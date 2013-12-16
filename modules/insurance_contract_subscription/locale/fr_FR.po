@@ -2,54 +2,54 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "%s is not a valid start date for product %s"
 msgstr "%s n'est pas une date d'effet compatible avec le produit %s"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "A product must be provided"
 msgstr "Saisir un produit"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "A start date must be provided"
 msgstr "Saisir la date d'effet"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "A subscriber must be provided"
 msgstr "Saisir le Souscripteur"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "At least an option must be selected"
 msgstr "Saisir une garantie"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "At least one option must be selected for %s"
 msgstr "Saisir au moins une garantie pour %s"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "Option %s is not eligible"
 msgstr "La garantie %s n'est pas éligible"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "Option %s must be subscribed after %s"
 msgstr "La Garantie %s doit être souscrite après le %s"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid ""
 "The payment bank account is required as the payment mode is Direct Debit"
 msgstr ""
 "Le compte bancaire de paiement doit être renseigné, le mode de paiement "
 "choisit étant le prélèvement"
 
-msgctxt "error:contract.contract:"
+msgctxt "error:contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un élement couvert"
 
@@ -57,39 +57,39 @@ msgctxt "error:contract.endorsement_process_finder:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "error:ins_contract.subscription_process_finder:"
+msgctxt "error:contract.subscribe:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "field:contract.contract,current_log:"
+msgctxt "field:contract,current_log:"
 msgid "Current Log"
 msgstr ""
 
-msgctxt "field:contract.contract,current_state:"
+msgctxt "field:contract,current_state:"
 msgid ""
 msgstr " "
 
-msgctxt "field:contract.contract,doc_received:"
+msgctxt "field:contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
 
-msgctxt "field:contract.contract,logs:"
+msgctxt "field:contract,logs:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:contract.contract,product_desc:"
+msgctxt "field:contract,product_desc:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:contract.contract,subscriber_desc:"
+msgctxt "field:contract,subscriber_desc:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:contract.contract,subscriber_kind:"
+msgctxt "field:contract,subscriber_kind:"
 msgid "Subscriber Kind"
 msgstr "Type"
 
-msgctxt "field:contract.contract,subscription_mgr:"
+msgctxt "field:contract,subscription_mgr:"
 msgid "Subscription Manager"
 msgstr ""
 
@@ -121,15 +121,15 @@ msgctxt "field:contract.endorsement_process_parameters,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:contract.subscribed_option,is_health:"
+msgctxt "field:contract.option,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 
-msgctxt "field:contract.subscribed_option,status_selection:"
+msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:ins_contract.covered_data,status_selection:"
+msgctxt "field:contract.covered_data,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
@@ -170,61 +170,61 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt ""
-"field:ins_contract.subscription_process_parameters,business_provider:"
+"field:contract.subscribe.find_process,business_provider:"
 msgid "Business Provider"
 msgstr "Apporteur d'affaires"
 
-msgctxt "field:ins_contract.subscription_process_parameters,com_product:"
+msgctxt "field:contract.subscribe.find_process,com_product:"
 msgid "Product Commercial"
 msgstr "Produit Commercial"
 
-msgctxt "field:ins_contract.subscription_process_parameters,date:"
+msgctxt "field:contract.subscribe.find_process,date:"
 msgid "Date"
 msgstr "Date"
 
 msgctxt ""
-"field:ins_contract.subscription_process_parameters,delegated_manager:"
+"field:contract.subscribe.find_process,delegated_manager:"
 msgid "Delegated Manager"
 msgstr "Délégataire de gestion"
 
-msgctxt "field:ins_contract.subscription_process_parameters,dist_network:"
+msgctxt "field:contract.subscribe.find_process,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:ins_contract.subscription_process_parameters,good_process:"
+msgctxt "field:contract.subscribe.find_process,good_process:"
 msgid "Good Process"
 msgstr "Processus"
 
-msgctxt "field:ins_contract.subscription_process_parameters,id:"
+msgctxt "field:contract.subscribe.find_process,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_contract.subscription_process_parameters,model:"
+msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:ins_contract.subscription_process_parameters,must_expand_tree:"
+msgctxt "field:contract.subscribe.find_process,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_contract.subscription_process_parameters,possible_brokers:"
+msgctxt "field:contract.subscribe.find_process,possible_brokers:"
 msgid "Possible Brokers"
 msgstr "Courtiers Possibles"
 
 msgctxt ""
-"field:ins_contract.subscription_process_parameters,possible_com_product:"
+"field:contract.subscribe.find_process,possible_com_product:"
 msgid "Commercial Products Available"
 msgstr "Produits Commerciaux Disponibles"
 
-msgctxt "field:ins_contract.subscription_process_parameters,product:"
+msgctxt "field:contract.subscribe.find_process,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:process.process_desc,display_steps_without_status:"
+msgctxt "field:process,display_steps_without_status:"
 msgid "Display Steps Without Status"
 msgstr "Afficher les Etapes sans Statut"
 
-msgctxt "field:process.process_desc,steps_to_display:"
+msgctxt "field:process,steps_to_display:"
 msgid "Steps"
 msgstr "Etapes"
 
@@ -236,7 +236,7 @@ msgctxt "model:ins_contract.subscription_mgr,name:"
 msgid "Subscription Manager"
 msgstr ""
 
-msgctxt "model:ins_contract.subscription_process_parameters,name:"
+msgctxt "model:contract.subscribe.find_process,name:"
 msgid "Subscription Process Parameters"
 msgstr "Paramètres du Processus de Souscription"
 
@@ -264,19 +264,19 @@ msgctxt "selection:ins_contract.subscription_mgr,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Contract Endorsement"
 msgstr "Avenant"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Options"
 msgstr "Garanties"
 
-msgctxt "view:ins_contract.covered_data:"
+msgctxt "view:contract.covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
 
@@ -291,11 +291,11 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgctxt ""
-"wizard_button:ins_contract.subscription_process_finder,process_parameters,action:"
+"wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
 
 msgctxt ""
-"wizard_button:ins_contract.subscription_process_finder,process_parameters,end:"
+"wizard_button:contract.subscribe,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"

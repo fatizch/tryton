@@ -10,9 +10,8 @@ __all__ = [
 
 
 class OfferedContext(RuleEngineContext):
-    'Offered Context'
 
-    __name__ = 'offered.rule_sets'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_lowest_level_object(cls, args):
@@ -28,17 +27,14 @@ class OfferedContext(RuleEngineContext):
     def _re_complementary_data(cls, args, data_name, from_object=None):
         if not from_object:
             from_object = cls.get_lowest_level_object(args)
-        ComplDataDef = Pool().get('offered.complementary_data_def')
+        ComplDataDef = Pool().get('extra_data')
         return ComplDataDef.get_complementary_data_value(from_object,
             data_name, args['date'])
 
 
 class ContractContext(RuleEngineContext):
-    '''
-        Context functions for contract related data
-    '''
 
-    __name__ = 'contract.rule_sets'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_contract_conditions_date(cls, args):

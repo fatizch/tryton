@@ -2,10 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract.delivered_service,is_loan:"
+msgctxt "field:contract.service,is_loan:"
 msgid "Is loan"
 msgstr "Est emprunteur"
 
-msgctxt "field:contract.delivered_service,loan:"
+msgctxt "field:contract.service,loan:"
 msgid "Loan"
 msgstr "Prêt"

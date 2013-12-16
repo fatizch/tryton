@@ -47,7 +47,7 @@ class Code(model.CoopSQL):
     'Code'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.code'
+    __name__ = 'process.action'
 
     @classmethod
     def _export_light(cls):
@@ -58,7 +58,7 @@ class StepTransition(model.CoopSQL):
     'Step Transition'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.step_transition'
+    __name__ = 'process.transition'
 
     pyson_choice = fields.Char(
         'Choice', states={'invisible': Eval('kind') != 'choice'})
@@ -66,7 +66,7 @@ class StepTransition(model.CoopSQL):
         'Pyson Description',
         states={'invisible': Eval('kind') != 'choice'})
     choice_if_true = fields.Many2One(
-        'process.step_transition',
+        'process.transition',
         'Transition if True',
         states={'invisible': Eval('kind') != 'choice'},
         domain=[
@@ -74,7 +74,7 @@ class StepTransition(model.CoopSQL):
             ('main_model', '=', Eval('_parent_on_process', {}).get(
                 'on_model'))])
     choice_if_false = fields.Many2One(
-        'process.step_transition',
+        'process.transition',
         'Transition if False',
         states={'invisible': Eval('kind') != 'choice'},
         domain=[
@@ -167,13 +167,13 @@ class StepTransition(model.CoopSQL):
 class ProcessLog(model.CoopSQL, model.CoopView):
     'Process Log'
 
-    __name__ = 'coop_process.process_log'
+    __name__ = 'process.log'
 
     user = fields.Many2One('res.user', 'User')
     from_state = fields.Many2One(
-        'process.process_step_relation', 'From State')
+        'process-process.step', 'From State')
     to_state = fields.Many2One(
-        'process.process_step_relation', 'To State', select=True)
+        'process-process.step', 'To State', select=True)
     start_time = fields.DateTime('Start Time')
     end_time = fields.DateTime('End Time')
     description = fields.Text('Description')
@@ -219,9 +219,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 class CoopProcessFramework(ProcessFramework):
     'Coop Process Framework'
 
-    logs = fields.One2Many('coop_process.process_log', 'task', 'Task')
+    logs = fields.One2Many('process.log', 'task', 'Task')
     current_log = fields.Function(
-        fields.Many2One('coop_process.process_log', 'Current Log'),
+        fields.Many2One('process.log', 'Current Log'),
         'get_current_log')
 
     @classmethod
@@ -234,7 +234,7 @@ class CoopProcessFramework(ProcessFramework):
     def get_current_log(self, name=None):
         if not (hasattr(self, 'id') and self.id):
             return None
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         current_log = Log.search([
             ('task', '=', utils.convert_to_reference(self)),
             ('latest', '=', True)])
@@ -251,7 +251,7 @@ class CoopProcessFramework(ProcessFramework):
                             instance.current_log.user.get_rec_name(None)))
         super(CoopProcessFramework, cls).write(instances, values)
         Session = Pool().get('ir.session')
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         try:
             good_session, = Session.search(
                 [('create_uid', '=', Transaction().user)])
@@ -286,7 +286,7 @@ class CoopProcessFramework(ProcessFramework):
     @classmethod
     def create(cls, values):
         instances = super(CoopProcessFramework, cls).create(values)
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         Session = Pool().get('ir.session')
         good_session, = Session.search(
             [('create_uid', '=', Transaction().user)])
@@ -304,7 +304,7 @@ class CoopProcessFramework(ProcessFramework):
     @classmethod
     def delete(cls, records):
         # Delete logs
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         Log.delete(Log.search([('task', 'in', [
             utils.convert_to_reference(x) for x in records])]))
         super(CoopProcessFramework, cls).delete(records)
@@ -352,7 +352,7 @@ class CoopProcessFramework(ProcessFramework):
     @classmethod
     def build_instruction_step_method(cls, process, data):
         def button_step_generic(works):
-            StepDesc = Pool().get('process.step_desc')
+            StepDesc = Pool().get('process.step')
             target = StepDesc(data[0])
             for work in works:
                 target.execute(work)
@@ -382,7 +382,7 @@ class CoopProcessFramework(ProcessFramework):
         if process.custom_transitions and \
                 not process.steps_implicitly_available:
             return {'readonly': True}
-        StepDesc = Pool().get('process.step_desc')
+        StepDesc = Pool().get('process.step')
         good_step = StepDesc(int(step_data[0]))
         if not good_step.pyson:
             return {}
@@ -428,7 +428,7 @@ class ProcessDesc(model.CoopSQL):
     'Process Descriptor'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
 
     with_prev_next = fields.Boolean('With Previous / Next button')
     custom_transitions = fields.Boolean('Custom Transitions')
@@ -597,7 +597,7 @@ class ProcessStepRelation(model.CoopSQL):
     'Process to Step relation'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.process_step_relation'
+    __name__ = 'process-process.step'
 
     @classmethod
     def __setup__(cls):
@@ -617,7 +617,7 @@ class ProcessStepRelation(model.CoopSQL):
 class XMLViewDesc(model.CoopSQL, model.CoopView):
     'XML View Descriptor'
 
-    __name__ = 'coop_process.xml_view_desc'
+    __name__ = 'ir.ui.view.description'
 
     the_view = fields.Many2One(
         'ir.ui.view', 'View',
@@ -662,7 +662,7 @@ class XMLViewDesc(model.CoopSQL, model.CoopView):
         'ir.model', 'View Model', required=True,
         states={'readonly': Eval('id', 0) > 0})
     for_step = fields.Many2One(
-        'process.step_desc', 'For Step', ondelete='CASCADE')
+        'process.step', 'For Step', ondelete='CASCADE')
     field_childs = fields.Selection(
         'get_field_childs', 'Children field',
         selection_change_with=['view_model'], depends=['view_model'],
@@ -820,11 +820,11 @@ class StepDesc(model.CoopSQL):
     'Step Desc'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.step_desc'
+    __name__ = 'process.step'
 
     pyson = fields.Char('Pyson Constraint')
     custom_views = fields.One2Many(
-        'coop_process.xml_view_desc', 'for_step', 'Custom Views',
+        'ir.ui.view.description', 'for_step', 'Custom Views',
         context={'for_step_name': Eval('technical_name', '')},
         states={'readonly': ~Eval('technical_name')})
     main_model = fields.Many2One(
@@ -868,14 +868,14 @@ class StepDesc(model.CoopSQL):
 class ProcessParameters(model.CoopView):
     'Process Parameters'
 
-    __name__ = 'coop_process.process_parameters'
+    __name__ = 'process.start'
 
     date = fields.Date('Date')
     model = fields.Many2One('ir.model', 'Model',
         domain=[('is_workflow', '=', 'True')],
         states={'readonly': True, 'invisible': True})
     good_process = fields.Many2One(
-        'process.process_desc',
+        'process',
         'Good Process',
         on_change_with=['date, model'],
         depends=['date', 'model'])
@@ -928,7 +928,7 @@ class ProcessFinder(Wizard):
 
     start_state = 'process_parameters'
     process_parameters = StateView(
-        'coop_process.process_parameters',
+        'process.start',
         'coop_process.process_parameters_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -998,7 +998,7 @@ class ProcessFinder(Wizard):
 
     @classmethod
     def get_parameters_model(cls):
-        return 'coop_process.process_parameters'
+        return 'process.start'
 
     @classmethod
     def get_parameters_view(cls):
@@ -1009,7 +1009,7 @@ class GenerateGraph():
     'Generate Graph'
 
     __metaclass__ = PoolMeta
-    __name__ = 'process.graph_generation'
+    __name__ = 'process.generate_graph.report'
 
     @classmethod
     def build_transition(cls, process, step, transition, graph, nodes, edges):

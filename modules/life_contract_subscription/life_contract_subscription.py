@@ -14,11 +14,11 @@ __all__ = [
 class LifeContractSubscription():
     'Life Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
     def set_subscriber_as_covered_element(self):
-        CoveredElement = Pool().get('ins_contract.covered_element')
+        CoveredElement = Pool().get('contract.covered_element')
         subscriber = self.get_policy_owner(self.start_date)
         if not utils.is_none(self, 'covered_elements'):
             for covered_element in self.covered_elements:
@@ -53,14 +53,14 @@ class LifeContractSubscription():
 class CoveredPersonSubs():
     'Covered Person'
 
-    __name__ = 'ins_contract.covered_element'
+    __name__ = 'contract.covered_element'
     __metaclass__ = PoolMeta
 
 
 class CoveredDataSubs():
     'Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
     __metaclass__ = PoolMeta
 
     coverage_amount_selection = fields.Function(
@@ -86,12 +86,12 @@ class CoveredDataSubs():
             on_change=['need_to_chose_beneficiary_clause']),
         'on_change_with_need_to_chose_beneficiary_clause')
     possible_beneficiary_clauses = fields.Function(
-        fields.One2Many('ins_product.clause', None,
+        fields.One2Many('clause', None,
             'Possible beneficiary Clauses', states={'invisible': True},
             on_change_with=['option', 'start_date']),
         'on_change_with_possible_beneficiary_clauses')
     beneficiary_clause_selection = fields.Function(
-        fields.Many2One('ins_product.clause',
+        fields.Many2One('clause',
             'Beneficiary Clause', states={
                 'invisible': ~Eval('need_to_chose_beneficiary_clause'),
                 'required': ~~Eval('need_to_chose_beneficiary_clause'),

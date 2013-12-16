@@ -43,7 +43,7 @@ DEF_CUR_DIG = 2
 class Templated(object):
     'Templated Class'
 
-    __name__ = 'offered.templated'
+    __name__ = 'offered.template'
 
     template = fields.Many2One(
         None, 'Template',
@@ -147,7 +147,7 @@ class GetResult(object):
 class Offered(model.CoopView, GetResult, Templated):
     'Offered'
 
-    __name__ = 'offered.offered'
+    __name__ = 'offered'
     _export_name = 'code'
 
     code = fields.Char('Code', required=True, select=1,
@@ -164,7 +164,7 @@ class Offered(model.CoopView, GetResult, Templated):
         fields.Integer('Currency Digits'),
         'get_currency_digits')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Offered Kind',
+        'extra_data', 'Offered Kind',
         context={'complementary_data_kind': 'product'},
         domain=[('kind', '=', 'product')],
         on_change_with=['complementary_data'])
@@ -224,7 +224,7 @@ class Offered(model.CoopView, GetResult, Templated):
 
     @staticmethod
     def default_complementary_data():
-        good_se = Pool().get('offered.complementary_data_def').search([
+        good_se = Pool().get('extra_data').search([
                 ('kind', '=', 'product')])
         res = {}
         for se in good_se:
@@ -253,7 +253,7 @@ class Offered(model.CoopView, GetResult, Templated):
     def on_change_with_complementary_data(self):
         if not hasattr(self, 'complementary_data_def'):
             return {}
-        ComplementaryData = Pool().get('offered.complementary_data_def')
+        ComplementaryData = Pool().get('extra_data')
         schemas = ComplementaryData.search([
             'name', 'in', [k for k in self.complementary_data_def.iterkeys()]])
         if not schemas:
@@ -297,7 +297,7 @@ class Product(model.CoopSQL, Offered):
 
     kind = fields.Selection([('', ''), ('default', 'Default')],
         'Product Kind')
-    coverages = fields.Many2Many('offered.product-options-coverage',
+    coverages = fields.Many2Many('offered.product-option.description',
         'product', 'coverage', 'Coverages',
         domain=[
             ('currency', '=', Eval('currency')),
@@ -309,7 +309,7 @@ class Product(model.CoopSQL, Offered):
         'Contract Number Generator', context={'code': 'offered.product'},
         ondelete='RESTRICT', required=True)
     complementary_data_def = fields.Many2Many(
-        'offered.product-complementary_data_def',
+        'offered.product-extra_data',
         'product', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
@@ -403,7 +403,7 @@ class Product(model.CoopSQL, Offered):
         if key:
             existing_data.update(args[key].get_all_complementary_data(
                 args['date']))
-        ComplementaryData = Pool().get('offered.complementary_data_def')
+        ComplementaryData = Pool().get('extra_data')
         result = ComplementaryData.calculate_value_set(
             possible_schemas, all_schemas, existing_data, args)
         return result, ()
@@ -463,23 +463,23 @@ class Product(model.CoopSQL, Offered):
 class ProductOptionsCoverage(model.CoopSQL):
     'Define Product - Coverage relations'
 
-    __name__ = 'offered.product-options-coverage'
+    __name__ = 'offered.product-option.description'
 
     product = fields.Many2One(
         'offered.product', 'Product',
         select=1, required=True, ondelete='CASCADE')
     coverage = fields.Many2One(
-        'offered.coverage', 'Coverage',
+        'offered.option.description', 'Coverage',
         select=1, required=True, ondelete='RESTRICT')
 
 
 class ProductComplementaryDataRelation(model.CoopSQL):
     'Relation between Product and Complementary Data'
 
-    __name__ = 'offered.product-complementary_data_def'
+    __name__ = 'offered.product-extra_data'
 
     product = fields.Many2One(
         'offered.product', 'Product', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT')

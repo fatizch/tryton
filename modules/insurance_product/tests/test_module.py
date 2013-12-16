@@ -25,17 +25,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Product': 'offered.product',
-            'Coverage': 'offered.coverage',
-            'Pricing': 'ins_product.pricing_rule',
-            'Eligibility': 'ins_product.eligibility_rule',
-            'PricingComponent': 'ins_product.pricing_component',
-            'Tax': 'coop_account.tax_desc',
-            'TaxVersion': 'coop_account.tax_version',
-            'Fee': 'coop_account.fee_desc',
-            'FeeVersion': 'coop_account.fee_version',
+            'Coverage': 'offered.option.description',
+            'Pricing': 'billing.premium.rule',
+            'Eligibility': 'offered.eligibility.rule',
+            'PricingComponent': 'billing.premium.rule.component',
+            'Tax': 'account.tax.description',
+            'TaxVersion': 'account.tax.description.version',
+            'Fee': 'account.fee.description',
+            'FeeVersion': 'account.fee.description.version',
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
-            'ItemDesc': 'ins_product.item_desc',
+            'ItemDesc': 'offered.item.description',
         }
 
     def test0001_testFunctionalRuleCreation(self):
@@ -47,7 +47,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te2.name = '_re_get_subscriber_birthdate'
         te2.translated_technical_name = 'date_de_naissance_souscripteur'
         te2.description = 'Date de naissance du Souscripteur'
-        te2.namespace = 'ins_product.rule_sets.subscriber'
+        te2.namespace = 'rule_engine.runtime'
 
         te2.save()
 
@@ -66,7 +66,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te3.name = '_re_years_between'
         te3.translated_technical_name = 'annees_entre'
         te3.description = 'Années entre...'
-        te3.namespace = 'rule_engine.tools_functions'
+        te3.namespace = 'rule_engine.runtime'
 
         te3.save()
 
@@ -76,7 +76,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te5.translated_technical_name = 'aujourd_hui'
         te5.name = '_re_today'
         te5.description = "Aujourd'hui"
-        te5.namespace = 'rule_engine.tools_functions'
+        te5.namespace = 'rule_engine.runtime'
 
         te5.save()
 
@@ -86,7 +86,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te6.name = '_re_add_warning'
         te6.translated_technical_name = 'ajouter_warning'
         te6.description = 'Ajouter warning'
-        te6.namespace = 'rule_engine.tools_functions'
+        te6.namespace = 'rule_engine.runtime'
 
         te6.save()
 

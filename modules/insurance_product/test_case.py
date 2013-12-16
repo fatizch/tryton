@@ -12,7 +12,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     @classmethod
     def _get_test_case_dependencies(cls):
@@ -27,7 +27,7 @@ class TestCaseModel():
 
     @classmethod
     def insurer_test_case(cls):
-        Insurer = Pool().get('party.insurer')
+        Insurer = Pool().get('insurer')
         cls.load_resources(MODULE_NAME)
         insurer_file = cls.read_data_file('insurer', MODULE_NAME, ';')
         insurers = []

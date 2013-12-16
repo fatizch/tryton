@@ -11,7 +11,7 @@ __all__ = [
 class Clause(model.CoopSQL, model.VersionedObject):
     'Clause'
 
-    __name__ = 'ins_product.clause'
+    __name__ = 'clause'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
@@ -21,7 +21,7 @@ class Clause(model.CoopSQL, model.VersionedObject):
 
     @classmethod
     def version_model(cls):
-        return 'ins_product.clause_version'
+        return 'clause.version'
 
     @classmethod
     def get_possible_clause_kinds(cls):
@@ -34,10 +34,10 @@ class Clause(model.CoopSQL, model.VersionedObject):
 class ClauseVersion(model.CoopSQL, model.VersionObject):
     'Clause Version'
 
-    __name__ = 'ins_product.clause_version'
+    __name__ = 'clause.version'
 
     content = fields.Text('Content')
 
     @classmethod
     def main_model(cls):
-        return 'ins_product.clause'
+        return 'clause'

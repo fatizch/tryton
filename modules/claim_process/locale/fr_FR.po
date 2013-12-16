@@ -2,79 +2,79 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.claim:"
+msgctxt "error:claim:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
 
-msgctxt "error:claim.claim:"
+msgctxt "error:claim:"
 msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
-msgctxt "error:claim.declaration_process_finder:"
+msgctxt "error:claim.declare:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "field:claim.claim,contact_history:"
+msgctxt "field:claim,contact_history:"
 msgid "History"
 msgstr "Historique"
 
-msgctxt "field:claim.claim,current_log:"
+msgctxt "field:claim,current_log:"
 msgid "Current Log"
 msgstr ""
 
-msgctxt "field:claim.claim,current_state:"
+msgctxt "field:claim,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
 
-msgctxt "field:claim.claim,doc_received:"
+msgctxt "field:claim,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
 
-msgctxt "field:claim.claim,indemnifications:"
+msgctxt "field:claim,indemnifications:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "field:claim.claim,indemnifications_consult:"
+msgctxt "field:claim,indemnifications_consult:"
 msgid "Indemnifications"
 msgstr "Indemnisations"
 
-msgctxt "field:claim.claim,is_pending_indemnification:"
+msgctxt "field:claim,is_pending_indemnification:"
 msgid "Pending Indemnification"
 msgstr "Indemnisation en attente"
 
-msgctxt "field:claim.claim,logs:"
+msgctxt "field:claim,logs:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:claim.declaration_process_parameters,claim:"
+msgctxt "field:claim.declare.find_process,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:claim.declaration_process_parameters,claims:"
+msgctxt "field:claim.declare.find_process,claims:"
 msgid "Claims"
 msgstr "Sinistres"
 
-msgctxt "field:claim.declaration_process_parameters,date:"
+msgctxt "field:claim.declare.find_process,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "field:claim.declaration_process_parameters,good_process:"
+msgctxt "field:claim.declare.find_process,good_process:"
 msgid "Good Process"
 msgstr "Processus"
 
-msgctxt "field:claim.declaration_process_parameters,id:"
+msgctxt "field:claim.declare.find_process,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:claim.declaration_process_parameters,model:"
+msgctxt "field:claim.declare.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:claim.declaration_process_parameters,must_expand_tree:"
+msgctxt "field:claim.declare.find_process,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:claim.declaration_process_parameters,party:"
+msgctxt "field:claim.declare.find_process,party:"
 msgid "Party"
 msgstr "Acteur"
 
@@ -90,7 +90,7 @@ msgctxt "field:claim.loss,can_modify_benefit:"
 msgid "Can Modify Benefit?"
 msgstr ""
 
-msgctxt "model:claim.declaration_process_parameters,name:"
+msgctxt "model:claim.declare.find_process,name:"
 msgid "Declaration Process Parameters"
 msgstr "Paramètres du Processus de Déclaration Sinistre"
 
@@ -106,11 +106,11 @@ msgctxt "model:ir.ui.menu,name:menu_start_declaration"
 msgid "Start Declaration"
 msgstr "Commencer la Déclaration"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Claim Declaration"
 msgstr "Claim Declaration"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid "Claim Reopening"
 msgstr "Réouverture de Sinistre"
 
@@ -119,11 +119,11 @@ msgid "Loss"
 msgstr "Préjudice"
 
 msgctxt ""
-"wizard_button:claim.declaration_process_finder,process_parameters,action:"
+"wizard_button:claim.declare,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
 
 msgctxt ""
-"wizard_button:claim.declaration_process_finder,process_parameters,end:"
+"wizard_button:claim.declare,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"

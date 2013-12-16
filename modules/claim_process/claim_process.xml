@@ -20,25 +20,25 @@
       <field name="name">loss_indemnification_form</field>
     </record>
     <record model="ir.ui.view" id="declaration_process_parameters_form">
-      <field name="model">claim.declaration_process_parameters</field>
+      <field name="model">claim.declare.find_process</field>
       <field name="type">form</field>
       <field name="name">claim_process_parameters_form</field>
       <field name="inherit" ref="coop_process.process_parameters_form"/>
     </record>
     <record model="ir.action.wizard" id="declaration_process_launcher">
       <field name="name">Start Declaration</field>
-      <field name="wiz_name">claim.declaration_process_finder</field>
+      <field name="wiz_name">claim.declare</field>
     </record>
     <menuitem parent="claim.menu_claim" sequence="1"
         action="declaration_process_launcher" id="menu_start_declaration"/>
     <record model="ir.action.act_window" id="act_claim_logs">
       <field name="name">Logs</field>
-      <field name="res_model">coop_process.process_log</field>
+      <field name="res_model">process.log</field>
       <field name="domain">[('task', '=', (Eval('active_model'),Eval('active_id')))]</field>
     </record>
     <record model="ir.action.keyword" id="act_claim_logs_keyword1">
       <field name="keyword">form_relate</field>
-      <field name="model">claim.claim,-1</field>
+      <field name="model">claim,-1</field>
       <field name="action" ref="act_claim_logs"/>
     </record>
   </data>

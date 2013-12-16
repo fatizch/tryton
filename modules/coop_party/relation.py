@@ -14,7 +14,7 @@ __all__ = [
 class PartyRelationKind(model.CoopSQL, model.CoopView):
     'Party Relation Kind'
 
-    __name__ = 'party.party_relation_kind'
+    __name__ = 'party.relation.kind'
 
     code = fields.Char('Code', required=True,
         states={'readonly': Bool(Eval('is_used'))},
@@ -38,14 +38,14 @@ class PartyRelationKind(model.CoopSQL, model.CoopView):
 class PartyRelation(model.CoopSQL, model.CoopView):
     'Party Relation'
 
-    __name__ = 'party.party-relation'
+    __name__ = 'party.relation'
     _rec_name = 'to_party'
 
     from_party = fields.Many2One('party.party', 'From Party',
         ondelete='CASCADE')
     to_party = fields.Many2One('party.party', 'To Party',
         ondelete='CASCADE')
-    relation_kind = fields.Many2One('party.party_relation_kind',
+    relation_kind = fields.Many2One('party.relation.kind',
         'Relation Kind', ondelete='RESTRICT', required=True)
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')

@@ -8,7 +8,7 @@ __all__ = ['CreateReceivablePaymentStart', 'CreateReceivablePayment']
 
 class CreateReceivablePaymentStart(ModelView):
     'Create Receivable Payment'
-    __name__ = 'coop_account_payment.create_receivable.start'
+    __name__ = 'account.payment.create.parameters'
     until = fields.Date('Until', required=True)
 
     @staticmethod
@@ -19,8 +19,8 @@ class CreateReceivablePaymentStart(ModelView):
 
 class CreateReceivablePayment(Wizard):
     'Create Receivable Payment'
-    __name__ = 'coop_account_payment.create_receivable'
-    start = StateView('coop_account_payment.create_receivable.start',
+    __name__ = 'account.payment.create'
+    start = StateView('account.payment.create.parameters',
         'coop_account_payment.create_receivable_start_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Create', 'create_', 'tryton-ok', default=True),
@@ -45,7 +45,7 @@ class CreateReceivablePayment(Wizard):
                     ],
                 ('party', '!=', None),
                 ('move_state', '=', 'posted'),
-                ('move.origin', 'ilike', 'contract.contract,%'),
+                ('move.origin', 'ilike', 'contract,%'),
                 ])
         for line in lines:
             contract = line.move.origin

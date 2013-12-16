@@ -14,19 +14,19 @@
     <!-- Collection -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="collection_form">
-      <field name="model">collection.collection</field>
+      <field name="model">collection</field>
       <field name="type">form</field>
       <field name="name">collection_form</field>
     </record>
     <record model="ir.ui.view" id="collection_tree">
-      <field name="model">collection.collection</field>
+      <field name="model">collection</field>
       <field name="type">tree</field>
       <field name="name">collection_tree</field>
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_collection">
       <field name="name">Collection</field>
-      <field name="res_model">collection.collection</field>
+      <field name="res_model">collection</field>
     </record>
     <record model="ir.action.act_window.view" id="act_collection_view1">
       <field name="sequence" eval="10"/>
@@ -43,7 +43,7 @@
     <!-- Relate -->
     <record model="ir.action.act_window" id="act_open_party_collections">
       <field name="name">Collections</field>
-      <field name="res_model">collection.collection</field>
+      <field name="res_model">collection</field>
       <field name="domain">[('party', '=', Eval('id'))]</field>
     </record>
     <record model="ir.action.keyword" id="act_open_party_collection_keyword">
@@ -55,7 +55,7 @@
     <!-- CollectionParameters -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="collection_parameters_form">
-      <field name="model">collection.collection_parameters</field>
+      <field name="model">collection.create.parameters</field>
       <field name="type">form</field>
       <field name="name">collection_parameters_form</field>
     </record>
@@ -63,12 +63,12 @@
     <!-- Assignment -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="assignment_form">
-      <field name="model">collection.assignment</field>
+      <field name="model">collection.create.assign.lines</field>
       <field name="type">form</field>
       <field name="name">assignment_form</field>
     </record>
     <record model="ir.ui.view" id="assignment_tree">
-      <field name="model">collection.assignment</field>
+      <field name="model">collection.create.assign.lines</field>
       <field name="type">tree</field>
       <field name="name">assignment_tree</field>
     </record>
@@ -76,7 +76,7 @@
     <!-- Assign Collection -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="assign_collection_form">
-      <field name="model">collection.assign_collection</field>
+      <field name="model">collection.create.assign</field>
       <field name="type">form</field>
       <field name="name">assign_collection_form</field>
     </record>
@@ -85,7 +85,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_collection_wizard">
       <field name="name">Collection Wizard</field>
-      <field name="wiz_name">collection.collection_wizard</field>
+      <field name="wiz_name">collection.create</field>
     </record>
     <record model="ir.action.keyword" id="act_collection_wizard_keyword">
       <field name="keyword">form_action</field>

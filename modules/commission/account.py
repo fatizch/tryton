@@ -23,7 +23,7 @@ class Move():
 
     com_details = fields.One2ManyDomain('account.move.line', 'move',
         'Commissions', domain=[('account.kind', '!=', 'receivable'),
-            ('second_origin.kind', '=', 'commission', 'offered.coverage')])
+            ('second_origin.kind', '=', 'commission', 'offered.option.description')])
     com_amount = fields.Function(
         fields.Numeric('Com amount'),
         'get_com_amount')
@@ -40,7 +40,7 @@ class Move():
         move_line = pool.get('account.move.line').__table__()
         account = pool.get('account.account').__table__()
         move = pool.get('account.move').__table__()
-        coverage = pool.get('offered.coverage').__table__()
+        coverage = pool.get('offered.option.description').__table__()
 
         query_table = move_line.join(move,
             condition=(move.id == move_line.move)
@@ -50,7 +50,7 @@ class Move():
                     - Coalesce(move_line.debit, 0)),
                 where=(account.kind != 'receivable')
                 & (move_line.second_origin.in_(coverage.select(
-                            Concat('offered.coverage,',
+                            Concat('offered.option.description,',
                                 Cast(coverage.id, 'VARCHAR')),
                             where=(coverage.kind == 'commission'))))
                 & (account.active)

@@ -218,7 +218,7 @@ class RuleEngineResult(object):
 class RuleExecutionLog(ModelSQL, ModelView):
     'Rule Execution Log'
 
-    __name__ = 'rule_engine.execution_log'
+    __name__ = 'rule_engine.log'
 
     user = fields.Many2One('res.user', 'User')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
@@ -276,7 +276,7 @@ class RuleTools(RuleEngineContext):
     '''
         Tools functions
     '''
-    __name__ = 'rule_engine.tools_functions'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_years_between(cls, args, date1, date2):
@@ -300,7 +300,7 @@ class RuleTools(RuleEngineContext):
 
     @classmethod
     def add_error(cls, args, error_code, custom=False, lvl=None):
-        RuleError = Pool().get('rule_engine.error')
+        RuleError = Pool().get('functional_error')
         if custom:
             error = error_code
         else:
@@ -378,7 +378,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
             'invisible': Eval('kind', '') != 'rule',
             'required': Eval('kind', '') == 'rule'},
         ondelete='RESTRICT', on_change=['the_rule'])
-    the_table = fields.Many2One('table.table_def', 'Table to use', states={
+    the_table = fields.Many2One('table', 'Table to use', states={
             'invisible': Eval('kind', '') != 'table',
             'required': Eval('kind', '') == 'table'},
         ondelete='RESTRICT', on_change=['the_table'])
@@ -558,7 +558,7 @@ class Rule(ModelView, ModelSQL):
         ], 'Status')
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many(
-        'rule_engine.execution_log', 'rule', 'Execution Logs',
+        'rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
         depends=['debug_mode'])
     rule_parameters = fields.One2Many('rule_engine.parameter', 'parent_rule',
@@ -616,7 +616,7 @@ class Rule(ModelView, ModelSQL):
     @classmethod
     def write(cls, rules, values):
         if 'debug_mode' in values and not values['debug_mode']:
-            RuleExecutionLog = Pool().get('rule_engine.execution_log')
+            RuleExecutionLog = Pool().get('rule_engine.log')
             RuleExecutionLog.delete(RuleExecutionLog.search([
                 ('rule', 'in', [x.id for x in rules])]))
         super(Rule, cls).write(rules, values)
@@ -771,7 +771,7 @@ class Rule(ModelView, ModelSQL):
                     the_result.low_level_debug.append(stack_info)
                 if self.debug_mode:
                     with Transaction().new_cursor() as transaction:
-                        RuleExecution = Pool().get('rule_engine.execution_log')
+                        RuleExecution = Pool().get('rule_engine.log')
                         rule_execution = RuleExecution()
                         rule_execution.rule = self
                         rule_execution.create_date = datetime.datetime.now()
@@ -871,7 +871,7 @@ class Rule(ModelView, ModelSQL):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_cursor() as transaction:
-            RuleExecution = Pool().get('rule_engine.execution_log')
+            RuleExecution = Pool().get('rule_engine.log')
             rule_execution = RuleExecution()
             rule_execution.rule = self
             rule_execution.create_date = datetime.datetime.now()
@@ -891,7 +891,7 @@ class Context(ModelView, ModelSQL):
 
     name = fields.Char('Name', required=True)
     allowed_elements = fields.Many2Many(
-        'rule_engine.context-rule_engine.tree_element', 'context',
+        'rule_engine.context-function', 'context',
         'tree_element', 'Allowed tree elements')
 
     @classmethod
@@ -940,7 +940,7 @@ class Context(ModelView, ModelSQL):
 
 class TreeElement(ModelView, ModelSQL):
     "Rule Engine Tree Element"
-    __name__ = 'rule_engine.tree_element'
+    __name__ = 'rule_engine.function'
     _rec_name = 'description'
 
     description = fields.Char(
@@ -965,9 +965,9 @@ class TreeElement(ModelView, ModelSQL):
             ('folder', 'Folder'),
             ('function', 'Function'),
         ], 'Type', required=True)
-    parent = fields.Many2One('rule_engine.tree_element', 'Parent')
+    parent = fields.Many2One('rule_engine.function', 'Parent')
     children = fields.One2Many(
-        'rule_engine.tree_element', 'parent', 'Children')
+        'rule_engine.function', 'parent', 'Children')
     translated_technical_name = fields.Char(
         'Translated technical name',
         states={
@@ -1104,12 +1104,12 @@ class TreeElement(ModelView, ModelSQL):
 
 class ContextTreeElement(ModelSQL):
     "Context Tree Element"
-    __name__ = 'rule_engine.context-rule_engine.tree_element'
+    __name__ = 'rule_engine.context-function'
 
     context = fields.Many2One(
         'rule_engine.context', 'Context', required=True, ondelete='CASCADE')
     tree_element = fields.Many2One(
-        'rule_engine.tree_element', 'Tree Element',
+        'rule_engine.function', 'Tree Element',
         required=True, ondelete='CASCADE')
 
 
@@ -1288,7 +1288,7 @@ class TestCase(ModelView, ModelSQL):
 
 class RunTestsReport(ModelView):
     "Test Run Report"
-    __name__ = 'rule_engine.run_tests.report'
+    __name__ = 'rule_engine.run_tests.results'
 
     report = fields.Text('Report', readonly=True)
 
@@ -1299,7 +1299,7 @@ class RunTests(Wizard):
     start_state = 'report'
 
     report = StateView(
-        'rule_engine.run_tests.report',
+        'rule_engine.run_tests.results',
         'rule_engine.run_tests_report', [
             Button('OK', 'end', 'tryton-ok', True),
         ])
@@ -1327,7 +1327,7 @@ class RunTests(Wizard):
 class RuleError(model.CoopSQL, model.CoopView):
     'Rule Error'
 
-    __name__ = 'rule_engine.error'
+    __name__ = 'functional_error'
 
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
     name = fields.Char('Name', required=True, translate=True)

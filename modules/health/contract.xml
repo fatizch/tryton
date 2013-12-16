@@ -3,7 +3,7 @@
     <data>
         <record model="ir.action.act_window" id="act_contract_form">
             <field name="name">Health Contracts</field>
-            <field name="res_model">contract.contract</field>
+            <field name="res_model">contract</field>
             <field name="domain">[('is_health', '=', True)]</field>
         </record>
         <menuitem name="Contracts" sequence="20" parent="menu_health" action="act_contract_form" id="menu_contract_form"/>
@@ -22,19 +22,19 @@
 
 
         <record model="ir.ui.view" id="contract_view_form">
-            <field name="model">contract.contract</field>
+            <field name="model">contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
         <record model="ir.ui.view" id="option_view_form">
-            <field name="model">contract.subscribed_option</field>
+            <field name="model">contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>
         <record model="ir.ui.view" id="covered_element_view_form">
-            <field name="model">ins_contract.covered_element</field>
+            <field name="model">contract.covered_element</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
             <field name="name">covered_element_form</field>

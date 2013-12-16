@@ -17,7 +17,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     number_of_parties = fields.Integer('Number of Parties')
     number_of_males = fields.Integer('Number of Males')
@@ -69,7 +69,7 @@ class TestCaseModel():
     @classmethod
     def relation_kind_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
-        RelationKind = Pool().get('party.party_relation_kind')
+        RelationKind = Pool().get('party.relation.kind')
         spouse = RelationKind()
         spouse.code = 'spouse'
         spouse.name = translater('Spouse')
@@ -83,7 +83,7 @@ class TestCaseModel():
     @classmethod
     def address_kind_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
-        AddressKind = Pool().get('party.address_kind')
+        AddressKind = Pool().get('party.address.kind')
         main = AddressKind()
         main.key = 'main'
         main.name = translater('Main')
@@ -186,8 +186,8 @@ class TestCaseModel():
     @classmethod
     def party_test_case(cls):
         Party = Pool().get('party.party')
-        PartyRelation = Pool().get('party.party-relation')
-        RelationKind = Pool().get('party.party_relation_kind')
+        PartyRelation = Pool().get('party.relation')
+        RelationKind = Pool().get('party.relation.kind')
         Configuration = cls.get_instance()
         nb_males = Party.search_count([('is_person', '=', True),
                 ('gender', '=', 'male')])
@@ -273,7 +273,7 @@ class TestCaseModel():
         pool = Pool()
         Party = pool.get('party.party')
         Contact = pool.get('party.contact_mechanism')
-        Configuration = pool.get('coop_utils.test_case_model').get_instance()
+        Configuration = pool.get('ir.test_case').get_instance()
         possible_domains = ['gmail.com', 'yahoo.com', 'aol.com',
             'hotmail.com']
         result = []

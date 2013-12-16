@@ -12,7 +12,7 @@ __metaclass__ = PoolMeta
 class TestCaseModel:
     'Test Case Model'
 
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     @classmethod
     def document_desc_test_case(cls):

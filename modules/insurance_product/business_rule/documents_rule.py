@@ -43,14 +43,14 @@ __all__ = [
 class LetterModel(model.CoopSQL, model.CoopView):
     'Letter Model'
 
-    __name__ = 'ins_product.letter_model'
+    __name__ = 'document.template'
 
     name = fields.Char('Name', required=True, translate=True)
     on_model = fields.Many2One(
         'ir.model', 'Model', domain=[('printable', '=', True)], required=True)
     code = fields.Char('Code', required=True)
     versions = fields.One2Many(
-        'ins_product.letter_version', 'resource', 'Versions')
+        'document.template.version', 'resource', 'Versions')
     kind = fields.Selection(
         [('', ''), ('doc_request', 'Document Request')], 'name')
 
@@ -73,7 +73,7 @@ class LetterModel(model.CoopSQL, model.CoopView):
 class LetterVersion(Attachment):
     'Letter Version'
 
-    __name__ = 'ins_product.letter_version'
+    __name__ = 'document.template.version'
     _table = None
 
     start_date = fields.Date('Start date', required=True)
@@ -89,7 +89,7 @@ class LetterVersion(Attachment):
 
         cls.resource = copy.copy(cls.resource)
         cls.resource.selection = [(
-            'ins_product.letter_model', 'Letter Model')]
+            'document.template', 'Letter Model')]
 
     @classmethod
     def default_type(cls):
@@ -139,7 +139,7 @@ class Printable(Model):
         return address.full_address
 
     def get_available_letter_models(self, kind=None):
-        LetterModel = Pool().get('ins_product.letter_model')
+        LetterModel = Pool().get('document.template')
 
         domain = [
             ('on_model.model', '=', self.__name__),
@@ -183,7 +183,7 @@ class Printable(Model):
 class DocumentDesc(model.CoopSQL, model.CoopView):
     'Document Descriptor'
 
-    __name__ = 'ins_product.document_desc'
+    __name__ = 'document.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)
@@ -194,7 +194,7 @@ class DocumentDesc(model.CoopSQL, model.CoopView):
 class DocumentRule(BusinessRuleRoot, model.CoopSQL):
     'Document Managing Rule'
 
-    __name__ = 'ins_product.document_rule'
+    __name__ = 'document.rule'
 
     kind = fields.Selection(
         [
@@ -204,7 +204,7 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
             ('', ''),
         ], 'Kind')
     documents = fields.Many2Many(
-        'ins_product.document-rule-relation', 'rule', 'document', 'Documents',
+        'document.rule-document.description', 'rule', 'document', 'Documents',
         states={'invisible': STATE_ADVANCED})
 
     def give_me_documents(self, args):
@@ -218,7 +218,7 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
             return [], ['Invalid rule']
         try:
             result = utils.get_those_objects(
-                'ins_product.document', [
+                'document.request.line', [
                     ('code', 'in', rule_result.result)])
             return result, []
         except:
@@ -232,21 +232,21 @@ class DocumentRule(BusinessRuleRoot, model.CoopSQL):
 class DocumentRuleRelation(model.CoopSQL):
     'Relation between rule and document'
 
-    __name__ = 'ins_product.document-rule-relation'
+    __name__ = 'document.rule-document.description'
 
     rule = fields.Many2One(
-        'ins_product.document_rule', 'Rule', ondelete='CASCADE')
+        'document.rule', 'Rule', ondelete='CASCADE')
     document = fields.Many2One(
-        'ins_product.document_desc', 'Document', ondelete='RESTRICT')
+        'document.description', 'Document', ondelete='RESTRICT')
 
 
 class Document(model.CoopSQL, model.CoopView):
     'Document'
 
-    __name__ = 'ins_product.document'
+    __name__ = 'document.request.line'
 
     document_desc = fields.Many2One(
-        'ins_product.document_desc', 'Document Definition', required=True)
+        'document.description', 'Document Definition', required=True)
     for_object = fields.Reference(
         'Needed For', [('', '')], states={'readonly': ~~Eval('for_object')})
 
@@ -278,7 +278,7 @@ class Document(model.CoopSQL, model.CoopView):
     )
 
     request = fields.Many2One(
-        'ins_product.document_request',
+        'document.request',
         'Document Request',
         ondelete='CASCADE',
     )
@@ -361,11 +361,11 @@ class Document(model.CoopSQL, model.CoopView):
 class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     'Document Request'
 
-    __name__ = 'ins_product.document_request'
+    __name__ = 'document.request'
 
     needed_by = fields.Reference('Requested for', [('', '')])
     documents = fields.One2Many(
-        'ins_product.document', 'request', 'Documents',
+        'document.request.line', 'request', 'Documents',
         depends=['needed_by_str'], on_change=['documents', 'is_complete'],
         context={'request_owner': Eval('needed_by_str')})
     is_complete = fields.Function(
@@ -459,7 +459,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     def add_documents(self, date, docs):
         # "docs" should be a list of tuple (doc_desc, for_object)
         existing_docs = self.get_current_docs()
-        Document = Pool().get('ins_product.document')
+        Document = Pool().get('document.request.line')
         for desc, obj in docs:
             if ((desc.id, utils.convert_to_reference(obj))) in existing_docs:
                 continue
@@ -479,7 +479,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
             if not k in id_docs:
                 to_del.append(v)
 
-        Document = Pool().get('ins_product.document')
+        Document = Pool().get('document.request.line')
 
         Document.delete(to_del)
 
@@ -508,10 +508,10 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
 class LetterModelDisplayer(model.CoopView):
     'Letter Model Displayer'
 
-    __name__ = 'ins_product.letter_model_displayer'
+    __name__ = 'document.create.select.template'
 
     letter_model = fields.Many2One(
-        'ins_product.letter_model',
+        'document.template',
         'Letter Model',
     )
 
@@ -523,10 +523,10 @@ class LetterModelDisplayer(model.CoopView):
 class LetterModelSelection(model.CoopView):
     'Letter Model Selection'
 
-    __name__ = 'ins_product.letter_model_selection'
+    __name__ = 'document.create.select'
 
     models = fields.One2Many(
-        'ins_product.letter_model_displayer',
+        'document.create.select.template',
         '',
         'Models',
     )
@@ -557,7 +557,7 @@ class LetterModelSelection(model.CoopView):
 
 
 class LetterReport(Report):
-    __name__ = 'ins_product.letter_report'
+    __name__ = 'document.generate.report'
 
     @classmethod
     def execute(cls, ids, data):
@@ -571,7 +571,7 @@ class LetterReport(Report):
         action_report = action_reports[0]
         records = None
         records = cls._get_records(ids, data['model'], data)
-        LetterModel = Pool().get('ins_product.letter_model')
+        LetterModel = Pool().get('document.template')
         good_letter = LetterModel(data['letter_model'])
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
@@ -608,7 +608,7 @@ class LetterReport(Report):
         localcontext['Today'] = utils.today()
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
-        LetterModel = Pool().get('ins_product.letter_model')
+        LetterModel = Pool().get('document.template')
         good_letter = LetterModel(data['letter_model'])
         report.report_content = good_letter.get_good_version(
             utils.today(), good_obj.get_lang()).data
@@ -619,14 +619,14 @@ class LetterReport(Report):
 class AttachmentCreation(model.CoopView):
     'Attachment Creation'
 
-    __name__ = 'ins_product.attach_letter'
+    __name__ = 'document.create.attach'
 
     attachment = fields.Binary('Data File', filename='name')
     name = fields.Char('Filename')
 
 
 class LetterGeneration(Wizard):
-    __name__ = 'ins_product.letter_creation_wizard'
+    __name__ = 'document.create'
 
     class SpecialStateAction(StateAction):
 
@@ -637,7 +637,7 @@ class LetterGeneration(Wizard):
             Action = Pool().get('ir.action')
             ActionReport = Pool().get('ir.action.report')
             good_report, = ActionReport.search([
-                ('report_name', '=', 'ins_product.letter_report')
+                ('report_name', '=', 'document.generate.report')
                 ('model', '=', Transaction().context.get('active_model')),
             ], limit=1)
             return Action.get_action_values(
@@ -648,14 +648,14 @@ class LetterGeneration(Wizard):
     generate = StateAction('insurance_product.letter_generation_report')
     post_generation = StateTransition()
     select_model = StateView(
-        'ins_product.letter_model_selection',
+        'document.create.select',
         'insurance_product.letter_model_selection_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Generate', 'generate', 'tryton-ok'),
             Button('Attach', 'attach', 'tryton-go-next')])
     attach = StateView(
-        'ins_product.attach_letter',
+        'document.create.attach',
         'insurance_product.attach_letter_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -715,7 +715,7 @@ class LetterGeneration(Wizard):
         good_obj = GoodModel(Transaction().context.get('active_id'))
         good_obj.post_generation()
 
-        ContactHistory = Pool().get('party.contact_history')
+        ContactHistory = Pool().get('party.interaction')
         contact = ContactHistory()
         contact.party = good_obj.get_contact()
         contact.media = 'mail'
@@ -738,11 +738,11 @@ class LetterGeneration(Wizard):
 class RequestFinder(model.CoopView):
     'Request Finder'
 
-    __name__ = 'ins_product.request_finder'
+    __name__ = 'document.receive.request'
 
     kind = fields.Selection([('', '')], 'Kind', on_change=['kind'])
     value = fields.Char('Value')
-    request = fields.Many2One('ins_product.document_request', 'Request',
+    request = fields.Many2One('document.request', 'Request',
         states={'invisible': True})
 
     @classmethod
@@ -825,7 +825,7 @@ class RequestFinder(model.CoopView):
 class AttachmentSetter(model.CoopView):
     'Attachment Setter'
 
-    __name__ = 'ins_product.attachment_setter'
+    __name__ = 'document.receive.attach'
 
     attachments = fields.One2Many(
         'ir.attachment', '', 'Attachments',
@@ -856,10 +856,10 @@ class AttachmentSetter(model.CoopView):
 class DocumentRequestDisplayer(model.CoopView):
     'Document Request Displayer'
 
-    __name__ = 'ins_product.document_request_displayer'
+    __name__ = 'document.receive.set_requests'
 
     documents = fields.One2Many(
-        'ins_product.document_request',
+        'document.request',
         '',
         'Documents',
         size=1,
@@ -869,18 +869,18 @@ class DocumentRequestDisplayer(model.CoopView):
 class ReceiveDocuments(Wizard):
     'Receive Documents Wizard'
 
-    __name__ = 'ins_product.receive_document_wizard'
+    __name__ = 'document.receive'
 
     start_state = 'start'
     start = StateTransition()
     select_instance = StateView(
-        'ins_product.request_finder',
+        'document.receive.request',
         'insurance_product.request_finder_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'attachment_setter', 'tryton-ok')])
     attachment_setter = StateView(
-        'ins_product.attachment_setter',
+        'document.receive.attach',
         'insurance_product.attachment_setter_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -889,7 +889,7 @@ class ReceiveDocuments(Wizard):
     store_attachments = StateTransition()
     store_and_reconcile = StateTransition()
     input_document = StateView(
-        'ins_product.document_request_displayer',
+        'document.receive.set_requests',
         'insurance_product.document_request_displayer_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -1023,15 +1023,15 @@ this object'})
 class DocumentRequestBatch(BatchRoot):
     'Document Request Batch Definition'
 
-    __name__ = 'ins_product.document_request_batch'
+    __name__ = 'document.request.batch'
 
     @classmethod
     def get_batch_main_model_name(cls):
-        return 'ins_product.document_request'
+        return 'document.request'
 
     @classmethod
     def get_batch_search_model(cls):
-        return 'ins_product.document'
+        return 'document.request.line'
 
     @classmethod
     def get_batch_field(cls):
@@ -1057,7 +1057,7 @@ class DocumentRequestBatch(BatchRoot):
     @classmethod
     def execute(cls, objects, ids, logger):
         LetterGeneration = Pool().get(
-            'ins_product.letter_creation_wizard', type='wizard')
+            'document.create', type='wizard')
         for cur_object in objects:
             with Transaction().set_context(
                     active_model=cur_object.__name__, active_id=cur_object.id):

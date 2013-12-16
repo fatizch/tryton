@@ -9,12 +9,12 @@
     <!-- Rule Execution Log -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="execution_log_form">
-      <field name="model">rule_engine.execution_log</field>
+      <field name="model">rule_engine.log</field>
       <field name="type">form</field>
       <field name="name">execution_log_form</field>
     </record>
     <record model="ir.ui.view" id="execution_log_tree">
-      <field name="model">rule_engine.execution_log</field>
+      <field name="model">rule_engine.log</field>
       <field name="type">tree</field>
       <field name="name">execution_log_tree</field>
     </record>
@@ -152,19 +152,19 @@
     <!-- Tree Elements -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="tree_element_form">
-      <field name="model">rule_engine.tree_element</field>
+      <field name="model">rule_engine.function</field>
       <field name="type">form</field>
       <field name="name">tree_element_form</field>
     </record>
     <record model="ir.ui.view" id="tree_element_tree">
-      <field name="model">rule_engine.tree_element</field>
+      <field name="model">rule_engine.function</field>
       <field name="type">tree</field>
       <field name="field_childs">children</field>
       <field name="name">tree_element_tree</field>
     </record>
     <record model="ir.action.act_window" id="tree_element_window">
       <field name="name">Tree Elements</field>
-      <field name="res_model">rule_engine.tree_element</field>
+      <field name="res_model">rule_engine.function</field>
     </record>
     <record model="ir.action.act_window.view" id="tree_element_tree_view">
       <field name="sequence" eval="10"/>
@@ -181,7 +181,7 @@
     <!-- Run Tests Wizard -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="run_tests_report">
-      <field name="model">rule_engine.run_tests.report</field>
+      <field name="model">rule_engine.run_tests.results</field>
       <field name="type">form</field>
       <field name="name">run_tests_report</field>
     </record>
@@ -204,18 +204,18 @@
     <!-- Rule Errors -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="error_form">
-      <field name="model">rule_engine.error</field>
+      <field name="model">functional_error</field>
       <field name="type">form</field>
       <field name="name">error_form</field>
     </record>
     <record model="ir.ui.view" id="error_tree">
-      <field name="model">rule_engine.error</field>
+      <field name="model">functional_error</field>
       <field name="type">tree</field>
       <field name="name">error_tree</field>
     </record>
     <record model="ir.action.act_window" id="error_window">
       <field name="name">Rule Errors</field>
-      <field name="res_model">rule_engine.error</field>
+      <field name="res_model">functional_error</field>
     </record>
     <record model="ir.action.act_window.view" id="error_tree_view">
       <field name="sequence" eval="10"/>

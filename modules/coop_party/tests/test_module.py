@@ -19,8 +19,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Party': 'party.party',
-            'RelationKind': 'party.party_relation_kind',
-            'PartyRelation': 'party.party-relation',
+            'RelationKind': 'party.relation.kind',
+            'PartyRelation': 'party.relation',
         }
 
     def test0001_createParties(self):

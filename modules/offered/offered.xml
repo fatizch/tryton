@@ -12,12 +12,12 @@
     <!-- Offered -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="offered_view_tree">
-      <field name="model">offered.offered</field>
+      <field name="model">offered</field>
       <field name="type">tree</field>
       <field name="name">offered_tree</field>
     </record>
     <record model="ir.ui.view" id="offered_view_form">
-      <field name="model">offered.offered</field>
+      <field name="model">offered</field>
       <field name="type">form</field>
       <field name="name">offered_form</field>
     </record>

@@ -5,12 +5,12 @@
     <!-- Status History -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="status_history_view_form">
-      <field name="model">contract.status_history</field>
+      <field name="model">contract.status.history</field>
       <field name="type">form</field>
       <field name="name">status_history_form</field>
     </record>
     <record model="ir.ui.view" id="status_history_view_tree">
-      <field name="model">contract.status_history</field>
+      <field name="model">contract.status.history</field>
       <field name="type">tree</field>
       <field name="name">status_history_tree</field>
     </record>
@@ -18,18 +18,18 @@
     <!-- Contract Screens -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="contract_view_tree">
-      <field name="model">contract.contract</field>
+      <field name="model">contract</field>
       <field name="type">tree</field>
       <field name="name">contract_tree</field>
     </record>
     <record model="ir.ui.view" id="contract_view_form">
-      <field name="model">contract.contract</field>
+      <field name="model">contract</field>
       <field name="type">form</field>
       <field name="name">contract_form</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_contract">
-      <field name="model" search="[('model', '=', 'contract.contract')]"/>
+      <field name="model" search="[('model', '=', 'contract')]"/>
       <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_contract_1">
@@ -39,7 +39,7 @@
     <!-- Entry point -->
     <record model="ir.action.act_window" id="act_contract_form">
       <field name="name">Contract</field>
-      <field name="res_model">contract.contract</field>
+      <field name="res_model">contract</field>
       <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_contract_form_view1">
@@ -56,12 +56,12 @@
     <!-- Options Screens -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="option_view_tree">
-      <field name="model">contract.subscribed_option</field>
+      <field name="model">contract.option</field>
       <field name="type">tree</field>
       <field name="name">option_tree</field>
     </record>
     <record model="ir.ui.view" id="option_view_form">
-      <field name="model">contract.subscribed_option</field>
+      <field name="model">contract.option</field>
       <field name="type">form</field>
       <field name="name">option_form</field>
     </record>
@@ -95,12 +95,12 @@
     <!-- Delivered Service -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="delivered_service_view_form">
-        <field name="model">contract.delivered_service</field>
+        <field name="model">contract.service</field>
         <field name="type">form</field>
         <field name="name">delivered_service_form</field>
     </record>
     <record model="ir.ui.view" id="delivered_service_view_tree">
-        <field name="model">contract.delivered_service</field>
+        <field name="model">contract.service</field>
         <field name="type">tree</field>
         <field name="name">delivered_service_tree</field>
     </record>

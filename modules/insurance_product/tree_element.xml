@@ -1,219 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data noupdate="1">
-    <record model="rule_engine.tree_element" id="dossier_personne_couverte">
+    <record model="rule_engine.function" id="dossier_personne_couverte">
       <field name="translated_technical_name">dossier_personne_couverte</field>
       <field name="description">Personne Couverte</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_personne_couverte">
+    <record model="rule_engine.context-function" id="cte_default_dossier_personne_couverte">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_personne_couverte"/>
     </record>
   </data>
   <data>
-    <record model="rule_engine.tree_element" id="a_souscrit_le_produit">
+    <record model="rule_engine.function" id="a_souscrit_le_produit">
       <field name="translated_technical_name">a_souscrit_le_produit</field>
       <field name="description">A souscrit le produit...</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_person_subscribed</field>
       <field name="fct_args">Code Produit</field>
       <field name="long_description">Indique si le souscripteur a souscrit le produit</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>
-    <record model="rule_engine.tree_element" id="est_majeur">
+    <record model="rule_engine.function" id="est_majeur">
       <field name="translated_technical_name">est_majeur</field>
       <field name="description">Est majeur ?</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_is_person_of_age</field>
       <field name="long_description">Renvoie True si la personne est majeure</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>
-    <record model="rule_engine.tree_element" id="date_de_naissance">
+    <record model="rule_engine.function" id="date_de_naissance">
       <field name="translated_technical_name">date_de_naissance</field>
       <field name="description">Date de naissance</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_person_birthdate</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>
-    <record model="rule_engine.tree_element" id="relation_avec_souscripteur">
+    <record model="rule_engine.function" id="relation_avec_souscripteur">
       <field name="translated_technical_name">relation_avec_souscripteur</field>
       <field name="description">Relation avec le souscripteur</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_link_with_subscriber</field>
       <field name="long_description">Précise la nature de la relation avec le souscripteur</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>
-    <record model="rule_engine.tree_element" id="pays_de_residence">
+    <record model="rule_engine.function" id="pays_de_residence">
       <field name="translated_technical_name">pays_de_residence</field>
       <field name="description">Pays de résidence</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.person</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_person_living_country</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>
   </data>
   <data noupdate="1">
-    <record model="rule_engine.tree_element" id="dossier_souscripteur">
+    <record model="rule_engine.function" id="dossier_souscripteur">
       <field name="translated_technical_name">dossier_souscripteur</field>
       <field name="description">Souscripteur</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_souscripteur">
+    <record model="rule_engine.context-function" id="cte_default_dossier_souscripteur">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_souscripteur"/>
     </record>
   </data>
   <data>
-    <record model="rule_engine.tree_element" id="date_de_naissance_souscripteur">
+    <record model="rule_engine.function" id="date_de_naissance_souscripteur">
       <field name="translated_technical_name">date_de_naissance_souscripteur</field>
       <field name="description">Date de naissance</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.subscriber</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_subscriber_birthdate</field>
       <field name="parent" ref="dossier_souscripteur"/>
     </record>
-    <record model="rule_engine.tree_element" id="pays_de_residence_souscripteur">
+    <record model="rule_engine.function" id="pays_de_residence_souscripteur">
       <field name="translated_technical_name">pays_de_residence_souscripteur</field>
       <field name="description">Pays de résidence</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.subscriber</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_subscriber_living_country</field>
       <field name="parent" ref="dossier_souscripteur"/>
     </record>
-    <record model="rule_engine.tree_element" id="souscripteur_a_souscrit_produit">
+    <record model="rule_engine.function" id="souscripteur_a_souscrit_produit">
       <field name="translated_technical_name">souscripteur_a_souscrit_produit</field>
       <field name="description">A souscrit le produit</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.subscriber</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_subscriber_subscribed</field>
       <field name="parent" ref="dossier_souscripteur"/>
     </record>
   </data>
   <data noupdate="1">
-    <record model="rule_engine.tree_element" id="dossier_option">
+    <record model="rule_engine.function" id="dossier_option">
       <field name="translated_technical_name">dossier_option</field>
       <field name="description">Option</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_option">
+    <record model="rule_engine.context-function" id="cte_default_dossier_option">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_option"/>
     </record>
-    <record model="rule_engine.tree_element" id="dossier_donnees_couverture">
+    <record model="rule_engine.function" id="dossier_donnees_couverture">
       <field name="translated_technical_name">dossier_donnees_couverture</field>
       <field name="description">Données de couverture</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_donnees_couverture">
+    <record model="rule_engine.context-function" id="cte_default_dossier_donnees_couverture">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_donnees_couverture"/>
     </record>
   </data>
   <data>
-    <record model="rule_engine.tree_element" id="date_debut_souscription">
+    <record model="rule_engine.function" id="date_debut_souscription">
       <field name="translated_technical_name">date_debut_souscription</field>
       <field name="description">Date d'effet du contrat</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_initial_subscription_date</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
-    <record model="rule_engine.tree_element" id="date_fin_souscription">
+    <record model="rule_engine.function" id="date_fin_souscription">
       <field name="translated_technical_name">date_fin_souscription</field>
       <field name="description">Date de fin du contrat</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_subscription_end_date</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
-    <record model="rule_engine.tree_element" id="montant_de_couverture">
+    <record model="rule_engine.function" id="montant_de_couverture">
       <field name="translated_technical_name">montant_de_couverture</field>
       <field name="description">Montant de couverture</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_coverage_amount</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
-    <record model="rule_engine.tree_element" id="donnee_compl_element_couvert">
+    <record model="rule_engine.function" id="donnee_compl_element_couvert">
       <field name="translated_technical_name">donnee_compl_element_couvert</field>
       <field name="description">Donnée complémentaire Elément Couvert</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.covered_data</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_covered_data_complementary_data</field>
       <field name="fct_args">Code donnee complementaire</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
   </data>
   <data noupdate="1">
-    <record model="rule_engine.tree_element" id="dossier_rule_combination">
+    <record model="rule_engine.function" id="dossier_rule_combination">
       <field name="translated_technical_name">dossier_rule_combination</field>
       <field name="description">Combinaison de règles</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_dossier_rule_combination">
+    <record model="rule_engine.context-function" id="cte_default_dossier_rule_combination">
       <field name="context" ref="rule_engine.default_context"/>
       <field name="tree_element" ref="dossier_rule_combination"/>
     </record>
   </data>
   <data>
-    <record model="rule_engine.tree_element" id="ajouter_detail">
+    <record model="rule_engine.function" id="ajouter_detail">
       <field name="translated_technical_name">ajouter_detail</field>
       <field name="description">Ajouter un détail</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_append_detail</field>
       <field name="fct_args">Code detail, Montant</field>
       <field name="parent" ref="dossier_rule_combination"/>
     </record>
-    <record model="rule_engine.tree_element" id="appliquer_frais">
+    <record model="rule_engine.function" id="appliquer_frais">
       <field name="translated_technical_name">appliquer_frais</field>
       <field name="description">Appliquer le frais</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_apply_fee</field>
       <field name="fct_args">Code Frais, Assiette</field>
       <field name="parent" ref="dossier_rule_combination"/>
     </record>
-    <record model="rule_engine.tree_element" id="valeur_de_composante">
+    <record model="rule_engine.function" id="valeur_de_composante">
       <field name="translated_technical_name">valeur_de_composante</field>
       <field name="description">Valeur de la composante</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_sub_component</field>
       <field name="fct_args">Code composante</field>
       <field name="parent" ref="dossier_rule_combination"/>
     </record>
-    <record model="rule_engine.tree_element" id="appliquer_taxe">
+    <record model="rule_engine.function" id="appliquer_taxe">
       <field name="translated_technical_name">appliquer_taxe</field>
       <field name="description">Appliquer la taxe</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">ins_product.rule_sets.rule_combination</field>
+      <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_apply_tax</field>
       <field name="fct_args">Code Taxe, Assiette</field>
       <field name="parent" ref="dossier_rule_combination"/>

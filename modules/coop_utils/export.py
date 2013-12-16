@@ -675,9 +675,13 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _import_complete(cls, created):
+        pool = Pool()
         for k, v in created.iteritems():
-            CurModel = Pool().get(k)
+            CurModel = pool.get(k)
             CurModel._post_import([elem for elem in v.itervalues()])
+        for k, v in created.iteritems():
+            CurModel = pool.get(k)
+            CurModel._validate([elem for elem in v.itervalues()])
 
     @classmethod
     def import_json(cls, values):
@@ -697,7 +701,7 @@ class ExportImportMixin(Model):
                 main_instances.append(
                     TargetModel._import_json(value, created, relink))
             cls._import_relink(created, relink)
-            cls._import_complete(created)
+        cls._import_complete(created)
         for instance in main_instances:
             try:
                 log_name = instance.get_rec_name(None)
@@ -711,7 +715,7 @@ class ExportImportMixin(Model):
 class FileSelector(ModelView):
     'File Selector'
 
-    __name__ = 'coop_utils.file_selector'
+    __name__ = 'ir.import.select_file'
 
     selected_file = fields.Binary('Import File', filename='name')
     name = fields.Char('Filename')
@@ -741,11 +745,11 @@ class FileSelector(ModelView):
 class ImportWizard(Wizard):
     'Import Wizard'
 
-    __name__ = 'coop_utils.import_wizard'
+    __name__ = 'ir.import'
 
     start_state = 'file_selector'
     file_selector = StateView(
-        'coop_utils.file_selector',
+        'ir.import.select_file',
         'coop_utils.file_selector_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
@@ -765,11 +769,11 @@ class ImportWizard(Wizard):
 class ExportInstance(ExportImportMixin, ModelSQL, ModelView):
     'Export Instance'
 
-    __name__ = 'coop_utils.export_instance'
+    __name__ = 'ir.export_package.item'
 
     to_export = fields.Reference('To export', 'get_all_exportable_models',
         required=True)
-    package = fields.Many2One('coop_utils.export_package', 'Package',
+    package = fields.Many2One('ir.export_package', 'Package',
         ondelete='CASCADE')
 
     @staticmethod
@@ -786,12 +790,12 @@ class ExportInstance(ExportImportMixin, ModelSQL, ModelView):
 class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     'Export Package'
 
-    __name__ = 'coop_utils.export_package'
+    __name__ = 'ir.export_package'
     _rec_name = 'package_name'
 
     code = fields.Char('Code')
     package_name = fields.Char('Package Name', required=True)
-    instances_to_export = fields.One2Many('coop_utils.export_instance',
+    instances_to_export = fields.One2Many('ir.export_package.item',
         'package', 'Instances to export')
     model = fields.Function(
         fields.Selection('get_possible_models_to_export', 'Model'),

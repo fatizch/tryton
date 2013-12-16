@@ -11,7 +11,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     @classmethod
     def _get_test_case_dependencies(cls):
@@ -33,7 +33,7 @@ class TestCaseModel():
     @classmethod
     def get_or_create_complementary_data(cls, name, string=None, type_=None,
             kind=None, selection=None):
-        ComplementaryData = Pool().get('offered.complementary_data_def')
+        ComplementaryData = Pool().get('extra_data')
         schema_el = ComplementaryData()
         schema_el.name = name
         schema_el.string = string
@@ -60,7 +60,7 @@ class TestCaseModel():
     def create_rule(cls, name, code, tables=None):
         RuleEngine = Pool().get('rule_engine')
         RuleParameter = Pool().get('rule_engine.parameter')
-        Table = Pool().get('table.table_def')
+        Table = Pool().get('table')
         Context = Pool().get('rule_engine.context')
         existing = RuleEngine.search([('name', '=', name)])
         if existing:
@@ -94,8 +94,8 @@ class TestCaseModel():
 
     @classmethod
     def create_tranche(cls, code, floor_name=None, ceiling_name=None):
-        Tranche = Pool().get('tranche.tranche')
-        TrancheVersion = Pool().get('tranche.tranche_version')
+        Tranche = Pool().get('salary_range')
+        TrancheVersion = Pool().get('salary_range.version')
         Rule = Pool().get('rule_engine')
         tranche = Tranche()
         tranche.code = code

@@ -14,7 +14,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     @classmethod
     def _get_test_case_dependencies(cls):
@@ -29,9 +29,9 @@ class TestCaseModel():
     def create_table_from_filename(cls, filename):
         # Remove file extension
         filename = filename.split('.')[0]
-        Table = Pool().get('table.table_def')
-        Dimension = Pool().get('table.table_dimension')
-        Cell = Pool().get('table.table_cell')
+        Table = Pool().get('table')
+        Dimension = Pool().get('table.dimension.value')
+        Cell = Pool().get('table.cell')
         if ';' in filename:
             code, name, kind = filename.split(';')
         else:
@@ -64,7 +64,7 @@ class TestCaseModel():
     @classmethod
     def create_nth_dimension(cls, table, values, n):
         Configuration = cls.get_instance()
-        Dimension = Pool().get('table.table_dimension')
+        Dimension = Pool().get('table.dimension.value')
         dimensions = []
         for idx, elem in enumerate(values):
             res = Dimension()
@@ -91,7 +91,7 @@ class TestCaseModel():
 
     @classmethod
     def load_table_from_file(cls, filename):
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         the_file = cls._loaded_resources[MODULE_NAME]['files'][filename]
         table = cls.create_table_from_filename(filename)
         cls.set_dimensions_from_first_cell(the_file[0][0], table)

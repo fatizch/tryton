@@ -18,7 +18,7 @@
     </record>
     <record model="ir.action.keyword" id="act_collection_to_cash_value_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="act_collection_to_cash_value"/>
     </record>
     <!-- ############################################################ -->
@@ -30,7 +30,7 @@
     </record>
     <record model="ir.action.keyword" id="act_cash_value_update_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="act_cash_value_update"/>
     </record>
     <!-- ############################################################ -->
@@ -50,7 +50,7 @@
     </record>
     <record model="ir.action.keyword" id="act_cash_surrender_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="act_cash_surrender"/>
     </record>
  </data>

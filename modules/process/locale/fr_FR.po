@@ -2,15 +2,15 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:process.code:"
+msgctxt "error:process.action:"
 msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"
 
-msgctxt "error:process.process_desc:"
+msgctxt "error:process:"
 msgid "%s: Step %s cannot be used more than once"
 msgstr "%s: L'étape %s ne peut être utilisée qu'une seule fois"
 
-msgctxt "error:process.process_desc:"
+msgctxt "error:process:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
@@ -18,15 +18,15 @@ msgctxt "error:process.process_framework:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
 
-msgctxt "error:process.step_desc:"
+msgctxt "error:process.step:"
 msgid "The technical name must be unique"
 msgstr "Le nom technique doit être unique"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
@@ -34,135 +34,135 @@ msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr "Processus"
 
-msgctxt "field:process.code,create_date:"
+msgctxt "field:process.action,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.code,create_uid:"
+msgctxt "field:process.action,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.code,id:"
+msgctxt "field:process.action,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.code,method_name:"
+msgctxt "field:process.action,method_name:"
 msgid "Method Name"
 msgstr "Nom de la Méthode"
 
-msgctxt "field:process.code,on_model:"
+msgctxt "field:process.action,on_model:"
 msgid "On Model"
 msgstr "Modèle"
 
-msgctxt "field:process.code,parent_step:"
+msgctxt "field:process.action,parent_step:"
 msgid "Parent Step"
 msgstr "Etape Parente"
 
-msgctxt "field:process.code,parent_transition:"
+msgctxt "field:process.action,parent_transition:"
 msgid "Parent Transition"
 msgstr "Transition Parente"
 
-msgctxt "field:process.code,rec_name:"
+msgctxt "field:process.action,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.code,sequence:"
+msgctxt "field:process.action,sequence:"
 msgid "Sequence"
 msgstr "Séquence"
 
-msgctxt "field:process.code,source_code:"
+msgctxt "field:process.action,source_code:"
 msgid "Source Code"
 msgstr "Code Source"
 
-msgctxt "field:process.code,technical_kind:"
+msgctxt "field:process.action,technical_kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:process.code,write_date:"
+msgctxt "field:process.action,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.code,write_uid:"
+msgctxt "field:process.action,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.process_desc,all_steps:"
+msgctxt "field:process,all_steps:"
 msgid "All Steps"
 msgstr "Toutes les Etapes"
 
-msgctxt "field:process.process_desc,create_date:"
+msgctxt "field:process,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.process_desc,create_uid:"
+msgctxt "field:process,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.process_desc,display_steps_without_status:"
+msgctxt "field:process,display_steps_without_status:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.process_desc,fancy_name:"
+msgctxt "field:process,fancy_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.process_desc,id:"
+msgctxt "field:process,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.process_desc,menu_icon:"
+msgctxt "field:process,menu_icon:"
 msgid "Menu Icon"
 msgstr "Icône du Menu"
 
-msgctxt "field:process.process_desc,menu_items:"
+msgctxt "field:process,menu_items:"
 msgid "Menus"
 msgstr "Menus"
 
-msgctxt "field:process.process_desc,menu_name:"
+msgctxt "field:process,menu_name:"
 msgid "Menu name"
 msgstr "Nom du Menu"
 
-msgctxt "field:process.process_desc,on_model:"
+msgctxt "field:process,on_model:"
 msgid "On Model"
 msgstr "Modèle"
 
-msgctxt "field:process.process_desc,rec_name:"
+msgctxt "field:process,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.process_desc,step_button_group_position:"
+msgctxt "field:process,step_button_group_position:"
 msgid "Process Overview Positioning"
 msgstr "Position des Boutons"
 
-msgctxt "field:process.process_desc,steps_to_display:"
+msgctxt "field:process,steps_to_display:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.process_desc,technical_name:"
+msgctxt "field:process,technical_name:"
 msgid "Technical Name"
 msgstr "Nom Technique"
 
-msgctxt "field:process.process_desc,transitions:"
+msgctxt "field:process,transitions:"
 msgid "Transitions"
 msgstr "Transitions"
 
-msgctxt "field:process.process_desc,write_date:"
+msgctxt "field:process,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.process_desc,write_uid:"
+msgctxt "field:process,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.process_desc,xml_footer:"
+msgctxt "field:process,xml_footer:"
 msgid "Footer XML"
 msgstr "Pied de Page XML"
 
-msgctxt "field:process.process_desc,xml_header:"
+msgctxt "field:process,xml_header:"
 msgid "Header XML"
 msgstr "Entête XML"
 
-msgctxt "field:process.process_desc,xml_tree:"
+msgctxt "field:process,xml_tree:"
 msgid "Tree View XML"
 msgstr "Description de la Vue Arbre"
 
@@ -174,75 +174,75 @@ msgctxt "field:process.process_framework,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.process_menu_relation,create_date:"
+msgctxt "field:process-menu,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.process_menu_relation,create_uid:"
+msgctxt "field:process-menu,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.process_menu_relation,id:"
+msgctxt "field:process-menu,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.process_menu_relation,menu:"
+msgctxt "field:process-menu,menu:"
 msgid "Menu"
 msgstr "Menu"
 
-msgctxt "field:process.process_menu_relation,process:"
+msgctxt "field:process-menu,process:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:process.process_menu_relation,rec_name:"
+msgctxt "field:process-menu,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.process_menu_relation,write_date:"
+msgctxt "field:process-menu,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.process_menu_relation,write_uid:"
+msgctxt "field:process-menu,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.process_step_relation,create_date:"
+msgctxt "field:process-process.step,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.process_step_relation,create_uid:"
+msgctxt "field:process-process.step,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.process_step_relation,id:"
+msgctxt "field:process-process.step,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.process_step_relation,order:"
+msgctxt "field:process-process.step,order:"
 msgid "Order"
 msgstr "Ordre"
 
-msgctxt "field:process.process_step_relation,process:"
+msgctxt "field:process-process.step,process:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:process.process_step_relation,rec_name:"
+msgctxt "field:process-process.step,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.process_step_relation,status:"
+msgctxt "field:process-process.step,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:process.process_step_relation,step:"
+msgctxt "field:process-process.step,step:"
 msgid "Step"
 msgstr "Etape"
 
-msgctxt "field:process.process_step_relation,write_date:"
+msgctxt "field:process-process.step,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.process_step_relation,write_uid:"
+msgctxt "field:process-process.step,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -282,199 +282,199 @@ msgctxt "field:process.status,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.step_desc,authorizations:"
+msgctxt "field:process.step,authorizations:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
-msgctxt "field:process.step_desc,code_after:"
+msgctxt "field:process.step,code_after:"
 msgid "Executed After Step"
 msgstr "Executé après l'Etape"
 
-msgctxt "field:process.step_desc,code_before:"
+msgctxt "field:process.step,code_before:"
 msgid "Executed Before Step"
 msgstr "Executé avant l'Etape"
 
-msgctxt "field:process.step_desc,colspan:"
+msgctxt "field:process.step,colspan:"
 msgid "View columns"
 msgstr "Colonnes de la Vue"
 
-msgctxt "field:process.step_desc,create_date:"
+msgctxt "field:process.step,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.step_desc,create_uid:"
+msgctxt "field:process.step,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.step_desc,fancy_name:"
+msgctxt "field:process.step,fancy_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.step_desc,id:"
+msgctxt "field:process.step,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.step_desc,processes:"
+msgctxt "field:process.step,processes:"
 msgid "Transitions"
 msgstr "Transitions"
 
-msgctxt "field:process.step_desc,rec_name:"
+msgctxt "field:process.step,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.step_desc,step_xml:"
+msgctxt "field:process.step,step_xml:"
 msgid "XML"
 msgstr "Description de la Vue"
 
-msgctxt "field:process.step_desc,technical_name:"
+msgctxt "field:process.step,technical_name:"
 msgid "Technical Name"
 msgstr "Nom Technique"
 
-msgctxt "field:process.step_desc,write_date:"
+msgctxt "field:process.step,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.step_desc,write_uid:"
+msgctxt "field:process.step,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.step_desc_authorization,create_date:"
+msgctxt "field:process.step-group,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.step_desc_authorization,create_uid:"
+msgctxt "field:process.step-group,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.step_desc_authorization,group:"
+msgctxt "field:process.step-group,group:"
 msgid "Group"
 msgstr "Groupe"
 
-msgctxt "field:process.step_desc_authorization,id:"
+msgctxt "field:process.step-group,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.step_desc_authorization,rec_name:"
+msgctxt "field:process.step-group,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.step_desc_authorization,step_desc:"
+msgctxt "field:process.step-group,step_desc:"
 msgid "Step Desc"
 msgstr "Descripteur d'Etape"
 
-msgctxt "field:process.step_desc_authorization,write_date:"
+msgctxt "field:process.step-group,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.step_desc_authorization,write_uid:"
+msgctxt "field:process.step-group,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.step_transition,authorizations:"
+msgctxt "field:process.transition,authorizations:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
-msgctxt "field:process.step_transition,choice_if_false:"
+msgctxt "field:process.transition,choice_if_false:"
 msgid "Transition if False"
 msgstr "Transition Si Faux"
 
-msgctxt "field:process.step_transition,choice_if_true:"
+msgctxt "field:process.transition,choice_if_true:"
 msgid "Transition if True"
 msgstr "Transition Si Vrai"
 
-msgctxt "field:process.step_transition,create_date:"
+msgctxt "field:process.transition,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.step_transition,create_uid:"
+msgctxt "field:process.transition,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.step_transition,from_step:"
+msgctxt "field:process.transition,from_step:"
 msgid "From Step"
 msgstr "Depuis l'Etape"
 
-msgctxt "field:process.step_transition,id:"
+msgctxt "field:process.transition,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.step_transition,kind:"
+msgctxt "field:process.transition,kind:"
 msgid "Transition Kind"
 msgstr "Type"
 
-msgctxt "field:process.step_transition,method_kind:"
+msgctxt "field:process.transition,method_kind:"
 msgid "Method Behaviour"
 msgstr "Comportement de la Méthode"
 
-msgctxt "field:process.step_transition,methods:"
+msgctxt "field:process.transition,methods:"
 msgid "Methods"
 msgstr "Méthodes"
 
-msgctxt "field:process.step_transition,on_process:"
+msgctxt "field:process.transition,on_process:"
 msgid "On Process"
 msgstr "Sur le Processus"
 
-msgctxt "field:process.step_transition,priority:"
+msgctxt "field:process.transition,priority:"
 msgid "Priority"
 msgstr "Priorité"
 
-msgctxt "field:process.step_transition,pyson:"
+msgctxt "field:process.transition,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
 
-msgctxt "field:process.step_transition,pyson_choice:"
+msgctxt "field:process.transition,pyson_choice:"
 msgid "Choice"
 msgstr "Choix"
 
-msgctxt "field:process.step_transition,pyson_description:"
+msgctxt "field:process.transition,pyson_description:"
 msgid "Pyson Description"
 msgstr "Description Pyson"
 
-msgctxt "field:process.step_transition,rec_name:"
+msgctxt "field:process.transition,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.step_transition,to_step:"
+msgctxt "field:process.transition,to_step:"
 msgid "To Step"
 msgstr "Vers l'Etape"
 
-msgctxt "field:process.step_transition,write_date:"
+msgctxt "field:process.transition,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.step_transition,write_uid:"
+msgctxt "field:process.transition,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process.transition_authorization,create_date:"
+msgctxt "field:process.transition-group,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process.transition_authorization,create_uid:"
+msgctxt "field:process.transition-group,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process.transition_authorization,group:"
+msgctxt "field:process.transition-group,group:"
 msgid "Group"
 msgstr "Groupe"
 
-msgctxt "field:process.transition_authorization,id:"
+msgctxt "field:process.transition-group,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process.transition_authorization,rec_name:"
+msgctxt "field:process.transition-group,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process.transition_authorization,transition:"
+msgctxt "field:process.transition-group,transition:"
 msgid "Transition"
 msgstr "Transition"
 
-msgctxt "field:process.transition_authorization,write_date:"
+msgctxt "field:process.transition-group,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process.transition_authorization,write_uid:"
+msgctxt "field:process.transition-group,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -518,11 +518,11 @@ msgctxt "model:ir.ui.menu,name:process_menu_id"
 msgid "Process Main Menu"
 msgstr "Moteur de Processus"
 
-msgctxt "model:process.code,name:"
+msgctxt "model:process.action,name:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "model:process.process_desc,name:"
+msgctxt "model:process,name:"
 msgid "Process Descriptor"
 msgstr "Descripteur de Processus"
 
@@ -530,11 +530,11 @@ msgctxt "model:process.process_framework,name:"
 msgid "Process Framework"
 msgstr ""
 
-msgctxt "model:process.process_menu_relation,name:"
+msgctxt "model:process-menu,name:"
 msgid "Process Menu Relation"
 msgstr "Relation Processus Menu"
 
-msgctxt "model:process.process_step_relation,name:"
+msgctxt "model:process-process.step,name:"
 msgid "Process to Step relation"
 msgstr "Relation Processus - Etape"
 
@@ -542,385 +542,385 @@ msgctxt "model:process.status,name:"
 msgid "Process Status"
 msgstr "Statuts des Etapes"
 
-msgctxt "model:process.step_desc,name:"
+msgctxt "model:process.step,name:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
-msgctxt "model:process.step_desc_authorization,name:"
+msgctxt "model:process.step-group,name:"
 msgid "Step Desc Authorization"
 msgstr "Autorisations pour l'Etape"
 
-msgctxt "model:process.step_transition,name:"
+msgctxt "model:process.transition,name:"
 msgid "Step Transition"
 msgstr "Transition d'Etape"
 
-msgctxt "model:process.transition_authorization,name:"
+msgctxt "model:process.transition-group,name:"
 msgid "Transition Authorization"
 msgstr "Autorisations pour les Transitions"
 
-msgctxt "selection:process.code,technical_kind:"
+msgctxt "selection:process.action,technical_kind:"
 msgid "After"
 msgstr "Après"
 
-msgctxt "selection:process.code,technical_kind:"
+msgctxt "selection:process.action,technical_kind:"
 msgid "Before"
 msgstr "Avant"
 
-msgctxt "selection:process.code,technical_kind:"
+msgctxt "selection:process.action,technical_kind:"
 msgid "Transition"
 msgstr "Transition"
 
-msgctxt "selection:process.process_desc,step_button_group_position:"
+msgctxt "selection:process,step_button_group_position:"
 msgid "Bottom"
 msgstr "Bas"
 
-msgctxt "selection:process.process_desc,step_button_group_position:"
+msgctxt "selection:process,step_button_group_position:"
 msgid "None"
 msgstr "Aucun"
 
-msgctxt "selection:process.process_desc,step_button_group_position:"
+msgctxt "selection:process,step_button_group_position:"
 msgid "Right"
 msgstr "Droite"
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Complete Process"
 msgstr "Terminer le processus"
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Standard Transition"
 msgstr "Transition Standard"
 
-msgctxt "selection:process.step_transition,method_kind:"
+msgctxt "selection:process.transition,method_kind:"
 msgid "Executed between steps"
 msgstr "Exécuter entre les Etapes"
 
-msgctxt "selection:process.step_transition,method_kind:"
+msgctxt "selection:process.transition,method_kind:"
 msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Clôture"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Documents"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Décl. du Préjudice"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Déclarant"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Prestations"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Rechute"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Remboursement"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Réouverture"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "==> Validation"
 msgstr ""
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Clôture"
 msgstr "Clôture"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Complete"
 msgstr "Terminer"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Décl. du Préjudice"
 msgstr "Décl. du Préjudice"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Déclarant"
 msgstr "Déclarant"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Déclaration de Sinistre"
 msgstr "Déclaration de Sinistre"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Losses"
 msgstr "Préjudices"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Prestations"
 msgstr "Prestations"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Rechute"
 msgstr "Rechute"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Remboursement"
 msgstr "Remboursement"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Réouverture"
 msgstr "Réouverture"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Réouverture De Sinistre"
 msgstr "Réouverture De Sinistre"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
-msgctxt "view:claim.claim:"
+msgctxt "view:claim:"
 msgid "Validation"
 msgstr "Validation"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Adhérent"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Affiliations"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Cotisations"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Documents"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Garanties"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Personnes Couvertes"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Populations"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Produit"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Prêt"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Tarif"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Taux"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Validation de l'avenant"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Validation du contrat"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "==> Validation du contrat Collectif"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "A aujourd'hui"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Accounting"
 msgstr "Comptabilité"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Adhérent"
 msgstr "Adhérent"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Affiliations"
 msgstr "Affiliations"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Avenant"
 msgstr "Avenant"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Billing"
 msgstr "Cotisation"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Calculate Prices"
 msgstr "Calculer les Primes"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Calculer les Taux"
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Complete"
 msgstr "Terminer"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Cotisations"
 msgstr "Cotisations"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Covered Elements/Options"
 msgstr "Eléments Couverts/Garanties"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Create Loan"
 msgstr "Créer un prêt"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Garanties"
 msgstr "Garanties"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Options"
 msgstr "Garanties"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Personnes Couvertes"
 msgstr "Personnes Couvertes"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Populations"
 msgstr "Populations"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Processus de souscription individuel"
 msgstr "Processus de souscription individuel"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Produit"
 msgstr "Produit"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Prêt"
 msgstr "Prêt"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Souscription Contrat Collectif"
 msgstr "Souscription Contrat Collectif"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Souscription Emprunteur"
 msgstr "Souscription Emprunteur"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Tarif"
 msgstr "Tarif"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Taux"
 msgstr "Taux"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid ""
 "The current record isin a state (Validation de l'avenant) that you are not "
 "allowed to view."
 msgstr ""
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Validation de l'avenant"
 msgstr "Validation de l'avenant"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Validation du contrat"
 msgstr "Validation du contrat"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Validation du contrat Collectif"
 msgstr "Validation du contrat Collectif"
 
-msgctxt "view:process.code:"
+msgctxt "view:process.action:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Process Descriptor"
 msgstr "Descripteur de Processus"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Process Descriptors"
 msgstr "Paramétrage des Processus"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "Update Menu"
 msgstr "Recharger le Menu"
 
-msgctxt "view:process.process_desc:"
+msgctxt "view:process:"
 msgid "XML"
 msgstr "Description de la Vue"
 
-msgctxt "view:process.process_step_relation:"
+msgctxt "view:process-process.step:"
 msgid "Process Relation"
 msgstr ""
 
-msgctxt "view:process.process_step_relation:"
+msgctxt "view:process-process.step:"
 msgid "Process Steps"
 msgstr ""
 
@@ -928,34 +928,34 @@ msgctxt "view:process.status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Authorizations"
 msgstr "Autorisations"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Step Descriptor"
 msgstr "Descripteur d'Etape"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Step Descriptors"
 msgstr "Paramétrage des Etapes"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Usage"
 msgstr "Utilisation"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "XML"
 msgstr "Description de la Vue"
 
-msgctxt "view:process.step_transition:"
+msgctxt "view:process.transition:"
 msgid "Step Transition Descriptor"
 msgstr "Descripteur de Transition"
 
-msgctxt "view:process.step_transition:"
+msgctxt "view:process.transition:"
 msgid "Transitions"
 msgstr "Transitions"

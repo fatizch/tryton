@@ -24,7 +24,7 @@ class ComplementaryDataDefinition(
         DictSchemaMixin, model.CoopSQL, model.CoopView):
     'Complementary Data Definition'
 
-    __name__ = 'offered.complementary_data_def'
+    __name__ = 'extra_data'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -49,7 +49,7 @@ class ComplementaryDataDefinition(
         ],
         'Kind')
     sub_datas = fields.One2Many(
-        'offered.complementary_data_recursive_relation',
+        'extra_data-sub_extra_data',
         'master', 'Sub Data', context={
             'kind': Eval('complementary_data_kind')},
         states={'invisible': Eval('sub_data_config_kind') != 'simple'})
@@ -57,7 +57,7 @@ class ComplementaryDataDefinition(
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
-    tags = fields.Many2Many('offered.compl_data_def-tag', 'compl_data_def',
+    tags = fields.Many2Many('extra_data-tag', 'compl_data_def',
         'tag', 'Tags')
     tags_name = fields.Function(
         fields.Char('Tags', on_change_with=['tags']),
@@ -328,12 +328,12 @@ class ComplementaryDataDefinition(
 class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
     'Complementary Data recursive relation'
 
-    __name__ = 'offered.complementary_data_recursive_relation'
+    __name__ = 'extra_data-sub_extra_data'
 
     master = fields.Many2One(
-        'offered.complementary_data_def', 'Master', ondelete='CASCADE')
+        'extra_data', 'Master', ondelete='CASCADE')
     child = fields.Many2One(
-        'offered.complementary_data_def', 'Child', ondelete='RESTRICT')
+        'extra_data', 'Child', ondelete='RESTRICT')
     select_value = fields.Char('Select value')
 
     def does_match(self, value):
@@ -354,7 +354,7 @@ class Tag():
 
     __name__ = 'tag'
 
-    compl_data_defs = fields.Many2Many('offered.compl_data_def-tag', 'tag',
+    compl_data_defs = fields.Many2Many('extra_data-tag', 'tag',
         'compl_data_def', 'Complementary Data')
 
     @classmethod
@@ -367,8 +367,8 @@ class Tag():
 class ComplementaryDataDefTagRelation(model.CoopSQL):
     'Relation between complementary data def and tag'
 
-    __name__ = 'offered.compl_data_def-tag'
+    __name__ = 'extra_data-tag'
 
-    compl_data_def = fields.Many2One('offered.complementary_data_def',
+    compl_data_def = fields.Many2One('extra_data',
         'Complementary Data Def', ondelete='CASCADE')
     tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

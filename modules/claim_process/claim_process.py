@@ -22,7 +22,7 @@ class ClaimProcess(CoopProcessFramework):
     'Claim'
 
     __metaclass__ = ClassAttr
-    __name__ = 'claim.claim'
+    __name__ = 'claim'
 
     doc_received = fields.Function(
         fields.Boolean(
@@ -38,7 +38,7 @@ class ClaimProcess(CoopProcessFramework):
         'get_indemnifications')
     contact_history = fields.Function(
         fields.One2Many(
-            'party.contact_history', '', 'History',
+            'party.interaction', '', 'History',
             on_change_with=['claimant'], depends=['claimant']),
         'on_change_with_contact_history')
     is_pending_indemnification = fields.Function(
@@ -48,7 +48,7 @@ class ClaimProcess(CoopProcessFramework):
     def on_change_with_contact_history(self, name=None):
         if not (hasattr(self, 'claimant') and self.claimant):
             return []
-        ContactHistory = Pool().get('party.contact_history')
+        ContactHistory = Pool().get('party.interaction')
         return [x.id for x in ContactHistory.search(
             [('party', '=', self.claimant)])]
 
@@ -61,7 +61,7 @@ class ClaimProcess(CoopProcessFramework):
         return True
 
     def init_declaration_document_request(self):
-        DocRequest = Pool().get('ins_product.document_request')
+        DocRequest = Pool().get('document.request')
         if not (hasattr(self, 'documents') and self.documents):
             good_req = DocRequest()
             good_req.needed_by = self
@@ -149,7 +149,7 @@ class LossProcess():
     #The Benefit to deliver is just a shortcut to ease delivered service
     #creation. it should not be used once a delivered_service has been created
     benefit_to_deliver = fields.Function(
-        fields.Many2One('ins_product.benefit', 'Benefit',
+        fields.Many2One('benefit', 'Benefit',
             domain=[('id', 'in', Eval('benefits'))],
             depends=['benefits', 'can_modify_benefit'],
             states={'invisible': ~Eval('can_modify_benefit')},
@@ -158,7 +158,7 @@ class LossProcess():
         'get_benefit_to_deliver', 'set_void')
     benefits = fields.Function(
         fields.One2Many(
-            'ins_product.benefit', None, 'Benefits',
+            'benefit', None, 'Benefits',
             on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim']),
         'on_change_with_benefits')
     can_modify_benefit = fields.Function(
@@ -247,7 +247,7 @@ class ProcessDesc():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
 
     @classmethod
     def __setup__(cls):
@@ -261,14 +261,14 @@ class ProcessDesc():
 class DeclarationProcessParameters(ProcessParameters):
     'Declaration Process Parameters'
 
-    __name__ = 'claim.declaration_process_parameters'
+    __name__ = 'claim.declare.find_process'
 
     party = fields.Many2One('party.party', 'Party')
-    claim = fields.Many2One('claim.claim', 'Claim',
+    claim = fields.Many2One('claim', 'Claim',
         domain=[('id', 'in', Eval('claims'))],
         depends=['claims'])
     claims = fields.Function(
-        fields.One2Many('claim.claim', None, 'Claims',
+        fields.One2Many('claim', None, 'Claims',
             on_change_with=['party']),
         'on_change_with_claims')
 
@@ -293,21 +293,21 @@ class DeclarationProcessParameters(ProcessParameters):
     @classmethod
     def default_model(cls):
         Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'claim.claim')])[0].id
+        return Model.search([('model', '=', 'claim')])[0].id
 
     def on_change_with_claims(self, name=None):
-        Claim = Pool().get('claim.claim')
+        Claim = Pool().get('claim')
         return [x.id for x in Claim.search([('claimant', '=', self.party)])]
 
 
 class DeclarationProcessFinder(ProcessFinder):
     'Declaration Process Finder'
 
-    __name__ = 'claim.declaration_process_finder'
+    __name__ = 'claim.declare'
 
     @classmethod
     def get_parameters_model(cls):
-        return 'claim.declaration_process_parameters'
+        return 'claim.declare.find_process'
 
     @classmethod
     def get_parameters_view(cls):

@@ -3,7 +3,7 @@
     <data>
         <record model="ir.ui.view" id="create_receivable_start_view_form">
             <field
-                name="model">coop_account_payment.create_receivable.start</field>
+                name="model">account.payment.create.parameters</field>
             <field name="type">form</field>
             <field name="name">create_receivable_start_form</field>
         </record>
@@ -11,7 +11,7 @@
         <record model="ir.action.wizard" id="wizard_create_receivable">
             <field name="name">Create Receivable Payment</field>
             <field
-                name="wiz_name">coop_account_payment.create_receivable</field>
+                name="wiz_name">account.payment.create</field>
         </record>
 
         <menuitem parent="account_payment.menu_payments" sequence="40"

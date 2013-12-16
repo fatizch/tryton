@@ -9,7 +9,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     @classmethod
     def create_distribution_network(cls, name, children_name=None,

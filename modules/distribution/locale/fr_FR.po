@@ -2,55 +2,55 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:distribution.dist_network,childs:"
+msgctxt "field:distribution.network,childs:"
 msgid "Sub Levels"
 msgstr "Niveaux Inférieurs"
 
-msgctxt "field:distribution.dist_network,create_date:"
+msgctxt "field:distribution.network,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:distribution.dist_network,create_date_:"
+msgctxt "field:distribution.network,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:distribution.dist_network,create_uid:"
+msgctxt "field:distribution.network,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:distribution.dist_network,id:"
+msgctxt "field:distribution.network,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:distribution.dist_network,left:"
+msgctxt "field:distribution.network,left:"
 msgid "Left"
 msgstr "Gauche"
 
-msgctxt "field:distribution.dist_network,must_expand_tree:"
+msgctxt "field:distribution.network,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:distribution.dist_network,name:"
+msgctxt "field:distribution.network,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:distribution.dist_network,parent:"
+msgctxt "field:distribution.network,parent:"
 msgid "Top Level"
 msgstr "Niveau Supérieur"
 
-msgctxt "field:distribution.dist_network,rec_name:"
+msgctxt "field:distribution.network,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:distribution.dist_network,right:"
+msgctxt "field:distribution.network,right:"
 msgid "Right"
 msgstr "Droite"
 
-msgctxt "field:distribution.dist_network,write_date:"
+msgctxt "field:distribution.network,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:distribution.dist_network,write_uid:"
+msgctxt "field:distribution.network,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -58,7 +58,7 @@ msgctxt "field:res.user,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "model:distribution.dist_network,name:"
+msgctxt "model:distribution.network,name:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
@@ -78,10 +78,10 @@ msgctxt "model:ir.ui.menu,name:menu_distribution_configuration"
 msgid "Configuration"
 msgstr "Configuration"
 
-msgctxt "view:distribution.dist_network:"
+msgctxt "view:distribution.network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "view:distribution.dist_network:"
+msgctxt "view:distribution.network:"
 msgid "Hierarchy"
 msgstr "Hierarchie"

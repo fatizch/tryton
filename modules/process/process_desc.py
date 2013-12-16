@@ -34,18 +34,18 @@ class Status(ModelSQL, ModelView):
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     relations = fields.One2Many(
-        'process.process_step_relation', 'status', 'Relations',
+        'process-process.step', 'status', 'Relations',
         states={'readonly': True})
 
 
 class ProcessStepRelation(ModelSQL, ModelView):
     'Process to Step relation'
 
-    __name__ = 'process.process_step_relation'
+    __name__ = 'process-process.step'
 
-    process = fields.Many2One('process.process_desc', 'Process',
+    process = fields.Many2One('process', 'Process',
         ondelete='CASCADE')
-    step = fields.Many2One('process.step_desc', 'Step',
+    step = fields.Many2One('process.step', 'Step',
         ondelete='RESTRICT')
     status = fields.Many2One('process.status', 'Status',
         ondelete='RESTRICT')
@@ -67,17 +67,17 @@ class ProcessStepRelation(ModelSQL, ModelView):
 class ProcessMenuRelation(ModelSQL):
     'Process Menu Relation'
 
-    __name__ = 'process.process_menu_relation'
+    __name__ = 'process-menu'
 
     process = fields.Many2One(
-        'process.process_desc', 'Process', ondelete='CASCADE')
+        'process', 'Process', ondelete='CASCADE')
     menu = fields.Many2One('ir.ui.menu', 'Menu', ondelete='RESTRICT')
 
 
 class ProcessDesc(ModelSQL, ModelView):
     'Process Descriptor'
 
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
 
     technical_name = fields.Char('Technical Name', required=True,
         on_change_with=['fancy_name', 'technical_name'])
@@ -89,17 +89,17 @@ class ProcessDesc(ModelSQL, ModelView):
             ('model', '!=', 'process.process_framework')
         ],
         required=True)
-    all_steps = fields.One2Many('process.process_step_relation',
+    all_steps = fields.One2Many('process-process.step',
         'process', 'All Steps', order=[('order', 'ASC')],
         states={'invisible': Bool(Eval('display_steps_without_status'))})
     display_steps_without_status = fields.Function(
         fields.Boolean('Display Steps Without Status'),
         'get_display_steps_without_status', 'set_void')
-    steps_to_display = fields.Many2Many('process.process_step_relation',
+    steps_to_display = fields.Many2Many('process-process.step',
         'process', 'step', 'Steps',
         states={'invisible': Bool(~Eval('display_steps_without_status'))})
     transitions = fields.One2Many(
-        'process.step_transition', 'on_process', 'Transitions')
+        'process.transition', 'on_process', 'Transitions')
     xml_header = fields.Text('Header XML')
     xml_footer = fields.Text('Footer XML')
     xml_tree = fields.Text('Tree View XML')
@@ -107,7 +107,7 @@ class ProcessDesc(ModelSQL, ModelView):
         [('', 'None'), ('right', 'Right'), ('bottom', 'Bottom')],
         'Process Overview Positioning')
     menu_items = fields.Many2Many(
-        'process.process_menu_relation', 'process', 'menu', 'Menus')
+        'process-menu', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
     menu_name = fields.Char(
         'Menu name', on_change_with=['fancy_name', 'menu_name'])
@@ -508,7 +508,7 @@ completed the current process, please go ahead"/>'
 
     def set_menu_item_list(self, previous_ids, new_ids):
         Menu = Pool().get('ir.ui.menu')
-        Process = Pool().get('process.process_desc')
+        Process = Pool().get('process')
         MenuItem = Pool().get('ir.ui.menu')
         ActWin = Pool().get('ir.action.act_window')
         View = Pool().get('ir.ui.view')
@@ -584,10 +584,10 @@ completed the current process, please go ahead"/>'
 class TransitionAuthorization(ModelSQL):
     'Transition Authorization'
 
-    __name__ = 'process.transition_authorization'
+    __name__ = 'process.transition-group'
 
     transition = fields.Many2One(
-        'process.step_transition', 'Transition', ondelete='CASCADE')
+        'process.transition', 'Transition', ondelete='CASCADE')
     group = fields.Many2One(
         'res.group', 'Group', ondelete='CASCADE')
 
@@ -595,7 +595,7 @@ class TransitionAuthorization(ModelSQL):
 class Code(ModelSQL, ModelView):
     'Code'
 
-    __name__ = 'process.code'
+    __name__ = 'process.action'
 
     technical_kind = fields.Selection([
             ('step_before', 'Before'),
@@ -610,9 +610,9 @@ class Code(ModelSQL, ModelView):
         'get_on_model')
     method_name = fields.Char('Method Name', required=True)
     parent_step = fields.Many2One(
-        'process.step_desc', 'Parent Step', ondelete='CASCADE')
+        'process.step', 'Parent Step', ondelete='CASCADE')
     parent_transition = fields.Many2One(
-        'process.step_transition', 'Parent Transition', ondelete='CASCADE')
+        'process.transition', 'Parent Transition', ondelete='CASCADE')
     sequence = fields.Integer('Sequence', states={'invisible': True})
 
     @classmethod
@@ -669,15 +669,15 @@ class Code(ModelSQL, ModelView):
 class StepTransition(ModelSQL, ModelView):
     'Step Transition'
 
-    __name__ = 'process.step_transition'
+    __name__ = 'process.transition'
 
     on_process = fields.Many2One(
-        'process.process_desc', 'On Process', required=True,
+        'process', 'On Process', required=True,
         ondelete='CASCADE')
     from_step = fields.Many2One(
-        'process.step_desc', 'From Step', ondelete='CASCADE', required=True)
+        'process.step', 'From Step', ondelete='CASCADE', required=True)
     to_step = fields.Many2One(
-        'process.step_desc', 'To Step', ondelete='CASCADE',
+        'process.step', 'To Step', ondelete='CASCADE',
         domain=[('id', '!=', Eval('from_step'))],
         depends=['from_step'],
         states={'invisible': Eval('kind') != 'standard'})
@@ -691,7 +691,7 @@ class StepTransition(ModelSQL, ModelView):
     #  re.compile('Eval\(\'([a-zA-Z0-9._]*)\'', re.I|re.U) + finditer
     pyson = fields.Char('Pyson Constraint')
     methods = fields.One2ManyDomain(
-        'process.code', 'parent_transition', 'Methods',
+        'process.action', 'parent_transition', 'Methods',
         domain=[('technical_kind', '=', 'transition')],
         order=[('sequence', 'ASC')])
     method_kind = fields.Selection(
@@ -700,7 +700,7 @@ class StepTransition(ModelSQL, ModelView):
             ('add', 'Executed between steps')],
         'Method Behaviour')
     authorizations = fields.Many2Many(
-        'process.transition_authorization', 'transition', 'group',
+        'process.transition-group', 'transition', 'group',
         'Authorizations')
     priority = fields.Integer('Priority')
 
@@ -779,17 +779,17 @@ class StepTransition(ModelSQL, ModelView):
 class StepDescAuthorization(ModelSQL):
     'Step Desc Authorization'
 
-    __name__ = 'process.step_desc_authorization'
+    __name__ = 'process.step-group'
 
     step_desc = fields.Many2One(
-        'process.step_desc', 'Step Desc', ondelete='CASCADE')
+        'process.step', 'Step Desc', ondelete='CASCADE')
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
 class StepDesc(ModelSQL, ModelView):
     'Step Descriptor'
 
-    __name__ = 'process.step_desc'
+    __name__ = 'process.step'
     _rec_name = 'fancy_name'
 
     technical_name = fields.Char(
@@ -797,19 +797,19 @@ class StepDesc(ModelSQL, ModelView):
     fancy_name = fields.Char('Name', required=True, translate=True)
     step_xml = fields.Text('XML')
     authorizations = fields.Many2Many(
-        'process.step_desc_authorization', 'step_desc', 'group',
+        'process.step-group', 'step_desc', 'group',
         'Authorizations')
     code_before = fields.One2ManyDomain(
-        'process.code', 'parent_step', 'Executed Before Step',
+        'process.action', 'parent_step', 'Executed Before Step',
         domain=[('technical_kind', '=', 'step_before')],
         order=[('sequence', 'ASC')])
     code_after = fields.One2ManyDomain(
-        'process.code', 'parent_step', 'Executed After Step',
+        'process.action', 'parent_step', 'Executed After Step',
         domain=[('technical_kind', '=', 'step_after')],
         order=[('sequence', 'ASC')])
     colspan = fields.Integer('View columns', required=True)
     processes = fields.One2Many(
-        'process.process_step_relation', 'step', 'Transitions')
+        'process-process.step', 'step', 'Transitions')
 
     @classmethod
     def __setup__(cls):
@@ -823,7 +823,7 @@ class StepDesc(ModelSQL, ModelView):
         super(StepDesc, cls).write(steps, values)
 
         # If we write a step that's being used in the definition of a process
-        ProcessStepRelation = Pool().get('process.process_step_relation')
+        ProcessStepRelation = Pool().get('process-process.step')
         processes = set()
 
         for step in steps:
@@ -834,7 +834,7 @@ class StepDesc(ModelSQL, ModelView):
         if not processes:
             return
 
-        Process = Pool().get('process.process_desc')
+        Process = Pool().get('process')
         # We need to update each of those processes view.
         for process in processes:
             Process(process).create_update_menu_entry()
@@ -885,7 +885,7 @@ class StepDesc(ModelSQL, ModelView):
 
 
 class GenerateGraph(Report):
-    __name__ = 'process.graph_generation'
+    __name__ = 'process.generate_graph.report'
 
     @classmethod
     def build_graph(cls, process):
@@ -975,7 +975,7 @@ class GenerateGraph(Report):
             raise Exception('Error', 'Report (%s) not find!' % cls.__name__)
         action_report = ActionReport(action_report_ids[0])
 
-        Process = Pool().get('process.process_desc')
+        Process = Pool().get('process')
         the_process = Process(Transaction().context.get('active_id'))
 
         graph = cls.build_graph(the_process)
@@ -1017,7 +1017,7 @@ class GenerateGraph(Report):
 
 
 class GenerateGraphWizard(Wizard):
-    __name__ = 'process.generate_graph_wizard'
+    __name__ = 'process.generate_graph'
 
     start_state = 'print_'
 

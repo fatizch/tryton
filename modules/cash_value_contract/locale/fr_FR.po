@@ -66,11 +66,11 @@ msgctxt "field:contract.cash_value.collection,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.contract,cash_value_collections:"
+msgctxt "field:contract,cash_value_collections:"
 msgid "Collections"
 msgstr "Encaissements"
 
-msgctxt "field:contract.contract,is_cash_value:"
+msgctxt "field:contract,is_cash_value:"
 msgid "Is Cash Value"
 msgstr "Est de type Epargne"
 
@@ -112,15 +112,15 @@ msgctxt "field:contract.wizard.collection_to_cash_value.select_date,to_date:"
 msgid "To Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_contract.covered_data,cash_value_collection_amount:"
+msgctxt "field:contract.covered_data,cash_value_collection_amount:"
 msgid "Cash value collection amount"
 msgstr "Montant du versement"
 
-msgctxt "field:ins_contract.covered_data,cash_value_payment_mode:"
+msgctxt "field:contract.covered_data,cash_value_payment_mode:"
 msgid "Cash Value Payment Mode"
 msgstr "Mode de paiement des versements"
 
-msgctxt "field:ins_contract.covered_data,is_cash_value:"
+msgctxt "field:contract.covered_data,is_cash_value:"
 msgid "Is Cash Value"
 msgstr "Est de type Epargne"
 
@@ -172,7 +172,7 @@ msgctxt "view:contract.cash_value.collection:"
 msgid "Updated Amount"
 msgstr "Montant actualisé"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Cash Value Collections"
 msgstr "Versements"
 

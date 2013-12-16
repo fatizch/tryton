@@ -7,14 +7,14 @@
 
         <!-- Party Relation kind tree view -->
         <record model="ir.ui.view" id="party_relation_kind_view_tree">
-            <field name="model">party.party_relation_kind</field>
+            <field name="model">party.relation.kind</field>
             <field name="type">tree</field>
             <field name="name">relation_kind_tree</field>
         </record>
 
         <!-- Party Relation Kind form view -->
         <record model="ir.ui.view" id="party_relation_kind_view_form">
-            <field name="model">party.party_relation_kind</field>
+            <field name="model">party.relation.kind</field>
             <field name="type">form</field>
             <field name="name">relation_kind_form</field>
         </record>
@@ -22,7 +22,7 @@
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_party_relation_kind_form">
             <field name="name">Party Relation Kind</field>
-            <field name="res_model">party.party_relation_kind</field>
+            <field name="res_model">party.relation.kind</field>
         </record>
 
         <!-- View that connects the form in the tree with the specification -->
@@ -47,22 +47,22 @@
             ************** Party Relation ***************
             ******************************************* -->
         <record model="ir.ui.view" id="party_relation_view_form">
-            <field name="model">party.party-relation</field>
+            <field name="model">party.relation</field>
             <field name="type">form</field>
             <field name="name">relation_form</field>
         </record>
         <record model="ir.ui.view" id="party_relation_view_tree_from">
-            <field name="model">party.party-relation</field>
+            <field name="model">party.relation</field>
             <field name="type">tree</field>
             <field name="name">relation_tree_from</field>
         </record>
         <record model="ir.ui.view" id="party_relation_view_tree_to">
-            <field name="model">party.party-relation</field>
+            <field name="model">party.relation</field>
             <field name="type">tree</field>
             <field name="name">relation_tree_to</field>
         </record>
         <record model="ir.ui.view" id="party_relation_view_tree_hierarchical">
-            <field name="model">party.party-relation</field>
+            <field name="model">party.relation</field>
             <field name="type">tree</field>
             <field name="name">relation_tree_hierarchical</field>
         </record>

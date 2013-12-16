@@ -36,7 +36,7 @@ for module in coop_utils_modules:
     Module.install([module.id], config.context)
 Wizard('ir.module.module.install_upgrade').execute('upgrade')
 ##Comment##Import Exported DB
-wizard = Wizard('coop_utils.test_case_wizard')
+wizard = Wizard('ir.test_case.run')
 wizard.form.select_all_files = True
 wizard.execute('execute_test_cases')
 wizard.execute('end')

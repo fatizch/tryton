@@ -5,7 +5,7 @@
     <!-- CollectionParameters -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="collection_parameters_form">
-      <field name="model">collection.collection_parameters</field>
+      <field name="model">collection.create.parameters</field>
       <field name="type">form</field>
       <field name="inherit" ref="collection.collection_parameters_form"/>
       <field name="name">collection_parameters_form</field>
@@ -14,7 +14,7 @@
     <!-- Assign Collection -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="assign_collection_form">
-      <field name="model">collection.assign_collection</field>
+      <field name="model">collection.create.assign</field>
       <field name="type">form</field>
       <field name="inherit" ref="collection.assign_collection_form"/>
       <field name="name">assign_collection_form</field>
@@ -24,7 +24,7 @@
     <!-- ############################################################ -->
     <record model="ir.action.keyword" id="act_collection_wizard_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="collection.act_collection_wizard"/>
     </record>
   </data>

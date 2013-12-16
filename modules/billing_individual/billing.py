@@ -54,11 +54,11 @@ PAYMENT_MODES = [
 class PaymentMethod(model.CoopSQL, model.CoopView):
     'Payment Method'
 
-    __name__ = 'billing.payment_method'
+    __name__ = 'billing.payment.method'
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
-    payment_rule = fields.Many2One('billing.payment_rule', 'Payment Rule',
+    payment_rule = fields.Many2One('billing.payment.term', 'Payment Rule',
         ondelete='RESTRICT', required=True)
     payment_mode = fields.Selection(PAYMENT_MODES, 'Payment Mode',
         required=True)
@@ -88,11 +88,11 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
 class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
     'Price Line Tax Relation'
 
-    __name__ = 'billing.price_line-tax-relation'
+    __name__ = 'contract.billing.premium-tax'
 
-    price_line = fields.Many2One('billing.price_line', 'Price Line',
+    price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
-    tax_desc = fields.Many2One('coop_account.tax_desc', 'Tax',
+    tax_desc = fields.Many2One('account.tax.description', 'Tax',
         ondelete='RESTRICT')
     to_recalculate = fields.Boolean('Recalculate at billing')
     amount = fields.Numeric('Amount')
@@ -105,11 +105,11 @@ class PriceLineTaxRelation(model.CoopSQL, model.CoopView):
 class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
     'Price Line Fee Relation'
 
-    __name__ = 'billing.price_line-fee-relation'
+    __name__ = 'contract.billing.premium-fee'
 
-    price_line = fields.Many2One('billing.price_line', 'Price Line',
+    price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
-    fee_desc = fields.Many2One('coop_account.fee_desc', 'Fee',
+    fee_desc = fields.Many2One('account.fee.description', 'Fee',
         ondelete='RESTRICT')
     to_recalculate = fields.Boolean('Recalculate at billing')
     amount = fields.Numeric('Amount')
@@ -122,17 +122,17 @@ class PriceLineFeeRelation(model.CoopSQL, model.CoopView):
 class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     'Price Line'
 
-    __name__ = 'billing.price_line'
+    __name__ = 'contract.billing.premium'
 
     amount = fields.Numeric('Amount')
     name = fields.Function(fields.Char('Short Description'), 'get_short_name')
-    master = fields.Many2One('billing.price_line', 'Master Line')
+    master = fields.Many2One('contract.billing.premium', 'Master Line')
     on_object = fields.Reference('Priced object', 'get_line_target_models')
     frequency = fields.Selection(PRICING_FREQUENCY + [('', '')], 'Frequency')
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract', 'Contract')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    all_lines = fields.One2Many('billing.price_line', 'master', 'Lines',
+    all_lines = fields.One2Many('contract.billing.premium', 'master', 'Lines',
         readonly=True, loading='lazy')
     estimated_total = fields.Function(
         fields.Numeric('Estimated total'),
@@ -141,9 +141,9 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Numeric('Estimated Taxes'), 'get_estimated_taxes')
     estimated_fees = fields.Function(
         fields.Numeric('Estimated Fees'), 'get_estimated_fees')
-    tax_lines = fields.One2Many('billing.price_line-tax-relation',
+    tax_lines = fields.One2Many('contract.billing.premium-tax',
         'price_line', 'Tax Lines')
-    fee_lines = fields.One2Many('billing.price_line-fee-relation',
+    fee_lines = fields.One2Many('contract.billing.premium-fee',
         'price_line', 'Fee Lines')
 
     def get_estimated_total(self, name):
@@ -163,7 +163,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def must_create_detail(cls, detail):
         if detail.on_object:
-            if detail.on_object.__name__ == 'ins_product.pricing_component':
+            if detail.on_object.__name__ == 'billing.premium.rule.component':
                 if detail.on_object.kind in ('tax', 'fee'):
                     return False
                 return True
@@ -173,7 +173,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         if not line.on_object:
             return None
         target = line.on_object
-        if target.__name__ == 'ins_product.pricing_component':
+        if target.__name__ == 'billing.premium.rule.component':
             if target.kind == 'tax':
                 return target.tax
             if target.kind == 'fee':
@@ -210,7 +210,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_tax_details(self, line, taxes):
         for elem in line.details:
             if (elem.on_object and elem.on_object.__name__ ==
-                    'ins_product.pricing_component' and
+                    'billing.premium.rule.component' and
                     elem.on_object.kind == 'tax'):
                 if elem.on_object.tax.id in taxes:
                     taxes[elem.on_object.tax.id].append(elem)
@@ -224,8 +224,8 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         if not (hasattr(self, 'tax_lines') and self.tax_lines):
             self.tax_lines = []
         self.get_tax_details(line, tax_details)
-        TaxDesc = Pool().get('coop_account.tax_desc')
-        TaxRelation = Pool().get('billing.price_line-tax-relation')
+        TaxDesc = Pool().get('account.tax.description')
+        TaxRelation = Pool().get('contract.billing.premium-tax')
         for tax_id, tax_lines in tax_details.iteritems():
             the_tax = TaxDesc(tax_id)
             tax_relation = TaxRelation()
@@ -237,7 +237,7 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_fee_details(self, line, fees):
         for elem in line.details:
             if (elem.on_object and elem.on_object.__name__ ==
-                    'ins_product.pricing_component' and
+                    'billing.premium.rule.component' and
                     elem.on_object.kind == 'fee'):
                 if elem.on_object.fee.id in fees:
                     fees[elem.on_object.fee.id].append(elem)
@@ -251,8 +251,8 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         if not (hasattr(self, 'fee_lines') and self.fee_lines):
             self.fee_lines = []
         self.get_fee_details(line, fee_details)
-        FeeDesc = Pool().get('coop_account.fee_desc')
-        FeeRelation = Pool().get('billing.price_line-fee-relation')
+        FeeDesc = Pool().get('account.fee.description')
+        FeeRelation = Pool().get('contract.billing.premium-fee')
         for fee_id, fee_lines in fee_details.iteritems():
             the_fee = FeeDesc(fee_id)
             fee_relation = FeeRelation()
@@ -279,12 +279,12 @@ class PriceLine(model.CoopSQL, model.CoopView, ModelCurrency):
         res = [
             f(''),
             f('offered.product'),
-            f('offered.coverage'),
-            f('contract.contract'),
-            f('contract.subscribed_option'),
-            f('ins_contract.covered_data'),
-            f('coop_account.tax_desc'),
-            f('coop_account.fee_desc')]
+            f('offered.option.description'),
+            f('contract'),
+            f('contract.option'),
+            f('contract.covered_data'),
+            f('account.tax.description'),
+            f('account.fee.description')]
         return res
 
     def get_account_for_billing(self):
@@ -337,16 +337,16 @@ class BillingManager(model.CoopSQL, model.CoopView):
         It will be the target of all sql requests for automated bill
         calculation, lapsing, etc...
     '''
-    __name__ = 'billing.billing_manager'
+    __name__ = 'contract.billing.data'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     policy_owner = fields.Function(
         fields.Many2One('party.party', 'Party', states={'invisible': True}),
         'get_policy_owner_id')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    payment_method = fields.Many2One('billing.payment_method',
+    payment_method = fields.Many2One('billing.payment.method',
         'Payment Method', on_change=['payment_method', 'payment_date'])
     payment_mode = fields.Function(
         fields.Char('Payment Mode', states={'invisible': True},
@@ -460,8 +460,8 @@ class BillingManager(model.CoopSQL, model.CoopView):
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
     'Billing Period'
-    __name__ = 'billing.period'
-    contract = fields.Many2One('contract.contract', 'Contract', required=True,
+    __name__ = 'contract.billing.period'
+    contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
@@ -514,18 +514,18 @@ class BillingPeriod(model.CoopSQL, model.CoopView):
 class BillParameters(model.CoopView):
     'Bill Parameters'
 
-    __name__ = 'billing.billing_process.bill_parameters'
+    __name__ = 'contract.do_billing.parameters'
 
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date', required=True)
     contract = fields.Many2One(
-        'contract.contract', 'Contract', states={'invisible': True})
+        'contract', 'Contract', states={'invisible': True})
 
 
 class BillDisplay(model.CoopView):
     'Bill Displayer'
 
-    __name__ = 'billing.billing_process.bill_display'
+    __name__ = 'contract.do_billing.bill'
 
     moves = fields.One2Many('account.move', None, 'Bill', readonly=True)
 
@@ -533,16 +533,16 @@ class BillDisplay(model.CoopView):
 class BillingProcess(Wizard):
     'Billing Process'
 
-    __name__ = 'billing.billing_process'
+    __name__ = 'contract.do_billing'
 
     start_state = 'bill_parameters'
     bill_parameters = StateView(
-        'billing.billing_process.bill_parameters',
+        'contract.do_billing.parameters',
         'billing_individual.bill_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Preview', 'bill_display', 'tryton-go-next')])
     bill_display = StateView(
-        'billing.billing_process.bill_display',
+        'contract.do_billing.bill',
         'billing_individual.bill_display_form', [
             Button('Cancel', 'cancel_bill', 'tryton-cancel'),
             Button('Accept', 'accept_bill', 'tryton-go-next')])
@@ -586,11 +586,11 @@ class BillingProcess(Wizard):
 class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
     'Product to Payment Method Relation definition'
 
-    __name__ = 'billing.product-payment_method-relation'
+    __name__ = 'offered.product-billing.payment.method'
 
     product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
-    payment_method = fields.Many2One('billing.payment_method',
+    payment_method = fields.Many2One('billing.payment.method',
         'Payment Method', ondelete='RESTRICT')
     order = fields.Integer('Order', required=True)
 
@@ -607,7 +607,7 @@ class Product():
 
     payment_delay = fields.Selection(PAYMENT_DELAYS, 'Payment delay')
     payment_methods = fields.One2Many(
-        'billing.product-payment_method-relation', 'product',
+        'offered.product-billing.payment.method', 'product',
         'Payment Methods', order=[('order', 'ASC')],
         domain=[('payment_method.payment_rule.payment_mode', '=',
                 Eval('payment_delay', ''))],
@@ -645,7 +645,7 @@ class Coverage():
     'Coverage'
 
     __metaclass__ = PoolMeta
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
 
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', depends=['company'], domain=[
@@ -663,9 +663,9 @@ class Contract():
     'Contract'
 
     __metaclass__ = PoolMeta
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
-    billing_managers = fields.One2Many('billing.billing_manager', 'contract',
+    billing_managers = fields.One2Many('contract.billing.data', 'contract',
         'Billing Managers')
     use_prices = fields.Function(
         fields.Boolean('Use Prices', states={'invisible': True}),
@@ -673,17 +673,17 @@ class Contract():
     next_billing_date = fields.Date('Next Billing Date',
         states={'invisible': ~Eval('use_prices')})
     prices = fields.One2Many(
-        'billing.price_line', 'contract', 'Prices',
+        'contract.billing.premium', 'contract', 'Prices',
         states={'invisible': ~Eval('use_prices')},
         order=[('start_date', 'ASC'), ('on_object', 'ASC')])
-    billing_periods = fields.One2Many('billing.period', 'contract',
+    billing_periods = fields.One2Many('contract.billing.period', 'contract',
         'Billing Periods')
     receivable_lines = fields.Function(
         fields.One2Many('account.move.line', None, 'Receivable Lines',
             depends=['display_all_lines', 'id'],
             domain=[('account.kind', '=', 'receivable'),
                 ('reconciliation', '=', None),
-                ('origin', '=', ('contract.contract', Eval('id', 0))),
+                ('origin', '=', ('contract', Eval('id', 0))),
                 If(~Eval('display_all_lines'),
                     ('maturity_date', '<=',
                         Eval('context', {}).get(
@@ -747,7 +747,7 @@ class Contract():
                 return manager
 
     def get_billing_period_at_date(self, date):
-        Period = Pool().get('billing.period')
+        Period = Pool().get('contract.billing.period')
         candidates = Period.search([
                 ('contract', '=', self.id), ('start_date', '<=', date),
                 ('end_date', '>=', date)])
@@ -868,7 +868,7 @@ class Contract():
         return journal
 
     def get_or_create_billing_period(self, period):
-        BillingPeriod = Pool().get('billing.period')
+        BillingPeriod = Pool().get('contract.billing.period')
         for billing_period in self.billing_periods \
                 if hasattr(self, 'billing_periods') else []:
             if (billing_period.start_date, billing_period.end_date) == period:
@@ -1165,7 +1165,7 @@ class Contract():
             move_line.maturity_date == None)
         good_moves_query = move.id.in_(move.select(move.id, where=(
                     move.origin.in_(
-                        ['contract.contract,%s' % x.id for x in contracts]))))
+                        ['contract,%s' % x.id for x in contracts]))))
 
         cursor.execute(*query_table.select(move.origin, Sum(
                 Coalesce(move_line.debit, 0) - Coalesce(move_line.credit, 0)),
@@ -1275,7 +1275,7 @@ class Option():
     'Option'
 
     __metaclass__ = PoolMeta
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     def get_name_for_billing(self):
         return self.get_coverage().name + ' - Base Price'
@@ -1285,7 +1285,7 @@ class CoveredElement():
     'Covered Element'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_contract.covered_element'
+    __name__ = 'contract.covered_element'
 
     subscriber = fields.Function(
         fields.Many2One('party.party', 'Subscriber'),
@@ -1310,7 +1310,7 @@ class CoveredData():
     'Covered Data'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
 
     def get_name_for_billing(self):
         return self.covered_element.get_name_for_billing()
@@ -1320,7 +1320,7 @@ class TaxDesc():
     'Tax Desc'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_account.tax_desc'
+    __name__ = 'account.tax.description'
 
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', depends=['company'], domain=[
@@ -1356,7 +1356,7 @@ class FeeDesc():
     'Fee Desc'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_account.fee_desc'
+    __name__ = 'account.fee.description'
 
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', depends=['company'], domain=[

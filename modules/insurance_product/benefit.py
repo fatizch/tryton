@@ -43,12 +43,12 @@ CURRENCY_SETTING = [
 class EventDesc(model.CoopSQL, model.CoopView):
     'Event Desc'
 
-    __name__ = 'ins_product.event_desc'
+    __name__ = 'benefit.event.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
     loss_descs = fields.Many2Many(
-        'ins_product.event_desc-loss_desc', 'event_desc', 'loss_desc',
+        'benefit.event.description-loss.description', 'event_desc', 'loss_desc',
         'Loss Descriptions', domain=[('company', '=', Eval('company'))],
         depends=['company'])
     company = fields.Many2One('company.company', 'Company', required=True,
@@ -68,33 +68,33 @@ class EventDesc(model.CoopSQL, model.CoopView):
 class LossDescDocumentsRelation(model.CoopSQL):
     'Loss Desc to Document relation'
 
-    __name__ = 'ins_product.loss-document-relation'
+    __name__ = 'benefit.loss.description-document.description'
 
     document = fields.Many2One(
-        'ins_product.document_desc', 'Document', ondelete='RESTRICT')
+        'document.description', 'Document', ondelete='RESTRICT')
     loss = fields.Many2One(
-        'ins_product.loss_desc', 'Loss', ondelete='CASCADE')
+        'benefit.loss.description', 'Loss', ondelete='CASCADE')
 
 
 class LossDesc(model.CoopSQL, model.CoopView):
     'Loss Desc'
 
-    __name__ = 'ins_product.loss_desc'
+    __name__ = 'benefit.loss.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
     event_descs = fields.Many2Many(
-        'ins_product.event_desc-loss_desc', 'loss_desc', 'event_desc',
+        'benefit.event.description-loss.description', 'loss_desc', 'event_desc',
         'Events Descriptions', domain=[('company', '=', Eval('company'))],
         depends=['company'])
     item_kind = fields.Selection('get_possible_item_kind', 'Kind')
     with_end_date = fields.Boolean('With End Date')
     complementary_data_def = fields.Many2Many(
-        'ins_product.loss_desc-complementary_data_def',
+        'benefit.loss.description-extra_data',
         'loss_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
     documents = fields.Many2Many(
-        'ins_product.loss-document-relation', 'loss', 'document', 'Documents')
+        'benefit.loss.description-document.description', 'loss', 'document', 'Documents')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
 
@@ -116,43 +116,43 @@ class LossDesc(model.CoopSQL, model.CoopView):
 class LossDescComplementaryDataRelation(model.CoopSQL):
     'Relation between Loss Desc and Complementary Data'
 
-    __name__ = 'ins_product.loss_desc-complementary_data_def'
+    __name__ = 'benefit.loss.description-extra_data'
 
     loss_desc = fields.Many2One(
-        'ins_product.loss_desc', 'Loss Desc', ondelete='CASCADE')
+        'benefit.loss.description', 'Loss Desc', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT')
 
 
 class EventDescLossDescRelation(model.CoopSQL):
     'Event Desc - Loss Desc Relation'
 
-    __name__ = 'ins_product.event_desc-loss_desc'
+    __name__ = 'benefit.event.description-loss.description'
 
     event_desc = fields.Many2One(
-        'ins_product.event_desc', 'Event Desc', ondelete='CASCADE')
+        'benefit.event.description', 'Event Desc', ondelete='CASCADE')
     loss_desc = fields.Many2One(
-        'ins_product.loss_desc', 'Loss Desc', ondelete='RESTRICT')
+        'benefit.loss.description', 'Loss Desc', ondelete='RESTRICT')
 
 
 class Benefit(model.CoopSQL, offered.Offered):
     'Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
 
     benefit_rules = fields.One2Many(
-        'ins_product.benefit_rule', 'offered', 'Benefit Rules')
+        'benefit.rule', 'offered', 'Benefit Rules')
     reserve_rules = fields.One2Many(
-        'ins_product.reserve_rule', 'offered', 'Reserve Rules')
+        'benefit.reserve.rule', 'offered', 'Reserve Rules')
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
         'Indemnification Kind', sort=False, required=True)
     loss_descs = fields.Many2Many(
-        'ins_product.benefit-loss_desc', 'benefit', 'loss_desc',
+        'benefit-loss.description', 'benefit', 'loss_desc',
         'Loss Descriptions', domain=[('company', '=', Eval('company'))],
         depends=['company'], required=True)
     complementary_data_def = fields.Many2Many(
-        'ins_product.benefit-complementary_data_def',
+        'benefit-extra_data',
         'benefit', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'benefit')])
     use_local_currency = fields.Boolean('Use Local Currency')
@@ -246,7 +246,7 @@ class Benefit(model.CoopSQL, offered.Offered):
         all_schemas, possible_schemas = self.get_compl_data_for_exec(args)
         existing_data = args['loss'].complementary_data
         existing_data.update(args['delivered_service'].complementary_data)
-        ComplementaryData = Pool().get('offered.complementary_data_def')
+        ComplementaryData = Pool().get('extra_data')
         result = ComplementaryData.calculate_value_set(
             possible_schemas, all_schemas, existing_data, args)
         return result, ()
@@ -255,7 +255,7 @@ class Benefit(model.CoopSQL, offered.Offered):
 class InsuranceBenefit(Offered):
     'Insurance Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
     #This empty override is necessary to have in the benefit the fields added
     #in the override of offered
 
@@ -263,32 +263,32 @@ class InsuranceBenefit(Offered):
 class BenefitLossDescRelation(model.CoopSQL):
     'Benefit Loss Desc Relation'
 
-    __name__ = 'ins_product.benefit-loss_desc'
+    __name__ = 'benefit-loss.description'
 
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='CASCADE')
+        'benefit', 'Benefit', ondelete='CASCADE')
     loss_desc = fields.Many2One(
-        'ins_product.loss_desc', 'Loss Desc', ondelete='RESTRICT')
+        'benefit.loss.description', 'Loss Desc', ondelete='RESTRICT')
 
 
 class CoverageBenefitRelation(model.CoopSQL):
     'Coverage Benefit Relation'
 
-    __name__ = 'offered.coverage-benefit'
+    __name__ = 'option.description-benefit'
 
     coverage = fields.Many2One(
-        'offered.coverage', 'Coverage', ondelete='CASCADE')
+        'offered.option.description', 'Coverage', ondelete='CASCADE')
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='RESTRICT')
+        'benefit', 'Benefit', ondelete='RESTRICT')
 
 
 class BenefitComplementaryDataRelation(model.CoopSQL):
     'Relation between Benefit and Complementary Data'
 
-    __name__ = 'ins_product.benefit-complementary_data_def'
+    __name__ = 'benefit-extra_data'
 
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='CASCADE')
+        'benefit', 'Benefit', ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT')

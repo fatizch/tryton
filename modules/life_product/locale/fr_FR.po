@@ -2,147 +2,147 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ins_product.eligibility_rule,max_age:"
+msgctxt "field:offered.eligibility.rule,max_age:"
 msgid "Maximum Age"
 msgstr "Age Maximum"
 
-msgctxt "field:ins_product.eligibility_rule,min_age:"
+msgctxt "field:offered.eligibility.rule,min_age:"
 msgid "Minimum Age"
 msgstr "Age Minimum"
 
-msgctxt "field:ins_product.eligibility_rule,sub_max_age:"
+msgctxt "field:offered.eligibility.rule,sub_max_age:"
 msgid "Maximum Age"
 msgstr "Age Maximum"
 
-msgctxt "field:ins_product.eligibility_rule,sub_min_age:"
+msgctxt "field:offered.eligibility.rule,sub_min_age:"
 msgid "Minimum Age"
 msgstr "Age Minimum"
 
-msgctxt "field:ins_product.item_desc,kind:"
+msgctxt "field:offered.item.description,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:offered.coverage,coverage_amount_rules:"
+msgctxt "field:offered.option.description,coverage_amount_rules:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,is_coverage_amount_needed:"
+msgctxt "field:offered.option.description,is_coverage_amount_needed:"
 msgid ""
 msgstr " "
 
-msgctxt "field:tranche.tranche,ceiling:"
+msgctxt "field:salary_range,ceiling:"
 msgid "Current Ceiling"
 msgstr "Plafond Courant"
 
-msgctxt "field:tranche.tranche,code:"
+msgctxt "field:salary_range,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:tranche.tranche,create_date:"
+msgctxt "field:salary_range,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:tranche.tranche,create_date_:"
+msgctxt "field:salary_range,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:tranche.tranche,create_uid:"
+msgctxt "field:salary_range,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:tranche.tranche,current_rec_name:"
+msgctxt "field:salary_range,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
-msgctxt "field:tranche.tranche,floor:"
+msgctxt "field:salary_range,floor:"
 msgid "Current Floor"
 msgstr "Plancher Courant"
 
-msgctxt "field:tranche.tranche,id:"
+msgctxt "field:salary_range,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:tranche.tranche,must_expand_tree:"
+msgctxt "field:salary_range,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:tranche.tranche,name:"
+msgctxt "field:salary_range,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:tranche.tranche,rec_name:"
+msgctxt "field:salary_range,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:tranche.tranche,versions:"
+msgctxt "field:salary_range,versions:"
 msgid "Versions"
 msgstr "Versions"
 
-msgctxt "field:tranche.tranche,write_date:"
+msgctxt "field:salary_range,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:tranche.tranche,write_uid:"
+msgctxt "field:salary_range,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:tranche.tranche_version,ceiling:"
+msgctxt "field:salary_range.version,ceiling:"
 msgid "Ceiling"
 msgstr "Plafond"
 
-msgctxt "field:tranche.tranche_version,create_date:"
+msgctxt "field:salary_range.version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:tranche.tranche_version,create_date_:"
+msgctxt "field:salary_range.version,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:tranche.tranche_version,create_uid:"
+msgctxt "field:salary_range.version,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:tranche.tranche_version,end_date:"
+msgctxt "field:salary_range.version,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:tranche.tranche_version,floor:"
+msgctxt "field:salary_range.version,floor:"
 msgid "Floor"
 msgstr "Seuil"
 
-msgctxt "field:tranche.tranche_version,id:"
+msgctxt "field:salary_range.version,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:tranche.tranche_version,main_elem:"
+msgctxt "field:salary_range.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:tranche.tranche_version,must_expand_tree:"
+msgctxt "field:salary_range.version,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:tranche.tranche_version,rec_name:"
+msgctxt "field:salary_range.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:tranche.tranche_version,start_date:"
+msgctxt "field:salary_range.version,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:tranche.tranche_version,write_date:"
+msgctxt "field:salary_range.version,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:tranche.tranche_version,write_uid:"
+msgctxt "field:salary_range.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "help:tranche.tranche_version,ceiling:"
+msgctxt "help:salary_range.version,ceiling:"
 msgid "Included"
 msgstr "Inclus"
 
-msgctxt "help:tranche.tranche_version,floor:"
+msgctxt "help:salary_range.version,floor:"
 msgid "Not Included"
 msgstr "Non Inclus"
 
@@ -158,26 +158,26 @@ msgctxt "model:tag,name:tag_life"
 msgid "Prévoyance"
 msgstr "Prévoyance"
 
-msgctxt "model:tranche.tranche,name:"
+msgctxt "model:salary_range,name:"
 msgid "Tranche"
 msgstr "Tranche"
 
-msgctxt "model:tranche.tranche_version,name:"
+msgctxt "model:salary_range.version,name:"
 msgid "Tranche Version"
 msgstr ""
 
-msgctxt "selection:offered.coverage,family:"
+msgctxt "selection:offered.option.description,family:"
 msgid "Life"
 msgstr "Prévoyance"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
-msgctxt "view:tranche.tranche:"
+msgctxt "view:salary_range:"
 msgid "Tranche"
 msgstr "Tranche"
 
-msgctxt "view:tranche.tranche_version:"
+msgctxt "view:salary_range.version:"
 msgid "Tranche Version"
 msgstr ""

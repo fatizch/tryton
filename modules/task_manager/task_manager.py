@@ -18,11 +18,11 @@ __all__ = [
 class Priority(model.CoopSQL, model.CoopView):
     'Priority'
 
-    __name__ = 'task_manager.priority'
+    __name__ = 'res.team.priority'
 
-    process_step = fields.Many2One('process.process_step_relation',
+    process_step = fields.Many2One('process-process.step',
         'Process Step', required=True, ondelete='CASCADE')
-    team = fields.Many2One('task_manager.team', 'Team', ondelete='CASCADE')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
     priority = fields.Integer('Priority')
     kind = fields.Selection(
         [
@@ -36,7 +36,7 @@ class Priority(model.CoopSQL, model.CoopView):
             return None
         process = self.process_step.process
         good_act = process.get_act_window()
-        Log = Pool().get('coop_process.process_log')
+        Log = Pool().get('process.log')
         domain = [
             ('latest', '=', True),
             ('to_state', '=', self.process_step),
@@ -58,25 +58,25 @@ class Priority(model.CoopSQL, model.CoopView):
 class TeamGroupRelation(model.CoopSQL):
     'Team - Group Relation'
 
-    __name__ = 'task_manager.team_group_relation'
+    __name__ = 'res.team-res.group'
 
-    team = fields.Many2One('task_manager.team', 'Team', ondelete='CASCADE')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
 class Team(model.CoopSQL, model.CoopView):
     'Team'
 
-    __name__ = 'task_manager.team'
+    __name__ = 'res.team'
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     members = fields.One2Many(
         'res.user', 'team', 'Members', states={'readonly': True})
     authorizations = fields.Many2Many(
-        'task_manager.team_group_relation', 'team', 'group', 'Authorizations')
+        'res.team-res.group', 'team', 'group', 'Authorizations')
     priorities = fields.One2Many(
-        'task_manager.priority', 'team', 'Priorities',
+        'res.team.priority', 'team', 'Priorities',
         order=[('priority', 'ASC')],
     )
 
@@ -109,7 +109,7 @@ class Team(model.CoopSQL, model.CoopView):
 class SelectUser(model.CoopView):
     'Select User'
 
-    __name__ = 'task_manager.select_user'
+    __name__ = 'res.team.add_user.select'
 
     user = fields.Many2One('res.user', 'User')
     user_ok = fields.Function(
@@ -130,11 +130,11 @@ class SelectUser(model.CoopView):
 class AddTeamUser(Wizard):
     'Add Team User'
 
-    __name__ = 'task_manager.add_user'
+    __name__ = 'res.team.add_user'
 
     start_state = 'select_user'
     select_user = StateView(
-        'task_manager.select_user',
+        'res.team.add_user.select',
         'task_manager.select_user_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),

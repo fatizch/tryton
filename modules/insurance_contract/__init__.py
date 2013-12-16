@@ -7,8 +7,8 @@ from .rule_engine import *
 from .wizard import *
 
 from trytond.modules.coop_utils import expand_tree
-CoveredElementTreeExpansion = expand_tree('ins_contract.covered_element')
-CoveredDataTreeExpansion = expand_tree('ins_contract.covered_data')
+CoveredElementTreeExpansion = expand_tree('contract.covered_element')
+CoveredDataTreeExpansion = expand_tree('contract.covered_data')
 
 
 def register():

@@ -17,7 +17,7 @@ __all__ = [
 class LifeClaim():
     'Claim'
 
-    __name__ = 'claim.claim'
+    __name__ = 'claim'
     __metaclass__ = PoolMeta
 
 
@@ -62,7 +62,7 @@ class LifeLoss():
 
     def get_possible_covered_persons(self):
         res = []
-        CoveredElement = Pool().get('ins_contract.covered_element')
+        CoveredElement = Pool().get('contract.covered_element')
         for covered_element in CoveredElement.get_possible_covered_elements(
                 self.claim.claimant, self.start_date):
             res.extend(covered_element.get_covered_parties(self.start_date))
@@ -80,7 +80,7 @@ class LifeLoss():
 class LifeClaimDeliveredService():
     'Claim Delivered Service'
 
-    __name__ = 'contract.delivered_service'
+    __name__ = 'contract.service'
     __metaclass__ = PoolMeta
 
     def get_covered_person(self):

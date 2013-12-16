@@ -5,20 +5,20 @@
     <!-- Benefit -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="benefit_view_form">
-      <field name="model">ins_product.benefit</field>
+      <field name="model">benefit</field>
       <field name="type">form</field>
       <field name="inherit" ref="offered.offered_view_form"/>
       <field name="name">benefit_form</field>
     </record>
     <record model="ir.ui.view" id="benefit_view_tree">
-      <field name="model">ins_product.benefit</field>
+      <field name="model">benefit</field>
       <field name="type">tree</field>
       <field name="inherit" ref="offered.offered_view_tree"/>
       <field name="name">benefit_tree</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_benefit">
-        <field name="model" search="[('model', '=', 'ins_product.benefit')]"/>
+        <field name="model" search="[('model', '=', 'benefit')]"/>
         <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_benefit_1">
@@ -28,7 +28,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_benefit_form">
       <field name="name">Benefits</field>
-      <field name="res_model">ins_product.benefit</field>
+      <field name="res_model">benefit</field>
       <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_benefit_view_tree">
@@ -46,18 +46,18 @@
     <!-- Event Desc -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="event_desc_view_form">
-      <field name="model">ins_product.event_desc</field>
+      <field name="model">benefit.event.description</field>
       <field name="type">form</field>
       <field name="name">event_desc_form</field>
     </record>
     <record model="ir.ui.view" id="event_desc_view_tree">
-      <field name="model">ins_product.event_desc</field>
+      <field name="model">benefit.event.description</field>
       <field name="type">tree</field>
       <field name="name">event_desc_tree</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_event_desc">
-        <field name="model" search="[('model', '=', 'ins_product.event_desc')]"/>
+        <field name="model" search="[('model', '=', 'benefit.event.description')]"/>
         <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_event_desc_1">
@@ -67,7 +67,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_event_desc_form">
       <field name="name">Events</field>
-      <field name="res_model">ins_product.event_desc</field>
+      <field name="res_model">benefit.event.description</field>
       <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_event_desc_view_tree">
@@ -85,18 +85,18 @@
     <!-- Loss Desc -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="loss_desc_view_form">
-      <field name="model">ins_product.loss_desc</field>
+      <field name="model">benefit.loss.description</field>
       <field name="type">form</field>
       <field name="name">loss_desc_form</field>
     </record>
     <record model="ir.ui.view" id="loss_desc_view_tree">
-      <field name="model">ins_product.loss_desc</field>
+      <field name="model">benefit.loss.description</field>
       <field name="type">tree</field>
       <field name="name">loss_desc_tree</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_loss_desc">
-        <field name="model" search="[('model', '=', 'ins_product.loss_desc')]"/>
+        <field name="model" search="[('model', '=', 'benefit.loss.description')]"/>
         <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_loss_desc_1">
@@ -106,7 +106,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_loss_desc_form">
       <field name="name">Losses</field>
-      <field name="res_model">ins_product.loss_desc</field>
+      <field name="res_model">benefit.loss.description</field>
       <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_loss_desc_view_tree">

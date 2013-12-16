@@ -9,7 +9,7 @@ __all__ = [
 class LoanPriceLine():
     'Loan Price Line'
 
-    __name__ = 'billing.price_line'
+    __name__ = 'contract.billing.premium'
 
     @classmethod
     def get_line_target_models(cls):

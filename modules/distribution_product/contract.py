@@ -11,10 +11,10 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
-    dist_network = fields.Many2One('distribution.dist_network',
+    dist_network = fields.Many2One('distribution.network',
         'Distribution Network', domain=[('company', '=', Eval('company'))],
         depends=['company'])
     com_product = fields.Function(

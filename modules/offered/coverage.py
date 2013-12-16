@@ -24,12 +24,12 @@ SUBSCRIPTION_BEHAVIOUR = [
 class Coverage(model.CoopSQL, Offered):
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
 
     kind = fields.Selection([('', ''), ('default', 'Default')],
         'Coverage Kind')
     products = fields.Many2Many(
-        'offered.product-options-coverage',
+        'offered.product-option.description',
         'coverage', 'product', 'Products',
         domain=[
             ('currency', '=', Eval('currency')),
@@ -39,13 +39,13 @@ class Coverage(model.CoopSQL, Offered):
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
     is_package = fields.Boolean('Package')
-    coverages_in_package = fields.Many2Many('offered.package-coverage',
+    coverages_in_package = fields.Many2Many('offered.package-option.description',
         'package', 'coverage', 'Coverages In Package',
         states={'invisible': Bool(~Eval('is_package'))},
         depends=['is_package', 'kind'],
         domain=[('is_package', '=', False), ('kind', '=', Eval('kind'))])
     complementary_data_def = fields.Many2Many(
-        'offered.coverage-complementary_data_def',
+        'offered.option.description-extra_data',
         'coverage', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
 
@@ -111,19 +111,19 @@ class Coverage(model.CoopSQL, Offered):
 class PackageCoverage(model.CoopSQL):
     'Link Package Coverage'
 
-    __name__ = 'offered.package-coverage'
+    __name__ = 'offered.package-option.description'
 
-    package = fields.Many2One('offered.coverage', 'Package')
-    coverage = fields.Many2One('offered.coverage', 'Coverage')
+    package = fields.Many2One('offered.option.description', 'Package')
+    coverage = fields.Many2One('offered.option.description', 'Coverage')
 
 
 class CoverageComplementaryDataRelation(model.CoopSQL):
     'Relation between Coverage and Complementary Data'
 
-    __name__ = 'offered.coverage-complementary_data_def'
+    __name__ = 'offered.option.description-extra_data'
 
-    coverage = fields.Many2One('offered.coverage', 'Coverage',
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='CASCADE')
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT')

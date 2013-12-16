@@ -63,7 +63,7 @@ def install_modules(config, modules_to_install, cfg_dict, only_this_module):
 def execute_test_cases(cfg_dict, files=False):
     if cfg_dict['only_install']:
         return
-    wizard = Wizard('coop_utils.test_case_wizard')
+    wizard = Wizard('ir.test_case.run')
     if files:
         wizard.form.select_all_files = True
     else:

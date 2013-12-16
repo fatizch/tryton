@@ -5,7 +5,7 @@
     <!--                     Bill Parameters View                       -->
     <!--################################################################-->
     <record model="ir.ui.view" id="bill_parameters_form">
-      <field name="model">billing.billing_process.bill_parameters</field>
+      <field name="model">contract.do_billing.parameters</field>
       <field name="type">form</field>
       <field name="name">bill_parameters_form</field>
     </record>
@@ -13,7 +13,7 @@
     <!--                            Bill Display                        -->
     <!--################################################################-->
     <record model="ir.ui.view" id="bill_display_form">
-      <field name="model">billing.billing_process.bill_display</field>
+      <field name="model">contract.do_billing.bill</field>
       <field name="type">form</field>
       <field name="name">bill_display_form</field>
     </record>
@@ -22,12 +22,12 @@
     <!--################################################################-->
     <record model="ir.action.wizard" id="launch_billing_process">
       <field name="name">Billing</field>
-      <field name="wiz_name">billing.billing_process</field>
-      <field name="model">contract.contract</field>
+      <field name="wiz_name">contract.do_billing</field>
+      <field name="model">contract</field>
     </record>
     <record model="ir.action.keyword" id="launch_billing_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">contract.contract,-1</field>
+      <field name="model">contract,-1</field>
       <field name="action" ref="launch_billing_process"/>
     </record>
   </data>

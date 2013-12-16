@@ -18,7 +18,7 @@ class Party:
 
     __name__ = 'party.party'
 
-    insurer_role = fields.One2Many('party.insurer', 'party', 'Insurer', size=1,
+    insurer_role = fields.One2Many('insurer', 'party', 'Insurer', size=1,
         states={'invisible': Not(STATES_COMPANY)})
 
     @classmethod
@@ -41,7 +41,7 @@ class Party:
 class Insurer(Actor, model.CoopSQL):
     'Insurer'
 
-    __name__ = 'party.insurer'
+    __name__ = 'insurer'
 
     @classmethod
     def _export_keys(cls):

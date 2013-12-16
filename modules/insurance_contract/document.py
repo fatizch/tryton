@@ -11,7 +11,7 @@ __all__ = [
 class DocumentRequest():
     'Document Request'
 
-    __name__ = 'ins_product.document_request'
+    __name__ = 'document.request'
     __metaclass__ = PoolMeta
 
     @classmethod
@@ -19,13 +19,13 @@ class DocumentRequest():
         super(DocumentRequest, cls).__setup__()
         cls.needed_by = copy.copy(cls.needed_by)
         cls.needed_by.selection.append(
-            ('contract.contract', 'Contract'))
+            ('contract', 'Contract'))
 
 
 class Document():
     'Document'
 
-    __name__ = 'ins_product.document'
+    __name__ = 'document.request.line'
     __metaclass__ = PoolMeta
 
     @classmethod
@@ -33,23 +33,23 @@ class Document():
         super(Document, cls).__setup__()
         cls.for_object = copy.copy(cls.for_object)
         cls.for_object.selection.append(
-            ('contract.contract', 'Contract'))
+            ('contract', 'Contract'))
         cls.for_object.selection.append(
-            ('contract.subscribed_option', 'Option'))
+            ('contract.option', 'Option'))
         cls.for_object.selection.append(
-            ('ins_contract.covered_element', 'Covered Element'))
+            ('contract.covered_element', 'Covered Element'))
 
 
 class RequestFinder():
     'Request Finder'
 
-    __name__ = 'ins_product.request_finder'
+    __name__ = 'document.receive.request'
     __metaclass__ = PoolMeta
 
     @classmethod
     def allowed_values(cls):
         result = super(RequestFinder, cls).allowed_values()
         result.update({
-            'contract.contract': (
+            'contract': (
                 'Contract', 'contract_number')})
         return result

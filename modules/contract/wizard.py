@@ -27,7 +27,7 @@ class OptionSubscription(model.CoopWizard):
     start_state = 'options_displayer'
 
     def default_options_displayer(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         options = []
         for coverage in contract.offered.coverages:
@@ -43,7 +43,7 @@ class OptionSubscription(model.CoopWizard):
             }
 
     def subscribe_option(self, coverage):
-        Option = Pool().get('contract.subscribed_option')
+        Option = Pool().get('contract.option')
         option = Option()
         option.init_from_offered(coverage,
             self.options_displayer.contract.start_date)
@@ -51,7 +51,7 @@ class OptionSubscription(model.CoopWizard):
         return option
 
     def transition_update_options(self):
-        Option = Pool().get('contract.subscribed_option')
+        Option = Pool().get('contract.option')
         to_delete = []
         to_subscribe = [x.coverage for x in self.options_displayer.options
             if x.is_selected]
@@ -79,7 +79,7 @@ class OptionsDisplayer(model.CoopView):
 
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract', 'Contract')
     options = fields.One2Many(
         'contract.wizard.option_subscription.options_displayer.option',
         None, 'Options')
@@ -90,7 +90,7 @@ class WizardOption(model.CoopView):
 
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
-    coverage = fields.Many2One('offered.coverage', 'Coverage')
+    coverage = fields.Many2One('offered.option.description', 'Coverage')
     coverage_behaviour = fields.Function(
         fields.Char('Behaviour'), 'get_coverage_behaviour')
     is_selected = fields.Boolean('Selected?', states={

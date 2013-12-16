@@ -20,11 +20,11 @@ __all__ = [
 class PriceLineComRelation(model.CoopSQL, model.CoopView):
     'Price line to Commission relation'
 
-    __name__ = 'commission.price_line-com-relation'
+    __name__ = 'contract.billing.premium-commission.option'
 
-    price_line = fields.Many2One('billing.price_line', 'Price Line',
+    price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
-    com_subscribed = fields.Many2One('contract.subscribed_option',
+    com_subscribed = fields.Many2One('contract.option',
         'Commission Subscribed', ondelete='RESTRICT')
     amount = fields.Numeric('Amount')
     to_recalculate = fields.Boolean('Recalculate at billing')
@@ -33,9 +33,9 @@ class PriceLineComRelation(model.CoopSQL, model.CoopView):
 class PriceLine():
     'Price Line'
 
-    __name__ = 'billing.price_line'
+    __name__ = 'contract.billing.premium'
 
-    com_lines = fields.One2Many('commission.price_line-com-relation',
+    com_lines = fields.One2Many('contract.billing.premium-commission.option',
         'price_line', 'Commission lines')
     estimated_com = fields.Function(
         fields.Numeric('Estimated Commissions'), 'get_estimated_coms')
@@ -56,16 +56,16 @@ class PriceLine():
         res = super(PriceLine, cls).must_create_detail(detail)
         if not res:
             return res
-        if detail.on_object.__name__ == 'commission.compensated_option':
+        if detail.on_object.__name__ == 'contract.option-commission.option':
             return False
         return True
 
     def build_com_lines(self, line):
-        ComLine = Pool().get('commission.price_line-com-relation')
+        ComLine = Pool().get('contract.billing.premium-commission.option')
         if not (hasattr(self, 'com_lines') and self.com_lines):
             self.com_lines = []
         for com_line in (x for x in line.details if x.on_object and
-                x.on_object.__name__ == 'commission.compensated_option'):
+                x.on_object.__name__ == 'contract.option-commission.option'):
             com_relation = ComLine()
             com_relation.com_subscribed = com_line.on_object.com_option
             # Com detail lines store the rate in the amount field. We need
@@ -103,7 +103,7 @@ class PriceLine():
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     def get_protocol_offered(self, kind):
         dist_network = self.get_dist_network()
@@ -123,7 +123,7 @@ class Contract():
         prices, errs = super(Contract, self).calculate_price_at_date(date)
         for price in prices:
             target = price.on_object
-            if target.__name__ != 'offered.coverage':
+            if target.__name__ != 'offered.option.description':
                 continue
             target = self.get_option_for_coverage_at_date(target, date)
             if not target:
@@ -163,7 +163,7 @@ class Contract():
 class ManagementRole():
     'Management Role'
 
-    __name__ = 'ins_contract.management_role'
+    __name__ = 'contract-agreement'
 
     @classmethod
     def get_possible_management_role_kind(cls):

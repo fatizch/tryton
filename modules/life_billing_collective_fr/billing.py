@@ -34,28 +34,28 @@ __all__ = [
 class RateLine(model.CoopSQL, model.CoopView):
     'Rate Line'
 
-    __name__ = 'billing.rate_line'
+    __name__ = 'contract.premium_rate.line'
 
     manual_billing = fields.Function(
         fields.Boolean('Manual Billing',
             on_change=['manual_billing', 'childs'],
             states={'invisible': True}),
         'get_manual_billing')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE',
         states={'invisible': ~~Eval('parent')})
-    covered_element = fields.Many2One('ins_contract.covered_element',
+    covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', ondelete='CASCADE')
-    option = fields.Many2One('contract.subscribed_option', 'Option',
+    option = fields.Many2One('contract.option', 'Option',
         ondelete='CASCADE')
     option_ = fields.Function(
-        fields.Many2One('contract.subscribed_option', 'Option'),
+        fields.Many2One('contract.option', 'Option'),
         'get_option_id')
-    tranche = fields.Many2One('tranche.tranche', 'Tranche',
+    tranche = fields.Many2One('salary_range', 'Tranche',
         ondelete='RESTRICT', states={'invisible': ~Eval('tranche')})
-    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+    fare_class = fields.Many2One('fare_class', 'Fare Class',
         states={'invisible': ~Eval('fare_class_group')})
-    index = fields.Many2One('table.table_def', 'Index',
+    index = fields.Many2One('table', 'Index',
         states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
     index_value = fields.Function(
         fields.Numeric('Index Value'),
@@ -64,8 +64,8 @@ class RateLine(model.CoopSQL, model.CoopView):
         fields.Numeric('Indexed Value',
             on_change_with=['rate', 'index', 'start_date_', 'index_value']),
         'on_change_with_indexed_value')
-    parent = fields.Many2One('billing.rate_line', 'Parent', ondelete='CASCADE')
-    childs = fields.One2Many('billing.rate_line', 'parent', 'Childs',
+    parent = fields.Many2One('contract.premium_rate.line', 'Parent', ondelete='CASCADE')
+    childs = fields.One2Many('contract.premium_rate.line', 'parent', 'Childs',
         states={'invisible': ~~Eval('tranche')})
     start_date = fields.Date('Start Date')
     start_date_ = fields.Function(
@@ -111,7 +111,7 @@ class RateLine(model.CoopSQL, model.CoopView):
 
     def create_rate_note_line(self, rate_note_line_model=None):
         if not rate_note_line_model:
-            RateNoteLine = Pool().get('billing.rate_note_line')
+            RateNoteLine = Pool().get('billing.premium_rate.form.line')
         else:
             RateNoteLine = rate_note_line_model
         res = RateNoteLine()
@@ -162,7 +162,7 @@ class RateLine(model.CoopSQL, model.CoopView):
     def get_index_value(self, name):
         if not self.index:
             return
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         cell = Cell.get_cell(self.index, (self.start_date_))
         return cell.get_value_with_type() if cell else None
 
@@ -176,7 +176,7 @@ class RateLine(model.CoopSQL, model.CoopView):
 class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
     'Rate Note'
 
-    __name__ = 'billing.rate_note'
+    __name__ = 'billing.premium_rate.form'
 
     name = fields.Char('Number', states={'readonly': True})
     start_date = fields.Date('Start Date')
@@ -188,8 +188,8 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
             ('completed_by_client', 'Completed by Client'),
             ('validated', 'Validated'),
             ], 'Status', sort=False)
-    lines = fields.One2Many('billing.rate_note_line', 'rate_note', 'Lines')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    lines = fields.One2Many('billing.premium_rate.form.line', 'rate_note', 'Lines')
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     client = fields.Function(
         fields.Many2One('party.party', 'Client'),
@@ -215,7 +215,7 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
         self.contract = contract
 
     def calculate(self):
-        RateNoteLine = Pool().get('billing.rate_note_line')
+        RateNoteLine = Pool().get('billing.premium_rate.form.line')
         if self.status != 'draft':
             return
         if not hasattr(self, 'lines'):
@@ -266,12 +266,12 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
 class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
     'Rate Note Line'
 
-    __name__ = 'billing.rate_note_line'
+    __name__ = 'billing.premium_rate.form.line'
 
-    rate_note = fields.Many2One('billing.rate_note', 'Rate Note',
+    rate_note = fields.Many2One('billing.premium_rate.form', 'Rate Note',
         ondelete='CASCADE')
     contract = fields.Function(
-        fields.Many2One('contract.contract', 'Contract'),
+        fields.Many2One('contract', 'Contract'),
         'get_contract_id')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -279,7 +279,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'],
         states={'readonly': ~~Eval('childs')})
-    rate_line = fields.Many2One('billing.rate_line', 'Rate Line')
+    rate_line = fields.Many2One('contract.premium_rate.line', 'Rate Line')
     amount = fields.Numeric('Amount',
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line'],
         states={'readonly': ~~Eval('childs')})
@@ -287,9 +287,9 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'],
         states={'readonly': ~~Eval('childs')})
-    parent = fields.Many2One('billing.rate_note_line', 'Parent',
+    parent = fields.Many2One('billing.premium_rate.form.line', 'Parent',
         ondelete='CASCADE')
-    childs = fields.One2Many('billing.rate_note_line', 'parent', 'Childs')
+    childs = fields.One2Many('billing.premium_rate.form.line', 'parent', 'Childs')
     rate = fields.Numeric('Rate', digits=(16, 4),
         on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
             'client_amount'], states={'readonly': ~~Eval('childs')})
@@ -395,16 +395,16 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
 class RateNoteParameters(model.CoopView):
     'Rate Note Parameters'
 
-    __name__ = 'billing.rate_note_process_parameters'
+    __name__ = 'billing.premium_rate.form.create.param'
 
     until_date = fields.Date('Until Date', required=True)
-    products = fields.Many2Many('billing.rate_note_process_parameter-product',
+    products = fields.Many2Many('billing.premium_rate.form.create.param-product',
         'parameters_view', 'product', 'Products',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'],
         domain=[('is_group', '=', True)])
     contracts = fields.Many2Many(
-        'billing.rate_note_process_parameter-contract',
+        'billing.premium_rate.form.create.param-contract',
         'parameters_view', 'contract', 'Contracts',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'],
@@ -415,17 +415,17 @@ class RateNoteParameters(model.CoopView):
                 [('next_assessment_date', '<=', Eval('until_date'))]]
             ], depends=['until_date'])
     group_clients = fields.Many2Many(
-        'billing.rate_note_process_parameter-group_client',
+        'billing.premium_rate.form.create.param-group_client',
         'parameters_view', 'group', 'Group Clients',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'])
-    clients = fields.Many2Many('billing.rate_note_process_parameter-client',
+    clients = fields.Many2Many('billing.premium_rate.form.create.param-client',
         'parameters_view', 'client', 'Clients',
         on_change=['products', 'contracts', 'group_clients', 'clients',
             'until_date'])
 
     def _on_change(self, name):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         res = {}
         clients = self.clients
         contracts = self.contracts
@@ -465,9 +465,9 @@ class RateNoteParameters(model.CoopView):
 class RateNoteParameterClientRelation(model.CoopView):
     'Rate Note Parameter Client Relation'
 
-    __name__ = 'billing.rate_note_process_parameter-client'
+    __name__ = 'billing.premium_rate.form.create.param-client'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
     client = fields.Many2One('party.party', 'Client')
 
@@ -475,9 +475,9 @@ class RateNoteParameterClientRelation(model.CoopView):
 class RateNoteParameterProductRelation(model.CoopView):
     'Rate Note Parameter Product Relation'
 
-    __name__ = 'billing.rate_note_process_parameter-product'
+    __name__ = 'billing.premium_rate.form.create.param-product'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
     product = fields.Many2One('offered.product', 'Product')
 
@@ -485,19 +485,19 @@ class RateNoteParameterProductRelation(model.CoopView):
 class RateNoteParameterContractRelation(model.CoopView):
     'Rate Note Parameter Contract Relation'
 
-    __name__ = 'billing.rate_note_process_parameter-contract'
+    __name__ = 'billing.premium_rate.form.create.param-contract'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
-    contract = fields.Many2One('contract.contract', 'Contract')
+    contract = fields.Many2One('contract', 'Contract')
 
 
 class RateNoteParameterGroupPartyRelation(model.CoopView):
     'Rate Note Parameter Group Party Relation'
 
-    __name__ = 'billing.rate_note_process_parameter-group_client'
+    __name__ = 'billing.premium_rate.form.create.param-group_client'
 
-    parameters_view = fields.Many2One('billing.rate_note_process_parameters',
+    parameters_view = fields.Many2One('billing.premium_rate.form.create.param',
         'Parameter View')
     group = fields.Many2One('party.group', 'Group Party')
 
@@ -505,23 +505,23 @@ class RateNoteParameterGroupPartyRelation(model.CoopView):
 class RateNotesDisplayer(model.CoopView):
     'Rate Notes'
 
-    __name__ = 'billing.rate_notes_displayer'
+    __name__ = 'billing.premium_rate.form.create.show_forms'
 
-    rate_notes = fields.One2Many('billing.rate_note', None, 'Rate Notes')
+    rate_notes = fields.One2Many('billing.premium_rate.form', None, 'Rate Notes')
 
 
 class RateNoteProcess(model.CoopWizard):
     'Rate Note Process'
 
-    __name__ = 'billing.rate_note_process'
+    __name__ = 'billing.premium_rate.form.create'
 
     start_state = 'parameters'
-    parameters = StateView('billing.rate_note_process_parameters',
+    parameters = StateView('billing.premium_rate.form.create.param',
         'life_billing_collective_fr.rate_note_process_parameters_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Next', 'rate_notes', 'tryton-go-next', default=True),
             ])
-    rate_notes = StateView('billing.rate_notes_displayer',
+    rate_notes = StateView('billing.premium_rate.form.create.show_forms',
         'life_billing_collective_fr.rate_notes_displayer_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Validate', 'validate_rate_notes', 'tryton-go-next',
@@ -530,9 +530,9 @@ class RateNoteProcess(model.CoopWizard):
     validate_rate_notes = StateTransition()
 
     def default_parameters(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = None
-        if Transaction().context.get('active_model') == 'contract.contract':
+        if Transaction().context.get('active_model') == 'contract':
             contract = Contract(Transaction().context.get('active_id'))
             if (not contract or not contract.offered.is_group
                     or contract.status != 'active'):
@@ -566,9 +566,9 @@ class RateNoteProcess(model.CoopWizard):
 class RateNoteSelection(model.CoopView):
     'Rate Note Selection'
 
-    __name__ = 'billing.rate_note_selection'
+    __name__ = 'billing.premium_rate.form.receive.select'
 
-    selected_note = fields.Many2One('billing.rate_note', 'Selected Note',
+    selected_note = fields.Many2One('billing.premium_rate.form', 'Selected Note',
         domain=[('status', '=', 'completed_by_blient')], states={
             'required': True})
 
@@ -576,7 +576,7 @@ class RateNoteSelection(model.CoopView):
 class RateNoteMoveDisplayer(model.CoopView):
     'Rate Note Move Displayer'
 
-    __name__ = 'billing.rate_note_move_displayer'
+    __name__ = 'billing.premium_rate.form.receive.create_move'
 
     move = fields.One2Many('account.move', None, 'Move',
         states={'readonly': True})
@@ -585,15 +585,15 @@ class RateNoteMoveDisplayer(model.CoopView):
 class RateNoteReception(model.CoopWizard):
     'Rate Note Reception Wizard'
 
-    __name__ = 'billing.rate_note_reception'
+    __name__ = 'billing.premium_rate.form.receive'
 
     start_state = 'calculate_start'
     calculate_start = StateTransition()
-    select_note = StateView('billing.rate_note_selection',
+    select_note = StateView('billing.premium_rate.form.receive.select',
         'life_billing_collective_fr.rate_note_selection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'preview_bill', 'tryton-ok')])
-    preview_bill = StateView('billing.rate_note_move_displayer',
+    preview_bill = StateView('billing.premium_rate.form.receive.create_move',
         'life_billing_collective_fr.rate_note_move_displayer_form', [
             Button('Cancel', 'clean_up', 'tryton-cancel'),
             Button('Validate', 'validate', 'tryton-ok')])
@@ -610,7 +610,7 @@ class RateNoteReception(model.CoopWizard):
         })
 
     def transition_calculate_start(self):
-        if (Transaction().context.get('active_model') == 'billing.rate_note'
+        if (Transaction().context.get('active_model') == 'billing.premium_rate.form'
                 and Transaction().context.get('active_id')):
             self.select_note.selected_note = Transaction().context.get(
                 'active_id')
@@ -651,7 +651,7 @@ class RateNoteReception(model.CoopWizard):
 
     def do_start_collection(self, action):
         return action, {
-            'model': 'billing.rate_note',
+            'model': 'billing.premium_rate.form',
             'id': self.select_note.selected_note.id,
             'ids': [self.select_note.selected_note.id],
             }
@@ -661,7 +661,7 @@ class ContractForBilling():
     'Contract'
 
     __metaclass__ = PoolMeta
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     def create_price_list(self, start_date, end_date):
         if not 'rate_note' in Transaction().context:
@@ -708,7 +708,7 @@ class Move():
         super(Move, cls).__setup__()
         cls.coverage_details = copy.copy(cls.coverage_details)
         cls.coverage_details.domain[1].append(
-            ('second_origin', 'like', 'billing.rate_note,%'))
+            ('second_origin', 'like', 'billing.premium_rate.form,%'))
 
 
 class MoveLine():
@@ -727,13 +727,13 @@ class MoveLine():
     @classmethod
     def _get_second_origin(cls):
         result = super(MoveLine, cls)._get_second_origin()
-        result.append('billing.rate_note')
+        result.append('billing.premium_rate.form')
         return result
 
     def get_second_origin_name(self, name):
         if not (hasattr(self, 'second_origin') and self.second_origin):
             return ''
-        if not self.second_origin.__name__ == 'billing.rate_note':
+        if not self.second_origin.__name__ == 'billing.premium_rate.form':
             return super(MoveLine, self).get_second_origin_name(name)
         return coop_string.translate(self, '', 'mes_rate_note_compensation',
             'error')
@@ -743,13 +743,13 @@ class CollectionWizard():
     'Collection Wizard'
 
     __metaclass__ = PoolMeta
-    __name__ = 'collection.collection_wizard'
+    __name__ = 'collection.create'
 
     def default_input_collection_parameters(self, name):
         res = super(
             CollectionWizard, self).default_input_collection_parameters(name)
         the_model = Transaction().context.get('active_model', None)
-        if not the_model or the_model != 'billing.rate_note':
+        if not the_model or the_model != 'billing.premium_rate.form':
             return res
         rate_note = Pool().get(the_model)(
             Transaction().context.get('active_id'))

@@ -30,17 +30,17 @@ __all__ = [
 class LifeItemDescriptor():
     'Item Descriptor'
 
-    __name__ = 'ins_product.item_desc'
+    __name__ = 'offered.item.description'
     __metaclass__ = PoolMeta
 
 
 class LifeCoverage():
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
-    coverage_amount_rules = fields.One2Many('ins_product.coverage_amount_rule',
+    coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',
         'offered', 'Coverage Amount Rules',
         states={
             'invisible': Or(
@@ -70,7 +70,7 @@ class LifeEligibilityRule():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'ins_product.eligibility_rule'
+    __name__ = 'offered.eligibility.rule'
 
     min_age = fields.Integer('Minimum Age',
         states={'invisible': Or(STATE_LIFE, STATE_ADVANCED)})
@@ -146,7 +146,7 @@ class LifeEligibilityRule():
 class LifeLossDesc():
     'Loss Desc'
 
-    __name__ = 'ins_product.loss_desc'
+    __name__ = 'benefit.loss.description'
     __metaclass__ = PoolMeta
 
     @classmethod
@@ -159,7 +159,7 @@ class LifeLossDesc():
 class LifeBenefit():
     'Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
     __metaclass__ = PoolMeta
 
     @classmethod
@@ -172,7 +172,7 @@ class LifeBenefit():
 class LifeBenefitRule():
     'Life Benefit Rule'
 
-    __name__ = 'ins_product.benefit_rule'
+    __name__ = 'benefit.rule'
     __metaclass__ = PoolMeta
 
     def get_coverage_amount(self, args):
@@ -181,9 +181,8 @@ class LifeBenefitRule():
 
 
 class CoveredDataContext(RuleEngineContext):
-    'Covered data context'
 
-    __name__ = 'ins_product.rule_sets.covered_data'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_get_coverage_amount(cls, args):

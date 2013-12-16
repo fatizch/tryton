@@ -10,7 +10,7 @@ __all__ = [
 class RateNoteLine():
     'Rate Note line'
 
-    __name__ = 'billing.rate_note_line'
+    __name__ = 'billing.premium_rate.form.line'
 
     def calculate_bill_line(self, work_set):
         super(RateNoteLine, self).calculate_bill_line(work_set)

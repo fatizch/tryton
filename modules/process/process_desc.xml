@@ -46,52 +46,52 @@
             action="act_process_status" id="menu_process_status"/>
         <!-- Process Step Relation entries -->
         <record model="ir.ui.view" id="process_step_relation_form">
-            <field name="model">process.process_step_relation</field>
+            <field name="model">process-process.step</field>
             <field name="type">form</field>
             <field name="name">process_step_relation_form</field>
         </record>
         <record model="ir.ui.view" id="process_step_relation_tree">
-            <field name="model">process.process_step_relation</field>
+            <field name="model">process-process.step</field>
             <field name="type">tree</field>
             <field name="name">process_step_relation_tree</field>
         </record>
         <!-- Process Desc entries -->
         <record model="ir.ui.view" id="process_desc_form">
-            <field name="model">process.process_desc</field>
+            <field name="model">process</field>
             <field name="type">form</field>
             <field name="name">process_desc_form</field>
         </record>
         <record model="ir.ui.view" id="process_desc_tree">
-            <field name="model">process.process_desc</field>
+            <field name="model">process</field>
             <field name="type">tree</field>
             <field name="name">process_desc_tree</field>
         </record>
         <!-- Step Desc Entries -->
         <record model="ir.ui.view" id="step_desc_form">
-            <field name="model">process.step_desc</field>
+            <field name="model">process.step</field>
             <field name="type">form</field>
             <field name="name">step_desc_form</field>
         </record>
         <record model="ir.ui.view" id="step_desc_tree">
-            <field name="model">process.step_desc</field>
+            <field name="model">process.step</field>
             <field name="type">tree</field>
             <field name="name">step_desc_tree</field>
         </record>
         <!-- Transitions entries -->
         <record model="ir.ui.view" id="step_transition_form">
-            <field name="model">process.step_transition</field>
+            <field name="model">process.transition</field>
             <field name="type">form</field>
             <field name="name">step_transition_form</field>
         </record>
         <record model="ir.ui.view" id="step_transition_tree">
-            <field name="model">process.step_transition</field>
+            <field name="model">process.transition</field>
             <field name="type">tree</field>
             <field name="name">step_transition_tree</field>
         </record>
         <!-- Menu for process desc -->
         <record model="ir.action.act_window" id="act_process_desc">
             <field name="name">Process Descriptors</field>
-            <field name="res_model">process.process_desc</field>
+            <field name="res_model">process</field>
         </record>
         <record model="ir.action.act_window.view" id="act_process_desc_view1">
             <field name="sequence" eval="10"/>
@@ -108,7 +108,7 @@
         <!-- Menu for step desc -->
         <record model="ir.action.act_window" id="act_step_desc">
             <field name="name">Step Descriptors</field>
-            <field name="res_model">process.step_desc</field>
+            <field name="res_model">process.step</field>
         </record>
         <record model="ir.action.act_window.view" id="act_step_desc_view1">
             <field name="sequence" eval="11"/>
@@ -128,27 +128,27 @@
         <!-- Visualization of process description -->
         <record model="ir.action.report" id="report_generate_graph">
             <field name="name">Graph</field>
-            <field name="model">process.process_desc</field>
-            <field name="report_name">process.graph_generation</field>
+            <field name="model">process</field>
+            <field name="report_name">process.generate_graph.report</field>
         </record>
         <record model="ir.action.wizard" id="generate_graph_wizard">
             <field name="name">Graph</field>
-            <field name="wiz_name">process.generate_graph_wizard</field>
-            <field name="model">process.process_desc</field>
+            <field name="wiz_name">process.generate_graph</field>
+            <field name="model">process</field>
         </record>
         <record model="ir.action.keyword" id="generate_graph_wizard_keyword">
             <field name="keyword">form_print</field>
-            <field name="model">process.process_desc,-1</field>
+            <field name="model">process,-1</field>
             <field name="action" ref="generate_graph_wizard"/>
         </record>
         <!-- Code -->
         <record model="ir.ui.view" id="code_form">
-          <field name="model">process.code</field>
+          <field name="model">process.action</field>
           <field name="type">form</field>
           <field name="name">code_form</field>
         </record>
         <record model="ir.ui.view" id="code_tree">
-          <field name="model">process.code</field>
+          <field name="model">process.action</field>
           <field name="type">tree</field>
           <field name="name">code_tree</field>
         </record>

@@ -11,7 +11,7 @@ __all__ = [
 class ClaimContract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
     def get_possible_benefits(self, loss):
@@ -24,7 +24,7 @@ class ClaimContract():
 class ClaimOption():
     'Option'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
     __metaclass__ = PoolMeta
 
     def is_item_covered(self, loss):

@@ -8,53 +8,53 @@
             <field name="name">product_form</field>
         </record>
         <record model="ir.ui.view" id="coverage_view_form">
-            <field name="model">offered.coverage</field>
+            <field name="model">offered.option.description</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">coverage_form</field>
         </record>
         <record model="ir.ui.view" id="rating_rule_view_tree">
-            <field name="model">collective.rating_rule</field>
+            <field name="model">billing.premium.rate.rule</field>
             <field name="type">tree</field>
             <field name="inherit" ref="insurance_product.businessruleroot_view_tree"/>
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="rating_rule_view_form">
-            <field name="model">collective.rating_rule</field>
+            <field name="model">billing.premium.rate.rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="insurance_product.businessruleroot_view_form"/>
             <field name="name">rating_rule_form</field>
         </record>
         <record model="ir.ui.view" id="rating_rule_by_tranche_view_tree">
-            <field name="model">collective.sub_rating_rule</field>
+            <field name="model">billing.premium.rate.rule.line</field>
             <field name="type">tree</field>
             <field name="name">rating_rule_by_tranche_tree</field>
         </record>
         <record model="ir.ui.view" id="rating_rule_by_fare_class_view_tree">
-            <field name="model">collective.sub_rating_rule</field>
+            <field name="model">billing.premium.rate.rule.line</field>
             <field name="type">tree</field>
             <field name="name">rating_rule_by_fare_class_tree</field>
         </record>
         <record model="ir.ui.view" id="sub_rating_rule_view_form">
-            <field name="model">collective.sub_rating_rule</field>
+            <field name="model">billing.premium.rate.rule.line</field>
             <field name="type">form</field>
             <field name="name">sub_rating_rule_form</field>
         </record>
 
         <!-- Fare Class -->
         <record model="ir.ui.view" id="fare_class_view_form">
-            <field name="model">collective.fare_class</field>
+            <field name="model">fare_class</field>
             <field name="type">form</field>
             <field name="name">fare_class_form</field>
         </record>
         <record model="ir.ui.view" id="fare_class_view_tree">
-            <field name="model">collective.fare_class</field>
+            <field name="model">fare_class</field>
             <field name="type">tree</field>
             <field name="name">fare_class_tree</field>
         </record>
         <record model="ir.action.act_window" id="act_fare_class_form">
             <field name="name">Fare Classes</field>
-            <field name="res_model">collective.fare_class</field>
+            <field name="res_model">fare_class</field>
         </record>
 
         <record model="ir.action.act_window.view" id="act_fare_class_form_view_tree">
@@ -72,18 +72,18 @@
 
         <!-- Fare Class Group -->
         <record model="ir.ui.view" id="fare_class_group_view_form">
-            <field name="model">collective.fare_class_group</field>
+            <field name="model">fare_class.group</field>
             <field name="type">form</field>
             <field name="name">fare_class_group_form</field>
         </record>
         <record model="ir.ui.view" id="fare_class_group_view_tree">
-            <field name="model">collective.fare_class_group</field>
+            <field name="model">fare_class.group</field>
             <field name="type">tree</field>
             <field name="name">fare_class_group_tree</field>
         </record>
         <record model="ir.action.act_window" id="act_fare_class_group_form">
             <field name="name">Fare Class Group</field>
-            <field name="res_model">collective.fare_class_group</field>
+            <field name="res_model">fare_class.group</field>
         </record>
 
         <record model="ir.action.act_window.view" id="act_fare_class_group_form_view_tree">

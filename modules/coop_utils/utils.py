@@ -539,7 +539,7 @@ def init_complementary_data(compl_data_defs):
 
 
 def init_complementary_data_from_ids(ids):
-    the_model = Pool().get('offered.complementary_data_def')
+    the_model = Pool().get('extra_data')
     res = {}
     for id in ids:
         elem = the_model(id)

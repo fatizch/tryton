@@ -11,7 +11,7 @@ __all__ = ['Coverage']
 class Coverage():
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
     @classmethod

@@ -15,7 +15,7 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     def update_coverage_amounts_if_needed(self, at_date=None):
         if not at_date:
@@ -87,14 +87,14 @@ class Contract():
 
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):
-        CoveredElement = Pool().get('ins_contract.covered_element')
+        CoveredElement = Pool().get('contract.covered_element')
         return CoveredElement.get_possible_covered_elements(party, at_date)
 
 
 class LifeOption():
     'Subscribed Life Coverage'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     def get_covered_data(self, covered_person):
         for covered_data in self.covered_data:
@@ -113,7 +113,7 @@ class LifeOption():
 class LifeCoveredData():
     'Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
 
     coverage_amount = fields.Numeric('Coverage Amount', states={
             'invisible': ~Eval('with_coverage_amount'),

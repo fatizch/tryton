@@ -15,12 +15,12 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     use_rates = fields.Function(
         fields.Boolean('Use Rates', states={'invisible': True}),
         'get_use_rates')
-    rates = fields.One2Many('billing.rate_line', 'contract', 'Rates',
+    rates = fields.One2Many('contract.premium_rate.line', 'contract', 'Rates',
         states={'invisible': ~Eval('use_rates')})
     next_assessment_date = fields.Date('Next Assessment Date',
         states={'invisible': ~Eval('use_rates')})
@@ -73,7 +73,7 @@ already exists and can't be modified (%s)'''),
         return rates, errs
 
     def calculate_rates(self):
-        RateLine = Pool().get('billing.rate_line')
+        RateLine = Pool().get('contract.premium_rate.line')
         rates, errs = self.calculate_rates_dicts_between_dates()
         if errs:
             return False, errs
@@ -134,7 +134,7 @@ already exists and can't be modified (%s)'''),
             cls.raise_user_error(errs)
 
     def calculate_rate_notes(self, until_date=None):
-        RateNote = Pool().get('billing.rate_note')
+        RateNote = Pool().get('billing.premium_rate.form')
         res = []
         if not until_date:
             until_date = utils.today()
@@ -201,12 +201,12 @@ already exists and can't be modified (%s)'''),
 class CoveredData():
     'Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
 
     is_rating_by_fare_class = fields.Function(
         fields.Boolean('Rating by Fare Class', states={'invisible': True}),
         'get_rating_by_fare_class')
-    fare_class_group = fields.Many2One('collective.fare_class_group',
+    fare_class_group = fields.Many2One('fare_class.group',
         'Fare Class Group', ondelete='RESTRICT',
         states={'invisible': ~Eval('is_rating_by_fare_class')})
 

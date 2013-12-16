@@ -23,11 +23,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'Contract': 'contract.contract',
+            'Contract': 'contract',
             'Party': 'party.party',
-            'AddressKind': 'party.address_kind',
+            'AddressKind': 'party.address.kind',
             'Sequence': 'ir.sequence',
-            # 'BillingProcess': 'billing.billing_process',
+            # 'BillingProcess': 'contract.do_billing',
         }
 
     def test0001_testPersonCreation(self):

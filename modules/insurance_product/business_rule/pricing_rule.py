@@ -40,14 +40,14 @@ RATED_OBJECT_KIND = [
 class PricingRule(BusinessRuleRoot, model.CoopSQL):
     'Pricing Rule'
 
-    __name__ = 'ins_product.pricing_rule'
+    __name__ = 'billing.premium.rule'
 
     components = fields.One2ManyDomain(
-        'ins_product.pricing_component', 'pricing_rule', 'Components',
+        'billing.premium.rule.component', 'pricing_rule', 'Components',
         domain=[('rated_object_kind', '=', 'global')],
         states={'invisible': STATE_SIMPLE})
     sub_item_components = fields.One2ManyDomain(
-        'ins_product.pricing_component',
+        'billing.premium.rule.component',
         'pricing_rule', 'Covered Item Components',
         domain=[('rated_object_kind', '=', 'sub_item')])
     frequency = fields.Selection(
@@ -66,7 +66,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
         'set_basic_price')
     basic_tax = fields.Function(
         fields.Many2One(
-            'coop_account.tax_desc', 'Tax',
+            'account.tax.description', 'Tax',
             states={'invisible': STATE_ADVANCED}),
         'get_basic_tax',
         'set_basic_tax')
@@ -85,7 +85,7 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
     def set_basic_price(cls, pricing_rules, name, value):
         if not value:
             return
-        Component = Pool().get('ins_product.pricing_component')
+        Component = Pool().get('billing.premium.rule.component')
         for pricing in pricing_rules:
             Component.delete(
                 [component for component in pricing.components
@@ -106,12 +106,12 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
             return
         try:
             tax, = utils.get_those_objects(
-                'coop_account.tax_desc',
+                'account.tax.description',
                 [('id', '=', value)])
         except ValueError:
             raise Exception(
                 'Could not found a Tax Desc with code %s' % value)
-        Component = Pool().get('ins_product.pricing_component')
+        Component = Pool().get('billing.premium.rule.component')
         for pricing in pricing_rules:
             Component.delete(
                 [component for component in pricing.components
@@ -286,10 +286,10 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
 class PricingComponent(model.CoopSQL, model.CoopView):
     'Pricing Component'
 
-    __name__ = 'ins_product.pricing_component'
+    __name__ = 'billing.premium.rule.component'
 
     pricing_rule = fields.Many2One(
-        'ins_product.pricing_rule', 'Pricing Rule', ondelete='CASCADE')
+        'billing.premium.rule', 'Pricing Rule', ondelete='CASCADE')
     fixed_amount = fields.Numeric(
         'Amount', depends=['kind', 'config_kind'],
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
@@ -310,7 +310,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
     rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={
             'invisible': Or(
@@ -321,10 +321,10 @@ class PricingComponent(model.CoopSQL, model.CoopView):
     code = fields.Char(
         'Code', required=True, on_change_with=['code', 'tax', 'fee'])
     tax = fields.Many2One(
-        'coop_account.tax_desc', 'Tax',
+        'account.tax.description', 'Tax',
         states={'invisible': Eval('kind') != 'tax'}, ondelete='RESTRICT')
     fee = fields.Many2One(
-        'coop_account.fee_desc', 'Fee',
+        'account.fee.description', 'Fee',
         states={'invisible': Eval('kind') != 'fee'}, ondelete='RESTRICT')
     summary = fields.Function(
         fields.Char(
@@ -419,7 +419,7 @@ class TaxVersion():
     'Tax Version'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_account.tax_version'
+    __name__ = 'account.tax.description.version'
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')
 
@@ -432,7 +432,7 @@ class FeeVersion():
     'Fee Version'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_account.fee_version'
+    __name__ = 'account.fee.description.version'
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')
 

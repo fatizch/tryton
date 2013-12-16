@@ -6,231 +6,231 @@ msgctxt "error:ProcessFinder:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
-msgctxt "error:coop_process.xml_view_desc:"
+msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
 
-msgctxt "error:process.step_transition:"
+msgctxt "error:process.transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
-msgctxt "field:coop_process.process_log,create_date:"
+msgctxt "field:process.log,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_process.process_log,create_date_:"
+msgctxt "field:process.log,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_process.process_log,create_uid:"
+msgctxt "field:process.log,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_process.process_log,description:"
+msgctxt "field:process.log,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:coop_process.process_log,end_time:"
+msgctxt "field:process.log,end_time:"
 msgid "End Time"
 msgstr "Fin"
 
-msgctxt "field:coop_process.process_log,from_state:"
+msgctxt "field:process.log,from_state:"
 msgid "From State"
 msgstr "Etat de Départ"
 
-msgctxt "field:coop_process.process_log,id:"
+msgctxt "field:process.log,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_process.process_log,latest:"
+msgctxt "field:process.log,latest:"
 msgid "Latest"
 msgstr "Dernier"
 
-msgctxt "field:coop_process.process_log,locked:"
+msgctxt "field:process.log,locked:"
 msgid "Lock"
 msgstr "Verrrouillé"
 
-msgctxt "field:coop_process.process_log,must_expand_tree:"
+msgctxt "field:process.log,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_process.process_log,rec_name:"
+msgctxt "field:process.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_process.process_log,session:"
+msgctxt "field:process.log,session:"
 msgid "Session"
 msgstr "Session"
 
-msgctxt "field:coop_process.process_log,start_time:"
+msgctxt "field:process.log,start_time:"
 msgid "Start Time"
 msgstr "Début"
 
-msgctxt "field:coop_process.process_log,task:"
+msgctxt "field:process.log,task:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:coop_process.process_log,to_state:"
+msgctxt "field:process.log,to_state:"
 msgid "To State"
 msgstr "Etat Final"
 
-msgctxt "field:coop_process.process_log,user:"
+msgctxt "field:process.log,user:"
 msgid "User"
 msgstr "Utilisateur"
 
-msgctxt "field:coop_process.process_log,write_date:"
+msgctxt "field:process.log,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_process.process_log,write_uid:"
+msgctxt "field:process.log,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_process.process_parameters,date:"
+msgctxt "field:process.start,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "field:coop_process.process_parameters,good_process:"
+msgctxt "field:process.start,good_process:"
 msgid "Good Process"
 msgstr "Processus"
 
-msgctxt "field:coop_process.process_parameters,id:"
+msgctxt "field:process.start,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_process.process_parameters,model:"
+msgctxt "field:process.start,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:coop_process.process_parameters,must_expand_tree:"
+msgctxt "field:process.start,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_process.xml_view_desc,create_date:"
+msgctxt "field:ir.ui.view.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_process.xml_view_desc,create_date_:"
+msgctxt "field:ir.ui.view.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_process.xml_view_desc,create_uid:"
+msgctxt "field:ir.ui.view.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_process.xml_view_desc,field_childs:"
+msgctxt "field:ir.ui.view.description,field_childs:"
 msgid "Children field"
 msgstr ""
 
-msgctxt "field:coop_process.xml_view_desc,for_step:"
+msgctxt "field:ir.ui.view.description,for_step:"
 msgid "For Step"
 msgstr "Pour l'Etape"
 
-msgctxt "field:coop_process.xml_view_desc,header_line:"
+msgctxt "field:ir.ui.view.description,header_line:"
 msgid "Header Line"
 msgstr "Ligne d'Entête"
 
-msgctxt "field:coop_process.xml_view_desc,id:"
+msgctxt "field:ir.ui.view.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_process.xml_view_desc,input_mode:"
+msgctxt "field:ir.ui.view.description,input_mode:"
 msgid "Input Mode"
 msgstr "Mode de Saisie"
 
-msgctxt "field:coop_process.xml_view_desc,must_expand_tree:"
+msgctxt "field:ir.ui.view.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:coop_process.xml_view_desc,nb_col:"
+msgctxt "field:ir.ui.view.description,nb_col:"
 msgid "Number of columns"
 msgstr "Nombre de Colonnes"
 
-msgctxt "field:coop_process.xml_view_desc,rec_name:"
+msgctxt "field:ir.ui.view.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_process.xml_view_desc,the_view:"
+msgctxt "field:ir.ui.view.description,the_view:"
 msgid "View"
 msgstr "Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_content:"
+msgctxt "field:ir.ui.view.description,view_content:"
 msgid "View Content"
 msgstr "Contenu de la Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_final_name:"
+msgctxt "field:ir.ui.view.description,view_final_name:"
 msgid "View Name"
 msgstr "Nom de le Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_kind:"
+msgctxt "field:ir.ui.view.description,view_kind:"
 msgid "View Kind"
 msgstr "Type de Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_model:"
+msgctxt "field:ir.ui.view.description,view_model:"
 msgid "View Model"
 msgstr "Vue du Modèle"
 
-msgctxt "field:coop_process.xml_view_desc,view_name:"
+msgctxt "field:ir.ui.view.description,view_name:"
 msgid "View Name"
 msgstr "Nom de le Vue"
 
-msgctxt "field:coop_process.xml_view_desc,view_string:"
+msgctxt "field:ir.ui.view.description,view_string:"
 msgid "View String"
 msgstr "Libellé de la Vue"
 
-msgctxt "field:coop_process.xml_view_desc,write_date:"
+msgctxt "field:ir.ui.view.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_process.xml_view_desc,write_uid:"
+msgctxt "field:ir.ui.view.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.export_package,process:"
+msgctxt "field:ir.export_package,process:"
 msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:coop_utils.export_package,steps:"
+msgctxt "field:ir.export_package,steps:"
 msgid "Steps"
 msgstr "Etapes"
 
-msgctxt "field:process.code,create_date_:"
+msgctxt "field:process.action,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.process_desc,create_date_:"
+msgctxt "field:process,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.process_desc,custom_transitions:"
+msgctxt "field:process,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"
 
-msgctxt "field:process.process_desc,end_date:"
+msgctxt "field:process,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:process.process_desc,kind:"
+msgctxt "field:process,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:process.process_desc,start_date:"
+msgctxt "field:process,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:process.process_desc,steps_implicitly_available:"
+msgctxt "field:process,steps_implicitly_available:"
 msgid "Steps Implicitly Available"
 msgstr "Etapes Implicites"
 
-msgctxt "field:process.process_desc,with_prev_next:"
+msgctxt "field:process,with_prev_next:"
 msgid "With Previous / Next button"
 msgstr "Avec Préc/Suiv."
 
-msgctxt "field:process.process_step_relation,create_date_:"
+msgctxt "field:process-process.step,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
@@ -238,99 +238,99 @@ msgctxt "field:process.status,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.step_desc,create_date_:"
+msgctxt "field:process.step,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.step_desc,custom_views:"
+msgctxt "field:process.step,custom_views:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
 
-msgctxt "field:process.step_desc,main_model:"
+msgctxt "field:process.step,main_model:"
 msgid "Main Model"
 msgstr "Modèle Principal"
 
-msgctxt "field:process.step_desc,pyson:"
+msgctxt "field:process.step,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
 
-msgctxt "field:process.step_transition,choice_if_false:"
+msgctxt "field:process.transition,choice_if_false:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.step_transition,choice_if_true:"
+msgctxt "field:process.transition,choice_if_true:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.step_transition,create_date_:"
+msgctxt "field:process.transition,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process.step_transition,pyson_choice:"
+msgctxt "field:process.transition,pyson_choice:"
 msgid ""
 msgstr " "
 
-msgctxt "field:process.step_transition,pyson_description:"
+msgctxt "field:process.transition,pyson_description:"
 msgid ""
 msgstr " "
 
-msgctxt "model:coop_process.process_log,name:"
+msgctxt "model:process.log,name:"
 msgid "Process Log"
 msgstr ""
 
-msgctxt "model:coop_process.process_parameters,name:"
+msgctxt "model:process.start,name:"
 msgid "Process Parameters"
 msgstr "Paramètres du Processus"
 
-msgctxt "model:coop_process.xml_view_desc,name:"
+msgctxt "model:ir.ui.view.description,name:"
 msgid "XML View Descriptor"
 msgstr "Descripteur de Vue XML"
 
-msgctxt "selection:coop_process.xml_view_desc,input_mode:"
+msgctxt "selection:ir.ui.view.description,input_mode:"
 msgid "Classic"
 msgstr "Classique"
 
-msgctxt "selection:coop_process.xml_view_desc,input_mode:"
+msgctxt "selection:ir.ui.view.description,input_mode:"
 msgid "Expert"
 msgstr "Avancé"
 
-msgctxt "selection:coop_process.xml_view_desc,view_kind:"
+msgctxt "selection:ir.ui.view.description,view_kind:"
 msgid "Form"
 msgstr "Formulaire"
 
-msgctxt "selection:coop_process.xml_view_desc,view_kind:"
+msgctxt "selection:ir.ui.view.description,view_kind:"
 msgid "Tree"
 msgstr "Arbre"
 
-msgctxt "selection:process.process_desc,kind:"
+msgctxt "selection:process,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:process.step_transition,kind:"
+msgctxt "selection:process.transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
 
-msgctxt "view:coop_process.process_log:"
+msgctxt "view:process.log:"
 msgid "Log"
 msgstr ""
 
-msgctxt "view:coop_process.process_log:"
+msgctxt "view:process.log:"
 msgid "Logs"
 msgstr ""
 
-msgctxt "view:coop_process.process_parameters:"
+msgctxt "view:process.start:"
 msgid "Process Parameters"
 msgstr "Paramètres du Processus"
 
-msgctxt "view:coop_process.xml_view_desc:"
+msgctxt "view:ir.ui.view.description:"
 msgid "View Descriptor"
 msgstr "Descripteur de Vue"
 
-msgctxt "view:coop_process.xml_view_desc:"
+msgctxt "view:ir.ui.view.description:"
 msgid "View Descriptors"
 msgstr "Descripteurs de Vue"
 
-msgctxt "view:process.step_desc:"
+msgctxt "view:process.step:"
 msgid "Custom Views"
 msgstr "Vues Personnalisées"
 

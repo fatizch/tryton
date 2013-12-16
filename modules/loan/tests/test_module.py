@@ -19,7 +19,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'Loan': 'loan.loan',
+            'Loan': 'loan',
             'Currency': 'currency.currency',
         }
 

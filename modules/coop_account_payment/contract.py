@@ -18,7 +18,7 @@ class Contract():
     'Contract'
 
     __metaclass__ = PoolMeta
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     paid_today = fields.Function(fields.Numeric('Paid today'),
         'get_paid_today')
@@ -78,7 +78,7 @@ class Contract():
             move_line.maturity_date == None)
         good_moves_query = move.id.in_(move.select(move.id, where=(
                     move.origin.in_(
-                        ['contract.contract,%s' % x.id for x in contracts]))))
+                        ['contract,%s' % x.id for x in contracts]))))
 
         cursor.execute(*query_table.select(move.origin, Sum(
                     Coalesce(payment.amount, 0)),

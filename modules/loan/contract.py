@@ -15,12 +15,12 @@ __all__ = [
 class LoanContract():
     'Loan Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')
-    loans = fields.One2Many('loan.loan', 'contract', 'Loans',
+    loans = fields.One2Many('loan', 'contract', 'Loans',
         states={'invisible': ~Eval('is_loan')},
         depends=['is_loan', 'currency'],
         context={'currency': Eval('currency')})
@@ -62,7 +62,7 @@ class LoanContract():
 class LoanOption():
     'Loan Option'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
@@ -75,10 +75,10 @@ class LoanOption():
 class LoanCoveredData():
     'Loan Covered Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
 
     loan_shares = fields.Many2Many(
-        'loan.covered_data-loan_share',
+        'contract.covered_data-loan.share',
         'covered_data', 'loan_share', 'Loan Shares',
         states={'invisible': ~Eval('is_loan')},
         domain=[
@@ -112,9 +112,9 @@ class LoanCoveredData():
 class LoanCoveredDataLoanShareRelation(model.CoopSQL):
     'Loan Covered Data Loan Share Relation'
 
-    __name__ = 'loan.covered_data-loan_share'
+    __name__ = 'contract.covered_data-loan.share'
 
-    covered_data = fields.Many2One('ins_contract.covered_data', 'Covered Data',
+    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE')
     loan_share = fields.Many2One('loan.share', 'Loan Share',
         ondelete='RESTRICT')

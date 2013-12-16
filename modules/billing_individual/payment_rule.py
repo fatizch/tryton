@@ -31,11 +31,11 @@ PAYMENT_DELAYS = [
 class PaymentRuleLine(model.CoopSQL, model.CoopView):
     'Payment Rule Line'
 
-    __name__ = 'billing.payment_rule_line'
+    __name__ = 'billing.payment.term.line'
 
     sequence = fields.Integer('Sequence',
         help='Use to order lines in ascending order')
-    payment_rule = fields.Many2One('billing.payment_rule', 'Payment Term',
+    payment_rule = fields.Many2One('billing.payment.term', 'Payment Term',
         required=True, ondelete="CASCADE")
     type = fields.Selection([
             ('fixed', 'Fixed'),
@@ -245,18 +245,18 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
 class PaymentRuleFeeRelation(model.CoopSQL):
     'Payment Rule - Fee relation'
 
-    __name__ = 'billing.payment_rule-fee-relation'
+    __name__ = 'billing.payment.term-fee'
 
-    payment_rule = fields.Many2One('billing.payment_rule', 'Payment Rule',
+    payment_rule = fields.Many2One('billing.payment.term', 'Payment Rule',
         required=True, ondelete='CASCADE')
-    fee = fields.Many2One('coop_account.fee_desc', 'Fee', required=True,
+    fee = fields.Many2One('account.fee.description', 'Fee', required=True,
         ondelete='RESTRICT')
 
 
 class PaymentRule(model.CoopSQL, model.CoopView):
     'Payment Rule'
 
-    __name__ = 'billing.payment_rule'
+    __name__ = 'billing.payment.term'
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
@@ -270,9 +270,9 @@ class PaymentRule(model.CoopSQL, model.CoopView):
     sync_date = fields.Date('Sync Date', states={
             'invisible': ~Eval('with_sync_date'),
             'required': ~~Eval('with_sync_date')})
-    start_lines = fields.One2Many('billing.payment_rule_line', 'payment_rule',
+    start_lines = fields.One2Many('billing.payment.term.line', 'payment_rule',
         'Start Lines')
-    appliable_fees = fields.Many2Many('billing.payment_rule-fee-relation',
+    appliable_fees = fields.Many2Many('billing.payment.term-fee',
         'payment_rule', 'fee', 'Appliable fees', depends=['company'],
         domain=[('company', '=', Eval('company'))])
     payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode')

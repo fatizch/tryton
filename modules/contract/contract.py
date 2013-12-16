@@ -35,7 +35,7 @@ __all__ = [
 class StatusHistory(model.CoopSQL, model.CoopView):
     'Status History'
 
-    __name__ = 'contract.status_history'
+    __name__ = 'contract.status.history'
 
     reference = fields.Reference('Reference', 'get_possible_reference')
     status = fields.Selection(OPTIONSTATUS, 'Status',
@@ -86,7 +86,7 @@ class Subscribed(model.CoopView, ModelCurrency):
     start_management_date = fields.Date('Management Date')
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     status_history = fields.One2Many(
-        'contract.status_history', 'reference', 'Status History')
+        'contract.status.history', 'reference', 'Status History')
 
     @classmethod
     def __setup__(cls):
@@ -187,7 +187,7 @@ class Subscribed(model.CoopView, ModelCurrency):
 class Contract(model.CoopSQL, Subscribed, Printable):
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     _rec_name = 'contract_number'
     _history = True
 
@@ -217,7 +217,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Complementary Data',
+        'extra_data', 'Complementary Data',
         on_change=[
             'complementary_data', 'start_date', 'options', 'offered',
             'appliable_conditions_date'],
@@ -229,7 +229,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     contact = fields.Many2One('party.party', 'Contact')
     appliable_conditions_date = fields.Date('Appliable Conditions Date')
     documents = fields.One2Many(
-        'ins_product.document_request', 'needed_by', 'Documents', size=1)
+        'document.request', 'needed_by', 'Documents', size=1)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True)
     addresses = fields.One2Many('contract.address', 'contract',
@@ -270,8 +270,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             options_code=None):
         'WIP : This method should be the basic API to have a contract.'
         pool = Pool()
-        Contract = pool.get('contract.contract')
-        SubscribedOpt = pool.get('contract.subscribed_option')
+        Contract = pool.get('contract')
+        SubscribedOpt = pool.get('contract.option')
         contract = Contract()
         contract.subscriber = party
         contract.init_from_offered(offered)
@@ -316,7 +316,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     @classmethod
     def get_options_model_name(cls):
-        return 'contract.subscribed_option'
+        return 'contract.option'
 
     @classmethod
     def get_offered_name(cls):
@@ -551,11 +551,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 class SubscribedCoverage(model.CoopSQL, Subscribed):
     'Subscribed Coverage'
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
     _history = True
 
     status = fields.Selection(OPTIONSTATUS, 'Status')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     coverage_kind = fields.Function(
         fields.Char('Coverage Kind', on_change_with=['offered']),
@@ -571,7 +571,7 @@ class SubscribedCoverage(model.CoopSQL, Subscribed):
 
     @classmethod
     def get_offered_name(cls):
-        return 'offered.coverage', 'Coverage'
+        return 'offered.option.description', 'Coverage'
 
     def get_coverage(self):
         return self.offered
@@ -632,9 +632,9 @@ class ContractClause(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract.clause'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
-    clause = fields.Many2One('ins_product.clause', 'Clause',
+    clause = fields.Many2One('clause', 'Clause',
         ondelete='RESTRICT')
     override_text = fields.Function(
         fields.Boolean('Override Text', on_change_with=['clause'],
@@ -676,7 +676,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract.address'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
@@ -708,7 +708,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
 class DeliveredService(model.CoopView, model.CoopSQL):
     'Delivered Service'
 
-    __name__ = 'contract.delivered_service'
+    __name__ = 'contract.service'
 
     status = fields.Selection([
             ('calculating', 'Calculating'),
@@ -716,14 +716,14 @@ class DeliveredService(model.CoopView, model.CoopSQL):
             ('calculated', 'Calculated'),
             ('delivered', 'Delivered'),
             ], 'Status')
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='RESTRICT')
     subscribed_service = fields.Many2One(
-        'contract.subscribed_option', 'Coverage', ondelete='RESTRICT',
+        'contract.option', 'Coverage', ondelete='RESTRICT',
         domain=[
             If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
         ], depends=['contract'])
-    func_error = fields.Many2One('rule_engine.error', 'Error',
+    func_error = fields.Many2One('functional_error', 'Error',
         ondelete='RESTRICT', states={
             'invisible': ~Eval('func_error'),
             'readonly': True})
@@ -749,7 +749,7 @@ class LetterModel():
     'Letter Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'ins_product.letter_model'
+    __name__ = 'document.template'
 
     @classmethod
     def __setup__(cls):

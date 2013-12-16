@@ -30,7 +30,7 @@ STATES_AMOUNT_EVOLVES = Bool(Eval('amount_evolves_over_time'))
 class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     'Benefit Rule'
 
-    __name__ = 'ins_product.benefit_rule'
+    __name__ = 'benefit.rule'
 
     amount_evolves_over_time = fields.Boolean('Evolves Over Time',
         states={'invisible': ~STATES_PERIOD})
@@ -59,7 +59,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES),
             'required': ~STATES_CAPITAL,
         }, sort=False)
-    sub_benefit_rules = fields.One2Many('ins_product.sub_benefit_rule',
+    sub_benefit_rules = fields.One2Many('benefit.rule.stage',
         'benefit_rule', 'Sub Benefit Rules',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
     use_monthly_period = fields.Boolean('Monthly Period',
@@ -91,7 +91,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             'invisible': Bool(~Eval('with_revaluation')),
             'required': Bool(Eval('with_revaluation')),
         })
-    revaluation_index = fields.Many2One('table.table_def', 'Revaluation Index',
+    revaluation_index = fields.Many2One('table', 'Revaluation Index',
         domain=[
             ('dimension_kind1', '=', 'range-date'),
             ('dimension_kind2', '=', None),
@@ -161,7 +161,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     def get_index_at_date(self, at_date):
         if not self.revaluation_index:
             return
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         return Cell.get_cell(self.revaluation_index, (at_date))
 
     def on_change_with_index_initial_value(self, name=None):
@@ -297,7 +297,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
     def get_indemnification_for_capital(self, args):
         res = {}
         res['nb_of_unit'] = 1
-        res['amount_per_unit'], errs = self.give_me_result(args)
+        result = self.give_me_result(args)
+        res['amount_per_unit'], errs = result.result, result.errors
         res['beneficiary_kind'] = self.offered.beneficiary_kind
         return [res], errs
 
@@ -311,16 +312,16 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
 class SubBenefitRule(model.CoopSQL, model.CoopView, ModelCurrency):
     'Sub Benefit Rule'
 
-    __name__ = 'ins_product.sub_benefit_rule'
+    __name__ = 'benefit.rule.stage'
 
-    benefit_rule = fields.Many2One('ins_product.benefit_rule', 'Benefit Rule',
+    benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
         ondelete='CASCADE')
     config_kind = fields.Selection(CONFIG_KIND,
         'Conf. kind', required=True)
     rule = fields.Many2One(
         'rule_engine', 'Amount', states={'invisible': STATE_SIMPLE})
     rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',

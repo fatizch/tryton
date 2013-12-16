@@ -2,11 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:offered.complementary_data_def:"
+msgctxt "error:extra_data:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "error:offered.coverage:"
+msgctxt "error:offered.option.description:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -14,433 +14,433 @@ msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "field:coop_utils.export_package,compl_data_defs:"
+msgctxt "field:ir.export_package,compl_data_defs:"
 msgid "Complementary Data Def"
 msgstr "Définition de Données Complémentaires"
 
-msgctxt "field:coop_utils.export_package,coverages:"
+msgctxt "field:ir.export_package,coverages:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "field:coop_utils.export_package,products:"
+msgctxt "field:ir.export_package,products:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "field:coop_utils.test_case_model,main_company_name:"
+msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
 msgstr "Nom de la company principale"
 
-msgctxt "field:offered.compl_data_def-tag,compl_data_def:"
+msgctxt "field:extra_data-tag,compl_data_def:"
 msgid "Complementary Data Def"
 msgstr "Définition de Données Complémentaires"
 
-msgctxt "field:offered.compl_data_def-tag,create_date:"
+msgctxt "field:extra_data-tag,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.compl_data_def-tag,create_date_:"
+msgctxt "field:extra_data-tag,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.compl_data_def-tag,create_uid:"
+msgctxt "field:extra_data-tag,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.compl_data_def-tag,id:"
+msgctxt "field:extra_data-tag,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.compl_data_def-tag,rec_name:"
+msgctxt "field:extra_data-tag,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.compl_data_def-tag,tag:"
+msgctxt "field:extra_data-tag,tag:"
 msgid "Tag"
 msgstr "Label"
 
-msgctxt "field:offered.compl_data_def-tag,write_date:"
+msgctxt "field:extra_data-tag,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.compl_data_def-tag,write_uid:"
+msgctxt "field:extra_data-tag,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.complementary_data_def,create_date:"
+msgctxt "field:extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,create_date_:"
+msgctxt "field:extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.complementary_data_def,create_uid:"
+msgctxt "field:extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,default_value:"
+msgctxt "field:extra_data,default_value:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,default_value_boolean:"
+msgctxt "field:extra_data,default_value_boolean:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,default_value_selection:"
+msgctxt "field:extra_data,default_value_selection:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,digits:"
+msgctxt "field:extra_data,digits:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,end_date:"
+msgctxt "field:extra_data,end_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,id:"
+msgctxt "field:extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,kind:"
+msgctxt "field:extra_data,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,must_expand_tree:"
+msgctxt "field:extra_data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.complementary_data_def,name:"
+msgctxt "field:extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,rec_name:"
+msgctxt "field:extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,rule:"
+msgctxt "field:extra_data,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:offered.complementary_data_def,selection:"
+msgctxt "field:extra_data,selection:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,selection_json:"
+msgctxt "field:extra_data,selection_json:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,start_date:"
+msgctxt "field:extra_data,start_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,string:"
+msgctxt "field:extra_data,string:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,sub_data_config_kind:"
+msgctxt "field:extra_data,sub_data_config_kind:"
 msgid "Sub Data Config Kind"
 msgstr ""
 
-msgctxt "field:offered.complementary_data_def,sub_datas:"
+msgctxt "field:extra_data,sub_datas:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,tags:"
+msgctxt "field:extra_data,tags:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "field:offered.complementary_data_def,tags_name:"
+msgctxt "field:extra_data,tags_name:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "field:offered.complementary_data_def,type_:"
+msgctxt "field:extra_data,type_:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,with_default_value:"
+msgctxt "field:extra_data,with_default_value:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,write_date:"
+msgctxt "field:extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_def,write_uid:"
+msgctxt "field:extra_data,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,child:"
+msgctxt "field:extra_data-sub_extra_data,child:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_date:"
+msgctxt "field:extra_data-sub_extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_date_:"
+msgctxt "field:extra_data-sub_extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.complementary_data_recursive_relation,create_uid:"
+msgctxt "field:extra_data-sub_extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,id:"
+msgctxt "field:extra_data-sub_extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,master:"
+msgctxt "field:extra_data-sub_extra_data,master:"
 msgid ""
 msgstr " "
 
 msgctxt ""
-"field:offered.complementary_data_recursive_relation,must_expand_tree:"
+"field:extra_data-sub_extra_data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.complementary_data_recursive_relation,rec_name:"
+msgctxt "field:extra_data-sub_extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,select_value:"
+msgctxt "field:extra_data-sub_extra_data,select_value:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,write_date:"
+msgctxt "field:extra_data-sub_extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.complementary_data_recursive_relation,write_uid:"
+msgctxt "field:extra_data-sub_extra_data,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,code:"
+msgctxt "field:offered.option.description,code:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,company:"
+msgctxt "field:offered.option.description,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered.coverage,complementary_data:"
+msgctxt "field:offered.option.description,complementary_data:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,complementary_data_def:"
+msgctxt "field:offered.option.description,complementary_data_def:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,coverages_in_package:"
+msgctxt "field:offered.option.description,coverages_in_package:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,create_date:"
+msgctxt "field:offered.option.description,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,create_date_:"
+msgctxt "field:offered.option.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.coverage,create_uid:"
+msgctxt "field:offered.option.description,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,currency:"
+msgctxt "field:offered.option.description,currency:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,currency_digits:"
+msgctxt "field:offered.option.description,currency_digits:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,description:"
+msgctxt "field:offered.option.description,description:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,end_date:"
+msgctxt "field:offered.option.description,end_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,id:"
+msgctxt "field:offered.option.description,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,is_package:"
+msgctxt "field:offered.option.description,is_package:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,kind:"
+msgctxt "field:offered.option.description,kind:"
 msgid "Coverage Kind"
 msgstr "Type de Garantie"
 
-msgctxt "field:offered.coverage,must_expand_tree:"
+msgctxt "field:offered.option.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.coverage,name:"
+msgctxt "field:offered.option.description,name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,products:"
+msgctxt "field:offered.option.description,products:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,rec_name:"
+msgctxt "field:offered.option.description,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,start_date:"
+msgctxt "field:offered.option.description,start_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,subscription_behaviour:"
+msgctxt "field:offered.option.description,subscription_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,summary:"
+msgctxt "field:offered.option.description,summary:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,template:"
+msgctxt "field:offered.option.description,template:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,template_behaviour:"
+msgctxt "field:offered.option.description,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,write_date:"
+msgctxt "field:offered.option.description,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage,write_uid:"
+msgctxt "field:offered.option.description,write_uid:"
 msgid ""
 msgstr " "
 
 msgctxt ""
-"field:offered.coverage-complementary_data_def,complementary_data_def:"
+"field:offered.option.description-extra_data,complementary_data_def:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,coverage:"
+msgctxt "field:offered.option.description-extra_data,coverage:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,create_date:"
+msgctxt "field:offered.option.description-extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,create_date_:"
+msgctxt "field:offered.option.description-extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.coverage-complementary_data_def,create_uid:"
+msgctxt "field:offered.option.description-extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,id:"
+msgctxt "field:offered.option.description-extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,rec_name:"
+msgctxt "field:offered.option.description-extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,write_date:"
+msgctxt "field:offered.option.description-extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.coverage-complementary_data_def,write_uid:"
+msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,code:"
+msgctxt "field:offered,code:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,company:"
+msgctxt "field:offered,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered.offered,complementary_data:"
+msgctxt "field:offered,complementary_data:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,currency_digits:"
+msgctxt "field:offered,currency_digits:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,description:"
+msgctxt "field:offered,description:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,end_date:"
+msgctxt "field:offered,end_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,id:"
+msgctxt "field:offered,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,must_expand_tree:"
+msgctxt "field:offered,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.offered,name:"
+msgctxt "field:offered,name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,start_date:"
+msgctxt "field:offered,start_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,summary:"
+msgctxt "field:offered,summary:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,template:"
+msgctxt "field:offered,template:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.offered,template_behaviour:"
+msgctxt "field:offered,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,coverage:"
+msgctxt "field:offered.package-option.description,coverage:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,create_date:"
+msgctxt "field:offered.package-option.description,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,create_date_:"
+msgctxt "field:offered.package-option.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.package-coverage,create_uid:"
+msgctxt "field:offered.package-option.description,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,id:"
+msgctxt "field:offered.package-option.description,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,package:"
+msgctxt "field:offered.package-option.description,package:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,rec_name:"
+msgctxt "field:offered.package-option.description,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,write_date:"
+msgctxt "field:offered.package-option.description,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.package-coverage,write_uid:"
+msgctxt "field:offered.package-option.description,write_uid:"
 msgid ""
 msgstr " "
 
@@ -544,75 +544,75 @@ msgctxt "field:offered.product,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,complementary_data_def:"
+msgctxt "field:offered.product-extra_data,complementary_data_def:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,create_date:"
+msgctxt "field:offered.product-extra_data,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,create_date_:"
+msgctxt "field:offered.product-extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.product-complementary_data_def,create_uid:"
+msgctxt "field:offered.product-extra_data,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,id:"
+msgctxt "field:offered.product-extra_data,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,product:"
+msgctxt "field:offered.product-extra_data,product:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,rec_name:"
+msgctxt "field:offered.product-extra_data,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,write_date:"
+msgctxt "field:offered.product-extra_data,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-complementary_data_def,write_uid:"
+msgctxt "field:offered.product-extra_data,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,coverage:"
+msgctxt "field:offered.product-option.description,coverage:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,create_date:"
+msgctxt "field:offered.product-option.description,create_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,create_date_:"
+msgctxt "field:offered.product-option.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.product-options-coverage,create_uid:"
+msgctxt "field:offered.product-option.description,create_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,id:"
+msgctxt "field:offered.product-option.description,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,product:"
+msgctxt "field:offered.product-option.description,product:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,rec_name:"
+msgctxt "field:offered.product-option.description,rec_name:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,write_date:"
+msgctxt "field:offered.product-option.description,write_date:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-options-coverage,write_uid:"
+msgctxt "field:offered.product-option.description,write_uid:"
 msgid ""
 msgstr " "
 
@@ -620,7 +620,7 @@ msgctxt "field:tag,compl_data_defs:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "help:offered.complementary_data_def,selection:"
+msgctxt "help:extra_data,selection:"
 msgid ""
 msgstr " "
 
@@ -668,31 +668,31 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "model:offered.compl_data_def-tag,name:"
+msgctxt "model:extra_data-tag,name:"
 msgid "Relation between complementary data def and tag"
 msgstr ""
 
-msgctxt "model:offered.complementary_data_def,name:"
+msgctxt "model:extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.complementary_data_recursive_relation,name:"
+msgctxt "model:extra_data-sub_extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.coverage,name:"
+msgctxt "model:offered.option.description,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.coverage-complementary_data_def,name:"
+msgctxt "model:offered.option.description-extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.offered,name:"
+msgctxt "model:offered,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.package-coverage,name:"
+msgctxt "model:offered.package-option.description,name:"
 msgid ""
 msgstr " "
 
@@ -700,119 +700,119 @@ msgctxt "model:offered.product,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.product-complementary_data_def,name:"
+msgctxt "model:offered.product-extra_data,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:offered.product-options-coverage,name:"
+msgctxt "model:offered.product-option.description,name:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Loss"
 msgstr "Préjudice"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:offered.complementary_data_def,kind:"
+msgctxt "selection:extra_data,kind:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "selection:offered.complementary_data_def,sub_data_config_kind:"
+msgctxt "selection:extra_data,sub_data_config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:offered.complementary_data_def,sub_data_config_kind:"
+msgctxt "selection:extra_data,sub_data_config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Boolean"
 msgstr "Booléen"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Char"
 msgstr "Alphanumérique"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "DateTime"
 msgstr ""
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Float"
 msgstr ""
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Integer"
 msgstr "Entier"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Numeric"
 msgstr "Numérique"
 
-msgctxt "selection:offered.complementary_data_def,type_:"
+msgctxt "selection:extra_data,type_:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "selection:offered.coverage,kind:"
+msgctxt "selection:offered.option.description,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.coverage,kind:"
+msgctxt "selection:offered.option.description,kind:"
 msgid "Default"
 msgstr "Défaut"
 
-msgctxt "selection:offered.coverage,subscription_behaviour:"
+msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
 
-msgctxt "selection:offered.coverage,subscription_behaviour:"
+msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Optional"
 msgstr "En Option"
 
-msgctxt "selection:offered.coverage,subscription_behaviour:"
+msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Proposed"
 msgstr "Proposé par Défaut"
 
-msgctxt "selection:offered.coverage,template_behaviour:"
+msgctxt "selection:offered.option.description,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.coverage,template_behaviour:"
+msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:offered.coverage,template_behaviour:"
+msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:offered.offered,template_behaviour:"
+msgctxt "selection:offered,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -848,55 +848,55 @@ msgctxt "selection:offered.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Complementary Data Descriptor"
 msgstr "Descripteur de Données Complémentaires"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Complementary Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Main"
 msgstr "Principale"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Sub Data"
 msgstr "Sous Donnée"
 
-msgctxt "view:offered.complementary_data_def:"
+msgctxt "view:extra_data:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "view:offered.complementary_data_recursive_relation:"
+msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relation"
 msgstr ""
 
-msgctxt "view:offered.complementary_data_recursive_relation:"
+msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relations"
 msgstr "Relations"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Administration"
 msgstr "Administration"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Offered"
 msgstr "Offre"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Rules"
 msgstr "Règles"
 
-msgctxt "view:offered.offered:"
+msgctxt "view:offered:"
 msgid "Summary"
 msgstr "Synthèse"
 

@@ -35,7 +35,7 @@ class GroupProduct():
 class GroupCoverage():
     'Group Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
     is_group = fields.Boolean('Group Coverage',
@@ -52,7 +52,7 @@ class GroupCoverage():
 class GroupBenefit():
     'Benefit'
 
-    __name__ = 'ins_product.benefit'
+    __name__ = 'benefit'
     __metaclass__ = PoolMeta
 
     @classmethod

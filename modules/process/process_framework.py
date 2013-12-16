@@ -107,7 +107,7 @@ class ProcessFramework(ModelView):
     # The current state is used to store which process is currently being
     # executed and which step is the current step
     current_state = fields.Many2One(
-        'process.process_step_relation',
+        'process-process.step',
         'Current State',
         ondelete='RESTRICT', states={'readonly': True})
 
@@ -149,7 +149,7 @@ class ProcessFramework(ModelView):
     def build_instruction_transition_method(cls, process, transition):
         def button_transition_generic(works):
             # Pretty straightforward : we find the matching transition
-            StepTransition = Pool().get('process.step_transition')
+            StepTransition = Pool().get('process.transition')
             good_trans = StepTransition(int(transition[0]))
 
             for work in works:
@@ -173,7 +173,7 @@ class ProcessFramework(ModelView):
         # The pattern for the transition is as follow :
         #      <instruction>_<process_desc_id>(_<data>)
         instruction = button_data[0]
-        ProcessDesc = Pool().get('process.process_desc')
+        ProcessDesc = Pool().get('process')
         process = ProcessDesc(button_data[1])
 
         try:
@@ -198,7 +198,7 @@ class ProcessFramework(ModelView):
             # We calculate it from the current_state
             process_desc = self.current_state.process
         else:
-            ProcessDesc = Pool().get('process.process_desc')
+            ProcessDesc = Pool().get('process')
             process_desc, = ProcessDesc.search([
                 ('technical_name', '=', process_name),
             ], limit=1)
@@ -215,7 +215,7 @@ class ProcessFramework(ModelView):
         if not process_name:
             return
 
-        ProcessDesc = Pool().get('process.process_desc')
+        ProcessDesc = Pool().get('process')
 
         process_desc, = ProcessDesc.search([
             ('technical_name', '=', process_name),
@@ -296,12 +296,12 @@ class ProcessFramework(ModelView):
             utils.pyson_result(good_button['invisible'], self, evaled=True))
 
     def is_button_available(self, process, executable):
-        if executable.__name__ == 'process.step_desc':
+        if executable.__name__ == 'process.step':
             if self.current_state and \
                     self.current_state.step.id == executable.id:
                 return False
             button_name = '_button_step_%s_%s' % (process.id, executable.id)
-        elif executable.__name__ == 'process.step_transition':
+        elif executable.__name__ == 'process.transition':
             button_name = '_button_transition_%s_%s' % (
                 process.id, executable.id)
         return self.button_is_active(button_name)
@@ -312,7 +312,7 @@ class ProcessFramework(ModelView):
 
         # We need to find the transition which matches the id given
         # through the name of the method.
-        TransitionDesc = Pool().get('process.step_transition')
+        TransitionDesc = Pool().get('process.transition')
         good_transition = TransitionDesc(transition_id)
 
         # We need to manage the authroizations on the transition
@@ -344,7 +344,7 @@ class ProcessFramework(ModelView):
         # The pattern for the transition is as follow :
         #      <instruction>_<process_desc_id>(_<data>)
         instruction = button_data[0]
-        ProcessDesc = Pool().get('process.process_desc')
+        ProcessDesc = Pool().get('process')
         process = ProcessDesc(button_data[1])
 
         try:

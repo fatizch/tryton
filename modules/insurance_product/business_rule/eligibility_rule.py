@@ -21,36 +21,36 @@ SUBSCRIBER_CLASSES = [
 class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     'Eligibility Rule'
 
-    __name__ = 'ins_product.eligibility_rule'
+    __name__ = 'offered.eligibility.rule'
 
     sub_elem_config_kind = fields.Selection(
         CONFIG_KIND, 'Sub Elem Conf. kind', states={
-            'invisible': Eval('offered_kind') != 'offered.coverage',
-            'required': Eval('offered_kind') == 'offered.coverage',
+            'invisible': Eval('offered_kind') != 'offered.option.description',
+            'required': Eval('offered_kind') == 'offered.option.description',
         })
     sub_elem_rule = fields.Many2One(
         'rule_engine', 'Sub Elem Rule Engine', depends=['config_kind'],
         states={
-            'invisible': Eval('offered_kind') != 'offered.coverage',
+            'invisible': Eval('offered_kind') != 'offered.option.description',
         })
     sub_elem_rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'],
         states={
-            'invisible': Eval('offered_kind') != 'offered.coverage',
+            'invisible': Eval('offered_kind') != 'offered.option.description',
         })
     subscriber_classes = fields.Selection(SUBSCRIBER_CLASSES,
         'Can be subscribed', states={
-            'invisible': Eval('offered_kind') == 'ins_product.benefit',
-            'required': Eval('offered_kind') != 'ins_product.benefit',
+            'invisible': Eval('offered_kind') == 'benefit',
+            'required': Eval('offered_kind') != 'benefit',
         })
     relation_kinds = fields.Many2Many(
-        'ins_product.eligibility_relation_kind',
+        'offered.eligibility.rule-relation.kind',
         'eligibility_rule', 'relation_kind', 'Relations Authorized',
         states={
             'invisible': Or(
                 Eval('sub_elem_config_kind') != 'simple',
-                Eval('offered_kind') != 'offered.coverage',
+                Eval('offered_kind') != 'offered.option.description',
             )
         }, depends=['sub_elem_config_kind'])
     offered_kind = fields.Function(
@@ -118,9 +118,9 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 class EligibilityRelationKind(model.CoopSQL):
     'Define relation between eligibility rule and relation kind authorized'
 
-    __name__ = 'ins_product.eligibility_relation_kind'
+    __name__ = 'offered.eligibility.rule-relation.kind'
 
     eligibility_rule = fields.Many2One(
-        'ins_product.eligibility_rule', 'Eligibility Rule', ondelete='CASCADE')
+        'offered.eligibility.rule', 'Eligibility Rule', ondelete='CASCADE')
     relation_kind = fields.Many2One(
-        'party.party_relation_kind', 'Relation Kind', ondelete='CASCADE')
+        'party.relation.kind', 'Relation Kind', ondelete='CASCADE')

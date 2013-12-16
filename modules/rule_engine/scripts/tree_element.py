@@ -14,7 +14,7 @@ def write_footer(f):
 
 def write_record(f, te, parent=None):
     id = te.translated_technical_name
-    record = u'''        <record model="rule_engine.tree_element" id="%s">
+    record = u'''        <record model="rule_engine.function" id="%s">
             <field name="translated_technical_name">%s</field>
             <field name="description">%s</field>
             <field name="type">%s</field>
@@ -37,7 +37,7 @@ def write_record(f, te, parent=None):
     record += '\n        </record>\n'
     f.write(record.encode('utf-8'))
     if not parent:
-        record = u'''        <record model="rule_engine.context-rule_engine.tree_element" id="cte_default_%s">
+        record = u'''        <record model="rule_engine.context-function" id="cte_default_%s">
             <field name="context" ref="rule_engine.default_context"/>
             <field name="tree_element" ref="%s"/>
         </record>\n''' % (id, id)
@@ -47,7 +47,7 @@ def write_record(f, te, parent=None):
 
 
 def export_tree_elements(cfg_dict, f):
-    TreeElement = Model.get('rule_engine.tree_element')
+    TreeElement = Model.get('rule_engine.function')
     for te in TreeElement.find([('parent', '=', None)]):
         write_record(f, te)
 

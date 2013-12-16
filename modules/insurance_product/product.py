@@ -32,23 +32,23 @@ IS_INSURANCE = Eval('kind') == 'insurance'
 class Offered():
     'Offered'
 
-    __name__ = 'offered.offered'
+    __name__ = 'offered'
     __metaclass__ = PoolMeta
 
-    pricing_rules = fields.One2Many('ins_product.pricing_rule',
+    pricing_rules = fields.One2Many('billing.premium.rule',
         'offered', 'Pricing Rules')
     eligibility_rules = fields.One2Many(
-        'ins_product.eligibility_rule', 'offered', 'Eligibility Rules')
+        'offered.eligibility.rule', 'offered', 'Eligibility Rules')
     clause_rules = fields.One2Many(
-        'ins_product.clause_rule', 'offered', 'Clause Rules')
+        'clause.rule', 'offered', 'Clause Rules')
     deductible_rules = fields.One2Many(
-        'ins_product.deductible_rule', 'offered', 'Deductible Rules')
+        'offered.deductible.rule', 'offered', 'Deductible Rules')
     document_rules = fields.One2ManyDomain(
-        'ins_product.document_rule', 'offered', 'Document Rules',
+        'document.rule', 'offered', 'Document Rules',
         context={'doc_rule_kind': 'main'},
         domain=[('kind', '=', 'main')])
     sub_document_rules = fields.One2ManyDomain(
-        'ins_product.document_rule', 'offered', 'Sub Document Rules',
+        'document.rule', 'offered', 'Sub Document Rules',
         context={'doc_rule_kind': 'sub'},
         domain=[('kind', '=', 'sub')])
 
@@ -91,9 +91,9 @@ class Product():
     __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    term_renewal_rules = fields.One2Many('ins_product.term_renewal_rule',
+    term_renewal_rules = fields.One2Many('offered.term.rule',
         'offered', 'Term - Renewal')
-    item_descriptors = fields.Many2Many('offered.product-item_desc', 'product',
+    item_descriptors = fields.Many2Many('offered.product-item.description', 'product',
         'item_desc', 'Item Descriptors',
         domain=[('id', 'in', Eval('possible_item_descs'))],
         depends=['possible_item_descs'],
@@ -102,7 +102,7 @@ class Product():
             'invisible': ~IS_INSURANCE,
             })
     possible_item_descs = fields.Function(
-        fields.Many2Many('ins_product.item_desc', None, None,
+        fields.Many2Many('offered.item.description', None, None,
             'Possible Item Descriptors', on_change_with=['coverages']),
         'on_change_with_possible_item_descs')
 
@@ -250,16 +250,16 @@ class OfferedProduct(Offered):
 class ItemDescriptor(model.CoopSQL, model.CoopView):
     'Item Descriptor'
 
-    __name__ = 'ins_product.item_desc'
+    __name__ = 'offered.item.description'
 
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
     name = fields.Char('Name')
     complementary_data_def = fields.Many2Many(
-        'ins_product.item_desc-complementary_data_def',
+        'offered.item.description-extra_data',
         'item_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'sub_elem')], )
     kind = fields.Selection('get_possible_item_kind', 'Kind')
-    sub_item_descs = fields.Many2Many('ins_product.item_desc-sub_item_desc',
+    sub_item_descs = fields.Many2Many('offered.item.description-sub_item.description',
         'item_desc', 'sub_item_desc', 'Sub Item Descriptors',
         states={'invisible': Eval('kind') == 'person'})
 
@@ -294,41 +294,41 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
 class ItemDescSubItemDescRelation(model.CoopSQL):
     'Relation between Item Desc and Sub Item Desc'
 
-    __name__ = 'ins_product.item_desc-sub_item_desc'
+    __name__ = 'offered.item.description-sub_item.description'
 
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Desc',
+    item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         ondelete='CASCADE')
-    sub_item_desc = fields.Many2One('ins_product.item_desc', 'Sub Item Desc',
+    sub_item_desc = fields.Many2One('offered.item.description', 'Sub Item Desc',
         ondelete='RESTRICT')
 
 
 class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
     'Relation between Item Descriptor and Complementary Data'
 
-    __name__ = 'ins_product.item_desc-complementary_data_def'
+    __name__ = 'offered.item.description-extra_data'
 
     item_desc = fields.Many2One(
-        'ins_product.item_desc', 'Item Desc', ondelete='CASCADE', )
+        'offered.item.description', 'Item Desc', ondelete='CASCADE', )
     complementary_data_def = fields.Many2One(
-        'offered.complementary_data_def',
+        'extra_data',
         'Complementary Data', ondelete='RESTRICT', )
 
 
 class ProductItemDescriptorRelation(model.CoopSQL):
     'Relation between Product and Item Descriptor'
 
-    __name__ = 'offered.product-item_desc'
+    __name__ = 'offered.product-item.description'
 
     product = fields.Many2One(
         'offered.product', 'Product', ondelete='CASCADE')
     item_desc = fields.Many2One(
-        'ins_product.item_desc', 'Item Descriptor', ondelete='RESTRICT')
+        'offered.item.description', 'Item Descriptor', ondelete='RESTRICT')
 
 
 class ExpenseKind(model.CoopSQL, model.CoopView):
     'Expense Kind'
 
-    __name__ = 'ins_product.expense_kind'
+    __name__ = 'expense.kind'
 
     kind = fields.Selection(
         [
@@ -345,7 +345,7 @@ class ExpenseKind(model.CoopSQL, model.CoopView):
 class ProductValidationBatch(BatchRoot):
     'Product Validation Batch'
 
-    __name__ = 'ins_product.product_validation_batch'
+    __name__ = 'offered.validate.batch'
 
     @classmethod
     def get_batch_main_model_name(cls):

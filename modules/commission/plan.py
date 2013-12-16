@@ -27,7 +27,7 @@ class CommissionPlan():
     __name__ = 'offered.product'
     __metaclass__ = PoolMeta
 
-    dist_networks = fields.Many2Many('distribution.dist_network-plan',
+    dist_networks = fields.Many2Many('distribution.network-commission.plan',
         'com_plan', 'dist_network', 'Distribution Networks')
     commission_kind = fields.Selection(COMMISSION_KIND, 'Commission Kind',
         states={
@@ -53,12 +53,12 @@ class CommissionPlan():
 class CommissionComponent():
     'Commission Component'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
-    commission_rules = fields.One2Many('commission.commission_rule',
+    commission_rules = fields.One2Many('commission.rule',
         'offered', 'Commission Rules')
-    coverages = fields.Many2Many('commission.component-coverage', 'component',
+    coverages = fields.Many2Many('commission.option.description-option.description', 'component',
         'coverage', 'Coverages', domain=[('kind', '=', 'insurance')])
 
     @classmethod
@@ -77,18 +77,18 @@ class CommissionComponent():
 class CommissionComponentCoverageRelation(model.CoopSQL):
     'Relation Commission Component and Coverage'
 
-    __name__ = 'commission.component-coverage'
+    __name__ = 'commission.option.description-option.description'
 
-    component = fields.Many2One('offered.coverage', 'Component',
+    component = fields.Many2One('offered.option.description', 'Component',
         ondelete='CASCADE')
-    coverage = fields.Many2One('offered.coverage', 'Coverage',
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='RESTRICT')
 
 
 class CommissionRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     'Commission Rule'
 
-    __name__ = 'commission.commission_rule'
+    __name__ = 'commission.rule'
 
     rate = fields.Numeric('Rate', digits=(16, 4), states={
             'invisible': business_rule.STATE_ADVANCED,

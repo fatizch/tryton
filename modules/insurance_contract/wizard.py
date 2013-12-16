@@ -17,7 +17,7 @@ class OptionSubscription:
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         res = super(OptionSubscription, self).default_options_displayer(
             values)
@@ -40,8 +40,8 @@ class OptionSubscription:
         return option
 
     def delete_options(self, options):
-        Option = Pool().get('contract.subscribed_option')
-        CoveredData = Pool().get('ins_contract.covered_data')
+        Option = Pool().get('contract.option')
+        CoveredData = Pool().get('contract.covered_data')
         cov_element = self.options_displayer.covered_element
         cov_data_to_del = []
         option_to_delete = []
@@ -88,10 +88,10 @@ class OptionsDisplayer:
 
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
-    covered_element = fields.Many2One('ins_contract.covered_element',
+    covered_element = fields.Many2One('contract.covered_element',
         'Covered Element',
         domain=[('id', 'in', Eval('possible_covered_elements'))],
         depends=['possible_covered_elements'], required=True)
     possible_covered_elements = fields.Many2Many(
-        'ins_contract.covered_element', None, None, 'Covered Elements',
+        'contract.covered_element', None, None, 'Covered Elements',
         states={'invisible': True})

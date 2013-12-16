@@ -16,7 +16,7 @@ __all__ = [
 class Move:
     __name__ = 'account.move'
 
-    billing_period = fields.Many2One('billing.period', 'Billing Period',
+    billing_period = fields.Many2One('contract.billing.period', 'Billing Period',
         ondelete='RESTRICT')
     total_amount = fields.Function(
         fields.Numeric('Total due amount'),
@@ -34,7 +34,7 @@ class Move:
         fields.Numeric('Fee amount'),
         'get_basic_amount', searcher='search_basic_amount')
     contract = fields.Function(
-        fields.Many2One('contract.contract', 'Contract'),
+        fields.Many2One('contract', 'Contract'),
         'get_contract')
     schedule = fields.One2ManyDomain('account.move.line', 'move', 'Schedule',
         domain=[('account.kind', '=', 'receivable')], order=[
@@ -42,21 +42,21 @@ class Move:
     coverage_details = fields.One2ManyDomain('account.move.line', 'move',
         'Details', domain=[('account.kind', '!=', 'receivable'), ['OR',
                 ['AND',
-                    ('second_origin', 'like', 'offered.coverage,%'),
+                    ('second_origin', 'like', 'offered.option.description,%'),
                     ('second_origin.kind', '=', 'insurance',
-                        'offered.coverage')
+                        'offered.option.description')
                 ],
                 ('second_origin', 'like', 'offered.product,%')]])
     tax_details = fields.One2ManyDomain('account.move.line', 'move', 'Taxes',
         domain=[('account.kind', '!=', 'receivable'),
-                ('second_origin', 'like', 'coop_account.tax_desc,%')])
+                ('second_origin', 'like', 'account.tax.description,%')])
     fee_details = fields.One2ManyDomain('account.move.line', 'move', 'Fees',
         domain=[('account.kind', '!=', 'receivable'),
-            ('second_origin', 'like', 'coop_account.fee_desc,%')])
+            ('second_origin', 'like', 'account.fee.description,%')])
 
     @classmethod
     def _get_origin(cls):
-        return super(Move, cls)._get_origin() + ['contract.contract']
+        return super(Move, cls)._get_origin() + ['contract']
 
     @classmethod
     def get_basic_amount(cls, moves, name):
@@ -134,7 +134,7 @@ class Move:
     def get_contract(self, name):
         if not (hasattr(self, 'origin') and self.origin):
             return None
-        if not self.origin.__name__ == 'contract.contract':
+        if not self.origin.__name__ == 'contract':
             return None
         return self.origin.id
 
@@ -182,9 +182,9 @@ class MoveLine:
     def _get_second_origin(cls):
         return [
             'offered.product',
-            'offered.coverage',
-            'coop_account.tax_desc',
-            'coop_account.fee_desc',
+            'offered.option.description',
+            'account.tax.description',
+            'account.fee.description',
             ]
 
     @classmethod

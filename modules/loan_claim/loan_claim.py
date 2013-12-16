@@ -12,13 +12,13 @@ __all__ = [
 class LoanClaimDeliveredService():
     'Claim Delivered Service'
 
-    __name__ = 'contract.delivered_service'
+    __name__ = 'contract.service'
     __metaclass__ = PoolMeta
 
     is_loan = fields.Function(
         fields.Boolean('Is loan', states={'invisible': True}),
         'get_is_loan')
-    loan = fields.Many2One('loan.loan', 'Loan',
+    loan = fields.Many2One('loan', 'Loan',
         domain=[('contract', '=', Eval('contract'))],
         states={'invisible': ~Eval('is_loan')},
         depends=['contract', 'is_loan'])

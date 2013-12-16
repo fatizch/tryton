@@ -13,7 +13,7 @@ __all__ = [
 class ExportPackage():
     'Export Package'
 
-    __name__ = 'coop_utils.export_package'
+    __name__ = 'ir.export_package'
 
     rules = fields.Function(
         fields.One2Many('rule_engine', None, 'Rules', states={
@@ -28,9 +28,9 @@ class ExportPackage():
                 add_remove=[]),
         'getter_void', setter='setter_void')
     tree_elements = fields.Function(
-        fields.One2Many('rule_engine.tree_element', None,
+        fields.One2Many('rule_engine.function', None,
             'Tree Elements', states={
-                'invisible': Bool(Eval('model') != 'rule_engine.tree_element')},
+                'invisible': Bool(Eval('model') != 'rule_engine.function')},
                 on_change=['tree_elements', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
@@ -47,7 +47,7 @@ class ExportPackage():
         res.extend([
                 ('rule_engine', 'Rule'),
                 ('rule_engine.context', 'Context'),
-                ('rule_engine.tree_element', 'Tree Element'),
+                ('rule_engine.function', 'Tree Element'),
                 ('tag', 'Tag'),
                 ])
         return list(set(res))

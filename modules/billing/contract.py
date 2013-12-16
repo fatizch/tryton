@@ -12,6 +12,6 @@ __all__ = [
 class Contract():
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
     manual_billing = fields.Boolean('Manual Billing')

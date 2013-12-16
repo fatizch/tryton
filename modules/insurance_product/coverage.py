@@ -22,10 +22,10 @@ COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 class Coverage():
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     __metaclass__ = PoolMeta
 
-    benefits = fields.Many2Many('offered.coverage-benefit', 'coverage',
+    benefits = fields.Many2Many('option.description-benefit', 'coverage',
         'benefit', 'Benefits', context={
             'start_date': Eval('start_date'),
             'currency_digits': Eval('currency_digits')},
@@ -33,14 +33,14 @@ class Coverage():
             'readonly': ~Eval('start_date'),
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             }, depends=['currency_digits'])
-    insurer = fields.Many2One('party.insurer', 'Insurer', states={
+    insurer = fields.Many2One('insurer', 'Insurer', states={
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE)
             }, depends=['is_package'])
     family = fields.Selection([('', '')], 'Family', states={
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             'required': And(~Eval('is_package'), IS_INSURANCE),
             }, depends=['is_package'])
-    item_desc = fields.Many2One('ins_product.item_desc', 'Item Descriptor',
+    item_desc = fields.Many2One('offered.item.description', 'Item Descriptor',
         states={
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             'required': And(~Eval('is_package'), IS_INSURANCE),
@@ -215,6 +215,6 @@ class Coverage():
 class OfferedCoverage(product.Offered):
     'Offered Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
     #This empty override is necessary to have in the coverage the fields added
     #in the override of offered

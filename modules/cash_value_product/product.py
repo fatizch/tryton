@@ -54,7 +54,7 @@ class Product:
 class Coverage:
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
 
     is_cash_value = fields.Function(
         fields.Boolean('Is Cash Value', states={'invisible': True}),

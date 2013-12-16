@@ -15,10 +15,7 @@ from trytond.modules.rule_engine import RuleTools
 
 
 class SubscriberContext(RuleEngineContext):
-    '''
-        Context functions for Contracts.
-    '''
-    __name__ = 'ins_product.rule_sets.subscriber'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('subscriber_person')
@@ -44,10 +41,8 @@ class SubscriberContext(RuleEngineContext):
 
 
 class PersonContext(RuleEngineContext):
-    '''
-        Context functions for Persons.
-    '''
-    __name__ = 'ins_product.rule_sets.person'
+
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_person(cls, args):
@@ -95,19 +90,13 @@ class PersonContext(RuleEngineContext):
 
 
 class OptionContext(RuleEngineContext):
-    '''
-        Context functions for option related data
-    '''
 
-    __name__ = 'ins_product.rule_sets.option'
+    __name__ = 'rule_engine.runtime'
 
 
 class CoveredDataContext(RuleEngineContext):
-    '''
-        Context functions for Coverage-Covered associations objects
-        (CoveredData)
-    '''
-    __name__ = 'ins_product.rule_sets.covered_data'
+
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_covered_data(cls, args):
@@ -135,12 +124,8 @@ class CoveredDataContext(RuleEngineContext):
 
 
 class RuleCombinationContext(RuleEngineContext):
-    '''
-        Context functions for combination of rule_engine results (see
-        ins_product.pricing_rule
-    '''
 
-    __name__ = 'ins_product.rule_sets.rule_combination'
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('price_details')

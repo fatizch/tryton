@@ -20,7 +20,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'TreeElement': 'rule_engine.tree_element',
+            'TreeElement': 'rule_engine.function',
             'Context': 'rule_engine.context',
             'RuleEngine': 'rule_engine',
             'TestCase': 'rule_engine.test_case',
@@ -28,7 +28,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'RunTests': 'rule_engine.run_tests',
             'Language': 'ir.lang',
             'RuleParameter': 'rule_engine.parameter',
-            'Table': 'table.table_def',
+            'Table': 'table',
         }
 
     @classmethod
@@ -67,19 +67,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
             return te
 
         create_tree_elem('function', '_re_today', 'today',
-            'rule_engine.tools_functions', 'Today')
+            'rule_engine.runtime', 'Today')
         create_tree_elem('function', '_re_add_error', 'add_error',
-            'rule_engine.tools_functions', 'Add Error')
+            'rule_engine.runtime', 'Add Error')
         create_tree_elem('function', '_re_add_warning', 'add_warning',
-            'rule_engine.tools_functions', 'Add Warning')
+            'rule_engine.runtime', 'Add Warning')
         create_tree_elem('function', '_re_add_info', 'add_info',
-            'rule_engine.tools_functions', 'Add Info')
+            'rule_engine.runtime', 'Add Info')
         create_tree_elem('function', '_re_add_error_code',
-            'add_error_code', 'rule_engine.tools_functions', 'Add Error Code')
+            'add_error_code', 'rule_engine.runtime', 'Add Error Code')
         create_tree_elem('function', '_re_debug', 'add_debug',
-            'rule_engine.tools_functions', 'Add Debug')
+            'rule_engine.runtime', 'Add Debug')
         create_tree_elem('function', '_re_calculation_date',
-            'calculation_date', 'rule_engine.tools_functions',
+            'calculation_date', 'rule_engine.runtime',
             'Calculation Date')
 
     @test_framework.prepare_test(

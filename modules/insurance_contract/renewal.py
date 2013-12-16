@@ -14,17 +14,17 @@ __all__ = [
 class RenewalStart(model.CoopView):
     'Renewal Start'
 
-    __name__ = 'ins_contract.renewal_start'
+    __name__ = 'contract.renew.parameters'
 
     renewal_date = fields.Date('Renewal Date', on_change=['renewal_date',
         'renew_what'])
     renew_what = fields.Boolean('All contracts', on_change=['renewal_date',
         'renew_what'])
-    will_be_renewed = fields.One2Many('contract.contract', None,
+    will_be_renewed = fields.One2Many('contract', None,
         'Will be renewed', states={'readonly': True,
             'invisible': ~Eval('renew_what')})
     this_contract = fields.Many2One(
-        'contract.contract', 'Renew this contract', domain=[
+        'contract', 'Renew this contract', domain=[
             ('next_renewal_date', '<=', Eval('renewal_date')),
             ('status', '!=', 'quote')],
         depends=['renew_what', 'renewal_date'],
@@ -33,7 +33,7 @@ class RenewalStart(model.CoopView):
     def on_change_renewal_date(self):
         if not (hasattr(self, 'renew_what') and self.renew_what):
             return {'will_be_renewed': []}
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         to_renew = Contract.search([
             ('next_renewal_date', '<=', self.renewal_date),
             ('status', '!=', 'quote')])
@@ -62,7 +62,7 @@ class RenewalStart(model.CoopView):
 class RenewalResult(model.CoopView):
     'Renewal Result'
 
-    __name__ = 'ins_contract.renewal_result'
+    __name__ = 'contract.renew.report'
 
     renewal_log_success = fields.Text('Succeeded', states={'readonly': True})
     renewal_log_failure = fields.Text('Failed', states={'readonly': True})
@@ -71,14 +71,14 @@ class RenewalResult(model.CoopView):
 class RenewalWizard(Wizard):
     'Renewal Wizard'
 
-    __name__ = 'ins_contract.renewal_wizard'
+    __name__ = 'contract.renew'
 
     start_state = 'renewal_start'
-    renewal_start = StateView('ins_contract.renewal_start',
+    renewal_start = StateView('contract.renew.parameters',
         'insurance_contract.renewal_start_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Start', 'renewal_result', 'tryton-go-next')])
-    renewal_result = StateView('ins_contract.renewal_result',
+    renewal_result = StateView('contract.renew.report',
         'insurance_contract.renewal_result_form', [
             Button('End', 'end', 'tryton-cancel')])
 

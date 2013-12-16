@@ -26,7 +26,7 @@ class SubscriptionManager(model.CoopSQL):
     contract = fields.Reference(
         'Contract',
         [
-            ('contract.contract', 'Contract')],
+            ('contract', 'Contract')],
     )
     is_custom = fields.Boolean('Custom')
 
@@ -36,7 +36,7 @@ class ProcessDesc():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'process.process_desc'
+    __name__ = 'process'
 
     @classmethod
     def __setup__(cls):
@@ -49,9 +49,9 @@ class ProcessDesc():
 class SubscriptionProcessParameters(ProcessParameters):
     'Subscription Process Parameters'
 
-    __name__ = 'ins_contract.subscription_process_parameters'
+    __name__ = 'contract.subscribe.find_process'
 
-    dist_network = fields.Many2One('distribution.dist_network',
+    dist_network = fields.Many2One('distribution.network',
         'Distribution Network', on_change=['dist_network', 'possible_brokers',
         'business_provider', 'management_delegation'])
     possible_brokers = fields.Function(
@@ -111,7 +111,7 @@ class SubscriptionProcessParameters(ProcessParameters):
     @classmethod
     def default_model(cls):
         Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'contract.contract')])[0].id
+        return Model.search([('model', '=', 'contract')])[0].id
 
     @classmethod
     def default_dist_network(cls):
@@ -159,11 +159,11 @@ class SubscriptionProcessParameters(ProcessParameters):
 class SubscriptionProcessFinder(ProcessFinder):
     'Subscription Process Finder'
 
-    __name__ = 'ins_contract.subscription_process_finder'
+    __name__ = 'contract.subscribe'
 
     @classmethod
     def get_parameters_model(cls):
-        return 'ins_contract.subscription_process_parameters'
+        return 'contract.subscribe.find_process'
 
     @classmethod
     def get_parameters_view(cls):

@@ -62,55 +62,55 @@ msgctxt "field:health.party_complement,regime:"
 msgid "Regime"
 msgstr "Régime"
 
-msgctxt "field:health.regime,code:"
+msgctxt "field:health.care_system,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:health.regime,create_date:"
+msgctxt "field:health.care_system,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:health.regime,create_date_:"
+msgctxt "field:health.care_system,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:health.regime,create_uid:"
+msgctxt "field:health.care_system,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:health.regime,id:"
+msgctxt "field:health.care_system,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:health.regime,must_expand_tree:"
+msgctxt "field:health.care_system,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:health.regime,name:"
+msgctxt "field:health.care_system,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:health.regime,rec_name:"
+msgctxt "field:health.care_system,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:health.regime,short_name:"
+msgctxt "field:health.care_system,short_name:"
 msgid "Short Name"
 msgstr "Nom Court"
 
-msgctxt "field:health.regime,write_date:"
+msgctxt "field:health.care_system,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:health.regime,write_uid:"
+msgctxt "field:health.care_system,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ins_contract.covered_element,is_law_madelin:"
+msgctxt "field:contract.covered_element,is_law_madelin:"
 msgid "Law Madelin"
 msgstr "Loi Madelin"
 
-msgctxt "field:ins_contract.covered_element,is_rsi:"
+msgctxt "field:contract.covered_element,is_rsi:"
 msgid "Is RSI"
 msgstr "RSI"
 
@@ -118,7 +118,7 @@ msgctxt "model:health.insurance_fund,name:"
 msgid "Insurance Fund"
 msgstr "Caisse d'Affiliation"
 
-msgctxt "model:health.regime,name:"
+msgctxt "model:health.care_system,name:"
 msgid "Regime"
 msgstr "Régime"
 
@@ -138,7 +138,7 @@ msgctxt "model:ir.ui.menu,name:menu_regime_form"
 msgid "Regimes"
 msgstr "Régimes"
 
-msgctxt "selection:offered.coverage,family:"
+msgctxt "selection:offered.option.description,family:"
 msgid "Health"
 msgstr "Santé"
 
@@ -146,10 +146,10 @@ msgctxt "view:health.insurance_fund:"
 msgid "Insurance Fund"
 msgstr "Caisse d'Affiliation"
 
-msgctxt "view:health.regime:"
+msgctxt "view:health.care_system:"
 msgid "Regime"
 msgstr "Régime"
 
-msgctxt "view:health.regime:"
+msgctxt "view:health.care_system:"
 msgid "name"
 msgstr "Nom"

@@ -10,7 +10,7 @@ __all__ = [
 class TaxDesc(model.CoopSQL, model.VersionedObject):
     '''Tax Descriptor'''
 
-    __name__ = 'coop_account.tax_desc'
+    __name__ = 'account.tax.description'
 
     name = fields.Char('Tax Name')
     code = fields.Char('Code', required=True)
@@ -25,7 +25,7 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
 
     @classmethod
     def version_model(cls):
-        return 'coop_account.tax_version'
+        return 'account.tax.description.version'
 
     def get_rec_name(self, name):
         res = ''
@@ -45,7 +45,7 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
 class TaxVersion(model.CoopSQL, model.VersionObject):
     '''Tax Version'''
 
-    __name__ = 'coop_account.tax_version'
+    __name__ = 'account.tax.description.version'
 
     kind = fields.Selection(
         [('flat', 'Flat'), ('rate', 'Rate'), ('rule', 'Rule')],
@@ -55,7 +55,7 @@ class TaxVersion(model.CoopSQL, model.VersionObject):
 
     @classmethod
     def main_model(cls):
-        return 'coop_account.tax_desc'
+        return 'account.tax.description'
 
     @staticmethod
     def default_kind():

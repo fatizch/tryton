@@ -10,9 +10,8 @@ __all__ = [
 
 
 class OfferedContext():
-    'Offered Context'
 
-    __name__ = 'offered.rule_sets'
+    __name__ = 'rule_engine.runtime'
     __metaclass__ = PoolMeta
 
     @classmethod
@@ -23,10 +22,8 @@ class OfferedContext():
 
 
 class ClaimContext(RuleEngineContext):
-    '''
-        Context functions for Claims.
-    '''
-    __name__ = 'ins_product.rule_sets.claim'
+
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('delivered_service')

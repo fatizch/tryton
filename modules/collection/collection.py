@@ -84,7 +84,7 @@ class SuspenseParty():
 class Collection(model.CoopSQL, model.CoopView):
     'Collection'
 
-    __name__ = 'collection.collection'
+    __name__ = 'collection'
 
     amount = fields.Numeric('Amount', states={'readonly': True})
     kind = fields.Selection([('cash', 'Cash'), ('check', 'Check')], 'Kind',
@@ -110,13 +110,13 @@ class Payment:
     __metaclass__ = PoolMeta
     __name__ = 'account.payment'
 
-    collection = fields.Many2One('collection.collection', 'Collection')
+    collection = fields.Many2One('collection', 'Collection')
 
 
 class CollectionParameters(model.CoopView):
     'Collection parameters'
 
-    __name__ = 'collection.collection_parameters'
+    __name__ = 'collection.create.parameters'
 
     kind = fields.Selection([('cash', 'Cash'), ('check', 'Check')], 'Kind',
         required=True)
@@ -128,14 +128,14 @@ class CollectionParameters(model.CoopView):
     check_reception_date = fields.Date('Check Reception Date', states={
             'invisible': Eval('kind') != 'check',
             'required': Eval('kind') == 'check'})
-    collection = fields.Many2One('collection.collection', 'Collection',
+    collection = fields.Many2One('collection', 'Collection',
         states={'invisible': True})
 
 
 class Assignment(model.CoopView):
     'Assignment'
 
-    __name__ = 'collection.assignment'
+    __name__ = 'collection.create.assign.lines'
 
     amount = fields.Numeric('Amount', on_change_with=['source_move_line'])
     source_move_line = fields.Many2One('account.move.line', 'Source Move Line',
@@ -188,11 +188,11 @@ class Assignment(model.CoopView):
 class AssignCollection(model.CoopView):
     'Assign Collection'
 
-    __name__ = 'collection.assign_collection'
+    __name__ = 'collection.create.assign'
 
     amount = fields.Numeric('Amount')
     party = fields.Many2One('party.party', 'Party')
-    assignments = fields.One2Many('collection.assignment', None, 'Assignments',
+    assignments = fields.One2Many('collection.create.assign.lines', None, 'Assignments',
         context={'from_party': Eval('party'), 'remaining': Eval('remaining')},
         depends=['party'])
     create_suspense_line_with_rest = fields.Boolean(
@@ -213,14 +213,14 @@ class AssignCollection(model.CoopView):
 class CollectionWizard(model.CoopWizard):
     'Collection Wizard'
 
-    __name__ = 'collection.collection_wizard'
+    __name__ = 'collection.create'
 
     start_state = 'input_collection_parameters'
-    input_collection_parameters = StateView('collection.collection_parameters',
+    input_collection_parameters = StateView('collection.create.parameters',
         'collection.collection_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Assign', 'assign', 'tryton-go-next')])
-    assign = StateView('collection.assign_collection',
+    assign = StateView('collection.create.assign',
         'collection.assign_collection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Validate', 'check_amount', 'tryton-ok')])
@@ -274,7 +274,7 @@ class CollectionWizard(model.CoopWizard):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         Move = pool.get('account.move')
-        Collection = pool.get('collection.collection')
+        Collection = pool.get('collection')
         Company = pool.get('company.company')
         Payment = pool.get('account.payment')
         AccountConfiguration = pool.get('account.configuration')

@@ -372,12 +372,12 @@ def relation_mixin(value_model, field, model, name):
 
 class Contract(object, EndorsementHistory):
     __metaclass__ = PoolMeta
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
 
 
 class ContractOption(object, EndorsementHistory):
     __metaclass__ = PoolMeta
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
 
 class Endorsement(values_mixin('endorsement.field'),
@@ -388,7 +388,7 @@ class Endorsement(values_mixin('endorsement.field'),
 
     template = fields.Many2One('endorsement.template', 'Template',
         states={'required': True})
-    contract = fields.Many2One('contract.contract', 'Contract', required=True,
+    contract = fields.Many2One('contract', 'Contract', required=True,
         datetime_field='applied_on',
         states={
             'readonly': Eval('state') == 'applied',
@@ -443,8 +443,8 @@ class Endorsement(values_mixin('endorsement.field'),
     @Workflow.transition('draft')
     def draft(cls, endorsements):
         pool = Pool()
-        Contract = pool.get('contract.contract')
-        ContractOption = pool.get('contract.subscribed_option')
+        Contract = pool.get('contract')
+        ContractOption = pool.get('contract.option')
 
         for endorsement in endorsements:
             latest_applied, = cls.search([
@@ -473,7 +473,7 @@ class Endorsement(values_mixin('endorsement.field'),
     @Workflow.transition('applied')
     def apply(cls, endorsements):
         pool = Pool()
-        Contract = pool.get('contract.contract')
+        Contract = pool.get('contract')
         for endorsement in endorsements:
             contract = endorsement.contract
             endorsement.set_applied_on(contract.write_date
@@ -496,7 +496,7 @@ class Endorsement(values_mixin('endorsement.field'),
         return values
 
 
-class EndorsementField(field_mixin('contract.contract'), ModelSQL, ModelView):
+class EndorsementField(field_mixin('contract'), ModelSQL, ModelView):
     'Endorsement Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.field'
@@ -506,7 +506,7 @@ class EndorsementField(field_mixin('contract.contract'), ModelSQL, ModelView):
 
 
 class EndorsementOption(relation_mixin('endorsement.option.field', 'option',
-            'contract.subscribed_option', 'Options'),
+            'contract.option', 'Options'),
         ModelSQL, ModelView):
     'Endorsement Option'
     __metaclass__ = PoolMeta
@@ -535,7 +535,7 @@ class EndorsementOption(relation_mixin('endorsement.option.field', 'option',
         return self.endorsement.template
 
 
-class EndorsementOptionField(field_mixin('contract.subscribed_option'),
+class EndorsementOptionField(field_mixin('contract.option'),
         ModelSQL, ModelView):
     'Endorsement Option Field'
     __metaclass__ = PoolMeta

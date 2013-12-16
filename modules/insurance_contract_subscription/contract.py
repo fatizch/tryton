@@ -18,7 +18,7 @@ __all__ = [
 class ContractSubscription(CoopProcessFramework):
     'Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = ClassAttr
 
     subscriber_desc = fields.Function(
@@ -85,7 +85,7 @@ class ContractSubscription(CoopProcessFramework):
     def on_change_payment_method(self):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return {}
-        PaymentMethod = Pool().get('billing.payment_method')
+        PaymentMethod = Pool().get('billing.payment.method')
         payment_method = PaymentMethod(int(self.payment_method))
         return {
             'payment_mode': payment_method.payment_mode,
@@ -104,7 +104,7 @@ class ContractSubscription(CoopProcessFramework):
     def get_payment_mode(self, name):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return ''
-        PaymentMethod = Pool().get('billing.payment_method')
+        PaymentMethod = Pool().get('billing.payment.method')
         payment_method = PaymentMethod(int(self.payment_method))
         return payment_method.payment_mode
 
@@ -227,7 +227,7 @@ class ContractSubscription(CoopProcessFramework):
         return res
 
     def init_subscription_document_request(self):
-        DocRequest = Pool().get('ins_product.document_request')
+        DocRequest = Pool().get('document.request')
 
         if not (hasattr(self, 'documents') and self.documents):
             good_req = DocRequest()
@@ -309,7 +309,7 @@ class Option():
 
     __metaclass__ = PoolMeta
 
-    __name__ = 'contract.subscribed_option'
+    __name__ = 'contract.option'
 
     status_selection = fields.Function(
         fields.Boolean('Status',
@@ -341,7 +341,7 @@ class Option():
 class CoveredElement():
     'Covered Element'
 
-    __name__ = 'ins_contract.covered_element'
+    __name__ = 'contract.covered_element'
     __metaclass__ = PoolMeta
 
     @classmethod
@@ -353,10 +353,10 @@ class CoveredElement():
         if not contract:
             return []
 
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(contract)
 
-        CoveredData = Pool().get('ins_contract.covered_data')
+        CoveredData = Pool().get('contract.covered_data')
 
         covered_datas = []
         for option in contract.options:
@@ -373,7 +373,7 @@ class CoveredElement():
 class CoveredData():
     'Coverage Data'
 
-    __name__ = 'ins_contract.covered_data'
+    __name__ = 'contract.covered_data'
     __metaclass__ = PoolMeta
 
     status_selection = fields.Function(

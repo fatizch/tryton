@@ -32,7 +32,7 @@ class ModelCurrency(object):
             return result
         # TODO : There is a diffence between test case configuration and global
         # configuration
-        config = Pool().get('coop_utils.test_case_model').get_instance()
+        config = Pool().get('ir.test_case').get_instance()
         return config.currency.id
 
     @classmethod

@@ -15,7 +15,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     _get_account_kind_cache = Cache('get_account_kind')
     _get_account_cache = Cache('get_account')
@@ -129,8 +129,8 @@ class TestCaseModel():
     @classmethod
     def create_tax_from_line(cls, tax_data):
         translater = cls.get_translater(MODULE_NAME)
-        TaxDesc = Pool().get('coop_account.tax_desc')
-        TaxVersion = Pool().get('coop_account.tax_version')
+        TaxDesc = Pool().get('account.tax.description')
+        TaxVersion = Pool().get('account.tax.description.version')
         tax = TaxDesc()
         tax.code = tax_data[0]
         tax.name = tax_data[1]

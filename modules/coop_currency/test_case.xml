@@ -5,13 +5,13 @@
     <!-- Test Case Module -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="test_case_model_form">
-      <field name="model">coop_utils.test_case_model</field>
+      <field name="model">ir.test_case</field>
       <field name="type">form</field>
       <field name="inherit" ref="coop_utils.test_case_model_form"/>
       <field name="name">test_case_model_form</field>
     </record>
     <!-- Data -->
-    <record model="coop_utils.test_case_model" id="coop_utils.test_case_configuration">
+    <record model="ir.test_case" id="coop_utils.test_case_configuration">
       <field name="currency" ref="currency.eur"/>
     </record>
   </data>

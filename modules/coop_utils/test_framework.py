@@ -117,7 +117,7 @@ class CoopTestCase(unittest.TestCase):
         for module in modules.itervalues():
             module.ModuleTestCase.install_module()
 
-        models = {'TestCaseModel': 'coop_utils.test_case_model'}
+        models = {'TestCaseModel': 'ir.test_case'}
         for modules in modules.itervalues():
             models.update(modules.ModuleTestCase.get_models())
 

@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:party.address_kind:"
+msgctxt "error:party.address.kind:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
@@ -10,43 +10,43 @@ msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
 msgstr "e-Mail Invalide"
 
-msgctxt "error:party.party_relation_kind:"
+msgctxt "error:party.relation.kind:"
 msgid "The key must be unique!"
 msgstr "La clé doit être unique"
 
-msgctxt "field:coop_utils.test_case_model,adult_age_max:"
+msgctxt "field:ir.test_case,adult_age_max:"
 msgid "Maximum age for adults"
 msgstr "Age maximum des adultes"
 
-msgctxt "field:coop_utils.test_case_model,adult_age_min:"
+msgctxt "field:ir.test_case,adult_age_min:"
 msgid "Minimum age for adults"
 msgstr "Age minimum des adultes"
 
-msgctxt "field:coop_utils.test_case_model,max_nb_of_children_per_couple:"
+msgctxt "field:ir.test_case,max_nb_of_children_per_couple:"
 msgid "Maximum number of children per couple"
 msgstr "Nombre maximum d'enfants par couple"
 
-msgctxt "field:coop_utils.test_case_model,number_of_males:"
+msgctxt "field:ir.test_case,number_of_males:"
 msgid "Number of Males"
 msgstr "Nombre d'hommes"
 
-msgctxt "field:coop_utils.test_case_model,number_of_parties:"
+msgctxt "field:ir.test_case,number_of_parties:"
 msgid "Number of Parties"
 msgstr "Nombre de Tiers"
 
-msgctxt "field:coop_utils.test_case_model,percent_of_couple:"
+msgctxt "field:ir.test_case,percent_of_couple:"
 msgid "Percentage of couples"
 msgstr "Pourcentage de couples"
 
-msgctxt "field:coop_utils.test_case_model,percent_of_couple_with_children:"
+msgctxt "field:ir.test_case,percent_of_couple_with_children:"
 msgid "Percentage of couples with children"
 msgstr "Pourcentage de couples ayant des enfants"
 
-msgctxt "field:coop_utils.test_case_model,percent_of_couple_with_same_name:"
+msgctxt "field:ir.test_case,percent_of_couple_with_same_name:"
 msgid "Percentage of couples with the same name"
 msgstr "Pourcentage de couples de même nom"
 
-msgctxt "field:coop_utils.test_case_model,phone_prefix:"
+msgctxt "field:ir.test_case,phone_prefix:"
 msgid "Phone Prefix"
 msgstr "Préfixe des numéro de téléphone"
 
@@ -122,131 +122,131 @@ msgctxt "field:party.address,zip_and_city:"
 msgid "Zip"
 msgstr "Code Postal"
 
-msgctxt "field:party.address_kind,create_date:"
+msgctxt "field:party.address.kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.address_kind,create_date_:"
+msgctxt "field:party.address.kind,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.address_kind,create_uid:"
+msgctxt "field:party.address.kind,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.address_kind,id:"
+msgctxt "field:party.address.kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.address_kind,is_used:"
+msgctxt "field:party.address.kind,is_used:"
 msgid "Is Used"
 msgstr "Est Utilisé"
 
-msgctxt "field:party.address_kind,key:"
+msgctxt "field:party.address.kind,key:"
 msgid "Key"
 msgstr "Clé"
 
-msgctxt "field:party.address_kind,must_expand_tree:"
+msgctxt "field:party.address.kind,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.address_kind,my_model_name:"
+msgctxt "field:party.address.kind,my_model_name:"
 msgid "Model Name"
 msgstr "Nom de l'objet"
 
-msgctxt "field:party.address_kind,name:"
+msgctxt "field:party.address.kind,name:"
 msgid "Value"
 msgstr "Valeur"
 
-msgctxt "field:party.address_kind,rec_name:"
+msgctxt "field:party.address.kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.address_kind,write_date:"
+msgctxt "field:party.address.kind,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.address_kind,write_uid:"
+msgctxt "field:party.address.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.contact_history,address:"
+msgctxt "field:party.interaction,address:"
 msgid "Address"
 msgstr "Adresse"
 
-msgctxt "field:party.contact_history,attachment:"
+msgctxt "field:party.interaction,attachment:"
 msgid "Attachment"
 msgstr "Pièce jointe"
 
-msgctxt "field:party.contact_history,comment:"
+msgctxt "field:party.interaction,comment:"
 msgid "Comment"
 msgstr "Commentaire"
 
-msgctxt "field:party.contact_history,contact_datetime:"
+msgctxt "field:party.interaction,contact_datetime:"
 msgid "Date and Time"
 msgstr "Date et Heure"
 
-msgctxt "field:party.contact_history,contact_mechanism:"
+msgctxt "field:party.interaction,contact_mechanism:"
 msgid "Contact Mechanism"
 msgstr "Moyen de contact"
 
-msgctxt "field:party.contact_history,create_date:"
+msgctxt "field:party.interaction,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.contact_history,create_date_:"
+msgctxt "field:party.interaction,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.contact_history,create_uid:"
+msgctxt "field:party.interaction,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.contact_history,for_object:"
+msgctxt "field:party.interaction,for_object:"
 msgid "For Object"
 msgstr "Pour l'Objet"
 
-msgctxt "field:party.contact_history,for_object_ref:"
+msgctxt "field:party.interaction,for_object_ref:"
 msgid "For Object"
 msgstr "Pour l'Objet"
 
-msgctxt "field:party.contact_history,id:"
+msgctxt "field:party.interaction,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.contact_history,media:"
+msgctxt "field:party.interaction,media:"
 msgid "Media"
 msgstr ""
 
-msgctxt "field:party.contact_history,must_expand_tree:"
+msgctxt "field:party.interaction,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.contact_history,party:"
+msgctxt "field:party.interaction,party:"
 msgid "Actor"
 msgstr "Acteur"
 
-msgctxt "field:party.contact_history,rec_name:"
+msgctxt "field:party.interaction,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.contact_history,title:"
+msgctxt "field:party.interaction,title:"
 msgid "Title"
 msgstr "Titre"
 
-msgctxt "field:party.contact_history,user:"
+msgctxt "field:party.interaction,user:"
 msgid "User"
 msgstr "Utilisateur"
 
-msgctxt "field:party.contact_history,user_name:"
+msgctxt "field:party.interaction,user_name:"
 msgid "User Name"
 msgstr "Gestionnaire"
 
-msgctxt "field:party.contact_history,write_date:"
+msgctxt "field:party.interaction,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.contact_history,write_uid:"
+msgctxt "field:party.interaction,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -330,107 +330,107 @@ msgctxt "field:party.party,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:party.party-relation,create_date:"
+msgctxt "field:party.relation,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.party-relation,create_date_:"
+msgctxt "field:party.relation,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.party-relation,create_uid:"
+msgctxt "field:party.relation,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.party-relation,end_date:"
+msgctxt "field:party.relation,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:party.party-relation,from_party:"
+msgctxt "field:party.relation,from_party:"
 msgid "From Party"
 msgstr "Depuis l'acteur"
 
-msgctxt "field:party.party-relation,id:"
+msgctxt "field:party.relation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.party-relation,kind:"
+msgctxt "field:party.relation,kind:"
 msgid "Temporary kind for migration use, to be deleted"
 msgstr "Type"
 
-msgctxt "field:party.party-relation,must_expand_tree:"
+msgctxt "field:party.relation,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.party-relation,rec_name:"
+msgctxt "field:party.relation,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.party-relation,relation_kind:"
+msgctxt "field:party.relation,relation_kind:"
 msgid "Relation Kind"
 msgstr "Type de Relation"
 
-msgctxt "field:party.party-relation,relation_name:"
+msgctxt "field:party.relation,relation_name:"
 msgid "Relation Name"
 msgstr ""
 
-msgctxt "field:party.party-relation,start_date:"
+msgctxt "field:party.relation,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:party.party-relation,to_party:"
+msgctxt "field:party.relation,to_party:"
 msgid "To Party"
 msgstr "Vers l'acteur"
 
-msgctxt "field:party.party-relation,write_date:"
+msgctxt "field:party.relation,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.party-relation,write_uid:"
+msgctxt "field:party.relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.party_relation_kind,code:"
+msgctxt "field:party.relation.kind,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:party.party_relation_kind,create_date:"
+msgctxt "field:party.relation.kind,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.party_relation_kind,create_date_:"
+msgctxt "field:party.relation.kind,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.party_relation_kind,create_uid:"
+msgctxt "field:party.relation.kind,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:party.party_relation_kind,id:"
+msgctxt "field:party.relation.kind,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.party_relation_kind,must_expand_tree:"
+msgctxt "field:party.relation.kind,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.party_relation_kind,name:"
+msgctxt "field:party.relation.kind,name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:party.party_relation_kind,rec_name:"
+msgctxt "field:party.relation.kind,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.party_relation_kind,reversed_name:"
+msgctxt "field:party.relation.kind,reversed_name:"
 msgid "Reversed Name"
 msgstr ""
 
-msgctxt "field:party.party_relation_kind,write_date:"
+msgctxt "field:party.relation.kind,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.party_relation_kind,write_uid:"
+msgctxt "field:party.relation.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -486,67 +486,67 @@ msgctxt "model:party.actor,name:"
 msgid "Actor"
 msgstr "Acteur"
 
-msgctxt "model:party.address_kind,name:"
+msgctxt "model:party.address.kind,name:"
 msgid "Addresse Kind"
 msgstr "Type d'Adresse"
 
-msgctxt "model:party.contact_history,name:"
+msgctxt "model:party.interaction,name:"
 msgid "Contact History"
 msgstr "Historique des Contacts"
 
-msgctxt "model:party.party-relation,name:"
+msgctxt "model:party.relation,name:"
 msgid "Party Relation"
 msgstr "Relations entre Acteurs"
 
-msgctxt "model:party.party_relation_kind,name:"
+msgctxt "model:party.relation.kind,name:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Acteurs"
 
-msgctxt "selection:party.contact_history,for_object_ref:"
+msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "E-Mail"
 msgstr "E-Mail"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Fax"
 msgstr "Fax"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "IRC"
 msgstr "IRC"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Jabber"
 msgstr "Jabber"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Mail"
 msgstr "Courrier"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Mobile"
 msgstr "Mobile"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Other"
 msgstr "Autre"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Phone"
 msgstr "Téléphone"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "SIP"
 msgstr "SIP"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Skype"
 msgstr "Skype"
 
-msgctxt "selection:party.contact_history,media:"
+msgctxt "selection:party.interaction,media:"
 msgid "Website"
 msgstr "Site web"
 
@@ -566,7 +566,7 @@ msgctxt "view:party.actor:"
 msgid "Roles"
 msgstr "Rôles"
 
-msgctxt "view:party.contact_history:"
+msgctxt "view:party.interaction:"
 msgid "Communication Log"
 msgstr "Historique des Contacts"
 
@@ -590,6 +590,6 @@ msgctxt "view:party.party:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "view:party.party_relation_kind:"
+msgctxt "view:party.relation.kind:"
 msgid "Party Relation Kind"
 msgstr "Type de Relation entre Acteurs"

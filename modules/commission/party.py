@@ -14,8 +14,8 @@ class Party:
     __name__ = 'party.party'
     __metaclass__ = PoolMeta
 
-    broker_role = fields.One2Many('party.broker', 'party', 'Broker', size=1)
-    dist_networks = fields.Many2Many('distribution.dist_network-broker',
+    broker_role = fields.One2Many('broker', 'party', 'Broker', size=1)
+    dist_networks = fields.Many2Many('distribution.network-broker',
         'broker', 'dist_network', 'Distribution Networks')
 
     @classmethod
@@ -34,7 +34,7 @@ class Party:
 class Broker(model.CoopSQL, model.CoopView):
     'Broker'
 
-    __name__ = 'party.broker'
+    __name__ = 'broker'
 
     party = fields.Many2One('party.party', 'Party', required=True,
         ondelete='CASCADE', select=True)

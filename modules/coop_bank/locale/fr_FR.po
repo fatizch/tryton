@@ -30,11 +30,11 @@ msgctxt "field:bank.account,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:coop_utils.test_case_model,currency:"
+msgctxt "field:ir.test_case,currency:"
 msgid "Main Currency"
 msgstr "Monnaie principale"
 
-msgctxt "field:coop_utils.test_case_model,number_of_banks:"
+msgctxt "field:ir.test_case,number_of_banks:"
 msgid "Number of Banks"
 msgstr "Nombre de banques"
 

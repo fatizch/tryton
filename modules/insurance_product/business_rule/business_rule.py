@@ -27,18 +27,18 @@ class RuleEngineParameter():
     __metaclass__ = PoolMeta
     __name__ = 'rule_engine.parameter'
 
-    the_complementary_data = fields.Many2One('offered.complementary_data_def',
+    the_complementary_data = fields.Many2One('extra_data',
         'Complementary Parameters', domain=[('kind', '=', 'rule_engine')],
         ondelete='RESTRICT', on_change=['the_complementary_data'],
         states={'invisible': Eval('kind', '') != 'rule_compl',
             'required': Eval('kind', '') == 'rule_compl'})
     rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['the_rule', 'rule_complementary_data'],
         states={'invisible': Or(
                 Eval('kind', '') != 'rule', ~Eval('rule_complementary_data'))})
     external_complementary_data = fields.Many2One(
-        'offered.complementary_data_def', 'External Complementary Data',
+        'extra_data', 'External Complementary Data',
         domain=[('kind', '!=', 'rime_engine')], ondelete='RESTRICT',
         on_change=['external_complementary_data'],
         states={'invisible': Eval('kind', '') != 'compl',
@@ -69,7 +69,7 @@ class RuleEngineParameter():
         return args['_complementary_data'][schema_name]
 
     def get_external_complementary_data(self, args):
-        OfferedSet = Pool().get('offered.rule_sets')
+        OfferedSet = Pool().get('rule_engine.runtime')
         from_object = OfferedSet.get_lowest_level_object(args)
         return self.external_complementary_data.get_complementary_data_value(
             from_object, self.external_complementary_data.name,
@@ -193,9 +193,9 @@ class DimensionDisplayer():
     'Dimension Displayer'
 
     __metaclass__ = PoolMeta
-    __name__ = 'table.dimension_displayer'
+    __name__ = 'table.manage_dimension.show.dimension'
 
-    complementary_data = fields.Many2One('offered.complementary_data_def',
+    complementary_data = fields.Many2One('extra_data',
         'Complementary Data', domain=[('type_', '=', 'selection')], states={
             'invisible': Eval('input_mode', '') != 'compl_data'},
         on_change=['input_mode', 'complementary_data'])
@@ -233,13 +233,13 @@ class DimensionDisplayer():
 class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     'Business Rule Root'
 
-    __name__ = 'ins_product.business_rule_root'
+    __name__ = 'offered.business_rule_root'
 
     offered = fields.Reference('Offered',
         selection=[
             ('offered.product', 'Product'),
-            ('offered.coverage', 'Coverage'),
-            ('ins_product.benefit', 'Benefit')
+            ('offered.option.description', 'Coverage'),
+            ('benefit', 'Benefit')
             ],
         states={'required': True})
     start_date = fields.Date('From Date', required=True)
@@ -253,7 +253,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         fields.Char('Name'),
         'get_rec_name')
     rule_complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Rule Complementary Data',
+        'extra_data', 'Rule Complementary Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible':
             Or(STATE_SIMPLE, ~Eval('rule_complementary_data'))})

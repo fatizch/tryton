@@ -2,11 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract.contract,is_group:"
+msgctxt "field:contract,is_group:"
 msgid "Group Contract"
 msgstr "Contrat Collectif"
 
-msgctxt "field:offered.coverage,is_group:"
+msgctxt "field:offered.option.description,is_group:"
 msgid "Group Coverage"
 msgstr "Garantie Collective"
 
@@ -54,10 +54,10 @@ msgctxt "model:tag,name:tag_group"
 msgid "Group"
 msgstr "Groupe"
 
-msgctxt "view:contract.contract:"
+msgctxt "view:contract:"
 msgid "Enrollments"
 msgstr "Affiliations"
 
-msgctxt "view:ins_contract.covered_element:"
+msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"

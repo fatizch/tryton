@@ -12,7 +12,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     @classmethod
     def _get_test_case_dependencies(cls):
@@ -33,7 +33,7 @@ class TestCaseModel():
 
     @classmethod
     def create_expense_kind_from_line(cls, data):
-        ExpenseKind = Pool().get('ins_product.expense_kind')
+        ExpenseKind = Pool().get('expense.kind')
         expense = ExpenseKind()
         for elem in ('kind', 'code', 'name', 'short_name'):
             setattr(expense, elem, data[elem])
@@ -52,7 +52,7 @@ class TestCaseModel():
 
     @classmethod
     def create_regime_from_line(cls, data):
-        Regime = Pool().get('health.regime')
+        Regime = Pool().get('health.care_system')
         regime = Regime()
         for elem in ('code', 'name', 'short_name'):
             setattr(regime, elem, data[elem])
@@ -71,7 +71,7 @@ class TestCaseModel():
     @classmethod
     def create_fund_from_line(cls, data, addresses):
         Fund = Pool().get('health.insurance_fund')
-        Regime = Pool().get('health.regime')
+        Regime = Pool().get('health.care_system')
         fund = Fund()
         for elem in ('code', 'name'):
             setattr(fund, elem, data[elem])

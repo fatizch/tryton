@@ -13,7 +13,7 @@ class TestCaseModel():
     'Test Case Model'
 
     __metaclass__ = PoolMeta
-    __name__ = 'coop_utils.test_case_model'
+    __name__ = 'ir.test_case'
 
     _get_event_desc_cache = Cache('get_event_desc')
     _get_document_desc_cache = Cache('get_document_desc')
@@ -44,7 +44,7 @@ class TestCaseModel():
 
     @classmethod
     def create_document(cls, code, name):
-        Document = Pool().get('ins_product.document_desc')
+        Document = Pool().get('document.description')
         doc = Document()
         doc.code = code
         doc.name = name
@@ -59,14 +59,14 @@ class TestCaseModel():
         result = cls._get_document_desc_cache.get(code)
         if result:
             return result
-        result = Pool().get('ins_product.document_desc').search([
+        result = Pool().get('document.description').search([
                 ('code', '=', code)], limit=1)[0]
         cls._get_document_desc_cache.set(code, result)
         return result
 
     @classmethod
     def create_event_desc(cls, code, name):
-        EventDesc = Pool().get('ins_product.event_desc')
+        EventDesc = Pool().get('benefit.event.description')
         event_desc = EventDesc()
         event_desc.code = code
         event_desc.name = name
@@ -82,7 +82,7 @@ class TestCaseModel():
         result = cls._get_event_desc_cache.get(code)
         if result:
             return result
-        result = Pool().get('ins_product.event_desc').search([
+        result = Pool().get('benefit.event.description').search([
                 ('code', '=', code),
                 ('company', '=', cls.get_company())], limit=1)[0]
         cls._get_event_desc_cache.set(code, result)
@@ -91,7 +91,7 @@ class TestCaseModel():
     @classmethod
     def create_loss_desc(cls, code, name, item_kind, with_end_date,
             events, documents):
-        LossDesc = Pool().get('ins_product.loss_desc')
+        LossDesc = Pool().get('benefit.loss.description')
         loss_desc = LossDesc()
         loss_desc.code = code
         loss_desc.name = name

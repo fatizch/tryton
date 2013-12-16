@@ -14,7 +14,7 @@ __all__ = [
 class GroupSubscriptionProcessParameters():
     'Group Process Parameters'
 
-    __name__ = 'ins_contract.subscription_process_parameters'
+    __name__ = 'contract.subscribe.find_process'
     __metaclass__ = PoolMeta
 
     is_group = fields.Boolean('Group', on_change=['product', 'is_group',
@@ -52,7 +52,7 @@ class GroupSubscriptionProcessParameters():
 class SubscriptionProcessFinder():
     'Subscription Process Finder'
 
-    __name__ = 'ins_contract.subscription_process_finder'
+    __name__ = 'contract.subscribe'
     __metaclass__ = PoolMeta
 
     def init_main_object_from_process(self, obj, process_param):

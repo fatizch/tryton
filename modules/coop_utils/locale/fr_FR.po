@@ -10,7 +10,7 @@ msgctxt "error:coop.table_of_table:"
 msgid "This item (%s) is used by %s (%s, %s)"
 msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
-msgctxt "error:coop_utils.test_case_wizard:"
+msgctxt "error:ir.test_case.run:"
 msgid "Cannot load test case file %s"
 msgstr "Impossible de charger le jeu d'essai du fichier %s"
 
@@ -126,195 +126,195 @@ msgctxt "field:coop.table_of_table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.export_instance,create_date:"
+msgctxt "field:ir.export_package.item,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_utils.export_instance,create_uid:"
+msgctxt "field:ir.export_package.item,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_utils.export_instance,id:"
+msgctxt "field:ir.export_package.item,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.export_instance,package:"
+msgctxt "field:ir.export_package.item,package:"
 msgid "Package"
 msgstr "Formule"
 
-msgctxt "field:coop_utils.export_instance,rec_name:"
+msgctxt "field:ir.export_package.item,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_utils.export_instance,to_export:"
+msgctxt "field:ir.export_package.item,to_export:"
 msgid "To export"
 msgstr "Elément à exporter"
 
-msgctxt "field:coop_utils.export_instance,write_date:"
+msgctxt "field:ir.export_package.item,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_utils.export_instance,write_uid:"
+msgctxt "field:ir.export_package.item,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.export_package,code:"
+msgctxt "field:ir.export_package,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:coop_utils.export_package,create_date:"
+msgctxt "field:ir.export_package,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_utils.export_package,create_uid:"
+msgctxt "field:ir.export_package,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_utils.export_package,id:"
+msgctxt "field:ir.export_package,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.export_package,instances_to_export:"
+msgctxt "field:ir.export_package,instances_to_export:"
 msgid "Instances to export"
 msgstr "Eléments à exporter"
 
-msgctxt "field:coop_utils.export_package,model:"
+msgctxt "field:ir.export_package,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:coop_utils.export_package,package_name:"
+msgctxt "field:ir.export_package,package_name:"
 msgid "Package Name"
 msgstr "Nom du Groupe"
 
-msgctxt "field:coop_utils.export_package,rec_name:"
+msgctxt "field:ir.export_package,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:coop_utils.export_package,write_date:"
+msgctxt "field:ir.export_package,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_utils.export_package,write_uid:"
+msgctxt "field:ir.export_package,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.file_selector,file_content:"
+msgctxt "field:ir.import.select_file,file_content:"
 msgid "File Content"
 msgstr "Contenu du fichier"
 
-msgctxt "field:coop_utils.file_selector,id:"
+msgctxt "field:ir.import.select_file,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.file_selector,name:"
+msgctxt "field:ir.import.select_file,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
-msgctxt "field:coop_utils.file_selector,selected_file:"
+msgctxt "field:ir.import.select_file,selected_file:"
 msgid "Import File"
 msgstr "Importer le Fichier"
 
-msgctxt "field:coop_utils.select_test_cases,id:"
+msgctxt "field:ir.test_case.run.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.select_test_cases,must_expand_tree:"
+msgctxt "field:ir.test_case.run.select,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.select_test_cases,select_all_files:"
+msgctxt "field:ir.test_case.run.select,select_all_files:"
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-msgctxt "field:coop_utils.select_test_cases,select_all_test_cases:"
+msgctxt "field:ir.test_case.run.select,select_all_test_cases:"
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-msgctxt "field:coop_utils.select_test_cases,test_cases:"
+msgctxt "field:ir.test_case.run.select,test_cases:"
 msgid "Test Cases"
 msgstr "Jeux de Test"
 
-msgctxt "field:coop_utils.select_test_cases,test_files:"
+msgctxt "field:ir.test_case.run.select,test_files:"
 msgid "Test Files"
 msgstr "Fichiers de test"
 
-msgctxt "field:coop_utils.test_case_file_selector,filename:"
+msgctxt "field:ir.test_case.run.select.file,filename:"
 msgid "File name"
 msgstr "Nom du fichier"
 
-msgctxt "field:coop_utils.test_case_file_selector,full_path:"
+msgctxt "field:ir.test_case.run.select.file,full_path:"
 msgid "Full Path"
 msgstr "Chemin complet"
 
-msgctxt "field:coop_utils.test_case_file_selector,id:"
+msgctxt "field:ir.test_case.run.select.file,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.test_case_file_selector,must_expand_tree:"
+msgctxt "field:ir.test_case.run.select.file,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.test_case_file_selector,selected:"
+msgctxt "field:ir.test_case.run.select.file,selected:"
 msgid "Will be loaded"
 msgstr "Seront chargés"
 
-msgctxt "field:coop_utils.test_case_model,create_date:"
+msgctxt "field:ir.test_case,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:coop_utils.test_case_model,create_date_:"
+msgctxt "field:ir.test_case,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:coop_utils.test_case_model,create_uid:"
+msgctxt "field:ir.test_case,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:coop_utils.test_case_model,id:"
+msgctxt "field:ir.test_case,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.test_case_model,language:"
+msgctxt "field:ir.test_case,language:"
 msgid "Test Case Language"
 msgstr "Langue des jeux d'essai"
 
-msgctxt "field:coop_utils.test_case_model,must_expand_tree:"
+msgctxt "field:ir.test_case,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.test_case_model,rec_name:"
+msgctxt "field:ir.test_case,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:coop_utils.test_case_model,write_date:"
+msgctxt "field:ir.test_case,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:coop_utils.test_case_model,write_uid:"
+msgctxt "field:ir.test_case,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:coop_utils.test_case_selector,id:"
+msgctxt "field:ir.test_case.run.select.method,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:coop_utils.test_case_selector,method_name:"
+msgctxt "field:ir.test_case.run.select.method,method_name:"
 msgid "Method Name"
 msgstr "Nom de la Méthode"
 
-msgctxt "field:coop_utils.test_case_selector,must_expand_tree:"
+msgctxt "field:ir.test_case.run.select.method,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:coop_utils.test_case_selector,name:"
+msgctxt "field:ir.test_case.run.select.method,name:"
 msgid "Test Case Name"
 msgstr "Nom du jeu d'essai"
 
-msgctxt "field:coop_utils.test_case_selector,selected:"
+msgctxt "field:ir.test_case.run.select.method,selected:"
 msgid "Will be executed"
 msgstr "Sera exécuté"
 
-msgctxt "field:coop_utils.test_case_selector,selection:"
+msgctxt "field:ir.test_case.run.select.method,selection:"
 msgid "Selection"
 msgstr "Sélection"
 
@@ -386,31 +386,31 @@ msgctxt "model:coop.table_of_table,name:"
 msgid "Table of table"
 msgstr "Table des Tables"
 
-msgctxt "model:coop_utils.export_instance,name:"
+msgctxt "model:ir.export_package.item,name:"
 msgid "Export Instance"
 msgstr "Elément à exporter"
 
-msgctxt "model:coop_utils.export_package,name:"
+msgctxt "model:ir.export_package,name:"
 msgid "Export Package"
 msgstr "Exports groupés"
 
-msgctxt "model:coop_utils.file_selector,name:"
+msgctxt "model:ir.import.select_file,name:"
 msgid "File Selector"
 msgstr "Selecteur de fichier"
 
-msgctxt "model:coop_utils.select_test_cases,name:"
+msgctxt "model:ir.test_case.run.select,name:"
 msgid "Select Test Case"
 msgstr "Sélection des jeux d'essai"
 
-msgctxt "model:coop_utils.test_case_file_selector,name:"
+msgctxt "model:ir.test_case.run.select.file,name:"
 msgid "Test Case File Selector"
 msgstr "Sélection des fichiers de jeu d'essai"
 
-msgctxt "model:coop_utils.test_case_model,name:"
+msgctxt "model:ir.test_case,name:"
 msgid "Test Case Model"
 msgstr "Jeux d'essais"
 
-msgctxt "model:coop_utils.test_case_selector,name:"
+msgctxt "model:ir.test_case.run.select.method,name:"
 msgid "Test Case Selector"
 msgstr "Sélection des jeux d'essai"
 
@@ -470,15 +470,15 @@ msgctxt "model:utils.versionned_object,name:"
 msgid "Versionned Object"
 msgstr "Objet Versionné"
 
-msgctxt "selection:coop_utils.test_case_selector,selection:"
+msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Automatic"
 msgstr "Automatique"
 
-msgctxt "selection:coop_utils.test_case_selector,selection:"
+msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Manual"
 msgstr "Manuel"
 
-msgctxt "selection:coop_utils.test_case_selector,selection:"
+msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Not Selected"
 msgstr "Non Sélectionné"
 
@@ -486,39 +486,39 @@ msgctxt "view:coop.dyn_selection:"
 msgid "Dynamic Selection"
 msgstr "Sélection Dynamique"
 
-msgctxt "view:coop_utils.export_instance:"
+msgctxt "view:ir.export_package.item:"
 msgid "Export Instance"
 msgstr "Elément à exporter"
 
-msgctxt "view:coop_utils.export_instance:"
+msgctxt "view:ir.export_package.item:"
 msgid "Export instances"
 msgstr ""
 
-msgctxt "view:coop_utils.export_package:"
+msgctxt "view:ir.export_package:"
 msgid "Export Package"
 msgstr "Exports groupés"
 
-msgctxt "view:coop_utils.export_package:"
+msgctxt "view:ir.export_package:"
 msgid "Export Packages"
 msgstr ""
 
-msgctxt "view:coop_utils.file_selector:"
+msgctxt "view:ir.import.select_file:"
 msgid "File Selection"
 msgstr "Sélection de Fichier"
 
-msgctxt "view:coop_utils.select_test_cases:"
+msgctxt "view:ir.test_case.run.select:"
 msgid "Select Test Cases"
 msgstr "Sélection des jeux d'essai"
 
-msgctxt "view:coop_utils.test_case_file_selector:"
+msgctxt "view:ir.test_case.run.select.file:"
 msgid "Test Case Files"
 msgstr "Fichiers de jeu d'essai"
 
-msgctxt "view:coop_utils.test_case_model:"
+msgctxt "view:ir.test_case:"
 msgid "Test Case Parameters"
 msgstr "Paramètres des jeu d'essais"
 
-msgctxt "view:coop_utils.test_case_selector:"
+msgctxt "view:ir.test_case.run.select.method:"
 msgid "Test Cases"
 msgstr "Jeux de Test"
 
@@ -530,19 +530,19 @@ msgctxt "view:utils.versionned_object:"
 msgid "Versionned Object"
 msgstr "Objet Versionné"
 
-msgctxt "wizard_button:coop_utils.import_wizard,file_selector,end:"
+msgctxt "wizard_button:ir.import,file_selector,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:coop_utils.import_wizard,file_selector,file_import:"
+msgctxt "wizard_button:ir.import,file_selector,file_import:"
 msgid "Import"
 msgstr "Importer"
 
-msgctxt "wizard_button:coop_utils.test_case_wizard,select_test_cases,end:"
+msgctxt "wizard_button:ir.test_case.run,select_test_cases,end:"
 msgid "Quit"
 msgstr "Quitter"
 
 msgctxt ""
-"wizard_button:coop_utils.test_case_wizard,select_test_cases,execute_test_cases:"
+"wizard_button:ir.test_case.run,select_test_cases,execute_test_cases:"
 msgid "Execute Selected"
 msgstr "Exécuter les jeux d'essai sélectionnés"

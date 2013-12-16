@@ -18,11 +18,11 @@ __all__ = [
 class LoanParameters(model.CoopView, ModelCurrency):
     'Loan Parameters'
 
-    __name__ = 'loan.creation_parameters'
+    __name__ = 'loan.create.parameters'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         states={"invisible": True})
-    loan = fields.Many2One('loan.loan', 'Loan')
+    loan = fields.Many2One('loan', 'Loan')
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True)
     number_of_payments = fields.Integer('Number of Payments', required=True)
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
@@ -41,7 +41,7 @@ class LoanParameters(model.CoopView, ModelCurrency):
 class LoanIncrementsDisplayer(model.CoopView):
     'Increments'
 
-    __name__ = 'loan.creation_increments'
+    __name__ = 'loan.create.increments'
 
     increments = fields.One2Many('loan.increment', None,
         'Increments')
@@ -50,7 +50,7 @@ class LoanIncrementsDisplayer(model.CoopView):
 class AmortizationTableDisplayer(model.CoopView):
     'Amortization Table'
 
-    __name__ = 'loan.creation_table'
+    __name__ = 'loan.create.amortization_table'
 
     payments = fields.One2Many('loan.payment', None, 'Payments')
 
@@ -58,16 +58,16 @@ class AmortizationTableDisplayer(model.CoopView):
 class LoanCreation(model.CoopWizard):
     'Loan Creation'
 
-    __name__ = 'loan.creation'
+    __name__ = 'loan.create'
 
     start_state = 'loan_parameters'
-    loan_parameters = StateView('loan.creation_parameters',
+    loan_parameters = StateView('loan.create.parameters',
         'loan.loan_creation_parameters_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Next', 'create_loan', 'tryton-go-next'),
             ])
     create_loan = StateTransition()
-    increments = StateView('loan.creation_increments',
+    increments = StateView('loan.create.increments',
         'loan.loan_creation_increments_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'loan_parameters', 'tryton-go-previous'),
@@ -75,7 +75,7 @@ class LoanCreation(model.CoopWizard):
                 default=True),
             ])
     create_payments = StateTransition()
-    amortization_table = StateView('loan.creation_table',
+    amortization_table = StateView('loan.create.amortization_table',
         'loan.loan_creation_table_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'increments', 'tryton-go-previous'),
@@ -86,7 +86,7 @@ class LoanCreation(model.CoopWizard):
     cancel_loan = StateTransition()
 
     def default_loan_parameters(self, values):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         return {
             'contract': contract.id,
@@ -107,7 +107,7 @@ class LoanCreation(model.CoopWizard):
             [x.id for x in self.loan_parameters.loan.increments]}
 
     def transition_create_loan(self):
-        Loan = Pool().get('loan.loan')
+        Loan = Pool().get('loan')
         loan = Loan()
         self.loan_parameters.loan = loan
         loan.contract = self.loan_parameters.contract
@@ -155,7 +155,7 @@ class LoanCreation(model.CoopWizard):
         return 'end'
 
     def transition_cancel_loan(self):
-        Loan = Pool().get('loan.loan')
+        Loan = Pool().get('loan')
         if self.loan_parameters.loan and self.loan_parameters.loan.id > 0:
             Loan.delete([self.loan_parameters.loan])
         return 'end'

@@ -16,11 +16,11 @@ class Party:
 
     __name__ = 'party.party'
 
-    complementary_data = fields.Dict('offered.complementary_data_def',
+    complementary_data = fields.Dict('extra_data',
         'Complementary Data')
-    covered_elements = fields.One2Many('ins_contract.covered_element',
+    covered_elements = fields.One2Many('contract.covered_element',
         'party', 'Covered Elements')
-    customer_role = fields.One2Many('party.customer', 'party', 'Customer',
+    customer_role = fields.One2Many('customer', 'party', 'Customer',
         size=1)
 
     @classmethod
@@ -40,14 +40,14 @@ class Party:
         return res
 
     def get_subscribed_contracts(self):
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         return Contract.search(['subscriber', '=', self.id])
 
 
 class Customer(Actor, model.CoopSQL):
     'Customer'
 
-    __name__ = 'party.customer'
+    __name__ = 'customer'
 
     @classmethod
     def get_summary(cls, customers, name=None, at_date=None, lang=None):

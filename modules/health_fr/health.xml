@@ -3,18 +3,18 @@
     <data>
         <!-- Regime -->
         <record model="ir.ui.view" id="regime_view_form">
-            <field name="model">health.regime</field>
+            <field name="model">health.care_system</field>
             <field name="type">form</field>
             <field name="name">regime_form</field>
         </record>
         <record model="ir.ui.view" id="regime_view_tree">
-            <field name="model">health.regime</field>
+            <field name="model">health.care_system</field>
             <field name="type">tree</field>
             <field name="name">regime_tree</field>
         </record>
         <record model="ir.action.act_window" id="act_regime_form">
             <field name="name">Regimes</field>
-            <field name="res_model">health.regime</field>
+            <field name="res_model">health.care_system</field>
         </record>
 
         <record model="ir.action.act_window.view" id="act_regime_form_view_tree">
@@ -65,7 +65,7 @@
         </data>
         <data skiptest="1">
 
-            <record model="health.regime" id="rsi">
+            <record model="health.care_system" id="rsi">
                 <field name="name">REGIME SOCIAL DES INDEPENDANTS</field>
                 <field name="code">03</field>
                 <field name="short_name">RSI</field>

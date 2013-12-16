@@ -13,7 +13,7 @@ __all__ = [
 class GroupContract():
     'Group Contract'
 
-    __name__ = 'contract.contract'
+    __name__ = 'contract'
     __metaclass__ = PoolMeta
 
     is_group = fields.Function(

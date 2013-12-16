@@ -37,12 +37,12 @@ DEPENDS = ['active']
 class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan'
 
-    __name__ = 'loan.loan'
+    __name__ = 'loan'
 
     active = fields.Boolean('Active')
     kind = fields.Selection(LOAN_KIND, 'Kind', sort=False, states=STATES,
         depends=DEPENDS)
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE', required=True)
     number_of_payments = fields.Integer('Number of Payments', states=STATES,
         depends=DEPENDS)
@@ -279,7 +279,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     share = fields.Numeric('Loan Share', digits=(16, 4))
     person = fields.Many2One('party.party', 'Person', ondelete='RESTRICT',
         domain=[('is_person', '=', True)])
@@ -305,7 +305,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     number = fields.Integer('Number')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments')
     rate = fields.Numeric('Annual Rate', digits=(16, 4))
     payment_amount = fields.Numeric('Amount',
@@ -326,7 +326,7 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'loan.payment'
 
-    loan = fields.Many2One('loan.loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     kind = fields.Selection([
             ('scheduled', 'Scheduled'),
             ('early', 'Early'),

@@ -5,18 +5,18 @@
     <!-- Claim -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="claim_view_form">
-      <field name="model">claim.claim</field>
+      <field name="model">claim</field>
       <field name="type">form</field>
       <field name="name">claim_form</field>
     </record>
     <record model="ir.ui.view" id="claim_view_tree">
-      <field name="model">claim.claim</field>
+      <field name="model">claim</field>
       <field name="type">tree</field>
       <field name="name">claim_tree</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_claim">
-        <field name="model" search="[('model', '=', 'claim.claim')]"/>
+        <field name="model" search="[('model', '=', 'claim')]"/>
         <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_claim_1">
@@ -26,7 +26,7 @@
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_claim_form">
       <field name="name">Claims</field>
-      <field name="res_model">claim.claim</field>
+      <field name="res_model">claim</field>
       <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_claim_view_tree">
@@ -65,13 +65,13 @@
     <!-- Delivered Service -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="delivered_service_view_form">
-      <field name="model">contract.delivered_service</field>
+      <field name="model">contract.service</field>
       <field name="type">form</field>
       <field name="inherit" ref="contract.delivered_service_view_form"/>
       <field name="name">delivered_service_form</field>
     </record>
     <record model="ir.ui.view" id="delivered_service_view_tree">
-      <field name="model">contract.delivered_service</field>
+      <field name="model">contract.service</field>
       <field name="type">tree</field>
       <field name="inherit" ref="contract.delivered_service_view_tree"/>
       <field name="name">delivered_service_tree</field>
@@ -93,12 +93,12 @@
     <!-- Indemnification Detail -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="indemnification_detail_view_form">
-      <field name="model">claim.indemnification_detail</field>
+      <field name="model">claim.indemnification.detail</field>
       <field name="type">form</field>
       <field name="name">indemnification_detail_form</field>
     </record>
     <record model="ir.ui.view" id="indemnification_detail_view_tree">
-      <field name="model">claim.indemnification_detail</field>
+      <field name="model">claim.indemnification.detail</field>
       <field name="type">tree</field>
       <field name="name">indemnification_detail_tree</field>
     </record>
@@ -125,7 +125,7 @@
     <!--################################################################ -->
     <record model="ir.action.act_window" id="act_claim_relate_form">
       <field name="name">Claims</field>
-      <field name="res_model">claim.claim</field>
+      <field name="res_model">claim</field>
       <field name="domain">[('claimant', '=', Eval('active_id'))]</field>
     </record>
     <record model="ir.action.keyword" id="act_claim_relate_keyword">
@@ -146,19 +146,19 @@
     <!-- Receive Documents -->
     <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">claim.claim,-1</field>
+      <field name="model">claim,-1</field>
       <field name="action" ref="insurance_product.receive_documents_wizard"/>
     </record>
     <!-- Send Document -->
     <record model="ir.action.keyword" id="letter_generation_claim_keyword">
       <field name="keyword">form_action</field>
-      <field name="model">claim.claim,-1</field>
+      <field name="model">claim,-1</field>
       <field name="action" ref="insurance_product.letter_generation_wizard"/>
     </record>
     <!-- Claim Number Generator -->
     <record model="ir.sequence.type" id="sequence_type_claim_number">
       <field name="name">Claim Number</field>
-      <field name="code">claim.claim</field>
+      <field name="code">claim</field>
     </record>
     <record model="ir.sequence.type-res.group" id="sequence_type_claim_number_group_admin">
       <field name="sequence_type" ref="sequence_type_claim_number"/>
@@ -166,31 +166,31 @@
     </record>
     <record model="ir.sequence" id="claim_sequence">
       <field name="name">Claim Sequence</field>
-      <field name="code">claim.claim</field>
+      <field name="code">claim</field>
       <field name="prefix">SIN${year}</field>
       <field name="padding">10</field>
     </record>
     <!-- Indemnification Displayer -->
     <record model="ir.ui.view" id="indemnification_displayer_form">
-      <field name="model">claim.indemnification_displayer</field>
+      <field name="model">claim.indemnification.validate.display</field>
       <field name="type">form</field>
       <field name="name">indemnification_displayer_form</field>
     </record>
     <record model="ir.ui.view" id="indemnification_displayer_tree">
-      <field name="model">claim.indemnification_displayer</field>
+      <field name="model">claim.indemnification.validate.display</field>
       <field name="type">tree</field>
       <field name="name">indemnification_displayer_tree</field>
     </record>
     <!-- Indemnification Selection -->
     <record model="ir.ui.view" id="indemnification_selection_form">
-      <field name="model">claim.indemnification_selection</field>
+      <field name="model">claim.indemnification.validate.select</field>
       <field name="type">form</field>
       <field name="name">indemnification_selection_form</field>
     </record>
     <!-- Indemnification Validation -->
     <record model="ir.action.wizard" id="indemnification_validation_wizard">
         <field name="name">Indemnification Validation</field>
-        <field name="wiz_name">claim.indemnification_validation</field>
+        <field name="wiz_name">claim.indemnification.validate</field>
     </record>
     <menuitem name="Validate Indemnifications" id="menu_validate_indemnification" sequence="15"
         parent="menu_claim" action="indemnification_validation_wizard"/>

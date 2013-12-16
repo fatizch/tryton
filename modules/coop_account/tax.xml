@@ -6,7 +6,7 @@
               *******************************************-->
 
         <record model="ir.ui.view" id="tax_version_view_tree">
-            <field name="model">coop_account.tax_version</field>
+            <field name="model">account.tax.description.version</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
@@ -21,7 +21,7 @@
         </record>
 
         <record model="ir.ui.view" id="tax_version_view_form">
-            <field name="model">coop_account.tax_version</field>
+            <field name="model">account.tax.description.version</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
@@ -45,7 +45,7 @@
               **************    Tax Desc   **************
               *******************************************-->
         <record model="ir.ui.view" id="tax_desc_view_tree">
-            <field name="model">coop_account.tax_desc</field>
+            <field name="model">account.tax.description</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <![CDATA[
@@ -59,7 +59,7 @@
         </record>
 
         <record model="ir.ui.view" id="tax_desc_view_form">
-            <field name="model">coop_account.tax_desc</field>
+            <field name="model">account.tax.description</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <![CDATA[
@@ -84,7 +84,7 @@
         <!-- View for the main menu and the event -->
         <record model="ir.action.act_window" id="act_tax_form">
             <field name="name">Taxes</field>
-            <field name="res_model">coop_account.tax_desc</field>
+            <field name="res_model">account.tax.description</field>
         </record>
 
         <!-- View that connects the form in the tree with the specification -->

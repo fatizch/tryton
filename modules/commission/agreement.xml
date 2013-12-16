@@ -3,7 +3,7 @@
     <data>
         <!-- CommissionAgreement -->
         <record model="ir.ui.view" id="agreement_view_tree">
-            <field name="model">contract.contract</field>
+            <field name="model">contract</field>
             <field name="type">tree</field>
             <field name="inherit" ref="contract.contract_view_tree"/>
             <!-- <field name="name">contract_tree</field> -->
@@ -11,7 +11,7 @@
         </record>
         <!-- form view -->
         <record model="ir.ui.view" id="agreement_view_form">
-            <field name="model">contract.contract</field>
+            <field name="model">contract</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="arch" type="xml"/>
@@ -19,7 +19,7 @@
         </record>
         <record model="ir.action.act_window" id="act_agreement_form">
             <field name="name">Commission Agreements</field>
-            <field name="res_model">contract.contract</field>
+            <field name="res_model">contract</field>
             <field name="domain">[('product_kind', '=', 'commission')]</field>
         </record>
         <record model="ir.action.act_window.view" id="act_agreement_tree_view">
@@ -38,20 +38,20 @@
 
         <!-- CommissionOption -->
         <record model="ir.ui.view" id="option_view_tree">
-            <field name="model">contract.subscribed_option</field>
+            <field name="model">contract.option</field>
             <field name="type">tree</field>
             <field name="inherit" ref="contract.option_view_tree"/>
             <!-- <field name="name">option_tree</field> -->
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="option_view_form">
-            <field name="model">contract.subscribed_option</field>
+            <field name="model">contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">option_form</field>
         </record>
         <record model="ir.ui.view" id="option_com_tree">
-          <field name="model">contract.subscribed_option</field>
+          <field name="model">contract.option</field>
           <field name="type">tree</field>
           <field name="field_childs">commissions</field>
           <field name="name">option_com_tree</field>
@@ -59,12 +59,12 @@
 
         <!-- CompensatedOption -->
         <record model="ir.ui.view" id="compensated_option_view_tree">
-            <field name="model">commission.compensated_option</field>
+            <field name="model">contract.option-commission.option</field>
             <field name="type">tree</field>
             <field name="name">compensated_option_tree</field>
         </record>
         <record model="ir.ui.view" id="compensated_option_view_form">
-            <field name="model">commission.compensated_option</field>
+            <field name="model">contract.option-commission.option</field>
             <field name="type">form</field>
             <field name="name">compensated_option_form</field>
         </record>

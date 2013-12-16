@@ -16,7 +16,7 @@ class EndorsementProcessParameters(ProcessParameters):
 
     __name__ = 'contract.endorsement_process_parameters'
 
-    contract = fields.Many2One('contract.contract', 'Contract',
+    contract = fields.Many2One('contract', 'Contract',
         on_change=['contract', 'product'],
         domain=[
             ('status', '=', 'active'),
@@ -48,7 +48,7 @@ class EndorsementProcessParameters(ProcessParameters):
     @classmethod
     def default_model(cls):
         Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'contract.contract')])[0].id
+        return Model.search([('model', '=', 'contract')])[0].id
 
 
 class EndorsementProcessFinder(ProcessFinder):

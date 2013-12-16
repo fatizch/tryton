@@ -21,7 +21,7 @@ DEDUCTIBLE_KIND = [
 class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
     'Deductible Rule'
 
-    __name__ = 'ins_product.deductible_rule'
+    __name__ = 'offered.deductible.rule'
 
     kind = fields.Selection(DEDUCTIBLE_KIND, 'Kind', sort=False, required=True)
     simple_config_choice = fields.Selection(
@@ -48,7 +48,7 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
                 Eval('simple_config_choice') == 'value'),
             })
-    durations = fields.One2Many('ins_product.deductible_duration',
+    durations = fields.One2Many('offered.deductible.rule.duration',
         'deductible_rule', 'Durations', states={
             'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration',
                 Eval('simple_config_choice') != 'list'),
@@ -151,9 +151,9 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
 class DeductibleDuration(model.CoopSQL, model.CoopView):
     'Deductible Duration'
 
-    __name__ = 'ins_product.deductible_duration'
+    __name__ = 'offered.deductible.rule.duration'
 
-    deductible_rule = fields.Many2One('ins_product.deductible_rule',
+    deductible_rule = fields.Many2One('offered.deductible.rule',
         'Deductible Rule')
     duration = fields.Integer('Duration', required=True)
     duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',

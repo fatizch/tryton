@@ -9,12 +9,12 @@
     </record>
     <!-- Insurer -->
     <record model="ir.ui.view" id="insurer_view_form_hosted">
-      <field name="model">party.insurer</field>
+      <field name="model">insurer</field>
       <field name="type">form</field>
       <field name="name">insurer_form</field>
     </record>
     <record model="ir.ui.view" id="insurer_view_tree">
-      <field name="model">party.insurer</field>
+      <field name="model">insurer</field>
       <field name="type">tree</field>
       <field name="name">insurer_tree</field>
     </record>

@@ -72,7 +72,7 @@ INDEMNIFICATION_STATUS = [
 class Claim(model.CoopSQL, model.CoopView, Printable):
     'Claim'
 
-    __name__ = 'claim.claim'
+    __name__ = 'claim'
     _history = True
 
     name = fields.Char('Number', select=True,
@@ -91,7 +91,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     claimant = fields.Many2One('party.party', 'Claimant', ondelete='RESTRICT')
     losses = fields.One2Many('claim.loss', 'claim', 'Losses',
         states={'readonly': Eval('status') == 'closed'})
-    documents = fields.One2Many('ins_product.document_request',
+    documents = fields.One2Many('document.request',
         'needed_by', 'Documents')
     # claim_history = fields.One2Many('claim.claim.history',
     #     'from_object', 'History')
@@ -100,13 +100,13 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     #of the claims where there is only one contract involved. This link should
     #not be used for other reason than initiating sub elements on claim.
     #Otherwise use claim.get_contract()
-    main_contract = fields.Many2One('contract.contract', 'Main Contract',
+    main_contract = fields.Many2One('contract', 'Main Contract',
         domain=[('id', 'in', Eval('possible_contracts')),
             ('company', '=', Eval('company'))],
         depends=['possible_contracts', 'company'])
     possible_contracts = fields.Function(
         fields.One2Many(
-            'contract.contract', None, 'Contracts',
+            'contract', None, 'Contracts',
             on_change_with=['claimant', 'declaration_date']),
         'on_change_with_possible_contracts')
 
@@ -219,7 +219,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return True
         Generator = Pool().get('ir.sequence')
         good_gen, = Generator.search([
-            ('code', '=', 'claim.claim'),
+            ('code', '=', 'claim'),
         ], limit=1)
         self.name = good_gen.get_id(good_gen.id)
         return True
@@ -289,7 +289,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def get_possible_contracts(self, at_date=None):
         if not at_date:
             at_date = self.declaration_date
-        Contract = Pool().get('contract.contract')
+        Contract = Pool().get('contract')
         return Contract.get_possible_contracts_from_party(self.claimant,
             at_date)
 
@@ -328,7 +328,7 @@ class ClaimHistory(model.ObjectHistory):
 
     @classmethod
     def get_object_model(cls):
-        return 'claim.claim'
+        return 'claim'
 
     @classmethod
     def get_object_name(cls):
@@ -340,13 +340,13 @@ class Loss(model.CoopSQL, model.CoopView):
 
     __name__ = 'claim.loss'
 
-    claim = fields.Many2One('claim.claim', 'Claim', ondelete='CASCADE')
+    claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE')
     start_date = fields.Date('Loss Date')
     end_date = fields.Date('End Date', states={
             'invisible': Bool(~Eval('with_end_date')),
             'required': Bool(Eval('with_end_date')),
             }, depends=['with_end_date'],)
-    loss_desc = fields.Many2One('ins_product.loss_desc', 'Loss Descriptor',
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
         ondelete='RESTRICT',
         on_change=['event_desc', 'loss_desc', 'with_end_date', 'end_date'],
         domain=[
@@ -355,20 +355,20 @@ class Loss(model.CoopSQL, model.CoopView):
             ],
         depends=['possible_loss_descs'])
     possible_loss_descs = fields.Function(
-        fields.One2Many('ins_product.loss_desc', None, 'Possible Loss Descs',
+        fields.One2Many('benefit.loss.description', None, 'Possible Loss Descs',
             on_change_with=['claim']),
         'on_change_with_possible_loss_descs')
-    event_desc = fields.Many2One('ins_product.event_desc', 'Event',
+    event_desc = fields.Many2One('benefit.event.description', 'Event',
         domain=[('loss_descs', '=', Eval('loss_desc'))],
         states={'invisible': Bool(Eval('main_loss'))},
         depends=['loss_desc'], ondelete='RESTRICT')
     delivered_services = fields.One2Many(
-        'contract.delivered_service', 'loss', 'Delivered Services',
+        'contract.service', 'loss', 'Delivered Services',
         domain=[
             ('contract', 'in',
                 Eval('_parent_claim', {}).get('possible_contracts'))
             ],)
-    multi_level_view = fields.One2Many('contract.delivered_service',
+    multi_level_view = fields.One2Many('contract.service',
         'loss', 'Delivered Services')
     main_loss = fields.Many2One('claim.loss', 'Main Loss',
         domain=[('claim', '=', Eval('claim')), ('id', '!=', Eval('id'))],
@@ -381,7 +381,7 @@ class Loss(model.CoopSQL, model.CoopView):
         fields.Boolean('With End Date'),
         'get_with_end_date')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Complementary Data',
+        'extra_data', 'Complementary Data',
         on_change_with=['loss_desc', 'complementary_data'],
         states={'invisible': ~Eval('complementary_data')})
 
@@ -517,12 +517,12 @@ class Loss(model.CoopSQL, model.CoopView):
 class ClaimDeliveredService():
     'Claim Delivered Service'
 
-    __name__ = 'contract.delivered_service'
+    __name__ = 'contract.service'
     __metaclass__ = PoolMeta
 
     loss = fields.Many2One('claim.loss', 'Loss', ondelete='CASCADE')
     benefit = fields.Many2One(
-        'ins_product.benefit', 'Benefit', ondelete='RESTRICT',
+        'benefit', 'Benefit', ondelete='RESTRICT',
         domain=[
             If(~~Eval('_parent_loss', {}).get('loss_desc'),
                 ('loss_descs', '=', Eval('_parent_loss', {}).get('loss_desc')),
@@ -534,7 +534,7 @@ class ClaimDeliveredService():
     multi_level_view = fields.One2Many(
         'claim.indemnification', 'delivered_service', 'Indemnifications')
     complementary_data = fields.Dict(
-        'offered.complementary_data_def', 'Complementary Data',
+        'extra_data', 'Complementary Data',
         on_change=['benefit', 'complementary_data', 'loss',
             'subscribed_service', 'is_loan', 'contract'],
         states={'invisible': ~Eval('complementary_data')})
@@ -641,7 +641,7 @@ class ClaimDeliveredService():
         self.func_error = None
         if res and not res.eligible:
             self.status = 'not_eligible'
-            Error = Pool().get('rule_engine.error')
+            Error = Pool().get('functional_error')
             func_err, other_errs = Error.get_functional_errors_from_errors(
                 res.details)
             if func_err:
@@ -714,7 +714,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         states={'readonly': Eval('status') == 'paid'})
     customer = fields.Many2One('party.party', 'Customer', ondelete='RESTRICT',
         states={'readonly': Eval('status') == 'paid'})
-    delivered_service = fields.Many2One('contract.delivered_service',
+    delivered_service = fields.Many2One('contract.service',
         'Delivered Service', ondelete='CASCADE',
         states={'readonly': Eval('status') == 'paid'})
     kind = fields.Function(
@@ -750,7 +750,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             states={'invisible': True},
             on_change_with=['local_currency']),
         'on_change_with_local_currency_digits')
-    details = fields.One2Many('claim.indemnification_detail',
+    details = fields.One2Many('claim.indemnification.detail',
         'indemnification', 'Details',
         states={'readonly': Or(~Eval('manual'), Eval('status') == 'paid')})
     manual = fields.Boolean('Manual Calculation',
@@ -794,7 +794,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             self.details = []
         else:
             self.details = list(self.details)
-            Pool().get('claim.indemnification_detail').delete(self.details)
+            Pool().get('claim.indemnification.detail').delete(self.details)
             self.details[:] = []
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
@@ -888,7 +888,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
 class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     'Indemnification Detail'
 
-    __name__ = 'claim.indemnification_detail'
+    __name__ = 'claim.indemnification.detail'
 
     indemnification = fields.Many2One('claim.indemnification',
         'Indemnification', ondelete='CASCADE')
@@ -925,44 +925,44 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
 class DocumentRequest():
     'Document Request'
 
-    __name__ = 'ins_product.document_request'
+    __name__ = 'document.request'
     __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(DocumentRequest, cls).__setup__()
         cls.needed_by = copy.copy(cls.needed_by)
-        cls.needed_by.selection.append(('claim.claim', 'Claim'))
+        cls.needed_by.selection.append(('claim', 'Claim'))
         cls.needed_by.selection.append(
-            ('contract.delivered_service', 'Delivered Service'))
+            ('contract.service', 'Delivered Service'))
 
 
 class Document():
     'Document'
 
-    __name__ = 'ins_product.document'
+    __name__ = 'document.request.line'
     __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(Document, cls).__setup__()
         cls.for_object = copy.copy(cls.for_object)
-        cls.for_object.selection.append(('claim.claim', 'Claim'))
+        cls.for_object.selection.append(('claim', 'Claim'))
         cls.for_object.selection.append(
-            ('contract.delivered_service', 'Delivered Service'))
+            ('contract.service', 'Delivered Service'))
 
 
 class RequestFinder():
     'Request Finder'
 
-    __name__ = 'ins_product.request_finder'
+    __name__ = 'document.receive.request'
     __metaclass__ = PoolMeta
 
     @classmethod
     def allowed_values(cls):
         result = super(RequestFinder, cls).allowed_values()
         result.update({
-            'claim.claim': (
+            'claim': (
                 'Claim', 'name')})
         return result
 
@@ -970,20 +970,20 @@ class RequestFinder():
 class ContactHistory():
     'Contact History'
 
-    __name__ = 'party.contact_history'
+    __name__ = 'party.interaction'
     __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
         super(ContactHistory, cls).__setup__()
         cls.for_object_ref = copy.copy(cls.for_object_ref)
-        cls.for_object_ref.selection.append(['claim.claim', 'Claim'])
+        cls.for_object_ref.selection.append(['claim', 'Claim'])
 
 
 class IndemnificationDisplayer(model.CoopView):
     'Indemnification Displayer'
 
-    __name__ = 'claim.indemnification_displayer'
+    __name__ = 'claim.indemnification.validate.display'
 
     selection = fields.Selection([
         ('nothing', 'Nothing'), ('validate', 'Validate'),
@@ -1007,17 +1007,17 @@ class IndemnificationDisplayer(model.CoopView):
     covered_element = fields.Char('Covered Element', states={'readonly': True})
     claim_number = fields.Char('Claim Number', states={'readonly': True})
     claim = fields.Many2One(
-        'claim.claim', 'Claim', states={'readonly': True})
+        'claim', 'Claim', states={'readonly': True})
     claim_declaration_date = fields.Date('Claim Declaration Date')
 
 
 class IndemnificationSelection(model.CoopView):
     'Indemnification Selection'
 
-    __name__ = 'claim.indemnification_selection'
+    __name__ = 'claim.indemnification.validate.select'
 
     indemnifications = fields.One2Many(
-        'claim.indemnification_displayer', '', 'Indemnifications')
+        'claim.indemnification.validate.display', '', 'Indemnifications')
     domain_string = fields.Char(
         'Domain', states={'invisible': ~Eval('display_domain')},
         on_change=['domain_string', 'indemnifications', 'search_size'])
@@ -1131,12 +1131,12 @@ class IndemnificationSelection(model.CoopView):
 class IndemnificationValidation(Wizard):
     'Indemnification Validation'
 
-    __name__ = 'claim.indemnification_validation'
+    __name__ = 'claim.indemnification.validate'
 
     start_state = 'select_indemnifications'
 
     select_indemnifications = StateView(
-        'claim.indemnification_selection',
+        'claim.indemnification.validate.select',
         'claim.indemnification_selection_form',
         [
             Button('Quit', 'end', 'tryton-cancel'),
@@ -1148,7 +1148,7 @@ class IndemnificationValidation(Wizard):
         default_max_date = datetime.date(today.year, today.month, 1)
         domain_string = 'status: = calculated, start_date: <= %s' % (
             coop_date.get_end_of_period(default_max_date, 'month'))
-        Selector = Pool().get('claim.indemnification_selection')
+        Selector = Pool().get('claim.indemnification.validate.select')
         return {
             'domain_string': domain_string,
             'global_value': 'nothing',
@@ -1168,7 +1168,7 @@ class IndemnificationValidation(Wizard):
             elif elem.selection == 'refuse':
                 to_reject.add(elem.indemnification.id)
                 claims.add(elem.claim.id)
-        Claim = Pool().get('claim.claim')
+        Claim = Pool().get('claim')
         Indemnification = Pool().get('claim.indemnification')
         Indemnification.validate_indemnification(
             Indemnification.browse(to_validate))
@@ -1177,7 +1177,7 @@ class IndemnificationValidation(Wizard):
         for claim in Claim.browse(claims):
             claim.complete_indemnifications()
             Claim.write([claim], {})
-        Selector = Pool().get('claim.indemnification_selection')
+        Selector = Pool().get('claim.indemnification.validate.select')
         self.select_indemnifications.indemnifications = \
             Selector.find_indemnifications(
                 Selector.build_domain(

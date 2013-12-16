@@ -17,7 +17,7 @@ class PartyHealthComplement():
     department = fields.Function(
         fields.Char('Department'),
         'get_department', 'set_void')
-    regime = fields.Many2One('health.regime', 'Regime')
+    regime = fields.Many2One('health.care_system', 'Regime')
     insurance_fund = fields.Many2One('health.insurance_fund', 'Insurance Fund',
         domain=[
             [If(

@@ -2,7 +2,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:commission.commission_rule:"
+msgctxt "error:commission.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -22,359 +22,359 @@ msgctxt "field:account.move,wo_tax_amount:"
 msgid "Total Amount w/o taxes"
 msgstr "Montant total hors Taxes"
 
-msgctxt "field:billing.price_line,com_lines:"
+msgctxt "field:contract.billing.premium,com_lines:"
 msgid "Commission lines"
 msgstr "Lignes de Commissions"
 
-msgctxt "field:billing.price_line,estimated_com:"
+msgctxt "field:contract.billing.premium,estimated_com:"
 msgid "Estimated Commissions"
 msgstr "Commissions estimées"
 
-msgctxt "field:billing.price_line,estimated_wo_com:"
+msgctxt "field:contract.billing.premium,estimated_wo_com:"
 msgid "Estimated w/o coms"
 msgstr "Montant estimé hors Commissions"
 
-msgctxt "field:commission.commission_rule,config_kind:"
+msgctxt "field:commission.rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:commission.commission_rule,create_date:"
+msgctxt "field:commission.rule,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:commission.commission_rule,create_date_:"
+msgctxt "field:commission.rule,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:commission.commission_rule,create_uid:"
+msgctxt "field:commission.rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:commission.commission_rule,end_date:"
+msgctxt "field:commission.rule,end_date:"
 msgid "To Date"
 msgstr "Date de Fin"
 
-msgctxt "field:commission.commission_rule,id:"
+msgctxt "field:commission.rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.commission_rule,must_expand_tree:"
+msgctxt "field:commission.rule,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:commission.commission_rule,offered:"
+msgctxt "field:commission.rule,offered:"
 msgid "Offered"
 msgstr "Offre"
 
-msgctxt "field:commission.commission_rule,rate:"
+msgctxt "field:commission.rule,rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:commission.commission_rule,rec_name:"
+msgctxt "field:commission.rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:commission.commission_rule,rule:"
+msgctxt "field:commission.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:commission.commission_rule,rule_complementary_data:"
+msgctxt "field:commission.rule,rule_complementary_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:commission.commission_rule,start_date:"
+msgctxt "field:commission.rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
 
-msgctxt "field:commission.commission_rule,template:"
+msgctxt "field:commission.rule,template:"
 msgid "Template"
 msgstr "Modèle"
 
-msgctxt "field:commission.commission_rule,template_behaviour:"
+msgctxt "field:commission.rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
-msgctxt "field:commission.commission_rule,view_rec_name:"
+msgctxt "field:commission.rule,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:commission.commission_rule,write_date:"
+msgctxt "field:commission.rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:commission.commission_rule,write_uid:"
+msgctxt "field:commission.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:commission.compensated_option,com_amount:"
+msgctxt "field:contract.option-commission.option,com_amount:"
 msgid "Com Amount"
 msgstr "Montant de la commission"
 
-msgctxt "field:commission.compensated_option,com_option:"
+msgctxt "field:contract.option-commission.option,com_option:"
 msgid "Commission Option"
 msgstr "Option de Commissionnement"
 
-msgctxt "field:commission.compensated_option,create_date:"
+msgctxt "field:contract.option-commission.option,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:commission.compensated_option,create_date_:"
+msgctxt "field:contract.option-commission.option,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:commission.compensated_option,create_uid:"
+msgctxt "field:contract.option-commission.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:commission.compensated_option,currency:"
+msgctxt "field:contract.option-commission.option,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt "field:commission.compensated_option,currency_digits:"
+msgctxt "field:contract.option-commission.option,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:commission.compensated_option,currency_symbol:"
+msgctxt "field:contract.option-commission.option,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:commission.compensated_option,end_date:"
+msgctxt "field:contract.option-commission.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:commission.compensated_option,id:"
+msgctxt "field:contract.option-commission.option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.compensated_option,must_expand_tree:"
+msgctxt "field:contract.option-commission.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:commission.compensated_option,rate:"
+msgctxt "field:contract.option-commission.option,rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:commission.compensated_option,rec_name:"
+msgctxt "field:contract.option-commission.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:commission.compensated_option,start_date:"
+msgctxt "field:contract.option-commission.option,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:commission.compensated_option,subs_option:"
+msgctxt "field:contract.option-commission.option,subs_option:"
 msgid "Subscribed Coverage"
 msgstr "Garantie Souscrite"
 
-msgctxt "field:commission.compensated_option,use_specific_rate:"
+msgctxt "field:contract.option-commission.option,use_specific_rate:"
 msgid "Specific Rate"
 msgstr "Taux Spécifique"
 
-msgctxt "field:commission.compensated_option,write_date:"
+msgctxt "field:contract.option-commission.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:commission.compensated_option,write_uid:"
+msgctxt "field:contract.option-commission.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:commission.component-coverage,component:"
+msgctxt "field:commission.option.description-option.description,component:"
 msgid "Component"
 msgstr "Composante"
 
-msgctxt "field:commission.component-coverage,coverage:"
+msgctxt "field:commission.option.description-option.description,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "field:commission.component-coverage,create_date:"
+msgctxt "field:commission.option.description-option.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:commission.component-coverage,create_date_:"
+msgctxt "field:commission.option.description-option.description,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:commission.component-coverage,create_uid:"
+msgctxt "field:commission.option.description-option.description,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:commission.component-coverage,id:"
+msgctxt "field:commission.option.description-option.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.component-coverage,rec_name:"
+msgctxt "field:commission.option.description-option.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:commission.component-coverage,write_date:"
+msgctxt "field:commission.option.description-option.description,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:commission.component-coverage,write_uid:"
+msgctxt "field:commission.option.description-option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:commission.price_line-com-relation,amount:"
+msgctxt "field:contract.billing.premium-commission.option,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:commission.price_line-com-relation,com_subscribed:"
+msgctxt "field:contract.billing.premium-commission.option,com_subscribed:"
 msgid "Commission Subscribed"
 msgstr "Garantie commissionée"
 
-msgctxt "field:commission.price_line-com-relation,create_date:"
+msgctxt "field:contract.billing.premium-commission.option,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:commission.price_line-com-relation,create_date_:"
+msgctxt "field:contract.billing.premium-commission.option,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:commission.price_line-com-relation,create_uid:"
+msgctxt "field:contract.billing.premium-commission.option,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:commission.price_line-com-relation,id:"
+msgctxt "field:contract.billing.premium-commission.option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:commission.price_line-com-relation,must_expand_tree:"
+msgctxt "field:contract.billing.premium-commission.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:commission.price_line-com-relation,price_line:"
+msgctxt "field:contract.billing.premium-commission.option,price_line:"
 msgid "Price Line"
 msgstr "Ligne de Prime"
 
-msgctxt "field:commission.price_line-com-relation,rec_name:"
+msgctxt "field:contract.billing.premium-commission.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:commission.price_line-com-relation,to_recalculate:"
+msgctxt "field:contract.billing.premium-commission.option,to_recalculate:"
 msgid "Recalculate at billing"
 msgstr "Recalculer à la facturation"
 
-msgctxt "field:commission.price_line-com-relation,write_date:"
+msgctxt "field:contract.billing.premium-commission.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:commission.price_line-com-relation,write_uid:"
+msgctxt "field:contract.billing.premium-commission.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.subscribed_option,commissions:"
+msgctxt "field:contract.option,commissions:"
 msgid "Commissions"
 msgstr "Commissions"
 
-msgctxt "field:contract.subscribed_option,compensated_options:"
+msgctxt "field:contract.option,compensated_options:"
 msgid "Compensated Options"
 msgstr "Options Commissionnées"
 
-msgctxt "field:distribution.dist_network,all_com_plans:"
+msgctxt "field:distribution.network,all_com_plans:"
 msgid "Top Level Commission Plans"
 msgstr "Plans de Commissionnement Hérités"
 
-msgctxt "field:distribution.dist_network,brokers:"
+msgctxt "field:distribution.network,brokers:"
 msgid "Brokers"
 msgstr "Courtiers"
 
-msgctxt "field:distribution.dist_network,childs_brokers:"
+msgctxt "field:distribution.network,childs_brokers:"
 msgid "Sub Level Brokers"
 msgstr "Courtiers du Réseau"
 
-msgctxt "field:distribution.dist_network,commission_plans:"
+msgctxt "field:distribution.network,commission_plans:"
 msgid "Commission Plans"
 msgstr "Plans de Commissionnement"
 
-msgctxt "field:distribution.dist_network,parent_com_plans:"
+msgctxt "field:distribution.network,parent_com_plans:"
 msgid "Top Level Commission Plans"
 msgstr "Plans de Commissionnement Hérités"
 
-msgctxt "field:distribution.dist_network-broker,broker:"
+msgctxt "field:distribution.network-broker,broker:"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "field:distribution.dist_network-broker,create_date:"
+msgctxt "field:distribution.network-broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:distribution.dist_network-broker,create_date_:"
+msgctxt "field:distribution.network-broker,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:distribution.dist_network-broker,create_uid:"
+msgctxt "field:distribution.network-broker,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:distribution.dist_network-broker,dist_network:"
+msgctxt "field:distribution.network-broker,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:distribution.dist_network-broker,id:"
+msgctxt "field:distribution.network-broker,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:distribution.dist_network-broker,must_expand_tree:"
+msgctxt "field:distribution.network-broker,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:distribution.dist_network-broker,rec_name:"
+msgctxt "field:distribution.network-broker,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:distribution.dist_network-broker,write_date:"
+msgctxt "field:distribution.network-broker,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:distribution.dist_network-broker,write_uid:"
+msgctxt "field:distribution.network-broker,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:distribution.dist_network-plan,com_plan:"
+msgctxt "field:distribution.network-commission.plan,com_plan:"
 msgid "Commission Plan"
 msgstr "Plan de Commissionnement"
 
-msgctxt "field:distribution.dist_network-plan,create_date:"
+msgctxt "field:distribution.network-commission.plan,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:distribution.dist_network-plan,create_date_:"
+msgctxt "field:distribution.network-commission.plan,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:distribution.dist_network-plan,create_uid:"
+msgctxt "field:distribution.network-commission.plan,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:distribution.dist_network-plan,dist_network:"
+msgctxt "field:distribution.network-commission.plan,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
-msgctxt "field:distribution.dist_network-plan,id:"
+msgctxt "field:distribution.network-commission.plan,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:distribution.dist_network-plan,rec_name:"
+msgctxt "field:distribution.network-commission.plan,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:distribution.dist_network-plan,write_date:"
+msgctxt "field:distribution.network-commission.plan,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:distribution.dist_network-plan,write_uid:"
+msgctxt "field:distribution.network-commission.plan,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.coverage,commission_rules:"
+msgctxt "field:offered.option.description,commission_rules:"
 msgid "Commission Rules"
 msgstr "Règles de Commissionnement"
 
-msgctxt "field:offered.coverage,coverages:"
+msgctxt "field:offered.option.description,coverages:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "field:offered.coverage,is_loan:"
+msgctxt "field:offered.option.description,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
@@ -390,43 +390,43 @@ msgctxt "field:offered.product,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:party.broker,create_date:"
+msgctxt "field:broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:party.broker,create_date_:"
+msgctxt "field:broker,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:party.broker,create_uid:"
+msgctxt "field:broker,create_uid:"
 msgid "Create User"
 msgstr "Create User"
 
-msgctxt "field:party.broker,id:"
+msgctxt "field:broker,id:"
 msgid "ID"
 msgstr " "
 
-msgctxt "field:party.broker,must_expand_tree:"
+msgctxt "field:broker,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:party.broker,party:"
+msgctxt "field:broker,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:party.broker,rec_name:"
+msgctxt "field:broker,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:party.broker,reference:"
+msgctxt "field:broker,reference:"
 msgid "Reference"
 msgstr "Référence"
 
-msgctxt "field:party.broker,write_date:"
+msgctxt "field:broker,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:party.broker,write_uid:"
+msgctxt "field:broker,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -442,27 +442,27 @@ msgctxt "field:party.party,is_broker:"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "model:commission.commission_rule,name:"
+msgctxt "model:commission.rule,name:"
 msgid "Commission Rule"
 msgstr "Règle de Commissionnement"
 
-msgctxt "model:commission.compensated_option,name:"
+msgctxt "model:contract.option-commission.option,name:"
 msgid "Compensated Option"
 msgstr "Option Commissionnée"
 
-msgctxt "model:commission.component-coverage,name:"
+msgctxt "model:commission.option.description-option.description,name:"
 msgid "Relation Commission Component and Coverage"
 msgstr "Relation Composante de Com - Garantie"
 
-msgctxt "model:commission.price_line-com-relation,name:"
+msgctxt "model:contract.billing.premium-commission.option,name:"
 msgid "Price line to Commission relation"
 msgstr "Relation Ligne de Prime - Commission"
 
-msgctxt "model:distribution.dist_network-broker,name:"
+msgctxt "model:distribution.network-broker,name:"
 msgid "Relation Distribution Network - Broker"
 msgstr "Relation Réseau de Distrib - Courtier"
 
-msgctxt "model:distribution.dist_network-plan,name:"
+msgctxt "model:distribution.network-commission.plan,name:"
 msgid "Relation Distribution Network - Commission Plan"
 msgstr "Relation Réseau de Distrib - Plan de Com"
 
@@ -506,7 +506,7 @@ msgctxt "model:ir.ui.menu,name:menu_plan_form"
 msgid "Commission Plans"
 msgstr "Plans de Commissionnement"
 
-msgctxt "model:party.broker,name:"
+msgctxt "model:broker,name:"
 msgid "Broker"
 msgstr "Courtier"
 
@@ -514,51 +514,51 @@ msgctxt "model:tag,name:tag_commission"
 msgid "Commission"
 msgstr "Commission"
 
-msgctxt "selection:commission.commission_rule,config_kind:"
+msgctxt "selection:commission.rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:commission.commission_rule,config_kind:"
+msgctxt "selection:commission.rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:commission.commission_rule,offered:"
+msgctxt "selection:commission.rule,offered:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "selection:commission.commission_rule,offered:"
+msgctxt "selection:commission.rule,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "selection:commission.commission_rule,offered:"
+msgctxt "selection:commission.rule,offered:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:commission.commission_rule,template_behaviour:"
+msgctxt "selection:commission.rule,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:commission.commission_rule,template_behaviour:"
+msgctxt "selection:commission.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:commission.commission_rule,template_behaviour:"
+msgctxt "selection:commission.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:ins_contract.management_role,kind:"
+msgctxt "selection:contract-agreement,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_contract.management_role,kind:"
+msgctxt "selection:contract-agreement,kind:"
 msgid "Business Provider"
 msgstr "Apporteur d'affaires"
 
-msgctxt "selection:ins_contract.management_role,kind:"
+msgctxt "selection:contract-agreement,kind:"
 msgid "Management Delegation"
 msgstr "Délégation de gestion"
 
-msgctxt "selection:offered.coverage,kind:"
+msgctxt "selection:offered.option.description,kind:"
 msgid "Commission"
 msgstr "Commission"
 
@@ -578,47 +578,47 @@ msgctxt "selection:offered.product,kind:"
 msgid "Commission"
 msgstr "Commission"
 
-msgctxt "view:commission.commission_rule:"
+msgctxt "view:commission.rule:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:commission.commission_rule:"
+msgctxt "view:commission.rule:"
 msgid "Commission rule"
 msgstr "Règle de Commissionnement"
 
-msgctxt "view:commission.compensated_option:"
+msgctxt "view:contract.option-commission.option:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:commission.compensated_option:"
+msgctxt "view:contract.option-commission.option:"
 msgid "Compensated Option"
 msgstr "Option Commissionnée"
 
-msgctxt "view:commission.price_line-com-relation:"
+msgctxt "view:contract.billing.premium-commission.option:"
 msgid "Com Line"
 msgstr "Ligne de Commission"
 
-msgctxt "view:commission.price_line-com-relation:"
+msgctxt "view:contract.billing.premium-commission.option:"
 msgid "Com Lines"
 msgstr "Lignes de Commission"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Commissions"
 msgstr "Commissions"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Compensated Options"
 msgstr "Options Commissionnées"
 
-msgctxt "view:contract.subscribed_option:"
+msgctxt "view:contract.option:"
 msgid "Coverages"
 msgstr "Garanties"
 
-msgctxt "view:distribution.dist_network:"
+msgctxt "view:distribution.network:"
 msgid "Commissioning"
 msgstr "Commissionnement"
 
-msgctxt "view:offered.coverage:"
+msgctxt "view:offered.option.description:"
 msgid "Commissioning"
 msgstr "Commissionnement"
 

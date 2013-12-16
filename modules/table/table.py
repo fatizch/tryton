@@ -77,7 +77,7 @@ def dimension_state(kind):
 class TableDefinition(ModelSQL, ModelView):
     "Table Definition"
 
-    __name__ = 'table.table_def'
+    __name__ = 'table'
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
@@ -135,22 +135,22 @@ class TableDefinition(ModelSQL, ModelView):
         KIND, 'Dimension Kind 4',
         states={'readonly': Bool(Eval('dimension4'))})
     dimension1 = fields.One2ManyDomain(
-        'table.table_dimension', 'definition', 'Dimension 1',
+        'table.dimension.value', 'definition', 'Dimension 1',
         domain=[('type', '=', 'dimension1')],
         states={'invisible': ~Eval('dimension_kind1')},
         depends=['dimension_kind1'])
     dimension2 = fields.One2ManyDomain(
-        'table.table_dimension', 'definition', 'Dimension 2',
+        'table.dimension.value', 'definition', 'Dimension 2',
         domain=[('type', '=', 'dimension2')],
         states={'invisible': ~Eval('dimension_kind2')},
         depends=['dimension_kind2'])
     dimension3 = fields.One2ManyDomain(
-        'table.table_dimension', 'definition', 'Dimension 3',
+        'table.dimension.value', 'definition', 'Dimension 3',
         domain=[('type', '=', 'dimension3')],
         states={'invisible': ~Eval('dimension_kind3')},
         depends=['dimension_kind4'])
     dimension4 = fields.One2ManyDomain(
-        'table.table_dimension', 'definition', 'Dimension 4',
+        'table.dimension.value', 'definition', 'Dimension 4',
         domain=[('type', '=', 'dimension4')],
         states={'invisible': ~Eval('dimension_kind4')},
         depends=['dimension_kind4'])
@@ -175,7 +175,7 @@ class TableDefinition(ModelSQL, ModelView):
             'invisible': ~Eval('dimension_kind4'),
         })
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
-    cells = fields.One2Many('table.table_cell', 'definition', 'Cells')
+    cells = fields.One2Many('table.cell', 'definition', 'Cells')
     number_of_digits = fields.Integer('Number of Digits', states={
             'invisible': Eval('type_', '') != 'numeric'})
 
@@ -267,7 +267,7 @@ class TableDefinition(ModelSQL, ModelView):
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
             field_value, values, created, relink):
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         if (hasattr(good_instance, 'id') and good_instance.id):
             table_id = good_instance.id
             Cell.delete(Cell.search([('definition', '=', table_id)]))
@@ -290,7 +290,7 @@ class TableDefinition(ModelSQL, ModelView):
             else:
                 for elem in xrange(dimensions[my_dim - 1]):
                     relink_template.append(('dimension%s' % my_dim, (
-                                'table.table_dimension', (
+                                'table.dimension.value', (
                                     instance_key, 'dimension%s' % my_dim,
                                     elem + 1))))
                     locked.append(elem + 1)
@@ -301,7 +301,7 @@ class TableDefinition(ModelSQL, ModelView):
         if table_id:
             template = []
         else:
-            template = [('definition', ('table.table_def',
+            template = [('definition', ('table',
                    instance_key))]
         lock_dim_and_import(locks, template)
 
@@ -319,7 +319,7 @@ class TableDefinition(ModelSQL, ModelView):
     @classmethod
     def write(cls, records, values):
         pool = Pool()
-        TableDefinitionDimension = pool.get('table.table_dimension')
+        TableDefinitionDimension = pool.get('table.dimension.value')
         super(TableDefinition, cls).write(records, values)
         if any(k for k in values if k.startswith('dimension_order')):
             dimensions = [d for r in records for i in xrange(DIMENSION_MAX)
@@ -380,7 +380,7 @@ class TableDefinition(ModelSQL, ModelView):
         pass
 
     def get_index_value(self, at_date=None):
-        Cell = Pool().get('table.table_cell')
+        Cell = Pool().get('table.cell')
         if not at_date:
             at_date = utils.today()
         cell = Cell.get_cell(self, (at_date))
@@ -398,7 +398,7 @@ class TableDefinition(ModelSQL, ModelView):
 class TableDefinitionDimension(ModelSQL, ModelView):
     "Table Definition Dimension"
 
-    __name__ = 'table.table_dimension'
+    __name__ = 'table.dimension.value'
     _order_name = 'rec_name'
 
     sequence = fields.Integer(
@@ -417,7 +417,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
                             'dimension_order4')))) == 'alpha')},
         depends=['type'])
     definition = fields.Many2One(
-        'table.table_def', 'Definition',
+        'table', 'Definition',
         required=True, ondelete='CASCADE')
     type = fields.Selection(
         [
@@ -554,12 +554,12 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
 class TableCell(ModelSQL, ModelView):
     "Cell"
-    __name__ = 'table.table_cell'
+    __name__ = 'table.cell'
     definition = fields.Many2One(
-        'table.table_def', 'Definition',
+        'table', 'Definition',
         required=True)
     dimension1 = fields.Many2One(
-        'table.table_dimension',
+        'table.dimension.value',
         'Dimension 1', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -567,7 +567,7 @@ class TableCell(ModelSQL, ModelView):
         ],
         depends=['definition'])
     dimension2 = fields.Many2One(
-        'table.table_dimension',
+        'table.dimension.value',
         'Dimension 2', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -575,7 +575,7 @@ class TableCell(ModelSQL, ModelView):
         ],
         depends=['definition'])
     dimension3 = fields.Many2One(
-        'table.table_dimension',
+        'table.dimension.value',
         'Dimension 3', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -583,7 +583,7 @@ class TableCell(ModelSQL, ModelView):
         ],
         depends=['definition'])
     dimension4 = fields.Many2One(
-        'table.table_dimension',
+        'table.dimension.value',
         'Dimension 4', ondelete='CASCADE',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -608,11 +608,11 @@ class TableCell(ModelSQL, ModelView):
     @classmethod
     def fields_get(cls, fields_names=None):
         pool = Pool()
-        TableDefinition = pool.get('table.table_def')
+        TableDefinition = pool.get('table')
         result = super(TableCell, cls).fields_get(fields_names=fields_names)
-        if Transaction().context.get('table.table_def') and 'value' in result:
+        if Transaction().context.get('table') and 'value' in result:
             table_definition = \
-                TableDefinition(Transaction().context['table.table_def'])
+                TableDefinition(Transaction().context['table'])
             result['value']['type'] = table_definition.type_
             if table_definition.type_ == 'numeric':
                 result['value']['digits'] = (12,
@@ -666,7 +666,7 @@ class TableCell(ModelSQL, ModelView):
     @classmethod
     def read(cls, ids, fields_names=None):
         pool = Pool()
-        TableDefinition = pool.get('table.table_def')
+        TableDefinition = pool.get('table')
         to_remove = []
         if fields_names and 'definition' not in fields_names:
             fields_names = fields_names[:]
@@ -688,8 +688,8 @@ class TableCell(ModelSQL, ModelView):
     @classmethod
     def get_cell(cls, definition, *values):
         pool = Pool()
-        Definition = pool.get('table.table_def')
-        Dimension = pool.get('table.table_dimension')
+        Definition = pool.get('table')
+        Dimension = pool.get('table.dimension.value')
 
         if not isinstance(definition, Definition):
             definition = Definition.get(definition)
@@ -759,10 +759,10 @@ class TableOpen2DAskDimensions(ModelView):
     "Table Open 2D Ask Dimensions"
     __name__ = 'table.2d.open.ask_dimensions'
     definition = fields.Many2One(
-        'table.table_def', 'Definition',
+        'table', 'Definition',
         readonly=True)
     dimension3 = fields.Many2One(
-        'table.table_dimension',
+        'table.dimension.value',
         'Dimension 3',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -775,7 +775,7 @@ class TableOpen2DAskDimensions(ModelView):
         depends=['definition', 'dimension3_required'])
     dimension3_required = fields.Boolean('Dimension 3 Required', readonly=True)
     dimension4 = fields.Many2One(
-        'table.table_dimension',
+        'table.dimension.value',
         'Dimension 4',
         domain=[
             ('definition', '=', Eval('definition')),
@@ -794,7 +794,7 @@ class TableOpen2DAskDimensions(ModelView):
 
     @staticmethod
     def default_dimension_required(dimension):
-        TableDefinition = Pool().get('table.table_def')
+        TableDefinition = Pool().get('table')
         definition_id = Transaction().context.get('active_id')
         if definition_id:
             definition = TableDefinition(definition_id)
@@ -814,7 +814,7 @@ class TableOpen2DAskDimensions(ModelView):
         'Dynamically use the current table dimension names'
         result = super(TableOpen2DAskDimensions, cls).fields_view_get(view_id,
             view_type)
-        TableDefinition = Pool().get('table.table_def')
+        TableDefinition = Pool().get('table')
         definition_id = Transaction().context.get('active_id')
         if definition_id:
             definition = TableDefinition(definition_id)
@@ -836,7 +836,7 @@ class TableOpen2D(Wizard):
     open_ = StateAction('table.act_table_2d_relate_form')
 
     def transition_start(self):
-        TableDefinition = Pool().get('table.table_def')
+        TableDefinition = Pool().get('table')
         definition_id = int(Transaction().context['active_id'])
         if definition_id != -1:
             definition = TableDefinition(definition_id)
@@ -849,7 +849,7 @@ class TableOpen2D(Wizard):
 
     def do_open_(self, action):
         context = {
-            'table.table_def': Transaction().context['active_id'],
+            'table': Transaction().context['active_id'],
         }
         if getattr(self.ask_dimensions, 'dimension3', None):
             context['dimension3'] = self.ask_dimensions.dimension3.id
@@ -863,7 +863,7 @@ class Table2DDict(dict):
 
     def __getitem__(self, key):
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
+        TableCell = pool.get('table.cell')
         if key.startswith('col'):
             field = copy.copy(TableCell.value)
             field.string = ''
@@ -878,9 +878,9 @@ class Table2DDict(dict):
     def keys(self):
         pool = Pool()
         TableDefinitionDimension = pool.get(
-            'table.table_dimension')
+            'table.dimension.value')
         definition_id = int(
-            Transaction().context.get('table.table_def', -1))
+            Transaction().context.get('table', -1))
         dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
@@ -899,7 +899,7 @@ class Table2D(ModelSQL, ModelView):
     __name__ = 'table.2d'
 
     row = fields.Many2One(
-        'table.table_dimension', 'Row',
+        'table.dimension.value', 'Row',
         readonly=True)
 
     @classmethod
@@ -919,14 +919,14 @@ class Table2D(ModelSQL, ModelView):
         if not CONFIG['db_type'] == 'postgresql':
             return True
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
-        TableDefinition = pool.get('table.table_def')
+        TableCell = pool.get('table.cell')
+        TableDefinition = pool.get('table')
         TableDefinitionDimension = pool.get(
-            'table.table_dimension')
+            'table.dimension.value')
         context = Transaction().context
         cursor = Transaction().cursor
         definition_id = int(
-            Transaction().context.get('table.table_def', -1))
+            Transaction().context.get('table', -1))
         if definition_id != -1:
             definition = TableDefinition(definition_id)
             if (not definition.dimension_kind1
@@ -989,13 +989,13 @@ class Table2D(ModelSQL, ModelView):
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
-        TableDefinition = pool.get('table.table_def')
+        TableCell = pool.get('table.cell')
+        TableDefinition = pool.get('table')
         TableDefinitionDimension = pool.get(
-            'table.table_dimension')
+            'table.dimension.value')
 
         definition_id = int(
-            Transaction().context.get('table.table_def', -1))
+            Transaction().context.get('table', -1))
         definition = TableDefinition(definition_id)
         value_field = TableCell.fields_get(['value'])['value']
         dimensions2 = TableDefinitionDimension.search([
@@ -1043,11 +1043,11 @@ class Table2D(ModelSQL, ModelView):
     @classmethod
     def write(cls, rows, values):
         pool = Pool()
-        TableCell = pool.get('table.table_cell')
+        TableCell = pool.get('table.cell')
         super(Table2D, cls).write(rows, values)
         dim1_ids = [r.id for r in rows]
         definition_id = int(
-            Transaction().context.get('table.table_def', -1))
+            Transaction().context.get('table', -1))
         to_creates = []
         for col, value in values.iteritems():
             dim2_id = int(col[3:])
@@ -1080,11 +1080,11 @@ class Table2D(ModelSQL, ModelView):
     @classmethod
     def read(cls, ids, fields_names=None):
         pool = Pool()
-        TableDefinition = pool.get('table.table_def')
-        TableCell = pool.get('table.table_cell')
+        TableDefinition = pool.get('table')
+        TableCell = pool.get('table.cell')
         result = super(Table2D, cls).read(ids, fields_names=fields_names)
         definition_id = int(
-            Transaction().context.get('table.table_def', -1))
+            Transaction().context.get('table', -1))
         definition = TableDefinition(definition_id)
         for value in result:
             for field in value:
@@ -1097,7 +1097,7 @@ class Table2D(ModelSQL, ModelView):
 class DimensionDisplayer(ModelView):
     'Dimension Displayer'
 
-    __name__ = 'table.dimension_displayer'
+    __name__ = 'table.manage_dimension.show.dimension'
 
     name = fields.Char('Name')
     order = fields.Selection(ORDER, 'Order')
@@ -1106,10 +1106,10 @@ class DimensionDisplayer(ModelView):
         [('flat_file', 'Flat data'), ('boolean', 'Boolean')], 'Input Mode',
         on_change=['values', 'order', 'input_mode', 'kind', 'date_format',
             'input_mode'], states={'invisible': Eval('kind', '') != 'value'})
-    values = fields.One2Many('table.table_dimension', None, 'Dimension Values',
+    values = fields.One2Many('table.dimension.value', None, 'Dimension Values',
         on_change=['values', 'order', 'kind', 'date_format', 'input_mode'])
     converted_text = fields.Text('Converted Text')
-    table = fields.Many2One('table.table_def', 'Table', states={
+    table = fields.Many2One('table', 'Table', states={
             'invisible': True})
     cur_dimension = fields.Integer('Current Dimension', states={
             'invisible': True})
@@ -1243,7 +1243,7 @@ class ManageDimensionGeneric(Wizard):
     'Manage Dimension'
 
     start_state = 'dimension_management'
-    dimension_management = StateView('table.dimension_displayer',
+    dimension_management = StateView('table.manage_dimension.show.dimension',
         'table.dimension_displayer_form', [
             Button('Exit', 'end', 'tryton-cancel'),
             Button('Apply', 'apply_', 'tryton-ok', True),
@@ -1270,9 +1270,9 @@ class ManageDimensionGeneric(Wizard):
         raise NotImplementedError
 
     def default_dimension_management(self, data):
-        TableDef = Pool().get('table.table_def')
-        TableDimension = Pool().get('table.table_dimension')
-        Displayer = Pool().get('table.dimension_displayer')
+        TableDef = Pool().get('table')
+        TableDimension = Pool().get('table.dimension.value')
+        Displayer = Pool().get('table.manage_dimension.show.dimension')
         selected_table = TableDef(Transaction().context.get('active_id'))
         selected_dimension = self.get_my_dimension()
 
@@ -1316,7 +1316,7 @@ class ManageDimensionGeneric(Wizard):
             new_values.split('\n'))
         if existing_values == new_values:
             return 'dimension_management'
-        Dimension = Pool().get('table.table_dimension')
+        Dimension = Pool().get('table.dimension.value')
         Dimension.delete(Dimension.search([
                     ('type', '=', 'dimension%s' % idx),
                     ('definition', '=', the_table.id)]))
@@ -1349,7 +1349,7 @@ class ManageDimensionGeneric(Wizard):
         self.transition_apply_()
         table_id = Transaction().context.get('active_id')
         data = {
-            'model': 'table.table_def',
+            'model': 'table',
             'id': table_id,
             'ids': [table_id],
             }
@@ -1358,7 +1358,7 @@ class ManageDimensionGeneric(Wizard):
     def do_next_dim_action(self, action):
         table_id = Transaction().context.get('active_id')
         data = {
-            'model': 'table.table_def',
+            'model': 'table',
             'id': table_id,
             'ids': [table_id],
             }
@@ -1368,7 +1368,7 @@ class ManageDimensionGeneric(Wizard):
 class ManageDimension1(ManageDimensionGeneric):
     'Manage Dimension 1'
 
-    __name__ = 'table.manage_dimension_1'
+    __name__ = 'table.manage_dimension.show_dimension_1'
 
     def get_my_dimension(self):
         return 1
@@ -1377,7 +1377,7 @@ class ManageDimension1(ManageDimensionGeneric):
 class ManageDimension2(ManageDimensionGeneric):
     'Manage Dimension 2'
 
-    __name__ = 'table.manage_dimension_2'
+    __name__ = 'table.manage_dimension.show_dimension_2'
 
     def get_my_dimension(self):
         return 2
@@ -1386,7 +1386,7 @@ class ManageDimension2(ManageDimensionGeneric):
 class ManageDimension3(ManageDimensionGeneric):
     'Manage Dimension 3'
 
-    __name__ = 'table.manage_dimension_3'
+    __name__ = 'table.manage_dimension.show_dimension_3'
 
     def get_my_dimension(self):
         return 3
@@ -1395,7 +1395,7 @@ class ManageDimension3(ManageDimensionGeneric):
 class ManageDimension4(ManageDimensionGeneric):
     'Manage Dimension 4'
 
-    __name__ = 'table.manage_dimension_4'
+    __name__ = 'table.manage_dimension.show_dimension_4'
 
     def get_my_dimension(self):
         return 4
@@ -1404,10 +1404,10 @@ class ManageDimension4(ManageDimensionGeneric):
 class TableCreation(Wizard):
     'Create New Table'
 
-    __name__ = 'table.create_table'
+    __name__ = 'table.create'
 
     start_state = 'new_table'
-    new_table = StateView('table.table_def', 'table.table_basic_data_form', [
+    new_table = StateView('table', 'table.table_basic_data_form', [
             Button('Exit', 'end', 'tryton-cancel'),
             Button('Edit Dimension 1', 'edit_dim_1', 'tryton-go-next')])
     edit_dim_1 = StateTransition()
@@ -1419,7 +1419,7 @@ class TableCreation(Wizard):
 
     def do_launch_edition(self, action):
         data = {
-            'model': 'table.table_def',
+            'model': 'table',
             'id': self.new_table.id,
             'ids': [self.new_table.id],
             }

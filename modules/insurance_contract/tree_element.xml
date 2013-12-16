@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data skiptest="1">
-        <record model="rule_engine.tree_element" id="te_relation_number">
+        <record model="rule_engine.function" id="te_relation_number">
             <field name="description">Numéro de la Relation</field>
             <field name="name">_re_relation_number</field>
-            <field name="namespace">contract.rule_sets</field>
+            <field name="namespace">rule_engine.runtime</field>
             <field name="type">function</field>
             <field name="parent" ref="insurance_product.dossier_donnees_couverture"/>
             <field name="translated_technical_name">numero_relation</field>

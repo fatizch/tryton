@@ -37,7 +37,7 @@ class Product():
 class Coverage():
     'Coverage'
 
-    __name__ = 'offered.coverage'
+    __name__ = 'offered.option.description'
 
     is_rating_by_fare_class = fields.Function(
         fields.Boolean('Rating by Fare Class', states={'invisible': True}),
@@ -45,7 +45,7 @@ class Coverage():
     use_rates = fields.Function(
         fields.Boolean('Use Rates', states={'invisible': True}),
         'get_use_rates')
-    rating_rules = fields.One2Many('collective.rating_rule', 'offered',
+    rating_rules = fields.One2Many('billing.premium.rate.rule', 'offered',
         'Rating Rules', states={'invisible': ~Eval('is_group')})
 
     def get_rating_by_fare_class(self, name):
@@ -63,7 +63,7 @@ class Coverage():
 class FareClass(model.CoopSQL, model.CoopView):
     'Fare Class'
 
-    __name__ = 'collective.fare_class'
+    __name__ = 'fare_class'
 
     code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
     name = fields.Char('Name')
@@ -77,11 +77,11 @@ class FareClass(model.CoopSQL, model.CoopView):
 class FareClassGroup(model.CoopSQL, model.CoopView):
     'Fare Class Group'
 
-    __name__ = 'collective.fare_class_group'
+    __name__ = 'fare_class.group'
 
     code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
     name = fields.Char('Name')
-    fare_classes = fields.Many2Many('collective.fare_class_group-fare_class',
+    fare_classes = fields.Many2Many('fare_class.group-fare_class',
         'group', 'fare_class', 'Fare Classes')
 
     def on_change_with_code(self):
@@ -93,25 +93,25 @@ class FareClassGroup(model.CoopSQL, model.CoopView):
 class FareClassGroupFareClassRelation(model.CoopSQL):
     'Relation between fare class group and fare class'
 
-    __name__ = 'collective.fare_class_group-fare_class'
+    __name__ = 'fare_class.group-fare_class'
 
-    group = fields.Many2One('collective.fare_class_group', 'Group',
+    group = fields.Many2One('fare_class.group', 'Group',
         ondelete='CASCADE')
-    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+    fare_class = fields.Many2One('fare_class', 'Fare Class',
         ondelete='RESTRICT')
 
 
 class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     'Collective Rating Rule'
 
-    __name__ = 'collective.rating_rule'
+    __name__ = 'billing.premium.rate.rule'
 
     rating_kind = fields.Selection(
         [('tranche', 'by Tranche'), ('fare_class', 'by Fare Class')],
         'Rating Kind', states={'readonly': ~~Eval('sub_rating_rules')})
-    sub_rating_rules = fields.One2Many('collective.sub_rating_rule',
+    sub_rating_rules = fields.One2Many('billing.premium.rate.rule.line',
         'main_rating_rule', 'Sub Rating Rules')
-    index = fields.Many2One('table.table_def', 'Index',
+    index = fields.Many2One('table', 'Index',
         domain=[
             ('dimension_kind1', '=', 'range-date'),
             ('dimension_kind2', '=', None),
@@ -158,20 +158,20 @@ class CollectiveRatingRule(business_rule.BusinessRuleRoot, model.CoopSQL):
 class SubRatingRule(model.CoopView, model.CoopSQL):
     'Sub Rating Rule'
 
-    __name__ = 'collective.sub_rating_rule'
+    __name__ = 'billing.premium.rate.rule.line'
 
-    main_rating_rule = fields.Many2One('collective.rating_rule',
+    main_rating_rule = fields.Many2One('billing.premium.rate.rule',
         'Main Rating Rule', ondelete='CASCADE')
-    tranche = fields.Many2One('tranche.tranche', 'Tranche',
+    tranche = fields.Many2One('salary_range', 'Tranche',
         states={'invisible': Eval('_parent_main_rating_rule', {}).get(
                 'rating_kind', '') != 'tranche'}, ondelete='RESTRICT')
-    fare_class_group = fields.Many2One('collective.fare_class_group',
+    fare_class_group = fields.Many2One('fare_class.group',
         'Fare Class Group',
         states={'invisible': Eval('_parent_main_rating_rule', {}).get(
                     'rating_kind', '') != 'fare_class'}, ondelete='RESTRICT',
         domain=[('fare_classes', '=', Eval('fare_class'))],
         depends=['fare_class'])
-    fare_class = fields.Many2One('collective.fare_class', 'Fare Class',
+    fare_class = fields.Many2One('fare_class', 'Fare Class',
         states={'invisible': Eval('_parent_main_rating_rule', {}).get(
                     'rating_kind', '') != 'fare_class'},
         ondelete='RESTRICT')
