@@ -681,9 +681,6 @@ class ExportImportMixin(Model):
         for k, v in created.iteritems():
             CurModel = pool.get(k)
             CurModel._post_import([elem for elem in v.itervalues()])
-        for k, v in created.iteritems():
-            CurModel = pool.get(k)
-            CurModel._validate([elem for elem in v.itervalues()])
 
     @classmethod
     def import_json(cls, values):
