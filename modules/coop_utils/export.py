@@ -683,6 +683,21 @@ class ExportImportMixin(Model):
             CurModel._post_import([elem for elem in v.itervalues()])
 
     @classmethod
+    def _import_must_validate(cls):
+        return False
+
+    @classmethod
+    def _import_validate(cls, created):
+        pool = Pool()
+        for k, v in created.iteritems():
+            CurModel = pool.get(k)
+            if not CurModel._import_must_validate():
+                continue
+            logging.getLogger('export_import').debug('Validating %s models'
+                % CurModel.__name__)
+            CurModel._validate(v)
+
+    @classmethod
     def import_json(cls, values):
         with Transaction().set_user(0), Transaction().set_context(
                 company=None), Transaction().set_context(__importing__=True):
