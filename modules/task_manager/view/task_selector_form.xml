@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Task Selector" col="2">
   <group id="tasks" col="1" yexpand="1" yfill="1">
-    <field name="tasks" yexpand="1" yfill="1" view_ids="task_manager.process_log_priority_tree"/>
+    <field name="tasks" yexpand="1" yfill="1" view_ids="task_manager.process_log_priority_view_list"/>
     <field name="selected_task"/>
   </group>
   <group id="graphs" col="2" yexpand="1" yfill="1" xexpand="0" xfill="0">
