@@ -15,29 +15,23 @@ __all__ = [
 RIB_LENGTH = 23
 
 
-class BankAccountNumber():
-    'Bank account Number'
-
+class BankAccountNumber:
     __name__ = 'bank.account.number'
 
     bank_code = fields.Function(fields.Char('Bank Code', size=5,
             states={'invisible': Eval('type') != 'rib'},
-            depends=['type'],
-            on_change=['bank_code']),
+            depends=['type'], on_change=['bank_code']),
         'get_sub_rib')
     branch_code = fields.Function(fields.Char('Branch Code', size=5,
             states={'invisible': Eval('type') != 'rib'},
-            depends=['type'],
-            on_change=['branch_code', 'bank_code']),
+            depends=['type'], on_change=['branch_code', 'bank_code']),
         'get_sub_rib')
     account_number = fields.Function(fields.Char('Account Number', size=11,
-            states={'invisible': Eval('type') != 'rib'},
-            depends=['type'],
+            states={'invisible': Eval('type') != 'rib'}, depends=['type'],
             on_change=['account_number', 'branch_code', 'bank_code']),
         'get_sub_rib')
     key = fields.Function(fields.Char('Key', size=2,
-            states={'invisible': Eval('type') != 'rib'},
-            depends=['type'],
+            states={'invisible': Eval('type') != 'rib'}, depends=['type'],
             on_change=['key', 'bank_code', 'branch_code', 'account_number']),
         'get_sub_rib')
 
@@ -143,36 +137,6 @@ class BankAccountNumber():
             if self.number and the_dict:
                 return the_dict[name]
         return ''
-
-    @classmethod
-    def set_sub_rib(cls, bank_account_nbs, name, value):
-        pass
-        # for nb in bank_account_nbs:
-        #     print nb.type, nb.number
-        #     if nb.type != 'rib':
-        #         continue
-        #     if not nb.number or len(nb.number) < RIB_LENGTH:
-        #         nb.number = '0' * RIB_LENGTH
-        #     if name == 'bank_code':
-        #         nb.number = value + nb.number[5:RIB_LENGTH]
-        #     elif name == 'branch_code':
-        #         nb.number = nb.number[0:5] + value + nb.number[10:RIB_LENGTH]
-        #     elif name == 'account_number':
-        #         nb.number = nb.number[0:10] + value + \
-        #             nb.number[21:RIB_LENGTH]
-        #     elif name == 'key':
-        #         nb.number = nb.number[0:21] + value
-        #     cls.write([nb], {'number': nb.number})
-
-    def on_change_with_number(self, name=None):
-        pass
-        # if self.type != 'rib':
-        #     return self.number
-        # res = coop_string.zfill(self, 'bank_code',)
-        # res += coop_string.zfill(self, 'branch_code')
-        # res += coop_string.zfill(self, 'account_number')
-        # res += coop_string.zfill(self, 'key')
-        # return res
 
     def on_change_bank_code(self):
         return {'number': self.bank_code, 'branch_code': '',
