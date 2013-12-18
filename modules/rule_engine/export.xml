@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-    <data>
-        <record model="ir.ui.view" id="export_package_view_form">
-            <field name="model">ir.export_package</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="coop_utils.export_package_form"/>
-            <field name="name">export_package_form</field>
-        </record>
-    </data>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Export Package -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="export_package_view_form">
+      <field name="model">ir.export_package</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="coop_utils.export_package_form"/>
+      <field name="name">export_package_form</field>
+    </record>
+  </data>
 </tryton>
