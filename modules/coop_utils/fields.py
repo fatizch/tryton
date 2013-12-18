@@ -1,3 +1,4 @@
+import logging
 from itertools import chain
 
 from trytond.model import fields as tryton_fields
@@ -55,7 +56,18 @@ class Reference(tryton_fields.Reference):
 
 
 class Many2One(tryton_fields.Many2One):
-    pass
+    def __init__(self, model_name, string='', left=None, right=None,
+            ondelete=None, datetime_field=None, help='', required=False,
+            readonly=False, domain=None, states=None, select=False,
+            on_change=None, on_change_with=None, depends=None,
+            context=None, loading='eager'):
+        if ondelete is None:
+            logging.getLogger('modules').warning('Ondelete is not explicitely '
+                'set for field %s' % string)
+            ondelete = 'SET NULL'
+        return super(Many2One, self).__init__(model_name, string, left, right,
+            ondelete, datetime_field, help, required, readonly, domain, states,
+            select, on_change, on_change_with, depends, context, loading)
 
 
 class One2Many(tryton_fields.One2Many):
