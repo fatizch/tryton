@@ -2,6 +2,7 @@ import traceback
 import sys
 import copy
 import datetime
+import collections
 import logging
 try:
     import simplejson as json
@@ -101,10 +102,10 @@ class ExportImportMixin(Model):
         values = ModelData.search([
                 ('model', '=', cls.__name__),
                 ('db_id', 'in', [x.id for x in objects])])
-        # TODO : What do we do if some ids do not have a match ?
-        result = dict([(elem.id, '') for elem in objects])
-        return result.update(
+        result = collections.defaultdict(lambda: '')
+        result.update(
             dict([(x.db_id, '%s.%s' % (x.module, x.fs_id)) for x in values]))
+        return result
 
     @classmethod
     def search_xml_id(cls, name, clause):
