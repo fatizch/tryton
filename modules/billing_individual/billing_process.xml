@@ -2,7 +2,7 @@
 <tryton>
   <data>
     <!--################################################################-->
-    <!--                     Bill Parameters View                       -->
+    <!--                     Contract Do Billing Parameters View                       -->
     <!--################################################################-->
     <record model="ir.ui.view" id="bill_parameters_form">
       <field name="model">contract.do_billing.parameters</field>

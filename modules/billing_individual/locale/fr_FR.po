@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -212,7 +212,7 @@ msgid "Payment Mode"
 msgstr "Mode de Paiement"
 
 msgctxt "field:billing.payment.method,payment_rule:"
-msgid "Payment Rule"
+msgid "Payment Term"
 msgstr "Règle de paiement"
 
 msgctxt "field:billing.payment.method,rec_name:"
@@ -324,7 +324,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:billing.payment.term-fee,payment_rule:"
-msgid "Payment Rule"
+msgid "Payment Term"
 msgstr "Règle de paiement"
 
 msgctxt "field:billing.payment.term-fee,rec_name:"
@@ -616,7 +616,7 @@ msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
 msgctxt "field:contract.billing.premium-fee,price_line:"
-msgid "Price Line"
+msgid "Premium"
 msgstr "Ligne de Prime"
 
 msgctxt "field:contract.billing.premium-fee,rec_name:"
@@ -660,7 +660,7 @@ msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
 msgctxt "field:contract.billing.premium-tax,price_line:"
-msgid "Price Line"
+msgid "Premium"
 msgstr "Ligne de Prime"
 
 msgctxt "field:contract.billing.premium-tax,rec_name:"
@@ -732,7 +732,7 @@ msgid "Fiscal Years"
 msgstr "Années fiscales"
 
 msgctxt "field:contract,billing_managers:"
-msgid "Billing Managers"
+msgid "Billing Datas"
 msgstr "Gestionnaires d'Appel de Cotisation"
 
 msgctxt "field:contract,billing_periods:"
@@ -830,15 +830,15 @@ msgid "Use to order lines in ascending order"
 msgstr "Utilisé pour trier les lignes en ordre croissant"
 
 msgctxt "model:contract.billing.data,name:"
-msgid "Billing Manager"
+msgid "Billing Data"
 msgstr "Gestionnaire d'Appel de Cotisation"
 
 msgctxt "model:contract.do_billing.bill,name:"
-msgid "Bill Displayer"
+msgid "Contract Do Billing Bill"
 msgstr ""
 
 msgctxt "model:contract.do_billing.parameters,name:"
-msgid "Bill Parameters"
+msgid "Contract Do Billing Parameters"
 msgstr "Paramètres de Facturation"
 
 msgctxt "model:billing.payment.method,name:"
@@ -846,15 +846,15 @@ msgid "Payment Method"
 msgstr "Méthode de Paiement"
 
 msgctxt "model:billing.payment.term,name:"
-msgid "Payment Rule"
+msgid "Payment Term"
 msgstr "Règle de paiement"
 
 msgctxt "model:billing.payment.term-fee,name:"
-msgid "Payment Rule - Fee relation"
+msgid "Payment Term - Fee relation"
 msgstr "Relation Règle de paiement - Frais"
 
 msgctxt "model:billing.payment.term.line,name:"
-msgid "Payment Rule Line"
+msgid "Payment Term Line"
 msgstr "Ligne de règle de paiement"
 
 msgctxt "model:contract.billing.period,name:"
@@ -862,19 +862,19 @@ msgid "Billing Period"
 msgstr "Période de Facturation"
 
 msgctxt "model:contract.billing.premium,name:"
-msgid "Price Line"
+msgid "Premium"
 msgstr "Ligne de Prime"
 
 msgctxt "model:contract.billing.premium-fee,name:"
-msgid "Price Line Fee Relation"
+msgid "Premium Fee Relation"
 msgstr ""
 
 msgctxt "model:contract.billing.premium-tax,name:"
-msgid "Price Line Tax Relation"
+msgid "Premium Tax Relation"
 msgstr ""
 
 msgctxt "model:offered.product-billing.payment.method,name:"
-msgid "Product to Payment Method Relation definition"
+msgid "Product Payment Method Relation"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_open_billing_period_form"
@@ -890,7 +890,7 @@ msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
 msgctxt "model:ir.action,name:act_payment_rule"
-msgid "Payment Rule"
+msgid "Payment Term"
 msgstr "Règle de paiement"
 
 msgctxt "model:ir.action,name:launch_billing_process"
@@ -902,7 +902,7 @@ msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
 msgctxt "model:ir.ui.menu,name:menu_payment_rule"
-msgid "Payment Rule"
+msgid "Payment Term"
 msgstr "Règle de paiement"
 
 msgctxt "selection:billing.payment.method,payment_mode:"
@@ -1118,7 +1118,7 @@ msgid "Moves"
 msgstr "Mouvements"
 
 msgctxt "view:contract.billing.data:"
-msgid "Billing Managers"
+msgid "Billing Datas"
 msgstr "Gestionnaires d'Appel de Cotisation"
 
 msgctxt "view:contract.billing.data:"
@@ -1130,7 +1130,7 @@ msgid "Bill Result"
 msgstr ""
 
 msgctxt "view:contract.do_billing.parameters:"
-msgid "Bill Parameters"
+msgid "Contract Do Billing Parameters"
 msgstr "Paramètres de Facturation"
 
 msgctxt "view:billing.payment.method:"
@@ -1142,7 +1142,7 @@ msgid "Payment Methods"
 msgstr "Méthode de Paiement"
 
 msgctxt "view:billing.payment.term:"
-msgid "Payment Rules"
+msgid "Payment Terms"
 msgstr ""
 
 msgctxt "view:billing.payment.term:"
@@ -1150,11 +1150,11 @@ msgid "payment_rule"
 msgstr ""
 
 msgctxt "view:billing.payment.term.line:"
-msgid "Payment Rule Line"
+msgid "Payment Term Line"
 msgstr "Ligne de règle de paiement"
 
 msgctxt "view:billing.payment.term.line:"
-msgid "Payment Rule Lines"
+msgid "Payment Term Lines"
 msgstr ""
 
 msgctxt "view:contract.billing.period:"
@@ -1186,7 +1186,7 @@ msgid "Amount w/o taxes"
 msgstr "Montant Hors Taxes"
 
 msgctxt "view:contract.billing.premium:"
-msgid "Price Line"
+msgid "Premium"
 msgstr "Ligne de Prime"
 
 msgctxt "view:contract.billing.premium:"
