@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -575,11 +575,11 @@ msgid "Indemnification Detail"
 msgstr "Détail de l'indemnisation"
 
 msgctxt "model:claim.indemnification.validate.display,name:"
-msgid "Indemnification Displayer"
+msgid "Claim Indemnification Validate Display"
 msgstr "Indemnisations"
 
 msgctxt "model:claim.indemnification.validate.select,name:"
-msgid "Indemnification Selection"
+msgid "Claim Indemnification Validate Select"
 msgstr "Choix des Indemnisations"
 
 msgctxt "model:claim.loss,name:"
@@ -607,7 +607,7 @@ msgid "Indemnifications"
 msgstr "Indemnisations"
 
 msgctxt "model:ir.action,name:indemnification_validation_wizard"
-msgid "Indemnification Validation"
+msgid "Claim Indemnification Validate"
 msgstr "Validation des Indemnisations"
 
 msgctxt "model:ir.sequence,name:claim_sequence"
@@ -903,7 +903,7 @@ msgid "Indemnifications"
 msgstr "Indemnisations"
 
 msgctxt "view:claim.indemnification.validate.select:"
-msgid "Indemnification Validation"
+msgid "Claim Indemnification Validate"
 msgstr "Validation des Indemnisations"
 
 msgctxt "view:claim.loss:"

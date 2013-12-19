@@ -1,29 +1,22 @@
 from trytond.pool import PoolMeta
 
-from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.rule_engine import check_args
 
+
+__metaclass__ = PoolMeta
 __all__ = [
-    'OfferedContext',
-    'ClaimContext',
+    'RuleEngineRuntime',
     ]
 
 
-class OfferedContext():
-
+class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def get_lowest_level_object(cls, args):
         if 'delivered_service' in args:
             return args['delivered_service']
-        return super(OfferedContext, cls).get_lowest_level_object(args)
-
-
-class ClaimContext(RuleEngineContext):
-
-    __name__ = 'rule_engine.runtime'
+        return super(RuleEngineRuntime, cls).get_lowest_level_object(args)
 
     @classmethod
     @check_args('delivered_service')

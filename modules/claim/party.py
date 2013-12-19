@@ -1,3 +1,5 @@
+import copy
+
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Less
 
@@ -7,12 +9,11 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Party',
+    'PartyInteraction',
     ]
 
 
-class Party():
-    'Party'
-
+class Party:
     __name__ = 'party.party'
 
     claims = fields.One2Many('claim', 'claimant', 'Claims')
@@ -47,3 +48,13 @@ class Party():
     @staticmethod
     def default_number_of_claims():
         return 0
+
+
+class PartyInteraction:
+    __name__ = 'party.interaction'
+
+    @classmethod
+    def __setup__(cls):
+        super(PartyInteraction, cls).__setup__()
+        cls.for_object_ref = copy.copy(cls.for_object_ref)
+        cls.for_object_ref.selection.append(['claim', 'Claim'])

@@ -2,17 +2,15 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import utils
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'ClaimContract',
-    'ClaimOption',
-]
+    'Contract',
+    'Option',
+    ]
 
 
-class ClaimContract():
-    'Contract'
-
+class Contract:
     __name__ = 'contract'
-    __metaclass__ = PoolMeta
 
     def get_possible_benefits(self, loss):
         res = []
@@ -21,11 +19,8 @@ class ClaimContract():
         return list(set(res))
 
 
-class ClaimOption():
-    'Option'
-
+class Option:
     __name__ = 'contract.option'
-    __metaclass__ = PoolMeta
 
     def is_item_covered(self, loss):
         return utils.is_effective_at_date(self, at_date=loss.start_date)
