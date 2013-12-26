@@ -10,20 +10,21 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coop_utils import fields
 
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Move',
     ]
 
 
-class Move():
-    'Move'
-
-    __metaclass__ = PoolMeta
+class Move:
     __name__ = 'account.move'
 
     com_details = fields.One2ManyDomain('account.move.line', 'move',
-        'Commissions', domain=[('account.kind', '!=', 'receivable'),
-            ('second_origin.kind', '=', 'commission', 'offered.option.description')])
+        'Commissions', domain=[
+            ('account.kind', '!=', 'receivable'),
+            ('second_origin.kind', '=', 'commission',
+                'offered.option.description'),
+            ])
     com_amount = fields.Function(
         fields.Numeric('Com amount'),
         'get_com_amount')

@@ -2,17 +2,15 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import model, fields
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'Broker',
-]
+    ]
 
 
 class Party:
-    'Party'
-
     __name__ = 'party.party'
-    __metaclass__ = PoolMeta
 
     broker_role = fields.One2Many('broker', 'party', 'Broker', size=1)
     dist_networks = fields.Many2Many('distribution.network-broker',

@@ -1,109 +1,46 @@
-from decimal import Decimal
 from collections import defaultdict
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, Equal, If
+from trytond.pool import Pool, PoolMeta
+from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields, coop_date
+from trytond.modules.coop_utils import fields, model, utils
+from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.offered import PricingResultDetail
-from .plan import COMMISSION_KIND
+
+from .offered import COMMISSION_KIND
 
 __metaclass__ = PoolMeta
-
 __all__ = [
-    'PriceLineComRelation',
-    'PriceLine',
     'Contract',
-    'ManagementRole',
+    'Option',
+    'OptionCommissionOptionRelation',
+    'ContractAgreementRelation',
     ]
 
 
-class PriceLineComRelation(model.CoopSQL, model.CoopView):
-    'Price line to Commission relation'
-
-    __name__ = 'contract.billing.premium-commission.option'
-
-    price_line = fields.Many2One('contract.billing.premium', 'Price Line',
-        ondelete='CASCADE')
-    com_subscribed = fields.Many2One('contract.option',
-        'Commission Subscribed', ondelete='RESTRICT')
-    amount = fields.Numeric('Amount')
-    to_recalculate = fields.Boolean('Recalculate at billing')
-
-
-class PriceLine():
-    'Price Line'
-
-    __name__ = 'contract.billing.premium'
-
-    com_lines = fields.One2Many('contract.billing.premium-commission.option',
-        'price_line', 'Commission lines')
-    estimated_com = fields.Function(
-        fields.Numeric('Estimated Commissions'), 'get_estimated_coms')
-    estimated_wo_com = fields.Function(
-        fields.Numeric('Estimated w/o coms'),
-        'get_estimated_wo_com')
-
-    def get_estimated_wo_com(self, name):
-        return self.amount - self.estimated_com
-
-    def init_from_result_line(self, line, build_details=False):
-        super(PriceLine, self).init_from_result_line(line, build_details)
-        if build_details:
-            self.build_com_lines(line)
+class Contract:
+    __name__ = 'contract'
 
     @classmethod
-    def must_create_detail(cls, detail):
-        res = super(PriceLine, cls).must_create_detail(detail)
-        if not res:
-            return res
-        if detail.on_object.__name__ == 'contract.option-commission.option':
-            return False
-        return True
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        utils.update_domain(cls, 'subscriber', [If(
+                    Equal(Eval('product_kind'), 'commission'),
+                    ('is_broker', '=', True),
+                    (),
+                    )])
+        utils.update_depends(cls, 'subscriber', ['product_kind'])
 
-    def build_com_lines(self, line):
-        ComLine = Pool().get('contract.billing.premium-commission.option')
-        if not (hasattr(self, 'com_lines') and self.com_lines):
-            self.com_lines = []
-        for com_line in (x for x in line.details if x.on_object and
-                x.on_object.__name__ == 'contract.option-commission.option'):
-            com_relation = ComLine()
-            com_relation.com_subscribed = com_line.on_object.com_option
-            # Com detail lines store the rate in the amount field. We need
-            # to apply it now to avoid taxes and fees
-            com_relation.amount = self.amount * com_line.amount
-            self.com_lines.append(com_relation)
-
-    def get_estimated_coms(self, field_name):
-        res = 0
-        for elem in self.com_lines:
-            res += elem.amount
-        return res
-
-    def get_base_amount_for_billing(self):
-        result = super(PriceLine, self).get_base_amount_for_billing()
-        for elem in self.com_lines:
-            result -= elem.amount
-        return result
-
-    def calculate_bill_contribution(self, work_set, period):
-        result = super(PriceLine, self).calculate_bill_contribution(work_set,
-            period)
-        number_of_days = coop_date.number_of_days_between(*period)
-        price_line_days = self.get_number_of_days_at_date(period[0])
-        convert_factor = number_of_days / Decimal(price_line_days)
-        for com_line in self.com_lines:
-            values = work_set['coms'][com_line.com_subscribed.offered.id]
-            values['object'] = com_line.com_subscribed
-            values['to_recalculate'] |= com_line.to_recalculate
-            values['amount'] += com_line.amount * convert_factor
-            values['base'] += result.credit
-        return result
-
-
-class Contract():
-    'Contract'
-
-    __name__ = 'contract'
+    def update_management_roles(self):
+        super(Contract, self).update_management_roles()
+        for com_kind in [x[0] for x in COMMISSION_KIND]:
+            role = self.get_management_role(com_kind)
+            agreement = role.protocol if role else None
+            if not agreement:
+                continue
+            for option in self.options:
+                option.update_commissions(agreement)
 
     def get_protocol_offered(self, kind):
         dist_network = self.get_dist_network()
@@ -160,13 +97,137 @@ class Contract():
         work_set['total_amount'] += new_total - ht_total
 
 
-class ManagementRole():
-    'Management Role'
+class Option:
+    __name__ = 'contract.option'
 
+    compensated_options = fields.One2Many('contract.option-commission.option',
+        'com_option', 'Option-Commission Option Relations',
+        states={'invisible': Eval('coverage_kind') != 'commission'},
+        context={'from': 'com'})
+    commissions = fields.One2Many('contract.option-commission.option',
+        'subs_option', 'Commissions',
+        states={'invisible': Eval('coverage_kind') != 'insurance'},
+        context={'from': 'subscribed'})
+
+    def update_commissions(self, agreement):
+        CompOption = Pool().get('contract.option-commission.option')
+        for com_option in agreement.options:
+            if not self.offered in com_option.offered.coverages:
+                continue
+            good_comp_option = None
+            for comp_option in self.commissions:
+                if comp_option.com_option == com_option:
+                    good_comp_option = comp_option
+                    break
+            if not good_comp_option:
+                good_comp_option = CompOption()
+                good_comp_option.com_option = com_option
+                if not self.commissions:
+                    self.commissions = []
+                self.commissions = list(self.commissions)
+                self.commissions.append(good_comp_option)
+            good_comp_option.start_date = self.start_date
+            self.save()
+
+    def get_com_options_and_rates_at_date(self, at_date):
+        for commission in self.commissions:
+            com_rate = commission.get_com_rate(at_date)
+            if not com_rate:
+                continue
+            yield((commission, com_rate))
+
+    def get_account_for_billing(self):
+        if self.coverage_kind != 'commission':
+            return self.offered.get_account_for_billing()
+        return self.current_policy_owner.account_payable
+
+
+class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
+        ModelCurrency):
+    'Option-Commission Option Relation'
+
+    __name__ = 'contract.option-commission.option'
+
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+    com_option = fields.Many2One('contract.option', 'Commission Option',
+        domain=[('coverage_kind', '=', 'commission')], ondelete='RESTRICT')
+    subs_option = fields.Many2One('contract.option', 'Subscribed Coverage',
+        domain=[('coverage_kind', '=', 'insurance')], ondelete='CASCADE')
+    use_specific_rate = fields.Boolean('Specific Rate')
+    rate = fields.Numeric('Rate', digits=(16, 4), states={
+            'invisible': ~Eval('use_specific_rate'),
+            'required': ~~Eval('use_specific_rate'),
+            })
+    com_amount = fields.Function(
+        fields.Numeric('Com Amount'),
+        'get_com_amount')
+
+    def get_rec_name(self, name):
+        option = None
+        if Transaction().context.get('from') == 'com':
+            option = self.subs_option
+        else:
+            option = self.com_option
+        if not option:
+            return ''
+        return '%s - %s (%s)' % (
+            option.current_policy_owner.rec_name,
+            option.contract.contract_number
+            if option.contract.contract_number else '',
+            option.rec_name,
+            )
+
+    def get_all_complementary_data(self, at_date):
+        res = {}
+        res.update(self.com_option.get_all_complementary_data(at_date))
+        res.update(self.subs_option.get_all_complementary_data(at_date))
+        return res
+
+    def init_dict_for_rule_engine(self, args):
+        args['comp_option'] = self
+        self.com_option.init_dict_for_rule_engine(args)
+
+    def get_com_rate(self, at_date=None):
+        if not at_date:
+            at_date = utils.today()
+        if not(at_date >= self.start_date
+                and (not self.end_date or at_date <= self.end_date)):
+            return 0, None
+        cur_dict = {'date': at_date}
+        self.init_dict_for_rule_engine(cur_dict)
+        rer = self.com_option.offered.get_result('commission', cur_dict)
+        if hasattr(rer, 'errors') and not rer.errors:
+            return rer.result
+        else:
+            return 0
+
+    def calculate_com(self, base_amount, at_date):
+        #TODO : deal with non linear com
+        com_rate = self.get_com_rate(at_date)
+        return com_rate * base_amount, com_rate
+
+    def get_com_amount(self, name):
+        for price_line in self.subs_option.contract.prices:
+            if price_line.on_object == self.subs_option.offered:
+                return self.calculate_com(price_line.amount).result
+
+    def get_currency(self):
+        return self.com_option.currency
+
+    def on_change_with_com_lines(self, name=None):
+        return [{}]
+
+    @classmethod
+    def set_void(cls, instances):
+        pass
+
+
+class ContractAgreementRelation:
     __name__ = 'contract-agreement'
 
     @classmethod
     def get_possible_management_role_kind(cls):
-        res = super(ManagementRole, cls).get_possible_management_role_kind()
+        res = super(ContractAgreementRelation, cls).get_possible_management_role_kind()
         res.extend(COMMISSION_KIND)
         return list(set(res))

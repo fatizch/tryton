@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -267,7 +267,7 @@ msgid "Commissions"
 msgstr "Commissions"
 
 msgctxt "field:contract.option,compensated_options:"
-msgid "Compensated Options"
+msgid "Option-Commission Option Relations"
 msgstr "Options Commissionnées"
 
 msgctxt "field:distribution.network,all_com_plans:"
@@ -447,15 +447,15 @@ msgid "Commission Rule"
 msgstr "Règle de Commissionnement"
 
 msgctxt "model:contract.option-commission.option,name:"
-msgid "Compensated Option"
+msgid "Option-Commission Option Relation"
 msgstr "Option Commissionnée"
 
 msgctxt "model:commission.option.description-option.description,name:"
-msgid "Relation Commission Component and Coverage"
+msgid "Commission Option Description-Option Description Relation"
 msgstr "Relation Composante de Com - Garantie"
 
 msgctxt "model:contract.billing.premium-commission.option,name:"
-msgid "Price line to Commission relation"
+msgid "Billing Premium-Commission Option Relation"
 msgstr "Relation Ligne de Prime - Commission"
 
 msgctxt "model:distribution.network-broker,name:"
@@ -475,7 +475,7 @@ msgid "Brokers"
 msgstr "Courtiers"
 
 msgctxt "model:ir.action,name:act_component_form"
-msgid "Commission Components"
+msgid "Option Descriptions"
 msgstr "Composantes de Commissionnement"
 
 msgctxt "model:ir.action,name:act_plan_form"
@@ -499,7 +499,7 @@ msgid "Configuration"
 msgstr "Configuration"
 
 msgctxt "model:ir.ui.menu,name:menu_component_form"
-msgid "Commission Components"
+msgid "Option Descriptions"
 msgstr "Composantes de Commissionnement"
 
 msgctxt "model:ir.ui.menu,name:menu_plan_form"
@@ -591,7 +591,7 @@ msgid "%"
 msgstr "%"
 
 msgctxt "view:contract.option-commission.option:"
-msgid "Compensated Option"
+msgid "Option-Commission Option Relation"
 msgstr "Option Commissionnée"
 
 msgctxt "view:contract.billing.premium-commission.option:"
@@ -607,7 +607,7 @@ msgid "Commissions"
 msgstr "Commissions"
 
 msgctxt "view:contract.option:"
-msgid "Compensated Options"
+msgid "Option-Commission Option Relations"
 msgstr "Options Commissionnées"
 
 msgctxt "view:contract.option:"
