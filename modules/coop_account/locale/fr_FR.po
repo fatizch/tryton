@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -219,15 +219,15 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "model:account.fee.description,name:"
-msgid "Fee Descriptor"
+msgid "Fee Description"
 msgstr "Descripteur de Frais"
 
 msgctxt "model:account.fee.description.version,name:"
-msgid "Fee Version"
+msgid "Fee Description Version"
 msgstr "Version de Frais"
 
 msgctxt "model:account.tax.description,name:"
-msgid "Tax Descriptor"
+msgid "Tax Description"
 msgstr "Descripteur de Taxe"
 
 msgctxt "model:account.tax.description.version,name:"
@@ -275,15 +275,15 @@ msgid "Rule"
 msgstr "Règle"
 
 msgctxt "view:account.fee.description:"
-msgid "Fee Descriptor"
+msgid "Fee Description"
 msgstr "Descripteur de Frais"
 
 msgctxt "view:account.fee.description.version:"
-msgid "Fee Version"
+msgid "Fee Description Version"
 msgstr "Version"
 
 msgctxt "view:account.tax.description:"
-msgid "Tax Descriptor"
+msgid "Tax Description"
 msgstr "Taxe"
 
 msgctxt "view:account.tax.description.version:"

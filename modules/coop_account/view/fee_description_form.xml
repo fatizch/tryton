@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Fee Description">
+    <group id="basic_data" col="2">
+        <label name="name"/>
+        <field name="name"/>
+        <label name="code"/>
+        <field name="code"/>
+        <label name="description"/>
+        <field name="description"/>
+    </group>
+    <newline/>
+    <group id="versions" yexpand="1" yfill="1">
+        <field name="versions" yexpand="1"/>
+    </group>
+</form>
