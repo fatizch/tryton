@@ -5,25 +5,18 @@ from trytond.modules.coop_utils import utils
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'OfferedContext',
-    'ContractContext',
+    'RuleEngineRuntime',
     ]
 
 
-class OfferedContext():
-
+class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_lowest_level_object(cls, args):
         if 'data' in args:
             return args['data']
-        return super(OfferedContext, cls).get_lowest_level_object(args)
-
-
-class ContractContext():
-
-    __name__ = 'rule_engine.runtime'
+        return super(RuleEngineRuntime, cls).get_lowest_level_object(args)
 
     @classmethod
     @check_args('contract')
