@@ -11,10 +11,6 @@ def register():
         Bank,
         BankAccount,
         BankAccountNumber,
-        #For temporary migration purpose
-        OldBank,
-        OldBankAccount,
-        OldBankAccountNumber,
         # from test_case
         TestCaseModel,
         module='coop_bank', type_='model')
