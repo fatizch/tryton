@@ -4,56 +4,36 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields, utils
+from trytond.modules.coop_utils import fields, utils
 from trytond.modules.coop_process import ProcessFinder, ProcessParameters
 
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'SubscriptionManager',
-    'ProcessDesc',
-    'SubscriptionProcessParameters',
-    'SubscriptionProcessFinder',
-]
+    'Process',
+    'ContractSubscribeFindProcess',
+    'ContractSubscribe',
+    ]
 
 
-class SubscriptionManager(model.CoopSQL):
-    'Subscription Manager'
-    '''Temporary object used during the subscription, it is dropped as soon
-    as the contract is activated'''
-
-    __name__ = 'ins_contract.subscription_mgr'
-
-    contract = fields.Reference(
-        'Contract',
-        [
-            ('contract', 'Contract')],
-    )
-    is_custom = fields.Boolean('Custom')
-
-
-class ProcessDesc():
-    'Process Desc'
-
-    __metaclass__ = PoolMeta
-
+class Process:
     __name__ = 'process'
 
     @classmethod
     def __setup__(cls):
-        super(ProcessDesc, cls).__setup__()
+        super(Process, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('subscription', 'Contract Subscription'))
-        cls.kind.selection.append(('endorsement', 'Contract Endorsement'))
 
 
-class SubscriptionProcessParameters(ProcessParameters):
-    'Subscription Process Parameters'
+class ContractSubscribeFindProcess(ProcessParameters):
+    'ContractSubscribe Find Process'
 
     __name__ = 'contract.subscribe.find_process'
 
     dist_network = fields.Many2One('distribution.network',
         'Distribution Network', on_change=['dist_network', 'possible_brokers',
-        'business_provider', 'management_delegation'])
+            'business_provider', 'management_delegation'])
     possible_brokers = fields.Function(
         fields.Many2Many('party.party', None, None, 'Possible Brokers',
             on_change_with=['dist_network', 'possible_brokers'],
@@ -76,19 +56,17 @@ class SubscriptionProcessParameters(ProcessParameters):
             states={'invisible': True}),
         'on_change_with_possible_com_product')
     com_product = fields.Many2One('distribution.commercial_product',
-        'Product Commercial',
-        domain=[
-                ('id', 'in', Eval('possible_com_product')),
-                ['OR',
-                    [('end_date', '>=', Eval('date'))],
-                    [('end_date', '=', None)],
+        'Product Commercial', domain=[
+            ('id', 'in', Eval('possible_com_product')),
+            ['OR',
+                [('end_date', '>=', Eval('date'))],
+                [('end_date', '=', None)],
                 ],
-                ['OR',
-                    [('start_date', '<=', Eval('date'))],
-                    [('start_date', '=', None)],
+            ['OR',
+                [('start_date', '<=', Eval('date'))],
+                [('start_date', '=', None)],
                 ],
-            ],
-        depends=['possible_com_product', 'date'],
+            ], depends=['possible_com_product', 'date'],
         on_change=['com_product', 'product'])
     product = fields.Many2One('offered.product', 'Product',
         states={'invisible': True})
@@ -96,7 +74,7 @@ class SubscriptionProcessParameters(ProcessParameters):
     @classmethod
     def build_process_domain(cls):
         result = super(
-            SubscriptionProcessParameters, cls).build_process_domain()
+            ContractSubscribeFindProcess, cls).build_process_domain()
         result.append(('for_products', '=', Eval('product')))
         result.append(('kind', '=', 'subscription'))
         return result
@@ -104,7 +82,7 @@ class SubscriptionProcessParameters(ProcessParameters):
     @classmethod
     def build_process_depends(cls):
         result = super(
-            SubscriptionProcessParameters, cls).build_process_depends()
+            ContractSubscribeFindProcess, cls).build_process_depends()
         result.append('product')
         return result
 
@@ -156,8 +134,8 @@ class SubscriptionProcessParameters(ProcessParameters):
         return res
 
 
-class SubscriptionProcessFinder(ProcessFinder):
-    'Subscription Process Finder'
+class ContractSubscribe(ProcessFinder):
+    'Contract Subscribe'
 
     __name__ = 'contract.subscribe'
 
@@ -172,7 +150,7 @@ class SubscriptionProcessFinder(ProcessFinder):
             'subscription_process_parameters_form')
 
     def init_main_object_from_process(self, obj, process_param):
-        res, errs = super(SubscriptionProcessFinder,
+        res, errs = super(ContractSubscribe,
             self).init_main_object_from_process(obj, process_param)
         if res:
             res, err = obj.init_from_offered(process_param.product,
