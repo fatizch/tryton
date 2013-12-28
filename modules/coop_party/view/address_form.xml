@@ -2,9 +2,6 @@
 <data>
     <xpath expr="/form/group[@id='checkboxes']" position="before">
         <newline/>
-        <label name="kind"/>
-        <field name="kind"/>
-        <newline/>
         <label name="start_date"/>
         <group id="date">
             <field name="start_date"/>

@@ -1,14 +1,6 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:coop.dyn_selection:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
-
-msgctxt "error:coop.table_of_table:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:ir.test_case.run:"
 msgid "Cannot load test case file %s"
@@ -29,102 +21,6 @@ msgstr " "
 msgctxt "field:company.company,id:"
 msgid ""
 msgstr " "
-
-msgctxt "field:coop.dyn_selection,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:coop.dyn_selection,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:coop.dyn_selection,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:coop.dyn_selection,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:coop.dyn_selection,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:coop.dyn_selection,key:"
-msgid "Key"
-msgstr "Clé"
-
-msgctxt "field:coop.dyn_selection,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:coop.dyn_selection,my_model_name:"
-msgid "Model Name"
-msgstr "Nom de l'objet"
-
-msgctxt "field:coop.dyn_selection,name:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:coop.dyn_selection,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:coop.dyn_selection,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:coop.dyn_selection,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:coop.table_of_table,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:coop.table_of_table,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:coop.table_of_table,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:coop.table_of_table,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:coop.table_of_table,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:coop.table_of_table,key:"
-msgid "Key"
-msgstr "Clé"
-
-msgctxt "field:coop.table_of_table,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:coop.table_of_table,my_model_name:"
-msgid "Model Name"
-msgstr "Nom de l'objet"
-
-msgctxt "field:coop.table_of_table,name:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:coop.table_of_table,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:coop.table_of_table,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:coop.table_of_table,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:ir.export_package.item,create_date:"
 msgid "Create Date"
@@ -378,14 +274,6 @@ msgctxt "model:company.company,name:"
 msgid "company.company"
 msgstr "Société"
 
-msgctxt "model:coop.dyn_selection,name:"
-msgid "Dynamic Selection"
-msgstr "Sélection Dynamique"
-
-msgctxt "model:coop.table_of_table,name:"
-msgid "Table of table"
-msgstr "Table des Tables"
-
 msgctxt "model:ir.export_package.item,name:"
 msgid "Export Instance"
 msgstr "Elément à exporter"
@@ -481,10 +369,6 @@ msgstr "Manuel"
 msgctxt "selection:ir.test_case.run.select.method,selection:"
 msgid "Not Selected"
 msgstr "Non Sélectionné"
-
-msgctxt "view:coop.dyn_selection:"
-msgid "Dynamic Selection"
-msgstr "Sélection Dynamique"
 
 msgctxt "view:ir.export_package.item:"
 msgid "Export Instance"

@@ -25,17 +25,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Contract': 'contract',
             'Party': 'party.party',
-            'AddressKind': 'party.address.kind',
             'Sequence': 'ir.sequence',
             # 'BillingProcess': 'contract.do_billing',
         }
 
     def test0001_testPersonCreation(self):
-        address_kind = self.AddressKind()
-        address_kind.key = 'main'
-        address_kind.name = 'Main'
-        address_kind.save()
-
         party = self.Party()
         party.is_person = True
         party.name = 'Toto'

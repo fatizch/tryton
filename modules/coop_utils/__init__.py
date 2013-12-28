@@ -40,8 +40,6 @@ def register():
         ResUserWarning,
         # From model
         FileSelector,
-        TableOfTable,
-        DynamicSelection,
         VersionedObject,
         VersionObject,
         # From view_validation_batch

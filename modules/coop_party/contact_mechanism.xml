@@ -19,7 +19,7 @@
             <field name="name">contact_history_form</field>
         </record>
         <record model="ir.action.act_window" id="act_contact_history_relate_form">
-            <field name="name">Contact History</field>
+            <field name="name">Party Interaction</field>
             <field name="res_model">party.interaction</field>
             <field name="domain">[('party', '=', Eval('active_id'))]</field>
             <field name="context">{'from_party': Eval('active_id'), 'from_model': Eval('active_model')}</field>

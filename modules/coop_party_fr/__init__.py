@@ -9,7 +9,7 @@ def register():
         # from address
         Address,
         # from party
-        FrenchParty,
+        Party,
         # from test_case
         TestCaseModel,
         module='coop_party_fr', type_='model')

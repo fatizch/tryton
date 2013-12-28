@@ -10,17 +10,14 @@ def register():
     Pool.register(
         # From party
         Party,
-        PartyCategory,
-        Actor,
         # From address
         Address,
-        AddresseKind,
         # From relation
         PartyRelationKind,
         PartyRelation,
         # From contact_mechanism
         ContactMechanism,
-        ContactHistory,
+        PartyInteraction,
         # from test_case
         TestCaseModel,
         module='coop_party', type_='model')

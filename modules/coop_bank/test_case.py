@@ -26,7 +26,7 @@ class TestCaseModel():
             'bank_test_case')
         result['bank_test_case'] = {
             'name': 'Bank Test Case',
-            'dependencies': set(['address_kind_test_case']),
+            'dependencies': set([]),
         }
         result['bank_account_test_case'] = {
             'name': 'Bank Account Test Case',
