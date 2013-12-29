@@ -3,15 +3,12 @@ from trytond.pool import PoolMeta
 from trytond.modules.coop_utils import fields
 
 __metaclass__ = PoolMeta
-
 __all__ = [
     'User',
     ]
 
 
 class User:
-    'User'
-
     __name__ = 'res.user'
 
     dist_network = fields.Many2One('distribution.network',
