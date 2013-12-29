@@ -8,12 +8,12 @@ from .test_case import *
 
 def register():
     Pool.register(
-        Regime,
+        HealthCareSystem,
         InsuranceFund,
-        PartyHealthComplement,
+        HealthPartyComplement,
         CoveredElement,
         #Rule Engine Context
-        HealthContext,
+        RuleEngineRuntime,
         # from test_case
         TestCaseModel,
         module='health_fr', type_='model')

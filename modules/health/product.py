@@ -3,17 +3,15 @@ import copy
 from trytond.pool import PoolMeta
 from trytond.modules.coop_utils import utils, fields
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'Coverage',
     ]
 
 
-class Product():
-    'Product'
-
+class Product:
     __name__ = 'offered.product'
-    __metaclass__ = PoolMeta
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
@@ -30,11 +28,8 @@ class Product():
         return [('coverages.is_health',) + tuple(clause[1:])]
 
 
-class Coverage():
-    'Coverage'
-
+class Coverage:
     __name__ = 'offered.option.description'
-    __metaclass__ = PoolMeta
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
