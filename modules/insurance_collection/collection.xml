@@ -2,7 +2,7 @@
 <tryton>
   <data>
     <!-- ############################################################ -->
-    <!-- CollectionParameters -->
+    <!-- CollectionCreateParameters -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="collection_parameters_form">
       <field name="model">collection.create.parameters</field>
