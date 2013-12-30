@@ -154,8 +154,13 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     @classmethod
     def run_test_case(cls, test_case):
+        cur_user = Transaction().user
         with Transaction().new_cursor(), Transaction().set_user(0):
-            cls.run_test_case_method(test_case)
+            if cur_user:
+                with Transaction().set_context(user=cur_user):
+                    cls.run_test_case_method(test_case)
+            else:
+                    cls.run_test_case_method(test_case)
             Transaction().cursor.commit()
 
     @classmethod
