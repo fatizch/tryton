@@ -61,11 +61,10 @@ class TestCaseModel:
 
     @classmethod
     def configure_accounting_test_case(cls):
-        result = super(TestCaseModel, cls).configure_accounting_test_case()
+        super(TestCaseModel, cls).configure_accounting_test_case()
         translater = cls.get_translater(MODULE_NAME)
         account_config = Pool().get('account.configuration').search([])[0]
         if not account_config.cash_value_journal:
             account_config.cash_value_journal = cls.get_journal(
                 translater('Cash Value Journal'))
             account_config.save()
-        return result
