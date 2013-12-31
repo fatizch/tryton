@@ -5,16 +5,14 @@ from trytond.pyson import If, Bool
 
 from trytond.modules.coop_utils import fields, utils
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'GroupContract',
+    'Contract',
     ]
 
 
-class GroupContract():
-    'Group Contract'
-
+class Contract:
     __name__ = 'contract'
-    __metaclass__ = PoolMeta
 
     is_group = fields.Function(
         fields.Boolean('Group Contract',
@@ -29,7 +27,7 @@ class GroupContract():
                     (),
                     )])
         utils.update_depends(cls, 'subscriber', ['is_group'])
-        super(GroupContract, cls).__setup__()
+        super(Contract, cls).__setup__()
 
     def get_is_group(self, name):
         return self.offered.is_group if self.offered else False
