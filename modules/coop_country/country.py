@@ -2,16 +2,14 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import export
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Country',
     'CountrySubdivision',
-]
+    ]
 
 
 class Country(export.ExportImportMixin):
-    'Country'
-
-    __metaclass__ = PoolMeta
     __name__ = 'country.country'
 
     @classmethod
