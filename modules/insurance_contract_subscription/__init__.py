@@ -2,23 +2,18 @@ from trytond.pool import Pool
 
 from .subscription_process import *
 from .contract import *
-from .endorsement import *
 
 
 def register():
     Pool.register(
-        ContractSubscription,
-        Option,
+        Contract,
+        ContractOption,
         CoveredElement,
         CoveredData,
-        SubscriptionManager,
-        ProcessDesc,
-        SubscriptionProcessParameters,
-        #From Endorsement
-        EndorsementProcessParameters,
+        Process,
+        ContractSubscribeFindProcess,
         module='insurance_contract_subscription', type_='model')
 
     Pool.register(
-        SubscriptionProcessFinder,
-        EndorsementProcessFinder,
+        ContractSubscribe,
         module='insurance_contract_subscription', type_='wizard')

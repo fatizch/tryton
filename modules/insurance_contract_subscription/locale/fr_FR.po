@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -53,10 +53,6 @@ msgctxt "error:contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un élement couvert"
 
-msgctxt "error:contract.endorsement_process_finder:"
-msgid "Please pick a process from the selection"
-msgstr "Choisir un processus de la sélection"
-
 msgctxt "error:contract.subscribe:"
 msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
@@ -89,38 +85,6 @@ msgctxt "field:contract,subscriber_kind:"
 msgid "Subscriber Kind"
 msgstr "Type"
 
-msgctxt "field:contract,subscription_mgr:"
-msgid "Subscription Manager"
-msgstr ""
-
-msgctxt "field:contract.endorsement_process_parameters,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.endorsement_process_parameters,date:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "field:contract.endorsement_process_parameters,good_process:"
-msgid "Good Process"
-msgstr "Processus"
-
-msgctxt "field:contract.endorsement_process_parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.endorsement_process_parameters,model:"
-msgid "Model"
-msgstr "Modèle"
-
-msgctxt "field:contract.endorsement_process_parameters,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.endorsement_process_parameters,product:"
-msgid "Product"
-msgstr "Produit"
-
 msgctxt "field:contract.option,is_health:"
 msgid "Is Health"
 msgstr "Santé"
@@ -132,42 +96,6 @@ msgstr "Statut"
 msgctxt "field:contract.covered_data,status_selection:"
 msgid "Status"
 msgstr "Statut"
-
-msgctxt "field:ins_contract.subscription_mgr,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:ins_contract.subscription_mgr,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.subscription_mgr,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:ins_contract.subscription_mgr,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ins_contract.subscription_mgr,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.subscription_mgr,is_custom:"
-msgid "Custom"
-msgstr "Sur Mesure"
-
-msgctxt "field:ins_contract.subscription_mgr,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ins_contract.subscription_mgr,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.subscription_mgr,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt ""
 "field:contract.subscribe.find_process,business_provider:"
@@ -228,25 +156,13 @@ msgctxt "field:process,steps_to_display:"
 msgid "Steps"
 msgstr "Etapes"
 
-msgctxt "model:contract.endorsement_process_parameters,name:"
-msgid "Endorsement Process Parameters"
-msgstr ""
-
-msgctxt "model:ins_contract.subscription_mgr,name:"
-msgid "Subscription Manager"
-msgstr ""
-
 msgctxt "model:contract.subscribe.find_process,name:"
-msgid "Subscription Process Parameters"
+msgid "ContractSubscribe Find Process"
 msgstr "Paramètres du Processus de Souscription"
 
 msgctxt "model:ir.action,name:act_contract_logs"
 msgid "Logs"
 msgstr ""
-
-msgctxt "model:ir.action,name:endorsement_process_launcher"
-msgid "Start Endorsement"
-msgstr "Démarer l'Avenant"
 
 msgctxt "model:ir.action,name:subscription_process_launcher"
 msgid "Start Subscription"
@@ -259,10 +175,6 @@ msgstr "Démarrer l'Avenant"
 msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"
 msgstr "Démarrer la Souscription"
-
-msgctxt "selection:ins_contract.subscription_mgr,contract:"
-msgid "Contract"
-msgstr "Contrat"
 
 msgctxt "selection:process,kind:"
 msgid "Contract Endorsement"
@@ -281,15 +193,7 @@ msgid "Covered Data"
 msgstr "Données de Couverture"
 
 msgctxt ""
-"wizard_button:contract.endorsement_process_finder,process_parameters,action:"
-msgid "Start Process"
-msgstr "Démarrer le processus"
-
 msgctxt ""
-"wizard_button:contract.endorsement_process_finder,process_parameters,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
 msgctxt ""
 "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"
