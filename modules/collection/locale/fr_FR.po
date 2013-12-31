@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -180,11 +180,11 @@ msgid "Suspense account"
 msgstr "Compte d'attente"
 
 msgctxt "model:collection.create.assign,name:"
-msgid "Assign Collection"
+msgid "Collection Create Assign"
 msgstr "Affecter l'encaissement"
 
 msgctxt "model:collection.create.assign.lines,name:"
-msgid "Assignment"
+msgid "Collection Create Assign Lines"
 msgstr "Affectation"
 
 msgctxt "model:collection,name:"
@@ -192,7 +192,7 @@ msgid "Collection"
 msgstr "Encaissement"
 
 msgctxt "model:collection.create.parameters,name:"
-msgid "Collection parameters"
+msgid "Collection Create Parameters"
 msgstr "Informations de l'encaissement"
 
 msgctxt "model:ir.action,name:act_collection"
@@ -200,7 +200,7 @@ msgid "Collection"
 msgstr "Encaissement"
 
 msgctxt "model:ir.action,name:act_collection_wizard"
-msgid "Collection Wizard"
+msgid "Collection Create"
 msgstr "Processus d'encaissement"
 
 msgctxt "model:ir.action,name:act_open_party_collections"
@@ -212,7 +212,7 @@ msgid "Collection"
 msgstr "Encaissement"
 
 msgctxt "model:ir.ui.menu,name:menu_collection_wizard"
-msgid "Collection Wizard"
+msgid "Collection Create"
 msgstr "Encaissement"
 
 msgctxt "selection:collection.create.assign.lines,kind:"
@@ -240,7 +240,7 @@ msgid "Check"
 msgstr "Chèque"
 
 msgctxt "view:collection.create.assign:"
-msgid "Assign Collection"
+msgid "Collection Create Assign"
 msgstr "Affecter l'encaissement"
 
 msgctxt "view:collection.create.assign.lines:"
@@ -260,7 +260,7 @@ msgid "Collections"
 msgstr "Encaissements"
 
 msgctxt "view:collection.create.parameters:"
-msgid "Collection Parameters"
+msgid "Collection Create Parameters"
 msgstr "informations d'encaissement"
 
 msgctxt "wizard_button:collection.create,assign,check_amount:"

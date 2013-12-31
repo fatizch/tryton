@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Assign Collection">
+<form string="Collection Create Assign">
   <label name="party"/>
   <field name="party" colspan="3"/>
   <label name="amount"/>
