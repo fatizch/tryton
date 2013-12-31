@@ -1,18 +1,16 @@
 import copy
 from trytond.pool import PoolMeta
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'Document',
+    'DocumentRequestLine',
     'DocumentRequest',
-    'RequestFinder',
-]
+    'DocumentReceiveRequest',
+    ]
 
 
-class DocumentRequest():
-    'Document Request'
-
+class DocumentRequest:
     __name__ = 'document.request'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
@@ -22,15 +20,12 @@ class DocumentRequest():
             ('contract', 'Contract'))
 
 
-class Document():
-    'Document'
-
+class DocumentRequestLine:
     __name__ = 'document.request.line'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
-        super(Document, cls).__setup__()
+        super(DocumentRequestLine, cls).__setup__()
         cls.for_object = copy.copy(cls.for_object)
         cls.for_object.selection.append(
             ('contract', 'Contract'))
@@ -38,18 +33,14 @@ class Document():
             ('contract.option', 'Option'))
         cls.for_object.selection.append(
             ('contract.covered_element', 'Covered Element'))
+        cls.for_object.selection = list(set(cls.for_object.selection))
 
 
-class RequestFinder():
-    'Request Finder'
-
+class DocumentReceiveRequest:
     __name__ = 'document.receive.request'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def allowed_values(cls):
-        result = super(RequestFinder, cls).allowed_values()
-        result.update({
-            'contract': (
-                'Contract', 'contract_number')})
+        result = super(DocumentReceiveRequest, cls).allowed_values()
+        result.update({'contract': ('Contract', 'contract_number')})
         return result

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -225,10 +225,6 @@ msgstr " "
 msgctxt "field:contract,summary:"
 msgid ""
 msgstr " "
-
-msgctxt "field:contract,temp_endorsment_date:"
-msgid "Endorsment Date"
-msgstr ""
 
 msgctxt "field:contract,write_date:"
 msgid ""
@@ -459,7 +455,7 @@ msgid ""
 msgstr " "
 
 msgctxt "model:contract.clause,name:"
-msgid "Contract clauses"
+msgid "Contract Clause"
 msgstr "Clauses du contrat"
 
 msgctxt "model:contract,name:"
@@ -611,7 +607,7 @@ msgid "Options"
 msgstr "Options"
 
 msgctxt "view:contract.service:"
-msgid "Delivered Service"
+msgid "Contract Service"
 msgstr "Prestation Fournie"
 
 msgctxt "view:contract.status.history:"

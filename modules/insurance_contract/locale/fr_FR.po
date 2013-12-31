@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -115,7 +115,7 @@ msgid "Last Renewed"
 msgstr "Dernier renouvellement"
 
 msgctxt "field:contract,management_roles:"
-msgid "Management Roles"
+msgid "Contract-Agreement Relations"
 msgstr "Géré par"
 
 msgctxt "field:contract,managing_roles:"
@@ -262,10 +262,6 @@ msgctxt "field:contract.option,benefits:"
 msgid "Benefits"
 msgstr "Prestations"
 
-msgctxt "field:contract.option,complement:"
-msgid "Complement"
-msgstr "Complément"
-
 msgctxt "field:contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -297,10 +293,6 @@ msgstr "Date de Fin"
 msgctxt "field:contract.option,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.option,ins_complement:"
-msgid "Complement"
-msgstr "Complément"
 
 msgctxt "field:contract.option,offered:"
 msgid "Coverage"
@@ -399,7 +391,7 @@ msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
 msgctxt "field:contract.covered_data,option:"
-msgid "Subscribed Coverage"
+msgid "Contract Option"
 msgstr "Garantie Souscrite"
 
 msgctxt "field:contract.covered_data,parent_covered_data:"
@@ -603,7 +595,7 @@ msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
 msgctxt "field:expense,delivered_service:"
-msgid "Delivered Service"
+msgid "Contract Service"
 msgstr "Prestation Fournie"
 
 msgctxt "field:expense,id:"
@@ -726,96 +718,9 @@ msgctxt "field:contract.renew.parameters,will_be_renewed:"
 msgid "Will be renewed"
 msgstr "A renouveller"
 
-msgctxt "field:ins_contract.subscribed_coverage_complement,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt ""
-"field:ins_contract.subscribed_coverage_complement,deductible_duration:"
-msgid "Deductible Duration"
-msgstr "Franchise"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt ""
-"field:ins_contract.subscribed_coverage_complement,possible_deductible_duration:"
-msgid "Possible Deductible Duration"
-msgstr "Franchises Possibles"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt ""
-"field:ins_contract.subscribed_coverage_complement,subscribed_coverage:"
-msgid "Subscribed Coverage"
-msgstr "Garantie Souscrite"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ins_contract.subscribed_coverage_complement,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:document.receive.request,tmp_0:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "field:customer,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:customer,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:customer,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:customer,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:customer,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:customer,party:"
-msgid "Party"
-msgstr "Acteur"
-
-msgctxt "field:customer,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:customer,reference:"
-msgid "Reference"
-msgstr "Référence"
-
-msgctxt "field:customer,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:customer,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:party.party,complementary_data:"
 msgid "Complementary Data"
@@ -824,14 +729,6 @@ msgstr "Données Complémentaires"
 msgctxt "field:party.party,covered_elements:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
-
-msgctxt "field:party.party,customer_role:"
-msgid "Customer"
-msgstr "Client"
-
-msgctxt "field:party.party,is_customer:"
-msgid "Customer"
-msgstr "Client"
 
 msgctxt "model:contract.address,name:"
 msgid "Contract Address"
@@ -846,11 +743,11 @@ msgid "Contract History"
 msgstr "Historique de Contrat"
 
 msgctxt "model:contract.service,name:"
-msgid "Delivered Service"
+msgid "Contract Service"
 msgstr "Prestation Fournie"
 
 msgctxt "model:contract.option,name:"
-msgid "Subscribed Coverage"
+msgid "Contract Option"
 msgstr "Garantie"
 
 msgctxt "model:contract.covered_data,name:"
@@ -870,7 +767,7 @@ msgid ""
 msgstr " "
 
 msgctxt "model:contract-agreement,name:"
-msgid "Management Role"
+msgid "Contract-Agreement Relation"
 msgstr "Gestionnaire"
 
 msgctxt "model:contract.renew.report,name:"
@@ -880,10 +777,6 @@ msgstr "Résultat du Renouvellement"
 msgctxt "model:contract.renew.parameters,name:"
 msgid "Renewal Start"
 msgstr "Paramètres du Renouvellement"
-
-msgctxt "model:ins_contract.subscribed_coverage_complement,name:"
-msgid "Subscribed Coverage"
-msgstr "Garantie Souscrite"
 
 msgctxt "model:ir.action,name:act_contract_relate_form"
 msgid "Contracts"
@@ -912,10 +805,6 @@ msgstr "Individuel"
 msgctxt "model:ir.ui.menu,name:menu_renew_contract"
 msgid "Renew Contracts"
 msgstr "Renouvellement"
-
-msgctxt "model:customer,name:"
-msgid "Customer"
-msgstr "Client"
 
 msgctxt "selection:contract,status:"
 msgid "Active"
@@ -1042,7 +931,7 @@ msgid "Managing Entities"
 msgstr "Délégataires"
 
 msgctxt "view:contract.service:"
-msgid "Delivered Service"
+msgid "Contract Service"
 msgstr "Prestation Fournie"
 
 msgctxt "view:contract.option:"
