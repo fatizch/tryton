@@ -4,17 +4,15 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Party',
-    'PartyHealthComplement',
+    'HealthPartyComplement',
     ]
 
 
-class Party():
-    'Party'
-
+class Party:
     __name__ = 'party.party'
-    __metaclass__ = PoolMeta
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
@@ -42,8 +40,8 @@ class Party():
                 return contract.id
 
 
-class PartyHealthComplement(model.CoopSQL, model.CoopView):
-    'Party Health Complement'
+class HealthPartyComplement(model.CoopSQL, model.CoopView):
+    'Health Party Complement'
 
     __name__ = 'health.party_complement'
 
