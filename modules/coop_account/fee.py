@@ -2,13 +2,13 @@ from trytond.modules.coop_utils import model, utils, fields
 
 
 __all__ = [
-    'FeeDesc',
-    'FeeVersion',
-]
+    'FeeDescription',
+    'FeeDescriptionVersion',
+    ]
 
 
-class FeeDesc(model.CoopSQL, model.VersionedObject):
-    '''Fee Descriptor'''
+class FeeDescription(model.CoopSQL, model.VersionedObject):
+    'Fee Description'
 
     __name__ = 'account.fee.description'
 
@@ -18,10 +18,10 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
 
     @classmethod
     def __setup__(cls):
-        super(FeeDesc, cls).__setup__()
+        super(FeeDescription, cls).__setup__()
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+            ]
 
     @classmethod
     def version_model(cls):
@@ -40,15 +40,15 @@ class FeeDesc(model.CoopSQL, model.VersionedObject):
         return self.name
 
 
-class FeeVersion(model.CoopSQL, model.VersionObject):
-    '''Fee Version'''
+class FeeDescriptionVersion(model.CoopSQL, model.VersionObject):
+    'Fee Description Version'
 
     __name__ = 'account.fee.description.version'
 
-    kind = fields.Selection(
-        [('flat', 'Flat'), ('rate', 'Rate')],
-        'Rating mode',
-        required=True)
+    kind = fields.Selection([
+            ('flat', 'Flat'),
+            ('rate', 'Rate')
+            ], 'Rating mode', required=True)
     value = fields.Numeric('Value')
 
     @classmethod

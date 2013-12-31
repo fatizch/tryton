@@ -6,13 +6,10 @@ from trytond.modules.coop_utils import fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Company',
-]
+    ]
 
 
-class Company():
-    'Company'
-
-    __metaclass__ = PoolMeta
+class Company:
     __name__ = 'company.company'
 
     fiscal_years = fields.One2Many('account.fiscalyear', 'company',
