@@ -6,7 +6,7 @@ from trytond.modules.coop_utils import fields
 
 __all__ = [
     'ModelCurrency',
-]
+    ]
 
 
 class ModelCurrency(object):
