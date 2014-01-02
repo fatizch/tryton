@@ -5,11 +5,11 @@ from .claim_process import *
 def register():
     Pool.register(
         ClaimProcess,
-        LossProcess,
-        ProcessDesc,
-        DeclarationProcessParameters,
+        Loss,
+        Process,
+        ClaimDeclareFindProcess,
         module='claim_process', type_='model')
 
     Pool.register(
-        DeclarationProcessFinder,
+        ClaimDeclare,
         module='claim_process', type_='wizard')
