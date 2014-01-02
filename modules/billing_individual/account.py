@@ -4,7 +4,9 @@ from sql.aggregate import Sum
 from sql.conditionals import Coalesce
 
 from trytond.transaction import Transaction
-from trytond.pool import PoolMeta, Pool, Eval
+from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval
+
 from trytond.modules.coop_utils import fields, export
 
 __metaclass__ = PoolMeta
