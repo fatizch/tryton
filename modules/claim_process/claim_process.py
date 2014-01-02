@@ -11,7 +11,7 @@ from trytond.modules.coop_process import ProcessFinder, ProcessStart
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'ClaimProcess',
+    'Claim',
     'Loss',
     'Process',
     'ClaimDeclareFindProcess',
@@ -19,7 +19,7 @@ __all__ = [
     ]
 
 
-class ClaimProcess(CogProcessFramework):
+class Claim(CogProcessFramework):
     'Claim'
 
     __metaclass__ = ClassAttr

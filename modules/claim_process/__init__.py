@@ -4,7 +4,7 @@ from .claim_process import *
 
 def register():
     Pool.register(
-        ClaimProcess,
+        Claim,
         Loss,
         Process,
         ClaimDeclareFindProcess,
