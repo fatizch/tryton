@@ -527,7 +527,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):
-        # This test must be run later as execute rule force a commit
+        # This test must be run later as execute rule with debug enabled forces
+        # a commit
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
 
         # Check Debug mode

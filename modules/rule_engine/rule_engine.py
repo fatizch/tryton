@@ -7,27 +7,25 @@ import tokenize
 import functools
 import json
 import datetime
-
 from StringIO import StringIO
-
 from decimal import Decimal
-
 from pyflakes.checker import Checker
 import pyflakes.messages
 
 from trytond.rpc import RPC
 from trytond import backend
-
-from trytond.modules.coop_utils import fields
-from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
-from trytond.modules.coop_utils.model import CoopView as ModelView
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval, Or
+
+from trytond.modules.coop_utils import fields
+from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
+from trytond.modules.coop_utils.model import CoopView as ModelView
 from trytond.modules.coop_utils import model, CoopView, utils, coop_string
 from trytond.modules.coop_utils import coop_date
+
 from trytond.modules.table import TableCell
 
 __all__ = [
@@ -49,7 +47,7 @@ __all__ = [
     'RuleError',
     'RuleEngineResult',
     'RuleEngineTagRelation',
-]
+    ]
 
 CODE_TEMPLATE = """
 def fct_%s():
@@ -96,7 +94,7 @@ def decistmt(s):
                 (tokenize.OP, '('),
                 (tokenize.STRING, repr(tokval)),
                 (tokenize.OP, ')')
-            ])
+                ])
         else:
             result.append((toknum, tokval))
     return tokenize.untokenize(result)
@@ -238,6 +236,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
         self.result = result.print_result()
 
 
+# TODO : After refactoring, remove.
 class RuleEngineContext(CoopView):
 
     @classmethod
@@ -371,7 +370,9 @@ class RuleEngineParameter(ModelView, ModelSQL):
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True)
-    kind = fields.Selection([('rule', 'Rule'), ('kwarg', 'Keyword Argument'),
+    kind = fields.Selection([
+            ('rule', 'Rule'),
+            ('kwarg', 'Keyword Argument'),
             ('table', 'Table')],
         'Kind', on_change=['kind'])
     the_rule = fields.Many2One('rule_engine', 'Rule to use', states={
@@ -389,8 +390,8 @@ class RuleEngineParameter(ModelView, ModelSQL):
     def __setup__(cls):
         super(RuleEngineParameter, cls).__setup__()
         cls._error_messages.update({
-            'kwarg_expected': 'Expected %s as a parameter for rule %s',
-        })
+                'kwarg_expected': 'Expected %s as a parameter for rule %s',
+                })
 
     @classmethod
     def _export_keys(cls):
@@ -546,45 +547,48 @@ class Rule(ModelView, ModelSQL):
     name = fields.Char('Name', required=True)
     context = fields.Many2One('rule_engine.context', 'Context', required=True)
     code = fields.Text('Code')
-    data_tree = fields.Function(fields.Text('Data Tree'), 'get_data_tree')
-    test_cases = fields.One2Many(
-        'rule_engine.test_case', 'rule', 'Test Cases',
+    data_tree = fields.Function(
+        fields.Text('Data Tree'),
+        'get_data_tree')
+    test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases',
         states={'invisible': Eval('id', 0) <= 0},
         context={'rule_id': Eval('id')})
-    status = fields.Selection(
-        [
+    status = fields.Selection([
             ('draft', 'Draft'),
-            ('validated', 'Validated'),
-        ], 'Status')
+            ('validated', 'Validated')],
+        'Status')
     debug_mode = fields.Boolean('Debug Mode')
-    exec_logs = fields.One2Many(
-        'rule_engine.log', 'rule', 'Execution Logs',
+    exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
         depends=['debug_mode'])
     rule_parameters = fields.One2Many('rule_engine.parameter', 'parent_rule',
         'Rule parameters')
     rule_kwargs = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
         'Extra Kwargs', domain=[('kind', '=', 'kwarg')],
-        states={'invisible': Or(~Eval('extra_data'),
+        states={'invisible': Or(
+                ~Eval('extra_data'),
                 Eval('extra_data_kind') != 'kwarg')})
     rule_rules = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
         'Extra Rules', domain=[('kind', '=', 'rule')],
-        states={'invisible': Or(~Eval('extra_data'),
+        states={'invisible': Or(
+                ~Eval('extra_data'),
                 Eval('extra_data_kind') != 'rule')})
     rule_tables = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
         'Extra Tables', domain=[('kind', '=', 'table')],
-        states={'invisible': Or(~Eval('extra_data'),
+        states={'invisible': Or(
+                ~Eval('extra_data'),
                 Eval('extra_data_kind') != 'table')})
     extra_data = fields.Function(fields.Boolean('Display Extra Data'),
         'get_extra_data', 'setter_void')
     extra_data_kind = fields.Function(
         fields.Selection([
-                ('', ''), ('kwarg', 'kwarg'),
-                ('rule', 'Rule'), ('table', 'Table')],
+                ('', ''),
+                ('kwarg', 'kwarg'),
+                ('rule', 'Rule'),
+                ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
         'get_extra_data_kind', 'setter_void')
-    tags = fields.Many2Many('rule_engine-tag', 'rule_engine',
-        'tag', 'Tags')
+    tags = fields.Many2Many('rule_engine-tag', 'rule_engine', 'tag', 'Tags')
     tags_name = fields.Function(
         fields.Char('Tags', on_change_with=['tags']),
         'on_change_with_tags_name', searcher='search_tags')
@@ -597,7 +601,7 @@ class Rule(ModelView, ModelSQL):
                 'bad_rule_computation': 'An error occured in rule %s.'
                 'For more information, activate debug mode and see the logs'
                 '\n\nError info :\n%s',
-        })
+                })
         on_change_fields = ['context', 'rule_parameters']
         for field_name in dir(cls):
             field = getattr(cls, field_name)
@@ -890,9 +894,8 @@ class Context(ModelView, ModelSQL):
     __name__ = 'rule_engine.context'
 
     name = fields.Char('Name', required=True)
-    allowed_elements = fields.Many2Many(
-        'rule_engine.context-function', 'context',
-        'tree_element', 'Allowed tree elements')
+    allowed_elements = fields.Many2Many('rule_engine.context-function',
+        'context', 'tree_element', 'Allowed tree elements')
 
     @classmethod
     def __setup__(cls):
@@ -900,7 +903,7 @@ class Context(ModelView, ModelSQL):
         cls._error_messages.update({
                 'duplicate_name': ('You have defined twice the same name %s '
                     'in %s and %s'),
-        })
+                })
 
     @classmethod
     def validate(cls, contexts):
@@ -939,56 +942,51 @@ class Context(ModelView, ModelSQL):
 
 
 class TreeElement(ModelView, ModelSQL):
-    "Rule Engine Tree Element"
+    'Rule Engine Tree Element'
     __name__ = 'rule_engine.function'
     _rec_name = 'description'
 
-    description = fields.Char(
-        'Description', on_change=['description', 'translated_technical_name'])
-    rule = fields.Many2One(
-        'rule_engine', 'Rule', states={
+    description = fields.Char('Description', on_change=[
+            'description', 'translated_technical_name'])
+    rule = fields.Many2One('rule_engine', 'Rule', states={
             'invisible': Eval('type') != 'rule',
-            'required': Eval('type') == 'rule',
-        }, depends=['rule'])
-    name = fields.Char(
-        'Name', states={
+            'required': Eval('type') == 'rule'},
+        depends=['rule'])
+    name = fields.Char('Name', states={
             'invisible': ~Eval('type').in_(['function']),
-            'required': Eval('type').in_(['function']),
-        }, depends=['type'])
-    namespace = fields.Char(
-        'Namespace', states={
+            'required': Eval('type').in_(['function'])},
+        depends=['type'])
+    namespace = fields.Char('Namespace', states={
             'invisible': Eval('type') != 'function',
-            'required': Eval('type') == 'function',
-        }, depends=['type'])
-    type = fields.Selection(
-        [
+            'required': Eval('type') == 'function'},
+        depends=['type'])
+    type = fields.Selection([
             ('folder', 'Folder'),
-            ('function', 'Function'),
-        ], 'Type', required=True)
+            ('function', 'Function')],
+        'Type', required=True)
     parent = fields.Many2One('rule_engine.function', 'Parent')
-    children = fields.One2Many(
-        'rule_engine.function', 'parent', 'Children')
-    translated_technical_name = fields.Char(
-        'Translated technical name',
+    children = fields.One2Many('rule_engine.function', 'parent', 'Children')
+    translated_technical_name = fields.Char('Translated technical name',
         states={
             'invisible': ~Eval('type').in_(['function', 'rule', 'table']),
-            'required': Eval('type').in_(['function', 'rule', 'table']),
-        }, depends=['type'],
-        on_change_with=['rule'])
-    fct_args = fields.Char(
-        'Function Arguments', states={'invisible': Eval('type') != 'function'})
+            'required': Eval('type').in_(['function', 'rule', 'table'])},
+        depends=['type'], on_change_with=['rule'])
+    fct_args = fields.Char('Function Arguments',
+        states={'invisible': Eval('type') != 'function'})
     language = fields.Many2One('ir.lang', 'Language', required=True)
     long_description = fields.Text('Long Description')
     full_path = fields.Function(
-        fields.Char('Full Path'), 'get_full_path')
+        fields.Char('Full Path'),
+        'get_full_path')
 
     @classmethod
     def __setup__(cls):
         super(TreeElement, cls).__setup__()
         cls._error_messages.update({
-            'argument_accent_error': 'Function arguments must only use ascii',
-            'name_accent_error': 'Technical name must only use ascii',
-        })
+                'argument_accent_error':
+                'Function arguments must only use ascii',
+                'name_accent_error': 'Technical name must only use ascii',
+                })
 
     @classmethod
     def _export_keys(cls):
@@ -1033,7 +1031,7 @@ class TreeElement(ModelView, ModelSQL):
         return {
             'translated_technical_name':
             coop_string.remove_blank_and_invalid_char(self.description)
-        }
+            }
 
     def as_tree(self):
         tree = {}
@@ -1103,28 +1101,26 @@ class TreeElement(ModelView, ModelSQL):
 
 
 class ContextTreeElement(ModelSQL):
-    "Context Tree Element"
+    'Context Tree Element'
     __name__ = 'rule_engine.context-function'
 
-    context = fields.Many2One(
-        'rule_engine.context', 'Context', required=True, ondelete='CASCADE')
-    tree_element = fields.Many2One(
-        'rule_engine.function', 'Tree Element',
+    context = fields.Many2One('rule_engine.context', 'Context', required=True,
+        ondelete='CASCADE')
+    tree_element = fields.Many2One('rule_engine.function', 'Tree Element',
         required=True, ondelete='CASCADE')
 
 
 class TestCaseValue(ModelView, ModelSQL):
-    "Test Case Value"
+    'Test Case Value'
     __name__ = 'rule_engine.test_case.value'
 
-    name = fields.Selection(
-        'get_selection', 'Name',
-        selection_change_with=['rule', 'test_case'], depends=['rule',
-            'test_case'])
+    name = fields.Selection('get_selection', 'Name',
+        selection_change_with=['rule', 'test_case'],
+        depends=['rule', 'test_case'])
     value = fields.Char('Value', states={'invisible': ~Eval('override_value')})
     override_value = fields.Boolean('Override Value')
-    test_case = fields.Many2One(
-        'rule_engine.test_case', 'Test Case', ondelete='CASCADE')
+    test_case = fields.Many2One('rule_engine.test_case', 'Test Case',
+        ondelete='CASCADE')
     rule = fields.Function(
         fields.Many2One('rule_engine', 'Rule'),
         'get_rule')
@@ -1133,8 +1129,8 @@ class TestCaseValue(ModelView, ModelSQL):
     def __setup__(cls):
         super(TestCaseValue, cls).__setup__()
         cls.__rpc__.update({
-            'get_selection': RPC(instantiate=0),
-        })
+                'get_selection': RPC(instantiate=0),
+                })
 
     @classmethod
     def _export_keys(cls):
@@ -1180,7 +1176,7 @@ class TestCaseValue(ModelView, ModelSQL):
 
 
 class TestCase(ModelView, ModelSQL):
-    "Test Case"
+    'Test Case'
     __name__ = 'rule_engine.test_case'
     _rec_name = 'description'
 
@@ -1188,8 +1184,7 @@ class TestCase(ModelView, ModelSQL):
     rule = fields.Many2One('rule_engine', 'Rule', required=True,
         ondelete='CASCADE')
     expected_result = fields.Char('Expected Result')
-    test_values = fields.One2Many(
-        'rule_engine.test_case.value', 'test_case', 'Values',
+    test_values = fields.One2Many('rule_engine.test_case.value', 'test_case', 'Values',
         on_change=['test_values', 'rule'], depends=['rule'],
         context={'rule_id': Eval('rule')})
     result_value = fields.Char('Result Value')
@@ -1237,7 +1232,7 @@ class TestCase(ModelView, ModelSQL):
                 'debug': '',
                 'low_debug': '',
                 'expected_result': result_value,
-            }
+                }
         if test_result == {}:
             return {}
         return {
@@ -1248,7 +1243,7 @@ class TestCase(ModelView, ModelSQL):
             'debug': '\n'.join(test_result.print_debug()),
             'low_debug': '\n'.join(test_result.print_low_level_debug()),
             'expected_result': str(test_result),
-        }
+            }
 
     def do_test(self):
         try:
@@ -1287,7 +1282,7 @@ class TestCase(ModelView, ModelSQL):
 
 
 class RunTestsReport(ModelView):
-    "Test Run Report"
+    'Test Run Report'
     __name__ = 'rule_engine.run_tests.results'
 
     report = fields.Text('Report', readonly=True)
@@ -1302,7 +1297,7 @@ class RunTests(Wizard):
         'rule_engine.run_tests.results',
         'rule_engine.run_tests_report', [
             Button('OK', 'end', 'tryton-ok', True),
-        ])
+            ])
 
     def format_result(self, test_case):
         success, info = test_case.do_test()
@@ -1318,10 +1313,7 @@ class RunTests(Wizard):
         results = []
         for test_case in rule.test_cases:
             results.append(self.format_result(test_case))
-
-        return {
-            'report': '\n\n'.join(results),
-        }
+        return {'report': '\n\n'.join(results)}
 
 
 class RuleError(model.CoopSQL, model.CoopView):
@@ -1331,9 +1323,11 @@ class RuleError(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
     name = fields.Char('Name', required=True, translate=True)
-    kind = fields.Selection(
-        [('info', 'Info'), ('warning', 'Warning'), ('error', 'Error')], 'Kind',
-        required=True)
+    kind = fields.Selection([
+            ('info', 'Info'),
+            ('warning', 'Warning'),
+            ('error', 'Error')],
+        'Kind', required=True)
     arguments = fields.Char('Arguments')
 
     def __str__(self):
@@ -1347,11 +1341,11 @@ class RuleError(model.CoopSQL, model.CoopView):
         super(RuleError, cls).__setup__()
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+            ]
         cls._error_messages.update({
-            'arg_number_error':
-            'Number of arguments does not match string content',
-        })
+                'arg_number_error':
+                'Number of arguments does not match string content',
+                })
 
     def check_arguments(self):
         try:
@@ -1394,6 +1388,6 @@ class RuleEngineTagRelation(model.CoopSQL):
 
     __name__ = 'rule_engine-tag'
 
-    rule_engine = fields.Many2One('rule_engine',
-        'Rule Engine', ondelete='CASCADE')
+    rule_engine = fields.Many2One('rule_engine', 'Rule Engine',
+        ondelete='CASCADE')
     tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')
