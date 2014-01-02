@@ -514,7 +514,7 @@ completed the current process, please go ahead"/>'
         View = Pool().get('ir.ui.view')
 
         to_delete = set(previous_ids) - set(new_ids)
-        Process.write([self], {'menu_items': [('set', new_ids)]})
+        Process.write([self], {'menu_items': [('add', new_ids)]})
         menus = []
         act_wins = []
         views = []
