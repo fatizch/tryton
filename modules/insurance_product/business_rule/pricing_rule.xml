@@ -15,7 +15,7 @@
       <field name="name">pricing_component_form</field>
     </record>
     <!--################################################################-->
-    <!-- Pricing Rule -->
+    <!-- Premium Rule -->
     <!--################################################################-->
     <record model="ir.ui.view" id="pricingrule_view_tree">
       <field name="model">billing.premium.rule</field>

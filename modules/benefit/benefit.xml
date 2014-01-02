@@ -43,7 +43,7 @@
     </record>
     <menuitem parent="offered.menu_product" sequence="1" id="menu_benefit_form" icon="tryton-list" action="act_benefit_form"/>
     <!-- ############################################################ -->
-    <!-- Event Desc -->
+    <!-- Event Description -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="event_desc_view_form">
       <field name="model">benefit.event.description</field>
@@ -82,7 +82,7 @@
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="11" id="menu_event_desc_form" icon="tryton-list" action="act_event_desc_form"/>
     <!-- ############################################################ -->
-    <!-- Loss Desc -->
+    <!-- Loss Description -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="loss_desc_view_form">
       <field name="model">benefit.loss.description</field>

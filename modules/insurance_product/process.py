@@ -3,10 +3,11 @@ from trytond.pool import PoolMeta
 from trytond.modules.coop_utils import model, fields
 
 
+__metaclass__ = PoolMeta
 __all__ = [
     'ProcessProductRelation',
-    'ProcessDesc',
-]
+    'Process',
+    ]
 
 
 class ProcessProductRelation(model.CoopSQL):
@@ -20,11 +21,8 @@ class ProcessProductRelation(model.CoopSQL):
         ondelete='CASCADE')
 
 
-class ProcessDesc():
-    'Process Desc'
-
+class Process:
     __name__ = 'process'
-    __metaclass__ = PoolMeta
 
     for_products = fields.Many2Many('process-offered.product',
         'process', 'product', 'Products')

@@ -12,12 +12,8 @@ from trytond.modules.offered.offered import DEF_CUR_DIG
 
 __all__ = [
     'BenefitRule',
-    'SubBenefitRule',
-]
-AMOUNT_KIND = [
-    ('amount', 'Amount'),
-    ('cov_amount', 'Coverage Amount'),
-]
+    'BenefitRuleStage',
+    ]
 STATES_CAPITAL = Eval('_parent_offered', {}).get(
     'indemnification_kind') == 'capital'
 STATES_PERIOD = Eval('_parent_offered', {}).get(
@@ -34,7 +30,10 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
 
     amount_evolves_over_time = fields.Boolean('Evolves Over Time',
         states={'invisible': ~STATES_PERIOD})
-    amount_kind = fields.Selection(AMOUNT_KIND, 'Amount Kind',
+    amount_kind = fields.Selection([
+            ('amount', 'Amount'),
+            ('cov_amount', 'Coverage Amount'),
+            ], 'Amount Kind',
         states={'invisible': Or(STATE_ADVANCED, STATES_AMOUNT_EVOLVES)})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
@@ -43,47 +42,48 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
                 STATE_ADVANCED,
                 Eval('amount_kind') != 'amount',
                 STATES_AMOUNT_EVOLVES,
-            )
-        })
+                )
+            })
     coef_coverage_amount = fields.Numeric('Multiplier', digits=(16, 4),
         states={
             'invisible': Or(
                 STATE_ADVANCED,
                 Eval('amount_kind') != 'cov_amount',
                 STATES_AMOUNT_EVOLVES,
-            )
-        }, help='Add a multiplier to apply to the coverage amount', )
+                )
+            }, help='Add a multiplier to apply to the coverage amount', )
     indemnification_calc_unit = fields.Selection(coop_date.DAILY_DURATION,
-        'Indemnification Calculation Unit',
-        states={
+        'Indemnification Calculation Unit', states={
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES),
             'required': ~STATES_CAPITAL,
-        }, sort=False)
+            }, sort=False)
     sub_benefit_rules = fields.One2Many('benefit.rule.stage',
-        'benefit_rule', 'Sub Benefit Rules',
+        'benefit_rule', 'Benefit Rule Stages',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
     use_monthly_period = fields.Boolean('Monthly Period',
-        help='Split periods at the end of the month',
-        states={'invisible':
-                Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
-                    Bool(Eval('max_duration_per_indemnification')))})
+        help='Split periods at the end of the month', states={
+            'invisible': Or(
+                STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
+                Bool(Eval('max_duration_per_indemnification')),
+                )
+            })
     max_duration_per_indemnification = fields.Integer(
-        'Max duration per Indemnification',
-        states={
-            'invisible':
-                Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
-                    Bool(Eval('use_monthly_period'))),
+        'Max duration per Indemnification', states={
+            'invisible': Or(
+                STATES_CAPITAL,
+                STATES_AMOUNT_EVOLVES,
+                Bool(Eval('use_monthly_period'))
+                ),
             'required': Or(STATES_ANNUITY,
                 Bool(Eval('max_duration_per_indemnification_unit')))
-        })
+            })
     max_duration_per_indemnification_unit = fields.Selection(
-        coop_date.DAILY_DURATION, 'Unit', sort=False,
-        states={
+        coop_date.DAILY_DURATION, 'Unit', sort=False, states={
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES,
                 Bool(Eval('use_monthly_period'))),
             'required': Or(STATES_ANNUITY,
                 Bool(Eval('max_duration_per_indemnification')))
-        })
+            })
     with_revaluation = fields.Boolean('With Revaluation',
         states={'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES)})
     revaluation_date = fields.Date('Revaluation Date',
@@ -95,18 +95,18 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         domain=[
             ('dimension_kind1', '=', 'range-date'),
             ('dimension_kind2', '=', None),
-        ], states={
+            ], states={
             'invisible': Bool(~Eval('with_revaluation')),
             'required': Bool(Eval('with_revaluation')),
-        }, ondelete='RESTRICT')
+            }, ondelete='RESTRICT')
     index_initial_date = fields.Date('Index Initial Date', states={
             'invisible': Bool(~Eval('with_revaluation')),
             'required': Bool(Eval('with_revaluation'))})
     index_initial_value = fields.Function(
         fields.Char('Initial Value', states={
                 'invisible': Bool(~Eval('with_revaluation')),
-                'required': Bool(Eval('with_revaluation'))},
-            domain=[('definition', '=', Eval('revaluation_index'))],
+                'required': Bool(Eval('with_revaluation')),
+                }, domain=[('definition', '=', Eval('revaluation_index'))],
             depends=['revaluation_index'],
             on_change_with=['revaluation_index', 'index_initial_date']),
         'on_change_with_index_initial_value')
@@ -309,19 +309,17 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             return self.get_indemnification_for_capital(args)
 
 
-class SubBenefitRule(model.CoopSQL, model.CoopView, ModelCurrency):
-    'Sub Benefit Rule'
+class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
+    'Benefit Rule Stage'
 
     __name__ = 'benefit.rule.stage'
 
     benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
         ondelete='CASCADE')
-    config_kind = fields.Selection(CONFIG_KIND,
-        'Conf. kind', required=True)
-    rule = fields.Many2One(
-        'rule_engine', 'Amount', states={'invisible': STATE_SIMPLE})
-    rule_complementary_data = fields.Dict(
-        'extra_data', 'Rule Complementary Data',
+    config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
+    rule = fields.Many2One('rule_engine', 'Amount',
+        states={'invisible': STATE_SIMPLE})
+    rule_complementary_data = fields.Dict('extra_data', 'Rule Extra Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',

@@ -3,15 +3,13 @@ from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'insurance_product'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
@@ -22,7 +20,7 @@ class TestCaseModel():
         result['insurer_test_case'] = {
             'name': 'Insurer Test Case',
             'dependencies': set(['configure_accounting_test_case']),
-        }
+            }
         return result
 
     @classmethod

@@ -11,9 +11,10 @@ from trytond.modules.offered import PricingResultDetail
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'PricingRule',
-    'PricingComponent',
+    'PremiumRule',
+    'PremiumRuleComponent',
     'TaxVersion',
     'FeeVersion',
     ]
@@ -31,55 +32,44 @@ PRICING_FREQUENCY = [
     ('monthly', 'Monthly')
     ]
 
-RATED_OBJECT_KIND = [
-    ('global', 'Global'),
-    ('sub_item', 'Covered Item'),
-    ]
 
-
-class PricingRule(BusinessRuleRoot, model.CoopSQL):
-    'Pricing Rule'
+class PremiumRule(BusinessRuleRoot, model.CoopSQL):
+    'Premium Rule'
 
     __name__ = 'billing.premium.rule'
 
-    components = fields.One2ManyDomain(
-        'billing.premium.rule.component', 'pricing_rule', 'Components',
+    components = fields.One2ManyDomain('billing.premium.rule.component',
+        'pricing_rule', 'Components',
         domain=[('rated_object_kind', '=', 'global')],
         states={'invisible': STATE_SIMPLE})
     sub_item_components = fields.One2ManyDomain(
         'billing.premium.rule.component',
         'pricing_rule', 'Covered Item Components',
         domain=[('rated_object_kind', '=', 'sub_item')])
-    frequency = fields.Selection(
-        PRICING_FREQUENCY, 'Rate Frequency', required=True)
-    specific_combination_rule = fields.Many2One(
-        'rule_engine', 'Combination Rule',
-        states={'invisible': STATE_SIMPLE})
-    sub_item_specific_combination_rule = fields.Many2One(
-        'rule_engine', 'Sub Item Combination Rule')
+    frequency = fields.Selection(PRICING_FREQUENCY, 'Rate Frequency',
+        required=True)
+    specific_combination_rule = fields.Many2One('rule_engine',
+        'Combination Rule', states={'invisible': STATE_SIMPLE})
+    sub_item_specific_combination_rule = fields.Many2One('rule_engine',
+        'Sub Item Combination Rule')
     basic_price = fields.Function(
-        fields.Numeric(
-            'Amount', states={'invisible': STATE_ADVANCED},
-            digits=(
+        fields.Numeric('Amount', states={'invisible': STATE_ADVANCED}, digits=(
                 16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG))),
-        'get_basic_price',
-        'set_basic_price')
+        'get_basic_price', 'set_basic_price')
     basic_tax = fields.Function(
-        fields.Many2One(
-            'account.tax.description', 'Tax',
+        fields.Many2One('account.tax.description', 'Tax',
             states={'invisible': STATE_ADVANCED}),
-        'get_basic_tax',
-        'set_basic_tax')
+        'get_basic_tax', 'set_basic_tax')
 
     @classmethod
     def __setup__(cls):
-        super(PricingRule, cls).__setup__()
+        super(PremiumRule, cls).__setup__()
         cls._error_messages.update({
-            'bad_tax_version':
-            '%s : Rule combination unavailable with tax (%s) version (%s)',
-            'bad_fee_version':
-            '%s : Rule combination unavailable with fee (%s) version (%s)',
-        })
+                'bad_tax_version':
+                '%s : Rule combination unavailable with tax (%s) version (%s)',
+                'bad_fee_version':
+                '%s : Rule combination unavailable with fee (%s) version (%s)',
+                })
 
     @classmethod
     def set_basic_price(cls, pricing_rules, name, value):
@@ -94,11 +84,12 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
             cls.write(
                 [pricing],
                 {'components': [(
-                    'create', [{
-                        'fixed_amount': value,
-                        'kind': 'base',
-                        'code': 'PP',
-                        'rated_object_kind': 'global'}])]})
+                        'create', [{
+                                'fixed_amount': value,
+                                'kind': 'base',
+                                'code': 'PP',
+                                'rated_object_kind': 'global',
+                                }])]})
 
     @classmethod
     def set_basic_tax(cls, pricing_rules, name, value):
@@ -120,14 +111,15 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
             cls.write(
                 [pricing],
                 {'components': [(
-                    'create', [{
-                        'kind': 'tax',
-                        'code': tax.code,
-                        'rated_object_kind': 'global'}])]})
+                        'create', [{
+                                'kind': 'tax',
+                                'code': tax.code,
+                                'rated_object_kind': 'global',
+                                }])]})
 
     @classmethod
     def validate(cls, rules):
-        super(PricingRule, cls).validate(rules)
+        super(PremiumRule, cls).validate(rules)
         for rule in rules:
             rule.check_rule_combination_compatibility()
 
@@ -283,54 +275,45 @@ class PricingRule(BusinessRuleRoot, model.CoopSQL):
         return result, errors
 
 
-class PricingComponent(model.CoopSQL, model.CoopView):
-    'Pricing Component'
+class PremiumRuleComponent(model.CoopSQL, model.CoopView):
+    'Premium Rule Component'
 
     __name__ = 'billing.premium.rule.component'
 
-    pricing_rule = fields.Many2One(
-        'billing.premium.rule', 'Pricing Rule', ondelete='CASCADE')
-    fixed_amount = fields.Numeric(
-        'Amount', depends=['kind', 'config_kind'],
+    pricing_rule = fields.Many2One('billing.premium.rule', 'Premium Rule',
+        ondelete='CASCADE')
+    fixed_amount = fields.Numeric('Amount', depends=['kind', 'config_kind'],
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'simple')))})
-    config_kind = fields.Selection(
-        CONFIG_KIND, 'Conf. kind', required=True,
+    config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True,
         states={'invisible': Eval('kind') != 'base'})
-    rated_object_kind = fields.Selection(
-        RATED_OBJECT_KIND, 'Rated Object Level', required=True)
-    rule = fields.Many2One(
-        'rule_engine', 'Rule Engine',
-        depends=['config_kind', 'kind'],
-        states={
+    rated_object_kind = fields.Selection([
+            ('global', 'Global'),
+            ('sub_item', 'Covered Item'),
+            ], 'Rated Object Level', required=True)
+    rule = fields.Many2One('rule_engine', 'Rule Engine',
+        depends=['config_kind', 'kind'], states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
-    rule_complementary_data = fields.Dict(
-        'extra_data', 'Rule Complementary Data',
-        on_change_with=['rule', 'rule_complementary_data'],
-        states={
+    rule_complementary_data = fields.Dict('extra_data', 'Rule Extra Data',
+        on_change_with=['rule', 'rule_complementary_data'], states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
-    kind = fields.Selection(
-        PRICING_LINE_KINDS, 'Line kind', required=True)
-    code = fields.Char(
-        'Code', required=True, on_change_with=['code', 'tax', 'fee'])
-    tax = fields.Many2One(
-        'account.tax.description', 'Tax',
+    kind = fields.Selection(PRICING_LINE_KINDS, 'Line kind', required=True)
+    code = fields.Char('Code', required=True,
+        on_change_with=['code', 'tax', 'fee'])
+    tax = fields.Many2One('account.tax.description', 'Tax',
         states={'invisible': Eval('kind') != 'tax'}, ondelete='RESTRICT')
-    fee = fields.Many2One(
-        'account.fee.description', 'Fee',
+    fee = fields.Many2One('account.fee.description', 'Fee',
         states={'invisible': Eval('kind') != 'fee'}, ondelete='RESTRICT')
     summary = fields.Function(
-        fields.Char(
-            'Value', on_change_with=[
-                'fixed_amount', 'config_kind', 'rule',
-                'kind', 'tax', 'fee', 'code']),
+        fields.Char('Value', on_change_with=['fixed_amount', 'config_kind',
+                'rule', 'kind', 'tax', 'fee', 'code']),
         'get_summary')
 
     @classmethod
@@ -415,10 +398,7 @@ class PricingComponent(model.CoopSQL, model.CoopView):
             return self.code
 
 
-class TaxVersion():
-    'Tax Version'
-
-    __metaclass__ = PoolMeta
+class TaxVersion:
     __name__ = 'account.tax.description.version'
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')
@@ -428,10 +408,7 @@ class TaxVersion():
         return False
 
 
-class FeeVersion():
-    'Fee Version'
-
-    __metaclass__ = PoolMeta
+class FeeVersion:
     __name__ = 'account.fee.description.version'
 
     apply_at_pricing_time = fields.Boolean('Apply when Pricing')

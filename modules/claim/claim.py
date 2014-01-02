@@ -12,8 +12,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, utils, coop_date, fields
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_currency import ModelCurrency
-from trytond.modules.insurance_product.benefit import INDEMNIFICATION_KIND, \
-    INDEMNIFICATION_DETAIL_KIND
+from trytond.modules.benefit import benefit
 from trytond.modules.insurance_product import Printable
 from trytond.modules.offered.offered import DEF_CUR_DIG
 
@@ -718,7 +717,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         'Delivered Service', ondelete='CASCADE',
         states={'readonly': Eval('status') == 'paid'})
     kind = fields.Function(
-        fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False,
+        fields.Selection(benefit.INDEMNIFICATION_KIND, 'Kind', sort=False,
             states={'invisible': True}),
         'get_kind')
     start_date = fields.Date('Start Date', states={
@@ -796,7 +795,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             self.details = list(self.details)
             Pool().get('claim.indemnification.detail').delete(self.details)
             self.details[:] = []
-        for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
+        for key, fancy_name in benefit.INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
                 continue
             for detail_dict in details_dict[key]:
@@ -900,7 +899,8 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
             'invisible':
                 Eval('_parent_indemnification', {}).get('kind') != 'period'
     })
-    kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
+    kind = fields.Selection(benefit.INDEMNIFICATION_DETAIL_KIND, 'Kind',
+        sort=False)
     amount_per_unit = fields.Numeric('Amount per Unit')
     nb_of_unit = fields.Numeric('Nb of Unit')
     unit = fields.Selection(coop_date.DAILY_DURATION, 'Unit')

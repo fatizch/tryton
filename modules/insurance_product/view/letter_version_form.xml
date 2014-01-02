@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Letter Version" col="2">
+<form string="Document Template Version" col="2">
     <group id="content" col="2" colspan="1">
         <label name="resource"/>
         <field name="resource"/>

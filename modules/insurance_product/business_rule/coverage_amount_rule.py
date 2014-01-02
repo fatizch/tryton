@@ -8,7 +8,7 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
 
 __all__ = [
     'CoverageAmountRule',
-]
+    ]
 
 
 class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
@@ -16,67 +16,53 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'offered.coverage_amount.rule'
 
-    kind = fields.Selection(
-        [
+    kind = fields.Selection([
             ('amount', 'Amount'),
             ('cal_list', 'Calculated List'),
             ('another_coverage', 'From another Coverage'),
-        ],
-        'Kind', states={'invisible': STATE_ADVANCED}, )
-    amounts = fields.Char(
-        'Amounts', help='Specify amounts separated by ;',
-        states={
+        ], 'Kind', states={'invisible': STATE_ADVANCED}, )
+    amounts = fields.Char('Amounts',
+        help='Specify amounts separated by ;', states={
             'invisible': Or(
                 (Eval('kind') != 'amount'),
                 (Eval('config_kind') != 'simple'),
-            ),
-        }, depends=['config_kind', 'kind'])
-    amount_start = fields.Numeric(
-        'From',
+                )}, depends=['config_kind', 'kind'])
+    amount_start = fields.Numeric('From',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={
-            'invisible': Or(
+        states={'invisible': Or(
                 (Eval('kind') != 'cal_list'),
                 (Eval('config_kind') != 'simple'),
-            ),
-        }, depends=['config_kind', 'kind'])
-    amount_end = fields.Numeric(
-        'To',
+                )}, depends=['config_kind', 'kind'])
+    amount_end = fields.Numeric('To',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={
-            'invisible': Or(
+        states={'invisible': Or(
                 (Eval('kind') != 'cal_list'),
                 (Eval('config_kind') != 'simple'),
-            ),
-        }, depends=['config_kind', 'kind'])
-    amount_step = fields.Numeric(
-        'Step',
+                )}, depends=['config_kind', 'kind'])
+    amount_step = fields.Numeric('Step',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={
-            'invisible': Or(
+        states={'invisible': Or(
                 (Eval('kind') != 'cal_list'),
                 (Eval('config_kind') != 'simple'),
-            ),
-        })
-    other_coverage = fields.Many2One('offered.option.description', 'Source Coverage',
-        domain=[('coverage_amount_rules', '!=', None)],
+                )})
+    other_coverage = fields.Many2One('offered.option.description',
+        'Source Coverage', domain=[('coverage_amount_rules', '!=', None)],
         states={
             'invisible': Or(
                 (Eval('config_kind') != 'simple'),
                 (Eval('kind') != 'another_coverage'),
-            ),
+                ),
             'required': And(
                 (Eval('config_kind') != 'simple'),
                 (Eval('kind') != 'another_coverage'),
-            )},
-        depends=['kind', 'config_kind'])
+                )}, depends=['kind', 'config_kind'])
 
     @classmethod
     def __setup__(cls):
         super(CoverageAmountRule, cls).__setup__()
         cls._error_messages.update({
-            'amounts_float': 'Amounts need to be floats !',
-        })
+                'amounts_float': 'Amounts need to be floats !',
+                })
 
     def validate_those_amounts(self, amounts):
         try:
