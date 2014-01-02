@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import fields, utils
-from trytond.modules.coop_process import ProcessFinder, ProcessParameters
+from trytond.modules.coop_process import ProcessFinder, ProcessStart
 
 
 __metaclass__ = PoolMeta
@@ -26,7 +26,7 @@ class Process:
         cls.kind.selection.append(('subscription', 'Contract Subscription'))
 
 
-class ContractSubscribeFindProcess(ProcessParameters):
+class ContractSubscribeFindProcess(ProcessStart):
     'ContractSubscribe Find Process'
 
     __name__ = 'contract.subscribe.find_process'

@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields, utils
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.coop_process import CoopProcessFramework
+from trytond.modules.coop_process import CogProcessFramework
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -15,7 +15,7 @@ __all__ = [
     ]
 
 
-class Contract(CoopProcessFramework):
+class Contract(CogProcessFramework):
     __name__ = 'contract'
     __metaclass__ = ClassAttr
 

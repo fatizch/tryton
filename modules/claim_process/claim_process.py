@@ -5,8 +5,8 @@ from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_utils import utils, fields
-from trytond.modules.coop_process import CoopProcessFramework
-from trytond.modules.coop_process import ProcessFinder, ProcessParameters
+from trytond.modules.coop_process import CogProcessFramework
+from trytond.modules.coop_process import ProcessFinder, ProcessStart
 
 
 __all__ = [
@@ -18,7 +18,7 @@ __all__ = [
     ]
 
 
-class ClaimProcess(CoopProcessFramework):
+class ClaimProcess(CogProcessFramework):
     'Claim'
 
     __metaclass__ = ClassAttr
@@ -258,7 +258,7 @@ class ProcessDesc():
         cls.kind.selection[:] = list(set(cls.kind.selection))
 
 
-class DeclarationProcessParameters(ProcessParameters):
+class DeclarationProcessParameters(ProcessStart):
     'Declaration Process Parameters'
 
     __name__ = 'claim.declare.find_process'
