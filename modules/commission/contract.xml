@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
     <data>
-        <!-- Contract -->
+        <!-- ############################################################ -->
+        <!-- ########### Contract ########### -->
+        <!-- ############################################################ -->
         <record model="ir.ui.view" id="agreement_view_tree">
             <field name="model">contract</field>
             <field name="type">tree</field>
@@ -36,7 +38,9 @@
         <menuitem parent="menu_commission" sequence="20"
             id="menu_agreement_form" icon="tryton-list" action="act_agreement_form"/>
 
-        <!-- Option -->
+        <!-- ############################################################ -->
+        <!-- ########### Option ########### -->
+        <!-- ############################################################ -->
         <record model="ir.ui.view" id="option_view_tree">
             <field name="model">contract.option</field>
             <field name="type">tree</field>
@@ -57,7 +61,9 @@
           <field name="name">option_com_tree</field>
         </record>
 
-        <!-- OptionCommissionOptionRelation -->
+        <!-- ############################################################ -->
+        <!-- ########### OptionCommissionOptionRelation ########### -->
+        <!-- ############################################################ -->
         <record model="ir.ui.view" id="compensated_option_view_tree">
             <field name="model">contract.option-commission.option</field>
             <field name="type">tree</field>
