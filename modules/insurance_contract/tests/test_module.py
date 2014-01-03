@@ -27,7 +27,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Party': 'party.party',
             'Sequence': 'ir.sequence',
             # 'BillingProcess': 'contract.do_billing',
-        }
+            }
 
     def test0001_testPersonCreation(self):
         party = self.Party()

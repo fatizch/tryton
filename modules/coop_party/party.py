@@ -3,7 +3,7 @@ from trytond.pyson import Eval, Bool, Less
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import utils, fields, model
+from trytond.modules.coop_utils import utils, fields, model, export
 from trytond.modules.coop_utils import coop_string
 
 
@@ -22,7 +22,7 @@ STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = Bool(Eval('is_company'))
 
 
-class Party:
+class Party(export.ExportImportMixin):
     __name__ = 'party.party'
 
     is_person = fields.Boolean('Person')
