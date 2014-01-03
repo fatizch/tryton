@@ -469,7 +469,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     complementary_data_summary = fields.Function(
         fields.Char('Complementary Data', on_change_with=['item_desc']),
         'on_change_with_complementary_data_summary')
-    party = fields.Many2One('party.party', 'Party',
+    party = fields.Many2One('party.party', 'Actor',
         domain=[
             If(
                 Eval('item_kind') == 'person',
