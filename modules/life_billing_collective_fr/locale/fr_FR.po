@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -112,7 +112,7 @@ msgid "Start Date"
 msgstr "Date de Début"
 
 msgctxt "field:contract.premium_rate.line,tranche:"
-msgid "Tranche"
+msgid "Salary Range"
 msgstr "Tranche"
 
 msgctxt "field:contract.premium_rate.line,write_date:"
@@ -280,7 +280,7 @@ msgid "Rate"
 msgstr "Taux"
 
 msgctxt "field:billing.premium_rate.form.line,rate_line:"
-msgid "Rate Line"
+msgid "Premium Rate Line"
 msgstr "Ligne de Taux"
 
 msgctxt "field:billing.premium_rate.form.line,rate_note:"
@@ -614,7 +614,7 @@ msgid "From Date"
 msgstr "Date de Début"
 
 msgctxt "field:billing.premium.rate.rule,sub_rating_rules:"
-msgid "Sub Rating Rules"
+msgid "Premium Rate Rule Lines"
 msgstr ""
 
 msgctxt "field:billing.premium.rate.rule,template:"
@@ -686,7 +686,7 @@ msgid "Rate"
 msgstr "Taux"
 
 msgctxt "field:billing.premium.rate.rule.line,tranche:"
-msgid "Tranche"
+msgid "Salary Range"
 msgstr "Tranche"
 
 msgctxt "field:billing.premium.rate.rule.line,write_date:"
@@ -790,7 +790,7 @@ msgid "Suspense Account"
 msgstr "Compte d'attente"
 
 msgctxt "model:contract.premium_rate.line,name:"
-msgid "Rate Line"
+msgid "Premium Rate Line"
 msgstr "Ligne de Tarif"
 
 msgctxt "model:billing.premium_rate.form,name:"
@@ -802,31 +802,31 @@ msgid "Rate Note Line"
 msgstr "Ligne de Bordereau"
 
 msgctxt "model:billing.premium_rate.form.receive.create_move,name:"
-msgid "Rate Note Move Displayer"
+msgid "Billing Premium Rate Form Receive Create Move"
 msgstr "Réception du bordereau"
 
 msgctxt "model:billing.premium_rate.form.create.param-client,name:"
-msgid "Rate Note Parameter Client Relation"
+msgid "Billing Premium Rate Form Create Param Client"
 msgstr "Relation Bordereau Client"
 
 msgctxt "model:billing.premium_rate.form.create.param-contract,name:"
-msgid "Rate Note Parameter Contract Relation"
+msgid "Billing Premium Rate Form Create Param Contract"
 msgstr "Relation Bordereau Contrat"
 
 msgctxt "model:billing.premium_rate.form.create.param-group_client,name:"
-msgid "Rate Note Parameter Group Party Relation"
+msgid "Billing Premium Rate Form Create Param Group Client"
 msgstr "Relation Bordereau Acteur"
 
 msgctxt "model:billing.premium_rate.form.create.param-product,name:"
-msgid "Rate Note Parameter Product Relation"
+msgid "Billing Premium Rate Form Create Param Product"
 msgstr "Relation Bordereau Produit"
 
 msgctxt "model:billing.premium_rate.form.create.param,name:"
-msgid "Rate Note Parameters"
+msgid "Billing Premium Rate Form Create Param"
 msgstr "Paramètres de Recherche"
 
 msgctxt "model:billing.premium_rate.form.receive.select,name:"
-msgid "Rate Note Selection"
+msgid "Billing Premium Rate Form Receive Select"
 msgstr "Sélection du bordereau"
 
 msgctxt "model:billing.premium_rate.form.create.show_forms,name:"
@@ -846,11 +846,11 @@ msgid "Relation between fare class group and fare class"
 msgstr ""
 
 msgctxt "model:billing.premium.rate.rule,name:"
-msgid "Collective Rating Rule"
+msgid "Premium Rate Rule"
 msgstr "Règle de Tarification Collective"
 
 msgctxt "model:billing.premium.rate.rule.line,name:"
-msgid "Sub Rating Rule"
+msgid "Premium Rate Rule Line"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_fare_class_form"
@@ -878,7 +878,7 @@ msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
 msgctxt "model:ir.action,name:launch_rate_notes_process"
-msgid "Rate Note Process"
+msgid "Billing Premium Rate Form Create"
 msgstr "Processus d'Appel de Cotisation"
 
 msgctxt "model:ir.ui.menu,name:menu_fare_class_form"
@@ -898,7 +898,7 @@ msgid "Rate Notes"
 msgstr "Bordereaux de Cotisations"
 
 msgctxt "model:ir.ui.menu,name:menu_rate_note_process"
-msgid "Rate Note Process"
+msgid "Billing Premium Rate Form Create"
 msgstr "Processus d'Appel de Cotisation"
 
 msgctxt "model:ir.ui.menu,name:menu_rate_note_reception"
@@ -954,7 +954,7 @@ msgid "by Fare Class"
 msgstr "par Classe Tarifaire"
 
 msgctxt "selection:billing.premium.rate.rule,rating_kind:"
-msgid "by Tranche"
+msgid "by Salary Range"
 msgstr "Par Tranche"
 
 msgctxt "selection:billing.premium.rate.rule,template_behaviour:"
@@ -982,7 +982,7 @@ msgid "%"
 msgstr "%"
 
 msgctxt "view:contract.premium_rate.line:"
-msgid "Rate Line"
+msgid "Premium Rate Line"
 msgstr "Ligne de Tarif"
 
 msgctxt "view:billing.premium_rate.form:"
@@ -1010,11 +1010,11 @@ msgid "Move"
 msgstr "Mouvement"
 
 msgctxt "view:billing.premium_rate.form.create.param:"
-msgid "Rate Note Process Parameters"
+msgid "Billing Premium Rate Form Create Parameters"
 msgstr "Paramètres de Recherche"
 
 msgctxt "view:billing.premium_rate.form.receive.select:"
-msgid "Rate Note Selection"
+msgid "Billing Premium Rate Form Receive Select"
 msgstr "Sélection du bordereau"
 
 msgctxt "view:billing.premium_rate.form.create.show_forms:"
@@ -1030,7 +1030,7 @@ msgid "Fare Class Group"
 msgstr "Cotisation Groupe de Tarif"
 
 msgctxt "view:billing.premium.rate.rule:"
-msgid "Collective Rating Rule"
+msgid "Premium Rate Rule"
 msgstr "Règle de Tarification Collective"
 
 msgctxt "view:billing.premium.rate.rule.line:"
@@ -1042,11 +1042,11 @@ msgid "Fare Class Rating Rule"
 msgstr "Règle de Classe Tarifaire"
 
 msgctxt "view:billing.premium.rate.rule.line:"
-msgid "Sub Rating Rule"
+msgid "Premium Rate Rule Line"
 msgstr ""
 
 msgctxt "view:billing.premium.rate.rule.line:"
-msgid "Tranche Rating Rule"
+msgid "Salary Range Rating Rule"
 msgstr "Règle de Tarif par Tranche"
 
 msgctxt "view:contract:"

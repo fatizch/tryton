@@ -1,12 +1,12 @@
-from trytond.modules.rule_engine import RuleEngineContext
+from trytond.pool import PoolMeta
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'OfferedContext',
+    'RuleEngineRuntime',
     ]
 
 
-class OfferedContext(RuleEngineContext):
-
+class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
@@ -15,4 +15,5 @@ class OfferedContext(RuleEngineContext):
 
     @classmethod
     def _re_fare_class_group(cls, args):
-        return args['fare_class_group'].code if 'fare_class_group' in args else None
+        return (args['fare_class_group'].code
+            if 'fare_class_group' in args else None)

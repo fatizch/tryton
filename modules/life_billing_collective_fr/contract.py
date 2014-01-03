@@ -1,20 +1,20 @@
+from decimal import Decimal
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, fields, utils, coop_date
 from trytond.modules.offered import NonExistingRuleKindException
 
 __metaclass__ = PoolMeta
-
 __all__ = [
     'Contract',
     'CoveredData',
     ]
 
 
-class Contract():
-    'Contract'
-
+class Contract:
     __name__ = 'contract'
 
     use_rates = fields.Function(
@@ -73,12 +73,12 @@ already exists and can't be modified (%s)'''),
         return rates, errs
 
     def calculate_rates(self):
-        RateLine = Pool().get('contract.premium_rate.line')
+        PremiumRateLine = Pool().get('contract.premium_rate.line')
         rates, errs = self.calculate_rates_dicts_between_dates()
         if errs:
             return False, errs
         if self.rates:
-            RateLine.delete(self.rates)
+            PremiumRateLine.delete(self.rates)
         self.rates = []
         pop_rates = {}
         for rate_dict in rates:
@@ -86,7 +86,7 @@ already exists and can't be modified (%s)'''),
             option = rate_dict['covered_data'].option
             at_date = rate_dict['date']
             if not (population, at_date) in pop_rates:
-                rate_line = RateLine()
+                rate_line = PremiumRateLine()
                 rate_line.contract = self
                 rate_line.covered_element = population
                 rate_line.start_date = at_date
@@ -196,6 +196,39 @@ already exists and can't be modified (%s)'''),
             return {'rates': {'update': rate_dicts}}
         else:
             return {}
+
+    def create_price_list(self, start_date, end_date):
+        if not 'rate_note' in Transaction().context:
+            return super(Contract, self).create_price_list(
+                start_date, end_date)
+        return []
+
+    def calculate_base_lines(self, work_set):
+        if not 'rate_note' in Transaction().context:
+            return super(Contract, self).calculate_base_lines(
+                work_set)
+        rate_note = Transaction().context.get('rate_note')
+        work_set['_remaining'] = Decimal(0)
+        for rate_line in rate_note.lines:
+            rate_line.calculate_bill_line(work_set)
+        if not work_set['_remaining']:
+            return
+
+        suspense_line = work_set['lines'][(None,
+            rate_note.contract.subscriber.suspense_account)]
+        suspense_line.second_origin = rate_note
+        suspense_line.debit = work_set['_remaining']
+        suspense_line.account = rate_note.contract.subscriber.suspense_account
+        suspense_line.party = rate_note.contract.subscriber
+        work_set['total_amount'] -= suspense_line.debit
+
+    def compensate_existing_moves_on_period(self, work_set):
+        if not 'rate_note' in Transaction().context:
+            return super(
+                Contract, self).compensate_existing_moves_on_period(
+                    work_set)
+        # No compensation when billing a rate note
+        pass
 
 
 class CoveredData():

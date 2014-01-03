@@ -13,6 +13,5 @@
             <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
             <field name="name">covered_data_form</field>
         </record>
-
     </data>
 </tryton>
