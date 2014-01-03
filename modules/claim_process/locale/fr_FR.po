@@ -91,7 +91,7 @@ msgid "Can Modify Benefit?"
 msgstr ""
 
 msgctxt "model:claim.declare.find_process,name:"
-msgid "Declaration Process Parameters"
+msgid "Claim Declare Find Process"
 msgstr "Paramètres du Processus de Déclaration Sinistre"
 
 msgctxt "model:ir.action,name:act_claim_logs"
