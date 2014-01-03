@@ -41,7 +41,7 @@
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="10" action="act_payment_method" id="menu_payment_method"/>
     <!--################################################################ -->
-    <!-- Price Lines -->
+    <!-- Premium -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="price_line_expandable_view_tree">
       <field name="model">contract.billing.premium</field>
@@ -113,7 +113,7 @@
       <field name="domain">[('account_for_billing.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <!--################################################################ -->
-    <!-- Billing Manager -->
+    <!-- Billing Data -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="billing_manager_view_form">
       <field name="model">contract.billing.data</field>

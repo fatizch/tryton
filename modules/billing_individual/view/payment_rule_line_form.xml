@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Payment Rule Line">
+<form string="Payment Term Line">
   <label name="type"/>
   <field name="type"/>
   <label name="is_remainder"/>
