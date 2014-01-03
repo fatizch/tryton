@@ -1,39 +1,39 @@
 from trytond.pool import Pool
 
-from .plan import *
-from .agreement import *
+from .offered import *
+from .contract import *
 from .party import *
 from .distribution import *
 from .contract import *
 from .rule_engine import *
 from .account import *
+from .billing import *
 
 
 def register():
     Pool.register(
-        #Plan
-        CommissionPlan,
-        CommissionComponent,
-        CommissionComponentCoverageRelation,
+        #From Offered
+        Product,
+        OptionDescription,
+        CommissionOptionDescriptionOptionDescriptionRelation,
         CommissionRule,
-        #Agreement
-        CommissionAgreement,
-        CompensatedOption,
-        CommissionOption,
-        #Party
+        #From Contract
+        Contract,
+        OptionCommissionOptionRelation,
+        Option,
+        ContractAgreementRelation,
+        #From Party
         Party,
         Broker,
-        #Distribution
+        #From Distribution
         DistributionNetwork,
         DistributionNetworkComPlanRelation,
         DistributionNetworkBrokerRelation,
-        #Contract
-        PriceLineComRelation,
-        PriceLine,
-        Contract,
-        ManagementRole,
+        # From billing
+        BillingPremiumCommissionOptionRelation,
+        Premium,
         #Rule Engine
-        OfferedContext,
+        RuleEngineRuntime,
         # Account
         Move,
         module='commission', type_='model')

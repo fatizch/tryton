@@ -7,10 +7,11 @@ from trytond.pyson import Eval
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.insurance_product.business_rule import business_rule
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'CommissionPlan',
-    'CommissionComponent',
-    'CommissionComponentCoverageRelation',
+    'Product',
+    'OptionDescription',
+    'CommissionOptionDescriptionOptionDescriptionRelation',
     'CommissionRule',
     ]
 
@@ -21,22 +22,20 @@ COMMISSION_KIND = [
     ]
 
 
-class CommissionPlan():
-    'Commission Plan'
-
+class Product:
     __name__ = 'offered.product'
-    __metaclass__ = PoolMeta
 
     dist_networks = fields.Many2Many('distribution.network-commission.plan',
         'com_plan', 'dist_network', 'Distribution Networks')
     commission_kind = fields.Selection(COMMISSION_KIND, 'Commission Kind',
         states={
             'invisible': ~(Eval('kind') == 'commission'),
-            'required': ~~(Eval('kind') == 'commission')})
+            'required': ~~(Eval('kind') == 'commission'),
+            })
 
     @classmethod
     def __setup__(cls):
-        super(CommissionPlan, cls).__setup__()
+        super(Product, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('commission', 'Commission'))
         if ('default', 'Default') in cls.kind.selection:
@@ -45,25 +44,23 @@ class CommissionPlan():
 
     @classmethod
     def _export_skips(cls):
-        result = super(CommissionPlan, cls)._export_skips()
+        result = super(Product, cls)._export_skips()
         result.add('dist_networks')
         return result
 
 
-class CommissionComponent():
-    'Commission Component'
-
+class OptionDescription:
     __name__ = 'offered.option.description'
-    __metaclass__ = PoolMeta
 
     commission_rules = fields.One2Many('commission.rule',
         'offered', 'Commission Rules')
-    coverages = fields.Many2Many('commission.option.description-option.description', 'component',
+    coverages = fields.Many2Many(
+        'commission.option.description-option.description', 'component',
         'coverage', 'Coverages', domain=[('kind', '=', 'insurance')])
 
     @classmethod
     def __setup__(cls):
-        super(CommissionComponent, cls).__setup__()
+        super(OptionDescription, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('commission', 'Commission'))
         if ('default', 'Default') in cls.kind.selection:
@@ -74,8 +71,8 @@ class CommissionComponent():
         return self.get_result(args=args, kind='commission')
 
 
-class CommissionComponentCoverageRelation(model.CoopSQL):
-    'Relation Commission Component and Coverage'
+class CommissionOptionDescriptionOptionDescriptionRelation(model.CoopSQL):
+    'Commission Option Description-Option Description Relation'
 
     __name__ = 'commission.option.description-option.description'
 
