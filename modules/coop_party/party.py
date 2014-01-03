@@ -3,15 +3,13 @@ from trytond.pyson import Eval, Bool, Less
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import CoopView
 from trytond.modules.coop_utils import utils, fields, model, export
 from trytond.modules.coop_utils import coop_string
 
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Party',
-    'PartyCategory',
-    'Actor',
     ]
 
 GENDER = [
@@ -24,19 +22,16 @@ STATES_PERSON = Bool(Eval('is_person'))
 STATES_COMPANY = Bool(Eval('is_company'))
 
 
-class Party(model.CoopSQL):
-    'Party'
-
+class Party(export.ExportImportMixin):
     __name__ = 'party.party'
-    __metaclass__ = PoolMeta
 
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
-    relations = fields.One2Many('party.relation',
-        'from_party', 'Relations', context={'direction': 'normal'})
-    in_relation_with = fields.One2Many('party.relation',
-        'to_party', 'in relation with', context={'direction': 'reverse'})
+    relations = fields.One2Many('party.relation', 'from_party', 'Relations',
+        context={'direction': 'normal'})
+    in_relation_with = fields.One2Many('party.relation', 'to_party',
+        'in relation with', context={'direction': 'reverse'})
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
@@ -51,39 +46,33 @@ class Party(model.CoopSQL):
         'get_main_contact_mechanism_id')
     number_of_contact_mechanisms = fields.Function(
         fields.Integer('Number Of Contact Mechanisms',
-            on_change_with=['contact_mechanisms'],
-            states={'invisible': True}),
+            on_change_with=['contact_mechanisms'], states={'invisible': True}),
         'on_change_with_number_of_contact_mechanisms')
     ####################################
     #Person information
-    gender = fields.Selection(GENDER, 'Gender',
-        on_change=['gender'], states={
+    gender = fields.Selection(GENDER, 'Gender', on_change=['gender'], states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-        })
-    first_name = fields.Char('First Name',
-        states={
+            })
+    first_name = fields.Char('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-        })
-    maiden_name = fields.Char('Maiden Name',
-        states={
+            })
+    maiden_name = fields.Char('Maiden Name', states={
             'readonly': Eval('gender') != 'female',
             'invisible': ~STATES_PERSON
-        })
-    birth_date = fields.Date('Birth Date',
-        states={
+            })
+    birth_date = fields.Date('Birth Date', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-        })
+            })
     ssn = fields.Char('SSN', states={'invisible': ~STATES_PERSON})
     ####################################
     #Company information
-    short_name = fields.Char(
-        'Short Name', states={'invisible': ~STATES_COMPANY},
+    short_name = fields.Char('Short Name',
+        states={'invisible': ~STATES_COMPANY},
         depends=['is_company'])
     parent = fields.Many2One('party.party', 'Parent',
-        #domain=[('is_company', '=', True)],
         states={'invisible': ~STATES_COMPANY})
     children = fields.One2Many('party.party', 'parent', 'Children',
         states={'invisible': ~STATES_COMPANY})
@@ -304,7 +293,8 @@ class Party(model.CoopSQL):
         return res
 
     def get_main_contact_mechanism_id(self, name):
-        return self.contact_mechanisms[0].id if self.contact_mechanisms else None
+        return (self.contact_mechanisms[0].id
+            if self.contact_mechanisms else None)
 
     @classmethod
     @model.CoopView.button_action('coop_party.act_addresses_button')
@@ -325,24 +315,3 @@ class Party(model.CoopSQL):
     @staticmethod
     def default_number_of_contact_mechanisms():
         return 0
-
-
-class PartyCategory(export.ExportImportMixin):
-    'Party Category'
-
-    __name__ = 'party.category'
-
-
-class Actor(CoopView):
-    'Actor'
-    __name__ = 'party.actor'
-    _rec_name = 'party'
-
-    reference = fields.Char('Reference')
-    party = fields.Many2One(
-        'party.party', 'Party', required=True, ondelete='CASCADE', select=True)
-
-    def get_rec_name(self, name):
-        if self.party:
-            return self.party.rec_name
-        return super(Actor, self).get_rec_name(name)
