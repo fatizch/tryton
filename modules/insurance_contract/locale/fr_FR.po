@@ -258,10 +258,6 @@ msgctxt "field:contract.service,expenses:"
 msgid "Expenses"
 msgstr "Frais"
 
-msgctxt "field:contract.option,benefits:"
-msgid "Benefits"
-msgstr "Prestations"
-
 msgctxt "field:contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"

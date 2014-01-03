@@ -231,9 +231,6 @@ class ContractOption:
 
     covered_data = fields.One2ManyDomain('contract.covered_data', 'option',
         'Covered Data', domain=[('covered_element.parent', '=', None)])
-    benefits = fields.Function(
-        fields.Many2Many('benefit', None, None, 'Benefits'),
-        'get_benefits_ids')
 
     def append_covered_data(self, covered_element=None):
         res = utils.instanciate_relation(self.__class__, 'covered_data')
@@ -251,9 +248,6 @@ class ContractOption:
 
     def get_coverage_amount(self):
         raise NotImplementedError
-
-    def get_benefits_ids(self, name):
-        return [x.id for x in self.offered.benefits] if self.offered else []
 
 
 class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
