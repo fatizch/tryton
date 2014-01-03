@@ -712,8 +712,6 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         super(Indemnification, cls).__setup__()
         cls.__rpc__.update({
                 'validate_indemnification': RPC(instantiate=0, readonly=False),
-                })
-        cls.__rpc__.update({
                 'reject_indemnification': RPC(instantiate=0, readonly=False),
                 })
         cls._buttons.update({
