@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.party.contact_mechanism import _TYPES
-from trytond.modules.coop_utils import model, utils, fields
+from trytond.modules.coop_utils import model, utils, fields, export
 
 MEDIA = _TYPES + [
     ('mail', 'Mail')
@@ -18,7 +18,7 @@ __all__ = [
     ]
 
 
-class ContactMechanism:
+class ContactMechanism(export.ExportImportMixin):
     __name__ = 'party.contact_mechanism'
     _rec_name = 'value'
 
