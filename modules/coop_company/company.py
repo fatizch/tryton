@@ -2,16 +2,13 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import export
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Company',
-]
-
-__metaclass__ = PoolMeta
+    ]
 
 
 class Company(export.ExportImportMixin):
-    'Company'
-
     __name__ = 'company.company'
 
     @classmethod

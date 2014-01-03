@@ -4,6 +4,7 @@ from trytond.pyson import Eval, Or
 
 from trytond.modules.coop_utils import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'Option',
@@ -11,11 +12,8 @@ __all__ = [
     ]
 
 
-class Contract():
-    'Contract'
-
+class Contract:
     __name__ = 'contract'
-    __metaclass__ = PoolMeta
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
@@ -33,11 +31,9 @@ class Contract():
     def search_is_health(cls, name, clause):
         return [('offered.is_health',) + tuple(clause[1:])]
 
-class Option():
-    'Option'
 
+class Option:
     __name__ = 'contract.option'
-    __metaclass__ = PoolMeta
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),
@@ -47,11 +43,8 @@ class Option():
         return self.offered and self.offered.is_health
 
 
-class CoveredElement():
-    'Covered Element'
-
+class CoveredElement:
     __name__ = 'contract.covered_element'
-    __metaclass__ = PoolMeta
 
     is_health = fields.Function(
         fields.Boolean('Is Health', states={'invisible': True}),

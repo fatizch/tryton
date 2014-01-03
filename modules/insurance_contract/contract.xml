@@ -74,22 +74,6 @@
           <field name="field_childs">covered_data</field>
           <field name="name">covered_elements_clean_tree</field>
         </record>
-        <!-- ############################################################ -->
-        <!-- Clauses -->
-        <!-- ############################################################ -->
-        <record model="ir.ui.view" id="clause_form">
-          <field name="model">contract.clause</field>
-          <field name="type">form</field>
-          <field name="inherit" ref="contract.clause_form"/>
-          <field name="name">clause_form</field>
-        </record>
-        <record model="ir.ui.view" id="clause_tree">
-          <field name="model">contract.clause</field>
-          <field name="type">tree</field>
-          <field name="inherit" ref="contract.clause_tree"/>
-          <field name="name">clause_tree</field>
-        </record>
-        <!--################################################################ -->
         <!-- Menus -->
         <!--################################################################ -->
         <menuitem name="Contract" id="menu_contract" sequence="11"/>
@@ -97,33 +81,6 @@
             sequence="10"/>
         <menuitem parent="menu_individual" sequence="1"
             id="menu_contract_form" icon="tryton-list" action="contract.act_contract_form"/>
-        <!--################################################################ -->
-        <!-- Delivered Service -->
-        <!--################################################################ -->
-        <record model="ir.ui.view" id="delivered_service_view_form">
-            <field name="model">contract.service</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="contract.delivered_service_view_form"/>
-            <field name="name">delivered_service_form</field>
-        </record>
-        <!--################################################################ -->
-        <!-- Contract History -->
-        <!--################################################################ -->
-        <record model="ir.ui.view" id="contract_history_view_form">
-            <field name="model">contract.contract.history</field>
-            <field name="type">form</field>
-            <field name="name">contract_history_form</field>
-        </record>
-        <record model="ir.ui.view" id="contract_history_view_tree">
-            <field name="model">contract.contract.history</field>
-            <field name="type">tree</field>
-            <field name="name">contract_history_tree</field>
-        </record>
-        <record model="ir.model.access" id="access_contract_history">
-            <field name="model" search="[('model', '=', 'contract.contract.history')]"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_read" eval="True"/>
-        </record>
         <!--################################################################ -->
         <!-- Relate -->
         <!--################################################################ -->
@@ -147,7 +104,7 @@
             <field name="model">contract,-1</field>
             <field name="action" ref="act_contract_status_history_relate_form"/>
         </record>
-        <!-- Management Role -->
+        <!-- Contract-Agreement Relation -->
         <record model="ir.ui.view" id="management_role_form">
           <field name="model">contract-agreement</field>
           <field name="type">form</field>

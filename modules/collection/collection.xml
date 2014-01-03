@@ -52,7 +52,7 @@
       <field name="action" ref="act_open_party_collections"/>
     </record>
     <!-- ############################################################ -->
-    <!-- CollectionParameters -->
+    <!-- CollectionCreateParameters -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="collection_parameters_form">
       <field name="model">collection.create.parameters</field>
@@ -60,7 +60,7 @@
       <field name="name">collection_parameters_form</field>
     </record>
     <!-- ############################################################ -->
-    <!-- Assignment -->
+    <!-- CollectionCreateAssignLines -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="assignment_form">
       <field name="model">collection.create.assign.lines</field>
@@ -73,7 +73,7 @@
       <field name="name">assignment_tree</field>
     </record>
     <!-- ############################################################ -->
-    <!-- Assign Collection -->
+    <!-- Collection Create Assign -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="assign_collection_form">
       <field name="model">collection.create.assign</field>
@@ -81,10 +81,10 @@
       <field name="name">assign_collection_form</field>
     </record>
     <!-- ############################################################ -->
-    <!-- Collection Wizard -->
+    <!-- Collection Create -->
     <!-- ############################################################ -->
     <record model="ir.action.wizard" id="act_collection_wizard">
-      <field name="name">Collection Wizard</field>
+      <field name="name">Collection Create</field>
       <field name="wiz_name">collection.create</field>
     </record>
     <record model="ir.action.keyword" id="act_collection_wizard_keyword">
@@ -92,6 +92,6 @@
       <field name="model">party.party,-1</field>
       <field name="action" ref="act_collection_wizard"/>
     </record>
-    <menuitem name="Collection Wizard" id="menu_collection_wizard" sequence="35" action="act_collection_wizard" parent="account.menu_account"/>
+    <menuitem name="Collection Create" id="menu_collection_wizard" sequence="35" action="act_collection_wizard" parent="account.menu_account"/>
   </data>
 </tryton>

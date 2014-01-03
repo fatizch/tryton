@@ -11,6 +11,6 @@ def register():
         CountrySubdivision,
         # From zipcode
         ZipCode,
-        # form test_case
+        # From test_case
         TestCaseModel,
         module='coop_country', type_='model')

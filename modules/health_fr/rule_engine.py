@@ -1,10 +1,13 @@
 from trytond.pool import PoolMeta
 
+__metaclass__ = PoolMeta
+__all__ = [
+    'RuleEngineRuntime',
+    ]
 
-class HealthContext():
 
+class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def _re_health_regime(cls, args):

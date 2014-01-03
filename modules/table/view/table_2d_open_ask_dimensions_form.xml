@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Dimensions" col="2">
+  <label name="dimension3"/>
+  <field name="dimension3" widget="selection"/>
+  <label name="dimension4"/>
+  <field name="dimension4" widget="selection"/>
+</form>

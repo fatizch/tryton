@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Price Line" col="2">
+<form string="Premium" col="2">
   <group id="General" xexpand="1" xfill="1" colspan="2" col="6">
     <label name="start_date"/>
     <field name="start_date" xexpand="1"/>

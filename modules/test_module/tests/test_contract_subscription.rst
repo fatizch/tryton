@@ -46,7 +46,7 @@ Create Database::
 
 Import Exported DB::
 
-    >>> wizard = Wizard('coop_utils.test_case_wizard')
+    >>> wizard = Wizard('ir.test_case.run')
     >>> wizard.form.select_all_files = True
     >>> wizard.execute('execute_test_cases')
     >>> wizard.execute('end')

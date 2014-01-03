@@ -1,13 +1,13 @@
 from trytond.modules.coop_utils import model, fields
 
 __all_ = [
-    'Regime',
+    'HealthCareSystem',
     'InsuranceFund',
     ]
 
 
-class Regime(model.CoopSQL, model.CoopView):
-    'Regime'
+class HealthCareSystem(model.CoopSQL, model.CoopView):
+    'Health Care System'
 
     __name__ = 'health.care_system'
     _order_name = 'code'
@@ -24,7 +24,7 @@ class InsuranceFund(model.CoopSQL, model.CoopView):
     code = fields.Char('Code')
     name = fields.Char('Name')
     department = fields.Char('Department')
-    regime = fields.Many2One('health.care_system', 'Regime')
+    regime = fields.Many2One('health.care_system', 'Health Care System')
 
     @classmethod
     def search_from_zipcode_and_regime(cls, zipcode, regime):

@@ -3,15 +3,13 @@ from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'health_fr'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
@@ -20,15 +18,15 @@ class TestCaseModel():
         result['expense_kind_test_case'] = {
             'name': 'Expense Kind Test Case',
             'dependencies': set([]),
-        }
+            }
         result['regime_test_case'] = {
-            'name': 'Regime Test Case',
+            'name': 'HealthCareSystem Test Case',
             'dependencies': set([]),
-        }
+            }
         result['fund_test_case'] = {
             'name': 'Fund Test Case',
             'dependencies': set(['regime_test_case']),
-        }
+            }
         return result
 
     @classmethod
@@ -52,8 +50,8 @@ class TestCaseModel():
 
     @classmethod
     def create_regime_from_line(cls, data):
-        Regime = Pool().get('health.care_system')
-        regime = Regime()
+        HealthCareSystem = Pool().get('health.care_system')
+        regime = HealthCareSystem()
         for elem in ('code', 'name', 'short_name'):
             setattr(regime, elem, data[elem])
         return regime
@@ -71,11 +69,11 @@ class TestCaseModel():
     @classmethod
     def create_fund_from_line(cls, data, addresses):
         Fund = Pool().get('health.insurance_fund')
-        Regime = Pool().get('health.care_system')
+        HealthCareSystem = Pool().get('health.care_system')
         fund = Fund()
         for elem in ('code', 'name'):
             setattr(fund, elem, data[elem])
-        fund.regime = Regime.search([
+        fund.regime = HealthCareSystem.search([
                 ('code', '=', data['regime_code'].zfill(2))])[0]
         if data['ID_ADR'] in addresses:
             zip_code = addresses[data['ID_ADR']]['Code Postal']

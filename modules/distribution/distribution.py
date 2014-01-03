@@ -12,10 +12,9 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     __name__ = 'distribution.network'
 
     name = fields.Char('Name')
-    parent = fields.Many2One('distribution.network',
-        'Top Level', select=True, left="left", right="right")
-    childs = fields.One2Many('distribution.network',
-        'parent', 'Sub Levels')
+    parent = fields.Many2One('distribution.network', 'Top Level', select=True,
+        left="left", right="right")
+    childs = fields.One2Many('distribution.network', 'parent', 'Sub Levels')
     left = fields.Integer('Left', required=True, select=True)
     right = fields.Integer('Right', required=True, select=True)
 

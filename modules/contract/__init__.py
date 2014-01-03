@@ -5,6 +5,9 @@ from .rule_engine import *
 from .party import *
 from .test_case import *
 from .wizard import *
+from .clause import *
+from .service import *
+from .document import *
 
 
 def register():
@@ -12,17 +15,19 @@ def register():
         # from contract
         StatusHistory,
         Contract,
-        SubscribedCoverage,
-        ContractClause,
+        ContractOption,
         ContractAddress,
-        DeliveredService,
-        LetterModel,
+        # From Service
+        ContractService,
+        # From Clause
+        ContractClause,
+        # From Document
+        DocumentTemplate,
         #From Rule Engine
-        OfferedContext,
-        ContractContext,
+        RuleEngineRuntime,
         # from party
         Party,
-        ContactHistory,
+        PartyInteraction,
         # from test_case
         TestCaseModel,
         #From Wizard

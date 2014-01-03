@@ -357,6 +357,67 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(self.ManageDimension1.next_dim_action.action_id,
                 'table.act_manage_dimension_2')
 
+    @test_framework.prepare_test('table.test0060table_2dim')
+    def test0090test_export(self):
+        test_table = self.Definition.search([('code', '=', 'test_code')])[0]
+        file_name, result, _ = test_table.export_json()
+        self.assertEqual(file_name, '[%s][table]test_code.json' %
+            datetime.date.today().strftime('%Y-%m-%d'))
+        self.assertEqual(result, [{
+                    '_export_key': (('code', u'test_code'),),
+                    'code': u'test_code',
+                    'dimension2': [
+                        {'definition':
+                            (('code', u'test_code'),),
+                            '_export_key':
+                            ((('code', u'test_code'),), 'dimension2', 1),
+                            'end': 10.0,
+                            'start': 1.0,
+                            '__name__': 'table.dimension.value',
+                            'type': u'dimension2'},
+                        {'definition': (('code', u'test_code'),),
+                            '_export_key':
+                            ((('code', u'test_code'),), 'dimension2', 2),
+                            'end': 42.0,
+                            'start': 20.0,
+                            '__name__': 'table.dimension.value',
+                            'type': u'dimension2'}],
+                    'name': u'Test',
+                    'dimension1': [
+                        {'__name__': 'table.dimension.value',
+                            '_export_key':
+                            ((('code', u'test_code'),), 'dimension1', 1),
+                            'type': u'dimension1',
+                            'value': u'bar',
+                            'definition': (('code', u'test_code'),)},
+                        {'__name__': 'table.dimension.value',
+                            '_export_key':
+                            ((('code', u'test_code'),), 'dimension1', 2),
+                            'type': u'dimension1',
+                            'value': u'foo',
+                            'definition': (('code', u'test_code'),)}],
+                    'cells':
+                        [[2, 2], [u'spam', u'chicken', u'ham', u'egg']],
+                    'type_': u'char',
+                    'number_of_digits': 2,
+                    'dimension_order4': u'alpha',
+                    'dimension_kind1': u'value',
+                    'dimension_order3': u'alpha',
+                    '__name__': 'table',
+                    'dimension_kind2': u'range',
+                    'dimension_order2': u'alpha',
+                    'dimension_name1': u'Value',
+                    'dimension_order1': u'alpha',
+                    'dimension_name2': u'Range'}])
+
+    @test_framework.prepare_test('table.test0060table_2dim')
+    def test0091test_copy(self):
+        test_table = self.Definition.search([('code', '=', 'test_code')])[0]
+        new_table = test_table.copy([test_table])[0]
+        self.assertEqual(new_table.code, 'test_code_clone')
+        self.assertEqual(self.Cell.get(new_table, 'bar', 30), 'chicken')
+
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

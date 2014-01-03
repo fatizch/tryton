@@ -1,15 +1,12 @@
 from trytond.pool import PoolMeta
 
+__metaclass__ = PoolMeta
 __all__ = [
     'User',
-]
-
-__metaclass__ = PoolMeta
+    ]
 
 
 class User:
-    'User'
-
     __name__ = 'res.user'
 
     @classmethod

@@ -1,19 +1,16 @@
 from trytond.pool import PoolMeta
 
 __metaclass__ = PoolMeta
-
 __all__ = [
-    'RateNoteLine',
+    'PremiumRateFormLine',
     ]
 
 
-class RateNoteLine():
-    'Rate Note line'
-
+class PremiumRateFormLine:
     __name__ = 'billing.premium_rate.form.line'
 
     def calculate_bill_line(self, work_set):
-        super(RateNoteLine, self).calculate_bill_line(work_set)
+        super(PremiumRateFormLine, self).calculate_bill_line(work_set)
         if not self.amount or not self.client_amount or self.childs:
             return
         key = (self.rate_line.covered_element,

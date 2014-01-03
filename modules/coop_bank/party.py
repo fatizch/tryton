@@ -12,8 +12,6 @@ __all__ = [
 
 
 class Party:
-    'Party'
-
     __name__ = 'party.party'
 
     bank_role = fields.One2Many(

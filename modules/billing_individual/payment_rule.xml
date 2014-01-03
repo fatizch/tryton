@@ -2,7 +2,7 @@
 <tryton>
   <data>
     <!-- ############################################################ -->
-    <!-- Payment Rule -->
+    <!-- Payment Term -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="payment_rule_form">
       <field name="model">billing.payment.term</field>
@@ -25,7 +25,7 @@
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_payment_rule">
-      <field name="name">Payment Rule</field>
+      <field name="name">Payment Term</field>
       <field name="res_model">billing.payment.term</field>
       <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
@@ -42,7 +42,7 @@
     <menuitem parent="offered.menu_product_configuration" sequence="6"
       action="act_payment_rule" id="menu_payment_rule"/>
     <!-- ############################################################ -->
-    <!-- Payment Rule Line -->
+    <!-- Payment Term Line -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="payment_rule_line_form">
       <field name="model">billing.payment.term.line</field>

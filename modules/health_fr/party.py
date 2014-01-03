@@ -3,21 +3,19 @@ from trytond.pyson import Eval, If
 
 from trytond.modules.coop_utils import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'PartyHealthComplement',
+    'HealthPartyComplement',
     ]
 
 
-class PartyHealthComplement():
-    'Party Health Complement'
-
+class HealthPartyComplement:
     __name__ = 'health.party_complement'
-    __metaclass__ = PoolMeta
 
     department = fields.Function(
         fields.Char('Department'),
         'get_department', 'set_void')
-    regime = fields.Many2One('health.care_system', 'Regime')
+    regime = fields.Many2One('health.care_system', 'Health Care System')
     insurance_fund = fields.Many2One('health.insurance_fund', 'Insurance Fund',
         domain=[
             [If(

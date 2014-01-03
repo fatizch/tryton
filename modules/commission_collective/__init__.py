@@ -5,5 +5,5 @@ from .billing import *
 def register():
     Pool.register(
         #From billing
-        RateNoteLine,
+        PremiumRateFormLine,
         module='commission_collective', type_='model')

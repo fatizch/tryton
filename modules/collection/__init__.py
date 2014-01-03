@@ -1,23 +1,27 @@
 from trytond.pool import Pool
 from .collection import *
 from .test_case import *
+from .party import *
+from .account import *
 
 
 def register():
     Pool.register(
         # From collection
-        SuspenseParty,
-        Configuration,
         Collection,
+        CollectionCreateParameters,
+        CollectionCreateAssignLines,
+        CollectionCreateAssign,
+        # From Account
+        Configuration,
         Payment,
-        CollectionParameters,
-        Assignment,
-        AssignCollection,
+        # From Party
+        Party,
         # From test_case
         TestCaseModel,
         module='collection', type_='model')
 
     Pool.register(
         # From collection
-        CollectionWizard,
+        CollectionCreate,
         module='collection', type_='wizard')

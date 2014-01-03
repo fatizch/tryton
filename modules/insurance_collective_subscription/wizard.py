@@ -5,17 +5,15 @@ from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import fields, utils
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'GroupSubscriptionProcessParameters',
-    'SubscriptionProcessFinder',
+    'ContractSubscribeFindProcess',
+    'ContractSubscribe',
     ]
 
 
-class GroupSubscriptionProcessParameters():
-    'Group Process Parameters'
-
+class ContractSubscribeFindProcess:
     __name__ = 'contract.subscribe.find_process'
-    __metaclass__ = PoolMeta
 
     is_group = fields.Boolean('Group', on_change=['product', 'is_group',
         'possible_com_product', 'dist_network', 'com_product'])
@@ -27,7 +25,7 @@ class GroupSubscriptionProcessParameters():
         utils.update_depends(cls, 'product', ['is_group'])
         cls.possible_com_product = copy.copy(cls.possible_com_product)
         cls.possible_com_product.on_change_with.append('is_group')
-        super(GroupSubscriptionProcessParameters, cls).__setup__()
+        super(ContractSubscribeFindProcess, cls).__setup__()
 
     def on_change_is_group(self):
         res = {}
@@ -41,7 +39,7 @@ class GroupSubscriptionProcessParameters():
         return res
 
     def get_possible_com_product(self):
-        res = super(GroupSubscriptionProcessParameters,
+        res = super(ContractSubscribeFindProcess,
             self).get_possible_com_product()
         if not res:
             return res
@@ -49,14 +47,11 @@ class GroupSubscriptionProcessParameters():
             if x.product.is_group == self.is_group]
 
 
-class SubscriptionProcessFinder():
-    'Subscription Process Finder'
-
+class ContractSubscribe:
     __name__ = 'contract.subscribe'
-    __metaclass__ = PoolMeta
 
     def init_main_object_from_process(self, obj, process_param):
-        res, errs = super(SubscriptionProcessFinder,
+        res, errs = super(ContractSubscribe,
             self).init_main_object_from_process(obj, process_param)
         if res:
             res, err = obj.init_from_offered(process_param.product,

@@ -19,11 +19,11 @@ def register():
         # From company
         Company,
         # From tax
-        TaxDesc,
-        TaxVersion,
+        TaxDescription,
+        TaxDescriptionVersion,
         # From fee
-        FeeDesc,
-        FeeVersion,
+        FeeDescription,
+        FeeDescriptionVersion,
         # From test_case
         TestCaseModel,
         module='coop_account', type_='model')
