@@ -42,6 +42,8 @@ class Insurer(model.CoopView, model.CoopSQL):
 
     __name__ = 'insurer'
 
+    party = fields.Many2One('party.party', 'Insurer', ondelete='CASCADE')
+
     @classmethod
     def _export_keys(cls):
         return set(['party.name'])
