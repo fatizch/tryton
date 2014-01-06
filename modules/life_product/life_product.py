@@ -7,7 +7,6 @@ from trytond.pyson import Eval, Or, Bool
 from trytond.modules.coop_utils import utils, fields
 from trytond.modules.coop_utils import coop_date
 
-from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.insurance_product.business_rule.business_rule import \
     STATE_ADVANCED, STATE_SUB_SIMPLE
@@ -16,45 +15,30 @@ STATE_LIFE = (
     Eval('_parent_offered', {}).get('family') != 'life_product.definition')
 FAMILY_LIFE = 'life_product.definition'
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'LifeItemDescriptor',
-    'LifeCoverage',
-    'LifeEligibilityRule',
-    'LifeLossDesc',
-    'LifeBenefit',
-    'LifeBenefitRule',
-    'CoveredDataContext',
-]
+    'OptionDescription',
+    'EligibilityRule',
+    ]
 
 
-class LifeItemDescriptor():
-    'Item Descriptor'
-
-    __name__ = 'offered.item.description'
-    __metaclass__ = PoolMeta
-
-
-class LifeCoverage():
-    'Coverage'
-
+class OptionDescription:
     __name__ = 'offered.option.description'
-    __metaclass__ = PoolMeta
 
     coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',
-        'offered', 'Coverage Amount Rules',
-        states={
+        'offered', 'Coverage Amount Rules', states={
             'invisible': Or(
                 Bool(Eval('is_package')),
                 Eval('family') != FAMILY_LIFE,
-            )
-        })
+                )
+            })
     is_coverage_amount_needed = fields.Function(
         fields.Boolean('Coverage Amount Needed', states={'invisible': True}),
         'get_is_coverage_amount_needed')
 
     @classmethod
     def __setup__(cls):
-        super(LifeCoverage, cls).__setup__()
+        super(OptionDescription, cls).__setup__()
         cls.family = copy.copy(cls.family)
         if not cls.family.selection:
             cls.family.selection = []
@@ -65,11 +49,7 @@ class LifeCoverage():
         return not self.is_package and self.family == FAMILY_LIFE
 
 
-class LifeEligibilityRule():
-    'Eligibility Rule'
-
-    __metaclass__ = PoolMeta
-
+class EligibilityRule:
     __name__ = 'offered.eligibility.rule'
 
     min_age = fields.Integer('Minimum Age',
@@ -83,11 +63,11 @@ class LifeEligibilityRule():
 
     @classmethod
     def __setup__(cls):
-        super(LifeEligibilityRule, cls).__setup__()
+        super(EligibilityRule, cls).__setup__()
         cls.__doc__ = 'Eligibility Rule'
 
     def give_me_eligibility(self, args):
-        res, errs = super(LifeEligibilityRule, self).give_me_eligibility(args)
+        res, errs = super(EligibilityRule, self).give_me_eligibility(args)
         if not res.eligible:
             return res, errs
         if not self.config_kind == 'simple' or not(
@@ -111,7 +91,7 @@ class LifeEligibilityRule():
 
     def give_me_sub_elem_eligibility(self, args):
         res, errs = super(
-                LifeEligibilityRule, self).give_me_sub_elem_eligibility(args)
+                EligibilityRule, self).give_me_sub_elem_eligibility(args)
         if not res.eligible:
             return res, errs
         if not self.config_kind == 'simple' or not(
@@ -141,52 +121,3 @@ class LifeEligibilityRule():
                 '%s must be younger than %s' % (
                     person.name, self.sub_max_age))
         return (EligibilityResultLine(eligible=res, details=details), errs)
-
-
-class LifeLossDesc():
-    'Loss Desc'
-
-    __name__ = 'benefit.loss.description'
-    __metaclass__ = PoolMeta
-
-    @classmethod
-    def get_possible_item_kind(cls):
-        res = super(LifeLossDesc, cls).get_possible_item_kind()
-        res.append(('person', 'Person'))
-        return res
-
-
-class LifeBenefit():
-    'Benefit'
-
-    __name__ = 'benefit'
-    __metaclass__ = PoolMeta
-
-    @classmethod
-    def get_beneficiary_kind(cls):
-        res = super(LifeBenefit, cls).get_beneficiary_kind()
-        res.append(['covered_person', 'Covered Person'])
-        return res
-
-
-class LifeBenefitRule():
-    'Life Benefit Rule'
-
-    __name__ = 'benefit.rule'
-    __metaclass__ = PoolMeta
-
-    def get_coverage_amount(self, args):
-        if 'option' in args and 'covered_person' in args:
-            return args['option'].get_coverage_amount(args['covered_person'])
-
-
-class CoveredDataContext(RuleEngineContext):
-
-    __name__ = 'rule_engine.runtime'
-
-    @classmethod
-    def _re_get_coverage_amount(cls, args):
-        data = cls.get_covered_data(args)
-        if data.coverage_amount:
-            return data.coverage_amount
-        cls.append_error(args, 'Coverage amount undefined')

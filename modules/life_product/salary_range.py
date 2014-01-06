@@ -5,13 +5,13 @@ from trytond.modules.coop_utils.model import CoopSQL, utils, fields
 from trytond.modules.coop_utils.model import VersionedObject, VersionObject
 
 __all__ = [
-    'Tranche',
-    'TrancheVersion',
-]
+    'SalaryRange',
+    'SalaryRangeVersion',
+    ]
 
 
-class Tranche(CoopSQL, VersionedObject):
-    'Tranche'
+class SalaryRange(CoopSQL, VersionedObject):
+    'Salary Range'
 
     __name__ = 'salary_range'
 
@@ -29,11 +29,11 @@ class Tranche(CoopSQL, VersionedObject):
         return utils.create_inst_with_default_val(
             Pool().get('salary_range'), 'versions')
 
-    def get_tranche_value(self, value, at_date=None):
+    def get_salary_range_value(self, value, at_date=None):
         version = self.get_version_at_date(at_date)
         if not version:
             return 0
-        return version.get_tranche_value(value)
+        return version.get_salary_range_value(value)
 
     def get_floor(self, name=None, at_date=None):
         version = self.get_version_at_date(at_date)
@@ -48,8 +48,8 @@ class Tranche(CoopSQL, VersionedObject):
         return version.get_ceiling(at_date=at_date)
 
 
-class TrancheVersion(CoopSQL, VersionObject):
-    'Tranche Version'
+class SalaryRangeVersion(CoopSQL, VersionObject):
+    'Salary Range Version'
 
     __name__ = 'salary_range.version'
 
@@ -62,7 +62,7 @@ class TrancheVersion(CoopSQL, VersionObject):
     def main_model(cls):
         return 'salary_range'
 
-    def get_tranche_value(self, value):
+    def get_salary_range_value(self, value):
         floor = self.get_floor()
         ceiling = self.get_ceiling()
         return (min(value, ceiling) if ceiling else value) - floor

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -146,24 +146,24 @@ msgctxt "help:salary_range.version,floor:"
 msgid "Not Included"
 msgstr "Non Inclus"
 
-msgctxt "model:ir.action,name:act_model_tranche"
-msgid "Tranches"
-msgstr "Tranches"
+msgctxt "model:ir.action,name:act_model_salary_range"
+msgid "Salary Range"
+msgstr "Tranche"
 
-msgctxt "model:ir.ui.menu,name:menu_model_tranche"
-msgid "Tranches"
-msgstr "Tranches"
+msgctxt "model:ir.ui.menu,name:menu_model_salary_range"
+msgid "Salary Range"
+msgstr "Tranche"
 
 msgctxt "model:tag,name:tag_life"
 msgid "Prévoyance"
 msgstr "Prévoyance"
 
 msgctxt "model:salary_range,name:"
-msgid "Tranche"
-msgstr "Tranche"
+msgid "Salary Range"
+msgstr "Trancge"
 
 msgctxt "model:salary_range.version,name:"
-msgid "Tranche Version"
+msgid "Salary Range Version"
 msgstr ""
 
 msgctxt "selection:offered.option.description,family:"
@@ -175,7 +175,7 @@ msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
 msgctxt "view:salary_range:"
-msgid "Tranche"
+msgid "Salary Range"
 msgstr "Tranche"
 
 msgctxt "view:salary_range.version:"
