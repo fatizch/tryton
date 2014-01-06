@@ -9,7 +9,7 @@ from trytond.modules.offered.offered import DEF_CUR_DIG
 
 __all__ = [
     'ReserveRule',
-]
+    ]
 
 
 class ReserveRule(BusinessRuleRoot, model.CoopSQL):
@@ -19,5 +19,4 @@ class ReserveRule(BusinessRuleRoot, model.CoopSQL):
 
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
-        states={'invisible': STATE_ADVANCED}
-        )
+        states={'invisible': STATE_ADVANCED})

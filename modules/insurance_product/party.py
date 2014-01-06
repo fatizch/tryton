@@ -13,8 +13,6 @@ __all__ = [
 
 
 class Party:
-    'Party'
-
     __name__ = 'party.party'
 
     insurer_role = fields.One2Many('insurer', 'party', 'Insurer', size=1,

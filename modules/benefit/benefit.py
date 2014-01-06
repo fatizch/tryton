@@ -1,56 +1,51 @@
 #-*- coding:utf-8 -*-
 from trytond.pyson import Eval
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, coop_date, fields
 from trytond.modules.offered import offered
 from trytond.modules.offered import EligibilityResultLine
-from .product import Offered
+from trytond.modules.insurance_product import product
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'EventDesc',
-    'LossDescDocumentsRelation',
-    'LossDesc',
-    'EventDescLossDescRelation',
+    'EventDescription',
+    'LossDescriptionDocumentDescriptionRelation',
+    'LossDescription',
+    'EventDescriptionLossDescriptionRelation',
     'Benefit',
     'InsuranceBenefit',
-    'BenefitLossDescRelation',
-    'CoverageBenefitRelation',
-    'LossDescComplementaryDataRelation',
-    'BenefitComplementaryDataRelation',
-]
+    'BenefitLossDescriptionRelation',
+    'OptionDescriptionBenefitRelation',
+    'LossDescriptionExtraDataRelation',
+    'BenefitExtraDataRelation',
+    ]
 
 INDEMNIFICATION_KIND = [
     ('capital', 'Capital'),
     ('period', 'Period'),
     ('annuity', 'Annuity'),
-]
+    ]
 INDEMNIFICATION_DETAIL_KIND = [
     ('waiting_period', 'Waiting Period'),
     ('deductible', 'Deductible'),
     ('benefit', 'Indemnified'),
     ('limit', 'Limit'),
     ('regularization', 'Regularization'),
-]
-CURRENCY_SETTING = [
-    ('specific', 'Specific'),
-    ('coverage', 'Coverage'),
-    ('')
-]
+    ]
 
 
-class EventDesc(model.CoopSQL, model.CoopView):
-    'Event Desc'
+class EventDescription(model.CoopSQL, model.CoopView):
+    'Event Description'
 
     __name__ = 'benefit.event.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
-    loss_descs = fields.Many2Many(
-        'benefit.event.description-loss.description', 'event_desc', 'loss_desc',
-        'Loss Descriptions', domain=[('company', '=', Eval('company'))],
-        depends=['company'])
+    loss_descs = fields.Many2Many('benefit.event.description-loss.description',
+        'event_desc', 'loss_desc', 'Loss Descriptions',
+        domain=[('company', '=', Eval('company'))], depends=['company'])
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
 
@@ -58,35 +53,24 @@ class EventDesc(model.CoopSQL, model.CoopView):
         if skip_fields is None:
             skip_fields = set()
         skip_fields.add('loss_descs')
-        return super(EventDesc, self).export_json(skip_fields)
+        return super(EventDescription, self).export_json(skip_fields)
 
     @classmethod
     def default_company(cls):
         return Transaction().context.get('company') or None
 
 
-class LossDescDocumentsRelation(model.CoopSQL):
-    'Loss Desc to Document relation'
-
-    __name__ = 'benefit.loss.description-document.description'
-
-    document = fields.Many2One(
-        'document.description', 'Document', ondelete='RESTRICT')
-    loss = fields.Many2One(
-        'benefit.loss.description', 'Loss', ondelete='CASCADE')
-
-
-class LossDesc(model.CoopSQL, model.CoopView):
-    'Loss Desc'
+class LossDescription(model.CoopSQL, model.CoopView):
+    'Loss Description'
 
     __name__ = 'benefit.loss.description'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
     event_descs = fields.Many2Many(
-        'benefit.event.description-loss.description', 'loss_desc', 'event_desc',
-        'Events Descriptions', domain=[('company', '=', Eval('company'))],
-        depends=['company'])
+        'benefit.event.description-loss.description', 'loss_desc',
+        'event_desc', 'Events Descriptions',
+        domain=[('company', '=', Eval('company'))], depends=['company'])
     item_kind = fields.Selection('get_possible_item_kind', 'Kind')
     with_end_date = fields.Boolean('With End Date')
     complementary_data_def = fields.Many2Many(
@@ -94,7 +78,8 @@ class LossDesc(model.CoopSQL, model.CoopView):
         'loss_desc', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
     documents = fields.Many2Many(
-        'benefit.loss.description-document.description', 'loss', 'document', 'Documents')
+        'benefit.loss.description-document.description', 'loss', 'document',
+        'Documents')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
 
@@ -113,27 +98,37 @@ class LossDesc(model.CoopSQL, model.CoopView):
         return Transaction().context.get('company') or None
 
 
-class LossDescComplementaryDataRelation(model.CoopSQL):
-    'Relation between Loss Desc and Complementary Data'
+class LossDescriptionDocumentDescriptionRelation(model.CoopSQL):
+    'Loss Description to Document Description Relation'
+
+    __name__ = 'benefit.loss.description-document.description'
+
+    document = fields.Many2One('document.description', 'Document',
+        ondelete='RESTRICT')
+    loss = fields.Many2One('benefit.loss.description', 'Loss',
+        ondelete='CASCADE')
+
+
+class LossDescriptionExtraDataRelation(model.CoopSQL):
+    'Relation between Loss Description and Complementary Data'
 
     __name__ = 'benefit.loss.description-extra_data'
 
-    loss_desc = fields.Many2One(
-        'benefit.loss.description', 'Loss Desc', ondelete='CASCADE')
-    complementary_data_def = fields.Many2One(
-        'extra_data',
-        'Complementary Data', ondelete='RESTRICT')
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description',
+        ondelete='CASCADE')
+    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+        ondelete='RESTRICT')
 
 
-class EventDescLossDescRelation(model.CoopSQL):
-    'Event Desc - Loss Desc Relation'
+class EventDescriptionLossDescriptionRelation(model.CoopSQL):
+    'Event Description - Loss Description Relation'
 
     __name__ = 'benefit.event.description-loss.description'
 
-    event_desc = fields.Many2One(
-        'benefit.event.description', 'Event Desc', ondelete='CASCADE')
-    loss_desc = fields.Many2One(
-        'benefit.loss.description', 'Loss Desc', ondelete='RESTRICT')
+    event_desc = fields.Many2One('benefit.event.description',
+        'Event Description', ondelete='CASCADE')
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description',
+        ondelete='RESTRICT')
 
 
 class Benefit(model.CoopSQL, offered.Offered):
@@ -141,18 +136,16 @@ class Benefit(model.CoopSQL, offered.Offered):
 
     __name__ = 'benefit'
 
-    benefit_rules = fields.One2Many(
-        'benefit.rule', 'offered', 'Benefit Rules')
-    reserve_rules = fields.One2Many(
-        'benefit.reserve.rule', 'offered', 'Reserve Rules')
+    benefit_rules = fields.One2Many('benefit.rule', 'offered', 'Benefit Rules')
+    reserve_rules = fields.One2Many('benefit.reserve.rule', 'offered',
+        'Reserve Rules')
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
         'Indemnification Kind', sort=False, required=True)
-    loss_descs = fields.Many2Many(
-        'benefit-loss.description', 'benefit', 'loss_desc',
-        'Loss Descriptions', domain=[('company', '=', Eval('company'))],
-        depends=['company'], required=True)
-    complementary_data_def = fields.Many2Many(
-        'benefit-extra_data',
+    loss_descs = fields.Many2Many('benefit-loss.description', 'benefit',
+        'loss_desc', 'Loss Descriptions',
+        domain=[('company', '=', Eval('company'))], depends=['company'],
+        required=True)
+    complementary_data_def = fields.Many2Many('benefit-extra_data',
         'benefit', 'complementary_data_def', 'Complementary Data',
         domain=[('kind', '=', 'benefit')])
     use_local_currency = fields.Boolean('Use Local Currency')
@@ -164,7 +157,7 @@ class Benefit(model.CoopSQL, offered.Offered):
         super(Benefit, cls).__setup__()
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+            ]
 
     @classmethod
     def delete(cls, entities):
@@ -216,8 +209,8 @@ class Benefit(model.CoopSQL, offered.Offered):
     @classmethod
     def get_beneficiary_kind(cls):
         return [
-                ('subscriber', 'Subscriber'),
-                ('other', 'Other'),
+            ('subscriber', 'Subscriber'),
+            ('other', 'Other'),
             ]
 
     @staticmethod
@@ -252,7 +245,7 @@ class Benefit(model.CoopSQL, offered.Offered):
         return result, ()
 
 
-class InsuranceBenefit(Offered):
+class InsuranceBenefit(product.Offered):
     'Insurance Benefit'
 
     __name__ = 'benefit'
@@ -260,35 +253,31 @@ class InsuranceBenefit(Offered):
     #in the override of offered
 
 
-class BenefitLossDescRelation(model.CoopSQL):
-    'Benefit Loss Desc Relation'
+class BenefitLossDescriptionRelation(model.CoopSQL):
+    'Benefit Loss Description Relation'
 
     __name__ = 'benefit-loss.description'
 
-    benefit = fields.Many2One(
-        'benefit', 'Benefit', ondelete='CASCADE')
-    loss_desc = fields.Many2One(
-        'benefit.loss.description', 'Loss Desc', ondelete='RESTRICT')
+    benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE')
+    loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description',
+        ondelete='RESTRICT')
 
 
-class CoverageBenefitRelation(model.CoopSQL):
-    'Coverage Benefit Relation'
+class OptionDescriptionBenefitRelation(model.CoopSQL):
+    'Option Description to Benefit Relation'
 
     __name__ = 'option.description-benefit'
 
-    coverage = fields.Many2One(
-        'offered.option.description', 'Coverage', ondelete='CASCADE')
-    benefit = fields.Many2One(
-        'benefit', 'Benefit', ondelete='RESTRICT')
+    coverage = fields.Many2One('offered.option.description',
+        'Option Description', ondelete='CASCADE')
+    benefit = fields.Many2One('benefit', 'Benefit', ondelete='RESTRICT')
 
 
-class BenefitComplementaryDataRelation(model.CoopSQL):
-    'Relation between Benefit and Complementary Data'
+class BenefitExtraDataRelation(model.CoopSQL):
+    'Benefit to Extra Data Relation'
 
     __name__ = 'benefit-extra_data'
 
-    benefit = fields.Many2One(
-        'benefit', 'Benefit', ondelete='CASCADE')
-    complementary_data_def = fields.Many2One(
-        'extra_data',
-        'Complementary Data', ondelete='RESTRICT')
+    benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE')
+    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+     ondelete='RESTRICT')

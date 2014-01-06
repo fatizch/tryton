@@ -3,12 +3,6 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Coverage"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='managers']" position="after">
-        <page string="Benefits" id="benefits"
-            states="{'invisible': Or(Bool(Eval('is_package')), Eval('kind') != 'insurance')}">
-            <field name="benefits"/>
-        </page>
-    </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
         position="inside">
         <label name="item_desc"/>

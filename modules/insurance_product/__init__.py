@@ -1,13 +1,14 @@
 from trytond.pool import Pool
 from rule_sets import *
 from .product import *
+from .expense import *
 from .business_rule import *
 from .coverage import *
-from .benefit import *
 from .clause import *
 from .process import *
 from .party import *
 from .test_case import *
+from .batch import *
 
 
 def register():
@@ -17,86 +18,72 @@ def register():
         Insurer,
         # From product
         Offered,
-        ItemDescriptor,
+        ItemDescription,
         Coverage,
         OfferedCoverage,
         Product,
         OfferedProduct,
         ItemDescSubItemDescRelation,
-        ItemDescriptorComplementaryDataRelation,
-        ProductItemDescriptorRelation,
+        ItemDescriptionExtraDataRelation,
+        ProductItemDescriptionRelation,
+        # From Batch
         ProductValidationBatch,
         # From business_rule
         RuleEngineParameter,
         RuleEngine,
-        DimensionDisplayer,
+        TableManageDimensionShowDimension,
         BusinessRuleRoot,
         # From business_rule.ir
-        PrintableModel,
-        NoTargetCheckAttachment,
+        Model,
+        Attachment,
         # From business_rule.documents_rule
-        LetterModel,
-        LetterVersion,
-        DocumentDesc,
+        DocumentTemplate,
+        DocumentTemplateVersion,
+        DocumentDescription,
         DocumentRule,
-        DocumentRuleRelation,
+        RuleDocumentDescriptionRelation,
         DocumentRequest,
-        Document,
-        LetterModelDisplayer,
-        LetterModelSelection,
-        AttachmentCreation,
-        RequestFinder,
-        AttachmentSetter,
-        DocumentRequestDisplayer,
+        DocumentRequestLine,
+        DocumentCreateSelectTemplate,
+        DocumentCreateSelect,
+        DocumentCreateAttach,
+        DocumentReceiveRequest,
+        DocumentReceiveAttach,
+        DocumentReceiveSetRequests,
         DocumentRequestBatch,
         # From business_rule.pricing_rule
-        PricingRule,
-        PricingComponent,
+        PremiumRule,
+        PremiumRuleComponent,
         TaxVersion,
         FeeVersion,
         # From business_rule.eligibility_rule
         EligibilityRule,
         EligibilityRelationKind,
-        EventDesc,
-        LossDesc,
-        LossDescDocumentsRelation,
-        EventDescLossDescRelation,
-        Benefit,
-        InsuranceBenefit,
-        CoverageBenefitRelation,
-        BenefitLossDescRelation,
-        BenefitComplementaryDataRelation,
-        BenefitRule,
-        SubBenefitRule,
-        ReserveRule,
         CoverageAmountRule,
         DeductibleRule,
         DeductibleDuration,
-        TermRenewalRule,
+        TermRule,
         # From rule_sets
-        SubscriberContext,
-        PersonContext,
-        OptionContext,
-        CoveredDataContext,
-        RuleCombinationContext,
+        RuleEngineRuntime,
+        #From Clause
         ClauseRule,
         Clause,
-        ClauseRelation,
+        RuleClauseRelation,
         ClauseVersion,
-        LossDescComplementaryDataRelation,
         # From process
         ProcessProductRelation,
-        ProcessDesc,
+        Process,
+        # From Expense
         ExpenseKind,
         # From test_case
         TestCaseModel,
         module='insurance_product', type_='model')
     Pool.register(
         # From business_rule.documents_rule
-        LetterReport,
+        DocumentGenerateReport,
         module='insurance_product', type_='report')
     Pool.register(
         # From business_rule.documents_rule
-        LetterGeneration,
-        ReceiveDocuments,
+        DocumentCreate,
+        DocumentReceive,
         module='insurance_product', type_='wizard')

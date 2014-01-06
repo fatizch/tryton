@@ -9,13 +9,7 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
 __all__ = [
     'DeductibleRule',
     'DeductibleDuration',
-]
-
-
-DEDUCTIBLE_KIND = [
-    ('amount', 'Amount'),
-    ('duration', 'Duration'),
-]
+    ]
 
 
 class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
@@ -23,14 +17,17 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'offered.deductible.rule'
 
-    kind = fields.Selection(DEDUCTIBLE_KIND, 'Kind', sort=False, required=True)
-    simple_config_choice = fields.Selection(
-        [('value', 'Value'), ('list', 'List')], 'Simple Config. Choice',
-        sort=False, states={
+    kind = fields.Selection([
+            ('amount', 'Amount'),
+            ('duration', 'Duration'),
+            ], 'Kind', sort=False, required=True)
+    simple_config_choice = fields.Selection([
+            ('value', 'Value'),
+            ('list', 'List'),
+            ], 'Simple Config. Choice', sort=False, states={
             'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration'),
             'required': And(~STATE_ADVANCED, Eval('kind') == 'duration'),
-            }
-        )
+            })
     amount = fields.Numeric('Amount', states={
             'invisible': Or(STATE_ADVANCED, Eval('kind') != 'amount'),
             'required': And(~STATE_ADVANCED, Eval('kind') == 'amount'),
@@ -55,9 +52,10 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
                 Eval('simple_config_choice') == 'list'),
             })
-    scope = fields.Selection(
-        [('coverage', 'Coverage'), ('covered', 'Covered Element')], 'Scope',
-        states={
+    scope = fields.Selection([
+            ('coverage', 'Coverage'),
+            ('covered', 'Covered Element'),
+            ], 'Scope', states={
             'invisible': Or(STATE_ADVANCED, Eval('kind') != 'duration',
                 Eval('simple_config_choice') != 'list'),
             'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',

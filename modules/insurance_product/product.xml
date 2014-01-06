@@ -26,7 +26,7 @@
             <field name="arch" type="xml"/>
         </record>
         <!--################################################################ -->
-        <!-- Item Descriptor -->
+        <!-- Item Description -->
         <!--################################################################ -->
         <record model="ir.ui.view" id="item_desc_view_form">
             <field name="model">offered.item.description</field>
@@ -40,7 +40,7 @@
         </record>
 
         <record model="ir.action.act_window" id="act_item_desc_form">
-            <field name="name">Item Descriptors</field>
+            <field name="name">Item Descriptions</field>
             <field name="res_model">offered.item.description</field>
         </record>
 

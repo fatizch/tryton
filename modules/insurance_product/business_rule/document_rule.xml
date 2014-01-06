@@ -13,7 +13,7 @@
       <field name="name">document_desc_tree</field>
     </record>
     <record model="ir.action.act_window" id="act_document_desc">
-      <field name="name">Document Descriptors</field>
+      <field name="name">Document Descriptions</field>
       <field name="res_model">document.description</field>
     </record>
     <record model="ir.action.act_window.view" id="act_document_desc_view1">
@@ -76,7 +76,7 @@
       <field name="model">document.request,-1</field>
       <field name="action" ref="letter_generation_wizard"/>
     </record>
-    <!-- Letter Model -->
+    <!-- Document Template -->
     <record model="ir.ui.view" id="letter_model_form">
       <field name="model">document.template</field>
       <field name="type">form</field>
@@ -88,7 +88,7 @@
       <field name="name">letter_model_tree</field>
     </record>
     <record model="ir.action.act_window" id="act_letter_model">
-      <field name="name">Letter Models</field>
+      <field name="name">Document Templates</field>
       <field name="res_model">document.template</field>
     </record>
     <record model="ir.action.act_window.view" id="act_letter_model_view1">
@@ -103,7 +103,7 @@
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="30"
       action="act_letter_model" id="menu_letter_model"/>
-    <!-- Letter Version -->
+    <!-- Document Template Version -->
     <record model="ir.ui.view" id="letter_version_form">
       <field name="model">document.template.version</field>
       <field name="type">form</field>
@@ -114,7 +114,7 @@
       <field name="type">tree</field>
       <field name="name">letter_version_tree</field>
     </record>
-    <!-- Letter Model Selection -->
+    <!-- Document Create Select -->
     <record model="ir.ui.view" id="letter_model_selection_form">
       <field name="model">document.create.select</field>
       <field name="type">form</field>

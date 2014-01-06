@@ -8,12 +8,12 @@ from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
 
 __all__ = [
-    'TermRenewalRule',
-]
+    'TermRule',
+    ]
 
 
-class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
-    'Term and Renewal Rule'
+class TermRule(BusinessRuleRoot, model.CoopSQL):
+    'Term Rule'
 
     __name__ = 'offered.term.rule'
 
@@ -22,10 +22,9 @@ class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
         states={'invisible': ~Eval('with_term')})
     term_date_choice = fields.Selection([
             ('subscription', 'At subscription Time'),
-            ('this_date', 'At this Date')],
-        'Term Date Selection', states={'invisible': ~Eval('with_term')})
-    date_for_sync = fields.Date('Sync Date',
-        states={
+            ('this_date', 'At this Date'),
+            ], 'Term Date Selection', states={'invisible': ~Eval('with_term')})
+    date_for_sync = fields.Date('Sync Date', states={
             'required': And(
                 Eval('term_date_choice') == 'this_date',
                 ~~Eval('with_term'),
@@ -39,12 +38,11 @@ class TermRenewalRule(BusinessRuleRoot, model.CoopSQL):
             ('half_yearly', 'Half Yearly'),
             ('quarterly', 'Quarterly'),
             ('monthly', 'Monthly')
-        ],
-        'Frequency',
-        states={
+            ], 'Frequency', states={
             'invisible': Not(And(
-                ~~Eval('with_term'),
-                ~~Eval('can_be_renewed')))})
+                    ~~Eval('with_term'),
+                    ~~Eval('can_be_renewed'))),
+            })
 
     @staticmethod
     def default_config_kind():

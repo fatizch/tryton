@@ -11,36 +11,26 @@ from trytond.modules.offered import EligibilityResultLine
 from .product import IS_INSURANCE
 
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Coverage',
     'OfferedCoverage',
-]
+    ]
 
 COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 
 
-class Coverage():
-    'Coverage'
-
+class Coverage:
     __name__ = 'offered.option.description'
-    __metaclass__ = PoolMeta
 
-    benefits = fields.Many2Many('option.description-benefit', 'coverage',
-        'benefit', 'Benefits', context={
-            'start_date': Eval('start_date'),
-            'currency_digits': Eval('currency_digits')},
-        states={
-            'readonly': ~Eval('start_date'),
-            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
-            }, depends=['currency_digits'])
     insurer = fields.Many2One('insurer', 'Insurer', states={
-            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE)
+            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             }, depends=['is_package'])
     family = fields.Selection([('', '')], 'Family', states={
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             'required': And(~Eval('is_package'), IS_INSURANCE),
             }, depends=['is_package'])
-    item_desc = fields.Many2One('offered.item.description', 'Item Descriptor',
+    item_desc = fields.Many2One('offered.item.description', 'Item Description',
         states={
             'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
             'required': And(~Eval('is_package'), IS_INSURANCE),
