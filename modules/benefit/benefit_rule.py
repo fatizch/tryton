@@ -122,6 +122,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             {'invisible': Bool(Eval('amount_evolves_over_time'))})
         utils.update_states(cls, 'rule',
             {'invisible': Bool(Eval('amount_evolves_over_time'))})
+        # TODO : Remove this once we use M2O rather than a Reference field
+        utils.update_selection(cls, 'offered', (('benefit', 'Benefit'),))
 
     def get_currency(self):
         if self.offered:

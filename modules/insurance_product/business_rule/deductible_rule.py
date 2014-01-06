@@ -1,7 +1,8 @@
 #-*- coding:utf-8 -*-
 from trytond.pyson import Eval, Or, And
 
-from trytond.modules.coop_utils import model, coop_date, fields, coop_string
+from trytond.modules.coop_utils import model, coop_date, fields, coop_string, \
+    utils
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 
@@ -61,6 +62,12 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             'required': And(~STATE_ADVANCED, Eval('kind') == 'duration',
                 Eval('simple_config_choice') == 'list'),
             })
+
+    @classmethod
+    def __setup__(cls):
+        super(DeductibleRule, cls).__setup__()
+        # TODO : Remove this once we use M2O rather than a Reference field
+        utils.update_selection(cls, 'offered', (('benefit', 'Benefit'),))
 
     def get_simple_rec_name(self):
         if self.simple_config_choice == 'value':
