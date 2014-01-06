@@ -4,18 +4,15 @@ from trytond.pyson import Eval
 from trytond.modules.coop_utils import fields, utils
 
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'LifeContractSubscription',
-    'CoveredPersonSubs',
-    'CoveredDataSubs',
+    'Contract',
+    'CoveredData',
     ]
 
 
-class LifeContractSubscription():
-    'Life Contract'
-
+class Contract:
     __name__ = 'contract'
-    __metaclass__ = PoolMeta
 
     def set_subscriber_as_covered_element(self):
         CoveredElement = Pool().get('contract.covered_element')
@@ -50,35 +47,21 @@ class LifeContractSubscription():
         return True
 
 
-class CoveredPersonSubs():
-    'Covered Person'
-
-    __name__ = 'contract.covered_element'
-    __metaclass__ = PoolMeta
-
-
-class CoveredDataSubs():
-    'Covered Data'
-
+class CoveredData:
     __name__ = 'contract.covered_data'
-    __metaclass__ = PoolMeta
 
     coverage_amount_selection = fields.Function(
-        fields.Selection(
-            'get_possible_amounts',
-            'Coverage Amount',
+        fields.Selection('get_possible_amounts', 'Coverage Amount',
             selection_change_with=['option', 'start_date',
                 'covered_element', 'currency'],
             depends=['option', 'start_date', 'coverage_amount',
-                'with_coverage_amount'],
-            sort=False,
+                'with_coverage_amount'], sort=False,
             on_change=['coverage_amount', 'coverage_amount_selection',
                 'currency'],
             states={
                 'invisible': ~Eval('with_coverage_amount'),
                 # 'required': ~~Eval('with_coverage_amount'),
-                }
-        ),
+                }),
         'get_coverage_amount_selection', 'setter_void')
     need_to_chose_beneficiary_clause = fields.Function(
         fields.Boolean('Need to chose beneficiary clause', states={
@@ -95,7 +78,7 @@ class CoveredDataSubs():
             'Beneficiary Clause', states={
                 'invisible': ~Eval('need_to_chose_beneficiary_clause'),
                 'required': ~~Eval('need_to_chose_beneficiary_clause'),
-            },
+                },
             domain=[('id', 'in', Eval('possible_beneficiary_clauses', []))],
             on_change=['clauses', 'may_override_beneficiary_clause_text',
                 'beneficiary_clause_override_text', 'option', 'start_date',
@@ -116,9 +99,10 @@ class CoveredDataSubs():
 
     @classmethod
     def __setup__(cls):
-        super(CoveredDataSubs, cls).__setup__()
+        super(CoveredData, cls).__setup__()
         cls._error_messages.update({
-            'coverage_amount_needed': 'A coverage amount must be provided :'})
+                'coverage_amount_needed': 'A coverage amount must be provided',
+                })
 
     def get_coverage_amount_selection(self, name):
         if (hasattr(self, 'coverage_amount') and self.coverage_amount):
@@ -139,7 +123,7 @@ class CoveredDataSubs():
             'beneficiary_clause_selection': None,
             'may_override_beneficiary_clause_text': False,
             'beneficiary_clause_override_text': '',
-        }
+            }
 
     def on_change_with_need_to_chose_beneficiary_clause(self, name=None):
         return len(self.on_change_with_possible_beneficiary_clauses()) > 1
@@ -151,7 +135,7 @@ class CoveredDataSubs():
                 'date': self.start_date,
                 'appliable_conditions_date':
                 self.option.contract.appliable_conditions_date,
-            })
+                })
         if not clauses or errs:
             return []
         beneficiary_clauses = []
@@ -181,7 +165,7 @@ class CoveredDataSubs():
             'beneficiary_clause_override_text':
             self.beneficiary_clause_selection.get_version_at_date(
                 self.start_date).content,
-        }
+            }
         result['clauses'] = {
             'remove': existing_beneficiary_clauses,
             'add': [{
