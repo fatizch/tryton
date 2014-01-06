@@ -2,6 +2,4 @@
 <form>
     <label name="party"/>
     <field name="party"/>
-    <label name="reference"/>
-    <field name="reference"/>
 </form>

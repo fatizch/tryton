@@ -55,6 +55,10 @@ class ExportImportMixin(Model):
             result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder), r[2]))
         cls.__rpc__['import_json'] = RPC(
             readonly=False, result=lambda r: None)
+
+    @classmethod
+    def __post_setup__(cls):
+        super(ExportImportMixin, cls).__post_setup__()
         if not hasattr(cls, '_fields'):
             return
         for field_name, field in cls._fields.iteritems():
@@ -595,7 +599,6 @@ class ExportImportMixin(Model):
                 logging.getLogger('export_import').debug(
                     'Relinking %s' % str(key))
                 working_instance = created[key[0]][key[1]]
-                # print utils.format_data(working_instance)
                 all_done = True
                 clean_keys = []
                 relink_idx = -1
@@ -648,7 +651,7 @@ class ExportImportMixin(Model):
                     cur_errs.append(e.args)
                     idx += 1
                     continue
-                except Exception:
+                except Exception, e:
                     logging.getLogger('export_import').debug(
                         'Error trying to save \n%s' % utils.format_data(
                             working_instance))

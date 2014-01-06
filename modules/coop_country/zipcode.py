@@ -3,7 +3,7 @@ from trytond.modules.coop_utils import coop_string, fields, model
 
 __all__ = [
     'ZipCode',
-]
+    ]
 
 
 class ZipCode(model.CoopSQL, model.CoopView):

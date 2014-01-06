@@ -2,26 +2,26 @@ from trytond.modules.coop_utils import model, fields
 
 
 __all__ = [
-    'TaxDesc',
-    'TaxVersion',
-]
+    'TaxDescription',
+    'TaxDescriptionVersion',
+    ]
 
 
-class TaxDesc(model.CoopSQL, model.VersionedObject):
-    '''Tax Descriptor'''
+class TaxDescription(model.CoopSQL, model.VersionedObject):
+    'Tax Description'
 
     __name__ = 'account.tax.description'
 
-    name = fields.Char('Tax Name')
+    name = fields.Char('Name')
     code = fields.Char('Code', required=True)
     description = fields.Text('Description')
 
     @classmethod
     def __setup__(cls):
-        super(TaxDesc, cls).__setup__()
+        super(TaxDescription, cls).__setup__()
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
-        ]
+            ]
 
     @classmethod
     def version_model(cls):
@@ -42,15 +42,16 @@ class TaxDesc(model.CoopSQL, model.VersionedObject):
         return self.name
 
 
-class TaxVersion(model.CoopSQL, model.VersionObject):
-    '''Tax Version'''
+class TaxDescriptionVersion(model.CoopSQL, model.VersionObject):
+    'Tax Version'
 
     __name__ = 'account.tax.description.version'
 
-    kind = fields.Selection(
-        [('flat', 'Flat'), ('rate', 'Rate'), ('rule', 'Rule')],
-        'Rating mode',
-        required=True)
+    kind = fields.Selection([
+            ('flat', 'Flat'),
+            ('rate', 'Rate'),
+            ('rule', 'Rule'),
+            ], 'Rating mode', required=True)
     value = fields.Numeric('Value')
 
     @classmethod

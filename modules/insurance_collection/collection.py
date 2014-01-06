@@ -5,17 +5,15 @@ from trytond.pyson import Eval, If
 from trytond.modules.coop_utils import fields
 
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'CollectionParameters',
-    'AssignCollection',
-    'CollectionWizard',
+    'CollectionCreateParameters',
+    'CollectionCreateAssign',
+    'CollectionCreate',
     ]
 
 
-class CollectionParameters():
-    'Collection parameters'
-
-    __metaclass__ = PoolMeta
+class CollectionCreateParameters:
     __name__ = 'collection.create.parameters'
 
     contract = fields.Many2One('contract', 'Contract', on_change=[
@@ -30,25 +28,19 @@ class CollectionParameters():
         return {'party': self.contract.subscriber.id}
 
 
-class AssignCollection():
-    'Assign Collection'
-
-    __metaclass__ = PoolMeta
+class CollectionCreateAssign:
     __name__ = 'collection.create.assign'
 
     contract = fields.Many2One('contract', 'Contract',
         states={'readonly': True})
 
 
-class CollectionWizard():
-    'Collection Wizard'
-
-    __metaclass__ = PoolMeta
+class CollectionCreate:
     __name__ = 'collection.create'
 
     def default_input_collection_parameters(self, name):
         res = super(
-            CollectionWizard, self).default_input_collection_parameters(name)
+            CollectionCreate, self).default_input_collection_parameters(name)
         if Transaction().context.get('active_model') == 'contract':
             Contract = Pool().get('contract')
             res['contract'] = Transaction().context.get('active_id')
@@ -57,7 +49,7 @@ class CollectionWizard():
 
     def default_assign(self, name):
         MoveLine = Pool().get('account.move.line')
-        res = super(CollectionWizard, self).default_assign(name)
+        res = super(CollectionCreate, self).default_assign(name)
         if not self.input_collection_parameters.contract:
             return res
         res['contract'] = self.input_collection_parameters.contract.id
@@ -112,7 +104,7 @@ class CollectionWizard():
         return res
 
     def get_collection_move(self):
-        result = super(CollectionWizard, self).get_collection_move()
+        result = super(CollectionCreate, self).get_collection_move()
         if not self.input_collection_parameters.contract:
             return result
         result.origin = self.input_collection_parameters.contract

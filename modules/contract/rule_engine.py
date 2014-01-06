@@ -1,16 +1,14 @@
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.rule_engine import RuleEngineContext
 from trytond.modules.rule_engine import check_args
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'OfferedContext',
-    'ContractContext',
+    'RuleEngineRuntime',
     ]
 
 
-class OfferedContext(RuleEngineContext):
-
+class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
@@ -30,11 +28,6 @@ class OfferedContext(RuleEngineContext):
         ComplDataDef = Pool().get('extra_data')
         return ComplDataDef.get_complementary_data_value(from_object,
             data_name, args['date'])
-
-
-class ContractContext(RuleEngineContext):
-
-    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_contract_conditions_date(cls, args):

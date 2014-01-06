@@ -2,16 +2,14 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import utils
 
-__al__ = [
-    'ClaimCoverage',
-]
+__metaclass__ = PoolMeta
+__all__ = [
+    'OptionDescription',
+    ]
 
 
-class ClaimCoverage():
-    'Coverage'
-
+class OptionDescription:
     __name__ = 'offered.option.description'
-    __metaclass__ = PoolMeta
 
     def get_possible_benefits(self, loss_desc=None, event_desc=None,
             at_date=None):

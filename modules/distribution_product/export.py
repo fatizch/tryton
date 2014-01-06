@@ -10,9 +10,7 @@ __all__ = [
     ]
 
 
-class ExportPackage():
-    'Export Package'
-
+class ExportPackage:
     __name__ = 'ir.export_package'
 
     com_products = fields.Function(

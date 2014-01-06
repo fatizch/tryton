@@ -20,8 +20,6 @@ __all__ = [
 
 
 class Bank(export.ExportImportMixin):
-    'Bank'
-
     __name__ = 'bank'
 
     @classmethod
@@ -64,8 +62,6 @@ class Bank(export.ExportImportMixin):
 
 
 class BankAccount(export.ExportImportMixin):
-    'Bank Account'
-
     __name__ = 'bank.account'
 
     start_date = fields.Date('Start Date')
@@ -147,8 +143,6 @@ class BankAccount(export.ExportImportMixin):
 
 
 class BankAccountNumber(export.ExportImportMixin):
-    'Bank account Number'
-
     __name__ = 'bank.account.number'
 
     @classmethod

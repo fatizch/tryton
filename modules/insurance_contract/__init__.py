@@ -5,6 +5,8 @@ from .document import *
 from .renewal import *
 from .rule_engine import *
 from .wizard import *
+from .clause import *
+from .service import *
 
 from trytond.modules.coop_utils import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
@@ -15,31 +17,28 @@ def register():
     Pool.register(
         #From Party
         Party,
-        Customer,
         # contract.py classes
-        InsurancePolicy,
-        ContractHistory,
-        ManagementRole,
-        InsuranceSubscribedCoverage,
-        SubscribedCoverageComplement,
-        StatusHistory,
+        Contract,
+        ContractAgreementRelation,
+        ContractOption,
         CoveredElement,
         CoveredElementTreeExpansion,
         CoveredElementPartyRelation,
         CoveredData,
         CoveredDataTreeExpansion,
-        ContractClause,
-        Document,
+        DocumentRequestLine,
         DocumentRequest,
-        DeliveredService,
-        RequestFinder,
+        DocumentReceiveRequest,
+        # From Service
+        ContractService,
         Expense,
+        # From Clause
+        ContractClause,
         # from renewal
         RenewalStart,
         RenewalResult,
         #From Rule Engine,
-        OfferedContext,
-        ContractContext,
+        RuleEngineRuntime,
         #From Wizard
         OptionsDisplayer,
         module='insurance_contract', type_='model')

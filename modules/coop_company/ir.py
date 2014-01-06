@@ -7,16 +7,13 @@ from trytond.modules.coop_utils import export
 
 
 __metaclass__ = PoolMeta
-
 __all__ = [
     'Sequence',
     'Property',
-]
+    ]
 
 
 class Sequence:
-    'Sequence'
-
     __name__ = 'ir.sequence'
 
     @classmethod
@@ -28,8 +25,6 @@ class Sequence:
 
 
 class Property:
-    'Property'
-
     __name__ = 'ir.property'
 
     @classmethod

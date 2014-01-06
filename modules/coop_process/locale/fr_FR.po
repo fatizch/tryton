@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -279,11 +279,11 @@ msgid "Process Log"
 msgstr ""
 
 msgctxt "model:process.start,name:"
-msgid "Process Parameters"
+msgid "Process Start"
 msgstr "Paramètres du Processus"
 
 msgctxt "model:ir.ui.view.description,name:"
-msgid "XML View Descriptor"
+msgid "View Description"
 msgstr "Descripteur de Vue XML"
 
 msgctxt "selection:ir.ui.view.description,input_mode:"
@@ -319,7 +319,7 @@ msgid "Logs"
 msgstr ""
 
 msgctxt "view:process.start:"
-msgid "Process Parameters"
+msgid "Process Start"
 msgstr "Paramètres du Processus"
 
 msgctxt "view:ir.ui.view.description:"

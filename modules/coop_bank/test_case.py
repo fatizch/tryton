@@ -6,15 +6,13 @@ from trytond.modules.coop_utils import fields, coop_string
 
 MODULE_NAME = 'coop_bank'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     number_of_banks = fields.Integer('Number of Banks')
@@ -26,13 +24,13 @@ class TestCaseModel():
             'bank_test_case')
         result['bank_test_case'] = {
             'name': 'Bank Test Case',
-            'dependencies': set(['address_kind_test_case']),
-        }
+            'dependencies': set([]),
+            }
         result['bank_account_test_case'] = {
             'name': 'Bank Account Test Case',
             'dependencies': set(['bank_test_case', 'party_test_case',
                     'main_company_test_case']),
-        }
+            }
         return result
 
     @classmethod

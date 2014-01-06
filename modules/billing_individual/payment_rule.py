@@ -10,9 +10,9 @@ from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 
 __all__ = [
-    'PaymentRuleLine',
-    'PaymentRuleFeeRelation',
-    'PaymentRule',
+    'PaymentTermLine',
+    'PaymentTermFeeRelation',
+    'PaymentTerm',
     ]
 
 REMAINING_POSITION = [
@@ -28,15 +28,14 @@ PAYMENT_DELAYS = [
     ]
 
 
-class PaymentRuleLine(model.CoopSQL, model.CoopView):
-    'Payment Rule Line'
+class PaymentTermLine(model.CoopSQL, model.CoopView):
+    'Payment Term Line'
 
     __name__ = 'billing.payment.term.line'
 
-    sequence = fields.Integer('Sequence',
-        help='Use to order lines in ascending order')
+    sequence = fields.Integer('Sequence')
     payment_rule = fields.Many2One('billing.payment.term', 'Payment Term',
-        required=True, ondelete="CASCADE")
+        required=True, ondelete='CASCADE')
     type = fields.Selection([
             ('fixed', 'Fixed'),
             ('percent_on_total', 'Percentage on Total'),
@@ -62,7 +61,7 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
         states={
             'invisible': Eval('type', '') != 'fixed',
             'required': Eval('type', '') == 'fixed',
-            }, depends=['type'])
+            }, depends=['type'], ondelete='RESTRICT', required=True)
     currency_digits = fields.Function(fields.Integer('Currency Digits',
             on_change_with=['currency']), 'on_change_with_currency_digits')
     day = fields.Integer('Day of Month')
@@ -242,19 +241,19 @@ class PaymentRuleLine(model.CoopSQL, model.CoopView):
             }
 
 
-class PaymentRuleFeeRelation(model.CoopSQL):
-    'Payment Rule - Fee relation'
+class PaymentTermFeeRelation(model.CoopSQL):
+    'Payment Term - Fee relation'
 
     __name__ = 'billing.payment.term-fee'
 
-    payment_rule = fields.Many2One('billing.payment.term', 'Payment Rule',
+    payment_rule = fields.Many2One('billing.payment.term', 'Payment Term',
         required=True, ondelete='CASCADE')
     fee = fields.Many2One('account.fee.description', 'Fee', required=True,
         ondelete='RESTRICT')
 
 
-class PaymentRule(model.CoopSQL, model.CoopView):
-    'Payment Rule'
+class PaymentTerm(model.CoopSQL, model.CoopView):
+    'Payment Term'
 
     __name__ = 'billing.payment.term'
 

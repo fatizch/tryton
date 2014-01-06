@@ -1,12 +1,16 @@
 from trytond.pool import Pool
-from .collective_product import *
-from .collective_contract import *
+from .offered import *
+from .contract import *
+from .benefit import *
 
 
 def register():
     Pool.register(
-        GroupProduct,
-        GroupCoverage,
-        GroupBenefit,
-        GroupContract,
+        # From Offered
+        Product,
+        OptionDescription,
+        # From Benefit
+        Benefit,
+        # From Contract
+        Contract,
         module='insurance_collective', type_='model')

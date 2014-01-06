@@ -6,14 +6,14 @@ from .export import *
 def register():
     Pool.register(
         Status,
-        Code,
+        ProcessAction,
         ProcessLog,
-        StepTransition,
+        ProcessTransition,
         ProcessStepRelation,
-        ProcessDesc,
-        XMLViewDesc,
-        StepDesc,
-        ProcessParameters,
+        Process,
+        ViewDescription,
+        ProcessStep,
+        ProcessStart,
         # From export
         ExportPackage,
         module='coop_process', type_='model')

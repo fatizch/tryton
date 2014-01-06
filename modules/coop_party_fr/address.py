@@ -6,14 +6,15 @@ from trytond.modules.party.address import STATES, DEPENDS
 
 from trytond.modules.coop_utils import fields
 
-__all__ = ['Address']
+__metaclass__ = PoolMeta
+__all__ = [
+    'Address',
+    ]
 
 
-class Address():
-    'Address'
+class Address:
 
     __name__ = 'party.address'
-    __metaclass__ = PoolMeta
 
     line2 = fields.Char('Add. complement', help=
         '''AFNOR - Line 2

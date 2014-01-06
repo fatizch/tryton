@@ -10,7 +10,7 @@ def register():
         Product,
         Coverage,
         Party,
-        PartyHealthComplement,
+        HealthPartyComplement,
         Contract,
         Option,
         CoveredElement,

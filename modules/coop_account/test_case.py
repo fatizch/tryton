@@ -6,15 +6,13 @@ from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'coop_account'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     _get_account_kind_cache = Cache('get_account_kind')
@@ -129,13 +127,13 @@ class TestCaseModel():
     @classmethod
     def create_tax_from_line(cls, tax_data):
         translater = cls.get_translater(MODULE_NAME)
-        TaxDesc = Pool().get('account.tax.description')
-        TaxVersion = Pool().get('account.tax.description.version')
-        tax = TaxDesc()
+        TaxDescription = Pool().get('account.tax.description')
+        TaxDescriptionVersion = Pool().get('account.tax.description.version')
+        tax = TaxDescription()
         tax.code = tax_data[0]
         tax.name = tax_data[1]
         tax.description = tax_data[5]
-        version = TaxVersion()
+        version = TaxDescriptionVersion()
         version.kind = tax_data[4]
         version.value = Decimal(tax_data[3])
         version.start_date = datetime.datetime.strptime(tax_data[2],

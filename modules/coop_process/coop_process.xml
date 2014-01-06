@@ -45,7 +45,7 @@
       <field name="type">tree</field>
       <field name="name">xml_view_desc_tree</field>
     </record>
-    <!-- Process Parameters -->
+    <!-- Process Start -->
     <record model="ir.ui.view" id="process_parameters_form">
       <field name="model">process.start</field>
       <field name="type">form</field>

@@ -3,16 +3,14 @@ from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
     'CoveredElement',
     ]
 
 
-class CoveredElement():
-    'Covered Element'
-
+class CoveredElement:
     __name__ = 'contract.covered_element'
-    __metaclass__ = PoolMeta
 
     is_rsi = fields.Function(
         fields.Boolean('Is RSI', on_change_with=['party'],
