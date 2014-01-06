@@ -2,19 +2,17 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import utils
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'LifeOption',
-]
+    'ContractOption',
+    ]
 
 
-class LifeOption():
-    'Option'
-
+class ContractOption:
     __name__ = 'contract.option'
-    __metaclass__ = PoolMeta
 
     def is_item_covered(self, loss):
-        res = super(LifeOption, self).is_item_covered(loss)
+        res = super(ContractOption, self).is_item_covered(loss)
         if not res or not hasattr(loss, 'covered_person'):
             return res
         for covered_data in self.covered_data:

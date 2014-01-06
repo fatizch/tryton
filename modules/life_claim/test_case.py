@@ -2,16 +2,13 @@ from trytond.pool import PoolMeta
 
 MODULE_NAME = 'life_claim'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
-]
-
-__metaclass__ = PoolMeta
+    ]
 
 
 class TestCaseModel:
-    'Test Case Model'
-
     __name__ = 'ir.test_case'
 
     @classmethod
