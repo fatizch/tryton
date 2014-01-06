@@ -1,10 +1,6 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:party.address.kind:"
-msgid "This item (%s) is used by %s (%s, %s)"
-msgstr "Cet élément (%s) est utilisé par %s (%s, %s)"
 
 msgctxt "error:party.contact_mechanism:"
 msgid "Invalid Email !"
@@ -86,22 +82,6 @@ msgctxt "field:country.zipcode,zip:"
 msgid "Zip"
 msgstr "Code Postal"
 
-msgctxt "field:party.actor,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:party.actor,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:party.actor,party:"
-msgid "Party"
-msgstr "Acteur"
-
-msgctxt "field:party.actor,reference:"
-msgid "Reference"
-msgstr "Référence"
-
 msgctxt "field:party.address,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
@@ -121,54 +101,6 @@ msgstr "Date de Début"
 msgctxt "field:party.address,zip_and_city:"
 msgid "Zip"
 msgstr "Code Postal"
-
-msgctxt "field:party.address.kind,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:party.address.kind,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:party.address.kind,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:party.address.kind,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:party.address.kind,is_used:"
-msgid "Is Used"
-msgstr "Est Utilisé"
-
-msgctxt "field:party.address.kind,key:"
-msgid "Key"
-msgstr "Clé"
-
-msgctxt "field:party.address.kind,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:party.address.kind,my_model_name:"
-msgid "Model Name"
-msgstr "Nom de l'objet"
-
-msgctxt "field:party.address.kind,name:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:party.address.kind,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:party.address.kind,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:party.address.kind,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:party.interaction,address:"
 msgid "Address"
@@ -223,7 +155,7 @@ msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
 msgctxt "field:party.interaction,party:"
-msgid "Actor"
+msgid "Party"
 msgstr "Acteur"
 
 msgctxt "field:party.interaction,rec_name:"
@@ -438,10 +370,6 @@ msgctxt "model:country.zipcode,name:"
 msgid "ZipCode"
 msgstr "Code Postal"
 
-msgctxt "model:ir.action,name:act_address_kind_form"
-msgid "Address Kind"
-msgstr "Type d'Adresse"
-
 msgctxt "model:ir.action,name:act_addresses_button"
 msgid "Addresses"
 msgstr "Adresses"
@@ -451,7 +379,7 @@ msgid "Companies"
 msgstr "Sociétés"
 
 msgctxt "model:ir.action,name:act_contact_history_relate_form"
-msgid "Contact History"
+msgid "Party Interaction"
 msgstr "Historique des Contacts"
 
 msgctxt "model:ir.action,name:act_contact_mechanisms_button"
@@ -466,10 +394,6 @@ msgctxt "model:ir.action,name:act_person_form"
 msgid "Persons"
 msgstr "Personnes"
 
-msgctxt "model:ir.ui.menu,name:menu_address_kind_form"
-msgid "Address Kind"
-msgstr "Type d'Adresse"
-
 msgctxt "model:ir.ui.menu,name:menu_company_form"
 msgid "Companies"
 msgstr "Sociétés"
@@ -482,16 +406,8 @@ msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
 msgstr "Personnes"
 
-msgctxt "model:party.actor,name:"
-msgid "Actor"
-msgstr "Acteur"
-
-msgctxt "model:party.address.kind,name:"
-msgid "Addresse Kind"
-msgstr "Type d'Adresse"
-
 msgctxt "model:party.interaction,name:"
-msgid "Contact History"
+msgid "Party Interaction"
 msgstr "Historique des Contacts"
 
 msgctxt "model:party.relation,name:"
@@ -561,10 +477,6 @@ msgstr "Mr"
 msgctxt "selection:party.party,gender:"
 msgid "Mrs."
 msgstr "Mme"
-
-msgctxt "view:party.actor:"
-msgid "Roles"
-msgstr "Rôles"
 
 msgctxt "view:party.interaction:"
 msgid "Communication Log"

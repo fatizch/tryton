@@ -2,7 +2,6 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Not
 
 from trytond.modules.coop_utils import model, fields, coop_string
-from trytond.modules.coop_party import Actor
 from trytond.modules.coop_party.party import STATES_COMPANY
 
 __metaclass__ = PoolMeta
@@ -38,10 +37,12 @@ class Party:
         return res
 
 
-class Insurer(Actor, model.CoopSQL):
+class Insurer(model.CoopView, model.CoopSQL):
     'Insurer'
 
     __name__ = 'insurer'
+
+    party = fields.Many2One('party.party', 'Insurer', ondelete='CASCADE')
 
     @classmethod
     def _export_keys(cls):

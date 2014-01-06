@@ -8,7 +8,7 @@ from trytond.modules.coop_utils import utils, coop_string, fields
 __all__ = [
     'PartyRelationKind',
     'PartyRelation',
-]
+    ]
 
 
 class PartyRelationKind(model.CoopSQL, model.CoopView):
@@ -27,7 +27,7 @@ class PartyRelationKind(model.CoopSQL, model.CoopView):
         super(PartyRelationKind, cls).__setup__()
         cls._sql_constraints += [
             ('key_uniq', 'UNIQUE(code)', 'The key must be unique!'),
-        ]
+            ]
 
     def on_change_with_code(self):
         if self.code:

@@ -8,12 +8,14 @@ from trytond.modules.coop_utils import utils, fields
 
 SSN_LENGTH = 15
 
+__metaclass__ = PoolMeta
+__all__ = [
+    'Party',
+    ]
 
-class FrenchParty():
-    'French Party'
 
+class Party:
     __name__ = 'party.party'
-    __metaclass__ = PoolMeta
 
     ssn_no_key = fields.Function(fields.Char('SSN', size=13),
         'get_ssn', setter='set_ssn')
@@ -22,26 +24,25 @@ class FrenchParty():
 
     @classmethod
     def __setup__(cls):
-        super(FrenchParty, cls).__setup__()
+        super(Party, cls).__setup__()
         cls.ssn = copy.copy(cls.ssn)
         if cls.ssn.on_change_with is None:
             cls.ssn.on_change_with = []
         cls.ssn.on_change_with += ['ssn_no_key', 'ssn_key']
 
-        cls._error_messages.update(
-            {
+        cls._error_messages.update({
                 'invalid_ssn': 'Invalid format for SSN',
                 'invalid_ssn_key': 'Invalid SSN Key',
                 'invalid_ssn_birth_date': 'Incompatible birth date and SSN',
                 'invalid_ssn_gender': 'Incompatible gender and SSN',
-            })
+                })
         #Do not display SIREN for person
         cls.siren = copy.copy(cls.siren)
         cls.siren.states = {'invisible': Bool(~Eval('is_company'))}
 
     @classmethod
     def validate(cls, parties):
-        super(FrenchParty, cls).validate(parties)
+        super(Party, cls).validate(parties)
         for party in parties:
             party.check_ssn()
             party.check_ssn_key()

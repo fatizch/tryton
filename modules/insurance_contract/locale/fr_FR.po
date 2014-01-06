@@ -503,7 +503,7 @@ msgid "Parent"
 msgstr "Parent"
 
 msgctxt "field:contract.covered_element,party:"
-msgid "Actor"
+msgid "Party"
 msgstr "Acteur"
 
 msgctxt "field:contract.covered_element,party_compl_data:"

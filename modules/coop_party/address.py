@@ -2,21 +2,20 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.coop_utils import DynamicSelection, utils
-from trytond.modules.coop_utils import coop_string, business, fields, model
+from trytond.modules.coop_utils import utils
+from trytond.modules.coop_utils import coop_string, business, fields, export
 
-__all__ = ['Address', 'AddresseKind']
+__metaclass__ = PoolMeta
+__all__ = [
+    'Address',
+    ]
 
 
-class Address(model.CoopSQL):
-    "Address"
-
-    __metaclass__ = PoolMeta
+class Address(export.ExportImportMixin):
     __name__ = 'party.address'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    kind = fields.Selection('get_possible_address_kind', 'Kind')
     zip_and_city = fields.Function(fields.Many2One('country.zipcode', 'Zip',
             on_change=['zip', 'country', 'city', 'zip_and_city']),
         'get_zip_and_city', 'set_zip_and_city')
@@ -63,10 +62,6 @@ class Address(model.CoopSQL):
         for address in addresses:
             res[address.id] = ''
             indent = 0
-            if address.kind:
-                res[address.id] = coop_string.get_field_as_summary(address,
-                    'kind', False, at_date, lang=lang)
-                indent = 1
             res[address.id] += coop_string.re_indent_text(
                 address.get_full_address(name), indent)
         return res
@@ -74,15 +69,6 @@ class Address(model.CoopSQL):
     @staticmethod
     def default_start_date():
         return utils.today()
-
-    @classmethod
-    def get_possible_address_kind(cls, vals=None):
-        return AddresseKind.get_values_as_selection('party.address.kind')
-
-    @staticmethod
-    def default_kind():
-        #RSE TODO : what if this address kind was removed or modified?
-        return 'main'
 
     @staticmethod
     def get_cities_from_zip(zipcode, country):
@@ -197,14 +183,3 @@ class Address(model.CoopSQL):
 
     def get_rec_name(self, name):
         return self.get_address_as_char(name)
-
-
-class AddresseKind(DynamicSelection):
-    'Addresse Kind'
-
-    __name__ = 'party.address.kind'
-    _table = 'coop_table_of_table'
-
-    @staticmethod
-    def get_class_where_used():
-        return [('party.address', 'kind')]

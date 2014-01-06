@@ -5,24 +5,20 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.party.contact_mechanism import _TYPES
-from trytond.modules.coop_utils import model, utils, fields
+from trytond.modules.coop_utils import model, utils, fields, export
 
 MEDIA = _TYPES + [
     ('mail', 'Mail')
-]
+    ]
 
-
+__metaclass__ = PoolMeta
 __all__ = [
     'ContactMechanism',
-    'ContactHistory',
-]
+    'PartyInteraction',
+    ]
 
 
-class ContactMechanism(model.CoopSQL):
-    "Contact Mechanism"
-
-    __metaclass__ = PoolMeta
-
+class ContactMechanism(export.ExportImportMixin):
     __name__ = 'party.contact_mechanism'
     _rec_name = 'value'
 
@@ -41,7 +37,7 @@ class ContactMechanism(model.CoopSQL):
             cls.type.selection.remove(('jabber', 'Jabber'))
         cls._constraints += [('check_email', 'invalid_email')]
         cls._error_messages.update({
-            'invalid_email': 'Invalid Email !'})
+                'invalid_email': 'Invalid Email !'})
 
     def check_email(self):
         if not (hasattr(self, 'type') and self.type == 'email'):
@@ -65,55 +61,39 @@ class ContactMechanism(model.CoopSQL):
         return ('party.name', 'type', 'value')
 
 
-class ContactHistory(model.CoopSQL, model.CoopView):
-    'Contact History'
+class PartyInteraction(model.CoopSQL, model.CoopView):
+    'Party Interaction'
 
     __name__ = 'party.interaction'
 
-    party = fields.Many2One('party.party', 'Actor',
-        ondelete='CASCADE',
-        states={
-            'readonly': True
-        })
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
+        states={'readonly': True})
     title = fields.Char('Title')
     media = fields.Selection(MEDIA, 'Media')
     contact_mechanism = fields.Many2One('party.contact_mechanism',
-        'Contact Mechanism',
-        domain=[
+        'Contact Mechanism', domain=[
             ('party', '=', Eval('party')),
             ('type', '=', Eval('media')),
-        ], depends=['party', 'media'],
+            ], depends=['party', 'media'],
         states={'invisible': Eval('media') == 'mail'},
         ondelete='RESTRICT')
     address = fields.Many2One('party.address', 'Address',
-        domain=[('party', '=', Eval('party'))],
-        depends=['party'],
+        domain=[('party', '=', Eval('party'))], depends=['party'],
         states={'invisible': Eval('media') != 'mail'})
     user = fields.Many2One('res.user', 'User')
     #in case the user is deleted, we also keep tracks of his name
     user_name = fields.Char('User Name')
     contact_datetime = fields.DateTime('Date and Time')
     comment = fields.Text('Comment')
-    attachment = fields.Many2One(
-        'ir.attachment', 'Attachment',
-        domain=[('resource', '=', Eval('for_object'))],
-        depends=['for_object'],
+    attachment = fields.Many2One('ir.attachment', 'Attachment',
+        domain=[('resource', '=', Eval('for_object'))], depends=['for_object'],
         context={'resource': Eval('for_object')})
     for_object = fields.Function(
-        fields.Char(
-            'For Object',
-            states={
-                'invisible': True
-            },
+        fields.Char('For Object', states={'invisible': True},
             on_change_with=['for_object_ref']),
         'on_change_with_for_object')
-    for_object_ref = fields.Reference(
-        'For Object',
-        [('party.party', 'Party')],
-        states={
-            'readonly': True
-        },
-        on_change_with=['party', 'for_object_ref'])
+    for_object_ref = fields.Reference('For Object', [('party.party', 'Party')],
+        states={'readonly': True}, on_change_with=['party', 'for_object_ref'])
 
     @staticmethod
     def default_user():
