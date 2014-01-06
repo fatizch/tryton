@@ -1,41 +1,41 @@
 from trytond.pool import Pool
 from .claim import *
-from .product import *
+from .offered import *
 from .contract import *
 from .rule_engine import *
 from .party import *
 from .test_case import *
+from .document import *
 
 
 def register():
     Pool.register(
-        # from claim
-        ClaimCoverage,
+        # From Claim
         Claim,
         Loss,
-        ClaimDeliveredService,
+        DeliveredService,
         Indemnification,
         IndemnificationDetail,
-        # from product
+        ClaimIndemnificationValidateDisplay,
+        ClaimIndemnificationValidateSelect,
+        # From Document
         Document,
         DocumentRequest,
         RequestFinder,
-        ContactHistory,
         # from contract
-        ClaimHistory,
-        ClaimContract,
-        ClaimOption,
-        IndemnificationDisplayer,
-        IndemnificationSelection,
+        Contract,
+        Option,
         #From Rule Engine
-        OfferedContext,
-        ClaimContext,
+        RuleEngineRuntime,
         # From Party,
         Party,
+        PartyInteraction,
+        # From Offered
+        OptionDescription,
         # from test_case
         TestCaseModel,
         module='claim', type_='model')
 
     Pool.register(
-        IndemnificationValidation,
+        ClaimIndemnificationValidate,
         module='claim', type_='wizard')

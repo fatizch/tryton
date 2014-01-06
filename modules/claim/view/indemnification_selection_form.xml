@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Indemnification Validation" col="2">
+<form string="Claim Indemnification Validate" col="2">
   <group id="toggles" colspan="1" xexpand="0" xfill="1">
     <label name="global_value"/>
     <field name="global_value" xexpand="0" xfill="1"/>
