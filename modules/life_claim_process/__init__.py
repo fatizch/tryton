@@ -4,5 +4,5 @@ from .claim_process import *
 
 def register():
     Pool.register(
-        LifeLossProcess,
+        Loss,
         module='life_claim_process', type_='model')
