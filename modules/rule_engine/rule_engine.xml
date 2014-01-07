@@ -149,7 +149,7 @@
     </record>
     <menuitem parent="menu_rule_engine" action="context_window" id="menu_context"/>
     <!-- ############################################################ -->
-    <!-- Tree Elements -->
+    <!-- Rule Functions -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="tree_element_form">
       <field name="model">rule_engine.function</field>
@@ -163,7 +163,7 @@
       <field name="name">tree_element_tree</field>
     </record>
     <record model="ir.action.act_window" id="tree_element_window">
-      <field name="name">Tree Elements</field>
+      <field name="name">Rule Functions</field>
       <field name="res_model">rule_engine.function</field>
     </record>
     <record model="ir.action.act_window.view" id="tree_element_tree_view">

@@ -33,8 +33,8 @@ __all__ = [
     'RuleEngineParameter',
     'RuleExecutionLog',
     'Context',
-    'TreeElement',
-    'ContextTreeElement',
+    'RuleFunction',
+    'ContextRuleFunction',
     'TestCase',
     'TestCaseValue',
     'RunTests',
@@ -941,8 +941,8 @@ class Context(ModelView, ModelSQL):
         return result
 
 
-class TreeElement(ModelView, ModelSQL):
-    'Rule Engine Tree Element'
+class RuleFunction(ModelView, ModelSQL):
+    'Rule Engine Function'
     __name__ = 'rule_engine.function'
     _rec_name = 'description'
 
@@ -981,7 +981,7 @@ class TreeElement(ModelView, ModelSQL):
 
     @classmethod
     def __setup__(cls):
-        super(TreeElement, cls).__setup__()
+        super(RuleFunction, cls).__setup__()
         cls._error_messages.update({
                 'argument_accent_error':
                 'Function arguments must only use ascii',
@@ -994,7 +994,7 @@ class TreeElement(ModelView, ModelSQL):
 
     @classmethod
     def _export_force_recreate(cls):
-        result = super(TreeElement, cls)._export_force_recreate()
+        result = super(RuleFunction, cls)._export_force_recreate()
         result.remove('children')
         return result
 
@@ -1016,7 +1016,7 @@ class TreeElement(ModelView, ModelSQL):
 
     @classmethod
     def validate(cls, records):
-        super(TreeElement, cls).validate(records)
+        super(RuleFunction, cls).validate(records)
         for elem in records:
             elem.check_arguments_accents()
             elem.check_name_accents()
@@ -1100,13 +1100,13 @@ class TreeElement(ModelView, ModelSQL):
         return res
 
 
-class ContextTreeElement(ModelSQL):
-    'Context Tree Element'
+class ContextRuleFunction(ModelSQL):
+    'Context Rule Function'
     __name__ = 'rule_engine.context-function'
 
     context = fields.Many2One('rule_engine.context', 'Context', required=True,
         ondelete='CASCADE')
-    tree_element = fields.Many2One('rule_engine.function', 'Tree Element',
+    tree_element = fields.Many2One('rule_engine.function', 'Rule Function',
         required=True, ondelete='CASCADE')
 
 

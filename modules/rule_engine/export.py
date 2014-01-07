@@ -29,7 +29,7 @@ class ExportPackage():
         'getter_void', setter='setter_void')
     tree_elements = fields.Function(
         fields.One2Many('rule_engine.function', None,
-            'Tree Elements', states={
+            'Rule Functions', states={
                 'invisible': Bool(Eval('model') != 'rule_engine.function')},
             on_change=['tree_elements', 'instances_to_export'],
             add_remove=[]),
@@ -47,7 +47,7 @@ class ExportPackage():
         res.extend([
                 ('rule_engine', 'Rule'),
                 ('rule_engine.context', 'Context'),
-                ('rule_engine.function', 'Tree Element'),
+                ('rule_engine.function', 'Rule Function'),
                 ('tag', 'Tag'),
                 ])
         return list(set(res))

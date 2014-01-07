@@ -41,7 +41,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0001_testFunctionalRuleCreation(self):
         fr = self.Lang.search([('name', '=', 'French')], limit=1)[0]
 
-        te2 = self.TreeElement()
+        te2 = self.RuleFunction()
         te2.language = fr
         te2.type = 'function'
         te2.name = '_re_get_subscriber_birthdate'
@@ -51,7 +51,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         te2.save()
 
-        te8 = self.TreeElement()
+        te8 = self.RuleFunction()
         te8.language = fr
         te8.type = 'folder'
         te8.translated_technical_name = 'Dossier Souscripteur'
@@ -60,7 +60,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         te8.save()
 
-        te3 = self.TreeElement()
+        te3 = self.RuleFunction()
         te3.language = fr
         te3.type = 'function'
         te3.name = '_re_years_between'
@@ -70,7 +70,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         te3.save()
 
-        te5 = self.TreeElement()
+        te5 = self.RuleFunction()
         te5.language = fr
         te5.type = 'function'
         te5.translated_technical_name = 'aujourd_hui'
@@ -80,7 +80,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         te5.save()
 
-        te6 = self.TreeElement()
+        te6 = self.RuleFunction()
         te6.language = fr
         te6.type = 'function'
         te6.name = '_re_add_warning'
@@ -90,7 +90,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         te6.save()
 
-        te4 = self.TreeElement()
+        te4 = self.RuleFunction()
         te4.language = fr
         te4.type = 'folder'
         te4.translated_technical_name = 'Dossier Outils'
