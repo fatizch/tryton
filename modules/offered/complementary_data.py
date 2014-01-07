@@ -13,16 +13,15 @@ from trytond.modules.offered.offered import CONFIG_KIND
 __metaclass__ = PoolMeta
 
 __all__ = [
-    'ComplementaryDataDefinition',
-    'ComplementaryDataRecursiveRelation',
+    'ExtraData',
+    'ExtraDataSubExtraDataRelation',
     'Tag',
-    'ComplementaryDataDefTagRelation',
+    'ExtraDataTagRelation',
     ]
 
 
-class ComplementaryDataDefinition(
-        DictSchemaMixin, model.CoopSQL, model.CoopView):
-    'Complementary Data Definition'
+class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
+    'Extra Data'
 
     __name__ = 'extra_data'
 
@@ -38,34 +37,29 @@ class ComplementaryDataDefinition(
             depends=['type_', 'selection', 'with_default_value']),
         'get_default_value', 'set_default_value')
     default_value = fields.Char('Default Value')
-    kind = fields.Selection(
-        [
+    kind = fields.Selection([
             ('contract', 'Contract'),
             ('product', 'Product'),
             ('sub_elem', 'Covered Element'),
             ('loss', 'Loss'),
             ('benefit', 'Benefit'),
             ('rule_engine', 'Rule Engine'),
-        ],
-        'Kind')
-    sub_datas = fields.One2Many(
-        'extra_data-sub_extra_data',
-        'master', 'Sub Data', context={
-            'kind': Eval('complementary_data_kind')},
+            ], 'Kind')
+    sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
+        'Sub Data', context={'kind': Eval('complementary_data_kind')},
         states={'invisible': Eval('sub_data_config_kind') != 'simple'})
     sub_data_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
-    tags = fields.Many2Many('extra_data-tag', 'compl_data_def',
-        'tag', 'Tags')
+    tags = fields.Many2Many('extra_data-tag', 'compl_data_def', 'tag', 'Tags')
     tags_name = fields.Function(
         fields.Char('Tags', on_change_with=['tags']),
         'on_change_with_tags_name', searcher='search_tags')
 
     @classmethod
     def __setup__(cls):
-        super(ComplementaryDataDefinition, cls).__setup__()
+        super(ExtraData, cls).__setup__()
 
         def update_field(field_name, field):
             if not hasattr(field, 'states'):
@@ -99,7 +93,7 @@ class ComplementaryDataDefinition(
 
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
-        ]
+            ]
         cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
 
     @staticmethod
@@ -195,7 +189,7 @@ class ComplementaryDataDefinition(
                             'dd_args': dd_args
                         })
                 domain.append(('id', 'in', good_schemas[0]))
-        return super(ComplementaryDataDefinition, cls).search(
+        return super(ExtraData, cls).search(
             domain, offset=offset, limit=limit, order=order, count=count,
             query=query)
 
@@ -325,8 +319,8 @@ class ComplementaryDataDefinition(
         return ['name', 'string', 'type_', 'selection_json']
 
 
-class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
-    'Complementary Data recursive relation'
+class ExtraDataSubExtraDataRelation(model.CoopSQL, model.CoopView):
+    'Extra Data to Sub Extra Data Relation'
 
     __name__ = 'extra_data-sub_extra_data'
 
@@ -349,13 +343,11 @@ class ComplementaryDataRecursiveRelation(model.CoopSQL, model.CoopView):
             args)
 
 
-class Tag():
-    'Tag'
-
+class Tag:
     __name__ = 'tag'
 
     compl_data_defs = fields.Many2Many('extra_data-tag', 'tag',
-        'compl_data_def', 'Complementary Data')
+        'compl_data_def', 'Extra Data')
 
     @classmethod
     def _export_skips(cls):
@@ -364,11 +356,11 @@ class Tag():
         return result
 
 
-class ComplementaryDataDefTagRelation(model.CoopSQL):
-    'Relation between complementary data def and tag'
+class ExtraDataTagRelation(model.CoopSQL):
+    'Relation between extra data def and tag'
 
     __name__ = 'extra_data-tag'
 
     compl_data_def = fields.Many2One('extra_data',
-        'Complementary Data Def', ondelete='CASCADE')
+        'Extra Data Def', ondelete='CASCADE')
     tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

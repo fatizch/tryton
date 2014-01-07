@@ -10,6 +10,8 @@ __all__ = [
     'CurrencyRate',
     ]
 
+DEF_CUR_DIG = 2
+
 
 class Currency(export.ExportImportMixin):
     __name__ = 'currency.currency'

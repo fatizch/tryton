@@ -50,16 +50,16 @@ class Coverage:
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
 
-        cls.kind = copy.copy(cls.kind)
-        cls.kind.selection.append(('insurance', 'Insurance'))
-        if ('default', 'Default') in cls.kind.selection:
-            cls.kind.selection.remove(('default', 'Default'))
-        cls.kind.selection = list(set(cls.kind.selection))
-
     @classmethod
     def delete(cls, entities):
         cls.delete_rules(entities)
         super(Coverage, cls).delete(entities)
+
+    @classmethod
+    def get_possible_option_description_kind(cls):
+        res = super(Coverage, cls).get_possible_option_description_kind()
+        res.append(('insurance', 'Insurance'))
+        return res
 
     def calculate_main_price(self, args, result_line, errs, date, contract):
         try:

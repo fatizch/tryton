@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -34,13 +32,11 @@ class Product:
             })
 
     @classmethod
-    def __setup__(cls):
-        super(Product, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
-        cls.kind.selection.append(('commission', 'Commission'))
-        if ('default', 'Default') in cls.kind.selection:
-            cls.kind.selection.remove(('default', 'Default'))
-        cls.kind.selection = list(set(cls.kind.selection))
+    def get_possible_product_kind(cls):
+        res = super(OptionDescription,
+            cls).get_possible_product_kind()
+        res.append(('commission', 'Commission'))
+        return res
 
     @classmethod
     def _export_skips(cls):
@@ -59,13 +55,11 @@ class OptionDescription:
         'coverage', 'Coverages', domain=[('kind', '=', 'insurance')])
 
     @classmethod
-    def __setup__(cls):
-        super(OptionDescription, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
-        cls.kind.selection.append(('commission', 'Commission'))
-        if ('default', 'Default') in cls.kind.selection:
-            cls.kind.selection.remove(('default', 'Default'))
-        cls.kind.selection = list(set(cls.kind.selection))
+    def get_possible_option_description_kind(cls):
+        res = super(OptionDescription,
+            cls).get_possible_option_description_kind()
+        res.append(('commission', 'Commission'))
+        return res
 
     def give_me_commission(self, args):
         return self.get_result(args=args, kind='commission')

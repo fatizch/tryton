@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.coop_currency import ModelCurrency
-from trytond.modules.offered.offered import DEF_CUR_DIG
+from trytond.modules.coop_currency.currency import DEF_CUR_DIG
 
 __metaclass__ = PoolMeta
 __all__ = [

@@ -12,7 +12,7 @@ from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.benefit import benefit
 from trytond.modules.insurance_product import Printable
-from trytond.modules.offered.offered import DEF_CUR_DIG
+from trytond.modules.coop_currency.currency import DEF_CUR_DIG
 
 
 __metaclass__ = PoolMeta

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -15,11 +15,11 @@ msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
 msgctxt "field:ir.export_package,compl_data_defs:"
-msgid "Complementary Data Def"
+msgid "Extra Data Def"
 msgstr "Définition de Données Complémentaires"
 
 msgctxt "field:ir.export_package,coverages:"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
 msgctxt "field:ir.export_package,products:"
@@ -31,7 +31,7 @@ msgid "Main Company Name"
 msgstr "Nom de la company principale"
 
 msgctxt "field:extra_data-tag,compl_data_def:"
-msgid "Complementary Data Def"
+msgid "Extra Data Def"
 msgstr "Définition de Données Complémentaires"
 
 msgctxt "field:extra_data-tag,create_date:"
@@ -272,7 +272,7 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.option.description,kind:"
-msgid "Coverage Kind"
+msgid "OptionDescription Kind"
 msgstr "Type de Garantie"
 
 msgctxt "field:offered.option.description,must_expand_tree:"
@@ -465,7 +465,7 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.product,coverages:"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
 msgctxt "field:offered.product,create_date:"
@@ -617,7 +617,7 @@ msgid ""
 msgstr " "
 
 msgctxt "field:tag,compl_data_defs:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "help:extra_data,selection:"
@@ -625,11 +625,11 @@ msgid ""
 msgstr " "
 
 msgctxt "model:ir.action,name:act_coverage_form"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
-msgctxt "model:ir.action,name:act_model_coop_schema"
-msgid "Complementary Data"
+msgctxt "model:ir.action,name:act_model_extra_data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.action,name:act_package_form"
@@ -645,11 +645,11 @@ msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
-msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
-msgid "Complementary Data"
+msgctxt "model:ir.ui.menu,name:menu_model_extra_data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.ui.menu,name:menu_package_form"
@@ -669,7 +669,7 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "model:extra_data-tag,name:"
-msgid "Relation between complementary data def and tag"
+msgid "Relation between extra data def and tag"
 msgstr ""
 
 msgctxt "model:extra_data,name:"
@@ -849,11 +849,11 @@ msgid "Remove"
 msgstr "Remplacer"
 
 msgctxt "view:extra_data:"
-msgid "Complementary Data Descriptor"
+msgid "Extra Data Descriptor"
 msgstr "Descripteur de Données Complémentaires"
 
 msgctxt "view:extra_data:"
-msgid "Complementary Data Descriptors"
+msgid "Extra Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 
 msgctxt "view:extra_data:"
@@ -877,11 +877,11 @@ msgid "Relations"
 msgstr "Relations"
 
 msgctxt "view:offered.option.description:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:offered.option.description:"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
 msgctxt "view:offered:"
@@ -901,11 +901,11 @@ msgid "Summary"
 msgstr "Synthèse"
 
 msgctxt "view:offered.product:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:offered.product:"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
 msgctxt "view:offered.product:"
@@ -913,5 +913,5 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "view:tag:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"

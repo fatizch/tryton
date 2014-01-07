@@ -2,7 +2,7 @@
 <tryton>
   <data>
     <!-- ############################################################ -->
-    <!-- Coverage -->
+    <!-- OptionDescription -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="coverage_view_form">
       <field name="model">offered.option.description</field>
@@ -27,7 +27,7 @@
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_coverage_form">
-      <field name="name">Coverages</field>
+      <field name="name">OptionDescriptions</field>
       <field name="res_model">offered.option.description</field>
       <field name="domain">[("is_package", "=", False), ('company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
