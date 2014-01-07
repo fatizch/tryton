@@ -3,10 +3,9 @@ from trytond.pool import PoolMeta
 from trytond.modules.coop_utils import fields
 
 __metaclass__ = PoolMeta
-
 __all__ = [
     'WorkflowModel',
-]
+    ]
 
 
 class WorkflowModel():
