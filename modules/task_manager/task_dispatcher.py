@@ -15,7 +15,7 @@ __all__ = [
     'TaskDisplayer',
     'TaskSelector',
     'LaunchTask',
-]
+    ]
 
 
 class ProcessLog:
@@ -267,7 +267,7 @@ class TaskDispatcher(Wizard):
         'task_manager.task_selector_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Compute Task', 'calculate_action', 'tryton-ok'),
-        ])
+            ])
     calculate_action = VoidStateAction()
 
     @classmethod
@@ -275,7 +275,7 @@ class TaskDispatcher(Wizard):
         super(TaskDispatcher, cls).__setup__()
         cls._error_messages.update({
                 'no_task_selected': 'No task has been selected.',
-            })
+                })
 
     def default_select_context(self, name):
         Selector = Pool().get('task.select.available_tasks')
@@ -338,14 +338,12 @@ class TaskDispatcher(Wizard):
                 if view[1] == 'form':
                     act['views'] = [view]
                     break
-        res = (
-            act,
-            {
+        res = (act, {
                 'id': good_id,
                 'model': good_model,
                 'res_id': good_id,
                 'res_model': good_model,
-            })
+                })
         return res
 
 
@@ -403,12 +401,10 @@ class LaunchTask(Wizard):
                 if view[1] == 'form':
                     act['views'] = [view]
                     break
-        res = (
-            act,
-            {
+        res = (act, {
                 'id': good_id,
                 'model': good_model,
                 'res_id': good_id,
                 'res_model': good_model,
-            })
+                })
         return res
