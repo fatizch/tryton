@@ -22,7 +22,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Currency': 'currency.currency',
             'Company': 'company.company',
             'Party': 'party.party',
-        }
+            }
 
     def test0001_testCurrencyCreation(self):
         euro = self.Currency()

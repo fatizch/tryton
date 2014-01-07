@@ -4,7 +4,7 @@ from trytond.pyson import Eval
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
-from trytond.modules.offered.offered import DEF_CUR_DIG
+from trytond.modules.coop_currency.currency import DEF_CUR_DIG
 
 
 __all__ = [

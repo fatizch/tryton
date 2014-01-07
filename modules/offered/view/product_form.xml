@@ -4,12 +4,12 @@
         <form string="Product"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='summary']" position="after">
-        <page string="Complementary Data" id="complementary_data">
+        <page string="Extra Data" id="complementary_data">
             <field name="complementary_data_def" colspan="4"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="before">
-        <page string="Coverages" id="option">
+        <page string="OptionDescriptions" id="option">
             <field name="coverages"/>
         </page>
     </xpath>

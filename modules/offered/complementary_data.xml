@@ -1,43 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
-    <!-- Complementary Datas -->
-    <record model="ir.ui.view" id="complementary_data_view_tree">
+    <!-- ############################################################ -->
+    <!-- ########### Extra Data ########### -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="extra_data_view_list">
       <field name="model">extra_data</field>
       <field name="type">tree</field>
-      <field name="name">complementary_data_tree</field>
+      <field name="name">extra_data_list</field>
     </record>
-    <record model="ir.ui.view" id="complementary_data_view_form">
+    <record model="ir.ui.view" id="extra_data_view_form">
       <field name="model">extra_data</field>
       <field name="type">form</field>
-      <field name="name">complementary_data_form</field>
+      <field name="name">extra_data_form</field>
     </record>
-    <record model="ir.action.act_window" id="act_model_coop_schema">
-      <field name="name">Complementary Data</field>
+    <record model="ir.action.act_window" id="act_model_extra_data">
+      <field name="name">Extra Data</field>
       <field name="res_model">extra_data</field>
     </record>
-    <record model="ir.action.act_window.view" id="act_model_coop_schema_tree">
+    <record model="ir.action.act_window.view" id="act_model_extra_data_tree">
       <field name="sequence" eval="10"/>
-      <field name="view" ref="complementary_data_view_tree"/>
-      <field name="act_window" ref="act_model_coop_schema"/>
+      <field name="view" ref="extra_data_view_list"/>
+      <field name="act_window" ref="act_model_extra_data"/>
     </record>
-    <record model="ir.action.act_window.view" id="act_model_coop_schema_form">
+    <record model="ir.action.act_window.view" id="act_model_extra_data_form">
       <field name="sequence" eval="20"/>
-      <field name="view" ref="complementary_data_view_form"/>
-      <field name="act_window" ref="act_model_coop_schema"/>
+      <field name="view" ref="extra_data_view_form"/>
+      <field name="act_window" ref="act_model_extra_data"/>
     </record>
-    <menuitem parent="menu_product_configuration" action="act_model_coop_schema" id="menu_model_coop_schema"/>
-    <!-- Complementary data recursive relation -->
-    <record model="ir.ui.view" id="complementary_data_recursive_relation_form">
+    <menuitem parent="menu_product_configuration" action="act_model_extra_data" id="menu_model_extra_data"/>
+    <!-- ############################################################ -->
+    <!-- ########### Extra Data Sub Extra Data Relation   ########### -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="extra_data-sub_extra_data_view_form">
       <field name="model">extra_data-sub_extra_data</field>
       <field name="type">form</field>
-      <field name="name">complementary_data_recursive_relation_form</field>
+      <field name="name">extra_data-sub_extra_data_form</field>
     </record>
-    <record model="ir.ui.view" id="complementary_data_recursive_relation_tree">
+    <record model="ir.ui.view" id="extra_data-sub_extra_data_view_tree">
       <field name="model">extra_data-sub_extra_data</field>
       <field name="type">tree</field>
-      <field name="name">complementary_data_recursive_relation_tree</field>
+      <field name="name">extra_data-sub_extra_data_tree</field>
     </record>
+    <!-- ############################################################ -->
+    <!-- ########### Tag ########### -->
+    <!-- ############################################################ -->
     <record model="ir.ui.view" id="tag_view_form">
         <field name="model">tag</field>
         <field name="type">form</field>

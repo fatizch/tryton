@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -96,11 +94,6 @@ class Product:
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
-        cls.kind.selection.append(('insurance', 'Insurance'))
-        if ('default', 'Default') in cls.kind.selection:
-            cls.kind.selection.remove(('default', 'Default'))
-        cls.kind.selection = list(set(cls.kind.selection))
         cls._error_messages.update({
                 'no_renewal_rule_configured': 'No renewal rule configured',
                 })
@@ -109,6 +102,12 @@ class Product:
     def delete(cls, entities):
         cls.delete_rules(entities)
         super(Product, cls).delete(entities)
+
+    @classmethod
+    def get_possible_product_kind(cls):
+        res = super(Product, cls).get_possible_product_kind()
+        res.append(('insurance', 'Insurance'))
+        return res
 
     def get_sub_elem_data(self):
         # This method is used by the get_result method to know where to look
