@@ -13,14 +13,14 @@ from .product import IS_INSURANCE
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Coverage',
-    'OfferedCoverage',
+    'OptionDescription',
+    'OfferedOptionDescription',
     ]
 
 COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 
 
-class Coverage:
+class OptionDescription:
     __name__ = 'offered.option.description'
 
     insurer = fields.Many2One('insurer', 'Insurer', states={
@@ -38,7 +38,7 @@ class Coverage:
 
     @classmethod
     def __setup__(cls):
-        super(Coverage, cls).__setup__()
+        super(OptionDescription, cls).__setup__()
         for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context') or not isinstance(
@@ -59,7 +59,7 @@ class Coverage:
     @classmethod
     def delete(cls, entities):
         cls.delete_rules(entities)
-        super(Coverage, cls).delete(entities)
+        super(OptionDescription, cls).delete(entities)
 
     def calculate_main_price(self, args, result_line, errs, date, contract):
         try:
@@ -197,13 +197,13 @@ class Coverage:
 
     @classmethod
     def get_var_names_for_full_extract(cls):
-        res = super(Coverage, cls).get_var_names_for_full_extract()
+        res = super(OptionDescription, cls).get_var_names_for_full_extract()
         res.extend([('item_desc', 'light')])
         return res
 
 
-class OfferedCoverage(product.Offered):
-    'Offered Coverage'
+class OfferedOptionDescription(product.Offered):
+    'OptionDescription'
 
     __name__ = 'offered.option.description'
     #This empty override is necessary to have in the coverage the fields added

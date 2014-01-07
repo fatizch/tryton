@@ -229,7 +229,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     offered = fields.Reference('Offered', selection=[
             ('offered.product', 'Product'),
-            ('offered.option.description', 'Coverage'),
+            ('offered.option.description', 'Option Description'),
             ], states={'required': True})
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')

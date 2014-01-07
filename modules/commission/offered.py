@@ -78,8 +78,8 @@ class CommissionOptionDescriptionOptionDescriptionRelation(model.CoopSQL):
 
     component = fields.Many2One('offered.option.description', 'Component',
         ondelete='CASCADE')
-    coverage = fields.Many2One('offered.option.description', 'Coverage',
-        ondelete='RESTRICT')
+    coverage = fields.Many2One('offered.option.description',
+        'Option Description', ondelete='RESTRICT')
 
 
 class CommissionRule(business_rule.BusinessRuleRoot, model.CoopSQL):

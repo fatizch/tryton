@@ -25,7 +25,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Product': 'offered.product',
-            'Coverage': 'offered.option.description',
+            'OptionDescription': 'offered.option.description',
             'Pricing': 'billing.premium.rule',
             'Eligibility': 'offered.eligibility.rule',
             'PremiumRuleComponent': 'billing.premium.rule.component',
@@ -272,7 +272,7 @@ return True'''
         pricing_ruleb.end_date = datetime.date.today() + \
             datetime.timedelta(days=20)
 
-        coverage_a = self.Coverage()
+        coverage_a = self.OptionDescription()
         coverage_a.family = coverage_a._fields['family'].selection[0][0]
         coverage_a.code = 'ALP'
         coverage_a.name = 'Alpha Coverage'
@@ -310,7 +310,7 @@ return True'''
         pricing_rulec.end_date = datetime.date.today() + \
             datetime.timedelta(days=10)
 
-        coverage_b = self.Coverage()
+        coverage_b = self.OptionDescription()
         coverage_b.code = 'BET'
         coverage_b.name = 'Beta Coverage'
         coverage_b.family = coverage_a._fields['family'].selection[0][0]
@@ -332,9 +332,9 @@ return True'''
 
         eligibility_rule_a.start_date = datetime.date.today()
 
-        coverage_c = self.Coverage()
+        coverage_c = self.OptionDescription()
         coverage_c.code = 'GAM'
-        coverage_c.name = 'Gamma Coverage'
+        coverage_c.name = 'GammaCoverage'
         coverage_c.family = coverage_a._fields['family'].selection[0][0]
         coverage_c.start_date = datetime.date.today()
 
@@ -354,7 +354,7 @@ return True'''
 
         eligibility_rule_d.start_date = datetime.date.today()
 
-        coverage_d = self.Coverage()
+        coverage_d = self.OptionDescription()
         coverage_d.code = 'DEL'
         coverage_d.name = 'Delta Coverage'
         coverage_d.family = coverage_a._fields['family'].selection[0][0]

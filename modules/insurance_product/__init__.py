@@ -19,8 +19,8 @@ def register():
         # From product
         Offered,
         ItemDescription,
-        Coverage,
-        OfferedCoverage,
+        OptionDescription,
+        OfferedOptionDescription,
         Product,
         OfferedProduct,
         ItemDescSubItemDescRelation,

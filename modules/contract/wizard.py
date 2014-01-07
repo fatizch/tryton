@@ -90,7 +90,8 @@ class WizardOption(model.CoopView):
 
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
-    coverage = fields.Many2One('offered.option.description', 'Coverage')
+    coverage = fields.Many2One('offered.option.description',
+        'Option Description')
     coverage_behaviour = fields.Function(
         fields.Char('Behaviour'), 'get_coverage_behaviour')
     is_selected = fields.Boolean('Selected?', states={
