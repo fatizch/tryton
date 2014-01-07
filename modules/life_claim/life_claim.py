@@ -6,54 +6,42 @@ from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.coop_utils import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'LifeClaim',
-    'LifeLoss',
-    'LifeClaimDeliveredService',
-    'LifeIndemnification',
-]
+    'Loss',
+    'DeliveredService',
+    'ClaimIndemnification',
+    ]
 
 
-class LifeClaim():
-    'Claim'
-
-    __name__ = 'claim'
-    __metaclass__ = PoolMeta
-
-
-class LifeLoss():
-    'Life Loss'
-
+class Loss:
     __name__ = 'claim.loss'
-    __metaclass__ = PoolMeta
 
     possible_covered_persons = fields.Function(
         fields.One2Many('party.party', None, 'Covered Persons',
             states={'invisible': True},
-            on_change_with=['claim', 'start_date']
-        ), 'on_change_with_possible_covered_persons')
+            on_change_with=['claim', 'start_date']),
+        'on_change_with_possible_covered_persons')
     covered_person = fields.Many2One('party.party', 'Covered Person',
         #TODO: Temporary hack, the function field is not calculated
         #when storing the object
-        domain=[
-            If(
+        domain=[If(
                 Bool(Eval('possible_covered_persons')),
                 ('id', 'in', Eval('possible_covered_persons')),
                 ()
-            )
-        ],
-        depends=['possible_covered_persons'],
+                )
+            ], depends=['possible_covered_persons'],
         on_change=['covered_person', 'possible_loss_descs', 'claim',
             'start_date', 'loss_desc', 'event_desc'])
 
     @classmethod
     def super(cls):
-        super(LifeLoss, cls).super()
+        super(Loss, cls).super()
         cls.main_loss = copy.copy(cls.main_loss)
         cls.main_loss.on_change += ['covered_person']
 
     def on_change_main_loss(self):
-        res = super(LifeLoss, self).on_change_main_loss()
+        res = super(Loss, self).on_change_main_loss()
         if self.main_loss and self.main_loss.covered_person:
             res['covered_person'] = self.main_loss.covered_person.id
         else:
@@ -77,17 +65,14 @@ class LifeLoss():
         return res
 
 
-class LifeClaimDeliveredService():
-    'Claim Delivered Service'
-
+class DeliveredService:
     __name__ = 'contract.service'
-    __metaclass__ = PoolMeta
 
     def get_covered_person(self):
         return self.loss.covered_person
 
     def init_dict_for_rule_engine(self, cur_dict):
-        super(LifeClaimDeliveredService, self).init_dict_for_rule_engine(
+        super(DeliveredService, self).init_dict_for_rule_engine(
             cur_dict)
         cur_dict['covered_person'] = self.get_covered_person()
 
@@ -99,14 +84,11 @@ class LifeClaimDeliveredService():
                 return sub_covered_data
 
 
-class LifeIndemnification():
-    'Indemnification'
-
+class ClaimIndemnification:
     __name__ = 'claim.indemnification'
-    __metaclass__ = PoolMeta
 
     def get_beneficiary(self, beneficiary_kind, del_service):
-        res = super(LifeIndemnification, self).get_beneficiary(
+        res = super(ClaimIndemnification, self).get_beneficiary(
             beneficiary_kind, del_service)
         if beneficiary_kind == 'covered_person':
             res = del_service.loss.covered_person
