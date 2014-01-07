@@ -32,7 +32,7 @@ __all__ = [
     'ImportWizard',
     'ExportInstance',
     'ExportPackage',
-]
+    ]
 
 
 class NotExportImport(Exception):

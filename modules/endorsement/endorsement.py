@@ -11,9 +11,14 @@ from trytond.pool import Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 
-__all__ = ['Contract', 'ContractOption',
-    'Endorsement', 'EndorsementField',
-    'EndorsementOption', 'EndorsementOptionField',
+__metaclass__ = PoolMeta
+__all__ = [
+    'Contract',
+    'ContractOption',
+    'Endorsement',
+    'EndorsementField',
+    'EndorsementOption',
+    'EndorsementOptionField',
     ]
 
 
@@ -371,19 +376,16 @@ def relation_mixin(value_model, field, model, name):
 
 
 class Contract(object, EndorsementHistory):
-    __metaclass__ = PoolMeta
     __name__ = 'contract'
 
 
 class ContractOption(object, EndorsementHistory):
-    __metaclass__ = PoolMeta
     __name__ = 'contract.option'
 
 
 class Endorsement(values_mixin('endorsement.field'),
         Workflow, ModelSQL, ModelView):
     'Endorsement'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement'
 
     template = fields.Many2One('endorsement.template', 'Template',
@@ -498,7 +500,6 @@ class Endorsement(values_mixin('endorsement.field'),
 
 class EndorsementField(field_mixin('contract'), ModelSQL, ModelView):
     'Endorsement Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.field'
 
     template = fields.Many2One('endorsement.template', 'Template',
@@ -509,7 +510,6 @@ class EndorsementOption(relation_mixin('endorsement.option.field', 'option',
             'contract.option', 'Options'),
         ModelSQL, ModelView):
     'Endorsement Option'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.option'
 
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
@@ -538,7 +538,6 @@ class EndorsementOption(relation_mixin('endorsement.option.field', 'option',
 class EndorsementOptionField(field_mixin('contract.option'),
         ModelSQL, ModelView):
     'Endorsement Option Field'
-    __metaclass__ = PoolMeta
     __name__ = 'endorsement.option.field'
 
     template = fields.Many2One('endorsement.template', 'Template',
