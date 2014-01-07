@@ -2,17 +2,13 @@ from trytond.pool import Pool, PoolMeta
 
 MODULE_NAME = 'collection'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-# TODO : Make it inherit from the soon to exist coop_account module which will
-# include test cases for receivable / payable accounts
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod

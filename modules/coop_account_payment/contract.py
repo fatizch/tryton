@@ -9,15 +9,13 @@ from trytond.pyson import If, Eval, Date
 from trytond.modules.coop_utils import utils, fields
 
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
-]
+    ]
 
 
-class Contract():
-    'Contract'
-
-    __metaclass__ = PoolMeta
+class Contract:
     __name__ = 'contract'
 
     paid_today = fields.Function(fields.Numeric('Paid today'),
