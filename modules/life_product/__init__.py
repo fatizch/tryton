@@ -1,5 +1,5 @@
 from trytond.pool import Pool
-from .life_product import *
+from .offered import *
 from .salary_range import *
 from .test_case import *
 from .rule_engine import *
@@ -7,7 +7,7 @@ from .rule_engine import *
 
 def register():
     Pool.register(
-        # from life_product
+        # from offered
         OptionDescription,
         EligibilityRule,
         # From rule_engine

@@ -1,10 +1,10 @@
 from trytond.pool import Pool
-from .life_contract import *
+from .contract import *
 
 
 def register():
     Pool.register(
-        # from life_contract
+        # from contract
         Contract,
         ContractOption,
         CoveredData,

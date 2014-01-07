@@ -1,7 +1,7 @@
 from trytond.pool import Pool
-from .product import *
+from .offered import *
 from .contract import *
-from .rule_sets import *
+from .rule_engine import *
 from .loan import *
 from .loan_creation_wizard import *
 from .billing import *
@@ -9,10 +9,10 @@ from .billing import *
 
 def register():
     Pool.register(
-        # From Product
+        # From offered
         Product,
         OptionDescription,
-        # From Rule Sets
+        # From rule_engine
         RuleEngineRuntime,
         # From Contract
         Contract,

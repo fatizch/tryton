@@ -1,6 +1,6 @@
 from trytond.pool import Pool
-from .life_claim import *
-from .life_contract import *
+from .claim import *
+from .contract import *
 from .test_case import *
 
 

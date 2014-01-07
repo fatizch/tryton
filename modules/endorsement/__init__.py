@@ -1,6 +1,6 @@
 from trytond.pool import Pool
 from .endorsement import *
-from .product import *
+from .offered import *
 from .wizard import *
 
 
