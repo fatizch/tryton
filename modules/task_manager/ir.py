@@ -1,16 +1,14 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
+__metaclass__ = PoolMeta
+
 __all__ = [
     'Session',
 ]
 
-__metaclass__ = PoolMeta
-
 
 class Session:
-    'Session'
-
     __name__ = 'ir.session'
 
     @classmethod

@@ -20,12 +20,11 @@ class Priority(model.CoopSQL, model.CoopView):
 
     __name__ = 'res.team.priority'
 
-    process_step = fields.Many2One('process-process.step',
-        'Process Step', required=True, ondelete='CASCADE')
+    process_step = fields.Many2One('process-process.step', 'Process Step',
+        required=True, ondelete='CASCADE')
     team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
     priority = fields.Integer('Priority')
-    kind = fields.Selection(
-        [
+    kind = fields.Selection([
             ('user', 'User Issues'),
             ('non_user', 'Another User issues'),
             ('both', 'Both')],
@@ -71,20 +70,19 @@ class Team(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
-    members = fields.One2Many(
-        'res.user', 'team', 'Members', states={'readonly': True})
-    authorizations = fields.Many2Many(
-        'res.team-res.group', 'team', 'group', 'Authorizations')
-    priorities = fields.One2Many(
-        'res.team.priority', 'team', 'Priorities',
-        order=[('priority', 'ASC')],
-    )
+    members = fields.One2Many('res.user', 'team', 'Members',
+        states={'readonly': True})
+    authorizations = fields.Many2Many('res.team-res.group', 'team', 'group',
+        'Authorizations')
+    priorities = fields.One2Many('res.team.priority', 'team', 'Priorities',
+        order=[('priority', 'ASC')])
 
     @classmethod
     def __setup__(cls):
         super(Team, cls).__setup__()
         cls._buttons.update({
-            'add_user_button': {}})
+                'add_user_button': {},
+                })
 
     @classmethod
     def _export_skips(cls):
@@ -113,10 +111,8 @@ class SelectUser(model.CoopView):
 
     user = fields.Many2One('res.user', 'User')
     user_ok = fields.Function(
-        fields.Char(
-            'User Ok', on_change_with=['user']),
-        'on_change_with_user_ok',
-    )
+        fields.Char('User Ok', on_change_with=['user']),
+        'on_change_with_user_ok')
 
     def on_change_with_user_ok(self):
         if not (hasattr(self, 'user') and self.user):
@@ -133,13 +129,10 @@ class AddTeamUser(Wizard):
     __name__ = 'res.team.add_user'
 
     start_state = 'select_user'
-    select_user = StateView(
-        'res.team.add_user.select',
-        'task_manager.select_user_form',
-        [
+    select_user = StateView('res.team.add_user.select',
+        'task_manager.select_user_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Add User', 'add_user', 'tryton-go-next'),
-        ])
+            Button('Add User', 'add_user', 'tryton-go-next')])
     add_user = StateTransition()
 
     def transition_add_user(self):
