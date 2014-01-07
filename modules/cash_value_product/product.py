@@ -10,7 +10,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'CashValueRule',
     'Product',
-    'Coverage',
+    'OptionDescription',
     ]
 
 
@@ -51,8 +51,8 @@ class Product:
         return False
 
 
-class Coverage:
-    'Coverage'
+class OptionDescription:
+    'OptionDescription'
 
     __name__ = 'offered.option.description'
 
@@ -64,7 +64,7 @@ class Coverage:
 
     @classmethod
     def __setup__(cls):
-        super(Coverage, cls).__setup__()
+        super(OptionDescription, cls).__setup__()
         cls.family = copy.copy(cls.family)
         if not cls.family.selection:
             cls.family.selection = []

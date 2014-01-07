@@ -21,9 +21,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         'insurance_product.test0010Coverage_creation',
     )
     def test0010_LifeProductCreation(self):
-        coverages = self.Coverage.search([
+        coverages = self.OptionDescription.search([
             ('code', 'in', ['ALP', 'BET', 'GAM', 'DEL'])])
-        self.Coverage.write(coverages, {'family': 'life_product.definition'})
+        self.OptionDescription.write(coverages, {
+                'family': 'life_product.definition'})
 
 
 def suite():

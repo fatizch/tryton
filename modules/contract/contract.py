@@ -569,7 +569,7 @@ class ContractOption(model.CoopSQL, Subscribed):
 
     @classmethod
     def get_offered_name(cls):
-        return 'offered.option.description', 'Coverage'
+        return 'offered.option.description', 'Option Description'
 
     def get_dates(self, dates=None):
         res = super(ContractOption, self).get_dates(dates)

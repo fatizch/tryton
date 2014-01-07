@@ -185,7 +185,7 @@
       <field name="name">product_form</field>
     </record>
     <!--################################################################-->
-    <!-- Coverage -->
+    <!-- OptionDescription -->
     <!--################################################################-->
     <record model="ir.ui.view" id="coverage_form">
       <field name="model">offered.option.description</field>

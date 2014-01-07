@@ -152,7 +152,7 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
     end_date = fields.Date('End Date')
     com_option = fields.Many2One('contract.option', 'Commission Option',
         domain=[('coverage_kind', '=', 'commission')], ondelete='RESTRICT')
-    subs_option = fields.Many2One('contract.option', 'Subscribed Coverage',
+    subs_option = fields.Many2One('contract.option', 'Subscribed Option',
         domain=[('coverage_kind', '=', 'insurance')], ondelete='CASCADE')
     use_specific_rate = fields.Boolean('Specific Rate')
     rate = fields.Numeric('Rate', digits=(16, 4), states={

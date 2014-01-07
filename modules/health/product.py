@@ -6,7 +6,7 @@ from trytond.modules.coop_utils import utils, fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Product',
-    'Coverage',
+    'OptionDescription',
     ]
 
 
@@ -28,7 +28,7 @@ class Product:
         return [('coverages.is_health',) + tuple(clause[1:])]
 
 
-class Coverage:
+class OptionDescription:
     __name__ = 'offered.option.description'
 
     is_health = fields.Function(
@@ -37,7 +37,7 @@ class Coverage:
 
     @classmethod
     def __setup__(cls):
-        super(Coverage, cls).__setup__()
+        super(OptionDescription, cls).__setup__()
         cls.family = copy.copy(cls.family)
         if not cls.family.selection:
             cls.family.selection = []

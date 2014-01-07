@@ -163,7 +163,7 @@ msgid "Start Date"
 msgstr "Date de Début"
 
 msgctxt "field:contract.option-commission.option,subs_option:"
-msgid "Subscribed Coverage"
+msgid "Subscribed Option"
 msgstr "Garantie Souscrite"
 
 msgctxt "field:contract.option-commission.option,use_specific_rate:"

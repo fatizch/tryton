@@ -7,5 +7,5 @@ def register():
         # From file product :
         CashValueRule,
         Product,
-        Coverage,
+        OptionDescription,
         module='cash_value_product', type_='model')

@@ -10,7 +10,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'ProductPaymentMethodRelation',
-    'Coverage',
+    'OptionDescription',
     ]
 
 
@@ -69,7 +69,7 @@ class ProductPaymentMethodRelation(model.CoopSQL, model.CoopView):
         return ['order', 'payment_method']
 
 
-class Coverage:
+class OptionDescription:
     __name__ = 'offered.option.description'
 
     account_for_billing = fields.Many2One('account.account',

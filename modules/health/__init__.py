@@ -8,7 +8,7 @@ from .contract import *
 def register():
     Pool.register(
         Product,
-        Coverage,
+        OptionDescription,
         Party,
         HealthPartyComplement,
         Contract,

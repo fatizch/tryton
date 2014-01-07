@@ -25,7 +25,7 @@ def register():
         #From Offered
         Product,
         ProductPaymentMethodRelation,
-        Coverage,
+        OptionDescription,
         # From Contract
         Contract,
         Option,
