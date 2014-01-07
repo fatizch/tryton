@@ -11,19 +11,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'life_product'
-
-    @classmethod
-    def depending_modules(cls):
-        return ['insurance_product']
-
-    @test_framework.prepare_test(
-        'insurance_product.test0010Coverage_creation',
-    )
-    def test0010_LifeProductCreation(self):
-        coverages = self.Coverage.search([
-            ('code', 'in', ['ALP', 'BET', 'GAM', 'DEL'])])
-        self.Coverage.write(coverages, {'family': 'life_product.definition'})
+        return 'life_benefit'
 
 
 def suite():
