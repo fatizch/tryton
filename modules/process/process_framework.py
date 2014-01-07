@@ -125,8 +125,8 @@ class ProcessFramework(ModelView):
     @classmethod
     def build_instruction_transition_method(cls, process, transition):
         def button_transition_generic(works):
-            StepTransition = Pool().get('process.transition')
-            good_trans = StepTransition(int(transition[0]))
+            ProcessTransition = Pool().get('process.transition')
+            good_trans = ProcessTransition(int(transition[0]))
             for work in works:
                 good_trans.execute(work)
                 work.save()
@@ -142,8 +142,8 @@ class ProcessFramework(ModelView):
         # The pattern for the transition is as follow :
         #      <instruction>_<process_desc_id>(_<data>)
         instruction = button_data[0]
-        ProcessDesc = Pool().get('process')
-        process = ProcessDesc(button_data[1])
+        Process = Pool().get('process')
+        process = Process(button_data[1])
         try:
             return getattr(cls, 'build_instruction_%s_method' % instruction)(
                 process, button_data[2:])
@@ -162,8 +162,8 @@ class ProcessFramework(ModelView):
         if not process_name and self.current_state:
             process_desc = self.current_state.process
         else:
-            ProcessDesc = Pool().get('process')
-            process_desc, = ProcessDesc.search([
+            Process = Pool().get('process')
+            process_desc, = Process.search([
                     ('technical_name', '=', process_name)], limit=1)
         self.current_state = process_desc.get_step_relation(value)
 
@@ -174,8 +174,8 @@ class ProcessFramework(ModelView):
         process_name = Transaction().context.get('running_process')
         if not process_name:
             return
-        ProcessDesc = Pool().get('process')
-        process_desc, = ProcessDesc.search([
+        Process = Pool().get('process')
+        process_desc, = Process.search([
                 ('technical_name', '=', process_name)], limit=1)
         # The good value is the name associated to the first step of the
         # current process
@@ -272,8 +272,8 @@ class ProcessFramework(ModelView):
         # The pattern for the transition is as follow :
         #      <instruction>_<process_desc_id>(_<data>)
         instruction = button_data[0]
-        ProcessDesc = Pool().get('process')
-        process = ProcessDesc(button_data[1])
+        Process = Pool().get('process')
+        process = Process(button_data[1])
         try:
             return getattr(cls, 'button_%s_states' % instruction)(
                 process, button_data[2:])

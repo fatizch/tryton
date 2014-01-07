@@ -63,9 +63,9 @@
       <field name="type">tree</field>
       <field name="name">process_step_relation_tree</field>
     </record>
-    <!-- ################ -->
-    <!-- # Process Desc # -->
-    <!-- ################ -->
+    <!-- ########### -->
+    <!-- # Process # -->
+    <!-- ########### -->
     <record model="ir.ui.view" id="process_desc_form">
       <field name="model">process</field>
       <field name="type">form</field>
@@ -78,7 +78,7 @@
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_process_desc">
-      <field name="name">Process Descriptors</field>
+      <field name="name">Processes</field>
       <field name="res_model">process</field>
     </record>
     <record model="ir.action.act_window.view" id="act_process_desc_view1">
@@ -92,9 +92,9 @@
       <field name="act_window" ref="act_process_desc"/>
     </record>
     <menuitem parent="process_menu_id" sequence="10" action="act_process_desc" id="menu_process_desc"/>
-    <!-- ############# -->
-    <!-- # Step Desc # -->
-    <!-- ############# -->
+    <!-- ################ -->
+    <!-- # Process Step # -->
+    <!-- ################ -->
     <record model="ir.ui.view" id="step_desc_form">
       <field name="model">process.step</field>
       <field name="type">form</field>
@@ -107,7 +107,7 @@
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_step_desc">
-      <field name="name">Step Descriptors</field>
+      <field name="name">Process Steps</field>
       <field name="res_model">process.step</field>
     </record>
     <record model="ir.action.act_window.view" id="act_step_desc_view1">

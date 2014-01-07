@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Process Descriptor" col="4">
+<form string="Process" col="4">
   <group id="global_part">
     <label name="fancy_name"/>
     <field name="fancy_name"/>

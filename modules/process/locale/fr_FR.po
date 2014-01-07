@@ -359,8 +359,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:process.step-group,step_desc:"
-msgid "Step Desc"
-msgstr "Descripteur d'Etape"
+msgid "Process Step"
+msgstr "Etape de process"
 
 msgctxt "field:process.step-group,write_date:"
 msgid "Write Date"
@@ -479,7 +479,7 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "model:ir.action,name:act_process_desc"
-msgid "Process Descriptors"
+msgid "Processes"
 msgstr "Processus"
 
 msgctxt "model:ir.action,name:act_process_status"
@@ -487,7 +487,7 @@ msgid "Process Status"
 msgstr "Statuts des Etapes"
 
 msgctxt "model:ir.action,name:act_step_desc"
-msgid "Step Descriptors"
+msgid "Process Steps"
 msgstr "Etapes"
 
 msgctxt "model:ir.action,name:generate_graph_wizard"
@@ -499,7 +499,7 @@ msgid "Graph"
 msgstr "Graphique"
 
 msgctxt "model:ir.ui.menu,name:menu_process_desc"
-msgid "Process Descriptors"
+msgid "Processes"
 msgstr "Processus"
 
 msgctxt "model:ir.ui.menu,name:menu_process_lang"
@@ -511,7 +511,7 @@ msgid "Process Status"
 msgstr "Statuts des Etapes"
 
 msgctxt "model:ir.ui.menu,name:menu_step_desc"
-msgid "Step Descriptors"
+msgid "Process Steps"
 msgstr "Etapes"
 
 msgctxt "model:ir.ui.menu,name:process_menu_id"
@@ -523,7 +523,7 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "model:process,name:"
-msgid "Process Descriptor"
+msgid "Process"
 msgstr "Descripteur de Processus"
 
 msgctxt "model:process.process_framework,name:"
@@ -543,15 +543,15 @@ msgid "Process Status"
 msgstr "Statuts des Etapes"
 
 msgctxt "model:process.step,name:"
-msgid "Step Descriptor"
+msgid "Process Step"
 msgstr "Descripteur d'Etape"
 
 msgctxt "model:process.step-group,name:"
-msgid "Step Desc Authorization"
+msgid "Step Group Relation"
 msgstr "Autorisations pour l'Etape"
 
 msgctxt "model:process.transition,name:"
-msgid "Step Transition"
+msgid "Process Transition"
 msgstr "Transition d'Etape"
 
 msgctxt "model:process.transition-group,name:"
@@ -901,11 +901,11 @@ msgid "Description"
 msgstr "Description"
 
 msgctxt "view:process:"
-msgid "Process Descriptor"
+msgid "Process"
 msgstr "Descripteur de Processus"
 
 msgctxt "view:process:"
-msgid "Process Descriptors"
+msgid "Processes"
 msgstr "Paramétrage des Processus"
 
 msgctxt "view:process:"
@@ -937,11 +937,11 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "view:process.step:"
-msgid "Step Descriptor"
+msgid "Process Step"
 msgstr "Descripteur d'Etape"
 
 msgctxt "view:process.step:"
-msgid "Step Descriptors"
+msgid "Process Steps"
 msgstr "Paramétrage des Etapes"
 
 msgctxt "view:process.step:"
@@ -953,7 +953,7 @@ msgid "XML"
 msgstr "Description de la Vue"
 
 msgctxt "view:process.transition:"
-msgid "Step Transition Descriptor"
+msgid "Process Transition"
 msgstr "Descripteur de Transition"
 
 msgctxt "view:process.transition:"

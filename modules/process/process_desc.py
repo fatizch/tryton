@@ -15,12 +15,12 @@ __all__ = [
     'Status',
     'ProcessStepRelation',
     'ProcessMenuRelation',
-    'ProcessDesc',
+    'Process',
     'TransitionAuthorization',
     'Code',
-    'StepTransition',
-    'StepDesc',
-    'StepDescAuthorization',
+    'ProcessTransition',
+    'ProcessStep',
+    'StepGroupRelation',
     'GenerateGraph',
     'GenerateGraphWizard',
     ]
@@ -69,8 +69,8 @@ class ProcessMenuRelation(ModelSQL):
     menu = fields.Many2One('ir.ui.menu', 'Menu', ondelete='RESTRICT')
 
 
-class ProcessDesc(ModelSQL, ModelView):
-    'Process Descriptor'
+class Process(ModelSQL, ModelView):
+    'Process'
 
     __name__ = 'process'
 
@@ -106,7 +106,7 @@ class ProcessDesc(ModelSQL, ModelView):
 
     @classmethod
     def __setup__(cls):
-        super(ProcessDesc, cls).__setup__()
+        super(Process, cls).__setup__()
         cls._buttons.update({
             'update_view': {'invisible': ~Eval('id')}})
         cls._sql_constraints += [(
@@ -119,7 +119,7 @@ class ProcessDesc(ModelSQL, ModelView):
 
     @classmethod
     def validate(cls, processes):
-        super(ProcessDesc, cls).validate(processes)
+        super(Process, cls).validate(processes)
         for process in processes:
             used_steps = set()
             for relation in process.all_steps:
@@ -479,7 +479,7 @@ class ProcessDesc(ModelSQL, ModelView):
 
     @classmethod
     def create(cls, values):
-        processes = super(ProcessDesc, cls).create(values)
+        processes = super(Process, cls).create(values)
         for process in processes:
             existing_menus = [x.id for x in process.menu_items]
             menus = process.create_update_menu_entry()
@@ -490,7 +490,7 @@ class ProcessDesc(ModelSQL, ModelView):
     @classmethod
     def write(cls, instances, values):
         # Each time we write the process, we update the view
-        super(ProcessDesc, cls).write(instances, values)
+        super(Process, cls).write(instances, values)
         if 'menu_items' in values:
             return
         for process in instances:
@@ -503,7 +503,7 @@ class ProcessDesc(ModelSQL, ModelView):
     def delete(cls, processes):
         for process in processes:
             process.set_menu_item_list([x.id for x in process.menu_items], [])
-        super(ProcessDesc, cls).delete(processes)
+        super(Process, cls).delete(processes)
 
     def get_act_window(self):
         if not self.menu_items:
@@ -609,7 +609,7 @@ class Code(ModelSQL, ModelView):
             return self.parent_transition.on_process.on_model.id
 
 
-class StepTransition(ModelSQL, ModelView):
+class ProcessTransition(ModelSQL, ModelView):
     'Step Transition'
 
     __name__ = 'process.transition'
@@ -707,18 +707,18 @@ class StepTransition(ModelSQL, ModelView):
         return pyson
 
 
-class StepDescAuthorization(ModelSQL):
-    'Step Desc Authorization'
+class StepGroupRelation(ModelSQL):
+    'Step Group Relation'
 
     __name__ = 'process.step-group'
 
-    step_desc = fields.Many2One('process.step', 'Step Desc',
+    step_desc = fields.Many2One('process.step', 'Process Step',
         ondelete='CASCADE')
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
-class StepDesc(ModelSQL, ModelView):
-    'Step Descriptor'
+class ProcessStep(ModelSQL, ModelView):
+    'Process Step'
 
     __name__ = 'process.step'
     _rec_name = 'fancy_name'
@@ -741,14 +741,14 @@ class StepDesc(ModelSQL, ModelView):
 
     @classmethod
     def __setup__(cls):
-        super(StepDesc, cls).__setup__()
+        super(ProcessStep, cls).__setup__()
         cls._sql_constraints += [(
                 'unique_tech_name', 'UNIQUE(technical_name)',
                 'The technical name must be unique')]
 
     @classmethod
     def write(cls, steps, values):
-        super(StepDesc, cls).write(steps, values)
+        super(ProcessStep, cls).write(steps, values)
         ProcessStepRelation = Pool().get('process-process.step')
         processes = set()
         for step in steps:
@@ -857,8 +857,9 @@ class GenerateGraph(Report):
 
     @classmethod
     def execute(cls, ids, data):
-        ActionReport = Pool().get('ir.action.report')
-        Process = Pool().get('process')
+        pool = Pool()
+        ActionReport = pool.get('ir.action.report')
+        Process = pool.get('process')
         action_report_ids = ActionReport.search([
                 ('report_name', '=', cls.__name__)])
         if not action_report_ids:
