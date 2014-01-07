@@ -8,15 +8,13 @@ from trytond.modules.coop_utils import coop_string
 
 MODULE_NAME = 'coop_party'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     number_of_parties = fields.Integer('Number of Parties')
@@ -40,24 +38,19 @@ class TestCaseModel():
         result['relation_kind_test_case'] = {
             'name': 'Relation Kind Test Case',
             'dependencies': set([]),
-        }
-        result['address_kind_test_case'] = {
-            'name': 'Address Kind Test Case',
-            'dependencies': set([]),
-        }
+            }
         result['party_test_case'] = {
             'name': 'Party Test Case',
-            'dependencies': set(['relation_kind_test_case',
-                    'address_kind_test_case']),
-        }
+            'dependencies': set(['relation_kind_test_case']),
+            }
         result['hierarchy_test_case'] = {
             'name': 'Hierarchy Test Case',
             'dependencies': set([]),
-        }
+            }
         result['contact_mechanism_test_case'] = {
             'name': 'Contact Mechanism Test Case',
             'dependencies': set(['party_test_case']),
-        }
+            }
         return result
 
     @classmethod
@@ -79,21 +72,6 @@ class TestCaseModel():
         parent.name = translater('Parent')
         parent.reversed_name = translater('Children')
         return [spouse, parent]
-
-    @classmethod
-    def address_kind_test_case(cls):
-        translater = cls.get_translater(MODULE_NAME)
-        AddressKind = Pool().get('party.address.kind')
-        main = AddressKind()
-        main.key = 'main'
-        main.name = translater('Main')
-        second = AddressKind()
-        second.key = '2nd'
-        second.name = translater('Secondary')
-        job = AddressKind()
-        job.key = 'job'
-        job.name = translater('Job')
-        return [main, second, job]
 
     @classmethod
     def create_person(cls, sex='male'):
@@ -148,7 +126,7 @@ class TestCaseModel():
             ('city', '=', address.city),
             ('zip', '=', address.zip),
             ('country', '=', address.country.id)
-        ]
+            ]
         if Zip.search(domain):
             return
         zipcode = Zip()

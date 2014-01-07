@@ -26,7 +26,7 @@
             <field name="arch" type="xml"/>
         </record>
         <!--################################################################ -->
-        <!-- Item Descriptor -->
+        <!-- Item Description -->
         <!--################################################################ -->
         <record model="ir.ui.view" id="item_desc_view_form">
             <field name="model">offered.item.description</field>
@@ -40,7 +40,7 @@
         </record>
 
         <record model="ir.action.act_window" id="act_item_desc_form">
-            <field name="name">Item Descriptors</field>
+            <field name="name">Item Descriptions</field>
             <field name="res_model">offered.item.description</field>
         </record>
 
@@ -59,31 +59,5 @@
         <menuitem parent="offered.menu_product_configuration" sequence="1"
             id="menu_item_desc_form" icon="tryton-list"
             action="act_item_desc_form"/>
-
-        <!-- *******************************************
-            ********* Dynamic Selection ***********
-            ******************************************* -->
-        <!--
-            <record model="ir.action.act_window" id="act_dyn_selection_form">
-            <field name="name">Benefit Kind</field>
-            <field name="res_model">coop.dyn_selection</field>
-            <field name="domain">[("my_model_name", "=", "ins_product.benefit_manager.kind")]</field>
-            </record>
-
-            <record model="ir.action.act_window.view" id="act_dyn_selection_tree_view">
-            <field name="sequence" eval="10" />
-            <field name="view" ref="coop_utils.dyn_selection_view_tree" />
-            <field name="act_window" ref="act_dyn_selection_form" />
-            </record>
-
-            <record model="ir.action.act_window.view" id="act_dyn_selection_form_view">
-            <field name="sequence" eval="20" />
-            <field name="view" ref="coop_utils.dyn_selection_view_form" />
-            <field name="act_window" ref="act_dyn_selection_form" />
-            </record>
-
-            <menuitem parent="offered.menu_product_configuration" sequence="10" id="menu_dyn_selection_form"
-            icon="tryton-list" action="act_dyn_selection_form" />
-        -->
     </data>
 </tryton>

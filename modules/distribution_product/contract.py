@@ -3,16 +3,14 @@ from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import fields, utils
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     ]
 
 
-class Contract():
-    'Contract'
-
+class Contract:
     __name__ = 'contract'
-    __metaclass__ = PoolMeta
 
     dist_network = fields.Many2One('distribution.network',
         'Distribution Network', domain=[('company', '=', Eval('company'))],

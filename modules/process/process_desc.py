@@ -127,6 +127,7 @@ class ProcessDesc(ModelSQL, ModelView):
 
     @classmethod
     def validate(cls, processes):
+        super(ProcessDesc, cls).validate(processes)
         for process in processes:
             used_steps = set()
             for relation in process.all_steps:
@@ -134,7 +135,6 @@ class ProcessDesc(ModelSQL, ModelView):
                     cls.raise_user_error('use_steps_only_once', (
                         process.fancy_name, relation.step.technical_name))
                 used_steps.add(relation.step.id)
-        return True
 
     @classmethod
     def default_step_button_group_position(cls):
@@ -514,7 +514,7 @@ completed the current process, please go ahead"/>'
         View = Pool().get('ir.ui.view')
 
         to_delete = set(previous_ids) - set(new_ids)
-        Process.write([self], {'menu_items': [('set', new_ids)]})
+        Process.write([self], {'menu_items': [('add', new_ids)]})
         menus = []
         act_wins = []
         views = []

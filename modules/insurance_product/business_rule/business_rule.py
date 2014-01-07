@@ -13,43 +13,42 @@ STATE_SIMPLE = Eval('config_kind') != 'advanced'
 STATE_ADVANCED = Eval('config_kind') != 'simple'
 STATE_SUB_SIMPLE = Eval('sub_elem_config_kind') != 'simple'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineParameter',
     'RuleEngine',
-    'DimensionDisplayer',
+    'TableManageDimensionShowDimension',
     'BusinessRuleRoot',
-]
+    ]
 
 
-class RuleEngineParameter():
-    'Rule Engine Parameter'
-
-    __metaclass__ = PoolMeta
+class RuleEngineParameter:
     __name__ = 'rule_engine.parameter'
 
-    the_complementary_data = fields.Many2One('extra_data',
-        'Complementary Parameters', domain=[('kind', '=', 'rule_engine')],
-        ondelete='RESTRICT', on_change=['the_complementary_data'],
-        states={'invisible': Eval('kind', '') != 'rule_compl',
-            'required': Eval('kind', '') == 'rule_compl'})
-    rule_complementary_data = fields.Dict(
-        'extra_data', 'Rule Complementary Data',
+    the_complementary_data = fields.Many2One('extra_data', 'Extra Parameters',
+        domain=[('kind', '=', 'rule_engine')],
+        ondelete='RESTRICT', on_change=['the_complementary_data'], states={
+            'invisible': Eval('kind', '') != 'rule_compl',
+            'required': Eval('kind', '') == 'rule_compl',
+            })
+    rule_complementary_data = fields.Dict('extra_data', 'Rule Extra Data',
         on_change_with=['the_rule', 'rule_complementary_data'],
         states={'invisible': Or(
                 Eval('kind', '') != 'rule', ~Eval('rule_complementary_data'))})
-    external_complementary_data = fields.Many2One(
-        'extra_data', 'External Complementary Data',
-        domain=[('kind', '!=', 'rime_engine')], ondelete='RESTRICT',
-        on_change=['external_complementary_data'],
-        states={'invisible': Eval('kind', '') != 'compl',
-            'required': Eval('kind', '') == 'compl'})
+    external_complementary_data = fields.Many2One('extra_data',
+        'External Extra Data', domain=[('kind', '!=', 'rime_engine')],
+        ondelete='RESTRICT', on_change=['external_complementary_data'],
+        states={
+            'invisible': Eval('kind', '') != 'compl',
+            'required': Eval('kind', '') == 'compl',
+            })
 
     @classmethod
     def __setup__(cls):
         super(RuleEngineParameter, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
-        cls.kind.selection.append(('rule_compl', 'Rule Complementary Data'))
-        cls.kind.selection.append(('compl', 'External Complementary Data'))
+        cls.kind.selection.append(('rule_compl', 'Rule Extra Data'))
+        cls.kind.selection.append(('compl', 'External Extra Data'))
         cls.kind.selection = list(set(cls.kind.selection))
         cls.the_rule = copy.copy(cls.the_rule)
         if not cls.the_rule.depends:
@@ -124,7 +123,7 @@ class RuleEngineParameter():
             tmp_node['name'] = 'rule_compl'
             tmp_node['translated'] = 'rule_compl'
             tmp_node['fct_args'] = ''
-            tmp_node['description'] = 'Rule Complementary Data'
+            tmp_node['description'] = 'Rule Extra Data'
             tmp_node['type'] = 'folder'
             tmp_node['long_description'] = ''
             tmp_node['children'] = []
@@ -132,27 +131,22 @@ class RuleEngineParameter():
             tmp_node['name'] = 'compl'
             tmp_node['translated'] = 'compl'
             tmp_node['fct_args'] = ''
-            tmp_node['description'] = 'External Complementary Data'
+            tmp_node['description'] = 'External Extra Data'
             tmp_node['type'] = 'folder'
             tmp_node['long_description'] = ''
             tmp_node['children'] = []
         return tmp_node
 
 
-class RuleEngine():
-    'Rule Engine'
-
-    __metaclass__ = PoolMeta
+class RuleEngine:
     __name__ = 'rule_engine'
 
     rule_external_compl_datas = fields.One2ManyDomain('rule_engine.parameter',
-        'parent_rule', 'Complementary Data',
-        domain=[('kind', '=', 'compl')],
+        'parent_rule', 'Extra Data', domain=[('kind', '=', 'compl')],
         states={'invisible': Or(~Eval('extra_data'),
                 Eval('extra_data_kind') != 'compl')})
     rule_compl_datas = fields.One2ManyDomain('rule_engine.parameter',
-        'parent_rule', 'Rule Parameter',
-        domain=[('kind', '=', 'rule_compl')],
+        'parent_rule', 'Rule Parameter', domain=[('kind', '=', 'rule_compl')],
         states={'invisible': Or(~Eval('extra_data'),
                 Eval('extra_data_kind') != 'rule_compl')})
 
@@ -160,7 +154,7 @@ class RuleEngine():
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
         cls.extra_data_kind = copy.copy(cls.extra_data_kind)
-        cls.extra_data_kind.selection.extend([('compl', 'Complementary Data'),
+        cls.extra_data_kind.selection.extend([('compl', 'Extra Data'),
                 ('rule_compl', 'Rule Parameter')])
         cls.extra_data_kind.selection = list(set(
                 cls.extra_data_kind.selection))
@@ -189,32 +183,30 @@ class RuleEngine():
         return self.on_change_rule_parameters()
 
 
-class DimensionDisplayer():
-    'Dimension Displayer'
-
-    __metaclass__ = PoolMeta
+class TableManageDimensionShowDimension:
     __name__ = 'table.manage_dimension.show.dimension'
 
-    complementary_data = fields.Many2One('extra_data',
-        'Complementary Data', domain=[('type_', '=', 'selection')], states={
-            'invisible': Eval('input_mode', '') != 'compl_data'},
-        on_change=['input_mode', 'complementary_data'])
+    complementary_data = fields.Many2One('extra_data', 'Extra Data',
+        domain=[('type_', '=', 'selection')], states={
+            'invisible': Eval('input_mode', '') != 'compl_data',
+            }, on_change=['input_mode', 'complementary_data'])
 
     @classmethod
     def __setup__(cls):
-        super(DimensionDisplayer, cls).__setup__()
+        super(TableManageDimensionShowDimension, cls).__setup__()
         cls.input_mode = copy.copy(cls.input_mode)
         cls.input_mode.selection.append(('compl_data', 'Complementary data'))
 
     def on_change_complementary_data(self):
         if self.input_mode == 'compl_data' and self.complementary_data:
             return {'converted_text': '\n'.join([x.split(':')[0] for x in
-                self.complementary_data.selection.split('\n')])}
+                        self.complementary_data.selection.split('\n')])}
         else:
             return {'complementary_data': None}
 
     def on_change_input_mode(self):
-        result = super(DimensionDisplayer, self).on_change_input_mode()
+        result = super(TableManageDimensionShowDimension,
+            self).on_change_input_mode()
         if self.input_mode != 'compl_data':
             result.update({'complementary_data': None})
             return result
@@ -227,7 +219,7 @@ class DimensionDisplayer():
         if self.input_mode == 'compl_data':
             return '\n'.join([x.split(':')[0] for x in
                 self.complementary_data.selection.split('\n')])
-        return super(DimensionDisplayer, self).convert_values()
+        return super(TableManageDimensionShowDimension, self).convert_values()
 
 
 class BusinessRuleRoot(model.CoopView, GetResult, Templated):
@@ -235,25 +227,20 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
 
     __name__ = 'offered.business_rule_root'
 
-    offered = fields.Reference('Offered',
-        selection=[
+    offered = fields.Reference('Offered', selection=[
             ('offered.product', 'Product'),
             ('offered.option.description', 'Coverage'),
-            ('benefit', 'Benefit')
-            ],
-        states={'required': True})
+            ], states={'required': True})
     start_date = fields.Date('From Date', required=True)
     end_date = fields.Date('To Date')
-    config_kind = fields.Selection(
-        CONFIG_KIND, 'Conf. kind', required=True)
-    rule = fields.Many2One(
-        'rule_engine', 'Rule Engine', states={'invisible': STATE_SIMPLE},
+    config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
+    rule = fields.Many2One('rule_engine', 'Rule Engine',
+        states={'invisible': STATE_SIMPLE},
         depends=['config_kind'], ondelete='RESTRICT')
     view_rec_name = fields.Function(
         fields.Char('Name'),
         'get_rec_name')
-    rule_complementary_data = fields.Dict(
-        'extra_data', 'Rule Complementary Data',
+    rule_complementary_data = fields.Dict('extra_data', 'Rule Extra Data',
         on_change_with=['rule', 'rule_complementary_data'],
         states={'invisible':
             Or(STATE_SIMPLE, ~Eval('rule_complementary_data'))})

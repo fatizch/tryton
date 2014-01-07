@@ -7,14 +7,12 @@ from trytond.modules.coop_utils import utils, fields
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
-    'LifeOption',
-    'LifeCoveredData',
+    'ContractOption',
+    'CoveredData',
     ]
 
 
-class Contract():
-    'Contract'
-
+class Contract:
     __name__ = 'contract'
 
     def update_coverage_amounts_if_needed(self, at_date=None):
@@ -55,8 +53,7 @@ class Contract():
                     continue
                 coverage = covered_data.option.offered
                 validity, errors = coverage.get_result(
-                    'coverage_amount_validity',
-                    {
+                    'coverage_amount_validity', {
                         'date': at_date,
                         'sub_elem': covered_element,
                         'data': covered_data,
@@ -64,7 +61,7 @@ class Contract():
                         'contract': self,
                         'appliable_conditions_date':
                         self.appliable_conditions_date,
-                    })
+                        })
                 res = res and (not validity or validity[0])
                 if validity:
                     errs += validity[1]
@@ -91,9 +88,7 @@ class Contract():
         return CoveredElement.get_possible_covered_elements(party, at_date)
 
 
-class LifeOption():
-    'Subscribed Life Coverage'
-
+class ContractOption:
     __name__ = 'contract.option'
 
     def get_covered_data(self, covered_person):
@@ -110,9 +105,7 @@ class LifeOption():
         return 0
 
 
-class LifeCoveredData():
-    'Covered Data'
-
+class CoveredData:
     __name__ = 'contract.covered_data'
 
     coverage_amount = fields.Numeric('Coverage Amount', states={
@@ -125,7 +118,7 @@ class LifeCoveredData():
 
     @classmethod
     def __setup__(cls):
-        super(LifeCoveredData, cls).__setup__()
+        super(CoveredData, cls).__setup__()
         cls.__rpc__.update({'get_possible_amounts': RPC(instantiate=0)})
 
     def get_possible_amounts(self):
@@ -133,12 +126,11 @@ class LifeCoveredData():
             return [('', '')]
         the_coverage = self.get_coverage()
         vals = the_coverage.get_result(
-            'allowed_amounts',
-            {
+            'allowed_amounts', {
                 'date': self.start_date,
                 'appliable_conditions_date':
                 self.option.contract.appliable_conditions_date,
-            },)[0]
+                },)[0]
         if vals:
             res = map(lambda x: (x, x),
                 map(lambda x: self.currency.amount_as_string(x), vals))
@@ -170,7 +162,7 @@ class LifeCoveredData():
         # In life insurance, the beneficiary clause requires a special
         # treatment. We let only one of those selected (the first one should be
         # the highest level in the product definition)
-        super(LifeCoveredData, self).init_clauses(option)
+        super(CoveredData, self).init_clauses(option)
         to_delete = []
         for idx, clause in enumerate(self.clauses):
             if not clause.clause.kind == 'beneficiary':

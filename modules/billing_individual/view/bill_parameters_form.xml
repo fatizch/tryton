@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Bill Parameters">
+<form string="Contract Do Billing Parameters">
   <label name="start_date"/>
   <field name="start_date"/>
   <newline/>

@@ -5,29 +5,28 @@ from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.coop_utils import utils, fields
-from trytond.modules.coop_process import CoopProcessFramework
-from trytond.modules.coop_process import ProcessFinder, ProcessParameters
+from trytond.modules.coop_process import CogProcessFramework
+from trytond.modules.coop_process import ProcessFinder, ProcessStart
 
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'ClaimProcess',
-    'LossProcess',
-    'ProcessDesc',
-    'DeclarationProcessParameters',
-    'DeclarationProcessFinder',
+    'Claim',
+    'Loss',
+    'Process',
+    'ClaimDeclareFindProcess',
+    'ClaimDeclare',
     ]
 
 
-class ClaimProcess(CoopProcessFramework):
+class Claim(CogProcessFramework):
     'Claim'
 
     __metaclass__ = ClassAttr
     __name__ = 'claim'
 
     doc_received = fields.Function(
-        fields.Boolean(
-            'All Document Received',
-            depends=['documents'],
+        fields.Boolean('All Document Received', depends=['documents'],
             on_change_with=['documents']),
         'on_change_with_doc_received')
     indemnifications = fields.Function(
@@ -37,8 +36,7 @@ class ClaimProcess(CoopProcessFramework):
         fields.One2Many('claim.indemnification', None, 'Indemnifications'),
         'get_indemnifications')
     contact_history = fields.Function(
-        fields.One2Many(
-            'party.interaction', '', 'History',
+        fields.One2Many('party.interaction', '', 'History',
             on_change_with=['claimant'], depends=['claimant']),
         'on_change_with_contact_history')
     is_pending_indemnification = fields.Function(
@@ -140,11 +138,8 @@ class ClaimProcess(CoopProcessFramework):
         return False
 
 
-class LossProcess():
-    'Loss'
-
+class Loss:
     __name__ = 'claim.loss'
-    __metaclass__ = PoolMeta
 
     #The Benefit to deliver is just a shortcut to ease delivered service
     #creation. it should not be used once a delivered_service has been created
@@ -157,8 +152,7 @@ class LossProcess():
                 'start_date', 'loss_desc', 'event_desc']),
         'get_benefit_to_deliver', 'set_void')
     benefits = fields.Function(
-        fields.One2Many(
-            'benefit', None, 'Benefits',
+        fields.One2Many('benefit', None, 'Benefits',
             on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim']),
         'on_change_with_benefits')
     can_modify_benefit = fields.Function(
@@ -242,51 +236,43 @@ class LossProcess():
                 and self.delivered_services[0].status == 'calculating'))
 
 
-class ProcessDesc():
-    'Process Desc'
-
-    __metaclass__ = PoolMeta
-
+class Process:
     __name__ = 'process'
 
     @classmethod
     def __setup__(cls):
-        super(ProcessDesc, cls).__setup__()
+        super(Process, cls).__setup__()
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('claim_declaration', 'Claim Declaration'))
         cls.kind.selection.append(('claim_reopening', 'Claim Reopening'))
         cls.kind.selection[:] = list(set(cls.kind.selection))
 
 
-class DeclarationProcessParameters(ProcessParameters):
-    'Declaration Process Parameters'
+class ClaimDeclareFindProcess(ProcessStart):
+    'Claim Declare Find Process'
 
     __name__ = 'claim.declare.find_process'
 
     party = fields.Many2One('party.party', 'Party')
     claim = fields.Many2One('claim', 'Claim',
-        domain=[('id', 'in', Eval('claims'))],
-        depends=['claims'])
+        domain=[('id', 'in', Eval('claims'))], depends=['claims'])
     claims = fields.Function(
-        fields.One2Many('claim', None, 'Claims',
-            on_change_with=['party']),
+        fields.One2Many('claim', None, 'Claims', on_change_with=['party']),
         'on_change_with_claims')
 
     @classmethod
     def build_process_domain(cls):
-        res = super(DeclarationProcessParameters, cls).build_process_domain()
-        res += [
-            If(
+        res = super(ClaimDeclareFindProcess, cls).build_process_domain()
+        res += [If(
                 Bool(Eval('claim')),
                 ('kind', 'in', ['claim_reopening', 'claim_declaration']),
                 ('kind', '=', 'claim_declaration')
-            )
-        ]
+                )]
         return res
 
     @classmethod
     def build_process_depends(cls):
-        res = super(DeclarationProcessParameters, cls).build_process_depends()
+        res = super(ClaimDeclareFindProcess, cls).build_process_depends()
         res += ['claim']
         return res
 
@@ -300,8 +286,8 @@ class DeclarationProcessParameters(ProcessParameters):
         return [x.id for x in Claim.search([('claimant', '=', self.party)])]
 
 
-class DeclarationProcessFinder(ProcessFinder):
-    'Declaration Process Finder'
+class ClaimDeclare(ProcessFinder):
+    'Claim Declare'
 
     __name__ = 'claim.declare'
 
@@ -316,7 +302,7 @@ class DeclarationProcessFinder(ProcessFinder):
             'declaration_process_parameters_form')
 
     def init_main_object_from_process(self, obj, process_param):
-        res, errs = super(DeclarationProcessFinder,
+        res, errs = super(ClaimDeclare,
             self).init_main_object_from_process(obj, process_param)
         if res:
             obj.declaration_date = process_param.date

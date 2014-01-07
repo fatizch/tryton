@@ -7,23 +7,20 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields, utils, coop_string
 from trytond.modules.coop_utils import export
 
+__metaclass__ = PoolMeta
 __all__ = [
     'DistributionNetwork',
     'CommercialProduct',
-    'Product',
     'DistributionNetworkComProductRelation',
     ]
 
 
-class DistributionNetwork():
-    'Distribution Network'
-
+class DistributionNetwork:
     __name__ = 'distribution.network'
-    __metaclass__ = PoolMeta
 
     commercial_products = fields.Many2Many(
-        'distribution.network-commercial_product', 'dist_network', 'com_product',
-        'Commercial Products', depends=['company'], domain=[
+        'distribution.network-commercial_product', 'dist_network',
+        'com_product', 'Commercial Products', depends=['company'], domain=[
             ('product.company', '=', Eval('company'))])
     parent_com_products = fields.Function(
         fields.Many2Many('distribution.commercial_product', None, None,
@@ -41,8 +38,7 @@ class DistributionNetwork():
         return [x.id for x in ComProduct.search([
                     ('dist_networks.left', '<', self.left),
                     ('dist_networks.right', '>', self.right),
-                    ])
-            ]
+                    ])]
 
     def get_all_commercial_products_id(self, name):
         return [x.id for x in set(
@@ -59,43 +55,17 @@ class DistributionNetwork():
         return result
 
 
-class Product():
-    'Product'
-
-    __name__ = 'offered.product'
-    __metaclass__ = PoolMeta
-
-    com_products = fields.One2Many('distribution.commercial_product',
-        'product', 'Commercial Products',
-        states={'invisible': Eval('product_kind') != 'insurance'})
-
-    @classmethod
-    def _export_force_recreate(cls):
-        res = super(Product, cls)._export_force_recreate()
-        res.remove('com_products')
-        return res
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Product, cls)._export_skips()
-        result.add('com_products')
-        return result
-
-
 class CommercialProduct(model.CoopSQL, model.CoopView):
     'Commercial Product'
 
     __name__ = 'distribution.commercial_product'
 
-    product = fields.Many2One('offered.product', 'Technical Product',
-        domain=[
+    product = fields.Many2One('offered.product', 'Technical Product', domain=[
             ('start_date', '<=', Eval('start_date')),
             ('company', '=', Eval('context', {}).get('company'))],
-        depends=['start_date'],
-        required=True)
+        depends=['start_date'], required=True)
     dist_networks = fields.Many2Many('distribution.network-commercial_product',
-        'com_product', 'dist_network',
-        'Distribution Networks')
+        'com_product', 'dist_network', 'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     name = fields.Char('Name', required=True)

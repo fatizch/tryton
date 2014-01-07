@@ -9,7 +9,6 @@
     <xpath expr="/form/notebook/page[@id='status_history']" position="before">
         <page string="Covered Data" id="covered_data"
             states="{'invisible': Eval('coverage_kind') != 'insurance'}">
-            <field name="benefits"/>
             <field name="covered_data" colspan="4"/>
         </page>
     </xpath>

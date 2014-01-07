@@ -3,23 +3,20 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import fields
 
-__all__ = [
-    'PrintableModel',
-    'NoTargetCheckAttachment',
-]
-
 __metaclass__ = PoolMeta
+__all__ = [
+    'Model',
+    'Attachment',
+    ]
 
 
-class PrintableModel():
-    'Model'
-
+class Model:
     __name__ = 'ir.model'
 
     printable = fields.Boolean('Printable')
 
 
-class NoTargetCheckAttachment():
+class Attachment:
     'Attachment'
 
     __name__ = 'ir.attachment'
@@ -28,4 +25,4 @@ class NoTargetCheckAttachment():
     def check_access(cls, ids, mode='read'):
         if '_force_access' in Transaction().context:
             return
-        super(NoTargetCheckAttachment, cls).check_access(ids, mode)
+        super(Attachment, cls).check_access(ids, mode)

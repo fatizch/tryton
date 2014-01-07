@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -75,7 +75,7 @@ msgid "Is Health"
 msgstr "Santé"
 
 msgctxt "model:health.party_complement,name:"
-msgid "Party Health Complement"
+msgid "Health Party Complement"
 msgstr "Complément Santé"
 
 msgctxt "model:ir.action,name:act_contract_form"
@@ -115,5 +115,5 @@ msgid "Health"
 msgstr "Santé"
 
 msgctxt "view:health.party_complement:"
-msgid "Party Health Complement"
+msgid "Health Party Complement"
 msgstr "Complément Santé"

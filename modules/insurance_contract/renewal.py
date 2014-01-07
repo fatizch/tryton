@@ -8,7 +8,7 @@ __all__ = [
     'RenewalStart',
     'RenewalResult',
     'RenewalWizard'
-]
+    ]
 
 
 class RenewalStart(model.CoopView):

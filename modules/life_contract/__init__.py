@@ -6,6 +6,6 @@ def register():
     Pool.register(
         # from life_contract
         Contract,
-        LifeOption,
-        LifeCoveredData,
+        ContractOption,
+        CoveredData,
         module='life_contract', type_='model')

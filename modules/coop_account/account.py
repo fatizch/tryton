@@ -7,7 +7,6 @@ from trytond.modules.coop_utils import export
 
 
 __metaclass__ = PoolMeta
-
 __all__ = [
     'Account',
     'AccountKind',
@@ -15,12 +14,10 @@ __all__ = [
     'FiscalYear',
     'Period',
     'Configuration',
-]
+    ]
 
 
 class AccountKind(export.ExportImportMixin):
-    'Account kind'
-
     __name__ = 'account.account.type'
 
     @classmethod
@@ -64,7 +61,6 @@ class Journal(export.ExportImportMixin):
 class FiscalYear(export.ExportImportMixin):
     'Fiscal Year'
 
-    __metaclass__ = PoolMeta
     __name__ = 'account.fiscalyear'
 
     @classmethod
@@ -92,9 +88,6 @@ class FiscalYear(export.ExportImportMixin):
 
 
 class Period(export.ExportImportMixin):
-    'Period'
-
-    __metaclass__ = PoolMeta
     __name__ = 'account.period'
 
     @classmethod
@@ -130,9 +123,6 @@ class Period(export.ExportImportMixin):
 
 
 class Configuration(export.ExportImportMixin):
-    'Account Configuration'
-
-    __metaclass__ = PoolMeta
     __name__ = 'account.configuration'
 
     @classmethod

@@ -4,15 +4,13 @@ from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'distribution'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
@@ -21,7 +19,7 @@ class TestCaseModel():
         result['distribution_network_test_case'] = {
             'name': 'Distribution Network Test Case',
             'dependencies': set(['main_company_test_case']),
-        }
+            }
         return result
 
     @classmethod

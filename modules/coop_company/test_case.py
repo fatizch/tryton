@@ -2,16 +2,13 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.modules.coop_utils import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
-__metaclass__ = PoolMeta
-
 
 class TestCaseModel:
-    'Test Case Model'
-
     __name__ = 'ir.test_case'
 
     main_company_name = fields.Char('Main Company Name')
@@ -24,7 +21,7 @@ class TestCaseModel:
         result['main_company_test_case'] = {
             'name': 'Main Company Test Case',
             'dependencies': set([]),
-        }
+            }
         return result
 
     @classmethod

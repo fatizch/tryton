@@ -3,7 +3,6 @@ import time
 import datetime
 import json
 
-from trytond.pyson import Eval, Bool
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -19,8 +18,6 @@ __all__ = [
     'CoopSQL',
     'CoopView',
     'CoopWizard',
-    'TableOfTable',
-    'DynamicSelection',
     'VersionedObject',
     'VersionObject',
     'ObjectHistory',
@@ -229,87 +226,6 @@ def expand_tree(name, test_field='must_expand_tree'):
 
 class CoopWizard(Wizard):
     pass
-
-
-class TableOfTable(CoopSQL, CoopView):
-    'Table of table'
-
-    __name__ = 'coop.table_of_table'
-    #unnecessary line, but to think for children class to replace '.' by '_'
-    _table = 'coop_table_of_table'
-
-    my_model_name = fields.Char('Model Name')
-    key = fields.Char(
-        'Key', states={'readonly': Bool(Eval('is_used'))})
-    name = fields.Char('Value', required=True, translate=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(TableOfTable, cls).__setup__()
-        cls._error_messages.update({
-                'item_used': 'This item (%s) is used by %s (%s, %s)',
-                })
-
-    @staticmethod
-    def get_class_where_used():
-        '''Method to override in all sub class and return the list of tuple
-        class, var_name of object using this class. Needed when you can't
-        guess dependency with foreign keys'''
-        raise NotImplementedError
-
-    @classmethod
-    def get_instances_using_me(cls, instances):
-        res = dict((instance.id, []) for instance in instances)
-        key_name = cls.get_func_pk_name()
-        if not key_name:
-            return res
-        key_dict = dict(
-            (getattr(instance, key_name), instance.id)
-            for instance in instances)
-        for cur_class, var_name in cls.get_class_where_used():
-            Class = Pool().get(cur_class)
-            for found_instance in Class.search(
-                    [
-                        (var_name, 'in',
-                            [getattr(cur_inst, key_name)
-                                for cur_inst in instances])
-                    ]):
-                cur_id = key_dict[getattr(found_instance, var_name)]
-                res[cur_id].append(found_instance)
-        return res
-
-    @staticmethod
-    def get_func_pk_name():
-        'return the functional key var name used when not using the id'
-        return 'key'
-
-    @classmethod
-    def default_my_model_name(cls):
-        return cls.__name__
-
-    @classmethod
-    def search(
-            cls, domain, offset=0, limit=None, order=None, count=False,
-            query=False):
-        domain.append(('my_model_name', '=', cls.__name__))
-        return super(TableOfTable, cls).search(
-            domain, offset=offset,
-            limit=limit, order=order, count=count, query=query)
-
-    @staticmethod
-    def get_values_as_selection(model_name):
-        res = []
-        DynamicSelection = Pool().get(model_name)
-        for dyn_sel in DynamicSelection.search([]):
-            res.append((dyn_sel.key, dyn_sel.name))
-        return res
-
-
-class DynamicSelection(TableOfTable):
-    'Dynamic Selection'
-
-    __name__ = 'coop.dyn_selection'
-    _table = 'coop_table_of_table'
 
 
 class VersionedObject(CoopView):

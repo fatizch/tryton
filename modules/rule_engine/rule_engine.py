@@ -701,9 +701,9 @@ class Rule(ModelView, ModelSQL):
 
     @classmethod
     def validate(cls, rules):
+        super(Rule, cls).validate(rules)
         for rule in rules:
             rule.check_code()
-        return True
 
     @staticmethod
     def default_status():
@@ -1016,10 +1016,10 @@ class TreeElement(ModelView, ModelSQL):
 
     @classmethod
     def validate(cls, records):
+        super(TreeElement, cls).validate(records)
         for elem in records:
             elem.check_arguments_accents()
             elem.check_name_accents()
-        return True
 
     @staticmethod
     def default_type():

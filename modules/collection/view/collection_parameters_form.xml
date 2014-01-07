@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Collection Parameters">
+<form string="Collection Create Parameters">
   <label name="party"/>
   <field name="party" colspan="3"/>
   <label name="kind"/>

@@ -1,23 +1,28 @@
+import copy
 from decimal import Decimal
 from sql.aggregate import Sum
 from sql.conditionals import Coalesce
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import fields
+from trytond.pyson import Eval
+
+from trytond.modules.coop_utils import fields, export
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Move',
     'MoveLine',
-]
+    'TaxDesc',
+    'FeeDesc',
+    ]
 
 
 class Move:
     __name__ = 'account.move'
 
-    billing_period = fields.Many2One('contract.billing.period', 'Billing Period',
-        ondelete='RESTRICT')
+    billing_period = fields.Many2One('contract.billing.period',
+        'Billing Period', ondelete='RESTRICT')
     total_amount = fields.Function(
         fields.Numeric('Total due amount'),
         'get_basic_amount', searcher='search_basic_amount')
@@ -207,3 +212,69 @@ class MoveLine:
     def get_rec_name(self, name):
         return '%.2f - %s' % (
             self.debit - self.credit, self.move.get_rec_name(None))
+
+
+class TaxDesc:
+    __name__ = 'account.tax.description'
+
+    account_for_billing = fields.Many2One('account.account',
+        'Account for billing', depends=['company'], domain=[
+            ('company', '=', Eval('context', {}).get('company'))],
+        required=True, ondelete='RESTRICT')
+    company = fields.Function(
+        fields.Many2One('company.company', 'Company',
+            depends=['account_for_billing']),
+        'get_company', searcher='search_company')
+
+    @classmethod
+    def __setup__(cls):
+        super(TaxDesc, cls).__setup__()
+        cls.account_for_billing = copy.copy(cls.account_for_billing)
+        cls.account_for_billing.domain = export.clean_domain_for_import(
+            cls.account_for_billing.domain)
+
+    def get_account_for_billing(self):
+        return self.account_for_billing
+
+    def get_company(self, name):
+        if not (hasattr(self, 'account_for_billing') and
+                self.account_for_billing):
+            return None
+        return self.account_for_billing.company.id
+
+    @classmethod
+    def search_company(cls, name, clause):
+        return [(('account_for_billing.company',) + tuple(clause[1:]))]
+
+
+class FeeDesc:
+    __name__ = 'account.fee.description'
+
+    account_for_billing = fields.Many2One('account.account',
+        'Account for billing', depends=['company'], domain=[
+            ('company', '=', Eval('context', {}).get('company'))],
+        required=True, ondelete='RESTRICT')
+    company = fields.Function(
+        fields.Many2One('company.company', 'Company',
+            depends=['account_for_billing']),
+        'get_company', searcher='search_company')
+
+    @classmethod
+    def __setup__(cls):
+        super(FeeDesc, cls).__setup__()
+        cls.account_for_billing = copy.copy(cls.account_for_billing)
+        cls.account_for_billing.domain = export.clean_domain_for_import(
+            cls.account_for_billing.domain)
+
+    def get_account_for_billing(self):
+        return self.account_for_billing
+
+    def get_company(self, name):
+        if not (hasattr(self, 'account_for_billing') and
+                self.account_for_billing):
+            return None
+        return self.account_for_billing.company.id
+
+    @classmethod
+    def search_company(cls, name, clause):
+        return [(('account_for_billing.company',) + tuple(clause[1:]))]

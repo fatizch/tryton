@@ -3,53 +3,44 @@ import copy
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
-from trytond.pool import Pool
-from trytond.error import UserError
 
 from trytond.modules.coop_utils import model, utils, fields
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.coop_utils import BatchRoot
+
 from trytond.modules.offered import NonExistingRuleKindException
 from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import EligibilityResultLine
 
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Offered',
     'Product',
     'OfferedProduct',
-    'ItemDescriptor',
+    'ItemDescription',
     'ItemDescSubItemDescRelation',
-    'ItemDescriptorComplementaryDataRelation',
-    'ProductItemDescriptorRelation',
-    'ExpenseKind',
-    'ProductValidationBatch',
+    'ItemDescriptionExtraDataRelation',
+    'ProductItemDescriptionRelation',
     ]
 
 IS_INSURANCE = Eval('kind') == 'insurance'
 
 
-class Offered():
-    'Offered'
-
+class Offered:
     __name__ = 'offered'
-    __metaclass__ = PoolMeta
 
-    pricing_rules = fields.One2Many('billing.premium.rule',
-        'offered', 'Pricing Rules')
-    eligibility_rules = fields.One2Many(
-        'offered.eligibility.rule', 'offered', 'Eligibility Rules')
-    clause_rules = fields.One2Many(
-        'clause.rule', 'offered', 'Clause Rules')
-    deductible_rules = fields.One2Many(
-        'offered.deductible.rule', 'offered', 'Deductible Rules')
-    document_rules = fields.One2ManyDomain(
-        'document.rule', 'offered', 'Document Rules',
-        context={'doc_rule_kind': 'main'},
+    pricing_rules = fields.One2Many('billing.premium.rule', 'offered',
+        'Premium Rules')
+    eligibility_rules = fields.One2Many('offered.eligibility.rule', 'offered',
+        'Eligibility Rules')
+    clause_rules = fields.One2Many('clause.rule', 'offered', 'Clause Rules')
+    deductible_rules = fields.One2Many('offered.deductible.rule', 'offered',
+        'Deductible Rules')
+    document_rules = fields.One2ManyDomain('document.rule', 'offered',
+        'Document Rules', context={'doc_rule_kind': 'main'},
         domain=[('kind', '=', 'main')])
-    sub_document_rules = fields.One2ManyDomain(
-        'document.rule', 'offered', 'Sub Document Rules',
-        context={'doc_rule_kind': 'sub'},
+    sub_document_rules = fields.One2ManyDomain('document.rule', 'offered',
+        'Sub Document Rules', context={'doc_rule_kind': 'sub'},
         domain=[('kind', '=', 'sub')])
 
     def get_name_for_billing(self):
@@ -66,8 +57,8 @@ class Offered():
 
     def give_me_sub_elem_eligibility(self, args):
         try:
-            res = self.get_result(
-                'sub_elem_eligibility', args, kind='eligibility')
+            res = self.get_result('sub_elem_eligibility', args,
+                kind='eligibility')
         except NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
@@ -85,25 +76,21 @@ class Offered():
             return [], ()
 
 
-class Product():
-    'Product'
-
+class Product:
     __name__ = 'offered.product'
-    __metaclass__ = PoolMeta
 
-    term_renewal_rules = fields.One2Many('offered.term.rule',
-        'offered', 'Term - Renewal')
-    item_descriptors = fields.Many2Many('offered.product-item.description', 'product',
-        'item_desc', 'Item Descriptors',
+    term_renewal_rules = fields.One2Many('offered.term.rule', 'offered',
+        'Term - Renewal')
+    item_descriptors = fields.Many2Many('offered.product-item.description',
+        'product', 'item_desc', 'Item Descriptions',
         domain=[('id', 'in', Eval('possible_item_descs'))],
-        depends=['possible_item_descs'],
-        states={
+        depends=['possible_item_descs'], states={
             'required': IS_INSURANCE,
             'invisible': ~IS_INSURANCE,
             })
     possible_item_descs = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
-            'Possible Item Descriptors', on_change_with=['coverages']),
+            'Possible Item Descriptions', on_change_with=['coverages']),
         'on_change_with_possible_item_descs')
 
     @classmethod
@@ -115,8 +102,8 @@ class Product():
             cls.kind.selection.remove(('default', 'Default'))
         cls.kind.selection = list(set(cls.kind.selection))
         cls._error_messages.update({
-            'no_renewal_rule_configured': 'No renewal rule configured',
-        })
+                'no_renewal_rule_configured': 'No renewal rule configured',
+                })
 
     @classmethod
     def delete(cls, entities):
@@ -247,8 +234,8 @@ class OfferedProduct(Offered):
     #in the override of offered
 
 
-class ItemDescriptor(model.CoopSQL, model.CoopView):
-    'Item Descriptor'
+class ItemDescription(model.CoopSQL, model.CoopView):
+    'Item Description'
 
     __name__ = 'offered.item.description'
 
@@ -256,11 +243,12 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
     name = fields.Char('Name')
     complementary_data_def = fields.Many2Many(
         'offered.item.description-extra_data',
-        'item_desc', 'complementary_data_def', 'Complementary Data',
+        'item_desc', 'complementary_data_def', 'Extra Data',
         domain=[('kind', '=', 'sub_elem')], )
     kind = fields.Selection('get_possible_item_kind', 'Kind')
-    sub_item_descs = fields.Many2Many('offered.item.description-sub_item.description',
-        'item_desc', 'sub_item_desc', 'Sub Item Descriptors',
+    sub_item_descs = fields.Many2Many(
+        'offered.item.description-sub_item.description',
+        'item_desc', 'sub_item_desc', 'Sub Item Descriptions',
         states={'invisible': Eval('kind') == 'person'})
 
     def on_change_with_code(self):
@@ -271,7 +259,7 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
 
     # @classmethod
     # def _export_force_recreate(cls):
-    #     result = super(ItemDescriptor, cls)._export_force_recreate()
+    #     result = super(ItemDescription, cls)._export_force_recreate()
     #     result.remove('sub_item_descs')
     #     return result
 
@@ -282,11 +270,11 @@ class ItemDescriptor(model.CoopSQL, model.CoopView):
             ('party', 'Party'),
             ('person', 'Person'),
             ('company', 'Company'),
-        ]
+            ]
 
     @classmethod
     def get_var_names_for_full_extract(cls):
-        res = super(ItemDescriptor, cls).get_var_names_for_full_extract()
+        res = super(ItemDescription, cls).get_var_names_for_full_extract()
         res.extend(['complementary_data_def', 'kind', 'sub_item_descs'])
         return res
 
@@ -298,85 +286,26 @@ class ItemDescSubItemDescRelation(model.CoopSQL):
 
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         ondelete='CASCADE')
-    sub_item_desc = fields.Many2One('offered.item.description', 'Sub Item Desc',
-        ondelete='RESTRICT')
+    sub_item_desc = fields.Many2One('offered.item.description',
+        'Sub Item Desc', ondelete='RESTRICT')
 
 
-class ItemDescriptorComplementaryDataRelation(model.CoopSQL):
-    'Relation between Item Descriptor and Complementary Data'
+class ItemDescriptionExtraDataRelation(model.CoopSQL):
+    'Item Description to Extra Data Relation'
 
     __name__ = 'offered.item.description-extra_data'
 
-    item_desc = fields.Many2One(
-        'offered.item.description', 'Item Desc', ondelete='CASCADE', )
-    complementary_data_def = fields.Many2One(
-        'extra_data',
-        'Complementary Data', ondelete='RESTRICT', )
+    item_desc = fields.Many2One('offered.item.description', 'Item Desc',
+        ondelete='CASCADE')
+    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+        ondelete='RESTRICT', )
 
 
-class ProductItemDescriptorRelation(model.CoopSQL):
-    'Relation between Product and Item Descriptor'
+class ProductItemDescriptionRelation(model.CoopSQL):
+    'Relation between Product and Item Description'
 
     __name__ = 'offered.product-item.description'
 
-    product = fields.Many2One(
-        'offered.product', 'Product', ondelete='CASCADE')
-    item_desc = fields.Many2One(
-        'offered.item.description', 'Item Descriptor', ondelete='RESTRICT')
-
-
-class ExpenseKind(model.CoopSQL, model.CoopView):
-    'Expense Kind'
-
-    __name__ = 'expense.kind'
-
-    kind = fields.Selection(
-        [
-            ('medical', 'Medical'),
-            ('expert', 'Expert'),
-            ('judiciary', 'Judiciary'),
-            ('other', 'Other'),
-        ], 'Kind')
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name')
-    short_name = fields.Char('Short Name')
-
-
-class ProductValidationBatch(BatchRoot):
-    'Product Validation Batch'
-
-    __name__ = 'offered.validate.batch'
-
-    @classmethod
-    def get_batch_main_model_name(cls):
-        return 'offered.product'
-
-    @classmethod
-    def get_batch_search_model(cls):
-        return 'offered.product'
-
-    @classmethod
-    def get_batch_name(cls):
-        return 'Product Validation Batch'
-
-    @classmethod
-    def execute(cls, objects, ids, logger):
-        # TODO : explose ModelStorage._validate in smaller functions that could
-        # be individually called.
-        # That would permit to see every test that failed, whereas as of the
-        # current version, only the first error of all the batch of records is
-        # reported
-        Product = Pool().get('offered.product')
-        logger.info('Validating products %s' % objects)
-        try:
-            Product._validate(objects)
-        except UserError as exc:
-            logger.warning('Bad validation : %s' % exc)
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        return 'divide'
-
-    @classmethod
-    def get_batch_step(cls):
-        return 2
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
+    item_desc = fields.Many2One('offered.item.description', 'Item Description',
+        ondelete='RESTRICT')

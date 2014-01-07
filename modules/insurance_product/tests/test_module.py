@@ -28,7 +28,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Coverage': 'offered.option.description',
             'Pricing': 'billing.premium.rule',
             'Eligibility': 'offered.eligibility.rule',
-            'PricingComponent': 'billing.premium.rule.component',
+            'PremiumRuleComponent': 'billing.premium.rule.component',
             'Tax': 'account.tax.description',
             'TaxVersion': 'account.tax.description.version',
             'Fee': 'account.fee.description',
@@ -36,7 +36,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
             'ItemDesc': 'offered.item.description',
-        }
+            }
 
     def test0001_testFunctionalRuleCreation(self):
         fr = self.Lang.search([('name', '=', 'French')], limit=1)[0]
@@ -206,7 +206,7 @@ return True'''
         'insurance_product.test0004_testNumberGeneratorCreation',
         'insurance_product.test0005_testItemDescCreation',
         'offered.test0002_testCompanyCreation',
-    )
+        )
     def test0010Coverage_creation(self):
         '''
             Tests process desc creation
@@ -221,26 +221,26 @@ return True'''
         fee = self.Fee.search([('code', '=', 'FEE')])[0]
         item_desc = self.ItemDesc.search([('code', '=', 'person')])[0]
 
-        pricing_comp1 = self.PricingComponent()
+        pricing_comp1 = self.PremiumRuleComponent()
         pricing_comp1.config_kind = 'simple'
         pricing_comp1.fixed_amount = 12
         pricing_comp1.kind = 'base'
         pricing_comp1.code = 'PP'
         pricing_comp1.rated_object_kind = 'global'
 
-        pricing_comp11 = self.PricingComponent()
+        pricing_comp11 = self.PremiumRuleComponent()
         pricing_comp11.kind = 'tax'
         pricing_comp11.tax = tax
         pricing_comp11.code = tax.code
         pricing_comp11.rated_object_kind = 'global'
 
-        pricing_comp12 = self.PricingComponent()
+        pricing_comp12 = self.PremiumRuleComponent()
         pricing_comp12.kind = 'fee'
         pricing_comp12.fee = fee
         pricing_comp12.code = fee.code
         pricing_comp12.rated_object_kind = 'global'
 
-        pricing_comp2 = self.PricingComponent()
+        pricing_comp2 = self.PremiumRuleComponent()
         pricing_comp2.config_kind = 'simple'
         pricing_comp2.fixed_amount = 1
         pricing_comp2.kind = 'base'
@@ -257,7 +257,7 @@ return True'''
         pricing_rulea.end_date = datetime.date.today() + \
             datetime.timedelta(days=10)
 
-        pricing_comp3 = self.PricingComponent()
+        pricing_comp3 = self.PremiumRuleComponent()
         pricing_comp3.config_kind = 'simple'
         pricing_comp3.fixed_amount = 15
         pricing_comp3.kind = 'base'
@@ -289,14 +289,14 @@ return True'''
 
         tax_1 = self.Tax.search([('code', '=', 'TTA')])[0]
 
-        pricing_comp4 = self.PricingComponent()
+        pricing_comp4 = self.PremiumRuleComponent()
         pricing_comp4.config_kind = 'simple'
         pricing_comp4.fixed_amount = 30
         pricing_comp4.kind = 'base'
         pricing_comp4.code = 'PP'
         pricing_comp4.rated_object_kind = 'global'
 
-        pricing_comp41 = self.PricingComponent()
+        pricing_comp41 = self.PremiumRuleComponent()
         pricing_comp41.kind = 'tax'
         pricing_comp41.tax = tax_1
         pricing_comp41.code = tax_1.code

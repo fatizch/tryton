@@ -1,18 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:document.receive.attach:"
 msgid "Duplicate name on attachments : %s"
 msgstr "Nom dupliqués sur les pièces jointe : %s"
-
-msgctxt "error:benefit:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
-msgctxt "error:benefit.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
 
 msgctxt "error:offered.business_rule_root:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -70,10 +62,6 @@ msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 msgctxt "error:document.receive:"
 msgid "No document request found for this object"
 msgstr "Aucune demande de document trouvé pour cet objet"
-
-msgctxt "error:benefit.reserve.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
 
 msgctxt "error:ins_product.simple_pricing_rule:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -139,352 +127,6 @@ msgctxt "field:document.receive.attach,resource:"
 msgid "Resource"
 msgstr "Ressource"
 
-msgctxt "field:benefit,beneficiary_kind:"
-msgid "Beneficiary Kind"
-msgstr "Type de Bénéficiaire"
-
-msgctxt "field:benefit,benefit_rules:"
-msgid "Benefit Rules"
-msgstr "Règles de Prestation"
-
-msgctxt "field:benefit,clause_rules:"
-msgid "Clause Rules"
-msgstr "Clauses"
-
-msgctxt "field:benefit,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:benefit,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:benefit,complementary_data:"
-msgid "Offered Kind"
-msgstr "Typage"
-
-msgctxt "field:benefit,complementary_data_def:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:benefit,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nbre de chiffres après la virgule"
-
-msgctxt "field:benefit,deductible_rules:"
-msgid "Deductible Rules"
-msgstr "Franchises"
-
-msgctxt "field:benefit,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:benefit,document_rules:"
-msgid "Document Rules"
-msgstr "Documents"
-
-msgctxt "field:benefit,eligibility_rules:"
-msgid "Eligibility Rules"
-msgstr "Règles d'Eligibilité"
-
-msgctxt "field:benefit,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:benefit,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit,indemnification_kind:"
-msgid "Indemnification Kind"
-msgstr "Type d'Indemnisation"
-
-msgctxt "field:benefit,loss_descs:"
-msgid "Loss Descriptions"
-msgstr "Types de Préjudice Couverts"
-
-msgctxt "field:benefit,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:benefit,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit,pricing_rules:"
-msgid "Pricing Rules"
-msgstr "Règles de Cotisation"
-
-msgctxt "field:benefit,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit,reserve_rules:"
-msgid "Reserve Rules"
-msgstr "Règle de Provisions"
-
-msgctxt "field:benefit,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:benefit,sub_document_rules:"
-msgid "Sub Document Rules"
-msgstr "Documents Eléments Couverts"
-
-msgctxt "field:benefit,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:benefit,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:benefit,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement de Modèle"
-
-msgctxt "field:benefit,use_local_currency:"
-msgid "Use Local Currency"
-msgstr "Utiliser la Devise Locale"
-
-msgctxt "field:benefit,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:benefit-extra_data,benefit:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt ""
-"field:benefit-extra_data,complementary_data_def:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:benefit-extra_data,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit-extra_data,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit-extra_data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit-extra_data,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit-extra_data,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit-extra_data,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit-extra_data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:benefit-loss.description,benefit:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "field:benefit-loss.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit-loss.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit-loss.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit-loss.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit-loss.description,loss_desc:"
-msgid "Loss Desc"
-msgstr "Type de Préjudice"
-
-msgctxt "field:benefit-loss.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit-loss.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit-loss.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:benefit.rule,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:benefit.rule,amount_evolves_over_time:"
-msgid "Evolves Over Time"
-msgstr "Evolue au cours du temps"
-
-msgctxt "field:benefit.rule,amount_kind:"
-msgid "Amount Kind"
-msgstr "Type de Montant"
-
-msgctxt "field:benefit.rule,coef_coverage_amount:"
-msgid "Multiplier"
-msgstr "Coef. Multiplicateur"
-
-msgctxt "field:benefit.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:benefit.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.rule,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:benefit.rule,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:benefit.rule,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:benefit.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:benefit.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.rule,indemnification_calc_unit:"
-msgid "Indemnification Calculation Unit"
-msgstr "Unité de calcul de l'indemnisation"
-
-msgctxt "field:benefit.rule,index_initial_date:"
-msgid "Index Initial Date"
-msgstr "Date de l'Indice de Référence"
-
-msgctxt "field:benefit.rule,index_initial_value:"
-msgid "Initial Value"
-msgstr "Valeur Initiale"
-
-msgctxt "field:benefit.rule,max_duration_per_indemnification:"
-msgid "Max duration per Indemnification"
-msgstr "Durée max par Indemnisation"
-
-msgctxt ""
-"field:benefit.rule,max_duration_per_indemnification_unit:"
-msgid "Unit"
-msgstr "Unité"
-
-msgctxt "field:benefit.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:benefit.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:benefit.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.rule,revaluation_date:"
-msgid "Revaluation Date"
-msgstr "Date de Revalorisation"
-
-msgctxt "field:benefit.rule,revaluation_index:"
-msgid "Revaluation Index"
-msgstr "Indice de Revalorisation"
-
-msgctxt "field:benefit.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:benefit.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:benefit.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:benefit.rule,sub_benefit_rules:"
-msgid "Sub Benefit Rules"
-msgstr "Sous Règles de Prestation"
-
-msgctxt "field:benefit.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:benefit.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:benefit.rule,use_monthly_period:"
-msgid "Monthly Period"
-msgstr "Période Mensuelle"
-
-msgctxt "field:benefit.rule,validation_delay:"
-msgid "Validation Delay"
-msgstr "Délai de Validation"
-
-msgctxt "field:benefit.rule,validation_delay_unit:"
-msgid "Delay"
-msgstr "Délai"
-
-msgctxt "field:benefit.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.rule,with_revaluation:"
-msgid "With Revaluation"
-msgstr "Avec Revalorisation"
-
-msgctxt "field:benefit.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:offered.business_rule_root,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -510,7 +152,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:offered.business_rule_root,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:offered.business_rule_root,start_date:"
@@ -670,7 +312,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:clause.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:clause.rule,shared_clauses:"
@@ -818,7 +460,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:offered.coverage_amount.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:offered.coverage_amount.rule,start_date:"
@@ -950,7 +592,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:offered.deductible.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:offered.deductible.rule,scope:"
@@ -1250,7 +892,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:document.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:document.rule,start_date:"
@@ -1362,7 +1004,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:offered.eligibility.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:offered.eligibility.rule,start_date:"
@@ -1378,7 +1020,7 @@ msgid "Sub Elem Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:offered.eligibility.rule,sub_elem_rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:offered.eligibility.rule,subscriber_classes:"
@@ -1402,90 +1044,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:offered.eligibility.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:benefit.event.description,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:benefit.event.description,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:benefit.event.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.event.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.event.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.event.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.event.description,loss_descs:"
-msgid "Loss Descriptions"
-msgstr "Types de Préjudice Couverts"
-
-msgctxt "field:benefit.event.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:benefit.event.description,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.event.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.event.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.event.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:benefit.event.description-loss.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.event.description-loss.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.event.description-loss.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.event.description-loss.description,event_desc:"
-msgid "Event Desc"
-msgstr "Descripteur d'Evénement"
-
-msgctxt "field:benefit.event.description-loss.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.event.description-loss.description,loss_desc:"
-msgid "Loss Desc"
-msgstr "Descripteur de Préjudice"
-
-msgctxt "field:benefit.event.description-loss.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.event.description-loss.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.event.description-loss.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -1542,7 +1100,7 @@ msgid "Code"
 msgstr "Code"
 
 msgctxt "field:offered.item.description,complementary_data_def:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:offered.item.description,create_date:"
@@ -1578,7 +1136,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:offered.item.description,sub_item_descs:"
-msgid "Sub Item Descriptors"
+msgid "Sub Item Descriptions"
 msgstr "Descriptions des Sous Eléments"
 
 msgctxt "field:offered.item.description,write_date:"
@@ -1589,9 +1147,8 @@ msgctxt "field:offered.item.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt ""
-"field:offered.item.description-extra_data,complementary_data_def:"
-msgid "Complementary Data"
+msgctxt "field:offered.item.description-extra_data,complementary_data_def:"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:offered.item.description-extra_data,create_date:"
@@ -1719,7 +1276,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:document.create.select.template,letter_model:"
-msgid "Letter Model"
+msgid "Document Template"
 msgstr "Modèle de Lettre"
 
 msgctxt "field:document.create.select.template,must_expand_tree:"
@@ -1834,143 +1391,6 @@ msgctxt "field:document.template.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:benefit.loss.description-document.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.loss.description-document.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.loss.description-document.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.loss.description-document.description,document:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "field:benefit.loss.description-document.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.loss.description-document.description,loss:"
-msgid "Loss"
-msgstr "Préjudice"
-
-msgctxt "field:benefit.loss.description-document.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.loss.description-document.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.loss.description-document.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:benefit.loss.description,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:benefit.loss.description,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:benefit.loss.description,complementary_data_def:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:benefit.loss.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.loss.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.loss.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.loss.description,documents:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "field:benefit.loss.description,event_descs:"
-msgid "Events Descriptions"
-msgstr "Descripteurs d'Evénement"
-
-msgctxt "field:benefit.loss.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.loss.description,item_kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:benefit.loss.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:benefit.loss.description,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.loss.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.loss.description,with_end_date:"
-msgid "With End Date"
-msgstr "Avec Date de Fin"
-
-msgctxt "field:benefit.loss.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.loss.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt ""
-"field:benefit.loss.description-extra_data,complementary_data_def:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:benefit.loss.description-extra_data,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.loss.description-extra_data,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.loss.description-extra_data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.loss.description-extra_data,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.loss.description-extra_data,loss_desc:"
-msgid "Loss Desc"
-msgstr "Descripteur de Préjudice"
-
-msgctxt "field:benefit.loss.description-extra_data,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.loss.description-extra_data,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.loss.description-extra_data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:billing.premium.rule.component,code:"
 msgid "Code"
 msgstr "Code"
@@ -2012,7 +1432,7 @@ msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
 msgctxt "field:billing.premium.rule.component,pricing_rule:"
-msgid "Pricing Rule"
+msgid "Premium Rule"
 msgstr "Règle de Cotisation"
 
 msgctxt "field:billing.premium.rule.component,rated_object_kind:"
@@ -2028,7 +1448,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:billing.premium.rule.component,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:billing.premium.rule.component,summary:"
@@ -2104,7 +1524,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:billing.premium.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:billing.premium.rule,specific_combination_rule:"
@@ -2203,78 +1623,6 @@ msgctxt "field:document.receive.request,value:"
 msgid "Value"
 msgstr "Nom"
 
-msgctxt "field:benefit.reserve.rule,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:benefit.reserve.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:benefit.reserve.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.reserve.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.reserve.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.reserve.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:benefit.reserve.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.reserve.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:benefit.reserve.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:benefit.reserve.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.reserve.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:benefit.reserve.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:benefit.reserve.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:benefit.reserve.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:benefit.reserve.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:benefit.reserve.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.reserve.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.reserve.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ins_product.simple_pricing_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -2300,7 +1648,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:ins_product.simple_pricing_rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:ins_product.simple_pricing_rule,start_date:"
@@ -2318,86 +1666,6 @@ msgstr "Comportement du Modèle"
 msgctxt "field:ins_product.simple_pricing_rule,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:benefit.rule.stage,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:benefit.rule.stage,benefit_rule:"
-msgid "Benefit Rule"
-msgstr "Règle de Prestation"
-
-msgctxt "field:benefit.rule.stage,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:benefit.rule.stage,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:benefit.rule.stage,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:benefit.rule.stage,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:benefit.rule.stage,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:benefit.rule.stage,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:benefit.rule.stage,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:benefit.rule.stage,duration:"
-msgid "Duration"
-msgstr "Durée"
-
-msgctxt "field:benefit.rule.stage,duration_unit:"
-msgid "Duration Unit"
-msgstr "Unité de la Durée"
-
-msgctxt "field:benefit.rule.stage,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:benefit.rule.stage,indemnification_calc_unit:"
-msgid "Calculation Unit"
-msgstr "Unité de Calcul"
-
-msgctxt "field:benefit.rule.stage,limited_duration:"
-msgid "Limited Duration"
-msgstr "Durée Limitée"
-
-msgctxt "field:benefit.rule.stage,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:benefit.rule.stage,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:benefit.rule.stage,rule:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:benefit.rule.stage,rule_complementary_data:"
-msgid "Rule Complementary Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:benefit.rule.stage,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:benefit.rule.stage,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:offered.term.rule,can_be_renewed:"
 msgid "Can be renewed"
@@ -2452,7 +1720,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:offered.term.rule,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:offered.term.rule,start_date:"
@@ -2607,10 +1875,6 @@ msgctxt "field:extra_data-sub_extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.option.description,benefits:"
-msgid "Benefits"
-msgstr "Prestations"
-
 msgctxt "field:offered.option.description,clause_rules:"
 msgid "Clause Rules"
 msgstr "Clauses"
@@ -2624,7 +1888,7 @@ msgid "Offered Kind"
 msgstr "Typage"
 
 msgctxt "field:offered.option.description,complementary_data_def:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:offered.option.description,coverage_amount_rules:"
@@ -2688,7 +1952,7 @@ msgid "Package"
 msgstr "Formule"
 
 msgctxt "field:offered.option.description,item_desc:"
-msgid "Item Descriptor"
+msgid "Item Description"
 msgstr "Description du Risque"
 
 msgctxt "field:offered.option.description,name:"
@@ -2696,7 +1960,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:offered.option.description,pricing_rules:"
-msgid "Pricing Rules"
+msgid "Premium Rules"
 msgstr "Règles de Cotisation"
 
 msgctxt "field:offered.option.description,products:"
@@ -2739,45 +2003,8 @@ msgctxt "field:offered.option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:option.description-benefit,benefit:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "field:option.description-benefit,coverage:"
-msgid "Coverage"
-msgstr "Offre"
-
-msgctxt "field:option.description-benefit,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:option.description-benefit,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:option.description-benefit,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:option.description-benefit,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:option.description-benefit,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:option.description-benefit,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:option.description-benefit,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt ""
-"field:offered.option.description-extra_data,complementary_data_def:"
-msgid "Complementary Data"
+msgctxt "field:offered.option.description-extra_data,complementary_data_def:"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:offered.option.description-extra_data,coverage:"
@@ -2853,7 +2080,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:offered,pricing_rules:"
-msgid "Pricing Rules"
+msgid "Premium Rules"
 msgstr "Règles de Cotisation"
 
 msgctxt "field:offered,start_date:"
@@ -2921,7 +2148,7 @@ msgid "Offered Kind"
 msgstr "Données Complémentaires"
 
 msgctxt "field:offered.product,complementary_data_def:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:offered.product,contract_generator:"
@@ -2969,7 +2196,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.product,item_descriptors:"
-msgid "Item Descriptors"
+msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
 
 msgctxt "field:offered.product,name:"
@@ -2977,11 +2204,11 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:offered.product,possible_item_descs:"
-msgid "Possible Item Descriptors"
+msgid "Possible Item Descriptions"
 msgstr ""
 
 msgctxt "field:offered.product,pricing_rules:"
-msgid "Pricing Rules"
+msgid "Premium Rules"
 msgstr "Règles de Cotisation"
 
 msgctxt "field:offered.product,rec_name:"
@@ -3021,7 +2248,7 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:offered.product-extra_data,complementary_data_def:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:offered.product-extra_data,create_date:"
@@ -3069,7 +2296,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:offered.product-item.description,item_desc:"
-msgid "Item Descriptor"
+msgid "Item Description"
 msgstr "Description du Risque"
 
 msgctxt "field:offered.product-item.description,product:"
@@ -3177,15 +2404,15 @@ msgid "Rule Parameter"
 msgstr "Paramètre de Règle"
 
 msgctxt "field:rule_engine,rule_external_compl_datas:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:rule_engine.parameter,external_complementary_data:"
-msgid "External Complementary Data"
+msgid "External Extra Data"
 msgstr "Donnée Complémentaire Externe"
 
 msgctxt "field:rule_engine.parameter,rule_complementary_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:rule_engine.parameter,the_complementary_data:"
@@ -3193,16 +2420,8 @@ msgid "Complementary Parameters"
 msgstr "Paramètres Complémentaires"
 
 msgctxt "field:table.manage_dimension.show.dimension,complementary_data:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
-
-msgctxt "help:benefit.rule,coef_coverage_amount:"
-msgid "Add a multiplier to apply to the coverage amount"
-msgstr "Ajouter un coefficient multiplicateur au montant de couverture"
-
-msgctxt "help:benefit.rule,use_monthly_period:"
-msgid "Split periods at the end of the month"
-msgstr "Découper les périodes à la fin du mois"
 
 msgctxt "help:offered.coverage_amount.rule,amounts:"
 msgid "Specify amounts separated by ;"
@@ -3213,28 +2432,12 @@ msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
 msgctxt "model:document.create.attach,name:"
-msgid "Attachment Creation"
+msgid "Document Create Attach"
 msgstr "Création de l'attachment"
 
 msgctxt "model:document.receive.attach,name:"
-msgid "Attachment Setter"
+msgid "Document Receive Attach"
 msgstr "Gestionnaire de Pièces Jointes"
-
-msgctxt "model:benefit,name:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "model:benefit-extra_data,name:"
-msgid "Relation between Benefit and Complementary Data"
-msgstr "Relation entre Prestation et Données Complémentaires"
-
-msgctxt "model:benefit-loss.description,name:"
-msgid "Benefit Loss Desc Relation"
-msgstr "Relation Prestation Descripteur de Préjudice"
-
-msgctxt "model:benefit.rule,name:"
-msgid "Benefit Rule"
-msgstr "Prestation"
 
 msgctxt "model:offered.business_rule_root,name:"
 msgid "Business Rule Root"
@@ -3245,7 +2448,7 @@ msgid "Clause"
 msgstr "Clause"
 
 msgctxt "model:clause.rule-clause,name:"
-msgid "Relation between clause and offered"
+msgid "Rule to Clause Relation"
 msgstr "Table intermédiaire entre l'offre et le clause"
 
 msgctxt "model:clause.rule,name:"
@@ -3277,7 +2480,7 @@ msgid "Relation between rule and document"
 msgstr "Relation Règle Document"
 
 msgctxt "model:document.description,name:"
-msgid "Document Descriptor"
+msgid "Document Description"
 msgstr "Descripteur de Document"
 
 msgctxt "model:document.request,name:"
@@ -3289,7 +2492,7 @@ msgid "Document Request Batch Definition"
 msgstr ""
 
 msgctxt "model:document.receive.set_requests,name:"
-msgid "Document Request Displayer"
+msgid "Document Receive Set Requests"
 msgstr "Document en attente"
 
 msgctxt "model:document.rule,name:"
@@ -3297,7 +2500,7 @@ msgid "Document Managing Rule"
 msgstr ""
 
 msgctxt "model:offered.eligibility.rule-relation.kind,name:"
-msgid "Define relation between eligibility rule and relation kind authorized"
+msgid "Eligibilty Rule to Relation Kind Relation"
 msgstr ""
 "Table intermédiaire entre la règle d'égibilité et les relations autorisées"
 
@@ -3305,24 +2508,16 @@ msgctxt "model:offered.eligibility.rule,name:"
 msgid "Eligibility Rule"
 msgstr "Eligibilite"
 
-msgctxt "model:benefit.event.description,name:"
-msgid "Event Desc"
-msgstr "Descripteur d'Evénement"
-
-msgctxt "model:benefit.event.description-loss.description,name:"
-msgid "Event Desc - Loss Desc Relation"
-msgstr "Relation Descripteur d'Evénement Descripteur de Préjudice"
-
 msgctxt "model:expense.kind,name:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
 
 msgctxt "model:offered.item.description,name:"
-msgid "Item Descriptor"
+msgid "Item Description"
 msgstr "Description du Risque"
 
 msgctxt "model:offered.item.description-extra_data,name:"
-msgid "Relation between Item Descriptor and Complementary Data"
+msgid "Item Description to Extra Data Relation"
 msgstr "Relation Risque - Données Complémentaires"
 
 msgctxt "model:offered.item.description-sub_item.description,name:"
@@ -3330,39 +2525,27 @@ msgid "Relation between Item Desc and Sub Item Desc"
 msgstr ""
 
 msgctxt "model:document.template,name:"
-msgid "Letter Model"
+msgid "Document Template"
 msgstr "Modèle de Lettre"
 
 msgctxt "model:document.create.select.template,name:"
-msgid "Letter Model Displayer"
+msgid "Document Create Select Template"
 msgstr "Présenteur de Modèle de Lettre"
 
 msgctxt "model:document.create.select,name:"
-msgid "Letter Model Selection"
+msgid "Document Create Select"
 msgstr "Sélection du modèle de Lettre"
 
 msgctxt "model:document.template.version,name:"
-msgid "Letter Version"
+msgid "Document Template Version"
 msgstr "Version de Lettre"
 
-msgctxt "model:benefit.loss.description-document.description,name:"
-msgid "Loss Desc to Document relation"
-msgstr "Relation Descripteur de Préjudice Document"
-
-msgctxt "model:benefit.loss.description,name:"
-msgid "Loss Desc"
-msgstr "Descripteur de Préjudice"
-
-msgctxt "model:benefit.loss.description-extra_data,name:"
-msgid "Relation between Loss Desc and Complementary Data"
-msgstr "Relation Type de Préjudice et Données Complémentaires"
-
 msgctxt "model:billing.premium.rule.component,name:"
-msgid "Pricing Component"
+msgid "Premium Rule Component"
 msgstr "Composante de Cotisation"
 
 msgctxt "model:billing.premium.rule,name:"
-msgid "Pricing Rule"
+msgid "Premium Rule"
 msgstr "Règle de Cotisation"
 
 msgctxt "model:process-offered.product,name:"
@@ -3374,35 +2557,23 @@ msgid "Product Validation Batch"
 msgstr ""
 
 msgctxt "model:document.receive.request,name:"
-msgid "Request Finder"
+msgid "Document Receive Request"
 msgstr "Rechercher une Demande"
-
-msgctxt "model:benefit.reserve.rule,name:"
-msgid "Reserve Rule"
-msgstr "Provisionnement"
 
 msgctxt "model:ins_product.rule_sets.contract,name:"
 msgid "Context functions for contract related data"
 msgstr ""
 
 msgctxt "model:ins_product.simple_pricing_rule,name:"
-msgid "Simple Pricing Rule"
+msgid "Simple Premium Rule"
 msgstr "Règle de Cotisation Simple"
 
-msgctxt "model:benefit.rule.stage,name:"
-msgid "Sub Benefit Rule"
-msgstr "Sous Règles de Prestation"
-
 msgctxt "model:offered.term.rule,name:"
-msgid "Term and Renewal Rule"
+msgid "Term Rule"
 msgstr "Règle de Terme - Renouvellement"
 
-msgctxt "model:ir.action,name:act_benefit_form"
-msgid "Benefits"
-msgstr "Prestations"
-
 msgctxt "model:ir.action,name:act_document_desc"
-msgid "Document Descriptors"
+msgid "Document Descriptions"
 msgstr "Descripteurs de Document"
 
 msgctxt "model:ir.action,name:act_event_desc_form"
@@ -3410,11 +2581,11 @@ msgid "Events"
 msgstr "Evénements"
 
 msgctxt "model:ir.action,name:act_item_desc_form"
-msgid "Item Descriptors"
+msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
 
 msgctxt "model:ir.action,name:act_letter_model"
-msgid "Letter Models"
+msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
 msgctxt "model:ir.action,name:act_loss_desc_form"
@@ -3441,12 +2612,8 @@ msgctxt "model:ir.action,name:receive_documents_wizard"
 msgid "Document Reception"
 msgstr "Réception de Document"
 
-msgctxt "model:ir.ui.menu,name:menu_benefit_form"
-msgid "Benefits"
-msgstr "Prestations"
-
 msgctxt "model:ir.ui.menu,name:menu_document_desc"
-msgid "Document Descriptors"
+msgid "Document Descriptions"
 msgstr "Descripteurs de Document"
 
 msgctxt "model:ir.ui.menu,name:menu_edm"
@@ -3458,11 +2625,11 @@ msgid "Events"
 msgstr "Evénements"
 
 msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
-msgid "Item Descriptors"
+msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
 
 msgctxt "model:ir.ui.menu,name:menu_letter_model"
-msgid "Letter Models"
+msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
 msgctxt "model:ir.ui.menu,name:menu_loss_desc_form"
@@ -3482,24 +2649,20 @@ msgid "Document Received"
 msgstr "Document reçu"
 
 msgctxt "model:extra_data,name:"
-msgid "Complementary Data Definition"
+msgid "Extra Data Definition"
 msgstr "Définition de Données Complémentaires"
 
 msgctxt "model:extra_data-sub_extra_data,name:"
-msgid "Complementary Data recursive relation"
+msgid "Extra Data recursive relation"
 msgstr "Données Complémentaires Récursives"
 
 msgctxt "model:offered.option.description,name:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "model:option.description-benefit,name:"
-msgid "Coverage Benefit Relation"
-msgstr "Relation Garantie Prestation"
-
 msgctxt "model:offered.option.description-extra_data,name:"
-msgid "Relation between Coverage and Complementary Data"
-msgstr "Garantie-Complementary Data Relation"
+msgid "Relation between Coverage and Extra Data"
+msgstr "Garantie-Extra Data Relation"
 
 msgctxt "model:offered,name:"
 msgid "Offered"
@@ -3514,11 +2677,11 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "model:offered.product-extra_data,name:"
-msgid "Relation between Product and Complementary Data"
+msgid "Relation between Product and Extra Data"
 msgstr "Relation Produit-Données Complémantaires"
 
 msgctxt "model:offered.product-item.description,name:"
-msgid "Relation between Product and Item Descriptor"
+msgid "Relation between Product and Item Description"
 msgstr "Relation Produit-Risque"
 
 msgctxt "model:offered.product-option.description,name:"
@@ -3529,161 +2692,6 @@ msgctxt "model:insurer,name:"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "selection:benefit,indemnification_kind:"
-msgid "Annuity"
-msgstr "Rente"
-
-msgctxt "selection:benefit,indemnification_kind:"
-msgid "Capital"
-msgstr "Capital"
-
-msgctxt "selection:benefit,indemnification_kind:"
-msgid "Period"
-msgstr "Période"
-
-msgctxt "selection:benefit,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:benefit,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:benefit.rule,amount_kind:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "selection:benefit.rule,amount_kind:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
-
-msgctxt "selection:benefit.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:benefit.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:benefit.rule,indemnification_calc_unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit.rule,indemnification_calc_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:benefit.rule,indemnification_calc_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:benefit.rule,indemnification_calc_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:benefit.rule,indemnification_calc_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:benefit.rule,indemnification_calc_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:benefit.rule,indemnification_calc_unit:"
-msgid "Year"
-msgstr "Année"
-
-msgctxt ""
-"selection:benefit.rule,max_duration_per_indemnification_unit:"
-msgid ""
-msgstr " "
-
-msgctxt ""
-"selection:benefit.rule,max_duration_per_indemnification_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt ""
-"selection:benefit.rule,max_duration_per_indemnification_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt ""
-"selection:benefit.rule,max_duration_per_indemnification_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt ""
-"selection:benefit.rule,max_duration_per_indemnification_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt ""
-"selection:benefit.rule,max_duration_per_indemnification_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt ""
-"selection:benefit.rule,max_duration_per_indemnification_unit:"
-msgid "Year"
-msgstr "Année"
-
-msgctxt "selection:benefit.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:benefit.rule,offered:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "selection:benefit.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:benefit.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:benefit.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:benefit.rule,validation_delay_unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit.rule,validation_delay_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:benefit.rule,validation_delay_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:benefit.rule,validation_delay_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:benefit.rule,validation_delay_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:benefit.rule,validation_delay_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:benefit.rule,validation_delay_unit:"
-msgid "Year"
-msgstr "Année"
-
 msgctxt "selection:offered.business_rule_root,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -3691,10 +2699,6 @@ msgstr "Avancé"
 msgctxt "selection:offered.business_rule_root,config_kind:"
 msgid "Simple"
 msgstr "Simple"
-
-msgctxt "selection:offered.business_rule_root,offered:"
-msgid "Benefit"
-msgstr "Prestation"
 
 msgctxt "selection:offered.business_rule_root,offered:"
 msgid "Coverage"
@@ -3723,10 +2727,6 @@ msgstr "Avancé"
 msgctxt "selection:clause.rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
-
-msgctxt "selection:clause.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
 
 msgctxt "selection:clause.rule,offered:"
 msgid "Coverage"
@@ -3767,10 +2767,6 @@ msgstr "Liste Calculé"
 msgctxt "selection:offered.coverage_amount.rule,kind:"
 msgid "From another Coverage"
 msgstr "A partir d'une autre garantie"
-
-msgctxt "selection:offered.coverage_amount.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
 
 msgctxt "selection:offered.coverage_amount.rule,offered:"
 msgid "Coverage"
@@ -3865,10 +2861,6 @@ msgid "Duration"
 msgstr "Durée"
 
 msgctxt "selection:offered.deductible.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:offered.deductible.rule,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
@@ -3937,10 +2929,6 @@ msgid "Sub Elem"
 msgstr "Elément Couvert"
 
 msgctxt "selection:document.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:document.rule,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
@@ -3967,10 +2955,6 @@ msgstr "Avancé"
 msgctxt "selection:offered.eligibility.rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
-
-msgctxt "selection:offered.eligibility.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
 
 msgctxt "selection:offered.eligibility.rule,offered:"
 msgid "Coverage"
@@ -4037,7 +3021,7 @@ msgid "Document Request"
 msgstr "Demande de Documents"
 
 msgctxt "selection:document.template.version,resource:"
-msgid "Letter Model"
+msgid "Document Template"
 msgstr "Modèle de Lettre"
 
 msgctxt "selection:document.template.version,type:"
@@ -4101,10 +3085,6 @@ msgid "Yearly"
 msgstr "Annuel"
 
 msgctxt "selection:billing.premium.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:billing.premium.rule,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
@@ -4128,38 +3108,6 @@ msgctxt "selection:document.receive.request,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:benefit.reserve.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:benefit.reserve.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:benefit.reserve.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:benefit.reserve.rule,offered:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "selection:benefit.reserve.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:benefit.reserve.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit.reserve.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:benefit.reserve.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
 msgctxt "selection:ins_product.simple_pricing_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -4167,10 +3115,6 @@ msgstr "Avancé"
 msgctxt "selection:ins_product.simple_pricing_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
-
-msgctxt "selection:ins_product.simple_pricing_rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
 
 msgctxt "selection:ins_product.simple_pricing_rule,offered:"
 msgid "Coverage"
@@ -4191,70 +3135,6 @@ msgstr "Compléter"
 msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
-
-msgctxt "selection:benefit.rule.stage,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:benefit.rule.stage,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:benefit.rule.stage,duration_unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit.rule.stage,duration_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:benefit.rule.stage,duration_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:benefit.rule.stage,duration_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:benefit.rule.stage,duration_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:benefit.rule.stage,duration_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:benefit.rule.stage,duration_unit:"
-msgid "Year"
-msgstr "Année"
-
-msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:benefit.rule.stage,indemnification_calc_unit:"
-msgid "Year"
-msgstr "Année"
 
 msgctxt "selection:offered.term.rule,config_kind:"
 msgid "Advanced"
@@ -4285,10 +3165,6 @@ msgid "Yearly"
 msgstr "Annuel"
 
 msgctxt "selection:offered.term.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:offered.term.rule,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
@@ -4315,10 +3191,6 @@ msgstr "À La Souscription"
 msgctxt "selection:offered.term.rule,term_date_choice:"
 msgid "At this Date"
 msgstr "À Cette Date"
-
-msgctxt "selection:extra_data,kind:"
-msgid "Benefit"
-msgstr "Prestation"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Contract"
@@ -4429,7 +3301,7 @@ msgid "Remove"
 msgstr "Remplacer"
 
 msgctxt "selection:rule_engine,extra_data_kind:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "selection:rule_engine,extra_data_kind:"
@@ -4437,11 +3309,11 @@ msgid "Rule Parameter"
 msgstr "Paramètre de Règle"
 
 msgctxt "selection:rule_engine.parameter,kind:"
-msgid "External Complementary Data"
+msgid "External Extra Data"
 msgstr "Donnée Complémentaire Externe"
 
 msgctxt "selection:rule_engine.parameter,kind:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
@@ -4455,30 +3327,6 @@ msgstr "Pièce jointe"
 msgctxt "view:document.receive.attach:"
 msgid "Attachments"
 msgstr "Pièces jointes"
-
-msgctxt "view:benefit:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "view:benefit:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:benefit:"
-msgid "Deductible"
-msgstr "Franchise"
-
-msgctxt "view:benefit:"
-msgid "Reserve"
-msgstr "Provision"
-
-msgctxt "view:benefit.rule:"
-msgid "%"
-msgstr "%"
-
-msgctxt "view:benefit.rule:"
-msgid "benefit rule"
-msgstr "Règle de Prestation"
 
 msgctxt "view:offered.business_rule_root:"
 msgid "Business Rule Root"
@@ -4556,60 +3404,40 @@ msgctxt "view:offered.eligibility.rule:"
 msgid "Eligibility rule"
 msgstr "Eligibilite"
 
-msgctxt "view:benefit.event.description:"
-msgid "Event Descriptor"
-msgstr "Descripteur d'Evénement"
-
 msgctxt "view:expense.kind:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
 
 msgctxt "view:document.template:"
-msgid "Letter Model"
+msgid "Document Template"
 msgstr "Modèle de Lettre"
 
 msgctxt "view:document.template:"
-msgid "Letter Models"
+msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
 msgctxt "view:document.create.select.template:"
-msgid "Letter Models"
+msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
 msgctxt "view:document.create.select:"
-msgid "Letter Models"
+msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
 msgctxt "view:document.template.version:"
-msgid "Letter Version"
+msgid "Document Template Version"
 msgstr "Version de Lettre"
 
 msgctxt "view:document.template.version:"
-msgid "Letter Versions"
+msgid "Document Template Versions"
 msgstr "Versions de Lettre"
 
-msgctxt "view:benefit.loss.description:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:benefit.loss.description:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "view:benefit.loss.description:"
-msgid "Events"
-msgstr "Evénements"
-
-msgctxt "view:benefit.loss.description:"
-msgid "Loss Descriptor"
-msgstr "Description du Préjudice"
-
 msgctxt "view:billing.premium.rule.component:"
-msgid "Pricing Component"
+msgid "Premium Rule Component"
 msgstr "Composante de Cotisation"
 
 msgctxt "view:billing.premium.rule.component:"
-msgid "Pricing Components"
+msgid "Premium Rule Components"
 msgstr "Composantes de Cotisation"
 
 msgctxt "view:billing.premium.rule:"
@@ -4621,27 +3449,19 @@ msgid "Pricing rule"
 msgstr "Règle de Cotisation"
 
 msgctxt "view:document.receive.request:"
-msgid "Request Finder"
+msgid "Document Receive Request"
 msgstr "Rechercher une Demande"
-
-msgctxt "view:benefit.reserve.rule:"
-msgid "Reserve rule"
-msgstr "Provisionnement"
-
-msgctxt "view:benefit.rule.stage:"
-msgid "Sub Benefit Rule"
-msgstr "Sous Règles de Prestation"
 
 msgctxt "view:offered.term.rule:"
 msgid "Term - Renewal rule"
 msgstr "Règle de Terme - Renouvellement"
 
 msgctxt "view:extra_data:"
-msgid "Complementary Data Descriptor"
+msgid "Extra Data Descriptor"
 msgstr "Descripteur de Données Complémentaires"
 
 msgctxt "view:extra_data:"
-msgid "Complementary Data Descriptors"
+msgid "Extra Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 
 msgctxt "view:extra_data-sub_extra_data:"
@@ -4651,10 +3471,6 @@ msgstr ""
 msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relations"
 msgstr "Relations"
-
-msgctxt "view:offered.option.description:"
-msgid "Benefits"
-msgstr "Prestations"
 
 msgctxt "view:offered.option.description:"
 msgid "Clause"
@@ -4709,7 +3525,7 @@ msgid "Products"
 msgstr "Produits"
 
 msgctxt "view:rule_engine.parameter:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "view:rule_engine.parameter:"

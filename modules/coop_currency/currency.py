@@ -8,12 +8,10 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Currency',
     'CurrencyRate',
-]
+    ]
 
 
 class Currency(export.ExportImportMixin):
-    'Currency'
-
     __name__ = 'currency.currency'
 
     def round(self, amount, rounding=ROUND_HALF_UP):

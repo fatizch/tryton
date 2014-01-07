@@ -7,12 +7,11 @@ from .test_case import *
 def register():
     Pool.register(
         # from life_contract
-        LifeOption,
-        LifeClaimDeliveredService,
+        ContractOption,
+        DeliveredService,
         # from life_claim
-        LifeClaim,
-        LifeLoss,
-        LifeIndemnification,
+        Loss,
+        ClaimIndemnification,
         # from test_module
         TestCaseModel,
         module='life_claim', type_='model')

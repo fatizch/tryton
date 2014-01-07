@@ -9,7 +9,6 @@ from trytond.modules.coop_utils import utils, coop_date
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.contract import contract
-from trytond.modules.offered.offered import DEF_CUR_DIG
 from trytond.modules.insurance_product import product
 
 
@@ -17,42 +16,29 @@ IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'InsurancePolicy',
-    'ContractHistory',
-    'InsuranceSubscribedCoverage',
-    'SubscribedCoverageComplement',
-    'StatusHistory',
+    'Contract',
+    'ContractOption',
     'CoveredElement',
     'CoveredElementPartyRelation',
     'CoveredData',
-    'ContractClause',
-    'ManagementRole',
-    'DeliveredService',
-    'Expense',
+    'ContractAgreementRelation',
     ]
 
 
-class InsurancePolicy():
-    'Insurance Policy'
-
+class Contract:
     __name__ = 'contract'
 
-    covered_elements = fields.One2ManyDomain(
-        'contract.covered_element', 'contract', 'Covered Elements',
-        domain=[('parent', '=', None)],
+    covered_elements = fields.One2ManyDomain('contract.covered_element',
+        'contract', 'Covered Elements', domain=[('parent', '=', None)],
         context={'contract': Eval('id')})
-    management_roles = fields.One2Many('contract-agreement',
-        'contract', 'Management Roles',
-        states={'invisible': Eval('product_kind') != 'insurance'})
+    management_roles = fields.One2Many('contract-agreement', 'contract',
+        'Contract-Agreement Relations', states={
+            'invisible': Eval('product_kind') != 'insurance'})
     managing_roles = fields.One2Many('contract-agreement',
-        'protocol', 'Managing Roles',
-        states={'invisible': Eval('product_kind') == 'insurance'})
+        'protocol', 'Managing Roles', states={
+            'invisible': Eval('product_kind') == 'insurance'})
     next_renewal_date = fields.Date('Next Renewal Date')
     last_renewed = fields.Date('Last Renewed')
-
-    @classmethod
-    def get_options_model_name(cls):
-        return 'contract.option'
 
     def check_sub_elem_eligibility(self, at_date=None, ext=None):
         errors = []
@@ -85,13 +71,13 @@ class InsurancePolicy():
         return (res, errs)
 
     def get_dates(self, dates=None):
-        res = super(InsurancePolicy, self).get_dates(dates)
+        res = super(Contract, self).get_dates(dates)
         if self.last_renewed:
             res.add(self.last_renewed)
         return res
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
-        res = super(InsurancePolicy, self).init_from_offered(offered,
+        res = super(Contract, self).init_from_offered(offered,
             start_date, end_date)
         self.last_renewed = self.start_date
         self.next_renewal_date = None
@@ -105,10 +91,6 @@ class InsurancePolicy():
         else:
             res = (res[0] and not errors, res[1] + errors)
             return res
-
-    @classmethod
-    def get_offered_name(cls):
-        return 'offered.product', 'Product'
 
     def check_at_least_one_covered(self):
         errors = []
@@ -162,11 +144,6 @@ class InsurancePolicy():
             self.options.append(option)
         return True, ()
 
-    def get_sender(self):
-        return self.company.party
-        role = self.get_management_role('contract_manager')
-        return role.party if role else None
-
     def get_management_role(self, kind, party=None, only_active_at_date=False,
             at_date=None):
         if only_active_at_date:
@@ -197,22 +174,6 @@ class InsurancePolicy():
         #what if several protocols exist?
         return None
 
-    @classmethod
-    def search_contract(cls, offered, party, at_date):
-        #TODO : add check on contract status and date
-        return cls.search([
-                ('offered', '=', offered),
-                ('subscriber', '=', party),
-                ('start_date', '<=', at_date),
-                ['OR',
-                    [('end_date', '=', None)],
-                    [('end_date', '>=', at_date)]
-                ], ('status', '=', 'active'),
-                ])
-
-    def update_protocol(self, contract):
-        pass
-
     def update_management_roles(self):
         #This method will update the management role and find the good protocol
         #based on real coverage subscribed
@@ -238,7 +199,6 @@ class InsurancePolicy():
                         role.party, protocol_offered.start_date)
                     protocol.save()
                 role.protocol = protocol.id
-            role.protocol.update_protocol(self)
             role.start_date = self.start_date
             role.save()
 
@@ -246,7 +206,7 @@ class InsurancePolicy():
         return coop_date.add_frequency('yearly', self.start_date)
 
     def finalize_contract(self):
-        super(InsurancePolicy, self).finalize_contract()
+        super(Contract, self).finalize_contract()
         self.update_management_roles()
 
     def renew(self):
@@ -265,35 +225,12 @@ class InsurancePolicy():
         self.store_prices(prices_update)
         return True
 
-    def get_appliable_logo(self, kind=''):
-        if self.company:
-            if self.company.party.logo:
-                return self.company.party.logo
-        return ''
 
-
-class InsuranceSubscribedCoverage():
-    'Subscribed Coverage'
-
+class ContractOption:
     __name__ = 'contract.option'
 
-    covered_data = fields.One2ManyDomain(
-        'contract.covered_data', 'option', 'Covered Data',
-        domain=[('covered_element.parent', '=', None)])
-    ins_complement = fields.One2Many(
-        'ins_contract.subscribed_coverage_complement', 'subscribed_coverage',
-        'Complement')
-    complement = fields.Function(
-        fields.Many2One('ins_contract.subscribed_coverage_complement',
-            'Complement'),
-        'get_ins_complement_id')
-    benefits = fields.Function(
-        fields.Many2Many('benefit', None, None, 'Benefits'),
-        'get_benefits_ids')
-
-    @classmethod
-    def get_offered_name(cls):
-        return 'offered.option.description', 'Coverage'
+    covered_data = fields.One2ManyDomain('contract.covered_data', 'option',
+        'Covered Data', domain=[('covered_element.parent', '=', None)])
 
     def append_covered_data(self, covered_element=None):
         res = utils.instanciate_relation(self.__class__, 'covered_data')
@@ -312,104 +249,6 @@ class InsuranceSubscribedCoverage():
     def get_coverage_amount(self):
         raise NotImplementedError
 
-    def get_ins_complement_id(self, name):
-        return self.ins_complement[0].id if self.ins_complement else None
-
-    def get_benefits_ids(self, name):
-        return [x.id for x in self.offered.benefits] if self.offered else []
-
-
-class SubscribedCoverageComplement(model.CoopSQL, model.CoopView):
-    'Subscribed Coverage'
-
-    __name__ = 'ins_contract.subscribed_coverage_complement'
-
-    subscribed_coverage = fields.Many2One('contract.option',
-        'Subscribed Coverage', ondelete='CASCADE')
-    deductible_duration = fields.Many2One('offered.deductible.rule.duration',
-        'Deductible Duration', states={
-            'invisible': ~Eval('possible_deductible_duration'),
-            # 'required': ~~Eval('possible_deductible_duration'),
-            }, domain=[('id', 'in', Eval('possible_deductible_duration'))],
-        depends=['possible_deductible_duration'])
-    possible_deductible_duration = fields.Function(
-        fields.Many2Many(
-            'offered.deductible.rule.duration', None, None,
-            'Possible Deductible Duration', states={'invisible': True}),
-        'get_possible_deductible_duration')
-
-    def get_coverage_amount(self):
-        raise NotImplementedError
-
-    def get_possible_deductible_duration(self, name):
-        try:
-            durations = self.offered.get_result(
-                'possible_deductible_duration', {
-                    'date': self.start_date,
-                    'appliable_conditions_date':
-                        self.subscribed_coverage.
-                            contract.appliable_conditions_date,
-                    'scope': 'coverage'},
-                kind='deductible')[0]
-            return [x.id for x in durations] if durations else []
-        except product.NonExistingRuleKindException:
-            return []
-
-
-class StatusHistory():
-    'Status History'
-
-    __name__ = 'contract.status.history'
-
-    @classmethod
-    def get_possible_reference(cls):
-        res = super(StatusHistory, cls).get_possible_reference()
-        res.append(('contract', 'Contract'))
-        res.append(('contract.option', 'Option'))
-        return res
-
-
-class ContractHistory(model.ObjectHistory):
-    'Contract History'
-
-    __name__ = 'contract.contract.history'
-
-    offered = fields.Many2One('offered.product', 'Product',
-        datetime_field='date')
-    start_date = fields.Date('Effective Date')
-    end_date = fields.Date('End Date')
-    start_management_date = fields.Date('Management Date')
-    status = fields.Selection('get_possible_status', 'Status')
-    summary = fields.Function(fields.Text('Summary'), 'get_summary')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency'),
-        'get_currency_id')
-    options = fields.Function(
-        fields.One2Many('contract.option', None, 'Options',
-            datetime_field='date'),
-        'get_options')
-    subscriber = fields.Many2One('party.party', 'Subscriber',
-        datetime_field='date')
-
-    @classmethod
-    def get_object_model(cls):
-        return 'contract'
-
-    @classmethod
-    def get_object_name(cls):
-        return 'Contract'
-
-    @staticmethod
-    def get_possible_status():
-        return Pool().get('contract').get_possible_status()
-
-    def get_options(self, name):
-        Option = Pool().get('contract.option')
-        options = Option.search([
-                ('contract', '=', self.from_object.id),
-                ])
-        return [o.id for o in options]
-
 
 class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     'Covered Element'
@@ -423,8 +262,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'contract.covered_element'
 
-    contract = fields.Many2One('contract', 'Contract',
-        ondelete='CASCADE', states={'invisible': ~Eval('contract')})
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
+        states={'invisible': ~Eval('contract')})
     # The link to use either for direct covered element or sub covered element
     main_contract = fields.Function(
         fields.Many2One('contract', 'Contract',
@@ -455,32 +294,27 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
         depends=['contract'], context={'_master_covered': Eval('id')})
     complementary_data = fields.Dict('extra_data',
-        'Contract Complementary Data',
-        on_change_with=['item_desc', 'complementary_data', 'contract',
-            'start_date', 'main_contract'],
-        states={'invisible': ~Eval('complementary_data')}
-        )
+        'Contract Complementary Data', on_change_with=['item_desc',
+            'complementary_data', 'contract', 'start_date', 'main_contract'],
+        states={'invisible': ~Eval('complementary_data')})
     party_compl_data = fields.Function(
-        fields.Dict('extra_data',
-            'Party Complementary Data',
+        fields.Dict('extra_data', 'Party Complementary Data',
             on_change_with=['item_desc', 'complementary_data', 'party'],
             states={'invisible': Or(~IS_PARTY, ~Eval('party_compl_data'))}),
         'on_change_with_party_compl_data', 'set_party_compl_data')
     complementary_data_summary = fields.Function(
         fields.Char('Complementary Data', on_change_with=['item_desc']),
         'on_change_with_complementary_data_summary')
-    party = fields.Many2One('party.party', 'Actor',
-        domain=[
-            If(
+    party = fields.Many2One('party.party', 'Actor', domain=[If(
                 Eval('item_kind') == 'person',
                 ('is_person', '=', True),
                 (),
-            ), If(
+                ), If(
                 Eval('item_kind') == 'company',
                 ('is_company', '=', True),
                 (),
-            )], ondelete='RESTRICT',
-        states={
+                )
+            ], ondelete='RESTRICT', states={
             'invisible': ~IS_PARTY,
             'required': IS_PARTY,
             }, depends=['item_kind'])
@@ -488,9 +322,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Boolean('Is Person', states={'invisible': True},
             on_change_with=['party']),
         'on_change_with_is_person')
-    covered_relations = fields.Many2Many(
-        'contract.covered_element-party', 'covered_element',
-        'party_relation', 'Covered Relations', domain=[
+    covered_relations = fields.Many2Many('contract.covered_element-party',
+        'covered_element', 'party_relation', 'Covered Relations', domain=[
             'OR',
             [('from_party', '=', Eval('party'))],
             [('to_party', '=', Eval('party'))],
@@ -799,18 +632,17 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'contract.covered_data'
 
-    option = fields.Many2One('contract.option',
-        'Subscribed Coverage', domain=[('id', 'in', Eval('possible_options'))],
+    option = fields.Many2One('contract.option', 'Contract Option',
+        domain=[('id', 'in', Eval('possible_options'))],
         depends=['possible_options'], ondelete='CASCADE')
     possible_options = fields.Function(
         fields.Many2Many('contract.option', None, None,
             'Possible Options', states={'invisible': True}),
         'get_possible_options')
-    covered_element = fields.Many2One(
-        'contract.covered_element', 'Covered Element', ondelete='CASCADE')
-    complementary_data = fields.Dict(
-        'extra_data', 'Complementary Data', on_change=[
-            'complementary_data', 'option', 'start_date',
+    covered_element = fields.Many2One('contract.covered_element',
+        'Covered Element', ondelete='CASCADE')
+    complementary_data = fields.Dict('extra_data', 'Complementary Data',
+        on_change=['complementary_data', 'option', 'start_date',
             'deductible_duration', 'covered_element'],
         depends=['complementary_data', 'option', 'start_date'],
         states={'invisible': ~Eval('complementary_data')})
@@ -820,10 +652,6 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_contract_id')
-    currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency',
-            states={'invisible': True}),
-        'get_currency_id')
     deductible_duration = fields.Many2One('offered.deductible.rule.duration',
         'Deductible Duration', states={
             'invisible': ~Eval('possible_deductible_duration'),
@@ -868,9 +696,9 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         self.clauses = []
         if errs or not clauses:
             return
-        ClauseRelation = Pool().get('contract.clause')
+        ContractClause = Pool().get('contract.clause')
         for clause in clauses:
-            new_clause = ClauseRelation()
+            new_clause = ContractClause()
             new_clause.clause = clause
             new_clause.text = clause.get_version_at_date(
                 option.start_date).content
@@ -879,12 +707,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def init_from_option(self, option):
         self.option = option
-        #TODO : Ugly endorsment temporary hack to remove ASAP
-        endorsment_date = self.option.contract.temp_endorsment_date
-        if endorsment_date:
-            self.start_date = endorsment_date
-        else:
-            self.start_date = option.start_date
+        self.start_date = option.start_date
         self.end_date = option.end_date
         self.init_clauses(option)
         self.init_complementary_data()
@@ -998,25 +821,15 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         return False
 
 
-class ContractClause:
-    'Contract Clause'
-
-    __name__ = 'contract.clause'
-
-    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
-        ondelete='CASCADE', states={'invisible': ~Eval('covered_data')})
-
-
-class ManagementRole(model.CoopSQL, model.CoopView):
-    'Management Role'
+class ContractAgreementRelation(model.CoopSQL, model.CoopView):
+    'Contract-Agreement Relation'
 
     __name__ = 'contract-agreement'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT')
-    protocol = fields.Many2One('contract', 'Protocol',
-        domain=[
+    protocol = fields.Many2One('contract', 'Protocol', domain=[
             utils.get_versioning_domain('start_date', 'end_date'),
             ('product_kind', '!=', 'insurance'),
             ('subscriber', '=', Eval('party')),
@@ -1032,53 +845,8 @@ class ManagementRole(model.CoopSQL, model.CoopView):
     def __setup__(cls):
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection = list(set(cls.get_possible_management_role_kind()))
-        super(ManagementRole, cls).__setup__()
+        super(ContractAgreementRelation, cls).__setup__()
 
     @classmethod
     def get_possible_management_role_kind(cls):
         return [('', '')]
-
-
-class DeliveredService():
-    'Delivered Service'
-
-    __name__ = 'contract.service'
-
-    expenses = fields.One2Many('expense',
-        'delivered_service', 'Expenses')
-
-    def get_expense(self, code, currency):
-        for expense in self.expenses:
-            if (expense.kind and expense.kind.code == code
-                    and expense.currency == currency):
-                return expense.amount
-
-    def get_total_expense(self, currency):
-        res = 0
-        for expense in self.expenses:
-            if expense.currency == currency:
-                res += expense.amount
-        return res
-
-
-class Expense(model.CoopSQL, model.CoopView, ModelCurrency):
-    'Expense'
-
-    __name__ = 'expense'
-
-    delivered_service = fields.Many2One(
-        'contract.service', 'Delivered Service',
-        ondelete='CASCADE')
-    kind = fields.Many2One('expense.kind', 'Kind')
-    amount = fields.Numeric(
-        'Amount', required=True,
-        digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
-        depends=['currency_digits'])
-
-    @classmethod
-    def default_currency(cls):
-        return ModelCurrency.default_currency()
-
-    def get_currency_digits(self, name):
-        if hasattr(self, 'currency') and self.currency:
-            return self.currency.digits

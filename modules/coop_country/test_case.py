@@ -3,15 +3,13 @@ from trytond.modules.coop_utils import fields
 
 MODULE_NAME = 'coop_country'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     load_all_zipcodes = fields.Boolean('Load all Zip Codes')
@@ -23,7 +21,7 @@ class TestCaseModel():
         result['zip_code_test_case'] = {
             'name': 'Zip Code Test Case',
             'dependencies': set([]),
-        }
+            }
         return result
 
     @classmethod

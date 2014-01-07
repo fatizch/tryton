@@ -5,7 +5,7 @@ from trytond.modules.coop_utils import model, fields
 __all__ = [
     'Clause',
     'ClauseVersion'
-]
+    ]
 
 
 class Clause(model.CoopSQL, model.VersionedObject):

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Event Descriptionriptor">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <newline/>
+    <field name="loss_descs" colspan="4"/>
+</form>

@@ -4,17 +4,17 @@ from trytond.modules.rule_engine import RuleTools
 
 ###############################################################################
 # We write here sets of functions that will be available in the rule engine.  #
-# They will be automatically created as tree_elements in sub_folders          #
-# matching the different RuleEngineContext classes.                           #
 # There are a few decorators available for management of these functions :    #
-#   - for_rule(str) => sets the 'rule_name' attribute which will be used      #
-#     for automatic creation of the tree_element for the description field    #
 #   - check_args(str1, str2...) => checks that each of the str in the args is #
 #     a key in the 'args' parameter of the function                           #
 ###############################################################################
 
+__all__ = [
+    'RuleEngineRuntime',
+    ]
 
-class SubscriberContext(RuleEngineContext):
+
+class RuleEngineRuntime(RuleEngineContext):
     __name__ = 'rule_engine.runtime'
 
     @classmethod
@@ -38,11 +38,6 @@ class SubscriberContext(RuleEngineContext):
         matches = [
             1 for x in contracts if x.get_product().code == product_name]
         return len(matches) > 0
-
-
-class PersonContext(RuleEngineContext):
-
-    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_person(cls, args):
@@ -88,16 +83,6 @@ class PersonContext(RuleEngineContext):
         subscriber = args['contract'].subscriber
         return person.get_relation_with(subscriber, args['date'])
 
-
-class OptionContext(RuleEngineContext):
-
-    __name__ = 'rule_engine.runtime'
-
-
-class CoveredDataContext(RuleEngineContext):
-
-    __name__ = 'rule_engine.runtime'
-
     @classmethod
     def get_covered_data(cls, args):
         if 'data' in args:
@@ -121,11 +106,6 @@ class CoveredDataContext(RuleEngineContext):
     @check_args('data')
     def _re_covered_data_complementary_data(cls, args, data_name):
         cls.append_error(args, 'deprecated_method')
-
-
-class RuleCombinationContext(RuleEngineContext):
-
-    __name__ = 'rule_engine.runtime'
 
     @classmethod
     @check_args('price_details')
