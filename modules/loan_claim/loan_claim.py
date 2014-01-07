@@ -3,17 +3,14 @@ from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'LoanClaimDeliveredService',
-    'LoanIndemnification',
+    'ContractService',
     ]
 
 
-class LoanClaimDeliveredService():
-    'Claim Delivered Service'
-
+class ContractService:
     __name__ = 'contract.service'
-    __metaclass__ = PoolMeta
 
     is_loan = fields.Function(
         fields.Boolean('Is loan', states={'invisible': True}),
@@ -30,23 +27,9 @@ class LoanClaimDeliveredService():
         return self.subscribed_service.is_loan
 
     def init_dict_for_rule_engine(self, cur_dict):
-        super(LoanClaimDeliveredService, self).init_dict_for_rule_engine(
+        super(ContractService, self).init_dict_for_rule_engine(
             cur_dict)
         if not self.is_loan:
             return
         cur_dict['loan'] = self.loan
         cur_dict['share'] = self.loan.get_loan_share(self.loss.covered_person)
-
-
-class LoanIndemnification():
-    'Indemnification'
-
-    __name__ = 'claim.indemnification'
-    __metaclass__ = PoolMeta
-
-    def init_from_delivered_service(self, delivered_service):
-        super(LoanIndemnification, self).init_from_delivered_service(
-            delivered_service)
-        if not delivered_service.is_loan:
-            return
-        self.beneficiary = delivered_service.loan.lender.party

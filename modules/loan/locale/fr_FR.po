@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -523,7 +523,7 @@ msgid "Context functions for Loans."
 msgstr "Eléments du contexte Emprunteur"
 
 msgctxt "model:ir.action,name:launch_loan_creation_wizard"
-msgid "Loan Creation"
+msgid "Loan Create"
 msgstr "Création du Prêt"
 
 msgctxt "model:contract.covered_data-loan.share,name:"
@@ -535,7 +535,7 @@ msgid "Increments"
 msgstr "Paliers"
 
 msgctxt "model:loan.create.parameters,name:"
-msgid "Loan Parameters"
+msgid "Loan Create Parameters"
 msgstr "Paramètres du Prêt"
 
 msgctxt "model:loan.create.amortization_table,name:"
@@ -747,7 +747,7 @@ msgid "%"
 msgstr "%"
 
 msgctxt "view:loan.create.parameters:"
-msgid "Loan Parameters"
+msgid "Loan Create Parameters"
 msgstr "Paramètres du Prêt"
 
 msgctxt "view:loan.create.amortization_table:"
@@ -787,7 +787,7 @@ msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "view:loan:"
-msgid "Loan Parameters"
+msgid "Loan Create Parameters"
 msgstr "Paramètres du Prêt"
 
 msgctxt "view:loan.payment:"

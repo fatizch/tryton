@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Loan">
   <notebook>
-    <page id="main" string="Loan Parameters">
+    <page id="main" string="Loan Create Parameters">
       <label name="active"/>
       <field name="active"/>
       <newline/>

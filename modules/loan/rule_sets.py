@@ -1,9 +1,14 @@
-from trytond.modules.rule_engine import RuleEngineContext
+from trytond.pool import PoolMeta
+
 from trytond.modules.rule_engine import check_args
 
+__metaclass__ = PoolMeta
+__all__ = [
+    'RuleEngineRuntime',
+    ]
 
-class LoanContext(RuleEngineContext):
 
+class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod

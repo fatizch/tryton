@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
+        <!-- ############################################################ -->
+        <!-- ########### Loan ########### -->
+        <!-- ############################################################ -->
         <record model="ir.ui.view" id="loan_view_form">
             <field name="model">loan</field>
             <field name="type">form</field>
@@ -11,24 +14,9 @@
             <field name="type">tree</field>
             <field name="name">loan_tree</field>
         </record>
-        <record model="ir.ui.view" id="contract_view_form">
-            <field name="model">contract</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="contract.contract_view_form"/>
-            <field name="name">contract_form</field>
-        </record>
-        <record model="ir.ui.view" id="contract_view_tree">
-            <field name="model">contract</field>
-            <field name="inherit" ref="contract.contract_view_tree"/>
-            <field name="type">tree</field>
-            <field name="arch" type="xml"/>
-        </record>
-        <record model="ir.ui.view" id="option_view_form">
-            <field name="model">contract.option</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_contract.option_view_form"/>
-            <field name="name">option_form</field>
-        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Loan Share ########### -->
+        <!-- ############################################################ -->
         <record model="ir.ui.view" id="loan_share_view_form">
             <field name="model">loan.share</field>
             <field name="type">form</field>
@@ -46,12 +34,9 @@
             <field name="type">tree</field>
             <field name="name">loan_share_editable_tree</field>
         </record>
-        <record model="ir.ui.view" id="covered_data_view_form">
-            <field name="model">contract.covered_data</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
-            <field name="name">covered_data_form</field>
-        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Loan Payment ########### -->
+        <!-- ############################################################ -->
         <record model="ir.ui.view" id="loan_payment_view_tree">
             <field name="model">loan.payment</field>
             <field name="type">tree</field>
@@ -62,13 +47,13 @@
             <field name="type">tree</field>
             <field name="name">loan_increment_tree</field>
         </record>
-
-        <!-- Loan Creation Wizard -->
+        <!-- ############################################################ -->
+        <!-- ########### Loan Create Wizard ########### -->
+        <!-- ############################################################ -->
         <record model="ir.action.wizard" id="launch_loan_creation_wizard">
-          <field name="name">Loan Creation</field>
+          <field name="name">Loan Create</field>
           <field name="wiz_name">loan.create</field>
         </record>
-
         <record model="ir.ui.view" id="loan_creation_parameters_view_form">
             <field name="model">loan.create.parameters</field>
             <field name="type">form</field>
