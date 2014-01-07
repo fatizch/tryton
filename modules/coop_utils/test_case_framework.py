@@ -535,8 +535,8 @@ class TestCaseWizard(model.CoopWizard):
                     logging.getLogger('test_case').info('Successfully '
                         'imported %s' % elem.filename)
                 except:
-                    logging.getLogger('test_case').info('Failed to import %s' %
-                        elem.filename)
+                    logging.getLogger('test_case').error('Failed to import %s'
+                        % elem.filename)
                     raise
                     self.raise_user_error('bad_json', (elem.filename))
         return 'select_test_cases'
