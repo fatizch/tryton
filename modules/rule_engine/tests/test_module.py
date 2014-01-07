@@ -20,7 +20,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'TreeElement': 'rule_engine.function',
+            'RuleFunction': 'rule_engine.function',
             'Context': 'rule_engine.context',
             'RuleEngine': 'rule_engine',
             'TestCase': 'rule_engine.test_case',
@@ -36,7 +36,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return ['table']
 
     def test0011_testCleanValues(self):
-        te = self.TreeElement()
+        te = self.RuleFunction()
         te.type = 'function'
         te.name = 'test_values'
         te.translated_technical_name = 'values_testé'
@@ -51,12 +51,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te.fct_args = 'Test, Qsdé'
         self.assertRaises(trytond.error.UserError, te.save)
 
-    def test0012_createRuleToolsTreeElements(self):
+    def test0012_createRuleToolsRuleFunction(self):
         english = self.Language.search([('code', '=', 'en_US')])
 
         def create_tree_elem(the_type, name, translated_name, namespace,
                 description):
-            te = self.TreeElement()
+            te = self.RuleFunction()
             te.type = the_type
             te.name = name
             te.translated_technical_name = translated_name
@@ -83,12 +83,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Calculation Date')
 
     @test_framework.prepare_test(
-        'rule_engine.test0012_createRuleToolsTreeElements')
+        'rule_engine.test0012_createRuleToolsRuleFunction')
     def test0013_createTestContext(self):
         ct = self.Context()
         ct.name = 'test_context'
         ct.allowed_elements = []
-        for elem in self.TreeElement.search([('language.code', '=', 'en_US')]):
+        for elem in self.RuleFunction.search([('language.code', '=', 'en_US')]):
             ct.allowed_elements.append(elem)
         self.assertEqual(len(ct.allowed_elements), 7)
         ct.save()
@@ -527,7 +527,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):
-        # This test must be run later as execute rule force a commit
+        # This test must be run later as execute rule with debug enabled forces
+        # a commit
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
 
         # Check Debug mode

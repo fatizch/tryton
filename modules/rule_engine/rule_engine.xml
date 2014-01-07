@@ -8,20 +8,20 @@
     <!-- ############################################################ -->
     <!-- Rule Execution Log -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="execution_log_form">
+    <record model="ir.ui.view" id="execution_log_view_form">
       <field name="model">rule_engine.log</field>
       <field name="type">form</field>
       <field name="name">execution_log_form</field>
     </record>
-    <record model="ir.ui.view" id="execution_log_tree">
+    <record model="ir.ui.view" id="execution_log_view_list">
       <field name="model">rule_engine.log</field>
       <field name="type">tree</field>
-      <field name="name">execution_log_tree</field>
+      <field name="name">execution_log_list</field>
     </record>
     <!-- ############################################################ -->
     <!-- Rule -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="rule_form">
+    <record model="ir.ui.view" id="rule_view_form">
       <field name="model">rule_engine</field>
       <field name="type">form</field>
       <field name="name">rule_engine_form</field>
@@ -42,7 +42,7 @@
     </record>
     <record model="ir.action.act_window.view" id="rule_form_view">
       <field name="sequence" eval="20"/>
-      <field name="view" ref="rule_form"/>
+      <field name="view" ref="rule_view_form"/>
       <field name="act_window" ref="rule_window"/>
     </record>
     <menuitem parent="menu_rule_engine" action="rule_window" id="menu_rule"/>
@@ -149,7 +149,7 @@
     </record>
     <menuitem parent="menu_rule_engine" action="context_window" id="menu_context"/>
     <!-- ############################################################ -->
-    <!-- Tree Elements -->
+    <!-- Rule Functions -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="tree_element_form">
       <field name="model">rule_engine.function</field>
@@ -163,7 +163,7 @@
       <field name="name">tree_element_tree</field>
     </record>
     <record model="ir.action.act_window" id="tree_element_window">
-      <field name="name">Tree Elements</field>
+      <field name="name">Rule Functions</field>
       <field name="res_model">rule_engine.function</field>
     </record>
     <record model="ir.action.act_window.view" id="tree_element_tree_view">
