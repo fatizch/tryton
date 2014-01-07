@@ -57,7 +57,8 @@ class OptionDescription:
 
     @classmethod
     def get_possible_option_description_kind(cls):
-        res = super(Coverage, cls).get_possible_option_description_kind()
+        res = super(OptionDescription,
+            cls).get_possible_option_description_kind()
         res.append(('insurance', 'Insurance'))
         return res
 
