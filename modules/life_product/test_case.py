@@ -2,15 +2,13 @@ from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'life_product'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
@@ -19,15 +17,15 @@ class TestCaseModel():
         result['shared_complementary_data_test_case'] = {
             'name': 'Shared Complementary Data Test Case',
             'dependencies': set([]),
-        }
+            }
         result['ceiling_rule_test_case'] = {
             'name': 'Ceiling Rule Test Case',
             'dependencies': set(['table_test_case']),
-        }
-        result['tranche_test_case'] = {
-            'name': 'Tranche Test Case',
+            }
+        result['salary_range_test_case'] = {
+            'name': 'Salary Range Test Case',
             'dependencies': set(['ceiling_rule_test_case']),
-        }
+            }
         return result
 
     @classmethod
@@ -93,30 +91,31 @@ class TestCaseModel():
         return rules
 
     @classmethod
-    def create_tranche(cls, code, floor_name=None, ceiling_name=None):
-        Tranche = Pool().get('salary_range')
-        TrancheVersion = Pool().get('salary_range.version')
-        Rule = Pool().get('rule_engine')
-        tranche = Tranche()
-        tranche.code = code
-        version = TrancheVersion()
+    def create_salary_range(cls, code, floor_name=None, ceiling_name=None):
+        pool = Pool()
+        SalaryRange = pool.get('salary_range')
+        SalaryRangeVersion = pool.get('salary_range.version')
+        Rule = pool.get('rule_engine')
+        salary_range = SalaryRange()
+        salary_range.code = code
+        version = SalaryRangeVersion()
         if floor_name:
             version.floor = Rule.search([('name', '=', floor_name)])[0]
         if ceiling_name:
             version.floor = Rule.search([('name', '=', ceiling_name)])[0]
-        tranche.versions = [version]
-        return tranche
+        salary_range.versions = [version]
+        return salary_range
 
     @classmethod
-    def tranche_test_case(cls):
+    def salary_range_test_case(cls):
         result = []
-        result.append(cls.create_tranche('TA', ceiling_name='Plafond TA'))
-        result.append(cls.create_tranche('TB', floor_name='Plafond TA',
+        result.append(cls.create_salary_range('TA', ceiling_name='Plafond TA'))
+        result.append(cls.create_salary_range('TB', floor_name='Plafond TA',
                 ceiling_name='Plafond TB'))
-        result.append(cls.create_tranche('TC', floor_name='Plafond TB',
+        result.append(cls.create_salary_range('TC', floor_name='Plafond TB',
                 ceiling_name='Plafond TC'))
-        result.append(cls.create_tranche('TD', floor_name='Plafond TC'))
-        result.append(cls.create_tranche('T1', ceiling_name='Plafond TA'))
-        result.append(cls.create_tranche('T2', floor_name='Plafond TA',
+        result.append(cls.create_salary_range('TD', floor_name='Plafond TC'))
+        result.append(cls.create_salary_range('T1', ceiling_name='Plafond TA'))
+        result.append(cls.create_salary_range('T2', floor_name='Plafond TA',
                 ceiling_name='Plafond T2'))
         return result
