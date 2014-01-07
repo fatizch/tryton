@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Loan Parameters">
+<form string="Loan Create Parameters">
     <label name="kind"/>
     <field name="kind"/>
     <label name="rate"/>

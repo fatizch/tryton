@@ -9,14 +9,12 @@ from trytond.modules.insurance_product import product
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'LoanProduct',
-    'LoanCoverage',
+    'Product',
+    'OptionDescription',
     ]
 
 
-class LoanProduct():
-    'Loan Product'
-
+class Product:
     __name__ = 'offered.product'
 
     is_loan = fields.Function(
@@ -30,9 +28,7 @@ class LoanProduct():
         return False
 
 
-class LoanCoverage():
-    'Loan Coverage'
-
+class OptionDescription:
     __name__ = 'offered.option.description'
 
     is_loan = fields.Function(
@@ -41,7 +37,7 @@ class LoanCoverage():
 
     @classmethod
     def __setup__(cls):
-        super(LoanCoverage, cls).__setup__()
+        super(OptionDescription, cls).__setup__()
         cls.family = copy.copy(cls.family)
         if not cls.family.selection:
             cls.family.selection = []
@@ -53,8 +49,8 @@ class LoanCoverage():
 
     def calculate_sub_elem_price(self, args, result_line, errs):
         if not self.is_loan:
-            return super(LoanCoverage, self).calculate_sub_elem_price(args,
-                result_line, errs)
+            return super(OptionDescription, self).calculate_sub_elem_price(
+                args, result_line, errs)
         for covered, covered_data in self.give_me_covered_elements_at_date(
                 args)[0]:
             tmp_args = args.copy()

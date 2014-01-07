@@ -5,29 +5,26 @@ from trytond.modules.coop_utils import utils, fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'LoanContract',
-    'LoanOption',
-    'LoanCoveredData',
-    'LoanCoveredDataLoanShareRelation',
+    'Contract',
+    'ContractOption',
+    'CoveredData',
+    'CoveredDataLoanShareRelation',
     ]
 
 
-class LoanContract():
-    'Loan Contract'
-
+class Contract:
     __name__ = 'contract'
 
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')
     loans = fields.One2Many('loan', 'contract', 'Loans',
-        states={'invisible': ~Eval('is_loan')},
-        depends=['is_loan', 'currency'],
+        states={'invisible': ~Eval('is_loan')}, depends=['is_loan', 'currency'],
         context={'currency': Eval('currency')})
 
     @classmethod
     def __setup__(cls):
-        super(LoanContract, cls).__setup__()
+        super(Contract, cls).__setup__()
         cls._buttons.update({'create_loan': {}})
 
     def get_is_loan(self, name):
@@ -39,14 +36,14 @@ class LoanContract():
         return False
 
     def init_dict_for_rule_engine(self, cur_dict):
-        super(LoanContract, self).init_dict_for_rule_engine(cur_dict)
+        super(Contract, self).init_dict_for_rule_engine(cur_dict)
         #TODO : To enhance
         if not utils.is_none(self, 'loans'):
             cur_dict['loan'] = self.loans[-1]
 
     def get_dates(self):
         if not self.is_loan:
-            return super(LoanContract, self).get_dates()
+            return super(Contract, self).get_dates()
         result = set()
         for loan in self.loans:
             for payment in loan.payments:
@@ -59,9 +56,7 @@ class LoanContract():
         pass
 
 
-class LoanOption():
-    'Loan Option'
-
+class ContractOption:
     __name__ = 'contract.option'
 
     is_loan = fields.Function(
@@ -72,16 +67,12 @@ class LoanOption():
         return self.offered and self.offered.family == 'loan'
 
 
-class LoanCoveredData():
-    'Loan Covered Data'
-
+class CoveredData:
     __name__ = 'contract.covered_data'
 
-    loan_shares = fields.Many2Many(
-        'contract.covered_data-loan.share',
+    loan_shares = fields.Many2Many('contract.covered_data-loan.share',
         'covered_data', 'loan_share', 'Loan Shares',
-        states={'invisible': ~Eval('is_loan')},
-        domain=[
+        states={'invisible': ~Eval('is_loan')}, domain=[
             ('person', '=', Eval('person')),
             ('loan.contract', '=', Eval('contract'))],
         depends=['person', 'contract'])
@@ -97,7 +88,7 @@ class LoanCoveredData():
             return self.covered_element.party.id
 
     def init_from_option(self, option):
-        super(LoanCoveredData, self).init_from_option(option)
+        super(CoveredData, self).init_from_option(option)
         if not hasattr(self, 'loan_shares'):
             self.loan_shares = []
         for loan in option.contract.loans:
@@ -109,7 +100,7 @@ class LoanCoveredData():
         return self.option and self.option.is_loan
 
 
-class LoanCoveredDataLoanShareRelation(model.CoopSQL):
+class CoveredDataLoanShareRelation(model.CoopSQL):
     'Loan Covered Data Loan Share Relation'
 
     __name__ = 'contract.covered_data-loan.share'

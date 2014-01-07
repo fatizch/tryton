@@ -10,27 +10,27 @@ from .billing import *
 def register():
     Pool.register(
         # From Product
-        LoanProduct,
-        LoanCoverage,
+        Product,
+        OptionDescription,
         # From Rule Sets
-        LoanContext,
+        RuleEngineRuntime,
         # From Contract
-        LoanContract,
-        LoanOption,
+        Contract,
+        ContractOption,
         # From Loan
         Loan,
         LoanShare,
-        LoanCoveredData,
-        LoanCoveredDataLoanShareRelation,
+        CoveredData,
+        CoveredDataLoanShareRelation,
         LoanIncrement,
         LoanPayment,
-        # From Loan Creation Wizard
-        LoanParameters,
-        LoanIncrementsDisplayer,
-        AmortizationTableDisplayer,
+        # From Loan Create Wizard
+        LoanCreateParameters,
+        LoanCreateIncrement,
+        LoanCreateAmortizationTable,
         # From Billing
-        LoanPriceLine,
+        BillingPremium,
         module='loan', type_='model')
     Pool.register(
-        LoanCreation,
+        LoanCreate,
         module='loan', type_='wizard')

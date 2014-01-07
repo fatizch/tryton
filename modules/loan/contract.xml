@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Contract ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_tree">
+            <field name="model">contract</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <field name="type">tree</field>
+            <field name="arch" type="xml"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Option ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.option</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.option_view_form"/>
+            <field name="name">option_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Covered Data ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="covered_data_view_form">
+            <field name="model">contract.covered_data</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="insurance_contract.covered_data_view_form"/>
+            <field name="name">covered_data_form</field>
+        </record>
+    </data>
+</tryton>

@@ -8,20 +8,20 @@ from trytond.modules.coop_currency import ModelCurrency
 from .loan import LOAN_KIND, DEFFERALS
 
 __all__ = [
-    'LoanParameters',
-    'LoanIncrementsDisplayer',
-    'AmortizationTableDisplayer',
-    'LoanCreation',
+    'LoanCreateParameters',
+    'LoanCreateIncrement',
+    'LoanCreateAmortizationTable',
+    'LoanCreate',
     ]
 
 
-class LoanParameters(model.CoopView, ModelCurrency):
-    'Loan Parameters'
+class LoanCreateParameters(model.CoopView, ModelCurrency):
+    'Loan Create Parameters'
 
     __name__ = 'loan.create.parameters'
 
     contract = fields.Many2One('contract', 'Contract',
-        states={"invisible": True})
+        states={'invisible': True})
     loan = fields.Many2One('loan', 'Loan')
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True)
     number_of_payments = fields.Integer('Number of Payments', required=True)
@@ -38,16 +38,15 @@ class LoanParameters(model.CoopView, ModelCurrency):
         'Loan Shares')
 
 
-class LoanIncrementsDisplayer(model.CoopView):
-    'Increments'
+class LoanCreateIncrement(model.CoopView):
+    'Loan Create Increments'
 
     __name__ = 'loan.create.increments'
 
-    increments = fields.One2Many('loan.increment', None,
-        'Increments')
+    increments = fields.One2Many('loan.increment', None, 'Increments')
 
 
-class AmortizationTableDisplayer(model.CoopView):
+class LoanCreateAmortizationTable(model.CoopView):
     'Amortization Table'
 
     __name__ = 'loan.create.amortization_table'
@@ -55,8 +54,8 @@ class AmortizationTableDisplayer(model.CoopView):
     payments = fields.One2Many('loan.payment', None, 'Payments')
 
 
-class LoanCreation(model.CoopWizard):
-    'Loan Creation'
+class LoanCreate(model.CoopWizard):
+    'Loan Create'
 
     __name__ = 'loan.create'
 
@@ -71,16 +70,14 @@ class LoanCreation(model.CoopWizard):
         'loan.loan_creation_increments_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'loan_parameters', 'tryton-go-previous'),
-            Button('Next', 'create_payments', 'tryton-go-next',
-                default=True),
+            Button('Next', 'create_payments', 'tryton-go-next', default=True),
             ])
     create_payments = StateTransition()
     amortization_table = StateView('loan.create.amortization_table',
         'loan.loan_creation_table_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
             Button('Previous', 'increments', 'tryton-go-previous'),
-            Button('End', 'validate_loan', 'tryton-go-next',
-                default=True),
+            Button('End', 'validate_loan', 'tryton-go-next', default=True),
             ])
     validate_loan = StateTransition()
     cancel_loan = StateTransition()
