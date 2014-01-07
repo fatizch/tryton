@@ -26,8 +26,8 @@ def get_child_models(from_class):
         except KeyError:
             raise
         cur_models = [model_name
-                      for model_name, model in Pool().iterobject()
-                      if issubclass(model, the_class)]
+            for model_name, model in Pool().iterobject()
+            if issubclass(model, the_class)]
         models = map(lambda x: Pool().get(x), cur_models)
         return models
     elif isinstance(from_class, type):
@@ -69,9 +69,9 @@ def change_relation_links(
             continue
         model_name = getattr(field, attr_name)
         if (convert_dict and not model_name in convert_dict or
-            from_module and to_module and
+                from_module and to_module and
                 not (model_name.startswith(from_module)
-                     and model_name.split('.', 1)[0] == from_module)):
+                    and model_name.split('.', 1)[0] == from_module)):
             continue
         if convert_dict:
             converted_name = convert_dict[model_name]
@@ -174,7 +174,7 @@ def tuple_index(value, the_tuple, key_index=0):
 
 def get_module_path(module_name):
     module_path = os.path.abspath(os.path.join(
-        os.path.normpath(__file__), '..', '..', module_name))
+            os.path.normpath(__file__), '..', '..', module_name))
     if os.path.isdir(module_path):
         return module_path
 
@@ -244,9 +244,9 @@ def get_this_object(model_name, domain):
 def delete_reference_backref(objs, target_model, target_field):
     the_model = Pool().get(target_model)
     to_delete = the_model.search([(
-        target_field, 'in', [
-            '%s,%s' % (obj.__name__, obj.id)
-            for obj in objs])])
+                target_field, 'in', [
+                    '%s,%s' % (obj.__name__, obj.id)
+                    for obj in objs])])
     the_model.delete(to_delete)
 
 
@@ -552,8 +552,8 @@ def recursive_list_tuple_convert(the_list):
         return tuple((recursive_list_tuple_convert(x) for x in the_list))
     elif isinstance(the_list, dict):
         return dict((
-            (key, recursive_list_tuple_convert(value))
-            for key, value in the_list.iteritems()))
+                (key, recursive_list_tuple_convert(value))
+                for key, value in the_list.iteritems()))
     else:
         return the_list
 

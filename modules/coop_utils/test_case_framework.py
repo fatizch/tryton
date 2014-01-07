@@ -35,8 +35,8 @@ def solve_graph(node_name, nodes, resolved=None, unresolved=None):
     for node_dep in nodes[node_name]:
         if node_dep not in resolved:
             if node_dep in unresolved:
-                raise Exception('Circular reference : %s => %s' % (
-                        node_name, node_dep))
+                raise Exception('Circular reference : %s => %s' % (node_name,
+                        node_dep))
             solve_graph(node_dep, nodes, resolved, unresolved)
     if node_name not in resolved:
         resolved.append(node_name)
@@ -59,7 +59,6 @@ def build_dependency_graph(cls, methods):
             if dep not in method_dict:
                 method_dict[dep] = getattr(cls, dep)
                 to_explore.append(method_dict[dep])
-
     cache_res = {}
 
     def get_deps(method, res=None):
@@ -241,8 +240,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     @classmethod
     def set_global_search(cls):
         Model = Pool().get('ir.model')
-        targets = Model.search([
-                ('model', 'in', cls.global_search_list())])
+        targets = Model.search([('model', 'in', cls.global_search_list())])
         Model.write(targets, {'global_search_p': True})
 
     @classmethod
@@ -258,8 +256,8 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     @classmethod
     def read_data_file(cls, filename, module, sep='|'):
         cls.load_resources(module)
-        if isinstance(cls._loaded_resources[module]['files'][filename], (
-                    list, dict)):
+        if isinstance(cls._loaded_resources[module]['files'][filename],
+                (list, dict)):
             return cls._loaded_resources[module]['files'][filename]
         res, cur_model, cur_data = {}, '', []
         with open(cls._loaded_resources[module]['files'][filename], 'r') as f:
@@ -484,8 +482,8 @@ class TestCaseWizard(model.CoopWizard):
     def __setup__(cls):
         super(TestCaseWizard, cls).__setup__()
         cls._error_messages.update({
-            'bad_json': 'Cannot load test case file %s',
-        })
+                'bad_json': 'Cannot load test case file %s',
+                })
 
     def default_select_test_cases(self, name):
         # Look for files

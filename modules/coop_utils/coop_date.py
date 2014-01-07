@@ -98,8 +98,8 @@ def convert_to_periods(dates):
     tmp_dates.sort()
     res = []
     for i in range(0, len(tmp_dates) - 1):
-        res.append(
-            (tmp_dates[i], tmp_dates[i + 1] - datetime.timedelta(days=1)))
+        res.append((tmp_dates[i], tmp_dates[i + 1] -
+                datetime.timedelta(days=1)))
     res[-1][1] = res[-1][1] + datetime.timedelta(days=1)
     return res
 
@@ -128,7 +128,6 @@ def duration_between(date1, date2, duration_unit):
         return number_of_days_between(date1, date2)
     elif duration_unit == 'week':
         return number_of_days_between(date1, date2) / 7
-
     date2 = add_day(date2, 1)
     if duration_unit == 'month':
         return number_of_months_between(date2, date1)
@@ -181,6 +180,5 @@ def calculate_date_interval(age_min, age_max):
     start_date = start_date.replace(year=start_date.year
         - int(age_max)).toordinal()
     end_date = datetime.date.today()
-    end_date = end_date.replace(year=end_date.year
-        - int(age_min)).toordinal()
+    end_date = end_date.replace(year=end_date.year - int(age_min)).toordinal()
     return [start_date, end_date]

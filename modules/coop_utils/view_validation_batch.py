@@ -4,7 +4,7 @@ import batchs
 
 __all__ = [
     'ViewValidationBatch',
-]
+    ]
 
 
 class ViewValidationBatch(batchs.BatchRoot):
@@ -38,7 +38,7 @@ class ViewValidationBatch(batchs.BatchRoot):
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'coop_utils')])[0]
         coop_modules = set([module.name for module in modules
-            if utils_module in module.parents])
+                if utils_module in module.parents])
         return [('module', 'in', coop_modules)]
 
     @classmethod
@@ -52,8 +52,9 @@ class ViewValidationBatch(batchs.BatchRoot):
                 if view.inherit:
                     full_inherited_xml_id = view.inherit.xml_id
                     if full_inherited_xml_id.split('.')[-1] != xml_id:
-                        logger.warning('View %s inherits from %s but has different '
-                            'id !' % (full_xml_id, full_inherited_xml_id))
+                        logger.warning('View %s inherits from %s but has '
+                            'different id !' % (full_xml_id,
+                                full_inherited_xml_id))
             except:
                 logger.error('Failed testing view %s' % view.id)
                 raise

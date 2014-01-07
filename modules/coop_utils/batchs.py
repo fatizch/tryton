@@ -7,7 +7,7 @@ from trytond.config import CONFIG
 
 __all__ = [
     'BatchRoot',
-]
+    ]
 
 
 class BatchRoot(ModelView):
@@ -17,7 +17,7 @@ class BatchRoot(ModelView):
     def __setup__(cls):
         super(BatchRoot, cls).__setup__()
         cls._error_messages.update({
-            'no_batch_path': 'No Batch Path Specified'})
+                'no_batch_path': 'No Batch Path Specified'})
 
     @classmethod
     def get_batch_name(cls):
@@ -56,7 +56,6 @@ class BatchRoot(ModelView):
         SearchModel = Pool().get(cls.get_batch_search_model())
         tables, expression = SearchModel.search_domain(
             cls.get_batch_domain())
-
         main_table, _ = tables[None]
 
         def convert_from(table, tables):
@@ -71,11 +70,8 @@ class BatchRoot(ModelView):
                 table = convert_from(table, sub_tables)
             return table
         table = convert_from(None, tables)
-
         search_column = getattr(main_table, cls.get_batch_field())
-
-        cursor.execute(*table.select(search_column,
-                where=expression,
+        cursor.execute(*table.select(search_column, where=expression,
                 order_by=search_column))
         res = cursor.fetchall()
         return res
@@ -106,6 +102,6 @@ class BatchRoot(ModelView):
         if not os.path.exists(good_batch_path):
             os.makedirs(good_batch_path)
         f = open(os.path.join(good_batch_path, '%s.%s' % (
-            name.replace(os.sep, '-'), format)), 'w')
+                    name.replace(os.sep, '-'), format)), 'w')
         f.write(buffer)
         f.close()
