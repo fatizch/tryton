@@ -7,7 +7,7 @@ import fields
 
 __all__ = [
     'Many2OneForm',
-]
+    ]
 
 
 class Many2OneForm(fields.Function):

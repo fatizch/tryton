@@ -22,7 +22,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ModuleTestCase))
+            ModuleTestCase))
     return suite
 
 if __name__ == '__main__':

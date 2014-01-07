@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import re
-from decimal import Decimal
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -21,12 +20,11 @@ def zfill(the_instance, val_name):
 
 
 def re_indent_text(src, indent):
-    return '%s\n' % "\n".join((4 * ' ' * indent) + i for i in src.splitlines())
+    return '%s\n' % '\n'.join((4 * ' ' * indent) + i for i in src.splitlines())
 
 
 def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
-                         lang=None):
-
+        lang=None):
     if not getattr(instance, var_name):
         return ''
     res = ''
@@ -92,8 +90,8 @@ def translate_value(instance, var_name, lang=None):
     else:
         res = u'%s' % getattr(instance, var_name)
     if (hasattr(field, 'translate') and field.translate
-        or (hasattr(field, 'translate_selection')
-            and field.translate_selection)):
+            or (hasattr(field, 'translate_selection')
+                and field.translate_selection)):
         return translate_field(instance, var_name, res, ttype, lang=lang)
     return res
 
@@ -113,18 +111,15 @@ def translate(model, var_name, src, ttype, lang=None):
 
 
 def translate_bool(value, lang=None):
-    if lang:
-        language = lang.code
-    else:
-        language = Transaction().language
+    language = lang.code if lang else Transaction().language
     if language == 'fr_FR':
         return 'Vrai' if value else 'Faux'
     return str(value)
 
 
 def translate_model_name(model, lang=None):
-    return translate(
-        model, 'name', model._get_name(), ttype='model', lang=lang)
+    return translate(model, 'name', model._get_name(), ttype='model',
+        lang=lang)
 
 
 def get_descendents_name(from_class):
@@ -134,8 +129,8 @@ def get_descendents_name(from_class):
             if model.__doc__:
                 result.append((model_name, translate_model_name(model)))
             else:
-                raise Exception(
-                    'Model %s does not have a docstring !' % model_name)
+                raise Exception('Model %s does not have a docstring !' %
+                    model_name)
     return result
 
 
@@ -161,9 +156,8 @@ def date_as_string(date, lang=None):
 
 def remove_invalid_char(from_string):
     import unicodedata
-    res = ''.join((
-        c for c in unicodedata.normalize('NFD', unicode(from_string))
-        if unicodedata.category(c) != 'Mn'))
+    res = ''.join((c for c in unicodedata.normalize('NFD',
+                unicode(from_string)) if unicodedata.category(c) != 'Mn'))
     res = re.sub('[^0-9a-zA-Z]+', '_', res)
     return res
 
@@ -175,9 +169,7 @@ def remove_all_but_alphanumeric_and_space(from_string):
 
 def remove_blank_and_invalid_char(from_string, lower_case=True):
     res = remove_invalid_char(from_string).replace(' ', '_')
-    if lower_case:
-        res = res.lower()
-    return res
+    return res.lower() if lower_case else res
 
 
 def concat_strings(this, that):

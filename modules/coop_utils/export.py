@@ -25,6 +25,7 @@ from trytond.pyson import Eval, If, PYSONEncoder
 import utils
 import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
     'NotExportImport',
     'ExportImportMixin',
@@ -32,7 +33,7 @@ __all__ = [
     'ImportWizard',
     'ExportInstance',
     'ExportPackage',
-]
+    ]
 
 
 class NotExportImport(Exception):
@@ -41,7 +42,6 @@ class NotExportImport(Exception):
 
 class ExportImportMixin(Model):
     'Mixin to support export/import in json'
-    __metaclass__ = PoolMeta
 
     xml_id = fields.Function(
         fields.Char('XML Id', states={'invisible': True}),
@@ -50,11 +50,9 @@ class ExportImportMixin(Model):
     @classmethod
     def __setup__(cls):
         super(ExportImportMixin, cls).__setup__()
-        cls.__rpc__['export_json'] = RPC(
-            instantiate=0,
+        cls.__rpc__['export_json'] = RPC(instantiate=0,
             result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder), r[2]))
-        cls.__rpc__['import_json'] = RPC(
-            readonly=False, result=lambda r: None)
+        cls.__rpc__['import_json'] = RPC(readonly=False, result=lambda r: None)
 
     @classmethod
     def __post_setup__(cls):
@@ -68,8 +66,8 @@ class ExportImportMixin(Model):
             tmp_field.required = False
             if not tmp_field.states:
                 tmp_field.states = {}
-            if 'required' in tmp_field.states and \
-                    tmp_field.states['required'] and tmp_field.required:
+            if ('required' in tmp_field.states and
+                    tmp_field.states['required'] and tmp_field.required):
                 raise Exception('\'required\' attribute defined both in field '
                     'definition and states for field %s in model %s' % (
                         field_name, cls.__name__))
@@ -96,8 +94,8 @@ class ExportImportMixin(Model):
             if not table._columns[field_name]['notnull']:
                 continue
             table.cursor.execute('ALTER TABLE "%s" '
-                'ALTER COLUMN "%s" DROP NOT NULL'
-                % (table.table_name, field_name))
+                'ALTER COLUMN "%s" DROP NOT NULL' % (table.table_name,
+                    field_name))
             table._update_definitions()
 
     @classmethod
@@ -107,8 +105,8 @@ class ExportImportMixin(Model):
                 ('model', '=', cls.__name__),
                 ('db_id', 'in', [x.id for x in objects])])
         result = collections.defaultdict(lambda: '')
-        result.update(
-            dict([(x.db_id, '%s.%s' % (x.module, x.fs_id)) for x in values]))
+        result.update(dict([(x.db_id, '%s.%s' % (x.module, x.fs_id))
+                    for x in values]))
         return result
 
     @classmethod
@@ -120,8 +118,7 @@ class ExportImportMixin(Model):
         model_table = ModelData.__table__()
 
         cursor.execute(*model_table.select(model_table.db_id,
-                where=(
-                    (model_table.model == cls.__name__)
+                where=((model_table.model == cls.__name__)
                     & Operator(Concat(model_table.module,
                             Concat('.', model_table.fs_id)),
                         getattr(cls, name).sql_format(value)))))
@@ -155,8 +152,8 @@ class ExportImportMixin(Model):
     @classmethod
     def _export_skips(cls):
         # A list of fields which will not be exported
-        return set((
-            'id', 'create_uid', 'write_uid', 'create_date', 'write_date'))
+        return set(('id', 'create_uid', 'write_uid', 'create_date',
+                'write_date'))
 
     @classmethod
     def _export_light(cls):
@@ -220,9 +217,8 @@ class ExportImportMixin(Model):
         if not result:
             return None
         if len(result) > 1:
-            raise NotExportImport(
-                'Multiple result found for key %s in class %s' % (
-                    instance_key, cls.__name__))
+            raise NotExportImport('Multiple result found for key %s in class '
+                '%s' % (instance_key, cls.__name__))
         return result[0]
 
     @classmethod
@@ -245,12 +241,11 @@ class ExportImportMixin(Model):
                     result = True
                 else:
                     result = False
-        elif isinstance(field, (
-                tryton_fields.One2One, tryton_fields.Many2Many)):
+        elif isinstance(field, (tryton_fields.One2One,
+                    tryton_fields.Many2Many)):
             RelationModel = Pool().get(field.relation_name)
             target_field = RelationModel._fields[field.target]
-            if not hasattr(
-                    Pool().get(target_field.model_name), 'export_json'):
+            if not hasattr(Pool().get(target_field.model_name), 'export_json'):
                 result = False
             else:
                 result = True
@@ -267,9 +262,8 @@ class ExportImportMixin(Model):
             raise NotExportImport('%s => %s' % (cls.__name__, field_name))
 
     @classmethod
-    def _export_single_link(
-            cls, exported, export_result, field_name, field, field_value,
-            from_field, force_key, values):
+    def _export_single_link(cls, exported, export_result, field_name, field,
+            field_value, from_field, force_key, values):
         if isinstance(field, tryton_fields.Reference):
             f = lambda x: (field_value.__name__, x)
         else:
@@ -278,17 +272,16 @@ class ExportImportMixin(Model):
             values[field_name] = f(force_key[0])
             return
         field_key = field_value._export_get_key()
-        if field_key in exported.get(field_value.__name__, set()) or \
-                field_name in cls._export_light():
+        if (field_key in exported.get(field_value.__name__, set()) or
+                field_name in cls._export_light()):
             values[field_name] = f(field_key)
         else:
             values[field_name] = f(field_key)
             field_value._export_json(exported, export_result)
 
     @classmethod
-    def _export_multiple_link(
-            cls, exported, export_result, field_name, field, field_value,
-            my_key, values):
+    def _export_multiple_link(cls, exported, export_result, field_name, field,
+            field_value, my_key, values):
         field_export_value = []
         if field_name in cls._export_force_recreate():
             idx = 1
@@ -303,16 +296,16 @@ class ExportImportMixin(Model):
         else:
             for elem in field_value:
                 elem_key = elem._export_get_key()
-                if elem_key in exported.get(elem.__name__, {}) or \
-                        field_name in cls._export_light():
+                if (elem_key in exported.get(elem.__name__, {}) or
+                        field_name in cls._export_light()):
                     field_export_value.append(elem_key)
                 else:
                     field_export_value.append(elem_key)
                     elem._export_json(exported, export_result)
         values[field_name] = field_export_value
 
-    def _export_json(
-            self, exported, export_result, from_field=None, force_key=None):
+    def _export_json(self, exported, export_result, from_field=None,
+            force_key=None):
         singleton = isinstance(self, ModelSingleton)
         if not (self.id > 0) and singleton:
             instance = self.get_singleton()
@@ -323,8 +316,8 @@ class ExportImportMixin(Model):
         except TypeError:
             log_name = self.get_rec_name([self], None)[self.id]
         if force_key is None and from_field is None:
-            logging.getLogger('export_import').debug(
-                'Trying to export %s' % log_name)
+            logging.getLogger('export_import').debug('Trying to export %s' %
+                log_name)
         my_key = self._export_prepare(exported, force_key)
         values = {
             '__name__': self.__name__,
@@ -335,9 +328,8 @@ class ExportImportMixin(Model):
             if not self._export_must_export_field(field_name, field):
                 continue
             if hasattr(self, '_export_override_%s' % field_name):
-                values[field_name] = getattr(
-                    self, '_export_override_%s' % field_name)(exported,
-                        export_result, my_key)
+                values[field_name] = getattr(self, '_export_override_%s' %
+                    field_name)(exported, export_result, my_key)
                 continue
             field_value = getattr(self, field_name)
             # We cannot just test "if field_value:" because 0 or '' might be
@@ -347,28 +339,25 @@ class ExportImportMixin(Model):
             if isinstance(field_value, tuple) and len(field_value) == 0:
                 continue
             self._export_check_value_exportable(field_name, field, field_value)
-            logging.getLogger('export_import').debug(
-                'Exporting field %s.%s' % (self.__name__, field_name))
+            logging.getLogger('export_import').debug('Exporting field %s.%s' %
+                (self.__name__, field_name))
             if isinstance(field, tryton_fields.Property):
                 field = field._field
-            if isinstance(field, (
-                    tryton_fields.Many2One, tryton_fields.One2One,
-                    tryton_fields.Reference)):
-                self._export_single_link(
-                    exported, export_result, field_name, field, field_value,
-                    from_field, force_key, values)
-            elif (isinstance(field, tryton_fields.Many2Many) or
-                    isinstance(field, tryton_fields.One2Many)):
-                self._export_multiple_link(
-                    exported, export_result, field_name, field, field_value,
-                    my_key, values)
+            if isinstance(field, (tryton_fields.Many2One,
+                        tryton_fields.One2One, tryton_fields.Reference)):
+                self._export_single_link(exported, export_result, field_name,
+                    field, field_value, from_field, force_key, values)
+            elif isinstance(field, (tryton_fields.Many2Many,
+                    tryton_fields.One2Many)):
+                self._export_multiple_link(exported, export_result, field_name,
+                    field, field_value, my_key, values)
             else:
                 values[field_name] = getattr(self, field_name)
         if force_key is None and from_field is None:
             if not singleton:
                 export_result.append(values)
-            logging.getLogger('export_import').debug(
-                'Successfully exported %s' % log_name)
+            logging.getLogger('export_import').debug('Successfully exported %s'
+                % log_name)
         return values
 
     def _export_filename(self):
@@ -380,8 +369,8 @@ class ExportImportMixin(Model):
         return '[%s][%s]' % (datetime.date.today().isoformat(), self.__name__)
 
     def export_json(self):
-        filename = '%s%s.json' % (
-            self._export_filename_prefix(), self._export_filename())
+        filename = '%s%s.json' % (self._export_filename_prefix(),
+            self._export_filename())
         exported = {}
         result = []
         self._export_json(exported, result)
@@ -406,9 +395,8 @@ class ExportImportMixin(Model):
         return good_instance
 
     @classmethod
-    def _import_single_link(
-            cls, instance, field_name, field, field_value, created, relink,
-            target_model, to_relink):
+    def _import_single_link(cls, instance, field_name, field, field_value,
+            created, relink, target_model, to_relink):
         check_req = False
         if isinstance(field_value, tuple):
             if (target_model.__name__ in created and
@@ -416,69 +404,50 @@ class ExportImportMixin(Model):
                 target_value = created[
                     target_model.__name__][field_value]
                 if hasattr(target_value, 'id') and target_value.id:
-                    setattr(instance, field_name, created[
-                        target_model.__name__][field_value])
+                    setattr(instance, field_name,
+                        created[target_model.__name__][field_value])
                 else:
                     check_req = True
             else:
-                good_value = target_model._export_find_instance(
-                    field_value)
+                good_value = target_model._export_find_instance(field_value)
                 if good_value:
                     setattr(instance, field_name, good_value)
                 else:
                     check_req = True
         else:
-            setattr(
-                instance, field_name, target_model._import_json(
+            setattr(instance, field_name, target_model._import_json(
                     field_value, created=created, relink=relink))
         if not check_req:
             return True
-        if (not('required' in field.states) and not
-                field.required):
-            to_relink.insert(0,
-                (field_name, (target_model.__name__, field_value)))
+        if not('required' in field.states) and not field.required:
+            to_relink.insert(0, (field_name, (target_model.__name__,
+                        field_value)))
             return True
         if field.required:
-            to_relink.append(
-                (field_name, (target_model.__name__, field_value)))
+            to_relink.append((field_name, (target_model.__name__,
+                        field_value)))
             return False
-        to_relink.insert(0,
-            (field_name, (target_model.__name__, field_value)))
+        to_relink.insert(0, (field_name, (target_model.__name__, field_value)))
         return not utils.pyson_result(field.states['required'], instance, True)
 
     @classmethod
-    def _import_one2many(
-            cls, instance, field_name, field, field_value, created, relink,
-            to_relink):
-        existing_values = getattr(instance, field_name) \
-            if hasattr(instance, field_name) else None
+    def _import_one2many(cls, instance, field_name, field, field_value,
+            created, relink, to_relink):
+        existing_values = getattr(instance, field_name) if hasattr(instance,
+            field_name) else None
         TargetModel = Pool().get(field.model_name)
         if not instance.id:
             pass
-        elif (field_name in cls._export_force_recreate()):
+        elif field_name in cls._export_force_recreate():
             TargetModel.delete([elem for elem in existing_values])
-        # else:
-            # found = []
-            # for elem in field_value:
-                # if isinstance(elem, tuple):
-                    # found.append(elem)
-                # else:
-                    # found.append(elem['_export_key'])
-            # print found
-            # print str([z for z in found])
-            # TargetModel.delete(TargetModel.search([
-                    # (field.field, '=', instance.id)] + [
-                        # [['OR'] + [(k, '!=', v) for k, v in z]]
-                        # for z in found]))
         for elem in field_value:
             if isinstance(elem, tuple):
                 continue
             TargetModel._import_json(elem, created=created, relink=relink)
 
     @classmethod
-    def _import_many2many(
-            cls, instance, field_name, field, field_value, created, relink,
-            to_relink):
+    def _import_many2many(cls, instance, field_name, field, field_value,
+            created, relink, to_relink):
         if (hasattr(instance, 'id') and instance.id):
             # For now, just recreate the links
             RelationModel = Pool().get(field.relation_name)
@@ -492,22 +461,19 @@ class ExportImportMixin(Model):
             if isinstance(elem, tuple):
                 if (TargetModel.__name__ in created and
                         elem in created[TargetModel.__name__]):
-                    good_values.append(
-                        created[TargetModel.__name__][elem])
+                    good_values.append(created[TargetModel.__name__][elem])
                 else:
-                    good_value = TargetModel._export_find_instance(
-                        elem)
+                    good_value = TargetModel._export_find_instance(elem)
                     if good_value:
                         good_values.append(good_value)
                     else:
                         relinks.append(elem)
             else:
-                good_values.append(TargetModel._import_json(
-                    elem, created=created, relink=relink))
+                good_values.append(TargetModel._import_json(elem,
+                        created=created, relink=relink))
         setattr(instance, field_name, good_values)
         if relinks:
-            to_relink.append(
-                (field_name, (TargetModel.__name__, relinks)))
+            to_relink.append((field_name, (TargetModel.__name__, relinks)))
 
     @classmethod
     def _import_finalize(cls, key, instance, save, created, relink, to_relink):
@@ -521,83 +487,71 @@ class ExportImportMixin(Model):
             try:
                 instance.save()
             except:
-                # print '\n'.join([str(x) for x in relink])
-                # print utils.format_data(created)
-                # print utils.format_data(instance)
                 for x in traceback.format_exception(*sys.exc_info()):
                     logging.getLogger('export_import').debug(str(x))
                 raise
-
         if to_relink:
             relink.append(((cls.__name__, key), to_relink))
 
     @classmethod
-    def _import_json(
-            cls, values, created, relink, force_recreate=False):
+    def _import_json(cls, values, created, relink, force_recreate=False):
         assert values['__name__'] == cls.__name__
         save = True
         to_relink = []
         my_key = values['_export_key']
-        logging.getLogger('export_import').debug(
-            'Importing %s %s' % (cls.__name__, my_key))
+        logging.getLogger('export_import').debug('Importing %s %s' %
+            (cls.__name__, my_key))
         good_instance = cls._import_get_working_instance(my_key)
         for field_name in sorted(cls._fields.iterkeys()):
             if not field_name in values:
                 continue
             field = cls._fields[field_name]
             field_value = values[field_name]
-            logging.getLogger('export_import').debug(
-                'Importing field %s : %s' % (field_name, field_value))
+            logging.getLogger('export_import').debug('Importing field %s : %s'
+                % (field_name, field_value))
             if hasattr(cls, '_import_override_%s' % field_name):
-                values[field_name] = getattr(
-                    cls, '_import_override_%s' % field_name)(my_key,
-                        good_instance, field_value, values, created, relink)
+                values[field_name] = getattr(cls, '_import_override_%s' %
+                    field_name)(my_key, good_instance, field_value, values,
+                        created, relink)
                 continue
             if isinstance(field, tryton_fields.Property):
                 field = field._field
-            if isinstance(field, (
-                    tryton_fields.Many2One, tryton_fields.One2One)):
+            if isinstance(field, (tryton_fields.Many2One,
+                        tryton_fields.One2One)):
                 TargetModel = Pool().get(field.model_name)
-                save = cls._import_single_link(
-                    good_instance, field_name, field, field_value, created,
-                    relink, TargetModel, to_relink) and save
+                save = cls._import_single_link(good_instance, field_name,
+                    field, field_value, created, relink, TargetModel,
+                    to_relink) and save
             elif isinstance(field, tryton_fields.Reference):
                 if isinstance(field_value, tuple):
                     field_model, field_value = field_value
                     TargetModel = Pool().get(field_model)
                 else:
                     TargetModel = Pool().get(field_value['__name__'])
-                save = cls._import_single_link(
-                    good_instance, field_name, field, field_value, created,
-                    relink, TargetModel, to_relink) and save
+                save = cls._import_single_link(good_instance, field_name,
+                    field, field_value, created, relink, TargetModel,
+                    to_relink) and save
             elif isinstance(field, tryton_fields.One2Many):
-                cls._import_one2many(
-                    good_instance, field_name, field, field_value, created,
-                    relink, to_relink)
+                cls._import_one2many(good_instance, field_name, field,
+                    field_value, created, relink, to_relink)
             elif isinstance(field, tryton_fields.Many2Many):
-                cls._import_many2many(
-                    good_instance, field_name, field, field_value, created,
-                    relink, to_relink)
+                cls._import_many2many(good_instance, field_name, field,
+                    field_value, created, relink, to_relink)
             else:
                 setattr(good_instance, field_name, field_value)
-        cls._import_finalize(
-            my_key, good_instance, save, created, relink, to_relink)
+        cls._import_finalize(my_key, good_instance, save, created, relink,
+            to_relink)
         return good_instance
 
     @classmethod
     def _import_relink(cls, created, relink):
-        # Useful for debugging
-        # print utils.format_data(created)
-        # print '\n'.join([str(x) for x in relink])
         counter = 0
         while len(relink) > 0:
             counter += 1
-            cur_errs = []
-            to_del = []
-            idx = 0
+            cur_errs, to_del, idx = [], [], 0
             for key, value in relink:
-                logging.getLogger('export_import').debug(
-                    'Relinking %s' % str(key))
+                logging.getLogger('export_import').debug('Relinking %s' %
+                    str(key))
                 working_instance = created[key[0]][key[1]]
                 all_done = True
                 clean_keys = []
@@ -615,8 +569,8 @@ class ExportImportMixin(Model):
                                 all_done = False
                                 continue
                         if len(to_append) == len(field_value[1]):
-                            existing = list(getattr(
-                                working_instance, field_name))
+                            existing = list(getattr(working_instance,
+                                    field_name))
                             existing += to_append
                             setattr(working_instance, field_name, existing)
                     else:
@@ -712,12 +666,11 @@ class ExportImportMixin(Model):
             relink = []
             main_instances = []
             for value in values:
-                logging.getLogger('export_import').debug(
-                    'First pass for %s %s' % (
-                        value['__name__'], value['_export_key']))
+                logging.getLogger('export_import').debug('First pass for %s %s'
+                    % (value['__name__'], value['_export_key']))
                 TargetModel = Pool().get(value['__name__'])
-                main_instances.append(
-                    TargetModel._import_json(value, created, relink))
+                main_instances.append(TargetModel._import_json(value, created,
+                        relink))
             cls._import_relink(created, relink)
         cls._import_complete(created)
         for instance in main_instances:
@@ -725,8 +678,8 @@ class ExportImportMixin(Model):
                 log_name = instance.get_rec_name(None)
             except TypeError:
                 log_name = instance.get_rec_name([instance], None)[instance.id]
-            logging.getLogger('export_import').debug(
-                'Successfully imported %s' % log_name)
+            logging.getLogger('export_import').debug('Successfully imported %s'
+                % log_name)
         return created
 
 
@@ -737,8 +690,8 @@ class FileSelector(ModelView):
 
     selected_file = fields.Binary('Import File', filename='name')
     name = fields.Char('Filename')
-    file_content = fields.Text(
-        'File Content', on_change_with=['selected_file'])
+    file_content = fields.Text('File Content', on_change_with=[
+            'selected_file'])
 
     def on_change_with_file_content(self):
         if not (hasattr(self, 'selected_file') and self.selected_file):
@@ -766,10 +719,8 @@ class ImportWizard(Wizard):
     __name__ = 'ir.import'
 
     start_state = 'file_selector'
-    file_selector = StateView(
-        'ir.import.select_file',
-        'coop_utils.file_selector_form',
-        [
+    file_selector = StateView('ir.import.select_file',
+        'coop_utils.file_selector_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Import', 'file_import', 'tryton-ok')])
     file_import = StateTransition()
@@ -813,8 +764,8 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
 
     code = fields.Char('Code')
     package_name = fields.Char('Package Name', required=True)
-    instances_to_export = fields.One2Many('ir.export_package.item',
-        'package', 'Instances to export')
+    instances_to_export = fields.One2Many('ir.export_package.item', 'package',
+        'Instances to export')
     model = fields.Function(
         fields.Selection('get_possible_models_to_export', 'Model'),
         'getter_void', setter='setter_void')

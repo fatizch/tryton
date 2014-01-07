@@ -73,8 +73,7 @@ def generate_all(batch_name, date=None):
             chunking = chunks_number
         else:
             chunking = chunks_size
-        group(
-            generate.s(BatchModel.__name__, tmp_list, date)
+        group(generate.s(BatchModel.__name__, tmp_list, date)
             for tmp_list in chunking(ids, BatchModel.get_batch_step()))()
 
 
@@ -85,8 +84,7 @@ def generate(batch_name, ids, date):
     BatchModel = Pool().get(batch_name)
     logger = get_task_logger(BatchModel.get_batch_name())
     with Transaction().set_user(admin.id), \
-        Transaction().set_context(
-            User.get_preferences(context_only=True),
+        Transaction().set_context(User.get_preferences(context_only=True),
             client_defined_date=date):
         to_treat = BatchModel.convert_to_instances(ids)
         BatchModel.execute(to_treat, ids, logger)

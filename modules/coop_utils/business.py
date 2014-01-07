@@ -1,7 +1,7 @@
 __all__ = [
     'ArgsDoNotMatchException',
     'update_args_with_subscriber',
-]
+    ]
 
 
 class ArgsDoNotMatchException(Exception):
@@ -9,6 +9,7 @@ class ArgsDoNotMatchException(Exception):
 
 
 def update_args_with_subscriber(args):
+    # TODO : Remove this
     subscriber = None
     if 'contract' in args:
         subscriber = args['contract'].subscriber
