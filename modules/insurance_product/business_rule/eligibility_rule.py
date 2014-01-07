@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 from trytond.pyson import Eval, Or
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.coop_utils import model, fields, utils
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot
 from trytond.modules.offered.offered import CONFIG_KIND
@@ -52,6 +52,12 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         fields.Char('Offered Kind', states={'invisible': True},
             on_change_with=['offered']),
         'on_change_with_offered_kind')
+
+    @classmethod
+    def __setup__(cls):
+        super(EligibilityRule, cls).__setup__()
+        # TODO : Remove this once we use M2O rather than a Reference field
+        utils.update_selection(cls, 'offered', (('benefit', 'Benefit'),))
 
     def give_me_eligibility(self, args):
         # Now we can call the rule if it exists :
