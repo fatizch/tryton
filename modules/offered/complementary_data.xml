@@ -32,15 +32,15 @@
     <!-- ############################################################ -->
     <!-- ########### Extra Data Sub Extra Data Relation   ########### -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="extra_data-sub_extra_data_relation_view_form">
+    <record model="ir.ui.view" id="extra_data-sub_extra_data_view_form">
       <field name="model">extra_data-sub_extra_data</field>
       <field name="type">form</field>
-      <field name="name">sub_extra_data_form</field>
+      <field name="name">extra_data-sub_extra_data_form</field>
     </record>
-    <record model="ir.ui.view" id="extra_data-sub_extra_data_relation_view_tree">
+    <record model="ir.ui.view" id="extra_data-sub_extra_data_view_tree">
       <field name="model">extra_data-sub_extra_data</field>
       <field name="type">tree</field>
-      <field name="name">sub_extra_data_tree</field>
+      <field name="name">extra_data-sub_extra_data_tree</field>
     </record>
     <!-- ############################################################ -->
     <!-- ########### Tag ########### -->

@@ -189,9 +189,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
                             'dd_args': dd_args
                         })
                 domain.append(('id', 'in', good_schemas[0]))
-        return super(ExtraData, cls).search(
-            domain, offset=offset, limit=limit, order=order, count=count,
-            query=query)
+        return super(ExtraData, cls).search(domain, offset=offset, limit=limit,
+            order=order, count=count, query=query)
 
     def valid_at_date(self, at_date):
         if at_date and hasattr(self, 'start_date') and self.start_date:
