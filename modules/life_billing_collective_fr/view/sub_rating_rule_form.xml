@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Sub Rating Rule">
+<form string="Premium Rate Rule Line">
     <label name="main_rating_rule"/>
     <field name="main_rating_rule"/>
     <newline/>

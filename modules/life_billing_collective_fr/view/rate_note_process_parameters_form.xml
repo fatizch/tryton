@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Rate Note Process Parameters">
+<form string="Billing Premium Rate Form Create Parameters">
     <label name="until_date"/>
     <field name="until_date"/>
     <field name="products" colspan="4"/>

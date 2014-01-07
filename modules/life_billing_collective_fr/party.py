@@ -26,9 +26,7 @@ class GroupParty(model.CoopSQL, model.CoopView):
         return coop_string.remove_blank_and_invalid_char(self.name)
 
 
-class Party():
-    'Party'
-
+class Party:
     __name__ = 'party.party'
 
     group = fields.Many2One('party.group', 'Group')
