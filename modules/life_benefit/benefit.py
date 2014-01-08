@@ -1,9 +1,11 @@
 from trytond.pool import PoolMeta
 
+from trytond.modules.coop_utils import utils
+
 __metaclass__ = PoolMeta
 __all__ = [
     'Benefit',
-    'LossDesc',
+    'LossDescription',
     'BenefitRule',
     ]
 
@@ -18,14 +20,13 @@ class Benefit:
         return res
 
 
-class LossDesc:
+class LossDescription:
     __name__ = 'benefit.loss.description'
 
     @classmethod
-    def get_possible_item_kind(cls):
-        res = super(LossDesc, cls).get_possible_item_kind()
-        res.append(('person', 'Person'))
-        return res
+    def __setup__(cls):
+        utils.update_selection(cls, 'item_kind', [('person', 'Person')])
+        super(LossDescription, cls).__setup__()
 
 
 class BenefitRule:

@@ -244,7 +244,12 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         'offered.item.description-extra_data',
         'item_desc', 'complementary_data_def', 'Extra Data',
         domain=[('kind', '=', 'sub_elem')], )
-    kind = fields.Selection('get_possible_item_kind', 'Kind')
+    kind = fields.Selection([
+            ('', ''),
+            ('party', 'Party'),
+            ('person', 'Person'),
+            ('company', 'Company'),
+            ], 'Kind')
     sub_item_descs = fields.Many2Many(
         'offered.item.description-sub_item.description',
         'item_desc', 'sub_item_desc', 'Sub Item Descriptions',
@@ -261,15 +266,6 @@ class ItemDescription(model.CoopSQL, model.CoopView):
     #     result = super(ItemDescription, cls)._export_force_recreate()
     #     result.remove('sub_item_descs')
     #     return result
-
-    @classmethod
-    def get_possible_item_kind(cls):
-        return [
-            ('', ''),
-            ('party', 'Party'),
-            ('person', 'Person'),
-            ('company', 'Company'),
-            ]
 
     @classmethod
     def get_var_names_for_full_extract(cls):

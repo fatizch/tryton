@@ -11,5 +11,5 @@ class OptionDescription:
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        utils.update_selection(cls, 'selection', (
-                ('pc', 'Property & Casualty'),))
+        utils.update_selection(cls, 'kind', [
+                ('pc', 'Property & Casualty')])

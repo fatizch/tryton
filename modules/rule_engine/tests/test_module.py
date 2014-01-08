@@ -172,21 +172,21 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(tree_structure, target_tree_structure)
 
         # Check default code validates
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
         # Check context elem code validates
         rule.code = 'return today()'
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
         # Check warnings validates
         rule.code = 'toto = 10\n'
         rule.code += 'return today()'
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
         # Check unknown symbols fail
         rule.code = 'return some_unknown_symbol'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
         # Check syntax errors fail
         rule.code = 'if 10'
         rule.code += ' return'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         rule.code = 'return 10.0'
         rule.save()
@@ -211,7 +211,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0015_testExternalParameterTable(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.code = 'return table_test_code(\'bar\', 5)'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         table = self.Table.search([('code', '=', 'test_code')])[0]
         table_parameter = self.RuleParameter()
@@ -250,13 +250,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'children': [],
                                 }]}]})
 
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('rule_engine.test0014_testRuleEngineCreation')
     def test0016_testExternalParameterKwarg(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.code = 'return kwarg_test_parameter()'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         kwarg_parameter = self.RuleParameter()
         kwarg_parameter.kind = 'kwarg'
@@ -291,14 +291,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'children': [],
                                 }]}]})
 
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test(
         'rule_engine.test0016_testExternalParameterKwarg')
     def test0017_testExternalParameterRule(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.code = 'return rule_test_rule(test_parameter=True)'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         rule_parameter = self.RuleParameter()
         rule_parameter.kind = 'rule'
@@ -353,7 +353,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'children': [],
                                 }]}]})
 
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('table.test0060table_2dim',
         'rule_engine.test0014_testRuleEngineCreation')
