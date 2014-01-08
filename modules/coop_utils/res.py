@@ -9,7 +9,7 @@ __all__ = [
     'Group',
     'User',
     'ResUserWarning',
-]
+    ]
 
 
 class Group(ExportImportMixin):
@@ -31,8 +31,6 @@ class Group(ExportImportMixin):
 
 
 class User(ExportImportMixin):
-    'User'
-
     __name__ = 'res.user'
 
     @classmethod
@@ -60,8 +58,6 @@ class User(ExportImportMixin):
 
 
 class ResUserWarning(ExportImportMixin):
-    'User Warning'
-
     __name__ = 'res.user.warning'
 
     @classmethod

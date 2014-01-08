@@ -1,6 +1,6 @@
 from trytond.pool import Pool
 from .rule_engine import *
-from .product import *
+from .offered import *
 from .expense import *
 from .business_rule import *
 from .coverage import *
@@ -16,7 +16,7 @@ def register():
         # From party
         Party,
         Insurer,
-        # From product
+        # From offered
         Offered,
         ItemDescription,
         OptionDescription,

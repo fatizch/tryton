@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
-    <!-- Menu -->
+    <!-- ######## -->
+    <!-- # Menu # -->
+    <!-- ######## -->
     <menuitem name="Export Import" id="menu_export_import" sequence="50" parent="ir.menu_administration"/>
-    <!-- Import Wizard -->
+    <!-- ###################### -->
+    <!-- # Import Select File # -->
+    <!-- ###################### -->
     <record model="ir.ui.view" id="file_selector_form">
       <field name="model">ir.import.select_file</field>
       <field name="type">form</field>
       <field name="name">file_selector_form</field>
     </record>
+    <!-- ################# -->
+    <!-- # Import Wizard # -->
+    <!-- ################# -->
     <record model="ir.action.wizard" id="import_wizard">
       <field name="name">Import File</field>
       <field name="wiz_name">ir.import</field>
     </record>
     <menuitem name="Import Wizard" id="menu_import_wizard" sequence="50" parent="menu_export_import" action="import_wizard"/>
-    <!-- Export Instance -->
+    <!-- ####################### -->
+    <!-- # Export Package Item # -->
+    <!-- ####################### -->
     <record model="ir.ui.view" id="export_instance_form">
       <field name="model">ir.export_package.item</field>
       <field name="type">form</field>
@@ -25,7 +34,9 @@
       <field name="type">tree</field>
       <field name="name">export_instance_tree</field>
     </record>
-    <!-- Export Package -->
+    <!-- ################## -->
+    <!-- # Export Package # -->
+    <!-- ################## -->
     <record model="ir.ui.view" id="export_package_form">
       <field name="model">ir.export_package</field>
       <field name="type">form</field>
@@ -36,6 +47,7 @@
       <field name="type">tree</field>
       <field name="name">export_package_tree</field>
     </record>
+    <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_export_package">
       <field name="name">Export Package</field>
       <field name="res_model">ir.export_package</field>

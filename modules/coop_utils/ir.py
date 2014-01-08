@@ -26,12 +26,10 @@ __all__ = [
     'ModelAccess',
     'Property',
     'Lang',
-]
+    ]
 
 
 class Sequence(ExportImportMixin):
-    'Sequence'
-
     __name__ = 'ir.sequence'
 
     @classmethod
@@ -64,8 +62,6 @@ class DateClass:
 
 
 class View(ExportImportMixin):
-    'View'
-
     __name__ = 'ir.ui.view'
 
     @classmethod
@@ -74,7 +70,6 @@ class View(ExportImportMixin):
 
 
 class UIMenu(ExportImportMixin):
-    'UI menu'
     __name__ = 'ir.ui.menu'
 
     def get_rec_name(self, name):
@@ -86,8 +81,6 @@ class UIMenu(ExportImportMixin):
 
 
 class Rule(ExportImportMixin):
-    'Rule'
-
     __name__ = 'ir.rule'
 
     @classmethod
@@ -96,8 +89,6 @@ class Rule(ExportImportMixin):
 
 
 class RuleGroup(ExportImportMixin):
-    'Rule Group'
-
     __name__ = 'ir.rule.group'
 
     @classmethod
@@ -114,8 +105,6 @@ class RuleGroup(ExportImportMixin):
 
 
 class Action(ExportImportMixin):
-    'Action'
-
     __name__ = 'ir.action'
 
     xml_id = fields.Function(
@@ -205,8 +194,6 @@ class Action(ExportImportMixin):
 
 
 class ActionKeyword(ExportImportMixin):
-    'Action Keyword'
-
     __name__ = 'ir.action.keyword'
 
     @classmethod
@@ -215,8 +202,6 @@ class ActionKeyword(ExportImportMixin):
 
 
 class IrModel(ExportImportMixin):
-    'Model'
-
     __name__ = 'ir.model'
 
     @classmethod
@@ -231,8 +216,6 @@ class IrModel(ExportImportMixin):
 
 
 class IrModelField(ExportImportMixin):
-    'Model Field'
-
     __name__ = 'ir.model.field'
 
     @classmethod
@@ -241,8 +224,6 @@ class IrModelField(ExportImportMixin):
 
 
 class IrModelFieldAccess(ExportImportMixin):
-    'Model Field Access'
-
     __name__ = 'ir.model.field.access'
 
     @classmethod
@@ -251,8 +232,6 @@ class IrModelFieldAccess(ExportImportMixin):
 
 
 class ModelAccess(ExportImportMixin):
-    'Model Access'
-
     __name__ = 'ir.model.access'
 
     @classmethod
@@ -262,8 +241,6 @@ class ModelAccess(ExportImportMixin):
 
 
 class Property(ExportImportMixin):
-    'Property'
-
     __name__ = 'ir.property'
 
     @classmethod
@@ -279,8 +256,6 @@ class Property(ExportImportMixin):
 
 
 class Lang(ExportImportMixin):
-    'Lang'
-
     __name__ = 'ir.lang'
 
     @classmethod

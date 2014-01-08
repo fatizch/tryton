@@ -8,16 +8,16 @@ def register():
     Pool.register(
         # From process
         Status,
-        StepDesc,
-        ProcessDesc,
-        StepTransition,
+        ProcessStep,
+        Process,
+        ProcessTransition,
         Code,
         TransitionAuthorization,
         ProcessMenuRelation,
         ProcessStepRelation,
-        StepDescAuthorization,
+        StepGroupRelation,
         # From ir
-        WorkflowModel,
+        Model,
         # From process_framework
         ProcessFramework,
         module='process', type_='model')

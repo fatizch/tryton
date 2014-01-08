@@ -22,49 +22,34 @@ __all__ = [
     'VersionObject',
     'ObjectHistory',
     'expand_tree',
-]
+    ]
 
 
 def serialize_this(the_data, from_field=None):
     res = None
-    if (isinstance(the_data, list) and
-            the_data != [] and
+    if (isinstance(the_data, list) and the_data != [] and
             isinstance(the_data[0], Model)):
-        # It the provided field is a list, and the elements of this list is
-        # a Model, we need to serialize each element before use.
         res = []
         for elem in the_data:
             res.append(serialize_this(elem))
     elif isinstance(the_data, Model):
-        # If the field is a model
         if isinstance(the_data, Model) and the_data.id > 0:
-            # that has been stored in the db, we just need its id to store
-            # it.
             res = the_data.id
             if isinstance(from_field, tryton_fields.Reference):
-                res = '%s,%s' % (
-                    the_data.__name__,
-                    the_data.id)
+                res = '%s,%s' % (the_data.__name__, the_data.id)
         else:
-            # If not, we need to go through each field to serialize each of
-            # them separately.
             res = {}
             if not the_data._values is None:
                 for key, value in the_data._values.iteritems():
-                    res[key] = serialize_this(
-                        value,
-                        the_data._fields[key])
+                    res[key] = serialize_this(value, the_data._fields[key])
     else:
-        # If the field is a basic type, no need for further work.
         res = the_data
-
     return res
 
 
 class CoopSQL(export.ExportImportMixin, ModelSQL):
-    'Root class for all stored classes'
-
-    create_date_ = fields.Function(fields.DateTime('Creation date'),
+    create_date_ = fields.Function(
+        fields.DateTime('Creation date'),
         '_get_creation_date')
 
     @classmethod
@@ -98,20 +83,18 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        if (hasattr(cls, 'code')
-                and cls.search([('code',) + tuple(clause[1:])], limit=1)):
+        if (hasattr(cls, 'code') and cls.search([
+                        ('code',) + tuple(clause[1:])], limit=1)):
             return [('code',) + tuple(clause[1:])]
         return [(cls._rec_name,) + tuple(clause[1:])]
 
     @classmethod
-    def search(
-            cls, domain, offset=0, limit=None, order=None, count=False,
+    def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query=False):
         #Set your class here to see the domain on the search
         # if cls.__name__ == 'ins_contract.loan_share':
         #     print domain
-        return super(CoopSQL, cls).search(
-            domain=domain, offset=offset,
+        return super(CoopSQL, cls).search(domain=domain, offset=offset,
             limit=limit, order=order, count=count, query=query)
 
     def _get_creation_date(self, name):
@@ -129,7 +112,6 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
             if default is None:
                 default = {}
             default = default.copy()
-            #Code must be unique and action "copy" stores in db during process
             default[constraints[0]] = 'temp_for_copy'
 
             res = super(CoopSQL, cls).copy(objects, default=default)
@@ -175,8 +157,8 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
 
 
 class CoopView(ModelView):
-    must_expand_tree = fields.Function(fields.Boolean('Must Expand Tree',
-            states={'invisible': True}),
+    must_expand_tree = fields.Function(
+        fields.Boolean('Must Expand Tree', states={'invisible': True}),
         '_expand_tree')
 
     @classmethod
@@ -233,10 +215,7 @@ class VersionedObject(CoopView):
 
     __name__ = 'utils.versionned_object'
 
-    versions = fields.One2Many(
-        None,
-        'main_elem',
-        'Versions')
+    versions = fields.One2Many(None, 'main_elem', 'Versions')
     current_rec_name = fields.Function(
         fields.Char('Current Value'),
         'get_current_rec_name')
@@ -251,9 +230,6 @@ class VersionedObject(CoopView):
         versions = copy.copy(getattr(cls, 'versions'))
         versions.model_name = cls.version_model()
         setattr(cls, 'versions', versions)
-
-    # To do : CTD0069
-    # Check there is no overlapping of versions before save
 
     def get_previous_version(self, at_date):
         prev_version = None
@@ -358,7 +334,7 @@ class ObjectHistory(CoopSQL, CoopView):
         return [
             '"%s".id' % table,
             'COALESCE("%s".write_uid, "%s".create_uid)' % (table, table),
-        ] + [
+            ] + [
             '"%s"."%s"' % (table, name)
             for name, field in cls._fields.iteritems()
             if (name not in ('id', 'from_object', 'date', 'user')

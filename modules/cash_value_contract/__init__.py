@@ -1,7 +1,7 @@
 from trytond.pool import Pool
 from .account import *
 from .contract import *
-from .product import *
+from .rule_engine import *
 from .wizard import *
 from .test_case import *
 
@@ -14,7 +14,7 @@ def register():
         # From file contract
         CashValueCollection,
         Contract,
-        # From file product
+        # From file rule_engine
         CoveredDataRuleSet,
         # From file wizard
         SelectDate,

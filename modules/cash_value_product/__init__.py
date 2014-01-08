@@ -1,10 +1,10 @@
 from trytond.pool import Pool
-from .product import *
+from .offered import *
 
 
 def register():
     Pool.register(
-        # From file product :
+        # From file offered :
         CashValueRule,
         Product,
         OptionDescription,

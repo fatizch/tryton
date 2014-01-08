@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Versionned Object">
+  <group id="basic data" col="12">
+                    </group>
+  <newline/>
+  <group id="versions" yexpand="1" yfill="1">
+    <field name="versions" yexpand="1"/>
+  </group>
+</form>

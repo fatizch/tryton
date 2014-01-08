@@ -11,13 +11,11 @@ __all__ = [
     'launch_function',
     'prepare_test',
     'CoopTestCase',
-]
+    ]
 
 
 def get_module_test_case(module_name):
-    filename = os.path.abspath(
-        os.path.join(
-            os.path.normpath(__file__),
+    filename = os.path.abspath(os.path.join(os.path.normpath(__file__),
             '..', '..', module_name, 'tests', 'test_module.py'))
     return imp.load_source(module_name, filename)
 
@@ -28,13 +26,13 @@ def launch_function(module_name, method_name):
             in master._executed):
         module_file = get_module_test_case(module_name)
         test_class = module_file.ModuleTestCase
-        test_class._models = Transaction().context.get(
-            'master')._models
+        test_class._models = Transaction().context.get('master')._models
         getattr(test_class(method_name), method_name)()
         master._executed.append('%s,%s' % (module_name, method_name))
 
 
 def prepare_test(*_args):
+    # Do not set this import file-wide, it breaks things
     from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
 
     for arg in _args:
@@ -91,7 +89,7 @@ class CoopTestCase(unittest.TestCase):
         test_function = getattr(self, self._testMethodName)
         if not (hasattr(test_function, '_is_ready') and
                 test_function._is_ready) and not (self._testMethodName in (
-                    'test0005views', 'test0006depends')):
+                        'test0005views', 'test0006depends')):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
