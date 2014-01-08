@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
+import shutil
 import os
 import ConfigParser
 import argparse
@@ -93,6 +94,8 @@ def sync(arguments, config, work_data):
         sync_this('proteus')
     if arguments.target in ('coop', 'all'):
         sync_this('coopbusiness')
+        arguments.env = os.environ['VIRTUAL_ENV']
+        configure(arguments, config, work_data)
 
 
 def database(arguments, config, work_data):
@@ -167,15 +170,29 @@ def export(arguments, config, work_data):
 
 
 def configure(arguments, config, work_data):
-    root = os.path.normpath(arguments.env)
+    root = os.path.normpath(os.path.abspath(arguments.env))
     base_name = os.path.basename(root)
     workspace = os.path.join(root, 'tryton-workspace')
     coopbusiness = os.path.join(workspace, 'coopbusiness')
     os.chdir(os.path.join(root, 'bin'))
-    os.system('ln -s %s coop_start' % os.path.join(coopbusiness, 'scripts',
-            'script_launcher.py'))
+    process = subprocess.Popen(['ln', '-s', os.path.join(coopbusiness,
+            'scripts', 'script_launcher.py'), 'coop_start'],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process.communicate()
+    module_dir = os.path.join(workspace, 'coopbusiness', 'modules')
+    for elem in os.listdir(module_dir):
+        if not os.path.isdir(os.path.join(module_dir, elem)):
+            continue
+        if not os.path.exists(os.path.join(module_dir, elem, '__init__.py')):
+            shutil.rmtree(os.path.join(module_dir, elem))
     os.chdir(os.path.join(workspace, 'trytond', 'trytond', 'modules'))
-    os.system("find . -maxdepth 1 -lname '*' -exec rm '{}' \\")
+    for filename in os.listdir(os.path.join(workspace, 'trytond', 'trytond',
+                'modules')):
+        target = os.path.join(workspace, 'trytond', 'trytond', 'modules',
+            filename)
+        if not os.path.islink(target):
+            continue
+        os.unlink(target)
     os.system('ln -s ../../../coopbusiness/modules/* . 2> /dev/null')
     if not os.path.exists(os.path.join(workspace, 'logs')):
         os.makedirs(os.path.join(workspace, 'logs'))
