@@ -1,24 +1,15 @@
-#-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
-
 from trytond.modules.coop_utils import utils
 
-__all__ = ['Coverage']
+__metaclass__ = PoolMeta
+__all__ = ['OptionDescription']
 
 
-class Coverage():
-    'Coverage'
-
+class OptionDescription:
     __name__ = 'offered.option.description'
-    __metaclass__ = PoolMeta
 
     @classmethod
     def __setup__(cls):
-        super(Coverage, cls).__setup__()
-        cls.family = copy.copy(cls.family)
-        if not cls.family.selection:
-            cls.family.selection = []
-        utils.append_inexisting(cls.family.selection,
-            ('pc', 'Property & Casualty'))
+        super(OptionDescription, cls).__setup__()
+        utils.update_selection(cls, 'selection', (
+                ('pc', 'Property & Casualty'),))
