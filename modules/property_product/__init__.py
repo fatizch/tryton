@@ -4,5 +4,6 @@ from .product import *
 
 def register():
     Pool.register(
-        Coverage,
+        # From product
+        OptionDescription,
         module='property_product', type_='model')
