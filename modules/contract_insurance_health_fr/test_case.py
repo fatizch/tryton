@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 
 
-MODULE_NAME = 'health_fr'
+MODULE_NAME = 'contract_insurance_health_fr'
 
 __metaclass__ = PoolMeta
 __all__ = [

@@ -10,7 +10,7 @@ NEEDED_MODULES = [
     'life_contract_subscription',
     'insurance_contract',
     'endorsement',
-    'health_fr',
+    'contract_insurance_health_fr',
     'commission',
     'company_cog',
     'distribution',

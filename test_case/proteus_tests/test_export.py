@@ -7,7 +7,7 @@ NEEDED_MODULES = [
     'cog_translation',
     'bank_cog',
     'table',
-    'health_fr',
+    'contract_insurance_health_fr',
     'property_product',
     'life_contract_subscription',
     'task_manager',

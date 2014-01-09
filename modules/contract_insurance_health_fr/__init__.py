@@ -16,4 +16,4 @@ def register():
         RuleEngineRuntime,
         # from test_case
         TestCaseModel,
-        module='health_fr', type_='model')
+        module='contract_insurance_health_fr', type_='model')
