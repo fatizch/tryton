@@ -7,7 +7,7 @@ NEEDED_MODULES = [
     'loan',
     'billing_group_life_fr',
     'party_cog',
-    'life_contract_subscription',
+    'contract_life_process',
     'contract_insurance',
     'endorsement',
     'contract_insurance_health_fr',

@@ -8,4 +8,4 @@ def register():
         # from contract
         Contract,
         CoveredData,
-        module='life_contract_subscription', type_='model')
+        module='contract_life_process', type_='model')

@@ -9,7 +9,7 @@ NEEDED_MODULES = [
     'table',
     'contract_insurance_health_fr',
     'property_product',
-    'life_contract_subscription',
+    'contract_life_process',
     'task_manager',
     'process_cog',
     'claim_life_process',
