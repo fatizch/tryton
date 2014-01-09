@@ -4,7 +4,7 @@ import copy
 from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import utils, fields
-from trytond.modules.insurance_product import product
+from trytond.modules.insurance_product import offered
 
 
 __metaclass__ = PoolMeta
@@ -60,7 +60,7 @@ class OptionDescription:
                 try:
                     sub_elem_line, sub_elem_errs = self.get_result(
                         'sub_elem_price', tmp_args, kind='pricing')
-                except product.NonExistingRuleKindException:
+                except offered.NonExistingRuleKindException:
                     sub_elem_line = None
                     sub_elem_errs = []
                 if sub_elem_line and sub_elem_line.amount:

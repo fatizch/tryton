@@ -9,7 +9,7 @@ from trytond.modules.coop_utils import utils, coop_date
 from trytond.modules.coop_utils import coop_string
 from trytond.modules.coop_currency import ModelCurrency
 from trytond.modules.contract import contract
-from trytond.modules.insurance_product import product
+from trytond.modules.insurance_product import offered
 
 
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
@@ -754,7 +754,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
                     'scope': 'covered'},
                 kind='deductible')[0]
             return [x.id for x in durations] if durations else []
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             return []
 
     def get_deductible_duration(self):

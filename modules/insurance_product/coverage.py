@@ -5,10 +5,9 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, And
 
 from trytond.modules.coop_utils import utils, fields
-from trytond.modules.insurance_product import product
+from trytond.modules.insurance_product import offered
 from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import EligibilityResultLine
-from .product import IS_INSURANCE
 
 
 __metaclass__ = PoolMeta
@@ -24,16 +23,16 @@ class OptionDescription:
     __name__ = 'offered.option.description'
 
     insurer = fields.Many2One('insurer', 'Insurer', states={
-            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
+            'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
             }, depends=['is_package'])
     family = fields.Selection([('', '')], 'Family', states={
-            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
-            'required': And(~Eval('is_package'), IS_INSURANCE),
+            'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
+            'required': And(~Eval('is_package'), offered.IS_INSURANCE),
             }, depends=['is_package'])
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         states={
-            'invisible': Or(~~Eval('is_package'), ~IS_INSURANCE),
-            'required': And(~Eval('is_package'), IS_INSURANCE),
+            'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
+            'required': And(~Eval('is_package'), offered.IS_INSURANCE),
             }, depends=['is_package'])
 
     @classmethod
@@ -66,7 +65,7 @@ class OptionDescription:
         try:
             coverage_line, coverage_errs = self.get_result(
                 'price', args, kind='pricing')
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             coverage_line = None
             coverage_errs = []
         if coverage_line and coverage_line.amount:
@@ -85,7 +84,7 @@ class OptionDescription:
             try:
                 sub_elem_line, sub_elem_errs = self.get_result(
                     'sub_elem_price', tmp_args, kind='pricing')
-            except product.NonExistingRuleKindException:
+            except offered.NonExistingRuleKindException:
                 sub_elem_line = None
                 sub_elem_errs = []
             if sub_elem_line and sub_elem_line.amount:
@@ -119,7 +118,7 @@ class OptionDescription:
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, kind='eligibility')
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
 
@@ -153,7 +152,7 @@ class OptionDescription:
                 'allowed_amounts',
                 args,
                 kind='coverage_amount')
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             return [], []
 
     def give_me_documents(self, args):
@@ -163,7 +162,7 @@ class OptionDescription:
                     'documents', args, kind='sub_document')
             else:
                 res, errs = self.get_result('documents', args, kind='document')
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             return [], []
 
         return res, errs
@@ -181,7 +180,7 @@ class OptionDescription:
                 'coverage_amount_validity',
                 args,
                 kind='coverage_amount')
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             return (True, []), []
 
     def give_me_dependant_amount_coverage(self, args):
@@ -190,7 +189,7 @@ class OptionDescription:
                 'dependant_amount_coverage',
                 args,
                 kind='coverage_amount')
-        except product.NonExistingRuleKindException:
+        except offered.NonExistingRuleKindException:
             return None, []
 
     def get_currency(self):
@@ -203,7 +202,7 @@ class OptionDescription:
         return res
 
 
-class OfferedOptionDescription(product.Offered):
+class OfferedOptionDescription(offered.Offered):
     'OptionDescription'
 
     __name__ = 'offered.option.description'

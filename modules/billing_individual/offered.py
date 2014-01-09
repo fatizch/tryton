@@ -3,7 +3,7 @@ from trytond.pool import PoolMeta
 
 from trytond.modules.coop_utils import model, fields
 
-from payment_rule import PAYMENT_DELAYS
+from payment_term import PAYMENT_DELAYS
 
 
 __metaclass__ = PoolMeta
