@@ -8,4 +8,4 @@ def register():
         CashValueRule,
         Product,
         OptionDescription,
-        module='cash_value_product', type_='model')
+        module='offered_cash_value', type_='model')

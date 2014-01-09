@@ -51,7 +51,7 @@ Constants::
     ...     'life_product',
     ...     'health',
     ...     'coop_process',
-    ...     'cash_value_product',
+    ...     'offered_cash_value',
     ...     'bank_fr',
     ...     'loan_claim',
     ...     'coop_party_fr',

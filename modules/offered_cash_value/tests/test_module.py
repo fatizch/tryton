@@ -13,7 +13,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @classmethod
     def get_module_name(cls):
-        return 'cash_value_product'
+        return 'offered_cash_value'
 
 
 def suite():
