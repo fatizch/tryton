@@ -33,8 +33,7 @@ class Product:
 
     @classmethod
     def get_possible_product_kind(cls):
-        res = super(OptionDescription,
-            cls).get_possible_product_kind()
+        res = super(Product, cls).get_possible_product_kind()
         res.append(('commission', 'Commission'))
         return res
 

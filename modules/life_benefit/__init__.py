@@ -6,6 +6,6 @@ def register():
     Pool.register(
         # From benefit
         Benefit,
-        LossDesc,
+        LossDescription,
         BenefitRule,
         module='life_benefit', type_='model')

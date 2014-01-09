@@ -71,7 +71,7 @@ class LossDescription(model.CoopSQL, model.CoopView):
         'benefit.event.description-loss.description', 'loss_desc',
         'event_desc', 'Events Descriptions',
         domain=[('company', '=', Eval('company'))], depends=['company'])
-    item_kind = fields.Selection('get_possible_item_kind', 'Kind')
+    item_kind = fields.Selection([('', '')], 'Kind')
     with_end_date = fields.Boolean('With End Date')
     complementary_data_def = fields.Many2Many(
         'benefit.loss.description-extra_data',
@@ -82,10 +82,6 @@ class LossDescription(model.CoopSQL, model.CoopView):
         'Documents')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
-
-    @classmethod
-    def get_possible_item_kind(cls):
-        return [('', '')]
 
     def get_documents(self):
         if not (hasattr(self, 'documents') and self.documents):
