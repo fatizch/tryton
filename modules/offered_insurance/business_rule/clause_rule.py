@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 from trytond.modules.cog_utils import model, fields
-from trytond.modules.insurance_product.business_rule.business_rule import \
+from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot
 
 

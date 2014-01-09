@@ -46,7 +46,7 @@ Constants::
     ...     'contract_cash_value',
     ...     'process',
     ...     'contract_group',
-    ...     'insurance_product',
+    ...     'offered_insurance',
     ...     'account_payment',
     ...     'life_product',
     ...     'health',

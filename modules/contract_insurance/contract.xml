@@ -22,7 +22,7 @@
         <record model="ir.action.keyword" id="report_document_request_keyword">
             <field name="keyword">form_action</field>
             <field name="model">contract,-1</field>
-            <field name="action" ref="insurance_product.letter_generation_wizard"/>
+            <field name="action" ref="offered_insurance.letter_generation_wizard"/>
         </record>
         <!--################################################################ -->
         <!-- Options Screens -->

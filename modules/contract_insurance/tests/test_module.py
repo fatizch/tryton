@@ -18,7 +18,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @classmethod
     def depending_modules(cls):
-        return ['life_contract', 'insurance_product', 'billing']
+        return ['life_contract', 'offered_insurance', 'billing']
 
     @classmethod
     def get_models(cls):

@@ -15,7 +15,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'insurance_product'
+        return 'offered_insurance'
 
     @classmethod
     def depending_modules(cls):
@@ -200,11 +200,11 @@ return True'''
         self.assert_(item_desc.id)
 
     @test_framework.prepare_test(
-        'insurance_product.test0001_testFunctionalRuleCreation',
-        'insurance_product.test0002_testTaxCreation',
-        'insurance_product.test0003_testFeeCreation',
-        'insurance_product.test0004_testNumberGeneratorCreation',
-        'insurance_product.test0005_testItemDescCreation',
+        'offered_insurance.test0001_testFunctionalRuleCreation',
+        'offered_insurance.test0002_testTaxCreation',
+        'offered_insurance.test0003_testFeeCreation',
+        'offered_insurance.test0004_testNumberGeneratorCreation',
+        'offered_insurance.test0005_testItemDescCreation',
         'offered.test0002_testCompanyCreation',
         )
     def test0010Coverage_creation(self):

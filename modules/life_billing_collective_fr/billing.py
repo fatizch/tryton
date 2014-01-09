@@ -6,7 +6,7 @@ from trytond.modules.cog_utils import model, fields, utils, coop_date, \
     coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.rule_engine import RuleEngineResult
-from trytond.modules.insurance_product import business_rule
+from trytond.modules.offered_insurance import business_rule
 
 __all__ = [
     'PremiumRateLine',

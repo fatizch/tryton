@@ -9,7 +9,7 @@ from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.offered.offered import CONFIG_KIND
 from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import PricingResultDetail
-from trytond.modules.insurance_product.business_rule.business_rule import \
+from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, STATE_SIMPLE
 
 __metaclass__ = PoolMeta

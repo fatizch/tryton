@@ -5,7 +5,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, And
 
 from trytond.modules.cog_utils import utils, fields
-from trytond.modules.insurance_product import offered
+from trytond.modules.offered_insurance import offered
 from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import EligibilityResultLine
 

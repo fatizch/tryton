@@ -77,13 +77,13 @@ def register():
         ExpenseKind,
         # From test_case
         TestCaseModel,
-        module='insurance_product', type_='model')
+        module='offered_insurance', type_='model')
     Pool.register(
         # From business_rule.documents_rule
         DocumentGenerateReport,
-        module='insurance_product', type_='report')
+        module='offered_insurance', type_='report')
     Pool.register(
         # From business_rule.documents_rule
         DocumentCreate,
         DocumentReceive,
-        module='insurance_product', type_='wizard')
+        module='offered_insurance', type_='wizard')

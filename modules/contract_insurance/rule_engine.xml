@@ -6,7 +6,7 @@
             <field name="name">_re_relation_number</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="type">function</field>
-            <field name="parent" ref="insurance_product.dossier_donnees_couverture"/>
+            <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
             <field name="translated_technical_name">numero_relation</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="fct_args">nom_relation[optionnel]</field>

@@ -3,7 +3,7 @@ from trytond.pyson import Eval, Or, And
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
-from trytond.modules.insurance_product.business_rule.business_rule import \
+from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 
 __all__ = [

@@ -14,7 +14,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.modules.cog_utils import fields, model, utils, coop_string
 from trytond.modules.cog_utils import coop_date
-from trytond.modules.insurance_product.business_rule.business_rule import \
+from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 from trytond.modules.cog_utils import BatchRoot
 
@@ -104,7 +104,7 @@ class Printable(Model):
         good_model.save()
 
     @classmethod
-    @model.CoopView.button_action('insurance_product.letter_generation_wizard')
+    @model.CoopView.button_action('offered_insurance.letter_generation_wizard')
     def generic_send_letter(cls, objs):
         pass
 
@@ -565,15 +565,15 @@ class DocumentCreate(Wizard):
             return Action.get_action_values('ir.action.report', good_report.id)
 
     start_state = 'select_model'
-    generate = StateAction('insurance_product.letter_generation_report')
+    generate = StateAction('offered_insurance.letter_generation_report')
     post_generation = StateTransition()
     select_model = StateView('document.create.select',
-        'insurance_product.letter_model_selection_form', [
+        'offered_insurance.letter_model_selection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Generate', 'generate', 'tryton-ok'),
             Button('Attach', 'attach', 'tryton-go-next')])
     attach = StateView('document.create.attach',
-        'insurance_product.attach_letter_form', [
+        'offered_insurance.attach_letter_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Attach', 'post_generation', 'tryton-ok')])
     attach_to_contact = StateTransition()
@@ -774,18 +774,18 @@ class DocumentReceive(Wizard):
     start_state = 'start'
     start = StateTransition()
     select_instance = StateView('document.receive.request',
-        'insurance_product.request_finder_form', [
+        'offered_insurance.request_finder_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'attachment_setter', 'tryton-ok')])
     attachment_setter = StateView('document.receive.attach',
-        'insurance_product.attachment_setter_form', [
+        'offered_insurance.attachment_setter_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Next', 'only_store', 'tryton-go-next')])
     only_store = StateTransition()
     store_attachments = StateTransition()
     store_and_reconcile = StateTransition()
     input_document = StateView('document.receive.set_requests',
-        'insurance_product.document_request_displayer_form', [
+        'offered_insurance.document_request_displayer_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Complete', 'notify_request', 'tryton-ok')])
     notify_request = StateTransition()

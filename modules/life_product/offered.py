@@ -8,7 +8,7 @@ from trytond.modules.cog_utils import utils, fields
 from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.offered import EligibilityResultLine
-from trytond.modules.insurance_product.business_rule.business_rule import \
+from trytond.modules.offered_insurance.business_rule.business_rule import \
     STATE_ADVANCED, STATE_SUB_SIMPLE
 
 STATE_LIFE = (

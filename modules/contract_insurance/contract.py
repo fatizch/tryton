@@ -9,7 +9,7 @@ from trytond.modules.cog_utils import utils, coop_date
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import contract
-from trytond.modules.insurance_product import offered
+from trytond.modules.offered_insurance import offered
 
 
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])

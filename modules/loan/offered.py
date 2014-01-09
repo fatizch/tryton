@@ -4,7 +4,7 @@ import copy
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import utils, fields
-from trytond.modules.insurance_product import offered
+from trytond.modules.offered_insurance import offered
 
 
 __metaclass__ = PoolMeta

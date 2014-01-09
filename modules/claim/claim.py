@@ -11,7 +11,7 @@ from trytond.modules.cog_utils import model, utils, coop_date, fields
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.benefit import benefit
-from trytond.modules.insurance_product import Printable
+from trytond.modules.offered_insurance import Printable
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
 

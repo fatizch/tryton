@@ -15,10 +15,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @classmethod
     def depending_modules(cls):
-        return ['insurance_product']
+        return ['offered_insurance']
 
     @test_framework.prepare_test(
-        'insurance_product.test0010Coverage_creation',
+        'offered_insurance.test0010Coverage_creation',
     )
     def test0010_LifeProductCreation(self):
         coverages = self.OptionDescription.search([
