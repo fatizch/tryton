@@ -13,7 +13,7 @@ def register():
         Company,
         # from contract
         Contract,
-        module='coop_account_payment', type_='model')
+        module='account_payment_cog', type_='model')
     Pool.register(
         CreateReceivablePayment,
-        module='coop_account_payment', type_='wizard')
+        module='account_payment_cog', type_='wizard')

@@ -9,7 +9,7 @@ Imports::
 Constants::
 
     >>> NEEDED_MODULES = [
-    ...     'coop_account_payment',
+    ...     'account_payment_cog',
     ...     'loan',
     ...     'life_billing_collective_fr',
     ...     'coop_party',

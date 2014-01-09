@@ -21,11 +21,11 @@ class CreateReceivablePayment(Wizard):
     'Create Receivable Payment'
     __name__ = 'account.payment.create'
     start = StateView('account.payment.create.parameters',
-        'coop_account_payment.create_receivable_start_view_form', [
+        'account_payment_cog.create_receivable_start_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Create', 'create_', 'tryton-ok', default=True),
             ])
-    create_ = StateAction('coop_account_payment.act_payment_receivable_form')
+    create_ = StateAction('account_payment_cog.act_payment_receivable_form')
 
     def do_create_(self, action):
         pool = Pool()
