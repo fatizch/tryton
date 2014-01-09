@@ -329,7 +329,7 @@ class Process(ModelSQL, ModelView):
         xml += "'invisible': ~~Eval('current_state')"
         xml += '}">'
         xml += '<label id="complete_text" string="The current record '
-        'completed the current process, please go ahead"/>'
+        xml += 'completed the current process, please go ahead"/>'
         xml += '</group>'
 
         return xml
