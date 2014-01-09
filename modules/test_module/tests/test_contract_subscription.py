@@ -36,7 +36,7 @@ NEEDED_MODULES = [
     'table',
     'property_product',
     'country_cog',
-    'life_claim',
+    'claim_life',
     'contract_cash_value',
     'process',
     'contract_group',

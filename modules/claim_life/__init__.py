@@ -14,4 +14,4 @@ def register():
         ClaimIndemnification,
         # from test_module
         TestCaseModel,
-        module='life_claim', type_='model')
+        module='claim_life', type_='model')
