@@ -8,4 +8,4 @@ def register():
         Benefit,
         LossDescription,
         BenefitRule,
-        module='life_benefit', type_='model')
+        module='benefit_life', type_='model')
