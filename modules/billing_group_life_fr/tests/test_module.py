@@ -10,7 +10,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'life_billing_collective_fr'
+        return 'billing_group_life_fr'
 
 
 def suite():

@@ -518,12 +518,12 @@ class BillingPremiumRateFormCreate(model.CoopWizard):
 
     start_state = 'parameters'
     parameters = StateView('billing.premium_rate.form.create.param',
-        'life_billing_collective_fr.rate_note_process_parameters_view_form', [
+        'billing_group_life_fr.rate_note_process_parameters_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Next', 'rate_notes', 'tryton-go-next', default=True),
             ])
     rate_notes = StateView('billing.premium_rate.form.create.show_forms',
-        'life_billing_collective_fr.rate_notes_displayer_view_form', [
+        'billing_group_life_fr.rate_notes_displayer_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Validate', 'validate_rate_notes', 'tryton-go-next',
                 default=True),
@@ -591,11 +591,11 @@ class BillingPremiumRateFormReceive(model.CoopWizard):
     start_state = 'calculate_start'
     calculate_start = StateTransition()
     select_note = StateView('billing.premium_rate.form.receive.select',
-        'life_billing_collective_fr.rate_note_selection_form', [
+        'billing_group_life_fr.rate_note_selection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'preview_bill', 'tryton-ok')])
     preview_bill = StateView('billing.premium_rate.form.receive.create_move',
-        'life_billing_collective_fr.rate_note_move_displayer_form', [
+        'billing_group_life_fr.rate_note_move_displayer_form', [
             Button('Cancel', 'clean_up', 'tryton-cancel'),
             Button('Validate', 'validate', 'tryton-ok')])
     clean_up = StateTransition()

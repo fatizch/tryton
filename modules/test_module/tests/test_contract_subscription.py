@@ -5,7 +5,7 @@ from proteus import config, Model, Wizard
 NEEDED_MODULES = [
     'account_payment_cog',
     'loan',
-    'life_billing_collective_fr',
+    'billing_group_life_fr',
     'party_cog',
     'life_contract_subscription',
     'contract_insurance',

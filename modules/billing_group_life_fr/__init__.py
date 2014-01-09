@@ -52,10 +52,10 @@ def register():
         RateNoteLineTreeExpansion,
         # from Company
         Company,
-        module='life_billing_collective_fr', type_='model')
+        module='billing_group_life_fr', type_='model')
     Pool.register(
         BillingPremiumRateFormCreate,
         BillingPremiumRateFormReceive,
         # From collection
         CollectionCreate,
-        module='life_billing_collective_fr', type_='wizard')
+        module='billing_group_life_fr', type_='wizard')
