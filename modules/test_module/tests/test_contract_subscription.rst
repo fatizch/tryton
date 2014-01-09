@@ -28,7 +28,7 @@ Constants::
     ...     'insurance_contract_subscription',
     ...     'currency_cog',
     ...     'coop_utils',
-    ...     'coop_translation',
+    ...     'cog_translation',
     ...     'collection',
     ...     'bank_cog',
     ...     'commission_group',

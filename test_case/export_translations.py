@@ -36,7 +36,7 @@ def launch_proteus_test_case(test_config_file):
     proteus_tools.get_config(cfg_dict)
     modules = proteus_tools.get_modules_to_update(cfg_dict['modules'])
     for cur_module in modules:
-        if cur_module == 'coop_translation':
+        if cur_module == 'cog_translation':
             #Manual translations to override tryton translations
             continue
         print '=' * 80 + '\n'
