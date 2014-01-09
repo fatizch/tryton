@@ -7,7 +7,7 @@ from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model, business, utils, fields
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.rule_engine import RuleEngineResult
 

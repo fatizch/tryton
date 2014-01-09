@@ -9,10 +9,10 @@ from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import model, utils, coop_date, fields
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.benefit import benefit
 from trytond.modules.insurance_product import Printable
-from trytond.modules.coop_currency.currency import DEF_CUR_DIG
+from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
 
 __metaclass__ = PoolMeta

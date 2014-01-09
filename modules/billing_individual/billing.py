@@ -9,7 +9,7 @@ from trytond.rpc import RPC
 
 from trytond.modules.coop_utils import model, fields, coop_date
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 

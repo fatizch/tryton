@@ -7,7 +7,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields
 from trytond.modules.coop_utils import utils, coop_date
 from trytond.modules.coop_utils import coop_string
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import contract
 from trytond.modules.insurance_product import offered
 

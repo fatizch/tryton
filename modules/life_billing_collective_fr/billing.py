@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.modules.coop_utils import model, fields, utils, coop_date, \
     coop_string
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.rule_engine import RuleEngineResult
 from trytond.modules.insurance_product import business_rule
 

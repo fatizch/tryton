@@ -11,4 +11,4 @@ def register():
         CurrencyRate,
         # From file test_case
         TestCaseModel,
-        module='coop_currency', type_='model')
+        module='currency_cog', type_='model')

@@ -5,7 +5,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
 from trytond.modules.coop_utils import utils, coop_date, model, fields
-from trytond.modules.coop_currency.currency import DEF_CUR_DIG
+from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.offered.offered import CONFIG_KIND
 from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import PricingResultDetail

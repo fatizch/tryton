@@ -4,7 +4,7 @@ from trytond.pool import Pool
 from trytond.pyson import Eval
 
 from trytond.modules.coop_utils import utils, coop_date, fields, model
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
     'Loan',
