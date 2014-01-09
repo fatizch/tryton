@@ -17,4 +17,4 @@ def register():
         SalaryRangeVersion,
         # from test_case
         TestCaseModel,
-        module='life_product', type_='model')
+        module='offered_life', type_='model')

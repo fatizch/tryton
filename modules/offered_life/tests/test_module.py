@@ -11,7 +11,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'life_product'
+        return 'offered_life'
 
     @classmethod
     def depending_modules(cls):
@@ -24,7 +24,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         coverages = self.OptionDescription.search([
             ('code', 'in', ['ALP', 'BET', 'GAM', 'DEL'])])
         self.OptionDescription.write(coverages, {
-                'family': 'life_product.definition'})
+                'family': 'offered_life.definition'})
 
 
 def suite():

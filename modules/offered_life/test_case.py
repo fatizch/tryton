@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 
-MODULE_NAME = 'life_product'
+MODULE_NAME = 'offered_life'
 
 __metaclass__ = PoolMeta
 __all__ = [

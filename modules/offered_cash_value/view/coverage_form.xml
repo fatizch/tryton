@@ -6,6 +6,6 @@
     </page>
   </xpath>
   <xpath expr="/form/notebook/page/notebook/page[@id='coverage_amount']" position="replace_attributes">
-    <page string="Coverage Amount" id="coverage_amount" states="{'invisible': Or(Bool(Eval('is_package')), Not(In(Eval('family'), ['cash_value', 'life_product.definition'])))}"/>
+    <page string="Coverage Amount" id="coverage_amount" states="{'invisible': Or(Bool(Eval('is_package')), Not(In(Eval('family'), ['cash_value', 'offered_life.definition'])))}"/>
   </xpath>
 </data>

@@ -12,8 +12,8 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
     STATE_ADVANCED, STATE_SUB_SIMPLE
 
 STATE_LIFE = (
-    Eval('_parent_offered', {}).get('family') != 'life_product.definition')
-FAMILY_LIFE = 'life_product.definition'
+    Eval('_parent_offered', {}).get('family') != 'offered_life.definition')
+FAMILY_LIFE = 'offered_life.definition'
 
 __metaclass__ = PoolMeta
 __all__ = [
