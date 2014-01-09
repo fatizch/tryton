@@ -31,7 +31,7 @@ Constants::
     ...     'coop_translation',
     ...     'collection',
     ...     'coop_bank',
-    ...     'commission_collective',
+    ...     'commission_group',
     ...     'insurance_collective_subscription',
     ...     'task_manager',
     ...     'rule_engine',

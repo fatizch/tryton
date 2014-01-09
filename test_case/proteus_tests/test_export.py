@@ -16,7 +16,7 @@ NEEDED_MODULES = [
     'loan_claim',
     'insurance_collective_subscription',
     'commission',
-    'commission_collective',
+    'commission_group',
     'billing',
     'coop_account_payment',
     'coop_account_payment_sepa',

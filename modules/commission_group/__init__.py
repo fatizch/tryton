@@ -6,4 +6,4 @@ def register():
     Pool.register(
         #From billing
         PremiumRateFormLine,
-        module='commission_collective', type_='model')
+        module='commission_group', type_='model')
