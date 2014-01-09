@@ -1,12 +1,12 @@
 from trytond.pool import Pool
-from .process_desc import *
+from .process import *
 from .ir import *
 from .process_framework import *
 
 
 def register():
     Pool.register(
-        # From process_desc
+        # From process
         Status,
         ProcessStep,
         Process,

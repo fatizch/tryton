@@ -1,6 +1,6 @@
 from trytond.pool import Pool
 
-from .subscription_process import *
+from .process import *
 from .contract import *
 
 

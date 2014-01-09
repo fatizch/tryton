@@ -1,6 +1,6 @@
 from trytond.pool import Pool
 
-from .product import *
+from .offered import *
 from .contract import *
 from .billing import *
 from .rule_engine import *

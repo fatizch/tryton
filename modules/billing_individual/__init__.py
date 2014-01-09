@@ -2,14 +2,14 @@ from trytond.pool import Pool
 from .billing import *
 from .account import *
 from .party import *
-from .payment_rule import *
+from .payment_term import *
 from .contract import *
 from .offered import *
 
 
 def register():
     Pool.register(
-        # From payment_rule
+        # From payment_term
         PaymentTerm,
         PaymentTermFeeRelation,
         PaymentTermLine,

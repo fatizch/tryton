@@ -1,9 +1,10 @@
 from trytond.pool import Pool
-from .claim_process import *
+from .claim import *
 
 
 def register():
     Pool.register(
+        # From claim
         Claim,
         Loss,
         Process,

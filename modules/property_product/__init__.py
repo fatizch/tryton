@@ -1,9 +1,9 @@
 from trytond.pool import Pool
-from .product import *
+from .offered import *
 
 
 def register():
     Pool.register(
-        # From product
+        # From offered
         OptionDescription,
         module='property_product', type_='model')

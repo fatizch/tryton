@@ -1,12 +1,13 @@
 from trytond.pool import Pool
 
-from .product import *
+from .offered import *
 from .party import *
 from .contract import *
 
 
 def register():
     Pool.register(
+        # From offered
         Product,
         OptionDescription,
         Party,

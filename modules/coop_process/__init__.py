@@ -1,10 +1,11 @@
 from trytond.pool import Pool
-from .coop_process import *
+from .process import *
 from .export import *
 
 
 def register():
     Pool.register(
+        # From process
         Status,
         ProcessAction,
         ProcessLog,
