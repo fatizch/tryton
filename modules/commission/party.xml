@@ -34,12 +34,12 @@
   </record>
   <record model="ir.action.act_window.view" id="act_broker_tree_view">
     <field name="sequence" eval="10"/>
-    <field name="view" ref="coop_party.party_view_tree"/>
+    <field name="view" ref="party_cog.party_view_tree"/>
     <field name="act_window" ref="act_broker_form"/>
   </record>
   <record model="ir.action.act_window.view" id="act_broker_form_view">
     <field name="sequence" eval="20"/>
-    <field name="view" ref="coop_party.party_view_form"/>
+    <field name="view" ref="party_cog.party_view_form"/>
     <field name="act_window" ref="act_broker_form"/>
   </record>
   <menuitem parent="menu_commission" sequence="1" id="menu_broker_form"

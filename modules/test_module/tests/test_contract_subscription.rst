@@ -12,7 +12,7 @@ Constants::
     ...     'account_payment_cog',
     ...     'loan',
     ...     'life_billing_collective_fr',
-    ...     'coop_party',
+    ...     'party_cog',
     ...     'life_contract_subscription',
     ...     'insurance_contract',
     ...     'endorsement',

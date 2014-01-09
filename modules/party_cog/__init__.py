@@ -20,4 +20,4 @@ def register():
         PartyInteraction,
         # from test_case
         TestCaseModel,
-        module='coop_party', type_='model')
+        module='party_cog', type_='model')

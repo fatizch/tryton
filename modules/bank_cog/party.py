@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Not
 
 from trytond.modules.coop_utils import coop_string, fields, utils
-from trytond.modules.coop_party.party import STATES_COMPANY
+from trytond.modules.party_cog.party import STATES_COMPANY
 
 __metaclass__ = PoolMeta
 

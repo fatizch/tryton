@@ -13,7 +13,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'coop_party'
+        return 'party_cog'
 
     @classmethod
     def get_models(cls):
@@ -37,7 +37,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'reversed_name': 'Children'
                     }])
 
-    @test_framework.prepare_test('coop_party.test0001_createParties')
+    @test_framework.prepare_test('party_cog.test0001_createParties')
     def test0010relations(self):
         '''
         Test Relations

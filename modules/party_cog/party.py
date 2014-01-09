@@ -297,12 +297,12 @@ class Party(export.ExportImportMixin):
             if self.contact_mechanisms else None)
 
     @classmethod
-    @model.CoopView.button_action('coop_party.act_addresses_button')
+    @model.CoopView.button_action('party_cog.act_addresses_button')
     def open_addresses(cls, objs):
         pass
 
     @classmethod
-    @model.CoopView.button_action('coop_party.act_contact_mechanisms_button')
+    @model.CoopView.button_action('party_cog.act_contact_mechanisms_button')
     def open_contact_mechanisms(cls, objs):
         pass
 

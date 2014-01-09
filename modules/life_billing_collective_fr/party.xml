@@ -26,7 +26,7 @@
             <field name="view" ref="group_party_view_form"/>
             <field name="act_window" ref="act_group_party_form"/>
         </record>
-        <menuitem parent="coop_party.menu_company_form" id="menu_group_party_form"
+        <menuitem parent="party_cog.menu_company_form" id="menu_group_party_form"
             icon="tryton-list" action="act_group_party_form"/>
     </data>
 </tryton>

@@ -61,15 +61,15 @@
             <field name="parent"/>
             <newline/>
             <field name="children" colspan="4"
-                view_ids="coop_party.company_view_tree_hierarchical,coop_party.company_view_form"
+                view_ids="party_cog.company_view_tree_hierarchical,party_cog.company_view_form"
                     mode="tree,form"/>
             <label name="logo" xalign="0"/>
             <field name="logo" colspan="3"/>
         </page>
         <page string="Relations" id="rel">
-            <field name="relations" view_ids="coop_party.party_relation_view_tree_from"
+            <field name="relations" view_ids="party_cog.party_relation_view_tree_from"
                 colspan="4"/>
-            <field name="in_relation_with" view_ids="coop_party.party_relation_view_tree_to"
+            <field name="in_relation_with" view_ids="party_cog.party_relation_view_tree_to"
                 colspan="4"/>
         </page>
         <page string="Roles" id="role">

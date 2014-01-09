@@ -6,7 +6,7 @@ from trytond.modules.coop_utils import fields, coop_date
 from trytond.modules.coop_utils import coop_string
 
 
-MODULE_NAME = 'coop_party'
+MODULE_NAME = 'party_cog'
 
 __metaclass__ = PoolMeta
 __all__ = [
