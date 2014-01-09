@@ -12,7 +12,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'coop_party_fr'
+        return 'party_fr'
 
     @classmethod
     def get_models(cls):

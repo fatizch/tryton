@@ -48,7 +48,7 @@ NEEDED_MODULES = [
     'offered_cash_value',
     'bank_fr',
     'loan_claim',
-    'coop_party_fr',
+    'party_fr',
     'claim',
     'billing',
     'account_cog',
