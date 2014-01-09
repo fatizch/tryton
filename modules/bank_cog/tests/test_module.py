@@ -15,7 +15,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'coop_bank'
+        return 'bank_cog'
 
     @classmethod
     def get_models(cls):
@@ -46,7 +46,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(os.path.isfile(config_file),
             'Impossible to found iban lib config file %s' % config_file)
 
-    @test_framework.prepare_test('coop_bank.test0010bank')
+    @test_framework.prepare_test('bank_cog.test0010bank')
     def test0020bankaccount(self):
         '''
         Create bank Account
@@ -88,7 +88,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         for value, test in values:
             self.assert_(ibanlib.iban.valid(value) == test)
 
-    @test_framework.prepare_test('coop_bank.test0010bank')
+    @test_framework.prepare_test('bank_cog.test0010bank')
     def test0040banknumberunicity(self):
         '''
         Check that a number account is unique in database

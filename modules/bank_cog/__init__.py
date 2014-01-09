@@ -14,4 +14,4 @@ def register():
         BankAccountNumber,
         # from test_case
         TestCaseModel,
-        module='coop_bank', type_='model')
+        module='bank_cog', type_='model')

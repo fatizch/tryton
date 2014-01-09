@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.modules.coop_utils import fields, coop_string
 
 
-MODULE_NAME = 'coop_bank'
+MODULE_NAME = 'bank_cog'
 
 __metaclass__ = PoolMeta
 __all__ = [

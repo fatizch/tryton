@@ -30,7 +30,7 @@ Constants::
     ...     'coop_utils',
     ...     'coop_translation',
     ...     'collection',
-    ...     'coop_bank',
+    ...     'bank_cog',
     ...     'commission_group',
     ...     'insurance_collective_subscription',
     ...     'task_manager',
