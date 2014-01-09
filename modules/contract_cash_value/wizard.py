@@ -33,7 +33,7 @@ class CollectionToCashValue(Wizard):
     start_state = 'select_date'
     select_date = StateView(
         'contract.wizard.collection_to_cash_value.select_date',
-        'cash_value_contract.select_date_form', [
+        'contract_cash_value.select_date_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'convert_to_cash_values', 'tryton-go-next')])
     convert_to_cash_values = StateTransition()
@@ -208,7 +208,7 @@ class CashValueUpdate(Wizard):
     start_state = 'select_date'
     select_date = StateView(
         'contract.wizard.collection_to_cash_value.select_date',
-        'cash_value_contract.select_date_form', [
+        'contract_cash_value.select_date_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'update_cash_values', 'tryton-go-next')])
     update_cash_values = StateTransition()
@@ -268,7 +268,7 @@ class CashSurrenderWizard(Wizard):
 
     start_state = 'parameters'
     parameters = StateView('contract.wizard.cash_surrender.parameters',
-        'cash_value_contract.parameters_form', [
+        'contract_cash_value.parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Surrend', 'surrend', 'tryton-go-next')])
     surrend = StateTransition()

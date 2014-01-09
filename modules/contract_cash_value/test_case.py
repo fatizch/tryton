@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
 
-MODULE_NAME = 'cash_value_contract'
+MODULE_NAME = 'contract_cash_value'
 
 __metaclass__ = PoolMeta
 

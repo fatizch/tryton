@@ -21,11 +21,11 @@ def register():
         CashSurrenderParameters,
         # From file test_case
         TestCaseModel,
-        module='cash_value_contract', type_='model')
+        module='contract_cash_value', type_='model')
 
     Pool.register(
         # From file wizard
         CollectionToCashValue,
         CashValueUpdate,
         CashSurrenderWizard,
-        module='cash_value_contract', type_='wizard')
+        module='contract_cash_value', type_='wizard')

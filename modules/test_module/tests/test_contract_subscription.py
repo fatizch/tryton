@@ -37,7 +37,7 @@ NEEDED_MODULES = [
     'property_product',
     'coop_country',
     'life_claim',
-    'cash_value_contract',
+    'contract_cash_value',
     'process',
     'insurance_collective',
     'insurance_product',
