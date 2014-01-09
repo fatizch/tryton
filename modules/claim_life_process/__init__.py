@@ -6,4 +6,4 @@ def register():
     Pool.register(
         # From claim
         Loss,
-        module='life_claim_process', type_='model')
+        module='claim_life_process', type_='model')

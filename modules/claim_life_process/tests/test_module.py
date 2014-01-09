@@ -11,7 +11,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'life_claim_process'
+        return 'claim_life_process'
 
 
 def suite():
