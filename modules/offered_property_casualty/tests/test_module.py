@@ -11,7 +11,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'property_product'
+        return 'offered_property_casualty'
 
 
 def suite():

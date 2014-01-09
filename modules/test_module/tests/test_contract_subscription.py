@@ -34,7 +34,7 @@ NEEDED_MODULES = [
     'offered',
     'contract',
     'table',
-    'property_product',
+    'offered_property_casualty',
     'country_cog',
     'claim_life',
     'contract_cash_value',

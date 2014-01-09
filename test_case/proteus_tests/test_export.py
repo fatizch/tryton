@@ -8,7 +8,7 @@ NEEDED_MODULES = [
     'bank_cog',
     'table',
     'contract_insurance_health_fr',
-    'property_product',
+    'offered_property_casualty',
     'contract_life_process',
     'task_manager',
     'process_cog',

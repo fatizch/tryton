@@ -6,4 +6,4 @@ def register():
     Pool.register(
         # From offered
         OptionDescription,
-        module='property_product', type_='model')
+        module='offered_property_casualty', type_='model')
