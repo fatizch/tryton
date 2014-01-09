@@ -10,7 +10,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'coop_country'
+        return 'country_cog'
 
 
 def suite():

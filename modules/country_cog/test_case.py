@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.coop_utils import fields
 
-MODULE_NAME = 'coop_country'
+MODULE_NAME = 'country_cog'
 
 __metaclass__ = PoolMeta
 __all__ = [

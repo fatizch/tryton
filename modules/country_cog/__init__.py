@@ -13,4 +13,4 @@ def register():
         ZipCode,
         # From test_case
         TestCaseModel,
-        module='coop_country', type_='model')
+        module='country_cog', type_='model')
