@@ -16,4 +16,4 @@ def register():
         User,
         # From test_case
         TestCaseModel,
-        module='coop_company', type_='model')
+        module='company_cog', type_='model')

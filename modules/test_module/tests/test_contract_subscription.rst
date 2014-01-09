@@ -18,7 +18,7 @@ Constants::
     ...     'endorsement',
     ...     'health_fr',
     ...     'commission',
-    ...     'coop_company',
+    ...     'company_cog',
     ...     'distribution',
     ...     'account_payment_sepa_cog',
     ...     'life_claim_process',
