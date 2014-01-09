@@ -17,12 +17,12 @@ def register():
         ProcessStart,
         # From export
         ExportPackage,
-        module='coop_process', type_='model')
+        module='process_cog', type_='model')
 
     Pool.register(
         GenerateGraph,
-        module='coop_process', type_='report')
+        module='process_cog', type_='report')
 
     Pool.register(
         ProcessFinder,
-        module='coop_process', type_='wizard')
+        module='process_cog', type_='wizard')

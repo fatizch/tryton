@@ -884,7 +884,7 @@ class ProcessFinder(Wizard):
 
     start_state = 'process_parameters'
     process_parameters = StateView('process.start',
-        'coop_process.process_parameters_form', [
+        'process_cog.process_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Start Process', 'action', 'tryton-go-next')])
     action = VoidStateAction()
@@ -956,7 +956,7 @@ class ProcessFinder(Wizard):
 
     @classmethod
     def get_parameters_view(cls):
-        return 'coop_process.process_parameters_form'
+        return 'process_cog.process_parameters_form'
 
 
 class GenerateGraph:

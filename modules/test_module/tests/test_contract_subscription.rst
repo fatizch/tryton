@@ -50,7 +50,7 @@ Constants::
     ...     'account_payment',
     ...     'life_product',
     ...     'health',
-    ...     'coop_process',
+    ...     'process_cog',
     ...     'offered_cash_value',
     ...     'bank_fr',
     ...     'loan_claim',

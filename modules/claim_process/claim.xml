@@ -23,7 +23,7 @@
       <field name="model">claim.declare.find_process</field>
       <field name="type">form</field>
       <field name="name">claim_process_parameters_form</field>
-      <field name="inherit" ref="coop_process.process_parameters_form"/>
+      <field name="inherit" ref="process_cog.process_parameters_form"/>
     </record>
     <record model="ir.action.wizard" id="declaration_process_launcher">
       <field name="name">Start Declaration</field>

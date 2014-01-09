@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.modules.coop_utils import model, fields, utils
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.coop_process import CogProcessFramework
+from trytond.modules.process_cog import CogProcessFramework
 
 __metaclass__ = PoolMeta
 __all__ = [

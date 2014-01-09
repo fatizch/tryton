@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.coop_utils import fields, utils
-from trytond.modules.coop_process import ProcessFinder, ProcessStart
+from trytond.modules.process_cog import ProcessFinder, ProcessStart
 
 
 __metaclass__ = PoolMeta

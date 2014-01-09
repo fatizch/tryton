@@ -11,7 +11,7 @@ NEEDED_MODULES = [
     'property_product',
     'life_contract_subscription',
     'task_manager',
-    'coop_process',
+    'process_cog',
     'life_claim_process',
     'loan_claim',
     'insurance_collective_subscription',
