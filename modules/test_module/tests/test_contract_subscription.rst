@@ -14,7 +14,7 @@ Constants::
     ...     'life_billing_collective_fr',
     ...     'party_cog',
     ...     'life_contract_subscription',
-    ...     'insurance_contract',
+    ...     'contract_insurance',
     ...     'endorsement',
     ...     'contract_insurance_health_fr',
     ...     'commission',

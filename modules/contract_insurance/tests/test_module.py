@@ -14,7 +14,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'insurance_contract'
+        return 'contract_insurance'
 
     @classmethod
     def depending_modules(cls):

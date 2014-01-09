@@ -10,7 +10,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Date
 
 from trytond.modules.cog_utils import model, fields, utils, coop_date
-from trytond.modules.insurance_contract.contract import IS_PARTY
+from trytond.modules.contract_insurance.contract import IS_PARTY
 
 
 __metaclass__ = PoolMeta

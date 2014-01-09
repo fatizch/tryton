@@ -25,6 +25,6 @@
       <field name="wiz_name">contract.renew</field>
     </record>
     <menuitem id="menu_renew_contract" sequence="15" action="act_renewal_wizard"
-        parent="insurance_contract.menu_contract"/>
+        parent="contract_insurance.menu_contract"/>
   </data>
 </tryton>

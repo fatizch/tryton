@@ -41,9 +41,9 @@ def register():
         RuleEngineRuntime,
         #From Wizard
         OptionsDisplayer,
-        module='insurance_contract', type_='model')
+        module='contract_insurance', type_='model')
 
     Pool.register(
         RenewalWizard,
         OptionSubscription,
-        module='insurance_contract', type_='wizard')
+        module='contract_insurance', type_='wizard')

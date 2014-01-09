@@ -4,7 +4,7 @@
     <!-- ############################################################ -->
     <!-- Menus -->
     <!-- ############################################################ -->
-    <menuitem parent="insurance_contract.menu_contract" name="Endorsement" id="menu_endorsement" sequence="20"/>
+    <menuitem parent="contract_insurance.menu_contract" name="Endorsement" id="menu_endorsement" sequence="20"/>
     <menuitem parent="menu_endorsement" name="Configuration" id="menu_configuration" sequence="0" icon="tryton-preferences"/>
     <!-- ############################################################ -->
     <!-- Endorsement -->

@@ -97,6 +97,6 @@
       <field name="act_window" ref="act_package_form"/>
     </record>
     <menuitem parent="offered.menu_product" sequence="5" id="menu_package_form" icon="tryton-list" action="act_package_form"/>
-    <menuitem parent="insurance_contract.menu_contract" name="Group" id="menu_group" sequence="20"/>
+    <menuitem parent="contract_insurance.menu_contract" name="Group" id="menu_group" sequence="20"/>
   </data>
 </tryton>

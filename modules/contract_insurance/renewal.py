@@ -75,11 +75,11 @@ class RenewalWizard(Wizard):
 
     start_state = 'renewal_start'
     renewal_start = StateView('contract.renew.parameters',
-        'insurance_contract.renewal_start_form', [
+        'contract_insurance.renewal_start_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Start', 'renewal_result', 'tryton-go-next')])
     renewal_result = StateView('contract.renew.report',
-        'insurance_contract.renewal_result_form', [
+        'contract_insurance.renewal_result_form', [
             Button('End', 'end', 'tryton-cancel')])
 
     def default_renewal_result(self, name):
