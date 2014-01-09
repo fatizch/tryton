@@ -7,9 +7,9 @@ def register():
         # from collection
         CollectionCreateParameters,
         CollectionCreateAssign,
-        module='insurance_collection', type_='model')
+        module='collection_insurance', type_='model')
 
     Pool.register(
         # from collection
         CollectionCreate,
-        module='insurance_collection', type_='wizard')
+        module='collection_insurance', type_='wizard')

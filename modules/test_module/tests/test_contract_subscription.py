@@ -16,7 +16,7 @@ NEEDED_MODULES = [
     'distribution',
     'account_payment_sepa_cog',
     'life_claim_process',
-    'insurance_collection',
+    'collection_insurance',
     'claim_process',
     'billing_individual',
     'insurance_contract_subscription',
