@@ -5,7 +5,7 @@ from .wizard import *
 def register():
     Pool.register(
         ContractSubscribeFindProcess,
-        module='insurance_collective_subscription', type_='model')
+        module='contract_group_process', type_='model')
     Pool.register(
         ContractSubscribe,
-        module='insurance_collective_subscription', type_='wizard')
+        module='contract_group_process', type_='wizard')

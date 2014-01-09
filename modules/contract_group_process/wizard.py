@@ -62,5 +62,5 @@ class ContractSubscribe:
     @classmethod
     def get_parameters_view(cls):
         return '%s.%s' % (
-            'insurance_collective_subscription',
+            'contract_group_process',
             'subscription_process_parameters_form')

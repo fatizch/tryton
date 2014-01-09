@@ -14,7 +14,7 @@ NEEDED_MODULES = [
     'process_cog',
     'life_claim_process',
     'loan_claim',
-    'insurance_collective_subscription',
+    'contract_group_process',
     'commission',
     'commission_group',
     'billing',

@@ -26,7 +26,7 @@ NEEDED_MODULES = [
     'collection',
     'bank_cog',
     'commission_group',
-    'insurance_collective_subscription',
+    'contract_group_process',
     'task_manager',
     'rule_engine',
     'life_contract',
