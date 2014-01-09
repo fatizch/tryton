@@ -19,7 +19,7 @@ NEEDED_MODULES = [
     'commission_group',
     'billing',
     'account_payment_cog',
-    'coop_account_payment_sepa',
+    'account_payment_sepa_cog',
     ]
 
 

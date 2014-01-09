@@ -20,7 +20,7 @@ Constants::
     ...     'commission',
     ...     'coop_company',
     ...     'distribution',
-    ...     'coop_account_payment_sepa',
+    ...     'account_payment_sepa_cog',
     ...     'life_claim_process',
     ...     'insurance_collection',
     ...     'claim_process',

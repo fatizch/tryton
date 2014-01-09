@@ -9,4 +9,4 @@ def register():
         Journal,
         Group,
         Payment,
-        module='coop_account_payment_sepa', type_='model')
+        module='account_payment_sepa_cog', type_='model')
