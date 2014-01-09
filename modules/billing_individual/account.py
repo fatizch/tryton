@@ -81,7 +81,7 @@ class Move:
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
             extra_clause = ((move_line.second_origin.like(
-                        'coop_account.%s_desc,%%' % name[0:3]))
+                        'account_cog.%s_desc,%%' % name[0:3]))
                 & (account.kind != 'receivable'))
             sign = -1
 
@@ -122,7 +122,7 @@ class Move:
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
             extra_clause = ((move_line.second_origin.like(
-                        'coop_account.%s_desc,%%' % name[0:3]))
+                        'account_cog.%s_desc,%%' % name[0:3]))
                 & (account.kind != 'receivable'))
             sign = -1
 

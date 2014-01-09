@@ -51,7 +51,7 @@ NEEDED_MODULES = [
     'coop_party_fr',
     'claim',
     'billing',
-    'coop_account',
+    'account_cog',
     ]
 ##Comment##Create Database
 config = config.set_trytond(database_type='sqlite')

@@ -4,7 +4,7 @@ from decimal import Decimal
 from trytond.cache import Cache
 from trytond.pool import PoolMeta, Pool
 
-MODULE_NAME = 'coop_account'
+MODULE_NAME = 'account_cog'
 
 __metaclass__ = PoolMeta
 __all__ = [

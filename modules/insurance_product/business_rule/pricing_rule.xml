@@ -35,7 +35,7 @@
     <record model="ir.ui.view" id="tax_version_form">
       <field name="model">account.tax.description.version</field>
       <field name="type">form</field>
-      <field name="inherit" ref="coop_account.tax_description_version_view_form"/>
+      <field name="inherit" ref="account_cog.tax_description_version_view_form"/>
       <field name="name">tax_version_form</field>
     </record>
     <!--################################################################-->
@@ -44,7 +44,7 @@
     <record model="ir.ui.view" id="fee_version_form">
       <field name="model">account.fee.description.version</field>
       <field name="type">form</field>
-      <field name="inherit" ref="coop_account.fee_description_version_view_form"/>
+      <field name="inherit" ref="account_cog.fee_description_version_view_form"/>
       <field name="name">fee_version_form</field>
     </record>
   </data>

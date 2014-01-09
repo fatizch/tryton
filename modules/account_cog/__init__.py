@@ -26,4 +26,4 @@ def register():
         FeeDescriptionVersion,
         # From test_case
         TestCaseModel,
-        module='coop_account', type_='model')
+        module='account_cog', type_='model')
