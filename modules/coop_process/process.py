@@ -570,6 +570,11 @@ class Process(model.CoopSQL):
                 step2_rank = elem.order
         return step1_rank < step2_rank
 
+    def create_update_menu_entry(self):
+        if Transaction().context.get('__importing__'):
+            return []
+        return super(Process, self).create_update_menu_entry()
+
 
 class ProcessStepRelation(model.CoopSQL):
     __name__ = 'process-process.step'
