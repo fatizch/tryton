@@ -29,7 +29,7 @@ NEEDED_MODULES = [
     'contract_group_process',
     'task_manager',
     'rule_engine',
-    'life_contract',
+    'contract_life',
     'offered_distribution',
     'offered',
     'contract',
