@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.modules.coop_utils import coop_string, fields, model
+from trytond.modules.cog_utils import coop_string, fields, model
 
 __all__ = [
     'ZipCode',

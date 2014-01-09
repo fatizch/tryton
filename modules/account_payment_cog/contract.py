@@ -6,7 +6,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.transaction import Transaction
 from trytond.pyson import If, Eval, Date
-from trytond.modules.coop_utils import utils, fields
+from trytond.modules.cog_utils import utils, fields
 
 
 __metaclass__ = PoolMeta

@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [

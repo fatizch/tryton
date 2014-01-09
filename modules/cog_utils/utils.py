@@ -180,10 +180,10 @@ def get_module_path(module_name):
 
 
 def get_coop_config(section, option):
-    coop_utils = get_module_path('coop_utils')
-    if coop_utils:
+    cog_utils = get_module_path('cog_utils')
+    if cog_utils:
         config = ConfigParser.ConfigParser()
-        config.read(os.path.join(coop_utils, 'coop.cfg'))
+        config.read(os.path.join(cog_utils, 'coop.cfg'))
         return config.get(section, option)
 
 

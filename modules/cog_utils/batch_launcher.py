@@ -17,17 +17,17 @@ from celery.utils.log import get_task_logger
 #
 # Start a worker :
 #   celery worker -l info --config=celeryconfig
-#                         --app=trytond.modules.coop_utils.batch_launcher
+#                         --app=trytond.modules.cog_utils.batch_launcher
 #                         --logfile=logs/coop_batch.log
 #
 # Start the workers as daemons (background) :
 #   celery multi start CoopBatch -l info
-#                         --app=trytond.modules.coop_utils.batch_launcher
+#                         --app=trytond.modules.cog_utils.batch_launcher
 #                         --logfile=logs/%n.log
 # (conf file for daemon should be put in /etc/default/celery)
 #
 # Run a given batch :
-#   celery call trytond.modules.coop_utils.batch_launcher.generate_all
+#   celery call trytond.modules.cog_utils.batch_launcher.generate_all
 #                         --args='[args]'
 #   args are :
 #      - batch class __name__ ("document.request.batch")
@@ -39,7 +39,7 @@ from celery.utils.log import get_task_logger
 ##############################################################################
 
 
-# Celery configuration file in coop_utils/celeryconfig.py
+# Celery configuration file in cog_utils/celeryconfig.py
 celery = Celery('Coopengo Batch')
 
 

@@ -1,6 +1,6 @@
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import fields, model
+from trytond.modules.cog_utils import fields, model
 
 __all__ = [
     'ContractClause',

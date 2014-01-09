@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import fields, model, coop_date
+from trytond.modules.cog_utils import fields, model, coop_date
 from trytond.modules.insurance_product.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 

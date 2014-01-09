@@ -3,7 +3,7 @@ from decimal import Decimal
 from trytond.pool import Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import utils, coop_date, fields, model
+from trytond.modules.cog_utils import utils, coop_date, fields, model
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [

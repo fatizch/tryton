@@ -3,7 +3,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 
 
 __all__ = [

@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 
 __all__ = [
     'OptionSubscription',

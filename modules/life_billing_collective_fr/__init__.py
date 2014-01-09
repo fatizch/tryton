@@ -9,7 +9,7 @@ from .company import *
 from .account import *
 from .collection import *
 
-from trytond.modules.coop_utils import expand_tree
+from trytond.modules.cog_utils import expand_tree
 PremiumRateLineTreeExpansion = expand_tree('contract.premium_rate.line')
 RateNoteLineTreeExpansion = expand_tree('billing.premium_rate.form.line')
 

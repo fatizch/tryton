@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, coop_date, fields
+from trytond.modules.cog_utils import model, coop_date, fields
 from trytond.modules.offered import offered
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.insurance_product import offered as product

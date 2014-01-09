@@ -4,8 +4,8 @@ import copy
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.coop_utils import utils, fields
-from trytond.modules.coop_utils import coop_date
+from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.insurance_product.business_rule.business_rule import \

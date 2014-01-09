@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import utils, fields, model
+from trytond.modules.cog_utils import utils, fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [

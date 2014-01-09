@@ -2,8 +2,8 @@ import random
 import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.cache import Cache
-from trytond.modules.coop_utils import fields, coop_date
-from trytond.modules.coop_utils import coop_string
+from trytond.modules.cog_utils import fields, coop_date
+from trytond.modules.cog_utils import coop_string
 
 
 MODULE_NAME = 'party_cog'

@@ -3,7 +3,7 @@ import copy
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import export
+from trytond.modules.cog_utils import export
 
 
 __metaclass__ = PoolMeta

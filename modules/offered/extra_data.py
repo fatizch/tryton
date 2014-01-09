@@ -7,7 +7,7 @@ from trytond.model import DictSchemaMixin
 from trytond.pyson import Eval, Bool, Or
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import fields, model, utils, coop_string
+from trytond.modules.cog_utils import fields, model, utils, coop_string
 from trytond.modules.offered.offered import CONFIG_KIND
 
 __metaclass__ = PoolMeta

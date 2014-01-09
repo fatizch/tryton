@@ -1,7 +1,7 @@
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 
 from payment_term import PAYMENT_DELAYS
 

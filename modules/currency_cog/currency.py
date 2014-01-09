@@ -1,7 +1,7 @@
 from decimal import ROUND_HALF_UP, Decimal
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.coop_utils import export, utils
+from trytond.modules.cog_utils import export, utils
 
 __metaclass__ = PoolMeta
 

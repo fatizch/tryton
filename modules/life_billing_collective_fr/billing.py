@@ -2,7 +2,7 @@ from trytond.pyson import Eval, Or
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import StateTransition, StateView, Button, StateAction
-from trytond.modules.coop_utils import model, fields, utils, coop_date, \
+from trytond.modules.cog_utils import model, fields, utils, coop_date, \
     coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.rule_engine import RuleEngineResult

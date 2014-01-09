@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import fields
+from trytond.modules.cog_utils import fields
 
 MODULE_NAME = 'country_cog'
 

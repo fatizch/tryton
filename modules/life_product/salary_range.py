@@ -1,8 +1,8 @@
 #-*- coding:utf-8 -*-
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils.model import CoopSQL, utils, fields
-from trytond.modules.coop_utils.model import VersionedObject, VersionObject
+from trytond.modules.cog_utils.model import CoopSQL, utils, fields
+from trytond.modules.cog_utils.model import VersionedObject, VersionObject
 
 __all__ = [
     'SalaryRange',

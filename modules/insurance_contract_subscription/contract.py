@@ -1,7 +1,7 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.modules.coop_utils import model, fields, utils
+from trytond.modules.cog_utils import model, fields, utils
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework

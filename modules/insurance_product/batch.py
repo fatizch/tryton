@@ -1,7 +1,7 @@
 from trytond.pool import Pool
 from trytond.error import UserError
 
-from trytond.modules.coop_utils import BatchRoot
+from trytond.modules.cog_utils import BatchRoot
 
 __all___ = [
     'ProductValidationBatch',

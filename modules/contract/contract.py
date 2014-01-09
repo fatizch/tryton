@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import utils, model, fields, coop_date
+from trytond.modules.cog_utils import utils, model, fields, coop_date
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.insurance_product import Printable
 

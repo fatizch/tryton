@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 

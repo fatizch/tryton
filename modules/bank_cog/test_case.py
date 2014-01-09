@@ -1,7 +1,7 @@
 import random
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.coop_utils import fields, coop_string
+from trytond.modules.cog_utils import fields, coop_string
 
 
 MODULE_NAME = 'bank_cog'

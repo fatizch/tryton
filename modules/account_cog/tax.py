@@ -1,4 +1,4 @@
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 
 
 __all__ = [

@@ -2,8 +2,8 @@
 from trytond.pyson import Bool, Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model
-from trytond.modules.coop_utils import utils, coop_string, fields
+from trytond.modules.cog_utils import model
+from trytond.modules.cog_utils import utils, coop_string, fields
 
 __all__ = [
     'PartyRelationKind',

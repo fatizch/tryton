@@ -36,7 +36,7 @@ class ViewValidationBatch(batchs.BatchRoot):
     def get_batch_domain(cls):
         Module = Pool().get('ir.module.module')
         modules = Module.search([])
-        utils_module = Module.search([('name', '=', 'coop_utils')])[0]
+        utils_module = Module.search([('name', '=', 'cog_utils')])[0]
         coop_modules = set([module.name for module in modules
                 if utils_module in module.parents])
         return [('module', 'in', coop_modules)]

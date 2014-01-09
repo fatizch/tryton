@@ -4,7 +4,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields, utils, coop_date
+from trytond.modules.cog_utils import model, fields, utils, coop_date
 from trytond.modules.offered import NonExistingRuleKindException
 
 __metaclass__ = PoolMeta

@@ -49,10 +49,10 @@ def register():
         TestCaseSelector,
         SelectTestCase,
         TestCaseFileSelector,
-        module='coop_utils', type_='model')
+        module='cog_utils', type_='model')
     Pool.register(
         # From export
         ImportWizard,
         # From test_case_framework
         TestCaseWizard,
-        module='coop_utils', type_='wizard')
+        module='cog_utils', type_='wizard')

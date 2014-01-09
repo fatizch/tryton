@@ -12,11 +12,11 @@ from trytond.ir import Attachment
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import fields, model, utils, coop_string
-from trytond.modules.coop_utils import coop_date
+from trytond.modules.cog_utils import fields, model, utils, coop_string
+from trytond.modules.cog_utils import coop_date
 from trytond.modules.insurance_product.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
-from trytond.modules.coop_utils import BatchRoot
+from trytond.modules.cog_utils import BatchRoot
 
 __all__ = [
     'DocumentDescription',

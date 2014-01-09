@@ -472,7 +472,7 @@ class TestCaseWizard(model.CoopWizard):
 
     start_state = 'select_test_cases'
     select_test_cases = StateView('ir.test_case.run.select',
-        'coop_utils.select_test_cases_form', [
+        'cog_utils.select_test_cases_form', [
             Button('Quit', 'end', 'tryton-cancel'),
             Button('Execute Selected', 'execute_test_cases', 'tryton-ok')])
     execute_test_cases = StateTransition()

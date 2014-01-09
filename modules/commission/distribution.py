@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.coop_utils import model, fields, export
+from trytond.modules.cog_utils import model, fields, export
 
 __metaclass__ = PoolMeta
 __all__ = [

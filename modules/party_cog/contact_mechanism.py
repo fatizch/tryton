@@ -5,7 +5,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 from trytond.modules.party.contact_mechanism import _TYPES
-from trytond.modules.coop_utils import model, utils, fields, export
+from trytond.modules.cog_utils import model, utils, fields, export
 
 MEDIA = _TYPES + [
     ('mail', 'Mail')

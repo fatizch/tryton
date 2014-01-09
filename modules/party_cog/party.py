@@ -3,8 +3,8 @@ from trytond.pyson import Eval, Bool, Less
 
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import utils, fields, model, export
-from trytond.modules.coop_utils import coop_string
+from trytond.modules.cog_utils import utils, fields, model, export
+from trytond.modules.cog_utils import coop_string
 
 
 __metaclass__ = PoolMeta

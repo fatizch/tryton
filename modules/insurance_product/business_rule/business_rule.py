@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, utils, fields
+from trytond.modules.cog_utils import model, utils, fields
 from trytond.modules.rule_engine import RuleEngineResult
 from trytond.modules.offered.offered import CONFIG_KIND, Templated, GetResult
 

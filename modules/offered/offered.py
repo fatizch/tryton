@@ -5,8 +5,8 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.coop_utils import model, business, utils, fields
-from trytond.modules.coop_utils import coop_string
+from trytond.modules.cog_utils import model, business, utils, fields
+from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.rule_engine import RuleEngineResult

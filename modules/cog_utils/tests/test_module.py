@@ -2,8 +2,8 @@ import unittest
 
 import trytond.tests.test_tryton
 
-from trytond.modules.coop_utils import test_framework
-from trytond.modules.coop_utils import utils
+from trytond.modules.cog_utils import test_framework
+from trytond.modules.cog_utils import utils
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -12,10 +12,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'coop_utils'
+        return 'cog_utils'
 
     def test0020get_module_path(self):
-        self.assert_(utils.get_module_path('coop_utils'))
+        self.assert_(utils.get_module_path('cog_utils'))
         self.assert_(utils.get_module_path('dfsfsfsdf') is None)
 
 

@@ -2,7 +2,7 @@ import copy
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, And, Bool
-from trytond.modules.coop_utils import fields, utils, model
+from trytond.modules.cog_utils import fields, utils, model
 from trytond.modules.insurance_product import BusinessRuleRoot
 
 __metaclass__ = PoolMeta

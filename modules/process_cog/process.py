@@ -10,7 +10,7 @@ from trytond.pyson import Eval, Not, And
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
-from trytond.modules.coop_utils import utils, model, coop_date, fields
+from trytond.modules.cog_utils import utils, model, coop_date, fields
 from trytond.modules.process import ProcessFramework
 
 

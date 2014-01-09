@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.modules.coop_utils import fields
+from trytond.modules.cog_utils import fields
 
 __all__ = [
     'Configuration',

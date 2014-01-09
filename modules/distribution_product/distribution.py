@@ -4,8 +4,8 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import model, fields, utils, coop_string
-from trytond.modules.coop_utils import export
+from trytond.modules.cog_utils import model, fields, utils, coop_string
+from trytond.modules.cog_utils import export
 
 __metaclass__ = PoolMeta
 __all__ = [

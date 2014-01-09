@@ -7,7 +7,7 @@ import genshi.template
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import fields, export
+from trytond.modules.cog_utils import fields, export
 
 __metaclass__ = PoolMeta
 __all__ = ['Journal', 'Group', 'Payment']

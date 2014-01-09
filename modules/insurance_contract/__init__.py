@@ -8,7 +8,7 @@ from .wizard import *
 from .clause import *
 from .service import *
 
-from trytond.modules.coop_utils import expand_tree
+from trytond.modules.cog_utils import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
 CoveredDataTreeExpansion = expand_tree('contract.covered_data')
 

@@ -20,11 +20,11 @@ from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source
 from trytond.pyson import Eval, Or
 
-from trytond.modules.coop_utils import fields
-from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
-from trytond.modules.coop_utils.model import CoopView as ModelView
-from trytond.modules.coop_utils import model, CoopView, utils, coop_string
-from trytond.modules.coop_utils import coop_date
+from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
+from trytond.modules.cog_utils.model import CoopView as ModelView
+from trytond.modules.cog_utils import model, CoopView, utils, coop_string
+from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.table import TableCell
 

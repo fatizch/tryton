@@ -6,7 +6,7 @@ from sql.operators import Concat
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 
 __all__ = [
     'SelectDate',

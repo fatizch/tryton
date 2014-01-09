@@ -6,8 +6,8 @@ from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
 from trytond.pyson import If, Bool, Eval
 
-from trytond.modules.coop_utils import utils, fields, export
-from trytond.modules.coop_utils import coop_string
+from trytond.modules.cog_utils import utils, fields, export
+from trytond.modules.cog_utils import coop_string
 
 
 __metaclass__ = PoolMeta
