@@ -11,7 +11,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'loan_claim'
+        return 'claim_credit'
 
 
 def suite():

@@ -9,4 +9,4 @@ def register():
         ContractService,
         # From claim
         ClaimIndemnification,
-        module='loan_claim', type_='model')
+        module='claim_credit', type_='model')

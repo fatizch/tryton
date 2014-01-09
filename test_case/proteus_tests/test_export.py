@@ -13,7 +13,7 @@ NEEDED_MODULES = [
     'task_manager',
     'process_cog',
     'claim_life_process',
-    'loan_claim',
+    'claim_credit',
     'contract_group_process',
     'commission',
     'commission_group',

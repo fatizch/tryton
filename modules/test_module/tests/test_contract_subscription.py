@@ -47,7 +47,7 @@ NEEDED_MODULES = [
     'process_cog',
     'offered_cash_value',
     'bank_fr',
-    'loan_claim',
+    'claim_credit',
     'party_fr',
     'claim',
     'billing',
