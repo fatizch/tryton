@@ -30,7 +30,7 @@ NEEDED_MODULES = [
     'task_manager',
     'rule_engine',
     'life_contract',
-    'distribution_product',
+    'offered_distribution',
     'offered',
     'contract',
     'table',

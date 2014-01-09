@@ -21,4 +21,4 @@ def register():
         ExportPackage,
         # from test_case
         TestCaseModel,
-        module='distribution_product', type_='model')
+        module='offered_distribution', type_='model')
