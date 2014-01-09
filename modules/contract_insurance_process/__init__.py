@@ -12,8 +12,8 @@ def register():
         CoveredData,
         Process,
         ContractSubscribeFindProcess,
-        module='insurance_contract_subscription', type_='model')
+        module='contract_insurance_process', type_='model')
 
     Pool.register(
         ContractSubscribe,
-        module='insurance_contract_subscription', type_='wizard')
+        module='contract_insurance_process', type_='wizard')

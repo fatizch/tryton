@@ -25,7 +25,7 @@ Constants::
     ...     'collection_insurance',
     ...     'claim_process',
     ...     'billing_individual',
-    ...     'insurance_contract_subscription',
+    ...     'contract_insurance_process',
     ...     'currency_cog',
     ...     'cog_utils',
     ...     'cog_translation',

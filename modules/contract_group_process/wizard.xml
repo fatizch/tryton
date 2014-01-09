@@ -4,7 +4,7 @@
         <record model="ir.ui.view" id="subscription_process_parameters_form">
           <field name="model">contract.subscribe.find_process</field>
           <field name="type">form</field>
-          <field name="inherit" ref="insurance_contract_subscription.subscription_process_parameters_form"/>
+          <field name="inherit" ref="contract_insurance_process.subscription_process_parameters_form"/>
           <field name="name">collective_subscription_process_parameters_form</field>
       </record>
   </data>
