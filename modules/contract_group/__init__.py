@@ -13,4 +13,4 @@ def register():
         Benefit,
         # From Contract
         Contract,
-        module='insurance_collective', type_='model')
+        module='contract_group', type_='model')

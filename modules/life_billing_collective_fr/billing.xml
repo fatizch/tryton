@@ -54,7 +54,7 @@
       <field name="view" ref="rate_note_view_form"/>
       <field name="act_window" ref="act_rate_note_form"/>
     </record>
-    <menuitem parent="insurance_collective.menu_group" sequence="20" id="menu_rate_note_form" icon="tryton-list" action="act_rate_note_form"/>
+    <menuitem parent="contract_group.menu_group" sequence="20" id="menu_rate_note_form" icon="tryton-list" action="act_rate_note_form"/>
     <!-- ############################################################ -->
     <!-- Rate Note Line -->
     <!-- ############################################################ -->
@@ -81,7 +81,7 @@
       <field name="model">contract,-1</field>
       <field name="action" ref="launch_rate_notes_process"/>
     </record>
-    <menuitem id="menu_rate_note_process" sequence="30" action="launch_rate_notes_process" parent="insurance_collective.menu_group"/>
+    <menuitem id="menu_rate_note_process" sequence="30" action="launch_rate_notes_process" parent="contract_group.menu_group"/>
     <record model="ir.action.act_window" id="act_rate_note_relate_form">
       <field name="name">Rate Notes</field>
       <field name="res_model">billing.premium_rate.form</field>
@@ -120,7 +120,7 @@
       <field name="model">billing.premium_rate.form,-1</field>
       <field name="action" ref="act_rate_note_reception"/>
     </record>
-    <menuitem id="menu_rate_note_reception" sequence="31" action="act_rate_note_reception" parent="insurance_collective.menu_group"/>
+    <menuitem id="menu_rate_note_reception" sequence="31" action="act_rate_note_reception" parent="contract_group.menu_group"/>
 
     <!-- ############################################################ -->
     <!-- ########### Premium Rate Rule ########### -->
