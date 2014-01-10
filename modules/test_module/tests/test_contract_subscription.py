@@ -70,3 +70,6 @@ wizard.execute('end')
 Product = Model.get('offered.product')
 len(Product.find([], order=[('code', 'ASC')]))
 ##Res##9
+OptionDescription = Model.get('offered.option_description')
+len(OptionDescription.find([]))
+##Res##25

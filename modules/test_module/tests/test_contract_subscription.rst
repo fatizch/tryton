@@ -80,3 +80,6 @@ Import Exported DB::
     >>> Product = Model.get('offered.product')
     >>> len(Product.find([], order=[('code', 'ASC')]))
     9
+    >>> OptionDescription = Model.get('offered.option_description')
+    >>> len(OptionDescription.find([]))
+    25
