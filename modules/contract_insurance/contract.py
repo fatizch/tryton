@@ -760,9 +760,6 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_deductible_duration(self):
         if not utils.is_none(self, 'deductible_duration'):
             return self.deductible_duration
-        elif (self.option and self.option.complement
-                and self.option.complement.deductible_duration):
-            return self.option.deductible_duration
 
     def get_possible_options(self, name):
         return [x.id for x in self.contract.options] if self.contract else []

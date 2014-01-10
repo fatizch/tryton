@@ -61,7 +61,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
         states={
             'invisible': Eval('type', '') != 'fixed',
             'required': Eval('type', '') == 'fixed',
-            }, depends=['type'], ondelete='RESTRICT', required=True)
+            }, depends=['type'], ondelete='RESTRICT')
     currency_digits = fields.Function(fields.Integer('Currency Digits',
             on_change_with=['currency']), 'on_change_with_currency_digits')
     day = fields.Integer('Day of Month')

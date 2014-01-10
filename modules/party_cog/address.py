@@ -104,10 +104,6 @@ class Address(export.ExportImportMixin):
             else:
                 return self.zip
 
-    @staticmethod
-    def default_country():
-        return business.get_default_country()
-
     def autocomplete_city(self):
         if self.zip and self.country:
             cities = self.get_cities_from_zip(self.zip, self.country)

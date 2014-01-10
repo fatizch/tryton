@@ -249,7 +249,7 @@ class Contract(CogProcessFramework):
             option_docs, errs = self.get_product().get_result(
                 'documents', {
                     'contract': self,
-                    'option': option.get_coverage().code,
+                    'option': option.offered.code,
                     'appliable_conditions_date':
                     self.appliable_conditions_date,
                     'date': self.start_date})
@@ -266,7 +266,7 @@ class Contract(CogProcessFramework):
                 sub_docs, errs = self.get_product().get_result(
                     'documents', {
                         'contract': self,
-                        'option': data.option.get_coverage().code,
+                        'option': data.option.offered.code,
                         'date': self.start_date,
                         'appliable_conditions_date':
                         self.appliable_conditions_date,
