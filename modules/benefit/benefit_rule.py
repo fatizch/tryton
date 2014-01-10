@@ -2,12 +2,12 @@ import datetime
 from trytond.pyson import Eval, Or, Bool
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import model, coop_string, coop_date, utils
-from trytond.modules.coop_utils import fields
-from trytond.modules.coop_currency import ModelCurrency
-from trytond.modules.insurance_product.business_rule.business_rule import \
+from trytond.modules.cog_utils import model, coop_string, coop_date, utils
+from trytond.modules.cog_utils import fields
+from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED, CONFIG_KIND, STATE_SIMPLE
-from trytond.modules.coop_currency.currency import DEF_CUR_DIG
+from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
 
 __all__ = [

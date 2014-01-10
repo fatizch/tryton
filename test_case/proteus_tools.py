@@ -96,7 +96,7 @@ def get_test_cfg(test_config_file):
 
 
 def is_coop_module(module):
-    return 'coop_utils' in get_module_depends(module)
+    return 'cog_utils' in get_module_depends(module)
 
 
 def get_module_depends(module):

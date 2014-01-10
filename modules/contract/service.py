@@ -1,6 +1,6 @@
 from trytond.pyson import If, Eval
 
-from trytond.modules.coop_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields, coop_string
 
 __all__ = [
     'ContractService',

@@ -4,9 +4,9 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.process import ClassAttr
-from trytond.modules.coop_utils import utils, fields
-from trytond.modules.coop_process import CogProcessFramework
-from trytond.modules.coop_process import ProcessFinder, ProcessStart
+from trytond.modules.cog_utils import utils, fields
+from trytond.modules.process_cog import CogProcessFramework
+from trytond.modules.process_cog import ProcessFinder, ProcessStart
 
 
 __metaclass__ = PoolMeta

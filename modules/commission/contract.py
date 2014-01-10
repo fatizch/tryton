@@ -4,8 +4,8 @@ from trytond.pyson import Eval, Equal, If
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import fields, model, utils
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import PricingResultDetail
 
 from .offered import COMMISSION_KIND

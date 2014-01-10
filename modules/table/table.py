@@ -20,10 +20,10 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.protocols.jsonrpc import JSONEncoder
 
-from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
-from trytond.modules.coop_utils.model import CoopView as ModelView
-from trytond.modules.coop_utils import fields
-from trytond.modules.coop_utils import utils, coop_string
+from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
+from trytond.modules.cog_utils.model import CoopView as ModelView
+from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import utils, coop_string
 
 __all__ = [
     'TableCell',

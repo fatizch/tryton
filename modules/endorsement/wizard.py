@@ -4,7 +4,7 @@ from trytond.pyson import Eval
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
 
-from trytond.modules.coop_utils import model, fields
+from trytond.modules.cog_utils import model, fields
 
 __all__ = [
     'EndorsementSelection',

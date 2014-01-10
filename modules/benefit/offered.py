@@ -1,8 +1,8 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or
 
-from trytond.modules.coop_utils import fields
-from trytond.modules.insurance_product import product
+from trytond.modules.cog_utils import fields
+from trytond.modules.offered_insurance import offered
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -19,5 +19,5 @@ class OptionDescription:
             'currency_digits': Eval('currency_digits'),
             }, states={
             'readonly': ~Eval('start_date'),
-            'invisible': Or(~~Eval('is_package'), ~product.IS_INSURANCE),
+            'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
             }, depends=['currency_digits'])

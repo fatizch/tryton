@@ -128,7 +128,7 @@
     </record>
     <record model="ir.action.act_window.view" id="act_process_log_view2">
       <field name="sequence" eval="11"/>
-      <field name="view" ref="coop_process.process_log_form"/>
+      <field name="view" ref="process_cog.process_log_form"/>
       <field name="act_window" ref="act_process_log"/>
     </record>
     <menuitem parent="menu_task" sequence="30" action="act_process_log" id="menu_launch_existing_tasks"/>

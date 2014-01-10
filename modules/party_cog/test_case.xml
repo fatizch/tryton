@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Test Case Model -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="test_case_model_form">
+      <field name="model">ir.test_case</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="cog_utils.test_case_model_form"/>
+      <field name="name">test_case_model_form</field>
+    </record>
+    <!-- Data -->
+    <record model="ir.test_case" id="cog_utils.test_case_configuration">
+      <field name="number_of_parties">100</field>
+      <field name="number_of_males">50</field>
+      <field name="adult_age_max">65</field>
+      <field name="adult_age_min">18</field>
+      <field name="percent_of_couple">60</field>
+      <field name="percent_of_couple_with_same_name">50</field>
+      <field name="percent_of_couple_with_children">70</field>
+      <field name="max_nb_of_children_per_couple">3</field>
+      <field name="phone_prefix">+33</field>
+    </record>
+  </data>
+</tryton>

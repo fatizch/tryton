@@ -7,7 +7,7 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import fields, export
+from trytond.modules.cog_utils import fields, export
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -81,7 +81,7 @@ class Move:
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
             extra_clause = ((move_line.second_origin.like(
-                        'coop_account.%s_desc,%%' % name[0:3]))
+                        'account_cog.%s_desc,%%' % name[0:3]))
                 & (account.kind != 'receivable'))
             sign = -1
 
@@ -122,7 +122,7 @@ class Move:
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
             extra_clause = ((move_line.second_origin.like(
-                        'coop_account.%s_desc,%%' % name[0:3]))
+                        'account_cog.%s_desc,%%' % name[0:3]))
                 & (account.kind != 'receivable'))
             sign = -1
 

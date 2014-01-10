@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.model import ModelView, fields
 
-from trytond.modules.coop_utils import utils
+from trytond.modules.cog_utils import utils
 
 
 __all__ = [

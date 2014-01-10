@@ -2,8 +2,8 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import model, fields
-from trytond.modules.insurance_product.business_rule import business_rule
+from trytond.modules.cog_utils import model, fields
+from trytond.modules.offered_insurance.business_rule import business_rule
 
 __metaclass__ = PoolMeta
 __all__ = [

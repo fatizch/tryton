@@ -5,8 +5,8 @@ from dateutil.relativedelta import relativedelta
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval
-from trytond.modules.coop_utils import fields, model, coop_date
-from trytond.modules.insurance_product.business_rule.pricing_rule import \
+from trytond.modules.cog_utils import fields, model, coop_date
+from trytond.modules.offered_insurance.business_rule.pricing_rule import \
     PRICING_FREQUENCY
 
 __all__ = [
@@ -61,7 +61,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
         states={
             'invisible': Eval('type', '') != 'fixed',
             'required': Eval('type', '') == 'fixed',
-            }, depends=['type'], ondelete='RESTRICT', required=True)
+            }, depends=['type'], ondelete='RESTRICT')
     currency_digits = fields.Function(fields.Integer('Currency Digits',
             on_change_with=['currency']), 'on_change_with_currency_digits')
     day = fields.Integer('Day of Month')

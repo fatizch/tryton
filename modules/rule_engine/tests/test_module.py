@@ -5,7 +5,7 @@ import trytond.tests.test_tryton
 from trytond.transaction import Transaction
 from trytond.error import UserError
 
-from trytond.modules.coop_utils import test_framework
+from trytond.modules.cog_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):

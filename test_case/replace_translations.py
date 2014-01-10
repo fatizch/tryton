@@ -55,4 +55,4 @@ if __name__ == '__main__':
         }
     replace_translations(os.path.join(DIR, 'test_case.cfg'), 'fr_FR',
         update_dict, os.path.abspath(os.path.join(DIR, '..',
-                'modules', 'coop_translation', 'locale')))
+                'modules', 'cog_translation', 'locale')))

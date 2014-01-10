@@ -5,7 +5,7 @@ from trytond.wizard import StateView, Button, StateTransition
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.coop_utils import utils, model, fields
+from trytond.modules.cog_utils import utils, model, fields
 
 __metaclass__ = PoolMeta
 

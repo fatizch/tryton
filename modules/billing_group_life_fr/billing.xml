@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Premium Rate Line -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_line_view_tree">
+      <field name="model">contract.premium_rate.line</field>
+      <field name="type">tree</field>
+      <field name="field_childs">childs</field>
+      <field name="name">rate_line_tree</field>
+    </record>
+    <record model="ir.ui.view" id="rate_line_view_form">
+      <field name="model">contract.premium_rate.line</field>
+      <field name="type">form</field>
+      <field name="name">rate_line_form</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.ui.view" id="rate_note_process_parameters_view_form">
+      <field name="model">billing.premium_rate.form.create.param</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_process_parameters_form</field>
+    </record>
+    <record model="ir.ui.view" id="rate_notes_displayer_view_form">
+      <field name="model">billing.premium_rate.form.create.show_forms</field>
+      <field name="type">form</field>
+      <field name="name">rate_notes_displayer_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Rate Note -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_note_view_form">
+      <field name="model">billing.premium_rate.form</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_form</field>
+    </record>
+    <record model="ir.ui.view" id="rate_note_view_tree">
+      <field name="model">billing.premium_rate.form</field>
+      <field name="type">tree</field>
+      <field name="name">rate_note_tree</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_rate_note_form">
+      <field name="name">Rate Notes</field>
+      <field name="res_model">billing.premium_rate.form</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_rate_note_form_view_tree">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="rate_note_view_tree"/>
+      <field name="act_window" ref="act_rate_note_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_rate_note_form_view_form">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="rate_note_view_form"/>
+      <field name="act_window" ref="act_rate_note_form"/>
+    </record>
+    <menuitem parent="contract_group.menu_group" sequence="20" id="menu_rate_note_form" icon="tryton-list" action="act_rate_note_form"/>
+    <!-- ############################################################ -->
+    <!-- Rate Note Line -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_note_line_view_form">
+      <field name="model">billing.premium_rate.form.line</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_line_form</field>
+    </record>
+    <record model="ir.ui.view" id="rate_note_line_view_tree">
+      <field name="model">billing.premium_rate.form.line</field>
+      <field name="type">tree</field>
+      <field name="field_childs">childs</field>
+      <field name="name">rate_note_line_tree</field>
+    </record>
+    <!--################################################################-->
+    <!-- Billing Premium Rate Form Create -->
+    <!--################################################################-->
+    <record model="ir.action.wizard" id="launch_rate_notes_process">
+      <field name="name">Billing Premium Rate Form Create</field>
+      <field name="wiz_name">billing.premium_rate.form.create</field>
+    </record>
+    <record model="ir.action.keyword" id="launch_rate_note_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">contract,-1</field>
+      <field name="action" ref="launch_rate_notes_process"/>
+    </record>
+    <menuitem id="menu_rate_note_process" sequence="30" action="launch_rate_notes_process" parent="contract_group.menu_group"/>
+    <record model="ir.action.act_window" id="act_rate_note_relate_form">
+      <field name="name">Rate Notes</field>
+      <field name="res_model">billing.premium_rate.form</field>
+      <field name="domain">[('contract', '=', Eval('active_id'))]</field>
+    </record>
+    <record model="ir.action.keyword" id="act_rate_note_relate_keyword">
+      <field name="keyword">form_relate</field>
+      <field name="model">contract,-1</field>
+      <field name="action" ref="act_rate_note_relate_form"/>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Billing Premium Rate Form Receive Select -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_note_selection_form">
+      <field name="model">billing.premium_rate.form.receive.select</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_selection_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Billing Premium Rate Form Receive Create Move -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rate_note_move_displayer_form">
+      <field name="model">billing.premium_rate.form.receive.create_move</field>
+      <field name="type">form</field>
+      <field name="name">rate_note_move_displayer_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Rate Note Reception -->
+    <!-- ############################################################ -->
+    <record model="ir.action.wizard" id="act_rate_note_reception">
+      <field name="name">Rate Note Reception</field>
+      <field name="wiz_name">billing.premium_rate.form.receive</field>
+    </record>
+    <record model="ir.action.keyword" id="act_rate_note_reception_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">billing.premium_rate.form,-1</field>
+      <field name="action" ref="act_rate_note_reception"/>
+    </record>
+    <menuitem id="menu_rate_note_reception" sequence="31" action="act_rate_note_reception" parent="contract_group.menu_group"/>
+
+    <!-- ############################################################ -->
+    <!-- ########### Premium Rate Rule ########### -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="rating_rule_view_tree">
+      <field name="model">billing.premium.rate.rule</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="offered_insurance.businessruleroot_view_tree"/>
+      <field name="arch" type="xml"/>
+    </record>
+    <record model="ir.ui.view" id="rating_rule_view_form">
+      <field name="model">billing.premium.rate.rule</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="offered_insurance.businessruleroot_view_form"/>
+      <field name="name">rating_rule_form</field>
+    </record>
+    <record model="ir.ui.view" id="rating_rule_by_tranche_view_tree">
+      <field name="model">billing.premium.rate.rule.line</field>
+      <field name="type">tree</field>
+      <field name="name">rating_rule_by_tranche_tree</field>
+    </record>
+    <record model="ir.ui.view" id="rating_rule_by_fare_class_view_tree">
+      <field name="model">billing.premium.rate.rule.line</field>
+      <field name="type">tree</field>
+      <field name="name">rating_rule_by_fare_class_tree</field>
+    </record>
+    <record model="ir.ui.view" id="sub_rating_rule_view_form">
+      <field name="model">billing.premium.rate.rule.line</field>
+      <field name="type">form</field>
+      <field name="name">sub_rating_rule_form</field>
+    </record>
+
+    <!-- ############################################################ -->
+    <!-- ########### Fare Class ########### -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="fare_class_view_form">
+      <field name="model">fare_class</field>
+      <field name="type">form</field>
+      <field name="name">fare_class_form</field>
+    </record>
+    <record model="ir.ui.view" id="fare_class_view_tree">
+      <field name="model">fare_class</field>
+      <field name="type">tree</field>
+      <field name="name">fare_class_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_fare_class_form">
+      <field name="name">Fare Classes</field>
+      <field name="res_model">fare_class</field>
+    </record>
+
+    <record model="ir.action.act_window.view" id="act_fare_class_form_view_tree">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="fare_class_view_tree"/>
+      <field name="act_window" ref="act_fare_class_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_fare_class_form_view_form">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="fare_class_view_form"/>
+      <field name="act_window" ref="act_fare_class_form"/>
+    </record>
+    <menuitem parent="offered.menu_product_configuration" id="menu_fare_class_form"
+      icon="tryton-list" action="act_fare_class_form"/>
+
+      <!-- ############################################################ -->
+      <!-- ########### Fare Class Group ########### -->
+      <!-- ############################################################ -->
+      <record model="ir.ui.view" id="fare_class_group_view_form">
+        <field name="model">fare_class.group</field>
+        <field name="type">form</field>
+        <field name="name">fare_class_group_form</field>
+      </record>
+      <record model="ir.ui.view" id="fare_class_group_view_tree">
+        <field name="model">fare_class.group</field>
+        <field name="type">tree</field>
+        <field name="name">fare_class_group_tree</field>
+      </record>
+      <record model="ir.action.act_window" id="act_fare_class_group_form">
+        <field name="name">Fare Class Group</field>
+        <field name="res_model">fare_class.group</field>
+      </record>
+
+      <record model="ir.action.act_window.view" id="act_fare_class_group_form_view_tree">
+        <field name="sequence" eval="10"/>
+        <field name="view" ref="fare_class_group_view_tree"/>
+        <field name="act_window" ref="act_fare_class_group_form"/>
+      </record>
+      <record model="ir.action.act_window.view" id="act_fare_class_group_form_view_form">
+        <field name="sequence" eval="20"/>
+        <field name="view" ref="fare_class_group_view_form"/>
+        <field name="act_window" ref="act_fare_class_group_form"/>
+      </record>
+      <menuitem parent="offered.menu_product_configuration" id="menu_fare_class_group_form"
+        icon="tryton-list" action="act_fare_class_group_form"/>
+      </data>
+    </tryton>

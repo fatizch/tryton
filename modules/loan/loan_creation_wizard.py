@@ -2,8 +2,8 @@ from trytond.pool import Pool
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import coop_date, fields, model
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.cog_utils import coop_date, fields, model
+from trytond.modules.currency_cog import ModelCurrency
 
 from .loan import LOAN_KIND, DEFFERALS
 

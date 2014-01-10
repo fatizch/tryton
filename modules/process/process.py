@@ -8,8 +8,8 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool
 from trytond.pool import Pool
 
-from trytond.modules.coop_utils import coop_string
-from trytond.modules.coop_utils import fields
+from trytond.modules.cog_utils import coop_string
+from trytond.modules.cog_utils import fields
 
 __all__ = [
     'Status',
@@ -283,7 +283,7 @@ class Process(ModelSQL, ModelView):
                 step_pyson, auth_pyson)
             xml += '}">'
             xml += '<label id="noauth_text" string="The current record is '
-            'in a state (%s) that you are not allowed to view."/>' % (
+            xml += 'in a state (%s) that you are not allowed to view."/>' % (
                 step.fancy_name)
             xml += '</group>'
         return xml
