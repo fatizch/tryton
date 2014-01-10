@@ -5,7 +5,12 @@ import sys
 def convert_file(input_file, output_file):
     with open(input_file) as i_file, open(output_file, 'w') as o_file:
         for line in i_file.readlines():
-            if line.startswith('##Title##'):
+            if line.startswith('# -*- coding'):
+                continue
+            elif line.lstrip().startswith('# '):
+                # No need to copy commented lines
+                continue
+            elif line.startswith('##Title##'):
                 o_file.write('=' * (len(line) - 9) + '\n')
                 o_file.write(line[9:])
                 o_file.write('=' * (len(line) - 9) + '\n')
@@ -23,7 +28,7 @@ def convert_file(input_file, output_file):
             elif line.startswith('    '):
                 o_file.write('    ... ' + line)
             elif line == '':
-                pass
+                continue
             else:
                 o_file.write('    >>> ' + line)
 
