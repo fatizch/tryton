@@ -140,7 +140,7 @@
     <record model="ir.ui.view" id="rating_rule_by_salary_range_view_tree">
       <field name="model">billing.premium.rate.rule.line</field>
       <field name="type">tree</field>
-      <field name="name">rating_rule_by_salary_range_tree</field>
+      <field name="name">premium_rate_rule_by_salary_range_tree</field>
     </record>
     <record model="ir.ui.view" id="rating_rule_by_fare_class_view_tree">
       <field name="model">billing.premium.rate.rule.line</field>

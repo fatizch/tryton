@@ -19,7 +19,7 @@
         <record model="ir.ui.view" id="rule_stage_view_tree">
             <field name="model">benefit.rule.stage</field>
             <field name="type">tree</field>
-            <field name="name">rule_stage_tree</field>
+            <field name="name">rule_stage_list</field>
         </record>
         <record model="ir.ui.view" id="rule_stage_view_form">
             <field name="model">benefit.rule.stage</field>

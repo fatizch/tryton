@@ -5,7 +5,7 @@
             <field name="model">contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
-            <field name="name">option_form</field>
+            <field name="name">option-commission_option_form</field>
         </record>
     </data>
 </tryton>

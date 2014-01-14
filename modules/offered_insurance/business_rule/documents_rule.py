@@ -568,7 +568,7 @@ class DocumentCreate(Wizard):
     generate = StateAction('offered_insurance.letter_generation_report')
     post_generation = StateTransition()
     select_model = StateView('document.create.select',
-        'offered_insurance.doc_template_selection_form', [
+        'offered_insurance.document_create_select_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Generate', 'generate', 'tryton-ok'),
             Button('Attach', 'attach', 'tryton-go-next')])

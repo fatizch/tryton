@@ -120,10 +120,10 @@
       <field name="type">form</field>
       <field name="name">billing_data_form</field>
     </record>
-    <record model="ir.ui.view" id="billing_data_tree">
+    <record model="ir.ui.view" id="billing_data_list">
       <field name="model">contract.billing.data</field>
       <field name="type">tree</field>
-      <field name="name">billing_data_tree</field>
+      <field name="name">billing_data_list</field>
     </record>
     <!--################################################################ -->
     <!-- Billing Period -->

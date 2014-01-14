@@ -74,7 +74,7 @@
       <field name="model">contract.service</field>
       <field name="type">tree</field>
       <field name="inherit" ref="contract.service_view_tree"/>
-      <field name="name">service_tree</field>
+      <field name="name">service_list</field>
     </record>
     <!--################################################################ -->
     <!-- Indemnification -->

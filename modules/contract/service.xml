@@ -9,7 +9,7 @@
     <record model="ir.ui.view" id="service_view_tree">
         <field name="model">contract.service</field>
         <field name="type">tree</field>
-        <field name="name">service_tree</field>
+        <field name="name">service_list</field>
     </record>
   </data>
 </tryton>

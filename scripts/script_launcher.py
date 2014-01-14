@@ -120,7 +120,7 @@ def database(arguments, config, work_data):
 
 
 def test(arguments, config, work_data):
-    base_command_line = [] if not arguments.with_test_cases else ['env',
+    base_command_line = [] if arguments.with_test_cases else ['env',
         'DO_NOT_TEST_CASES=True']
     base_command_line += [work_data['python_exec'],
         work_data['tryton_script_launcher']]

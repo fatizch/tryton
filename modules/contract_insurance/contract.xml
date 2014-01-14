@@ -33,14 +33,14 @@
             <field name="type">tree</field>
             <field name="inherit" ref="contract.option_view_tree"/>
             <field name="arch" type="xml"/>
-            <!-- <field name="name">option_tree</field> -->
+            <!-- <field name="name">option-commission_option_list</field> -->
         </record>
         <!-- form view -->
         <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
-            <field name="name">option_form</field>
+            <field name="name">option-commission_option_form</field>
         </record>
         <!--################################################################ -->
         <!-- Covered Data -->
@@ -105,15 +105,15 @@
             <field name="action" ref="act_contract_status_history_relate_form"/>
         </record>
         <!-- Contract-Agreement Relation -->
-        <record model="ir.ui.view" id="agreement_form">
+        <record model="ir.ui.view" id="contract_agreement_form">
           <field name="model">contract-agreement</field>
           <field name="type">form</field>
-          <field name="name">agreement_form</field>
+          <field name="name">contract_agreement_form</field>
         </record>
-        <record model="ir.ui.view" id="agreement_tree">
+        <record model="ir.ui.view" id="contract_agreement_list">
           <field name="model">contract-agreement</field>
           <field name="type">tree</field>
-          <field name="name">agreement_tree</field>
+          <field name="name">contract_agreement_list</field>
       </record>
     </data>
 </tryton>

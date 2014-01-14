@@ -77,15 +77,15 @@
       <field name="action" ref="letter_generation_wizard"/>
     </record>
     <!-- Document Template -->
-    <record model="ir.ui.view" id="doc_template_form">
+    <record model="ir.ui.view" id="document_template_form">
       <field name="model">document.template</field>
       <field name="type">form</field>
-      <field name="name">doc_template_form</field>
+      <field name="name">document_template_form</field>
     </record>
-    <record model="ir.ui.view" id="doc_template_tree">
+    <record model="ir.ui.view" id="document_template_list">
       <field name="model">document.template</field>
       <field name="type">tree</field>
-      <field name="name">doc_template_tree</field>
+      <field name="name">document_template_list</field>
     </record>
     <record model="ir.action.act_window" id="act_doc_template">
       <field name="name">Document Templates</field>
@@ -93,12 +93,12 @@
     </record>
     <record model="ir.action.act_window.view" id="act_doc_template_view1">
       <field name="sequence" eval="16"/>
-      <field name="view" ref="doc_template_tree"/>
+      <field name="view" ref="document_template_list"/>
       <field name="act_window" ref="act_doc_template"/>
     </record>
     <record model="ir.action.act_window.view" id="act_doc_template_view2">
       <field name="sequence" eval="16"/>
-      <field name="view" ref="doc_template_form"/>
+      <field name="view" ref="document_template_form"/>
       <field name="act_window" ref="act_doc_template"/>
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="30"
@@ -115,20 +115,20 @@
       <field name="name">document_template_version_list</field>
     </record>
     <!-- Document Create Select -->
-    <record model="ir.ui.view" id="doc_template_selection_form">
+    <record model="ir.ui.view" id="document_create_select_form">
       <field name="model">document.create.select</field>
       <field name="type">form</field>
-      <field name="name">doc_template_selection_form</field>
+      <field name="name">document_create_select_form</field>
     </record>
     <record model="ir.ui.view" id="document_create_attach_form">
       <field name="model">document.create.attach</field>
       <field name="type">form</field>
       <field name="name">document_create_attach_form</field>
     </record>
-    <record model="ir.ui.view" id="doc_template_displayer_tree">
+    <record model="ir.ui.view" id="document_create_select_template_list">
       <field name="model">document.create.select.template</field>
       <field name="type">tree</field>
-      <field name="name">doc_template_displayer_tree</field>
+      <field name="name">document_create_select_template_list</field>
     </record>
     <!-- Receive Document -->
     <record model="ir.ui.view" id="document_receive_request_form">

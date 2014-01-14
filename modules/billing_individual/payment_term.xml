@@ -9,10 +9,10 @@
       <field name="type">form</field>
       <field name="name">payment_term_form</field>
     </record>
-    <record model="ir.ui.view" id="payment_term_tree">
+    <record model="ir.ui.view" id="payment_term_list">
       <field name="model">billing.payment.term</field>
       <field name="type">tree</field>
-      <field name="name">payment_term_tree</field>
+      <field name="name">payment_term_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_payment_term">
@@ -31,7 +31,7 @@
     </record>
     <record model="ir.action.act_window.view" id="act_payment_term_view1">
       <field name="sequence" eval="5"/>
-      <field name="view" ref="payment_term_tree"/>
+      <field name="view" ref="payment_term_list"/>
       <field name="act_window" ref="act_payment_term"/>
     </record>
     <record model="ir.action.act_window.view" id="act_payment_term_view2">
@@ -49,10 +49,10 @@
       <field name="type">form</field>
       <field name="name">payment_term_line_form</field>
     </record>
-    <record model="ir.ui.view" id="payment_term_line_tree">
+    <record model="ir.ui.view" id="payment_term_line_list">
       <field name="model">billing.payment.term.line</field>
       <field name="type">tree</field>
-      <field name="name">payment_term_line_tree</field>
+      <field name="name">payment_term_line_list</field>
     </record>
   </data>
 </tryton>

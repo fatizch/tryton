@@ -5,12 +5,12 @@
         <record model="ir.ui.view" id="hc_system_view_form">
             <field name="model">health.care_system</field>
             <field name="type">form</field>
-            <field name="name">hc_system_form</field>
+            <field name="name">health_care_system_form</field>
         </record>
         <record model="ir.ui.view" id="hc_system_view_tree">
             <field name="model">health.care_system</field>
             <field name="type">tree</field>
-            <field name="name">hc_system_tree</field>
+            <field name="name">health_care_system_list</field>
         </record>
         <record model="ir.action.act_window" id="act_hc_system_form">
             <field name="name">Health Care Systems</field>
