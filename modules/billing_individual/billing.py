@@ -10,7 +10,7 @@ from trytond.rpc import RPC
 from trytond.modules.cog_utils import model, fields, coop_date
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
-from trytond.modules.offered_insurance.business_rule.pricing_rule import \
+from trytond.modules.offered_insurance.business_rule.premium_rule import \
     PRICING_FREQUENCY
 
 
@@ -35,7 +35,7 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
-    payment_rule = fields.Many2One('billing.payment.term', 'Payment Term',
+    payment_term = fields.Many2One('billing.payment.term', 'Payment Term',
         ondelete='RESTRICT', required=True)
     payment_mode = fields.Selection([
             ('cash', 'Cash'),
@@ -56,7 +56,7 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
         return coop_string.remove_blank_and_invalid_char(self.name)
 
     def get_rule(self):
-        return self.payment_rule
+        return self.payment_term
 
     def get_allowed_date_values(self):
         if not self.payment_mode == 'direct_debit':

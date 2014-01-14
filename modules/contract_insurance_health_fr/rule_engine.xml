@@ -13,13 +13,13 @@
     </record>
   </data>
   <data>
-    <record model="rule_engine.function" id="te_health_regime">
+    <record model="rule_engine.function" id="te_health_hc_system">
       <field name="description">Code Régime</field>
-      <field name="name">_re_health_regime</field>
+      <field name="name">_re_health_hc_system</field>
       <field name="namespace">rule_engine.runtime</field>
       <field name="type">function</field>
       <field name="parent" ref="te_health"/>
-      <field name="translated_technical_name">code_regime</field>
+      <field name="translated_technical_name">code_hc_system</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
   </data>

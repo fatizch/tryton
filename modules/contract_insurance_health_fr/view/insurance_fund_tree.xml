@@ -3,5 +3,5 @@
     <field name="code"/>
     <field name="name"/>
     <field name="department"/>
-    <field name="regime"/>
+    <field name="hc_system"/>
 </tree>

@@ -58,7 +58,7 @@ msgctxt "field:contract,addresses:"
 msgid "Addresses"
 msgstr "Adresses"
 
-msgctxt "field:contract,complementary_data:"
+msgctxt "field:contract,extra_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -114,11 +114,11 @@ msgctxt "field:contract,last_renewed:"
 msgid "Last Renewed"
 msgstr "Dernier renouvellement"
 
-msgctxt "field:contract,management_roles:"
+msgctxt "field:contract,agreements:"
 msgid "Contract-Agreement Relations"
 msgstr "Géré par"
 
-msgctxt "field:contract,managing_roles:"
+msgctxt "field:contract,contracts:"
 msgid "Managing Roles"
 msgstr "Gérant les Contrats"
 
@@ -330,7 +330,7 @@ msgctxt "field:contract.covered_data,clauses:"
 msgid "Clauses"
 msgstr "Clauses"
 
-msgctxt "field:contract.covered_data,complementary_data:"
+msgctxt "field:contract.covered_data,extra_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -422,11 +422,11 @@ msgctxt "field:contract.covered_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.covered_element,complementary_data:"
+msgctxt "field:contract.covered_element,extra_data:"
 msgid "Contract Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:contract.covered_element,complementary_data_summary:"
+msgctxt "field:contract.covered_element,extra_data_summary:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -506,7 +506,7 @@ msgctxt "field:contract.covered_element,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:contract.covered_element,party_compl_data:"
+msgctxt "field:contract.covered_element,party_extra_data:"
 msgid "Party Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -590,7 +590,7 @@ msgctxt "field:expense,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:expense,delivered_service:"
+msgctxt "field:expense,service:"
 msgid "Contract Service"
 msgstr "Prestation Fournie"
 
@@ -718,7 +718,7 @@ msgctxt "field:document.receive.request,tmp_0:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:party.party,complementary_data:"
+msgctxt "field:party.party,extra_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 

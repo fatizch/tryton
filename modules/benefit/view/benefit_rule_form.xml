@@ -6,7 +6,7 @@
     <xpath expr="/form/label[@name='config_kind']" position="before">
         <label name="amount_evolves_over_time"/>
         <field name="amount_evolves_over_time"/>
-        <field name="sub_benefit_rules" colspan="4"/>
+        <field name="rule_stages" colspan="4"/>
         <newline/>
     </xpath>
     <xpath expr="/form/label[@name='rule']" position="before">

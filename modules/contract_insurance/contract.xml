@@ -105,15 +105,15 @@
             <field name="action" ref="act_contract_status_history_relate_form"/>
         </record>
         <!-- Contract-Agreement Relation -->
-        <record model="ir.ui.view" id="management_role_form">
+        <record model="ir.ui.view" id="agreement_form">
           <field name="model">contract-agreement</field>
           <field name="type">form</field>
-          <field name="name">management_role_form</field>
+          <field name="name">agreement_form</field>
         </record>
-        <record model="ir.ui.view" id="management_role_tree">
+        <record model="ir.ui.view" id="agreement_tree">
           <field name="model">contract-agreement</field>
           <field name="type">tree</field>
-          <field name="name">management_role_tree</field>
+          <field name="name">agreement_tree</field>
       </record>
     </data>
 </tryton>

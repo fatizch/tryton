@@ -42,12 +42,12 @@ msgid "Company"
 msgstr "Société"
 
 
-msgctxt "field:benefit,complementary_data:"
+msgctxt "field:benefit,extra_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
 
-msgctxt "field:benefit,complementary_data_def:"
+msgctxt "field:benefit,extra_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -122,7 +122,7 @@ msgid "Name"
 msgstr "Nom"
 
 
-msgctxt "field:benefit,pricing_rules:"
+msgctxt "field:benefit,premium_rules:"
 msgid "Pricing Rules"
 msgstr "Règles de Cotisation"
 
@@ -182,7 +182,7 @@ msgid "Benefit"
 msgstr "Prestation"
 
 
-msgctxt "field:benefit-extra_data,complementary_data_def:"
+msgctxt "field:benefit-extra_data,extra_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -387,7 +387,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 
-msgctxt "field:benefit.rule,rule_complementary_data:"
+msgctxt "field:benefit.rule,rule_extra_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
@@ -397,7 +397,7 @@ msgid "From Date"
 msgstr "Date de Début"
 
 
-msgctxt "field:benefit.rule,sub_benefit_rules:"
+msgctxt "field:benefit.rule,rule_stages:"
 msgid "Sub Benefit Rules"
 msgstr "Sous Règles de Prestation"
 
@@ -607,7 +607,7 @@ msgid "Company"
 msgstr "Société"
 
 
-msgctxt "field:benefit.loss.description,complementary_data_def:"
+msgctxt "field:benefit.loss.description,extra_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -677,7 +677,7 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 
-msgctxt "field:benefit.loss.description-extra_data,complementary_data_def:"
+msgctxt "field:benefit.loss.description-extra_data,extra_data_def:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -777,7 +777,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 
-msgctxt "field:benefit.reserve.rule,rule_complementary_data:"
+msgctxt "field:benefit.reserve.rule,rule_extra_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
@@ -897,7 +897,7 @@ msgid "Amount"
 msgstr "Montant"
 
 
-msgctxt "field:benefit.rule.stage,rule_complementary_data:"
+msgctxt "field:benefit.rule.stage,rule_extra_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
@@ -1445,7 +1445,7 @@ msgid "Benefit"
 msgstr "Prestation"
 
 
-msgctxt "selection:ins_product.simple_pricing_rule,offered:"
+msgctxt "selection:ins_product.simple_premium_rule,offered:"
 msgid "Benefit"
 msgstr "Prestation"
 

@@ -57,22 +57,22 @@
         <record model="ir.ui.view" id="option_com_tree">
           <field name="model">contract.option</field>
           <field name="type">tree</field>
-          <field name="field_childs">commissions</field>
+          <field name="field_childs">com_options</field>
           <field name="name">option_com_tree</field>
         </record>
 
         <!-- ############################################################ -->
         <!-- ########### OptionCommissionOptionRelation ########### -->
         <!-- ############################################################ -->
-        <record model="ir.ui.view" id="compensated_option_view_tree">
+        <record model="ir.ui.view" id="option_view_tree">
             <field name="model">contract.option-commission.option</field>
             <field name="type">tree</field>
-            <field name="name">compensated_option_tree</field>
+            <field name="name">option_tree</field>
         </record>
-        <record model="ir.ui.view" id="compensated_option_view_form">
+        <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option-commission.option</field>
             <field name="type">form</field>
-            <field name="name">compensated_option_form</field>
+            <field name="name">option_form</field>
         </record>
     </data>
 </tryton>

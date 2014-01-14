@@ -77,32 +77,32 @@
       <field name="action" ref="letter_generation_wizard"/>
     </record>
     <!-- Document Template -->
-    <record model="ir.ui.view" id="letter_model_form">
+    <record model="ir.ui.view" id="doc_template_form">
       <field name="model">document.template</field>
       <field name="type">form</field>
-      <field name="name">letter_model_form</field>
+      <field name="name">doc_template_form</field>
     </record>
-    <record model="ir.ui.view" id="letter_model_tree">
+    <record model="ir.ui.view" id="doc_template_tree">
       <field name="model">document.template</field>
       <field name="type">tree</field>
-      <field name="name">letter_model_tree</field>
+      <field name="name">doc_template_tree</field>
     </record>
-    <record model="ir.action.act_window" id="act_letter_model">
+    <record model="ir.action.act_window" id="act_doc_template">
       <field name="name">Document Templates</field>
       <field name="res_model">document.template</field>
     </record>
-    <record model="ir.action.act_window.view" id="act_letter_model_view1">
+    <record model="ir.action.act_window.view" id="act_doc_template_view1">
       <field name="sequence" eval="16"/>
-      <field name="view" ref="letter_model_tree"/>
-      <field name="act_window" ref="act_letter_model"/>
+      <field name="view" ref="doc_template_tree"/>
+      <field name="act_window" ref="act_doc_template"/>
     </record>
-    <record model="ir.action.act_window.view" id="act_letter_model_view2">
+    <record model="ir.action.act_window.view" id="act_doc_template_view2">
       <field name="sequence" eval="16"/>
-      <field name="view" ref="letter_model_form"/>
-      <field name="act_window" ref="act_letter_model"/>
+      <field name="view" ref="doc_template_form"/>
+      <field name="act_window" ref="act_doc_template"/>
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="30"
-      action="act_letter_model" id="menu_letter_model"/>
+      action="act_doc_template" id="menu_doc_template"/>
     <!-- Document Template Version -->
     <record model="ir.ui.view" id="letter_version_form">
       <field name="model">document.template.version</field>
@@ -115,20 +115,20 @@
       <field name="name">letter_version_tree</field>
     </record>
     <!-- Document Create Select -->
-    <record model="ir.ui.view" id="letter_model_selection_form">
+    <record model="ir.ui.view" id="doc_template_selection_form">
       <field name="model">document.create.select</field>
       <field name="type">form</field>
-      <field name="name">letter_model_selection_form</field>
+      <field name="name">doc_template_selection_form</field>
     </record>
     <record model="ir.ui.view" id="attach_letter_form">
       <field name="model">document.create.attach</field>
       <field name="type">form</field>
       <field name="name">attach_letter_form</field>
     </record>
-    <record model="ir.ui.view" id="letter_model_displayer_tree">
+    <record model="ir.ui.view" id="doc_template_displayer_tree">
       <field name="model">document.create.select.template</field>
       <field name="type">tree</field>
-      <field name="name">letter_model_displayer_tree</field>
+      <field name="name">doc_template_displayer_tree</field>
     </record>
     <!-- Receive Document -->
     <record model="ir.ui.view" id="request_finder_form">

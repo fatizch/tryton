@@ -5,7 +5,7 @@
         <newline/>
         <field name="coverages" colspan="4"/>
         <newline/>
-        <field name="compl_data_defs" colspan="4"/>
+        <field name="extra_data_defs" colspan="4"/>
         <newline/>
     </xpath>
 </data>

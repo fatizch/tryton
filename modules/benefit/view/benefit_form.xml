@@ -4,8 +4,8 @@
         <form string="Benefit"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='summary']" position="after">
-        <page string="Complementary Data" id="complementary_data">
-            <field name="complementary_data_def" colspan="4"/>
+        <page string="Complementary Data" id="extra_data">
+            <field name="extra_data_def" colspan="4"/>
         </page>
     </xpath>
     <xpath

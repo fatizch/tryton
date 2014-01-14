@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="delivered_service_view_form">
+        <record model="ir.ui.view" id="service_view_form">
             <field name="model">contract.service</field>
             <field name="type">form</field>
-            <field name="inherit" ref="contract.delivered_service_view_form"/>
-            <field name="name">delivered_service_form</field>
+            <field name="inherit" ref="contract.service_view_form"/>
+            <field name="name">service_form</field>
         </record>
     </data>
 </tryton>

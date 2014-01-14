@@ -16,8 +16,8 @@
     <newline/>
     <notebook>
         <page id="data" string="Complementary Data">
-            <field name="complementary_data" colspan="2" no_command="1"/>
-            <field name="party_compl_data" colspan="2" no_command="1"/>
+            <field name="extra_data" colspan="2" no_command="1"/>
+            <field name="party_extra_data" colspan="2" no_command="1"/>
             <newline/>
         </page>
         <page id="covered_data" string="Covered Data">

@@ -78,7 +78,7 @@ msgctxt "field:commission.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:commission.rule,rule_complementary_data:"
+msgctxt "field:commission.rule,rule_extra_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
@@ -162,7 +162,7 @@ msgctxt "field:contract.option-commission.option,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:contract.option-commission.option,subs_option:"
+msgctxt "field:contract.option-commission.option,option:"
 msgid "Subscribed Option"
 msgstr "Garantie Souscrite"
 
@@ -218,7 +218,7 @@ msgctxt "field:contract.billing.premium-commission.option,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:contract.billing.premium-commission.option,com_subscribed:"
+msgctxt "field:contract.billing.premium-commission.option,com_option:"
 msgid "Commission Subscribed"
 msgstr "Garantie commissionée"
 
@@ -262,11 +262,11 @@ msgctxt "field:contract.billing.premium-commission.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.option,commissions:"
+msgctxt "field:contract.option,com_options:"
 msgid "Commissions"
 msgstr "Commissions"
 
-msgctxt "field:contract.option,compensated_options:"
+msgctxt "field:contract.option,options:"
 msgid "Option-Commission Option Relations"
 msgstr "Options Commissionnées"
 

@@ -247,14 +247,14 @@ return True'''
         pricing_comp2.code = 'PP'
         pricing_comp2.rated_object_kind = 'sub_item'
 
-        pricing_rulea = self.Pricing()
+        premium_rulea = self.Pricing()
 
-        pricing_rulea.components = [
+        premium_rulea.components = [
             pricing_comp1, pricing_comp11, pricing_comp12]
-        pricing_rulea.sub_item_components = [pricing_comp2]
+        premium_rulea.sub_item_components = [pricing_comp2]
 
-        pricing_rulea.start_date = datetime.date.today()
-        pricing_rulea.end_date = datetime.date.today() + \
+        premium_rulea.start_date = datetime.date.today()
+        premium_rulea.end_date = datetime.date.today() + \
             datetime.timedelta(days=10)
 
         pricing_comp3 = self.PremiumRuleComponent()
@@ -264,12 +264,12 @@ return True'''
         pricing_comp3.code = 'PP'
         pricing_comp3.rated_object_kind = 'global'
 
-        pricing_ruleb = self.Pricing()
-        pricing_ruleb.components = [pricing_comp3]
+        premium_ruleb = self.Pricing()
+        premium_ruleb.components = [pricing_comp3]
 
-        pricing_ruleb.start_date = datetime.date.today() + \
+        premium_ruleb.start_date = datetime.date.today() + \
             datetime.timedelta(days=11)
-        pricing_ruleb.end_date = datetime.date.today() + \
+        premium_ruleb.end_date = datetime.date.today() + \
             datetime.timedelta(days=20)
 
         coverage_a = self.OptionDescription()
@@ -278,7 +278,7 @@ return True'''
         coverage_a.name = 'Alpha Coverage'
         coverage_a.start_date = datetime.date.today()
 
-        coverage_a.pricing_rules = [pricing_rulea]
+        coverage_a.premium_rules = [premium_rulea]
 
         coverage_a.item_desc = item_desc
 
@@ -302,12 +302,12 @@ return True'''
         pricing_comp41.code = tax_1.code
         pricing_comp41.rated_object_kind = 'global'
 
-        pricing_rulec = self.Pricing()
-        pricing_rulec.config_kind = 'simple'
-        pricing_rulec.components = [pricing_comp4, pricing_comp41]
+        premium_rulec = self.Pricing()
+        premium_rulec.config_kind = 'simple'
+        premium_rulec.components = [pricing_comp4, pricing_comp41]
 
-        pricing_rulec.start_date = datetime.date.today()
-        pricing_rulec.end_date = datetime.date.today() + \
+        premium_rulec.start_date = datetime.date.today()
+        premium_rulec.end_date = datetime.date.today() + \
             datetime.timedelta(days=10)
 
         coverage_b = self.OptionDescription()
@@ -317,7 +317,7 @@ return True'''
         coverage_b.start_date = datetime.date.today() + \
             datetime.timedelta(days=5)
 
-        coverage_b.pricing_rules = [pricing_ruleb]
+        coverage_b.premium_rules = [premium_ruleb]
 
         coverage_b.item_desc = item_desc
         coverage_b.company = company

@@ -530,15 +530,15 @@ def get_team(good_user=None):
     return good_user.team
 
 
-def init_complementary_data(compl_data_defs):
+def init_extra_data(extra_data_defs):
     res = {}
-    if compl_data_defs:
-        for compl_data_def in compl_data_defs:
-            res[compl_data_def.name] = compl_data_def.get_default_value(None)
+    if extra_data_defs:
+        for extra_data_def in extra_data_defs:
+            res[extra_data_def.name] = extra_data_def.get_default_value(None)
     return res
 
 
-def init_complementary_data_from_ids(ids):
+def init_extra_data_from_ids(ids):
     the_model = Pool().get('extra_data')
     res = {}
     for id in ids:

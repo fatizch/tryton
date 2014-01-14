@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval
 from trytond.modules.cog_utils import fields, model, coop_date
-from trytond.modules.offered_insurance.business_rule.pricing_rule import \
+from trytond.modules.offered_insurance.business_rule.premium_rule import \
     PRICING_FREQUENCY
 
 __all__ = [
@@ -34,7 +34,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
     __name__ = 'billing.payment.term.line'
 
     sequence = fields.Integer('Sequence')
-    payment_rule = fields.Many2One('billing.payment.term', 'Payment Term',
+    payment_term = fields.Many2One('billing.payment.term', 'Payment Term',
         required=True, ondelete='CASCADE')
     type = fields.Selection([
             ('fixed', 'Fixed'),
@@ -101,7 +101,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             'required': ~~Eval('add_calculated_period')})
     is_remainder = fields.Boolean('Is remainder',
         states={'invisible':
-            Eval('_parent_payment_rule', {}).get('remaining_position', '')
+            Eval('_parent_payment_term', {}).get('remaining_position', '')
             != 'custom'})
 
     @classmethod
@@ -199,25 +199,25 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
         elif self.type == 'percent_on_total':
             return currency.round(amount * self.percentage / Decimal('100'))
         elif self.type == 'prorata':
-            payment_rule = self.payment_rule
+            payment_term = self.payment_term
             my_start_date = self.get_date(start_date)
-            if payment_rule.with_sync_date:
+            if payment_term.with_sync_date:
                 temp_date = coop_date.add_frequency(
-                    payment_rule.base_frequency, my_start_date)
-                if payment_rule.base_frequency == 'yearly':
+                    payment_term.base_frequency, my_start_date)
+                if payment_term.base_frequency == 'yearly':
                     final_date = datetime.date(temp_date.year,
-                        payment_rule.sync_date.month,
-                        payment_rule.sync_date.day)
+                        payment_term.sync_date.month,
+                        payment_term.sync_date.day)
                 else:
                     final_date = datetime.date(temp_date.year, temp_date.month,
-                        payment_rule.sync_date.day)
+                        payment_term.sync_date.day)
                 if final_date <= end_date:
                     my_end_date = final_date
                 else:
                     my_end_date = end_date
             else:
                 my_end_date = coop_date.add_frequency(
-                    payment_rule.base_frequency, my_start_date)
+                    payment_term.base_frequency, my_start_date)
             my_end_date = coop_date.add_day(my_end_date, -1)
             period = coop_date.number_of_days_between(
                 my_start_date, my_end_date)
@@ -246,7 +246,7 @@ class PaymentTermFeeRelation(model.CoopSQL):
 
     __name__ = 'billing.payment.term-fee'
 
-    payment_rule = fields.Many2One('billing.payment.term', 'Payment Term',
+    payment_term = fields.Many2One('billing.payment.term', 'Payment Term',
         required=True, ondelete='CASCADE')
     fee = fields.Many2One('account.fee.description', 'Fee', required=True,
         ondelete='RESTRICT')
@@ -269,10 +269,10 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
     sync_date = fields.Date('Sync Date', states={
             'invisible': ~Eval('with_sync_date'),
             'required': ~~Eval('with_sync_date')})
-    start_lines = fields.One2Many('billing.payment.term.line', 'payment_rule',
+    start_lines = fields.One2Many('billing.payment.term.line', 'payment_term',
         'Start Lines')
     appliable_fees = fields.Many2Many('billing.payment.term-fee',
-        'payment_rule', 'fee', 'Appliable fees', depends=['company'],
+        'payment_term', 'fee', 'Appliable fees', depends=['company'],
         domain=[('company', '=', Eval('company'))])
     payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode')
     company = fields.Many2One('company.company', 'Company', required=True,

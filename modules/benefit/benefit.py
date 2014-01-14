@@ -73,9 +73,9 @@ class LossDescription(model.CoopSQL, model.CoopView):
         domain=[('company', '=', Eval('company'))], depends=['company'])
     item_kind = fields.Selection([('', '')], 'Kind')
     with_end_date = fields.Boolean('With End Date')
-    complementary_data_def = fields.Many2Many(
+    extra_data_def = fields.Many2Many(
         'benefit.loss.description-extra_data',
-        'loss_desc', 'complementary_data_def', 'Complementary Data',
+        'loss_desc', 'extra_data_def', 'Complementary Data',
         domain=[('kind', '=', 'loss')], )
     documents = fields.Many2Many(
         'benefit.loss.description-document.description', 'loss', 'document',
@@ -112,7 +112,7 @@ class LossDescriptionExtraDataRelation(model.CoopSQL):
 
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Description',
         ondelete='CASCADE')
-    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+    extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT')
 
 
@@ -141,8 +141,8 @@ class Benefit(model.CoopSQL, offered.Offered):
         'loss_desc', 'Loss Descriptions',
         domain=[('company', '=', Eval('company'))], depends=['company'],
         required=True)
-    complementary_data_def = fields.Many2Many('benefit-extra_data',
-        'benefit', 'complementary_data_def', 'Complementary Data',
+    extra_data_def = fields.Many2Many('benefit-extra_data',
+        'benefit', 'extra_data_def', 'Complementary Data',
         domain=[('kind', '=', 'benefit')])
     use_local_currency = fields.Boolean('Use Local Currency')
     beneficiary_kind = fields.Selection('get_beneficiary_kind',
@@ -217,12 +217,12 @@ class Benefit(model.CoopSQL, offered.Offered):
         super(Benefit, self).init_dict_for_rule_engine(args)
         args['benefit'] = self
 
-    def get_compl_data_for_exec(self, args):
-        all_schemas = set(self.get_complementary_data_def('benefit',
+    def get_extra_data_for_exec(self, args):
+        all_schemas = set(self.get_extra_data_def('benefit',
             args['date']))
         return all_schemas, all_schemas
 
-    def give_me_calculated_complementary_datas(self, args):
+    def give_me_calculated_extra_datas(self, args):
         # We prepare the call to the 'calculate_value_set' API.
         # It needs the following parameters:
         #  - The list of the schemas it must look for
@@ -232,9 +232,9 @@ class Benefit(model.CoopSQL, offered.Offered):
         if not 'loss' in args or not 'date' in args:
             raise Exception('Expected loss and date in args, got %s' % (
                 str([k for k in args.iterkeys()])))
-        all_schemas, possible_schemas = self.get_compl_data_for_exec(args)
-        existing_data = args['loss'].complementary_data
-        existing_data.update(args['delivered_service'].complementary_data)
+        all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
+        existing_data = args['loss'].extra_data
+        existing_data.update(args['service'].extra_data)
         ComplementaryData = Pool().get('extra_data')
         result = ComplementaryData.calculate_value_set(
             possible_schemas, all_schemas, existing_data, args)
@@ -275,5 +275,5 @@ class BenefitExtraDataRelation(model.CoopSQL):
     __name__ = 'benefit-extra_data'
 
     benefit = fields.Many2One('benefit', 'Benefit', ondelete='CASCADE')
-    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+    extra_data_def = fields.Many2One('extra_data', 'Extra Data',
      ondelete='RESTRICT')

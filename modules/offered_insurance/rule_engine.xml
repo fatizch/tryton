@@ -160,7 +160,7 @@
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_covered_data_complementary_data</field>
+      <field name="name">_re_covered_data_extra_data</field>
       <field name="fct_args">Code donnee complementaire</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>

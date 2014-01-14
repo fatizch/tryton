@@ -194,7 +194,7 @@ msgctxt "field:claim.indemnification,customer:"
 msgid "Customer"
 msgstr "Client"
 
-msgctxt "field:claim.indemnification,delivered_service:"
+msgctxt "field:claim.indemnification,service:"
 msgid "Delivered Service"
 msgstr "Prestation Fournie"
 
@@ -418,7 +418,7 @@ msgctxt "field:claim.loss,claim:"
 msgid "Claim"
 msgstr "Sinistre"
 
-msgctxt "field:claim.loss,complementary_data:"
+msgctxt "field:claim.loss,extra_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
@@ -434,7 +434,7 @@ msgctxt "field:claim.loss,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:claim.loss,delivered_services:"
+msgctxt "field:claim.loss,services:"
 msgid "Delivered Services"
 msgstr "Prestations Fournies"
 
@@ -498,7 +498,7 @@ msgctxt "field:contract.service,benefit:"
 msgid "Benefit"
 msgstr "Prestation"
 
-msgctxt "field:contract.service,complementary_data:"
+msgctxt "field:contract.service,extra_data:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 

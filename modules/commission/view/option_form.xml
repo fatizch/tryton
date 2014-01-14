@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='status_history']" position="before">
-        <page string="Option-Commission Option Relations" id="compensated_options"
+        <page string="Option-Commission Option Relations" id="options"
             states="{'invisible': Eval('coverage_kind') != 'commission'}">
-            <field name="compensated_options" colspan="4"/>
+            <field name="options" colspan="4"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='status_history']" position="before">
-        <page string="Commissions" id="commissions"
+        <page string="Commissions" id="com_options"
             states="{'invisible': Eval('coverage_kind') != 'insurance'}">
-            <field name="commissions" colspan="4"/>
+            <field name="com_options" colspan="4"/>
         </page>
     </xpath>
 </data>

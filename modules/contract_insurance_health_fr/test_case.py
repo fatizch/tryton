@@ -19,13 +19,13 @@ class TestCaseModel:
             'name': 'Expense Kind Test Case',
             'dependencies': set([]),
             }
-        result['regime_test_case'] = {
+        result['hc_system_test_case'] = {
             'name': 'HealthCareSystem Test Case',
             'dependencies': set([]),
             }
         result['fund_test_case'] = {
             'name': 'Fund Test Case',
-            'dependencies': set(['regime_test_case']),
+            'dependencies': set(['hc_system_test_case']),
             }
         return result
 
@@ -49,22 +49,22 @@ class TestCaseModel:
         return expense_kinds
 
     @classmethod
-    def create_regime_from_line(cls, data):
+    def create_hc_system_from_line(cls, data):
         HealthCareSystem = Pool().get('health.care_system')
-        regime = HealthCareSystem()
+        hc_system = HealthCareSystem()
         for elem in ('code', 'name', 'short_name'):
-            setattr(regime, elem, data[elem])
-        return regime
+            setattr(hc_system, elem, data[elem])
+        return hc_system
 
     @classmethod
-    def regime_test_case(cls):
+    def hc_system_test_case(cls):
         cls.load_resources(MODULE_NAME)
-        regime_file = cls.read_csv_file('regime.csv', MODULE_NAME,
+        hc_system_file = cls.read_csv_file('hc_system.csv', MODULE_NAME,
             reader='dict')
-        regimes = []
-        for regime_data in regime_file:
-            regimes.append(cls.create_regime_from_line(regime_data))
-        return regimes
+        hc_systems = []
+        for hc_system_data in hc_system_file:
+            hc_systems.append(cls.create_hc_system_from_line(hc_system_data))
+        return hc_systems
 
     @classmethod
     def create_fund_from_line(cls, data, addresses):
@@ -73,8 +73,8 @@ class TestCaseModel:
         fund = Fund()
         for elem in ('code', 'name'):
             setattr(fund, elem, data[elem])
-        fund.regime = HealthCareSystem.search([
-                ('code', '=', data['regime_code'].zfill(2))])[0]
+        fund.hc_system = HealthCareSystem.search([
+                ('code', '=', data['hc_system_code'].zfill(2))])[0]
         if data['ID_ADR'] in addresses:
             zip_code = addresses[data['ID_ADR']]['Code Postal']
             if zip_code[0:2] in ['97', '98']:

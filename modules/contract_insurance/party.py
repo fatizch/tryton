@@ -12,7 +12,7 @@ _all_ = [
 class Party:
     __name__ = 'party.party'
 
-    complementary_data = fields.Dict('extra_data', 'Extra Data')
+    extra_data = fields.Dict('extra_data', 'Extra Data')
     covered_elements = fields.One2Many('contract.covered_element',
         'party', 'Covered Elements')
 

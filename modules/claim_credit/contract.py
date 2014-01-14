@@ -24,7 +24,7 @@ class ContractService:
         return self.loan
 
     def get_is_loan(self, name):
-        return self.subscribed_service.is_loan
+        return self.option.is_loan
 
     def init_dict_for_rule_engine(self, cur_dict):
         super(ContractService, self).init_dict_for_rule_engine(

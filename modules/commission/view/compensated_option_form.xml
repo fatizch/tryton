@@ -8,8 +8,8 @@
     <label name="com_option"/>
     <field name="com_option"/>
     <newline/>
-    <label name="subs_option"/>
-    <field name="subs_option"/>
+    <label name="option"/>
+    <field name="option"/>
     <newline/>
     <label name="use_specific_rate"/>
     <field name="use_specific_rate"/>

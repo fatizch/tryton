@@ -85,7 +85,7 @@ def translate_value(instance, var_name, lang=None):
         res = date_as_string(getattr(instance, var_name), lang)
     elif _type == 'dict':
         CDataDef = Pool().get('extra_data')
-        res = CDataDef.get_complementary_data_summary([instance],
+        res = CDataDef.get_extra_data_summary([instance],
             var_name)[instance.id]
     else:
         res = u'%s' % getattr(instance, var_name)

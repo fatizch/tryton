@@ -111,7 +111,7 @@ msgctxt "field:contract.premium_rate.line,start_date_:"
 msgid "Start Date"
 msgstr "Date de Début"
 
-msgctxt "field:contract.premium_rate.line,tranche:"
+msgctxt "field:contract.premium_rate.line,salary_range:"
 msgid "Salary Range"
 msgstr "Tranche"
 
@@ -605,7 +605,7 @@ msgctxt "field:billing.premium.rate.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:billing.premium.rate.rule,rule_complementary_data:"
+msgctxt "field:billing.premium.rate.rule,rule_extra_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 
@@ -613,7 +613,7 @@ msgctxt "field:billing.premium.rate.rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
 
-msgctxt "field:billing.premium.rate.rule,sub_rating_rules:"
+msgctxt "field:billing.premium.rate.rule,lines:"
 msgid "Premium Rate Rule Lines"
 msgstr ""
 
@@ -665,7 +665,7 @@ msgctxt "field:billing.premium.rate.rule.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.premium.rate.rule.line,main_rating_rule:"
+msgctxt "field:billing.premium.rate.rule.line,main_rate_rule:"
 msgid "Main Rating Rule"
 msgstr "Principale Règle de Tarif"
 
@@ -685,7 +685,7 @@ msgctxt "field:billing.premium.rate.rule.line,simple_rate:"
 msgid "Rate"
 msgstr "Taux"
 
-msgctxt "field:billing.premium.rate.rule.line,tranche:"
+msgctxt "field:billing.premium.rate.rule.line,salary_range:"
 msgid "Salary Range"
 msgstr "Tranche"
 

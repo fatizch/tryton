@@ -103,15 +103,15 @@ already exists and can't be modified (%s)'''),
                     option_dict[option] = sub_rate_line
                 else:
                     sub_rate_line = option_dict[option]
-                if rate['kind'] == 'tranche':
-                    tranche = rate['key']
+                if rate['kind'] == 'salary_range':
+                    salary_range = rate['key']
                     index = None
                     fare_class = None
                 else:
-                    tranche = None
+                    salary_range = None
                     index = rate['index']
                     fare_class = rate['key']
-                sub_rate_line.add_sub_rate_line(rate['rate'], tranche=tranche,
+                sub_rate_line.add_sub_rate_line(rate['rate'], salary_range=salary_range,
                     fare_class=fare_class, index=index)
         for population in self.covered_elements:
             if not population in [x[0] for x in pop_rates.iterkeys()]:

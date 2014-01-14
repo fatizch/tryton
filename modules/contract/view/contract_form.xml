@@ -14,8 +14,8 @@
     <page string="Options" id="options">
       <field name="options" colspan="4"/>
     </page>
-    <page string="Complementary Data" id="complementary_data">
-      <field name="complementary_data" no_command="1"/>
+    <page string="Complementary Data" id="extra_data">
+      <field name="extra_data" no_command="1"/>
     </page>
     <page string="Documents" id="documents">
       <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>

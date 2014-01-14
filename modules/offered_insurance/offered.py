@@ -27,7 +27,7 @@ IS_INSURANCE = Eval('kind') == 'insurance'
 class Offered:
     __name__ = 'offered'
 
-    pricing_rules = fields.One2Many('billing.premium.rule', 'offered',
+    premium_rules = fields.One2Many('billing.premium.rule', 'offered',
         'Premium Rules')
     eligibility_rules = fields.One2Many('offered.eligibility.rule', 'offered',
         'Eligibility Rules')
@@ -240,9 +240,9 @@ class ItemDescription(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
     name = fields.Char('Name')
-    complementary_data_def = fields.Many2Many(
+    extra_data_def = fields.Many2Many(
         'offered.item.description-extra_data',
-        'item_desc', 'complementary_data_def', 'Extra Data',
+        'item_desc', 'extra_data_def', 'Extra Data',
         domain=[('kind', '=', 'sub_elem')], )
     kind = fields.Selection([
             ('', ''),
@@ -270,7 +270,7 @@ class ItemDescription(model.CoopSQL, model.CoopView):
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(ItemDescription, cls).get_var_names_for_full_extract()
-        res.extend(['complementary_data_def', 'kind', 'sub_item_descs'])
+        res.extend(['extra_data_def', 'kind', 'sub_item_descs'])
         return res
 
 
@@ -292,7 +292,7 @@ class ItemDescriptionExtraDataRelation(model.CoopSQL):
 
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         ondelete='CASCADE')
-    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+    extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT', )
 
 

@@ -104,7 +104,7 @@ class RuleEngineRuntime(RuleEngineContext):
 
     @classmethod
     @check_args('data')
-    def _re_covered_data_complementary_data(cls, args, data_name):
+    def _re_covered_data_extra_data(cls, args, data_name):
         cls.append_error(args, 'deprecated_method')
 
     @classmethod

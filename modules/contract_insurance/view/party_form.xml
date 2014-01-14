@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook" position="inside">
-        <page string="Complementary Data" id="compl_data">
-            <field name="complementary_data" no_command="1"/>
+        <page string="Complementary Data" id="extra_data">
+            <field name="extra_data" no_command="1"/>
         </page>
     </xpath>
 </data>

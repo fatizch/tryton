@@ -27,7 +27,7 @@
       <field name="model">billing.premium.rule</field>
       <field name="type">form</field>
       <field name="inherit" ref="businessruleroot_view_form"/>
-      <field name="name">pricing_rule_form</field>
+      <field name="name">premium_rule_form</field>
     </record>
     <!--################################################################-->
     <!-- Tax Version -->

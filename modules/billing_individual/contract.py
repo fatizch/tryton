@@ -25,7 +25,7 @@ __all__ = [
 class Contract:
     __name__ = 'contract'
 
-    billing_managers = fields.One2Many('contract.billing.data', 'contract',
+    billing_datas = fields.One2Many('contract.billing.data', 'contract',
         'Billing Datas')
     use_prices = fields.Function(
         fields.Boolean('Use Prices', states={'invisible': True}),
@@ -77,30 +77,30 @@ class Contract:
     def get_name_for_billing(self):
         return self.offered.name + ' - Base Price'
 
-    def new_billing_manager(self):
-        return utils.instanciate_relation(self, 'billing_managers')
+    def new_billing_data(self):
+        return utils.instanciate_relation(self, 'billing_datas')
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered, start_date,
             end_date)
-        self.init_billing_manager()
+        self.init_billing_data()
         return res
 
-    def init_billing_manager(self):
-        if utils.is_none(self, 'billing_managers'):
-            bm = self.new_billing_manager()
+    def init_billing_data(self):
+        if utils.is_none(self, 'billing_datas'):
+            bm = self.new_billing_data()
             bm.init_from_contract(self, self.start_date)
-            self.billing_managers = [bm]
+            self.billing_datas = [bm]
             bm.save()
         if utils.is_none(self, 'next_billing_date'):
             self.next_billing_date = self.start_date
 
-    def get_billing_manager(self, date=None):
+    def get_billing_data(self, date=None):
         pool = Pool()
         Date = pool.get('ir.date')
         if date is None:
             date = Date.today()
-        for manager in self.billing_managers:
+        for manager in self.billing_datas:
             if (manager.start_date <= date
                     and (manager.end_date is None
                         or manager.end_date >= date)):
@@ -288,9 +288,9 @@ class Contract:
             work_set['total_amount'] += line.credit
 
     def calculate_billing_fees(self, work_set):
-        if not work_set['payment_rule']:
+        if not work_set['payment_term']:
             return
-        for fee_desc in work_set['payment_rule'].appliable_fees:
+        for fee_desc in work_set['payment_term'].appliable_fees:
             fee_line = work_set['fees'][fee_desc.id]
             fee_line['object'] = fee_desc
             fee_line['to_recalculate'] = True
@@ -321,15 +321,15 @@ class Contract:
                 x for x in work_set['billing_period'].moves
                 if x.state == 'draft'])
 
-    def apply_payment_rule(self, work_set):
+    def apply_payment_term(self, work_set):
         Line = Pool().get('account.move.line')
         Date = Pool().get('ir.date')
         for line in work_set['lines'].itervalues():
             if line.credit < 0:
                 line.credit, line.debit = 0, -line.credit
 
-        if work_set['total_amount'] >= 0 and work_set['payment_rule']:
-            term_lines = work_set['payment_rule'].compute(
+        if work_set['total_amount'] >= 0 and work_set['payment_term']:
+            term_lines = work_set['payment_term'].compute(
                 work_set['period'][0], work_set['period'][1],
                 work_set['total_amount'], work_set['currency'],
                 work_set['payment_date'])
@@ -361,10 +361,10 @@ class Contract:
         if not period:
             return
 
-        # Get the billing_manager and the billing period
-        self.init_billing_manager()
-        billing_manager = self.get_billing_manager(period[0])
-        assert billing_manager, 'Missing Billing Data'
+        # Get the billing_data and the billing period
+        self.init_billing_data()
+        billing_data = self.get_billing_data(period[0])
+        assert billing_data, 'Missing Billing Data'
         billing_period = self.get_or_create_billing_period(period)
 
         # Get the appliable prices ont the period. This is a list of tuples
@@ -375,12 +375,12 @@ class Contract:
         currency = self.get_currency()
         work_set = self.init_billing_work_set()
         work_set['price_lines'] = price_lines
-        work_set['payment_date'] = billing_manager.get_payment_date()
-        work_set['payment_method'] = billing_manager.payment_method
+        work_set['payment_date'] = billing_data.get_payment_date()
+        work_set['payment_method'] = billing_data.payment_method
         if work_set['payment_method']:
-            work_set['payment_rule'] = work_set['payment_method'].get_rule()
+            work_set['payment_term'] = work_set['payment_method'].get_rule()
         else:
-            work_set['payment_rule'] = None
+            work_set['payment_term'] = None
         work_set['period'] = period
         work_set['currency'] = currency
         work_set['billing_period'] = billing_period
@@ -404,7 +404,7 @@ class Contract:
         self.compensate_existing_moves_on_period(work_set)
 
         # Schedule the payments depending on the chosen rule
-        self.apply_payment_rule(work_set)
+        self.apply_payment_term(work_set)
 
         work_set['move'].lines = work_set['lines'].values() + \
             work_set['counterparts']
@@ -617,16 +617,16 @@ class Contract:
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(Contract, cls).get_var_names_for_full_extract()
-        res.extend(['billing_managers'])
+        res.extend(['billing_datas'])
         return res
 
     def get_use_prices(self, name):
         if not self.offered:
             return False
-        for rules in self.offered.pricing_rules:
+        for rules in self.offered.premium_rules:
             return True
         for option in self.options:
-            if option.offered.pricing_rules:
+            if option.offered.premium_rules:
                 return True
         return False
 

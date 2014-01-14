@@ -85,14 +85,14 @@ class Contract(CogProcessFramework):
         payment_method = PaymentMethod(int(self.payment_method))
         return {
             'payment_mode': payment_method.payment_mode,
-            'billing_managers': {
+            'billing_datas': {
                 'update': [
-                    {'id': self.billing_managers[0].id,
+                    {'id': self.billing_datas[0].id,
                     'payment_method': int(self.payment_method)}]}}
 
     def get_payment_method(self, name):
-        if (hasattr(self, 'billing_managers') and self.billing_managers):
-            return str(self.billing_managers[0].payment_method.id)
+        if (hasattr(self, 'billing_datas') and self.billing_datas):
+            return str(self.billing_datas[0].payment_method.id)
         if (hasattr(self, 'offered') and self.offered):
             payment_method = self.offered.get_default_payment_method()
             return str(payment_method.id) if payment_method else ''
@@ -109,15 +109,15 @@ class Contract(CogProcessFramework):
                 self.payment_bank_account):
             return {}
         return {
-            'billing_managers': {'update': [{'id': self.billing_managers[0].id,
+            'billing_datas': {'update': [{'id': self.billing_datas[0].id,
                 'payment_bank_account': self.payment_bank_account.id}]}}
 
     def get_payment_bank_account(self, name):
-        if (hasattr(self, 'billing_managers') and self.billing_managers):
-            the_billing_manager = self.billing_managers[0]
-            if (hasattr(the_billing_manager, 'payment_bank_account')
-                    and the_billing_manager.payment_bank_account):
-                return the_billing_manager.payment_bank_account.id
+        if (hasattr(self, 'billing_datas') and self.billing_datas):
+            the_billing_data = self.billing_datas[0]
+            if (hasattr(the_billing_data, 'payment_bank_account')
+                    and the_billing_data.payment_bank_account):
+                return the_billing_data.payment_bank_account.id
 
     def check_product_not_null(self):
         if not (hasattr(self, 'offered') and self.offered):
@@ -187,10 +187,10 @@ class Contract(CogProcessFramework):
 
         return False, (('no_option', ()),)
 
-    def check_billing_manager(self):
+    def check_billing_data(self):
         result = True
         errs = []
-        for manager in self.billing_managers:
+        for manager in self.billing_datas:
             if not manager.payment_mode == 'direct_debit':
                 continue
             if not manager.payment_bank_account:
@@ -339,7 +339,7 @@ class CoveredElement:
             good_data.init_from_option(option)
             # good_data.start_date = max(
                 # good_data.start_date, contract.start_date)
-            # good_data.init_complementary_data(option.offered, contract)
+            # good_data.init_extra_data(option.offered, contract)
             good_data.status_selection = True
             covered_datas.append(good_data)
         return model.serialize_this(covered_datas)

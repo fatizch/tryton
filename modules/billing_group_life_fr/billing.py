@@ -48,8 +48,8 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
     option_ = fields.Function(
         fields.Many2One('contract.option', 'Option'),
         'get_option_id')
-    tranche = fields.Many2One('salary_range', 'Salary Range',
-        ondelete='RESTRICT', states={'invisible': ~Eval('tranche')})
+    salary_range = fields.Many2One('salary_range', 'Salary Range',
+        ondelete='RESTRICT', states={'invisible': ~Eval('salary_range')})
     fare_class = fields.Many2One('fare_class', 'Fare Class',
         states={'invisible': ~Eval('fare_class_group')})
     index = fields.Many2One('table', 'Index',
@@ -64,7 +64,7 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
     parent = fields.Many2One('contract.premium_rate.line', 'Parent',
         ondelete='CASCADE')
     childs = fields.One2Many('contract.premium_rate.line', 'parent', 'Childs',
-        states={'invisible': ~~Eval('tranche')})
+        states={'invisible': ~~Eval('salary_range')})
     start_date = fields.Date('Start Date')
     start_date_ = fields.Function(
         fields.Date('Start Date'),
@@ -80,10 +80,10 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
         self.childs.append(child_line)
         return child_line
 
-    def add_sub_rate_line(self, rate, tranche=None, fare_class=None,
+    def add_sub_rate_line(self, rate, salary_range=None, fare_class=None,
             index=None):
         child_line = self.add_child()
-        child_line.tranche = tranche
+        child_line.salary_range = salary_range
         child_line.fare_class = fare_class
         child_line.index = index
         child_line.rate = rate
@@ -100,8 +100,8 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
                 coop_string.date_as_string(self.start_date))
         elif self.option:
             return self.option.rec_name
-        elif self.tranche:
-            return self.tranche.rec_name
+        elif self.salary_range:
+            return self.salary_range.rec_name
         elif self.fare_class:
             return self.fare_class.rec_name
         elif self.index:
@@ -706,10 +706,10 @@ class PremiumRateRule(business_rule.BusinessRuleRoot, model.CoopSQL):
     __name__ = 'billing.premium.rate.rule'
 
     rating_kind = fields.Selection(
-        [('tranche', 'by Salary Range'), ('fare_class', 'by Fare Class')],
-        'Rating Kind', states={'readonly': ~~Eval('sub_rating_rules')})
-    sub_rating_rules = fields.One2Many('billing.premium.rate.rule.line',
-        'main_rating_rule', 'Premium Rate Rule Lines')
+        [('salary_range', 'by Salary Range'), ('fare_class', 'by Fare Class')],
+        'Rating Kind', states={'readonly': ~~Eval('lines')})
+    lines = fields.One2Many('billing.premium.rate.rule.line',
+        'main_rate_rule', 'Premium Rate Rule Lines')
     index = fields.Many2One('table', 'Index',
         domain=[
             ('dimension_kind1', '=', 'range-date'),
@@ -727,7 +727,7 @@ class PremiumRateRule(business_rule.BusinessRuleRoot, model.CoopSQL):
             result.append(cov_data_dict)
             cov_data_args = args.copy()
             cov_data.init_dict_for_rule_engine(cov_data_args)
-            for sub_rule in self.sub_rating_rules:
+            for sub_rule in self.lines:
                 if self.rating_kind == 'fare_class':
                     if sub_rule.fare_class_group != cov_data.fare_class_group:
                         continue
@@ -743,9 +743,9 @@ class PremiumRateRule(business_rule.BusinessRuleRoot, model.CoopSQL):
                     cur_dict['key'] = sub_rule.fare_class
                     cur_dict['index'] = self.index
                     cur_dict['kind'] = 'fare_class'
-                elif self.rating_kind == 'tranche':
-                    cur_dict['key'] = sub_rule.tranche
-                    cur_dict['kind'] = 'tranche'
+                elif self.rating_kind == 'salary_range':
+                    cur_dict['key'] = sub_rule.salary_range
+                    cur_dict['kind'] = 'salary_range'
                 cov_data_dict['rates'].append(cur_dict)
         return result, errs
 
@@ -759,19 +759,19 @@ class PremiumRateRuleLine(model.CoopView, model.CoopSQL):
 
     __name__ = 'billing.premium.rate.rule.line'
 
-    main_rating_rule = fields.Many2One('billing.premium.rate.rule',
+    main_rate_rule = fields.Many2One('billing.premium.rate.rule',
         'Main Rating Rule', ondelete='CASCADE')
-    tranche = fields.Many2One('salary_range', 'Salary Range',
-        states={'invisible': Eval('_parent_main_rating_rule', {}).get(
-                'rating_kind', '') != 'tranche'}, ondelete='RESTRICT')
+    salary_range = fields.Many2One('salary_range', 'Salary Range',
+        states={'invisible': Eval('_parent_main_rate_rule', {}).get(
+                'rating_kind', '') != 'salary_range'}, ondelete='RESTRICT')
     fare_class_group = fields.Many2One('fare_class.group',
         'Fare Class Group',
-        states={'invisible': Eval('_parent_main_rating_rule', {}).get(
+        states={'invisible': Eval('_parent_main_rate_rule', {}).get(
                     'rating_kind', '') != 'fare_class'}, ondelete='RESTRICT',
         domain=[('fare_classes', '=', Eval('fare_class'))],
         depends=['fare_class'])
     fare_class = fields.Many2One('fare_class', 'Fare Class',
-        states={'invisible': Eval('_parent_main_rating_rule', {}).get(
+        states={'invisible': Eval('_parent_main_rate_rule', {}).get(
                     'rating_kind', '') != 'fare_class'},
         ondelete='RESTRICT')
     config_kind = fields.Selection(business_rule.CONFIG_KIND, 'Conf. kind',

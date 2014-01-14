@@ -24,15 +24,15 @@ class InsuranceFund(model.CoopSQL, model.CoopView):
     code = fields.Char('Code')
     name = fields.Char('Name')
     department = fields.Char('Department')
-    regime = fields.Many2One('health.care_system', 'Health Care System')
+    hc_system = fields.Many2One('health.care_system', 'Health Care System')
 
     @classmethod
-    def search_from_zipcode_and_regime(cls, zipcode, regime):
+    def search_from_zipcode_and_hc_system(cls, zipcode, hc_system):
         if zipcode[0:2] in ['97', '98']:
             dep = zipcode[0:3]
         else:
             dep = zipcode[0:2]
         return cls.search([
                 ('department', '=', dep),
-                ('regime', '=', regime),
+                ('hc_system', '=', hc_system),
                 ])

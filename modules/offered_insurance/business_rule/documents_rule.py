@@ -127,16 +127,16 @@ class Printable(Model):
             address = contact.addresses[0]
         return address.full_address
 
-    def get_available_letter_models(self, kind=None):
+    def get_available_doc_templates(self, kind=None):
         DocumentTemplate = Pool().get('document.template')
         domain = [
             ('on_model.model', '=', self.__name__),
             ['OR',
-                ('kind', '=', kind or self.get_letter_model_kind()),
+                ('kind', '=', kind or self.get_doc_template_kind()),
                 ('kind', '=', '')]]
         return DocumentTemplate.search(domain)
 
-    def get_letter_model_kind(self):
+    def get_doc_template_kind(self):
         return None
 
     def post_generation(self):
@@ -439,7 +439,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     def notify_completed(self):
         pass
 
-    def get_letter_model_kind(self):
+    def get_doc_template_kind(self):
         return 'doc_request'
 
     def get_object_for_contact(self):
@@ -454,7 +454,7 @@ class DocumentCreateSelectTemplate(model.CoopView):
 
     __name__ = 'document.create.select.template'
 
-    letter_model = fields.Many2One('document.template', 'Document Template')
+    doc_template = fields.Many2One('document.template', 'Document Template')
     selected = fields.Boolean('Selected')
 
 
@@ -474,9 +474,9 @@ class DocumentCreateSelect(model.CoopView):
         for elem in self.models:
             if elem.selected:
                 if id_only:
-                    return elem.letter_model.id
+                    return elem.doc_template.id
                 else:
-                    return elem.letter_model
+                    return elem.doc_template
 
 
 class DocumentGenerateReport(Report):
@@ -495,7 +495,7 @@ class DocumentGenerateReport(Report):
         records = None
         records = cls._get_records(ids, data['model'], data)
         DocumentTemplate = Pool().get('document.template')
-        good_letter = DocumentTemplate(data['letter_model'])
+        good_letter = DocumentTemplate(data['doc_template'])
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
         good_party = Pool().get('party.party')(data['party'])
@@ -531,7 +531,7 @@ class DocumentGenerateReport(Report):
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
         DocumentTemplate = Pool().get('document.template')
-        good_letter = DocumentTemplate(data['letter_model'])
+        good_letter = DocumentTemplate(data['doc_template'])
         report.report_content = good_letter.get_good_version(
             utils.today(), good_obj.get_lang()).data
         return super(DocumentGenerateReport, cls).parse(
@@ -568,7 +568,7 @@ class DocumentCreate(Wizard):
     generate = StateAction('offered_insurance.letter_generation_report')
     post_generation = StateTransition()
     select_model = StateView('document.create.select',
-        'offered_insurance.letter_model_selection_form', [
+        'offered_insurance.doc_template_selection_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Generate', 'generate', 'tryton-ok'),
             Button('Attach', 'attach', 'tryton-go-next')])
@@ -592,7 +592,7 @@ class DocumentCreate(Wizard):
             'id': Transaction().context.get('active_id'),
             'ids': Transaction().context.get('active_ids'),
             'model': Transaction().context.get('active_model'),
-            'letter_model': self.select_model.get_active_model(),
+            'doc_template': self.select_model.get_active_model(),
             'party': self.select_model.party.id,
             'address': self.select_model.good_address.id,
             'sender': sender.id if sender else None,
@@ -608,9 +608,9 @@ class DocumentCreate(Wizard):
 
         letters = []
         has_selection = True
-        for elem in good_model.get_available_letter_models():
+        for elem in good_model.get_available_doc_templates():
             letters.append({
-                'letter_model': elem.id,
+                'doc_template': elem.id,
                 'selected': has_selection})
             has_selection = False
 

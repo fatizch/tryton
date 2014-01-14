@@ -11,11 +11,11 @@
         <newline/>
     </xpath>
     <xpath expr="/form" position="inside">
-        <group id="sub_rating_rules" states="{'invisible': Eval('rating_kind') != 'tranche'}" colspan="4" yexpand="1" yfill="1">
-            <field name="sub_rating_rules" colspan="4" view_ids="billing_group_life_fr.rating_rule_by_tranche_view_tree,billing_group_life_fr.sub_rating_rule_view_form"/>
+        <group id="lines" states="{'invisible': Eval('rating_kind') != 'salary_range'}" colspan="4" yexpand="1" yfill="1">
+            <field name="lines" colspan="4" view_ids="billing_group_life_fr.rating_rule_by_salary_range_view_tree,billing_group_life_fr.sub_rating_rule_view_form"/>
         </group>
         <group id="rates_by_index" states="{'invisible': Eval('rating_kind') != 'fare_class'}" colspan="4" yexpand="1" yfill="1">
-            <field name="sub_rating_rules" colspan="4" view_ids="billing_group_life_fr.rating_rule_by_fare_class_view_tree,billing_group_life_fr.sub_rating_rule_view_form"/>
+            <field name="lines" colspan="4" view_ids="billing_group_life_fr.rating_rule_by_fare_class_view_tree,billing_group_life_fr.sub_rating_rule_view_form"/>
         </group>
     </xpath>
     <xpath expr="/form/label[@name='config_kind']" position="replace"/>

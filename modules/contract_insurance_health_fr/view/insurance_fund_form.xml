@@ -6,6 +6,6 @@
     <field name="name"/>
     <label name="department"/>
     <field name="department"/>
-    <label name="regime"/>
-    <field name="regime"/>
+    <label name="hc_system"/>
+    <field name="hc_system"/>
 </form>

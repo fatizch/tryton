@@ -46,13 +46,13 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             ('rule_engine', 'Rule Engine'),
             ], 'Kind')
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
-        'Sub Data', context={'kind': Eval('complementary_data_kind')},
+        'Sub Data', context={'kind': Eval('extra_data_kind')},
         states={'invisible': Eval('sub_data_config_kind') != 'simple'})
     sub_data_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
-    tags = fields.Many2Many('extra_data-tag', 'compl_data_def', 'tag', 'Tags')
+    tags = fields.Many2Many('extra_data-tag', 'extra_data_def', 'tag', 'Tags')
     tags_name = fields.Function(
         fields.Char('Tags', on_change_with=['tags']),
         'on_change_with_tags_name', searcher='search_tags')
@@ -183,7 +183,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
                     [('id', '=', Transaction().context['for_product'])])
                 with Transaction().set_context({'relation_selection': True}):
                     good_schemas = the_product.get_result(
-                        'complementary_data_getter',
+                        'extra_data_getter',
                         {
                             'date': Transaction().context['at_date'],
                             'dd_args': dd_args
@@ -203,8 +203,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
 
     @staticmethod
     def default_kind():
-        if 'complementary_data_kind' in Transaction().context:
-            return Transaction().context['complementary_data_kind']
+        if 'extra_data_kind' in Transaction().context:
+            return Transaction().context['extra_data_kind']
         return 'contract'
 
     def on_change_with_name(self):
@@ -270,7 +270,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         return str(value)
 
     @classmethod
-    def get_complementary_data_summary(cls, instances, var_name, lang=None):
+    def get_extra_data_summary(cls, instances, var_name, lang=None):
         res = {}
         domain = []
         keys = []
@@ -290,9 +290,9 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def get_complementary_data_value(cls, instance, key, at_date=None):
-        compl_data = instance.get_all_complementary_data(at_date)
-        res = compl_data.get(key)
+    def get_extra_data_value(cls, instance, key, at_date=None):
+        extra_data = instance.get_all_extra_data(at_date)
+        res = extra_data.get(key)
         if res:
             return res
         #TODO : To Enhance and load data_def in cache
@@ -345,13 +345,13 @@ class ExtraDataSubExtraDataRelation(model.CoopSQL, model.CoopView):
 class Tag:
     __name__ = 'tag'
 
-    compl_data_defs = fields.Many2Many('extra_data-tag', 'tag',
-        'compl_data_def', 'Extra Data')
+    extra_data_defs = fields.Many2Many('extra_data-tag', 'tag',
+        'extra_data_def', 'Extra Data')
 
     @classmethod
     def _export_skips(cls):
         result = super(Tag, cls)._export_skips()
-        result.add('compl_data_defs')
+        result.add('extra_data_defs')
         return result
 
 
@@ -360,6 +360,6 @@ class ExtraDataTagRelation(model.CoopSQL):
 
     __name__ = 'extra_data-tag'
 
-    compl_data_def = fields.Many2One('extra_data',
+    extra_data_def = fields.Many2One('extra_data',
         'Extra Data Def', ondelete='CASCADE')
     tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

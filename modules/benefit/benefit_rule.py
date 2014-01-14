@@ -57,7 +57,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES),
             'required': ~STATES_CAPITAL,
             }, sort=False)
-    sub_benefit_rules = fields.One2Many('benefit.rule.stage',
+    rule_stages = fields.One2Many('benefit.rule.stage',
         'benefit_rule', 'Benefit Rule Stages',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
     use_monthly_period = fields.Boolean('Monthly Period',
@@ -152,7 +152,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         if not self.amount_evolves_over_time:
             return super(BenefitRule, self).get_rec_name(name)
         res = ''
-        for sub_rule in self.sub_benefit_rules:
+        for sub_rule in self.rule_stages:
             res += sub_rule.get_rec_name(name)
         return res
 
@@ -285,7 +285,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         errs = []
         res = []
         start_date = args['start_date']
-        for sub_rule in self.sub_benefit_rules:
+        for sub_rule in self.rule_stages:
             sub_args = args.copy()
             sub_args['start_date'] = start_date
             indemn, err = sub_rule.get_indemnification_for_period(sub_args)
@@ -321,8 +321,8 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
     rule = fields.Many2One('rule_engine', 'Amount',
         states={'invisible': STATE_SIMPLE})
-    rule_complementary_data = fields.Dict('extra_data', 'Rule Extra Data',
-        on_change_with=['rule', 'rule_complementary_data'],
+    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
+        on_change_with=['rule', 'rule_extra_data'],
         states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
@@ -335,17 +335,17 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         sort=False, states={'invisible': Bool(~Eval('limited_duration'))})
 
-    def on_change_with_rule_complementary_data(self):
+    def on_change_with_rule_extra_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}
-        return self.rule.get_complementary_data_for_on_change(
-            self.rule_complementary_data)
+        return self.rule.get_extra_data_for_on_change(
+            self.rule_extra_data)
 
-    def get_rule_complementary_data(self, schema_name):
-        if not (hasattr(self, 'rule_complementary_data') and
-                self.rule_complementary_data):
+    def get_rule_extra_data(self, schema_name):
+        if not (hasattr(self, 'rule_extra_data') and
+                self.rule_extra_data):
             return None
-        return self.rule_complementary_data.get(schema_name, None)
+        return self.rule_extra_data.get(schema_name, None)
 
     def get_rec_name(self, name=None):
         if self.config_kind == 'advanced' and self.rule:
@@ -376,7 +376,7 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_rule_result(self, args):
         if self.rule:
-            rule_result = self.rule.execute(args, self.rule_complementary_data)
+            rule_result = self.rule.execute(args, self.rule_extra_data)
             return rule_result.result, rule_result.errors
 
     def give_me_result(self, args):

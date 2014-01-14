@@ -2,6 +2,6 @@
 <tree string="Option-Commission Option Relation">
     <field name="start_date"/>
     <field name="end_date"/>
-    <field name="subs_option"/>
+    <field name="option"/>
     <field name="rec_name"/>
 </tree>

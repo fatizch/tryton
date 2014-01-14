@@ -21,7 +21,7 @@ class Product:
     payment_methods = fields.One2Many(
         'offered.product-billing.payment.method', 'product',
         'Payment Methods', order=[('order', 'ASC')],
-        domain=[('payment_method.payment_rule.payment_mode', '=',
+        domain=[('payment_method.payment_term.payment_mode', '=',
                 Eval('payment_delay', ''))],
         depends=['payment_delay'])
     account_for_billing = fields.Many2One('account.account',

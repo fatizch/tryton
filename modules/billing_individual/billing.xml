@@ -20,14 +20,14 @@
         <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_payment_method_1">
-      <field name="domain">[('payment_rule.company', 'in', [c.id for c in user.companies])]</field>
+      <field name="domain">[('payment_term.company', 'in', [c.id for c in user.companies])]</field>
       <field name="rule_group" ref="rule_group_payment_method"/>
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_payment_method">
       <field name="name">Payment Methods</field>
       <field name="res_model">billing.payment.method</field>
-      <field name="domain">[('payment_rule.company', '=', Eval('context', {}).get('company', False))]</field>
+      <field name="domain">[('payment_term.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_payment_method_view1">
       <field name="sequence" eval="16"/>
@@ -115,15 +115,15 @@
     <!--################################################################ -->
     <!-- Billing Data -->
     <!--################################################################ -->
-    <record model="ir.ui.view" id="billing_manager_view_form">
+    <record model="ir.ui.view" id="billing_data_view_form">
       <field name="model">contract.billing.data</field>
       <field name="type">form</field>
-      <field name="name">billing_manager_form</field>
+      <field name="name">billing_data_form</field>
     </record>
-    <record model="ir.ui.view" id="billing_manager_tree">
+    <record model="ir.ui.view" id="billing_data_tree">
       <field name="model">contract.billing.data</field>
       <field name="type">tree</field>
-      <field name="name">billing_manager_tree</field>
+      <field name="name">billing_data_tree</field>
     </record>
     <!--################################################################ -->
     <!-- Billing Period -->

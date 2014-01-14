@@ -2,33 +2,33 @@
 <tryton>
     <data>
         <!-- HealthCareSystem -->
-        <record model="ir.ui.view" id="regime_view_form">
+        <record model="ir.ui.view" id="hc_system_view_form">
             <field name="model">health.care_system</field>
             <field name="type">form</field>
-            <field name="name">regime_form</field>
+            <field name="name">hc_system_form</field>
         </record>
-        <record model="ir.ui.view" id="regime_view_tree">
+        <record model="ir.ui.view" id="hc_system_view_tree">
             <field name="model">health.care_system</field>
             <field name="type">tree</field>
-            <field name="name">regime_tree</field>
+            <field name="name">hc_system_tree</field>
         </record>
-        <record model="ir.action.act_window" id="act_regime_form">
+        <record model="ir.action.act_window" id="act_hc_system_form">
             <field name="name">Health Care Systems</field>
             <field name="res_model">health.care_system</field>
         </record>
 
-        <record model="ir.action.act_window.view" id="act_regime_form_view_tree">
+        <record model="ir.action.act_window.view" id="act_hc_system_form_view_tree">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="regime_view_tree"/>
-            <field name="act_window" ref="act_regime_form"/>
+            <field name="view" ref="hc_system_view_tree"/>
+            <field name="act_window" ref="act_hc_system_form"/>
         </record>
-        <record model="ir.action.act_window.view" id="act_regime_form_view_form">
+        <record model="ir.action.act_window.view" id="act_hc_system_form_view_form">
             <field name="sequence" eval="20"/>
-            <field name="view" ref="regime_view_form"/>
-            <field name="act_window" ref="act_regime_form"/>
+            <field name="view" ref="hc_system_view_form"/>
+            <field name="act_window" ref="act_hc_system_form"/>
         </record>
-        <menuitem parent="health.menu_health_configuration" sequence="1" id="menu_regime_form"
-            icon="tryton-list" action="act_regime_form"/>
+        <menuitem parent="health.menu_health_configuration" sequence="1" id="menu_hc_system_form"
+            icon="tryton-list" action="act_hc_system_form"/>
 
         <!-- Insurance Fund -->
         <record model="ir.ui.view" id="insurance_fund_view_form">

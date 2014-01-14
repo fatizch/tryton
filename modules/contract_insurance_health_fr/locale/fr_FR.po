@@ -38,7 +38,7 @@ msgctxt "field:health.insurance_fund,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:health.insurance_fund,regime:"
+msgctxt "field:health.insurance_fund,hc_system:"
 msgid "Health Care System"
 msgstr "Régime"
 
@@ -58,7 +58,7 @@ msgctxt "field:health.party_complement,insurance_fund:"
 msgid "Insurance Fund"
 msgstr "Caisse d'Affiliation"
 
-msgctxt "field:health.party_complement,regime:"
+msgctxt "field:health.party_complement,hc_system:"
 msgid "Health Care System"
 msgstr "Régime"
 
@@ -126,7 +126,7 @@ msgctxt "model:ir.action,name:act_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"
 
-msgctxt "model:ir.action,name:act_regime_form"
+msgctxt "model:ir.action,name:act_hc_system_form"
 msgid "Health Care Systems"
 msgstr "Régimes"
 
@@ -134,7 +134,7 @@ msgctxt "model:ir.ui.menu,name:menu_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"
 
-msgctxt "model:ir.ui.menu,name:menu_regime_form"
+msgctxt "model:ir.ui.menu,name:menu_hc_system_form"
 msgid "Health Care Systems"
 msgstr "Régimes"
 

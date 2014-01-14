@@ -63,7 +63,7 @@ msgctxt "error:document.receive:"
 msgid "No document request found for this object"
 msgstr "Aucune demande de document trouvé pour cet objet"
 
-msgctxt "error:ins_product.simple_pricing_rule:"
+msgctxt "error:ins_product.simple_premium_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -151,7 +151,7 @@ msgctxt "field:offered.business_rule_root,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:offered.business_rule_root,rule_complementary_data:"
+msgctxt "field:offered.business_rule_root,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -311,11 +311,11 @@ msgctxt "field:clause.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:clause.rule,rule_complementary_data:"
+msgctxt "field:clause.rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:clause.rule,shared_clauses:"
+msgctxt "field:clause.rule,clauses:"
 msgid "Shared Clauses"
 msgstr "Clauses Partagées"
 
@@ -459,7 +459,7 @@ msgctxt "field:offered.coverage_amount.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:offered.coverage_amount.rule,rule_complementary_data:"
+msgctxt "field:offered.coverage_amount.rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -591,7 +591,7 @@ msgctxt "field:offered.deductible.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:offered.deductible.rule,rule_complementary_data:"
+msgctxt "field:offered.deductible.rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -891,7 +891,7 @@ msgctxt "field:document.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:document.rule,rule_complementary_data:"
+msgctxt "field:document.rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -1003,7 +1003,7 @@ msgctxt "field:offered.eligibility.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:offered.eligibility.rule,rule_complementary_data:"
+msgctxt "field:offered.eligibility.rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -1019,7 +1019,7 @@ msgctxt "field:offered.eligibility.rule,sub_elem_rule:"
 msgid "Sub Elem Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:offered.eligibility.rule,sub_elem_rule_complementary_data:"
+msgctxt "field:offered.eligibility.rule,sub_elem_rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -1099,7 +1099,7 @@ msgctxt "field:offered.item.description,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered.item.description,complementary_data_def:"
+msgctxt "field:offered.item.description,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -1147,7 +1147,7 @@ msgctxt "field:offered.item.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.item.description-extra_data,complementary_data_def:"
+msgctxt "field:offered.item.description-extra_data,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -1275,7 +1275,7 @@ msgctxt "field:document.create.select.template,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.create.select.template,letter_model:"
+msgctxt "field:document.create.select.template,doc_template:"
 msgid "Document Template"
 msgstr "Modèle de Lettre"
 
@@ -1431,7 +1431,7 @@ msgctxt "field:billing.premium.rule.component,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:billing.premium.rule.component,pricing_rule:"
+msgctxt "field:billing.premium.rule.component,premium_rule:"
 msgid "Premium Rule"
 msgstr "Règle de Cotisation"
 
@@ -1447,7 +1447,7 @@ msgctxt "field:billing.premium.rule.component,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:billing.premium.rule.component,rule_complementary_data:"
+msgctxt "field:billing.premium.rule.component,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -1523,7 +1523,7 @@ msgctxt "field:billing.premium.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:billing.premium.rule,rule_complementary_data:"
+msgctxt "field:billing.premium.rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -1623,47 +1623,47 @@ msgctxt "field:document.receive.request,value:"
 msgid "Value"
 msgstr "Nom"
 
-msgctxt "field:ins_product.simple_pricing_rule,config_kind:"
+msgctxt "field:ins_product.simple_premium_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
 
-msgctxt "field:ins_product.simple_pricing_rule,end_date:"
+msgctxt "field:ins_product.simple_premium_rule,end_date:"
 msgid "To Date"
 msgstr "Date de Fin"
 
-msgctxt "field:ins_product.simple_pricing_rule,id:"
+msgctxt "field:ins_product.simple_premium_rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.simple_pricing_rule,must_expand_tree:"
+msgctxt "field:ins_product.simple_premium_rule,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.simple_pricing_rule,offered:"
+msgctxt "field:ins_product.simple_premium_rule,offered:"
 msgid "Offered"
 msgstr "Offre"
 
-msgctxt "field:ins_product.simple_pricing_rule,rule:"
+msgctxt "field:ins_product.simple_premium_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:ins_product.simple_pricing_rule,rule_complementary_data:"
+msgctxt "field:ins_product.simple_premium_rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:ins_product.simple_pricing_rule,start_date:"
+msgctxt "field:ins_product.simple_premium_rule,start_date:"
 msgid "From Date"
 msgstr "Date de Début"
 
-msgctxt "field:ins_product.simple_pricing_rule,template:"
+msgctxt "field:ins_product.simple_premium_rule,template:"
 msgid "Template"
 msgstr "Modèle"
 
-msgctxt "field:ins_product.simple_pricing_rule,template_behaviour:"
+msgctxt "field:ins_product.simple_premium_rule,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
 
-msgctxt "field:ins_product.simple_pricing_rule,view_rec_name:"
+msgctxt "field:ins_product.simple_premium_rule,view_rec_name:"
 msgid "Name"
 msgstr "Nom"
 
@@ -1719,7 +1719,7 @@ msgctxt "field:offered.term.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:offered.term.rule,rule_complementary_data:"
+msgctxt "field:offered.term.rule,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
@@ -1883,11 +1883,11 @@ msgctxt "field:offered.option.description,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered.option.description,complementary_data:"
+msgctxt "field:offered.option.description,extra_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
-msgctxt "field:offered.option.description,complementary_data_def:"
+msgctxt "field:offered.option.description,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -1959,7 +1959,7 @@ msgctxt "field:offered.option.description,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.option.description,pricing_rules:"
+msgctxt "field:offered.option.description,premium_rules:"
 msgid "Premium Rules"
 msgstr "Règles de Cotisation"
 
@@ -2003,7 +2003,7 @@ msgctxt "field:offered.option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.option.description-extra_data,complementary_data_def:"
+msgctxt "field:offered.option.description-extra_data,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -2043,7 +2043,7 @@ msgctxt "field:offered,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered,complementary_data:"
+msgctxt "field:offered,extra_data:"
 msgid "Offered Kind"
 msgstr "Typage"
 
@@ -2079,7 +2079,7 @@ msgctxt "field:offered,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered,pricing_rules:"
+msgctxt "field:offered,premium_rules:"
 msgid "Premium Rules"
 msgstr "Règles de Cotisation"
 
@@ -2143,11 +2143,11 @@ msgctxt "field:offered.product,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered.product,complementary_data:"
+msgctxt "field:offered.product,extra_data:"
 msgid "Offered Kind"
 msgstr "Données Complémentaires"
 
-msgctxt "field:offered.product,complementary_data_def:"
+msgctxt "field:offered.product,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -2207,7 +2207,7 @@ msgctxt "field:offered.product,possible_item_descs:"
 msgid "Possible Item Descriptions"
 msgstr ""
 
-msgctxt "field:offered.product,pricing_rules:"
+msgctxt "field:offered.product,premium_rules:"
 msgid "Premium Rules"
 msgstr "Règles de Cotisation"
 
@@ -2247,7 +2247,7 @@ msgctxt "field:offered.product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.product-extra_data,complementary_data_def:"
+msgctxt "field:offered.product-extra_data,extra_data_def:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -2399,27 +2399,27 @@ msgctxt "field:process,for_products:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "field:rule_engine,rule_compl_datas:"
+msgctxt "field:rule_engine,rule_extra_datas:"
 msgid "Rule Parameter"
 msgstr "Paramètre de Règle"
 
-msgctxt "field:rule_engine,rule_external_compl_datas:"
+msgctxt "field:rule_engine,rule_external_extra_datas:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
-msgctxt "field:rule_engine.parameter,external_complementary_data:"
+msgctxt "field:rule_engine.parameter,external_extra_data_def:"
 msgid "External Extra Data"
 msgstr "Donnée Complémentaire Externe"
 
-msgctxt "field:rule_engine.parameter,rule_complementary_data:"
+msgctxt "field:rule_engine.parameter,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:rule_engine.parameter,the_complementary_data:"
+msgctxt "field:rule_engine.parameter,extra_data_def:"
 msgid "Complementary Parameters"
 msgstr "Paramètres Complémentaires"
 
-msgctxt "field:table.manage_dimension.show.dimension,complementary_data:"
+msgctxt "field:table.manage_dimension.show.dimension,extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -2564,7 +2564,7 @@ msgctxt "model:ins_product.rule_sets.contract,name:"
 msgid "Context functions for contract related data"
 msgstr ""
 
-msgctxt "model:ins_product.simple_pricing_rule,name:"
+msgctxt "model:ins_product.simple_premium_rule,name:"
 msgid "Simple Premium Rule"
 msgstr "Règle de Cotisation Simple"
 
@@ -2584,7 +2584,7 @@ msgctxt "model:ir.action,name:act_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
 
-msgctxt "model:ir.action,name:act_letter_model"
+msgctxt "model:ir.action,name:act_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
@@ -2628,7 +2628,7 @@ msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
 
-msgctxt "model:ir.ui.menu,name:menu_letter_model"
+msgctxt "model:ir.ui.menu,name:menu_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
@@ -3108,31 +3108,31 @@ msgctxt "selection:document.receive.request,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.simple_pricing_rule,config_kind:"
+msgctxt "selection:ins_product.simple_premium_rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:ins_product.simple_pricing_rule,config_kind:"
+msgctxt "selection:ins_product.simple_premium_rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:ins_product.simple_pricing_rule,offered:"
+msgctxt "selection:ins_product.simple_premium_rule,offered:"
 msgid "Coverage"
 msgstr "Garantie"
 
-msgctxt "selection:ins_product.simple_pricing_rule,offered:"
+msgctxt "selection:ins_product.simple_premium_rule,offered:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
+msgctxt "selection:ins_product.simple_premium_rule,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
+msgctxt "selection:ins_product.simple_premium_rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:ins_product.simple_pricing_rule,template_behaviour:"
+msgctxt "selection:ins_product.simple_premium_rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 

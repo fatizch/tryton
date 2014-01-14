@@ -51,7 +51,7 @@ def register():
         DocumentReceiveAttach,
         DocumentReceiveSetRequests,
         DocumentRequestBatch,
-        # From business_rule.pricing_rule
+        # From business_rule.premium_rule
         PremiumRule,
         PremiumRuleComponent,
         TaxVersion,

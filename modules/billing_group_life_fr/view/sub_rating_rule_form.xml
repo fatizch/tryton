@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Premium Rate Rule Line">
-    <label name="main_rating_rule"/>
-    <field name="main_rating_rule"/>
+    <label name="main_rate_rule"/>
+    <field name="main_rate_rule"/>
     <newline/>
-    <label name="tranche"/>
-    <field name="tranche"/>
+    <label name="salary_range"/>
+    <field name="salary_range"/>
     <newline/>
     <label name="fare_class"/>
     <field name="fare_class"/>

@@ -126,7 +126,7 @@ msgctxt "field:contract,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:contract,complementary_data:"
+msgctxt "field:contract,extra_data:"
 msgid ""
 msgstr " "
 
@@ -270,7 +270,7 @@ msgctxt "field:contract.service,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.service,subscribed_service:"
+msgctxt "field:contract.service,option:"
 msgid "Coverage"
 msgstr "Garantie"
 

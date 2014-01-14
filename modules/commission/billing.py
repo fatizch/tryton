@@ -18,7 +18,7 @@ class BillingPremiumCommissionOptionRelation(model.CoopSQL, model.CoopView):
 
     price_line = fields.Many2One('contract.billing.premium', 'Price Line',
         ondelete='CASCADE')
-    com_subscribed = fields.Many2One('contract.option',
+    com_option = fields.Many2One('contract.option',
         'Commission Subscribed', ondelete='RESTRICT')
     amount = fields.Numeric('Amount')
     to_recalculate = fields.Boolean('Recalculate at billing')
@@ -59,7 +59,7 @@ class Premium:
         for com_line in (x for x in line.details if x.on_object and
                 x.on_object.__name__ == 'contract.option-commission.option'):
             com_relation = ComLine()
-            com_relation.com_subscribed = com_line.on_object.com_option
+            com_relation.com_option = com_line.on_object.com_option
             # Com detail lines store the rate in the amount field. We need
             # to apply it now to avoid taxes and fees
             com_relation.amount = self.amount * com_line.amount
@@ -84,8 +84,8 @@ class Premium:
         price_line_days = self.get_number_of_days_at_date(period[0])
         convert_factor = number_of_days / Decimal(price_line_days)
         for com_line in self.com_lines:
-            values = work_set['coms'][com_line.com_subscribed.offered.id]
-            values['object'] = com_line.com_subscribed
+            values = work_set['coms'][com_line.com_option.offered.id]
+            values['object'] = com_line.com_option
             values['to_recalculate'] |= com_line.to_recalculate
             values['amount'] += com_line.amount * convert_factor
             values['base'] += result.credit

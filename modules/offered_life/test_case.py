@@ -14,7 +14,7 @@ class TestCaseModel:
     @classmethod
     def _get_test_case_dependencies(cls):
         result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['shared_complementary_data_test_case'] = {
+        result['shared_extra_data_test_case'] = {
             'name': 'Shared Complementary Data Test Case',
             'dependencies': set([]),
             }
@@ -29,7 +29,7 @@ class TestCaseModel:
         return result
 
     @classmethod
-    def get_or_create_complementary_data(cls, name, string=None, type_=None,
+    def get_or_create_extra_data(cls, name, string=None, type_=None,
             kind=None, selection=None):
         ComplementaryData = Pool().get('extra_data')
         schema_el = ComplementaryData()
@@ -41,14 +41,14 @@ class TestCaseModel:
         return schema_el
 
     @classmethod
-    def shared_complementary_data_test_case(cls):
+    def shared_extra_data_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         schemas = []
-        schemas.append(cls.get_or_create_complementary_data('is_vip',
+        schemas.append(cls.get_or_create_extra_data('is_vip',
                 translater('Is VIP'), 'boolean', 'contract'))
-        schemas.append(cls.get_or_create_complementary_data('salary',
+        schemas.append(cls.get_or_create_extra_data('salary',
                 translater('Annual Salary'), 'numeric', 'sub_elem'))
-        schemas.append(cls.get_or_create_complementary_data('CSP',
+        schemas.append(cls.get_or_create_extra_data('CSP',
                 translater('CSP'), 'selection', 'sub_elem', '\n'.join([
                                 'CSP1: CSP1', 'CSP2: CSP2', 'CSP3: CSP3',
                                 'CSP4: CSP4'])))

@@ -156,10 +156,10 @@ class Offered(model.CoopView, GetResult, Templated):
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'get_currency_digits')
-    complementary_data = fields.Dict('extra_data', 'Offered Kind',
-        context={'complementary_data_kind': 'product'},
+    extra_data = fields.Dict('extra_data', 'Offered Kind',
+        context={'extra_data_kind': 'product'},
         domain=[('kind', '=', 'product')],
-        on_change_with=['complementary_data'])
+        on_change_with=['extra_data'])
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete="RESTRICT")
 
@@ -215,7 +215,7 @@ class Offered(model.CoopView, GetResult, Templated):
             return Transaction().context.get('currency_digits')
 
     @staticmethod
-    def default_complementary_data():
+    def default_extra_data():
         good_se = Pool().get('extra_data').search([
                 ('kind', '=', 'product')])
         res = {}
@@ -223,34 +223,34 @@ class Offered(model.CoopView, GetResult, Templated):
             res[se.name] = se.get_default_value(None)
         return res
 
-    def get_complementary_data_def(self, kinds=None, at_date=None):
+    def get_extra_data_def(self, kinds=None, at_date=None):
         return [
-            x for x in self.complementary_data_def
+            x for x in self.extra_data_def
             if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
 
     def get_cmpl_data_looking_for_what(self, args):
         return 'contract' if not 'sub_elem' in args else 'sub_elem'
 
-    def get_compl_data_for_exec(self, args):
+    def get_extra_data_for_exec(self, args):
         looking_for = self.get_cmpl_data_looking_for_what(args)
-        all_schemas = set(self.get_complementary_data_def(
+        all_schemas = set(self.get_extra_data_def(
             ('contract', looking_for), args['date']))
         if looking_for:
-            possible_schemas = set(self.get_complementary_data_def(
+            possible_schemas = set(self.get_extra_data_def(
                 (looking_for), args['date']))
         else:
             possible_schemas = set([])
         return all_schemas, possible_schemas
 
-    def on_change_with_complementary_data(self):
-        if not hasattr(self, 'complementary_data_def'):
+    def on_change_with_extra_data(self):
+        if not hasattr(self, 'extra_data_def'):
             return {}
         ExtraData = Pool().get('extra_data')
         schemas = ExtraData.search([
-            'name', 'in', [k for k in self.complementary_data_def.iterkeys()]])
+            'name', 'in', [k for k in self.extra_data_def.iterkeys()]])
         if not schemas:
             return {}
-        result = copy.copy(self.complementary_data_def)
+        result = copy.copy(self.extra_data_def)
         for schema in schemas:
             schema.update_field_value(result)
         return result
@@ -298,8 +298,8 @@ class Product(model.CoopSQL, Offered):
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
         ondelete='RESTRICT', required=True)
-    complementary_data_def = fields.Many2Many('offered.product-extra_data',
-        'product', 'complementary_data_def', 'Extra Data',
+    extra_data_def = fields.Many2Many('offered.product-extra_data',
+        'product', 'extra_data_def', 'Extra Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
 
@@ -337,33 +337,33 @@ class Product(model.CoopSQL, Offered):
         return (self.contract_generator.get_id(self.contract_generator.id)
             if self.contract_generator else '')
 
-    def give_me_complementary_data_ids_aggregate(self, args):
+    def give_me_extra_data_ids_aggregate(self, args):
         if not 'dd_args' in args:
             return [], []
         res = set()
         errs = []
         for opt in self.coverages:
             result, errors = opt.get_result(
-                'complementary_data_ids_aggregate',
+                'extra_data_ids_aggregate',
                 args)
             map(lambda x: res.add(x), result)
             errs += errors
         return list(res), errs
 
-    def give_me_complementary_data_getter(self, args):
+    def give_me_extra_data_getter(self, args):
         if not 'dd_args' in args:
             return [], []
         dd_args = args['dd_args']
         if not 'path' in dd_args:
             if not 'options' in dd_args:
-                return self.give_me_complementary_data_ids(args)
+                return self.give_me_extra_data_ids(args)
             dd_args['path'] = 'all'
-        return self.give_me_complementary_data_ids_aggregate(args)
+        return self.give_me_extra_data_ids_aggregate(args)
 
     def get_currency(self):
         return self.currency
 
-    def give_me_calculated_complementary_datas(self, args):
+    def give_me_calculated_extra_datas(self, args):
         # We prepare the call to the 'calculate_value_set' API.
         # It needs the following parameters:
         #  - The list of the schemas it must look for
@@ -373,23 +373,23 @@ class Product(model.CoopSQL, Offered):
         if not 'contract' in args or not 'date' in args:
             raise Exception('Expected contract and date in args, got %s' % (
                 str([k for k in args.iterkeys()])))
-        all_schemas, possible_schemas = self.get_compl_data_for_exec(args)
+        all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
         if not 'sub_elem' in args:
             for coverage in args['contract'].get_active_coverages_at_date(
                     args['date']):
                 coverage_all, coverage_possible = \
-                    coverage.get_compl_data_for_exec(args)
+                    coverage.get_extra_data_for_exec(args)
                 all_schemas |= coverage_all
                 possible_schemas |= coverage_possible
         else:
             coverage = args['coverage']
             coverage_all, coverage_possible = \
-                coverage.get_compl_data_for_exec(args)
+                coverage.get_extra_data_for_exec(args)
             all_schemas |= coverage_all
             possible_schemas |= coverage_possible
         existing_data = {}
-        if args['contract'].complementary_data:
-            existing_data.update(args['contract'].complementary_data)
+        if args['contract'].extra_data:
+            existing_data.update(args['contract'].extra_data)
         key = None
         if 'data' in args:
             key = 'data'
@@ -398,7 +398,7 @@ class Product(model.CoopSQL, Offered):
         elif 'contract' in args:
             key = 'contract'
         if key:
-            existing_data.update(args[key].get_all_complementary_data(
+            existing_data.update(args[key].get_all_extra_data(
                 args['date']))
         ExtraData = Pool().get('extra_data')
         result = ExtraData.calculate_value_set(
@@ -445,7 +445,7 @@ class Product(model.CoopSQL, Offered):
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(Product, cls).get_var_names_for_full_extract()
-        res.extend(['complementary_data_def',
+        res.extend(['extra_data_def',
             'coverages', 'description', 'subscriber_kind',
             ('currency', 'light')])
         return res
@@ -481,9 +481,9 @@ class OptionDescription(model.CoopSQL, Offered):
         states={'invisible': Bool(~Eval('is_package'))},
         depends=['is_package', 'kind'],
         domain=[('is_package', '=', False), ('kind', '=', Eval('kind'))])
-    complementary_data_def = fields.Many2Many(
+    extra_data_def = fields.Many2Many(
         'offered.option.description-extra_data',
-        'coverage', 'complementary_data_def', 'Extra Data',
+        'coverage', 'extra_data_def', 'Extra Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
 
     @classmethod
@@ -514,14 +514,14 @@ class OptionDescription(model.CoopSQL, Offered):
             return False
         return True
 
-    def give_me_complementary_data_ids_aggregate(self, args):
+    def give_me_extra_data_ids_aggregate(self, args):
         if not 'dd_args' in args:
             return [], []
         dd_args = args['dd_args']
         if not('options' in dd_args and dd_args['options'] != '' and
                 self.code in dd_args['options'].split(';')):
             return [], []
-        return self.get_complementary_data_def(
+        return self.get_extra_data_def(
             [dd_args['kind']], args['date']), []
 
     @staticmethod
@@ -540,7 +540,7 @@ class OptionDescription(model.CoopSQL, Offered):
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(OptionDescription, cls).get_var_names_for_full_extract()
-        res.extend(['complementary_data_def', 'description',
+        res.extend(['extra_data_def', 'description',
             'subscription_behaviour'])
         return res
 
@@ -567,7 +567,7 @@ class OptionDescriptionExtraDataRelation(model.CoopSQL):
 
     coverage = fields.Many2One('offered.option.description',
         'Option Description', ondelete='CASCADE')
-    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+    extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT')
 
 
@@ -587,5 +587,5 @@ class ProductExtraDataRelation(model.CoopSQL):
     __name__ = 'offered.product-extra_data'
 
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
-    complementary_data_def = fields.Many2One('extra_data', 'Extra Data',
+    extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT')

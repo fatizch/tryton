@@ -20,7 +20,7 @@
     <label name="currency"/>
     <field name="currency"/>
     <newline/>
-    <field name="complementary_data" colspan="2" no_command="1"/>
+    <field name="extra_data" colspan="2" no_command="1"/>
     <newline/>
     <field name="clauses" colspan="2"/>
 </form>

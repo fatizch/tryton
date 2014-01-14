@@ -156,10 +156,10 @@ class ContractSubscribe(ProcessFinder):
             res, err = obj.init_from_offered(process_param.product,
                 process_param.date)
             if process_param.business_provider:
-                obj.get_or_create_management_role('business_provider',
+                obj.get_or_create_agreement('business_provider',
                     process_param.business_provider)
             if process_param.delegated_manager:
-                obj.get_or_create_management_role('management',
+                obj.get_or_create_agreement('management',
                     process_param.delegated_manager)
             obj.dist_network = process_param.dist_network
             errs += err

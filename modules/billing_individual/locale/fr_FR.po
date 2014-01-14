@@ -211,7 +211,7 @@ msgctxt "field:billing.payment.method,payment_mode:"
 msgid "Payment Mode"
 msgstr "Mode de Paiement"
 
-msgctxt "field:billing.payment.method,payment_rule:"
+msgctxt "field:billing.payment.method,payment_term:"
 msgid "Payment Term"
 msgstr "Règle de paiement"
 
@@ -323,7 +323,7 @@ msgctxt "field:billing.payment.term-fee,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:billing.payment.term-fee,payment_rule:"
+msgctxt "field:billing.payment.term-fee,payment_term:"
 msgid "Payment Term"
 msgstr "Règle de paiement"
 
@@ -403,7 +403,7 @@ msgctxt "field:billing.payment.term.line,number_of_periods:"
 msgid "Number of periods"
 msgstr "Nombre de périodes"
 
-msgctxt "field:billing.payment.term.line,payment_rule:"
+msgctxt "field:billing.payment.term.line,payment_term:"
 msgid "Payment Term"
 msgstr "Conditions de paiement"
 
@@ -731,7 +731,7 @@ msgctxt "field:company.company,fiscal_years:"
 msgid "Fiscal Years"
 msgstr "Années fiscales"
 
-msgctxt "field:contract,billing_managers:"
+msgctxt "field:contract,billing_datas:"
 msgid "Billing Datas"
 msgstr "Gestionnaires d'Appel de Cotisation"
 
@@ -889,7 +889,7 @@ msgctxt "model:ir.action,name:act_payment_method"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
-msgctxt "model:ir.action,name:act_payment_rule"
+msgctxt "model:ir.action,name:act_payment_term"
 msgid "Payment Term"
 msgstr "Règle de paiement"
 
@@ -901,7 +901,7 @@ msgctxt "model:ir.ui.menu,name:menu_payment_method"
 msgid "Payment Methods"
 msgstr "Méthodes de Paiement"
 
-msgctxt "model:ir.ui.menu,name:menu_payment_rule"
+msgctxt "model:ir.ui.menu,name:menu_payment_term"
 msgid "Payment Term"
 msgstr "Règle de paiement"
 
@@ -1122,7 +1122,7 @@ msgid "Billing Datas"
 msgstr "Gestionnaires d'Appel de Cotisation"
 
 msgctxt "view:contract.billing.data:"
-msgid "billing_manager"
+msgid "billing_data"
 msgstr ""
 
 msgctxt "view:contract.do_billing.bill:"
@@ -1146,7 +1146,7 @@ msgid "Payment Terms"
 msgstr ""
 
 msgctxt "view:billing.payment.term:"
-msgid "payment_rule"
+msgid "payment_term"
 msgstr ""
 
 msgctxt "view:billing.payment.term.line:"

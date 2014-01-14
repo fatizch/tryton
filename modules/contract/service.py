@@ -19,7 +19,7 @@ class ContractService(model.CoopView, model.CoopSQL):
             ('delivered', 'Delivered'),
             ], 'Status')
     contract = fields.Many2One('contract', 'Contract', ondelete='RESTRICT')
-    subscribed_service = fields.Many2One(
+    option = fields.Many2One(
         'contract.option', 'Coverage', ondelete='RESTRICT', domain=[
             If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
             ], depends=['contract'])
@@ -30,8 +30,8 @@ class ContractService(model.CoopView, model.CoopSQL):
             })
 
     def get_rec_name(self, name=None):
-        if self.subscribed_service:
-            res = self.subscribed_service.get_rec_name(name)
+        if self.option:
+            res = self.option.get_rec_name(name)
         else:
             res = super(ContractService, self).get_rec_name(name)
         if self.status:

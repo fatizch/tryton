@@ -95,10 +95,10 @@ class Payment:
 
         if self.line and isinstance(self.line.move.origin, Contract):
             contract = self.line.move.origin
-            billing_manager = contract.get_billing_manager(self.line.date)
-            assert billing_manager, 'Missing Billing Manager'
-            if billing_manager.payment_bank_account:
+            billing_data = contract.get_billing_data(self.line.date)
+            assert billing_data, 'Missing Billing Manager'
+            if billing_data.payment_bank_account:
                 for account_number in \
-                        billing_manager.payment_bank_account.account_numbers:
+                        billing_data.payment_bank_account.account_numbers:
                     if account_number.type == 'iban':
                         return account_number

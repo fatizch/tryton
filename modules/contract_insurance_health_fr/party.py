@@ -15,7 +15,7 @@ class HealthPartyComplement:
     department = fields.Function(
         fields.Char('Department'),
         'get_department', 'set_void')
-    regime = fields.Many2One('health.care_system', 'Health Care System')
+    hc_system = fields.Many2One('health.care_system', 'Health Care System')
     insurance_fund = fields.Many2One('health.insurance_fund', 'Insurance Fund',
         domain=[
             [If(
@@ -23,8 +23,8 @@ class HealthPartyComplement:
                     (),
                     ('department', '=', Eval('department')),
                     )],
-            ('regime', '=', Eval('regime')),
-            ], depends=['department', 'regime'])
+            ('hc_system', '=', Eval('hc_system')),
+            ], depends=['department', 'hc_system'])
 
     def get_department(self, name):
         address = self.party.address_get() if self.party else None

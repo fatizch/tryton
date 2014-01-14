@@ -40,12 +40,12 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
     __name__ = 'billing.premium.rule'
 
     components = fields.One2ManyDomain('billing.premium.rule.component',
-        'pricing_rule', 'Components',
+        'premium_rule', 'Components',
         domain=[('rated_object_kind', '=', 'global')],
         states={'invisible': STATE_SIMPLE})
     sub_item_components = fields.One2ManyDomain(
         'billing.premium.rule.component',
-        'pricing_rule', 'Covered Item Components',
+        'premium_rule', 'Covered Item Components',
         domain=[('rated_object_kind', '=', 'sub_item')])
     frequency = fields.Selection(PRICING_FREQUENCY, 'Rate Frequency',
         required=True)
@@ -73,11 +73,11 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
                 })
 
     @classmethod
-    def set_basic_price(cls, pricing_rules, name, value):
+    def set_basic_price(cls, premium_rules, name, value):
         if not value:
             return
         Component = Pool().get('billing.premium.rule.component')
-        for pricing in pricing_rules:
+        for pricing in premium_rules:
             Component.delete(
                 [component for component in pricing.components
                     if component.kind == 'base']
@@ -93,7 +93,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
                                 }])]})
 
     @classmethod
-    def set_basic_tax(cls, pricing_rules, name, value):
+    def set_basic_tax(cls, premium_rules, name, value):
         if not value:
             return
         try:
@@ -104,7 +104,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             raise Exception(
                 'Could not found a Tax Desc with code %s' % value)
         Component = Pool().get('billing.premium.rule.component')
-        for pricing in pricing_rules:
+        for pricing in premium_rules:
             Component.delete(
                 [component for component in pricing.components
                     if component.kind == 'tax']
@@ -281,7 +281,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
 
     __name__ = 'billing.premium.rule.component'
 
-    pricing_rule = fields.Many2One('billing.premium.rule', 'Premium Rule',
+    premium_rule = fields.Many2One('billing.premium.rule', 'Premium Rule',
         ondelete='CASCADE')
     fixed_amount = fields.Numeric('Amount', depends=['kind', 'config_kind'],
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
@@ -300,8 +300,8 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
-    rule_complementary_data = fields.Dict('extra_data', 'Rule Extra Data',
-        on_change_with=['rule', 'rule_complementary_data'], states={
+    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
+        on_change_with=['rule', 'rule_extra_data'], states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
@@ -346,21 +346,21 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
         elif self.config_kind == 'simple':
             amount = self.fixed_amount
         elif self.config_kind == 'advanced' and self.rule:
-            rule_result = self.rule.execute(args, self.rule_complementary_data)
+            rule_result = self.rule.execute(args, self.rule_extra_data)
             amount, errors = rule_result.result, rule_result.print_errors()
         return amount, errors
 
-    def on_change_with_rule_complementary_data(self):
+    def on_change_with_rule_extra_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}
-        return self.rule.get_complementary_data_for_on_change(
-            self.rule_complementary_data)
+        return self.rule.get_extra_data_for_on_change(
+            self.rule_extra_data)
 
-    def get_rule_complementary_data(self, schema_name):
-        if not (hasattr(self, 'rule_complementary_data') and
-                self.rule_complementary_data):
+    def get_rule_extra_data(self, schema_name):
+        if not (hasattr(self, 'rule_extra_data') and
+                self.rule_extra_data):
             return None
-        return self.rule_complementary_data.get(schema_name, None)
+        return self.rule_extra_data.get(schema_name, None)
 
     def calculate_value(self, args):
         amount, errors = self.get_amount(args)

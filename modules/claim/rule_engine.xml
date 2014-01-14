@@ -19,7 +19,7 @@
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_delivered_service_total_expenses</field>
+      <field name="name">_re_service_total_expenses</field>
       <field name="parent" ref="dossier_sinistre"/>
     </record>
     <record model="rule_engine.function" id="depense">
@@ -28,7 +28,7 @@
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_delivered_service_expense</field>
+      <field name="name">_re_service_expense</field>
       <field name="fct_args">Code de la depense</field>
       <field name="parent" ref="dossier_sinistre"/>
     </record>
@@ -38,7 +38,7 @@
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_delivered_service_complementary_data</field>
+      <field name="name">_re_service_extra_data</field>
       <field name="fct_args">Code donnee complementaire</field>
       <field name="parent" ref="dossier_sinistre"/>
     </record>

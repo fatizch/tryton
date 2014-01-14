@@ -174,9 +174,9 @@ class Subscribed(model.CoopView, ModelCurrency):
                 return True
         return False
 
-    def get_all_complementary_data(self, at_date):
-        if not utils.is_none(self, 'complementary_data'):
-            return self.complementary_data
+    def get_all_extra_data(self, at_date):
+        if not utils.is_none(self, 'extra_data'):
+            return self.extra_data
         return {}
 
 
@@ -212,11 +212,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
-    complementary_data = fields.Dict('extra_data', 'Complementary Data',
-        on_change=['complementary_data', 'start_date', 'options', 'offered',
+    extra_data = fields.Dict('extra_data', 'Complementary Data',
+        on_change=['extra_data', 'start_date', 'options', 'offered',
             'appliable_conditions_date'],
-        depends=['complementary_data', 'start_date', 'options', 'offered'],
-        # states={'invisible': ~Eval('complementary_data')
+        depends=['extra_data', 'start_date', 'options', 'offered'],
+        # states={'invisible': ~Eval('extra_data')
         )
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact')
@@ -340,24 +340,24 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return [
             elem.offered for elem in self.get_active_options_at_date(at_date)]
 
-    def init_complementary_data(self):
-        if not (hasattr(self, 'complementary_data') and
-                self.complementary_data):
-            self.complementary_data = {}
-        self.complementary_data = self.on_change_complementary_data()[
-            'complementary_data']
+    def init_extra_data(self):
+        if not (hasattr(self, 'extra_data') and
+                self.extra_data):
+            self.extra_data = {}
+        self.extra_data = self.on_change_extra_data()[
+            'extra_data']
         return True, ()
 
-    def get_complementary_data_def(self):
-        compl_data_defs = []
+    def get_extra_data_def(self):
+        extra_data_defs = []
         if self.offered:
-            compl_data_defs.extend(self.offered.get_complementary_data_def(
+            extra_data_defs.extend(self.offered.get_extra_data_def(
                 ['contract'], at_date=self.start_date))
         for option in self.options:
-            compl_data_defs.extend(
-                option.offered.get_complementary_data_def(
+            extra_data_defs.extend(
+                option.offered.get_extra_data_def(
                     ['contract'], at_date=option.start_date))
-        return set(compl_data_defs)
+        return set(extra_data_defs)
 
     def get_dates(self, dates=None):
         res = super(Contract, self).get_dates(dates)
@@ -476,11 +476,11 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.currency
 
-    def on_change_complementary_data(self):
+    def on_change_extra_data(self):
         args = {'date': self.start_date, 'level': 'contract'}
         self.init_dict_for_rule_engine(args)
-        return {'complementary_data': self.offered.get_result(
-                'calculated_complementary_datas', args)[0]}
+        return {'extra_data': self.offered.get_result(
+                'calculated_extra_datas', args)[0]}
 
     @classmethod
     def get_possible_contracts_from_party(cls, party, at_date):
@@ -529,7 +529,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             self.addresses = [cur_address]
         return True
 
-    def get_letter_model_kind(self):
+    def get_doc_template_kind(self):
         return 'contract'
 
     def get_appliable_logo(self, kind=''):
@@ -543,7 +543,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
     @classmethod
     def get_var_names_for_full_extract(cls):
-        return ['subscriber', ('offered', 'light'), 'complementary_data',
+        return ['subscriber', ('offered', 'light'), 'extra_data',
             'options', 'covered_elements', 'start_date', 'end_date']
 
 
@@ -602,10 +602,10 @@ class ContractOption(model.CoopSQL, Subscribed):
     def search_coverage_kind(cls, name, clause):
         return [('offered.kind', ) + tuple(clause[1:])]
 
-    def get_all_complementary_data(self, at_date):
-        res = super(ContractOption, self).get_all_complementary_data(
+    def get_all_extra_data(self, at_date):
+        res = super(ContractOption, self).get_all_extra_data(
             at_date)
-        res.update(self.contract.get_all_complementary_data(at_date))
+        res.update(self.contract.get_all_extra_data(at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):

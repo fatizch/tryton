@@ -52,10 +52,10 @@ class Claim(CogProcessFramework):
 
     def calculate_indemnification(self):
         for loss in self.losses:
-            for delivered_service in loss.delivered_services:
-                if delivered_service.status == 'calculating':
-                    delivered_service.calculate()
-                    delivered_service.save()
+            for service in loss.services:
+                if service.status == 'calculating':
+                    service.calculate()
+                    service.save()
         return True
 
     def init_declaration_document_request(self):
@@ -73,7 +73,7 @@ class Claim(CogProcessFramework):
             loss_docs = loss.loss_desc.get_documents()
             if loss_docs:
                 documents.extend([(doc_desc, self) for doc_desc in loss_docs])
-            for delivered in loss.delivered_services:
+            for delivered in loss.services:
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
                 contract = delivered.contract
@@ -111,8 +111,8 @@ class Claim(CogProcessFramework):
     def get_indemnifications(self, name=None):
         res = []
         for loss in self.losses:
-            for delivered_service in loss.delivered_services:
-                for indemnification in delivered_service.indemnifications:
+            for service in loss.services:
+                for indemnification in service.indemnifications:
                     res.append(indemnification.id)
         return res
 
@@ -131,7 +131,7 @@ class Claim(CogProcessFramework):
 
     def get_is_pending_indemnification(self, name):
         for loss in self.losses:
-            for del_ser in loss.delivered_services:
+            for del_ser in loss.services:
                 for indemn in del_ser.indemnifications:
                     if indemn.status == 'calculated':
                         return True
@@ -142,13 +142,13 @@ class Loss:
     __name__ = 'claim.loss'
 
     #The Benefit to deliver is just a shortcut to ease delivered service
-    #creation. it should not be used once a delivered_service has been created
+    #creation. it should not be used once a service has been created
     benefit_to_deliver = fields.Function(
         fields.Many2One('benefit', 'Benefit',
             domain=[('id', 'in', Eval('benefits'))],
             depends=['benefits', 'can_modify_benefit'],
             states={'invisible': ~Eval('can_modify_benefit')},
-            on_change=['benefit_to_deliver', 'delivered_services', 'claim',
+            on_change=['benefit_to_deliver', 'services', 'claim',
                 'start_date', 'loss_desc', 'event_desc']),
         'get_benefit_to_deliver', 'set_void')
     benefits = fields.Function(
@@ -157,7 +157,7 @@ class Loss:
         'on_change_with_benefits')
     can_modify_benefit = fields.Function(
         fields.Boolean('Can Modify Benefit?',
-            on_change_with=['delivered_services']),
+            on_change_with=['services']),
         'on_change_with_can_modify_benefit')
 
     def get_possible_benefits(self):
@@ -183,9 +183,9 @@ class Loss:
         return list(set(res))
 
     def get_benefit_to_deliver(self, name):
-        if (len(self.delivered_services) == 1
-                and self.delivered_services[0].status == 'calculating'):
-            return self.delivered_services[0].benefit.id
+        if (len(self.services) == 1
+                and self.services[0].status == 'calculating'):
+            return self.services[0].benefit.id
 
     @classmethod
     def set_void(cls, instances, name, vals):
@@ -193,22 +193,22 @@ class Loss:
 
     def on_change_benefit_to_deliver(self):
         res = {}
-        if not self.delivered_services:
-            res['delivered_services'] = utils.create_inst_with_default_val(
-                self, 'delivered_services', 'add')
-            del_serv_dict = res['delivered_services']['add'][0]
-        elif (len(self.delivered_services) == 1
-                and self.delivered_services[0].status == 'calculating'):
-            res['delivered_services'] = {'update':
-                [{'id': self.delivered_services[0].id}]
+        if not self.services:
+            res['services'] = utils.create_inst_with_default_val(
+                self, 'services', 'add')
+            del_serv_dict = res['services']['add'][0]
+        elif (len(self.services) == 1
+                and self.services[0].status == 'calculating'):
+            res['services'] = {'update':
+                [{'id': self.services[0].id}]
             }
-            del_serv_dict = res['delivered_services']['update'][0]
+            del_serv_dict = res['services']['update'][0]
         else:
             return res
         del_serv_dict['benefit'] = (self.benefit_to_deliver.id
             if self.benefit_to_deliver else None)
-        del_serv_dict['complementary_data'] = (utils.init_complementary_data(
-                self.benefit_to_deliver.complementary_data_def)
+        del_serv_dict['extra_data'] = (utils.init_extra_data(
+                self.benefit_to_deliver.extra_data_def)
             if self.benefit_to_deliver else {})
         contract = None
         if self.claim.main_contract:
@@ -227,13 +227,13 @@ class Loss:
             if self.benefit_to_deliver in option.get_possible_benefits(self):
                 options.append(option)
         if len(set(options)) == 1:
-            del_serv_dict['subscribed_service'] = options[0].id
+            del_serv_dict['option'] = options[0].id
         return res
 
     def on_change_with_can_modify_benefit(self, name=None):
-        return (not self.delivered_services
-            or (len(self.delivered_services) == 1
-                and self.delivered_services[0].status == 'calculating'))
+        return (not self.services
+            or (len(self.services) == 1
+                and self.services[0].status == 'calculating'))
 
 
 class Process:

@@ -18,7 +18,7 @@ class PremiumRateFormLine:
         if not key in work_set['lines']:
             return
         line = work_set['lines'][key]
-        for comp_option in self.rate_line.option_.commissions:
+        for comp_option in self.rate_line.option_.com_options:
                 values = work_set['coms'][comp_option.com_option.offered.id]
                 values['object'] = comp_option.com_option
                 values['to_recalculate'] |= False

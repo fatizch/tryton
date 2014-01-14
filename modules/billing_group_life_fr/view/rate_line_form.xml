@@ -23,8 +23,8 @@
         <label name="rate" string="%" xalign="0.0" xexpand="1"/>
     </group>
     <newline/>
-    <label name="tranche"/>
-    <field name="tranche"/>
+    <label name="salary_range"/>
+    <field name="salary_range"/>
     <newline/>
     <label name="index"/>
     <field name="index"/>

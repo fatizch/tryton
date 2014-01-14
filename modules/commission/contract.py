@@ -32,15 +32,15 @@ class Contract:
                     )])
         utils.update_depends(cls, 'subscriber', ['product_kind'])
 
-    def update_management_roles(self):
-        super(Contract, self).update_management_roles()
+    def update_agreements(self):
+        super(Contract, self).update_agreements()
         for com_kind in [x[0] for x in COMMISSION_KIND]:
-            role = self.get_management_role(com_kind)
+            role = self.get_agreement(com_kind)
             agreement = role.protocol if role else None
             if not agreement:
                 continue
             for option in self.options:
-                option.update_commissions(agreement)
+                option.update_com_options(agreement)
 
     def get_protocol_offered(self, kind):
         dist_network = self.get_dist_network()
@@ -100,37 +100,37 @@ class Contract:
 class Option:
     __name__ = 'contract.option'
 
-    compensated_options = fields.One2Many('contract.option-commission.option',
+    options = fields.One2Many('contract.option-commission.option',
         'com_option', 'Option-Commission Option Relations',
         states={'invisible': Eval('coverage_kind') != 'commission'},
         context={'from': 'com'})
-    commissions = fields.One2Many('contract.option-commission.option',
-        'subs_option', 'Commissions',
+    com_options = fields.One2Many('contract.option-commission.option',
+        'option', 'Commissions',
         states={'invisible': Eval('coverage_kind') != 'insurance'},
         context={'from': 'subscribed'})
 
-    def update_commissions(self, agreement):
+    def update_com_options(self, agreement):
         CompOption = Pool().get('contract.option-commission.option')
         for com_option in agreement.options:
             if not self.offered in com_option.offered.coverages:
                 continue
             good_comp_option = None
-            for comp_option in self.commissions:
+            for comp_option in self.com_options:
                 if comp_option.com_option == com_option:
                     good_comp_option = comp_option
                     break
             if not good_comp_option:
                 good_comp_option = CompOption()
                 good_comp_option.com_option = com_option
-                if not self.commissions:
-                    self.commissions = []
-                self.commissions = list(self.commissions)
-                self.commissions.append(good_comp_option)
+                if not self.com_options:
+                    self.com_options = []
+                self.com_options = list(self.com_options)
+                self.com_options.append(good_comp_option)
             good_comp_option.start_date = self.start_date
             self.save()
 
     def get_com_options_and_rates_at_date(self, at_date):
-        for commission in self.commissions:
+        for commission in self.com_options:
             com_rate = commission.get_com_rate(at_date)
             if not com_rate:
                 continue
@@ -152,7 +152,7 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
     end_date = fields.Date('End Date')
     com_option = fields.Many2One('contract.option', 'Commission Option',
         domain=[('coverage_kind', '=', 'commission')], ondelete='RESTRICT')
-    subs_option = fields.Many2One('contract.option', 'Subscribed Option',
+    option = fields.Many2One('contract.option', 'Subscribed Option',
         domain=[('coverage_kind', '=', 'insurance')], ondelete='CASCADE')
     use_specific_rate = fields.Boolean('Specific Rate')
     rate = fields.Numeric('Rate', digits=(16, 4), states={
@@ -166,7 +166,7 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
     def get_rec_name(self, name):
         option = None
         if Transaction().context.get('from') == 'com':
-            option = self.subs_option
+            option = self.option
         else:
             option = self.com_option
         if not option:
@@ -178,10 +178,10 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
             option.rec_name,
             )
 
-    def get_all_complementary_data(self, at_date):
+    def get_all_extra_data(self, at_date):
         res = {}
-        res.update(self.com_option.get_all_complementary_data(at_date))
-        res.update(self.subs_option.get_all_complementary_data(at_date))
+        res.update(self.com_option.get_all_extra_data(at_date))
+        res.update(self.option.get_all_extra_data(at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):
@@ -208,8 +208,8 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
         return com_rate * base_amount, com_rate
 
     def get_com_amount(self, name):
-        for price_line in self.subs_option.contract.prices:
-            if price_line.on_object == self.subs_option.offered:
+        for price_line in self.option.contract.prices:
+            if price_line.on_object == self.option.offered:
                 return self.calculate_com(price_line.amount).result
 
     def get_currency(self):
@@ -227,7 +227,7 @@ class ContractAgreementRelation:
     __name__ = 'contract-agreement'
 
     @classmethod
-    def get_possible_management_role_kind(cls):
-        res = super(ContractAgreementRelation, cls).get_possible_management_role_kind()
+    def get_possible_agreement_kind(cls):
+        res = super(ContractAgreementRelation, cls).get_possible_agreement_kind()
         res.extend(COMMISSION_KIND)
         return list(set(res))

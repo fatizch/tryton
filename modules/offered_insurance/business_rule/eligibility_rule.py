@@ -26,9 +26,9 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         depends=['config_kind'], states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
-    sub_elem_rule_complementary_data = fields.Dict('extra_data',
+    sub_elem_rule_extra_data = fields.Dict('extra_data',
         'Rule Extra Data',
-        on_change_with=['sub_elem_rule', 'sub_elem_rule_complementary_data'],
+        on_change_with=['sub_elem_rule', 'sub_elem_rule_extra_data'],
         states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
@@ -79,21 +79,21 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
                     details=result.warnings), result.errors)
         return (EligibilityResultLine(True), [])
 
-    def on_change_with_sub_elem_rule_complementary_data(self):
+    def on_change_with_sub_elem_rule_extra_data(self):
         if not (hasattr(self, 'sub_elem_rule') and self.sub_elem_rule):
             return {}
-        return self.sub_elem_rule.get_complementary_data_for_on_change(
-            self.sub_elem_rule_complementary_data)
+        return self.sub_elem_rule.get_extra_data_for_on_change(
+            self.sub_elem_rule_extra_data)
 
-    def get_rule_complementary_data(self, schema_name):
-        if not (hasattr(self, 'sub_elem_rule_complementary_data') and
-                self.sub_elem_rule_complementary_data):
+    def get_rule_extra_data(self, schema_name):
+        if not (hasattr(self, 'sub_elem_rule_extra_data') and
+                self.sub_elem_rule_extra_data):
             result = None
         else:
-            result = self.sub_elem_rule_complementary_data.get(
+            result = self.sub_elem_rule_extra_data.get(
                 schema_name, None)
         if not result:
-            return super(EligibilityRule, self).get_rule_complementary_data(
+            return super(EligibilityRule, self).get_rule_extra_data(
                 schema_name)
         return result
 

@@ -14,7 +14,7 @@ msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "field:ir.export_package,compl_data_defs:"
+msgctxt "field:ir.export_package,extra_data_defs:"
 msgid "Extra Data Def"
 msgstr "Définition de Données Complémentaires"
 
@@ -30,7 +30,7 @@ msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
 msgstr "Nom de la company principale"
 
-msgctxt "field:extra_data-tag,compl_data_def:"
+msgctxt "field:extra_data-tag,extra_data_def:"
 msgid "Extra Data Def"
 msgstr "Définition de Données Complémentaires"
 
@@ -223,11 +223,11 @@ msgctxt "field:offered.option.description,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered.option.description,complementary_data:"
+msgctxt "field:offered.option.description,extra_data:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.option.description,complementary_data_def:"
+msgctxt "field:offered.option.description,extra_data_def:"
 msgid ""
 msgstr " "
 
@@ -320,7 +320,7 @@ msgid ""
 msgstr " "
 
 msgctxt ""
-"field:offered.option.description-extra_data,complementary_data_def:"
+"field:offered.option.description-extra_data,extra_data_def:"
 msgid ""
 msgstr " "
 
@@ -364,7 +364,7 @@ msgctxt "field:offered,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered,complementary_data:"
+msgctxt "field:offered,extra_data:"
 msgid ""
 msgstr " "
 
@@ -452,11 +452,11 @@ msgctxt "field:offered.product,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered.product,complementary_data:"
+msgctxt "field:offered.product,extra_data:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product,complementary_data_def:"
+msgctxt "field:offered.product,extra_data_def:"
 msgid ""
 msgstr " "
 
@@ -544,7 +544,7 @@ msgctxt "field:offered.product,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-extra_data,complementary_data_def:"
+msgctxt "field:offered.product-extra_data,extra_data_def:"
 msgid ""
 msgstr " "
 
@@ -616,7 +616,7 @@ msgctxt "field:offered.product-option.description,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:tag,compl_data_defs:"
+msgctxt "field:tag,extra_data_defs:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 

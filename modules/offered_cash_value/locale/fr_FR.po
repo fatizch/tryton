@@ -23,7 +23,7 @@ msgid "Computation Rule"
 msgstr "Règle de calcul"
 
 msgctxt ""
-"field:cash_value.cash_value_rule,computation_rule_complementary_data:"
+"field:cash_value.cash_value_rule,computation_rule_extra_data:"
 msgid "Computation Rule Complementary Data"
 msgstr "Données complémentaires"
 
@@ -79,7 +79,7 @@ msgctxt "field:cash_value.cash_value_rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "field:cash_value.cash_value_rule,rule_complementary_data:"
+msgctxt "field:cash_value.cash_value_rule,rule_extra_data:"
 msgid "Rule Complementary Data"
 msgstr "Paramètres de Rêgle"
 

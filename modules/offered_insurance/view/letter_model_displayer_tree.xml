@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Document Templates" editable="bottom">
   <field name="selected"/>
-  <field name="letter_model"/>
+  <field name="doc_template"/>
 </tree>
 

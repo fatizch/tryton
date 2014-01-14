@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/tree" position="inside">
-        <field name="regime"/>
+        <field name="hc_system"/>
         <field name="department" tree_invisible="1"/>
         <field name="insurance_fund"/>
     </xpath>

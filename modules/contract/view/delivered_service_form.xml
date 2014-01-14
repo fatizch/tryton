@@ -6,6 +6,6 @@
     <field name="func_error"/>
     <label name="contract"/>
     <field name="contract"/>
-    <label name="subscribed_service"/>
-    <field name="subscribed_service" widget="selection"/>
+    <label name="option"/>
+    <field name="option" widget="selection"/>
 </form>

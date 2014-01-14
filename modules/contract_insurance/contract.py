@@ -31,10 +31,10 @@ class Contract:
     covered_elements = fields.One2ManyDomain('contract.covered_element',
         'contract', 'Covered Elements', domain=[('parent', '=', None)],
         context={'contract': Eval('id')})
-    management_roles = fields.One2Many('contract-agreement', 'contract',
+    agreements = fields.One2Many('contract-agreement', 'contract',
         'Contract-Agreement Relations', states={
             'invisible': Eval('product_kind') != 'insurance'})
-    managing_roles = fields.One2Many('contract-agreement',
+    contracts = fields.One2Many('contract-agreement',
         'protocol', 'Managing Roles', states={
             'invisible': Eval('product_kind') == 'insurance'})
     next_renewal_date = fields.Date('Next Renewal Date')
@@ -117,7 +117,7 @@ class Contract:
             good_datas = []
             for code, option in options.iteritems():
                 if code in existing_datas:
-                    existing_datas[code].init_complementary_data()
+                    existing_datas[code].init_extra_data()
                     good_datas.append(existing_datas[code])
                     to_delete.remove(existing_datas[code])
                     continue
@@ -144,42 +144,42 @@ class Contract:
             self.options.append(option)
         return True, ()
 
-    def get_management_role(self, kind, party=None, only_active_at_date=False,
+    def get_agreement(self, kind, party=None, only_active_at_date=False,
             at_date=None):
         if only_active_at_date:
-            roles = utils.get_good_versions_at_date(self, 'management_roles',
+            roles = utils.get_good_versions_at_date(self, 'agreements',
                 at_date)
-        elif not utils.is_none(self, 'management_roles'):
-            roles = self.management_roles
+        elif not utils.is_none(self, 'agreements'):
+            roles = self.agreements
         else:
             roles = []
         good_roles = [x for x in roles if (not x.kind or x.kind == kind)
             and (not party or x.party == party)]
         return good_roles[0] if len(good_roles) == 1 else None
 
-    def get_or_create_management_role(self, kind, party):
-        role = self.get_management_role(kind, party)
+    def get_or_create_agreement(self, kind, party):
+        role = self.get_agreement(kind, party)
         if not role:
-            role = utils.instanciate_relation(self, 'management_roles')
+            role = utils.instanciate_relation(self, 'agreements')
             role.party = party
             role.kind = kind
-            if utils.is_none(self, 'management_roles'):
-                self.management_roles = []
+            if utils.is_none(self, 'agreements'):
+                self.agreements = []
             else:
-                self.management_roles = list(self.management_roles)
-            self.management_roles.append(role)
+                self.agreements = list(self.agreements)
+            self.agreements.append(role)
         return role
 
     def get_protocol_offered(self, kind):
         #what if several protocols exist?
         return None
 
-    def update_management_roles(self):
+    def update_agreements(self):
         #This method will update the management role and find the good protocol
         #based on real coverage subscribed
-        if utils.is_none(self, 'management_roles'):
+        if utils.is_none(self, 'agreements'):
             return
-        for role in [x for x in self.management_roles]:
+        for role in [x for x in self.agreements]:
             #we browse all roles that need to be updated on contract
             if not role.protocol:
                 protocol_offered = self.get_protocol_offered(role.kind)
@@ -207,7 +207,7 @@ class Contract:
 
     def finalize_contract(self):
         super(Contract, self).finalize_contract()
-        self.update_management_roles()
+        self.update_agreements()
 
     def renew(self):
         renewal_date = self.next_renewal_date
@@ -273,12 +273,12 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
-        on_change=['item_desc', 'complementary_data', 'party', 'main_contract',
+        on_change=['item_desc', 'extra_data', 'party', 'main_contract',
             'start_date'], domain=[If(
                 ~~Eval('possible_item_desc'),
                 ('id', 'in', Eval('possible_item_desc')),
                 ())
-            ], depends=['possible_item_desc', 'complementary_data'],
+            ], depends=['possible_item_desc', 'extra_data'],
             ondelete='RESTRICT')
     possible_item_desc = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
@@ -293,18 +293,18 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         states={'invisible': Eval('item_kind') == 'person'},
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
         depends=['contract'], context={'_master_covered': Eval('id')})
-    complementary_data = fields.Dict('extra_data',
+    extra_data = fields.Dict('extra_data',
         'Contract Complementary Data', on_change_with=['item_desc',
-            'complementary_data', 'contract', 'start_date', 'main_contract'],
-        states={'invisible': ~Eval('complementary_data')})
-    party_compl_data = fields.Function(
+            'extra_data', 'contract', 'start_date', 'main_contract'],
+        states={'invisible': ~Eval('extra_data')})
+    party_extra_data = fields.Function(
         fields.Dict('extra_data', 'Party Complementary Data',
-            on_change_with=['item_desc', 'complementary_data', 'party'],
-            states={'invisible': Or(~IS_PARTY, ~Eval('party_compl_data'))}),
-        'on_change_with_party_compl_data', 'set_party_compl_data')
-    complementary_data_summary = fields.Function(
+            on_change_with=['item_desc', 'extra_data', 'party'],
+            states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))}),
+        'on_change_with_party_extra_data', 'set_party_extra_data')
+    extra_data_summary = fields.Function(
         fields.Char('Complementary Data', on_change_with=['item_desc']),
-        'on_change_with_complementary_data_summary')
+        'on_change_with_extra_data_summary')
     party = fields.Many2One('party.party', 'Actor', domain=[If(
                 Eval('item_kind') == 'person',
                 ('is_person', '=', True),
@@ -350,7 +350,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def get_var_names_for_full_extract(cls):
         return ['name', 'sub_covered_elements',
-            'complementary_data', 'party', 'covered_relations']
+            'extra_data', 'party', 'covered_relations']
 
     @classmethod
     def get_parent_in_transaction(cls):
@@ -419,24 +419,24 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_item_desc(self):
         res = {}
         if not (hasattr(self, 'item_desc') and self.item_desc):
-            res['complementary_data'] = {}
+            res['extra_data'] = {}
         else:
-            res['complementary_data'] = \
-                self.on_change_with_complementary_data()
+            res['extra_data'] = \
+                self.on_change_with_extra_data()
         res['item_kind'] = self.on_change_with_item_kind()
-        res['party_compl_data'] = self.on_change_with_party_compl_data()
+        res['party_extra_data'] = self.on_change_with_party_extra_data()
         return res
 
-    def on_change_with_complementary_data(self):
-        return utils.init_complementary_data(self.get_complementary_data_def())
+    def on_change_with_extra_data(self):
+        return utils.init_extra_data(self.get_extra_data_def())
 
-    def on_change_with_complementary_data_summary(self, name=None):
-        if not (hasattr(self, 'complementary_data') and
-                self.complementary_data):
+    def on_change_with_extra_data_summary(self, name=None):
+        if not (hasattr(self, 'extra_data') and
+                self.extra_data):
             return ''
         return ' '.join([
             '%s: %s' % (x[0], x[1])
-            for x in self.complementary_data.iteritems()])
+            for x in self.extra_data.iteritems()])
 
     def get_main_contract_id(self, name):
         if not utils.is_none(self, 'contract'):
@@ -446,37 +446,37 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         elif 'contract' in Transaction().context:
             return Transaction().context.get('contract')
 
-    def on_change_with_party_compl_data(self, name=None):
+    def on_change_with_party_extra_data(self, name=None):
         res = {}
         if utils.is_none(self, 'party') or not (self.item_desc
                 and self.item_desc.kind in ['party', 'person', 'company']):
             return res
-        for compl_data_def in self.item_desc.complementary_data_def:
+        for extra_data_def in self.item_desc.extra_data_def:
             if (self.party
-                    and not utils.is_none(self.party, 'complementary_data')
-                    and compl_data_def.name in self.party.complementary_data):
-                res[compl_data_def.name] = self.party.complementary_data[
-                    compl_data_def.name]
+                    and not utils.is_none(self.party, 'extra_data')
+                    and extra_data_def.name in self.party.extra_data):
+                res[extra_data_def.name] = self.party.extra_data[
+                    extra_data_def.name]
             else:
-                res[compl_data_def.name] = compl_data_def.get_default_value(
+                res[extra_data_def.name] = extra_data_def.get_default_value(
                     None)
         return res
 
     @classmethod
-    def set_party_compl_data(cls, instances, name, vals):
+    def set_party_extra_data(cls, instances, name, vals):
         #We'll update the party complementary data with existing key or add new
         #keys, but if others keys already exist we won't modify them
         Party = Pool().get('party.party')
         for covered in instances:
             if not covered.party:
                 continue
-            if utils.is_none(covered.party, 'complementary_data'):
-                Party.write([covered.party], {'complementary_data': vals})
+            if utils.is_none(covered.party, 'extra_data'):
+                Party.write([covered.party], {'extra_data': vals})
             else:
-                covered.party.complementary_data.update(vals)
+                covered.party.extra_data.update(vals)
                 covered.party.save()
 
-    def get_complementary_data_def(self, at_date=None):
+    def get_extra_data_def(self, at_date=None):
         contract = self.main_contract
         if not contract:
             Contract = Pool().get('contract')
@@ -484,15 +484,15 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         res = []
         if (self.item_desc
                 and not self.item_desc.kind in ['party', 'person', 'company']):
-            res.extend(self.item_desc.complementary_data_def)
-        res.extend(contract.offered.get_complementary_data_def(
+            res.extend(self.item_desc.extra_data_def)
+        res.extend(contract.offered.get_extra_data_def(
             ['sub_elem'], at_date=at_date))
         return res
 
-    def get_party_compl_data_def(self):
+    def get_party_extra_data_def(self):
         if (self.item_desc
                 and self.item_desc.kind in ['party', 'person', 'company']):
-            return self.item_desc.complementary_data_def
+            return self.item_desc.extra_data_def
 
     def init_from_party(self, party):
         self.party = party
@@ -597,12 +597,12 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             if sub_element.match_key(from_name, party):
                 return sub_element
 
-    def get_all_complementary_data(self, at_date):
+    def get_all_extra_data(self, at_date):
         res = {}
-        if not utils.is_none(self, 'complementary_data'):
-            res = self.complementary_data
-        if not utils.is_none(self, 'party_compl_data'):
-            res.update(self.party_compl_data)
+        if not utils.is_none(self, 'extra_data'):
+            res = self.extra_data
+        if not utils.is_none(self, 'party_extra_data'):
+            res.update(self.party_extra_data)
         return res
 
     def init_dict_for_rule_engine(self, args):
@@ -641,11 +641,11 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_possible_options')
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', ondelete='CASCADE')
-    complementary_data = fields.Dict('extra_data', 'Complementary Data',
-        on_change=['complementary_data', 'option', 'start_date',
+    extra_data = fields.Dict('extra_data', 'Complementary Data',
+        on_change=['extra_data', 'option', 'start_date',
             'deductible_duration', 'covered_element'],
-        depends=['complementary_data', 'option', 'start_date'],
-        states={'invisible': ~Eval('complementary_data')})
+        depends=['extra_data', 'option', 'start_date'],
+        states={'invisible': ~Eval('extra_data')})
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     status = fields.Selection(contract.OPTIONSTATUS, 'Status')
@@ -676,16 +676,16 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_rec_name(self, name):
         return self.get_coverage().name
 
-    def get_complementary_data_def(self):
-        return self.option.offered.get_complementary_data_def(
+    def get_extra_data_def(self):
+        return self.option.offered.get_extra_data_def(
             ['sub_elem'], at_date=self.start_date)
 
-    def init_complementary_data(self):
-        if not (hasattr(self, 'complementary_data') and
-                self.complementary_data):
-            self.complementary_data = {}
-        self.complementary_data = self.on_change_complementary_data()[
-            'complementary_data']
+    def init_extra_data(self):
+        if not (hasattr(self, 'extra_data') and
+                self.extra_data):
+            self.extra_data = {}
+        self.extra_data = self.on_change_extra_data()[
+            'extra_data']
 
     def init_clauses(self, option):
         clauses, errs = self.option.offered.get_result('all_clauses', {
@@ -710,13 +710,13 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         self.start_date = option.start_date
         self.end_date = option.end_date
         self.init_clauses(option)
-        self.init_complementary_data()
+        self.init_extra_data()
 
-    def on_change_complementary_data(self):
+    def on_change_extra_data(self):
         args = {'date': self.start_date, 'level': 'covered_data'}
         self.init_dict_for_rule_engine(args)
-        return {'complementary_data': self.option.contract.offered.get_result(
-                'calculated_complementary_datas', args)[0]}
+        return {'extra_data': self.option.contract.offered.get_result(
+                'calculated_extra_datas', args)[0]}
 
     def init_from_covered_element(self, covered_element):
         self.covered_element = covered_element
@@ -779,16 +779,16 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def _expand_tree(self, name):
         return True
 
-    def get_all_complementary_data(self, at_date):
+    def get_all_extra_data(self, at_date):
         res = {}
-        if not utils.is_none(self, 'complementary_data'):
-            res = self.complementary_data
-            res.update(self.covered_element.get_all_complementary_data(
+        if not utils.is_none(self, 'extra_data'):
+            res = self.extra_data
+            res.update(self.covered_element.get_all_extra_data(
                     at_date))
-        res.update(self.option.get_all_complementary_data(at_date))
+        res.update(self.option.get_all_extra_data(at_date))
         parent_covered_data = self.get_parent_covered_data()
         if parent_covered_data:
-            res.update(parent_covered_data.get_all_complementary_data(at_date))
+            res.update(parent_covered_data.get_all_extra_data(at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):
@@ -841,9 +841,9 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         cls.kind = copy.copy(cls.kind)
-        cls.kind.selection = list(set(cls.get_possible_management_role_kind()))
+        cls.kind.selection = list(set(cls.get_possible_agreement_kind()))
         super(ContractAgreementRelation, cls).__setup__()
 
     @classmethod
-    def get_possible_management_role_kind(cls):
+    def get_possible_agreement_kind(cls):
         return [('', '')]
