@@ -154,11 +154,11 @@ class CollectionCreate(model.CoopWizard):
 
     start_state = 'input_collection_parameters'
     input_collection_parameters = StateView('collection.create.parameters',
-        'collection.collection_parameters_form', [
+        'collection.collection_create_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Assign', 'assign', 'tryton-go-next')])
     assign = StateView('collection.create.assign',
-        'collection.assign_collection_form', [
+        'collection.collection_create_assign_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Validate', 'check_amount', 'tryton-ok')])
     check_amount = StateTransition()

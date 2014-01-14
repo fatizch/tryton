@@ -62,7 +62,7 @@
     <record model="ir.ui.view" id="select_user_view_form">
       <field name="model">res.team.add_user.select</field>
       <field name="type">form</field>
-      <field name="name">select_user_form</field>
+      <field name="name">task_team_add_user_select_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Add User Wizard -->
@@ -86,7 +86,7 @@
     <record model="ir.ui.view" id="task_selector_view_form">
       <field name="model">task.select.available_tasks</field>
       <field name="type">form</field>
-      <field name="name">task_selector_form</field>
+      <field name="name">task_select_available_tasks_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Task Displayer -->
@@ -99,7 +99,7 @@
     <record model="ir.ui.view" id="task_displayer_view_graph">
       <field name="model">task.select.available_tasks.task</field>
       <field name="type">graph</field>
-      <field name="name">task_displayer_graph</field>
+      <field name="name">task_select_available_tasks_task_graph</field>
     </record>
     <!-- ############################################################ -->
     <!-- Process Log -->

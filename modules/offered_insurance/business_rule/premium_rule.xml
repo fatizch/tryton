@@ -7,12 +7,12 @@
     <record model="ir.ui.view" id="pricing_component_view_tree">
       <field name="model">billing.premium.rule.component</field>
       <field name="type">tree</field>
-      <field name="name">pricing_component_tree</field>
+      <field name="name">premium_rule_component_list</field>
     </record>
     <record model="ir.ui.view" id="pricing_component_view_form">
       <field name="model">billing.premium.rule.component</field>
       <field name="type">form</field>
-      <field name="name">pricing_component_form</field>
+      <field name="name">premium_rule_component_form</field>
     </record>
     <!--################################################################-->
     <!-- Premium Rule -->
@@ -32,20 +32,20 @@
     <!--################################################################-->
     <!-- Tax Version -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="tax_version_form">
+    <record model="ir.ui.view" id="tax_description_version_form">
       <field name="model">account.tax.description.version</field>
       <field name="type">form</field>
       <field name="inherit" ref="account_cog.tax_description_version_view_form"/>
-      <field name="name">tax_version_form</field>
+      <field name="name">tax_description_version_form</field>
     </record>
     <!--################################################################-->
     <!-- Fee Version -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="fee_version_form">
+    <record model="ir.ui.view" id="fee_description_version_form">
       <field name="model">account.fee.description.version</field>
       <field name="type">form</field>
       <field name="inherit" ref="account_cog.fee_description_version_view_form"/>
-      <field name="name">fee_version_form</field>
+      <field name="name">fee_description_version_form</field>
     </record>
   </data>
 </tryton>

@@ -9,7 +9,7 @@
             <field name="model">offered.product</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.product_view_form"/>
-            <field name="name">plan_form</field>
+            <field name="name">product_form</field>
         </record>
         <record model="ir.ui.view" id="plan_view_tree">
             <field name="model">offered.product</field>
@@ -43,7 +43,7 @@
             <field name="model">offered.option.description</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.coverage_view_form"/>
-            <field name="name">component_form</field>
+            <field name="name">option_description_form</field>
         </record>
         <record model="ir.ui.view" id="component_view_tree">
             <field name="model">offered.option.description</field>

@@ -8,10 +8,10 @@
     <!-- ###################### -->
     <!-- # Import Select File # -->
     <!-- ###################### -->
-    <record model="ir.ui.view" id="file_selector_form">
+    <record model="ir.ui.view" id="import_select_file_form">
       <field name="model">ir.import.select_file</field>
       <field name="type">form</field>
-      <field name="name">file_selector_form</field>
+      <field name="name">import_select_file_form</field>
     </record>
     <!-- ################# -->
     <!-- # Import Wizard # -->
@@ -24,15 +24,15 @@
     <!-- ####################### -->
     <!-- # Export Package Item # -->
     <!-- ####################### -->
-    <record model="ir.ui.view" id="export_instance_form">
+    <record model="ir.ui.view" id="export_package_item_form">
       <field name="model">ir.export_package.item</field>
       <field name="type">form</field>
-      <field name="name">export_instance_form</field>
+      <field name="name">export_package_item_form</field>
     </record>
-    <record model="ir.ui.view" id="export_instance_tree">
+    <record model="ir.ui.view" id="export_package_item_list">
       <field name="model">ir.export_package.item</field>
       <field name="type">tree</field>
-      <field name="name">export_instance_tree</field>
+      <field name="name">export_package_item_list</field>
     </record>
     <!-- ################## -->
     <!-- # Export Package # -->

@@ -54,10 +54,10 @@
     <!-- ############################################################ -->
     <!-- CollectionCreateParameters -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="collection_parameters_form">
+    <record model="ir.ui.view" id="collection_create_parameters_form">
       <field name="model">collection.create.parameters</field>
       <field name="type">form</field>
-      <field name="name">collection_parameters_form</field>
+      <field name="name">collection_create_parameters_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- CollectionCreateAssignLines -->
@@ -75,10 +75,10 @@
     <!-- ############################################################ -->
     <!-- Collection Create Assign -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="assign_collection_form">
+    <record model="ir.ui.view" id="collection_create_assign_form">
       <field name="model">collection.create.assign</field>
       <field name="type">form</field>
-      <field name="name">assign_collection_form</field>
+      <field name="name">collection_create_assign_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Collection Create -->

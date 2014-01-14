@@ -4,18 +4,18 @@
     <!--################################################################-->
     <!--                     Contract Do Billing Parameters View                       -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="bill_parameters_form">
+    <record model="ir.ui.view" id="contract_do_billing_parameters_form">
       <field name="model">contract.do_billing.parameters</field>
       <field name="type">form</field>
-      <field name="name">bill_parameters_form</field>
+      <field name="name">contract_do_billing_parameters_form</field>
     </record>
     <!--################################################################-->
     <!--                            Bill Display                        -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="bill_display_form">
+    <record model="ir.ui.view" id="contract_do_billing_bill_form">
       <field name="model">contract.do_billing.bill</field>
       <field name="type">form</field>
-      <field name="name">bill_display_form</field>
+      <field name="name">contract_do_billing_bill_form</field>
     </record>
     <!--################################################################-->
     <!--                          Actions Entries                       -->

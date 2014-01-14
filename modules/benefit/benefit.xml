@@ -48,12 +48,12 @@
     <record model="ir.ui.view" id="event_desc_view_form">
       <field name="model">benefit.event.description</field>
       <field name="type">form</field>
-      <field name="name">event_desc_form</field>
+      <field name="name">event_description_form</field>
     </record>
     <record model="ir.ui.view" id="event_desc_view_tree">
       <field name="model">benefit.event.description</field>
       <field name="type">tree</field>
-      <field name="name">event_desc_tree</field>
+      <field name="name">event_description_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_event_desc">
@@ -87,12 +87,12 @@
     <record model="ir.ui.view" id="loss_desc_view_form">
       <field name="model">benefit.loss.description</field>
       <field name="type">form</field>
-      <field name="name">loss_desc_form</field>
+      <field name="name">loss_description_form</field>
     </record>
     <record model="ir.ui.view" id="loss_desc_view_tree">
       <field name="model">benefit.loss.description</field>
       <field name="type">tree</field>
-      <field name="name">loss_desc_tree</field>
+      <field name="name">loss_description_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_loss_desc">

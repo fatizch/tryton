@@ -1030,7 +1030,7 @@ class ClaimIndemnificationValidate(Wizard):
     start_state = 'select_indemnifications'
     select_indemnifications = StateView(
         'claim.indemnification.validate.select',
-        'claim.indemnification_selection_form', [
+        'claim.indemnification_validate_select_form', [
             Button('Quit', 'end', 'tryton-cancel'),
             Button('Continue', 'reload_selection', 'tryton-refresh')])
     reload_selection = StateTransition()

@@ -31,12 +31,12 @@
         <record model="ir.ui.view" id="item_desc_view_form">
             <field name="model">offered.item.description</field>
             <field name="type">form</field>
-            <field name="name">item_desc_form</field>
+            <field name="name">item_description_form</field>
         </record>
         <record model="ir.ui.view" id="item_desc_view_tree">
             <field name="model">offered.item.description</field>
             <field name="type">tree</field>
-            <field name="name">item_desc_tree</field>
+            <field name="name">item_description_list</field>
         </record>
 
         <record model="ir.action.act_window" id="act_item_desc_form">

@@ -19,12 +19,12 @@
         <record model="ir.ui.view" id="deductible_duration_view_tree">
             <field name="model">offered.deductible.rule.duration</field>
             <field name="type">tree</field>
-            <field name="name">deductible_duration_tree</field>
+            <field name="name">deductible_rule_duration_list</field>
         </record>
         <record model="ir.ui.view" id="deductible_duration_view_form">
             <field name="model">offered.deductible.rule.duration</field>
             <field name="type">form</field>
-            <field name="name">deductible_duration_form</field>
+            <field name="name">deductible_rule_duration_form</field>
         </record>
     </data>
 </tryton>

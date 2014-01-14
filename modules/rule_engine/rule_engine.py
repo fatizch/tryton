@@ -1295,7 +1295,7 @@ class RunTests(Wizard):
 
     report = StateView(
         'rule_engine.run_tests.results',
-        'rule_engine.run_tests_report', [
+        'rule_engine.rule_engine_run_tests_results_form', [
             Button('OK', 'end', 'tryton-ok', True),
             ])
 

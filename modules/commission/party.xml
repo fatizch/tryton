@@ -16,15 +16,15 @@
     </record>
 
     <!-- Broker -->
-    <record model="ir.ui.view" id="broker_view_form">
+    <record model="ir.ui.view" id="broker_form">
       <field name="model">broker</field>
       <field name="type">form</field>
-      <field name="name">broker_view_form</field>
+      <field name="name">broker_form</field>
     </record>
-    <record model="ir.ui.view" id="broker_view_tree">
+    <record model="ir.ui.view" id="broker_list">
       <field name="model">broker</field>
       <field name="type">tree</field>
-      <field name="name">broker_view_tree</field>
+      <field name="name">broker_list</field>
     </record>
   </data>
   <record model="ir.action.act_window" id="act_broker_form">

@@ -147,7 +147,7 @@ class ContractSubscribe(ProcessFinder):
     def get_parameters_view(cls):
         return '%s.%s' % (
             'contract_insurance_process',
-            'subscription_process_parameters_form')
+            'contract_subscribe_find_process_form')
 
     def init_main_object_from_process(self, obj, process_param):
         res, errs = super(ContractSubscribe,

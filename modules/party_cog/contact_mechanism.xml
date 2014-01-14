@@ -11,12 +11,12 @@
         <record model="ir.ui.view" id="contact_history_view_tree">
             <field name="model">party.interaction</field>
             <field name="type">tree</field>
-            <field name="name">contact_history_tree</field>
+            <field name="name">party_interaction_list</field>
         </record>
         <record model="ir.ui.view" id="contact_history_view_form">
             <field name="model">party.interaction</field>
             <field name="type">form</field>
-            <field name="name">contact_history_form</field>
+            <field name="name">party_interaction_form</field>
         </record>
         <record model="ir.action.act_window" id="act_contact_history_relate_form">
             <field name="name">Party Interaction</field>

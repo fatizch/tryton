@@ -104,15 +104,15 @@
     <menuitem parent="offered.menu_product_configuration" sequence="30"
       action="act_doc_template" id="menu_doc_template"/>
     <!-- Document Template Version -->
-    <record model="ir.ui.view" id="letter_version_form">
+    <record model="ir.ui.view" id="document_template_version_form">
       <field name="model">document.template.version</field>
       <field name="type">form</field>
-      <field name="name">letter_version_form</field>
+      <field name="name">document_template_version_form</field>
     </record>
-    <record model="ir.ui.view" id="letter_version_tree">
+    <record model="ir.ui.view" id="document_template_version_list">
       <field name="model">document.template.version</field>
       <field name="type">tree</field>
-      <field name="name">letter_version_tree</field>
+      <field name="name">document_template_version_list</field>
     </record>
     <!-- Document Create Select -->
     <record model="ir.ui.view" id="doc_template_selection_form">
@@ -120,10 +120,10 @@
       <field name="type">form</field>
       <field name="name">doc_template_selection_form</field>
     </record>
-    <record model="ir.ui.view" id="attach_letter_form">
+    <record model="ir.ui.view" id="document_create_attach_form">
       <field name="model">document.create.attach</field>
       <field name="type">form</field>
-      <field name="name">attach_letter_form</field>
+      <field name="name">document_create_attach_form</field>
     </record>
     <record model="ir.ui.view" id="doc_template_displayer_tree">
       <field name="model">document.create.select.template</field>
@@ -131,20 +131,20 @@
       <field name="name">doc_template_displayer_tree</field>
     </record>
     <!-- Receive Document -->
-    <record model="ir.ui.view" id="request_finder_form">
+    <record model="ir.ui.view" id="document_receive_request_form">
       <field name="model">document.receive.request</field>
       <field name="type">form</field>
-      <field name="name">request_finder_form</field>
+      <field name="name">document_receive_request_form</field>
     </record>
-    <record model="ir.ui.view" id="document_request_displayer_form">
+    <record model="ir.ui.view" id="document_receive_set_requests_form">
       <field name="model">document.receive.set_requests</field>
       <field name="type">form</field>
-      <field name="name">document_request_displayer_form</field>
+      <field name="name">document_receive_set_requests_form</field>
     </record>
-    <record model="ir.ui.view" id="attachment_setter_form">
+    <record model="ir.ui.view" id="document_receive_attach_form">
       <field name="model">document.receive.attach</field>
       <field name="type">form</field>
-      <field name="name">attachment_setter_form</field>
+      <field name="name">document_receive_attach_form</field>
     </record>
     <record model="ir.action.wizard" id="receive_documents_wizard">
         <field name="name">Document Reception</field>

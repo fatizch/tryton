@@ -8,7 +8,7 @@
       <field name="model">distribution.network</field>
       <field name="type">form</field>
       <field name="inherit" ref="distribution.dist_network_view_form"/>
-      <field name="name">dist_network_form</field>
+      <field name="name">distribution_network_form</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_dist_network">

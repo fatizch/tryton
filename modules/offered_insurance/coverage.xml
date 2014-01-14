@@ -9,13 +9,13 @@
             <field name="model">offered.option.description</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.coverage_view_form"/>
-            <field name="name">coverage_form</field>
+            <field name="name">option_description_form</field>
         </record>
         <record model="ir.ui.view" id="coverage_view_tree">
             <field name="model">offered.option.description</field>
             <field name="type">tree</field>
             <field name="inherit" ref="offered.coverage_view_tree"/>
-            <field name="name">coverage_tree</field>
+            <field name="name">option_description_list</field>
         </record>
 
         <record model="ir.action.act_window" id="offered.act_product_form">

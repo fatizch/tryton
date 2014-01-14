@@ -528,12 +528,12 @@ class ContractDoBilling(Wizard):
     start_state = 'bill_parameters'
     bill_parameters = StateView(
         'contract.do_billing.parameters',
-        'billing_individual.bill_parameters_form', [
+        'billing_individual.contract_do_billing_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Preview', 'bill_display', 'tryton-go-next')])
     bill_display = StateView(
         'contract.do_billing.bill',
-        'billing_individual.bill_display_form', [
+        'billing_individual.contract_do_billing_bill_form', [
             Button('Cancel', 'cancel_bill', 'tryton-cancel'),
             Button('Accept', 'accept_bill', 'tryton-go-next')])
     cancel_bill = StateTransition()

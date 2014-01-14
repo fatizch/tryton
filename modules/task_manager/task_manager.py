@@ -130,7 +130,7 @@ class AddTeamUser(Wizard):
 
     start_state = 'select_user'
     select_user = StateView('res.team.add_user.select',
-        'task_manager.select_user_form', [
+        'task_manager.task_team_add_user_select_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Add User', 'add_user', 'tryton-go-next')])
     add_user = StateTransition()

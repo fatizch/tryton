@@ -2,48 +2,48 @@
 <tryton>
   <data>
       <!-- Transition Override -->
-    <record model="ir.ui.view" id="step_transition_form">
+    <record model="ir.ui.view" id="transition_form">
       <field name="model">process.transition</field>
       <field name="type">form</field>
-      <field name="inherit" ref="process.step_transition_form"/>
-      <field name="name">step_transition_form</field>
+      <field name="inherit" ref="process.transition_form"/>
+      <field name="name">transition_form</field>
     </record>
     <!-- Process Override -->
-    <record model="ir.ui.view" id="process_desc_form">
+    <record model="ir.ui.view" id="process_form">
       <field name="model">process</field>
       <field name="type">form</field>
-      <field name="inherit" ref="process.process_desc_form"/>
-      <field name="name">process_desc_form</field>
+      <field name="inherit" ref="process.process_form"/>
+      <field name="name">process_form</field>
     </record>
-    <record model="ir.ui.view" id="process_desc_tree">
+    <record model="ir.ui.view" id="process_list">
       <field name="model">process</field>
       <field name="type">tree</field>
-      <field name="inherit" ref="process.process_desc_tree"/>
-      <field name="name">process_desc_tree</field>
+      <field name="inherit" ref="process.process_list"/>
+      <field name="name">process_list</field>
     </record>
     <!-- Step Override -->
-    <record model="ir.ui.view" id="step_desc_form">
+    <record model="ir.ui.view" id="step_form">
       <field name="model">process.step</field>
       <field name="type">form</field>
-      <field name="inherit" ref="process.step_desc_form"/>
-      <field name="name">step_desc_form</field>
+      <field name="inherit" ref="process.step_form"/>
+      <field name="name">step_form</field>
     </record>
-    <record model="ir.ui.view" id="step_desc_tree">
+    <record model="ir.ui.view" id="step_list">
       <field name="model">process.step</field>
       <field name="type">tree</field>
-      <field name="inherit" ref="process.step_desc_tree"/>
-      <field name="name">step_desc_tree</field>
+      <field name="inherit" ref="process.step_list"/>
+      <field name="name">step_list</field>
     </record>
     <!-- XML View Desc -->
-    <record model="ir.ui.view" id="xml_view_desc_form">
+    <record model="ir.ui.view" id="view_description_form">
       <field name="model">ir.ui.view.description</field>
       <field name="type">form</field>
-      <field name="name">xml_view_desc_form</field>
+      <field name="name">view_description_form</field>
     </record>
-    <record model="ir.ui.view" id="xml_view_desc_tree">
+    <record model="ir.ui.view" id="view_description_list">
       <field name="model">ir.ui.view.description</field>
       <field name="type">tree</field>
-      <field name="name">xml_view_desc_tree</field>
+      <field name="name">view_description_list</field>
     </record>
     <!-- Process Start -->
     <record model="ir.ui.view" id="process_parameters_form">

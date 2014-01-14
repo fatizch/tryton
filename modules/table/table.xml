@@ -41,17 +41,17 @@
     <record model="ir.ui.view" id="table_definition_dimension_view_form">
       <field name="model">table.dimension.value</field>
       <field name="type">form</field>
-      <field name="name">table_dimension_form</field>
+      <field name="name">dimension_value_form</field>
     </record>
     <record model="ir.ui.view" id="table_definition_dimension_view_list">
       <field name="model">table.dimension.value</field>
       <field name="type">tree</field>
-      <field name="name">table_dimension_list</field>
+      <field name="name">dimension_value_list</field>
     </record>
     <record model="ir.ui.view" id="table_definition_dimension_sequence_view_list">
       <field name="model">table.dimension.value</field>
       <field name="type">tree</field>
-      <field name="name">table_dimension_sequence_list</field>
+      <field name="name">dimension_value_sequence_list</field>
     </record>
     <!-- ############################################################ -->
     <!-- Table Cell -->
@@ -134,7 +134,7 @@
     <record model="ir.ui.view" id="dimension_displayer_view_form">
       <field name="model">table.manage_dimension.show.dimension</field>
       <field name="type">form</field>
-      <field name="name">dimension_displayer_form</field>
+      <field name="name">table_manage_dimension_show_dimension_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Manage Dimension 1 Wizard -->

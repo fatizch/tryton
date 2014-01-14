@@ -5,7 +5,7 @@
             <field
                 name="model">account.payment.create.parameters</field>
             <field name="type">form</field>
-            <field name="name">create_receivable_start_form</field>
+            <field name="name">payment_create_parameters_form</field>
         </record>
 
         <record model="ir.action.wizard" id="wizard_create_receivable">

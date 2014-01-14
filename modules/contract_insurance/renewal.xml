@@ -4,18 +4,18 @@
     <!-- ############################################################ -->
     <!-- Renewal Start -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="renewal_start_form">
+    <record model="ir.ui.view" id="contract_renew_parameters_form">
       <field name="model">contract.renew.parameters</field>
       <field name="type">form</field>
-      <field name="name">renewal_start_form</field>
+      <field name="name">contract_renew_parameters_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Renewal Result -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="renewal_result_form">
+    <record model="ir.ui.view" id="contract_renew_report_form">
       <field name="model">contract.renew.report</field>
       <field name="type">form</field>
-      <field name="name">renewal_result_form</field>
+      <field name="name">contract_renew_report_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Renewal Wizard -->

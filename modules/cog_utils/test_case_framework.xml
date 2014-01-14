@@ -8,10 +8,10 @@
     <!-- ############################################################ -->
     <!-- Test Case Model -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="test_case_model_form">
+    <record model="ir.ui.view" id="test_case_form">
       <field name="model">ir.test_case</field>
       <field name="type">form</field>
-      <field name="name">test_case_model_form</field>
+      <field name="name">test_case_form</field>
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_test_case_model">
@@ -20,7 +20,7 @@
     </record>
     <record model="ir.action.act_window.view" id="act_test_case_model_view2">
       <field name="sequence" eval="10"/>
-      <field name="view" ref="test_case_model_form"/>
+      <field name="view" ref="test_case_form"/>
       <field name="act_window" ref="act_test_case_model"/>
     </record>
     <menuitem parent="menu_test_case" sequence="1"
@@ -32,26 +32,26 @@
     <!-- ############################################################ -->
     <!-- Test Case Selector -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="test_case_selector_tree">
+    <record model="ir.ui.view" id="test_case_run_select_method_list">
       <field name="model">ir.test_case.run.select.method</field>
       <field name="type">tree</field>
-      <field name="name">test_case_selector_tree</field>
+      <field name="name">test_case_run_select_method_list</field>
     </record>
     <!-- ############################################################ -->
     <!-- Select Test Case -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="select_test_cases_form">
+    <record model="ir.ui.view" id="test_case_run_select_form">
       <field name="model">ir.test_case.run.select</field>
       <field name="type">form</field>
-      <field name="name">select_test_cases_form</field>
+      <field name="name">test_case_run_select_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Test Case File Selector -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="test_case_file_selector_tree">
+    <record model="ir.ui.view" id="test_case_run_select_file_list">
       <field name="model">ir.test_case.run.select.file</field>
       <field name="type">tree</field>
-      <field name="name">test_case_file_selector_tree</field>
+      <field name="name">test_case_run_select_file_list</field>
     </record>
     <!-- ############################################################ -->
     <!-- Test Case Wizard -->

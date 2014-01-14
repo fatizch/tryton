@@ -32,7 +32,7 @@
             <field name="model">loan.share</field>
             <field name="priority" eval="20"/>
             <field name="type">tree</field>
-            <field name="name">loan_share_editable_tree</field>
+            <field name="name">loan_share_list</field>
         </record>
         <!-- ############################################################ -->
         <!-- ########### Loan Payment ########### -->
@@ -57,17 +57,17 @@
         <record model="ir.ui.view" id="loan_creation_parameters_view_form">
             <field name="model">loan.create.parameters</field>
             <field name="type">form</field>
-            <field name="name">loan_creation_parameters_form</field>
+            <field name="name">loan_create_parameters_form</field>
         </record>
         <record model="ir.ui.view" id="loan_creation_increments_view_form">
             <field name="model">loan.create.increments</field>
             <field name="type">form</field>
-            <field name="name">loan_creation_increments_form</field>
+            <field name="name">loan_create_increments_form</field>
         </record>
         <record model="ir.ui.view" id="loan_creation_table_view_form">
             <field name="model">loan.create.amortization_table</field>
             <field name="type">form</field>
-            <field name="name">loan_creation_table_form</field>
+            <field name="name">loan_create_amortization_table_form</field>
         </record>
     </data>
 </tryton>

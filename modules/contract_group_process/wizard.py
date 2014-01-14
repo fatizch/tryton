@@ -63,4 +63,4 @@ class ContractSubscribe:
     def get_parameters_view(cls):
         return '%s.%s' % (
             'contract_group_process',
-            'subscription_process_parameters_form')
+            'contract_subscribe_find_process_form')

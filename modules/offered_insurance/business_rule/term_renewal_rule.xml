@@ -14,7 +14,7 @@
             <field name="model">offered.term.rule</field>
             <field name="type">form</field>
             <field name="inherit" ref="businessruleroot_view_form"/>
-            <field name="name">term_renewal_rule_form</field>
+            <field name="name">term_rule_form</field>
         </record>
     </data>
 </tryton>

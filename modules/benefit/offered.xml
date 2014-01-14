@@ -5,7 +5,7 @@
             <field name="model">offered.option.description</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.coverage_view_form"/>
-            <field name="name">option_desc_form</field>
+            <field name="name">option_description_form</field>
         </record>
     </data>
 </tryton>

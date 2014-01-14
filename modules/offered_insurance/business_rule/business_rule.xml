@@ -4,11 +4,11 @@
     <!-- ############################################################ -->
     <!-- Dimension Displayer -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="dimension_displayer_form">
+    <record model="ir.ui.view" id="table_manage_dimension_show_dimension_form">
       <field name="model">table.manage_dimension.show.dimension</field>
       <field name="type">form</field>
       <field name="inherit" ref="table.dimension_displayer_view_form"/>
-      <field name="name">dimension_displayer_form</field>
+      <field name="name">table_manage_dimension_show_dimension_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Rule Engine Parameter -->
@@ -19,15 +19,15 @@
       <field name="inherit" ref="rule_engine.parameter_form"/>
       <field name="name">parameter_form</field>
     </record>
-    <record model="ir.ui.view" id="compl_parameter_tree">
+    <record model="ir.ui.view" id="rule_parameter_list">
       <field name="model">rule_engine.parameter</field>
       <field name="type">tree</field>
-      <field name="name">compl_parameter_tree</field>
+      <field name="name">rule_parameter_list</field>
     </record>
-    <record model="ir.ui.view" id="external_compl_parameter_tree">
+    <record model="ir.ui.view" id="rule_external_parameter_list">
       <field name="model">rule_engine.parameter</field>
       <field name="type">tree</field>
-      <field name="name">external_compl_parameter_tree</field>
+      <field name="name">rule_external_parameter_list</field>
     </record>
     <!-- ############################################################ -->
     <!-- Rule Engine -->
@@ -44,12 +44,12 @@
     <record model="ir.ui.view" id="businessruleroot_view_form">
       <field name="model">offered.business_rule_root</field>
       <field name="type">form</field>
-      <field name="name">br_root_form</field>
+      <field name="name">business_rule_root_form</field>
     </record>
     <record model="ir.ui.view" id="businessruleroot_view_tree">
       <field name="model">offered.business_rule_root</field>
       <field name="type">tree</field>
-      <field name="name">br_root_tree</field>
+      <field name="name">business_rule_root_list</field>
     </record>
   </data>
 </tryton>

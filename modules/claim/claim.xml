@@ -153,21 +153,21 @@
       <field name="padding">10</field>
     </record>
     <!-- Claim Indemnification Validate Display -->
-    <record model="ir.ui.view" id="indemnification_displayer_form">
+    <record model="ir.ui.view" id="indemnification_validate_display_form">
       <field name="model">claim.indemnification.validate.display</field>
       <field name="type">form</field>
-      <field name="name">indemnification_displayer_form</field>
+      <field name="name">indemnification_validate_display_form</field>
     </record>
-    <record model="ir.ui.view" id="indemnification_displayer_tree">
+    <record model="ir.ui.view" id="indemnification_validate_display_list">
       <field name="model">claim.indemnification.validate.display</field>
       <field name="type">tree</field>
-      <field name="name">indemnification_displayer_tree</field>
+      <field name="name">indemnification_validate_display_list</field>
     </record>
     <!-- Claim Indemnification Validate Select -->
-    <record model="ir.ui.view" id="indemnification_selection_form">
+    <record model="ir.ui.view" id="indemnification_validate_select_form">
       <field name="model">claim.indemnification.validate.select</field>
       <field name="type">form</field>
-      <field name="name">indemnification_selection_form</field>
+      <field name="name">indemnification_validate_select_form</field>
     </record>
     <!-- Claim Indemnification Validate -->
     <record model="ir.action.wizard" id="indemnification_validation_wizard">

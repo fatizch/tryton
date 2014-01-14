@@ -591,11 +591,11 @@ class BillingPremiumRateFormReceive(model.CoopWizard):
     start_state = 'calculate_start'
     calculate_start = StateTransition()
     select_note = StateView('billing.premium_rate.form.receive.select',
-        'billing_group_life_fr.rate_note_selection_form', [
+        'billing_group_life_fr.premium_rate_form_receive_select_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Continue', 'preview_bill', 'tryton-ok')])
     preview_bill = StateView('billing.premium_rate.form.receive.create_move',
-        'billing_group_life_fr.rate_note_move_displayer_form', [
+        'billing_group_life_fr.premium_rate_form_receive_create_move_form', [
             Button('Cancel', 'clean_up', 'tryton-cancel'),
             Button('Validate', 'validate', 'tryton-ok')])
     clean_up = StateTransition()

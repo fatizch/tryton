@@ -53,25 +53,25 @@
     <record model="ir.ui.view" id="price_line_view_tree">
       <field name="model">contract.billing.premium</field>
       <field name="type">tree</field>
-      <field name="name">price_line_tree</field>
+      <field name="name">billing_premium_list</field>
     </record>
     <record model="ir.ui.view" id="price_line_view_form">
       <field name="model">contract.billing.premium</field>
       <field name="type">form</field>
-      <field name="name">price_line_form</field>
+      <field name="name">billing_premium_form</field>
     </record>
     <!--################################################################ -->
     <!-- Tax lines -->
     <!--################################################################ -->
-    <record model="ir.ui.view" id="price_line-tax-relation_form">
+    <record model="ir.ui.view" id="billing_premium-tax_form">
       <field name="model">contract.billing.premium-tax</field>
       <field name="type">form</field>
-      <field name="name">price_line-tax-relation_form</field>
+      <field name="name">billing_premium-tax_form</field>
     </record>
-    <record model="ir.ui.view" id="price_line-tax-relation_tree">
+    <record model="ir.ui.view" id="billing_premium-tax_list">
       <field name="model">contract.billing.premium-tax</field>
       <field name="type">tree</field>
-      <field name="name">price_line-tax-relation_tree</field>
+      <field name="name">billing_premium-tax_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_tax">
@@ -89,15 +89,15 @@
     <!--################################################################ -->
     <!-- Fee Lines -->
     <!--################################################################ -->
-    <record model="ir.ui.view" id="price_line-fee-relation_form">
+    <record model="ir.ui.view" id="billing_premium-fee_form">
       <field name="model">contract.billing.premium-fee</field>
       <field name="type">form</field>
-      <field name="name">price_line-fee-relation_form</field>
+      <field name="name">billing_premium-fee_form</field>
     </record>
-    <record model="ir.ui.view" id="price_line-fee-relation_tree">
+    <record model="ir.ui.view" id="billing_premium-fee_list">
       <field name="model">contract.billing.premium-fee</field>
       <field name="type">tree</field>
-      <field name="name">price_line-fee-relation_tree</field>
+      <field name="name">billing_premium-fee_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_fee">
@@ -165,15 +165,15 @@
     <!--################################################################-->
     <!-- Product Payment Method Relation -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="product-payment_method-relation_tree">
+    <record model="ir.ui.view" id="product-billing_payment_method_list">
       <field name="model">offered.product-billing.payment.method</field>
       <field name="type">tree</field>
-      <field name="name">product-payment_method-relation_tree</field>
+      <field name="name">product-billing_payment_method_list</field>
     </record>
-    <record model="ir.ui.view" id="product-payment_method-relation_form">
+    <record model="ir.ui.view" id="product-billing_payment_method_form">
       <field name="model">offered.product-billing.payment.method</field>
       <field name="type">form</field>
-      <field name="name">product-payment_method-relation_form</field>
+      <field name="name">product-billing_payment_method_form</field>
     </record>
     <!--################################################################-->
     <!-- Product -->
@@ -187,29 +187,29 @@
     <!--################################################################-->
     <!-- OptionDescription -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="coverage_form">
+    <record model="ir.ui.view" id="option_description_form">
       <field name="model">offered.option.description</field>
       <field name="type">form</field>
       <field name="inherit" ref="offered.coverage_view_form"/>
-      <field name="name">coverage_form</field>
+      <field name="name">option_description_form</field>
     </record>
     <!--################################################################-->
     <!-- Tax Version -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="tax_desc_form">
+    <record model="ir.ui.view" id="tax_description_form">
       <field name="model">account.tax.description</field>
       <field name="type">form</field>
       <field name="inherit" ref="account_cog.tax_desc_view_form"/>
-      <field name="name">tax_desc_form</field>
+      <field name="name">tax_description_form</field>
     </record>
     <!--################################################################-->
     <!-- Fee Version -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="fee_desc_form">
+    <record model="ir.ui.view" id="fee_description_form">
       <field name="model">account.fee.description</field>
       <field name="type">form</field>
       <field name="inherit" ref="account_cog.fee_description_view_form"/>
-      <field name="name">fee_desc_form</field>
+      <field name="name">fee_description_form</field>
     </record>
     <!--################################################################-->
     <!--                           Menus                                -->

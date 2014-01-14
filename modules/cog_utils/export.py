@@ -720,7 +720,7 @@ class ImportWizard(Wizard):
 
     start_state = 'file_selector'
     file_selector = StateView('ir.import.select_file',
-        'cog_utils.file_selector_form', [
+        'cog_utils.import_select_file_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Import', 'file_import', 'tryton-ok')])
     file_import = StateTransition()

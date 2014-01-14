@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
-    <record model="ir.ui.view" id="subscription_process_parameters_form">
+    <record model="ir.ui.view" id="contract_subscribe_find_process_form">
       <field name="model">contract.subscribe.find_process</field>
       <field name="type">form</field>
       <field name="inherit" ref="process_cog.process_parameters_form"/>
-      <field name="name">subscription_process_parameters_form</field>
+      <field name="name">contract_subscribe_find_process_form</field>
     </record>
     <record model="ir.action.wizard" id="subscription_process_launcher">
       <field name="name">Start Subscription</field>
