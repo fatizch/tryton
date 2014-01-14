@@ -6,72 +6,31 @@ Imports::
 
     >>> import os
     >>> import datetime
-    >>> from decimal import Decimal
     >>> from proteus import config, Model, Wizard
-
-Constants::
-
-    >>> NEEDED_MODULES = [
-    ...     'account_payment_cog',
-    ...     'loan',
-    ...     'billing_group_life_fr',
-    ...     'party_cog',
-    ...     'contract_life_process',
-    ...     'contract_insurance',
-    ...     'endorsement',
-    ...     'contract_insurance_health_fr',
-    ...     'commission',
-    ...     'company_cog',
-    ...     'distribution',
-    ...     'account_payment_sepa_cog',
-    ...     'claim_life_process',
-    ...     'collection_insurance',
-    ...     'claim_process',
-    ...     'billing_individual',
-    ...     'contract_insurance_process',
-    ...     'currency_cog',
-    ...     'cog_utils',
-    ...     'cog_translation',
-    ...     'collection',
-    ...     'bank_cog',
-    ...     'commission_group',
-    ...     'contract_group_process',
-    ...     'task_manager',
-    ...     'rule_engine',
-    ...     'contract_life',
-    ...     'offered_distribution',
-    ...     'offered',
-    ...     'contract',
-    ...     'table',
-    ...     'offered_property_casualty',
-    ...     'country_cog',
-    ...     'claim_life',
-    ...     'contract_cash_value',
-    ...     'process',
-    ...     'contract_group',
-    ...     'offered_insurance',
-    ...     'account_payment',
-    ...     'offered_life',
-    ...     'health',
-    ...     'process_cog',
-    ...     'offered_cash_value',
-    ...     'bank_fr',
-    ...     'claim_credit',
-    ...     'party_fr',
-    ...     'claim',
-    ...     'billing',
-    ...     'account_cog',
-    ...     ]
 
 Create Database::
 
     >>> config = config.set_trytond(database_type='postgresql',
     ...     database_name='test_database',
     ...     user='admin',
-    ...     language='fr_FR',
+    ...     language='en_US',
     ...     password='admin',
     ...     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
     ...         'conf', 'trytond.conf'))
+    >>> Module = Model.get('ir.module.module')
+    >>> test_module = Module.find([('name', '=', 'test_module')])[0]
+    >>> Module.install([test_module.id], {})
+    >>> wizard = Wizard('ir.module.module.install_upgrade')
+    >>> wizard.execute('upgrade')
+    >>> Model.reset()
+
+Import Exported DB::
+
+    >>> wizard = Wizard('ir.test_case.run')
+    >>> wizard.form.select_all_test_cases = True
+    >>> wizard.form.select_all_files = True
+    >>> wizard.execute('execute_test_cases')
+    >>> wizard.execute('end')
 
 Get Models::
 
@@ -82,10 +41,11 @@ Get Models::
     >>> IrModel = Model.get('ir.model')
     >>> Contract = Model.get('contract')
     >>> Party = Model.get('party.party')
-    >>> len(Product.find([], order=[('code', 'ASC')]))
-    15
-    >>> len(OptionDescription.find([]))
-    25
+    >>> User = Model.get('res.user')
+
+Reload user preferences::
+
+    >>> config._context = User.get_preferences(True, config.context)
 
 Start subscription::
 
@@ -168,4 +128,3 @@ Get contract::
     [[('', ''), (u'25000,00 \u20ac', u'25000,00 \u20ac'), (u'50000,00 \u20ac', u'50000,00 \u20ac'), (u'75000,00 \u20ac', u'75000,00 \u20ac'), (u'100000,00 \u20ac', u'100000,00 \u20ac')]]
     >>> cd2.coverage_amount_selection = '75000.00'
     >>> cd2.save()
-    >>> import pdb;pdb.set_trace()

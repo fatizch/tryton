@@ -3,80 +3,29 @@
 ##Comment##Imports
 import os
 import datetime
-from decimal import Decimal
 from proteus import config, Model, Wizard
-##Comment##Constants
-NEEDED_MODULES = [
-    'account_payment_cog',
-    'loan',
-    'billing_group_life_fr',
-    'party_cog',
-    'contract_life_process',
-    'contract_insurance',
-    'endorsement',
-    'contract_insurance_health_fr',
-    'commission',
-    'company_cog',
-    'distribution',
-    'account_payment_sepa_cog',
-    'claim_life_process',
-    'collection_insurance',
-    'claim_process',
-    'billing_individual',
-    'contract_insurance_process',
-    'currency_cog',
-    'cog_utils',
-    'cog_translation',
-    'collection',
-    'bank_cog',
-    'commission_group',
-    'contract_group_process',
-    'task_manager',
-    'rule_engine',
-    'contract_life',
-    'offered_distribution',
-    'offered',
-    'contract',
-    'table',
-    'offered_property_casualty',
-    'country_cog',
-    'claim_life',
-    'contract_cash_value',
-    'process',
-    'contract_group',
-    'offered_insurance',
-    'account_payment',
-    'offered_life',
-    'health',
-    'process_cog',
-    'offered_cash_value',
-    'bank_fr',
-    'claim_credit',
-    'party_fr',
-    'claim',
-    'billing',
-    'account_cog',
-    ]
 ##Comment##Create Database
+# config = config.set_trytond(database_type='sqlite')
+# config.pool.test = True
 config = config.set_trytond(database_type='postgresql',
     database_name='test_database',
     user='admin',
-    language='fr_FR',
+    language='en_US',
     password='admin',
     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
         'conf', 'trytond.conf'))
-# config.pool.test = True
-# Module = Model.get('ir.module.module')
-# coop_utils_modules = Module.find([('name', 'in', NEEDED_MODULES)])
-# for module in coop_utils_modules:
-    # Module.install([module.id], config.context)
-# Wizard('ir.module.module.install_upgrade').execute('upgrade')
-# ##Comment##Import Exported DB
-# wizard = Wizard('ir.test_case.run')
-# wizard.form.select_all_test_cases = True
-# wizard.form.select_all_files = True
-# wizard.execute('execute_test_cases')
-# wizard.execute('end')
+Module = Model.get('ir.module.module')
+test_module = Module.find([('name', '=', 'test_module')])[0]
+Module.install([test_module.id], {})
+wizard = Wizard('ir.module.module.install_upgrade')
+wizard.execute('upgrade')
+Model.reset()
+##Comment##Import Exported DB
+wizard = Wizard('ir.test_case.run')
+wizard.form.select_all_test_cases = True
+wizard.form.select_all_files = True
+wizard.execute('execute_test_cases')
+wizard.execute('end')
 ##Comment##Get Models
 Product = Model.get('offered.product')
 OptionDescription = Model.get('offered.option.description')
@@ -85,10 +34,9 @@ Process = Model.get('process')
 IrModel = Model.get('ir.model')
 Contract = Model.get('contract')
 Party = Model.get('party.party')
-len(Product.find([], order=[('code', 'ASC')]))
-##Res##15
-len(OptionDescription.find([]))
-##Res##25
+User = Model.get('res.user')
+##Comment##Reload user preferences
+config._context = User.get_preferences(True, config.context)
 ##Comment##Start subscription
 wizard = Wizard('contract.subscribe')
 dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
@@ -167,4 +115,4 @@ cd2.__class__.get_possible_amounts([cd2.id], {})
 ##Res##[[('', ''), (u'25000,00 \u20ac', u'25000,00 \u20ac'), (u'50000,00 \u20ac', u'50000,00 \u20ac'), (u'75000,00 \u20ac', u'75000,00 \u20ac'), (u'100000,00 \u20ac', u'100000,00 \u20ac')]]
 cd2.coverage_amount_selection = '75000.00'
 cd2.save()
-import pdb;pdb.set_trace()
+# import pdb;pdb.set_trace()

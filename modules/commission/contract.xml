@@ -64,15 +64,15 @@
         <!-- ############################################################ -->
         <!-- ########### OptionCommissionOptionRelation ########### -->
         <!-- ############################################################ -->
-        <record model="ir.ui.view" id="option_view_tree">
+        <record model="ir.ui.view" id="option_commission_option_view_tree">
             <field name="model">contract.option-commission.option</field>
             <field name="type">tree</field>
-            <field name="name">option_tree</field>
+            <field name="name">option_commission_option_tree</field>
         </record>
-        <record model="ir.ui.view" id="option_view_form">
+        <record model="ir.ui.view" id="option_commision_option_view_form">
             <field name="model">contract.option-commission.option</field>
             <field name="type">form</field>
-            <field name="name">option_form</field>
+            <field name="name">option_commission_option_form</field>
         </record>
     </data>
 </tryton>

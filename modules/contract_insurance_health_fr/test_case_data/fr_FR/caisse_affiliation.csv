@@ -1,4 +1,4 @@
-code;ID_ADR;name;filler1;Numero de caisse daffiliation;filler2;regime_code;;Code teletransmision
+code;ID_ADR;name;filler1;Numero de caisse daffiliation;filler2;hc_system_code;;Code teletransmision
 682599-94;67 445;MFP DU HAUT RHIN;542;682;;94;0;682599-94
 691599-94;67 446;MFP DU RHÔNE;542;691;;94;0;691599-94
 701599-94;67 448;MFP VESOUL;542;701;;94;;701599-94

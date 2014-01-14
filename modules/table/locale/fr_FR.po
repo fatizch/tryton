@@ -714,13 +714,11 @@ msgctxt "wizard_button:table.manage_dimension.show_dimension_1,dimension_managem
 msgid "Exit"
 msgstr "Fin"
 
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,next_dim:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_1,dimension_management,next_dim:"
 msgid "Dimension 2"
 msgstr "Dimension 2"
 
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,view_data:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_1,dimension_management,view_data:"
 msgid "View Data"
 msgstr "Visualisation des données"
 
@@ -732,13 +730,11 @@ msgctxt "wizard_button:table.manage_dimension.show_dimension_2,dimension_managem
 msgid "Exit"
 msgstr "Fin"
 
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_2,dimension_management,next_dim:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_2,dimension_management,next_dim:"
 msgid "Dimension 3"
 msgstr "Dimension 3"
 
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_2,dimension_management,view_data:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_2,dimension_management,view_data:"
 msgid "View Data"
 msgstr "Visualisation des données"
 
@@ -750,13 +746,11 @@ msgctxt "wizard_button:table.manage_dimension.show_dimension_3,dimension_managem
 msgid "Exit"
 msgstr "Fin"
 
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_3,dimension_management,next_dim:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_3,dimension_management,next_dim:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
 
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_3,dimension_management,view_data:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_3,dimension_management,view_data:"
 msgid "View Data"
 msgstr "Visualisation des données"
 
@@ -768,7 +762,6 @@ msgctxt "wizard_button:table.manage_dimension.show_dimension_4,dimension_managem
 msgid "Exit"
 msgstr "Fin"
 
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_4,dimension_management,view_data:"
+msgctxt "wizard_button:table.manage_dimension.show_dimension_4,dimension_management,view_data:"
 msgid "View Data"
 msgstr "Visualisation des données"

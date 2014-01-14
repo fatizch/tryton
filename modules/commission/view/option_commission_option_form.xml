@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Option-Commission Option Relation">
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <label name="com_option"/>
+    <field name="com_option"/>
+    <newline/>
+    <label name="option"/>
+    <field name="option"/>
+    <newline/>
+    <label name="use_specific_rate"/>
+    <field name="use_specific_rate"/>
+    <label name="rate"/>
+    <group id="rate">
+      <field name="rate" xexpand="0" factor="100"/>
+      <label string="%" id="rate" xexpand="0" xalign="0"
+        states="{'invisible': ~Eval('use_specific_rate')}"/>
+    </group>
+    <label name="com_amount"/>
+    <group id="com_amount">
+        <field name="com_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+</form>

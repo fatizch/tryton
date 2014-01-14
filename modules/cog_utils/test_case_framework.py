@@ -6,6 +6,7 @@ import random
 
 from trytond.pool import Pool
 from trytond.pyson import Eval
+from trytond import backend
 from trytond.wizard import Button, StateView, StateTransition
 from trytond.model import ModelSingleton
 from trytond.transaction import Transaction
@@ -154,13 +155,17 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     @classmethod
     def run_test_case(cls, test_case):
         cur_user = Transaction().user
+        DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_cursor(), Transaction().set_user(0):
             if cur_user:
                 with Transaction().set_context(user=cur_user):
                     cls.run_test_case_method(test_case)
             else:
                     cls.run_test_case_method(test_case)
-            Transaction().cursor.commit()
+            try:
+                Transaction().cursor.commit()
+            except DatabaseOperationalError:
+                Transaction().cursor.rollback()
 
     @classmethod
     def clear_all_caches(cls):
@@ -529,7 +534,21 @@ class TestCaseWizard(model.CoopWizard):
                 logging.getLogger('test_case').info('Loading json file %s' %
                     elem.filename)
                 try:
-                    export.ExportImportMixin.import_json(the_file.read())
+                    cur_user = Transaction().user
+                    DatabaseOperationalError = backend.get(
+                        'DatabaseOperationalError')
+                    with Transaction().new_cursor(), Transaction().set_user(0):
+                        if cur_user:
+                            with Transaction().set_context(user=cur_user):
+                                export.ExportImportMixin.import_json(
+                                    the_file.read())
+                        else:
+                                export.ExportImportMixin.import_json(
+                                    the_file.read())
+                        try:
+                            Transaction().cursor.commit()
+                        except DatabaseOperationalError:
+                            Transaction().cursor.rollback()
                     logging.getLogger('test_case').info('Successfully '
                         'imported %s' % elem.filename)
                 except:
