@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ################### -->
+    <!-- # Visualize Debug # -->
+    <!-- ################### -->
+    <record model="ir.ui.view" id="visualize_view_form">
+      <field name="model">debug.visualize</field>
+      <field name="type">form</field>
+      <field name="name">visualize_form</field>
+    </record>
+    <!-- ######### -->
+    <!-- # Debug # -->
+    <!-- ######### -->
+    <record model="ir.action.wizard" id="act_debug">
+      <field name="name">Debug</field>
+      <field name="wiz_name">debug</field>
+    </record>
+    <menuitem parent="ir.menu_administration" name="Debug" id="menu_debug" sequence="100" action="act_debug"/>
+  </data>
+</tryton>
