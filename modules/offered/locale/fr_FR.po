@@ -14,58 +14,6 @@ msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "field:ir.export_package,compl_data_defs:"
-msgid "Complementary Data Def"
-msgstr "Définition de Données Complémentaires"
-
-msgctxt "field:ir.export_package,coverages:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "field:ir.export_package,products:"
-msgid "Products"
-msgstr "Produits"
-
-msgctxt "field:ir.test_case,main_company_name:"
-msgid "Main Company Name"
-msgstr "Nom de la company principale"
-
-msgctxt "field:extra_data-tag,compl_data_def:"
-msgid "Complementary Data Def"
-msgstr "Définition de Données Complémentaires"
-
-msgctxt "field:extra_data-tag,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:extra_data-tag,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:extra_data-tag,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:extra_data-tag,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:extra_data-tag,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:extra_data-tag,tag:"
-msgid "Tag"
-msgstr "Label"
-
-msgctxt "field:extra_data-tag,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:extra_data-tag,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:extra_data,create_date:"
 msgid ""
 msgstr " "
@@ -170,6 +118,10 @@ msgctxt "field:extra_data,write_uid:"
 msgid ""
 msgstr " "
 
+msgctxt "field:extra_data,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:extra_data-sub_extra_data,child:"
 msgid ""
 msgstr " "
@@ -194,8 +146,7 @@ msgctxt "field:extra_data-sub_extra_data,master:"
 msgid ""
 msgstr " "
 
-msgctxt ""
-"field:extra_data-sub_extra_data,must_expand_tree:"
+msgctxt "field:extra_data-sub_extra_data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
@@ -215,6 +166,118 @@ msgctxt "field:extra_data-sub_extra_data,write_uid:"
 msgid ""
 msgstr " "
 
+msgctxt "field:extra_data-sub_extra_data,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:extra_data-tag,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:extra_data-tag,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:extra_data-tag,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:extra_data-tag,extra_data_def:"
+msgid "Extra Data Def"
+msgstr "Définition de Données Complémentaires"
+
+msgctxt "field:extra_data-tag,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:extra_data-tag,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:extra_data-tag,tag:"
+msgid "Tag"
+msgstr "Label"
+
+msgctxt "field:extra_data-tag,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:extra_data-tag,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:extra_data-tag,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.export_package,coverages:"
+msgid "OptionDescriptions"
+msgstr "Garanties"
+
+msgctxt "field:ir.export_package,extra_data_defs:"
+msgid "Extra Data Def"
+msgstr "Définition de Données Complémentaires"
+
+msgctxt "field:ir.export_package,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:ir.test_case,main_company_name:"
+msgid "Main Company Name"
+msgstr "Nom de la company principale"
+
+msgctxt "field:offered,code:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:offered,currency_digits:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,description:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,end_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,extra_data:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,id:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered,name:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,start_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,summary:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,template:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered,template_behaviour:"
+msgid ""
+msgstr " "
+
 msgctxt "field:offered.option.description,code:"
 msgid ""
 msgstr " "
@@ -223,17 +286,9 @@ msgctxt "field:offered.option.description,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered.option.description,complementary_data:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.option.description,complementary_data_def:"
-msgid ""
-msgstr " "
-
 msgctxt "field:offered.option.description,coverages_in_package:"
-msgid ""
-msgstr " "
+msgid "OptionDescriptions In Package"
+msgstr "Options de la Formule"
 
 msgctxt "field:offered.option.description,create_date:"
 msgid ""
@@ -263,6 +318,14 @@ msgctxt "field:offered.option.description,end_date:"
 msgid ""
 msgstr " "
 
+msgctxt "field:offered.option.description,extra_data:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered.option.description,extra_data_def:"
+msgid ""
+msgstr " "
+
 msgctxt "field:offered.option.description,id:"
 msgid ""
 msgstr " "
@@ -272,7 +335,7 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.option.description,kind:"
-msgid "Coverage Kind"
+msgid "Option Description Kind"
 msgstr "Type de Garantie"
 
 msgctxt "field:offered.option.description,must_expand_tree:"
@@ -319,14 +382,13 @@ msgctxt "field:offered.option.description,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt ""
-"field:offered.option.description-extra_data,complementary_data_def:"
-msgid ""
-msgstr " "
+msgctxt "field:offered.option.description,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:offered.option.description-extra_data,coverage:"
-msgid ""
-msgstr " "
+msgid "Option Description"
+msgstr "Description d'Option"
 
 msgctxt "field:offered.option.description-extra_data,create_date:"
 msgid ""
@@ -337,6 +399,10 @@ msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:offered.option.description-extra_data,create_uid:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered.option.description-extra_data,extra_data_def:"
 msgid ""
 msgstr " "
 
@@ -356,61 +422,13 @@ msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered,code:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:offered,complementary_data:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,currency_digits:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,description:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,end_date:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,id:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:offered,name:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,start_date:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,summary:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,template:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered,template_behaviour:"
-msgid ""
-msgstr " "
+msgctxt "field:offered.option.description-extra_data,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:offered.package-option.description,coverage:"
-msgid ""
-msgstr " "
+msgid "OptionDescription"
+msgstr "Description d'Option"
 
 msgctxt "field:offered.package-option.description,create_date:"
 msgid ""
@@ -444,6 +462,10 @@ msgctxt "field:offered.package-option.description,write_uid:"
 msgid ""
 msgstr " "
 
+msgctxt "field:offered.package-option.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:offered.product,code:"
 msgid ""
 msgstr " "
@@ -452,20 +474,12 @@ msgctxt "field:offered.product,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:offered.product,complementary_data:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.product,complementary_data_def:"
-msgid ""
-msgstr " "
-
 msgctxt "field:offered.product,contract_generator:"
 msgid ""
 msgstr " "
 
 msgctxt "field:offered.product,coverages:"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
 msgctxt "field:offered.product,create_date:"
@@ -493,6 +507,14 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.product,end_date:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered.product,extra_data:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered.product,extra_data_def:"
 msgid ""
 msgstr " "
 
@@ -544,9 +566,9 @@ msgctxt "field:offered.product,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:offered.product-extra_data,complementary_data_def:"
-msgid ""
-msgstr " "
+msgctxt "field:offered.product,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:offered.product-extra_data,create_date:"
 msgid ""
@@ -557,6 +579,10 @@ msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:offered.product-extra_data,create_uid:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered.product-extra_data,extra_data_def:"
 msgid ""
 msgstr " "
 
@@ -580,9 +606,13 @@ msgctxt "field:offered.product-extra_data,write_uid:"
 msgid ""
 msgstr " "
 
+msgctxt "field:offered.product-extra_data,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:offered.product-option.description,coverage:"
-msgid ""
-msgstr " "
+msgid "Option Description"
+msgstr "Description d'Option"
 
 msgctxt "field:offered.product-option.description,create_date:"
 msgid ""
@@ -616,20 +646,36 @@ msgctxt "field:offered.product-option.description,write_uid:"
 msgid ""
 msgstr " "
 
-msgctxt "field:tag,compl_data_defs:"
-msgid "Complementary Data"
+msgctxt "field:offered.product-option.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:tag,extra_data_defs:"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "help:extra_data,selection:"
 msgid ""
 msgstr " "
 
+msgctxt "model:extra_data,name:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "model:extra_data-sub_extra_data,name:"
+msgid "Extra Data to Sub Extra Data Relation"
+msgstr "Données Complémentaires Récursives"
+
+msgctxt "model:extra_data-tag,name:"
+msgid "Relation between extra data def and tag"
+msgstr ""
+
 msgctxt "model:ir.action,name:act_coverage_form"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
-msgctxt "model:ir.action,name:act_model_coop_schema"
-msgid "Complementary Data"
+msgctxt "model:ir.action,name:act_model_extra_data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.action,name:act_package_form"
@@ -645,11 +691,11 @@ msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_coverage_form"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
 
-msgctxt "model:ir.ui.menu,name:menu_model_coop_schema"
-msgid "Complementary Data"
+msgctxt "model:ir.ui.menu,name:menu_model_extra_data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "model:ir.ui.menu,name:menu_package_form"
@@ -668,33 +714,21 @@ msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "model:extra_data-tag,name:"
-msgid "Relation between complementary data def and tag"
-msgstr ""
-
-msgctxt "model:extra_data,name:"
-msgid ""
-msgstr " "
-
-msgctxt "model:extra_data-sub_extra_data,name:"
-msgid ""
-msgstr " "
-
-msgctxt "model:offered.option.description,name:"
-msgid ""
-msgstr " "
-
-msgctxt "model:offered.option.description-extra_data,name:"
-msgid ""
-msgstr " "
-
 msgctxt "model:offered,name:"
 msgid ""
 msgstr " "
 
+msgctxt "model:offered.option.description,name:"
+msgid "OptionDescription"
+msgstr "Description d'Option"
+
+msgctxt "model:offered.option.description-extra_data,name:"
+msgid "Relation between OptionDescription and Extra Data"
+msgstr "Relation Description d'Option - Données Complémentaires"
+
 msgctxt "model:offered.package-option.description,name:"
-msgid ""
-msgstr " "
+msgid "Package to Option Description Relation"
+msgstr "Relation Formules - Description d'Option"
 
 msgctxt "model:offered.product,name:"
 msgid ""
@@ -705,8 +739,8 @@ msgid ""
 msgstr " "
 
 msgctxt "model:offered.product-option.description,name:"
-msgid ""
-msgstr " "
+msgid "Product to Option Description Relation"
+msgstr "Relation Produit - Description d'Option"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Benefit"
@@ -772,13 +806,21 @@ msgctxt "selection:extra_data,type_:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "selection:offered.option.description,kind:"
+msgctxt "selection:offered,template_behaviour:"
 msgid ""
 msgstr " "
 
+msgctxt "selection:offered,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:offered,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
 msgctxt "selection:offered.option.description,kind:"
-msgid "Default"
-msgstr "Défaut"
+msgid ""
+msgstr " "
 
 msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Mandatory"
@@ -804,25 +846,9 @@ msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
 msgctxt "selection:offered.product,kind:"
 msgid ""
 msgstr " "
-
-msgctxt "selection:offered.product,kind:"
-msgid "Default"
-msgstr "Défaut"
 
 msgctxt "selection:offered.product,subscriber_kind:"
 msgid "All"
@@ -848,12 +874,20 @@ msgctxt "selection:offered.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "view:extra_data-sub_extra_data:"
+msgid "Relation"
+msgstr ""
+
+msgctxt "view:extra_data-sub_extra_data:"
+msgid "Relations"
+msgstr "Relations"
+
 msgctxt "view:extra_data:"
-msgid "Complementary Data Descriptor"
+msgid "Extra Data Descriptor"
 msgstr "Descripteur de Données Complémentaires"
 
 msgctxt "view:extra_data:"
-msgid "Complementary Data Descriptors"
+msgid "Extra Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 
 msgctxt "view:extra_data:"
@@ -868,21 +902,25 @@ msgctxt "view:extra_data:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "view:extra_data-sub_extra_data:"
-msgid "Relation"
-msgstr ""
-
-msgctxt "view:extra_data-sub_extra_data:"
-msgid "Relations"
-msgstr "Relations"
-
 msgctxt "view:offered.option.description:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:offered.option.description:"
-msgid "Coverages"
+msgid "OptionDescriptions"
 msgstr "Garanties"
+
+msgctxt "view:offered.product:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "view:offered.product:"
+msgid "OptionDescriptions"
+msgstr "Garanties"
+
+msgctxt "view:offered.product:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "view:offered:"
 msgid "Administration"
@@ -900,18 +938,6 @@ msgctxt "view:offered:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "view:offered.product:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:offered.product:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "view:offered.product:"
-msgid "Product"
-msgstr "Produit"
-
 msgctxt "view:tag:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"

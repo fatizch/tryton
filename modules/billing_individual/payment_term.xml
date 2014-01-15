@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Payment Term -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="payment_term_form">
+      <field name="model">billing.payment.term</field>
+      <field name="type">form</field>
+      <field name="name">payment_term_form</field>
+    </record>
+    <record model="ir.ui.view" id="payment_term_list">
+      <field name="model">billing.payment.term</field>
+      <field name="type">tree</field>
+      <field name="name">payment_term_list</field>
+    </record>
+    <!-- Read / Write rule -->
+    <record model="ir.rule.group" id="rule_group_payment_term">
+        <field name="model" search="[('model', '=', 'billing.payment.term')]"/>
+        <field name="global_p" eval="True"/>
+    </record>
+    <record model="ir.rule" id="rule_payment_term_1">
+      <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+      <field name="rule_group" ref="rule_group_payment_term"/>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_payment_term">
+      <field name="name">Payment Term</field>
+      <field name="res_model">billing.payment.term</field>
+      <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_term_view1">
+      <field name="sequence" eval="5"/>
+      <field name="view" ref="payment_term_list"/>
+      <field name="act_window" ref="act_payment_term"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_payment_term_view2">
+      <field name="sequence" eval="5"/>
+      <field name="view" ref="payment_term_form"/>
+      <field name="act_window" ref="act_payment_term"/>
+    </record>
+    <menuitem parent="offered.menu_product_configuration" sequence="6"
+      action="act_payment_term" id="menu_payment_term"/>
+    <!-- ############################################################ -->
+    <!-- Payment Term Line -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="payment_term_line_form">
+      <field name="model">billing.payment.term.line</field>
+      <field name="type">form</field>
+      <field name="name">payment_term_line_form</field>
+    </record>
+    <record model="ir.ui.view" id="payment_term_line_list">
+      <field name="model">billing.payment.term.line</field>
+      <field name="type">tree</field>
+      <field name="name">payment_term_line_list</field>
+    </record>
+  </data>
+</tryton>

@@ -47,8 +47,8 @@ def write_record(f, te, parent=None):
 
 
 def export_tree_elements(cfg_dict, f):
-    TreeElement = Model.get('rule_engine.function')
-    for te in TreeElement.find([('parent', '=', None)]):
+    RuleFunction = Model.get('rule_engine.function')
+    for te in RuleFunction.find([('parent', '=', None)]):
         write_record(f, te)
 
 

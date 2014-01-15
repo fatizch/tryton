@@ -1,84 +1,24 @@
-import copy
-
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 
-from trytond.modules.coop_utils import fields, model, export
+from trytond.modules.cog_utils import fields, model
 
 
+__metaclass__ = PoolMeta
 __all__ = [
-    'Configuration',
-    'SuspenseParty',
     'Collection',
-    'Payment',
-    'CollectionParameters',
-    'Assignment',
-    'AssignCollection',
-    'CollectionWizard',
+    'CollectionCreateParameters',
+    'CollectionCreateAssignLines',
+    'CollectionCreateAssign',
+    'CollectionCreate',
     ]
 
-
-class Configuration():
-    'Account Configuration'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'account.configuration'
-
-    default_suspense_account = fields.Function(fields.Many2One(
-        'account.account', 'Default Suspense Account',
-        domain=[
-                ('kind', '=', 'other'),
-                ('company', '=', Eval('context', {}).get('company')),
-                ]),
-        'get_account', setter='set_account')
-    cash_account = fields.Property(
-        fields.Many2One('account.account', 'Cash Account',
-            domain=[('kind', '=', 'revenue')]))
-    check_account = fields.Property(
-        fields.Many2One('account.account', 'Check Account',
-            domain=[('kind', '=', 'revenue')]))
-    collection_journal = fields.Property(
-        fields.Many2One('account.journal', 'Journal', domain=[
-                ('type', '=', 'cash')]))
-
-    @classmethod
-    def _export_must_export_field(cls, field_name, field):
-        # Function field are not exported by default
-        if field_name == 'default_suspense_account':
-            return True
-        return super(Configuration, cls)._export_must_export_field(
-            field_name, field)
-
-    def _export_override_default_suspense_account(self, exported, result,
-            my_key):
-        return self._export_default_account('default_suspense_account',
-            exported, result, my_key)
-
-
-class SuspenseParty():
-    'Party'
-
-    __metaclass__ = PoolMeta
-    __name__ = 'party.party'
-
-    suspense_account = fields.Property(fields.Many2One('account.account',
-            'Suspense Account', domain=[
-                ('kind', '=', 'other'),
-                ('company', '=', Eval('context', {}).get('company')),
-                ],
-            states={
-                'required': ~~(Eval('context', {}).get('company')),
-                'invisible': ~Eval('context', {}).get('company'),
-                }))
-
-    @classmethod
-    def __setup__(cls):
-        super(SuspenseParty, cls).__setup__()
-        cls.suspense_account = copy.copy(cls.suspense_account)
-        cls.suspense_account.domain = export.clean_domain_for_import(
-            cls.suspense_account.domain, 'company')
+COLLECTION_KIND = [
+    ('cash', 'Cash'),
+    ('check', 'Check'),
+    ]
 
 
 class Collection(model.CoopSQL, model.CoopView):
@@ -87,7 +27,7 @@ class Collection(model.CoopSQL, model.CoopView):
     __name__ = 'collection'
 
     amount = fields.Numeric('Amount', states={'readonly': True})
-    kind = fields.Selection([('cash', 'Cash'), ('check', 'Check')], 'Kind',
+    kind = fields.Selection(COLLECTION_KIND, 'Kind',
         states={'readonly': True})
     assignment_move = fields.Many2One('account.move', 'Assignment Move',
         states={'readonly': True})
@@ -97,43 +37,39 @@ class Collection(model.CoopSQL, model.CoopView):
         'get_create_user')
     check_number = fields.Char('Check Number', states={
             'invisible': Eval('kind') != 'check',
-            'required': Eval('kind') == 'check'})
+            'required': Eval('kind') == 'check',
+            })
     check_reception_date = fields.Date('Check Reception Date', states={
             'invisible': Eval('kind') != 'check',
-            'required': Eval('kind') == 'check'})
+            'required': Eval('kind') == 'check',
+            })
 
     def get_create_user(self, name):
         return self.create_uid.id
 
 
-class Payment:
-    __metaclass__ = PoolMeta
-    __name__ = 'account.payment'
-
-    collection = fields.Many2One('collection', 'Collection')
-
-
-class CollectionParameters(model.CoopView):
-    'Collection parameters'
+class CollectionCreateParameters(model.CoopView):
+    'Collection Create Parameters'
 
     __name__ = 'collection.create.parameters'
 
-    kind = fields.Selection([('cash', 'Cash'), ('check', 'Check')], 'Kind',
-        required=True)
+    kind = fields.Selection(COLLECTION_KIND, 'Kind', required=True)
     amount = fields.Numeric('Amount', required=True)
     party = fields.Many2One('party.party', 'Party', required=True)
     check_number = fields.Char('Check Number', states={
             'invisible': Eval('kind') != 'check',
-            'required': Eval('kind') == 'check'})
+            'required': Eval('kind') == 'check',
+            })
     check_reception_date = fields.Date('Check Reception Date', states={
             'invisible': Eval('kind') != 'check',
-            'required': Eval('kind') == 'check'})
+            'required': Eval('kind') == 'check',
+            })
     collection = fields.Many2One('collection', 'Collection',
         states={'invisible': True})
 
 
-class Assignment(model.CoopView):
-    'Assignment'
+class CollectionCreateAssignLines(model.CoopView):
+    'Collection Create Assign Lines'
 
     __name__ = 'collection.create.assign.lines'
 
@@ -154,7 +90,7 @@ class Assignment(model.CoopView):
 
     @classmethod
     def __setup__(cls):
-        super(Assignment, cls).__setup__()
+        super(CollectionCreateAssignLines, cls).__setup__()
         cls._error_messages.update({
             'amount_too_big': 'Amount (%s) for line is too big. It must'
             'be lower than %s',
@@ -185,14 +121,15 @@ class Assignment(model.CoopView):
         return True
 
 
-class AssignCollection(model.CoopView):
-    'Assign Collection'
+class CollectionCreateAssign(model.CoopView):
+    'Collection Create Assign'
 
     __name__ = 'collection.create.assign'
 
     amount = fields.Numeric('Amount')
     party = fields.Many2One('party.party', 'Party')
-    assignments = fields.One2Many('collection.create.assign.lines', None, 'Assignments',
+    assignments = fields.One2Many('collection.create.assign.lines', None,
+        'Assignments',
         context={'from_party': Eval('party'), 'remaining': Eval('remaining')},
         depends=['party'])
     create_suspense_line_with_rest = fields.Boolean(
@@ -210,18 +147,18 @@ class AssignCollection(model.CoopView):
                 lambda x: x.amount or 0, self.assignments))
 
 
-class CollectionWizard(model.CoopWizard):
-    'Collection Wizard'
+class CollectionCreate(model.CoopWizard):
+    'Collection Create'
 
     __name__ = 'collection.create'
 
     start_state = 'input_collection_parameters'
     input_collection_parameters = StateView('collection.create.parameters',
-        'collection.collection_parameters_form', [
+        'collection.collection_create_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Assign', 'assign', 'tryton-go-next')])
     assign = StateView('collection.create.assign',
-        'collection.assign_collection_form', [
+        'collection.collection_create_assign_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Validate', 'check_amount', 'tryton-ok')])
     check_amount = StateTransition()
@@ -229,11 +166,11 @@ class CollectionWizard(model.CoopWizard):
 
     @classmethod
     def __setup__(cls):
-        super(CollectionWizard, cls).__setup__()
+        super(CollectionCreate, cls).__setup__()
         cls._error_messages.update({
                 'bad_ventilation': 'Ventilation is not consistent : %s '
                 'declared, %s assigned',
-        })
+                })
 
     def default_input_collection_parameters(self, name):
         res = {'kind': 'cash'}
@@ -245,7 +182,8 @@ class CollectionWizard(model.CoopWizard):
         return {
             'party': self.input_collection_parameters.party.id,
             'amount': self.input_collection_parameters.amount,
-            'remaining': self.input_collection_parameters.amount}
+            'remaining': self.input_collection_parameters.amount,
+            }
 
     def transition_check_amount(self):
         if self.assign.create_suspense_line_with_rest:

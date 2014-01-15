@@ -54,6 +54,10 @@ msgctxt "field:distribution.network,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:distribution.network,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:res.user,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"

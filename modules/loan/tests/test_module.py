@@ -5,7 +5,7 @@ import unittest
 
 import trytond.tests.test_tryton
 
-from trytond.modules.coop_utils import test_framework
+from trytond.modules.cog_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -21,14 +21,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Loan': 'loan',
             'Currency': 'currency.currency',
-        }
+            }
 
     def test0010loan_basic_data(self):
         currency, = self.Currency.create([{
                     'name': 'Euro',
                     'code': 'EUR',
                     'symbol': u'€',
-        }])
+                    }])
 
     def assert_payment(self, loan, at_date, number, begin_balance, amount,
             principal, interest, end_balance):

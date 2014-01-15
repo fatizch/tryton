@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tree string="Tranche Rating Rule">
-    <field name="tranche"/>
-    <field name="config_kind"/>
-    <field name="simple_rate" factor="100">
-        <suffix string="%"/>
-    </field>
-</tree>

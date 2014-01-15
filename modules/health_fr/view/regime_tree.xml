@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tree string="Regime">
-    <field name="code"/>
-    <field name="short_name"/>
-    <field name="name"/>
-</tree>

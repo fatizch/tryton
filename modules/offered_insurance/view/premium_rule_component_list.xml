@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Premium Rule Components">
+    <field name="kind"/>
+    <field name="code"/>
+    <field name="config_kind"/>
+    <field name="summary"/>
+</tree>

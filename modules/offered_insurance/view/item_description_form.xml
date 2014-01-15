@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <newline/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <field name="extra_data_def" colspan="4"/>
+    <field name="sub_item_descs" colspan="4"/>
+</form>

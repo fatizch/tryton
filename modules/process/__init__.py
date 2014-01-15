@@ -1,23 +1,23 @@
 from trytond.pool import Pool
-from .process_desc import *
+from .process import *
 from .ir import *
 from .process_framework import *
 
 
 def register():
     Pool.register(
-        # From process_desc
+        # From process
         Status,
-        StepDesc,
-        ProcessDesc,
-        StepTransition,
+        ProcessStep,
+        Process,
+        ProcessTransition,
         Code,
         TransitionAuthorization,
         ProcessMenuRelation,
         ProcessStepRelation,
-        StepDescAuthorization,
+        StepGroupRelation,
         # From ir
-        WorkflowModel,
+        Model,
         # From process_framework
         ProcessFramework,
         module='process', type_='model')

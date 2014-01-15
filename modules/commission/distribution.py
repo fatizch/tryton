@@ -1,8 +1,9 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.modules.coop_utils import model, fields, export
+from trytond.modules.cog_utils import model, fields, export
 
+__metaclass__ = PoolMeta
 __all__ = [
     'DistributionNetwork',
     'DistributionNetworkComPlanRelation',
@@ -10,11 +11,8 @@ __all__ = [
     ]
 
 
-class DistributionNetwork():
-    'Distribution Network'
-
+class DistributionNetwork:
     __name__ = 'distribution.network'
-    __metaclass__ = PoolMeta
 
     commission_plans = fields.Many2Many('distribution.network-commission.plan',
         'dist_network', 'com_plan', 'Commission Plans',

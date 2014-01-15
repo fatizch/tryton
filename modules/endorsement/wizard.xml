@@ -21,6 +21,6 @@
       <field name="model">contract,-1</field>
       <field name="action" ref="act_launcher"/>
     </record>
-    <menuitem name="Start Endorsement" id="menu_launch_endorsement" parent="insurance_contract.menu_contract" action="act_launcher" sequence="10"/>
+    <menuitem name="Start Endorsement" id="menu_launch_endorsement" parent="contract_insurance.menu_contract" action="act_launcher" sequence="10"/>
   </data>
 </tryton>

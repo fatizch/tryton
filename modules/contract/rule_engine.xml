@@ -13,9 +13,9 @@
     </record>
   </data>
   <data>
-    <record model="rule_engine.function" id="te_contract_compl_data">
+    <record model="rule_engine.function" id="te_contract_extra_data">
       <field name="description">Donnée Complémentaire</field>
-      <field name="name">_re_complementary_data</field>
+      <field name="name">_re_extra_data</field>
       <field name="namespace">rule_engine.runtime</field>
       <field name="type">function</field>
       <field name="parent" ref="te_contract"/>

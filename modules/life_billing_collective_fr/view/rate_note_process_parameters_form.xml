@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<form string="Rate Note Process Parameters">
-    <label name="until_date"/>
-    <field name="until_date"/>
-    <field name="products" colspan="4"/>
-    <field name="group_clients" colspan = "2"/>
-    <field name="clients" colspan="2"/>
-    <field name="contracts" colspan="4"/>
-</form>

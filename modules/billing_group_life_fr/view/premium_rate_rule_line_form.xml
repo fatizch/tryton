@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Premium Rate Rule Line">
+    <label name="main_rate_rule"/>
+    <field name="main_rate_rule"/>
+    <newline/>
+    <label name="salary_range"/>
+    <field name="salary_range"/>
+    <newline/>
+    <label name="fare_class"/>
+    <field name="fare_class"/>
+    <label name="fare_class_group"/>
+    <field name="fare_class_group"/>
+
+    <label name="config_kind"/>
+    <field name="config_kind"/>
+    <newline/>
+    <label name="simple_rate"/>
+    <group col="2" id="simple_rate">
+        <field name="simple_rate" factor="100" xexpand="0"/>
+        <label name="simple_rate" string="%" xalign="0.0" xexpand="1"/>
+    </group>
+    <newline/>
+    <label name="rule"/>
+    <field name="rule"/>
+</form>

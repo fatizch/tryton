@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Contract Service">
+    <label name="status"/>
+    <field name="status"/>
+    <label name="func_error"/>
+    <field name="func_error"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="option"/>
+    <field name="option" widget="selection"/>
+</form>

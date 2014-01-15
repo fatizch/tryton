@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:claim.declare:"
+msgid "Please pick a process from the selection"
+msgstr "Choisir un processus de la sélection"
+
 msgctxt "error:claim:"
 msgid "Everything is good !"
 msgstr "Tout est bon!"
@@ -9,10 +13,6 @@ msgstr "Tout est bon!"
 msgctxt "error:claim:"
 msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
-
-msgctxt "error:claim.declare:"
-msgid "Please pick a process from the selection"
-msgstr "Choisir un processus de la sélection"
 
 msgctxt "field:claim,contact_history:"
 msgid "History"
@@ -91,7 +91,7 @@ msgid "Can Modify Benefit?"
 msgstr ""
 
 msgctxt "model:claim.declare.find_process,name:"
-msgid "Declaration Process Parameters"
+msgid "Claim Declare Find Process"
 msgstr "Paramètres du Processus de Déclaration Sinistre"
 
 msgctxt "model:ir.action,name:act_claim_logs"
@@ -100,11 +100,11 @@ msgstr ""
 
 msgctxt "model:ir.action,name:declaration_process_launcher"
 msgid "Start Declaration"
-msgstr "Commencer la Déclaration"
+msgstr "Déclaration Sinistre"
 
 msgctxt "model:ir.ui.menu,name:menu_start_declaration"
 msgid "Start Declaration"
-msgstr "Commencer la Déclaration"
+msgstr "Déclaration Sinistre"
 
 msgctxt "selection:process,kind:"
 msgid "Claim Declaration"
@@ -118,12 +118,10 @@ msgctxt "view:claim.loss:"
 msgid "Loss"
 msgstr "Préjudice"
 
-msgctxt ""
-"wizard_button:claim.declare,process_parameters,action:"
+msgctxt "wizard_button:claim.declare,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
 
-msgctxt ""
-"wizard_button:claim.declare,process_parameters,end:"
+msgctxt "wizard_button:claim.declare,process_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"

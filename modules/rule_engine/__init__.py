@@ -6,9 +6,9 @@ from .export import *
 
 def register():
     Pool.register(
-        #from tag
+        # From tag
         Tag,
-        # from Rule Engine
+        # From rule_engine
         RuleTools,
         Context,
         Rule,
@@ -16,14 +16,15 @@ def register():
         RuleExecutionLog,
         TestCase,
         TestCaseValue,
-        TreeElement,
-        ContextTreeElement,
+        RuleFunction,
+        ContextRuleFunction,
         RunTestsReport,
         RuleError,
         RuleEngineTagRelation,
-        #From export
+        # From export
         ExportPackage,
         module='rule_engine', type_='model')
     Pool.register(
+        # From rule_engine
         RunTests,
         module='rule_engine', type_='wizard')

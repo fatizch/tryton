@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Price Line Com Relation -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="billing_premium-commission_option_form">
+      <field name="model">contract.billing.premium-commission.option</field>
+      <field name="type">form</field>
+      <field name="name">billing_premium-commission_option_form</field>
+    </record>
+    <record model="ir.ui.view" id="billing_premium-commission_option_list">
+      <field name="model">contract.billing.premium-commission.option</field>
+      <field name="type">tree</field>
+      <field name="name">billing_premium-commission_option_list</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Price Line -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="billing_premium_form">
+      <field name="model">contract.billing.premium</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="billing_individual.price_line_view_form"/>
+      <field name="name">billing_premium_form</field>
+    </record>
+    <record model="ir.ui.view" id="billing_premium_list">
+      <field name="model">contract.billing.premium</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="billing_individual.price_line_view_tree"/>
+      <field name="name">billing_premium_list</field>
+    </record>
+  </data>
+</tryton>

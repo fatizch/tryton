@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- CollectionCreateParameters -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="collection_create_parameters_form">
+      <field name="model">collection.create.parameters</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="collection.collection_create_parameters_form"/>
+      <field name="name">collection_create_parameters_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Assign Collection -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="collection_create_assign_form">
+      <field name="model">collection.create.assign</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="collection.collection_create_assign_form"/>
+      <field name="name">collection_create_assign_form</field>
+    </record>
+    <!-- ############################################################ -->
+    <!-- Collection Wizard -->
+    <!-- ############################################################ -->
+    <record model="ir.action.keyword" id="act_collection_wizard_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">contract,-1</field>
+      <field name="action" ref="collection.act_collection_wizard"/>
+    </record>
+  </data>
+</tryton>

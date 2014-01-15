@@ -5,8 +5,9 @@ from trytond.wizard import StateView, Button, StateTransition
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.coop_utils import utils, model, fields
+from trytond.modules.cog_utils import utils, model, fields
 
+__metaclass__ = PoolMeta
 
 __all__ = [
     'ProcessLog',
@@ -14,13 +15,10 @@ __all__ = [
     'TaskDisplayer',
     'TaskSelector',
     'LaunchTask',
-]
+    ]
 
 
-class ProcessLog():
-    'Process Log'
-
-    __metaclass__ = PoolMeta
+class ProcessLog:
     __name__ = 'process.log'
 
     priority = fields.Function(fields.Integer('Priority'), 'get_priority')
@@ -29,8 +27,7 @@ class ProcessLog():
         'on_change_with_task_start')
     task_selected = fields.Function(
         fields.Boolean('Selected'),
-        'get_task_selected',
-        setter='setter_void')
+        'get_task_selected', setter='setter_void')
     is_current_user = fields.Function(
         fields.Boolean('Is current user', depends=['user']),
         'get_is_current_user')
@@ -65,11 +62,10 @@ class ProcessLog():
         return start_log.start_time
 
     @classmethod
-    def search(
-            cls, domain, offset=0, limit=None, order=None, count=False,
+    def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query=False):
-        result = super(ProcessLog, cls).search(
-            domain, offset, limit, order, count, query)
+        result = super(ProcessLog, cls).search(domain, offset, limit, order,
+            count, query)
         if not (order and len(order) == 1):
             return result
         if not order[0][0] in ('priority', 'task_start'):
@@ -119,11 +115,10 @@ class TaskDisplayer(model.CoopView):
     __name__ = 'task.select.available_tasks.task'
 
     task = fields.Many2One('process-process.step', 'Task')
-    nb_tasks = fields.Integer(
-        'Number', on_change_with=['task'], depends=['task', 'kind'])
-    kind = fields.Selection(
-        [('team', 'Team'), ('process', 'Process')],
-        'Kind', states={'invisible': True})
+    nb_tasks = fields.Integer('Number', on_change_with=['task'],
+        depends=['task', 'kind'])
+    kind = fields.Selection([('team', 'Team'), ('process', 'Process')], 'Kind',
+        states={'invisible': True})
     task_name = fields.Function(
         fields.Char('Task Name', on_change_with=['task'], depends=['task']),
         'on_change_with_task_name')
@@ -131,8 +126,8 @@ class TaskDisplayer(model.CoopView):
     def on_change_with_task_name(self, name=None):
         if not (hasattr(self, 'task') and self.task):
             return ''
-        return '%s - %s' % (
-            self.task.process.fancy_name, self.task.step.fancy_name)
+        return '%s - %s' % (self.task.process.fancy_name,
+            self.task.step.fancy_name)
 
     def on_change_with_nb_tasks(self):
         if not (hasattr(self, 'task') and self.task):
@@ -149,37 +144,25 @@ class TaskSelector(model.CoopView):
 
     __name__ = 'task.select.available_tasks'
 
-    team = fields.Many2One(
-        'res.team', 'Team',
-        on_change=[
-            'team', 'nb_tasks_team', 'nb_users_team', 'tasks_team', 'tasks'])
-    process = fields.Many2One(
-        'process', 'Process',
-        on_change=['process', 'nb_tasks_process', 'tasks_process'])
-    nb_tasks_team = fields.Integer(
-        'Team Tasks',
+    team = fields.Many2One('res.team', 'Team', on_change=['team',
+            'nb_tasks_team', 'nb_users_team', 'tasks_team', 'tasks'])
+    process = fields.Many2One('process', 'Process', on_change=['process',
+            'nb_tasks_process', 'tasks_process'])
+    nb_tasks_team = fields.Integer('Team Tasks', states={'readonly': True})
+    nb_users_team = fields.Integer('Team Users', states={'readonly': True})
+    nb_tasks_process = fields.Integer('Process Tasks',
         states={'readonly': True})
-    nb_users_team = fields.Integer(
-        'Team Users',
+    tasks_team = fields.One2ManyDomain('task.select.available_tasks.task', '',
+        'Team Tasks', domain=[('kind', '=', 'team')],
         states={'readonly': True})
-    nb_tasks_process = fields.Integer(
-        'Process Tasks',
+    tasks_process = fields.One2ManyDomain('task.select.available_tasks.task',
+        '', 'Process Tasks', domain=[('kind', '=', 'process')],
         states={'readonly': True})
-    tasks_team = fields.One2ManyDomain(
-        'task.select.available_tasks.task', '', 'Team Tasks',
-        domain=[('kind', '=', 'team')],
-        states={'readonly': True})
-    tasks_process = fields.One2ManyDomain(
-        'task.select.available_tasks.task', '', 'Process Tasks',
-        domain=[('kind', '=', 'process')],
-        states={'readonly': True})
-    tasks = fields.One2Many(
-        'process.log', '', 'Tasks',
+    tasks = fields.One2Many('process.log', '', 'Tasks',
         domain=[('latest', '=', True), ('locked', '=', False)],
-        order=[('priority', 'ASC')],
-        on_change=['selected_task', 'tasks'])
-    selected_task = fields.Many2One(
-        'process.log', 'Selected Task', states={'readonly': True})
+        order=[('priority', 'ASC')], on_change=['selected_task', 'tasks'])
+    selected_task = fields.Many2One('process.log', 'Selected Task',
+        states={'readonly': True})
 
     def on_change_team(self):
         if not (hasattr(self, 'team') and self.team):
@@ -202,8 +185,8 @@ class TaskSelector(model.CoopView):
             task = TaskDisplayer()
             task.kind = 'team'
             task.task = priority.process_step
-            task.task_name = '%s - %s' % (
-                task.task.process.fancy_name, task.task.step.fancy_name)
+            task.task_name = '%s - %s' % (task.task.process.fancy_name,
+                task.task.step.fancy_name)
             task.nb_tasks = task.on_change_with_nb_tasks()
             nb_tasks += task.nb_tasks
             tmp_result[(priority.process_step.id, priority.priority)] = task
@@ -233,8 +216,8 @@ class TaskSelector(model.CoopView):
             task = TaskDisplayer()
             task.kind = 'process'
             task.task = step.id
-            task.task_name = '%s - %s' % (
-                task.task.process.fancy_name, task.task.step.fancy_name)
+            task.task_name = '%s - %s' % (task.task.process.fancy_name,
+                task.task.step.fancy_name)
             task.nb_tasks = task.on_change_with_nb_tasks()
             nb_tasks += task.nb_tasks
             tmp_result.append(task)
@@ -280,21 +263,19 @@ class TaskDispatcher(Wizard):
             return None
 
     remove_locks = StateTransition()
-    select_context = StateView(
-        'task.select.available_tasks',
-        'task_manager.task_selector_form',
-        [
+    select_context = StateView('task.select.available_tasks',
+        'task_manager.task_selector_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Compute Task', 'calculate_action', 'tryton-ok'),
-        ])
+            ])
     calculate_action = VoidStateAction()
 
     @classmethod
     def __setup__(cls):
         super(TaskDispatcher, cls).__setup__()
         cls._error_messages.update({
-            'no_task_selected': 'No task has been selected.',
-        })
+                'no_task_selected': 'No task has been selected.',
+                })
 
     def default_select_context(self, name):
         Selector = Pool().get('task.select.available_tasks')
@@ -357,14 +338,12 @@ class TaskDispatcher(Wizard):
                 if view[1] == 'form':
                     act['views'] = [view]
                     break
-        res = (
-            act,
-            {
+        res = (act, {
                 'id': good_id,
                 'model': good_model,
                 'res_id': good_id,
                 'res_model': good_model,
-            })
+                })
         return res
 
 
@@ -422,12 +401,10 @@ class LaunchTask(Wizard):
                 if view[1] == 'form':
                     act['views'] = [view]
                     break
-        res = (
-            act,
-            {
+        res = (act, {
                 'id': good_id,
                 'model': good_model,
                 'res_id': good_id,
                 'res_model': good_model,
-            })
+                })
         return res

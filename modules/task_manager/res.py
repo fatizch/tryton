@@ -1,17 +1,15 @@
 from trytond.pool import PoolMeta
 
-from trytond.modules.coop_utils import fields
+from trytond.modules.cog_utils import fields
+
+__metaclass__ = PoolMeta
 
 __all__ = [
     'User',
 ]
 
-__metaclass__ = PoolMeta
 
-
-class User():
-    'User'
-
+class User:
     __name__ = 'res.user'
 
     team = fields.Many2One('res.team', 'Team')
@@ -21,6 +19,3 @@ class User():
         result = super(User, cls)._export_light()
         result.add('team')
         return result
-
-
-

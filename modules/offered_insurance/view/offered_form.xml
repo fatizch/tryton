@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
+          <page string="Eligibility" id="eligibility">
+            <field name="eligibility_rules" colspan="4"/>
+        </page>
+        <page string="Pricing" id="pricing"
+            states="{'invisible': ~~Eval('is_package')}">
+            <field name="premium_rules" colspan="4"/>
+        </page>
+    </xpath>
+</data>

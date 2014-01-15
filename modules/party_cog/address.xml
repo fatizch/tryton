@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.menu" id="party.menu_address_form">
+            <field name="active" eval="False"/>
+        </record>
+        <record model="ir.ui.view" id="address_view_form">
+            <field name="model">party.address</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="party.address_view_form"></field>
+            <field name="name">address_form</field>
+        </record>
+        <record model="ir.ui.view" id="address_view_tree">
+            <field name="model">party.address</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="party.address_view_tree_sequence"></field>
+            <field name="name">address_tree</field>
+        </record>
+    </data>
+</tryton>

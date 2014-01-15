@@ -2,18 +2,16 @@ import copy
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Less
 
-from trytond.modules.coop_utils import fields, utils, coop_string, model
+from trytond.modules.cog_utils import fields, utils, coop_string, model
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
-    'ContactHistory',
+    'PartyInteraction',
     ]
 
 
-class Party():
-    'Party'
-
+class Party:
     __name__ = 'party.party'
 
     quotes = fields.One2ManyDomain('contract', 'subscriber', 'Quotes',
@@ -95,13 +93,11 @@ class Party():
         return 0
 
 
-class ContactHistory():
-    'Contact History'
-
+class PartyInteraction:
     __name__ = 'party.interaction'
 
     @classmethod
     def __setup__(cls):
-        super(ContactHistory, cls).__setup__()
+        super(PartyInteraction, cls).__setup__()
         cls.for_object_ref = copy.copy(cls.for_object_ref)
         cls.for_object_ref.selection.append(('contract', 'Contract'))

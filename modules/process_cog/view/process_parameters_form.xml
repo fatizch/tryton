@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Process Start" col="4">
+  <label name="date"/>
+  <field name="date" colspan="3"/>
+  <label name="good_process"/>
+  <field name="good_process" widget="selection"/>
+  <label name="model"/>
+  <field name="model" colspan="3"/>
+</form>

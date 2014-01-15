@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree" position="replace_attributes">
+        <tree string="Salary Range Version">
+            <field name="floor"/>
+            <field name="ceiling"/>
+        </tree>
+    </xpath>
+</data>

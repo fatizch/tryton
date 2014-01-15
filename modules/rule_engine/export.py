@@ -1,7 +1,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.coop_utils import fields
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 
@@ -18,27 +18,27 @@ class ExportPackage():
     rules = fields.Function(
         fields.One2Many('rule_engine', None, 'Rules', states={
                 'invisible': Bool(Eval('model') != 'rule_engine')},
-                on_change=['rules', 'instances_to_export'],
-                add_remove=[]),
+            on_change=['rules', 'instances_to_export'],
+            add_remove=[]),
         'getter_void', setter='setter_void')
     contexts = fields.Function(
         fields.One2Many('rule_engine.context', None, 'Contexts', states={
                 'invisible': Bool(Eval('model') != 'rule_engine.context')},
-                on_change=['contexts', 'instances_to_export'],
-                add_remove=[]),
+            on_change=['contexts', 'instances_to_export'],
+            add_remove=[]),
         'getter_void', setter='setter_void')
     tree_elements = fields.Function(
         fields.One2Many('rule_engine.function', None,
-            'Tree Elements', states={
+            'Rule Functions', states={
                 'invisible': Bool(Eval('model') != 'rule_engine.function')},
-                on_change=['tree_elements', 'instances_to_export'],
-                add_remove=[]),
+            on_change=['tree_elements', 'instances_to_export'],
+            add_remove=[]),
         'getter_void', setter='setter_void')
     tags = fields.Function(
         fields.One2Many('tag', None, 'Tags', states={
                 'invisible': Bool(Eval('model') != 'tag')},
-                on_change=['tags', 'instances_to_export'],
-                add_remove=[]),
+            on_change=['tags', 'instances_to_export'],
+            add_remove=[]),
         'getter_void', setter='setter_void')
 
     @classmethod
@@ -47,7 +47,7 @@ class ExportPackage():
         res.extend([
                 ('rule_engine', 'Rule'),
                 ('rule_engine.context', 'Context'),
-                ('rule_engine.function', 'Tree Element'),
+                ('rule_engine.function', 'Rule Function'),
                 ('tag', 'Tag'),
                 ])
         return list(set(res))

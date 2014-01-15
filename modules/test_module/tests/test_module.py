@@ -2,7 +2,7 @@ import unittest
 
 import trytond.tests.test_tryton
 
-from trytond.modules.coop_utils import test_framework
+from trytond.modules.cog_utils import test_framework
 
 
 def doctest_dropdb(test):
@@ -13,6 +13,8 @@ def doctest_dropdb(test):
     try:
         database.drop(cursor, ':memory:')
         cursor.commit()
+    except:
+        pass
     finally:
         cursor.close()
 
@@ -24,6 +26,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_module_name(cls):
         return 'test_module'
+
+    def test9999_launch_test_cases(self):
+        pass
 
 
 def suite():

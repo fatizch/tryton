@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tree string="Insurance Fund">
-    <field name="code"/>
-    <field name="name"/>
-    <field name="department"/>
-    <field name="regime"/>
-</tree>

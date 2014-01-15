@@ -11,12 +11,12 @@ if sys.argv[1] == '-k':
         shell=True)
 elif sys.argv[1] == '-r' or sys.argv[1] == '--run':
     _worker_process = subprocess.Popen('celery worker -l info '
-        '--config=celeryconfig --app=trytond.modules.coop_utils.batch_launcher'
+        '--config=celeryconfig --app=trytond.modules.cog_utils.batch_launcher'
         ' --logfile=%slogs/%s.log' % (os.environ['REPOS_ROOT'],
             sys.argv[2]), shell=True)
 
     time.sleep(2)
 
     _execution = subprocess.Popen('celery call '
-        'trytond.modules.coop_utils.batch_launcher.generate_all '
+        'trytond.modules.cog_utils.batch_launcher.generate_all '
         '--args=\'["%s"]\'' % sys.argv[2], shell=True)

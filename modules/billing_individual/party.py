@@ -1,17 +1,16 @@
 import copy
 
 from trytond.pool import PoolMeta
-from trytond.modules.coop_utils import fields, export
+from trytond.modules.cog_utils import fields, export
 
+
+__metaclass__ = PoolMeta
 __all__ = [
     'Party',
-]
+    ]
 
 
-class Party():
-    'Party'
-
-    __metaclass__ = PoolMeta
+class Party:
     __name__ = 'party.party'
 
     receivable_lines = fields.One2ManyDomain('account.move.line', 'party',

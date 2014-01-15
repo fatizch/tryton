@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
   <xpath expr="/form/notebook/page[@id='billing']" position="inside">
-      <field name="billing_managers" mode="form,tree" colspan="4"/>
+      <field name="billing_datas" mode="form,tree" colspan="4"/>
         <label name="next_billing_date"/>
         <field name="next_billing_date"/>
         <field name="prices" colspan="4"/>

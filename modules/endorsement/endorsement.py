@@ -11,9 +11,13 @@ from trytond.pool import Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 
-__all__ = ['Contract', 'ContractOption',
-    'Endorsement', 'EndorsementField',
-    'EndorsementOption', 'EndorsementOptionField',
+__all__ = [
+    'Contract',
+    'ContractOption',
+    'Endorsement',
+    'EndorsementField',
+    'EndorsementOption',
+    'EndorsementOptionField',
     ]
 
 

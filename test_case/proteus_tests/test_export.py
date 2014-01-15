@@ -4,22 +4,22 @@ from proteus import config, Model, Wizard
 IMPORT_FILE = '/path/to/export_file.json'
 
 NEEDED_MODULES = [
-    'coop_translation',
-    'coop_bank',
+    'cog_translation',
+    'bank_cog',
     'table',
-    'health_fr',
-    'property_product',
-    'life_contract_subscription',
+    'contract_insurance_health_fr',
+    'offered_property_casualty',
+    'contract_life_process',
     'task_manager',
-    'coop_process',
-    'life_claim_process',
-    'loan_claim',
-    'insurance_collective_subscription',
+    'process_cog',
+    'claim_life_process',
+    'claim_credit',
+    'contract_group_process',
     'commission',
-    'commission_collective',
+    'commission_group',
     'billing',
-    'coop_account_payment',
-    'coop_account_payment_sepa',
+    'account_payment_cog',
+    'account_payment_sepa_cog',
     ]
 
 

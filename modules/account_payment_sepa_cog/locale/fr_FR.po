@@ -1,0 +1,19 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.payment.group,sepa_msg:"
+msgid ""
+msgstr ""
+
+msgctxt "field:account.payment.journal,sepa_bank_account_number:"
+msgid ""
+msgstr ""
+
+msgctxt "field:account.payment.journal,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "selection:account.payment.journal,process_method:"
+msgid "Sepa"
+msgstr ""

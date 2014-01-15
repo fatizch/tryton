@@ -4,7 +4,7 @@ import unittest
 import trytond.tests.test_tryton
 from trytond.transaction import Transaction
 
-from trytond.modules.coop_utils import test_framework
+from trytond.modules.cog_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -22,7 +22,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Currency': 'currency.currency',
             'Company': 'company.company',
             'Party': 'party.party',
-        }
+            }
 
     def test0001_testCurrencyCreation(self):
         euro = self.Currency()

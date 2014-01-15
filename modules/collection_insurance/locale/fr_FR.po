@@ -1,0 +1,27 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:collection.create.assign,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:collection.create.parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "wizard_button:collection.create,assign,check_amount:"
+msgid "Validate"
+msgstr "Valider"
+
+msgctxt "wizard_button:collection.create,assign,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:collection.create,input_collection_parameters,assign:"
+msgid "Assign"
+msgstr "Affecter"
+
+msgctxt "wizard_button:collection.create,input_collection_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

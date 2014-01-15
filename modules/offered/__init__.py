@@ -1,27 +1,27 @@
 from trytond.pool import Pool
 
-from .rule_engine_results import *
+from .rule_engine import *
 from .offered import *
-from .complementary_data import *
-from .coverage import *
+from .extra_data import *
 from .export import *
 from .test_case import *
 
 
 def register():
     Pool.register(
+        # From offered
         Offered,
-        Coverage,
-        PackageCoverage,
+        OptionDescription,
+        PackageOptionDescription,
         Product,
-        ProductOptionsCoverage,
-        # from complementary_data
-        ComplementaryDataDefinition,
-        ComplementaryDataRecursiveRelation,
-        ProductComplementaryDataRelation,
-        CoverageComplementaryDataRelation,
+        ProductOptionDescriptionRelation,
+        # from extra_data
+        ExtraData,
+        ExtraDataSubExtraDataRelation,
+        ProductExtraDataRelation,
+        OptionDescriptionExtraDataRelation,
         Tag,
-        ComplementaryDataDefTagRelation,
+        ExtraDataTagRelation,
         # from test_case
         TestCaseModel,
         # from export

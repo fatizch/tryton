@@ -57,8 +57,17 @@ def launch(arguments, config, work_data):
                     work_data['trytond_conf']])
             print 'Server launched, pid %s' % server_process.pid
     if arguments.target in ('client', 'all'):
-        subprocess.Popen([work_data['python_exec'], work_data['tryton_exec'],
-                '-c', work_data['tryton_conf']])
+        if arguments.mode == 'demo':
+            subprocess.Popen([work_data['python_exec'],
+                    work_data['tryton_exec'], '-c', work_data['tryton_conf']])
+        elif arguments.mode == 'dev':
+            subprocess.Popen([work_data['python_exec'],
+                    work_data['tryton_exec'], '-c', work_data['tryton_conf'],
+                    '-d'])
+        elif arguments.mode == 'debug':
+            subprocess.Popen([work_data['python_exec'],
+                    work_data['tryton_exec'], '-c', work_data['tryton_conf'],
+                    '-l', 'DEBUG', '-d', '-v'])
 
 
 def kill(arguments, config, work_data):
@@ -120,7 +129,7 @@ def database(arguments, config, work_data):
 
 
 def test(arguments, config, work_data):
-    base_command_line = [] if not arguments.with_test_cases else ['env',
+    base_command_line = [] if arguments.with_test_cases else ['env',
         'DO_NOT_TEST_CASES=True']
     base_command_line += [work_data['python_exec'],
         work_data['tryton_script_launcher']]
@@ -169,8 +178,8 @@ def export(arguments, config, work_data):
         process.communicate()
 
 
-def configure(arguments, config, work_data):
-    root = os.path.normpath(os.path.abspath(arguments.env))
+def configure(target_env):
+    root = os.path.normpath(os.path.abspath(target_env))
     base_name = os.path.basename(root)
     workspace = os.path.join(root, 'tryton-workspace')
     coopbusiness = os.path.join(workspace, 'coopbusiness')
@@ -291,9 +300,15 @@ if __name__ == '__main__':
                 '..'))
 
     config = ConfigParser.RawConfigParser()
-    with open(os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-                'conf', 'py_scripts.conf'), 'r') as fconf:
-            config.readfp(fconf)
+    try:
+        with open(os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+                    'conf', 'py_scripts.conf'), 'r') as fconf:
+                config.readfp(fconf)
+    except:
+        configure(os.environ['VIRTUAL_ENV'])
+        with open(os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+                    'conf', 'py_scripts.conf'), 'r') as fconf:
+                config.readfp(fconf)
 
     parser = argparse.ArgumentParser(description='Launch utilitary scripts')
     subparsers = parser.add_subparsers(title='Subcommands',
@@ -302,6 +317,8 @@ if __name__ == '__main__':
         help='launch client / server')
     parser_launch.add_argument('target', choices=['server', 'client',
             'all'], help='What should be launched')
+    parser_launch.add_argument('--mode', '-m', choices=['demo', 'dev',
+            'debug'], default=config.get('parameters', 'launch_mode'))
     parser_batch = subparsers.add_parser('batch', help='Launches a batch')
     parser_batch.add_argument('action', choices=['kill', 'execute'])
     parser_batch.add_argument('--name', type=str, help='Name of the batch'
@@ -357,4 +374,4 @@ if __name__ == '__main__':
     elif arguments.command == 'export':
         export(arguments, config, work_data)
     elif arguments.command == 'configure':
-        configure(arguments, config, work_data)
+        configure(arguments.env)

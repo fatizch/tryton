@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+        <!--################################################################ -->
+        <!-- Contract Screens -->
+        <!--################################################################ -->
+        <!-- Tree view for contract -->
+        <record model="ir.ui.view" id="contract_view_tree">
+            <field name="model">contract</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="contract.contract_view_tree"/>
+            <!-- <field name="name">contract_tree</field> -->
+            <field name="arch" type="xml"/>
+        </record>
+        <!-- form view -->
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <record model="ir.action.keyword" id="report_document_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="offered_insurance.letter_generation_wizard"/>
+        </record>
+        <!--################################################################ -->
+        <!-- Options Screens -->
+        <!--################################################################ -->
+        <!-- Tree view -->
+        <record model="ir.ui.view" id="option_view_tree">
+            <field name="model">contract.option</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="contract.option_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <!-- form view -->
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.option</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option-commission_option_form</field>
+        </record>
+        <!--################################################################ -->
+        <!-- Covered Data -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="covered_data_view_tree">
+            <field name="model">contract.covered_data</field>
+            <field name="type">tree</field>
+            <field name="name">covered_data_tree</field>
+        </record>
+        <record model="ir.ui.view" id="covered_data_view_form">
+            <field name="model">contract.covered_data</field>
+            <field name="type">form</field>
+            <field name="name">covered_data_form</field>
+        </record>
+        <!--################################################################ -->
+        <!-- Covered Elements -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="covered_element_view_tree">
+            <field name="model">contract.covered_element</field>
+            <field name="type">tree</field>
+            <field name="name">covered_element_tree</field>
+        </record>
+        <record model="ir.ui.view" id="covered_element_view_form">
+            <field name="model">contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="name">covered_element_form</field>
+        </record>
+        <record model="ir.ui.view" id="covered_elements_clean_tree">
+          <field name="model">contract.covered_element</field>
+          <field name="type">tree</field>
+          <field name="field_childs">covered_data</field>
+          <field name="name">covered_elements_clean_tree</field>
+        </record>
+        <!-- Menus -->
+        <!--################################################################ -->
+        <menuitem name="Contract" id="menu_contract" sequence="11"/>
+        <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual"
+            sequence="10"/>
+        <menuitem parent="menu_individual" sequence="1"
+            id="menu_contract_form" icon="tryton-list" action="contract.act_contract_form"/>
+        <!--################################################################ -->
+        <!-- Relate -->
+        <!--################################################################ -->
+        <record model="ir.action.act_window" id="act_contract_relate_form">
+            <field name="name">Contracts</field>
+            <field name="res_model">contract</field>
+            <field name="domain">[('subscriber', '=', Eval('active_id'))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_contract_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_contract_relate_form"/>
+        </record>
+        <record model="ir.action.act_window" id="act_contract_status_history_relate_form">
+            <field name="name">Status History</field>
+            <field name="res_model">contract.status.history</field>
+            <field name="domain">[('reference', '=', ('contract', Eval('active_id')))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_contract_status_history_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_contract_status_history_relate_form"/>
+        </record>
+        <!-- Contract-Agreement Relation -->
+        <record model="ir.ui.view" id="contract_agreement_form">
+          <field name="model">contract-agreement</field>
+          <field name="type">form</field>
+          <field name="name">contract_agreement_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_agreement_list">
+          <field name="model">contract-agreement</field>
+          <field name="type">tree</field>
+          <field name="name">contract_agreement_list</field>
+      </record>
+    </data>
+</tryton>

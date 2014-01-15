@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Test Case Module -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="test_case_form">
+      <field name="model">ir.test_case</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="cog_utils.test_case_form"/>
+      <field name="name">test_case_form</field>
+    </record>
+    <!-- Data -->
+    <record model="ir.test_case" id="cog_utils.test_case_configuration">
+      <field name="number_of_banks">50</field>
+    </record>
+  </data>
+</tryton>

@@ -1,0 +1,19 @@
+from trytond.pool import Pool
+from .health import *
+from .party import *
+from .contract import *
+from .rule_engine import *
+from .test_case import *
+
+
+def register():
+    Pool.register(
+        HealthCareSystem,
+        InsuranceFund,
+        HealthPartyComplement,
+        CoveredElement,
+        #Rule Engine Context
+        RuleEngineRuntime,
+        # from test_case
+        TestCaseModel,
+        module='contract_insurance_health_fr', type_='model')

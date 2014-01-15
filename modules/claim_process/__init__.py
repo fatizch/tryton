@@ -1,15 +1,16 @@
 from trytond.pool import Pool
-from .claim_process import *
+from .claim import *
 
 
 def register():
     Pool.register(
-        ClaimProcess,
-        LossProcess,
-        ProcessDesc,
-        DeclarationProcessParameters,
+        # From claim
+        Claim,
+        Loss,
+        Process,
+        ClaimDeclareFindProcess,
         module='claim_process', type_='model')
 
     Pool.register(
-        DeclarationProcessFinder,
+        ClaimDeclare,
         module='claim_process', type_='wizard')

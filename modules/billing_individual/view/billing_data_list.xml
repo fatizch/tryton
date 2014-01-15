@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Billing Datas">
+  <field name="start_date"/>
+  <field name="end_date"/>
+  <field name="payment_method"/>
+</tree>

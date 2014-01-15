@@ -5,7 +5,7 @@ import trytond.tests.test_tryton
 from trytond.transaction import Transaction
 from trytond.error import UserError
 
-from trytond.modules.coop_utils import test_framework
+from trytond.modules.cog_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -20,7 +20,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'TreeElement': 'rule_engine.function',
+            'RuleFunction': 'rule_engine.function',
             'Context': 'rule_engine.context',
             'RuleEngine': 'rule_engine',
             'TestCase': 'rule_engine.test_case',
@@ -36,7 +36,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return ['table']
 
     def test0011_testCleanValues(self):
-        te = self.TreeElement()
+        te = self.RuleFunction()
         te.type = 'function'
         te.name = 'test_values'
         te.translated_technical_name = 'values_testé'
@@ -51,12 +51,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         te.fct_args = 'Test, Qsdé'
         self.assertRaises(trytond.error.UserError, te.save)
 
-    def test0012_createRuleToolsTreeElements(self):
+    def test0012_createRuleToolsRuleFunction(self):
         english = self.Language.search([('code', '=', 'en_US')])
 
         def create_tree_elem(the_type, name, translated_name, namespace,
                 description):
-            te = self.TreeElement()
+            te = self.RuleFunction()
             te.type = the_type
             te.name = name
             te.translated_technical_name = translated_name
@@ -83,12 +83,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Calculation Date')
 
     @test_framework.prepare_test(
-        'rule_engine.test0012_createRuleToolsTreeElements')
+        'rule_engine.test0012_createRuleToolsRuleFunction')
     def test0013_createTestContext(self):
         ct = self.Context()
         ct.name = 'test_context'
         ct.allowed_elements = []
-        for elem in self.TreeElement.search([('language.code', '=', 'en_US')]):
+        for elem in self.RuleFunction.search([('language.code', '=', 'en_US')]):
             ct.allowed_elements.append(elem)
         self.assertEqual(len(ct.allowed_elements), 7)
         ct.save()
@@ -172,21 +172,21 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(tree_structure, target_tree_structure)
 
         # Check default code validates
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
         # Check context elem code validates
         rule.code = 'return today()'
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
         # Check warnings validates
         rule.code = 'toto = 10\n'
         rule.code += 'return today()'
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
         # Check unknown symbols fail
         rule.code = 'return some_unknown_symbol'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
         # Check syntax errors fail
         rule.code = 'if 10'
         rule.code += ' return'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         rule.code = 'return 10.0'
         rule.save()
@@ -211,7 +211,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0015_testExternalParameterTable(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.code = 'return table_test_code(\'bar\', 5)'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         table = self.Table.search([('code', '=', 'test_code')])[0]
         table_parameter = self.RuleParameter()
@@ -250,13 +250,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'children': [],
                                 }]}]})
 
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('rule_engine.test0014_testRuleEngineCreation')
     def test0016_testExternalParameterKwarg(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.code = 'return kwarg_test_parameter()'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         kwarg_parameter = self.RuleParameter()
         kwarg_parameter.kind = 'kwarg'
@@ -291,14 +291,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'children': [],
                                 }]}]})
 
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test(
         'rule_engine.test0016_testExternalParameterKwarg')
     def test0017_testExternalParameterRule(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.code = 'return rule_test_rule(test_parameter=True)'
-        self.assertRaises(UserError, rule.validate, [rule])
+        self.assertRaises(UserError, rule.check_code)
 
         rule_parameter = self.RuleParameter()
         rule_parameter.kind = 'rule'
@@ -353,7 +353,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                                 'children': [],
                                 }]}]})
 
-        self.assertEqual(rule.validate([rule]), True)
+        self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('table.test0060table_2dim',
         'rule_engine.test0014_testRuleEngineCreation')
@@ -527,7 +527,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):
-        # This test must be run later as execute rule force a commit
+        # This test must be run later as execute rule with debug enabled forces
+        # a commit
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
 
         # Check Debug mode

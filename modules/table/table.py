@@ -20,10 +20,10 @@ from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
 from trytond.protocols.jsonrpc import JSONEncoder
 
-from trytond.modules.coop_utils.model import CoopSQL as ModelSQL
-from trytond.modules.coop_utils.model import CoopView as ModelView
-from trytond.modules.coop_utils import fields
-from trytond.modules.coop_utils import utils, coop_string
+from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
+from trytond.modules.cog_utils.model import CoopView as ModelView
+from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import utils, coop_string
 
 __all__ = [
     'TableCell',
@@ -829,7 +829,7 @@ class TableOpen2D(Wizard):
     __name__ = 'table.2d.open'
     start = StateTransition()
     ask_dimensions = StateView('table.2d.open.ask_dimensions',
-        'table.table_2d_open_ask_dimensions_form_view', [
+        'table.table_2d_open_ask_dimensions_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Open', 'open_', 'tryton-ok', True),
             ])
@@ -1244,7 +1244,7 @@ class ManageDimensionGeneric(Wizard):
 
     start_state = 'dimension_management'
     dimension_management = StateView('table.manage_dimension.show.dimension',
-        'table.dimension_displayer_form', [
+        'table.dimension_displayer_view_form', [
             Button('Exit', 'end', 'tryton-cancel'),
             Button('Apply', 'apply_', 'tryton-ok', True),
             Button('View Data', 'view_data', 'tryton-find')])
@@ -1407,7 +1407,7 @@ class TableCreation(Wizard):
     __name__ = 'table.create'
 
     start_state = 'new_table'
-    new_table = StateView('table', 'table.table_basic_data_form', [
+    new_table = StateView('table', 'table.table_basic_data_view_form', [
             Button('Exit', 'end', 'tryton-cancel'),
             Button('Edit Dimension 1', 'edit_dim_1', 'tryton-go-next')])
     edit_dim_1 = StateTransition()

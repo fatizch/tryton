@@ -1,0 +1,15 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract.subscribe.find_process,is_group:"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
+msgid "Start Process"
+msgstr "Démarrer le processus"
+
+msgctxt "wizard_button:contract.subscribe,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

@@ -18,9 +18,6 @@
           <field name="act_window" ref="act_contract_form"/>
         </record>
 
-
-
-
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
             <field name="type">form</field>
@@ -31,12 +28,12 @@
             <field name="model">contract.option</field>
             <field name="type">form</field>
             <field name="inherit" ref="contract.option_view_form"/>
-            <field name="name">option_form</field>
+            <field name="name">option-commission_option_form</field>
         </record>
         <record model="ir.ui.view" id="covered_element_view_form">
             <field name="model">contract.covered_element</field>
             <field name="type">form</field>
-            <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
+            <field name="inherit" ref="contract_insurance.covered_element_view_form"/>
             <field name="name">covered_element_form</field>
         </record>
 

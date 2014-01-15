@@ -31,58 +31,6 @@ msgctxt "field:account.payment,collection:"
 msgid "Collection"
 msgstr "Encaissement"
 
-msgctxt "field:collection.create.assign,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:collection.create.assign,assignments:"
-msgid "Assignments"
-msgstr "Affectations"
-
-msgctxt "field:collection.create.assign,create_suspense_line_with_rest:"
-msgid "Create Suspense Line from Remaining"
-msgstr "Placer le reste dans le compte d'attente"
-
-msgctxt "field:collection.create.assign,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:collection.create.assign,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:collection.create.assign,party:"
-msgid "Party"
-msgstr "Tiers"
-
-msgctxt "field:collection.create.assign,remaining:"
-msgid "Remaining"
-msgstr "Reste"
-
-msgctxt "field:collection.create.assign.lines,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:collection.create.assign.lines,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:collection.create.assign.lines,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:collection.create.assign.lines,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:collection.create.assign.lines,source_move_line:"
-msgid "Source Move Line"
-msgstr "Lignes comptable d'origine"
-
-msgctxt "field:collection.create.assign.lines,target_account:"
-msgid "Target Account"
-msgstr "Compte concerné"
-
 msgctxt "field:collection,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -143,6 +91,62 @@ msgctxt "field:collection,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:collection,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:collection.create.assign,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:collection.create.assign,assignments:"
+msgid "Assignments"
+msgstr "Affectations"
+
+msgctxt "field:collection.create.assign,create_suspense_line_with_rest:"
+msgid "Create Suspense Line from Remaining"
+msgstr "Placer le reste dans le compte d'attente"
+
+msgctxt "field:collection.create.assign,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collection.create.assign,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collection.create.assign,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:collection.create.assign,remaining:"
+msgid "Remaining"
+msgstr "Reste"
+
+msgctxt "field:collection.create.assign.lines,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:collection.create.assign.lines,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:collection.create.assign.lines,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:collection.create.assign.lines,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:collection.create.assign.lines,source_move_line:"
+msgid "Source Move Line"
+msgstr "Lignes comptable d'origine"
+
+msgctxt "field:collection.create.assign.lines,target_account:"
+msgid "Target Account"
+msgstr "Compte concerné"
+
 msgctxt "field:collection.create.parameters,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -179,20 +183,20 @@ msgctxt "field:party.party,suspense_account:"
 msgid "Suspense account"
 msgstr "Compte d'attente"
 
-msgctxt "model:collection.create.assign,name:"
-msgid "Assign Collection"
-msgstr "Affecter l'encaissement"
-
-msgctxt "model:collection.create.assign.lines,name:"
-msgid "Assignment"
-msgstr "Affectation"
-
 msgctxt "model:collection,name:"
 msgid "Collection"
 msgstr "Encaissement"
 
+msgctxt "model:collection.create.assign,name:"
+msgid "Collection Create Assign"
+msgstr "Affecter l'encaissement"
+
+msgctxt "model:collection.create.assign.lines,name:"
+msgid "Collection Create Assign Lines"
+msgstr "Affectation"
+
 msgctxt "model:collection.create.parameters,name:"
-msgid "Collection parameters"
+msgid "Collection Create Parameters"
 msgstr "Informations de l'encaissement"
 
 msgctxt "model:ir.action,name:act_collection"
@@ -200,7 +204,7 @@ msgid "Collection"
 msgstr "Encaissement"
 
 msgctxt "model:ir.action,name:act_collection_wizard"
-msgid "Collection Wizard"
+msgid "Collection Create"
 msgstr "Processus d'encaissement"
 
 msgctxt "model:ir.action,name:act_open_party_collections"
@@ -212,8 +216,16 @@ msgid "Collection"
 msgstr "Encaissement"
 
 msgctxt "model:ir.ui.menu,name:menu_collection_wizard"
-msgid "Collection Wizard"
+msgid "Collection Create"
 msgstr "Encaissement"
+
+msgctxt "selection:collection,kind:"
+msgid "Cash"
+msgstr "Cash"
+
+msgctxt "selection:collection,kind:"
+msgid "Check"
+msgstr "Chèque"
 
 msgctxt "selection:collection.create.assign.lines,kind:"
 msgid "From Move Line"
@@ -223,14 +235,6 @@ msgctxt "selection:collection.create.assign.lines,kind:"
 msgid "Select Account"
 msgstr "Sélection du compte"
 
-msgctxt "selection:collection,kind:"
-msgid "Cash"
-msgstr "Cash"
-
-msgctxt "selection:collection,kind:"
-msgid "Check"
-msgstr "Chèque"
-
 msgctxt "selection:collection.create.parameters,kind:"
 msgid "Cash"
 msgstr "Cash"
@@ -238,10 +242,6 @@ msgstr "Cash"
 msgctxt "selection:collection.create.parameters,kind:"
 msgid "Check"
 msgstr "Chèque"
-
-msgctxt "view:collection.create.assign:"
-msgid "Assign Collection"
-msgstr "Affecter l'encaissement"
 
 msgctxt "view:collection.create.assign.lines:"
 msgid "Assignment"
@@ -251,6 +251,14 @@ msgctxt "view:collection.create.assign.lines:"
 msgid "Assignments"
 msgstr "Affectations"
 
+msgctxt "view:collection.create.assign:"
+msgid "Collection Create Assign"
+msgstr "Affecter l'encaissement"
+
+msgctxt "view:collection.create.parameters:"
+msgid "Collection Create Parameters"
+msgstr "informations d'encaissement"
+
 msgctxt "view:collection:"
 msgid "Collection"
 msgstr "Encaissement"
@@ -258,10 +266,6 @@ msgstr "Encaissement"
 msgctxt "view:collection:"
 msgid "Collections"
 msgstr "Encaissements"
-
-msgctxt "view:collection.create.parameters:"
-msgid "Collection Parameters"
-msgstr "informations d'encaissement"
 
 msgctxt "wizard_button:collection.create,assign,check_amount:"
 msgid "Validate"
@@ -271,12 +275,10 @@ msgctxt "wizard_button:collection.create,assign,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:collection.create,input_collection_parameters,assign:"
+msgctxt "wizard_button:collection.create,input_collection_parameters,assign:"
 msgid "Assign"
 msgstr "Affecter"
 
-msgctxt ""
-"wizard_button:collection.create,input_collection_parameters,end:"
+msgctxt "wizard_button:collection.create,input_collection_parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"

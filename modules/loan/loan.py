@@ -3,8 +3,8 @@ from decimal import Decimal
 from trytond.pool import Pool
 from trytond.pyson import Eval
 
-from trytond.modules.coop_utils import utils, coop_date, fields, model
-from trytond.modules.coop_currency import ModelCurrency
+from trytond.modules.cog_utils import utils, coop_date, fields, model
+from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
     'Loan',
@@ -30,35 +30,27 @@ DEFFERALS = [
     ('fully', 'Fully deferred'),
     ]
 
-STATES = {'required': ~~Eval('active')}
-DEPENDS = ['active']
-
 
 class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan'
 
     __name__ = 'loan'
 
-    active = fields.Boolean('Active')
-    kind = fields.Selection(LOAN_KIND, 'Kind', sort=False, states=STATES,
-        depends=DEPENDS)
-    contract = fields.Many2One('contract', 'Contract',
-        ondelete='CASCADE', required=True)
-    number_of_payments = fields.Integer('Number of Payments', states=STATES,
-        depends=DEPENDS)
+    kind = fields.Selection(LOAN_KIND, 'Kind', sort=False)
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
+        required=True)
+    number_of_payments = fields.Integer('Number of Payments')
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
-        'Payment Frequency', sort=False, states=STATES, depends=DEPENDS)
+        'Payment Frequency', sort=False)
     payment_amount = fields.Numeric('Payment Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
         on_change_with=['payment_amount', 'kind', 'rate',
             'amount', 'number_of_payments', 'currency', 'payment_frequency',
             'first_payment_date', 'increments'])
-    amount = fields.Numeric('Amount', states=STATES, depends=DEPENDS)
+    amount = fields.Numeric('Amount')
     funds_release_date = fields.Date('Funds Release Date')
-    first_payment_date = fields.Date('First Payment Date', states=STATES,
-        depends=DEPENDS)
-    loan_shares = fields.One2Many('loan.share',
-        'loan', 'Loan Shares')
+    first_payment_date = fields.Date('First Payment Date')
+    loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
     outstanding_capital = fields.Numeric('Outstanding Capital')
     rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
             'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])})
@@ -67,8 +59,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         'Payments')
     early_payments = fields.One2ManyDomain('loan.payment', 'loan',
         'Early Payments', domain=[('kind', '=', 'early')])
-    increments = fields.One2Many('loan.increment', 'loan',
-        'Increments')
+    increments = fields.One2Many('loan.increment', 'loan', 'Increments')
     defferal = fields.Function(
         fields.Selection(DEFFERALS, 'Differal'),
         'get_defferal')

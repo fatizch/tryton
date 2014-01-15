@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tree string="Payment Rules">
-  <field name="name"/>
-  <field name="code"/>
-  <field name="payment_mode"/>
-  <field name="base_frequency"/>
-  <field name="sync_date"/>
-</tree>

@@ -4,15 +4,13 @@ from trytond.cache import Cache
 
 MODULE_NAME = 'claim'
 
+__metaclass__ = PoolMeta
 __all__ = [
     'TestCaseModel',
     ]
 
 
-class TestCaseModel():
-    'Test Case Model'
-
-    __metaclass__ = PoolMeta
+class TestCaseModel:
     __name__ = 'ir.test_case'
 
     _get_event_desc_cache = Cache('get_event_desc')
@@ -24,16 +22,16 @@ class TestCaseModel():
         result['document_desc_test_case'] = {
             'name': 'Document Desc Test Case',
             'dependencies': set([]),
-        }
+            }
         result['event_desc_test_case'] = {
             'name': 'Event Desc Test Case',
             'dependencies': set([]),
-        }
+            }
         result['loss_desc_test_case'] = {
             'name': 'Loss Desc Test Case',
             'dependencies': set(['document_desc_test_case',
                     'event_desc_test_case']),
-        }
+            }
         return result
 
     @classmethod

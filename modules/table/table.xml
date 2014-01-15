@@ -4,87 +4,84 @@
     <!-- ############################################################ -->
     <!-- Table Definition -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="table_definition_form_view">
+    <record model="ir.ui.view" id="table_definition_view_form">
       <field name="model">table</field>
       <field name="type">form</field>
       <field name="name">table_definition_form</field>
     </record>
-    <record model="ir.ui.view" id="table_basic_data_form">
+    <record model="ir.ui.view" id="table_basic_data_view_form">
       <field name="model">table</field>
       <field name="type">form</field>
       <field name="name">table_basic_data_form</field>
     </record>
-    <record model="ir.ui.view" id="table_definition_list_view">
+    <record model="ir.ui.view" id="table_definition_view_list">
       <field name="model">table</field>
       <field name="type">tree</field>
-      <field name="name">table_definition_tree</field>
+      <field name="name">table_definition_list</field>
     </record>
+    <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_table_definition_form">
       <field name="name">Tables</field>
       <field name="res_model">table</field>
     </record>
     <record model="ir.action.act_window.view" id="act_table_definition_form_view1">
       <field name="sequence" eval="10"/>
-      <field name="view" ref="table_definition_list_view"/>
+      <field name="view" ref="table_definition_view_list"/>
       <field name="act_window" ref="act_table_definition_form"/>
     </record>
     <record model="ir.action.act_window.view" id="act_table_definition_form_view2">
       <field name="sequence" eval="20"/>
-      <field name="view" ref="table_definition_form_view"/>
+      <field name="view" ref="table_definition_view_form"/>
       <field name="act_window" ref="act_table_definition_form"/>
     </record>
     <menuitem action="act_table_definition_form" sequence="10" id="menu_table_defintion_form"/>
     <!-- ############################################################ -->
     <!-- Table Definition Dimension -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="table_definition_dimension_form_view">
+    <record model="ir.ui.view" id="table_definition_dimension_view_form">
       <field name="model">table.dimension.value</field>
       <field name="type">form</field>
-      <field name="name">table_dimension_form</field>
+      <field name="name">dimension_value_form</field>
     </record>
-    <record model="ir.ui.view" id="table_definition_dimension_list_view">
+    <record model="ir.ui.view" id="table_definition_dimension_view_list">
       <field name="model">table.dimension.value</field>
       <field name="type">tree</field>
-      <field name="name">table_dimension_tree</field>
+      <field name="name">dimension_value_list</field>
     </record>
-    <record model="ir.ui.view" id="table_definition_dimension_list_sequence_view">
+    <record model="ir.ui.view" id="table_definition_dimension_sequence_view_list">
       <field name="model">table.dimension.value</field>
       <field name="type">tree</field>
-      <field name="name">table_dimension_tree_sequence</field>
+      <field name="name">dimension_value_sequence_list</field>
     </record>
     <!-- ############################################################ -->
     <!-- Table Cell -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="cell_form_view">
+    <record model="ir.ui.view" id="cell_view_form">
       <field name="model">table.cell</field>
       <field name="type">form</field>
       <field name="name">cell_form</field>
     </record>
-    <record model="ir.ui.view" id="cell_list_view">
+    <record model="ir.ui.view" id="cell_view_list">
       <field name="model">table.cell</field>
       <field name="type">tree</field>
-      <field name="name">cell_tree</field>
+      <field name="name">cell_list</field>
     </record>
+    <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_cell_form">
       <field name="name">Cells</field>
       <field name="res_model">table.cell</field>
     </record>
     <record model="ir.action.act_window.view" id="act_cell_form_view1">
       <field name="sequence" eval="10"/>
-      <field name="view" ref="cell_list_view"/>
+      <field name="view" ref="cell_view_list"/>
       <field name="act_window" ref="act_cell_form"/>
     </record>
     <record model="ir.action.act_window.view" id="act_cell_form_view2">
       <field name="sequence" eval="20"/>
-      <field name="view" ref="cell_form_view"/>
+      <field name="view" ref="cell_view_form"/>
       <field name="act_window" ref="act_cell_form"/>
     </record>
-    <!--  
-        <menuitem parent="menu_table"
-            action="act_cell_form"
-            sequence="20"
-            id="menu_cell_form"/>
-        -->
+    <!-- Relate -->
     <record model="ir.action.act_window" id="act_cell_relate_form">
       <field name="name">Cells</field>
       <field name="res_model">table.cell</field>
@@ -99,17 +96,10 @@
     <!-- ############################################################ -->
     <!-- Table 2D Open Ask Dimensions -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="table_2d_open_ask_dimensions_form_view">
+    <record model="ir.ui.view" id="table_2d_open_ask_dimensions_view_form">
       <field name="model">table.2d.open.ask_dimensions</field>
       <field name="type">form</field>
-      <field name="arch" type="xml"><![CDATA[
-                <form string="Dimensions" col="2">
-                    <label name="dimension3"/>
-                    <field name="dimension3" widget="selection"/>
-                    <label name="dimension4"/>
-                    <field name="dimension4" widget="selection"/>
-                </form>
-                ]]></field>
+      <field name="name">table_2d_open_ask_dimensions_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Table 2D Open Wizard -->
@@ -123,12 +113,14 @@
       <field name="model">table,-1</field>
       <field name="action" ref="act_table_2d_open"/>
     </record>
+    <!-- Relate -->
     <record model="ir.action.act_window" id="act_table_2d_relate_form">
       <field name="name">Table 2D</field>
       <field name="res_model">table.2d</field>
       <field name="window_name" eval="False"/>
       <field name="context">{'table': Eval('active_id'), 'dimension3': Eval('dimension3'), 'dimension4': Eval('dimension4')}</field>
     </record>
+    <!-- Access Right -->
     <record model="ir.model.access" id="access_table_2d">
       <field name="model" search="[('model', '=', 'table.2d')]"/>
       <field name="perm_read" eval="True"/>
@@ -139,10 +131,10 @@
     <!-- ############################################################ -->
     <!-- Dimension Displayer -->
     <!-- ############################################################ -->
-    <record model="ir.ui.view" id="dimension_displayer_form">
+    <record model="ir.ui.view" id="dimension_displayer_view_form">
       <field name="model">table.manage_dimension.show.dimension</field>
       <field name="type">form</field>
-      <field name="name">dimension_displayer_form</field>
+      <field name="name">table_manage_dimension_show_dimension_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- Manage Dimension 1 Wizard -->

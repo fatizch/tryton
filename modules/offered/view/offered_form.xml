@@ -27,7 +27,7 @@
             <group id="left">
             </group>
             <group id="right">
-                <field name="complementary_data"/>
+                <field name="extra_data"/>
             </group>
         </page>
     </notebook>

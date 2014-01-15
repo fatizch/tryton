@@ -2,40 +2,44 @@ from trytond.pool import Pool
 from .billing import *
 from .account import *
 from .party import *
-from .payment_rule import *
+from .payment_term import *
+from .contract import *
+from .offered import *
 
 
 def register():
     Pool.register(
-        # From payment_rule
-        PaymentRule,
-        PaymentRuleFeeRelation,
-        PaymentRuleLine,
+        # From payment_term
+        PaymentTerm,
+        PaymentTermFeeRelation,
+        PaymentTermLine,
         # From billing
         PaymentMethod,
-        BillingManager,
+        BillingData,
         BillingPeriod,
-        PriceLine,
-        PriceLineTaxRelation,
-        PriceLineFeeRelation,
-        BillParameters,
-        BillDisplay,
-        ProductPaymentMethodRelation,
+        Premium,
+        PremiumTaxRelation,
+        PremiumFeeRelation,
+        ContractDoBillingParameters,
+        ContractDoBillingBill,
+        #From Offered
         Product,
-        Coverage,
+        ProductPaymentMethodRelation,
+        OptionDescription,
+        # From Contract
         Contract,
         Option,
         CoveredElement,
         CoveredData,
-        TaxDesc,
-        FeeDesc,
         # From party
         Party,
         # From account
         Move,
         MoveLine,
+        TaxDesc,
+        FeeDesc,
         module='billing_individual', type_='model')
 
     Pool.register(
-        BillingProcess,
+        ContractDoBilling,
         module='billing_individual', type_='wizard')

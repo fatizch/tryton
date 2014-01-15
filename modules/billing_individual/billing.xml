@@ -20,14 +20,14 @@
         <field name="global_p" eval="True"/>
     </record>
     <record model="ir.rule" id="rule_payment_method_1">
-      <field name="domain">[('payment_rule.company', 'in', [c.id for c in user.companies])]</field>
+      <field name="domain">[('payment_term.company', 'in', [c.id for c in user.companies])]</field>
       <field name="rule_group" ref="rule_group_payment_method"/>
     </record>
     <!-- Entry Point -->
     <record model="ir.action.act_window" id="act_payment_method">
       <field name="name">Payment Methods</field>
       <field name="res_model">billing.payment.method</field>
-      <field name="domain">[('payment_rule.company', '=', Eval('context', {}).get('company', False))]</field>
+      <field name="domain">[('payment_term.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_payment_method_view1">
       <field name="sequence" eval="16"/>
@@ -41,7 +41,7 @@
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="10" action="act_payment_method" id="menu_payment_method"/>
     <!--################################################################ -->
-    <!-- Price Lines -->
+    <!-- Premium -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="price_line_expandable_view_tree">
       <field name="model">contract.billing.premium</field>
@@ -53,25 +53,25 @@
     <record model="ir.ui.view" id="price_line_view_tree">
       <field name="model">contract.billing.premium</field>
       <field name="type">tree</field>
-      <field name="name">price_line_tree</field>
+      <field name="name">billing_premium_list</field>
     </record>
     <record model="ir.ui.view" id="price_line_view_form">
       <field name="model">contract.billing.premium</field>
       <field name="type">form</field>
-      <field name="name">price_line_form</field>
+      <field name="name">billing_premium_form</field>
     </record>
     <!--################################################################ -->
     <!-- Tax lines -->
     <!--################################################################ -->
-    <record model="ir.ui.view" id="price_line-tax-relation_form">
+    <record model="ir.ui.view" id="billing_premium-tax_form">
       <field name="model">contract.billing.premium-tax</field>
       <field name="type">form</field>
-      <field name="name">price_line-tax-relation_form</field>
+      <field name="name">billing_premium-tax_form</field>
     </record>
-    <record model="ir.ui.view" id="price_line-tax-relation_tree">
+    <record model="ir.ui.view" id="billing_premium-tax_list">
       <field name="model">contract.billing.premium-tax</field>
       <field name="type">tree</field>
-      <field name="name">price_line-tax-relation_tree</field>
+      <field name="name">billing_premium-tax_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_tax">
@@ -83,21 +83,21 @@
       <field name="rule_group" ref="rule_group_tax"/>
     </record>
     <!-- Entry Point -->
-    <record model="ir.action.act_window" id="coop_account.act_tax_form">
+    <record model="ir.action.act_window" id="account_cog.act_tax_form">
       <field name="domain">[('account_for_billing.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <!--################################################################ -->
     <!-- Fee Lines -->
     <!--################################################################ -->
-    <record model="ir.ui.view" id="price_line-fee-relation_form">
+    <record model="ir.ui.view" id="billing_premium-fee_form">
       <field name="model">contract.billing.premium-fee</field>
       <field name="type">form</field>
-      <field name="name">price_line-fee-relation_form</field>
+      <field name="name">billing_premium-fee_form</field>
     </record>
-    <record model="ir.ui.view" id="price_line-fee-relation_tree">
+    <record model="ir.ui.view" id="billing_premium-fee_list">
       <field name="model">contract.billing.premium-fee</field>
       <field name="type">tree</field>
-      <field name="name">price_line-fee-relation_tree</field>
+      <field name="name">billing_premium-fee_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_fee">
@@ -109,21 +109,21 @@
       <field name="rule_group" ref="rule_group_fee"/>
     </record>
     <!-- Entry Point -->
-    <record model="ir.action.act_window" id="coop_account.act_fee_form">
+    <record model="ir.action.act_window" id="account_cog.act_fee_form">
       <field name="domain">[('account_for_billing.company', '=', Eval('context', {}).get('company', False))]</field>
     </record>
     <!--################################################################ -->
-    <!-- Billing Manager -->
+    <!-- Billing Data -->
     <!--################################################################ -->
-    <record model="ir.ui.view" id="billing_manager_view_form">
+    <record model="ir.ui.view" id="billing_data_view_form">
       <field name="model">contract.billing.data</field>
       <field name="type">form</field>
-      <field name="name">billing_manager_form</field>
+      <field name="name">billing_data_form</field>
     </record>
-    <record model="ir.ui.view" id="billing_manager_tree">
+    <record model="ir.ui.view" id="billing_data_list">
       <field name="model">contract.billing.data</field>
       <field name="type">tree</field>
-      <field name="name">billing_manager_tree</field>
+      <field name="name">billing_data_list</field>
     </record>
     <!--################################################################ -->
     <!-- Billing Period -->
@@ -159,21 +159,21 @@
     <record model="ir.ui.view" id="covered_element_form">
       <field name="model">contract.covered_element</field>
       <field name="type">form</field>
-      <field name="inherit" ref="insurance_contract.covered_element_view_form"/>
+      <field name="inherit" ref="contract_insurance.covered_element_view_form"/>
       <field name="name">covered_element_form</field>
     </record>
     <!--################################################################-->
     <!-- Product Payment Method Relation -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="product-payment_method-relation_tree">
+    <record model="ir.ui.view" id="product-billing_payment_method_list">
       <field name="model">offered.product-billing.payment.method</field>
       <field name="type">tree</field>
-      <field name="name">product-payment_method-relation_tree</field>
+      <field name="name">product-billing_payment_method_list</field>
     </record>
-    <record model="ir.ui.view" id="product-payment_method-relation_form">
+    <record model="ir.ui.view" id="product-billing_payment_method_form">
       <field name="model">offered.product-billing.payment.method</field>
       <field name="type">form</field>
-      <field name="name">product-payment_method-relation_form</field>
+      <field name="name">product-billing_payment_method_form</field>
     </record>
     <!--################################################################-->
     <!-- Product -->
@@ -185,31 +185,31 @@
       <field name="name">product_form</field>
     </record>
     <!--################################################################-->
-    <!-- Coverage -->
+    <!-- OptionDescription -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="coverage_form">
+    <record model="ir.ui.view" id="option_description_form">
       <field name="model">offered.option.description</field>
       <field name="type">form</field>
       <field name="inherit" ref="offered.coverage_view_form"/>
-      <field name="name">coverage_form</field>
+      <field name="name">option_description_form</field>
     </record>
     <!--################################################################-->
     <!-- Tax Version -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="tax_desc_form">
+    <record model="ir.ui.view" id="tax_description_form">
       <field name="model">account.tax.description</field>
       <field name="type">form</field>
-      <field name="inherit" ref="coop_account.tax_desc_view_form"/>
-      <field name="name">tax_desc_form</field>
+      <field name="inherit" ref="account_cog.tax_desc_view_form"/>
+      <field name="name">tax_description_form</field>
     </record>
     <!--################################################################-->
     <!-- Fee Version -->
     <!--################################################################-->
-    <record model="ir.ui.view" id="fee_desc_form">
+    <record model="ir.ui.view" id="fee_description_form">
       <field name="model">account.fee.description</field>
       <field name="type">form</field>
-      <field name="inherit" ref="coop_account.fee_desc_view_form"/>
-      <field name="name">fee_desc_form</field>
+      <field name="inherit" ref="account_cog.fee_description_view_form"/>
+      <field name="name">fee_description_form</field>
     </record>
     <!--################################################################-->
     <!--                           Menus                                -->
