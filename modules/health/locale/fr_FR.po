@@ -1,10 +1,18 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:contract,is_health:"
 msgid ""
 msgstr " "
+
+msgctxt "field:contract.covered_element,health_complement:"
+msgid "Health Complement"
+msgstr "Complément Santé"
+
+msgctxt "field:contract.covered_element,is_health:"
+msgid "Is Health"
+msgstr "Santé"
 
 msgctxt "field:contract.option,is_health:"
 msgid ""
@@ -46,13 +54,9 @@ msgctxt "field:health.party_complement,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.covered_element,health_complement:"
-msgid "Health Complement"
-msgstr "Complément Santé"
-
-msgctxt "field:contract.covered_element,is_health:"
-msgid "Is Health"
-msgstr "Santé"
+msgctxt "field:health.party_complement,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:offered.option.description,is_health:"
 msgid "Is Health"

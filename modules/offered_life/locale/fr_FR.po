@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -86,6 +86,10 @@ msgctxt "field:salary_range,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:salary_range,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:salary_range.version,ceiling:"
 msgid "Ceiling"
 msgstr "Plafond"
@@ -138,6 +142,10 @@ msgctxt "field:salary_range.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:salary_range.version,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "help:salary_range.version,ceiling:"
 msgid "Included"
 msgstr "Inclus"
@@ -154,10 +162,6 @@ msgctxt "model:ir.ui.menu,name:menu_model_salary_range"
 msgid "Salary Range"
 msgstr "Tranche"
 
-msgctxt "model:tag,name:tag_life"
-msgid "Prévoyance"
-msgstr "Prévoyance"
-
 msgctxt "model:salary_range,name:"
 msgid "Salary Range"
 msgstr "Trancge"
@@ -165,6 +169,10 @@ msgstr "Trancge"
 msgctxt "model:salary_range.version,name:"
 msgid "Salary Range Version"
 msgstr ""
+
+msgctxt "model:tag,name:tag_life"
+msgid "Prévoyance"
+msgstr "Prévoyance"
 
 msgctxt "selection:offered.option.description,family:"
 msgid "Life"
@@ -174,10 +182,10 @@ msgctxt "view:offered.option.description:"
 msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
+msgctxt "view:salary_range.version:"
+msgid "Salary Range Version"
+msgstr ""
+
 msgctxt "view:salary_range:"
 msgid "Salary Range"
 msgstr "Tranche"
-
-msgctxt "view:salary_range.version:"
-msgid "Tranche Version"
-msgstr ""

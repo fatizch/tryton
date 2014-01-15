@@ -46,10 +46,10 @@ msgctxt "model:contract.covered_element-party,name:"
 msgid "Relation between Covered Element and Covered Relations"
 msgstr ""
 
-msgctxt "view:contract:"
-msgid "Extension Life"
-msgstr "Prévoyance"
-
 msgctxt "view:contract.covered_element:"
 msgid "Covered Person"
 msgstr "Personne Couverte"
+
+msgctxt "view:contract:"
+msgid "Extension Life"
+msgstr "Prévoyance"

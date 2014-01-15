@@ -1,10 +1,14 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ir.test_case.run:"
 msgid "Cannot load test case file %s"
 msgstr "Impossible de charger le jeu d'essai du fichier %s"
+
+msgctxt "error:ir.ui.view.validate:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
 msgctxt "field:account.account,id:"
 msgid ""
@@ -22,37 +26,17 @@ msgctxt "field:company.company,id:"
 msgid ""
 msgstr " "
 
-msgctxt "field:ir.export_package.item,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
+msgctxt "field:country.subdivision,id:"
+msgid ""
+msgstr " "
 
-msgctxt "field:ir.export_package.item,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
+msgctxt "field:ir.action,xml_id:"
+msgid "Xml Id"
+msgstr ""
 
-msgctxt "field:ir.export_package.item,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ir.export_package.item,package:"
-msgid "Package"
-msgstr "Formule"
-
-msgctxt "field:ir.export_package.item,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:ir.export_package.item,to_export:"
-msgid "To export"
-msgstr "Elément à exporter"
-
-msgctxt "field:ir.export_package.item,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ir.export_package.item,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
+msgctxt "field:ir.action.keyword,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:ir.export_package,code:"
 msgid "Code"
@@ -94,6 +78,46 @@ msgctxt "field:ir.export_package,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:ir.export_package,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.export_package.item,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ir.export_package.item,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.export_package.item,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.export_package.item,package:"
+msgid "Package"
+msgstr "Formule"
+
+msgctxt "field:ir.export_package.item,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.export_package.item,to_export:"
+msgid "To export"
+msgstr "Elément à exporter"
+
+msgctxt "field:ir.export_package.item,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ir.export_package.item,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ir.export_package.item,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:ir.import.select_file,file_content:"
 msgid "File Content"
 msgstr "Contenu du fichier"
@@ -109,6 +133,82 @@ msgstr "Nom du Fichier"
 msgctxt "field:ir.import.select_file,selected_file:"
 msgid "Import File"
 msgstr "Importer le Fichier"
+
+msgctxt "field:ir.lang,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.model,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.model.access,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.model.field,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.model.field.access,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.property,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.rule.group,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.sequence,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.test_case,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:ir.test_case,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:ir.test_case,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.test_case,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.test_case,language:"
+msgid "Test Case Language"
+msgstr "Langue des jeux d'essai"
+
+msgctxt "field:ir.test_case,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:ir.test_case,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:ir.test_case,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ir.test_case,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ir.test_case,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:ir.test_case.run.select,id:"
 msgid "ID"
@@ -154,42 +254,6 @@ msgctxt "field:ir.test_case.run.select.file,selected:"
 msgid "Will be loaded"
 msgstr "Seront chargés"
 
-msgctxt "field:ir.test_case,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:ir.test_case,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:ir.test_case,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:ir.test_case,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:ir.test_case,language:"
-msgid "Test Case Language"
-msgstr "Langue des jeux d'essai"
-
-msgctxt "field:ir.test_case,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:ir.test_case,rec_name:"
-msgid "Name"
-msgstr "Valeur"
-
-msgctxt "field:ir.test_case,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:ir.test_case,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:ir.test_case.run.select.method,id:"
 msgid "ID"
 msgstr "ID"
@@ -214,13 +278,33 @@ msgctxt "field:ir.test_case.run.select.method,selection:"
 msgid "Selection"
 msgstr "Sélection"
 
-msgctxt "field:country.subdivision,id:"
-msgid ""
-msgstr " "
+msgctxt "field:ir.ui.menu,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.ui.view,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.ui.view.validate,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:party.category,id:"
 msgid ""
 msgstr " "
+
+msgctxt "field:res.group,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:res.user,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:res.user.warning,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"
@@ -267,40 +351,12 @@ msgid "account.account.type"
 msgstr "Type de compte"
 
 msgctxt "model:account.tax,name:"
-msgid "account.tax"
+msgid "Account Tax"
 msgstr "Compte de taxe"
 
 msgctxt "model:company.company,name:"
-msgid "company.company"
+msgid "Company"
 msgstr "Société"
-
-msgctxt "model:ir.export_package.item,name:"
-msgid "Export Instance"
-msgstr "Elément à exporter"
-
-msgctxt "model:ir.export_package,name:"
-msgid "Export Package"
-msgstr "Exports groupés"
-
-msgctxt "model:ir.import.select_file,name:"
-msgid "File Selector"
-msgstr "Selecteur de fichier"
-
-msgctxt "model:ir.test_case.run.select,name:"
-msgid "Select Test Case"
-msgstr "Sélection des jeux d'essai"
-
-msgctxt "model:ir.test_case.run.select.file,name:"
-msgid "Test Case File Selector"
-msgstr "Sélection des fichiers de jeu d'essai"
-
-msgctxt "model:ir.test_case,name:"
-msgid "Test Case Model"
-msgstr "Jeux d'essais"
-
-msgctxt "model:ir.test_case.run.select.method,name:"
-msgid "Test Case Selector"
-msgstr "Sélection des jeux d'essai"
 
 msgctxt "model:country.subdivision,name:"
 msgid ""
@@ -321,6 +377,34 @@ msgstr "Gestionnaire de jeux d'essai"
 msgctxt "model:ir.action,name:import_wizard"
 msgid "Import File"
 msgstr "Importer le Fichier"
+
+msgctxt "model:ir.export_package,name:"
+msgid "Export Package"
+msgstr "Exports groupés"
+
+msgctxt "model:ir.export_package.item,name:"
+msgid "Export Instance"
+msgstr "Elément à exporter"
+
+msgctxt "model:ir.import.select_file,name:"
+msgid "File Selector"
+msgstr "Selecteur de fichier"
+
+msgctxt "model:ir.test_case,name:"
+msgid "Test Case Model"
+msgstr "Jeux d'essais"
+
+msgctxt "model:ir.test_case.run.select,name:"
+msgid "Select Test Case"
+msgstr "Sélection des jeux d'essai"
+
+msgctxt "model:ir.test_case.run.select.file,name:"
+msgid "Test Case File Selector"
+msgstr "Sélection des fichiers de jeu d'essai"
+
+msgctxt "model:ir.test_case.run.select.method,name:"
+msgid "Test Case Selector"
+msgstr "Sélection des jeux d'essai"
 
 msgctxt "model:ir.ui.menu,name:menu_export_import"
 msgid "Export Import"
@@ -346,8 +430,12 @@ msgctxt "model:ir.ui.menu,name:test_case_menu"
 msgid "Test Case Launcher"
 msgstr "Gestionnaire des jeux d'essai"
 
+msgctxt "model:ir.ui.view.validate,name:"
+msgid "View validation batch"
+msgstr ""
+
 msgctxt "model:party.category,name:"
-msgid "party.category"
+msgid "Category"
 msgstr "Catégorie"
 
 msgctxt "model:utils.version_object,name:"
@@ -390,21 +478,21 @@ msgctxt "view:ir.import.select_file:"
 msgid "File Selection"
 msgstr "Sélection de Fichier"
 
-msgctxt "view:ir.test_case.run.select:"
-msgid "Select Test Cases"
-msgstr "Sélection des jeux d'essai"
-
 msgctxt "view:ir.test_case.run.select.file:"
 msgid "Test Case Files"
 msgstr "Fichiers de jeu d'essai"
 
-msgctxt "view:ir.test_case:"
-msgid "Test Case Parameters"
-msgstr "Paramètres des jeu d'essais"
-
 msgctxt "view:ir.test_case.run.select.method:"
 msgid "Test Cases"
 msgstr "Jeux de Test"
+
+msgctxt "view:ir.test_case.run.select:"
+msgid "Select Test Cases"
+msgstr "Sélection des jeux d'essai"
+
+msgctxt "view:ir.test_case:"
+msgid "Test Case Parameters"
+msgstr "Paramètres des jeu d'essais"
 
 msgctxt "view:utils.version_object:"
 msgid "Version Object"
@@ -426,7 +514,6 @@ msgctxt "wizard_button:ir.test_case.run,select_test_cases,end:"
 msgid "Quit"
 msgstr "Quitter"
 
-msgctxt ""
-"wizard_button:ir.test_case.run,select_test_cases,execute_test_cases:"
+msgctxt "wizard_button:ir.test_case.run,select_test_cases,execute_test_cases:"
 msgid "Execute Selected"
 msgstr "Exécuter les jeux d'essai sélectionnés"

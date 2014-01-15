@@ -22,142 +22,6 @@ msgctxt "field:process.log,task_start:"
 msgid "Task Start"
 msgstr "Début de la Tâche"
 
-msgctxt "field:res.user,team:"
-msgid "Team"
-msgstr "Equipe"
-
-msgctxt "field:res.team.priority,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:res.team.priority,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:res.team.priority,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:res.team.priority,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:res.team.priority,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:res.team.priority,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:res.team.priority,priority:"
-msgid "Priority"
-msgstr "Priorité"
-
-msgctxt "field:res.team.priority,process_step:"
-msgid "Process Step"
-msgstr "Etape"
-
-msgctxt "field:res.team.priority,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:res.team.priority,team:"
-msgid "Team"
-msgstr "Equipe"
-
-msgctxt "field:res.team.priority,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:res.team.priority,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:res.team.add_user.select,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:res.team.add_user.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:res.team.add_user.select,user:"
-msgid "User"
-msgstr "Utilisateur"
-
-msgctxt "field:res.team.add_user.select,user_ok:"
-msgid "User Ok"
-msgstr "Utilisateur Ok"
-
-msgctxt "field:task.select.available_tasks.task,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:task.select.available_tasks.task,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:task.select.available_tasks.task,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:task.select.available_tasks.task,nb_tasks:"
-msgid "Number"
-msgstr "Numéro"
-
-msgctxt "field:task.select.available_tasks.task,task:"
-msgid "Task"
-msgstr "Tâche"
-
-msgctxt "field:task.select.available_tasks.task,task_name:"
-msgid "Task Name"
-msgstr "Nom de la Tâche"
-
-msgctxt "field:task.select.available_tasks,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:task.select.available_tasks,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:task.select.available_tasks,nb_tasks_process:"
-msgid "Process Tasks"
-msgstr "Tâches du Process"
-
-msgctxt "field:task.select.available_tasks,nb_tasks_team:"
-msgid "Team Tasks"
-msgstr "Tâches de l'Equipe"
-
-msgctxt "field:task.select.available_tasks,nb_users_team:"
-msgid "Team Users"
-msgstr "Membre de l'Equipe"
-
-msgctxt "field:task.select.available_tasks,process:"
-msgid "Process"
-msgstr "Processus"
-
-msgctxt "field:task.select.available_tasks,selected_task:"
-msgid "Selected Task"
-msgstr "Tâche Sélectionnée"
-
-msgctxt "field:task.select.available_tasks,tasks:"
-msgid "Tasks"
-msgstr "Tâches"
-
-msgctxt "field:task.select.available_tasks,tasks_process:"
-msgid "Process Tasks"
-msgstr "Tâches du Process"
-
-msgctxt "field:task.select.available_tasks,tasks_team:"
-msgid "Team Tasks"
-msgstr "Tâches de l'Equipe"
-
-msgctxt "field:task.select.available_tasks,team:"
-msgid "Team"
-msgstr "Equipe"
-
 msgctxt "field:res.team,authorizations:"
 msgid "Authorizations"
 msgstr "Autorisations"
@@ -210,6 +74,10 @@ msgctxt "field:res.team,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:res.team,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:res.team-res.group,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -245,6 +113,150 @@ msgstr "Date de mise à jour"
 msgctxt "field:res.team-res.group,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:res.team-res.group,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:res.team.add_user.select,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:res.team.add_user.select,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:res.team.add_user.select,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.team.add_user.select,user_ok:"
+msgid "User Ok"
+msgstr "Utilisateur Ok"
+
+msgctxt "field:res.team.priority,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:res.team.priority,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:res.team.priority,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:res.team.priority,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:res.team.priority,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:res.team.priority,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:res.team.priority,priority:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "field:res.team.priority,process_step:"
+msgid "Process Step"
+msgstr "Etape"
+
+msgctxt "field:res.team.priority,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:res.team.priority,team:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "field:res.team.priority,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:res.team.priority,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:res.team.priority,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:res.user,team:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "field:task.select.available_tasks,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task.select.available_tasks,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:task.select.available_tasks,nb_tasks_process:"
+msgid "Process Tasks"
+msgstr "Tâches du Process"
+
+msgctxt "field:task.select.available_tasks,nb_tasks_team:"
+msgid "Team Tasks"
+msgstr "Tâches de l'Equipe"
+
+msgctxt "field:task.select.available_tasks,nb_users_team:"
+msgid "Team Users"
+msgstr "Membre de l'Equipe"
+
+msgctxt "field:task.select.available_tasks,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:task.select.available_tasks,selected_task:"
+msgid "Selected Task"
+msgstr "Tâche Sélectionnée"
+
+msgctxt "field:task.select.available_tasks,tasks:"
+msgid "Tasks"
+msgstr "Tâches"
+
+msgctxt "field:task.select.available_tasks,tasks_process:"
+msgid "Process Tasks"
+msgstr "Tâches du Process"
+
+msgctxt "field:task.select.available_tasks,tasks_team:"
+msgid "Team Tasks"
+msgstr "Tâches de l'Equipe"
+
+msgctxt "field:task.select.available_tasks,team:"
+msgid "Team"
+msgstr "Equipe"
+
+msgctxt "field:task.select.available_tasks.task,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:task.select.available_tasks.task,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:task.select.available_tasks.task,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:task.select.available_tasks.task,nb_tasks:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:task.select.available_tasks.task,task:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:task.select.available_tasks.task,task_name:"
+msgid "Task Name"
+msgstr "Nom de la Tâche"
 
 msgctxt "model:ir.action,name:act_launch_task_wizard"
 msgid "Launch Task"
@@ -282,22 +294,6 @@ msgctxt "model:ir.ui.menu,name:menu_team"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "model:res.team.priority,name:"
-msgid "Priority"
-msgstr "Priorité"
-
-msgctxt "model:res.team.add_user.select,name:"
-msgid "Select User"
-msgstr "Saisir un utilisateur"
-
-msgctxt "model:task.select.available_tasks.task,name:"
-msgid "Task Displayer"
-msgstr "Tableau de Bord"
-
-msgctxt "model:task.select.available_tasks,name:"
-msgid "Task Selector"
-msgstr "Sélectionneur de Tâche"
-
 msgctxt "model:res.team,name:"
 msgid "Team"
 msgstr "Equipe"
@@ -305,6 +301,22 @@ msgstr "Equipe"
 msgctxt "model:res.team-res.group,name:"
 msgid "Team - Group Relation"
 msgstr "Relation Equipe - Groupe"
+
+msgctxt "model:res.team.add_user.select,name:"
+msgid "Select User"
+msgstr "Saisir un utilisateur"
+
+msgctxt "model:res.team.priority,name:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "model:task.select.available_tasks,name:"
+msgid "Task Selector"
+msgstr "Sélectionneur de Tâche"
+
+msgctxt "model:task.select.available_tasks.task,name:"
+msgid "Task Displayer"
+msgstr "Tableau de Bord"
 
 msgctxt "selection:res.team.priority,kind:"
 msgid "Another User issues"
@@ -334,9 +346,9 @@ msgctxt "view:process.log:"
 msgid "Tasks"
 msgstr "Tâches"
 
-msgctxt "view:res.user:"
-msgid "Team management"
-msgstr "Gestion de l'Equipe"
+msgctxt "view:res.team.add_user.select:"
+msgid "Add User"
+msgstr "Ajouter l'Utilisateur"
 
 msgctxt "view:res.team.priority:"
 msgid "Priorities"
@@ -345,22 +357,6 @@ msgstr "Priorités"
 msgctxt "view:res.team.priority:"
 msgid "Priority"
 msgstr "Priorité"
-
-msgctxt "view:res.team.add_user.select:"
-msgid "Add User"
-msgstr "Ajouter l'Utilisateur"
-
-msgctxt "view:task.select.available_tasks.task:"
-msgid "Tasks"
-msgstr "Tâches"
-
-msgctxt "view:task.select.available_tasks.task:"
-msgid "Tasks Repartition"
-msgstr "Repartition des Tâches"
-
-msgctxt "view:task.select.available_tasks:"
-msgid "Task Selector"
-msgstr "Sélectionneur de Tâche"
 
 msgctxt "view:res.team:"
 msgid "Add User"
@@ -374,6 +370,22 @@ msgctxt "view:res.team:"
 msgid "Teams"
 msgstr "Equipes"
 
+msgctxt "view:res.user:"
+msgid "Team management"
+msgstr "Gestion de l'Equipe"
+
+msgctxt "view:task.select.available_tasks.task:"
+msgid "Tasks"
+msgstr "Tâches"
+
+msgctxt "view:task.select.available_tasks.task:"
+msgid "Tasks Repartition"
+msgstr "Repartition des Tâches"
+
+msgctxt "view:task.select.available_tasks:"
+msgid "Task Selector"
+msgstr "Sélectionneur de Tâche"
+
 msgctxt "wizard_button:res.team.add_user,select_user,add_user:"
 msgid "Add User"
 msgstr "Ajouter l'Utilisateur"
@@ -382,8 +394,7 @@ msgctxt "wizard_button:res.team.add_user,select_user,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:task.select,select_context,calculate_action:"
+msgctxt "wizard_button:task.select,select_context,calculate_action:"
 msgid "Compute Task"
 msgstr "Réaliser la Tâche"
 

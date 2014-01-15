@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.covered_data:"
+msgid "A coverage amount must be provided"
+msgstr ""
+
+msgctxt "error:contract.covered_data:"
 msgid "A coverage amount must be provided :"
 msgstr "Saisir le Montant de Couverture"
 
@@ -22,8 +26,7 @@ msgctxt "field:contract.covered_data,currency:"
 msgid "Currency"
 msgstr "Devises"
 
-msgctxt ""
-"field:contract.covered_data,may_override_beneficiary_clause_text:"
+msgctxt "field:contract.covered_data,may_override_beneficiary_clause_text:"
 msgid "May override Beneficiary Clause Texte"
 msgstr "Texte de la clause bénéficiaire surchargeable"
 

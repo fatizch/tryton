@@ -1,0 +1,15 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:currency.currency,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:currency.currency.rate,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.test_case,currency:"
+msgid ""
+msgstr ""

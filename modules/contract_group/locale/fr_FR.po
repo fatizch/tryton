@@ -54,10 +54,10 @@ msgctxt "model:tag,name:tag_group"
 msgid "Group"
 msgstr "Groupe"
 
-msgctxt "view:contract:"
-msgid "Enrollments"
-msgstr "Affiliations"
-
 msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Elément Couvert"
+
+msgctxt "view:contract:"
+msgid "Enrollments"
+msgstr "Affiliations"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,42 +9,6 @@ msgstr "e-Mail Invalide"
 msgctxt "error:party.relation.kind:"
 msgid "The key must be unique!"
 msgstr "La clé doit être unique"
-
-msgctxt "field:ir.test_case,adult_age_max:"
-msgid "Maximum age for adults"
-msgstr "Age maximum des adultes"
-
-msgctxt "field:ir.test_case,adult_age_min:"
-msgid "Minimum age for adults"
-msgstr "Age minimum des adultes"
-
-msgctxt "field:ir.test_case,max_nb_of_children_per_couple:"
-msgid "Maximum number of children per couple"
-msgstr "Nombre maximum d'enfants par couple"
-
-msgctxt "field:ir.test_case,number_of_males:"
-msgid "Number of Males"
-msgstr "Nombre d'hommes"
-
-msgctxt "field:ir.test_case,number_of_parties:"
-msgid "Number of Parties"
-msgstr "Nombre de Tiers"
-
-msgctxt "field:ir.test_case,percent_of_couple:"
-msgid "Percentage of couples"
-msgstr "Pourcentage de couples"
-
-msgctxt "field:ir.test_case,percent_of_couple_with_children:"
-msgid "Percentage of couples with children"
-msgstr "Pourcentage de couples ayant des enfants"
-
-msgctxt "field:ir.test_case,percent_of_couple_with_same_name:"
-msgid "Percentage of couples with the same name"
-msgstr "Pourcentage de couples de même nom"
-
-msgctxt "field:ir.test_case,phone_prefix:"
-msgid "Phone Prefix"
-msgstr "Préfixe des numéro de téléphone"
 
 msgctxt "field:country.zipcode,city:"
 msgid "City"
@@ -82,25 +46,61 @@ msgctxt "field:country.zipcode,zip:"
 msgid "Zip"
 msgstr "Code Postal"
 
-msgctxt "field:party.address,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
+msgctxt "field:ir.test_case,adult_age_max:"
+msgid "Maximum age for adults"
+msgstr "Age maximum des adultes"
+
+msgctxt "field:ir.test_case,adult_age_min:"
+msgid "Minimum age for adults"
+msgstr "Age minimum des adultes"
+
+msgctxt "field:ir.test_case,max_nb_of_children_per_couple:"
+msgid "Maximum number of children per couple"
+msgstr "Nombre maximum d'enfants par couple"
+
+msgctxt "field:ir.test_case,number_of_males:"
+msgid "Number of Males"
+msgstr "Nombre d'hommes"
+
+msgctxt "field:ir.test_case,number_of_parties:"
+msgid "Number of Parties"
+msgstr "Nombre de Tiers"
+
+msgctxt "field:ir.test_case,percent_of_couple:"
+msgid "Percentage of couples"
+msgstr "Pourcentage de couples"
+
+msgctxt "field:ir.test_case,percent_of_couple_with_children:"
+msgid "Percentage of couples with children"
+msgstr "Pourcentage de couples ayant des enfants"
+
+msgctxt "field:ir.test_case,percent_of_couple_with_same_name:"
+msgid "Percentage of couples with the same name"
+msgstr "Pourcentage de couples de même nom"
+
+msgctxt "field:ir.test_case,phone_prefix:"
+msgid "Phone Prefix"
+msgstr "Préfixe des numéro de téléphone"
 
 msgctxt "field:party.address,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:party.address,kind:"
-msgid "Kind"
-msgstr "Type"
-
 msgctxt "field:party.address,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
 
+msgctxt "field:party.address,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:party.address,zip_and_city:"
 msgid "Zip"
 msgstr "Code Postal"
+
+msgctxt "field:party.contact_mechanism,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:party.interaction,address:"
 msgid "Address"
@@ -182,9 +182,9 @@ msgctxt "field:party.interaction,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:party.contact_mechanism,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
+msgctxt "field:party.interaction,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:party.party,birth_date:"
 msgid "Birth Date"
@@ -193,10 +193,6 @@ msgstr "Date de Naissance"
 msgctxt "field:party.party,children:"
 msgid "Children"
 msgstr "Enfants"
-
-msgctxt "field:party.party,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
 
 msgctxt "field:party.party,first_name:"
 msgid "First Name"
@@ -262,6 +258,10 @@ msgctxt "field:party.party,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
+msgctxt "field:party.party,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:party.relation,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -322,6 +322,10 @@ msgctxt "field:party.relation,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:party.relation,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:party.relation.kind,code:"
 msgid "Code"
 msgstr "Code"
@@ -365,6 +369,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:party.relation.kind,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:party.relation.kind,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "model:country.zipcode,name:"
 msgid "ZipCode"

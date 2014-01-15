@@ -1,6 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.subscribe:"
+msgid "Please pick a process from the selection"
+msgstr "Choisir un processus de la sélection"
 
 msgctxt "error:contract:"
 msgid "%s is not a valid start date for product %s"
@@ -53,10 +57,6 @@ msgctxt "error:contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un élement couvert"
 
-msgctxt "error:contract.subscribe:"
-msgid "Please pick a process from the selection"
-msgstr "Choisir un processus de la sélection"
-
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
 msgstr ""
@@ -85,6 +85,10 @@ msgctxt "field:contract,subscriber_kind:"
 msgid "Subscriber Kind"
 msgstr "Type"
 
+msgctxt "field:contract.covered_data,status_selection:"
+msgid "Status"
+msgstr "Statut"
+
 msgctxt "field:contract.option,is_health:"
 msgid "Is Health"
 msgstr "Santé"
@@ -93,12 +97,7 @@ msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.covered_data,status_selection:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt ""
-"field:contract.subscribe.find_process,business_provider:"
+msgctxt "field:contract.subscribe.find_process,business_provider:"
 msgid "Business Provider"
 msgstr "Apporteur d'affaires"
 
@@ -110,8 +109,7 @@ msgctxt "field:contract.subscribe.find_process,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt ""
-"field:contract.subscribe.find_process,delegated_manager:"
+msgctxt "field:contract.subscribe.find_process,delegated_manager:"
 msgid "Delegated Manager"
 msgstr "Délégataire de gestion"
 
@@ -139,8 +137,7 @@ msgctxt "field:contract.subscribe.find_process,possible_brokers:"
 msgid "Possible Brokers"
 msgstr "Courtiers Possibles"
 
-msgctxt ""
-"field:contract.subscribe.find_process,possible_com_product:"
+msgctxt "field:contract.subscribe.find_process,possible_com_product:"
 msgid "Commercial Products Available"
 msgstr "Produits Commerciaux Disponibles"
 
@@ -168,29 +165,21 @@ msgctxt "model:ir.action,name:subscription_process_launcher"
 msgid "Start Subscription"
 msgstr "Démarrer la Souscription"
 
-msgctxt "model:ir.ui.menu,name:menu_start_endorsement"
-msgid "Start Endorsement"
-msgstr "Démarrer l'Avenant"
-
 msgctxt "model:ir.ui.menu,name:menu_start_subscription"
 msgid "Start Subscription"
-msgstr "Démarrer la Souscription"
-
-msgctxt "selection:process,kind:"
-msgid "Contract Endorsement"
-msgstr "Avenant"
+msgstr "Souscription Contrat"
 
 msgctxt "selection:process,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"
 
-msgctxt "view:contract.option:"
-msgid "Options"
-msgstr "Garanties"
-
 msgctxt "view:contract.covered_data:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
+
+msgctxt "view:contract.option:"
+msgid "Options"
+msgstr "Garanties"
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"

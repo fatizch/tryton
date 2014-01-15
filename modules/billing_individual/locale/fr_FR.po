@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -10,6 +10,14 @@ msgstr ""
 msgctxt "error:contract.billing.period:"
 msgid "Billing Period \"%(first)s\" and \"%(second)s\" overlap."
 msgstr ""
+
+msgctxt "field:account.fee.description,account_for_billing:"
+msgid "Account for billing"
+msgstr "Compte de Facturation"
+
+msgctxt "field:account.fee.description,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:account.move,billing_period:"
 msgid "Billing Period"
@@ -71,109 +79,13 @@ msgctxt "field:account.move.line,total_amount:"
 msgid "Total amount"
 msgstr "Montant total"
 
-msgctxt "field:contract.billing.data,contract:"
-msgid "Contract"
-msgstr "Contrat"
+msgctxt "field:account.tax.description,account_for_billing:"
+msgid "Account for billing"
+msgstr "Compte de Facturation"
 
-msgctxt "field:contract.billing.data,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:contract.billing.data,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:contract.billing.data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.billing.data,disbursment_bank_account:"
-msgid "Disbursement Bank Account"
-msgstr "Compte de Virement"
-
-msgctxt "field:contract.billing.data,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:contract.billing.data,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.billing.data,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:contract.billing.data,payment_bank_account:"
-msgid "Payment Bank Account"
-msgstr "Compte de Paiement"
-
-msgctxt "field:contract.billing.data,payment_date:"
-msgid "Payment Date"
-msgstr "Jour de paiement"
-
-msgctxt "field:contract.billing.data,payment_date_selector:"
-msgid "Payment Date"
-msgstr "Jour de paiement"
-
-msgctxt "field:contract.billing.data,payment_method:"
-msgid "Payment Method"
-msgstr "Méthode de Paiement"
-
-msgctxt "field:contract.billing.data,payment_mode:"
-msgid "Payment Mode"
-msgstr "Mode de Paiement"
-
-msgctxt "field:contract.billing.data,policy_owner:"
-msgid "Party"
-msgstr "Acteur"
-
-msgctxt "field:contract.billing.data,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.billing.data,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:contract.billing.data,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.billing.data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.do_billing.bill,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.do_billing.bill,moves:"
-msgid "Bill"
-msgstr ""
-
-msgctxt "field:contract.do_billing.bill,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:contract.do_billing.parameters,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.do_billing.parameters,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:contract.do_billing.parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.do_billing.parameters,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:contract.do_billing.parameters,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
+msgctxt "field:account.tax.description,company:"
+msgid "Company"
+msgstr "Société"
 
 msgctxt "field:billing.payment.method,allowed_payment_dates:"
 msgid "Allowed Payment Dates"
@@ -226,6 +138,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:billing.payment.method,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:billing.payment.method,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:billing.payment.term,appliable_fees:"
 msgid "Appliable fees"
@@ -303,6 +219,10 @@ msgctxt "field:billing.payment.term,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:billing.payment.term,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:billing.payment.term-fee,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -338,6 +258,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:billing.payment.term-fee,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:billing.payment.term-fee,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:billing.payment.term.line,add_calculated_period:"
 msgid "Add calculated period"
@@ -439,6 +363,126 @@ msgctxt "field:billing.payment.term.line,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:billing.payment.term.line,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:company.company,fiscal_years:"
+msgid "Fiscal Years"
+msgstr "Années fiscales"
+
+msgctxt "field:contract,billing_datas:"
+msgid "Billing Datas"
+msgstr "Gestionnaires d'Appel de Cotisation"
+
+msgctxt "field:contract,billing_periods:"
+msgid "Billing Periods"
+msgstr "Période de Facturation"
+
+msgctxt "field:contract,display_all_lines:"
+msgid ""
+msgstr " "
+
+msgctxt "field:contract,last_bill:"
+msgid "Last Bill"
+msgstr "Dernier Décompte"
+
+msgctxt "field:contract,next_billing_date:"
+msgid "Next Billing Date"
+msgstr "Date du Prochain Calcul"
+
+msgctxt "field:contract,prices:"
+msgid "Prices"
+msgstr "Primes"
+
+msgctxt "field:contract,receivable_lines:"
+msgid "Receivable Lines"
+msgstr "Lignes à recevoir"
+
+msgctxt "field:contract,receivable_today:"
+msgid "Receivable Today"
+msgstr "Montant Dû"
+
+msgctxt "field:contract,use_prices:"
+msgid "Use Prices"
+msgstr ""
+
+msgctxt "field:contract.billing.data,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.billing.data,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:contract.billing.data,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:contract.billing.data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.billing.data,disbursment_bank_account:"
+msgid "Disbursement Bank Account"
+msgstr "Compte de Virement"
+
+msgctxt "field:contract.billing.data,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.billing.data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.billing.data,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.billing.data,payment_bank_account:"
+msgid "Payment Bank Account"
+msgstr "Compte de Paiement"
+
+msgctxt "field:contract.billing.data,payment_date:"
+msgid "Payment Date"
+msgstr "Jour de paiement"
+
+msgctxt "field:contract.billing.data,payment_date_selector:"
+msgid "Payment Date"
+msgstr "Jour de paiement"
+
+msgctxt "field:contract.billing.data,payment_method:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "field:contract.billing.data,payment_mode:"
+msgid "Payment Mode"
+msgstr "Mode de Paiement"
+
+msgctxt "field:contract.billing.data,policy_owner:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:contract.billing.data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.billing.data,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:contract.billing.data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.billing.data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.billing.data,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:contract.billing.period,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -486,6 +530,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract.billing.period,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:contract.billing.period,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:contract.billing.premium,all_lines:"
 msgid "Lines"
@@ -587,6 +635,10 @@ msgctxt "field:contract.billing.premium,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.billing.premium,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:contract.billing.premium-fee,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -634,6 +686,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract.billing.premium-fee,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:contract.billing.premium-fee,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:contract.billing.premium-tax,amount:"
 msgid "Amount"
@@ -683,6 +739,66 @@ msgctxt "field:contract.billing.premium-tax,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.billing.premium-tax,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:contract.covered_element,indemnification_bank_account:"
+msgid "Indemnification Bank Account"
+msgstr "Compte de Remboursement"
+
+msgctxt "field:contract.covered_element,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:contract.do_billing.bill,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.do_billing.bill,moves:"
+msgid "Bill"
+msgstr ""
+
+msgctxt "field:contract.do_billing.bill,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.do_billing.parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.do_billing.parameters,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.do_billing.parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.do_billing.parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.do_billing.parameters,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:offered.option.description,account_for_billing:"
+msgid "Account for billing"
+msgstr "Compte de Facturation"
+
+msgctxt "field:offered.product,account_for_billing:"
+msgid "Account for billing"
+msgstr "Compte de Facturation"
+
+msgctxt "field:offered.product,payment_delay:"
+msgid "Payment delay"
+msgstr "Délai de Paiement"
+
+msgctxt "field:offered.product,payment_methods:"
+msgid "Payment Methods"
+msgstr "Méthodes de Paiement"
+
 msgctxt "field:offered.product-billing.payment.method,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -727,85 +843,9 @@ msgctxt "field:offered.product-billing.payment.method,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:company.company,fiscal_years:"
-msgid "Fiscal Years"
-msgstr "Années fiscales"
-
-msgctxt "field:contract,billing_datas:"
-msgid "Billing Datas"
-msgstr "Gestionnaires d'Appel de Cotisation"
-
-msgctxt "field:contract,billing_periods:"
-msgid "Billing Periods"
-msgstr "Période de Facturation"
-
-msgctxt "field:contract,display_all_lines:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract,last_bill:"
-msgid "Last Bill"
-msgstr "Dernier Décompte"
-
-msgctxt "field:contract,next_billing_date:"
-msgid "Next Billing Date"
-msgstr "Date du Prochain Calcul"
-
-msgctxt "field:contract,prices:"
-msgid "Prices"
-msgstr "Primes"
-
-msgctxt "field:contract,receivable_lines:"
-msgid "Receivable Lines"
-msgstr "Lignes à recevoir"
-
-msgctxt "field:contract,receivable_today:"
-msgid "Receivable Today"
-msgstr "Montant Dû"
-
-msgctxt "field:contract,use_prices:"
-msgid "Use Prices"
+msgctxt "field:offered.product-billing.payment.method,xml_id:"
+msgid "XML Id"
 msgstr ""
-
-msgctxt "field:account.fee.description,account_for_billing:"
-msgid "Account for billing"
-msgstr "Compte de Facturation"
-
-msgctxt "field:account.fee.description,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:account.tax.description,account_for_billing:"
-msgid "Account for billing"
-msgstr "Compte de Facturation"
-
-msgctxt "field:account.tax.description,company:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "field:contract.covered_element,indemnification_bank_account:"
-msgid "Indemnification Bank Account"
-msgstr "Compte de Remboursement"
-
-msgctxt "field:contract.covered_element,subscriber:"
-msgid "Subscriber"
-msgstr "Souscripteur"
-
-msgctxt "field:offered.option.description,account_for_billing:"
-msgid "Account for billing"
-msgstr "Compte de Facturation"
-
-msgctxt "field:offered.product,account_for_billing:"
-msgid "Account for billing"
-msgstr "Compte de Facturation"
-
-msgctxt "field:offered.product,payment_delay:"
-msgid "Payment delay"
-msgstr "Délai de Paiement"
-
-msgctxt "field:offered.product,payment_methods:"
-msgid "Payment Methods"
-msgstr "Méthodes de Paiement"
 
 msgctxt "field:party.party,payable_lines:"
 msgid "Payable Lines"
@@ -825,22 +865,6 @@ msgstr ""
 "mois possibles pour le prélèvement automatique.\\n\\nUne liste vide laisse "
 "le choix au client."
 
-msgctxt "help:billing.payment.term.line,sequence:"
-msgid "Use to order lines in ascending order"
-msgstr "Utilisé pour trier les lignes en ordre croissant"
-
-msgctxt "model:contract.billing.data,name:"
-msgid "Billing Data"
-msgstr "Gestionnaire d'Appel de Cotisation"
-
-msgctxt "model:contract.do_billing.bill,name:"
-msgid "Contract Do Billing Bill"
-msgstr ""
-
-msgctxt "model:contract.do_billing.parameters,name:"
-msgid "Contract Do Billing Parameters"
-msgstr "Paramètres de Facturation"
-
 msgctxt "model:billing.payment.method,name:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
@@ -856,6 +880,10 @@ msgstr "Relation Règle de paiement - Frais"
 msgctxt "model:billing.payment.term.line,name:"
 msgid "Payment Term Line"
 msgstr "Ligne de règle de paiement"
+
+msgctxt "model:contract.billing.data,name:"
+msgid "Billing Data"
+msgstr "Gestionnaire d'Appel de Cotisation"
 
 msgctxt "model:contract.billing.period,name:"
 msgid "Billing Period"
@@ -873,9 +901,13 @@ msgctxt "model:contract.billing.premium-tax,name:"
 msgid "Premium Tax Relation"
 msgstr ""
 
-msgctxt "model:offered.product-billing.payment.method,name:"
-msgid "Product Payment Method Relation"
+msgctxt "model:contract.do_billing.bill,name:"
+msgid "Contract Do Billing Bill"
 msgstr ""
+
+msgctxt "model:contract.do_billing.parameters,name:"
+msgid "Contract Do Billing Parameters"
+msgstr "Paramètres de Facturation"
 
 msgctxt "model:ir.action,name:act_open_billing_period_form"
 msgid "Billing Periods"
@@ -904,6 +936,10 @@ msgstr "Méthodes de Paiement"
 msgctxt "model:ir.ui.menu,name:menu_payment_term"
 msgid "Payment Term"
 msgstr "Règle de paiement"
+
+msgctxt "model:offered.product-billing.payment.method,name:"
+msgid "Product Payment Method Relation"
+msgstr ""
 
 msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Cash"
@@ -1117,22 +1153,6 @@ msgctxt "view:account.move:"
 msgid "Moves"
 msgstr "Mouvements"
 
-msgctxt "view:contract.billing.data:"
-msgid "Billing Datas"
-msgstr "Gestionnaires d'Appel de Cotisation"
-
-msgctxt "view:contract.billing.data:"
-msgid "billing_data"
-msgstr ""
-
-msgctxt "view:contract.do_billing.bill:"
-msgid "Bill Result"
-msgstr ""
-
-msgctxt "view:contract.do_billing.parameters:"
-msgid "Contract Do Billing Parameters"
-msgstr "Paramètres de Facturation"
-
 msgctxt "view:billing.payment.method:"
 msgid "Payment Method"
 msgstr "Méthode de Paiement"
@@ -1140,6 +1160,14 @@ msgstr "Méthode de Paiement"
 msgctxt "view:billing.payment.method:"
 msgid "Payment Methods"
 msgstr "Méthode de Paiement"
+
+msgctxt "view:billing.payment.term.line:"
+msgid "Payment Term Line"
+msgstr "Ligne de règle de paiement"
+
+msgctxt "view:billing.payment.term.line:"
+msgid "Payment Term Lines"
+msgstr ""
 
 msgctxt "view:billing.payment.term:"
 msgid "Payment Terms"
@@ -1149,12 +1177,12 @@ msgctxt "view:billing.payment.term:"
 msgid "payment_term"
 msgstr ""
 
-msgctxt "view:billing.payment.term.line:"
-msgid "Payment Term Line"
-msgstr "Ligne de règle de paiement"
+msgctxt "view:contract.billing.data:"
+msgid "Billing Datas"
+msgstr "Gestionnaires d'Appel de Cotisation"
 
-msgctxt "view:billing.payment.term.line:"
-msgid "Payment Term Lines"
+msgctxt "view:contract.billing.data:"
+msgid "billing_data"
 msgstr ""
 
 msgctxt "view:contract.billing.period:"
@@ -1193,13 +1221,13 @@ msgctxt "view:contract.billing.premium:"
 msgid "Pricing Lines"
 msgstr "Lignes de Prime"
 
-msgctxt "view:offered.product-billing.payment.method:"
-msgid "Payment Method"
-msgstr "Méthode de Paiement"
+msgctxt "view:contract.do_billing.bill:"
+msgid "Bill Result"
+msgstr ""
 
-msgctxt "view:offered.product-billing.payment.method:"
-msgid "Payment Methods"
-msgstr "Méthodes de Paiement"
+msgctxt "view:contract.do_billing.parameters:"
+msgid "Contract Do Billing Parameters"
+msgstr "Paramètres de Facturation"
 
 msgctxt "view:contract:"
 msgid "Accounting"
@@ -1208,6 +1236,14 @@ msgstr "Comptabilité"
 msgctxt "view:contract:"
 msgid "Calculate Prices"
 msgstr "Calculer les Primes"
+
+msgctxt "view:offered.product-billing.payment.method:"
+msgid "Payment Method"
+msgstr "Méthode de Paiement"
+
+msgctxt "view:offered.product-billing.payment.method:"
+msgid "Payment Methods"
+msgstr "Méthodes de Paiement"
 
 msgctxt "view:offered.product:"
 msgid "Payment Methods"

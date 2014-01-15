@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -18,97 +18,13 @@ msgctxt "error:process.transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
-msgctxt "field:process.log,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:process.log,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:process.log,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:process.log,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:process.log,end_time:"
-msgid "End Time"
-msgstr "Fin"
-
-msgctxt "field:process.log,from_state:"
-msgid "From State"
-msgstr "Etat de Départ"
-
-msgctxt "field:process.log,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:process.log,latest:"
-msgid "Latest"
-msgstr "Dernier"
-
-msgctxt "field:process.log,locked:"
-msgid "Lock"
-msgstr "Verrrouillé"
-
-msgctxt "field:process.log,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:process.log,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:process.log,session:"
-msgid "Session"
-msgstr "Session"
-
-msgctxt "field:process.log,start_time:"
-msgid "Start Time"
-msgstr "Début"
-
-msgctxt "field:process.log,task:"
-msgid "Task"
-msgstr "Tâche"
-
-msgctxt "field:process.log,to_state:"
-msgid "To State"
-msgstr "Etat Final"
-
-msgctxt "field:process.log,user:"
-msgid "User"
-msgstr "Utilisateur"
-
-msgctxt "field:process.log,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:process.log,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:process.start,date:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "field:process.start,good_process:"
-msgid "Good Process"
+msgctxt "field:ir.export_package,process:"
+msgid "Process"
 msgstr "Processus"
 
-msgctxt "field:process.start,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:process.start,model:"
-msgid "Model"
-msgstr "Modèle"
-
-msgctxt "field:process.start,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
+msgctxt "field:ir.export_package,steps:"
+msgid "Steps"
+msgstr "Etapes"
 
 msgctxt "field:ir.ui.view.description,create_date:"
 msgid "Create Date"
@@ -190,17 +106,9 @@ msgctxt "field:ir.ui.view.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ir.export_package,process:"
-msgid "Process"
-msgstr "Processus"
-
-msgctxt "field:ir.export_package,steps:"
-msgid "Steps"
-msgstr "Etapes"
-
-msgctxt "field:process.action,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
+msgctxt "field:ir.ui.view.description,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:process,create_date_:"
 msgid "Creation date"
@@ -230,13 +138,129 @@ msgctxt "field:process,with_prev_next:"
 msgid "With Previous / Next button"
 msgstr "Avec Préc/Suiv."
 
+msgctxt "field:process,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:process-process.step,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
+msgctxt "field:process-process.step,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:process.action,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:process.action,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:process.log,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process.log,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:process.log,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.log,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:process.log,end_time:"
+msgid "End Time"
+msgstr "Fin"
+
+msgctxt "field:process.log,from_state:"
+msgid "From State"
+msgstr "Etat de Départ"
+
+msgctxt "field:process.log,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.log,latest:"
+msgid "Latest"
+msgstr "Dernier"
+
+msgctxt "field:process.log,locked:"
+msgid "Lock"
+msgstr "Verrrouillé"
+
+msgctxt "field:process.log,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:process.log,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:process.log,session:"
+msgid "Session"
+msgstr "Session"
+
+msgctxt "field:process.log,start_time:"
+msgid "Start Time"
+msgstr "Début"
+
+msgctxt "field:process.log,task:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:process.log,to_state:"
+msgid "To State"
+msgstr "Etat Final"
+
+msgctxt "field:process.log,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:process.log,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.log,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.log,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:process.start,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:process.start,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:process.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.start,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:process.start,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
 msgctxt "field:process.status,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
+
+msgctxt "field:process.status,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:process.step,create_date_:"
 msgid "Creation date"
@@ -253,6 +277,10 @@ msgstr "Modèle Principal"
 msgctxt "field:process.step,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
+
+msgctxt "field:process.step,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:process.transition,choice_if_false:"
 msgid ""
@@ -274,6 +302,14 @@ msgctxt "field:process.transition,pyson_description:"
 msgid ""
 msgstr " "
 
+msgctxt "field:process.transition,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "model:ir.ui.view.description,name:"
+msgid "View Description"
+msgstr "Descripteur de Vue XML"
+
 msgctxt "model:process.log,name:"
 msgid "Process Log"
 msgstr ""
@@ -281,10 +317,6 @@ msgstr ""
 msgctxt "model:process.start,name:"
 msgid "Process Start"
 msgstr "Paramètres du Processus"
-
-msgctxt "model:ir.ui.view.description,name:"
-msgid "View Description"
-msgstr "Descripteur de Vue XML"
 
 msgctxt "selection:ir.ui.view.description,input_mode:"
 msgid "Classic"
@@ -310,6 +342,14 @@ msgctxt "selection:process.transition,kind:"
 msgid "Calculated"
 msgstr "Calculé"
 
+msgctxt "view:ir.ui.view.description:"
+msgid "View Descriptor"
+msgstr "Descripteur de Vue"
+
+msgctxt "view:ir.ui.view.description:"
+msgid "View Descriptors"
+msgstr "Descripteurs de Vue"
+
 msgctxt "view:process.log:"
 msgid "Log"
 msgstr ""
@@ -321,14 +361,6 @@ msgstr ""
 msgctxt "view:process.start:"
 msgid "Process Start"
 msgstr "Paramètres du Processus"
-
-msgctxt "view:ir.ui.view.description:"
-msgid "View Descriptor"
-msgstr "Descripteur de Vue"
-
-msgctxt "view:ir.ui.view.description:"
-msgid "View Descriptors"
-msgstr "Descripteurs de Vue"
 
 msgctxt "view:process.step:"
 msgid "Custom Views"

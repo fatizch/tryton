@@ -6,6 +6,14 @@ msgctxt "field:account.configuration,cash_value_journal:"
 msgid "Cash Value Journal"
 msgstr "Journal d'épargne"
 
+msgctxt "field:contract,cash_value_collections:"
+msgid "Collections"
+msgstr "Encaissements"
+
+msgctxt "field:contract,is_cash_value:"
+msgid "Is Cash Value"
+msgstr "Est de type Epargne"
+
 msgctxt "field:contract.cash_value.collection,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -66,13 +74,9 @@ msgctxt "field:contract.cash_value.collection,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract,cash_value_collections:"
-msgid "Collections"
-msgstr "Encaissements"
-
-msgctxt "field:contract,is_cash_value:"
-msgid "Is Cash Value"
-msgstr "Est de type Epargne"
+msgctxt "field:contract.cash_value.collection,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:contract.wizard.cash_surrender.parameters,contract:"
 msgid "Contract"
@@ -94,11 +98,6 @@ msgctxt "field:contract.wizard.cash_surrender.parameters,surrender_date:"
 msgid "Surrender Date"
 msgstr "Date de rachat"
 
-msgctxt ""
-"field:contract.wizard.collection_to_cash_value.select_date,affected_contracts:"
-msgid "Contracts"
-msgstr "Contrats"
-
 msgctxt "field:contract.wizard.collection_to_cash_value.select_date,id:"
 msgid "ID"
 msgstr "ID"
@@ -111,18 +110,6 @@ msgstr "Must Expand Tree"
 msgctxt "field:contract.wizard.collection_to_cash_value.select_date,to_date:"
 msgid "To Date"
 msgstr "Date de Fin"
-
-msgctxt "field:contract.covered_data,cash_value_collection_amount:"
-msgid "Cash value collection amount"
-msgstr "Montant du versement"
-
-msgctxt "field:contract.covered_data,cash_value_payment_mode:"
-msgid "Cash Value Payment Mode"
-msgstr "Mode de paiement des versements"
-
-msgctxt "field:contract.covered_data,is_cash_value:"
-msgid "Is Cash Value"
-msgstr "Est de type Epargne"
 
 msgctxt "model:contract.cash_value.collection,name:"
 msgid "Cash Value Collection"
@@ -146,15 +133,11 @@ msgstr "Mise à jour des versements"
 
 msgctxt "model:ir.action,name:act_collection_to_cash_value"
 msgid "Collection To Cash Value"
-msgstr "Calcul des versements depuis les encaissements"
+msgstr "Action"
 
 msgctxt "selection:contract.cash_value.collection,kind:"
 msgid "Payment"
 msgstr "Paiement"
-
-msgctxt "view:collection.wizard.collection_to_cash_value.select_date:"
-msgid "Select Date"
-msgstr "Sélection de la date"
 
 msgctxt "view:contract.cash_value.collection:"
 msgid "Amount"
@@ -172,13 +155,17 @@ msgctxt "view:contract.cash_value.collection:"
 msgid "Updated Amount"
 msgstr "Montant actualisé"
 
-msgctxt "view:contract:"
-msgid "Cash Value Collections"
-msgstr "Versements"
-
 msgctxt "view:contract.wizard.cash_surrender.parameters:"
 msgid "Cash Surrender Parameters"
 msgstr "Paramètres de Rachat"
+
+msgctxt "view:contract.wizard.collection_to_cash_value.select_date:"
+msgid "Select Date"
+msgstr ""
+
+msgctxt "view:contract:"
+msgid "Cash Value Collections"
+msgstr "Versements"
 
 msgctxt "wizard_button:contract.wizard.cash_surrender,parameters,end:"
 msgid "Cancel"

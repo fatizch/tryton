@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,6 +9,18 @@ msgstr "Le code doit être unique"
 msgctxt "error:account.tax.description:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
+
+msgctxt "field:account.account,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:account.account.type,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:account.configuration,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:account.fee.description,code:"
 msgid "Code"
@@ -62,6 +74,10 @@ msgctxt "field:account.fee.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:account.fee.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:account.fee.description.version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -114,6 +130,22 @@ msgctxt "field:account.fee.description.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:account.fee.description.version,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:account.fiscalyear,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:account.journal,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:account.period,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:account.tax.description,code:"
 msgid "Code"
 msgstr "Code"
@@ -147,7 +179,7 @@ msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
 msgctxt "field:account.tax.description,name:"
-msgid "Tax Name"
+msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:account.tax.description,rec_name:"
@@ -165,6 +197,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:account.tax.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:account.tax.description,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:account.tax.description.version,create_date:"
 msgid "Create Date"
@@ -217,6 +253,14 @@ msgstr "Date de mise à jour"
 msgctxt "field:account.tax.description.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:account.tax.description.version,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:company.company,fiscal_years:"
+msgid ""
+msgstr ""
 
 msgctxt "model:account.fee.description,name:"
 msgid "Fee Description"
@@ -274,18 +318,18 @@ msgctxt "selection:account.tax.description.version,kind:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "view:account.fee.description:"
-msgid "Fee Description"
-msgstr "Descripteur de Frais"
-
 msgctxt "view:account.fee.description.version:"
 msgid "Fee Description Version"
 msgstr "Version"
 
+msgctxt "view:account.fee.description:"
+msgid "Fee Description"
+msgstr "Descripteur de Frais"
+
+msgctxt "view:account.tax.description.version:"
+msgid "Tax Description Version"
+msgstr ""
+
 msgctxt "view:account.tax.description:"
 msgid "Tax Description"
 msgstr "Taxe"
-
-msgctxt "view:account.tax.description.version:"
-msgid "Tax Version"
-msgstr "Version de Taxe"

@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.payment.create.parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.create.parameters,until:"
+msgid "Until"
+msgstr "Jusqu'à"
+
 msgctxt "field:account.payment.group,sepa_msg:"
 msgid "Sepa Message"
 msgstr ""
@@ -25,14 +33,6 @@ msgstr "Payé"
 msgctxt "field:contract,payment_lines:"
 msgid "Payment Lines"
 msgstr "Lignes de Paiement"
-
-msgctxt "field:account.payment.create.parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:account.payment.create.parameters,until:"
-msgid "Until"
-msgstr "Jusqu'à"
 
 msgctxt "model:account.payment.create.parameters,name:"
 msgid "Create Receivable Payment"
@@ -58,10 +58,6 @@ msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
 
-msgctxt "view:contract:"
-msgid "As of today"
-msgstr ""
-
 msgctxt "view:account.payment.create.parameters:"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"
@@ -69,6 +65,10 @@ msgstr "Créer Paiement"
 msgctxt "view:account.payment.create.parameters:"
 msgid "Create Receivable Payment?"
 msgstr "Créer Paiement?"
+
+msgctxt "view:contract:"
+msgid "As of today"
+msgstr ""
 
 msgctxt "wizard_button:account.payment.create,start,create_:"
 msgid "Create"

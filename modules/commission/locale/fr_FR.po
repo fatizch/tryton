@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -22,17 +22,89 @@ msgctxt "field:account.move,wo_tax_amount:"
 msgid "Total Amount w/o taxes"
 msgstr "Montant total hors Taxes"
 
-msgctxt "field:contract.billing.premium,com_lines:"
-msgid "Commission lines"
-msgstr "Lignes de Commissions"
+msgctxt "field:broker,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
 
-msgctxt "field:contract.billing.premium,estimated_com:"
-msgid "Estimated Commissions"
-msgstr "Commissions estimées"
+msgctxt "field:broker,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
 
-msgctxt "field:contract.billing.premium,estimated_wo_com:"
-msgid "Estimated w/o coms"
-msgstr "Montant estimé hors Commissions"
+msgctxt "field:broker,create_uid:"
+msgid "Create User"
+msgstr "Create User"
+
+msgctxt "field:broker,id:"
+msgid "ID"
+msgstr " "
+
+msgctxt "field:broker,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:broker,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:broker,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:broker,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:broker,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:broker,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:broker,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:commission.option.description-option.description,component:"
+msgid "Component"
+msgstr "Composante"
+
+msgctxt "field:commission.option.description-option.description,coverage:"
+msgid "Option Description"
+msgstr "Garantie"
+
+msgctxt "field:commission.option.description-option.description,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:commission.option.description-option.description,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:commission.option.description-option.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.option.description-option.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.option.description-option.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.option.description-option.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.option.description-option.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.option.description-option.description,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:commission.rule,config_kind:"
 msgid "Conf. kind"
@@ -79,7 +151,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:commission.rule,rule_extra_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:commission.rule,start_date:"
@@ -106,113 +178,21 @@ msgctxt "field:commission.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.option-commission.option,com_amount:"
-msgid "Com Amount"
-msgstr "Montant de la commission"
+msgctxt "field:commission.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
 
-msgctxt "field:contract.option-commission.option,com_option:"
-msgid "Commission Option"
-msgstr "Option de Commissionnement"
+msgctxt "field:contract.billing.premium,com_lines:"
+msgid "Commission lines"
+msgstr "Lignes de Commissions"
 
-msgctxt "field:contract.option-commission.option,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
+msgctxt "field:contract.billing.premium,estimated_com:"
+msgid "Estimated Commissions"
+msgstr "Commissions estimées"
 
-msgctxt "field:contract.option-commission.option,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:contract.option-commission.option,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.option-commission.option,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:contract.option-commission.option,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:contract.option-commission.option,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:contract.option-commission.option,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:contract.option-commission.option,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.option-commission.option,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:contract.option-commission.option,rate:"
-msgid "Rate"
-msgstr "Taux"
-
-msgctxt "field:contract.option-commission.option,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.option-commission.option,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:contract.option-commission.option,option:"
-msgid "Subscribed Option"
-msgstr "Garantie Souscrite"
-
-msgctxt "field:contract.option-commission.option,use_specific_rate:"
-msgid "Specific Rate"
-msgstr "Taux Spécifique"
-
-msgctxt "field:contract.option-commission.option,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.option-commission.option,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:commission.option.description-option.description,component:"
-msgid "Component"
-msgstr "Composante"
-
-msgctxt "field:commission.option.description-option.description,coverage:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "field:commission.option.description-option.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:commission.option.description-option.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:commission.option.description-option.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:commission.option.description-option.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:commission.option.description-option.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:commission.option.description-option.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:commission.option.description-option.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
+msgctxt "field:contract.billing.premium,estimated_wo_com:"
+msgid "Estimated w/o coms"
+msgstr "Montant estimé hors Commissions"
 
 msgctxt "field:contract.billing.premium-commission.option,amount:"
 msgid "Amount"
@@ -262,6 +242,10 @@ msgctxt "field:contract.billing.premium-commission.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.billing.premium-commission.option,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:contract.option,com_options:"
 msgid "Commissions"
 msgstr "Commissions"
@@ -269,6 +253,82 @@ msgstr "Commissions"
 msgctxt "field:contract.option,options:"
 msgid "Option-Commission Option Relations"
 msgstr "Options Commissionnées"
+
+msgctxt "field:contract.option-commission.option,com_amount:"
+msgid "Com Amount"
+msgstr "Montant de la commission"
+
+msgctxt "field:contract.option-commission.option,com_option:"
+msgid "Commission Option"
+msgstr "Option de Commissionnement"
+
+msgctxt "field:contract.option-commission.option,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:contract.option-commission.option,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:contract.option-commission.option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.option-commission.option,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.option-commission.option,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.option-commission.option,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.option-commission.option,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.option-commission.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.option-commission.option,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:contract.option-commission.option,option:"
+msgid "Subscribed Option"
+msgstr "Garantie Souscrite"
+
+msgctxt "field:contract.option-commission.option,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:contract.option-commission.option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.option-commission.option,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:contract.option-commission.option,use_specific_rate:"
+msgid "Specific Rate"
+msgstr "Taux Spécifique"
+
+msgctxt "field:contract.option-commission.option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.option-commission.option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.option-commission.option,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:distribution.network,all_com_plans:"
 msgid "Top Level Commission Plans"
@@ -330,6 +390,10 @@ msgctxt "field:distribution.network-broker,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:distribution.network-broker,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:distribution.network-commission.plan,com_plan:"
 msgid "Commission Plan"
 msgstr "Plan de Commissionnement"
@@ -366,6 +430,10 @@ msgctxt "field:distribution.network-commission.plan,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:distribution.network-commission.plan,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:offered.option.description,commission_rules:"
 msgid "Commission Rules"
 msgstr "Règles de Commissionnement"
@@ -390,46 +458,6 @@ msgctxt "field:offered.product,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:broker,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:broker,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:broker,create_uid:"
-msgid "Create User"
-msgstr "Create User"
-
-msgctxt "field:broker,id:"
-msgid "ID"
-msgstr " "
-
-msgctxt "field:broker,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:broker,party:"
-msgid "Party"
-msgstr "Acteur"
-
-msgctxt "field:broker,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:broker,reference:"
-msgid "Reference"
-msgstr "Référence"
-
-msgctxt "field:broker,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:broker,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:party.party,broker_role:"
 msgid "Broker"
 msgstr "Courtier"
@@ -442,21 +470,25 @@ msgctxt "field:party.party,is_broker:"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "model:commission.rule,name:"
-msgid "Commission Rule"
-msgstr "Règle de Commissionnement"
-
-msgctxt "model:contract.option-commission.option,name:"
-msgid "Option-Commission Option Relation"
-msgstr "Option Commissionnée"
+msgctxt "model:broker,name:"
+msgid "Broker"
+msgstr "Courtier"
 
 msgctxt "model:commission.option.description-option.description,name:"
 msgid "Commission Option Description-Option Description Relation"
 msgstr "Relation Composante de Com - Garantie"
 
+msgctxt "model:commission.rule,name:"
+msgid "Commission Rule"
+msgstr "Règle de Commissionnement"
+
 msgctxt "model:contract.billing.premium-commission.option,name:"
 msgid "Billing Premium-Commission Option Relation"
 msgstr "Relation Ligne de Prime - Commission"
+
+msgctxt "model:contract.option-commission.option,name:"
+msgid "Option-Commission Option Relation"
+msgstr "Option Commissionnée"
 
 msgctxt "model:distribution.network-broker,name:"
 msgid "Relation Distribution Network - Broker"
@@ -506,10 +538,6 @@ msgctxt "model:ir.ui.menu,name:menu_plan_form"
 msgid "Commission Plans"
 msgstr "Plans de Commissionnement"
 
-msgctxt "model:broker,name:"
-msgid "Broker"
-msgstr "Courtier"
-
 msgctxt "model:tag,name:tag_commission"
 msgid "Commission"
 msgstr "Commission"
@@ -523,11 +551,7 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:commission.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:commission.rule,offered:"
-msgid "Coverage"
+msgid "Option Description"
 msgstr "Garantie"
 
 msgctxt "selection:commission.rule,offered:"
@@ -586,14 +610,6 @@ msgctxt "view:commission.rule:"
 msgid "Commission rule"
 msgstr "Règle de Commissionnement"
 
-msgctxt "view:contract.option-commission.option:"
-msgid "%"
-msgstr "%"
-
-msgctxt "view:contract.option-commission.option:"
-msgid "Option-Commission Option Relation"
-msgstr "Option Commissionnée"
-
 msgctxt "view:contract.billing.premium-commission.option:"
 msgid "Com Line"
 msgstr "Ligne de Commission"
@@ -602,17 +618,25 @@ msgctxt "view:contract.billing.premium-commission.option:"
 msgid "Com Lines"
 msgstr "Lignes de Commission"
 
-msgctxt "view:contract.option:"
-msgid "Commissions"
-msgstr "Commissions"
+msgctxt "view:contract.option-commission.option:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:contract.option-commission.option:"
+msgid "Option-Commission Option Relation"
+msgstr "Option Commissionnée"
 
 msgctxt "view:contract.option:"
-msgid "Option-Commission Option Relations"
-msgstr "Options Commissionnées"
+msgid "%"
+msgstr "%"
 
 msgctxt "view:contract.option:"
 msgid "Coverages"
 msgstr "Garanties"
+
+msgctxt "view:contract.option:"
+msgid "Option-Commission Option Relation"
+msgstr "Relation Option - Option de Com"
 
 msgctxt "view:distribution.network:"
 msgid "Commissioning"

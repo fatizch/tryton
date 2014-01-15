@@ -2,6 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "selection:offered.option.description,family:"
+msgctxt "selection:offered.option.description,kind:"
 msgid "Property & Casualty"
-msgstr "IARD"
+msgstr ""

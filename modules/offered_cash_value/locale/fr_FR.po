@@ -6,27 +6,6 @@ msgctxt "error:cash_value.cash_value_rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "field:cash_value.cash_value_rule,allow_one_shot:"
-msgid "Allow One Shot Payment"
-msgstr "Autoriser le paiement en une fois"
-
-msgctxt "field:cash_value.cash_value_rule,collection_fee:"
-msgid "Collection Fee"
-msgstr "Frais d'acquisition"
-
-msgctxt "field:cash_value.cash_value_rule,collection_fee_account:"
-msgid "Collection Fee Account"
-msgstr "Compte de frais d'acquisition"
-
-msgctxt "field:cash_value.cash_value_rule,computation_rule:"
-msgid "Computation Rule"
-msgstr "Règle de calcul"
-
-msgctxt ""
-"field:cash_value.cash_value_rule,computation_rule_extra_data:"
-msgid "Computation Rule Complementary Data"
-msgstr "Données complémentaires"
-
 msgctxt "field:cash_value.cash_value_rule,config_kind:"
 msgid "Conf. kind"
 msgstr "Type de Conf."
@@ -51,18 +30,6 @@ msgctxt "field:cash_value.cash_value_rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:cash_value.cash_value_rule,interest_rate:"
-msgid "Interest Rate"
-msgstr "Taux d'intérêt"
-
-msgctxt "field:cash_value.cash_value_rule,management_fee:"
-msgid "Management Fee"
-msgstr "Frais de gestion"
-
-msgctxt "field:cash_value.cash_value_rule,management_fee_account:"
-msgid "Management Fee Account"
-msgstr "Compte de frais de gestion"
-
 msgctxt "field:cash_value.cash_value_rule,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
@@ -80,7 +47,7 @@ msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
 msgctxt "field:cash_value.cash_value_rule,rule_extra_data:"
-msgid "Rule Complementary Data"
+msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:cash_value.cash_value_rule,saving_account:"
@@ -111,6 +78,10 @@ msgctxt "field:cash_value.cash_value_rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:cash_value.cash_value_rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:offered.option.description,cash_value_rules:"
 msgid "Cash Value Rules"
 msgstr "Règles d'Epargne"
@@ -136,12 +107,8 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:cash_value.cash_value_rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:cash_value.cash_value_rule,offered:"
-msgid "Coverage"
-msgstr "Offre"
+msgid "Option Description"
+msgstr "Garantie"
 
 msgctxt "selection:cash_value.cash_value_rule,offered:"
 msgid "Product"

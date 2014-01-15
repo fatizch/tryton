@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:rule_engine.context:"
-msgid "You have defined twice the same name %s in %s and %s"
-msgstr ""
-
 msgctxt "error:functional_error:"
 msgid "Number of arguments does not match string content"
 msgstr ""
@@ -14,9 +10,9 @@ msgctxt "error:functional_error:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
-msgctxt "error:rule_engine.parameter:"
-msgid "Expected %s as a parameter for rule %s"
-msgstr "L'argument %s est nécessaire pour la règle %s"
+msgctxt "error:rule_engine.context:"
+msgid "You have defined twice the same name %s in %s and %s"
+msgstr ""
 
 msgctxt "error:rule_engine.function:"
 msgid "Function arguments must only use ascii"
@@ -25,6 +21,10 @@ msgstr "Paramètres de la Fonction ne doit pas utiliser de caracères spéciaux"
 msgctxt "error:rule_engine.function:"
 msgid "Technical name must only use ascii"
 msgstr ""
+
+msgctxt "error:rule_engine.parameter:"
+msgid "Expected %s as a parameter for rule %s"
+msgstr "L'argument %s est nécessaire pour la règle %s"
 
 msgctxt "error:rule_engine:"
 msgid ""
@@ -40,6 +40,58 @@ msgstr ""
 msgctxt "error:rule_engine:"
 msgid "Your code has errors!"
 msgstr "L'algorithme contient des erreurs"
+
+msgctxt "field:functional_error,arguments:"
+msgid "Arguments"
+msgstr "Arguments"
+
+msgctxt "field:functional_error,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:functional_error,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:functional_error,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:functional_error,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:functional_error,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:functional_error,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:functional_error,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:functional_error,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:functional_error,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:functional_error,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:functional_error,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:functional_error,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:ir.export_package,contexts:"
 msgid "Contexts"
@@ -153,6 +205,10 @@ msgctxt "field:rule_engine,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:rule_engine,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:rule_engine-tag,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -188,6 +244,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:rule_engine-tag,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine-tag,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:rule_engine.context,allowed_elements:"
 msgid "Allowed tree elements"
@@ -229,6 +289,10 @@ msgctxt "field:rule_engine.context,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:rule_engine.context,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:rule_engine.context-function,context:"
 msgid "Context"
 msgstr "Contexte"
@@ -254,7 +318,7 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:rule_engine.context-function,tree_element:"
-msgid "Rule Functions"
+msgid "Rule Function"
 msgstr "Fonctions du Moteur de règle"
 
 msgctxt "field:rule_engine.context-function,write_date:"
@@ -265,321 +329,9 @@ msgctxt "field:rule_engine.context-function,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:functional_error,arguments:"
-msgid "Arguments"
-msgstr "Arguments"
-
-msgctxt "field:functional_error,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:functional_error,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:functional_error,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:functional_error,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:functional_error,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:functional_error,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:functional_error,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:functional_error,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:functional_error,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:functional_error,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:functional_error,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:rule_engine.log,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:rule_engine.log,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:rule_engine.log,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:rule_engine.log,debug:"
-msgid "Debug"
+msgctxt "field:rule_engine.context-function,xml_id:"
+msgid "XML Id"
 msgstr ""
-
-msgctxt "field:rule_engine.log,errors:"
-msgid "Errors"
-msgstr "Erreurs"
-
-msgctxt "field:rule_engine.log,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.log,info:"
-msgid "Info"
-msgstr "Info"
-
-msgctxt "field:rule_engine.log,low_level_debug:"
-msgid "Execution Trace"
-msgstr ""
-
-msgctxt "field:rule_engine.log,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.log,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:rule_engine.log,result:"
-msgid "Result"
-msgstr "Résultat"
-
-msgctxt "field:rule_engine.log,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:rule_engine.log,user:"
-msgid "User"
-msgstr "Utilisateur"
-
-msgctxt "field:rule_engine.log,warnings:"
-msgid "Warnings"
-msgstr "Avertissements"
-
-msgctxt "field:rule_engine.log,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:rule_engine.log,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:rule_engine.parameter,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:rule_engine.parameter,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:rule_engine.parameter,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:rule_engine.parameter,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:rule_engine.parameter,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.parameter,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:rule_engine.parameter,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:rule_engine.parameter,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:rule_engine.parameter,parent_rule:"
-msgid "Parent Rule"
-msgstr "Règle parente"
-
-msgctxt "field:rule_engine.parameter,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:rule_engine.parameter,the_rule:"
-msgid "Rule to use"
-msgstr "Règle à appliquer"
-
-msgctxt "field:rule_engine.parameter,the_table:"
-msgid "Table to use"
-msgstr "Table à Utiliser"
-
-msgctxt "field:rule_engine.parameter,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:rule_engine.parameter,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:rule_engine.run_tests.results,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.run_tests.results,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.run_tests.results,report:"
-msgid "Report"
-msgstr "Rapport"
-
-msgctxt "field:rule_engine.test_case,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:rule_engine.test_case,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:rule_engine.test_case,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:rule_engine.test_case,debug:"
-msgid "Debug Info"
-msgstr "Information de débogage"
-
-msgctxt "field:rule_engine.test_case,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:rule_engine.test_case,expected_result:"
-msgid "Expected Result"
-msgstr "Résultat attendu"
-
-msgctxt "field:rule_engine.test_case,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.test_case,low_debug:"
-msgid "Low Level Debug Info"
-msgstr ""
-
-msgctxt "field:rule_engine.test_case,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.test_case,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:rule_engine.test_case,result_errors:"
-msgid "Result Errors"
-msgstr "Erreurs du Résultat"
-
-msgctxt "field:rule_engine.test_case,result_info:"
-msgid "Result Info"
-msgstr ""
-
-msgctxt "field:rule_engine.test_case,result_value:"
-msgid "Result Value"
-msgstr "Valeur du Résultat"
-
-msgctxt "field:rule_engine.test_case,result_warnings:"
-msgid "Result Warnings"
-msgstr ""
-
-msgctxt "field:rule_engine.test_case,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:rule_engine.test_case,rule_text:"
-msgid "Rule Text"
-msgstr ""
-
-msgctxt "field:rule_engine.test_case,test_values:"
-msgid "Values"
-msgstr "Valeurs"
-
-msgctxt "field:rule_engine.test_case,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:rule_engine.test_case,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:rule_engine.test_case.value,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:rule_engine.test_case.value,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:rule_engine.test_case.value,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:rule_engine.test_case.value,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.test_case.value,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:rule_engine.test_case.value,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:rule_engine.test_case.value,override_value:"
-msgid "Override Value"
-msgstr ""
-
-msgctxt "field:rule_engine.test_case.value,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:rule_engine.test_case.value,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:rule_engine.test_case.value,test_case:"
-msgid "Test Case"
-msgstr "Jeu de Test"
-
-msgctxt "field:rule_engine.test_case.value,value:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:rule_engine.test_case.value,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:rule_engine.test_case.value,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:rule_engine.runtime,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:rule_engine.function,children:"
 msgid "Children"
@@ -661,6 +413,294 @@ msgctxt "field:rule_engine.function,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:rule_engine.function,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:rule_engine.log,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.log,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:rule_engine.log,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.log,debug:"
+msgid "Debug"
+msgstr ""
+
+msgctxt "field:rule_engine.log,errors:"
+msgid "Errors"
+msgstr "Erreurs"
+
+msgctxt "field:rule_engine.log,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.log,info:"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "field:rule_engine.log,low_level_debug:"
+msgid "Execution Trace"
+msgstr ""
+
+msgctxt "field:rule_engine.log,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:rule_engine.log,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.log,result:"
+msgid "Result"
+msgstr "Résultat"
+
+msgctxt "field:rule_engine.log,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:rule_engine.log,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:rule_engine.log,warnings:"
+msgid "Warnings"
+msgstr "Avertissements"
+
+msgctxt "field:rule_engine.log,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.log,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.log,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:rule_engine.parameter,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:rule_engine.parameter,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.parameter,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:rule_engine.parameter,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.parameter,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.parameter,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:rule_engine.parameter,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:rule_engine.parameter,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.parameter,parent_rule:"
+msgid "Parent Rule"
+msgstr "Règle parente"
+
+msgctxt "field:rule_engine.parameter,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.parameter,the_rule:"
+msgid "Rule to use"
+msgstr "Règle à appliquer"
+
+msgctxt "field:rule_engine.parameter,the_table:"
+msgid "Table to use"
+msgstr "Table à Utiliser"
+
+msgctxt "field:rule_engine.parameter,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.parameter,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.parameter,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:rule_engine.run_tests.results,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.run_tests.results,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:rule_engine.run_tests.results,report:"
+msgid "Report"
+msgstr "Rapport"
+
+msgctxt "field:rule_engine.runtime,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:rule_engine.test_case,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.test_case,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:rule_engine.test_case,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.test_case,debug:"
+msgid "Debug Info"
+msgstr "Information de débogage"
+
+msgctxt "field:rule_engine.test_case,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:rule_engine.test_case,expected_result:"
+msgid "Expected Result"
+msgstr "Résultat attendu"
+
+msgctxt "field:rule_engine.test_case,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.test_case,low_debug:"
+msgid "Low Level Debug Info"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:rule_engine.test_case,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case,result_errors:"
+msgid "Result Errors"
+msgstr "Erreurs du Résultat"
+
+msgctxt "field:rule_engine.test_case,result_info:"
+msgid "Result Info"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case,result_value:"
+msgid "Result Value"
+msgstr "Valeur du Résultat"
+
+msgctxt "field:rule_engine.test_case,result_warnings:"
+msgid "Result Warnings"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:rule_engine.test_case,rule_text:"
+msgid "Rule Text"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case,test_values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:rule_engine.test_case,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.test_case,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.test_case,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case.value,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:rule_engine.test_case.value,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:rule_engine.test_case.value,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine.test_case.value,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine.test_case.value,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:rule_engine.test_case.value,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case.value,override_value:"
+msgid "Override Value"
+msgstr ""
+
+msgctxt "field:rule_engine.test_case.value,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:rule_engine.test_case.value,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:rule_engine.test_case.value,test_case:"
+msgid "Test Case"
+msgstr "Jeu de Test"
+
+msgctxt "field:rule_engine.test_case.value,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:rule_engine.test_case.value,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine.test_case.value,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine.test_case.value,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:tag,childs:"
 msgid "Childs"
 msgstr "Enfants"
@@ -712,6 +752,14 @@ msgstr "Date de mise à jour"
 msgctxt "field:tag,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:tag,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "model:functional_error,name:"
+msgid "Rule Error"
+msgstr "Erreur"
 
 msgctxt "model:ir.action,name:act_tag_form"
 msgid "Tags"
@@ -781,9 +829,9 @@ msgctxt "model:rule_engine.context-function,name:"
 msgid "Context Rule Function"
 msgstr ""
 
-msgctxt "model:functional_error,name:"
-msgid "Rule Error"
-msgstr "Erreur"
+msgctxt "model:rule_engine.function,name:"
+msgid "Rule Engine Function"
+msgstr "Fonction du Moteur de règles"
 
 msgctxt "model:rule_engine.log,name:"
 msgid "Rule Execution Log"
@@ -797,6 +845,10 @@ msgctxt "model:rule_engine.run_tests.results,name:"
 msgid "Test Run Report"
 msgstr "Tester le rapport d'exécution"
 
+msgctxt "model:rule_engine.runtime,name:"
+msgid "Tools functions"
+msgstr "Outils"
+
 msgctxt "model:rule_engine.test_case,name:"
 msgid "Test Case"
 msgstr "Jeu de Test"
@@ -805,17 +857,21 @@ msgctxt "model:rule_engine.test_case.value,name:"
 msgid "Test Case Value"
 msgstr "Valeur du Test"
 
-msgctxt "model:rule_engine.runtime,name:"
-msgid "Tools functions"
-msgstr "Outils"
-
-msgctxt "model:rule_engine.function,name:"
-msgid "Rule Engine Function"
-msgstr "Fonction du Moteur de règles"
-
 msgctxt "model:tag,name:"
 msgid "Tag"
 msgstr "Label"
+
+msgctxt "selection:functional_error,kind:"
+msgid "Error"
+msgstr "Erreur"
+
+msgctxt "selection:functional_error,kind:"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "selection:functional_error,kind:"
+msgid "Warning"
+msgstr "Avertissement"
 
 msgctxt "selection:rule_engine,extra_data_kind:"
 msgid ""
@@ -841,17 +897,13 @@ msgctxt "selection:rule_engine,status:"
 msgid "Validated"
 msgstr "Validé"
 
-msgctxt "selection:functional_error,kind:"
-msgid "Error"
-msgstr "Erreur"
+msgctxt "selection:rule_engine.function,type:"
+msgid "Folder"
+msgstr "Dossier"
 
-msgctxt "selection:functional_error,kind:"
-msgid "Info"
-msgstr "Info"
-
-msgctxt "selection:functional_error,kind:"
-msgid "Warning"
-msgstr "Avertissement"
+msgctxt "selection:rule_engine.function,type:"
+msgid "Function"
+msgstr "Fonction"
 
 msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Keyword Argument"
@@ -865,13 +917,13 @@ msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Table"
 msgstr "Table"
 
-msgctxt "selection:rule_engine.function,type:"
-msgid "Folder"
-msgstr "Dossier"
+msgctxt "view:functional_error:"
+msgid "Rule Error"
+msgstr "Erreur"
 
-msgctxt "selection:rule_engine.function,type:"
-msgid "Function"
-msgstr "Fonction"
+msgctxt "view:functional_error:"
+msgid "name"
+msgstr "Nom"
 
 msgctxt "view:rule_engine.context:"
 msgid "Context"
@@ -881,13 +933,9 @@ msgctxt "view:rule_engine.context:"
 msgid "Contexts"
 msgstr "Contextes"
 
-msgctxt "view:functional_error:"
-msgid "Rule Error"
-msgstr "Erreur"
-
-msgctxt "view:functional_error:"
-msgid "name"
-msgstr "Nom"
+msgctxt "view:rule_engine.function:"
+msgid "Rule Function"
+msgstr "Fonction du Moteur de règle"
 
 msgctxt "view:rule_engine.log:"
 msgid "Execution Log"
@@ -936,10 +984,6 @@ msgstr "Résultat"
 msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
 msgstr "Jeu de Test"
-
-msgctxt "view:rule_engine.function:"
-msgid "Rule Function"
-msgstr "Fonction du Moteur de règle"
 
 msgctxt "view:rule_engine:"
 msgid "Debug"

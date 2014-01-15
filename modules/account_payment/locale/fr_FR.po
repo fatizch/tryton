@@ -255,7 +255,7 @@ msgstr "Traitement"
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_payment_form_domain_suceeded"
 msgid "Succeeded"
-msgstr "Ont réussit"
+msgstr "Réussi"
 
 msgctxt "model:ir.sequence,name:sequence_account_payment_group"
 msgid "Default Account Payment Group"
@@ -290,7 +290,7 @@ msgid "Payments"
 msgstr "Paiements"
 
 msgctxt "model:res.group,name:group_payment"
-msgid "Payment"
+msgid "Paiement"
 msgstr "Paiement"
 
 msgctxt "selection:account.move.line,payment_kind:"

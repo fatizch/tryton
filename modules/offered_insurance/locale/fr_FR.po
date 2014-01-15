@@ -1,16 +1,49 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:billing.premium.rule:"
+msgid "%s : Rule combination unavailable with fee (%s) version (%s)"
+msgstr ""
+
+msgctxt "error:billing.premium.rule:"
+msgid "%s : Rule combination unavailable with tax (%s) version (%s)"
+msgstr ""
+
+msgctxt "error:billing.premium.rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:clause.rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
 
 msgctxt "error:document.receive.attach:"
 msgid "Duplicate name on attachments : %s"
 msgstr "Nom dupliqués sur les pièces jointe : %s"
 
-msgctxt "error:offered.business_rule_root:"
+msgctxt "error:document.receive:"
+msgid "No document request found for this object"
+msgstr "Aucune demande de document trouvé pour cet objet"
+
+msgctxt "error:document.request.batch:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
+
+msgctxt "error:document.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:clause.rule:"
+msgctxt "error:document.template.version:"
+msgid "The  names of attachments must be unique by resource!"
+msgstr ""
+"Le nom des pièces jointes doivent être unique pour une même ressource !"
+
+msgctxt "error:extra_data:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:offered.business_rule_root:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -26,54 +59,9 @@ msgctxt "error:offered.deductible.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:document.request.batch:"
-msgid "No Batch Path Specified"
-msgstr "Le chemin d'exécution des batchs n'est pas configuré"
-
-msgctxt "error:document.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
 msgctxt "error:offered.eligibility.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
-
-msgctxt "error:document.template.version:"
-msgid "The  names of attachments must be unique by resource!"
-msgstr ""
-"Le nom des pièces jointes doivent être unique pour une même ressource !"
-
-msgctxt "error:billing.premium.rule:"
-msgid "%s : Rule combination unavailable with fee (%s) version (%s)"
-msgstr ""
-
-msgctxt "error:billing.premium.rule:"
-msgid "%s : Rule combination unavailable with tax (%s) version (%s)"
-msgstr ""
-
-msgctxt "error:billing.premium.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:offered.validate.batch:"
-msgid "No Batch Path Specified"
-msgstr "Le chemin d'exécution des batchs n'est pas configuré"
-
-msgctxt "error:document.receive:"
-msgid "No document request found for this object"
-msgstr "Aucune demande de document trouvé pour cet objet"
-
-msgctxt "error:ins_product.simple_premium_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:offered.term.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:extra_data:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
 
 msgctxt "error:offered.option.description:"
 msgid "The code must be unique!"
@@ -87,6 +75,14 @@ msgctxt "error:offered.product:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
+msgctxt "error:offered.term.rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "error:offered.validate.batch:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
+
 msgctxt "field:account.fee.description.version,apply_at_pricing_time:"
 msgid "Apply when Pricing"
 msgstr ""
@@ -94,1378 +90,6 @@ msgstr ""
 msgctxt "field:account.tax.description.version,apply_at_pricing_time:"
 msgid "Apply when Pricing"
 msgstr ""
-
-msgctxt "field:document.create.attach,attachment:"
-msgid "Data File"
-msgstr "Fichier"
-
-msgctxt "field:document.create.attach,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.create.attach,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.create.attach,name:"
-msgid "Filename"
-msgstr "Nom du Fichier"
-
-msgctxt "field:document.receive.attach,attachments:"
-msgid "Attachments"
-msgstr "Pièces jointes"
-
-msgctxt "field:document.receive.attach,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.receive.attach,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.receive.attach,resource:"
-msgid "Resource"
-msgstr "Ressource"
-
-msgctxt "field:offered.business_rule_root,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.business_rule_root,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.business_rule_root,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.business_rule_root,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:offered.business_rule_root,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:offered.business_rule_root,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.business_rule_root,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.business_rule_root,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.business_rule_root,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.business_rule_root,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.business_rule_root,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:clause,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:clause,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:clause,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:clause,current_rec_name:"
-msgid "Current Value"
-msgstr "Valeur Courante"
-
-msgctxt "field:clause,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:clause,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:clause,may_be_overriden:"
-msgid "May be Overriden"
-msgstr "Peut être surchargé"
-
-msgctxt "field:clause,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:clause,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:clause,title:"
-msgid "Title"
-msgstr "Titre"
-
-msgctxt "field:clause,versions:"
-msgid "Versions"
-msgstr "Versions"
-
-msgctxt "field:clause,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:clause,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:clause.rule-clause,clause:"
-msgid "Clause"
-msgstr "Clause"
-
-msgctxt "field:clause.rule-clause,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:clause.rule-clause,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:clause.rule-clause,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:clause.rule-clause,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:clause.rule-clause,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.rule-clause,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:clause.rule-clause,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:clause.rule-clause,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:clause.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:clause.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:clause.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:clause.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:clause.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:clause.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:clause.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:clause.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:clause.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:clause.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:clause.rule,clauses:"
-msgid "Shared Clauses"
-msgstr "Clauses Partagées"
-
-msgctxt "field:clause.rule,specific_clauses:"
-msgid "Specific Clauses"
-msgstr "Clauses Spécifiques"
-
-msgctxt "field:clause.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:clause.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:clause.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:clause.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:clause.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:clause.version,content:"
-msgid "Content"
-msgstr "Contenu"
-
-msgctxt "field:clause.version,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:clause.version,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:clause.version,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:clause.version,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:clause.version,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:clause.version,main_elem:"
-msgid "Descriptor"
-msgstr "Descripteur"
-
-msgctxt "field:clause.version,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:clause.version,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.version,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:clause.version,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:clause.version,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.coverage_amount.rule,amount_end:"
-msgid "To"
-msgstr "À"
-
-msgctxt "field:offered.coverage_amount.rule,amount_start:"
-msgid "From"
-msgstr "De"
-
-msgctxt "field:offered.coverage_amount.rule,amount_step:"
-msgid "Step"
-msgstr "Pas"
-
-msgctxt "field:offered.coverage_amount.rule,amounts:"
-msgid "Amounts"
-msgstr "Montant"
-
-msgctxt "field:offered.coverage_amount.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.coverage_amount.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.coverage_amount.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.coverage_amount.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.coverage_amount.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.coverage_amount.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.coverage_amount.rule,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:offered.coverage_amount.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:offered.coverage_amount.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:offered.coverage_amount.rule,other_coverage:"
-msgid "Source Coverage"
-msgstr "Garantie d'origine"
-
-msgctxt "field:offered.coverage_amount.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.coverage_amount.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.coverage_amount.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.coverage_amount.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.coverage_amount.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.coverage_amount.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.coverage_amount.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.coverage_amount.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.coverage_amount.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.deductible.rule.duration,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.deductible.rule.duration,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.deductible.rule.duration,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.deductible.rule.duration,deductible_rule:"
-msgid "Deductible Rule"
-msgstr "Franchise"
-
-msgctxt "field:offered.deductible.rule.duration,duration:"
-msgid "Duration"
-msgstr "Durée"
-
-msgctxt "field:offered.deductible.rule.duration,duration_unit:"
-msgid "Duration Unit"
-msgstr "Unité de la Durée"
-
-msgctxt "field:offered.deductible.rule.duration,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.deductible.rule.duration,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:offered.deductible.rule.duration,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.deductible.rule.duration,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.deductible.rule.duration,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.deductible.rule,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:offered.deductible.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.deductible.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.deductible.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.deductible.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.deductible.rule,duration:"
-msgid "Duration"
-msgstr "Durée"
-
-msgctxt "field:offered.deductible.rule,duration_unit:"
-msgid "Duration Unit"
-msgstr "Unité de la Durée"
-
-msgctxt "field:offered.deductible.rule,durations:"
-msgid "Durations"
-msgstr "Durées"
-
-msgctxt "field:offered.deductible.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.deductible.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.deductible.rule,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:offered.deductible.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:offered.deductible.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:offered.deductible.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.deductible.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.deductible.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.deductible.rule,scope:"
-msgid "Scope"
-msgstr ""
-
-msgctxt "field:offered.deductible.rule,simple_config_choice:"
-msgid "Simple Config. Choice"
-msgstr "Choix de Config. Simple"
-
-msgctxt "field:offered.deductible.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.deductible.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.deductible.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.deductible.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.deductible.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.deductible.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.request.line,attachment:"
-msgid "Attachment"
-msgstr "Pièce jointe"
-
-msgctxt "field:document.request.line,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:document.request.line,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:document.request.line,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.request.line,document_desc:"
-msgid "Document Definition"
-msgstr "Définition du Document"
-
-msgctxt "field:document.request.line,for_object:"
-msgid "Needed For"
-msgstr "Nécessaire Pour"
-
-msgctxt "field:document.request.line,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.request.line,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.request.line,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.request.line,received:"
-msgid "Received"
-msgstr "Reçu"
-
-msgctxt "field:document.request.line,reception_date:"
-msgid "Reception Date"
-msgstr "Date de Réception"
-
-msgctxt "field:document.request.line,request:"
-msgid "Document Request"
-msgstr "Demande de Documents"
-
-msgctxt "field:document.request.line,request_date:"
-msgid "Request Date"
-msgstr "Date de la Demande"
-
-msgctxt "field:document.request.line,send_date:"
-msgid "Send Date"
-msgstr "Date d'Envoi"
-
-msgctxt "field:document.request.line,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.request.line,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.rule-document.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:document.rule-document.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:document.rule-document.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.rule-document.description,document:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "field:document.rule-document.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.rule-document.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.rule-document.description,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:document.rule-document.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.rule-document.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.description,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:document.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:document.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:document.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.description,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:document.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.description,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.description,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:document.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.request,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:document.request,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:document.request,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.request,documents:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "field:document.request,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.request,is_complete:"
-msgid "Is Complete"
-msgstr "Tout reçu"
-
-msgctxt "field:document.request,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.request,needed_by:"
-msgid "Requested for"
-msgstr "Nécessaire Pour"
-
-msgctxt "field:document.request,needed_by_str:"
-msgid "Master as String"
-msgstr ""
-
-msgctxt "field:document.request,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.request,request_description:"
-msgid "Request Description"
-msgstr "Description de la Demande"
-
-msgctxt "field:document.request,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.request,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.request.batch,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.receive.set_requests,documents:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "field:document.receive.set_requests,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.receive.set_requests,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:document.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:document.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:document.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.rule,documents:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "field:document.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:document.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.rule,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:document.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:document.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:document.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:document.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:document.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:document.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:document.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,eligibility_rule:"
-msgid "Eligibility Rule"
-msgstr "Eligibilite"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,relation_kind:"
-msgid "Relation Kind"
-msgstr "Type de Relation"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.eligibility.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.eligibility.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.eligibility.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.eligibility.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.eligibility.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.eligibility.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.eligibility.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:offered.eligibility.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:offered.eligibility.rule,offered_kind:"
-msgid "Offered Kind"
-msgstr "Typage"
-
-msgctxt "field:offered.eligibility.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.eligibility.rule,relation_kinds:"
-msgid "Relations Authorized"
-msgstr "Relations Autorisées"
-
-msgctxt "field:offered.eligibility.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.eligibility.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.eligibility.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.eligibility.rule,sub_elem_config_kind:"
-msgid "Sub Elem Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.eligibility.rule,sub_elem_rule:"
-msgid "Sub Elem Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.eligibility.rule,sub_elem_rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.eligibility.rule,subscriber_classes:"
-msgid "Can be subscribed"
-msgstr "Peut-être souscrit par"
-
-msgctxt "field:offered.eligibility.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.eligibility.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.eligibility.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.eligibility.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.eligibility.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:expense.kind,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:expense.kind,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:expense.kind,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:expense.kind,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:expense.kind,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:expense.kind,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:expense.kind,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:expense.kind,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:expense.kind,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:expense.kind,short_name:"
-msgid "Short Name"
-msgstr "Nom Court"
-
-msgctxt "field:expense.kind,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:expense.kind,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.item.description,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:offered.item.description,extra_data_def:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:offered.item.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.item.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.item.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.item.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.item.description,kind:"
-msgid ""
-msgstr " "
-
-msgctxt "field:offered.item.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:offered.item.description,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.item.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.item.description,sub_item_descs:"
-msgid "Sub Item Descriptions"
-msgstr "Descriptions des Sous Eléments"
-
-msgctxt "field:offered.item.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.item.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.item.description-extra_data,extra_data_def:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:offered.item.description-extra_data,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.item.description-extra_data,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.item.description-extra_data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.item.description-extra_data,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.item.description-extra_data,item_desc:"
-msgid "Item Desc"
-msgstr "Desc Risque"
-
-msgctxt "field:offered.item.description-extra_data,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.item.description-extra_data,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.item.description-extra_data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.item.description-sub_item.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.item.description-sub_item.description,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.item.description-sub_item.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.item.description-sub_item.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.item.description-sub_item.description,item_desc:"
-msgid "Item Desc"
-msgstr "Desc Risque"
-
-msgctxt "field:offered.item.description-sub_item.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.item.description-sub_item.description,sub_item_desc:"
-msgid "Sub Item Desc"
-msgstr ""
-
-msgctxt "field:offered.item.description-sub_item.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.item.description-sub_item.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.template,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:document.template,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:document.template,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:document.template,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.template,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.template,kind:"
-msgid "name"
-msgstr "Nom"
-
-msgctxt "field:document.template,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.template,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.template,on_model:"
-msgid "Model"
-msgstr "Modèle"
-
-msgctxt "field:document.template,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.template,versions:"
-msgid "Versions"
-msgstr "Versions"
-
-msgctxt "field:document.template,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.template,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.create.select.template,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.create.select.template,doc_template:"
-msgid "Document Template"
-msgstr "Modèle de Lettre"
-
-msgctxt "field:document.create.select.template,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.create.select.template,selected:"
-msgid "Selected"
-msgstr "Coché"
-
-msgctxt "field:document.create.select,good_address:"
-msgid "Mail Address"
-msgstr "Adresse du courrier"
-
-msgctxt "field:document.create.select,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.create.select,models:"
-msgid "Models"
-msgstr "Modèles"
-
-msgctxt "field:document.create.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:document.create.select,party:"
-msgid "Party"
-msgstr "Acteur"
-
-msgctxt "field:document.template.version,collision:"
-msgid "Collision"
-msgstr "Collision"
-
-msgctxt "field:document.template.version,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:document.template.version,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.template.version,data:"
-msgid "Data"
-msgstr "Données"
-
-msgctxt "field:document.template.version,data_size:"
-msgid "Data size"
-msgstr "Taille des données"
-
-msgctxt "field:document.template.version,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:document.template.version,digest:"
-msgid "Digest"
-msgstr "Empreinte"
-
-msgctxt "field:document.template.version,end_date:"
-msgid "End date"
-msgstr "Date de Fin"
-
-msgctxt "field:document.template.version,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.template.version,language:"
-msgid "Language"
-msgstr "Langues"
-
-msgctxt "field:document.template.version,last_modification:"
-msgid "Last Modification"
-msgstr "Dernière modification"
-
-msgctxt "field:document.template.version,last_user:"
-msgid "Last User"
-msgstr "Dernier utilisateur"
-
-msgctxt "field:document.template.version,link:"
-msgid "Link"
-msgstr "Lien"
-
-msgctxt "field:document.template.version,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.template.version,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.template.version,resource:"
-msgid "Resource"
-msgstr "Ressource"
-
-msgctxt "field:document.template.version,start_date:"
-msgid "Start date"
-msgstr "Date de Début"
-
-msgctxt "field:document.template.version,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:document.template.version,type:"
-msgid "Type"
-msgstr "Type"
-
-msgctxt "field:document.template.version,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.template.version,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:billing.premium.rule.component,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:billing.premium.rule.component,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:billing.premium.rule.component,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:billing.premium.rule.component,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:billing.premium.rule.component,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:billing.premium.rule.component,fee:"
-msgid "Fee"
-msgstr "Frais"
-
-msgctxt "field:billing.premium.rule.component,fixed_amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:billing.premium.rule.component,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:billing.premium.rule.component,kind:"
-msgid "Line kind"
-msgstr "Type"
-
-msgctxt "field:billing.premium.rule.component,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:billing.premium.rule.component,premium_rule:"
-msgid "Premium Rule"
-msgstr "Règle de Cotisation"
-
-msgctxt "field:billing.premium.rule.component,rated_object_kind:"
-msgid "Rated Object Level"
-msgstr "Niveau d'Objet Tarifé"
-
-msgctxt "field:billing.premium.rule.component,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:billing.premium.rule.component,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:billing.premium.rule.component,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:billing.premium.rule.component,summary:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:billing.premium.rule.component,tax:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "field:billing.premium.rule.component,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:billing.premium.rule.component,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:billing.premium.rule,basic_price:"
 msgid "Amount"
@@ -1563,45 +187,441 @@ msgctxt "field:billing.premium.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:process-offered.product,create_date:"
+msgctxt "field:billing.premium.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:billing.premium.rule.component,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:billing.premium.rule.component,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:billing.premium.rule.component,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:process-offered.product,create_date_:"
+msgctxt "field:billing.premium.rule.component,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:process-offered.product,create_uid:"
+msgctxt "field:billing.premium.rule.component,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:process-offered.product,id:"
+msgctxt "field:billing.premium.rule.component,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:billing.premium.rule.component,fixed_amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:billing.premium.rule.component,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:process-offered.product,process:"
-msgid "Process"
-msgstr "Processus"
+msgctxt "field:billing.premium.rule.component,kind:"
+msgid "Line kind"
+msgstr "Type"
 
-msgctxt "field:process-offered.product,product:"
-msgid "Product"
-msgstr "Produit"
+msgctxt "field:billing.premium.rule.component,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
 
-msgctxt "field:process-offered.product,rec_name:"
+msgctxt "field:billing.premium.rule.component,premium_rule:"
+msgid "Premium Rule"
+msgstr "Règle de Cotisation"
+
+msgctxt "field:billing.premium.rule.component,rated_object_kind:"
+msgid "Rated Object Level"
+msgstr "Niveau d'Objet Tarifé"
+
+msgctxt "field:billing.premium.rule.component,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:process-offered.product,write_date:"
+msgctxt "field:billing.premium.rule.component,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:billing.premium.rule.component,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:billing.premium.rule.component,summary:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:billing.premium.rule.component,tax:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "field:billing.premium.rule.component,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:process-offered.product,write_uid:"
+msgctxt "field:billing.premium.rule.component,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.validate.batch,id:"
+msgctxt "field:billing.premium.rule.component,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:clause,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:clause,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:clause,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:clause,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:clause,current_rec_name:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:clause,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:clause,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:clause,may_be_overriden:"
+msgid "May be Overriden"
+msgstr "Peut être surchargé"
+
+msgctxt "field:clause,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:clause,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause,title:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:clause,versions:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "field:clause,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:clause,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:clause,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:clause.rule,clauses:"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "field:clause.rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:clause.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:clause.rule,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:clause.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:clause.rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:clause.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:clause.rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:clause.rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:clause.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:clause.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:clause.rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:clause.rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:clause.rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:clause.rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:clause.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:clause.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:clause.rule-clause,clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "field:clause.rule-clause,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:clause.rule-clause,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:clause.rule-clause,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:clause.rule-clause,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:clause.rule-clause,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause.rule-clause,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:clause.rule-clause,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:clause.rule-clause,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:clause.rule-clause,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:clause.version,content:"
+msgid "Content"
+msgstr "Contenu"
+
+msgctxt "field:clause.version,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:clause.version,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:clause.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:clause.version,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:clause.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:clause.version,main_elem:"
+msgid "Descriptor"
+msgstr "Descripteur"
+
+msgctxt "field:clause.version,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:clause.version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause.version,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:clause.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:clause.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:clause.version,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:document.create.attach,attachment:"
+msgid "Data File"
+msgstr "Fichier"
+
+msgctxt "field:document.create.attach,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.create.attach,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.create.attach,name:"
+msgid "Filename"
+msgstr "Nom du Fichier"
+
+msgctxt "field:document.create.select,good_address:"
+msgid "Mail Address"
+msgstr "Adresse du courrier"
+
+msgctxt "field:document.create.select,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.create.select,models:"
+msgid "Models"
+msgstr "Modèles"
+
+msgctxt "field:document.create.select,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.create.select,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:document.create.select.template,doc_template:"
+msgid "Document Template"
+msgstr "Modèle de Lettre"
+
+msgctxt "field:document.create.select.template,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.create.select.template,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.create.select.template,selected:"
+msgid "Selected"
+msgstr "Coché"
+
+msgctxt "field:document.description,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:document.description,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:document.description,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:document.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.description,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:document.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.description,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.description,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:document.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:document.receive.attach,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:document.receive.attach,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.receive.attach,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.receive.attach,resource:"
+msgid "Resource"
+msgstr "Ressource"
 
 msgctxt "field:document.receive.request,id:"
 msgid "ID"
@@ -1623,141 +643,457 @@ msgctxt "field:document.receive.request,value:"
 msgid "Value"
 msgstr "Nom"
 
-msgctxt "field:ins_product.simple_premium_rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
+msgctxt "field:document.receive.set_requests,documents:"
+msgid "Documents"
+msgstr "Documents"
 
-msgctxt "field:ins_product.simple_premium_rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:ins_product.simple_premium_rule,id:"
+msgctxt "field:document.receive.set_requests,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ins_product.simple_premium_rule,must_expand_tree:"
+msgctxt "field:document.receive.set_requests,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:ins_product.simple_premium_rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:ins_product.simple_premium_rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:ins_product.simple_premium_rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:ins_product.simple_premium_rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:ins_product.simple_premium_rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:ins_product.simple_premium_rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:ins_product.simple_premium_rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.term.rule,can_be_renewed:"
-msgid "Can be renewed"
-msgstr "Peut Etre Renouvelé"
-
-msgctxt "field:offered.term.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.term.rule,create_date:"
+msgctxt "field:document.request,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:offered.term.rule,create_date_:"
+msgctxt "field:document.request,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:offered.term.rule,create_uid:"
+msgctxt "field:document.request,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.term.rule,date_for_sync:"
-msgid "Sync Date"
-msgstr "Date de Synchro"
+msgctxt "field:document.request,documents:"
+msgid "Documents"
+msgstr "Documents"
 
-msgctxt "field:offered.term.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.term.rule,frequency:"
-msgid "Frequency"
-msgstr "Fréquence"
-
-msgctxt "field:offered.term.rule,id:"
+msgctxt "field:document.request,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.term.rule,must_expand_tree:"
+msgctxt "field:document.request,is_complete:"
+msgid "Is Complete"
+msgstr "Tout reçu"
+
+msgctxt "field:document.request,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:offered.term.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
+msgctxt "field:document.request,needed_by:"
+msgid "Requested for"
+msgstr "Nécessaire Pour"
 
-msgctxt "field:offered.term.rule,rec_name:"
+msgctxt "field:document.request,needed_by_str:"
+msgid "Master as String"
+msgstr ""
+
+msgctxt "field:document.request,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.term.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
+msgctxt "field:document.request,request_description:"
+msgid "Request Description"
+msgstr "Description de la Demande"
 
-msgctxt "field:offered.term.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.term.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.term.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.term.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.term.rule,term_date_choice:"
-msgid "Term Date Selection"
-msgstr "Date de Terme"
-
-msgctxt "field:offered.term.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.term.rule,with_term:"
-msgid "With Term"
-msgstr "Avec Terme"
-
-msgctxt "field:offered.term.rule,write_date:"
+msgctxt "field:document.request,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.term.rule,write_uid:"
+msgctxt "field:document.request,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:ir.model,printable:"
-msgid "Printable"
-msgstr "Imprimable"
+msgctxt "field:document.request,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:document.request.batch,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.request.line,attachment:"
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+msgctxt "field:document.request.line,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:document.request.line,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:document.request.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.request.line,document_desc:"
+msgid "Document Definition"
+msgstr "Définition du Document"
+
+msgctxt "field:document.request.line,for_object:"
+msgid "Needed For"
+msgstr "Nécessaire Pour"
+
+msgctxt "field:document.request.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.request.line,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.request.line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.request.line,received:"
+msgid "Received"
+msgstr "Reçu"
+
+msgctxt "field:document.request.line,reception_date:"
+msgid "Reception Date"
+msgstr "Date de Réception"
+
+msgctxt "field:document.request.line,request:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "field:document.request.line,request_date:"
+msgid "Request Date"
+msgstr "Date de la Demande"
+
+msgctxt "field:document.request.line,send_date:"
+msgid "Send Date"
+msgstr "Date d'Envoi"
+
+msgctxt "field:document.request.line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.request.line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.request.line,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:document.rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:document.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:document.rule,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:document.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.rule,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:document.rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:document.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.rule,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:document.rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:document.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:document.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:document.rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:document.rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:document.rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:document.rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:document.rule-document.description,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:document.rule-document.description,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:document.rule-document.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.rule-document.description,document:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "field:document.rule-document.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.rule-document.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.rule-document.description,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:document.rule-document.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.rule-document.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.rule-document.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:document.template,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:document.template,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:document.template,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:document.template,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.template,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.template,kind:"
+msgid "name"
+msgstr "Nom"
+
+msgctxt "field:document.template,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:document.template,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.template,on_model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:document.template,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.template,versions:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "field:document.template,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.template,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.template,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:document.template.version,collision:"
+msgid "Collision"
+msgstr "Collision"
+
+msgctxt "field:document.template.version,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:document.template.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.template.version,data:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "field:document.template.version,data_size:"
+msgid "Data size"
+msgstr "Taille des données"
+
+msgctxt "field:document.template.version,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:document.template.version,digest:"
+msgid "Digest"
+msgstr "Empreinte"
+
+msgctxt "field:document.template.version,end_date:"
+msgid "End date"
+msgstr "Date de Fin"
+
+msgctxt "field:document.template.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.template.version,language:"
+msgid "Language"
+msgstr "Langues"
+
+msgctxt "field:document.template.version,last_modification:"
+msgid "Last Modification"
+msgstr "Dernière modification"
+
+msgctxt "field:document.template.version,last_user:"
+msgid "Last User"
+msgstr "Dernier utilisateur"
+
+msgctxt "field:document.template.version,link:"
+msgid "Link"
+msgstr "Lien"
+
+msgctxt "field:document.template.version,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.template.version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.template.version,resource:"
+msgid "Resource"
+msgstr "Ressource"
+
+msgctxt "field:document.template.version,start_date:"
+msgid "Start date"
+msgstr "Date de Début"
+
+msgctxt "field:document.template.version,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:document.template.version,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:document.template.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.template.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:expense.kind,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:expense.kind,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:expense.kind,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:expense.kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:expense.kind,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:expense.kind,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:expense.kind,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:expense.kind,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:expense.kind,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:expense.kind,short_name:"
+msgid "Short Name"
+msgstr "Nom Court"
+
+msgctxt "field:expense.kind,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:expense.kind,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:expense.kind,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:extra_data,create_date:"
 msgid "Create Date"
@@ -1875,6 +1211,678 @@ msgctxt "field:extra_data-sub_extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:insurer,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:insurer,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:insurer,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:insurer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:insurer,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:insurer,party:"
+msgid "Insurer"
+msgstr "Acteur"
+
+msgctxt "field:insurer,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:insurer,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:insurer,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:insurer,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.model,printable:"
+msgid "Printable"
+msgstr "Imprimable"
+
+msgctxt "field:offered,clause_rules:"
+msgid "Clause Rules"
+msgstr "Clauses"
+
+msgctxt "field:offered,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:offered,currency_digits:"
+msgid "Currency Digits"
+msgstr "Nbre de chiffres après la virgule"
+
+msgctxt "field:offered,deductible_rules:"
+msgid "Deductible Rules"
+msgstr "Franchises"
+
+msgctxt "field:offered,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:offered,document_rules:"
+msgid "Document Rules"
+msgstr "Documents"
+
+msgctxt "field:offered,eligibility_rules:"
+msgid "Eligibility Rules"
+msgstr "Règles d'Eligibilité"
+
+msgctxt "field:offered,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:offered,extra_data:"
+msgid "Offered Kind"
+msgstr "Typage"
+
+msgctxt "field:offered,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered,premium_rules:"
+msgid "Premium Rules"
+msgstr "Règles de Cotisation"
+
+msgctxt "field:offered,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:offered,sub_document_rules:"
+msgid "Sub Document Rules"
+msgstr "Documents Eléments Couverts"
+
+msgctxt "field:offered,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
+msgctxt "field:offered,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:offered,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:offered.business_rule_root,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:offered.business_rule_root,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:offered.business_rule_root,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.business_rule_root,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.business_rule_root,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:offered.business_rule_root,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.business_rule_root,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.business_rule_root,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:offered.business_rule_root,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:offered.business_rule_root,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:offered.business_rule_root,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.coverage_amount.rule,amount_end:"
+msgid "To"
+msgstr "À"
+
+msgctxt "field:offered.coverage_amount.rule,amount_start:"
+msgid "From"
+msgstr "De"
+
+msgctxt "field:offered.coverage_amount.rule,amount_step:"
+msgid "Step"
+msgstr "Pas"
+
+msgctxt "field:offered.coverage_amount.rule,amounts:"
+msgid "Amounts"
+msgstr "Montant"
+
+msgctxt "field:offered.coverage_amount.rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:offered.coverage_amount.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.coverage_amount.rule,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.coverage_amount.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.coverage_amount.rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:offered.coverage_amount.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.coverage_amount.rule,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:offered.coverage_amount.rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.coverage_amount.rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:offered.coverage_amount.rule,other_coverage:"
+msgid "Source Coverage"
+msgstr "Garantie d'origine"
+
+msgctxt "field:offered.coverage_amount.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.coverage_amount.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.coverage_amount.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.coverage_amount.rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:offered.coverage_amount.rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:offered.coverage_amount.rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:offered.coverage_amount.rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.coverage_amount.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.coverage_amount.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.coverage_amount.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.deductible.rule,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:offered.deductible.rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:offered.deductible.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.deductible.rule,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.deductible.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.deductible.rule,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:offered.deductible.rule,duration_unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
+
+msgctxt "field:offered.deductible.rule,durations:"
+msgid "Durations"
+msgstr "Durées"
+
+msgctxt "field:offered.deductible.rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:offered.deductible.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.deductible.rule,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:offered.deductible.rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.deductible.rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:offered.deductible.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.deductible.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.deductible.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.deductible.rule,scope:"
+msgid "Scope"
+msgstr ""
+
+msgctxt "field:offered.deductible.rule,simple_config_choice:"
+msgid "Simple Config. Choice"
+msgstr "Choix de Config. Simple"
+
+msgctxt "field:offered.deductible.rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:offered.deductible.rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:offered.deductible.rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:offered.deductible.rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.deductible.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.deductible.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.deductible.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.deductible.rule.duration,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.deductible.rule.duration,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.deductible.rule.duration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.deductible.rule.duration,deductible_rule:"
+msgid "Deductible Rule"
+msgstr "Franchise"
+
+msgctxt "field:offered.deductible.rule.duration,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:offered.deductible.rule.duration,duration_unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
+
+msgctxt "field:offered.deductible.rule.duration,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.deductible.rule.duration,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.deductible.rule.duration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.deductible.rule.duration,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.deductible.rule.duration,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.deductible.rule.duration,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.eligibility.rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:offered.eligibility.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.eligibility.rule,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.eligibility.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.eligibility.rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:offered.eligibility.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.eligibility.rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.eligibility.rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:offered.eligibility.rule,offered_kind:"
+msgid "Offered Kind"
+msgstr "Typage"
+
+msgctxt "field:offered.eligibility.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.eligibility.rule,relation_kinds:"
+msgid "Relations Authorized"
+msgstr "Relations Autorisées"
+
+msgctxt "field:offered.eligibility.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.eligibility.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.eligibility.rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:offered.eligibility.rule,sub_elem_config_kind:"
+msgid "Sub Elem Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:offered.eligibility.rule,sub_elem_rule:"
+msgid "Sub Elem Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.eligibility.rule,sub_elem_rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.eligibility.rule,subscriber_classes:"
+msgid "Can be subscribed"
+msgstr "Peut-être souscrit par"
+
+msgctxt "field:offered.eligibility.rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:offered.eligibility.rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:offered.eligibility.rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.eligibility.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.eligibility.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.eligibility.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.eligibility.rule-relation.kind,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,eligibility_rule:"
+msgid "Eligibility Rule"
+msgstr "Eligibilite"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,relation_kind:"
+msgid "Relation Kind"
+msgstr "Type de Relation"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.eligibility.rule-relation.kind,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.item.description,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:offered.item.description,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.item.description,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.item.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.item.description,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:offered.item.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.item.description,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "field:offered.item.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre Arbre"
+
+msgctxt "field:offered.item.description,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.item.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.item.description,sub_item_descs:"
+msgid "Sub Item Descriptions"
+msgstr "Descriptions des Sous Eléments"
+
+msgctxt "field:offered.item.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.item.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.item.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.item.description-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.item.description-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.item.description-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.item.description-extra_data,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:offered.item.description-extra_data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.item.description-extra_data,item_desc:"
+msgid "Item Desc"
+msgstr "Desc Risque"
+
+msgctxt "field:offered.item.description-extra_data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.item.description-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.item.description-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.item.description-extra_data,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.item.description-sub_item.description,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:offered.item.description-sub_item.description,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.item.description-sub_item.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.item.description-sub_item.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.item.description-sub_item.description,item_desc:"
+msgid "Item Desc"
+msgstr "Desc Risque"
+
+msgctxt "field:offered.item.description-sub_item.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.item.description-sub_item.description,sub_item_desc:"
+msgid "Sub Item Desc"
+msgstr ""
+
+msgctxt "field:offered.item.description-sub_item.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.item.description-sub_item.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.item.description-sub_item.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:offered.option.description,clause_rules:"
 msgid "Clause Rules"
 msgstr "Clauses"
@@ -1883,20 +1891,12 @@ msgctxt "field:offered.option.description,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:offered.option.description,extra_data:"
-msgid "Offered Kind"
-msgstr "Typage"
-
-msgctxt "field:offered.option.description,extra_data_def:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
 msgctxt "field:offered.option.description,coverage_amount_rules:"
 msgid "Coverage Amount Rules"
 msgstr "Règles de Montant de Couverture"
 
 msgctxt "field:offered.option.description,coverages_in_package:"
-msgid "Coverages In Package"
+msgid "OptionDescriptions In Package"
 msgstr "Garanties de la Formule"
 
 msgctxt "field:offered.option.description,create_date:"
@@ -1934,6 +1934,14 @@ msgstr "Règles d'Eligibilité"
 msgctxt "field:offered.option.description,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
+
+msgctxt "field:offered.option.description,extra_data:"
+msgid "Offered Kind"
+msgstr "Typage"
+
+msgctxt "field:offered.option.description,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:offered.option.description,family:"
 msgid "Family"
@@ -2003,12 +2011,8 @@ msgctxt "field:offered.option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.option.description-extra_data,extra_data_def:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
 msgctxt "field:offered.option.description-extra_data,coverage:"
-msgid "Coverage"
+msgid "Option Description"
 msgstr "Garantie"
 
 msgctxt "field:offered.option.description-extra_data,create_date:"
@@ -2018,6 +2022,10 @@ msgstr "Date de création"
 msgctxt "field:offered.option.description-extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:offered.option.description-extra_data,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:offered.option.description-extra_data,id:"
 msgid "ID"
@@ -2035,76 +2043,8 @@ msgctxt "field:offered.option.description-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered,clause_rules:"
-msgid "Clause Rules"
-msgstr "Clauses"
-
-msgctxt "field:offered,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:offered,extra_data:"
-msgid "Offered Kind"
-msgstr "Typage"
-
-msgctxt "field:offered,currency_digits:"
-msgid "Currency Digits"
-msgstr "Nbre de chiffres après la virgule"
-
-msgctxt "field:offered,deductible_rules:"
-msgid "Deductible Rules"
-msgstr "Franchises"
-
-msgctxt "field:offered,description:"
-msgid "Description"
-msgstr "Description"
-
-msgctxt "field:offered,document_rules:"
-msgid "Document Rules"
-msgstr "Documents"
-
-msgctxt "field:offered,eligibility_rules:"
-msgid "Eligibility Rules"
-msgstr "Règles d'Eligibilité"
-
-msgctxt "field:offered,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered,premium_rules:"
-msgid "Premium Rules"
-msgstr "Règles de Cotisation"
-
-msgctxt "field:offered,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered,sub_document_rules:"
-msgid "Sub Document Rules"
-msgstr "Documents Eléments Couverts"
-
-msgctxt "field:offered,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
-msgctxt "field:offered,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
 msgctxt "field:offered.package-option.description,coverage:"
-msgid "Coverage"
+msgid "OptionDescription"
 msgstr "Garantie"
 
 msgctxt "field:offered.package-option.description,create_date:"
@@ -2142,14 +2082,6 @@ msgstr "Clauses"
 msgctxt "field:offered.product,code:"
 msgid "Code"
 msgstr "Code"
-
-msgctxt "field:offered.product,extra_data:"
-msgid "Offered Kind"
-msgstr "Données Complémentaires"
-
-msgctxt "field:offered.product,extra_data_def:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
 
 msgctxt "field:offered.product,contract_generator:"
 msgid "Contract Number Generator"
@@ -2190,6 +2122,14 @@ msgstr "Règles d'Eligibilité"
 msgctxt "field:offered.product,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
+
+msgctxt "field:offered.product,extra_data:"
+msgid "Offered Kind"
+msgstr "Données Complémentaires"
+
+msgctxt "field:offered.product,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:offered.product,id:"
 msgid "ID"
@@ -2247,10 +2187,6 @@ msgctxt "field:offered.product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.product-extra_data,extra_data_def:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
 msgctxt "field:offered.product-extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -2258,6 +2194,10 @@ msgstr "Date de création"
 msgctxt "field:offered.product-extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:offered.product-extra_data,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:offered.product-extra_data,id:"
 msgid "ID"
@@ -2315,8 +2255,12 @@ msgctxt "field:offered.product-item.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:offered.product-item.description,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:offered.product-option.description,coverage:"
-msgid "Coverage"
+msgid "Option Description"
 msgstr "Garantie"
 
 msgctxt "field:offered.product-option.description,create_date:"
@@ -2347,45 +2291,101 @@ msgctxt "field:offered.product-option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:insurer,create_date:"
+msgctxt "field:offered.term.rule,can_be_renewed:"
+msgid "Can be renewed"
+msgstr "Peut Etre Renouvelé"
+
+msgctxt "field:offered.term.rule,config_kind:"
+msgid "Conf. kind"
+msgstr "Type de Conf."
+
+msgctxt "field:offered.term.rule,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:insurer,create_date_:"
+msgctxt "field:offered.term.rule,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:insurer,create_uid:"
+msgctxt "field:offered.term.rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:insurer,id:"
+msgctxt "field:offered.term.rule,date_for_sync:"
+msgid "Sync Date"
+msgstr "Date de Synchro"
+
+msgctxt "field:offered.term.rule,end_date:"
+msgid "To Date"
+msgstr "Date de Fin"
+
+msgctxt "field:offered.term.rule,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt "field:offered.term.rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:insurer,must_expand_tree:"
+msgctxt "field:offered.term.rule,must_expand_tree:"
 msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
+msgstr "Etendre Arbre"
 
-msgctxt "field:insurer,party:"
-msgid "Party"
-msgstr "Acteur"
+msgctxt "field:offered.term.rule,offered:"
+msgid "Offered"
+msgstr "Offre"
 
-msgctxt "field:insurer,rec_name:"
+msgctxt "field:offered.term.rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:insurer,reference:"
-msgid "Reference"
-msgstr "Référence"
+msgctxt "field:offered.term.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
 
-msgctxt "field:insurer,write_date:"
+msgctxt "field:offered.term.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.term.rule,start_date:"
+msgid "From Date"
+msgstr "Date de Début"
+
+msgctxt "field:offered.term.rule,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:offered.term.rule,template_behaviour:"
+msgid "Template Behaviour"
+msgstr "Comportement du Modèle"
+
+msgctxt "field:offered.term.rule,term_date_choice:"
+msgid "Term Date Selection"
+msgstr "Date de Terme"
+
+msgctxt "field:offered.term.rule,view_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.term.rule,with_term:"
+msgid "With Term"
+msgstr "Avec Terme"
+
+msgctxt "field:offered.term.rule,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:insurer,write_uid:"
+msgctxt "field:offered.term.rule,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:offered.term.rule,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.validate.batch,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:party.party,insurer_role:"
 msgid "Insurer"
@@ -2399,89 +2399,129 @@ msgctxt "field:process,for_products:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "field:rule_engine,rule_extra_datas:"
-msgid "Rule Parameter"
-msgstr "Paramètre de Règle"
+msgctxt "field:process-offered.product,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:process-offered.product,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:process-offered.product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process-offered.product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process-offered.product,process:"
+msgid "Process"
+msgstr "Processus"
+
+msgctxt "field:process-offered.product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:process-offered.product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:process-offered.product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process-offered.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process-offered.product,xml_id:"
+msgid "XML Id"
+msgstr ""
 
 msgctxt "field:rule_engine,rule_external_extra_datas:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "field:rule_engine,rule_extra_datas:"
+msgid "Rule Parameter"
+msgstr "Paramètre de Règle"
+
 msgctxt "field:rule_engine.parameter,external_extra_data_def:"
 msgid "External Extra Data"
 msgstr "Donnée Complémentaire Externe"
+
+msgctxt "field:rule_engine.parameter,extra_data_def:"
+msgid "Extra Parameters"
+msgstr "Paramètres Complémentaires"
 
 msgctxt "field:rule_engine.parameter,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:rule_engine.parameter,extra_data_def:"
-msgid "Complementary Parameters"
-msgstr "Paramètres Complémentaires"
-
 msgctxt "field:table.manage_dimension.show.dimension,extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
-
-msgctxt "help:offered.coverage_amount.rule,amounts:"
-msgid "Specify amounts separated by ;"
-msgstr "Spécifier les montants séparés par des ;"
 
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
-msgctxt "model:document.create.attach,name:"
-msgid "Document Create Attach"
-msgstr "Création de l'attachment"
+msgctxt "help:offered.coverage_amount.rule,amounts:"
+msgid "Specify amounts separated by ;"
+msgstr "Spécifier les montants séparés par des ;"
 
-msgctxt "model:document.receive.attach,name:"
-msgid "Document Receive Attach"
-msgstr "Gestionnaire de Pièces Jointes"
+msgctxt "model:billing.premium.rule,name:"
+msgid "Premium Rule"
+msgstr "Règle de Cotisation"
 
-msgctxt "model:offered.business_rule_root,name:"
-msgid "Business Rule Root"
-msgstr "Règle Métier Racine"
+msgctxt "model:billing.premium.rule.component,name:"
+msgid "Premium Rule Component"
+msgstr "Composante de Cotisation"
 
 msgctxt "model:clause,name:"
 msgid "Clause"
+msgstr "Clause"
+
+msgctxt "model:clause.rule,name:"
+msgid "Clause Rule"
 msgstr "Clause"
 
 msgctxt "model:clause.rule-clause,name:"
 msgid "Rule to Clause Relation"
 msgstr "Table intermédiaire entre l'offre et le clause"
 
-msgctxt "model:clause.rule,name:"
-msgid "Clause Rule"
-msgstr "Clause"
-
 msgctxt "model:clause.version,name:"
 msgid "Clause Version"
 msgstr "Version de Clause"
 
-msgctxt "model:offered.coverage_amount.rule,name:"
-msgid "Coverage Amount Rule"
-msgstr "Montant de Couverture"
+msgctxt "model:document.create.attach,name:"
+msgid "Document Create Attach"
+msgstr "Création de l'attachment"
 
-msgctxt "model:offered.deductible.rule.duration,name:"
-msgid "Deductible Duration"
-msgstr "Franchise"
+msgctxt "model:document.create.select,name:"
+msgid "Document Create Select"
+msgstr "Sélection du modèle de Lettre"
 
-msgctxt "model:offered.deductible.rule,name:"
-msgid "Deductible Rule"
-msgstr "Franchise"
-
-msgctxt "model:document.request.line,name:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "model:document.rule-document.description,name:"
-msgid "Relation between rule and document"
-msgstr "Relation Règle Document"
+msgctxt "model:document.create.select.template,name:"
+msgid "Document Create Select Template"
+msgstr "Présenteur de Modèle de Lettre"
 
 msgctxt "model:document.description,name:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
+
+msgctxt "model:document.receive.attach,name:"
+msgid "Document Receive Attach"
+msgstr "Gestionnaire de Pièces Jointes"
+
+msgctxt "model:document.receive.request,name:"
+msgid "Document Receive Request"
+msgstr "Rechercher une Demande"
+
+msgctxt "model:document.receive.set_requests,name:"
+msgid "Document Receive Set Requests"
+msgstr "Document en attente"
 
 msgctxt "model:document.request,name:"
 msgid "Document Request"
@@ -2491,106 +2531,53 @@ msgctxt "model:document.request.batch,name:"
 msgid "Document Request Batch Definition"
 msgstr ""
 
-msgctxt "model:document.receive.set_requests,name:"
-msgid "Document Receive Set Requests"
-msgstr "Document en attente"
+msgctxt "model:document.request.line,name:"
+msgid "Document Request Line"
+msgstr "Document"
 
 msgctxt "model:document.rule,name:"
 msgid "Document Managing Rule"
 msgstr ""
 
-msgctxt "model:offered.eligibility.rule-relation.kind,name:"
-msgid "Eligibilty Rule to Relation Kind Relation"
-msgstr ""
-"Table intermédiaire entre la règle d'égibilité et les relations autorisées"
-
-msgctxt "model:offered.eligibility.rule,name:"
-msgid "Eligibility Rule"
-msgstr "Eligibilite"
-
-msgctxt "model:expense.kind,name:"
-msgid "Expense Kind"
-msgstr "Type de Frais"
-
-msgctxt "model:offered.item.description,name:"
-msgid "Item Description"
-msgstr "Description du Risque"
-
-msgctxt "model:offered.item.description-extra_data,name:"
-msgid "Item Description to Extra Data Relation"
-msgstr "Relation Risque - Données Complémentaires"
-
-msgctxt "model:offered.item.description-sub_item.description,name:"
-msgid "Relation between Item Desc and Sub Item Desc"
-msgstr ""
+msgctxt "model:document.rule-document.description,name:"
+msgid "Rule to Document Description Relation"
+msgstr "Relation Règle Document"
 
 msgctxt "model:document.template,name:"
 msgid "Document Template"
 msgstr "Modèle de Lettre"
 
-msgctxt "model:document.create.select.template,name:"
-msgid "Document Create Select Template"
-msgstr "Présenteur de Modèle de Lettre"
-
-msgctxt "model:document.create.select,name:"
-msgid "Document Create Select"
-msgstr "Sélection du modèle de Lettre"
-
 msgctxt "model:document.template.version,name:"
 msgid "Document Template Version"
 msgstr "Version de Lettre"
 
-msgctxt "model:billing.premium.rule.component,name:"
-msgid "Premium Rule Component"
-msgstr "Composante de Cotisation"
+msgctxt "model:expense.kind,name:"
+msgid "Expense Kind"
+msgstr "Type de Frais"
 
-msgctxt "model:billing.premium.rule,name:"
-msgid "Premium Rule"
-msgstr "Règle de Cotisation"
+msgctxt "model:extra_data,name:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
-msgctxt "model:process-offered.product,name:"
-msgid "Process Product Relation"
-msgstr "Relation Processus Produit"
+msgctxt "model:extra_data-sub_extra_data,name:"
+msgid "Extra Data to Sub Extra Data Relation"
+msgstr "Données Complémentaires Récursives"
 
-msgctxt "model:offered.validate.batch,name:"
-msgid "Product Validation Batch"
-msgstr ""
-
-msgctxt "model:document.receive.request,name:"
-msgid "Document Receive Request"
-msgstr "Rechercher une Demande"
-
-msgctxt "model:ins_product.rule_sets.contract,name:"
-msgid "Context functions for contract related data"
-msgstr ""
-
-msgctxt "model:ins_product.simple_premium_rule,name:"
-msgid "Simple Premium Rule"
-msgstr "Règle de Cotisation Simple"
-
-msgctxt "model:offered.term.rule,name:"
-msgid "Term Rule"
-msgstr "Règle de Terme - Renouvellement"
-
-msgctxt "model:ir.action,name:act_document_desc"
-msgid "Document Descriptions"
-msgstr "Descripteurs de Document"
-
-msgctxt "model:ir.action,name:act_event_desc_form"
-msgid "Events"
-msgstr "Evénements"
-
-msgctxt "model:ir.action,name:act_item_desc_form"
-msgid "Item Descriptions"
-msgstr "Descriptions des Risques"
+msgctxt "model:insurer,name:"
+msgid "Insurer"
+msgstr "Assureur"
 
 msgctxt "model:ir.action,name:act_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
-msgctxt "model:ir.action,name:act_loss_desc_form"
-msgid "Losses"
-msgstr "Préjudices"
+msgctxt "model:ir.action,name:act_document_desc"
+msgid "Document Descriptions"
+msgstr "Descripteurs de Document"
+
+msgctxt "model:ir.action,name:act_item_desc_form"
+msgid "Item Descriptions"
+msgstr "Descriptions des Risques"
 
 msgctxt "model:ir.action,name:act_model_clause"
 msgid "Clauses"
@@ -2612,6 +2599,10 @@ msgctxt "model:ir.action,name:receive_documents_wizard"
 msgid "Document Reception"
 msgstr "Réception de Document"
 
+msgctxt "model:ir.ui.menu,name:menu_doc_template"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
 msgctxt "model:ir.ui.menu,name:menu_document_desc"
 msgid "Document Descriptions"
 msgstr "Descripteurs de Document"
@@ -2620,21 +2611,9 @@ msgctxt "model:ir.ui.menu,name:menu_edm"
 msgid "EDM"
 msgstr "GED"
 
-msgctxt "model:ir.ui.menu,name:menu_event_desc_form"
-msgid "Events"
-msgstr "Evénements"
-
 msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
-
-msgctxt "model:ir.ui.menu,name:menu_doc_template"
-msgid "Document Templates"
-msgstr "Modèles de Lettre"
-
-msgctxt "model:ir.ui.menu,name:menu_loss_desc_form"
-msgid "Losses"
-msgstr "Préjudices"
 
 msgctxt "model:ir.ui.menu,name:menu_model_clause"
 msgid "Clauses"
@@ -2648,28 +2627,57 @@ msgctxt "model:ir.ui.menu,name:menu_receive_documents"
 msgid "Document Received"
 msgstr "Document reçu"
 
-msgctxt "model:extra_data,name:"
-msgid "Extra Data Definition"
-msgstr "Définition de Données Complémentaires"
-
-msgctxt "model:extra_data-sub_extra_data,name:"
-msgid "Extra Data recursive relation"
-msgstr "Données Complémentaires Récursives"
-
-msgctxt "model:offered.option.description,name:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "model:offered.option.description-extra_data,name:"
-msgid "Relation between Coverage and Extra Data"
-msgstr "Garantie-Extra Data Relation"
-
 msgctxt "model:offered,name:"
 msgid "Offered"
 msgstr "Offre"
 
+msgctxt "model:offered.business_rule_root,name:"
+msgid "Business Rule Root"
+msgstr "Règle Métier Racine"
+
+msgctxt "model:offered.coverage_amount.rule,name:"
+msgid "Coverage Amount Rule"
+msgstr "Montant de Couverture"
+
+msgctxt "model:offered.deductible.rule,name:"
+msgid "Deductible Rule"
+msgstr "Franchise"
+
+msgctxt "model:offered.deductible.rule.duration,name:"
+msgid "Deductible Duration"
+msgstr "Franchise"
+
+msgctxt "model:offered.eligibility.rule,name:"
+msgid "Eligibility Rule"
+msgstr "Eligibilite"
+
+msgctxt "model:offered.eligibility.rule-relation.kind,name:"
+msgid "Eligibilty Rule to Relation Kind Relation"
+msgstr ""
+"Table intermédiaire entre la règle d'égibilité et les relations autorisées"
+
+msgctxt "model:offered.item.description,name:"
+msgid "Item Description"
+msgstr "Description du Risque"
+
+msgctxt "model:offered.item.description-extra_data,name:"
+msgid "Item Description to Extra Data Relation"
+msgstr "Relation Risque - Données Complémentaires"
+
+msgctxt "model:offered.item.description-sub_item.description,name:"
+msgid "Relation between Item Desc and Sub Item Desc"
+msgstr ""
+
+msgctxt "model:offered.option.description,name:"
+msgid "OptionDescription"
+msgstr "Garantie"
+
+msgctxt "model:offered.option.description-extra_data,name:"
+msgid "Relation between OptionDescription and Extra Data"
+msgstr "Garantie-Données Complémentaires Relation"
+
 msgctxt "model:offered.package-option.description,name:"
-msgid "Link Package Coverage"
+msgid "Package to Option Description Relation"
 msgstr "Lien Formule Garantie"
 
 msgctxt "model:offered.product,name:"
@@ -2685,41 +2693,93 @@ msgid "Relation between Product and Item Description"
 msgstr "Relation Produit-Risque"
 
 msgctxt "model:offered.product-option.description,name:"
-msgid "Define Product - Coverage relations"
+msgid "Product to Option Description Relation"
 msgstr "Relations Produit Garantie"
 
-msgctxt "model:insurer,name:"
-msgid "Insurer"
-msgstr "Assureur"
+msgctxt "model:offered.term.rule,name:"
+msgid "Term Rule"
+msgstr "Règle de Terme - Renouvellement"
 
-msgctxt "selection:offered.business_rule_root,config_kind:"
+msgctxt "model:offered.validate.batch,name:"
+msgid "Product Validation Batch"
+msgstr ""
+
+msgctxt "model:process-offered.product,name:"
+msgid "Process Product Relation"
+msgstr "Relation Processus Produit"
+
+msgctxt "selection:billing.premium.rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
 
-msgctxt "selection:offered.business_rule_root,config_kind:"
+msgctxt "selection:billing.premium.rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
 
-msgctxt "selection:offered.business_rule_root,offered:"
-msgid "Coverage"
+msgctxt "selection:billing.premium.rule,frequency:"
+msgid "Half Yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:billing.premium.rule,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:billing.premium.rule,frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:billing.premium.rule,frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
+msgctxt "selection:billing.premium.rule,offered:"
+msgid "Option Description"
 msgstr "Garantie"
 
-msgctxt "selection:offered.business_rule_root,offered:"
+msgctxt "selection:billing.premium.rule,offered:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:offered.business_rule_root,template_behaviour:"
+msgctxt "selection:billing.premium.rule,template_behaviour:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.business_rule_root,template_behaviour:"
+msgctxt "selection:billing.premium.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
-msgctxt "selection:offered.business_rule_root,template_behaviour:"
+msgctxt "selection:billing.premium.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:billing.premium.rule.component,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:billing.premium.rule.component,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:billing.premium.rule.component,kind:"
+msgid "Base Price"
+msgstr "Prime de base"
+
+msgctxt "selection:billing.premium.rule.component,kind:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "selection:billing.premium.rule.component,kind:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
+msgid "Covered Item"
+msgstr "Elèment Couvert"
+
+msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
+msgid "Global"
+msgstr "Global"
+
 msgctxt "selection:clause.rule,config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -2729,7 +2789,7 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:clause.rule,offered:"
-msgid "Coverage"
+msgid "Option Description"
 msgstr "Garantie"
 
 msgctxt "selection:clause.rule,offered:"
@@ -2745,6 +2805,182 @@ msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:clause.rule,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:document.receive.request,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.request,needed_by:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.request.line,for_object:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:document.rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:document.rule,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.rule,kind:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "selection:document.rule,kind:"
+msgid "Main"
+msgstr "Principale"
+
+msgctxt "selection:document.rule,kind:"
+msgid "Sub Elem"
+msgstr "Elément Couvert"
+
+msgctxt "selection:document.rule,offered:"
+msgid "Option Description"
+msgstr "Garantie"
+
+msgctxt "selection:document.rule,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:document.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.rule,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:document.rule,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:document.template,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.template,kind:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "selection:document.template.version,resource:"
+msgid "Document Template"
+msgstr "Modèle de Lettre"
+
+msgctxt "selection:document.template.version,type:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "selection:document.template.version,type:"
+msgid "Link"
+msgstr "Lien"
+
+msgctxt "selection:expense.kind,kind:"
+msgid "Expert"
+msgstr "Avancé"
+
+msgctxt "selection:expense.kind,kind:"
+msgid "Judiciary"
+msgstr "Judiciaire"
+
+msgctxt "selection:expense.kind,kind:"
+msgid "Medical"
+msgstr "Médical"
+
+msgctxt "selection:expense.kind,kind:"
+msgid "Other"
+msgstr "Autre"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Loss"
+msgstr "Préjudice"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "selection:extra_data,type_:"
+msgid "Boolean"
+msgstr "Booléen"
+
+msgctxt "selection:extra_data,type_:"
+msgid "Char"
+msgstr "Alphanumérique"
+
+msgctxt "selection:extra_data,type_:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:extra_data,type_:"
+msgid "Integer"
+msgstr "Entier"
+
+msgctxt "selection:extra_data,type_:"
+msgid "Numeric"
+msgstr "Numérique"
+
+msgctxt "selection:extra_data,type_:"
+msgid "Selection"
+msgstr "Sélection"
+
+msgctxt "selection:offered,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:offered,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:offered.business_rule_root,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:offered.business_rule_root,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:offered.business_rule_root,offered:"
+msgid "Option Description"
+msgstr "Garantie"
+
+msgctxt "selection:offered.business_rule_root,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:offered.business_rule_root,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.business_rule_root,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:offered.business_rule_root,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
@@ -2769,7 +3005,7 @@ msgid "From another Coverage"
 msgstr "A partir d'une autre garantie"
 
 msgctxt "selection:offered.coverage_amount.rule,offered:"
-msgid "Coverage"
+msgid "Option Description"
 msgstr "Garantie"
 
 msgctxt "selection:offered.coverage_amount.rule,offered:"
@@ -2787,34 +3023,6 @@ msgstr "Compléter"
 msgctxt "selection:offered.coverage_amount.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Year"
-msgstr "Année"
 
 msgctxt "selection:offered.deductible.rule,config_kind:"
 msgid "Advanced"
@@ -2861,7 +3069,11 @@ msgid "Duration"
 msgstr "Durée"
 
 msgctxt "selection:offered.deductible.rule,offered:"
-msgid "Coverage"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "selection:offered.deductible.rule,offered:"
+msgid "Option Description"
 msgstr "Garantie"
 
 msgctxt "selection:offered.deductible.rule,offered:"
@@ -2896,57 +3108,33 @@ msgctxt "selection:offered.deductible.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:document.request.line,for_object:"
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:document.request,needed_by:"
-msgid ""
-msgstr " "
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
+msgid "Day"
+msgstr "Jour"
 
-msgctxt "selection:document.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
+msgid "Half-year"
+msgstr "Semestre"
 
-msgctxt "selection:document.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
+msgid "Month"
+msgstr "Mois"
 
-msgctxt "selection:document.rule,kind:"
-msgid ""
-msgstr " "
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
+msgid "Quarter"
+msgstr "Trimestre"
 
-msgctxt "selection:document.rule,kind:"
-msgid "Loss"
-msgstr "Préjudice"
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
+msgid "Week"
+msgstr "Semaine"
 
-msgctxt "selection:document.rule,kind:"
-msgid "Main"
-msgstr "Principale"
-
-msgctxt "selection:document.rule,kind:"
-msgid "Sub Elem"
-msgstr "Elément Couvert"
-
-msgctxt "selection:document.rule,offered:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "selection:document.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:document.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:document.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:document.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "selection:offered.eligibility.rule,config_kind:"
 msgid "Advanced"
@@ -2957,8 +3145,12 @@ msgid "Simple"
 msgstr "Simple"
 
 msgctxt "selection:offered.eligibility.rule,offered:"
-msgid "Coverage"
-msgstr "Garantie"
+msgid "Benefit"
+msgstr "Prestation"
+
+msgctxt "selection:offered.eligibility.rule,offered:"
+msgid "Option Description"
+msgstr "Offre"
 
 msgctxt "selection:offered.eligibility.rule,offered:"
 msgid "Product"
@@ -2996,245 +3188,21 @@ msgctxt "selection:offered.eligibility.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:expense.kind,kind:"
-msgid "Expert"
-msgstr "Avancé"
-
-msgctxt "selection:expense.kind,kind:"
-msgid "Judiciary"
-msgstr "Judiciaire"
-
-msgctxt "selection:expense.kind,kind:"
-msgid "Medical"
-msgstr "Médical"
-
-msgctxt "selection:expense.kind,kind:"
-msgid "Other"
-msgstr "Autre"
-
-msgctxt "selection:document.template,kind:"
+msgctxt "selection:offered.item.description,kind:"
 msgid ""
-msgstr " "
+msgstr ""
 
-msgctxt "selection:document.template,kind:"
-msgid "Document Request"
-msgstr "Demande de Documents"
+msgctxt "selection:offered.item.description,kind:"
+msgid "Company"
+msgstr "Société"
 
-msgctxt "selection:document.template.version,resource:"
-msgid "Document Template"
-msgstr "Modèle de Lettre"
+msgctxt "selection:offered.item.description,kind:"
+msgid "Party"
+msgstr "Acteur"
 
-msgctxt "selection:document.template.version,type:"
-msgid "Data"
-msgstr "Données"
-
-msgctxt "selection:document.template.version,type:"
-msgid "Link"
-msgstr "Lien"
-
-msgctxt "selection:billing.premium.rule.component,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:billing.premium.rule.component,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:billing.premium.rule.component,kind:"
-msgid "Base Price"
-msgstr "Prime de base"
-
-msgctxt "selection:billing.premium.rule.component,kind:"
-msgid "Fee"
-msgstr "Frais"
-
-msgctxt "selection:billing.premium.rule.component,kind:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
-msgid "Covered Item"
-msgstr "Elèment Couvert"
-
-msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
-msgid "Global"
-msgstr "Global"
-
-msgctxt "selection:billing.premium.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:billing.premium.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Half Yearly"
-msgstr "Semestriel"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Monthly"
-msgstr "Mensuel"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Quarterly"
-msgstr "Trimestriel"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Yearly"
-msgstr "Annuel"
-
-msgctxt "selection:billing.premium.rule,offered:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "selection:billing.premium.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:billing.premium.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:billing.premium.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:billing.premium.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:document.receive.request,kind:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:ins_product.simple_premium_rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:ins_product.simple_premium_rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:ins_product.simple_premium_rule,offered:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "selection:ins_product.simple_premium_rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:ins_product.simple_premium_rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:ins_product.simple_premium_rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:ins_product.simple_premium_rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:offered.term.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:offered.term.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:offered.term.rule,frequency:"
-msgid "Biyearly"
-msgstr "Biannuel"
-
-msgctxt "selection:offered.term.rule,frequency:"
-msgid "Half Yearly"
-msgstr "Semestriel"
-
-msgctxt "selection:offered.term.rule,frequency:"
-msgid "Monthly"
-msgstr "Mensuel"
-
-msgctxt "selection:offered.term.rule,frequency:"
-msgid "Quarterly"
-msgstr "Trimestriel"
-
-msgctxt "selection:offered.term.rule,frequency:"
-msgid "Yearly"
-msgstr "Annuel"
-
-msgctxt "selection:offered.term.rule,offered:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "selection:offered.term.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:offered.term.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.term.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.term.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:offered.term.rule,term_date_choice:"
-msgid "At subscription Time"
-msgstr "À La Souscription"
-
-msgctxt "selection:offered.term.rule,term_date_choice:"
-msgid "At this Date"
-msgstr "À Cette Date"
-
-msgctxt "selection:extra_data,kind:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:extra_data,kind:"
-msgid "Covered Element"
-msgstr "Elément Couvert"
-
-msgctxt "selection:extra_data,kind:"
-msgid "Loss"
-msgstr "Préjudice"
-
-msgctxt "selection:extra_data,kind:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:extra_data,kind:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "selection:extra_data,type_:"
-msgid "Boolean"
-msgstr "Booléen"
-
-msgctxt "selection:extra_data,type_:"
-msgid "Char"
-msgstr "Alphanumérique"
-
-msgctxt "selection:extra_data,type_:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "selection:extra_data,type_:"
-msgid "Integer"
-msgstr "Entier"
-
-msgctxt "selection:extra_data,type_:"
-msgid "Numeric"
-msgstr "Numérique"
-
-msgctxt "selection:extra_data,type_:"
-msgid "Selection"
-msgstr "Sélection"
+msgctxt "selection:offered.item.description,kind:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "selection:offered.option.description,family:"
 msgid ""
@@ -3272,18 +3240,6 @@ msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
 msgctxt "selection:offered.product,kind:"
 msgid "Insurance"
 msgstr "Assurance"
@@ -3299,6 +3255,62 @@ msgstr "Compléter"
 msgctxt "selection:offered.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:offered.term.rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:offered.term.rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:offered.term.rule,frequency:"
+msgid "Biyearly"
+msgstr "Biannuel"
+
+msgctxt "selection:offered.term.rule,frequency:"
+msgid "Half Yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:offered.term.rule,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:offered.term.rule,frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:offered.term.rule,frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
+msgctxt "selection:offered.term.rule,offered:"
+msgid "Option Description"
+msgstr "Garantie"
+
+msgctxt "selection:offered.term.rule,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:offered.term.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.term.rule,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:offered.term.rule,template_behaviour:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:offered.term.rule,term_date_choice:"
+msgid "At subscription Time"
+msgstr "À La Souscription"
+
+msgctxt "selection:offered.term.rule,term_date_choice:"
+msgid "At this Date"
+msgstr "À Cette Date"
 
 msgctxt "selection:rule_engine,extra_data_kind:"
 msgid "Extra Data"
@@ -3320,118 +3332,6 @@ msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
 msgid "Complementary data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:document.create.attach:"
-msgid "Attachment"
-msgstr "Pièce jointe"
-
-msgctxt "view:document.receive.attach:"
-msgid "Attachments"
-msgstr "Pièces jointes"
-
-msgctxt "view:offered.business_rule_root:"
-msgid "Business Rule Root"
-msgstr "Règle Métier Racine"
-
-msgctxt "view:clause:"
-msgid "Clause"
-msgstr "Clause"
-
-msgctxt "view:clause.rule:"
-msgid "Clause rule"
-msgstr "Clause"
-
-msgctxt "view:clause.version:"
-msgid "Clause Version"
-msgstr "Version de Clause"
-
-msgctxt "view:clause.version:"
-msgid "Clause rule"
-msgstr "Clause"
-
-msgctxt "view:offered.coverage_amount.rule:"
-msgid "Coverage Amount rule"
-msgstr "Montant de Couverture"
-
-msgctxt "view:offered.deductible.rule.duration:"
-msgid "Deductible Duration"
-msgstr "Franchise"
-
-msgctxt "view:offered.deductible.rule:"
-msgid "Deductible rule"
-msgstr "Franchise"
-
-msgctxt "view:document.request.line:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "view:document.request.line:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "view:document.description:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "view:document.description:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "view:document.request:"
-msgid "Document Request"
-msgstr "Demande de Documents"
-
-msgctxt "view:document.request:"
-msgid "Requests"
-msgstr "Demandes"
-
-msgctxt "view:document.request:"
-msgid "Send Request"
-msgstr "Envoyer la demande"
-
-msgctxt "view:document.receive.set_requests:"
-msgid "Document Request"
-msgstr "Document Request"
-
-msgctxt "view:document.rule:"
-msgid "Document Rule"
-msgstr "Document"
-
-msgctxt "view:offered.eligibility.rule:"
-msgid "Covered Element"
-msgstr "Elément Couvert"
-
-msgctxt "view:offered.eligibility.rule:"
-msgid "Eligibility rule"
-msgstr "Eligibilite"
-
-msgctxt "view:expense.kind:"
-msgid "Expense Kind"
-msgstr "Type de Frais"
-
-msgctxt "view:document.template:"
-msgid "Document Template"
-msgstr "Modèle de Lettre"
-
-msgctxt "view:document.template:"
-msgid "Document Templates"
-msgstr "Modèles de Lettre"
-
-msgctxt "view:document.create.select.template:"
-msgid "Document Templates"
-msgstr "Modèles de Lettre"
-
-msgctxt "view:document.create.select:"
-msgid "Document Templates"
-msgstr "Modèles de Lettre"
-
-msgctxt "view:document.template.version:"
-msgid "Document Template Version"
-msgstr "Version de Lettre"
-
-msgctxt "view:document.template.version:"
-msgid "Document Template Versions"
-msgstr "Versions de Lettre"
-
 msgctxt "view:billing.premium.rule.component:"
 msgid "Premium Rule Component"
 msgstr "Composante de Cotisation"
@@ -3448,13 +3348,105 @@ msgctxt "view:billing.premium.rule:"
 msgid "Pricing rule"
 msgstr "Règle de Cotisation"
 
+msgctxt "view:clause.rule:"
+msgid "Clause rule"
+msgstr "Clause"
+
+msgctxt "view:clause.version:"
+msgid "Clause Version"
+msgstr "Version de Clause"
+
+msgctxt "view:clause.version:"
+msgid "Clause rule"
+msgstr "Clause"
+
+msgctxt "view:clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "view:document.create.attach:"
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+msgctxt "view:document.create.select.template:"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:document.create.select:"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:document.description:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "view:document.description:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:document.receive.attach:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
 msgctxt "view:document.receive.request:"
 msgid "Document Receive Request"
 msgstr "Rechercher une Demande"
 
-msgctxt "view:offered.term.rule:"
-msgid "Term - Renewal rule"
-msgstr "Règle de Terme - Renouvellement"
+msgctxt "view:document.receive.set_requests:"
+msgid "Document Request"
+msgstr "Document Request"
+
+msgctxt "view:document.request.line:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "view:document.request.line:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:document.request:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "view:document.request:"
+msgid "Requests"
+msgstr "Demandes"
+
+msgctxt "view:document.request:"
+msgid "Send Request"
+msgstr "Envoyer la demande"
+
+msgctxt "view:document.rule:"
+msgid "Document Rule"
+msgstr "Document"
+
+msgctxt "view:document.template.version:"
+msgid "Document Template Version"
+msgstr "Version de Lettre"
+
+msgctxt "view:document.template.version:"
+msgid "Document Template Versions"
+msgstr "Versions de Lettre"
+
+msgctxt "view:document.template:"
+msgid "Document Template"
+msgstr "Modèle de Lettre"
+
+msgctxt "view:document.template:"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:expense.kind:"
+msgid "Expense Kind"
+msgstr "Type de Frais"
+
+msgctxt "view:extra_data-sub_extra_data:"
+msgid "Relation"
+msgstr ""
+
+msgctxt "view:extra_data-sub_extra_data:"
+msgid "Relations"
+msgstr "Relations"
 
 msgctxt "view:extra_data:"
 msgid "Extra Data Descriptor"
@@ -3464,13 +3456,29 @@ msgctxt "view:extra_data:"
 msgid "Extra Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
 
-msgctxt "view:extra_data-sub_extra_data:"
-msgid "Relation"
-msgstr ""
+msgctxt "view:offered.business_rule_root:"
+msgid "Business Rule Root"
+msgstr "Règle Métier Racine"
 
-msgctxt "view:extra_data-sub_extra_data:"
-msgid "Relations"
-msgstr "Relations"
+msgctxt "view:offered.coverage_amount.rule:"
+msgid "Coverage Amount rule"
+msgstr "Montant de Couverture"
+
+msgctxt "view:offered.deductible.rule.duration:"
+msgid "Deductible Duration"
+msgstr "Franchise"
+
+msgctxt "view:offered.deductible.rule:"
+msgid "Deductible rule"
+msgstr "Franchise"
+
+msgctxt "view:offered.eligibility.rule:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "view:offered.eligibility.rule:"
+msgid "Eligibility rule"
+msgstr "Eligibilite"
 
 msgctxt "view:offered.option.description:"
 msgid "Clause"
@@ -3487,14 +3495,6 @@ msgstr "Franchise"
 msgctxt "view:offered.option.description:"
 msgid "Documents"
 msgstr "Documents"
-
-msgctxt "view:offered:"
-msgid "Eligibility"
-msgstr "Eligibilité"
-
-msgctxt "view:offered:"
-msgid "Pricing"
-msgstr "Cotisation"
 
 msgctxt "view:offered.product:"
 msgid "Clause"
@@ -3516,6 +3516,18 @@ msgctxt "view:offered.product:"
 msgid "Term - Renewal"
 msgstr "Terme - Renouvellement"
 
+msgctxt "view:offered.term.rule:"
+msgid "Term - Renewal rule"
+msgstr "Règle de Terme - Renouvellement"
+
+msgctxt "view:offered:"
+msgid "Eligibility"
+msgstr "Eligibilité"
+
+msgctxt "view:offered:"
+msgid "Pricing"
+msgstr "Cotisation"
+
 msgctxt "view:party.party:"
 msgid "Insurer"
 msgstr "Assureur"
@@ -3536,13 +3548,11 @@ msgctxt "wizard_button:document.create,attach,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:document.create,attach,post_generation:"
+msgctxt "wizard_button:document.create,attach,post_generation:"
 msgid "Attach"
 msgstr "Attacher"
 
-msgctxt ""
-"wizard_button:document.create,select_model,attach:"
+msgctxt "wizard_button:document.create,select_model,attach:"
 msgid "Attach"
 msgstr "Attacher"
 
@@ -3550,37 +3560,30 @@ msgctxt "wizard_button:document.create,select_model,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:document.create,select_model,generate:"
+msgctxt "wizard_button:document.create,select_model,generate:"
 msgid "Generate"
 msgstr "Générer"
 
-msgctxt ""
-"wizard_button:document.receive,attachment_setter,end:"
+msgctxt "wizard_button:document.receive,attachment_setter,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:document.receive,attachment_setter,only_store:"
+msgctxt "wizard_button:document.receive,attachment_setter,only_store:"
 msgid "Next"
 msgstr "Suivant"
 
-msgctxt ""
-"wizard_button:document.receive,input_document,end:"
+msgctxt "wizard_button:document.receive,input_document,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt ""
-"wizard_button:document.receive,input_document,notify_request:"
+msgctxt "wizard_button:document.receive,input_document,notify_request:"
 msgid "Complete"
 msgstr "Terminer"
 
-msgctxt ""
-"wizard_button:document.receive,select_instance,attachment_setter:"
+msgctxt "wizard_button:document.receive,select_instance,attachment_setter:"
 msgid "Continue"
 msgstr "Continuer"
 
-msgctxt ""
-"wizard_button:document.receive,select_instance,end:"
+msgctxt "wizard_button:document.receive,select_instance,end:"
 msgid "Cancel"
 msgstr "Annuler"

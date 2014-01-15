@@ -14,10 +14,6 @@ msgctxt "field:contract,is_health:"
 msgid "Is Health"
 msgstr "Santé"
 
-msgctxt "field:ir.export_package,com_products:"
-msgid "Com Products"
-msgstr ""
-
 msgctxt "field:distribution.commercial_product,code:"
 msgid "Code"
 msgstr "Code"
@@ -78,6 +74,10 @@ msgctxt "field:distribution.commercial_product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:distribution.commercial_product,xml_id:"
+msgid "XML Id"
+msgstr ""
+
 msgctxt "field:distribution.network,all_com_products:"
 msgid "All Comercial Products"
 msgstr "Tous les produits commerciaux"
@@ -129,6 +129,14 @@ msgstr "Date de mise à jour"
 msgctxt "field:distribution.network-commercial_product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:distribution.network-commercial_product,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.export_package,com_products:"
+msgid "Com Products"
+msgstr ""
 
 msgctxt "field:offered.product,com_products:"
 msgid "Commercial Products"

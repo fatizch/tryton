@@ -1,0 +1,11 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:company.company,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:ir.test_case,main_company_name:"
+msgid ""
+msgstr ""
