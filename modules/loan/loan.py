@@ -30,33 +30,26 @@ DEFFERALS = [
     ('fully', 'Fully deferred'),
     ]
 
-STATES = {'required': ~~Eval('active')}
-DEPENDS = ['active']
-
 
 class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan'
 
     __name__ = 'loan'
 
-    active = fields.Boolean('Active')
-    kind = fields.Selection(LOAN_KIND, 'Kind', sort=False, states=STATES,
-        depends=DEPENDS)
+    kind = fields.Selection(LOAN_KIND, 'Kind', sort=False)
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
         required=True)
-    number_of_payments = fields.Integer('Number of Payments', states=STATES,
-        depends=DEPENDS)
+    number_of_payments = fields.Integer('Number of Payments')
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
-        'Payment Frequency', sort=False, states=STATES, depends=DEPENDS)
+        'Payment Frequency', sort=False)
     payment_amount = fields.Numeric('Payment Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
         on_change_with=['payment_amount', 'kind', 'rate',
             'amount', 'number_of_payments', 'currency', 'payment_frequency',
             'first_payment_date', 'increments'])
-    amount = fields.Numeric('Amount', states=STATES, depends=DEPENDS)
+    amount = fields.Numeric('Amount')
     funds_release_date = fields.Date('Funds Release Date')
-    first_payment_date = fields.Date('First Payment Date', states=STATES,
-        depends=DEPENDS)
+    first_payment_date = fields.Date('First Payment Date')
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
     outstanding_capital = fields.Numeric('Outstanding Capital')
     rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
@@ -87,6 +80,10 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def default_kind(cls):
         return 'fixed_rate'
+
+    @classmethod
+    def default_is_draft(cls):
+        return True
 
     def on_change_with_payment_amount(self):
         if (not self.amount or not self.number_of_payments

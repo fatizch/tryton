@@ -2,8 +2,6 @@
 <form string="Loan">
   <notebook>
     <page id="main" string="Loan Create Parameters">
-      <label name="active"/>
-      <field name="active"/>
       <newline/>
       <label name="kind"/>
       <field name="kind"/>
