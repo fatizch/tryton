@@ -19,10 +19,9 @@ Create Database::
     ...         'conf', 'trytond.conf'))
     >>> Module = Model.get('ir.module.module')
     >>> test_module = Module.find([('name', '=', 'test_module')])[0]
-    >>> Module.install([test_module.id], {})
+    >>> Module.install([test_module.id], config.context)
     >>> wizard = Wizard('ir.module.module.install_upgrade')
     >>> wizard.execute('upgrade')
-    >>> Model.reset()
 
 Import Exported DB::
 
@@ -46,6 +45,7 @@ Get Models::
 Reload user preferences::
 
     >>> config._context = User.get_preferences(True, config.context)
+    >>> Model.reset()
 
 Start subscription::
 
@@ -68,7 +68,7 @@ Start subscription::
     >>> wizard.form.good_process = process
     >>> process.fancy_name
     u'Processus de souscription individuel'
-    >>> wizard.execute('action')
+    >>> wizard.execute('action', config.context)
 
 Get contract::
 

@@ -57,8 +57,17 @@ def launch(arguments, config, work_data):
                     work_data['trytond_conf']])
             print 'Server launched, pid %s' % server_process.pid
     if arguments.target in ('client', 'all'):
-        subprocess.Popen([work_data['python_exec'], work_data['tryton_exec'],
-                '-c', work_data['tryton_conf']])
+        if arguments.mode == 'demo':
+            subprocess.Popen([work_data['python_exec'],
+                    work_data['tryton_exec'], '-c', work_data['tryton_conf']])
+        elif arguments.mode == 'dev':
+            subprocess.Popen([work_data['python_exec'],
+                    work_data['tryton_exec'], '-c', work_data['tryton_conf'],
+                    '-d'])
+        elif arguments.mode == 'debug':
+            subprocess.Popen([work_data['python_exec'],
+                    work_data['tryton_exec'], '-c', work_data['tryton_conf'],
+                    '-l', 'DEBUG', '-d', '-v'])
 
 
 def kill(arguments, config, work_data):
@@ -302,6 +311,8 @@ if __name__ == '__main__':
         help='launch client / server')
     parser_launch.add_argument('target', choices=['server', 'client',
             'all'], help='What should be launched')
+    parser_launch.add_argument('--mode', '-m', choices=['demo', 'dev',
+            'debug'], default='demo')
     parser_batch = subparsers.add_parser('batch', help='Launches a batch')
     parser_batch.add_argument('action', choices=['kill', 'execute'])
     parser_batch.add_argument('--name', type=str, help='Name of the batch'

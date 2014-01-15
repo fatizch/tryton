@@ -16,10 +16,9 @@ config = config.set_trytond(database_type='postgresql',
         'conf', 'trytond.conf'))
 Module = Model.get('ir.module.module')
 test_module = Module.find([('name', '=', 'test_module')])[0]
-Module.install([test_module.id], {})
+Module.install([test_module.id], config.context)
 wizard = Wizard('ir.module.module.install_upgrade')
 wizard.execute('upgrade')
-Model.reset()
 ##Comment##Import Exported DB
 wizard = Wizard('ir.test_case.run')
 wizard.form.select_all_test_cases = True
@@ -37,6 +36,7 @@ Party = Model.get('party.party')
 User = Model.get('res.user')
 ##Comment##Reload user preferences
 config._context = User.get_preferences(True, config.context)
+Model.reset()
 ##Comment##Start subscription
 wizard = Wizard('contract.subscribe')
 dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
@@ -57,7 +57,7 @@ process = Process.find([
 wizard.form.good_process = process
 process.fancy_name
 ##Res##u'Processus de souscription individuel'
-wizard.execute('action')
+wizard.execute('action', config.context)
 ##Comment##Get contract
 contract = Contract.find([], limit=1, order=[('create_date', 'DESC')])[0]
 contract.current_state.step.fancy_name

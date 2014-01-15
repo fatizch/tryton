@@ -64,7 +64,7 @@ class OptionDescription:
     def calculate_main_price(self, args, result_line, errs, date, contract):
         try:
             coverage_line, coverage_errs = self.get_result(
-                'price', args, kind='pricing')
+                'price', args, kind='premium')
         except offered.NonExistingRuleKindException:
             coverage_line = None
             coverage_errs = []
@@ -83,7 +83,7 @@ class OptionDescription:
             covered_data.init_dict_for_rule_engine(tmp_args)
             try:
                 sub_elem_line, sub_elem_errs = self.get_result(
-                    'sub_elem_price', tmp_args, kind='pricing')
+                    'sub_elem_price', tmp_args, kind='premium')
             except offered.NonExistingRuleKindException:
                 sub_elem_line = None
                 sub_elem_errs = []

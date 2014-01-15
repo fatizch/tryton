@@ -138,7 +138,7 @@ class Product:
         result_line.init_from_args(args)
         try:
             product_line, product_errs = self.get_result('price', args,
-                kind='pricing')
+                kind='premium')
         except NonExistingRuleKindException:
             product_line = None
             product_errs = []
@@ -175,13 +175,13 @@ class Product:
         if not 'date' in args:
             raise Exception('A date must be provided')
         try:
-            return self.get_result('frequency', args, kind='pricing')
+            return self.get_result('frequency', args, kind='premium')
         except NonExistingRuleKindException:
             pass
         for coverage in self.get_valid_coverages():
             try:
                 return coverage.get_result(
-                    'frequency', args, kind='pricing')
+                    'frequency', args, kind='premium')
             except NonExistingRuleKindException:
                 pass
         return 'yearly', []

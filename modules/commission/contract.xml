@@ -45,7 +45,6 @@
             <field name="model">contract.option</field>
             <field name="type">tree</field>
             <field name="inherit" ref="contract.option_view_tree"/>
-            <!-- <field name="name">option-commission_option_list</field> -->
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="option_view_form">
