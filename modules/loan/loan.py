@@ -81,10 +81,6 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_kind(cls):
         return 'fixed_rate'
 
-    @classmethod
-    def default_is_draft(cls):
-        return True
-
     def on_change_with_payment_amount(self):
         if (not self.amount or not self.number_of_payments
                 or not self.first_payment_date):
