@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Commission Plans"/>
-    </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <newline/>
         <label name="commission_kind"/>
