@@ -72,12 +72,14 @@ def execute_test_cases(cfg_dict, files=False):
     wizard.execute('end')
 
 
-def launch_proteus_test_case(test_config_file=None, module=None):
+def launch_proteus_test_case(test_config_file=None, module=None, database=''):
     if not test_config_file:
         test_config_file = os.path.join(DIR, 'test_case.cfg')
     logging.getLogger('test_case').info('Reading config from %s'
         % test_config_file)
     cfg_dict = proteus_tools.get_test_cfg(test_config_file)
+    if database:
+        cfg_dict['database_name'] = database
 
     delete_db_if_necessary(cfg_dict)
     if not module:
@@ -93,9 +95,9 @@ def launch_proteus_test_case(test_config_file=None, module=None):
 if __name__ == '__main__':
     logging.getLogger('test_case').info('Launching Proteus Test Case')
     module = None
-    if len(sys.argv) == 2:
-        module = sys.argv[1]
-    cfg_dict = launch_proteus_test_case(module=module)
+    if len(sys.argv) == 3:
+        module = sys.argv[2]
+    cfg_dict = launch_proteus_test_case(module=module, database=sys.argv[1])
     if not module and not cfg_dict['only_install']:
         Model.reset()
         execute_test_cases(cfg_dict)

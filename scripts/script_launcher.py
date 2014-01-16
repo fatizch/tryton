@@ -120,7 +120,7 @@ def database(arguments, config, work_data):
         command_line = [work_data['python_exec'],
             work_data['tryton_script_launcher'], os.path.join(
                 work_data['runtime_dir'], 'coopbusiness', 'test_case',
-                'proteus_test_case.py')]
+                'proteus_test_case.py', arguments.database)]
         if arguments.test_case == 'all':
             process = subprocess.Popen(command_line)
         else:
