@@ -1260,11 +1260,16 @@ class ManageDimensionGeneric(Wizard):
         setattr(cls, 'view_data', StateAction('table.act_table_2d_open'))
         if int(cls.__name__[-1]) >= DIMENSION_MAX:
             return
+        next_dim = int(cls.__name__[-1]) + 1
         setattr(cls, 'next_dim_action', StateAction(
-                'table.act_manage_dimension_%s' % (int(cls.__name__[-1]) + 1)))
+                'table.act_manage_dimension_%s' % next_dim))
+        # TODO : Find why this is needed (sometimes, the insert occurs twice)
+        if 'Dimension %s' % next_dim in [x.string for x in
+                cls.dimension_management.buttons]:
+            return
         cls.dimension_management = copy.copy(cls.dimension_management)
-        cls.dimension_management.buttons.insert(2, Button('Dimension %s' % (
-                    int(cls.__name__[-1]) + 1), 'next_dim', 'tryton-go-next'))
+        cls.dimension_management.buttons.insert(2, Button('Dimension %s' %
+                    next_dim, 'next_dim', 'tryton-go-next'))
 
     def get_my_dimension(self):
         raise NotImplementedError

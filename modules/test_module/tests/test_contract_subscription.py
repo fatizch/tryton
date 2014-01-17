@@ -36,7 +36,7 @@ Party = Model.get('party.party')
 User = Model.get('res.user')
 ##Comment##Reload user preferences
 config._context = User.get_preferences(True, config.context)
-Model.reset()
+# Model.reset()
 ##Comment##Start subscription
 wizard = Wizard('contract.subscribe')
 dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
@@ -57,7 +57,7 @@ process = Process.find([
 wizard.form.good_process = process
 process.fancy_name
 ##Res##u'Processus de souscription individuel'
-wizard.execute('action', config.context)
+wizard.execute('action')
 ##Comment##Get contract
 contract = Contract.find([], limit=1, order=[('create_date', 'DESC')])[0]
 contract.current_state.step.fancy_name

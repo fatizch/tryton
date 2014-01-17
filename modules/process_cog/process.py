@@ -270,7 +270,7 @@ class CogProcessFramework(ProcessFramework):
         instances = super(CogProcessFramework, cls).create(values)
         Log = Pool().get('process.log')
         Session = Pool().get('ir.session')
-        good_session, = Session.search(
+        good_sessions = Session.search(
             [('create_uid', '=', Transaction().user)])
         for instance in instances:
             log = Log()
@@ -279,7 +279,7 @@ class CogProcessFramework(ProcessFramework):
             log.start_time = datetime.datetime.now()
             log.end_time = datetime.datetime.now()
             log.to_state = instance.current_state
-            log.session = good_session.key
+            log.session = good_sessions[0].key if good_sessions else ''
             log.save()
         return instances
 

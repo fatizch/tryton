@@ -36,7 +36,7 @@ class TestCaseModel:
             name, code, kind = filename, '', 'char'
         code = code.strip()
         name = name.strip()
-        existing = Table.search([('name', '=', name)])
+        existing = Table.search([('code', '=', code)])
         if existing:
             # Delete existing data before update
             Cell.delete(Cell.search([('definition', '=', existing[0].id)]))
