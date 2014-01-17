@@ -45,7 +45,6 @@ Get Models::
 Reload user preferences::
 
     >>> config._context = User.get_preferences(True, config.context)
-    >>> Model.reset()
 
 Start subscription::
 
@@ -68,7 +67,7 @@ Start subscription::
     >>> wizard.form.good_process = process
     >>> process.fancy_name
     u'Processus de souscription individuel'
-    >>> wizard.execute('action', config.context)
+    >>> wizard.execute('action')
 
 Get contract::
 
