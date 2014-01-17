@@ -49,3 +49,7 @@ class Insurer(model.CoopView, model.CoopSQL):
     @classmethod
     def get_summary(cls, insurers, name=None, at_date=None, lang=None):
         return dict([(insurer.id, 'X') for insurer in insurers])
+
+    def get_rec_name(self, name):
+        return (self.party.rec_name
+            if self.party else super(Insurer, self).get_rec_name(name))
