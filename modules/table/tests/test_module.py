@@ -344,15 +344,16 @@ class ModuleTestCase(test_framework.CoopTestCase):
             wizard = self.ManageDimension1(wizard_id)
             wizard._execute('dimension_management')
             res = wizard.default_dimension_management(None)
+            self.assertEqual(len(res['values']), 2)
             self.assertEqual(res, {
                     'date_format': "%d%m%y",
-                    'kind': "value",
-                    'name': "Value",
+                    'kind': u'value',
+                    'name': u'Value',
                     'cur_dimension': 1,
                     'converted_text': "bar\nfoo",
-                    'values': [2, 1],
-                    'table': 1,
-                    'order': "alpha",
+                    'values': res['values'],
+                    'table': res['table'],
+                    'order': u'alpha',
                 })
             self.assertEqual(self.ManageDimension1.next_dim_action.action_id,
                 'table.act_manage_dimension_2')
@@ -416,7 +417,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         new_table = test_table.copy([test_table])[0]
         self.assertEqual(new_table.code, 'test_code_clone')
         self.assertEqual(self.Cell.get(new_table, 'bar', 30), 'chicken')
-
 
 
 def suite():

@@ -29,6 +29,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Language': 'ir.lang',
             'RuleParameter': 'rule_engine.parameter',
             'Table': 'table',
+            'Log': 'rule_engine.log',
         }
 
     @classmethod
@@ -534,8 +535,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # Check Debug mode
         rule.debug_mode = True
         rule.save()
+
+        Transaction().cursor.commit()
         rule.execute({})
-        self.assertEqual(len(rule.exec_logs), 1)
+
+        with Transaction().new_cursor():
+            self.assertEqual(len(self.Log.search([('rule', '=', rule.id)])), 1)
 
         # Check execution errors raise UserErrors
         rule.debug_mode = False
