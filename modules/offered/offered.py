@@ -34,6 +34,12 @@ SUBSCRIBER_KIND = [
     ('company', 'Company'),
     ]
 
+SUBSCRIPTION_BEHAVIOUR = [
+    ('mandatory', 'Mandatory'),
+    ('proposed', 'Proposed'),
+    ('optional', 'Optional'),
+    ]
+
 
 class Templated(object):
     'Templated'
@@ -469,11 +475,8 @@ class OptionDescription(model.CoopSQL, Offered):
             ('company', '=', Eval('company'))],
         depends=['currency', 'company'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    subscription_behaviour = fields.Selection([
-            ('mandatory', 'Mandatory'),
-            ('proposed', 'Proposed'),
-            ('optional', 'Optional'),
-            ], 'Subscription Behaviour', sort=False)
+    subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
+        'Subscription Behaviour', sort=False)
     is_package = fields.Boolean('Package')
     coverages_in_package = fields.Many2Many(
         'offered.package-option.description',

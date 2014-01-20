@@ -23,6 +23,8 @@ class OptionSubscription:
             values)
         res['possible_covered_elements'] = [
             x.id for x in contract.covered_elements]
+        if len(contract.covered_elements) == 1:
+            res['covered_element'] = contract.covered_elements[0].id
         return res
 
     def subscribe_option(self, coverage):
@@ -79,6 +81,7 @@ class OptionSubscription:
             if not x in to_delete]
         if to_delete:
             self.delete_options(to_delete)
+        contract.init_extra_data()
         contract.save()
         return 'end'
 

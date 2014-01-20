@@ -4,6 +4,7 @@ from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields
+from trytond.modules.offered import offered
 
 __all__ = [
     'OptionSubscription',
@@ -33,7 +34,8 @@ class OptionSubscription(model.CoopWizard):
         for coverage in contract.offered.coverages:
             options.append({
                     'is_selected': (
-                        coverage.subscription_behaviour != 'optional'),
+                        coverage.id in [x.offered.id for x in contract.options]
+                        or coverage.subscription_behaviour != 'optional'),
                     'coverage_behaviour': coverage.subscription_behaviour,
                     'coverage': coverage.id
                     })
@@ -70,6 +72,7 @@ class OptionSubscription(model.CoopWizard):
             if not x in to_delete]
         if to_delete:
             Option.delete(to_delete)
+        contract.init_extra_data()
         contract.save()
         return 'end'
 
@@ -92,10 +95,7 @@ class WizardOption(model.CoopView):
 
     coverage = fields.Many2One('offered.option.description',
         'Option Description')
-    coverage_behaviour = fields.Function(
-        fields.Char('Behaviour'), 'get_coverage_behaviour')
+    coverage_behaviour = fields.Selection(offered.SUBSCRIPTION_BEHAVIOUR,
+        'Subscription Behaviour', sort=False)
     is_selected = fields.Boolean('Selected?', states={
             'readonly': Eval('coverage_behaviour') == 'mandatory'})
-
-    def get_coverage_behaviour(self, name):
-        return self.coverage.subscription_behaviour if self.coverage else ''
