@@ -3190,7 +3190,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:offered.item.description,kind:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:offered.item.description,kind:"
 msgid "Company"
@@ -3455,6 +3455,10 @@ msgstr "Descripteur de Données Complémentaires"
 msgctxt "view:extra_data:"
 msgid "Extra Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
+
+msgctxt "view:insurer:"
+msgid "Insurer"
+msgstr "Assureur"
 
 msgctxt "view:offered.business_rule_root:"
 msgid "Business Rule Root"

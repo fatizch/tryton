@@ -24,8 +24,8 @@ msgid "Journal"
 msgstr "Journal"
 
 msgctxt "field:account.configuration,default_suspense_account:"
-msgid ""
-msgstr " "
+msgid "Default Suspense Account"
+msgstr "Compte d'attente par défaut"
 
 msgctxt "field:account.payment,collection:"
 msgid "Collection"
@@ -180,7 +180,7 @@ msgid "Party"
 msgstr "Tiers"
 
 msgctxt "field:party.party,suspense_account:"
-msgid "Suspense account"
+msgid "Suspense Account"
 msgstr "Compte d'attente"
 
 msgctxt "model:collection,name:"

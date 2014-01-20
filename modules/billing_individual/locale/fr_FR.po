@@ -380,8 +380,8 @@ msgid "Billing Periods"
 msgstr "Période de Facturation"
 
 msgctxt "field:contract,display_all_lines:"
-msgid ""
-msgstr " "
+msgid "Display all lines"
+msgstr "Afficher Toutes les Lignes"
 
 msgctxt "field:contract,last_bill:"
 msgid "Last Bill"

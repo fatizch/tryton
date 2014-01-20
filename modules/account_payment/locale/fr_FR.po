@@ -290,7 +290,7 @@ msgid "Payments"
 msgstr "Paiements"
 
 msgctxt "model:res.group,name:group_payment"
-msgid "Paiement"
+msgid "Payment"
 msgstr "Paiement"
 
 msgctxt "selection:account.move.line,payment_kind:"

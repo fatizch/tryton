@@ -27,8 +27,8 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.option.description,is_coverage_amount_needed:"
-msgid ""
-msgstr " "
+msgid "Coverage Amount Needed"
+msgstr "Montant de Couverture Nécessaire"
 
 msgctxt "field:salary_range,ceiling:"
 msgid "Current Ceiling"
@@ -171,7 +171,7 @@ msgid "Salary Range Version"
 msgstr ""
 
 msgctxt "model:tag,name:tag_life"
-msgid "Prévoyance"
+msgid "Life"
 msgstr "Prévoyance"
 
 msgctxt "selection:offered.option.description,family:"

@@ -260,7 +260,7 @@ msgstr ""
 
 msgctxt "field:company.company,fiscal_years:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "model:account.fee.description,name:"
 msgid "Fee Description"
