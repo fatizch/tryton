@@ -137,6 +137,7 @@ class ExportImportMixin(Model):
         # functional key for self.
         # field_name may use "." to chain if it is not ambiguous
         # TODO : Look for a field with 'UNIQUE' and 'required' attributes set
+        # TODO : Cache this
         res = []
         if 'company' in cls._fields and (
                 not isinstance(cls._fields['company'], tryton_fields.Function)
@@ -657,8 +658,10 @@ class ExportImportMixin(Model):
 
     @classmethod
     def import_json(cls, values):
+        Config = Pool().get('ir.configuration')
         with Transaction().set_user(0), Transaction().set_context(
-                company=None), Transaction().set_context(__importing__=True):
+                company=None, __importing__=True,
+                language=Config.get_language()):
             if isinstance(values, basestring):
                 values = json.loads(values, object_hook=object_hook)
                 values = map(utils.recursive_list_tuple_convert, values)
