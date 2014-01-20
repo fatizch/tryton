@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tree>
-  <field name="reference"/>
+<tree string="Brokers">
+    <field name="party"/>
+    <field name="reference"/>
 </tree>

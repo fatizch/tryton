@@ -8,4 +8,4 @@ msgstr ""
 
 msgctxt "field:ir.test_case,main_company_name:"
 msgid ""
-msgstr ""
+msgstr " "

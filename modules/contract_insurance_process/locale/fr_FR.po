@@ -89,10 +89,6 @@ msgctxt "field:contract.covered_data,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.option,is_health:"
-msgid "Is Health"
-msgstr "Santé"
-
 msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"

@@ -535,7 +535,7 @@ msgstr " "
 
 msgctxt "model:contract.service,name:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "model:contract.status.history,name:"
 msgid "Status History"

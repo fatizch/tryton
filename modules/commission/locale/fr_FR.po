@@ -462,10 +462,6 @@ msgctxt "field:party.party,broker_role:"
 msgid "Broker"
 msgstr "Courtier"
 
-msgctxt "field:party.party,dist_networks:"
-msgid "Distribution Networks"
-msgstr "Réseaux de Distribution"
-
 msgctxt "field:party.party,is_broker:"
 msgid "Broker"
 msgstr "Courtier"
@@ -601,6 +597,10 @@ msgstr "Délégation de gestion"
 msgctxt "selection:offered.product,kind:"
 msgid "Commission"
 msgstr "Commission"
+
+msgctxt "view:broker:"
+msgid "Broker"
+msgstr "Courtier"
 
 msgctxt "view:commission.rule:"
 msgid "%"

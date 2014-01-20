@@ -25,6 +25,7 @@ class Broker(model.CoopSQL, model.CoopView):
     'Broker'
 
     __name__ = 'broker'
+    _rec_name = 'party'
 
     party = fields.Many2One('party.party', 'Party', required=True,
         ondelete='CASCADE', select=True)

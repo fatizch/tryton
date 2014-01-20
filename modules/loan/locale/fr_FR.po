@@ -78,10 +78,6 @@ msgctxt "field:contract.option,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:loan,active:"
-msgid "Active"
-msgstr "Active"
-
 msgctxt "field:loan,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -567,7 +563,7 @@ msgid "Loan Share"
 msgstr "Quotité"
 
 msgctxt "model:tag,name:tag_loan"
-msgid "Prêt"
+msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "selection:loan,defferal:"
