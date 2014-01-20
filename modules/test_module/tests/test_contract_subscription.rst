@@ -27,6 +27,7 @@ Import Exported DB::
 
     >>> wizard = Wizard('ir.test_case.run')
     >>> wizard.form.select_all_test_cases = True
+    >>> wizard.execute('execute_test_cases')
     >>> wizard.form.select_all_files = True
     >>> wizard.execute('execute_test_cases')
     >>> wizard.execute('end')
