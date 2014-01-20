@@ -53,10 +53,6 @@ class Journal(export.ExportImportMixin):
         cls.debit_account.domain = export.clean_domain_for_import(
             cls.debit_account.domain, 'company')
 
-    @classmethod
-    def _export_keys(cls):
-        return set(['name'])
-
 
 class FiscalYear(export.ExportImportMixin):
     'Fiscal Year'
