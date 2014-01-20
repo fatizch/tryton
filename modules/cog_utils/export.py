@@ -51,7 +51,7 @@ class ExportImportMixin(Model):
     def __setup__(cls):
         super(ExportImportMixin, cls).__setup__()
         cls.__rpc__['export_json'] = RPC(instantiate=0,
-            result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder), r[2]))
+            result=lambda r: cls._export_format_result(r))
         cls.__rpc__['import_json'] = RPC(readonly=False, result=lambda r: None)
 
     @classmethod
@@ -130,6 +130,11 @@ class ExportImportMixin(Model):
     @classmethod
     def _post_import(cls, records):
         pass
+
+    @classmethod
+    def _export_format_result(cls, result):
+        return (result[0], json.dumps(result[1], cls=JSONEncoder, indent=4,
+                sort_keys=True, separator=(',', ': ')), result[2])
 
     @classmethod
     def _export_keys(cls):
