@@ -39,6 +39,7 @@ class Insurer(model.CoopView, model.CoopSQL):
     'Insurer'
 
     __name__ = 'insurer'
+    _rec_name = 'party'
 
     party = fields.Many2One('party.party', 'Insurer', ondelete='CASCADE')
 
