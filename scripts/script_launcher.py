@@ -303,8 +303,10 @@ def test(arguments, config, work_data):
 
     # Delete test databases if needed
     if arguments.delete_test_databases:
-        subprocess.Popen('sudo su postgres -c "for db in `psql -l | '
-            'grep \'test_1\' | cut -f2 -d ' '`; dropdb $db', shell=True)
+        killer = subprocess.Popen('sudo su postgres -c "for db in `psql -l | '
+            'grep \'test_1\' | cut -f2 -d \' \'`; do dropdb $db;done"',
+            shell=True)
+        killer.communicate()
     format_result(log_dir)
 
 
