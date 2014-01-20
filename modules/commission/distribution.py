@@ -30,6 +30,9 @@ class DistributionNetwork:
     childs_brokers = fields.Function(
         fields.Many2Many('broker', None, None, 'Sub Level Brokers',),
         'get_childs_brokers_id')
+    parents_brokers = fields.Function(
+        fields.Many2Many('broker', None, None, 'Parent Brokers',),
+        'get_parents_brokers_id')
 
     @classmethod
     def __setup__(cls):
@@ -55,11 +58,19 @@ class DistributionNetwork:
                     ])
             ]
 
+    def get_parents_brokers_id(self, name):
+        Broker = Pool().get('broker')
+        return [x.id for x in Broker.search([
+                    ('dist_networks.left', '<', self.left),
+                    ('dist_networks.right', '>', self.right),
+                ])
+            ]
+
     def get_all_com_plans_id(self, name):
         return [x.id for x in self.commission_plans + self.parent_com_plans]
 
     def get_brokers(self):
-        return self.brokers + self.childs_brokers
+        return self.brokers + self.childs_brokers + self.parents_brokers
 
 
 class DistributionNetworkComPlanRelation(model.CoopSQL):
