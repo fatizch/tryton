@@ -123,6 +123,8 @@ def get_modules_to_update(from_modules):
 
 
 def get_database_name(cfg_dict):
+    if 'DB_NAME' in os.environ:
+        return os.environ['DB_NAME']
     if 'database_name' in cfg_dict:
         return cfg_dict['database_name']
     config_file = os.path.join(cfg_dict['config_path'], 'scripts.conf')

@@ -32,6 +32,10 @@ def init_work_data(config):
             'parameters', 'runtime_dir'), 'conf', 'tryton.conf')
     result['tryton_script_launcher'] = os.path.join(result['runtime_dir'],
         'coopbusiness', 'scripts', 'python_scripts', 'launch_tryton_script.py')
+    result['trytond_test_runner'] = os.path.join(result['runtime_dir'],
+        'trytond', 'trytond', 'tests', 'run-tests.py')
+    result['modules'] = os.path.join(result['runtime_dir'], 'coopbusiness',
+        'modules')
     return result
 
 
@@ -120,7 +124,7 @@ def database(arguments, config, work_data):
         command_line = [work_data['python_exec'],
             work_data['tryton_script_launcher'], os.path.join(
                 work_data['runtime_dir'], 'coopbusiness', 'test_case',
-                'proteus_test_case.py', arguments.database)]
+                'proteus_test_case.py'), arguments.database]
         if arguments.test_case == 'all':
             process = subprocess.Popen(command_line)
         else:
@@ -129,19 +133,179 @@ def database(arguments, config, work_data):
 
 
 def test(arguments, config, work_data):
-    base_command_line = [] if arguments.with_test_cases else ['env',
-        'DO_NOT_TEST_CASES=True']
-    base_command_line += [work_data['python_exec'],
-        work_data['tryton_script_launcher']]
-    if arguments.module == 'all':
-        test_process = subprocess.Popen(base_command_line + [os.path.join(
-                    work_data['runtime_dir'], 'coopbusiness', 'test_case',
-                    'launch_all_tests.py')])
-    else:
-        test_process = subprocess.Popen(base_command_line + [os.path.join(
-                    work_data['runtime_dir'], 'coopbusiness', 'modules',
-                    arguments.module, 'tests', 'test_module.py')])
-    test_process.communicate()
+    import logging
+    import datetime
+    import threading
+    import multiprocessing
+    import time
+
+    def set_logger():
+        log_dir = os.path.join(work_data['runtime_dir'], 'test_log')
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+            os.makedirs(os.path.join(log_dir, 'test_results'))
+        else:
+            for file in os.listdir(log_dir):
+                if file != 'test_results':
+                    os.remove(os.path.join(log_dir, file))
+            if not os.path.exists(os.path.join(log_dir, 'test_results')):
+                os.makedirs(os.path.join(log_dir, 'test_results'))
+
+        logFormatter = logging.Formatter('[%(asctime)s] %(levelname)s:'
+            '%(name)s: %(message)s', '%a %b %d %H:%M:%S %Y')
+        testLogger = logging.getLogger('unittest')
+        testLogger.setLevel(logging.INFO)
+
+        fileHandler = logging.FileHandler(os.path.join(log_dir,
+                'test_results', datetime.datetime.now().strftime(
+                    '%Y-%m-%d_%Hh%Mm%Ss') + '_test_execution.log'))
+        fileHandler.setFormatter(logFormatter)
+        testLogger.addHandler(fileHandler)
+
+        consoleHandler = logging.StreamHandler()
+        consoleHandler.setFormatter(logFormatter)
+        testLogger.addHandler(consoleHandler)
+        return log_dir
+
+    def test_module(module, module_dir, log_folder, base_command_line):
+        if not (os.path.isdir(os.path.join(module_dir, module))
+                and os.path.isfile(os.path.join(module_dir, module,
+                        'tryton.cfg'))):
+            return
+        if os.path.isdir(os.path.join(module_dir, module, 'tests')):
+            logfile = os.path.join(log_folder, module + '.test_log')
+            try:
+                os.remove(logfile)
+            except:
+                pass
+            logfile_desc = os.open(logfile, os.O_RDWR | os.O_CREAT)
+            logfile = os.fdopen(logfile_desc, 'w')
+            logging.getLogger('unittest').info('Launching unittest for '
+                'module  %s' % module)
+            test = subprocess.Popen(base_command_line + [module],
+                stdout=logfile, stderr=logfile)
+            test.communicate()
+            logfile.close()
+
+    def format_result(log_dir):
+        file_names = os.listdir(log_dir)
+        file_names.sort()
+        log_files = map(lambda x: os.path.join(log_dir, x), file_names)
+        summary = {}
+        for file in log_files:
+            if os.path.isdir(file):
+                continue
+            cur_module = file.rsplit('/', 1)[1].split('.')[0]
+            sum = {}
+            lines = open(file).readlines()
+            if lines[-1][:-1] == 'OK':
+                sum['errors'] = 0
+            elif lines[-1][:6] == 'FAILED':
+                sum['errors'] = 0
+                if lines[-1][8] == 'f':
+                    fail = lines[-1].split('failures=')[1]
+                    if len(fail) > 3:
+                        sum['errors'] += int(fail.split(',')[0])
+                        sum['errors'] += int(fail.split('errors=')[1][:-2])
+                    else:
+                        sum['errors'] += int(fail[:-2])
+                else:
+                    sum['errors'] = int(lines[-1][15:-2])
+            else:
+                sum['errors'] = 0
+
+            if lines[-1][:-1] != 'OK':
+                logging.getLogger('unittest').info('=' * 80)
+                logging.getLogger('unittest').info('Test results (detailed) '
+                    'for module ' + cur_module)
+                logging.getLogger('unittest').info('=' * 80)
+                for line in lines:
+                    logging.getLogger('unittest').info(line[:-1])
+
+            try:
+                sum['number'] = int(lines[-3].split(' ', 2)[1])
+            except:
+                sum['number'] = 1
+
+            try:
+                sum['time'] = float(lines[-3][:-1].rsplit(' ', 1)[1][:-1])
+            except:
+                sum['time'] = 0
+
+            summary[cur_module] = sum
+
+        logging.getLogger('unittest').info('=' * 80)
+        logging.getLogger('unittest').info('Global summary')
+        logging.getLogger('unittest').info('=' * 80)
+        final = {'number': 0, 'time': 0.00, 'errors': 0}
+
+        tag = False
+        for key, value in summary.iteritems():
+            if not tag:
+                logging.getLogger('unittest').info('=' * 80)
+                logging.getLogger('unittest').info('PASSED :')
+                logging.getLogger('unittest').info('=' * 80)
+                tag = True
+            if value['errors'] == 0:
+                logging.getLogger('unittest').info('Module %s ran %s tests '
+                    'in %s seconds' % (key, value['number'], value['time']))
+                for key1, value1 in value.iteritems():
+                    final[key1] += value1
+
+        tag = False
+        for key, value in summary.iteritems():
+            if value['errors'] != 0:
+                if not tag:
+                    logging.getLogger('unittest').info('=' * 80)
+                    logging.getLogger('unittest').info('FAILED :')
+                    logging.getLogger('unittest').info('=' * 80)
+                    tag = True
+                logging.getLogger('unittest').info('Module %s ran %s tests '
+                    'in %s seconds with %s failures' % (
+                        key, value['number'], value['time'], value['errors']))
+                for key1, value1 in value.iteritems():
+                    final[key1] += value1
+
+        logging.getLogger('unittest').info('')
+        logging.getLogger('unittest').info('Total : %s tests in %.2f seconds '
+            'with %s failures' % (final['number'], final['time'],
+                final['errors']))
+
+    base_command_line = ['env', 'DB_NAME=%s' % arguments.database]
+    if not arguments.with_test_cases:
+        base_command_line.append('DO_NOT_TEST_CASES=True')
+    base_command_line.extend([work_data['trytond_test_runner'], '-c',
+            work_data['trytond_conf'], '-m'])
+    argument_list = arguments.module
+    if argument_list == 'all':
+        argument_list = os.listdir(work_data['modules'])
+        argument_list.sort(reverse=True)
+
+    num_processes = multiprocessing.cpu_count()
+    threads = []
+    log_dir = set_logger()
+
+    # run until all the threads are done, and there is no data left
+    while threads or argument_list:
+        if (len(threads) < num_processes) and argument_list:
+            t = threading.Thread(
+                target=test_module, args=[argument_list.pop(),
+                    work_data['modules'],
+                    log_dir, base_command_line])
+            t.setDaemon(True)
+            time.sleep(1)
+            t.start()
+            threads.append(t)
+        else:
+            for thread in threads:
+                if not thread.isAlive():
+                    threads.remove(thread)
+
+    # Delete test databases if needed
+    if arguments.delete_test_databases:
+        subprocess.Popen('sudo su postgres -c "for db in `psql -l | '
+            'grep \'test_1\' | cut -f2 -d ' '`; dropdb $db', shell=True)
+    format_result(log_dir)
 
 
 def batch(arguments, config, work_data):
@@ -171,10 +335,11 @@ def batch(arguments, config, work_data):
 
 def export(arguments, config, work_data):
     if arguments.target == 'translations':
-        process = subprocess.Popen([work_data['python_exec'],
-            work_data['tryton_script_launcher'], os.path.join(
-                        work_data['runtime_dir'], 'coopbusiness', 'test_case',
-                        'export_translations.py')])
+        process = subprocess.Popen(['env', 'DB_NAME=%s' % arguments.database,
+                work_data['python_exec'], work_data['tryton_script_launcher'],
+                os.path.join(
+                    work_data['runtime_dir'], 'coopbusiness', 'test_case',
+                    'export_translations.py')])
         process.communicate()
 
 
@@ -310,19 +475,26 @@ if __name__ == '__main__':
                     'conf', 'py_scripts.conf'), 'r') as fconf:
                 config.readfp(fconf)
 
+    # Main parser
     parser = argparse.ArgumentParser(description='Launch utilitary scripts')
     subparsers = parser.add_subparsers(title='Subcommands',
         description='Valid subcommands', dest='command')
+
+    # Launch parser
     parser_launch = subparsers.add_parser('launch',
         help='launch client / server')
     parser_launch.add_argument('target', choices=['server', 'client',
             'all'], help='What should be launched')
     parser_launch.add_argument('--mode', '-m', choices=['demo', 'dev',
             'debug'], default=config.get('parameters', 'launch_mode'))
+
+    # Batch parser
     parser_batch = subparsers.add_parser('batch', help='Launches a batch')
     parser_batch.add_argument('action', choices=['kill', 'execute'])
     parser_batch.add_argument('--name', type=str, help='Name of the batch'
         'to launch')
+
+    # Database parser
     parser_database = subparsers.add_parser('database', help='Execute a '
         'database action')
     parser_database.add_argument('action', choices=['update', 'install',
@@ -333,24 +505,40 @@ if __name__ == '__main__':
         default='all', type=str)
     parser_database.add_argument('--test-case', '-t', help='Test case to run',
         default='all')
+
+    # Kill parser
     parser_kill = subparsers.add_parser('kill', help='Kills running tryton '
         'processes')
     parser_kill.add_argument('target', choices=['server', 'client',
             'all'], help='What should be killed')
+
+    # Sync parser
     parser_sync = subparsers.add_parser('sync',
         help='Sync current environment')
     parser_sync.add_argument('target', choices=['client', 'server', 'proteus',
             'coop', 'all'], default='all')
+
+    # Test parser
     parser_unittests = subparsers.add_parser('test', help='Test related '
         'actions')
     parser_unittests.add_argument('--module', '-m', default='all',
-        help='Module to unittest')
+        help='Module to unittest', nargs='+')
+    parser_unittests.add_argument('--database', '-d', help='Database name',
+        default=config.get('parameters', 'db_name'), type=str)
     parser_unittests.add_argument('--with-test-cases', '-t', help='Allow test '
         'cases execution as unittests', action='store_true')
+    parser_unittests.add_argument('--delete-test-databases', '-k',
+        help='Delete test databases after execution', action='store_true')
+
+    # Export parser
     parser_export = subparsers.add_parser('export', help='Export various '
         'things')
     parser_export.add_argument('target', choices=['translations'],
         help='What to export')
+    parser_export.add_argument('--database', '-d', help='Database name',
+        default=config.get('parameters', 'db_name'), type=str)
+
+    # Configure parser
     parser_configure = subparsers.add_parser('configure', help='Configure '
         'directory')
     parser_configure.add_argument('--env', '-e', help='Root of environment '
