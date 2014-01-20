@@ -10,7 +10,6 @@
         <page id='broker' string="Broker"
             states="{'invisible': Bool(~Eval('is_broker'))}">
             <field name="broker_role" mode="form" colspan="4"/>
-            <field name="dist_networks" colspan="4"/>
         </page>
     </xpath>
 </data>

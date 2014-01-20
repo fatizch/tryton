@@ -26,10 +26,9 @@ class DistributionNetwork:
             'Top Level Commission Plans'),
         'get_all_com_plans_id')
     brokers = fields.Many2Many('distribution.network-broker',
-        'dist_network', 'broker', 'Brokers',
-        domain=[('is_broker', '=', True)])
+        'dist_network', 'broker', 'Brokers')
     childs_brokers = fields.Function(
-        fields.Many2Many('party.party', None, None, 'Sub Level Brokers',),
+        fields.Many2Many('broker', None, None, 'Sub Level Brokers',),
         'get_childs_brokers_id')
 
     @classmethod
@@ -49,7 +48,7 @@ class DistributionNetwork:
             ]
 
     def get_childs_brokers_id(self, name):
-        Broker = Pool().get('party.party')
+        Broker = Pool().get('broker')
         return [x.id for x in Broker.search([
                     ('dist_networks.parent', 'child_of', self.id),
                     ('dist_networks.id', '!=', self.id),
@@ -81,4 +80,4 @@ class DistributionNetworkBrokerRelation(model.CoopSQL, model.CoopView):
 
     dist_network = fields.Many2One('distribution.network',
         'Distribution Network', ondelete='RESTRICT')
-    broker = fields.Many2One('party.party', 'Broker', ondelete='CASCADE')
+    broker = fields.Many2One('broker', 'Broker', ondelete='CASCADE')

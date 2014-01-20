@@ -13,19 +13,11 @@ class Party:
     __name__ = 'party.party'
 
     broker_role = fields.One2Many('broker', 'party', 'Broker', size=1)
-    dist_networks = fields.Many2Many('distribution.network-broker',
-        'broker', 'dist_network', 'Distribution Networks')
 
     @classmethod
     def _export_force_recreate(cls):
         result = super(Party, cls)._export_force_recreate()
         result.remove('broker_role')
-        return result
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Party, cls)._export_skips()
-        result.add('dist_networks')
         return result
 
 
@@ -37,6 +29,8 @@ class Broker(model.CoopSQL, model.CoopView):
     party = fields.Many2One('party.party', 'Party', required=True,
         ondelete='CASCADE', select=True)
     reference = fields.Char('Reference')
+    dist_networks = fields.Many2Many('distribution.network-broker',
+        'broker', 'dist_network', 'Distribution Networks')
 
     @classmethod
     def get_summary(cls, brokers, name=None, at_date=None, lang=None):
@@ -45,3 +39,13 @@ class Broker(model.CoopSQL, model.CoopView):
     @classmethod
     def _export_keys(cls):
         return set(['party.name'])
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Party, cls)._export_skips()
+        result.add('dist_networks')
+        return result
+
+    def get_rec_name(self, name):
+        return (self.party.rec_name
+            if self.party else super(Broker, self).get_rec_name(name))

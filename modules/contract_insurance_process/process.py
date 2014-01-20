@@ -39,16 +39,12 @@ class ContractSubscribeFindProcess(ProcessStart):
             on_change_with=['dist_network', 'possible_brokers'],
             states={'invisible': True},
             ), 'on_change_with_possible_brokers')
-    business_provider = fields.Many2One('party.party', 'Business Provider',
-        domain=[
-            ('id', 'in', Eval('possible_brokers')),
-            ('is_broker', '=', True),
-            ], depends=['possible_brokers'])
-    delegated_manager = fields.Many2One('party.party', 'Delegated Manager',
-        domain=[
-            ('id', 'in', Eval('possible_brokers')),
-            ('is_broker', '=', True),
-            ], depends=['possible_brokers'])
+    business_provider = fields.Many2One('broker', 'Business Provider',
+        domain=[('id', 'in', Eval('possible_brokers'))],
+        depends=['possible_brokers'])
+    delegated_manager = fields.Many2One('broker', 'Delegated Manager',
+        domain=[('id', 'in', Eval('possible_brokers'))],
+        depends=['possible_brokers'])
     possible_com_product = fields.Function(
         fields.Many2Many('distribution.commercial_product', None,
             None, 'Commercial Products Available',
@@ -157,10 +153,10 @@ class ContractSubscribe(ProcessFinder):
                 process_param.date)
             if process_param.business_provider:
                 obj.get_or_create_agreement('business_provider',
-                    process_param.business_provider)
+                    process_param.business_provider.party)
             if process_param.delegated_manager:
                 obj.get_or_create_agreement('management',
-                    process_param.delegated_manager)
+                    process_param.delegated_manager.party)
             obj.dist_network = process_param.dist_network
             errs += err
         return res, errs
