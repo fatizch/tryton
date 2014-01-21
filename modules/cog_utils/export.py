@@ -134,7 +134,7 @@ class ExportImportMixin(Model):
     @classmethod
     def _export_format_result(cls, result):
         return (result[0], json.dumps(result[1], cls=JSONEncoder, indent=4,
-                sort_keys=True, separator=(',', ': ')), result[2])
+                sort_keys=True, separators=(',', ': ')), result[2])
 
     @classmethod
     def _export_keys(cls):
