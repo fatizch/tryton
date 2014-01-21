@@ -36,7 +36,7 @@ SUBSCRIBER_KIND = [
 
 SUBSCRIPTION_BEHAVIOUR = [
     ('mandatory', 'Mandatory'),
-    ('proposed', 'Proposed'),
+    ('defaulted', 'Defaulted'),
     ('optional', 'Optional'),
     ]
 
