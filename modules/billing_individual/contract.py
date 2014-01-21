@@ -129,8 +129,11 @@ class Contract:
             if period.end_date > last_date:
                 last_date = period.end_date
         new_period_start = coop_date.add_day(last_date, 1)
-        new_period_end = coop_date.add_frequency(
-            self.get_product_frequency(last_date), last_date)
+        appliable_frequency = self.get_product_frequency(last_date)
+        if appliable_frequency == 'one-shot':
+            return (new_period_start, self.end_date)
+        new_period_end = coop_date.add_frequency(appliable_frequency,
+            last_date)
         if self.next_renewal_date:
             new_period_end = min(new_period_end, coop_date.add_day(
                 self.next_renewal_date, -1))

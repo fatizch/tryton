@@ -277,9 +277,12 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_account_for_billing(self):
         return self.on_object.get_account_for_billing()
 
-    def get_number_of_days_at_date(self, at_date):
-        final_date = coop_date.add_frequency(self.frequency, at_date)
-        return coop_date.number_of_days_between(at_date, final_date) - 1
+    def get_number_of_days_at_date(self, start_date, end_date):
+        if self.frequency == 'one_shot':
+            final_date = end_date
+        else:
+            final_date = coop_date.add_frequency(self.frequency, start_date)
+        return coop_date.number_of_days_between(start_date, final_date) - 1
 
     def get_currency(self):
         if self.contract:
@@ -292,7 +295,7 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def calculate_bill_contribution(self, work_set, period):
         number_of_days = coop_date.number_of_days_between(*period)
-        price_line_days = self.get_number_of_days_at_date(period[0])
+        price_line_days = self.get_number_of_days_at_date(*period)
         convert_factor = number_of_days / Decimal(price_line_days)
         amount = self.get_base_amount_for_billing() * convert_factor
         amount = work_set['currency'].round(amount)

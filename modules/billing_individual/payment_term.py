@@ -15,6 +15,8 @@ __all__ = [
     'PaymentTerm',
     ]
 
+PAYMENT_FREQUENCY = PRICING_FREQUENCY[::1]
+
 REMAINING_POSITION = [
     ('', ''),
     ('first_calc', 'First calculated'),
@@ -25,6 +27,11 @@ REMAINING_POSITION = [
 PAYMENT_DELAYS = [
     ('in_arrears', 'In Arrears'),
     ('in_advance', 'In Advance'),
+    ]
+
+SPLIT_METHODS = [
+    ('exact', 'Exact'),
+    ('equal', 'Equal'),
     ]
 
 
@@ -259,24 +266,32 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
-    base_frequency = fields.Selection(PRICING_FREQUENCY, 'Base Frequency',
-        required=True)
+    base_frequency = fields.Selection(PAYMENT_FREQUENCY, 'Base Frequency',
+        required=True, on_change=['base_frequency', 'start_lines'])
     remaining_position = fields.Selection(REMAINING_POSITION,
-        'Remaining position')
-    with_sync_date = fields.Boolean('With Sync Date')
+        'Remaining position', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
+    with_sync_date = fields.Boolean('With Sync Date', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
     force_line_at_start = fields.Boolean('Force start date line',
-        states={'invisible': ~Eval('with_sync_date') or ~~Eval('start_lines')})
+        states={'invisible': ~Eval('with_sync_date') or ~~Eval('start_lines')
+            or Eval('base_frequency', '') == 'one_shot'})
     sync_date = fields.Date('Sync Date', states={
-            'invisible': ~Eval('with_sync_date'),
+            'invisible': ~Eval('with_sync_date') or Eval('base_frequency', '')
+            == 'one_shot',
             'required': ~~Eval('with_sync_date')})
     start_lines = fields.One2Many('billing.payment.term.line', 'payment_term',
-        'Start Lines')
+        'Start Lines', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
     appliable_fees = fields.Many2Many('billing.payment.term-fee',
         'payment_term', 'fee', 'Appliable fees', depends=['company'],
         domain=[('company', '=', Eval('company'))])
-    payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode')
+    payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
+    split_method = fields.Selection(SPLIT_METHODS, 'Splitting method', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
 
     @classmethod
     def default_company(cls):
@@ -305,7 +320,25 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
     def default_force_line_at_start(cls):
         return True
 
+    def on_change_base_frequency(self):
+        if self.base_frequency != 'one_shot':
+            return {}
+        return {
+            'payment_mode': 'in_advance',
+            'start_lines': {'remove': [x.id for x in self.start_lines]},
+            }
+
+    @classmethod
+    def default_split_method(cls):
+        return 'exact'
+
     def get_line_dates(self, start_date, end_date):
+        if self.base_frequency == 'one_shot':
+            return [{
+                    'date': start_date,
+                    'remaining': True,
+                    'freq_amount': 0,
+                    'line': None}]
         dates = [line.get_line_info(start_date) for line in self.start_lines]
         if not dates and self.with_sync_date and self.force_line_at_start:
             dates.append({
@@ -417,11 +450,26 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
             flat_total += line_amount
             res[line['date']] += line_amount
             remainder -= line_amount
-
-        base_amount = remainder / freq_number
-        for elem in (l for l in lines_dates if l['freq_amount']):
-            line_amount = currency.round(base_amount * elem['freq_amount'])
-            res[elem['date']] += line_amount
+        base_amount = remainder / freq_number if freq_number else remainder
+        exact_day_price = remainder / coop_date.number_of_days_between(
+            start_date, end_date)
+        periods = []
+        for idx, elem in enumerate([l for l in lines_dates
+                    if l['freq_amount']] + [{'date': coop_date.add_day(
+                            end_date, 1)}]):
+            if idx != 0:
+                periods[idx - 1][1] = coop_date.add_day(elem['date'], -1)
+            if elem['date'] == coop_date.add_day(end_date, 1):
+                continue
+            periods.append([elem['date'], None, elem])
+        for start_date, end_date, elem in periods:
+            if (self.split_method == 'equal' or self.base_frequency ==
+                    'one_shot'):
+                line_amount = currency.round(base_amount * elem['freq_amount'])
+            elif self.split_method == 'exact':
+                line_amount = currency.round(exact_day_price *
+                    coop_date.number_of_days_between(start_date, end_date))
+            res[start_date] += line_amount
             remainder -= line_amount
         if remainder:
             remaining_line = next(l for l in lines_dates if l['remaining'])

@@ -19,7 +19,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @classmethod
     def depending_modules(cls):
-        return ['rule_engine', 'offered']
+        return ['rule_engine', 'company_cog']
 
     @classmethod
     def get_models(cls):
@@ -205,7 +205,7 @@ return True'''
         'offered_insurance.test0003_testFeeCreation',
         'offered_insurance.test0004_testNumberGeneratorCreation',
         'offered_insurance.test0005_testItemDescCreation',
-        'offered.test0002_testCompanyCreation',
+        'company_cog.test0001_testCompanyCreation',
         )
     def test0010Coverage_creation(self):
         '''
