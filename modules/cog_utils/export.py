@@ -51,7 +51,7 @@ class ExportImportMixin(Model):
     def __setup__(cls):
         super(ExportImportMixin, cls).__setup__()
         cls.__rpc__['export_json'] = RPC(instantiate=0,
-            result=lambda r: (r[0], json.dumps(r[1], cls=JSONEncoder), r[2]))
+            result=lambda r: cls._export_format_result(r))
         cls.__rpc__['import_json'] = RPC(readonly=False, result=lambda r: None)
 
     @classmethod
@@ -132,11 +132,17 @@ class ExportImportMixin(Model):
         pass
 
     @classmethod
+    def _export_format_result(cls, result):
+        return (result[0], json.dumps(result[1], cls=JSONEncoder, indent=4,
+                sort_keys=True, separator=(',', ': ')), result[2])
+
+    @classmethod
     def _export_keys(cls):
         # Returns a set of fields which will be used to compute a unique
         # functional key for self.
         # field_name may use "." to chain if it is not ambiguous
         # TODO : Look for a field with 'UNIQUE' and 'required' attributes set
+        # TODO : Cache this
         res = []
         if 'company' in cls._fields and (
                 not isinstance(cls._fields['company'], tryton_fields.Function)
@@ -657,8 +663,10 @@ class ExportImportMixin(Model):
 
     @classmethod
     def import_json(cls, values):
+        Config = Pool().get('ir.configuration')
         with Transaction().set_user(0), Transaction().set_context(
-                company=None), Transaction().set_context(__importing__=True):
+                company=None, __importing__=True,
+                language=Config.get_language()):
             if isinstance(values, basestring):
                 values = json.loads(values, object_hook=object_hook)
                 values = map(utils.recursive_list_tuple_convert, values)
