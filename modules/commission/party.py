@@ -43,7 +43,7 @@ class Broker(model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_skips(cls):
-        result = super(Party, cls)._export_skips()
+        result = super(Broker, cls)._export_skips()
         result.add('dist_networks')
         return result
 
