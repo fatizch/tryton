@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import logging
 from proteus import Model, Wizard
 
 import proteus_tools
@@ -27,7 +28,8 @@ def generate_module_translation(cfg_dict, base_path, module_name):
         os.mkdir(locale_dir)
     po_path = os.path.join(locale_dir, '%s.po' % cfg_dict['language'])
     with open(po_path, 'w') as csv_file:
-        print 'Generating translation file ', po_path
+        logging.getLogger('export_translation').info('Generating translation '
+            'file ' + po_path)
         csv_file.write(result)
 
 
@@ -39,7 +41,6 @@ def launch_proteus_test_case(test_config_file):
         if cur_module == 'cog_translation':
             #Manual translations to override tryton translations
             continue
-        print '=' * 80 + '\n'
         cur_path = os.path.abspath(
             os.path.join(DIR, '..', 'modules', cur_module))
         if cfg_dict['un_fuzzy_translation']:
