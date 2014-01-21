@@ -3,4 +3,5 @@
     <field name="is_selected"/>
     <field name="coverage"/>
     <field name="coverage_behaviour"/>
+    <field name="selection" tree_invisible="1"/>
 </tree>

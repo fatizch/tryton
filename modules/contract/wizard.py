@@ -31,13 +31,23 @@ class OptionSubscription(model.CoopWizard):
         Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         options = []
+        excluded = []
+        for coverage in contract.options:
+            excluded += coverage.offered.options_excluded
         for coverage in contract.offered.coverages:
+            if coverage.subscription_behaviour == 'mandatory':
+                selection = 'mandatory'
+            elif coverage in excluded:
+                selection = 'excluded'
+            else:
+                selection = ''
             options.append({
-                    'is_selected': (
-                        coverage.id in [x.offered.id for x in contract.options]
+                    'is_selected': (coverage.id in [x.offered.id
+                            for x in contract.options]
                         or coverage.subscription_behaviour != 'optional'),
                     'coverage_behaviour': coverage.subscription_behaviour,
-                    'coverage': coverage.id
+                    'coverage': coverage.id,
+                    'selection': selection,
                     })
         return {
             'contract': contract.id,
@@ -49,6 +59,8 @@ class OptionSubscription(model.CoopWizard):
         option = Option()
         option.init_from_offered(coverage,
             self.options_displayer.contract.start_date)
+        self.options_displayer.contract.options = list(
+            self.options_displayer.contract.options)
         self.options_displayer.contract.options.append(option)
         return option
 
@@ -85,7 +97,33 @@ class OptionsDisplayer(model.CoopView):
     contract = fields.Many2One('contract', 'Contract')
     options = fields.One2Many(
         'contract.wizard.option_subscription.options_displayer.option',
-        None, 'Options')
+        None, 'Options', on_change=['options'])
+
+    def on_change_options(self):
+        selected = [elem for elem in self.options
+            if elem.is_selected and not elem.selection == 'automatic']
+        to_update = []
+        excluded = []
+        required = []
+        for x in selected:
+            excluded += x.coverage.options_excluded
+            required += x.coverage.options_required
+        for x in self.options:
+            if not x in selected or x.coverage in excluded:
+                to_update.append({
+                        'id': x.id,
+                        'is_selected': False,
+                        'selection': ('excluded'
+                            if x.coverage in excluded else ''),
+                        })
+            if x.coverage in required:
+                to_update.append({
+                        'id': x.id,
+                        'is_selected': True,
+                        'selection': ('manual'
+                            if x in selected else 'automatic'),
+                        })
+        return {'options': {'update': to_update}}
 
 
 class WizardOption(model.CoopView):
@@ -94,8 +132,14 @@ class WizardOption(model.CoopView):
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
 
     coverage = fields.Many2One('offered.option.description',
-        'Option Description')
+        'Option Description', readonly=True)
     coverage_behaviour = fields.Selection(offered.SUBSCRIPTION_BEHAVIOUR,
-        'Subscription Behaviour', sort=False)
-    is_selected = fields.Boolean('Selected?', states={
-            'readonly': Eval('coverage_behaviour') == 'mandatory'})
+        'Subscription Behaviour', sort=False, readonly=True)
+    is_selected = fields.Boolean('Selected?', states={'readonly':
+            Eval('selection').in_(['automatic', 'mandatory', 'excluded'])})
+    selection = fields.Selection([
+            ('', ''),
+            ('mandatory', 'Mandatory'),
+            ('automatic', 'Automatic'),
+            ('manual', 'Manual'),
+            ('excluded', 'Excluded')], 'Selection')
