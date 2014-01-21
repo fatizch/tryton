@@ -30,6 +30,8 @@ def init_work_data(config):
             'parameters', 'runtime_dir'), 'conf', 'trytond.conf')
     result['tryton_conf'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'), 'conf', 'tryton.conf')
+    result['tests_conf'] = os.path.join(virtual_env_path, config.get(
+            'parameters', 'runtime_dir'), 'conf', 'tests.conf')
     result['tryton_script_launcher'] = os.path.join(result['runtime_dir'],
         'coopbusiness', 'scripts', 'python_scripts', 'launch_tryton_script.py')
     result['trytond_test_runner'] = os.path.join(result['runtime_dir'],
@@ -275,7 +277,7 @@ def test(arguments, config, work_data):
     if not arguments.with_test_cases:
         base_command_line.append('DO_NOT_TEST_CASES=True')
     base_command_line.extend([work_data['trytond_test_runner'], '-c',
-            work_data['trytond_conf'], '-m'])
+            work_data['tests_conf'], '-m'])
     argument_list = arguments.module
     if argument_list == 'all':
         argument_list = os.listdir(work_data['modules'])
@@ -304,7 +306,7 @@ def test(arguments, config, work_data):
     # Delete test databases if needed
     if arguments.delete_test_databases:
         killer = subprocess.Popen('sudo su postgres -c "for db in `psql -l | '
-            'grep \'test_1\' | cut -f2 -d \' \'`; do dropdb $db;done"',
+            + 'grep \'test_1\' | cut -f2 -d \' \'`;do dropdb $db;done"',
             shell=True)
         killer.communicate()
     format_result(log_dir)
@@ -386,9 +388,19 @@ def configure(target_env):
         with open(os.path.join(workspace, 'conf', 'trytond.conf'), 'w') as f:
             f.write('\n'.join([
                         '[options]',
+                        'jsonrpc = localhost:8000',
                         'db_type = postgresql',
                         'db_user = tryton',
                         'db_password = tryton',
+                        'data_path = %s' % os.path.join(workspace, 'data'),
+                        'logfile = %s' % os.path.join(workspace, 'logs',
+                            'server_logs.log')]))
+    if not os.path.exists(os.path.join(workspace, 'conf', 'tests.conf')):
+        with open(os.path.join(workspace, 'conf', 'tests.conf'), 'w') as f:
+            f.write('\n'.join([
+                        '[options]',
+                        'jsonrpc = localhost:8000',
+                        'db_type = sqlite',
                         'data_path = %s' % os.path.join(workspace, 'data'),
                         'logfile = %s' % os.path.join(workspace, 'logs',
                             'server_logs.log')]))
