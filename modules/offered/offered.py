@@ -21,6 +21,8 @@ __all__ = [
     'OptionDescriptionExtraDataRelation',
     'ProductOptionDescriptionRelation',
     'ProductExtraDataRelation',
+    'OptionDescriptionRequired',
+    'OptionDescriptionExcluded',
     ]
 
 CONFIG_KIND = [
@@ -488,6 +490,20 @@ class OptionDescription(model.CoopSQL, Offered):
         'offered.option.description-extra_data',
         'coverage', 'extra_data_def', 'Extra Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
+    options_required = fields.Many2Many('offered.option.description.required',
+        'from_option_desc', 'to_option_desc', 'Options Required', domain=[
+            ('kind', '=', Eval('kind')),
+            ('id', '!=', Eval('id')),
+            ('id', 'not in', Eval('options_excluded')),
+            ], depends=['kind', 'id', 'options_excluded'])
+    options_excluded = fields.Many2Many('offered.option.description.excluded',
+        'from_option_desc', 'to_option_desc', 'Options Excluded', domain=[
+            ('kind', '=', Eval('kind')),
+            ('id', '!=', Eval('id')),
+            ('id', 'not in', Eval('options_required')),
+            ], depends=['kind', 'id', 'options_required'])
+
+
 
     @classmethod
     def __setup__(cls):
@@ -592,3 +608,25 @@ class ProductExtraDataRelation(model.CoopSQL):
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
     extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT')
+
+
+class OptionDescriptionRequired(model.CoopSQL):
+    'Option Description Required'
+
+    __name__ = 'offered.option.description.required'
+
+    from_option_desc = fields.Many2One('offered.option.description',
+        'From Option Description', ondelete='CASCADE')
+    to_option_desc = fields.Many2One('offered.option.description',
+        'To Option Description', ondelete='RESTRICT')
+
+
+class OptionDescriptionExcluded(model.CoopSQL):
+    'Option Description Excluded'
+
+    __name__ = 'offered.option.description.excluded'
+
+    from_option_desc = fields.Many2One('offered.option.description',
+        'From Option Description', ondelete='CASCADE')
+    to_option_desc = fields.Many2One('offered.option.description',
+        'To Option Description', ondelete='RESTRICT')

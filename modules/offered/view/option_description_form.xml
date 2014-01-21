@@ -6,9 +6,19 @@
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="before">
-        <page string="OptionDescriptions" id="package"
+        <page string="Option Descriptions" id="package"
             states="{'invisible': Bool(~Eval('is_package'))}">
             <field name="coverages_in_package"/>
+        </page>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']" position="before">
+        <page string="Subscription" id="subscription">
+            <label name="subscription_behaviour"/>
+            <field name="subscription_behaviour"/>
+            <newline/>
+            <field name="options_required" colspan="2"/>
+            <field name="options_excluded" colspan="2"/>
+            <newline/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
@@ -20,8 +30,6 @@
         <newline/>
         <label name="is_package"/>
         <field name="is_package"/>
-        <label name="subscription_behaviour"/>
-        <field name="subscription_behaviour"/>
         <newline/>
     </xpath>
 </data>

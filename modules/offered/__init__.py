@@ -15,6 +15,8 @@ def register():
         PackageOptionDescription,
         Product,
         ProductOptionDescriptionRelation,
+        OptionDescriptionRequired,
+        OptionDescriptionExcluded,
         # from extra_data
         ExtraData,
         ExtraDataSubExtraDataRelation,
