@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -599,8 +599,8 @@ msgid "Optional"
 msgstr "En Option"
 
 msgctxt "selection:offered.option.description,subscription_behaviour:"
-msgid "Proposed"
-msgstr "Proposé par Défaut"
+msgid "Defaulted"
+msgstr "Proposée par Défaut"
 
 msgctxt "selection:offered.product,commission_kind:"
 msgid ""

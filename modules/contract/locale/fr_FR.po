@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -670,8 +670,8 @@ msgstr "En Option"
 
 msgctxt ""
 "selection:contract.wizard.option_subscription.options_displayer.option,coverage_behaviour:"
-msgid "Proposed"
-msgstr "Proposé par Défaut"
+msgid "Defaulted"
+msgstr "Proposée par Défaut"
 
 msgctxt "selection:document.template,kind:"
 msgid "Contract Documents"
