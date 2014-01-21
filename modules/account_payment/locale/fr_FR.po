@@ -81,7 +81,7 @@ msgstr "Tiers"
 
 msgctxt "field:account.payment,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:account.payment,state:"
 msgid "State"
@@ -125,7 +125,7 @@ msgstr "Paiements"
 
 msgctxt "field:account.payment.group,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:account.payment.group,reference:"
 msgid "Reference"
@@ -161,7 +161,7 @@ msgstr "ID"
 
 msgctxt "field:account.payment.journal,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:account.payment.journal,process_method:"
 msgid "Process Method"
@@ -169,7 +169,7 @@ msgstr "Méthode de traitement"
 
 msgctxt "field:account.payment.journal,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:account.payment.journal,write_date:"
 msgid "Write Date"

@@ -81,7 +81,7 @@ msgstr "Tiers"
 
 msgctxt "field:collection,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:collection,write_date:"
 msgid "Write Date"

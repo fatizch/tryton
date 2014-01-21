@@ -346,6 +346,14 @@ msgctxt "field:offered.option.description,name:"
 msgid ""
 msgstr " "
 
+msgctxt "field:offered.option.description,options_excluded:"
+msgid "Options Excluded"
+msgstr "Options Exclues"
+
+msgctxt "field:offered.option.description,options_required:"
+msgid "Options Required"
+msgstr "Options Requises"
+
 msgctxt "field:offered.option.description,products:"
 msgid ""
 msgstr " "
@@ -359,8 +367,8 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.option.description,subscription_behaviour:"
-msgid ""
-msgstr " "
+msgid "Subscription Behaviour"
+msgstr "Comportement à la Souscription"
 
 msgctxt "field:offered.option.description,summary:"
 msgid ""
@@ -423,6 +431,86 @@ msgid ""
 msgstr " "
 
 msgctxt "field:offered.option.description-extra_data,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.option.description.excluded,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.excluded,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.excluded,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.excluded,from_option_desc:"
+msgid "From Option Description"
+msgstr ""
+
+msgctxt "field:offered.option.description.excluded,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description.excluded,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.excluded,to_option_desc:"
+msgid "To Option Description"
+msgstr ""
+
+msgctxt "field:offered.option.description.excluded,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description.excluded,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description.excluded,xml_id:"
+msgid "XML Id"
+msgstr ""
+
+msgctxt "field:offered.option.description.required,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.required,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.required,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.required,from_option_desc:"
+msgid "From Option Description"
+msgstr ""
+
+msgctxt "field:offered.option.description.required,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description.required,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.required,to_option_desc:"
+msgid "To Option Description"
+msgstr ""
+
+msgctxt "field:offered.option.description.required,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description.required,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description.required,xml_id:"
 msgid "XML Id"
 msgstr ""
 
@@ -726,6 +814,14 @@ msgctxt "model:offered.option.description-extra_data,name:"
 msgid "Relation between OptionDescription and Extra Data"
 msgstr "Relation Description d'Option - Données Complémentaires"
 
+msgctxt "model:offered.option.description.excluded,name:"
+msgid "Option Description Excluded"
+msgstr ""
+
+msgctxt "model:offered.option.description.required,name:"
+msgid "Option Description Required"
+msgstr ""
+
 msgctxt "model:offered.package-option.description,name:"
 msgid "Package to Option Description Relation"
 msgstr "Relation Formules - Description d'Option"
@@ -907,8 +1003,12 @@ msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:offered.option.description:"
-msgid "OptionDescriptions"
-msgstr "Garanties"
+msgid "Option Descriptions"
+msgstr "Descriptions d'Options"
+
+msgctxt "view:offered.option.description:"
+msgid "Subscription"
+msgstr "Souscription"
 
 msgctxt "view:offered.product:"
 msgid "Extra Data"

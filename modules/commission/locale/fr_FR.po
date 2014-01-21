@@ -32,7 +32,11 @@ msgstr "Creation date"
 
 msgctxt "field:broker,create_uid:"
 msgid "Create User"
-msgstr "Create User"
+msgstr "Créé par"
+
+msgctxt "field:broker,dist_networks:"
+msgid "Distribution Networks"
+msgstr "Réseaux de Distribution"
 
 msgctxt "field:broker,id:"
 msgid "ID"
@@ -350,6 +354,10 @@ msgctxt "field:distribution.network,parent_com_plans:"
 msgid "Top Level Commission Plans"
 msgstr "Plans de Commissionnement Hérités"
 
+msgctxt "field:distribution.network,parents_brokers:"
+msgid "Parent Brokers"
+msgstr ""
+
 msgctxt "field:distribution.network-broker,broker:"
 msgid "Broker"
 msgstr "Courtier"
@@ -582,6 +590,18 @@ msgctxt "selection:offered.option.description,kind:"
 msgid "Commission"
 msgstr "Commission"
 
+msgctxt "selection:offered.option.description,subscription_behaviour:"
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgctxt "selection:offered.option.description,subscription_behaviour:"
+msgid "Optional"
+msgstr "En Option"
+
+msgctxt "selection:offered.option.description,subscription_behaviour:"
+msgid "Proposed"
+msgstr "Proposé par Défaut"
+
 msgctxt "selection:offered.product,commission_kind:"
 msgid ""
 msgstr " "
@@ -601,6 +621,10 @@ msgstr "Commission"
 msgctxt "view:broker:"
 msgid "Broker"
 msgstr "Courtier"
+
+msgctxt "view:broker:"
+msgid "Brokers"
+msgstr "Courtiers"
 
 msgctxt "view:commission.rule:"
 msgid "%"

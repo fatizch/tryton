@@ -196,7 +196,7 @@ msgstr "Must Expand Tree"
 
 msgctxt "field:ir.test_case,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:ir.test_case,write_date:"
 msgid "Write Date"

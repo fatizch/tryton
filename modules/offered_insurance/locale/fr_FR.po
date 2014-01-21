@@ -1987,10 +1987,6 @@ msgctxt "field:offered.option.description,sub_document_rules:"
 msgid "Sub Document Rules"
 msgstr "Documents Eléments Couverts"
 
-msgctxt "field:offered.option.description,subscription_behaviour:"
-msgid "Subscription Behaviour"
-msgstr "Comportement à la Souscription"
-
 msgctxt "field:offered.option.description,summary:"
 msgid "Summary"
 msgstr "Synthèse"

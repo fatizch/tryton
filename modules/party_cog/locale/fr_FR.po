@@ -352,7 +352,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:party.relation.kind,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.relation.kind,rec_name:"
 msgid "Name"
