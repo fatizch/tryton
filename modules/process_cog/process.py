@@ -575,6 +575,11 @@ class Process(model.CoopSQL):
             return []
         return super(Process, self).create_update_menu_entry()
 
+    def set_menu_item_list(self, previous_ids, new_ids):
+        if Transaction().context.get('__importing__'):
+            return []
+        return super(Process, self).set_menu_item_listj()
+
 
 class ProcessStepRelation(model.CoopSQL):
     __name__ = 'process-process.step'
