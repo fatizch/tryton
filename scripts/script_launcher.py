@@ -8,12 +8,6 @@ import subprocess
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
-POSSIBLE_ACTIONS = [
-    'launch_server',
-    'launch',
-    'launch_client',
-    ]
-
 
 def init_work_data(config):
     result = {}
@@ -22,8 +16,12 @@ def init_work_data(config):
     result['python_exec'] = os.path.join(virtual_env_path, 'bin', 'python')
     result['runtime_dir'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'))
-    result['trytond_exec'] = os.path.join(virtual_env_path, config.get(
-            'parameters', 'runtime_dir'), 'trytond', 'bin', 'trytond')
+    if config.get('parameters', 'sentry_dsn'):
+        result['trytond_exec'] = os.path.join(virtual_env_path, 'bin',
+            'trytond_sentry')
+    else:
+        result['trytond_exec'] = os.path.join(virtual_env_path, config.get(
+                'parameters', 'runtime_dir'), 'trytond', 'bin', 'trytond')
     result['tryton_exec'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'), 'tryton', 'bin', 'tryton')
     result['trytond_conf'] = os.path.join(virtual_env_path, config.get(
@@ -51,17 +49,23 @@ def find_matching_processes(name):
     return targets
 
 
-def launch(arguments, config, work_data):
+def start(arguments, config, work_data):
     if arguments.target in ('server', 'all'):
         servers = find_matching_processes('python %s' %
             work_data['trytond_exec'])
         if servers:
             print 'Server is already up and running !'
         else:
-            server_process = subprocess.Popen([work_data['python_exec'],
-                    work_data['trytond_exec'], '-c',
-                    work_data['trytond_conf']])
-            print 'Server launched, pid %s' % server_process.pid
+            if config.get('parameters', 'sentry_dsn'):
+                server_process = subprocess.Popen([work_data['python_exec'],
+                        work_data['trytond_exec'], '-c',
+                        work_data['trytond_conf'], '-s', config.get(
+                            'parameters', 'sentry_dsn')])
+            else:
+                server_process = subprocess.Popen([work_data['python_exec'],
+                        work_data['trytond_exec'], '-c',
+                        work_data['trytond_conf']])
+            print 'Server started, pid %s' % server_process.pid
     if arguments.target in ('client', 'all'):
         if arguments.mode == 'demo':
             subprocess.Popen([work_data['python_exec'],
@@ -354,7 +358,7 @@ def configure(target_env):
     coopbusiness = os.path.join(workspace, 'coopbusiness')
     os.chdir(os.path.join(root, 'bin'))
     process = subprocess.Popen(['ln', '-s', os.path.join(coopbusiness,
-            'scripts', 'script_launcher.py'), 'coop_start'],
+            'scripts', 'script_launcher.py'), 'coop'],
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.communicate()
     module_dir = os.path.join(workspace, 'coopbusiness', 'modules')
@@ -382,7 +386,7 @@ def configure(target_env):
             f.write('\n'.join([
                         '[parameters]',
                         'db_name = %s' % base_name,
-                        'launch_mode = demo',
+                        'start_mode = demo',
                         'runtime_dir = tryton-workspace']))
     if not os.path.exists(os.path.join(workspace, 'conf', 'trytond.conf')):
         with open(os.path.join(workspace, 'conf', 'trytond.conf'), 'w') as f:
@@ -494,13 +498,13 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers(title='Subcommands',
         description='Valid subcommands', dest='command')
 
-    # Launch parser
-    parser_launch = subparsers.add_parser('launch',
-        help='launch client / server')
-    parser_launch.add_argument('target', choices=['server', 'client',
-            'all'], help='What should be launched')
-    parser_launch.add_argument('--mode', '-m', choices=['demo', 'dev',
-            'debug'], default=config.get('parameters', 'launch_mode'))
+    # Start parser
+    parser_start = subparsers.add_parser('start',
+        help='start client / server')
+    parser_start.add_argument('target', choices=['server', 'client',
+            'all'], help='What should be started')
+    parser_start.add_argument('--mode', '-m', choices=['demo', 'dev',
+            'debug'], default=config.get('parameters', 'start_mode'))
 
     # Batch parser
     parser_batch = subparsers.add_parser('batch', help='Launches a batch')
@@ -561,8 +565,8 @@ if __name__ == '__main__':
     arguments = parser.parse_args()
     work_data = init_work_data(config)
 
-    if arguments.command == 'launch':
-        launch(arguments, config, work_data)
+    if arguments.command == 'start':
+        start(arguments, config, work_data)
     elif arguments.command == 'kill':
         kill(arguments, config, work_data)
     elif arguments.command == 'sync':
