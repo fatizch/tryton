@@ -55,6 +55,13 @@ class Contract:
     def create_loan(cls, loans):
         pass
 
+    def set_contract_end_date_from_loans(self):
+        if not self.loans:
+            return
+        end_date = reduce(lambda x, y: max(x, y.payments[-1].end_date),
+            self.loans, self.start_date)
+        self.end_date = end_date
+
 
 class ContractOption:
     __name__ = 'contract.option'
