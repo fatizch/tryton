@@ -58,8 +58,7 @@ class Contract:
     def set_contract_end_date_from_loans(self):
         if not self.loans:
             return
-        end_date = reduce(lambda x, y: max(x, y.payments[-1].end_date),
-            self.loans, self.start_date)
+        end_date = max([x.end_date for x in self.loans])
         self.end_date = end_date
 
 

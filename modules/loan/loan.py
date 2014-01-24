@@ -66,6 +66,9 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     defferal_duration = fields.Function(
         fields.Integer('Differal Duration'),
         'get_defferal_duration')
+    end_date = fields.Function(
+        fields.Date('End Date'),
+        'get_loan_end_date')
 
     @classmethod
     def __setup__(cls):
@@ -260,6 +263,14 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         for share in self.loan_shares:
             if share.person == party:
                 return share
+
+    def get_loan_end_date(self, name):
+        Increment = Pool().get('loan.increment')
+        last_increment = Increment.search([('loan', '=', self.id)], order=[
+                ('end_date', 'DESC')], limit=1)
+        if not last_increment:
+            return None
+        return last_increment.end_date
 
 
 class LoanShare(model.CoopSQL, model.CoopView):
