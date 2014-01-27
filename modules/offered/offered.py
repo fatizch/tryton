@@ -301,7 +301,14 @@ class Product(model.CoopSQL, Offered):
             ('currency', '=', Eval('currency')),
             ('kind', '=', Eval('kind')),
             ('company', '=', Eval('company')),
-            ], depends=['currency', 'kind', 'company'])
+            ], depends=['currency', 'kind', 'company'],
+            states={'invisible': Bool(Eval('change_coverages_order'))})
+    change_coverages_order = fields.Function(
+        fields.Boolean('Change Order'),
+        'get_change_coverages_order', 'setter_void')
+    ordered_coverages = fields.One2Many('offered.product-option.description',
+        'product', 'Ordered Coverages', order=[('order', 'ASC')],
+        states={'invisible': ~Eval('change_coverages_order')})
     currency = fields.Many2One('currency.currency', 'Currency', required=True)
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
@@ -464,6 +471,9 @@ class Product(model.CoopSQL, Offered):
         if len(products) == 1:
             return products[0].extract_object('full')
 
+    def get_change_coverages_order(self, name):
+        return False
+
 
 class OptionDescription(model.CoopSQL, Offered):
     'OptionDescription'
@@ -502,8 +512,6 @@ class OptionDescription(model.CoopSQL, Offered):
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_required')),
             ], depends=['kind', 'id', 'options_required'])
-
-
 
     @classmethod
     def __setup__(cls):
@@ -590,7 +598,7 @@ class OptionDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class ProductOptionDescriptionRelation(model.CoopSQL):
+class ProductOptionDescriptionRelation(model.CoopSQL, model.CoopView):
     'Product to Option Description Relation'
 
     __name__ = 'offered.product-option.description'
@@ -598,6 +606,7 @@ class ProductOptionDescriptionRelation(model.CoopSQL):
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
     coverage = fields.Many2One('offered.option.description',
         'Option Description', ondelete='RESTRICT')
+    order = fields.Integer('Order')
 
 
 class ProductExtraDataRelation(model.CoopSQL):

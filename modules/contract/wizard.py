@@ -34,7 +34,8 @@ class OptionSubscription(model.CoopWizard):
         excluded = []
         for coverage in contract.options:
             excluded += coverage.offered.options_excluded
-        for coverage in contract.offered.coverages:
+        for coverage in [x.coverage
+                for x in contract.offered.ordered_coverages]:
             if coverage.subscription_behaviour == 'mandatory':
                 selection = 'mandatory'
             elif coverage in excluded:
