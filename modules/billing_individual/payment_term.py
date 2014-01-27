@@ -30,8 +30,8 @@ PAYMENT_DELAYS = [
     ]
 
 SPLIT_METHODS = [
-    ('exact', 'Exact'),
-    ('equal', 'Equal'),
+    ('proportional', 'Proportional Periods'),
+    ('equal', 'Equal Periods'),
     ]
 
 
@@ -330,7 +330,7 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
 
     @classmethod
     def default_split_method(cls):
-        return 'exact'
+        return 'proportional'
 
     def get_line_dates(self, start_date, end_date):
         if self.base_frequency == 'one_shot':
@@ -466,7 +466,7 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
             if (self.split_method == 'equal' or self.base_frequency ==
                     'one_shot'):
                 line_amount = currency.round(base_amount * elem['freq_amount'])
-            elif self.split_method == 'exact':
+            elif self.split_method == 'proportional':
                 line_amount = currency.round(exact_day_price *
                     coop_date.number_of_days_between(start_date, end_date))
             res[start_date] += line_amount
