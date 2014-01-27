@@ -104,6 +104,15 @@
     </record>
     <menuitem parent="menu_product" sequence="2" id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>
     <!-- ############################################################ -->
+    <!-- ########### Product Option Relation ########### -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="product-option_description_view_list">
+        <field name="model">offered.product-option.description</field>
+        <field name="type">tree</field>
+        <field name="name">product-option_description_list</field>
+    </record>
+
+    <!-- ############################################################ -->
     <!-- Package -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="package_view_form">

@@ -10,7 +10,11 @@
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']" position="before">
         <page string="OptionDescriptions" id="option">
-            <field name="coverages"/>
+            <label name="change_coverages_order"/>
+            <field name="change_coverages_order"/>
+            <newline/>
+            <field name="coverages" colspan="4"/>
+            <field name="ordered_coverages" colspan="4"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"

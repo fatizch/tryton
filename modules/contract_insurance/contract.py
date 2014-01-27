@@ -136,7 +136,7 @@ class Contract:
         if self.options:
             return True, ()
         self.options = []
-        for coverage in self.offered.coverages:
+        for coverage in [x.coverage for x in self.offered.ordered_coverages]:
             option = utils.instanciate_relation(self, 'options')
             option.init_from_offered(coverage, self.start_date)
             for covered_element in self.covered_elements:

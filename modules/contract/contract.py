@@ -266,7 +266,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         contract.init_from_offered(offered)
         contract.init_default_address()
         contract.options = []
-        for option in offered.coverages:
+        for option in [x.coverage for x in offered.ordered_coverages]:
             if options_code and option.code not in options_code:
                 continue
             sub_option = SubscribedOpt()
@@ -447,7 +447,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         good_options = []
         to_delete = [elem for elem in existing.itervalues()]
         OptionModel = utils.get_relation_model(self, 'options')
-        for coverage in self.offered.coverages:
+        for coverage in [x.coverage for x in self.offered.ordered_coverages]:
             if coverage.code in existing:
                 good_opt = existing[coverage.code]
                 to_delete.remove(good_opt)
