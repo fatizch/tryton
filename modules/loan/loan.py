@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, coop_date, fields, model
@@ -264,13 +265,17 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             if share.person == party:
                 return share
 
-    def get_loan_end_date(self, name):
-        Increment = Pool().get('loan.increment')
-        last_increment = Increment.search([('loan', '=', self.id)], order=[
-                ('end_date', 'DESC')], limit=1)
-        if not last_increment:
-            return None
-        return last_increment.end_date
+    @classmethod
+    def get_loan_end_date(cls, loans):
+        pool = Pool()
+        cursor = Transaction().cursor
+        loan = pool.get('loan').__table__()
+        increment = Pool().get('loan.increment').__table__()
+        query_table = loan.join(increment, type_='LEFT',
+            condition=(loan.id == increment.loan))
+        cursor.execute(*query_table.select(loan.id, max(increment.end_date),
+                group_by=loan.id))
+        return dict(cursor.fetchall())
 
 
 class LoanShare(model.CoopSQL, model.CoopView):
