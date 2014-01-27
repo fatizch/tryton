@@ -26,7 +26,7 @@ from trytond.modules.cog_utils.model import CoopView as ModelView
 from trytond.modules.cog_utils import model, CoopView, utils, coop_string
 from trytond.modules.cog_utils import coop_date
 
-from trytond.modules.table import TableCell
+from trytond.modules.table import table
 
 __all__ = [
     'Rule',
@@ -415,7 +415,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
             if not (hasattr(self, 'the_table') and self.the_table):
                 return ''
             dimension_names = []
-            for idx in (1, 2, 3, 4):
+            for idx in range(1, table.DIMENSION_MAX + 1):
                 try:
                     dim = getattr(self.the_table, 'dimension_kind%s' % idx)
                 except AttributeError:
@@ -490,7 +490,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
                 functools.partial(self.execute_rule, evaluation_context))
         elif self.kind == 'table':
             context[self.get_translated_technical_name()] = debug_wrapper(
-                functools.partial(TableCell.get, self.the_table))
+                functools.partial(table.TableCell.get, self.the_table))
         return context
 
     def on_change_the_rule(self):
@@ -1184,8 +1184,8 @@ class TestCase(ModelView, ModelSQL):
     rule = fields.Many2One('rule_engine', 'Rule', required=True,
         ondelete='CASCADE')
     expected_result = fields.Char('Expected Result')
-    test_values = fields.One2Many('rule_engine.test_case.value', 'test_case', 'Values',
-        on_change=['test_values', 'rule'], depends=['rule'],
+    test_values = fields.One2Many('rule_engine.test_case.value', 'test_case',
+        'Values', on_change=['test_values', 'rule'], depends=['rule'],
         context={'rule_id': Eval('rule')})
     result_value = fields.Char('Result Value')
     result_warnings = fields.Text('Result Warnings')
