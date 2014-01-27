@@ -65,6 +65,8 @@ class PricingResultLine(RuleEngineResultLine):
             self.start_date = args['date']
 
     def add_detail(self, detail):
+        if not detail.amount:
+            return
         self.amount += detail.amount
         self.details.append(detail)
 
