@@ -14,7 +14,7 @@
             <field name="change_coverages_order"/>
             <newline/>
             <field name="coverages" colspan="4"/>
-            <field name="ordered_coverages" colspan="4"/>
+            <field name="ordered_coverages" colspan="4" mode="tree"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
