@@ -783,8 +783,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         res = {}
         if not utils.is_none(self, 'extra_data'):
             res = self.extra_data
-            res.update(self.covered_element.get_all_extra_data(
-                    at_date))
+        res.update(self.covered_element.get_all_extra_data(at_date))
         res.update(self.option.get_all_extra_data(at_date))
         parent_covered_data = self.get_parent_covered_data()
         if parent_covered_data:
