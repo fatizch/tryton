@@ -16,12 +16,10 @@ def init_work_data(config):
     result['python_exec'] = os.path.join(virtual_env_path, 'bin', 'python')
     result['runtime_dir'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'))
-    if config.get('parameters', 'sentry_dsn'):
-        result['trytond_exec'] = os.path.join(virtual_env_path, 'bin',
-            'trytond_sentry')
-    else:
-        result['trytond_exec'] = os.path.join(virtual_env_path, config.get(
-                'parameters', 'runtime_dir'), 'trytond', 'bin', 'trytond')
+    result['sentry_exec'] = os.path.join(virtual_env_path, 'bin',
+        'trytond_sentry')
+    result['trytond_exec'] = os.path.join(virtual_env_path, config.get(
+            'parameters', 'runtime_dir'), 'trytond', 'bin', 'trytond')
     result['tryton_exec'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'), 'tryton', 'bin', 'tryton')
     result['trytond_conf'] = os.path.join(virtual_env_path, config.get(
@@ -56,11 +54,18 @@ def start(arguments, config, work_data):
         if servers:
             print 'Server is already up and running !'
         else:
-            if config.get('parameters', 'sentry_dsn'):
-                server_process = subprocess.Popen([work_data['python_exec'],
-                        work_data['trytond_exec'], '-c',
-                        work_data['trytond_conf'], '-s', config.get(
-                            'parameters', 'sentry_dsn')])
+            if os.path.isfile(work_data['sentry_exec']):
+                try:
+                    server_process = subprocess.Popen([
+                            work_data['python_exec'],
+                            work_data['sentry_exec'], '-c',
+                            work_data['trytond_conf'], '-s', config.get(
+                                'parameters', 'sentry_dsn')])
+                except ConfigParser.NoOptionError:
+                    server_process = subprocess.Popen([
+                            work_data['python_exec'],
+                            work_data['trytond_exec'], '-c',
+                            work_data['trytond_conf']])
             else:
                 server_process = subprocess.Popen([work_data['python_exec'],
                         work_data['trytond_exec'], '-c',
@@ -83,7 +88,8 @@ def start(arguments, config, work_data):
 def kill(arguments, config, work_data):
     if arguments.target in ('server', 'all'):
         servers = find_matching_processes('python %s' %
-            work_data['trytond_exec'])
+            work_data['trytond_exec']) + find_matching_processes('python %s' %
+            work_data['sentry_exec'])
         if not servers:
             print 'Server is already down !'
         else:
@@ -482,7 +488,7 @@ if __name__ == '__main__':
         os.environ['VIRTUAL_ENV'] = os.path.abspath(os.path.join(target, '..',
                 '..'))
 
-    config = ConfigParser.RawConfigParser()
+    config = ConfigParser.ConfigParser()
     try:
         with open(os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
                     'conf', 'py_scripts.conf'), 'r') as fconf:
