@@ -130,7 +130,7 @@ class Contract:
                 last_date = period.end_date
         new_period_start = coop_date.add_day(last_date, 1)
         appliable_frequency = self.get_product_frequency(last_date)
-        if appliable_frequency == 'one-shot':
+        if appliable_frequency == 'one_shot':
             return (new_period_start, self.end_date)
         new_period_end = coop_date.add_frequency(appliable_frequency,
             last_date)

@@ -81,7 +81,7 @@ class Premium:
         result = super(Premium, self).calculate_bill_contribution(work_set,
             period)
         number_of_days = coop_date.number_of_days_between(*period)
-        price_line_days = self.get_number_of_days_at_date(period[0])
+        price_line_days = self.get_number_of_days_at_date(*period)
         convert_factor = number_of_days / Decimal(price_line_days)
         for com_line in self.com_lines:
             values = work_set['coms'][com_line.com_option.offered.id]
