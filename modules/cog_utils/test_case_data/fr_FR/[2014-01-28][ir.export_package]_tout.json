@@ -871,119 +871,6 @@
         "type": "incremental"
     },
     {
-        "__name__": "account.period",
-        "_export_key": [
-            [
-                "fiscalyear.code",
-                "2013"
-            ],
-            [
-                "code",
-                "2013"
-            ],
-            [
-                "fiscalyear.company.party.name",
-                "Coop"
-            ]
-        ],
-        "code": "2013",
-        "end_date": {
-            "__class__": "date",
-            "day": 31,
-            "month": 12,
-            "year": 2013
-        },
-        "fiscalyear": [
-            [
-                "code",
-                "2013"
-            ],
-            [
-                "company.party.name",
-                "Coop"
-            ]
-        ],
-        "name": "Periode 2013",
-        "post_move_sequence": [
-            [
-                "code",
-                "account.move"
-            ],
-            [
-                "name",
-                "Mouvements Post\u00e9s 2013"
-            ]
-        ],
-        "start_date": {
-            "__class__": "date",
-            "day": 1,
-            "month": 1,
-            "year": 2013
-        },
-        "state": "open",
-        "type": "standard"
-    },
-    {
-        "__name__": "account.fiscalyear",
-        "_export_key": [
-            [
-                "code",
-                "2013"
-            ],
-            [
-                "company.party.name",
-                "Coop"
-            ]
-        ],
-        "code": "2013",
-        "company": [
-            [
-                "party.name",
-                "Coop"
-            ]
-        ],
-        "end_date": {
-            "__class__": "date",
-            "day": 31,
-            "month": 12,
-            "year": 2013
-        },
-        "name": "Annee Fiscale 2013",
-        "periods": [
-            [
-                [
-                    "fiscalyear.code",
-                    "2013"
-                ],
-                [
-                    "code",
-                    "2013"
-                ],
-                [
-                    "fiscalyear.company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
-        "post_move_sequence": [
-            [
-                "code",
-                "account.move"
-            ],
-            [
-                "name",
-                "Mouvements Post\u00e9s 2013"
-            ]
-        ],
-        "start_date": {
-            "__class__": "date",
-            "day": 1,
-            "month": 1,
-            "year": 2013
-        },
-        "state": "open"
-    },
-    {
         "__name__": "ir.sequence",
         "_export_key": [
             [
@@ -1012,119 +899,6 @@
         "timestamp_offset": 946681200.0,
         "timestamp_rounding": 1.0,
         "type": "incremental"
-    },
-    {
-        "__name__": "account.period",
-        "_export_key": [
-            [
-                "fiscalyear.code",
-                "2014"
-            ],
-            [
-                "code",
-                "2014"
-            ],
-            [
-                "fiscalyear.company.party.name",
-                "Coop"
-            ]
-        ],
-        "code": "2014",
-        "end_date": {
-            "__class__": "date",
-            "day": 31,
-            "month": 12,
-            "year": 2014
-        },
-        "fiscalyear": [
-            [
-                "code",
-                "2014"
-            ],
-            [
-                "company.party.name",
-                "Coop"
-            ]
-        ],
-        "name": "Periode 2014",
-        "post_move_sequence": [
-            [
-                "code",
-                "account.move"
-            ],
-            [
-                "name",
-                "Mouvements Post\u00e9s 2014"
-            ]
-        ],
-        "start_date": {
-            "__class__": "date",
-            "day": 1,
-            "month": 1,
-            "year": 2014
-        },
-        "state": "open",
-        "type": "standard"
-    },
-    {
-        "__name__": "account.fiscalyear",
-        "_export_key": [
-            [
-                "code",
-                "2014"
-            ],
-            [
-                "company.party.name",
-                "Coop"
-            ]
-        ],
-        "code": "2014",
-        "company": [
-            [
-                "party.name",
-                "Coop"
-            ]
-        ],
-        "end_date": {
-            "__class__": "date",
-            "day": 31,
-            "month": 12,
-            "year": 2014
-        },
-        "name": "Annee fiscale 2014",
-        "periods": [
-            [
-                [
-                    "fiscalyear.code",
-                    "2014"
-                ],
-                [
-                    "code",
-                    "2014"
-                ],
-                [
-                    "fiscalyear.company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
-        "post_move_sequence": [
-            [
-                "code",
-                "account.move"
-            ],
-            [
-                "name",
-                "Mouvements Post\u00e9s 2014"
-            ]
-        ],
-        "start_date": {
-            "__class__": "date",
-            "day": 1,
-            "month": 1,
-            "year": 2014
-        },
-        "state": "open"
     },
     {
         "__name__": "account.account.type",
@@ -1511,7 +1285,7 @@
             [
                 [
                     "code",
-                    "2013"
+                    "annee_fiscale_2013"
                 ],
                 [
                     "company.party.name",
@@ -1521,7 +1295,7 @@
             [
                 [
                     "code",
-                    "2014"
+                    "annee_fiscale_2014"
                 ],
                 [
                     "company.party.name",
