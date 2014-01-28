@@ -14,6 +14,7 @@ import pyflakes.messages
 
 from trytond.rpc import RPC
 from trytond import backend
+from trytond.model import ModelView as TrytonModelView
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -1198,6 +1199,11 @@ class TestCase(ModelView, ModelSQL):
         'get_rule_text')
 
     @classmethod
+    def __setup__(cls):
+        super(TestCase, cls).__setup__()
+        cls._buttons.update({'recalculate': {}})
+
+    @classmethod
     def default_rule_text(cls):
         if 'rule_id' not in Transaction().context:
             return ''
@@ -1244,6 +1250,15 @@ class TestCase(ModelView, ModelSQL):
             'low_debug': '\n'.join(test_result.print_low_level_debug()),
             'expected_result': str(test_result),
             }
+
+    @classmethod
+    @TrytonModelView.button
+    def recalculate(cls, instances):
+        for elem in instances:
+            result = elem.on_change_test_values()
+            for k, v in result.iteritems():
+                setattr(elem, k, v)
+            elem.save()
 
     def do_test(self):
         try:
