@@ -263,7 +263,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         SubscribedOpt = pool.get('contract.option')
         contract = Contract()
         contract.subscriber = party
-        contract.init_from_offered(offered)
+        contract.init_from_offered(offered, at_date)
         contract.init_default_address()
         contract.options = []
         for option in [x.coverage for x in offered.ordered_coverages]:
