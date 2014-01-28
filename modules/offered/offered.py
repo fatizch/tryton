@@ -289,6 +289,30 @@ class Offered(model.CoopView, GetResult, Templated):
     def init_dict_for_rule_engine(self, args):
         pass
 
+    @classmethod
+    def get_dated_fields(cls):
+        return [x for x in cls._fields.keys() if x.endswith('rules')]
+
+    @classmethod
+    def validate(cls, instances):
+        # Builds a virtual list of all business versions of the offered to be
+        # able to validate possible rule dependencies in all possible
+        # combinations
+        versioned_fields = cls.get_dated_fields()
+        for instance in instances:
+            values = []
+            for field in versioned_fields:
+                values += getattr(instance, field)
+            dates = set(map(lambda x: x.start_date, values))
+            for date in dates:
+                data = dict([
+                        (x, utils.get_good_version_at_date(instance, x, date))
+                        for x in versioned_fields])
+                instance.validate_consistency(data)
+
+    def validate_consistency(self, data):
+        pass
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
