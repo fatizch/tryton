@@ -331,6 +331,13 @@ class Product(model.CoopSQL, Offered):
         cls.kind.selection = list(set(cls.kind.selection))
 
     @classmethod
+    def _export_skips(cls):
+        result = super(Product, cls)._export_skips()
+        # ordered_coverages should be enough
+        result.add('coverages')
+        return result
+
+    @classmethod
     def get_possible_product_kind(cls):
         return [('', '')]
 

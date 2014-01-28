@@ -8699,18 +8699,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "DIVINEA"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -12964,28 +12952,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "obseque_epargne"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "obseque_temporaire_deces"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -16480,38 +16446,6 @@
             [
                 "name",
                 "S\u00e9quence"
-            ]
-        ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "DC"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "INCAP"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "INVAL"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
             ]
         ],
         "currency": [
@@ -25143,18 +25077,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "SANTE_INDIV"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -31097,58 +31019,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "DECES_HUMANIS"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "INCAPACITE_HUMANIS"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "RENTE_CONJOINT_HUMANIS"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "RENTE_EDUCATION_HUMANIS"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "SANTE_HUMANIS"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -32953,28 +32823,6 @@
             [
                 "name",
                 "S\u00e9quence"
-            ]
-        ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "prev"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "sante"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
             ]
         ],
         "currency": [
@@ -35846,18 +35694,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "PREV_PME_DECES"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -36762,38 +36598,6 @@
             [
                 "name",
                 "S\u00e9quence"
-            ]
-        ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "INCAPACITE_HUMANIS"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "INCAP_tns_1"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "SANTE_HUMANIS"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
             ]
         ],
         "currency": [
@@ -44544,38 +44348,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "DC_LOAN"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "TD_LOAN"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ],
-            [
-                [
-                    "code",
-                    "DY_LOAN"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -45400,18 +45172,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "option_kayes"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -46202,18 +45962,6 @@
                 "S\u00e9quence"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "COM15"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -46600,18 +46348,6 @@
             [
                 "name",
                 "Commissionnement"
-            ]
-        ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "com17"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
             ]
         ],
         "currency": [
@@ -47089,18 +46825,6 @@
                 "Commissionnement"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "com_apporteur"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -47473,18 +47197,6 @@
                 "Commissionnement"
             ]
         ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "com_de_gestion"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
-            ]
-        ],
         "currency": [
             [
                 "code",
@@ -47715,18 +47427,6 @@
             [
                 "name",
                 "Commissionnement"
-            ]
-        ],
-        "coverages": [
-            [
-                [
-                    "code",
-                    "COM_sante_indiv"
-                ],
-                [
-                    "company.party.name",
-                    "Coop"
-                ]
             ]
         ],
         "currency": [
