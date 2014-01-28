@@ -9,6 +9,8 @@
     <field name="payment_mode"/>
     <label name="base_frequency"/>
     <field name="base_frequency" colspan="3"/>
+    <label name="split_method"/>
+    <field name="split_method" colspan="3"/>
     <label name="remaining_position"/>
     <field name="remaining_position" colspan="3"/>
     <label name="with_sync_date"/>

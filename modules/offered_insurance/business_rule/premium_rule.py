@@ -4,7 +4,7 @@ import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.cog_utils import utils, coop_date, model, fields
+from trytond.modules.cog_utils import utils, model, fields
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.offered.offered import CONFIG_KIND
 from trytond.modules.offered import PricingResultLine
@@ -30,7 +30,8 @@ PRICING_FREQUENCY = [
     ('yearly', 'Yearly'),
     ('half_yearly', 'Half Yearly'),
     ('quarterly', 'Quarterly'),
-    ('monthly', 'Monthly')
+    ('monthly', 'Monthly'),
+    ('one_shot', 'One-Shot'),
     ]
 
 
@@ -181,14 +182,6 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         if hasattr(self, 'frequency') and self.frequency:
             return self.frequency
         return None
-
-    def give_me_frequency_days(self, args):
-        if not 'date' in args:
-            return (None, ['A base date must be provided !'])
-        the_date = args['date']
-        return coop_date.number_of_days_between(
-            the_date,
-            coop_date.add_frequency(self.frequency, the_date))
 
     @staticmethod
     def default_frequency():
