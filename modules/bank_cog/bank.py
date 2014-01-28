@@ -148,26 +148,9 @@ class BankAccountNumber(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_number': ('Invalid %s number : %s')})
         cls._sql_constraints += [
             ('number_uniq', 'UNIQUE(number)', 'The number must be unique!'),
             ]
-
-    @classmethod
-    def validate(cls, numbers):
-        super(BankAccountNumber, cls).validate(numbers)
-        for number in numbers:
-            cls.check_number(number)
-
-    def check_number(self):
-        res = True
-        if not hasattr(self, 'type'):
-            return
-        if self.type == 'iban':
-            res = self.check_iban()
-        if not res:
-            self.raise_user_error('invalid_number', (self.type, self.number))
 
     def check_iban(self):
         return self.number != '' and iban.valid(self.number)
@@ -178,7 +161,7 @@ class BankAccountNumber(export.ExportImportMixin):
 
     def pre_validate(self):
         super(BankAccountNumber, self).pre_validate()
-        self.check_number()
+        self.validate([self])
 
     @classmethod
     def get_summary(cls, numbers, name=None, at_date=None, lang=None):
