@@ -1,4 +1,5 @@
 from decimal import Decimal
+from sql.aggregators import Max
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -270,10 +271,10 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         pool = Pool()
         cursor = Transaction().cursor
         loan = pool.get('loan').__table__()
-        increment = Pool().get('loan.increment').__table__()
+        increment = pool.get('loan.increment').__table__()
         query_table = loan.join(increment, type_='LEFT',
             condition=(loan.id == increment.loan))
-        cursor.execute(*query_table.select(loan.id, max(increment.end_date),
+        cursor.execute(*query_table.select(loan.id, Max(increment.end_date),
                 group_by=loan.id))
         return dict(cursor.fetchall())
 
