@@ -295,6 +295,9 @@ class Offered(model.CoopView, GetResult, Templated):
 
     @classmethod
     def validate(cls, instances):
+        # Builds a virtual list of all business versions of the offered to be
+        # able to validate possible rule dependencies in all possible
+        # combinations
         versioned_fields = cls.get_dated_fields()
         for instance in instances:
             values = []
