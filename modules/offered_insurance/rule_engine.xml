@@ -129,7 +129,7 @@
   <data>
     <record model="rule_engine.function" id="date_debut_souscription">
       <field name="translated_technical_name">date_debut_souscription</field>
-      <field name="description">Date d'effet du contrat</field>
+      <field name="description">Date d'effet de la Garantie</field>
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
