@@ -72,6 +72,9 @@ class View(ExportImportMixin):
 class UIMenu(ExportImportMixin):
     __name__ = 'ir.ui.menu'
 
+    #XXX overide existing field and must create extension unaccent
+    name = fields.UnaccentChar('Menu', required=True, translate=True)
+
     def get_rec_name(self, name):
         return self.name
 
