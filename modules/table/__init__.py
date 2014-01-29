@@ -19,9 +19,6 @@ def register():
     Pool.register(
         # From table
         TableOpen2D,
-        ManageDimension1,
-        ManageDimension2,
-        ManageDimension3,
-        ManageDimension4,
+        ManageDimension,
         TableCreation,
         module='table', type_='wizard')

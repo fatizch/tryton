@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form string="Table" col="8">
+<form string="Table">
     <label name="definition"/>
-    <field name="definition" colspan="7"/>
+    <field name="definition" colspan="3"/>
     <newline/>
-    <label name="dimension1"/>
-    <field name="dimension1"/>
-    <label name="dimension2"/>
-    <field name="dimension2"/>
-    <label name="dimension3"/>
-    <field name="dimension3"/>
-    <label name="dimension4"/>
-    <field name="dimension4"/>
+    <field name="dimensions"/>
+    <newline/>
     <label name="value"/>
-    <field name="value" colspan="7"/>
+    <field name="value" colspan="3"/>
 </form>

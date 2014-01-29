@@ -21,7 +21,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Definition': 'table',
             'Dimension': 'table.dimension.value',
             'Cell': 'table.cell',
-            'ManageDimension1': 'table.manage_dimension.show_dimension_1',
+            'ManageDimension': 'table.manage_dimension',
         }
 
     def test0010definition_get(self):
@@ -340,8 +340,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0080test_manage_dimension1_wizard(self):
         table = self.Definition.search([('code', '=', 'test_code')])[0]
         with Transaction().set_context({'active_id': table.id}):
-            wizard_id, _, _ = self.ManageDimension1.create()
-            wizard = self.ManageDimension1(wizard_id)
+            wizard_id, _, _ = self.ManageDimension.create()
+            wizard = self.ManageDimension(wizard_id)
             wizard._execute('dimension_management')
             res = wizard.default_dimension_management(None)
             self.assertEqual(len(res['values']), 2)
@@ -355,8 +355,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'table': res['table'],
                     'order': u'alpha',
                 })
-            self.assertEqual(self.ManageDimension1.next_dim_action.action_id,
-                'table.act_manage_dimension_2')
 
     @test_framework.prepare_test('table.test0060table_2dim')
     def test0090test_export(self):
