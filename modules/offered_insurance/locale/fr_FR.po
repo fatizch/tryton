@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -39,7 +39,15 @@ msgid "The  names of attachments must be unique by resource!"
 msgstr ""
 "Le nom des pièces jointes doivent être unique pour une même ressource !"
 
+msgctxt "error:exclusion.kind:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
 msgctxt "error:extra_data:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
+
+msgctxt "error:extra_premium.kind:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -1043,6 +1051,54 @@ msgctxt "field:document.template.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:exclusion.kind,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:exclusion.kind,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:exclusion.kind,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:exclusion.kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:exclusion.kind,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:exclusion.kind,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:exclusion.kind,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:exclusion.kind,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:exclusion.kind,text:"
+msgid "Text"
+msgstr "Texte"
+
+msgctxt "field:exclusion.kind,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:exclusion.kind,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:exclusion.kind,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:expense.kind,code:"
 msgid "Code"
 msgstr "Code"
@@ -1210,6 +1266,50 @@ msgstr "Date de mise à jour"
 msgctxt "field:extra_data-sub_extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:extra_premium.kind,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:extra_premium.kind,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_premium.kind,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:extra_premium.kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:extra_premium.kind,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:extra_premium.kind,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:extra_premium.kind,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:extra_premium.kind,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:extra_premium.kind,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:extra_premium.kind,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:extra_premium.kind,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:insurer,create_date:"
 msgid "Create Date"
@@ -2547,6 +2647,10 @@ msgctxt "model:document.template.version,name:"
 msgid "Document Template Version"
 msgstr "Version de Lettre"
 
+msgctxt "model:exclusion.kind,name:"
+msgid "Exclusion Kind"
+msgstr "Type d'exclusion"
+
 msgctxt "model:expense.kind,name:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
@@ -2559,6 +2663,10 @@ msgctxt "model:extra_data-sub_extra_data,name:"
 msgid "Extra Data to Sub Extra Data Relation"
 msgstr "Données Complémentaires Récursives"
 
+msgctxt "model:extra_premium.kind,name:"
+msgid "Extra Premium Kind"
+msgstr "Type de Surprime"
+
 msgctxt "model:insurer,name:"
 msgid "Insurer"
 msgstr "Assureur"
@@ -2570,6 +2678,14 @@ msgstr "Modèles de Lettre"
 msgctxt "model:ir.action,name:act_document_desc"
 msgid "Document Descriptions"
 msgstr "Descripteurs de Document"
+
+msgctxt "model:ir.action,name:act_exclusion_kind"
+msgid "Exclusion Kind"
+msgstr "Type d'exclusion"
+
+msgctxt "model:ir.action,name:act_extra_premium_kind"
+msgid "Extra Premium Kind"
+msgstr "Type de surprime"
 
 msgctxt "model:ir.action,name:act_item_desc_form"
 msgid "Item Descriptions"
@@ -2606,6 +2722,14 @@ msgstr "Descripteurs de Document"
 msgctxt "model:ir.ui.menu,name:menu_edm"
 msgid "EDM"
 msgstr "GED"
+
+msgctxt "model:ir.ui.menu,name:menu_exclusion_kind"
+msgid "Exclusion Kind"
+msgstr "Type d'exclusion"
+
+msgctxt "model:ir.ui.menu,name:menu_extra_premium_kind"
+msgid "Extra Premium Kind"
+msgstr "Type de Surprime"
 
 msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
 msgid "Item Descriptions"
@@ -2721,6 +2845,10 @@ msgid "Monthly"
 msgstr "Mensuel"
 
 msgctxt "selection:billing.premium.rule,frequency:"
+msgid "One-Shot"
+msgstr "En une fois"
+
+msgctxt "selection:billing.premium.rule,frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 
@@ -2759,6 +2887,10 @@ msgstr "Simple"
 msgctxt "selection:billing.premium.rule.component,kind:"
 msgid "Base Price"
 msgstr "Prime de base"
+
+msgctxt "selection:billing.premium.rule.component,kind:"
+msgid "Extra"
+msgstr "Surprime"
 
 msgctxt "selection:billing.premium.rule.component,kind:"
 msgid "Fee"
@@ -3213,16 +3345,16 @@ msgid "Insurance"
 msgstr "Assurance"
 
 msgctxt "selection:offered.option.description,subscription_behaviour:"
+msgid "Defaulted"
+msgstr "Proposée par Défaut"
+
+msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
 
 msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Optional"
 msgstr "En Option"
-
-msgctxt "selection:offered.option.description,subscription_behaviour:"
-msgid "Defaulted"
-msgstr "Proposée par Défaut"
 
 msgctxt "selection:offered.option.description,template_behaviour:"
 msgid ""
@@ -3432,6 +3564,14 @@ msgctxt "view:document.template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
+msgctxt "view:exclusion.kind:"
+msgid "Exclusion Kind"
+msgstr "Type d'exclusion"
+
+msgctxt "view:exclusion.kind:"
+msgid "Exclusion Kinds"
+msgstr "Types d'exclusions"
+
 msgctxt "view:expense.kind:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
@@ -3451,6 +3591,14 @@ msgstr "Descripteur de Données Complémentaires"
 msgctxt "view:extra_data:"
 msgid "Extra Data Descriptors"
 msgstr "Descripteurs de Données Complémentaires"
+
+msgctxt "view:extra_premium.kind:"
+msgid "Extra Premium Kind"
+msgstr "Type de surprime"
+
+msgctxt "view:extra_premium.kind:"
+msgid "Extra Premium Kinds"
+msgstr "Types de surprime"
 
 msgctxt "view:insurer:"
 msgid "Insurer"

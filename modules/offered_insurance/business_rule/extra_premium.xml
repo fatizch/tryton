@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ###################### -->
+    <!-- # Extra Premium Kind # -->
+    <!-- ###################### -->
+    <record model="ir.ui.view" id="extra_premium_kind_view_form">
+      <field name="model">extra_premium.kind</field>
+      <field name="type">form</field>
+      <field name="name">extra_premium_kind_form</field>
+    </record>
+    <record model="ir.ui.view" id="extra_premium_kind_view_list">
+      <field name="model">extra_premium.kind</field>
+      <field name="type">tree</field>
+      <field name="name">extra_premium_kind_list</field>
+    </record>
+    <!-- Entry Point -->
+    <record model="ir.action.act_window" id="act_extra_premium_kind">
+      <field name="name">Extra Premium Kind</field>
+      <field name="res_model">extra_premium.kind</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_extra_premium_kind_view1">
+      <field name="sequence" eval="15"/>
+      <field name="view" ref="extra_premium_kind_view_list"/>
+      <field name="act_window" ref="act_extra_premium_kind"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_extra_premium_kind_view2">
+      <field name="sequence" eval="15"/>
+      <field name="view" ref="extra_premium_kind_view_form"/>
+      <field name="act_window" ref="act_extra_premium_kind"/>
+    </record>
+    <menuitem parent="offered.menu_product_configuration" sequence="15" action="act_extra_premium_kind" id="menu_extra_premium_kind"/>
+  </data>
+</tryton>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Exclusion Kind">
+  <label name="name"/>
+  <field name="name"/>
+  <label name="code"/>
+  <field name="code"/>
+  <field name="text" colspan="4"/>
+</form>

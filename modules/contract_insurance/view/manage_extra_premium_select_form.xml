@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Manage Extra Premium">
+  <label name="covered_element"/>
+  <field name="covered_element" colspan="3" widget="selection"/>
+  <field name="extra_premiums" colspan="2"/>
+  <field name="coverages" colspan="2"/>
+  <field name="contract" invisible="1"/>
+  <field name="covered_data" invisible="1"/>
+  <field name="kind" invisible="1"/>
+</form>

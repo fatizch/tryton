@@ -23,7 +23,8 @@ __all__ = [
 PRICING_LINE_KINDS = [
     ('base', 'Base Price'),
     ('tax', 'Tax'),
-    ('fee', 'Fee')
+    ('fee', 'Fee'),
+    ('extra', 'Extra'),
     ]
 
 PRICING_FREQUENCY = [
@@ -220,12 +221,24 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         from_detail.to_recalculate = fee_vers.apply_at_pricing_time
         from_detail.amount = amount
 
+    def calculate_extra_detail(self, from_detail, args, base):
+        extra = from_detail.on_object
+        extra_amount = extra.calculate_premium_amount(args, base)
+        if not extra_amount:
+            return
+        from_detail.amount = extra_amount
+        from_detail.on_object = extra.kind
+
     def calculate_components_contribution(self, args, result, errors,
             rated_object_kind):
         for component in self.get_components(rated_object_kind):
             res, errs = component.calculate_value(args)
             result.add_detail(res)
             errors += errs
+        if 'extras' not in args:
+            return
+        for extra in args['extras']:
+            result.add_detail(PricingResultDetail(0, extra, kind='extra'))
 
     def calculate_price(self, args, rated_object_kind='global'):
         result = PricingResultLine()
@@ -248,9 +261,15 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             result.amount = 0
             group_details = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
             for detail in result.details:
-                group_details[detail.on_object.kind].append(detail)
+                group_details[detail.kind].append(detail)
             result.details = []
             for detail in group_details['base']:
+                result.add_detail(detail)
+            extra_details = []
+            for detail in group_details['extra']:
+                self.calculate_extra_detail(detail, args, result.amount)
+                extra_details.append(detail)
+            for detail in extra_details:
                 result.add_detail(detail)
             # By default, taxes and fees are appliend on the total base amount
             fee_details = []
@@ -357,7 +376,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
 
     def calculate_value(self, args):
         amount, errors = self.get_amount(args)
-        detail_line = PricingResultDetail(amount, self)
+        detail_line = PricingResultDetail(amount, self, kind=self.kind)
         return detail_line, errors
 
     @classmethod

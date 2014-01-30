@@ -638,7 +638,7 @@ class Option:
     __name__ = 'contract.option'
 
     def get_name_for_billing(self):
-        return self.get_coverage().name + ' - Base Price'
+        return self.option.name + ' - Base Price'
 
 
 class CoveredElement:
