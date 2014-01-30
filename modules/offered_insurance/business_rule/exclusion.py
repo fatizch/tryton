@@ -11,7 +11,7 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
 
     __name__ = 'exclusion.kind'
 
-    name = fields.Char('Name', on_change=['name'], required=True)
+    name = fields.Char('Name', on_change=['name', 'code'], required=True)
     code = fields.Char('Code', required=True)
     text = fields.Text('Text', required=True)
 
@@ -23,4 +23,6 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
             ]
 
     def on_change_name(self):
+        if self.code:
+            return {}
         return {'code': coop_string.remove_invalid_char(self.name)}

@@ -87,10 +87,10 @@
           <field name="type">form</field>
           <field name="name">extra_premium_form</field>
         </record>
-        <record model="ir.ui.view" id="extra_premium_tree">
+        <record model="ir.ui.view" id="extra_premium_list">
           <field name="model">contract.covered_data.extra_premium</field>
           <field name="type">tree</field>
-          <field name="name">extra_premium_tree</field>
+          <field name="name">extra_premium_list</field>
         </record>
         <!--################################################################ -->
         <!-- Relate -->

@@ -235,9 +235,9 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             res, errs = component.calculate_value(args)
             result.add_detail(res)
             errors += errs
-        if 'extras' not in args:
+        if 'extra_premiums' not in args:
             return
-        for extra in args['extras']:
+        for extra in args['extra_premiums']:
             result.add_detail(PricingResultDetail(0, extra, kind='extra'))
 
     def calculate_price(self, args, rated_object_kind='global'):

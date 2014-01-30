@@ -836,9 +836,9 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         args['data'] = self
         args['deductible_duration'] = self.get_deductible_duration()
         if hasattr(self, 'extra_premiums'):
-            args['extras'] = self.extra_premiums
+            args['extra_premiums'] = self.extra_premiums
         else:
-            args['extra'] = []
+            args['extra_premiums'] = []
         # if not utils.is_none(self, 'covered_element'):
         self.covered_element.init_dict_for_rule_engine(args)
         self.option.init_dict_for_rule_engine(args)
@@ -884,7 +884,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     covered_data = fields.Many2One('contract.covered_data',
         'Covered Data', ondelete='CASCADE')
-    kind = fields.Many2One('extra_premium.kind', 'Kind')
+    kind = fields.Many2One('extra_premium.kind', 'Kind', ondelete='RESTRICT')
     start_date = fields.Date('Start date', states={'required': True})
     end_date = fields.Date('End date')
     calculation_kind = fields.Selection(POSSIBLE_EXTRA_PREMIUM_RULES,
@@ -903,7 +903,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         super(ExtraPremium, cls).__setup__()
         cls._error_messages.update({
                 'bad_start_date': 'Extra premium %s start date (%s) should be '
-                'greater than that of the coverage (%s)'})
+                'greater than the coverage\'s (%s)'})
         cls._buttons.update({'propagate': {}})
 
     @classmethod
@@ -927,8 +927,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return 0
 
     @classmethod
-    def default_fixed_rate(cls):
-        return 10
+    def default_rate(cls):
+        return 0
 
     @classmethod
     def validate(cls, records):

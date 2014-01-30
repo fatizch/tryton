@@ -216,10 +216,11 @@ class ManageExtraPremium(Wizard):
     def __setup__(cls):
         super(ManageExtraPremium, cls).__setup__()
         cls._error_messages.update({
-            'no_extra_selected': 'At least one extra premium must be selected',
-            '1_coverage_selected': 'There may be only one coverage selected '
-                'for this action',
-        })
+                'no_extra_selected': 'At least one extra premium must be '
+                'selected',
+                '1_coverage_selected': 'There may be only one coverage '
+                'selected for this action',
+                })
 
     def default_existing(self, name):
         pool = Pool()
@@ -370,10 +371,11 @@ class ManageExclusion(Wizard):
     def __setup__(cls):
         super(ManageExclusion, cls).__setup__()
         cls._error_messages.update({
-            'no_exclusion_selected': 'At least one exclusion must be selected',
-            'no_covered_data': 'No covered data found in the context, please '
-                'report this',
-        })
+                'no_exclusion_selected': 'At least one exclusion must be '
+                'selected',
+                'no_covered_data': 'No covered data found in the context, '
+                'please report this',
+                })
 
     def default_existing(self, name):
         pool = Pool()
@@ -482,8 +484,8 @@ class CreateExtraPremium(Wizard):
     def __setup__(cls):
         super(CreateExtraPremium, cls).__setup__()
         cls._error_messages.update({
-            'no_covered_data': 'Please select a covered data to continue',
-        })
+                'no_covered_data': 'Please select a covered data to continue',
+                })
 
     def default_extra_premium(self, name):
         assert Transaction().context.get('active_model') == 'contract'

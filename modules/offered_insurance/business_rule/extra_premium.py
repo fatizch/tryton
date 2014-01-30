@@ -11,7 +11,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView):
 
     __name__ = 'extra_premium.kind'
 
-    name = fields.Char('Name', on_change=['name'], required=True)
+    name = fields.Char('Name', on_change=['name', 'code'], required=True)
     code = fields.Char('Code', required=True)
 
     @classmethod
@@ -22,6 +22,8 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView):
             ]
 
     def on_change_name(self):
+        if self.code:
+            return {}
         return {'code': coop_string.remove_invalid_char(self.name)}
 
     def get_name_for_billing(self):

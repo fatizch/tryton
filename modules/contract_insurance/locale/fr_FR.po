@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.covered_data.extra_premium:"
 msgid ""
-"Extra premium %s start date (%s) should be greater than that of the coverage"
+"Extra premium %s start date (%s) should be greater than the coverage's"
 " (%s)"
 msgstr ""
 "Surprime %s : la date de début (%s) doit être supérieure à celle de la "
@@ -922,7 +922,7 @@ msgid "Covered Elements"
 msgstr "Eléments Couverts"
 
 msgctxt "field:document.receive.request,tmp_0:"
-msgid "Claim"
+msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "field:expense,amount:"
@@ -1203,7 +1203,7 @@ msgstr "Non Eligible"
 
 msgctxt "selection:contract.wizard.manage_extra_premium.select,kind:"
 msgid "Contract"
-msgstr "Gestionnaire de Contrats"
+msgstr "Contrat"
 
 msgctxt "selection:contract.wizard.manage_extra_premium.select,kind:"
 msgid "Covered Data"
@@ -1395,7 +1395,7 @@ msgstr "Annuler"
 
 msgctxt "wizard_button:contract.wizard.manage_exclusion,existing,end:"
 msgid "Exit"
-msgstr "Fin"
+msgstr "Terminer"
 
 msgctxt ""
 "wizard_button:contract.wizard.manage_exclusion,existing,propagate_selected:"
@@ -1404,7 +1404,7 @@ msgstr "Propager"
 
 msgctxt "wizard_button:contract.wizard.manage_exclusion.select,existing,end:"
 msgid "Exit"
-msgstr "Fin"
+msgstr "Terminer"
 
 msgctxt ""
 "wizard_button:contract.wizard.manage_exclusion.select,existing,propagate_selected:"
@@ -1418,7 +1418,7 @@ msgstr "Supprimer"
 
 msgctxt "wizard_button:contract.wizard.manage_extra_premium,existing,end:"
 msgid "Exit"
-msgstr "Fin"
+msgstr "Terminer"
 
 msgctxt ""
 "wizard_button:contract.wizard.manage_extra_premium,existing,propagate_selected:"

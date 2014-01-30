@@ -12,5 +12,9 @@
   <label name="fixed_amount"/>
   <field name="fixed_amount"/>
   <label name="rate"/>
-  <field name="rate"/>
+  <group id="rate">
+      <field name="rate" xexpand="0" factor="100"/>
+      <label string="%" id="rate" xexpand="0" xalign="0"
+        states="{'invisible': Eval('calculation_kind') != 'rate'}"/>
+  </group>
 </form>

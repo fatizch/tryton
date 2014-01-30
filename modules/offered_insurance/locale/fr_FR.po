@@ -1077,11 +1077,11 @@ msgstr "Must Expand Tree"
 
 msgctxt "field:exclusion.kind,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:exclusion.kind,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:exclusion.kind,text:"
 msgid "Text"
@@ -1293,11 +1293,11 @@ msgstr "Must Expand Tree"
 
 msgctxt "field:extra_premium.kind,name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:extra_premium.kind,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:extra_premium.kind,write_date:"
 msgid "Write Date"
@@ -2846,7 +2846,7 @@ msgstr "Mensuel"
 
 msgctxt "selection:billing.premium.rule,frequency:"
 msgid "One-Shot"
-msgstr "En une fois"
+msgstr "Entête"
 
 msgctxt "selection:billing.premium.rule,frequency:"
 msgid "Quarterly"
