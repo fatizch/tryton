@@ -293,7 +293,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
     def get_extra_data_value(cls, instance, key, at_date=None):
         extra_data = instance.get_all_extra_data(at_date)
         res = extra_data.get(key)
-        if res:
+        if res is not None:
             return res
         #TODO : To Enhance and load data_def in cache
         data_def, = cls.search([('name', '=', key)])
