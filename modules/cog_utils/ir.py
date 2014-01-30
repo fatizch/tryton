@@ -4,6 +4,7 @@ from sql.operators import Concat
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
+from trytond.config import CONFIG
 
 import fields
 from export import ExportImportMixin
@@ -74,6 +75,18 @@ class UIMenu(ExportImportMixin):
 
     #XXX overide existing field and must create extension unaccent
     name = fields.UnaccentChar('Menu', required=True, translate=True)
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(UIMenu, cls).__register__(module_name)
+
+        if CONFIG['db_type'] != 'postgresql':
+            return
+
+        with Transaction().new_cursor() as transaction:
+            cursor = transaction.cursor
+            cursor.execute('CREATE EXTENSION IF NOT EXISTS unaccent', ())
+            cursor.commit()
 
     def get_rec_name(self, name):
         return self.name

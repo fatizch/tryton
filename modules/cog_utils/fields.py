@@ -171,7 +171,7 @@ class UnaccentChar(tryton_fields.Char):
     @classmethod
     def sql_format(cls, value):
         value = super(UnaccentChar, cls).sql_format(value)
-        if isinstance(value, basestring):
+        if isinstance(value, basestring) and CONFIG['db_type'] == 'postgresql':
             return Unaccent(value)
         return value
 
