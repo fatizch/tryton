@@ -475,7 +475,10 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         if operator == '=' and isinstance(value, (int, long)):
             return [('id', '=', value)]
         if operator == 'ilike':
-            records = cls.search([('name', 'ilike', value.strip('%'))])
+            records = cls.search([
+                    ('name', 'ilike', value.strip('%')),
+                    ('definition', '=', Transaction().context.get('table')),
+                    ])
             if len(records) == 1:
                 return [('id', '=', records[0].id)]
         return [('name',) + tuple(clause[1:])]
