@@ -1,4 +1,4 @@
-from trytond.modules.cog_utils import model, utils, fields
+from trytond.modules.cog_utils import model, utils, fields, coop_string
 
 
 __all__ = [
@@ -13,7 +13,7 @@ class FeeDescription(model.CoopSQL, model.VersionedObject):
     __name__ = 'account.fee.description'
 
     name = fields.Char('Fee Name', required=True)
-    code = fields.Char('Code', required=True)
+    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
     description = fields.Text('Description')
 
     @classmethod
@@ -38,6 +38,11 @@ class FeeDescription(model.CoopSQL, model.VersionedObject):
 
     def get_name_for_billing(self):
         return self.name
+
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 class FeeDescriptionVersion(model.CoopSQL, model.VersionObject):
