@@ -658,6 +658,12 @@ class ViewDescription(model.CoopSQL, model.CoopView):
         return result
 
     @classmethod
+    def _export_light(cls):
+        result = super(ViewDescription, cls)._export_light()
+        result.add('view_model')
+        return result
+
+    @classmethod
     def _post_import(cls, views):
         for view in views:
             view.the_view = view.create_update_view()

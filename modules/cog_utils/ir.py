@@ -103,6 +103,12 @@ class RuleGroup(ExportImportMixin):
         result.add('users')
         return result
 
+    @classmethod
+    def _export_light(cls):
+        result = super(RuleGroup, cls)._export_light()
+        result.add('model')
+        return result
+
 
 class Action(ExportImportMixin):
     __name__ = 'ir.action'
@@ -228,7 +234,14 @@ class IrModelFieldAccess(ExportImportMixin):
 
     @classmethod
     def _export_keys(cls):
-        return set(['field.name', 'field.model.model'])
+        return set(['field.name', 'field.model.model', 'group.name',
+                'perm_read', 'perm_write', 'perm_create', 'perm_delete'])
+
+    @classmethod
+    def _export_light(cls):
+        result = super(IrModelFieldAccess, cls)._export_light()
+        result.add('field')
+        return result
 
 
 class ModelAccess(ExportImportMixin):
@@ -238,6 +251,12 @@ class ModelAccess(ExportImportMixin):
     def _export_keys(cls):
         return set(['model.model', 'group.name', 'perm_read', 'perm_write',
                 'perm_create', 'perm_delete'])
+
+    @classmethod
+    def _export_light(cls):
+        result = super(ModelAccess, cls)._export_light()
+        result.add('model')
+        return result
 
 
 class Property(ExportImportMixin):
