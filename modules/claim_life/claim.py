@@ -38,7 +38,7 @@ class Loss:
     def super(cls):
         super(Loss, cls).super()
         cls.main_loss = copy.copy(cls.main_loss)
-        cls.main_loss.on_change += ['covered_person']
+        cls.main_loss.on_change.add('covered_person')
 
     def on_change_main_loss(self):
         res = super(Loss, self).on_change_main_loss()
