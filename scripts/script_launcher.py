@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
+# PYTHON_ARGCOMPLETE_OK
 import shutil
 import os
 import ConfigParser
 import argparse
+import argcomplete
 import subprocess
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -568,6 +570,7 @@ if __name__ == '__main__':
     parser_configure.add_argument('--env', '-e', help='Root of environment '
         'to configure', default=os.environ['VIRTUAL_ENV'])
 
+    argcomplete.autocomplete(parser)
     arguments = parser.parse_args()
     work_data = init_work_data(config)
 
