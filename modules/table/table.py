@@ -161,7 +161,7 @@ class TableDefinition(ModelSQL, ModelView):
 
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
-            field_value, values, created, relink):
+            field_value, values, created, relink, to_relink):
         Cell = Pool().get('table.cell')
         if (hasattr(good_instance, 'id') and good_instance.id):
             table_id = good_instance.id

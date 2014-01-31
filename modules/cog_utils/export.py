@@ -518,7 +518,7 @@ class ExportImportMixin(Model):
             if hasattr(cls, '_import_override_%s' % field_name):
                 values[field_name] = getattr(cls, '_import_override_%s' %
                     field_name)(my_key, good_instance, field_value, values,
-                        created, relink)
+                        created, relink, to_relink)
                 continue
             if isinstance(field, tryton_fields.Property):
                 field = field._field

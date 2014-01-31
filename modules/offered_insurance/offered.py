@@ -81,7 +81,6 @@ class Product:
         'Term - Renewal')
     item_descriptors = fields.Many2Many('offered.product-item.description',
         'product', 'item_desc', 'Item Descriptions',
-        domain=[('id', 'in', Eval('possible_item_descs'))],
         depends=['possible_item_descs'], states={
             'required': IS_INSURANCE,
             'invisible': ~IS_INSURANCE,
