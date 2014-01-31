@@ -1,6 +1,5 @@
 import re
 import copy
-import time
 from datetime import datetime
 from decimal import Decimal
 from functools import partial
@@ -582,7 +581,6 @@ class TableCell(ModelSQL, ModelView):
 
     @classmethod
     def import_data(cls, fields_names, data):
-        start = time.time()
         pool = Pool()
         DimensionValue = pool.get('table.dimension.value')
 
@@ -614,7 +612,6 @@ class TableCell(ModelSQL, ModelView):
                     row[i] = search_dimension_value(field_name, dimension_name,
                         table_id)
         r = super(TableCell, cls).import_data(fields_names, data)
-        print 'Time:', time.time() - start
         return r
 
     @classmethod
