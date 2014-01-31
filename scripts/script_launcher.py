@@ -115,7 +115,7 @@ def sync(arguments, config, work_data):
     if arguments.target in ('coop', 'all'):
         sync_this('coopbusiness')
         arguments.env = os.environ['VIRTUAL_ENV']
-        configure(arguments, config, work_data)
+        configure(arguments.env)
 
 
 def database(arguments, config, work_data):
