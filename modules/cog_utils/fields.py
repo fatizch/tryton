@@ -1,10 +1,13 @@
 import logging
 from itertools import chain
 
+from sql import Column, Literal, operators, functions
+
 from trytond.model import fields as tryton_fields
 from trytond.pyson import PYSON
 from trytond.pool import Pool
 from trytond.transaction import Transaction
+from trytond.config import CONFIG
 
 
 class Boolean(tryton_fields.Boolean):
@@ -156,3 +159,33 @@ class One2One(tryton_fields.One2One):
 
 class Dict(tryton_fields.Dict):
     pass
+
+
+class Unaccent(functions.Function):
+    __slots__ = ()
+    _function = 'unaccent'
+
+
+class UnaccentChar(tryton_fields.Char):
+
+    @classmethod
+    def sql_format(cls, value):
+        value = super(UnaccentChar, cls).sql_format(value)
+        if isinstance(value, basestring) and CONFIG['db_type'] == 'postgresql':
+            return Unaccent(value)
+        return value
+
+    def convert_domain(self, domain, tables, Model):
+        table, _ = tables[None]
+        name, operator, value = domain
+        Operator = tryton_fields.SQL_OPERATORS[operator]
+        column = Column(table, name)
+        if CONFIG['db_type'] == 'postgresql':
+            column = Unaccent(column)
+        expression = Operator(column, self._domain_value(operator, value))
+        if isinstance(expression, operators.In) and not expression.right:
+            expression = Literal(False)
+        elif isinstance(expression, operators.NotIn) and not expression.right:
+            expression = Literal(True)
+        expression = self._domain_add_null(column, operator, value, expression)
+        return expression
