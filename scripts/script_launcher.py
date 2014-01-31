@@ -83,8 +83,7 @@ def start(arguments, config, work_data):
 def kill(arguments, config, work_data):
     if arguments.target in ('server', 'all'):
         servers = find_matching_processes('python %s' %
-            work_data['trytond_exec']) + find_matching_processes('python %s' %
-            work_data['sentry_exec'])
+            work_data['trytond_exec'])
         if not servers:
             print 'Server is already down !'
         else:
