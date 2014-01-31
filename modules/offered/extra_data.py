@@ -74,20 +74,21 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
 
         cls.name = copy.copy(cls.name)
         if not cls.name.on_change_with:
-            cls.name.on_change_with = []
-        cls.name.on_change_with.append('string')
-        cls.name.on_change_with.append('name')
+            cls.name.on_change_with = set()
+        cls.name.on_change_with.add('string')
+        cls.name.on_change_with.add('name')
         cls.name.string = 'Code'
 
         cls.type_ = copy.copy(cls.type_)
         if not cls.type_.on_change:
-            cls.type_.on_change = []
-        cls.type_.on_change.append('type_')
+            cls.type_.on_change = set()
+        cls.type_.on_change.add('type_')
 
         cls.selection = copy.copy(cls.selection)
         if not cls.selection.on_change:
-            cls.selection.on_change = []
-        cls.selection.on_change += ['selection', 'default_value_selection']
+            cls.selection.on_change = set()
+        cls.selection.on_change |= set(['selection',
+                'default_value_selection'])
         cls.selection.states['required'] = (Eval('type_') == 'selection'
             and ~~Eval('with_default_value'))
 

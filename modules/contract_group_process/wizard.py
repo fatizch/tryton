@@ -24,7 +24,7 @@ class ContractSubscribeFindProcess:
             [('is_group', '=', Eval('is_group'))])
         utils.update_depends(cls, 'product', ['is_group'])
         cls.possible_com_product = copy.copy(cls.possible_com_product)
-        cls.possible_com_product.on_change_with.append('is_group')
+        cls.possible_com_product.on_change_with.add('is_group')
         super(ContractSubscribeFindProcess, cls).__setup__()
 
     def on_change_is_group(self):

@@ -507,8 +507,8 @@ def update_depends(cls, var_name, new_depends):
 def update_on_change(cls, var_name, new_on_change):
     field_name = copy.copy(getattr(cls, var_name))
     if not field_name.on_change:
-        field_name.on_change = []
-    field_name.on_change.extend(new_on_change)
+        field_name.on_change = set()
+    field_name.on_change |= set(new_on_change)
     setattr(cls, var_name, field_name)
 
 
