@@ -16,8 +16,6 @@ def init_work_data(config):
     result['python_exec'] = os.path.join(virtual_env_path, 'bin', 'python')
     result['runtime_dir'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'))
-    result['sentry_exec'] = os.path.join(virtual_env_path, 'bin',
-        'trytond_sentry')
     result['trytond_exec'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'), 'trytond', 'bin', 'trytond')
     result['tryton_exec'] = os.path.join(virtual_env_path, config.get(
@@ -54,22 +52,17 @@ def start(arguments, config, work_data):
         if servers:
             print 'Server is already up and running !'
         else:
-            if os.path.isfile(work_data['sentry_exec']):
-                try:
-                    server_process = subprocess.Popen([
-                            work_data['python_exec'],
-                            work_data['sentry_exec'], '-c',
-                            work_data['trytond_conf'], '-s', config.get(
-                                'parameters', 'sentry_dsn')])
-                except ConfigParser.NoOptionError:
-                    server_process = subprocess.Popen([
-                            work_data['python_exec'],
-                            work_data['trytond_exec'], '-c',
-                            work_data['trytond_conf']])
-            else:
-                server_process = subprocess.Popen([work_data['python_exec'],
+            try:
+                server_process = subprocess.Popen([
+                        work_data['python_exec'],
                         work_data['trytond_exec'], '-c',
-                        work_data['trytond_conf']])
+                        work_data['trytond_conf'], '-s', config.get(
+                            'parameters', 'sentry_dsn')])
+            except ConfigParser.NoOptionError:
+                server_process = subprocess.Popen([
+                        work_data['python_exec'],
+                        work_data['trytond_exec'], '-c',
+                            work_data['trytond_conf']])
             print 'Server started, pid %s' % server_process.pid
     if arguments.target in ('client', 'all'):
         if arguments.mode == 'demo':
