@@ -960,7 +960,7 @@ class CoveredDataExclusionKindRelation(model.CoopSQL):
 
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE')
-    exclusion = fields.Many2One('exclusion.kind', 'Exclusion',
+    exclusion = fields.Many2One('offered.exclusion', 'Exclusion',
         ondelete='RESTRICT')
 
 

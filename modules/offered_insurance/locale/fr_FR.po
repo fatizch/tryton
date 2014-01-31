@@ -39,7 +39,7 @@ msgid "The  names of attachments must be unique by resource!"
 msgstr ""
 "Le nom des pièces jointes doivent être unique pour une même ressource !"
 
-msgctxt "error:exclusion.kind:"
+msgctxt "error:offered.exclusion:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
 
@@ -1051,51 +1051,51 @@ msgctxt "field:document.template.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:exclusion.kind,code:"
+msgctxt "field:offered.exclusion,code:"
 msgid "Code"
 msgstr "Code"
 
-msgctxt "field:exclusion.kind,create_date:"
+msgctxt "field:offered.exclusion,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:exclusion.kind,create_date_:"
+msgctxt "field:offered.exclusion,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:exclusion.kind,create_uid:"
+msgctxt "field:offered.exclusion,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:exclusion.kind,id:"
+msgctxt "field:offered.exclusion,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:exclusion.kind,must_expand_tree:"
+msgctxt "field:offered.exclusion,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:exclusion.kind,name:"
+msgctxt "field:offered.exclusion,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:exclusion.kind,rec_name:"
+msgctxt "field:offered.exclusion,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:exclusion.kind,text:"
+msgctxt "field:offered.exclusion,text:"
 msgid "Text"
 msgstr "Texte"
 
-msgctxt "field:exclusion.kind,write_date:"
+msgctxt "field:offered.exclusion,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:exclusion.kind,write_uid:"
+msgctxt "field:offered.exclusion,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:exclusion.kind,xml_id:"
+msgctxt "field:offered.exclusion,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -2647,7 +2647,7 @@ msgctxt "model:document.template.version,name:"
 msgid "Document Template Version"
 msgstr "Version de Lettre"
 
-msgctxt "model:exclusion.kind,name:"
+msgctxt "model:offered.exclusion,name:"
 msgid "Exclusion Kind"
 msgstr "Type d'exclusion"
 
@@ -3564,11 +3564,11 @@ msgctxt "view:document.template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
-msgctxt "view:exclusion.kind:"
+msgctxt "view:offered.exclusion:"
 msgid "Exclusion Kind"
 msgstr "Type d'exclusion"
 
-msgctxt "view:exclusion.kind:"
+msgctxt "view:offered.exclusion:"
 msgid "Exclusion Kinds"
 msgstr "Types d'exclusions"
 

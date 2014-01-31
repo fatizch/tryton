@@ -337,7 +337,7 @@ class ExclusionSelector(model.CoopView):
     __name__ = 'contract.manage_exclusion.select.exclusion'
 
     selected = fields.Boolean('Selected')
-    exclusion = fields.Many2One('exclusion.kind', 'Exclusion')
+    exclusion = fields.Many2One('offered.exclusion', 'Exclusion')
 
 
 class ExclusionDisplay(model.CoopView):
