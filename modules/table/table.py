@@ -1,6 +1,5 @@
 import re
 import copy
-import time
 from datetime import datetime
 from decimal import Decimal
 from functools import partial
@@ -475,10 +474,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         if operator == '=' and isinstance(value, (int, long)):
             return [('id', '=', value)]
         if operator == 'ilike':
-            records = cls.search([
-                    ('name', 'ilike', value.strip('%')),
-                    ('definition', '=', Transaction().context.get('table')),
-                    ])
+            records = cls.search([('name', 'ilike', value.strip('%'))])
             if len(records) == 1:
                 return [('id', '=', records[0].id)]
         return [('name',) + tuple(clause[1:])]
@@ -585,7 +581,6 @@ class TableCell(ModelSQL, ModelView):
 
     @classmethod
     def import_data(cls, fields_names, data):
-        start = time.time()
         pool = Pool()
         DimensionValue = pool.get('table.dimension.value')
 
@@ -617,7 +612,6 @@ class TableCell(ModelSQL, ModelView):
                     row[i] = search_dimension_value(field_name, dimension_name,
                         table_id)
         r = super(TableCell, cls).import_data(fields_names, data)
-        print 'Time:', time.time() - start
         return r
 
     @classmethod
