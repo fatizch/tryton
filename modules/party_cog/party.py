@@ -25,6 +25,7 @@ STATES_COMPANY = Bool(Eval('is_company'))
 class Party(export.ExportImportMixin):
     __name__ = 'party.party'
 
+    name = fields.UnaccentChar('Name', required=True, select=True)
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
@@ -54,11 +55,11 @@ class Party(export.ExportImportMixin):
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             })
-    first_name = fields.Char('First Name', states={
+    first_name = fields.UnaccentChar('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             })
-    maiden_name = fields.Char('Maiden Name', states={
+    maiden_name = fields.UnaccentChar('Maiden Name', states={
             'readonly': Eval('gender') != 'female',
             'invisible': ~STATES_PERSON
             })
