@@ -95,6 +95,11 @@ class UIMenu(ExportImportMixin):
     def _export_keys(cls):
         return set(['xml_id'])
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        #Bypass Tryton default search on parent
+        return [('name',) + tuple(clause[1:])]
+
 
 class Rule(ExportImportMixin):
     __name__ = 'ir.rule'
