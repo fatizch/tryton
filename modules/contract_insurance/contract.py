@@ -16,7 +16,7 @@ from trytond.modules.offered_insurance import offered
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
 POSSIBLE_EXTRA_PREMIUM_RULES = [
-    ('fixed', 'Fixed Amount'),
+    ('flat', 'Flat Amount'),
     ('rate', 'Rate on Premium'),
     ]
 
@@ -889,9 +889,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     end_date = fields.Date('End date')
     calculation_kind = fields.Selection(POSSIBLE_EXTRA_PREMIUM_RULES,
         'Calculation Kind')
-    fixed_amount = fields.Numeric('Fixed amount', states={
-            'invisible': Eval('calculation_kind', '') != 'fixed',
-            'required': Eval('calculation_kind', '') == 'fixed',
+    flat_amount = fields.Numeric('Flat amount', states={
+            'invisible': Eval('calculation_kind', '') != 'flat',
+            'required': Eval('calculation_kind', '') == 'flat',
             }, digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
     rate = fields.Numeric('Rate on Premium', states={
@@ -923,7 +923,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return 'rate'
 
     @classmethod
-    def default_fixed_amount(cls):
+    def default_flat_amount(cls):
         return 0
 
     @classmethod
@@ -938,8 +938,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                         record.start_date, record.covered_data.start_date))
 
     def calculate_premium_amount(self, args, base):
-        if self.calculation_kind == 'fixed':
-            return self.fixed_amount
+        if self.calculation_kind == 'flat':
+            return self.flat_amount
         elif self.calculation_kind == 'rate':
             return base * self.rate
         return 0

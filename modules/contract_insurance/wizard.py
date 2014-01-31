@@ -113,7 +113,7 @@ class OptionsDisplayer:
 class ExtraPremiumSelector(model.CoopView):
     'Extra Premium'
 
-    __name__ = 'contract.wizard.manage_extra_premium.select.extra'
+    __name__ = 'contract.manage_extra_premium.select.extra'
 
     selected = fields.Boolean('Selected')
     extra_premium = fields.Many2One('contract.covered_data.extra_premium',
@@ -124,7 +124,7 @@ class ExtraPremiumSelector(model.CoopView):
 class CoveredDataSelector(model.CoopView):
     'Coverage'
 
-    __name__ = 'contract.wizard.manage_extra_premium.select.coverage'
+    __name__ = 'contract.manage_extra_premium.select.coverage'
 
     selected = fields.Boolean('Selected')
     coverage = fields.Many2One('contract.covered_data', 'Coverage')
@@ -134,7 +134,7 @@ class CoveredDataSelector(model.CoopView):
 class ExtraPremiumDisplay(model.CoopView):
     'Extra Premium Display'
 
-    __name__ = 'contract.wizard.manage_extra_premium.select'
+    __name__ = 'contract.manage_extra_premium.select'
 
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', domain=[('contract', '=', Eval('contract'))],
@@ -143,11 +143,11 @@ class ExtraPremiumDisplay(model.CoopView):
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data')
     contract = fields.Many2One('contract', 'Contract')
     extra_premiums = fields.One2Many(
-        'contract.wizard.manage_extra_premium.select.extra', None,
+        'contract.manage_extra_premium.select.extra', None,
         'Extra Premiums', states={
             'readonly': Eval('kind', '') == 'extra_premium'})
     coverages = fields.One2Many(
-        'contract.wizard.manage_extra_premium.select.coverage', None,
+        'contract.manage_extra_premium.select.coverage', None,
         'Coverages')
     kind = fields.Selection([
             ('contract', 'Contract'),
@@ -198,12 +198,12 @@ class ExtraPremiumDisplay(model.CoopView):
 class ManageExtraPremium(Wizard):
     'Manage Extra Premiums'
 
-    __name__ = 'contract.wizard.manage_extra_premium'
+    __name__ = 'contract.manage_extra_premium'
 
     start_state = 'existing'
-    existing = StateView('contract.wizard.manage_extra_premium.select',
+    existing = StateView('contract.manage_extra_premium.select',
         'contract_insurance.manage_extra_premium_select_view_form', [
-            Button('Exit', 'end', 'tryton-ok'),
+            Button('End', 'end', 'tryton-ok'),
             Button('Delete Selected', 'delete_selected', 'tryton-clear',
                 states={'invisible': Eval('kind', '') == 'extra_premium'}),
             Button('Propagate Selected', 'propagate_selected',
@@ -227,7 +227,7 @@ class ManageExtraPremium(Wizard):
         Contract = pool.get('contract')
         CoveredData = pool.get('contract.covered_data')
         ExtraPremium = pool.get('contract.covered_data.extra_premium')
-        Selector = pool.get('contract.wizard.manage_extra_premium.select')
+        Selector = pool.get('contract.manage_extra_premium.select')
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
         if active_model == 'contract':
@@ -334,7 +334,7 @@ class ManageExtraPremium(Wizard):
 class ExclusionSelector(model.CoopView):
     'Exclusion'
 
-    __name__ = 'contract.wizard.manage_exclusion.select.exclusion'
+    __name__ = 'contract.manage_exclusion.select.exclusion'
 
     selected = fields.Boolean('Selected')
     exclusion = fields.Many2One('exclusion.kind', 'Exclusion')
@@ -343,25 +343,25 @@ class ExclusionSelector(model.CoopView):
 class ExclusionDisplay(model.CoopView):
     'Exclusion Display'
 
-    __name__ = 'contract.wizard.manage_exclusion.select'
+    __name__ = 'contract.manage_exclusion.select'
 
     coverages = fields.One2Many(
-        'contract.wizard.manage_extra_premium.select.coverage', None,
+        'contract.manage_extra_premium.select.coverage', None,
         'Coverages')
     exclusions = fields.One2Many(
-        'contract.wizard.manage_exclusion.select.exclusion', None,
+        'contract.manage_exclusion.select.exclusion', None,
         'Exclusions')
 
 
 class ManageExclusion(Wizard):
     'Manage Exclusions'
 
-    __name__ = 'contract.wizard.manage_exclusion'
+    __name__ = 'contract.manage_exclusion'
 
     start_state = 'existing'
-    existing = StateView('contract.wizard.manage_exclusion.select',
+    existing = StateView('contract.manage_exclusion.select',
         'contract_insurance.manage_exclusion_select_view_form', [
-            Button('Exit', 'end', 'tryton-ok'),
+            Button('End', 'end', 'tryton-ok'),
             Button('Propagate Selected', 'propagate_selected',
                 'tryton-fullscreen'),
             ])
@@ -380,7 +380,7 @@ class ManageExclusion(Wizard):
     def default_existing(self, name):
         pool = Pool()
         CoveredData = pool.get('contract.covered_data')
-        Selector = pool.get('contract.wizard.manage_extra_premium.select')
+        Selector = pool.get('contract.manage_extra_premium.select')
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
         if active_model != 'contract.covered_data':
@@ -424,7 +424,7 @@ class ManageExclusion(Wizard):
 class ExtraPremiumDisplayer(model.CoopView):
     'Extra Premium Displayer'
 
-    __name__ = 'contract.wizard.create_extra_premium.create'
+    __name__ = 'contract.create_extra_premium.create'
 
     contract = fields.Many2One('contract', 'Contract')
     covered_element = fields.Many2One('contract.covered_element',
@@ -463,17 +463,17 @@ class ExtraPremiumDisplayer(model.CoopView):
                 'end_date': self.covered_data.end_date,
                 'calculation_kind': 'rate',
                 'rate': 0,
-                'fixed_amount': 0}]
+                'flat_amount': 0}]
         return result
 
 
 class CreateExtraPremium(Wizard):
     'Create Extra Premium'
 
-    __name__ = 'contract.wizard.create_extra_premium'
+    __name__ = 'contract.create_extra_premium'
 
     start_state = 'extra_premium'
-    extra_premium = StateView('contract.wizard.create_extra_premium.create',
+    extra_premium = StateView('contract.create_extra_premium.create',
         'contract_insurance.create_extra_premium_create_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Create', 'create_extra', 'tryton-ok', states={
@@ -503,7 +503,7 @@ class CreateExtraPremium(Wizard):
                     'end_date': covered_data.end_date,
                     'calculation_kind': 'rate',
                     'rate': 0,
-                    'fixed_amount': 0}]}
+                    'flat_amount': 0}]}
 
     def transition_create_extra(self):
         if not self.extra_premium.covered_data:

@@ -9,8 +9,8 @@
   <label name="calculation_kind"/>
   <field name="calculation_kind"/>
   <newline/>
-  <label name="fixed_amount"/>
-  <field name="fixed_amount"/>
+  <label name="flat_amount"/>
+  <field name="flat_amount"/>
   <label name="rate"/>
   <group id="rate">
       <field name="rate" xexpand="0" factor="100"/>
