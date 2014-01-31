@@ -200,8 +200,8 @@ class TableDefinition(ModelSQL, ModelView):
                    instance_key))]
         lock_dim_and_import(locks, template)
 
-    @staticmethod
-    def default_dimension_order():
+    @classmethod
+    def default_dimension_order(cls):
         return 'alpha'
 
     @staticmethod
