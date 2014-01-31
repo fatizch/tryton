@@ -108,6 +108,11 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     language = fields.Many2One('ir.lang', 'Test Case Language')
 
     @classmethod
+    def check_xml_record(cls, records, values):
+        # Override to allow to modify the base configuration
+        return True
+
+    @classmethod
     def run_test_case_method(cls, method):
         # Runner function that will be used to automatically call before /
         # after methods. It supports chained before / after though the use of
