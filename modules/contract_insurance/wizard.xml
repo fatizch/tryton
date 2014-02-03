@@ -1,11 +1,83 @@
 <?xml version="1.0"?>
 <tryton>
-    <data>
-        <record model="ir.ui.view" id="options_displayer_view_form">
-            <field name="model">contract.wizard.option_subscription.options_displayer</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="contract.options_displayer_view_form"/>
-            <field name="name">option_subscription.options_displayer_form</field>
-        </record>
-    </data>
+  <data>
+    <!-- ######################### -->
+    <!-- # Option Displayer Form # -->
+    <!-- ######################### -->
+    <record model="ir.ui.view" id="options_displayer_view_form">
+      <field name="model">contract.wizard.option_subscription.options_displayer</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="contract.options_displayer_view_form"/>
+      <field name="name">option_subscription.options_displayer_form</field>
+    </record>
+    <!-- ########################## -->
+    <!-- # Extra Premium Selector # -->
+    <!-- ########################## -->
+    <record model="ir.ui.view" id="manage_extra_premium_select_extra_view_list">
+      <field name="model">contract.manage_extra_premium.select.extra</field>
+      <field name="type">tree</field>
+      <field name="name">manage_extra_premium_select_extra_list</field>
+    </record>
+    <!-- ######################### -->
+    <!-- # Covered Data Selector # -->
+    <!-- ######################### -->
+    <record model="ir.ui.view" id="manage_extra_premium_select_coverage_view_list">
+      <field name="model">contract.manage_extra_premium.select.coverage</field>
+      <field name="type">tree</field>
+      <field name="name">manage_extra_premium_select_coverage_list</field>
+    </record>
+    <!-- ######################### -->
+    <!-- # Extra Premium Display # -->
+    <!-- ######################### -->
+    <record model="ir.ui.view" id="manage_extra_premium_select_view_form">
+      <field name="model">contract.manage_extra_premium.select</field>
+      <field name="type">form</field>
+      <field name="name">manage_extra_premium_select_form</field>
+    </record>
+    <!-- ######################## -->
+    <!-- # Manage Extra Premium # -->
+    <!-- ######################## -->
+    <record model="ir.action.wizard" id="act_manage_extra_premium">
+      <field name="name">Manage Extra Premium</field>
+      <field name="wiz_name">contract.manage_extra_premium</field>
+    </record>
+    <!-- ###################### -->
+    <!-- # Exclusion Selector # -->
+    <!-- ###################### -->
+    <record model="ir.ui.view" id="manage_exclusion_select_extra_view_tree">
+      <field name="model">contract.manage_exclusion.select.exclusion</field>
+      <field name="type">tree</field>
+      <field name="name">manage_exclusion_select_exclusion_tree</field>
+    </record>
+    <!-- ##################### -->
+    <!-- # Exclusion Display # -->
+    <!-- ##################### -->
+    <record model="ir.ui.view" id="manage_exclusion_select_view_list">
+      <field name="model">contract.manage_exclusion.select</field>
+      <field name="type">form</field>
+      <field name="name">manage_exclusion_select_list</field>
+    </record>
+    <!-- #################### -->
+    <!-- # Manage Exclusion # -->
+    <!-- #################### -->
+    <record model="ir.action.wizard" id="act_manage_exclusion">
+      <field name="name">Manage Exclusions</field>
+      <field name="wiz_name">contract.manage_exclusion</field>
+    </record>
+    <!-- ########################### -->
+    <!-- # Extra Premium Displayer # -->
+    <!-- ########################### -->
+    <record model="ir.ui.view" id="create_extra_premium_create_view_form">
+      <field name="model">contract.create_extra_premium.create</field>
+      <field name="type">form</field>
+      <field name="name">create_extra_premium_create_form</field>
+    </record>
+    <!-- ######################## -->
+    <!-- # Create Extra Premium # -->
+    <!-- ######################## -->
+    <record model="ir.action.wizard" id="act_create_extra_premium">
+      <field name="name">Create Extra Premium</field>
+      <field name="wiz_name">contract.create_extra_premium</field>
+    </record>
+  </data>
 </tryton>

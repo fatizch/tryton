@@ -7,3 +7,5 @@ from .clause_rule import *
 from .term_renewal_rule import *
 from .deductible_rule import *
 from .ir import *
+from .exclusion import *
+from .extra_premium import *

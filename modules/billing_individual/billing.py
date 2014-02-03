@@ -271,7 +271,9 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
             f('contract.option'),
             f('contract.covered_data'),
             f('account.tax.description'),
-            f('account.fee.description')]
+            f('account.fee.description'),
+            f('extra_premium.kind'),
+            ]
         return res
 
     def get_account_for_billing(self):

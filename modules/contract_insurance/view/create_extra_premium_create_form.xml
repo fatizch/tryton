@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Extra Premium Creation">
+  <label name="covered_element"/>
+  <field name="covered_element" widget="selection"/>
+  <label name="covered_data"/>
+  <field name="covered_data" widget="selection"/>
+  <field name="extra_premium" mode="form" colspan="4"/>
+  <field name="contract" invisible="1"/>
+</form>

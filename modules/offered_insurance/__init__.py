@@ -63,6 +63,10 @@ def register():
         DeductibleRule,
         DeductibleDuration,
         TermRule,
+        # From business_rule.exclusion
+        ExclusionKind,
+        # From business_rule.extra_premium
+        ExtraPremiumKind,
         # From rule_engine
         RuleEngineRuntime,
         #From Clause
