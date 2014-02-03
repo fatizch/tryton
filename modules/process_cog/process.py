@@ -897,7 +897,8 @@ class ProcessFinder(Wizard):
     process_parameters = StateView('process.start',
         'process_cog.process_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Start Process', 'action', 'tryton-go-next')])
+            Button('Start Process (_k)', 'action', 'tryton-go-next',
+                default=True)])
     action = VoidStateAction()
 
     @classmethod
