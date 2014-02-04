@@ -3,7 +3,8 @@ import copy
 
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.cog_utils import utils
-from trytond.modules.cog_utils import coop_string, fields, export, business
+from trytond.modules.cog_utils import coop_string, fields, export
+from trytond.modules.country_cog import country
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -182,4 +183,4 @@ class Address(export.ExportImportMixin):
 
     @staticmethod
     def default_country():
-        return business.default_country().id
+        return country.Country.default_country().id
