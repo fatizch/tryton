@@ -176,16 +176,28 @@ class UnaccentChar(tryton_fields.Char):
         return value
 
     def convert_domain(self, domain, tables, Model):
-        table, _ = tables[None]
+        pool = Pool()
+        Translation = pool.get('ir.translation')
+        IrModel = pool.get('ir.model')
+        if not self.translate:
+            return super(FieldTranslate, self).convert_domain(
+                domain, tables, Model)
+
+        table = Model.__table__()
+        translation = Translation.__table__()
+        model = IrModel.__table__()
         name, operator, value = domain
-        Operator = tryton_fields.SQL_OPERATORS[operator]
-        column = Column(table, name)
+        join = self.__get_translation_join(Model, name,
+            translation, model, table)
+        Operator = SQL_OPERATORS[operator]
+        column = Coalesce(NullIf(translation.value, ''),
+            Column(table, name))
         if CONFIG['db_type'] == 'postgresql':
             column = Unaccent(column)
-        expression = Operator(column, self._domain_value(operator, value))
-        if isinstance(expression, operators.In) and not expression.right:
-            expression = Literal(False)
-        elif isinstance(expression, operators.NotIn) and not expression.right:
-            expression = Literal(True)
-        expression = self._domain_add_null(column, operator, value, expression)
-        return expression
+        where = Operator(column, self._domain_value(operator, value))
+        if isinstance(where, operators.In) and not where.right:
+            where = Literal(False)
+        elif isinstance(where, operators.NotIn) and not where.right:
+            where = Literal(True)
+        where = self._domain_add_null(column, operator, value, where)
+        return tables[None][0].id.in_(join.select(table.id, where=where))
