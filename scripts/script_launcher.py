@@ -367,6 +367,10 @@ def configure(target_env):
             continue
         if not os.path.exists(os.path.join(module_dir, elem, '__init__.py')):
             shutil.rmtree(os.path.join(module_dir, elem))
+    os.chdir(os.path.join(workspace, 'coopbusiness'))
+    os.system('find . -name "*.pyc" -exec rm -rf {} \;')
+    os.system('find . -name "*.rej" -exec rm -rf {} \;')
+    os.system('find . -name "*.orig" -exec rm -rf {} \;')
     os.chdir(os.path.join(workspace, 'trytond', 'trytond', 'modules'))
     for filename in os.listdir(os.path.join(workspace, 'trytond', 'trytond',
                 'modules')):
