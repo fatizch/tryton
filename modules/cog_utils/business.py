@@ -1,3 +1,6 @@
+from trytond.config import CONFIG
+from trytond.pool import Pool
+
 __all__ = [
     'ArgsDoNotMatchException',
     'update_args_with_subscriber',
@@ -24,3 +27,10 @@ def update_args_with_subscriber(args):
         elif hasattr(subscriber, 'is_company') and subscriber.is_company:
             args['subscriber_company'] = subscriber
         return
+
+
+def default_country():
+    Country = Pool().get('country.country')
+    code = CONFIG.get('default_country', 'FR')
+    country, = Country.search([('code', '=', code)])
+    return country
