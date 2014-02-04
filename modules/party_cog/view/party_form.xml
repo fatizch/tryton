@@ -80,7 +80,7 @@
     </xpath>
     <xpath expr="/form/notebook/page/field[@name='categories']" position="replace"/>
     <xpath expr="/form/notebook/page/field[@name='addresses']" position="replace_attributes">
-        <field name="addresses" colspan="3"/>
+        <field name="addresses" colspan="4" mode="tree,form" view_ids="party.address_view_tree_sequence,party.address_view_form"/>
     </xpath>
     <xpath expr="/form/notebook/page/group[@id='lang']" position="replace"/>
     <xpath expr="/form/notebook/page[@id='general']/field[@name='addresses']"
@@ -91,7 +91,7 @@
     </xpath>
     <xpath expr="/form/notebook/page/field[@name='contact_mechanisms']"
         position="replace_attributes">
-        <field name="contact_mechanisms" colspan="1"
+        <field name="contact_mechanisms" colspan="2"
             view_ids="party.contact_mechanism_view_tree_sequence" pre_validate="1"/>
     </xpath>
     <xpath expr="/form" position="inside">
