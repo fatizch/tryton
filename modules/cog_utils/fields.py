@@ -2,12 +2,15 @@ import logging
 from itertools import chain
 
 from sql import Column, Literal, operators, functions
+from sql.conditionals import Coalesce, NullIf
+from sql.operators import Concat
 
 from trytond.model import fields as tryton_fields
 from trytond.pyson import PYSON
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.config import CONFIG
+from trytond.model.fields import SQL_OPERATORS
 
 
 class Boolean(tryton_fields.Boolean):
@@ -175,12 +178,44 @@ class UnaccentChar(tryton_fields.Char):
             return Unaccent(value)
         return value
 
+    def __get_translation_join(self, Model, name,
+            translation, model, table):
+        language = Transaction().language
+        if Model.__name__ == 'ir.model':
+            return table.join(translation, 'LEFT',
+                condition=(translation.name == Concat(table.model, name))
+                & (translation.res_id == -1)
+                & (translation.lang == language)
+                & (translation.type == 'model')
+                & (translation.fuzzy == False))
+        elif Model.__name__ == 'ir.model.field':
+            if name == 'field_description':
+                type_ = 'field'
+            else:
+                type_ = 'help'
+            return table.join(model, 'LEFT',
+                condition=model.id == table.model).join(
+                    translation, 'LEFT',
+                    condition=(translation.name == Concat(Concat(
+                                model.model, ','), table.name))
+                    & (translation.res_id == -1)
+                    & (translation.lang == language)
+                    & (translation.type == type_)
+                    & (translation.fuzzy == False))
+        else:
+            return table.join(translation, 'LEFT',
+                condition=(translation.res_id == table.id)
+                & (translation.name == '%s,%s' % (Model.__name__, name))
+                & (translation.lang == language)
+                & (translation.type == 'model')
+                & (translation.fuzzy == False))
+
     def convert_domain(self, domain, tables, Model):
         pool = Pool()
         Translation = pool.get('ir.translation')
         IrModel = pool.get('ir.model')
         if not self.translate:
-            return super(FieldTranslate, self).convert_domain(
+            return super(UnaccentChar, self).convert_domain(
                 domain, tables, Model)
 
         table = Model.__table__()
