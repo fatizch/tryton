@@ -112,8 +112,11 @@ class TestCaseModel:
         result = cls._get_country_code_cache.get(country_code)
         if result:
             return result
-        result = Pool().get('country.country').search([
-                ('code', '=', country_code.upper())], limit=1)[0]
+        countries = Pool().get('country.country').search([
+                ('code', '=', country_code.upper())], limit=1)
+        if not countries:
+            return None
+        result = countries[0]
         cls._get_country_code_cache.set(country_code, result)
         return result
 
