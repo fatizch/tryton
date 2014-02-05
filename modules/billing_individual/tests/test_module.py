@@ -111,7 +111,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         payment_term.sync_date = datetime.date(2012, 1, 1)
         payment_term.remaining_position = 'last_calc'
         payment_term.force_line_at_start = True
-        payment_term.split_method = 'exact'
+        payment_term.split_method = 'proportional'
         payment_term.company = company
         payment_term.save()
 
