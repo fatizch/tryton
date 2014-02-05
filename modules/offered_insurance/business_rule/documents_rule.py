@@ -3,6 +3,7 @@ import os
 import copy
 import StringIO
 import functools
+import shutil
 
 from trytond.config import CONFIG
 from trytond.model import Model
@@ -635,6 +636,11 @@ class DocumentCreate(Wizard):
             Button('Complete', 'post_generation', 'tryton-ok')])
     attach_to_contact = StateTransition()
 
+    @classmethod
+    def __setup__(cls):
+        super(DocumentCreate, cls).__setup__()
+        shutil.rmtree(CONFIG['server_shared_folder'])
+
     def default_select_model(self, fields):
         result = utils.set_state_view_defaults(self, 'select_model')
         if result['id']:
@@ -679,11 +685,12 @@ class DocumentCreate(Wizard):
                 })
         filename = coop_string.remove_invalid_char(exact_name)
         while True:
+            # Loop until we find an unused folder id
             tmp_directory = utils.id_generator()
             server_tmp_directory = os.path.join(CONFIG['server_shared_folder'],
                 tmp_directory)
             try:
-                os.mkdir(server_tmp_directory)
+                os.makedirs(server_tmp_directory)
                 break
             except:
                 pass
