@@ -38,6 +38,7 @@ def register():
         Attachment,
         # From business_rule.documents_rule
         DocumentTemplate,
+        DocumentProductRelation,
         DocumentTemplateVersion,
         DocumentDescription,
         DocumentRule,
@@ -46,6 +47,7 @@ def register():
         DocumentRequestLine,
         DocumentCreateSelectTemplate,
         DocumentCreateSelect,
+        DocumentCreatePreview,
         DocumentCreateAttach,
         DocumentReceiveRequest,
         DocumentReceiveAttach,
@@ -85,6 +87,7 @@ def register():
     Pool.register(
         # From business_rule.documents_rule
         DocumentGenerateReport,
+        DocumentFromFilename,
         module='offered_insurance', type_='report')
     Pool.register(
         # From business_rule.documents_rule

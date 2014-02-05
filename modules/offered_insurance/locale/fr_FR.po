@@ -39,10 +39,6 @@ msgid "The  names of attachments must be unique by resource!"
 msgstr ""
 "Le nom des pièces jointes doivent être unique pour une même ressource !"
 
-msgctxt "error:offered.exclusion:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique"
-
 msgctxt "error:extra_data:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
@@ -70,6 +66,10 @@ msgstr "2 règles se chevauchent!"
 msgctxt "error:offered.eligibility.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
+
+msgctxt "error:offered.exclusion:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique"
 
 msgctxt "error:offered.option.description:"
 msgid "The code must be unique!"
@@ -197,7 +197,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.premium.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.premium.rule.component,code:"
 msgid "Code"
@@ -277,7 +277,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.premium.rule.component,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:clause,code:"
 msgid "Code"
@@ -341,7 +341,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:clause,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:clause.rule,clauses:"
 msgid "Clauses"
@@ -417,7 +417,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:clause.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:clause.rule-clause,clause:"
 msgid "Clause"
@@ -457,7 +457,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:clause.rule-clause,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:clause.version,content:"
 msgid "Content"
@@ -509,7 +509,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:clause.version,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:document.create.attach,attachment:"
 msgid "Data File"
@@ -526,6 +526,22 @@ msgstr "Etendre Arbre"
 msgctxt "field:document.create.attach,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
+
+msgctxt "field:document.create.preview,generated_report:"
+msgid "Generated report"
+msgstr "Rapport généré"
+
+msgctxt "field:document.create.preview,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.create.preview,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:document.create.select,generated_report:"
+msgid "Generated report"
+msgstr "Rapport généré"
 
 msgctxt "field:document.create.select,good_address:"
 msgid "Mail Address"
@@ -613,7 +629,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:document.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:document.receive.attach,attachments:"
 msgid "Attachments"
@@ -717,7 +733,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:document.request,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:document.request.batch,id:"
 msgid "ID"
@@ -789,7 +805,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:document.request.line,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:document.rule,config_kind:"
 msgid "Conf. kind"
@@ -869,7 +885,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:document.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:document.rule-document.description,create_date:"
 msgid "Create Date"
@@ -909,7 +925,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:document.rule-document.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:document.template,code:"
 msgid "Code"
@@ -932,8 +948,16 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:document.template,kind:"
-msgid "name"
-msgstr "Nom"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:document.template,mail_body:"
+msgid "Mail Body"
+msgstr "Corps du mail"
+
+msgctxt "field:document.template,mail_subject:"
+msgid "Mail Subject"
+msgstr "Sujet du mail"
 
 msgctxt "field:document.template,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -946,6 +970,10 @@ msgstr "Nom"
 msgctxt "field:document.template,on_model:"
 msgid "Model"
 msgstr "Modèle"
+
+msgctxt "field:document.template,products:"
+msgid "Products"
+msgstr "Produits"
 
 msgctxt "field:document.template,rec_name:"
 msgid "Name"
@@ -965,7 +993,47 @@ msgstr "Mis à jour par"
 
 msgctxt "field:document.template,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
+
+msgctxt "field:document.template-offered.product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.template-offered.product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.template-offered.product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.template-offered.product,document:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "field:document.template-offered.product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.template-offered.product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:document.template-offered.product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.template-offered.product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.template-offered.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.template-offered.product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:document.template.version,collision:"
 msgid "Collision"
@@ -1051,54 +1119,6 @@ msgctxt "field:document.template.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.exclusion,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:offered.exclusion,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:offered.exclusion,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:offered.exclusion,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.exclusion,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.exclusion,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:offered.exclusion,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.exclusion,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.exclusion,text:"
-msgid "Text"
-msgstr "Texte"
-
-msgctxt "field:offered.exclusion,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.exclusion,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.exclusion,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:expense.kind,code:"
 msgid "Code"
 msgstr "Code"
@@ -1149,7 +1169,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:expense.kind,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:extra_data,create_date:"
 msgid "Create Date"
@@ -1349,7 +1369,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:insurer,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.model,printable:"
 msgid "Printable"
@@ -1561,7 +1581,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.coverage_amount.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.deductible.rule,amount:"
 msgid "Amount"
@@ -1661,7 +1681,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.deductible.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.deductible.rule.duration,create_date:"
 msgid "Create Date"
@@ -1709,7 +1729,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.deductible.rule.duration,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.eligibility.rule,config_kind:"
 msgid "Conf. kind"
@@ -1805,7 +1825,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.eligibility.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.eligibility.rule-relation.kind,create_date:"
 msgid "Create Date"
@@ -1845,7 +1865,55 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.eligibility.rule-relation.kind,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.exclusion,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:offered.exclusion,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.exclusion,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.exclusion,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.exclusion,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.exclusion,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:offered.exclusion,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.exclusion,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.exclusion,text:"
+msgid "Text"
+msgstr "Texte"
+
+msgctxt "field:offered.exclusion,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.exclusion,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.exclusion,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.item.description,code:"
 msgid "Code"
@@ -1901,7 +1969,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.item.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.item.description-extra_data,create_date:"
 msgid "Create Date"
@@ -1941,7 +2009,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.item.description-extra_data,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.item.description-sub_item.description,create_date:"
 msgid "Create Date"
@@ -1981,7 +2049,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.item.description-sub_item.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,clause_rules:"
 msgid "Clause Rules"
@@ -2353,7 +2421,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.product-item.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.product-option.description,coverage:"
 msgid "Option Description"
@@ -2477,7 +2545,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.term.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.validate.batch,id:"
 msgid "ID"
@@ -2533,7 +2601,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:process-offered.product,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine,rule_external_extra_datas:"
 msgid "Extra Data"
@@ -2595,6 +2663,10 @@ msgctxt "model:document.create.attach,name:"
 msgid "Document Create Attach"
 msgstr "Création de l'attachment"
 
+msgctxt "model:document.create.preview,name:"
+msgid "Document Create Preview"
+msgstr "Prévisualisation du document"
+
 msgctxt "model:document.create.select,name:"
 msgid "Document Create Select"
 msgstr "Sélection du modèle de Lettre"
@@ -2643,13 +2715,13 @@ msgctxt "model:document.template,name:"
 msgid "Document Template"
 msgstr "Modèle de Lettre"
 
+msgctxt "model:document.template-offered.product,name:"
+msgid "Document template to Product relation"
+msgstr "Relation Modèle de Document - Produit"
+
 msgctxt "model:document.template.version,name:"
 msgid "Document Template Version"
 msgstr "Version de Lettre"
-
-msgctxt "model:offered.exclusion,name:"
-msgid "Exclusion Kind"
-msgstr "Type d'exclusion"
 
 msgctxt "model:expense.kind,name:"
 msgid "Expense Kind"
@@ -2698,6 +2770,10 @@ msgstr "Clauses"
 msgctxt "model:ir.action,name:act_model_expense_kind"
 msgid "Expenses Kind"
 msgstr "Type de Frais"
+
+msgctxt "model:ir.action,name:generate_file_report"
+msgid "Document From Filename"
+msgstr "Document à partir d'un fichier"
 
 msgctxt "model:ir.action,name:letter_generation_report"
 msgid "Letter Report"
@@ -2775,6 +2851,10 @@ msgctxt "model:offered.eligibility.rule-relation.kind,name:"
 msgid "Eligibilty Rule to Relation Kind Relation"
 msgstr ""
 "Table intermédiaire entre la règle d'égibilité et les relations autorisées"
+
+msgctxt "model:offered.exclusion,name:"
+msgid "Exclusion Kind"
+msgstr "Type d'exclusion"
 
 msgctxt "model:offered.item.description,name:"
 msgid "Item Description"
@@ -3564,14 +3644,6 @@ msgctxt "view:document.template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
-msgctxt "view:offered.exclusion:"
-msgid "Exclusion Kind"
-msgstr "Type d'exclusion"
-
-msgctxt "view:offered.exclusion:"
-msgid "Exclusion Kinds"
-msgstr "Types d'exclusions"
-
 msgctxt "view:expense.kind:"
 msgid "Expense Kind"
 msgstr "Type de Frais"
@@ -3627,6 +3699,14 @@ msgstr "Elément Couvert"
 msgctxt "view:offered.eligibility.rule:"
 msgid "Eligibility rule"
 msgstr "Eligibilite"
+
+msgctxt "view:offered.exclusion:"
+msgid "Exclusion Kind"
+msgstr "Type d'exclusion"
+
+msgctxt "view:offered.exclusion:"
+msgid "Exclusion Kinds"
+msgstr "Types d'exclusions"
 
 msgctxt "view:offered.option.description:"
 msgid "Clause"
@@ -3700,6 +3780,26 @@ msgctxt "wizard_button:document.create,attach,post_generation:"
 msgid "Attach"
 msgstr "Attacher"
 
+msgctxt "wizard_button:document.create,attach,post_generation:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:document.create,preview_document,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:document.create,preview_document,mail:"
+msgid "Mail"
+msgstr "Courrier Electronique"
+
+msgctxt "wizard_button:document.create,preview_document,previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:document.create,preview_document,select_model:"
+msgid "Previous"
+msgstr "Précédent"
+
 msgctxt "wizard_button:document.create,select_model,attach:"
 msgid "Attach"
 msgstr "Attacher"
@@ -3711,6 +3811,14 @@ msgstr "Annuler"
 msgctxt "wizard_button:document.create,select_model,generate:"
 msgid "Generate"
 msgstr "Générer"
+
+msgctxt "wizard_button:document.create,select_model,mail:"
+msgid "Mail"
+msgstr "Courrier Electronique"
+
+msgctxt "wizard_button:document.create,select_model,preview_document:"
+msgid "Preview"
+msgstr "Prévisualiser"
 
 msgctxt "wizard_button:document.receive,attachment_setter,end:"
 msgid "Cancel"

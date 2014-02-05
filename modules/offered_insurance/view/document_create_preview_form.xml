@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Document Preview">
+  <label name="generated_report"/>
+  <field name="generated_report" colspan="3" widget="url"/>
+  <label name="mail"/>
+  <field name="mail" colspan="3" widget="selection"/>
+  <field name="party"/>
+  <field name="filename"/>
+  <field name="exact_name"/>
+</form>

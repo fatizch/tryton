@@ -77,6 +77,10 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def __setup__(cls):
         super(Claim, cls).__setup__()
         cls.__rpc__.update({'get_possible_sub_status': RPC(instantiate=0)})
+        cls._error_messages.update({
+                'no_main_contract': 'Impossible to find a main contract, '
+                'please try again once it has been set',
+        })
 
     @classmethod
     def write(cls, claims, values):
@@ -284,6 +288,11 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return contracts[0]
         elif len(contracts) > 1 and self.main_contract in contracts:
             return self.main_contract
+        else:
+            self.raise_user_error('no_main_contract')
+
+    def get_product(self):
+        return self.get_contract().offered
 
 
 class Loss(model.CoopSQL, model.CoopView):

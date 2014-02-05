@@ -3,6 +3,8 @@ import os
 import datetime
 import time
 import copy
+import string
+import random
 
 from trytond.pool import Pool
 from trytond.model import Model
@@ -593,3 +595,20 @@ def extract_object(instance, vars_name=None):
         else:
             res[var_name] = getattr(instance, var_name)
     return res
+
+
+def set_state_view_defaults(wizard, state_name):
+    if not hasattr(wizard, state_name) or not getattr(wizard, state_name):
+        return {}
+    state = getattr(wizard, state_name)
+    result = {}
+    for field_name, _ in state._fields.iteritems():
+        try:
+            result[field_name] = getattr(state, field_name)
+        except:
+            pass
+    return result
+
+
+def id_generator(size=20, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
