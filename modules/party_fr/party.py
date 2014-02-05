@@ -27,8 +27,8 @@ class Party:
         super(Party, cls).__setup__()
         cls.ssn = copy.copy(cls.ssn)
         if cls.ssn.on_change_with is None:
-            cls.ssn.on_change_with = []
-        cls.ssn.on_change_with += ['ssn_no_key', 'ssn_key']
+            cls.ssn.on_change_with = set()
+        cls.ssn.on_change_with |= set(['ssn_no_key', 'ssn_key'])
 
         cls._error_messages.update({
                 'invalid_ssn': 'Invalid format for SSN',

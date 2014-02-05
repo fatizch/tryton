@@ -1,0 +1,17 @@
+msgid "medical_risk"
+msgstr "risque_medical"
+
+msgid "Medical Risk"
+msgstr "Risque Médical"
+
+msgid "professional_risk"
+msgstr "risque_professionnel"
+
+msgid "Professional Risk"
+msgstr "Risque Professionnel"
+
+msgid "sport_risk"
+msgstr "risque_sportif"
+
+msgid "Sport Risk"
+msgstr "Risque Sportif"

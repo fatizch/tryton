@@ -42,8 +42,8 @@ class Address:
 
         cls.street = copy.copy(cls.street)
         if cls.street.on_change is None:
-            cls.street.on_change = []
-        cls.street.on_change.append('street')
+            cls.street.on_change = set()
+        cls.street.on_change.add('street')
         cls.street.help = '''AFNOR - Line 4
             Street number or plot and thoroughfare -
             Street or Avenue or Village...'''
@@ -56,12 +56,12 @@ class Address:
             and Locality (if different from the distribution area indicator'''
         if cls.streetbis.on_change is None:
             cls.streetbis.on_change = []
-        cls.streetbis.on_change.append('streetbis')
+        cls.streetbis.on_change.add('streetbis')
 
         cls.city = copy.copy(cls.city)
         if cls.city.on_change is None:
             cls.city.on_change = []
-        cls.city.on_change.append('city')
+        cls.city.on_change.add('city')
         #Set Siret invisible for person
         cls.siret = copy.copy(cls.siret)
         cls.siret.states = {

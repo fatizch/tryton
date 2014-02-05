@@ -3,6 +3,7 @@ import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool
 from trytond.transaction import Transaction
+from trytond.model import ModelView
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.cog_utils import utils, coop_date
@@ -14,6 +15,11 @@ from trytond.modules.offered_insurance import offered
 
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
+POSSIBLE_EXTRA_PREMIUM_RULES = [
+    ('flat', 'Flat Amount'),
+    ('rate', 'Rate on Premium'),
+    ]
+
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
@@ -21,6 +27,8 @@ __all__ = [
     'CoveredElement',
     'CoveredElementPartyRelation',
     'CoveredData',
+    'ExtraPremium',
+    'CoveredDataExclusionKindRelation',
     'ContractAgreementRelation',
     ]
 
@@ -31,6 +39,8 @@ class Contract:
     covered_elements = fields.One2ManyDomain('contract.covered_element',
         'contract', 'Covered Elements', domain=[('parent', '=', None)],
         context={'contract': Eval('id')})
+    covered_datas = fields.One2Many('contract.covered_data', 'contract',
+        'Covered Datas')
     agreements = fields.One2Many('contract-agreement', 'contract',
         'Contract-Agreement Relations', states={
             'invisible': Eval('product_kind') != 'insurance'})
@@ -39,6 +49,14 @@ class Contract:
             'invisible': Eval('product_kind') == 'insurance'})
     next_renewal_date = fields.Date('Next Renewal Date')
     last_renewed = fields.Date('Last Renewed')
+
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'manage_extra_premium': {},
+                'create_extra_premium': {},
+                })
 
     def check_sub_elem_eligibility(self, at_date=None, ext=None):
         errors = []
@@ -224,6 +242,16 @@ class Contract:
             return False
         self.store_prices(prices_update)
         return True
+
+    @classmethod
+    @ModelView.button_action('contract_insurance.act_manage_extra_premium')
+    def manage_extra_premium(cls, instances):
+        pass
+
+    @classmethod
+    @ModelView.button_action('contract_insurance.act_create_extra_premium')
+    def create_extra_premium(cls, instances):
+        pass
 
 
 class ContractOption:
@@ -651,7 +679,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     status = fields.Selection(contract.OPTIONSTATUS, 'Status')
     contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
-        'get_contract_id')
+        'get_contract_id', searcher='search_contract')
     deductible_duration = fields.Many2One('offered.deductible.rule.duration',
         'Deductible Duration', states={
             'invisible': ~Eval('possible_deductible_duration'),
@@ -668,6 +696,20 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_parent_covered_data_id')
     clauses = fields.One2Many('contract.clause', 'covered_data',
         'Clauses', context={'start_date': Eval('start_date')})
+    exclusions = fields.Many2Many(
+        'contract.covered_data-exclusion.kind', 'covered_data', 'exclusion',
+        'Exclusions')
+    extra_premiums = fields.One2Many('contract.covered_data.extra_premium',
+        'covered_data', 'Extra Premiums', context={
+            'start_date': Eval('start_date'), 'end_date': Eval('end_date')})
+
+    @classmethod
+    def __setup__(cls):
+        super(CoveredData, cls).__setup__()
+        cls._buttons.update({
+                'propagate_extra_premiums': {},
+                'propagate_exclusions': {},
+                })
 
     @classmethod
     def default_status(cls):
@@ -793,6 +835,10 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def init_dict_for_rule_engine(self, args):
         args['data'] = self
         args['deductible_duration'] = self.get_deductible_duration()
+        if hasattr(self, 'extra_premiums'):
+            args['extra_premiums'] = self.extra_premiums
+        else:
+            args['extra_premiums'] = []
         # if not utils.is_none(self, 'covered_element'):
         self.covered_element.init_dict_for_rule_engine(args)
         self.option.init_dict_for_rule_engine(args)
@@ -815,6 +861,107 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         if not self.end_date or self.end_date <= date:
             return True
         return False
+
+    @classmethod
+    def search_contract(cls, name, clause):
+        return [(('covered_element.contract',) + tuple(clause[1:]))]
+
+    @classmethod
+    @ModelView.button_action('contract_insurance.act_manage_extra_premium')
+    def propagate_extra_premiums(cls, covered_datas):
+        pass
+
+    @classmethod
+    @ModelView.button_action('contract_insurance.act_manage_exclusion')
+    def propagate_exclusions(cls, covered_datas):
+        pass
+
+
+class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
+    'Extra Premium'
+
+    __name__ = 'contract.covered_data.extra_premium'
+
+    covered_data = fields.Many2One('contract.covered_data',
+        'Covered Data', ondelete='CASCADE')
+    kind = fields.Many2One('extra_premium.kind', 'Kind', ondelete='RESTRICT')
+    start_date = fields.Date('Start date', states={'required': True})
+    end_date = fields.Date('End date')
+    calculation_kind = fields.Selection(POSSIBLE_EXTRA_PREMIUM_RULES,
+        'Calculation Kind')
+    flat_amount = fields.Numeric('Flat amount', states={
+            'invisible': Eval('calculation_kind', '') != 'flat',
+            'required': Eval('calculation_kind', '') == 'flat',
+            }, digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
+    rate = fields.Numeric('Rate on Premium', states={
+            'invisible': Eval('calculation_kind', '') != 'rate',
+            'required': Eval('calculation_kind', '') == 'rate'})
+
+    @classmethod
+    def __setup__(cls):
+        super(ExtraPremium, cls).__setup__()
+        cls._error_messages.update({
+                'bad_start_date': 'Extra premium %s start date (%s) should be '
+                'greater than the coverage\'s (%s)'})
+        cls._buttons.update({'propagate': {}})
+
+    @classmethod
+    def default_start_date(cls):
+        if 'start_date' in Transaction().context:
+            return Transaction().context.get('start_date')
+        return utils.today()
+
+    @classmethod
+    def default_end_date(cls):
+        if 'end_date' in Transaction().context:
+            return Transaction().context.get('end_date')
+        return None
+
+    @classmethod
+    def default_calculation_kind(cls):
+        return 'rate'
+
+    @classmethod
+    def default_flat_amount(cls):
+        return 0
+
+    @classmethod
+    def default_rate(cls):
+        return 0
+
+    @classmethod
+    def validate(cls, records):
+        for record in records:
+            if not record.start_date >= record.covered_data.start_date:
+                record.raise_user_error('bad_start_date', (record.kind.name,
+                        record.start_date, record.covered_data.start_date))
+
+    def calculate_premium_amount(self, args, base):
+        if self.calculation_kind == 'flat':
+            return self.flat_amount
+        elif self.calculation_kind == 'rate':
+            return base * self.rate
+        return 0
+
+    def get_currency(self):
+        return self.covered_data.currency if self.covered_data else None
+
+    @classmethod
+    @ModelView.button_action('contract_insurance.act_manage_extra_premium')
+    def propagate(cls, extras):
+        pass
+
+
+class CoveredDataExclusionKindRelation(model.CoopSQL):
+    'Covered Data to Exclusion Kind relation'
+
+    __name__ = 'contract.covered_data-exclusion.kind'
+
+    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
+        ondelete='CASCADE')
+    exclusion = fields.Many2One('offered.exclusion', 'Exclusion',
+        ondelete='RESTRICT')
 
 
 class ContractAgreementRelation(model.CoopSQL, model.CoopView):

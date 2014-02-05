@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
+# PYTHON_ARGCOMPLETE_OK
 import shutil
 import os
 import ConfigParser
 import argparse
+import argcomplete
 import subprocess
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
@@ -16,8 +18,6 @@ def init_work_data(config):
     result['python_exec'] = os.path.join(virtual_env_path, 'bin', 'python')
     result['runtime_dir'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'))
-    result['sentry_exec'] = os.path.join(virtual_env_path, 'bin',
-        'trytond_sentry')
     result['trytond_exec'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'), 'trytond', 'bin', 'trytond')
     result['tryton_exec'] = os.path.join(virtual_env_path, config.get(
@@ -54,22 +54,17 @@ def start(arguments, config, work_data):
         if servers:
             print 'Server is already up and running !'
         else:
-            if os.path.isfile(work_data['sentry_exec']):
-                try:
-                    server_process = subprocess.Popen([
-                            work_data['python_exec'],
-                            work_data['sentry_exec'], '-c',
-                            work_data['trytond_conf'], '-s', config.get(
-                                'parameters', 'sentry_dsn')])
-                except ConfigParser.NoOptionError:
-                    server_process = subprocess.Popen([
-                            work_data['python_exec'],
-                            work_data['trytond_exec'], '-c',
-                            work_data['trytond_conf']])
-            else:
-                server_process = subprocess.Popen([work_data['python_exec'],
+            try:
+                server_process = subprocess.Popen([
+                        work_data['python_exec'],
                         work_data['trytond_exec'], '-c',
-                        work_data['trytond_conf']])
+                        work_data['trytond_conf'], '-s', config.get(
+                            'parameters', 'sentry_dsn')])
+            except ConfigParser.NoOptionError:
+                server_process = subprocess.Popen([
+                        work_data['python_exec'],
+                        work_data['trytond_exec'], '-c',
+                            work_data['trytond_conf']])
             print 'Server started, pid %s' % server_process.pid
     if arguments.target in ('client', 'all'):
         if arguments.mode == 'demo':
@@ -88,8 +83,7 @@ def start(arguments, config, work_data):
 def kill(arguments, config, work_data):
     if arguments.target in ('server', 'all'):
         servers = find_matching_processes('python %s' %
-            work_data['trytond_exec']) + find_matching_processes('python %s' %
-            work_data['sentry_exec'])
+            work_data['trytond_exec'])
         if not servers:
             print 'Server is already down !'
         else:
@@ -120,7 +114,7 @@ def sync(arguments, config, work_data):
     if arguments.target in ('coop', 'all'):
         sync_this('coopbusiness')
         arguments.env = os.environ['VIRTUAL_ENV']
-        configure(arguments, config, work_data)
+        configure(arguments.env)
 
 
 def database(arguments, config, work_data):
@@ -373,6 +367,10 @@ def configure(target_env):
             continue
         if not os.path.exists(os.path.join(module_dir, elem, '__init__.py')):
             shutil.rmtree(os.path.join(module_dir, elem))
+    os.chdir(os.path.join(workspace, 'coopbusiness'))
+    os.system('find . -name "*.pyc" -exec rm -rf {} \;')
+    os.system('find . -name "*.rej" -exec rm -rf {} \;')
+    os.system('find . -name "*.orig" -exec rm -rf {} \;')
     os.chdir(os.path.join(workspace, 'trytond', 'trytond', 'modules'))
     for filename in os.listdir(os.path.join(workspace, 'trytond', 'trytond',
                 'modules')):
@@ -568,6 +566,7 @@ if __name__ == '__main__':
     parser_configure.add_argument('--env', '-e', help='Root of environment '
         'to configure', default=os.environ['VIRTUAL_ENV'])
 
+    argcomplete.autocomplete(parser)
     arguments = parser.parse_args()
     work_data = init_work_data(config)
 

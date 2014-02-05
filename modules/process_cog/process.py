@@ -518,10 +518,10 @@ class Process(model.CoopSQL):
         xml = ''
         if self.with_prev_next:
             xml += '<group name="group_prevnext" colspan="4" col="8">'
-            xml += '<button string="Previous"'
+            xml += '<button string="Previous  (_j)"'
             xml += ' name="_button_previous_%s"/>' % self.id
             xml += '<group name="void" colspan="6"/>'
-            xml += '<button string="Next" '
+            xml += '<button string="Next (_k)" '
             xml += 'name="_button_next_%s"/>' % self.id
             xml += '</group>'
             xml += '<newline/>'
@@ -897,7 +897,8 @@ class ProcessFinder(Wizard):
     process_parameters = StateView('process.start',
         'process_cog.process_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Start Process', 'action', 'tryton-go-next')])
+            Button('Start Process (_k)', 'action', 'tryton-go-next',
+                default=True)])
     action = VoidStateAction()
 
     @classmethod

@@ -74,12 +74,24 @@
           <field name="name">covered_elements_clean_tree</field>
         </record>
         <!-- Menus -->
-        <!--################################################################ -->
         <menuitem name="Contract" id="menu_contract" sequence="11"/>
         <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual"
             sequence="10"/>
         <menuitem parent="menu_individual" sequence="1"
             id="menu_contract_form" icon="tryton-list" action="contract.act_contract_form"/>
+        <!-- ################# -->
+        <!-- # Extra Premium # -->
+        <!-- ################# -->
+        <record model="ir.ui.view" id="extra_premium_form">
+          <field name="model">contract.covered_data.extra_premium</field>
+          <field name="type">form</field>
+          <field name="name">extra_premium_form</field>
+        </record>
+        <record model="ir.ui.view" id="extra_premium_list">
+          <field name="model">contract.covered_data.extra_premium</field>
+          <field name="type">tree</field>
+          <field name="name">extra_premium_list</field>
+        </record>
         <!--################################################################ -->
         <!-- Relate -->
         <!--################################################################ -->

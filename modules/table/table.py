@@ -1,6 +1,5 @@
 import re
 import copy
-import time
 from datetime import datetime
 from decimal import Decimal
 from functools import partial
@@ -162,7 +161,7 @@ class TableDefinition(ModelSQL, ModelView):
 
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
-            field_value, values, created, relink):
+            field_value, values, created, relink, to_relink):
         Cell = Pool().get('table.cell')
         if (hasattr(good_instance, 'id') and good_instance.id):
             table_id = good_instance.id
@@ -201,8 +200,8 @@ class TableDefinition(ModelSQL, ModelView):
                    instance_key))]
         lock_dim_and_import(locks, template)
 
-    @staticmethod
-    def default_dimension_order():
+    @classmethod
+    def default_dimension_order(cls):
         return 'alpha'
 
     @staticmethod
@@ -582,7 +581,6 @@ class TableCell(ModelSQL, ModelView):
 
     @classmethod
     def import_data(cls, fields_names, data):
-        start = time.time()
         pool = Pool()
         DimensionValue = pool.get('table.dimension.value')
 
@@ -614,7 +612,6 @@ class TableCell(ModelSQL, ModelView):
                     row[i] = search_dimension_value(field_name, dimension_name,
                         table_id)
         r = super(TableCell, cls).import_data(fields_names, data)
-        print 'Time:', time.time() - start
         return r
 
     @classmethod

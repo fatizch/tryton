@@ -15,4 +15,4 @@ class Loss:
     def __setup__(cls):
         super(Loss, cls).__setup__()
         cls.benefits = copy.copy(cls.benefits)
-        cls.benefits.on_change_with += ['covered_person']
+        cls.benefits.on_change_with.add('covered_person')

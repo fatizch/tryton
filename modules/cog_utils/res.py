@@ -48,7 +48,7 @@ class User(ExportImportMixin):
 
     @classmethod
     def _import_override_password(cls, instance_key, good_instance,
-            field_value, values, created, relink):
+            field_value, values, created, relink, to_relink):
         if good_instance.id:
             # Do not try to override the password
             return
