@@ -884,7 +884,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     covered_data = fields.Many2One('contract.covered_data',
         'Covered Data', ondelete='CASCADE')
-    kind = fields.Many2One('extra_premium.kind', 'Kind', ondelete='RESTRICT')
+    kind = fields.Many2One('extra_premium.kind', 'Kind', ondelete='RESTRICT',
+        states={'required': True})
     start_date = fields.Date('Start date', states={'required': True})
     end_date = fields.Date('End date')
     calculation_kind = fields.Selection(POSSIBLE_EXTRA_PREMIUM_RULES,
