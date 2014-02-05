@@ -511,10 +511,21 @@ class TableCell(ModelSQL, ModelView):
 
     @classmethod
     def _view_look_dom_arch(cls, tree, type, field_children=None):
+        pool = Pool()
+        TableDefinition = pool.get('table')
         result = tree.xpath("//field[@name='dimensions']")
         if result:
             dimensions, = result
-            for i in range(1, DIMENSION_MAX + 1):
+            dimension_max = DIMENSION_MAX
+            table_id = Transaction().context.get('table')
+            if table_id:
+                table = TableDefinition(table_id)
+                for i in range(DIMENSION_MAX, 0, -1):
+                    field = 'dimension_kind%s' % i
+                    if getattr(table, field):
+                        dimension_max = i
+                        break
+            for i in range(1, dimension_max + 1):
                 if tree.tag == 'form':
                     new_dimension = copy.copy(dimensions)
                     new_dimension.tag = 'label'
@@ -536,13 +547,21 @@ class TableCell(ModelSQL, ModelView):
         pool = Pool()
         TableDefinition = pool.get('table')
         result = super(TableCell, cls).fields_get(fields_names=fields_names)
-        if Transaction().context.get('table') and 'value' in result:
-            table_definition = \
-                TableDefinition(Transaction().context['table'])
-            result['value']['type'] = table_definition.type_
-            if table_definition.type_ == 'numeric':
-                result['value']['digits'] = (12,
-                    table_definition.number_of_digits)
+        table_id = Transaction().context.get('table')
+        if table_id:
+            table_definition = TableDefinition(table_id)
+            if 'value' in result:
+                result['value']['type'] = table_definition.type_
+                if table_definition.type_ == 'numeric':
+                    result['value']['digits'] = (12,
+                        table_definition.number_of_digits)
+            for i in range(1, DIMENSION_MAX + 1):
+                dimension_field = 'dimension%s' % i
+                dimension_name = 'dimension_name%s' % i
+                if dimension_field in result:
+                    result[dimension_field]['string'] = \
+                        getattr(table_definition, dimension_name)
+
         return result
 
     @staticmethod
