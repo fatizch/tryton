@@ -16580,7 +16580,7 @@
                 ]
             }
         ],
-        "payment_delay": "in_arrears",
+        "payment_delay": "in_advance",
         "payment_methods": [
             {
                 "__name__": "offered.product-billing.payment.method",
@@ -31225,7 +31225,7 @@
                 ]
             }
         ],
-        "payment_delay": "in_arrears",
+        "payment_delay": "in_advance",
         "start_date": {
             "__class__": "date",
             "day": 21,
@@ -47247,7 +47247,7 @@
                 ]
             }
         ],
-        "payment_delay": "in_arrears",
+        "payment_delay": "in_advance",
         "start_date": {
             "__class__": "date",
             "day": 25,

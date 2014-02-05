@@ -864,7 +864,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def search_contract(cls, name, clause):
-        return [('covered_element.contract' + tuple(clause[1:]))]
+        return [(('covered_element.contract',) + tuple(clause[1:]))]
 
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')

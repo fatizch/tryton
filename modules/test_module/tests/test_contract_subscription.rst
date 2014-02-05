@@ -10,13 +10,7 @@ Imports::
 
 Create Database::
 
-    >>> config = config.set_trytond(database_type='postgresql',
-    ...     database_name='test_database',
-    ...     user='admin',
-    ...     language='en_US',
-    ...     password='admin',
-    ...     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-    ...         'conf', 'trytond.conf'))
+    >>> config = config.set_trytond(database_type='sqlite')
     >>> Module = Model.get('ir.module.module')
     >>> test_module = Module.find([('name', '=', 'test_module')])[0]
     >>> Module.install([test_module.id], config.context)
@@ -52,10 +46,6 @@ Start subscription::
     >>> wizard = Wizard('contract.subscribe')
     >>> dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
     >>> wizard.form.dist_network = dist_network
-    >>> wizard.form.delegated_manager.name
-    u'CAPVIE'
-    >>> wizard.form.business_provider.name
-    u'CAPVIE'
     >>> product = Product.find([('code', '=', 'PREV')])[0]
     >>> product.name
     u'Pr\xe9voyance Indviduelle'

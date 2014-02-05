@@ -151,10 +151,12 @@ class ContractSubscribe(ProcessFinder):
         if res:
             res, err = obj.init_from_offered(process_param.product,
                 process_param.date)
-            if process_param.business_provider:
+            if (hasattr(process_param, 'business_provider') and
+                    process_param.business_provider):
                 obj.get_or_create_agreement('business_provider',
                     process_param.business_provider.party)
-            if process_param.delegated_manager:
+            if (hasattr(process_param, 'delegated_manager') and
+                    process_param.delegated_manager):
                 obj.get_or_create_agreement('management',
                     process_param.delegated_manager.party)
             obj.dist_network = process_param.dist_network

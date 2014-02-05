@@ -139,7 +139,8 @@ class ExtraPremiumDisplay(model.CoopView):
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', domain=[('contract', '=', Eval('contract'))],
         on_change=['covered_element', 'extra_premiums', 'coverages'],
-        states={'invisible': Eval('kind', '') != 'contract'})
+        states={'invisible': Eval('kind', '') != 'contract'},
+        depends=['contract'])
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data')
     contract = fields.Many2One('contract', 'Contract')
     extra_premiums = fields.One2Many(
@@ -429,15 +430,18 @@ class ExtraPremiumDisplayer(model.CoopView):
     contract = fields.Many2One('contract', 'Contract')
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', domain=[('contract', '=', Eval('contract'))],
-        on_change=['covered_element', 'extra_premium'])
+        on_change=['covered_element', 'extra_premium'],
+        depends=['contract'])
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         domain=[('covered_element', '=', Eval('covered_element'))],
         states={'invisible': ~Eval('covered_element')},
-        on_change=['covered_data', 'extra_premium'])
+        on_change=['covered_data', 'extra_premium'],
+        depends=['covered_element'])
     extra_premium = fields.One2Many('contract.covered_data.extra_premium',
         None, 'Extra Premium', domain=[
             ('covered_data', '=', Eval('covered_data'))], states={
-                'invisible': ~Eval('covered_data')})
+                'invisible': ~Eval('covered_data')},
+        depends=['covered_data'])
 
     def on_change_covered_element(self):
         result = {}

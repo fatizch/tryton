@@ -5,15 +5,15 @@ import os
 import datetime
 from proteus import config, Model, Wizard
 ##Comment##Create Database
-# config = config.set_trytond(database_type='sqlite')
+config = config.set_trytond(database_type='sqlite')
 # config.pool.test = True
-config = config.set_trytond(database_type='postgresql',
-    database_name='test_database',
-    user='admin',
-    language='en_US',
-    password='admin',
-    config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-        'conf', 'trytond.conf'))
+# config = config.set_trytond(database_type='postgresql',
+    # database_name='test_database',
+    # user='admin',
+    # language='en_US',
+    # password='admin',
+    # config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+        # 'conf', 'trytond.conf'))
 Module = Model.get('ir.module.module')
 test_module = Module.find([('name', '=', 'test_module')])[0]
 Module.install([test_module.id], config.context)
@@ -42,10 +42,6 @@ config._context = User.get_preferences(True, config.context)
 wizard = Wizard('contract.subscribe')
 dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
 wizard.form.dist_network = dist_network
-wizard.form.delegated_manager.name
-##Res##u'CAPVIE'
-wizard.form.business_provider.name
-##Res##u'CAPVIE'
 product = Product.find([('code', '=', 'PREV')])[0]
 product.name
 ##Res##u'Pr\xe9voyance Indviduelle'
