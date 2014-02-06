@@ -114,6 +114,8 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_rate(self, annual_rate=None):
         if not annual_rate:
             annual_rate = self.rate
+        if not annual_rate:
+            annual_rate = Decimal(0.0)
         coeff = coop_date.convert_frequency(self.payment_frequency, 'year')
         return annual_rate / Decimal(coeff)
 
@@ -202,16 +204,20 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             i += 1
             increment.number = i
             increment.start_date = start_date
-            increment.end_date = coop_date.get_end_of_period(start_date,
-                self.payment_frequency, increment.number_of_payments)
+            if not utils.is_none(increment, 'number_of_payments'):
+                increment.end_date = coop_date.get_end_of_period(start_date,
+                    self.payment_frequency, increment.number_of_payments)
             defferal = (increment.defferal
                 if hasattr(increment, 'defferal') else None)
-            increment.payment_amount = self.calculate_payment_amount(
-                increment.rate, self.number_of_payments - deffered_payments,
-                self.amount, defferal)
+            if not utils.is_none(increment, 'rate'):
+                increment.payment_amount = self.calculate_payment_amount(
+                    increment.rate,
+                    self.number_of_payments - deffered_payments,
+                    self.amount, defferal)
             if defferal:
                 deffered_payments += increment.number_of_payments
-            start_date = coop_date.add_day(increment.end_date, 1)
+            if not utils.is_none(increment, 'number_of_payments'):
+                start_date = coop_date.add_day(increment.end_date, 1)
 
     def create_increments_from_defferal(self, defferal, duration):
         Increment = Pool().get('loan.increment')
@@ -232,6 +238,11 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         elif self.kind == 'intermediate':
             increments = self.create_increments_from_defferal('partially',
                 self.number_of_payments - 1)
+        elif self.kind == 'graduated':
+            Increment = Pool().get('loan.increment')
+            increment = Increment()
+            increment.start_date = self.funds_release_date
+            increments = [increment]
         if not hasattr(self, 'increments'):
             self.increments = []
         self.increments = list(self.increments)
@@ -293,9 +304,10 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'loan.increment'
 
-    number = fields.Integer('Number')
+    number = fields.Integer('Number', readonly=True)
     start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
+    end_date = fields.Date('End Date', on_change_with=['loan', 'start_date',
+        'number_of_payments'])
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments')
     rate = fields.Numeric('Annual Rate', digits=(16, 4))
@@ -310,6 +322,10 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_currency(self):
         return self.loan.currency
+
+    def on_change_with_end_date(self):
+        return coop_date.add_duration(self.start_date, self.number_of_payments,
+            self.loan.payment_frequency)
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):

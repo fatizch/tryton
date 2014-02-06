@@ -1,8 +1,9 @@
 from trytond.pool import Pool
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
+from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import coop_date, fields, model
+from trytond.modules.cog_utils import coop_date, fields, model, utils
 from trytond.modules.currency_cog import ModelCurrency
 
 from .loan import LOAN_KIND, DEFFERALS
@@ -29,13 +30,23 @@ class LoanCreateParameters(model.CoopView, ModelCurrency):
         'Payment Frequency', required=True, sort=False)
     amount = fields.Numeric('Amount', required=True)
     funds_release_date = fields.Date('Funds Release Date', required=True)
-    first_payment_date = fields.Date('First Payment Date', required=True)
-    rate = fields.Numeric('Annual Rate', digits=(16, 4), required=True)
-    lender = fields.Many2One('bank', 'Lender', required=True)
+    first_payment_date = fields.Date('First Payment Date', required=True,
+        on_change_with=['funds_release_date', 'first_payment_date',
+            'payment_frequency'])
+    rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
+        'required': Eval('kind') != 'graduated',
+        'invisible': Eval('kind') == 'graduated',
+        })
+    lender = fields.Many2One('bank', 'Lender')
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
     defferal_duration = fields.Integer('Differal Duration')
     loan_shares = fields.One2Many('loan.share', None,
         'Loan Shares')
+
+    def on_change_with_first_payment_date(self):
+        if self.funds_release_date and self.payment_frequency:
+            return coop_date.add_duration(self.funds_release_date, 1,
+                self.payment_frequency)
 
 
 class LoanCreateIncrement(model.CoopView):
@@ -63,7 +74,7 @@ class LoanCreate(model.CoopWizard):
     loan_parameters = StateView('loan.create.parameters',
         'loan.loan_creation_parameters_view_form', [
             Button('Cancel', 'cancel_loan', 'tryton-cancel'),
-            Button('Next', 'create_loan', 'tryton-go-next'),
+            Button('Next', 'create_loan', 'tryton-go-next', default=True),
             ])
     create_loan = StateTransition()
     increments = StateView('loan.create.increments',
@@ -92,6 +103,8 @@ class LoanCreate(model.CoopWizard):
             'kind': 'fixed_rate',
             'payment_frequency': 'month',
             'funds_release_date': contract.start_date,
+            'first_payment_date': coop_date.add_duration(contract.start_date,
+                1, 'month'),
             'loan_shares': [{
                     'start_date': contract.start_date,
                     'share': 1,
@@ -126,6 +139,8 @@ class LoanCreate(model.CoopWizard):
         elif loan.kind == 'intermediate':
             loan.calculate_increments(defferal='partially',
                 defferal_duration=loan.number_of_payments - 1)
+        elif loan.kind == 'graduated':
+            loan.calculate_increments()
         loan.save()
         if loan.kind != 'graduated' and not loan.increments:
             return 'create_payments'
@@ -153,6 +168,7 @@ class LoanCreate(model.CoopWizard):
 
     def transition_cancel_loan(self):
         Loan = Pool().get('loan')
-        if self.loan_parameters.loan and self.loan_parameters.loan.id > 0:
+        if (not utils.is_none(self.loan_parameters, 'loan')
+                and self.loan_parameters.loan.id > 0):
             Loan.delete([self.loan_parameters.loan])
         return 'end'
