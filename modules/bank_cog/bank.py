@@ -60,6 +60,22 @@ class Bank(export.ExportImportMixin):
     def get_var_names_for_light_extract(cls):
         return ['bic']
 
+    def get_rec_name(self, name):
+        res = super(Bank, self).get_rec_name(name)
+        res = '[%s] %s' % (self.bic, res)
+        return res
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        banks = cls.search(['OR',
+                [('bic',) + tuple(clause[1:])],
+                [('party.name',) + tuple(clause[1:])],
+                [('party.short_name',) + tuple(clause[1:])],
+                ], order=[])
+        if banks:
+            return [('id', 'in', [bank.id for bank in banks])]
+        return super(Bank, cls).search_rec_name(name, clause)
+
 
 class BankAccount(export.ExportImportMixin):
     __name__ = 'bank.account'
