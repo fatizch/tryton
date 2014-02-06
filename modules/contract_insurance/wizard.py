@@ -138,7 +138,6 @@ class ExtraPremiumDisplay(model.CoopView):
 
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', domain=[('contract', '=', Eval('contract'))],
-        on_change=['covered_element', 'extra_premiums', 'coverages'],
         states={'invisible': Eval('kind', '') != 'contract'},
         depends=['contract'])
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data')
@@ -167,6 +166,7 @@ class ExtraPremiumDisplay(model.CoopView):
             coverage.start_date,
             coverage.end_date if coverage.end_date else '')
 
+    @fields.depends('covered_element', 'extra_premiums', 'coverages')
     def on_change_covered_element(self):
         extra_to_delete = [x.id for x in self.extra_premiums]
         coverages_to_delete = [x.id for x in self.coverages]
@@ -430,12 +430,10 @@ class ExtraPremiumDisplayer(model.CoopView):
     contract = fields.Many2One('contract', 'Contract')
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', domain=[('contract', '=', Eval('contract'))],
-        on_change=['covered_element', 'extra_premium'],
         depends=['contract'])
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         domain=[('covered_element', '=', Eval('covered_element'))],
         states={'invisible': ~Eval('covered_element')},
-        on_change=['covered_data', 'extra_premium'],
         depends=['covered_element'])
     extra_premium = fields.One2Many('contract.covered_data.extra_premium',
         None, 'Extra Premium', domain=[
@@ -443,6 +441,7 @@ class ExtraPremiumDisplayer(model.CoopView):
                 'invisible': ~Eval('covered_data')},
         depends=['covered_data'])
 
+    @fields.depends('covered_element', 'extra_premium')
     def on_change_covered_element(self):
         result = {}
         if not self.covered_element:
@@ -456,6 +455,7 @@ class ExtraPremiumDisplayer(model.CoopView):
                             self.covered_element.covered_data[0].id}]}}
         return result
 
+    @fields.depends('covered_data', 'extra_premium')
     def on_change_covered_data(self):
         result = {'extra_premium': {'remove':
                 [x.id for x in self.extra_premium]}}

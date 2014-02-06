@@ -13,6 +13,9 @@ from trytond.config import CONFIG
 from trytond.model.fields import SQL_OPERATORS
 
 
+depends = tryton_fields.depends
+
+
 class Boolean(tryton_fields.Boolean):
     pass
 

@@ -69,7 +69,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     name = fields.Char('Name', required=True)
-    code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
+    code = fields.Char('Code', required=True)
     description = fields.Text('Description')
 
     @classmethod
@@ -83,6 +83,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     def default_start_date():
         return utils.today()
 
+    @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
             return self.code

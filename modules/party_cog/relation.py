@@ -17,8 +17,7 @@ class PartyRelationKind(model.CoopSQL, model.CoopView):
     __name__ = 'party.relation.kind'
 
     code = fields.Char('Code', required=True,
-        states={'readonly': Bool(Eval('is_used'))},
-        on_change_with=['code', 'name'])
+        states={'readonly': Bool(Eval('is_used'))})
     name = fields.Char('Name', required=True, translate=True)
     reversed_name = fields.Char('Reversed Name', translate=True)
 
@@ -29,6 +28,7 @@ class PartyRelationKind(model.CoopSQL, model.CoopView):
             ('key_uniq', 'UNIQUE(code)', 'The key must be unique!'),
             ]
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code
@@ -50,8 +50,7 @@ class PartyRelation(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     relation_name = fields.Function(
-        fields.Char('Relation Name',
-            on_change_with=['relation_kind']),
+        fields.Char('Relation Name'),
         'on_change_with_relation_name')
     kind = fields.Char('Temporary kind for migration use, to be deleted')
 
@@ -59,6 +58,7 @@ class PartyRelation(model.CoopSQL, model.CoopView):
     def default_start_date():
         return utils.today()
 
+    @fields.depends('relation_kind')
     def on_change_with_relation_name(self, name=None):
         if not self.relation_kind:
             return

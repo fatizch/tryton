@@ -84,7 +84,8 @@ class ProcessTransition(model.CoopSQL):
                     'on_model'))])
 
         cls._error_messages.update({
-                'missing_pyson': 'Pyson expression and description is mandatory',
+                'missing_pyson':
+                'Pyson expression and description is mandatory',
                 'missing_choice': 'Both choices must be filled !',
                 })
 
@@ -607,11 +608,9 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     the_view = fields.Many2One('ir.ui.view', 'View', states={'readonly': True})
     view_name = fields.Char('View Name', required=True,
         states={'readonly': Eval('id', 0) > 0},
-        on_change_with=['view_name', 'view_model'],
         depends=['view_name', 'view_model'])
     view_final_name = fields.Function(
         fields.Char('View Name', states={'readonly': True},
-            on_change_with=['view_name', 'view_kind', 'view_model'],
             depends=['view_name', 'view_kind', 'view_model']),
         'on_change_with_view_final_name')
     view_kind = fields.Selection([
@@ -622,13 +621,11 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             ('expert', 'Expert')], 'Input Mode')
     header_line = fields.Char('Header Line',
         states={'invisible': Eval('input_mode', '') != 'expert'},
-        on_change_with=[
-            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
-        depends=[
-            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'])
+        depends=['view_string', 'nb_col', 'input_mode', 'header_line',
+            'view_kind'])
     view_string = fields.Char('View String',
         states={'invisible': Eval('input_mode', '') != 'classic'},
-        on_change_with=['view_model'], depends=['input_mode', 'view_model'])
+        depends=['input_mode', 'view_model'])
     nb_col = fields.Integer('Number of columns', states={
             'invisible': Not(And(
                     Eval('input_mode', '') == 'classic',
@@ -639,9 +636,8 @@ class ViewDescription(model.CoopSQL, model.CoopView):
         states={'readonly': Eval('id', 0) > 0})
     for_step = fields.Many2One('process.step', 'For Step', ondelete='CASCADE')
     field_childs = fields.Selection('get_field_childs', 'Children field',
-        selection_change_with=['view_model'], depends=['view_model'],
-        states={'invisible': Eval('view_kind') != 'tree'},
-        on_change_with=['view_model'])
+        depends=['view_model'], states={
+            'invisible': Eval('view_kind') != 'tree'})
 
     @classmethod
     def __setup__(cls):
@@ -681,10 +677,12 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     def default_input_mode(cls):
         return 'classic'
 
+    @fields.depends('view_model')
     def on_change_with_field_childs(self):
         if not (hasattr(self, 'view_model') and self.view_model):
             return ''
 
+    @fields.depends('view_model')
     def get_field_childs(self):
         if not (hasattr(self, 'view_model') and self.view_model):
             return [('', '')]
@@ -698,6 +696,8 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     def default_view_final_name(cls):
         return 'step_%s__form' % Transaction().context.get('for_step_name', '')
 
+    @fields.depends('view_string', 'nb_col', 'input_mode', 'header_line',
+        'view_kind')
     def on_change_with_header_line(self):
         if self.input_mode == 'expert':
             return self.header_line
@@ -706,17 +706,20 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             xml += 'col="%s" ' % self.nb_col
         return xml
 
+    @fields.depends('view_model')
     def on_change_with_view_string(self):
         if not (hasattr(self, 'view_model') and self.view_model):
             return ''
         # TODO : Get the good (translated) name
         return self.view_model.name
 
+    @fields.depends('view_name', 'view_model')
     def on_change_with_view_name(self):
         if (hasattr(self, 'view_model') and self.view_model):
             if not (hasattr(self, 'attribute') and self.attribute):
                 return self.view_model.model.split('.')[1].replace('.', '_')
 
+    @fields.depends('view_name', 'view_kind', 'view_model')
     def on_change_with_view_final_name(self, name=None):
         if (hasattr(self, 'for_step') and self.for_step):
             the_step = self.for_step.technical_name
@@ -846,7 +849,7 @@ class ProcessStart(model.CoopView):
         domain=[('is_workflow', '=', 'True')],
         states={'readonly': True, 'invisible': True})
     good_process = fields.Many2One('process', 'Good Process',
-        on_change_with=['date, model'], depends=['date', 'model'])
+        depends=['date', 'model'])
 
     @classmethod
     def __setup__(cls):
@@ -854,7 +857,7 @@ class ProcessStart(model.CoopView):
         cls.good_process = copy.copy(cls.good_process)
         cls.good_process.domain = cls.build_process_domain()
         cls.good_process.depends = cls.build_process_depends()
-        cls.good_process.on_change_with = cls.build_process_depends()
+        cls.good_process.on_change_with = set(cls.build_process_depends())
 
     @classmethod
     def build_process_domain(cls):
@@ -873,6 +876,7 @@ class ProcessStart(model.CoopView):
     def default_model(cls):
         raise NotImplementedError
 
+    @fields.depends('date', 'model')
     def on_change_with_good_process(self):
         try:
             good_process = utils.get_domain_instances(self, 'good_process')
@@ -908,7 +912,9 @@ class ProcessFinder(Wizard):
         cls.process_parameters.model_name = cls.get_parameters_model()
         cls.process_parameters.view = cls.get_parameters_view()
         cls._error_messages.update({
-                'no_process_selected': 'Please pick a process from the selection'})
+                'no_process_selected':
+                'Please pick a process from the selection',
+                })
 
     def do_action(self, action):
         Action = Pool().get('ir.action')

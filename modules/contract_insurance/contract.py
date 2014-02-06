@@ -301,8 +301,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
-        on_change=['item_desc', 'extra_data', 'party', 'main_contract',
-            'start_date'], domain=[If(
+        domain=[If(
                 ~~Eval('possible_item_desc'),
                 ('id', 'in', Eval('possible_item_desc')),
                 ())
@@ -322,16 +321,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         domain=[('covered_data.option.contract', '=', Eval('contract'))],
         depends=['contract'], context={'_master_covered': Eval('id')})
     extra_data = fields.Dict('extra_data',
-        'Contract Complementary Data', on_change_with=['item_desc',
-            'extra_data', 'contract', 'start_date', 'main_contract'],
-        states={'invisible': ~Eval('extra_data')})
+        'Contract Complementary Data', states={
+            'invisible': ~Eval('extra_data')})
     party_extra_data = fields.Function(
         fields.Dict('extra_data', 'Party Complementary Data',
-            on_change_with=['item_desc', 'extra_data', 'party'],
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))}),
         'on_change_with_party_extra_data', 'set_party_extra_data')
     extra_data_summary = fields.Function(
-        fields.Char('Complementary Data', on_change_with=['item_desc']),
+        fields.Char('Complementary Data'),
         'on_change_with_extra_data_summary')
     party = fields.Many2One('party.party', 'Actor', domain=[If(
                 Eval('item_kind') == 'person',
@@ -347,8 +344,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             'required': IS_PARTY,
             }, depends=['item_kind'])
     is_person = fields.Function(
-        fields.Boolean('Is Person', states={'invisible': True},
-            on_change_with=['party']),
+        fields.Boolean('Is Person', states={'invisible': True}),
         'on_change_with_is_person')
     covered_relations = fields.Many2Many('contract.covered_element-party',
         'covered_element', 'party_relation', 'Covered Relations', domain=[
@@ -358,11 +354,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             ], depends=['party'],
         states={'invisible': ~IS_PARTY})
     item_kind = fields.Function(
-        fields.Char('Item Kind', on_change_with=['item_desc'],
-            states={'invisible': True}),
+        fields.Char('Item Kind', states={'invisible': True}),
         'on_change_with_item_kind')
     covered_name = fields.Function(
-        fields.Char('Name', on_change_with=['party']),
+        fields.Char('Name'),
         'on_change_with_covered_name')
 
     @classmethod
@@ -444,6 +439,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             return False, errors
         return True, ()
 
+    @fields.depends('item_desc', 'extra_data', 'party', 'main_contract',
+        'start_date')
     def on_change_item_desc(self):
         res = {}
         if not (hasattr(self, 'item_desc') and self.item_desc):
@@ -455,9 +452,12 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         res['party_extra_data'] = self.on_change_with_party_extra_data()
         return res
 
+    @fields.depends('item_desc', 'extra_data', 'contract', 'start_date',
+        'main_contract')
     def on_change_with_extra_data(self):
         return utils.init_extra_data(self.get_extra_data_def())
 
+    @fields.depends('item_desc')
     def on_change_with_extra_data_summary(self, name=None):
         if not (hasattr(self, 'extra_data') and
                 self.extra_data):
@@ -474,6 +474,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         elif 'contract' in Transaction().context:
             return Transaction().context.get('contract')
 
+    @fields.depends('item_desc', 'extra_data', 'party')
     def on_change_with_party_extra_data(self, name=None):
         res = {}
         if utils.is_none(self, 'party') or not (self.item_desc
@@ -537,6 +538,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                     return True
         return False
 
+    @fields.depends('item_desc')
     def on_change_with_item_kind(self, name=None):
         if self.item_desc:
             return self.item_desc.kind
@@ -559,6 +561,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                 res.append(relation.to_party)
         return res
 
+    @fields.depends('party')
     def on_change_with_covered_name(self, name=None):
         if self.party:
             return self.party.rec_name
@@ -636,6 +639,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def init_dict_for_rule_engine(self, args):
         args['sub_elem'] = self
 
+    @fields.depends('party')
     def on_change_with_is_person(self, name=None):
         return self.party and self.party.is_person
 
@@ -670,8 +674,6 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', ondelete='CASCADE')
     extra_data = fields.Dict('extra_data', 'Complementary Data',
-        on_change=['extra_data', 'option', 'start_date',
-            'deductible_duration', 'covered_element'],
         depends=['extra_data', 'option', 'start_date'],
         states={'invisible': ~Eval('extra_data')})
     start_date = fields.Date('Start Date')
@@ -754,6 +756,8 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         self.init_clauses(option)
         self.init_extra_data()
 
+    @fields.depends('extra_data', 'option', 'start_date',
+        'deductible_duration', 'covered_element')
     def on_change_extra_data(self):
         args = {'date': self.start_date, 'level': 'covered_data'}
         self.init_dict_for_rule_engine(args)

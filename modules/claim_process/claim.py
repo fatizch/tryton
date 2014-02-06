@@ -26,8 +26,7 @@ class Claim(CogProcessFramework):
     __name__ = 'claim'
 
     doc_received = fields.Function(
-        fields.Boolean('All Document Received', depends=['documents'],
-            on_change_with=['documents']),
+        fields.Boolean('All Document Received', depends=['documents']),
         'on_change_with_doc_received')
     indemnifications = fields.Function(
         fields.One2Many('claim.indemnification', None, 'Indemnifications'),
@@ -37,12 +36,13 @@ class Claim(CogProcessFramework):
         'get_indemnifications')
     contact_history = fields.Function(
         fields.One2Many('party.interaction', '', 'History',
-            on_change_with=['claimant'], depends=['claimant']),
+            depends=['claimant']),
         'on_change_with_contact_history')
     is_pending_indemnification = fields.Function(
         fields.Boolean('Pending Indemnification', states={'invisible': True}),
         'get_is_pending_indemnification')
 
+    @fields.depends('claimant')
     def on_change_with_contact_history(self, name=None):
         if not (hasattr(self, 'claimant') and self.claimant):
             return []
@@ -100,6 +100,7 @@ class Claim(CogProcessFramework):
         # good_req.clean_extras(documents)
         return True, ()
 
+    @fields.depends('documents')
     def on_change_with_doc_received(self, name=None):
         if not (hasattr(self, 'documents') and self.documents):
             return False
@@ -147,17 +148,13 @@ class Loss:
         fields.Many2One('benefit', 'Benefit',
             domain=[('id', 'in', Eval('benefits'))],
             depends=['benefits', 'can_modify_benefit'],
-            states={'invisible': ~Eval('can_modify_benefit')},
-            on_change=['benefit_to_deliver', 'services', 'claim',
-                'start_date', 'loss_desc', 'event_desc']),
+            states={'invisible': ~Eval('can_modify_benefit')}),
         'get_benefit_to_deliver', 'set_void')
     benefits = fields.Function(
-        fields.One2Many('benefit', None, 'Benefits',
-            on_change_with=['loss_desc', 'event_desc', 'start_date', 'claim']),
+        fields.One2Many('benefit', None, 'Benefits'),
         'on_change_with_benefits')
     can_modify_benefit = fields.Function(
-        fields.Boolean('Can Modify Benefit?',
-            on_change_with=['services']),
+        fields.Boolean('Can Modify Benefit?'),
         'on_change_with_can_modify_benefit')
 
     def get_possible_benefits(self):
@@ -176,6 +173,7 @@ class Loss:
                     res[option.id] = benefits
         return res
 
+    @fields.depends('loss_desc', 'event_desc', 'start_date', 'claim')
     def on_change_with_benefits(self, name=None):
         res = []
         for x in self.get_possible_benefits().values():
@@ -191,6 +189,8 @@ class Loss:
     def set_void(cls, instances, name, vals):
         pass
 
+    @fields.depends('benefit_to_deliver', 'services', 'claim', 'start_date',
+        'loss_desc', 'event_desc')
     def on_change_benefit_to_deliver(self):
         res = {}
         if not self.services:
@@ -230,6 +230,7 @@ class Loss:
             del_serv_dict['option'] = options[0].id
         return res
 
+    @fields.depends('services')
     def on_change_with_can_modify_benefit(self, name=None):
         return (not self.services
             or (len(self.services) == 1
@@ -257,7 +258,7 @@ class ClaimDeclareFindProcess(ProcessStart):
     claim = fields.Many2One('claim', 'Claim',
         domain=[('id', 'in', Eval('claims'))], depends=['claims'])
     claims = fields.Function(
-        fields.One2Many('claim', None, 'Claims', on_change_with=['party']),
+        fields.One2Many('claim', None, 'Claims'),
         'on_change_with_claims')
 
     @classmethod
@@ -281,6 +282,7 @@ class ClaimDeclareFindProcess(ProcessStart):
         Model = Pool().get('ir.model')
         return Model.search([('model', '=', 'claim')])[0].id
 
+    @fields.depends('party')
     def on_change_with_claims(self, name=None):
         Claim = Pool().get('claim')
         return [x.id for x in Claim.search([('claimant', '=', self.party)])]

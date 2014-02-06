@@ -111,9 +111,10 @@ class SelectUser(model.CoopView):
 
     user = fields.Many2One('res.user', 'User')
     user_ok = fields.Function(
-        fields.Char('User Ok', on_change_with=['user']),
+        fields.Char('User Ok'),
         'on_change_with_user_ok')
 
+    @fields.depends('user')
     def on_change_with_user_ok(self):
         if not (hasattr(self, 'user') and self.user):
             return ''

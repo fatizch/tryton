@@ -89,11 +89,10 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         domain=[('resource', '=', Eval('for_object'))], depends=['for_object'],
         context={'resource': Eval('for_object')})
     for_object = fields.Function(
-        fields.Char('For Object', states={'invisible': True},
-            on_change_with=['for_object_ref']),
+        fields.Char('For Object', states={'invisible': True}),
         'on_change_with_for_object')
     for_object_ref = fields.Reference('For Object', [('party.party', 'Party')],
-        states={'readonly': True}, on_change_with=['party', 'for_object_ref'])
+        states={'readonly': True})
 
     @staticmethod
     def default_user():
@@ -124,12 +123,14 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
     def default_for_object(cls):
         return cls.default_for_object_ref()
 
+    @fields.depends('party', 'for_object_ref')
     def on_change_with_for_object_ref(self):
         if (hasattr(self, 'for_object_ref') and self.for_object_ref):
             return self.for_object_ref
         if (hasattr(self, 'party') and self.party):
             return self.party
 
+    @fields.depends('for_object_ref')
     def on_change_with_for_object(self, name=None):
         if not (hasattr(self, 'for_object_ref') and self.for_object_ref):
             return ''

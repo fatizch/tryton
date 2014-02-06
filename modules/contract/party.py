@@ -20,12 +20,10 @@ class Party:
         fields.Many2One('contract', 'Last Quote'),
         'get_last_quote_id')
     number_of_quotes = fields.Function(
-        fields.Integer('Number of Quotes', on_change_with=['quotes'],
-            states={'invisible': True}),
+        fields.Integer('Number of Quotes', states={'invisible': True}),
         'on_change_with_number_of_quotes')
     number_of_contracts = fields.Function(
-        fields.Integer('Number of Contracts', on_change_with=['contracts'],
-            states={'invisible': True}),
+        fields.Integer('Number of Contracts', states={'invisible': True}),
         'on_change_with_number_of_contracts')
     main_contract = fields.Function(
         fields.Many2One('contract', 'Main Contract'),
@@ -62,9 +60,11 @@ class Party:
     def open_quotes(cls, objs):
         pass
 
+    @fields.depends('contracts')
     def on_change_with_number_of_contracts(self, name=None):
         return len(self.contracts)
 
+    @fields.depends('quotes')
     def on_change_with_number_of_quotes(self, name=None):
         return len(self.quotes)
 

@@ -98,8 +98,9 @@ class OptionsDisplayer(model.CoopView):
     contract = fields.Many2One('contract', 'Contract')
     options = fields.One2Many(
         'contract.wizard.option_subscription.options_displayer.option',
-        None, 'Options', on_change=['options'])
+        None, 'Options')
 
+    @fields.depends('options')
     def on_change_options(self):
         selected = [elem for elem in self.options
             if elem.is_selected and not elem.selection == 'automatic']

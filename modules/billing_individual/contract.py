@@ -49,7 +49,7 @@ class Contract:
                         Eval('context', {}).get(
                             'client_defined_date', Date())),
                     ())],
-            on_change_with=['display_all_lines', 'id'], loading='lazy'),
+            loading='lazy'),
         'on_change_with_receivable_lines')
     receivable_today = fields.Function(fields.Numeric('Receivable Today'),
             'get_receivable_today', searcher='search_receivable_today')
@@ -67,6 +67,7 @@ class Contract:
                 'button_calculate_prices': {'invisible': ~Eval('use_prices')},
                 })
 
+    @fields.depends('display_all_lines', 'id')
     def on_change_with_receivable_lines(self, name=None):
         return map(lambda x: x.id, utils.get_domain_instances(self,
             'receivable_lines'))

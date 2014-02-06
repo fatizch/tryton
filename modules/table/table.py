@@ -69,7 +69,7 @@ class TableDefinition(ModelSQL, ModelView):
     __name__ = 'table'
 
     name = fields.Char('Name', required=True)
-    code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
+    code = fields.Char('Code', required=True)
     type_ = fields.Selection(TYPE, 'Type', required=True)
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
     cells = fields.One2Many('table.cell', 'definition', 'Cells')
@@ -272,6 +272,7 @@ class TableDefinition(ModelSQL, ModelView):
         else:
             return 'Table %sD' % nb_dim
 
+    @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
             return self.code
@@ -353,11 +354,11 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         [('dimension%s' % i, 'Dimension %s' % i)
             for i in range(1, DIMENSION_MAX + 1)],
         'Type', required=True)
-    dimension_kind = fields.Function(fields.Selection(KIND, 'Dimension Kind',
-            on_change_with=['definition', 'type']),
+    dimension_kind = fields.Function(
+        fields.Selection(KIND, 'Dimension Kind'),
         'on_change_with_dimension_kind')
-    dimension_order = fields.Function(fields.Selection(ORDER,
-            'Dimension Order', on_change_with=['definition', 'type']),
+    dimension_order = fields.Function(
+        fields.Selection(ORDER, 'Dimension Order'),
         'on_change_with_dimension_order')
     value = fields.Char(
         'Value', states=dimension_state('value'),
@@ -393,11 +394,13 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         table = TableHandler(cursor, cls, module_name)
         table.index_action(['definition', 'type'], 'add')
 
+    @fields.depends('definition', 'type')
     def on_change_with_dimension_kind(self, name=None):
         if getattr(self, 'definition', None) and getattr(self, 'type', None):
             idx = int(self.type[len('dimension'):])
             return getattr(self.definition, 'dimension_kind%s' % idx)
 
+    @fields.depends('definition', 'type')
     def on_change_with_dimension_order(self, name=None):
         if getattr(self, 'definition', None) and getattr(self, 'type', None):
             idx = int(self.type[len('dimension'):])
@@ -1102,27 +1105,19 @@ class DimensionDisplayer(ModelView):
     kind = fields.Selection(KIND, 'Kind')
     input_mode = fields.Selection(
         [('flat_file', 'Flat data'), ('boolean', 'Boolean')], 'Input Mode',
-        on_change=['values', 'order', 'input_mode', 'kind', 'date_format',
-            'input_mode'], states={'invisible': Eval('kind', '') != 'value'})
-    values = fields.One2Many('table.dimension.value', None, 'Dimension Values',
-        on_change=['values', 'order', 'kind', 'date_format', 'input_mode'])
+        states={'invisible': Eval('kind', '') != 'value'})
+    values = fields.One2Many('table.dimension.value', None, 'Dimension Values')
     converted_text = fields.Text('Converted Text')
     table = fields.Many2One('table', 'Table', states={
             'invisible': True})
     cur_dimension = fields.Integer('Current Dimension', states={
             'invisible': True})
-    input_text = fields.Text('Input Text', on_change=['input_text',
-            'date_format', 'kind', 'values', 'input_mode'], states={
+    input_text = fields.Text('Input Text', states={
             'invisible': Eval('input_mode', '') != 'flat_file'},)
     date_format = fields.Char('Date Format', states={
             'invisible': Not(Or(
                     Eval('kind', '') == 'date',
-                    Eval('kind', '') == 'range-date'))},
-            # 'invisible': Or(Eval('kind', '') == 'date',
-                # Eval('kind', '') == 'range-date')
-            # and Eval('input_mode', '') != 'flat_file'},
-        on_change=['date_format', 'values', 'input_text', 'kind',
-            'input_mode'])
+                    Eval('kind', '') == 'range-date'))})
 
     @classmethod
     def __setup__(cls):
@@ -1138,12 +1133,16 @@ class DimensionDisplayer(ModelView):
     def default_cur_dimension():
         return 1
 
+    @fields.depends('input_text', 'date_format', 'kind', 'values',
+        'input_mode')
     def on_change_input_text(self):
         if self.input_text:
             return {'converted_text': self.convert_values()}
         else:
             return self.on_change_values()
 
+    @fields.depends('date_format', 'values', 'input_text', 'kind',
+        'input_mode')
     def on_change_date_format(self):
         if self.kind not in ('date', 'range-date'):
             return {'date_format': ''}
@@ -1151,6 +1150,7 @@ class DimensionDisplayer(ModelView):
             return self.on_change_input_text()
         return self.on_change_values()
 
+    @fields.depends('values', 'order', 'kind', 'date_format', 'input_mode')
     def on_change_values(self):
         if not self.values:
             return {'converted_text': ''}
@@ -1158,6 +1158,8 @@ class DimensionDisplayer(ModelView):
         return {'converted_text': self.convert_existing_values(existing,
                 self.kind, self.date_format)}
 
+    @fields.depends('values', 'order', 'input_mode', 'kind', 'date_format',
+        'input_mode')
     def on_change_input_mode(self):
         if self.input_mode == 'boolean':
             return {

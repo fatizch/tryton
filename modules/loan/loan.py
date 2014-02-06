@@ -43,10 +43,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
         'Payment Frequency', sort=False)
     payment_amount = fields.Numeric('Payment Amount',
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
-        on_change_with=['payment_amount', 'kind', 'rate',
-            'amount', 'number_of_payments', 'currency', 'payment_frequency',
-            'first_payment_date', 'increments'])
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     amount = fields.Numeric('Amount')
     funds_release_date = fields.Date('Funds Release Date')
     first_payment_date = fields.Date('First Payment Date')
@@ -81,6 +78,9 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_kind(cls):
         return 'fixed_rate'
 
+    @fields.depends('payment_amount', 'kind', 'rate', 'amount',
+        'number_of_payments', 'currency', 'payment_frequency',
+        'first_payment_date', 'increments')
     def on_change_with_payment_amount(self):
         if (not self.amount or not self.number_of_payments
                 or not self.first_payment_date):

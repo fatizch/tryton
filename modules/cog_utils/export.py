@@ -698,9 +698,9 @@ class FileSelector(ModelView):
 
     selected_file = fields.Binary('Import File', filename='name')
     name = fields.Char('Filename')
-    file_content = fields.Text('File Content', on_change_with=[
-            'selected_file'])
+    file_content = fields.Text('File Content')
 
+    @fields.depends('selected_file')
     def on_change_with_file_content(self):
         if not (hasattr(self, 'selected_file') and self.selected_file):
             return ''

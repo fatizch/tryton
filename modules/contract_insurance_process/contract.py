@@ -20,15 +20,13 @@ class Contract(CogProcessFramework):
     __metaclass__ = ClassAttr
 
     subscriber_desc = fields.Function(
-        fields.Text('Summary', on_change_with=['subscriber'], readonly=True),
+        fields.Text('Summary', readonly=True),
         'on_change_with_subscriber_desc', 'setter_void', )
     product_desc = fields.Function(
-        fields.Text('Description', on_change_with=['offered', 'com_product'],
-            readonly=True),
+        fields.Text('Description', readonly=True),
         'on_change_with_product_desc', 'setter_void', )
     doc_received = fields.Function(
-        fields.Boolean('All Document Received',
-            depends=['documents'], on_change_with=['documents']),
+        fields.Boolean('All Document Received', depends=['documents']),
         'on_change_with_doc_received')
 
     @classmethod
@@ -49,18 +47,21 @@ class Contract(CogProcessFramework):
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
+    @fields.depends('subscriber')
     def on_change_with_subscriber_desc(self, name=None):
         res = ''
         if self.subscriber:
             res = self.subscriber.summary
         return res
 
+    @fields.depends('offered', 'com_product')
     def on_change_with_product_desc(self, name=None):
         res = ''
         if self.com_product:
             res = self.com_product.description
         return res
 
+    @fields.depends('documents')
     def on_change_with_doc_received(self, name=None):
         if not (hasattr(self, 'documents') and self.documents):
             return False
@@ -296,9 +297,10 @@ class ContractOption:
     __name__ = 'contract.option'
 
     status_selection = fields.Function(
-        fields.Boolean('Status', on_change=['status_selection', 'status']),
+        fields.Boolean('Status'),
         'get_status_selection', 'setter_void')
 
+    @fields.depends('status_selection', 'status')
     def on_change_status_selection(self):
         if self.status_selection:
             return {'status': 'active'}
@@ -349,9 +351,10 @@ class CoveredData:
     __name__ = 'contract.covered_data'
 
     status_selection = fields.Function(
-        fields.Boolean('Status', on_change=['status_selection', 'status']),
+        fields.Boolean('Status'),
         'get_status_selection', 'setter_void')
 
+    @fields.depends('status_selection', 'status')
     def on_change_status_selection(self):
         if self.status_selection:
             return {'status': 'active'}

@@ -23,7 +23,7 @@ class ProcessLog:
 
     priority = fields.Function(fields.Integer('Priority'), 'get_priority')
     task_start = fields.Function(
-        fields.DateTime('Task Start', on_change_with=['task']),
+        fields.DateTime('Task Start'),
         'on_change_with_task_start')
     task_selected = fields.Function(
         fields.Boolean('Selected'),
@@ -53,6 +53,7 @@ class ProcessLog:
     def get_task_selected(self, name):
         return False
 
+    @fields.depends('task')
     def on_change_with_task_start(self, name=None):
         if not (hasattr(self, 'task') and self.task):
             return None
@@ -115,20 +116,21 @@ class TaskDisplayer(model.CoopView):
     __name__ = 'task.select.available_tasks.task'
 
     task = fields.Many2One('process-process.step', 'Task')
-    nb_tasks = fields.Integer('Number', on_change_with=['task'],
-        depends=['task', 'kind'])
+    nb_tasks = fields.Integer('Number', depends=['task', 'kind'])
     kind = fields.Selection([('team', 'Team'), ('process', 'Process')], 'Kind',
         states={'invisible': True})
     task_name = fields.Function(
-        fields.Char('Task Name', on_change_with=['task'], depends=['task']),
+        fields.Char('Task Name', depends=['task']),
         'on_change_with_task_name')
 
+    @fields.depends('task')
     def on_change_with_task_name(self, name=None):
         if not (hasattr(self, 'task') and self.task):
             return ''
         return '%s - %s' % (self.task.process.fancy_name,
             self.task.step.fancy_name)
 
+    @fields.depends('task')
     def on_change_with_nb_tasks(self):
         if not (hasattr(self, 'task') and self.task):
             return None
@@ -144,10 +146,8 @@ class TaskSelector(model.CoopView):
 
     __name__ = 'task.select.available_tasks'
 
-    team = fields.Many2One('res.team', 'Team', on_change=['team',
-            'nb_tasks_team', 'nb_users_team', 'tasks_team', 'tasks'])
-    process = fields.Many2One('process', 'Process', on_change=['process',
-            'nb_tasks_process', 'tasks_process'])
+    team = fields.Many2One('res.team', 'Team')
+    process = fields.Many2One('process', 'Process')
     nb_tasks_team = fields.Integer('Team Tasks', states={'readonly': True})
     nb_users_team = fields.Integer('Team Users', states={'readonly': True})
     nb_tasks_process = fields.Integer('Process Tasks',
@@ -160,10 +160,12 @@ class TaskSelector(model.CoopView):
         states={'readonly': True})
     tasks = fields.One2Many('process.log', '', 'Tasks',
         domain=[('latest', '=', True), ('locked', '=', False)],
-        order=[('priority', 'ASC')], on_change=['selected_task', 'tasks'])
+        order=[('priority', 'ASC')])
     selected_task = fields.Many2One('process.log', 'Selected Task',
         states={'readonly': True})
 
+    @fields.depends('team', 'nb_tasks_team', 'nb_users_team', 'tasks_team',
+        'tasks')
     def on_change_team(self):
         if not (hasattr(self, 'team') and self.team):
             return {
@@ -203,6 +205,7 @@ class TaskSelector(model.CoopView):
                 result['tasks'][0] if result['tasks'] else None
         return result
 
+    @fields.depends('process', 'nb_tasks_process', 'tasks_process')
     def on_change_process(self):
         if not (hasattr(self, 'process') and self.process):
             return {
@@ -225,6 +228,7 @@ class TaskSelector(model.CoopView):
         result['nb_tasks_process'] = nb_tasks
         return result
 
+    @fields.depends('selected_task', 'tasks')
     def on_change_tasks(self):
         if not (hasattr(self, 'tasks') and self.tasks):
             return None

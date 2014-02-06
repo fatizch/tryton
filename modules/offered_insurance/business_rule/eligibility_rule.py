@@ -26,9 +26,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         depends=['config_kind'], states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
-    sub_elem_rule_extra_data = fields.Dict('extra_data',
-        'Rule Extra Data',
-        on_change_with=['sub_elem_rule', 'sub_elem_rule_extra_data'],
+    sub_elem_rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
         states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
@@ -49,8 +47,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
                 )
             }, depends=['sub_elem_config_kind'])
     offered_kind = fields.Function(
-        fields.Char('Offered Kind', states={'invisible': True},
-            on_change_with=['offered']),
+        fields.Char('Offered Kind', states={'invisible': True}),
         'on_change_with_offered_kind')
 
     @classmethod
@@ -79,6 +76,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
                     details=result.warnings), result.errors)
         return (EligibilityResultLine(True), [])
 
+    @fields.depends('sub_elem_rule', 'sub_elem_rule_extra_data')
     def on_change_with_sub_elem_rule_extra_data(self):
         if not (hasattr(self, 'sub_elem_rule') and self.sub_elem_rule):
             return {}
@@ -109,6 +107,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
     def default_subscriber_classes():
         return 'person'
 
+    @fields.depends('offered')
     def on_change_with_offered_kind(self, name):
         res = ''
         if self.offered:

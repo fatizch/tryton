@@ -18,26 +18,22 @@ class ExportPackage():
     rules = fields.Function(
         fields.One2Many('rule_engine', None, 'Rules', states={
                 'invisible': Bool(Eval('model') != 'rule_engine')},
-            on_change=['rules', 'instances_to_export'],
             add_remove=[]),
         'getter_void', setter='setter_void')
     contexts = fields.Function(
         fields.One2Many('rule_engine.context', None, 'Contexts', states={
                 'invisible': Bool(Eval('model') != 'rule_engine.context')},
-            on_change=['contexts', 'instances_to_export'],
             add_remove=[]),
         'getter_void', setter='setter_void')
     tree_elements = fields.Function(
         fields.One2Many('rule_engine.function', None,
             'Rule Functions', states={
                 'invisible': Bool(Eval('model') != 'rule_engine.function')},
-            on_change=['tree_elements', 'instances_to_export'],
             add_remove=[]),
         'getter_void', setter='setter_void')
     tags = fields.Function(
         fields.One2Many('tag', None, 'Tags', states={
                 'invisible': Bool(Eval('model') != 'tag')},
-            on_change=['tags', 'instances_to_export'],
             add_remove=[]),
         'getter_void', setter='setter_void')
 
@@ -52,14 +48,18 @@ class ExportPackage():
                 ])
         return list(set(res))
 
+    @fields.depends('rules', 'instances_to_export')
     def on_change_rules(self):
         return self._on_change('rules')
 
+    @fields.depends('contexts', 'instances_to_export')
     def on_change_contexts(self):
         return self._on_change('contexts')
 
+    @fields.depends('tree_elements', 'instances_to_export')
     def on_change_tree_elements(self):
         return self._on_change('tree_elements')
 
+    @fields.depends('tags', 'instances_to_export')
     def on_change_tags(self):
         return self._on_change('tags')

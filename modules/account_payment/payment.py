@@ -104,14 +104,16 @@ class Payment(Workflow, ModelSQL, ModelView):
             ('company', '=', Eval('company', 0)),
             ],
         depends=_DEPENDS + ['company'])
-    currency = fields.Function(fields.Many2One('currency.currency', 'Currency',
-            on_change_with=['journal']), 'on_change_with_currency')
-    currency_digits = fields.Function(fields.Integer('Currency Digits',
-            on_change_with=['journal']), 'on_change_with_currency_digits')
-    kind = fields.Selection(KINDS, 'Kind', required=True, on_change=['kind'],
-        states=_STATES, depends=_DEPENDS)
+    currency = fields.Function(
+        fields.Many2One('currency.currency', 'Currency'),
+        'on_change_with_currency')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'on_change_with_currency_digits')
+    kind = fields.Selection(KINDS, 'Kind', required=True, states=_STATES,
+        depends=_DEPENDS)
     party = fields.Many2One('party.party', 'Party', required=True,
-        states=_STATES, depends=_DEPENDS, on_change=['party'])
+        states=_STATES, depends=_DEPENDS)
     date = fields.Date('Date', required=True, states=_STATES, depends=_DEPENDS)
     amount = fields.Numeric('Amount', required=True,
         digits=(16, Eval('currency_digits', 2)), states=_STATES,
@@ -138,7 +140,6 @@ class Payment(Workflow, ModelSQL, ModelView):
                 ],
             ('move_state', '=', 'posted'),
             ],
-        on_change=['line'],
         states=_STATES, depends=_DEPENDS + ['kind', 'party', 'currency'])
     description = fields.Char('Description', states=_STATES, depends=_DEPENDS)
     group = fields.Many2One('account.payment.group', 'Group', readonly=True,
@@ -199,25 +200,30 @@ class Payment(Workflow, ModelSQL, ModelView):
     def default_state():
         return 'draft'
 
+    @fields.depends('journal')
     def on_change_with_currency(self, name=None):
         if self.journal:
             return self.journal.currency.id
 
+    @fields.depends('journal')
     def on_change_with_currency_digits(self, name=None):
         if self.journal:
             return self.journal.currency.digits
         return 2
 
+    @fields.depends('kind')
     def on_change_kind(self):
         return {
             'line': None,
             }
 
+    @fields.depends('party')
     def on_change_party(self):
         return {
             'line': None,
             }
 
+    @fields.depends('line')
     def on_change_line(self):
         if self.line:
             return {

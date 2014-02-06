@@ -234,21 +234,18 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     for_object = fields.Reference('Needed For', [('', '')],
         states={'readonly': ~~Eval('for_object')})
     send_date = fields.Date('Send Date')
-    reception_date = fields.Date('Reception Date',
-        on_change_with=['attachment', 'reception_date'])
+    reception_date = fields.Date('Reception Date')
     request_date = fields.Date('Request Date', states={'readonly': True})
     received = fields.Function(
-        fields.Boolean('Received', depends=['attachment', 'reception_date'],
-            on_change_with=['reception_date'],
-            on_change=['received', 'reception_date']),
-        'on_change_with_received', 'setter_void')
+        fields.Boolean('Received', depends=['attachment', 'reception_date']),
+        'on_change_with_received')
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE')
     attachment = fields.Many2One('ir.attachment', 'Attachment', domain=[
             ('resource', '=', Eval('_parent_request', {}).get(
-                'needed_by_str'))],
-        on_change=['attachment', 'reception_date', 'received'])
+                'needed_by_str'))])
 
+    @fields.depends('attachment', 'reception_date', 'received')
     def on_change_attachment(self):
         if not (hasattr(self, 'attachment') and self.attachment):
             return {}
@@ -258,12 +255,14 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
                 hasattr(self, 'reception_date') and
                 self.reception_date) or utils.today()}
 
+    @fields.depends('reception_date')
     def on_change_with_received(self, name=None):
         if not (hasattr(self, 'reception_date') and self.reception_date):
             return False
         else:
             return True
 
+    @fields.depends('received', 'reception_date')
     def on_change_received(self):
         if (hasattr(self, 'received') and self.received):
             if (hasattr(self, 'reception_date') and self.reception_date):
@@ -273,6 +272,7 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         else:
             return {'reception_date': None}
 
+    @fields.depends('attachment', 'reception_date')
     def on_change_with_reception_date(self, name=None):
         if (hasattr(self, 'attachment') and self.attachment):
             if (hasattr(self, 'reception_date') and self.reception_date):
@@ -322,21 +322,16 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     needed_by = fields.Reference('Requested for', [('', '')])
     documents = fields.One2Many('document.request.line', 'request',
         'Documents', depends=['needed_by_str'],
-        on_change=['documents', 'is_complete'],
         context={'request_owner': Eval('needed_by_str')})
     is_complete = fields.Function(
         fields.Boolean('Is Complete', depends=['documents'],
-            on_change_with=['documents'],
-            on_change=['documents', 'is_complete'],
             states={'readonly': ~~Eval('is_complete')}),
         'on_change_with_is_complete', 'setter_void')
     needed_by_str = fields.Function(
-        fields.Char('Master as String', on_change_with=['needed_by'],
-            depends=['needed_by']),
+        fields.Char('Master as String', depends=['needed_by']),
         'on_change_with_needed_by_str')
     request_description = fields.Function(
-        fields.Char('Request Description', depends=['needed_by'],
-            on_change_with=['needed_by']),
+        fields.Char('Request Description', depends=['needed_by']),
         'on_change_with_request_description')
 
     @classmethod
@@ -347,6 +342,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     def get_request_date(self):
         return utils.today()
 
+    @fields.depends('needed_by')
     def on_change_with_request_description(self, name=None):
         return 'Document Request for %s' % self.needed_by.get_rec_name(name)
 
@@ -358,12 +354,14 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
         except AttributeError:
             return None
 
+    @fields.depends('needed_by')
     def on_change_with_needed_by_str(self, name=None):
         if not (hasattr(self, 'needed_by') and self.needed_by):
             return ''
 
         return utils.convert_to_reference(self.needed_by)
 
+    @fields.depends('documents')
     def on_change_with_is_complete(self, name=None):
         if not (hasattr(self, 'documents') and self.documents):
             return True
@@ -372,9 +370,11 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
                 return False
         return True
 
+    @fields.depends('documents', 'is_complete')
     def on_change_documents(self):
         return {'is_complete': self.on_change_with_is_complete()}
 
+    @fields.depends('documents', 'is_complete')
     def on_change_is_complete(self):
         if not (hasattr(self, 'is_complete') or not self.is_complete):
             return {}
@@ -655,7 +655,7 @@ class DocumentReceiveRequest(model.CoopView):
 
     __name__ = 'document.receive.request'
 
-    kind = fields.Selection([('', '')], 'Kind', on_change=['kind'])
+    kind = fields.Selection([('', '')], 'Kind')
     value = fields.Char('Value')
     request = fields.Many2One('document.request', 'Request',
         states={'invisible': True})
@@ -671,8 +671,7 @@ class DocumentReceiveRequest(model.CoopView):
             tmp = fields.Many2One(
                 k, v[0],
                 states={'invisible': Eval('kind') != k},
-                depends=['kind', 'value'],
-                on_change=['request', 'tmp_%s' % idx, 'kind'])
+                depends=['kind', 'value'])
             setattr(cls, 'tmp_%s' % idx, tmp)
 
             def on_change_tmp(self, name=''):
@@ -683,17 +682,21 @@ class DocumentReceiveRequest(model.CoopView):
                 if not (hasattr(relation, 'documents') and relation.documents):
                     return {'value': utils.convert_to_reference(
                         getattr(self, name))}
-
                 return {'request': relation.documents[0].id}
-
-            setattr(cls, 'on_change_tmp_%s' % idx, functools.partial(
-                on_change_tmp, name='tmp_%s' % idx))
+            # Hack to fix http://bugs.python.org/issue3445
+            tmp_function = functools.partial(on_change_tmp,
+                name='tmp_%s' % idx)
+            tmp_function.__module__ = on_change_tmp.__module__
+            tmp_function.__name__ = on_change_tmp.__name__
+            setattr(cls, 'on_change_tmp_%s' % idx, fields.depends(
+                    'request', 'tmp_%s' % idx, 'kind')(tmp_function))
             idx += 1
 
     @classmethod
     def allowed_values(cls):
         return {}
 
+    @fields.depends('kind')
     def on_change_kind(self):
         result = {}
         for k, v in self._fields.iteritems():
@@ -735,8 +738,7 @@ class DocumentReceiveAttach(model.CoopView):
     __name__ = 'document.receive.attach'
 
     attachments = fields.One2Many('ir.attachment', '', 'Attachments',
-        context={'resource': Eval('resource')},
-        on_change=['attachments', 'resource'])
+        context={'resource': Eval('resource')})
     resource = fields.Char('Resource', states={'invisible': True})
 
     @classmethod
@@ -745,6 +747,7 @@ class DocumentReceiveAttach(model.CoopView):
         cls._error_messages.update({
             'ident_name': 'Duplicate name on attachments : %s'})
 
+    @fields.depends('attachments', 'resource')
     def on_change_attachments(self):
         if not (hasattr(self, 'attachments') and self.attachments):
             return {}

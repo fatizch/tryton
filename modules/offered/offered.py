@@ -49,8 +49,7 @@ class Templated(object):
     __name__ = 'offered.template'
 
     template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))], depends=['id'],
-        on_change=['template'])
+        domain=[('id', '!=', Eval('id'))], depends=['id'])
     template_behaviour = fields.Selection([
             ('', ''),
             ('pass', 'Add'),
@@ -59,6 +58,7 @@ class Templated(object):
         states={'invisible': ~Eval('template')},
         depends=['template'])
 
+    @fields.depends('template')
     def on_change_template(self):
         if hasattr(self, 'template') and self.template:
             if (not hasattr(self, 'template_behaviour')
@@ -151,8 +151,7 @@ class Offered(model.CoopView, GetResult, Templated):
     __name__ = 'offered'
     _export_name = 'code'
 
-    code = fields.Char('Code', required=True, select=1,
-        on_change_with=['code', 'name'])
+    code = fields.Char('Code', required=True, select=1)
     name = fields.Char('Name', required=True, select=1, translate=True)
     start_date = fields.Date('Start Date', required=True, select=1)
     end_date = fields.Date('End Date')
@@ -166,8 +165,7 @@ class Offered(model.CoopView, GetResult, Templated):
         'get_currency_digits')
     extra_data = fields.Dict('extra_data', 'Offered Kind',
         context={'extra_data_kind': 'product'},
-        domain=[('kind', '=', 'product')],
-        on_change_with=['extra_data'])
+        domain=[('kind', '=', 'product')])
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete="RESTRICT")
 
@@ -250,6 +248,7 @@ class Offered(model.CoopView, GetResult, Templated):
             possible_schemas = set([])
         return all_schemas, possible_schemas
 
+    @fields.depends('extra_data')
     def on_change_with_extra_data(self):
         if not hasattr(self, 'extra_data_def'):
             return {}
@@ -281,6 +280,7 @@ class Offered(model.CoopView, GetResult, Templated):
         except ValueError:
             return None
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code

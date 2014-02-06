@@ -17,8 +17,8 @@ class Address(export.ExportImportMixin):
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    zip_and_city = fields.Function(fields.Many2One('country.zipcode', 'Zip',
-            on_change=['zip', 'country', 'city', 'zip_and_city']),
+    zip_and_city = fields.Function(
+        fields.Many2One('country.zipcode', 'Zip'),
         'get_zip_and_city', 'set_zip_and_city')
 
     @classmethod
@@ -131,6 +131,7 @@ class Address(export.ExportImportMixin):
         if zips:
             return zips[0].id
 
+    @fields.depends('zip', 'country', 'city', 'zip_and_city')
     def on_change_zip_and_city(self):
         res = {'city': '', 'zip': ''}
         if self.zip_and_city:

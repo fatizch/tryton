@@ -32,7 +32,7 @@ class Contract:
                         Eval('context', {}).get(
                             'client_defined_date', Date())),
                     ())],
-            on_change_with=['display_all_lines', 'id'], loading='lazy'),
+            loading='lazy'),
         'on_change_with_payment_lines')
 
     @classmethod
@@ -94,6 +94,7 @@ class Contract:
             res[int(contract_id.split(',')[1])] = sum
         return res
 
+    @fields.depends('display_all_lines', 'id')
     def on_change_with_payment_lines(self, name=None):
         return map(lambda x: x.id, sorted(utils.get_domain_instances(self,
             'payment_lines'), key=lambda x: x.date, reverse=True))

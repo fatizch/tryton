@@ -18,21 +18,20 @@ class EndorsementSelection(model.CoopView):
     __name__ = 'endorsement.wizard.selection'
 
     contract = fields.Many2One('contract', 'Contract', states={
-            'readonly': ~Eval('to_select')}, depends=['to_select'],
-        on_change=['contract'])
+            'readonly': ~Eval('to_select')}, depends=['to_select'])
     to_select = fields.Boolean('Select Contract', states={'invisible': True})
     selected_product = fields.Many2One('offered.product', 'Product',
         states={'invisible': ~Eval('contract'), 'readonly': True})
     template = fields.Many2One('endorsement.template', 'Endorsement Template',
         states={'invisible': ~Eval('selected_product')},
         domain=[('products', '=', Eval('selected_product'))],
-        on_change=['template'],
         depends=['selected_product', 'contract'])
     template_description = fields.Text('Template Description',
         states={'readonly': True})
     endorsement = fields.Many2One('endorsement', 'Endorsement',
         states={'invisible': True})
 
+    @fields.depends('contract')
     def on_change_contract(self):
         if not self.contract:
             return {
@@ -52,6 +51,7 @@ class EndorsementSelection(model.CoopView):
             result['template_description'] = ''
         return result
 
+    @fields.depends('template')
     def on_change_template(self, name):
         if not self.template:
             return {'template_description': ''}

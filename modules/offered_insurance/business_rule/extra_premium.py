@@ -11,7 +11,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView):
 
     __name__ = 'extra_premium.kind'
 
-    name = fields.Char('Name', on_change=['name', 'code'], required=True)
+    name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
 
     @classmethod
@@ -21,6 +21,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
+    @fields.depends('name', 'code')
     def on_change_name(self):
         if self.code:
             return {}

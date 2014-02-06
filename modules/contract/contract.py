@@ -37,8 +37,7 @@ class StatusHistory(model.CoopSQL, model.CoopView):
             ('contract', 'Contract'),
             ('contract.option', 'Option'),
             ])
-    status = fields.Selection(OPTIONSTATUS, 'Status',
-        selection_change_with=['reference'])
+    status = fields.Selection(OPTIONSTATUS, 'Status')
     sub_status = fields.Char('Sub Status')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -188,15 +187,14 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     _history = True
 
     product_kind = fields.Function(
-        fields.Char('Product Kind', on_change_with=['offered']),
+        fields.Char('Product Kind'),
         'on_change_with_product_kind', searcher='search_product_kind')
     status = fields.Selection(CONTRACTSTATUSES, 'Status')
     options = fields.One2Many('contract.option', 'contract', 'Options')
     contract_number = fields.Char('Contract Number', select=1,
         states={'required': Eval('status') == 'active'})
     subscriber_kind = fields.Function(
-        fields.Char('Subscriber Kind', on_change_with=['offered'],
-            states={'invisible': True}),
+        fields.Char('Subscriber Kind', states={'invisible': True}),
         'on_change_with_subscriber_kind')
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[[If(
@@ -213,8 +211,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
     extra_data = fields.Dict('extra_data', 'Complementary Data',
-        on_change=['extra_data', 'start_date', 'options', 'offered',
-            'appliable_conditions_date'],
         depends=['extra_data', 'start_date', 'options', 'offered'],
         # states={'invisible': ~Eval('extra_data')
         )
@@ -476,6 +472,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         if hasattr(self, 'offered') and self.offered:
             return self.offered.currency
 
+    @fields.depends('extra_data', 'start_date', 'options', 'offered',
+        'appliable_conditions_date')
     def on_change_extra_data(self):
         args = {'date': self.start_date, 'level': 'contract'}
         self.init_dict_for_rule_engine(args)
@@ -510,6 +508,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     def get_next_renewal_date(self):
         return coop_date.add_frequency('yearly', self.start_date)
 
+    @fields.depends('offered')
     def on_change_with_product_kind(self, name=None):
         return self.offered.kind if self.offered else ''
 
@@ -538,6 +537,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 return self.company.party.logo
         return ''
 
+    @fields.depends('offered')
     def on_change_with_subscriber_kind(self, name=None):
         return self.offered.subscriber_kind if self.offered else 'all'
 
@@ -556,7 +556,7 @@ class ContractOption(model.CoopSQL, Subscribed):
     status = fields.Selection(OPTIONSTATUS, 'Status')
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     coverage_kind = fields.Function(
-        fields.Char('Coverage Kind', on_change_with=['offered']),
+        fields.Char('Coverage Kind'),
         'on_change_with_coverage_kind', searcher='search_coverage_kind')
     contract_number = fields.Function(
         fields.Char('Contract Number'), 'get_contract_number')
@@ -595,6 +595,7 @@ class ContractOption(model.CoopSQL, Subscribed):
     def get_product_id(self, name):
         return self.contract.offered.id if self.contract else None
 
+    @fields.depends('offered')
     def on_change_with_coverage_kind(self, name=None):
         return self.offered.kind if self.offered else ''
 

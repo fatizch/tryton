@@ -34,7 +34,7 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
     __name__ = 'billing.payment.method'
 
     name = fields.Char('Name')
-    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
+    code = fields.Char('Code', required=True)
     payment_term = fields.Many2One('billing.payment.term', 'Payment Term',
         ondelete='RESTRICT', required=True)
     payment_mode = fields.Selection([
@@ -50,6 +50,7 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
         'allowed days of the month eligible for direct debit.\n\n'
         'An empty list means that all dates are allowed')
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code
@@ -338,11 +339,9 @@ class BillingData(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     payment_method = fields.Many2One('billing.payment.method',
-        'Payment Method', on_change=['payment_method', 'payment_date'],
-        ondelete='RESTRICT')
+        'Payment Method', ondelete='RESTRICT')
     payment_mode = fields.Function(
-        fields.Char('Payment Mode', states={'invisible': True},
-            on_change_with=['payment_method']),
+        fields.Char('Payment Mode', states={'invisible': True}),
         'on_change_with_payment_mode')
     payment_bank_account = fields.Many2One('bank.account',
         'Payment Bank Account',
@@ -356,9 +355,8 @@ class BillingData(model.CoopSQL, model.CoopView):
         depends=['policy_owner'], ondelete='RESTRICT')
     payment_date_selector = fields.Function(
         fields.Selection('get_allowed_payment_dates',
-            'Payment Date', selection_change_with=['payment_method'],
-            states={'invisible': Eval('payment_mode', '') != 'direct_debit'},
-            on_change=['payment_date_selector']),
+            'Payment Date', states={
+                'invisible': Eval('payment_mode', '') != 'direct_debit'}),
         'get_payment_date_selector', 'setter_void')
     payment_date = fields.Integer('Payment Date', states={'invisible': True})
 
@@ -386,6 +384,7 @@ class BillingData(model.CoopSQL, model.CoopView):
         for manager in managers:
             manager.check_payment_bank_acount()
 
+    @fields.depends('payment_date_selector')
     def on_change_payment_date_selector(self):
         if not (hasattr(self, 'payment_date_selector') and
                 self.payment_date_selector):
@@ -415,6 +414,7 @@ class BillingData(model.CoopSQL, model.CoopView):
             except IndexError:
                 pass
 
+    @fields.depends('payment_method')
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return ''
@@ -425,11 +425,13 @@ class BillingData(model.CoopSQL, model.CoopView):
             if self.contract else None)
         return policy_owner.id if policy_owner else None
 
+    @fields.depends('payment_method')
     def get_allowed_payment_dates(self):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return [('', '')]
         return self.payment_method.get_allowed_date_values()
 
+    @fields.depends('payment_method', 'payment_date')
     def on_change_payment_method(self):
         allowed_vals = map(lambda x: x[0], self.get_allowed_payment_dates())
         if not (hasattr(self, 'payment_date') and self.payment_date):

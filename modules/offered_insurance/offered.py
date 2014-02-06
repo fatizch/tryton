@@ -87,7 +87,7 @@ class Product:
             })
     possible_item_descs = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
-            'Possible Item Descriptions', on_change_with=['coverages']),
+            'Possible Item Descriptions'),
         'on_change_with_possible_item_descs')
 
     @classmethod
@@ -198,6 +198,7 @@ class Product:
                 return [], ()
         return [], ()
 
+    @fields.depends('coverages')
     def on_change_with_possible_item_descs(self, name=None):
         res = []
         for coverage in self.coverages:
@@ -237,7 +238,7 @@ class ItemDescription(model.CoopSQL, model.CoopView):
 
     __name__ = 'offered.item.description'
 
-    code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
+    code = fields.Char('Code', required=True)
     name = fields.Char('Name')
     extra_data_def = fields.Many2Many(
         'offered.item.description-extra_data',
@@ -254,17 +255,12 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         'item_desc', 'sub_item_desc', 'Sub Item Descriptions',
         states={'invisible': Eval('kind') == 'person'})
 
+    @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
             return self.code
         elif self.name:
             return coop_string.remove_blank_and_invalid_char(self.name)
-
-    # @classmethod
-    # def _export_force_recreate(cls):
-    #     result = super(ItemDescription, cls)._export_force_recreate()
-    #     result.remove('sub_item_descs')
-    #     return result
 
     @classmethod
     def get_var_names_for_full_extract(cls):

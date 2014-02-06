@@ -10,7 +10,7 @@ class Tag(model.CoopSQL, model.CoopView):
 
     __name__ = 'tag'
 
-    code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
+    code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
     parent = fields.Many2One('tag', 'Parent', ondelete='CASCADE')
     childs = fields.One2Many('tag', 'parent', 'Childs')
@@ -23,6 +23,7 @@ class Tag(model.CoopSQL, model.CoopView):
         result.add('rules')
         return result
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code

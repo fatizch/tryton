@@ -15,26 +15,26 @@ class ContractClause(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     clause = fields.Many2One('clause', 'Clause', ondelete='RESTRICT')
     override_text = fields.Function(
-        fields.Boolean('Override Text', on_change_with=['clause'],
-            states={'invisible': True}),
+        fields.Boolean('Override Text', states={'invisible': True}),
         'on_change_with_override_text')
     text = fields.Text('Text', states={
             'readonly': ~Eval('override_text'),
             'invisible': True,
         })
     visual_text = fields.Function(
-        fields.Text('Clause Text', on_change_with=[
-                'text', 'clause', 'override_text', 'contract']),
+        fields.Text('Clause Text'),
         'on_change_with_visual_text')
     kind = fields.Function(
-        fields.Char('Kind', on_change_with=['clause', 'contract']),
+        fields.Char('Kind'),
         'on_change_with_kind')
 
+    @fields.depends('clause')
     def on_change_with_override_text(self, name=None):
         if not self.clause:
             return False
         return self.clause.may_be_overriden
 
+    @fields.depends('text', 'clause', 'override_text', 'contract')
     def on_change_with_visual_text(self, name=None):
         if not self.clause:
             return ''
@@ -43,6 +43,7 @@ class ContractClause(model.CoopSQL, model.CoopView):
         return self.clause.get_version_at_date(
             self.contract.appliable_conditions_date).content
 
+    @fields.depends('clause', 'contract')
     def on_change_with_kind(self, name=None):
         if not self.clause:
             return ''

@@ -17,7 +17,6 @@ class ExportPackage:
         fields.One2Many('distribution.commercial_product', None,
             'Com Products', states={'invisible':
                     Bool(Eval('model') != 'distribution.commercial_product')},
-                on_change=['com_products', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
 
@@ -29,5 +28,6 @@ class ExportPackage:
                 ])
         return list(set(res))
 
+    @fields.depends('com_products', 'instances_to_export')
     def on_change_com_products(self):
         return self._on_change('com_products')

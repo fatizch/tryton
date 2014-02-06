@@ -47,18 +47,17 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             ('fixed', 'Fixed'),
             ('percent_on_total', 'Percentage on Total'),
             ('prorata', 'Prorata'),
-            ], 'Type', required=True,
-        on_change=['type'])
+            ], 'Type', required=True)
     percentage = fields.Numeric('Percentage', digits=(16, 8),
         states={
             'invisible': Eval('type', '') != 'percent_on_total',
             'required': Eval('type', '') == 'percent_on_total'
-            }, on_change=['percentage'], depends=['type'])
+            }, depends=['type'])
     divisor = fields.Numeric('Divisor', digits=(16, 8),
         states={
             'invisible': Eval('type', '') != 'percent_on_total',
             'required': Eval('type', '') == 'percent_on_total',
-            }, on_change=['divisor'], depends=['type'])
+            }, depends=['type'])
     amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
         states={
             'invisible': Eval('type', '') != 'fixed',
@@ -69,8 +68,9 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             'invisible': Eval('type', '') != 'fixed',
             'required': Eval('type', '') == 'fixed',
             }, depends=['type'], ondelete='RESTRICT')
-    currency_digits = fields.Function(fields.Integer('Currency Digits',
-            on_change_with=['currency']), 'on_change_with_currency_digits')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'on_change_with_currency_digits')
     day = fields.Integer('Day of Month')
     month = fields.Selection([
             (None, ''),
@@ -100,8 +100,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
     months = fields.Integer('Number of Months', required=True)
     weeks = fields.Integer('Number of Weeks', required=True)
     days = fields.Integer('Number of Days', required=True)
-    add_calculated_period = fields.Boolean('Add calculated period',
-        on_change=['add_calculated_period'])
+    add_calculated_period = fields.Boolean('Add calculated period')
     number_of_periods = fields.Numeric('Number of periods', digits=(16, 2),
         states={
             'invisible': ~Eval('add_calculated_period'),
@@ -148,6 +147,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
     def default_days():
         return 0
 
+    @fields.depends('add_calculated_period')
     def on_change_add_calculated_period(self):
         res = {}
         if (hasattr(self, 'add_calculated_period') and
@@ -155,6 +155,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             res['number_of_periods'] = 1
         return res
 
+    @fields.depends('type')
     def on_change_type(self):
         res = {}
         if self.type != 'fixed':
@@ -165,6 +166,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             res['divisor'] = Decimal('0.0')
         return res
 
+    @fields.depends('percentage')
     def on_change_percentage(self):
         if not self.percentage:
             return {'divisor': 0.0}
@@ -173,6 +175,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
                 self.__class__.divisor.digits[1]),
             }
 
+    @fields.depends('divisor')
     def on_change_divisor(self):
         if not self.divisor:
             return {'percentage': 0.0}
@@ -181,6 +184,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
                 self.__class__.percentage.digits[1]),
             }
 
+    @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
         if self.currency:
             return self.currency.digits
@@ -267,7 +271,7 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     base_frequency = fields.Selection(PAYMENT_FREQUENCY, 'Base Frequency',
-        required=True, on_change=['base_frequency', 'start_lines'])
+        required=True)
     remaining_position = fields.Selection(REMAINING_POSITION,
         'Remaining position', states={
             'invisible': Eval('base_frequency', '') == 'one_shot'})
@@ -320,6 +324,7 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
     def default_force_line_at_start(cls):
         return True
 
+    @fields.depends('base_frequency', 'start_lines')
     def on_change_base_frequency(self):
         if self.base_frequency != 'one_shot':
             return {}

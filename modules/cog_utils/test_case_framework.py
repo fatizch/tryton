@@ -425,15 +425,14 @@ class SelectTestCase(model.CoopView):
 
     __name__ = 'ir.test_case.run.select'
 
-    select_all_test_cases = fields.Boolean('Select All',
-        on_change=['select_all_test_cases', 'test_cases'])
-    select_all_files = fields.Boolean('Select All',
-        on_change=['select_all_files', 'test_files'])
+    select_all_test_cases = fields.Boolean('Select All')
+    select_all_files = fields.Boolean('Select All')
     test_cases = fields.One2Many('ir.test_case.run.select.method', None,
-        'Test Cases', on_change=['test_cases'])
+        'Test Cases')
     test_files = fields.One2Many('ir.test_case.run.select.file', None,
         'Test Files')
 
+    @fields.depends('test_cases')
     def on_change_test_cases(self):
         TestCaseModel = Pool().get('ir.test_case')
         selected = [elem for elem in self.test_cases
@@ -454,6 +453,7 @@ class SelectTestCase(model.CoopView):
                     'selection': 'manual' if x in selected else 'automatic'})
         return {'test_cases': {'update': to_update}}
 
+    @fields.depends('select_all_test_cases', 'test_cases')
     def on_change_select_all_test_cases(self):
         if not (hasattr(self, 'test_cases') and self.test_cases):
             return {}
@@ -465,6 +465,7 @@ class SelectTestCase(model.CoopView):
                         'selected': self.select_all_test_cases}
                     for x in self.test_cases]}}
 
+    @fields.depends('select_all_files', 'test_files')
     def on_change_select_all_files(self):
         if not (hasattr(self, 'test_files') and self.test_files):
             return {}

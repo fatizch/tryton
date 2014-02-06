@@ -15,8 +15,7 @@ __all__ = [
 class ContractSubscribeFindProcess:
     __name__ = 'contract.subscribe.find_process'
 
-    is_group = fields.Boolean('Group', on_change=['product', 'is_group',
-        'possible_com_product', 'dist_network', 'com_product'])
+    is_group = fields.Boolean('Group')
 
     @classmethod
     def __setup__(cls):
@@ -27,6 +26,8 @@ class ContractSubscribeFindProcess:
         cls.possible_com_product.on_change_with.add('is_group')
         super(ContractSubscribeFindProcess, cls).__setup__()
 
+    @fields.depends('product', 'is_group', 'possible_com_product',
+        'dist_network', 'com_product')
     def on_change_is_group(self):
         res = {}
         com_products = self.get_possible_com_product()

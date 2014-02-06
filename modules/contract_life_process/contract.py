@@ -52,12 +52,8 @@ class CoveredData:
 
     coverage_amount_selection = fields.Function(
         fields.Selection('get_possible_amounts', 'Coverage Amount',
-            selection_change_with=['option', 'start_date',
-                'covered_element', 'currency'],
             depends=['option', 'start_date', 'coverage_amount',
                 'with_coverage_amount'], sort=False,
-            on_change=['coverage_amount', 'coverage_amount_selection',
-                'currency'],
             states={
                 'invisible': ~Eval('with_coverage_amount'),
                 # 'required': ~~Eval('with_coverage_amount'),
@@ -65,13 +61,11 @@ class CoveredData:
         'get_coverage_amount_selection', 'setter_void')
     need_to_chose_beneficiary_clause = fields.Function(
         fields.Boolean('Need to chose beneficiary clause', states={
-                'invisible': True}, on_change_with=['start_date', 'option'],
-            on_change=['need_to_chose_beneficiary_clause']),
+                'invisible': True}),
         'on_change_with_need_to_chose_beneficiary_clause')
     possible_beneficiary_clauses = fields.Function(
         fields.One2Many('clause', None,
-            'Possible beneficiary Clauses', states={'invisible': True},
-            on_change_with=['option', 'start_date']),
+            'Possible beneficiary Clauses', states={'invisible': True}),
         'on_change_with_possible_beneficiary_clauses')
     beneficiary_clause_selection = fields.Function(
         fields.Many2One('clause',
@@ -80,10 +74,6 @@ class CoveredData:
                 'required': ~~Eval('need_to_chose_beneficiary_clause'),
                 },
             domain=[('id', 'in', Eval('possible_beneficiary_clauses', []))],
-            on_change=['clauses', 'may_override_beneficiary_clause_text',
-                'beneficiary_clause_override_text', 'option', 'start_date',
-                'need_to_chose_beneficiary_clause',
-                'beneficiary_clause_selection'],
             depends=['possible_beneficiary_clauses']),
         'get_beneficiary_clause_selection', 'setter_void')
     may_override_beneficiary_clause_text = fields.Function(
@@ -92,7 +82,6 @@ class CoveredData:
         'get_may_override_beneficiary_clause_text')
     beneficiary_clause_override_text = fields.Function(
         fields.Text('Beneficiary Clause Override Text',
-            on_change=['clauses', 'beneficiary_clause_override_text'],
             states={'readonly': ~Eval('may_override_beneficiary_clause_text'),
                 'invisible': ~Eval('need_to_chose_beneficiary_clause')}),
         'get_beneficiary_clause_override_text', 'setter_void')
@@ -104,12 +93,17 @@ class CoveredData:
                 'coverage_amount_needed': 'A coverage amount must be provided',
                 })
 
+    @fields.depends('option', 'start_date', 'covered_element', 'currency')
+    def get_possible_amounts(self):
+        return super(CoveredData, self).get_possible_amounts()
+
     def get_coverage_amount_selection(self, name):
         if (hasattr(self, 'coverage_amount') and self.coverage_amount):
             # return '%.2f' % self.coverage_amount
             return self.currency.amount_as_string(self.coverage_amount)
         return ''
 
+    @fields.depends('coverage_amount', 'coverage_amount_selection', 'currency')
     def on_change_coverage_amount_selection(self):
         if not utils.is_none(self, 'coverage_amount_selection'):
             return {'coverage_amount':
@@ -118,6 +112,7 @@ class CoveredData:
         else:
             return {'coverage_amount': None}
 
+    @fields.depends('start_date', 'option')
     def on_change_need_to_chose_beneficiary_clause(self):
         return {
             'beneficiary_clause_selection': None,
@@ -125,9 +120,11 @@ class CoveredData:
             'beneficiary_clause_override_text': '',
             }
 
+    @fields.depends('start_date', 'option')
     def on_change_with_need_to_chose_beneficiary_clause(self, name=None):
         return len(self.on_change_with_possible_beneficiary_clauses()) > 1
 
+    @fields.depends('option', 'start_date')
     def on_change_with_possible_beneficiary_clauses(self, name=None):
         if not self.option:
             return []
@@ -150,6 +147,9 @@ class CoveredData:
                 return clause.clause.id
         return None
 
+    @fields.depends('clauses', 'may_override_beneficiary_clause_text',
+        'beneficiary_clause_override_text', 'option', 'start_date',
+        'need_to_chose_beneficiary_clause', 'beneficiary_clause_selection')
     def on_change_beneficiary_clause_selection(self):
         if not self.beneficiary_clause_selection:
             return self.on_change_need_to_chose_beneficiary_clause()
@@ -185,6 +185,7 @@ class CoveredData:
                 return clause.clause.may_be_overriden
         return False
 
+    @fields.depends('clauses', 'beneficiary_clause_override_text')
     def on_change_beneficiary_clause_override_text(self):
         beneficiary_clause = None
         for clause in self.clauses:

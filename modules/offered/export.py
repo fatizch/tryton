@@ -18,20 +18,19 @@ class ExportPackage():
     products = fields.Function(
         fields.One2Many('offered.product', None, 'Products', states={
                 'invisible': Bool(Eval('model') != 'offered.product')},
-                on_change=['products', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
     coverages = fields.Function(
-        fields.One2Many('offered.option.description', None, 'OptionDescriptions', states={
-                'invisible': Bool(Eval('model') != 'offered.option.description')},
-                on_change=['coverages', 'instances_to_export'],
-                add_remove=[]),
+        fields.One2Many('offered.option.description', None,
+            'OptionDescriptions', states={
+                'invisible':
+                Bool(Eval('model') != 'offered.option.description')},
+            add_remove=[]),
         'getter_void', setter='setter_void')
     extra_data_defs = fields.Function(
         fields.One2Many('extra_data', None,
             'Extra Data Def', states={
                 'invisible': Bool(Eval('model') != 'extra_data')},
-                on_change=['extra_data_defs', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
 
@@ -45,11 +44,14 @@ class ExportPackage():
                 ])
         return list(set(res))
 
+    @fields.depends('products', 'instances_to_export')
     def on_change_products(self):
         return self._on_change('products')
 
+    @fields.depends('coverages', 'instances_to_export')
     def on_change_coverages(self):
         return self._on_change('coverages')
 
+    @fields.depends('extra_data_defs', 'instances_to_export')
     def on_change_extra_data_defs(self):
         return self._on_change('extra_data_defs')

@@ -74,8 +74,7 @@ class Process(ModelSQL, ModelView):
 
     __name__ = 'process'
 
-    technical_name = fields.Char('Technical Name', required=True,
-        on_change_with=['fancy_name', 'technical_name'])
+    technical_name = fields.Char('Technical Name', required=True)
     fancy_name = fields.Char('Name', translate=True)
     on_model = fields.Many2One('ir.model', 'On Model',
         # This model must be workflow compatible
@@ -101,8 +100,7 @@ class Process(ModelSQL, ModelView):
         'Process Overview Positioning')
     menu_items = fields.Many2Many('process-menu', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
-    menu_name = fields.Char('Menu name', on_change_with=[
-            'fancy_name', 'menu_name'])
+    menu_name = fields.Char('Menu name')
 
     @classmethod
     def __setup__(cls):
@@ -142,6 +140,7 @@ class Process(ModelSQL, ModelView):
         Menu = Pool().get('ir.ui.menu')
         return Menu.list_icons()
 
+    @fields.depends('fancy_name', 'menu_name')
     def on_change_with_menu_name(self):
         if not (hasattr(self, 'fancy_name') and self.fancy_name):
             if (hasattr(self, 'menu_name') and self.menu_name):
@@ -513,6 +512,7 @@ class Process(ModelSQL, ModelView):
             if menu.name == '%s_%s' % (self.technical_name, lang):
                 return menu.action
 
+    @fields.depends('fancy_name', 'technical_name')
     def on_change_with_technical_name(self):
         if self.technical_name:
             return self.technical_name
@@ -547,7 +547,7 @@ class Code(ModelSQL, ModelView):
             ('transition', 'Transition')],
         'Kind', states={'invisible': True})
     source_code = fields.Function(
-        fields.Text('Source Code', on_change_with=['method_name', 'on_model']),
+        fields.Text('Source Code'),
         'on_change_with_source_code')
     on_model = fields.Function(
         fields.Many2One('ir.model', 'On Model'),
@@ -588,6 +588,7 @@ class Code(ModelSQL, ModelView):
         if not res or errs:
             target.raise_user_error(errs)
 
+    @fields.depends('method_name', 'on_model')
     def on_change_with_source_code(self, name=None):
         if not (hasattr(self, 'method_name') and self.method_name):
             return ''
@@ -723,8 +724,7 @@ class ProcessStep(ModelSQL, ModelView):
     __name__ = 'process.step'
     _rec_name = 'fancy_name'
 
-    technical_name = fields.Char('Technical Name', on_change_with=[
-            'technical_name', 'fancy_name'])
+    technical_name = fields.Char('Technical Name')
     fancy_name = fields.Char('Name', required=True, translate=True)
     step_xml = fields.Text('XML')
     authorizations = fields.Many2Many('process.step-group', 'step_desc',
@@ -790,6 +790,7 @@ class ProcessStep(ModelSQL, ModelView):
         xml = self.build_step_main_view(process)
         return xml
 
+    @fields.depends('technical_name', 'fancy_name')
     def on_change_with_technical_name(self, name=None):
         if self.technical_name:
             return self.technical_name

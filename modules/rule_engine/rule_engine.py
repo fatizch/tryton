@@ -375,15 +375,15 @@ class RuleEngineParameter(ModelView, ModelSQL):
             ('rule', 'Rule'),
             ('kwarg', 'Keyword Argument'),
             ('table', 'Table')],
-        'Kind', on_change=['kind'])
+        'Kind')
     the_rule = fields.Many2One('rule_engine', 'Rule to use', states={
             'invisible': Eval('kind', '') != 'rule',
             'required': Eval('kind', '') == 'rule'},
-        ondelete='RESTRICT', on_change=['the_rule'])
+        ondelete='RESTRICT')
     the_table = fields.Many2One('table', 'Table to use', states={
             'invisible': Eval('kind', '') != 'table',
             'required': Eval('kind', '') == 'table'},
-        ondelete='RESTRICT', on_change=['the_table'])
+        ondelete='RESTRICT')
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE')
 
@@ -398,6 +398,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
     def _export_keys(cls):
         return set(['code', 'parent_rule.name'])
 
+    @fields.depends('kind')
     def on_change_kind(self):
         result = {}
         if (hasattr(self, 'kind') and self.kind != 'rule'):
@@ -494,6 +495,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
                 functools.partial(table.TableCell.get, self.the_table))
         return context
 
+    @fields.depends('the_rule')
     def on_change_the_rule(self):
         result = {}
         if not (hasattr(self, 'the_rule') and self.the_rule):
@@ -503,6 +505,7 @@ class RuleEngineParameter(ModelView, ModelSQL):
         result['name'] = self.the_rule.name
         return result
 
+    @fields.depends('the_table')
     def on_change_the_table(self):
         result = {}
         if not (hasattr(self, 'the_table') and self.the_table):
@@ -591,7 +594,7 @@ class Rule(ModelView, ModelSQL):
         'get_extra_data_kind', 'setter_void')
     tags = fields.Many2Many('rule_engine-tag', 'rule_engine', 'tag', 'Tags')
     tags_name = fields.Function(
-        fields.Char('Tags', on_change_with=['tags']),
+        fields.Char('Tags'),
         'on_change_with_tags_name', searcher='search_tags')
 
     @classmethod
@@ -862,6 +865,7 @@ class Rule(ModelView, ModelSQL):
     def default_code(cls):
         return 'return'
 
+    @fields.depends('tags')
     def on_change_with_tags_name(self, name=None):
         return ', '.join([x.name for x in self.tags])
 
@@ -947,8 +951,7 @@ class RuleFunction(ModelView, ModelSQL):
     __name__ = 'rule_engine.function'
     _rec_name = 'description'
 
-    description = fields.Char('Description', on_change=[
-            'description', 'translated_technical_name'])
+    description = fields.Char('Description')
     rule = fields.Many2One('rule_engine', 'Rule', states={
             'invisible': Eval('type') != 'rule',
             'required': Eval('type') == 'rule'},
@@ -971,7 +974,7 @@ class RuleFunction(ModelView, ModelSQL):
         states={
             'invisible': ~Eval('type').in_(['function', 'rule', 'table']),
             'required': Eval('type').in_(['function', 'rule', 'table'])},
-        depends=['type'], on_change_with=['rule'])
+        depends=['type'])
     fct_args = fields.Char('Function Arguments',
         states={'invisible': Eval('type') != 'function'})
     language = fields.Many2One('ir.lang', 'Language', required=True)
@@ -1026,6 +1029,7 @@ class RuleFunction(ModelView, ModelSQL):
     def default_type():
         return 'function'
 
+    @fields.depends('description', 'translated_technical_name')
     def on_change_description(self):
         if self.translated_technical_name:
             return {}
@@ -1084,6 +1088,7 @@ class RuleFunction(ModelView, ModelSQL):
             element.as_context(context)
         return context
 
+    @fields.depends('rule')
     def on_change_with_translated_technical_name(self):
         if self.rule:
             return coop_string.remove_blank_and_invalid_char(self.rule.name)
@@ -1116,7 +1121,6 @@ class TestCaseValue(ModelView, ModelSQL):
     __name__ = 'rule_engine.test_case.value'
 
     name = fields.Selection('get_selection', 'Name',
-        selection_change_with=['rule', 'test_case'],
         depends=['rule', 'test_case'])
     value = fields.Char('Value', states={'invisible': ~Eval('override_value')})
     override_value = fields.Boolean('Override Value')
@@ -1153,6 +1157,7 @@ class TestCaseValue(ModelView, ModelSQL):
         else:
             return None
 
+    @fields.depends('rule', 'test_case')
     def get_selection(self):
         if (hasattr(self, 'rule') and self.rule):
             rule = self.rule
@@ -1186,7 +1191,7 @@ class TestCase(ModelView, ModelSQL):
         ondelete='CASCADE')
     expected_result = fields.Char('Expected Result')
     test_values = fields.One2Many('rule_engine.test_case.value', 'test_case',
-        'Values', on_change=['test_values', 'rule'], depends=['rule'],
+        'Values', depends=['rule'],
         context={'rule_id': Eval('rule')})
     result_value = fields.Char('Result Value')
     result_warnings = fields.Text('Result Warnings')
@@ -1225,6 +1230,7 @@ class TestCase(ModelView, ModelSQL):
             for key, value in test_context.items()}
         return self.rule.execute(test_context)
 
+    @fields.depends('test_values', 'rule')
     def on_change_test_values(self):
         try:
             test_result = self.execute_test()
@@ -1336,7 +1342,7 @@ class RuleError(model.CoopSQL, model.CoopView):
 
     __name__ = 'functional_error'
 
-    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
+    code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)
     kind = fields.Selection([
             ('info', 'Info'),
@@ -1377,6 +1383,7 @@ class RuleError(model.CoopSQL, model.CoopView):
         for error in errors:
             error.check_arguments()
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code

@@ -26,19 +26,16 @@ class RuleEngineParameter:
     __name__ = 'rule_engine.parameter'
 
     extra_data_def = fields.Many2One('extra_data', 'Extra Parameters',
-        domain=[('kind', '=', 'rule_engine')],
-        ondelete='RESTRICT', on_change=['extra_data_def'], states={
+        domain=[('kind', '=', 'rule_engine')], ondelete='RESTRICT', states={
             'invisible': Eval('kind', '') != 'rule_compl',
             'required': Eval('kind', '') == 'rule_compl',
             })
     rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
-        on_change_with=['the_rule', 'rule_extra_data'],
         states={'invisible': Or(
                 Eval('kind', '') != 'rule', ~Eval('rule_extra_data'))})
     external_extra_data_def = fields.Many2One('extra_data',
         'External Extra Data', domain=[('kind', '!=', 'rime_engine')],
-        ondelete='RESTRICT', on_change=['external_extra_data_def'],
-        states={
+        ondelete='RESTRICT', states={
             'invisible': Eval('kind', '') != 'compl',
             'required': Eval('kind', '') == 'compl',
             })
@@ -67,6 +64,7 @@ class RuleEngineParameter:
     def get_complementary_parameter_value(cls, args, schema_name):
         return args['_extra_data'][schema_name]
 
+    @fields.depends('external_extra_data_def')
     def get_external_extra_data_def(self, args):
         OfferedSet = Pool().get('rule_engine.runtime')
         from_object = OfferedSet.get_lowest_level_object(args)
@@ -92,12 +90,14 @@ class RuleEngineParameter:
                     evaluation_context))
         return context
 
+    @fields.depends('the_rule', 'rule_extra_data')
     def on_change_with_rule_extra_data(self):
         if not (hasattr(self, 'the_rule') and self.the_rule):
             return None
         return self.the_rule.get_extra_data_for_on_change(
             self.rule_extra_data)
 
+    @fields.depends('extra_data_def')
     def on_change_extra_data_def(self):
         result = {}
         if not (hasattr(self, 'extra_data_def') and
@@ -189,7 +189,7 @@ class TableManageDimensionShowDimension:
     extra_data = fields.Many2One('extra_data', 'Extra Data',
         domain=[('type_', '=', 'selection')], states={
             'invisible': Eval('input_mode', '') != 'extra_data',
-            }, on_change=['input_mode', 'extra_data'])
+            })
 
     @classmethod
     def __setup__(cls):
@@ -197,6 +197,7 @@ class TableManageDimensionShowDimension:
         cls.input_mode = copy.copy(cls.input_mode)
         cls.input_mode.selection.append(('extra_data', 'Complementary data'))
 
+    @fields.depends('input_mode', 'extra_data')
     def on_change_extra_data(self):
         if self.input_mode == 'extra_data' and self.extra_data:
             return {'converted_text': '\n'.join([x.split(':')[0] for x in
@@ -241,7 +242,6 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         fields.Char('Name'),
         'get_rec_name')
     rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
-        on_change_with=['rule', 'rule_extra_data'],
         states={'invisible':
             Or(STATE_SIMPLE, ~Eval('rule_extra_data'))})
 
@@ -261,6 +261,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         if self.rule:
             return self.rule.execute(args, self.rule_extra_data)
 
+    @fields.depends('rule', 'rule_extra_data')
     def on_change_with_rule_extra_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}

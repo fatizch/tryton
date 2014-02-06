@@ -16,13 +16,11 @@ class ExportPackage:
     process = fields.Function(
         fields.One2Many('process', None, 'Process', states={
                 'invisible': Bool(Eval('model') != 'process')},
-                on_change=['process', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
     steps = fields.Function(
         fields.One2Many('process.step', None, 'Steps', states={
                 'invisible': Bool(Eval('model') != 'process.step')},
-                on_change=['steps', 'instances_to_export'],
                 add_remove=[]),
         'getter_void', setter='setter_void')
 
@@ -35,8 +33,10 @@ class ExportPackage:
                 ])
         return list(set(res))
 
+    @fields.depends('process', 'instances_to_export')
     def on_change_process(self):
         return self._on_change('process')
 
+    @fields.depends('steps', 'instances_to_export')
     def on_change_steps(self):
         return self._on_change('steps')

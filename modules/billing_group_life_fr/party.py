@@ -15,11 +15,12 @@ class GroupParty(model.CoopSQL, model.CoopView):
 
     __name__ = 'party.group'
 
-    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
+    code = fields.Char('Code', required=True)
     name = fields.Char('Name')
     parties = fields.One2Many('party.party', 'group', 'Parties',
         add_remove=[('is_company', '=', True)])
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code

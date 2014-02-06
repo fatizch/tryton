@@ -312,21 +312,18 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
-    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
-        on_change_with=['rule', 'rule_extra_data'], states={
+    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data', states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
     kind = fields.Selection(PRICING_LINE_KINDS, 'Line kind', required=True)
-    code = fields.Char('Code', required=True,
-        on_change_with=['code', 'tax', 'fee'])
+    code = fields.Char('Code', required=True)
     tax = fields.Many2One('account.tax.description', 'Tax',
         states={'invisible': Eval('kind') != 'tax'}, ondelete='RESTRICT')
     fee = fields.Many2One('account.fee.description', 'Fee',
         states={'invisible': Eval('kind') != 'fee'}, ondelete='RESTRICT')
     summary = fields.Function(
-        fields.Char('Value', on_change_with=['fixed_amount', 'config_kind',
-                'rule', 'kind', 'tax', 'fee', 'code']),
+        fields.Char('Value'),
         'get_summary')
 
     @classmethod
@@ -362,6 +359,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             amount, errors = rule_result.result, rule_result.print_errors()
         return amount, errors
 
+    @fields.depends('rule', 'rule_extra_data')
     def on_change_with_rule_extra_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}
@@ -399,9 +397,12 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
     def get_rec_name(self, name=None):
         return self.get_summary([self])[self.id]
 
+    @fields.depends('fixed_amount', 'config_kind', 'rule', 'kind', 'tax',
+        'fee', 'code')
     def on_change_with_summary(self, name=None):
         return self.get_summary([self])[self.id]
 
+    @fields.depends('code', 'tax', 'fee')
     def on_change_with_code(self, name=None):
         if self.tax:
             return self.tax.code

@@ -37,20 +37,19 @@ class Party(export.ExportImportMixin):
         fields.Many2One('party.address', 'Main Address'),
         'get_main_address_id')
     number_of_addresses = fields.Function(
-        fields.Integer('Number Of Addresses', on_change_with=['addresses'],
-            states={'invisible': True}),
+        fields.Integer('Number Of Addresses', states={'invisible': True}),
         'on_change_with_number_of_addresses')
     main_contact_mechanism = fields.Function(
         fields.Many2One('party.contact_mechanism', 'Main Contact Mechanism',
             states={'invisible': ~Eval('main_contact_mechanism')}),
         'get_main_contact_mechanism_id')
     number_of_contact_mechanisms = fields.Function(
-        fields.Integer('Number Of Contact Mechanisms',
-            on_change_with=['contact_mechanisms'], states={'invisible': True}),
+        fields.Integer('Number Of Contact Mechanisms', states={
+                'invisible': True}),
         'on_change_with_number_of_contact_mechanisms')
     ####################################
     #Person information
-    gender = fields.Selection(GENDER, 'Gender', on_change=['gender'], states={
+    gender = fields.Selection(GENDER, 'Gender', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             })
@@ -101,9 +100,7 @@ class Party(export.ExportImportMixin):
                 continue
             is_actor_var_name = Party.get_is_actor_var_name(field_name)
             field = fields.Function(
-                fields.Boolean(
-                    field.string, on_change=[field_name, is_actor_var_name],
-                    states=field.states),
+                fields.Boolean(field.string, states=field.states),
                 'get_is_actor', setter='set_is_actor',
                 searcher='search_is_actor')
             setattr(cls, is_actor_var_name, field)
@@ -116,8 +113,8 @@ class Party(export.ExportImportMixin):
 
             on_change_method = 'on_change_%s' % is_actor_var_name
             if not getattr(cls, on_change_method, None):
-                setattr(
-                    cls, on_change_method, get_on_change(is_actor_var_name))
+                setattr(cls, on_change_method, fields.depends(field_name,
+                        is_actor_var_name)(get_on_change(is_actor_var_name)))
 
     @classmethod
     def _export_keys(cls):
@@ -276,6 +273,7 @@ class Party(export.ExportImportMixin):
     def default_lang(cls):
         return utils.get_user_language().id
 
+    @fields.depends('gender')
     def on_change_gender(self):
         res = {}
         if self.gender == 'female':
@@ -306,9 +304,11 @@ class Party(export.ExportImportMixin):
     def open_contact_mechanisms(cls, objs):
         pass
 
+    @fields.depends('addresses')
     def on_change_with_number_of_addresses(self, name=None):
         return len(self.addresses)
 
+    @fields.depends('contact_mechanisms')
     def on_change_with_number_of_contact_mechanisms(self, name=None):
         return len(self.contact_mechanisms)
 

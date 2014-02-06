@@ -13,7 +13,7 @@ class FeeDescription(model.CoopSQL, model.VersionedObject):
     __name__ = 'account.fee.description'
 
     name = fields.Char('Fee Name', required=True)
-    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
+    code = fields.Char('Code', required=True)
     description = fields.Text('Description')
 
     @classmethod
@@ -39,6 +39,7 @@ class FeeDescription(model.CoopSQL, model.VersionedObject):
     def get_name_for_billing(self):
         return self.name
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code

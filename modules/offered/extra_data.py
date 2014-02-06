@@ -33,7 +33,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         'get_default_value', 'set_default_value')
     default_value_selection = fields.Function(
         fields.Selection('get_default_value_selection', 'Default Value',
-            selection_change_with=['type_', 'selection', 'with_default_value'],
             depends=['type_', 'selection', 'with_default_value']),
         'get_default_value', 'set_default_value')
     default_value = fields.Char('Default Value')
@@ -54,7 +53,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
     tags = fields.Many2Many('extra_data-tag', 'extra_data_def', 'tag', 'Tags')
     tags_name = fields.Function(
-        fields.Char('Tags', on_change_with=['tags']),
+        fields.Char('Tags'),
         'on_change_with_tags_name', searcher='search_tags')
 
     @classmethod
@@ -127,6 +126,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             return {'default_value_selection': selection[0] or None}
         return {}
 
+    @fields.depends('type_', 'selection', 'with_default_value')
     def get_default_value_selection(self):
         if not (hasattr(self, 'type_') and self.type_ == 'selection'):
             return [('', '')]
@@ -307,6 +307,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
     def default_sub_data_config_kind():
         return 'simple'
 
+    @fields.depends('tags')
     def on_change_with_tags_name(self, name=None):
         return ', '.join([x.name for x in self.tags])
 
