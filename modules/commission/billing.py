@@ -84,7 +84,7 @@ class Premium:
         price_line_days = self.get_number_of_days_at_date(*period)
         convert_factor = number_of_days / Decimal(price_line_days)
         for com_line in self.com_lines:
-            values = work_set['coms'][com_line.com_option.offered.id]
+            values = work_set.coms[com_line.com_option.offered.id]
             values['object'] = com_line.com_option
             values['to_recalculate'] |= com_line.to_recalculate
             values['amount'] += com_line.amount * convert_factor
