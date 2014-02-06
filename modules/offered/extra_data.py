@@ -88,7 +88,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         if not cls.selection.on_change:
             cls.selection.on_change = set()
         cls.selection.on_change |= set(['selection',
-                'default_value_selection'])
+                'default_value_selection', 'type_'])
         cls.selection.states['required'] = (Eval('type_') == 'selection'
             and ~~Eval('with_default_value'))
 
@@ -115,28 +115,23 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         return res
 
     def on_change_selection(self):
-        if not (hasattr(self, 'default_value_selection') and
-                self.default_value_selection):
+        if not getattr(self, 'default_value_selection', None):
             return {}
-        if not (hasattr(self, 'selection') and self.selection):
-            return {'default_value_selection': ''}
-        db_selection = self.selection
-        selection = [v.split(':')[0].strip()
-            for v in db_selection.splitlines() if v]
+        selection = self.get_default_value_selection()
         if not self.default_value_selection in selection:
             return {'default_value_selection': selection[0] or None}
         return {}
 
     def get_default_value_selection(self):
-        if not (hasattr(self, 'type_') and self.type_ == 'selection'):
+        if not getattr(self, 'type_', None):
             return [('', '')]
-        if not (hasattr(self, 'selection') and self.selection):
+        if not getattr(self, 'selection', None):
             return [('', '')]
-        res = [x.split(':') for x in self.selection.split('\n')]
-        if not (hasattr(self, 'with_default_value')
-                and self.with_default_value):
-            res.append(('', ''))
-        return res
+        selection = [x.split(':') for x in self.selection.splitlines()
+            if x and ':' in x]
+        if not getattr(self, 'with_default_value', False):
+            selection.append(('', ''))
+        return selection
 
     def get_default_value(self, name):
         if name is None:
