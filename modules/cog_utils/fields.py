@@ -211,12 +211,26 @@ class UnaccentChar(tryton_fields.Char):
                 & (translation.fuzzy == False))
 
     def convert_domain(self, domain, tables, Model):
+        if self.translate:
+            return self.convert_domain_translate(domain, tables, Model)
+        table, _ = tables[None]
+        name, operator, value = domain
+        Operator = tryton_fields.SQL_OPERATORS[operator]
+        column = Column(table, name)
+        if CONFIG['db_type'] == 'postgresql':
+            column = Unaccent(column)
+        expression = Operator(column, self._domain_value(operator, value))
+        if isinstance(expression, operators.In) and not expression.right:
+            expression = Literal(False)
+        elif isinstance(expression, operators.NotIn) and not expression.right:
+            expression = Literal(True)
+        expression = self._domain_add_null(column, operator, value, expression)
+        return expression
+
+    def convert_domain_translate(self, domain, tables, Model):
         pool = Pool()
         Translation = pool.get('ir.translation')
         IrModel = pool.get('ir.model')
-        if not self.translate:
-            return super(UnaccentChar, self).convert_domain(
-                domain, tables, Model)
 
         table = Model.__table__()
         translation = Translation.__table__()
