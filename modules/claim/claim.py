@@ -80,7 +80,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         cls._error_messages.update({
                 'no_main_contract': 'Impossible to find a main contract, '
                 'please try again once it has been set',
-        })
+                })
 
     @classmethod
     def write(cls, claims, values):

@@ -952,12 +952,12 @@ msgid "Kind"
 msgstr "Type"
 
 msgctxt "field:document.template,mail_body:"
-msgid "Mail Body"
-msgstr "Corps du mail"
+msgid "eMail Body"
+msgstr "Corps du courrier électronique"
 
 msgctxt "field:document.template,mail_subject:"
-msgid "Mail Subject"
-msgstr "Sujet du mail"
+msgid "eMail Subject"
+msgstr "Sujet du courrier électronique"
 
 msgctxt "field:document.template,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -1353,7 +1353,7 @@ msgstr "Must Expand Tree"
 
 msgctxt "field:insurer,party:"
 msgid "Insurer"
-msgstr "Acteur"
+msgstr "Assureur"
 
 msgctxt "field:insurer,rec_name:"
 msgid "Name"
@@ -1385,7 +1385,7 @@ msgstr "Code"
 
 msgctxt "field:offered,currency_digits:"
 msgid "Currency Digits"
-msgstr "Nbre de chiffres après la virgule"
+msgstr "Précision"
 
 msgctxt "field:offered,deductible_rules:"
 msgid "Deductible Rules"

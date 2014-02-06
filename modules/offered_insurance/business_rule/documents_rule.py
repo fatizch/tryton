@@ -21,6 +21,8 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 from trytond.modules.cog_utils import BatchRoot
 
+MAX_TMP_TRIES = 10
+
 __all__ = [
     'DocumentDescription',
     'DocumentProductRelation',
@@ -60,9 +62,9 @@ class DocumentTemplate(model.CoopSQL, model.CoopView):
     kind = fields.Selection('get_possible_kinds', 'Kind',
         selection_change_with=['on_model'])
     products = fields.Many2Many('document.template-offered.product',
-        'document', 'product', 'Products')
-    mail_subject = fields.Char('Mail Subject')
-    mail_body = fields.Text('Mail Body')
+        'document_template', 'product', 'Products')
+    mail_subject = fields.Char('eMail Subject')
+    mail_body = fields.Text('eMail Body')
 
     def get_good_version(self, date, language):
         for version in self.versions:
@@ -87,7 +89,7 @@ class DocumentProductRelation(model.CoopSQL):
 
     __name__ = 'document.template-offered.product'
 
-    document = fields.Many2One('document.template', 'Document',
+    document_template = fields.Many2One('document.template', 'Document',
         ondelete='RESTRICT')
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
 
@@ -596,7 +598,7 @@ class DocumentCreatePreview(model.CoopView):
             'invisible': ~Eval('generated_report')})
     party = fields.Many2One('party.party', 'Party',
         states={'invisible': True})
-    mail = fields.Many2One('party.contact_mechanism', 'eMail', domain=[
+    email = fields.Many2One('party.contact_mechanism', 'eMail', domain=[
             ('party', '=', Eval('party')),
             ('type', '=', 'email')])
     filename = fields.Char('Filename', states={'invisible': True})
@@ -628,7 +630,7 @@ class DocumentCreate(Wizard):
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Previous', 'select_model', 'tryton-go-previous'),
             Button('Mail', 'mail', 'tryton-go-next', states={
-                    'readonly': ~Eval('mail')}),
+                    'readonly': ~Eval('email')}),
             ])
     attach = StateView('document.create.attach',
         'offered_insurance.document_create_attach_form', [
@@ -639,7 +641,10 @@ class DocumentCreate(Wizard):
     @classmethod
     def __setup__(cls):
         super(DocumentCreate, cls).__setup__()
-        shutil.rmtree(CONFIG['server_shared_folder'])
+        try:
+            shutil.rmtree(CONFIG['server_shared_folder'])
+        except:
+            pass
 
     def default_select_model(self, fields):
         result = utils.set_state_view_defaults(self, 'select_model')
@@ -684,7 +689,8 @@ class DocumentCreate(Wizard):
                 else None,
                 })
         filename = coop_string.remove_invalid_char(exact_name)
-        while True:
+        max_tries = MAX_TMP_TRIES
+        while max_tries > 0:
             # Loop until we find an unused folder id
             tmp_directory = utils.id_generator()
             server_tmp_directory = os.path.join(CONFIG['server_shared_folder'],
@@ -694,6 +700,10 @@ class DocumentCreate(Wizard):
                 break
             except:
                 pass
+            max_tries -= 1
+        if max_tries == 0:
+            raise Exception('Could not create tmp_directory in %s' %
+                CONFIG['server_shared_folder'])
         server_filename = os.path.join(server_tmp_directory, '%s.odt' %
             filename)
         client_filename = os.path.join(CONFIG['client_shared_folder'],
@@ -706,13 +716,13 @@ class DocumentCreate(Wizard):
             'filename': server_filename,
             'exact_name': exact_name,
             }
-        mail = ContactMechanism.search([
+        email = ContactMechanism.search([
                 ('party', '=', self.select_model.party.id),
                 ('type', '=', 'email'),
                 ])
-        if not mail:
+        if not email:
             return result
-        result['mail'] = mail[0].id
+        result['email'] = email[0].id
         return result
 
     def do_mail(self, action):
@@ -720,7 +730,7 @@ class DocumentCreate(Wizard):
         selected_model = DocumentTemplate(self.select_model.get_active_model())
         action['email_print'] = True
         action['email'] = {
-            'to': self.preview_document.mail.value,
+            'to': self.preview_document.email.value,
             'subject': selected_model.mail_subject,
             'body': selected_model.mail_body}
         return action, {
