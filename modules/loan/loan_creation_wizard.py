@@ -34,10 +34,10 @@ class LoanCreateParameters(model.CoopView, ModelCurrency):
         on_change_with=['funds_release_date', 'first_payment_date',
             'payment_frequency'])
     rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
-        'required': Eval('kind') != 'graduated',
-        'invisible': Eval('kind') == 'graduated',
-        })
-    lender = fields.Many2One('bank', 'Lender')
+            'required': Eval('kind') != 'graduated',
+            'invisible': Eval('kind') == 'graduated',
+            })
+    lender = fields.Many2One('bank', 'Lender', ondelete='RESTRICT')
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
     defferal_duration = fields.Integer('Differal Duration')
     loan_shares = fields.One2Many('loan.share', None,
