@@ -73,7 +73,8 @@ class TestCaseModel:
                 cls.add_address(line, company)
                 bank.bic = coop_string.check_for_pattern(line[236:247],
                     r'^[0-9A-Z]{8,11}')
-                existing[bank.bic] = bank
+                if bank.bic:
+                    existing[bank.bic] = bank
                 company.save()
                 bank.party = company
                 bank.save()
@@ -95,7 +96,8 @@ class TestCaseModel:
             company.currency = Configuration.currency
             bank.bic = coop_string.check_for_pattern(bank_dict['bic'],
                 r'^[0-9A-Z]{8,11}')
-            existing[bank.bic] = bank
+            if bank.bic:
+                existing[bank.bic] = bank
             company.save()
             bank.party = company
             bank.save()

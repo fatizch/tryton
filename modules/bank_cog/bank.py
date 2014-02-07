@@ -67,14 +67,11 @@ class Bank(export.ExportImportMixin):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        banks = cls.search(['OR',
-                [('bic',) + tuple(clause[1:])],
-                [('party.name',) + tuple(clause[1:])],
-                [('party.short_name',) + tuple(clause[1:])],
-                ], order=[])
-        if banks:
-            return [('id', 'in', [bank.id for bank in banks])]
-        return super(Bank, cls).search_rec_name(name, clause)
+        return ['OR',
+            [('bic',) + tuple(clause[1:])],
+            [('party.name',) + tuple(clause[1:])],
+            [('party.short_name',) + tuple(clause[1:])],
+            ]
 
 
 class BankAccount(export.ExportImportMixin):
