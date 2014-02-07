@@ -34,6 +34,7 @@ def register():
         # From party
         Party,
         # From account
+        MoveBreakdown,
         Move,
         MoveLine,
         TaxDesc,

@@ -6,7 +6,7 @@
     <label name="com_amount"/>
     <field name="com_amount"/>
   </xpath>
-  <xpath expr="/form/group[@id='lines']/group[@id='details']/field[@name='coverage_details']" position="after">
+  <xpath expr="/form/notebook/page[@id='general_details']/group[@id='details']/field[@name='coverage_details']" position="after">
     <field name="com_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
   </xpath>
 </data>

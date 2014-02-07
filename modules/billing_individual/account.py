@@ -7,15 +7,47 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, export
+from trytond.modules.cog_utils import fields, export, model
+from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'MoveBreakdown',
     'Move',
     'MoveLine',
     'TaxDesc',
     'FeeDesc',
     ]
+
+
+class MoveBreakdown(model.CoopSQL, model.CoopView, ModelCurrency):
+    'Move Breakdown'
+
+    __name__ = 'account.move.breakdown'
+
+    start_date = fields.Date('Start Date', states={'required': True})
+    end_date = fields.Date('End Date', states={'required': True})
+    base_total = fields.Numeric('Base Total')
+    fees = fields.Numeric('Fees')
+    total_wo_taxes = fields.Numeric('Total HT')
+    taxes = fields.Numeric('Taxes')
+    total = fields.Numeric('Total')
+    move = fields.Many2One('account.move', 'Move', states={'required': True},
+        ondelete='CASCADE')
+
+    def ventilate_amounts(self, work_set):
+        ratio = self.total / work_set.total_amount
+        self.taxes = work_set.move.tax_amount * ratio
+        self.total_wo_taxes = self.total - self.taxes
+        self.fees = work_set.move.fee_amount * ratio
+        self.base_total = self.total_wo_taxes - self.fees
+        return ratio
+
+    def get_currency(self):
+        try:
+            return self.move.contract.currency
+        except:
+            return None
 
 
 class Move:
@@ -58,6 +90,8 @@ class Move:
     fee_details = fields.One2ManyDomain('account.move.line', 'move', 'Fees',
         domain=[('account.kind', '!=', 'receivable'),
             ('second_origin', 'like', 'account.fee.description,%')])
+    calculation_details = fields.One2Many('account.move.breakdown',
+        'move', 'Calculation Details')
 
     @classmethod
     def _get_origin(cls):
@@ -81,7 +115,7 @@ class Move:
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
             extra_clause = ((move_line.second_origin.like(
-                        'account_cog.%s_desc,%%' % name[0:3]))
+                        'account.%s.description,%%' % name[0:3]))
                 & (account.kind != 'receivable'))
             sign = -1
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <xpath expr="/tree/field[@name='base_total']" position="after">
+    <field name="commissions" sum="Commissions"/>
+    <field name="total_base_com" sum="Total with coms"/>
+  </xpath>
+</data>

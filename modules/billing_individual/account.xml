@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
+    <!-- ################## -->
+    <!-- # Move Breakdown # -->
+    <!-- ################## -->
+    <record model="ir.ui.view" id="breakdown_view_list">
+      <field name="model">account.move.breakdown</field>
+      <field name="type">tree</field>
+      <field name="name">breakdown_list</field>
+    </record>
     <!--################################################################-->
     <!-- Move Line -->
     <!--################################################################-->

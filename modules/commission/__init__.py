@@ -35,5 +35,6 @@ def register():
         #Rule Engine
         RuleEngineRuntime,
         # Account
+        MoveBreakdown,
         Move,
         module='commission', type_='model')

@@ -262,6 +262,7 @@ class Contract:
                 self.taxes = defaultdict(
                     lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
                 self.total_amount = 0
+                self.detail_lines = None
         return WorkSet
 
     def init_billing_work_set(self):
@@ -337,6 +338,27 @@ class Contract:
         Move.delete([
                 x for x in work_set.billing_period.moves
                 if x.state == 'draft'])
+
+    def calculate_bill_details(self, work_set):
+        MoveBreakdown = Pool().get('account.move.breakdown')
+        work_set.detail_lines = []
+        for idx, line in enumerate(work_set.counterparts):
+            new_line = MoveBreakdown()
+            new_line.move = work_set.move
+            if idx == 0:
+                new_line.start_date = work_set.period[0]
+            else:
+                new_line.start_date = line.maturity_date
+            if idx == len(work_set.counterparts) - 1:
+                end_date = work_set.period[1]
+            else:
+                end_date = coop_date.add_day(
+                    work_set.counterparts[idx + 1].maturity_date, -1)
+            new_line.end_date = end_date
+            new_line.total = line.debit
+            new_line.ventilate_amounts(work_set)
+            new_line.save()
+            work_set.detail_lines.append(new_line)
 
     def apply_payment_term(self, work_set):
         Line = Pool().get('account.move.line')
@@ -424,6 +446,7 @@ class Contract:
             work_set.counterparts
         if work_set.total_amount > 0:
             work_set.move.save()
+            self.calculate_bill_details(work_set)
             return work_set.move
         else:
             return
