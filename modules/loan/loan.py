@@ -1,6 +1,8 @@
 from decimal import Decimal
+from sql.aggregators import Max
 
 from trytond.pool import Pool
+from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, coop_date, fields, model
@@ -66,6 +68,9 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     defferal_duration = fields.Function(
         fields.Integer('Differal Duration'),
         'get_defferal_duration')
+    end_date = fields.Function(
+        fields.Date('End Date'),
+        'get_loan_end_date')
 
     @classmethod
     def __setup__(cls):
@@ -271,6 +276,18 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         for share in self.loan_shares:
             if share.person == party:
                 return share
+
+    @classmethod
+    def get_loan_end_date(cls, loans):
+        pool = Pool()
+        cursor = Transaction().cursor
+        loan = pool.get('loan').__table__()
+        increment = pool.get('loan.increment').__table__()
+        query_table = loan.join(increment, type_='LEFT',
+            condition=(loan.id == increment.loan))
+        cursor.execute(*query_table.select(loan.id, Max(increment.end_date),
+                group_by=loan.id))
+        return dict(cursor.fetchall())
 
 
 class LoanShare(model.CoopSQL, model.CoopView):
