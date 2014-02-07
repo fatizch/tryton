@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -18,17 +18,13 @@ msgctxt "error:party.party:"
 msgid "Invalid format for SSN"
 msgstr "Format non valide pour le numéro de sécu"
 
-msgctxt "field:party.address,line2:"
-msgid "Add. complement"
-msgstr "Compl. d'Adresse"
+msgctxt "field:party.address,name:"
+msgid "Line 2"
+msgstr "Ligne 2"
 
 msgctxt "field:party.address,line3:"
-msgid "Building"
-msgstr "Batiment"
-
-msgctxt "field:party.address,name:"
-msgid "Recipient"
-msgstr "Destinataire"
+msgid "Building (Line 3)"
+msgstr "Batiment (Ligne 3)"
 
 msgctxt "field:party.party,ssn_key:"
 msgid "SSN Key"
@@ -38,7 +34,7 @@ msgctxt "field:party.party,ssn_no_key:"
 msgid "SSN"
 msgstr "NIR"
 
-msgctxt "help:party.address,line2:"
+msgctxt "help:party.address,name:"
 msgid ""
 "AFNOR - Line 2\n"
 "        For individual : Delivery Point Access Data\n"
@@ -58,18 +54,6 @@ msgid ""
 msgstr ""
 "AFNOR - Ligne 3\n"
 "        Bâtiment,  entrée, résidence, lotissement"
-
-msgctxt "help:party.address,name:"
-msgid ""
-"AFNOR - Line 1\n"
-"        For individual : Identity of the addressee -\n"
-"        Form of address or given name or surname...\n"
-"        For companies : Organization identification -\n"
-"        Organization name, Legal Status"
-msgstr ""
-"AFNOR - Ligne 1\n"
-"        Pour un particulier : sa civilité ou son titre, sa qualité, ses nom et prénom.\n"
-"        Pour une entreprise : la raison sociale ou la dénomination de l’entreprise."
 
 msgctxt "help:party.address,street:"
 msgid ""

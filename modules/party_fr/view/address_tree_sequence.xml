@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/tree/field[@name='subdivision']" position="replace"/>
+    <xpath expr="/tree/field[@name='name']" position="after">
+        <field name="line3"/>
+    </xpath>
 </data>

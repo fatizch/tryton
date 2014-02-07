@@ -3,7 +3,7 @@
 <xpath expr="/tree" position="replace_attributes">
     <tree editable="bottom"/>
 </xpath>
-    <xpath expr="/tree/field[@name='name']" position="after">
+    <xpath expr="/tree/field[@name='name']" position="before">
         <field name="start_date"/>
         <field name="end_date"/>
     </xpath>
