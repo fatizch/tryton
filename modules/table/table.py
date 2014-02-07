@@ -31,6 +31,8 @@ __all__ = [
     'TableCell',
     'TableDefinition',
     'TableDefinitionDimension',
+    'TableDefinitionDimensionOpenAskType',
+    'TableDefinitionDimensionOpen',
     'TableOpen2DAskDimensions',
     'TableOpen2D',
     'Table2D',
@@ -439,6 +441,38 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         cls.set_name(records)
 
     @classmethod
+    def _view_look_dom_arch(cls, tree, type, field_children=None):
+        pool = Pool()
+        TableDefinition = pool.get('table')
+        context = Transaction().context
+        if type == 'tree' and 'table' in context and 'type' in context:
+            result = tree.xpath("//field[@name='rec_name']")
+            table = TableDefinition(context['table'])
+            if result:
+                rec_name, = result
+                kind = getattr(table, 'dimension_kind%s' %
+                    context['type'][len('dimension'):])
+                if kind in ('value', 'date'):
+                    value = copy.copy(rec_name)
+                    value.set('name', kind)
+                    rec_name.addnext(value)
+                elif kind in ('range', 'range-date'):
+                    if kind == 'range-date':
+                        suffix = '_date'
+                    else:
+                        suffix = ''
+                    start = copy.copy(rec_name)
+                    start.set('name', 'start' + suffix)
+                    rec_name.addnext(start)
+                    end = copy.copy(start)
+                    end.set('name', 'end' + suffix)
+                    start.addnext(end)
+                if kind is not None:
+                    rec_name.getparent().remove(rec_name)
+        return super(TableDefinitionDimension, cls)._view_look_dom_arch(tree,
+            type, field_children=field_children)
+
+    @classmethod
     def set_name(cls, dimensions):
         pool = Pool()
         Lang = pool.get('ir.lang')
@@ -493,6 +527,53 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     @classmethod
     def _export_keys(cls):
         return set([])
+
+
+class TableDefinitionDimensionOpenAskType(ModelView):
+    'Table Open Definition Dimension'
+    __name__ = 'table.dimension.value.open.ask_type'
+    table = fields.Many2One('table', 'Table', required=True)
+    type = fields.Selection('get_types', 'Type', required=True)
+
+    @staticmethod
+    def default_table():
+        return Transaction().context['active_id']
+
+    @fields.depends('table')
+    def get_types(self):
+        if not self.table:
+            return []
+        types = []
+        for i in range(1, DIMENSION_MAX + 1):
+            if getattr(self.table, 'dimension_kind%s' % i):
+                types.append(('dimension%s' % i,
+                        getattr(self.table, 'dimension_name%s' % i)))
+        return types
+
+
+class TableDefinitionDimensionOpen(Wizard):
+    'Table Open Definition Dimension'
+    __name__ = 'table.dimension.value.open'
+    start_state = 'ask_type'
+    ask_type = StateView('table.dimension.value.open.ask_type',
+        'table.table_dimension_value_open_ask_type_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Open', 'open_', 'tryton-ok', True),
+            ])
+    open_ = StateAction('table.act_definition_dimension_form')
+
+    def do_open_(self, action):
+        context = {
+            'table': self.ask_type.table.id,
+            'type': self.ask_type.type,
+            }
+        domain = [
+            ('definition', '=', self.ask_type.table.id),
+            ('type', '=', self.ask_type.type),
+            ]
+        action['pyson_context'] = PYSONEncoder().encode(context)
+        action['pyson_domain'] = PYSONEncoder().encode(domain)
+        return action, {}
 
 
 class TableCell(ModelSQL, ModelView):

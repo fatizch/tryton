@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Definition Dimension" col="2">
+    <label name="type"/>
+    <field name="type"/>
+    <field name="table" invisible="1" colspan="2"/>
+</form>
