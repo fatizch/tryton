@@ -682,7 +682,7 @@ class Option:
     __name__ = 'contract.option'
 
     def get_name_for_billing(self):
-        return self.option.name + ' - Base Price'
+        return self.offered.name + ' - Base Price'
 
 
 class CoveredElement:
