@@ -1,5 +1,5 @@
 from decimal import Decimal
-from sql.aggregators import Max
+from sql.aggregate import Max
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
