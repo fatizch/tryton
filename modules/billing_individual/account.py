@@ -34,6 +34,7 @@ class MoveComputationLog(model.CoopSQL, model.CoopView, ModelCurrency):
     base_amount = fields.Char('Base Amount')
     final_amount = fields.Char('Final Amount')
     ratio = fields.Char('Ratio')
+    level = fields.Integer('Level', states={'invisible': True})
 
     def get_currency(self):
         try:
@@ -49,8 +50,15 @@ class MoveComputationLog(model.CoopSQL, model.CoopView, ModelCurrency):
         self.base_amount = '%s %s' % (log['base_amount'], self.currency.symbol)
         self.final_amount = '%s %s' % (log['final_amount'],
             self.currency.symbol)
-        self.ratio = '%.2f %%' % log['ratio'] * 100
+        self.ratio = '%.2f %%' % (log['ratio'] * 100)
         self.move = work_set.move
+        print log['from'].__name__
+        if log['from'].__name__ == 'offered.option.description':
+            print log['from'].kind
+            if log['from'].kind == 'insurance':
+                self.level = 1
+        else:
+            self.level = 2
 
 
 class MoveBreakdown(model.CoopSQL, model.CoopView, ModelCurrency):
@@ -126,7 +134,7 @@ class Move:
     breakdown_details = fields.One2Many('account.move.breakdown',
         'move', 'Breakdown Details', states={'readonly': True})
     calculation_details = fields.One2Many('account.move.computation_log',
-        'move', 'Calculation Details', states={'readonly': True})
+        'move', 'Calculation Details')
 
     @classmethod
     def _get_origin(cls):
