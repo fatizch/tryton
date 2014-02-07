@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Computation Logs">
+  <field name="origin"/>
+  <field name="start_date"/>
+  <field name="end_date"/>
+  <field name="base_amount"/>
+  <field name="final_amount"/>
+  <field name="ratio"/>
+</tree>

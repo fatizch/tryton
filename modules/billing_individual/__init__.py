@@ -34,6 +34,7 @@ def register():
         # From party
         Party,
         # From account
+        MoveComputationLog,
         MoveBreakdown,
         Move,
         MoveLine,

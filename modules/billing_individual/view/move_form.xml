@@ -25,6 +25,9 @@
   </group>
   <notebook colspan="6">
     <page string="Line details" id="line_details">
+      <field name="breakdown_details" mode="tree"/>
+    </page>
+    <page string="Computation Details" id="computation_details">
       <field name="calculation_details" mode="tree"/>
     </page>
     <page string="General" id="general_details">

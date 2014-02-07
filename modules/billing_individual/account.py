@@ -12,6 +12,7 @@ from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'MoveComputationLog',
     'MoveBreakdown',
     'Move',
     'MoveLine',
@@ -20,20 +21,52 @@ __all__ = [
     ]
 
 
+class MoveComputationLog(model.CoopSQL, model.CoopView, ModelCurrency):
+    'Move Computation Log'
+
+    __name__ = 'account.move.computation_log'
+
+    move = fields.Many2One('account.move', 'Move', states={'required': True},
+        ondelete='CASCADE')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+    origin = fields.Char('Origin')
+    base_amount = fields.Char('Base Amount')
+    final_amount = fields.Char('Final Amount')
+    ratio = fields.Char('Ratio')
+
+    def get_currency(self):
+        try:
+            return self.move.contract.currency
+        except:
+            return None
+
+    def init_from_log(self, log, work_set):
+        self.currency = work_set.move.contract.currency
+        self.origin = log['from'].get_rec_name(None)
+        self.start_date = log['start_date']
+        self.end_date = log['end_date']
+        self.base_amount = '%s %s' % (log['base_amount'], self.currency.symbol)
+        self.final_amount = '%s %s' % (log['final_amount'],
+            self.currency.symbol)
+        self.ratio = '%.2f %%' % log['ratio'] * 100
+        self.move = work_set.move
+
+
 class MoveBreakdown(model.CoopSQL, model.CoopView, ModelCurrency):
     'Move Breakdown'
 
     __name__ = 'account.move.breakdown'
 
-    start_date = fields.Date('Start Date', states={'required': True})
-    end_date = fields.Date('End Date', states={'required': True})
+    move = fields.Many2One('account.move', 'Move', states={'required': True},
+        ondelete='CASCADE')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
     base_total = fields.Numeric('Base Total')
     fees = fields.Numeric('Fees')
     total_wo_taxes = fields.Numeric('Total HT')
     taxes = fields.Numeric('Taxes')
     total = fields.Numeric('Total')
-    move = fields.Many2One('account.move', 'Move', states={'required': True},
-        ondelete='CASCADE')
 
     def ventilate_amounts(self, work_set):
         ratio = self.total / work_set.total_amount
@@ -90,8 +123,10 @@ class Move:
     fee_details = fields.One2ManyDomain('account.move.line', 'move', 'Fees',
         domain=[('account.kind', '!=', 'receivable'),
             ('second_origin', 'like', 'account.fee.description,%')])
-    calculation_details = fields.One2Many('account.move.breakdown',
-        'move', 'Calculation Details')
+    breakdown_details = fields.One2Many('account.move.breakdown',
+        'move', 'Breakdown Details', states={'readonly': True})
+    calculation_details = fields.One2Many('account.move.computation_log',
+        'move', 'Calculation Details', states={'readonly': True})
 
     @classmethod
     def _get_origin(cls):

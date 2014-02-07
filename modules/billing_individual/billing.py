@@ -302,6 +302,14 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
         amount = self.get_base_amount_for_billing() * convert_factor
         amount = work_set.currency.round(amount)
         account = self.get_account_for_billing()
+        work_set.contributions.append({
+                'from': self.on_object,
+                'start_date': period[0],
+                'end_date': period[1],
+                'base_amount': self.get_base_amount_for_billing(),
+                'final_amount': amount,
+                'ratio': convert_factor,
+                })
         line = work_set.lines[(self.on_object, account)]
         line.second_origin = self.on_object
         line.credit += amount
@@ -319,6 +327,14 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
             values['to_recalculate'] |= sub_line.to_recalculate
             values['amount'] += sub_line.amount * convert_factor
             values['base'] += amount
+            work_set.contributions.append({
+                'from': desc,
+                'start_date': period[0],
+                'end_date': period[1],
+                'base_amount': sub_line.amount,
+                'final_amount': sub_line.amount * convert_factor,
+                'ratio': convert_factor,
+                })
         return line
 
 

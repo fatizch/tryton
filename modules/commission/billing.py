@@ -89,4 +89,12 @@ class Premium:
             values['to_recalculate'] |= com_line.to_recalculate
             values['amount'] += com_line.amount * convert_factor
             values['base'] += result.credit
+            work_set.contributions.append({
+                'from': com_line.com_option,
+                'start_date': period[0],
+                'end_date': period[1],
+                'base_amount': com_line.amount,
+                'final_amount': com_line.amount * convert_factor,
+                'ratio': convert_factor,
+                })
         return result

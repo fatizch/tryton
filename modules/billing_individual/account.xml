@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
+    <!-- ######################## -->
+    <!-- # Move Computation Log # -->
+    <!-- ######################## -->
+    <record model="ir.ui.view" id="computation_log_view_list">
+      <field name="model">account.move.computation_log</field>
+      <field name="type">tree</field>
+      <field name="name">computation_log_list</field>
+    </record>
     <!-- ################## -->
     <!-- # Move Breakdown # -->
     <!-- ################## -->

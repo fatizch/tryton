@@ -248,8 +248,10 @@ class Contract:
             def __init__(self):
                 Line = Pool().get('account.move.line')
                 self.billing_period = None
+                self.contributions = None
                 self.counterparts = None
                 self.currency = None
+                self.detail_lines = None
                 self.fees = defaultdict(
                     lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
                 self.lines = defaultdict(lambda: Line(credit=0, debit=0))
@@ -262,7 +264,6 @@ class Contract:
                 self.taxes = defaultdict(
                     lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
                 self.total_amount = 0
-                self.detail_lines = None
         return WorkSet
 
     def init_billing_work_set(self):
@@ -283,6 +284,7 @@ class Contract:
         return move
 
     def calculate_base_lines(self, work_set):
+        work_set.contributions = []
         for period, price_line in work_set.price_lines:
             price_line.calculate_bill_contribution(work_set, period)
 
@@ -359,6 +361,13 @@ class Contract:
             new_line.ventilate_amounts(work_set)
             new_line.save()
             work_set.detail_lines.append(new_line)
+
+    def build_computation_logs(self, work_set):
+        ComputationLog = Pool().get('account.move.computation_log')
+        for elem in work_set.contributions:
+            log = ComputationLog()
+            log.init_from_log(elem, work_set)
+            log.save()
 
     def apply_payment_term(self, work_set):
         Line = Pool().get('account.move.line')
@@ -447,6 +456,7 @@ class Contract:
         if work_set.total_amount > 0:
             work_set.move.save()
             self.calculate_bill_details(work_set)
+            self.build_computation_logs(work_set)
             return work_set.move
         else:
             return
