@@ -6,7 +6,6 @@ from sql.operators import Concat
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
 
@@ -22,13 +21,12 @@ class MoveBreakdown:
     __name__ = 'account.move.breakdown'
 
     commissions = fields.Numeric('Commissions')
-    total_base_com = fields.Numeric('Total with coms')
+    base_total = fields.Numeric('Base Total')
 
     def ventilate_amounts(self, work_set):
         ratio = super(MoveBreakdown, self).ventilate_amounts(work_set)
         self.commissions = work_set.move.com_amount * ratio
-        self.total_base_com = self.base_total
-        self.base_total = self.base_total - self.commissions
+        self.base_total = self.total_wo_fees - self.commissions
         return ratio
 
 

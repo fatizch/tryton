@@ -135,6 +135,10 @@ msgctxt "field:account.move.breakdown,total:"
 msgid "Total"
 msgstr "Total"
 
+msgctxt "field:account.move.breakdown,total_wo_fees:"
+msgid "Amount w/o fees"
+msgstr "Montant hors Frais"
+
 msgctxt "field:account.move.breakdown,total_wo_taxes:"
 msgid "Total HT"
 msgstr "Total HT"

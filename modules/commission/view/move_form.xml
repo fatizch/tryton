@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form/group[@id='amount']/label[@name='wo_fee_amount']" position="before">
-    <label name="wo_com_amount"/>
-    <field name="wo_com_amount"/>
-    <label name="com_amount"/>
-    <field name="com_amount"/>
-  </xpath>
   <xpath expr="/form/notebook/page[@id='general_details']/group[@id='details']/field[@name='coverage_details']" position="after">
     <field name="com_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
+  </xpath>
+  <xpath expr="/form/notebook/page[@id='line_details']" position="after">
+    <page string="Commissions" id="commissions">
+      <label name="wo_com_amount"/>
+      <field name="wo_com_amount"/>
+      <label name="com_amount"/>
+      <field name="com_amount"/>
+      <field name="breakdown_details" mode="tree" view_ids="commission.breakdown_view_list" colspan="4"/>
+    </page>
   </xpath>
 </data>

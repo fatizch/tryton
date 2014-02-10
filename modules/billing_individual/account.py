@@ -52,9 +52,7 @@ class MoveComputationLog(model.CoopSQL, model.CoopView, ModelCurrency):
             self.currency.symbol)
         self.ratio = '%.2f %%' % (log['ratio'] * 100)
         self.move = work_set.move
-        print log['from'].__name__
         if log['from'].__name__ == 'offered.option.description':
-            print log['from'].kind
             if log['from'].kind == 'insurance':
                 self.level = 1
         else:
@@ -70,7 +68,7 @@ class MoveBreakdown(model.CoopSQL, model.CoopView, ModelCurrency):
         ondelete='CASCADE')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    base_total = fields.Numeric('Base Total')
+    total_wo_fees = fields.Numeric('Amount w/o fees')
     fees = fields.Numeric('Fees')
     total_wo_taxes = fields.Numeric('Total HT')
     taxes = fields.Numeric('Taxes')
@@ -81,7 +79,7 @@ class MoveBreakdown(model.CoopSQL, model.CoopView, ModelCurrency):
         self.taxes = work_set.move.tax_amount * ratio
         self.total_wo_taxes = self.total - self.taxes
         self.fees = work_set.move.fee_amount * ratio
-        self.base_total = self.total_wo_taxes - self.fees
+        self.total_wo_fees = self.total_wo_taxes - self.fees
         return ratio
 
     def get_currency(self):

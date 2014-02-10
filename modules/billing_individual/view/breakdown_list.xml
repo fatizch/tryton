@@ -2,7 +2,7 @@
 <tree string="Breakdown">
   <field name="start_date"/>
   <field name="end_date"/>
-  <field name="base_total" sum="Base total"/>
+  <field name="total_wo_fees" sum="Total w/o Fees"/>
   <field name="fees" sum="Fees"/>
   <field name="total_wo_taxes" sum="Total w/o taxes"/>
   <field name="taxes" sum="Taxes"/>
