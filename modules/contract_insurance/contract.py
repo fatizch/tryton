@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, If, Or, Bool
+from trytond.pyson import Eval, If, Or, Bool, Equal
 from trytond.transaction import Transaction
 from trytond.model import ModelView
 
@@ -305,13 +305,20 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             'start_date'], domain=[If(
                 ~~Eval('possible_item_desc'),
                 ('id', 'in', Eval('possible_item_desc')),
-                ())
-            ], depends=['possible_item_desc', 'extra_data'],
+                ())], states={
+                'invisible': Equal(Eval('possible_item_desc_nb', 0), 1)},
+            depends=['possible_item_desc', 'extra_data',
+                'possible_item_desc_nb'],
             ondelete='RESTRICT')
     possible_item_desc = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Possible Item Desc', states={'invisible': True}),
         'get_possible_item_desc_ids')
+    possible_item_desc_nb = fields.Function(
+        fields.Integer('Possible Item Desc Number',
+            states={'invisible': True},
+            on_change_with=['possible_item_desc']),
+        'on_change_with_possible_item_desc_nb')
     covered_data = fields.One2Many('contract.covered_data',
         'covered_element', 'Covered Element Data')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
@@ -642,6 +649,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def default_main_contract(cls):
         return Transaction().context.get('contract')
+
+    def on_change_with_possible_item_desc_nb(self, name=None):
+        return len(self.possible_item_desc)
 
 
 class CoveredElementPartyRelation(model.CoopSQL):
