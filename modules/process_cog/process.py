@@ -578,7 +578,7 @@ class Process(model.CoopSQL):
     def set_menu_item_list(self, previous_ids, new_ids):
         if Transaction().context.get('__importing__'):
             return []
-        return super(Process, self).set_menu_item_listj()
+        return super(Process, self).set_menu_item_list(previous_ids, new_ids)
 
 
 class ProcessStepRelation(model.CoopSQL):
