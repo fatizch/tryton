@@ -459,6 +459,8 @@ class Contract:
             if price:
                 prices.extend(price)
             errs += err
+            if errs:
+                return [], errs
         return prices, errs
 
     def get_last_bill(self, name):
