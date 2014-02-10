@@ -13,5 +13,11 @@
             <field name="inherit" ref="party.address_view_tree_sequence"></field>
             <field name="name">address_tree_sequence</field>
         </record>
+        <record model="ir.ui.view" id="address_view_tree">
+            <field name="model">party.address</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="party.address_view_tree"></field>
+            <field name="name">address_tree</field>
+        </record>
     </data>
 </tryton>
