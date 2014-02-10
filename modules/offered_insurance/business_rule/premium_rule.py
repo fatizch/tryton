@@ -233,7 +233,11 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             rated_object_kind):
         for component in self.get_components(rated_object_kind):
             res, errs = component.calculate_value(args)
-            result.add_detail(res)
+            try:
+                result.add_detail(res)
+            except TypeError:
+                errors.append('Calculated amount %s is not a valid result for '
+                    '%s' % (res.amount, component))
             errors += errs
         if 'extra_premiums' not in args:
             return
@@ -245,6 +249,8 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         errors = []
         self.calculate_components_contribution(args, result, errors,
             rated_object_kind)
+        if errors:
+            return None, errors
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)
