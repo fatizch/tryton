@@ -13,7 +13,7 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name', on_change=['name', 'code'], required=True)
     code = fields.Char('Code', required=True)
-    text = fields.Text('Text', required=True)
+    text = fields.Text('Text')
 
     @classmethod
     def __setup__(cls):
@@ -25,4 +25,4 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
     def on_change_name(self):
         if self.code:
             return {}
-        return {'code': coop_string.remove_invalid_char(self.name)}
+        return {'code': coop_string.remove_blank_and_invalid_char(self.name)}
