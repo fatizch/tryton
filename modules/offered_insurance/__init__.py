@@ -9,6 +9,7 @@ from .process import *
 from .party import *
 from .test_case import *
 from .batch import *
+from .export import *
 
 
 def register():
@@ -83,6 +84,8 @@ def register():
         ExpenseKind,
         # From test_case
         TestCaseModel,
+        #From export
+        ExportPackage,
         module='offered_insurance', type_='model')
     Pool.register(
         # From business_rule.documents_rule
