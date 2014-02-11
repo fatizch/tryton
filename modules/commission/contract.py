@@ -96,6 +96,14 @@ class Contract:
         self.calculate_final_coms(work_set)
         work_set['total_amount'] += new_total - ht_total
 
+    def get_publishing_context(self, cur_context):
+        result = super(Contract, self).get_publishing_context(cur_context)
+        result['BusinessProviders'] = [x.party for x in self.agreements
+            if x.kind == 'business_provider']
+        result['BusinessManagers'] = [x.party.id for x in self.agreements
+            if x.kind == 'management']
+        return result
+
 
 class Option:
     __name__ = 'contract.option'
@@ -228,6 +236,7 @@ class ContractAgreementRelation:
 
     @classmethod
     def get_possible_agreement_kind(cls):
-        res = super(ContractAgreementRelation, cls).get_possible_agreement_kind()
+        res = super(ContractAgreementRelation,
+            cls).get_possible_agreement_kind()
         res.extend(COMMISSION_KIND)
         return list(set(res))

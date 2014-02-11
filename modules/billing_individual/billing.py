@@ -449,6 +449,14 @@ class BillingData(model.CoopSQL, model.CoopView):
         return [('payment_method', 'light'), ('payment_bank_account', 'light'),
             ('disbursment_bank_account', 'light'), 'payment_date']
 
+    def get_publishing_values(self):
+        result = super(BillingData, self).get_publishing_values()
+        result['payment_frequency'] = \
+            self.payment_method.payment_term.base_frequency
+        result['payment_date'] = self.payment_date
+        result['sync_date'] = self.payment_method.payment_term.sync_date
+        return result
+
 
 class BillingPeriod(model.CoopSQL, model.CoopView):
     'Billing Period'

@@ -154,6 +154,15 @@ class Move:
             return super(Move, self).get_rec_name(name)
         return self.contract.get_rec_name(name)
 
+    def get_publishing_values(self):
+        result = super(Move, self).get_publishing_values()
+        result['start_date'] = self.billing_period.start_date
+        result['end_date'] = self.billing_period.end_date
+        result['first_payment_date'] = self.schedule[0].maturity_date
+        result['first_payment_amount'] = self.schedule[0].debit
+        result['standard_payment_amount'] = self.schedule[1].debit
+        return result
+
 
 class MoveLine:
     __name__ = 'account.move.line'

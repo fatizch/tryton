@@ -14,3 +14,7 @@ class Company(export.ExportImportMixin):
     @classmethod
     def _export_keys(cls):
         return set(['party.name'])
+
+    def get_publishing_values(self):
+        result = self.party.get_publishing_values()
+        return result
