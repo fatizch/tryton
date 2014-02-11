@@ -561,7 +561,7 @@ class Rule(ModelView, ModelSQL):
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
-        depends=['debug_mode'])
+        depends=['debug_mode'], order=[('create_date', 'DESC')])
     rule_parameters = fields.One2Many('rule_engine.parameter', 'parent_rule',
         'Rule parameters')
     rule_kwargs = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
