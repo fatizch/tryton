@@ -346,7 +346,6 @@ class LoanShare(model.CoopSQL, model.CoopView):
 
     def init_from_option(self, option):
         self.start_date = option.start_date
-        self.share = 1
 
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
