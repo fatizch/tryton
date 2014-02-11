@@ -11,7 +11,7 @@
         <field name="possible_com_product" colspan="2"/>
         <newline/>
         <label name="com_product"/>
-        <field name="com_product" widget="selection"/>
+        <field name="com_product"/>
         <newline/>
         <label name="product"/>
         <field name="product" colspan="3"/>
