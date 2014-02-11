@@ -15,6 +15,20 @@
             <field name="name">loan_tree</field>
         </record>
         <!-- ############################################################ -->
+        <!-- ########### Contract Loan ########### -->
+        <!-- ############################################################ -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="contract-loan_view_form">
+            <field name="model">contract-loan</field>
+            <field name="type">form</field>
+            <field name="name">contract-loan_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract-loan_view_tree">
+            <field name="model">contract-loan</field>
+            <field name="type">tree</field>
+            <field name="name">contract-loan_tree</field>
+        </record>
+        <!-- ############################################################ -->
         <!-- ########### Loan Share ########### -->
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="loan_share_view_form">

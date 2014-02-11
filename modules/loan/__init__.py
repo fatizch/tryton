@@ -19,6 +19,7 @@ def register():
         ContractOption,
         # From Loan
         Loan,
+        ContractLoanRelation,
         LoanShare,
         CoveredData,
         CoveredDataLoanShareRelation,

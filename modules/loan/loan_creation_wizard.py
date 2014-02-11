@@ -120,7 +120,7 @@ class LoanCreate(model.CoopWizard):
         Loan = Pool().get('loan')
         loan = Loan()
         self.loan_parameters.loan = loan
-        loan.contract = self.loan_parameters.contract
+        loan.contracts = [self.loan_parameters.contract]
         loan.kind = self.loan_parameters.kind
         loan.payment_frequency = self.loan_parameters.payment_frequency
         loan.number_of_payments = self.loan_parameters.number_of_payments
@@ -129,7 +129,7 @@ class LoanCreate(model.CoopWizard):
         loan.rate = self.loan_parameters.rate
         loan.lender = self.loan_parameters.lender
         loan.first_payment_date = self.loan_parameters.first_payment_date
-        loan.currency = loan.contract.currency
+        loan.currency = self.loan_parameters.contract.currency
         loan.payment_amount = loan.on_change_with_payment_amount()
         loan.loan_shares = self.loan_parameters.loan_shares
         if (self.loan_parameters.defferal

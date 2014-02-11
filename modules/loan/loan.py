@@ -10,6 +10,7 @@ from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
     'Loan',
+    'ContractLoanRelation',
     'LoanShare',
     'LoanIncrement',
     'LoanPayment',
@@ -39,8 +40,8 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'loan'
 
     kind = fields.Selection(LOAN_KIND, 'Kind', sort=False)
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
-        required=True)
+    contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
+        'Contracts')
     number_of_payments = fields.Integer('Number of Payments')
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
         'Payment Frequency', sort=False)
@@ -113,8 +114,18 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             self.funds_release_date, 1)
 
     def get_currency(self):
-        if hasattr(self, 'contract') and self.contract:
-            return self.contract.currency
+        if hasattr(self, 'contracts') and self.contracts:
+            currencies = list(set([x.currency for x in self.contracts]))
+            if len(currencies) == 1:
+                return currencies[0]
+            else:
+                raise
+
+    def get_currency_id(self, name):
+        if 'currency' in Transaction().context:
+            return Transaction().context.get('currency')
+        else:
+            return super(Loan, self).get_currency_id(name)
 
     def get_rate(self, annual_rate=None):
         if not annual_rate:
@@ -288,6 +299,16 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         cursor.execute(*query_table.select(loan.id, Max(increment.end_date),
                 group_by=loan.id))
         return dict(cursor.fetchall())
+
+
+class ContractLoanRelation(model.CoopSQL, model.CoopView):
+    'Contract Loan Relation'
+
+    __name__ = 'contract-loan'
+
+    loan_number = fields.Integer('Loan Number')
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT')
 
 
 class LoanShare(model.CoopSQL, model.CoopView):
