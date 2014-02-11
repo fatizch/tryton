@@ -479,6 +479,10 @@ class TableDefinitionDimension(ModelSQL, ModelView):
                 return [('id', '=', records[0].id)]
         return [('name',) + tuple(clause[1:])]
 
+    @classmethod
+    def _export_keys(cls):
+        return set([])
+
 
 class TableCell(ModelSQL, ModelView):
     "Cell"
