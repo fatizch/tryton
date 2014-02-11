@@ -44,10 +44,10 @@
     <!-- ###################### -->
     <!-- # Exclusion Selector # -->
     <!-- ###################### -->
-    <record model="ir.ui.view" id="manage_exclusion_select_extra_view_tree">
+    <record model="ir.ui.view" id="manage_exclusion_select_extra_view_list">
       <field name="model">contract.manage_exclusion.select.exclusion</field>
       <field name="type">tree</field>
-      <field name="name">manage_exclusion_select_exclusion_tree</field>
+      <field name="name">manage_exclusion_select_exclusion_list</field>
     </record>
     <!-- ##################### -->
     <!-- # Exclusion Display # -->
