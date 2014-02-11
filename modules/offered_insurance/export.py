@@ -16,8 +16,8 @@ class ExportPackage:
     exclusions = fields.Function(
         fields.One2Many('offered.exclusion', None, 'Exclusion', states={
                 'invisible': Bool(Eval('model') != 'offered.exclusion')},
-                on_change=['exclusions', 'instances_to_export'],
-                add_remove=[]),
+            on_change=['exclusions', 'instances_to_export'],
+            add_remove=[]),
         'getter_void', setter='setter_void')
 
     @classmethod
