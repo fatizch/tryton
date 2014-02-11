@@ -52,7 +52,7 @@
     <!-- ##################### -->
     <!-- # Exclusion Display # -->
     <!-- ##################### -->
-    <record model="ir.ui.view" id="manage_exclusion_select_view_list">
+    <record model="ir.ui.view" id="manage_exclusion_select_view_form">
       <field name="model">contract.manage_exclusion.select</field>
       <field name="type">form</field>
       <field name="name">manage_exclusion_select_form</field>
