@@ -253,6 +253,11 @@ class Contract:
     def create_extra_premium(cls, instances):
         pass
 
+    def get_publishing_context(self):
+        result = super(Contract, self).get_publishing_context()
+        result['Insurers'] = [x.offered.insurer.party for x in self.options]
+        return result
+
 
 class ContractOption:
     __name__ = 'contract.option'
@@ -653,6 +658,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_with_possible_item_desc_nb(self, name=None):
         return len(self.possible_item_desc)
 
+    def get_publishing_values(self):
+        result = super(CoveredElement, self).get_publishing_values()
+        result['party'] = self.party
+        return result
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -885,6 +895,11 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     @ModelView.button_action('contract_insurance.act_manage_exclusion')
     def propagate_exclusions(cls, covered_datas):
         pass
+
+    def get_publishing_values(self):
+        result = super(CoveredData, self).get_publishing_values()
+        result['offered'] = self.option.offered
+        return result
 
 
 class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):

@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
-from trytond.pyson import Eval, Bool, Less
+import StringIO
 
+from trytond.pyson import Eval, Bool, Less
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import utils, fields, model, export
@@ -316,3 +317,16 @@ class Party(export.ExportImportMixin):
     @staticmethod
     def default_number_of_contact_mechanisms():
         return 0
+
+    def get_publishing_values(self):
+        result = super(Party, self).get_publishing_values()
+        result['name'] = self.name
+        result['first_name'] = self.first_name
+        result['birth_date'] = self.birth_date
+        result['gender'] = coop_string.translate_value(self, 'gender')
+        try:
+            result['main_address'] = self.addresses[0]
+        except:
+            pass
+        result['logo'] = StringIO.StringIO(str(self.logo)) if self.logo else ''
+        return result

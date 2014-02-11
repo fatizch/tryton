@@ -546,6 +546,28 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return ['subscriber', ('offered', 'light'), 'extra_data',
             'options', 'covered_elements', 'start_date', 'end_date']
 
+    def get_publishing_context(self):
+        result = super(Contract, self).get_publishing_context()
+        result['Subscriber'] = self.subscriber
+        result['Product'] = self.offered
+        result['Contract'] = self
+        result['Company'] = self.company
+        result['Currency'] = self.currency
+
+        def format_currency(value):
+            template = '%.%sf' % self.currency_digits
+            return template % value
+
+        result['FAmount'] = format_currency
+        return result
+
+    def get_publishing_values(self):
+        result = super(Contract, self).get_publishing_values()
+        result['number'] = self.contract_number
+        result['start_date'] = self.start_date
+        result['end_date'] = self.end_date
+        return result
+
 
 class ContractOption(model.CoopSQL, Subscribed):
     'Contract Option'

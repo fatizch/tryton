@@ -296,6 +296,13 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
                 group_by=loan.id))
         return dict(cursor.fetchall())
 
+    def get_publishing_values(self):
+        result = super(Loan, self).get_publishing_values()
+        result['amount'] = self.amount
+        result['start_date'] = self.start_date
+        result['number_payments'] = self.number_of_payments
+        return result
+
 
 class ContractLoanRelation(model.CoopSQL, model.CoopView):
     'Contract Loan Relation'
@@ -346,6 +353,13 @@ class LoanShare(model.CoopSQL, model.CoopView):
 
     def init_from_option(self, option):
         self.start_date = option.start_date
+
+    def get_publishing_values(self):
+        result = super(LoanShare, self).get_publishing_values()
+        result.update(self.loan.get_publishing_values())
+        result['share'] = self.share
+        result['covered_amount'] = self.share * result['amount']
+        return result
 
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
