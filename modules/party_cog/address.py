@@ -184,3 +184,11 @@ class Address(export.ExportImportMixin):
     @staticmethod
     def default_country():
         return country.Country.default_country().id
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('street',) + tuple(clause[1:])],
+            [('city',) + tuple(clause[1:])],
+            [('zip',) + tuple(clause[1:])],
+            ]
