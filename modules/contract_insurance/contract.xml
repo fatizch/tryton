@@ -67,6 +67,12 @@
             <field name="type">form</field>
             <field name="name">covered_element_form</field>
         </record>
+        <record model="ir.ui.view" id="covered_element_simple_view_form">
+            <field name="model">contract.covered_element</field>
+            <field name="type">form</field>
+            <field name="name">covered_element_simple_form</field>
+            <field name="priority">20</field>
+        </record>
         <record model="ir.ui.view" id="covered_elements_clean_tree">
           <field name="model">contract.covered_element</field>
           <field name="type">tree</field>
