@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -33,46 +33,6 @@ msgstr "Quotités"
 msgctxt "field:contract.covered_data,person:"
 msgid "Person"
 msgstr "Personne Physique"
-
-msgctxt "field:contract.covered_data-loan.share,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:contract.covered_data-loan.share,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:contract.covered_data-loan.share,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:contract.covered_data-loan.share,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.covered_data-loan.share,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.covered_data-loan.share,loan_share:"
-msgid "Loan Share"
-msgstr "Quotité"
-
-msgctxt "field:contract.covered_data-loan.share,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.covered_data-loan.share,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.covered_data-loan.share,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.covered_data-loan.share,xml_id:"
-msgid "XML Id"
-msgstr ""
 
 msgctxt "field:contract.option,is_loan:"
 msgid "Is Loan"

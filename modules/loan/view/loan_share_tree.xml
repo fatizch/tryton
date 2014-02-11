@@ -4,7 +4,6 @@
     <field name="share" factor="100">
         <suffix string="%"/>
     </field>
-    <field name="person"/>
     <field name="start_date"/>
     <field name="end_date"/>
 </tree>

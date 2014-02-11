@@ -40,8 +40,6 @@ class LoanCreateParameters(model.CoopView, ModelCurrency):
     lender = fields.Many2One('bank', 'Lender', ondelete='RESTRICT')
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
     defferal_duration = fields.Integer('Differal Duration')
-    loan_shares = fields.One2Many('loan.share', None,
-        'Loan Shares')
 
     def on_change_with_first_payment_date(self):
         if self.funds_release_date and self.payment_frequency:
@@ -105,11 +103,6 @@ class LoanCreate(model.CoopWizard):
             'funds_release_date': contract.start_date,
             'first_payment_date': coop_date.add_duration(contract.start_date,
                 1, 'month'),
-            'loan_shares': [{
-                    'start_date': contract.start_date,
-                    'share': 1,
-                    'person': x.party.id,
-                    } for x in contract.covered_elements]
             }
 
     def default_increments(self, values):
@@ -131,7 +124,6 @@ class LoanCreate(model.CoopWizard):
         loan.first_payment_date = self.loan_parameters.first_payment_date
         loan.currency = self.loan_parameters.contract.currency
         loan.payment_amount = loan.on_change_with_payment_amount()
-        loan.loan_shares = self.loan_parameters.loan_shares
         if (self.loan_parameters.defferal
                 and self.loan_parameters.defferal_duration):
             loan.calculate_increments(defferal=self.loan_parameters.defferal,
