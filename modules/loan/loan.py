@@ -115,11 +115,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_currency(self):
         if hasattr(self, 'contracts') and self.contracts:
-            currencies = list(set([x.currency for x in self.contracts]))
-            if len(currencies) == 1:
-                return currencies[0]
-            else:
-                raise
+            return [x.currency for x in self.contracts][0]
 
     def get_currency_id(self, name):
         if 'currency' in Transaction().context:

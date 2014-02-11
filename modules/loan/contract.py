@@ -20,7 +20,7 @@ class Contract:
         'get_is_loan')
     change_loans_order = fields.Function(
         fields.Boolean('Change Order', states={'invisible': ~Eval('is_loan')}),
-        'get_changer_loans_order', 'setter_void')
+        'get_change_loans_order', 'setter_void')
     loans = fields.Many2Many('contract-loan', 'contract', 'loan', 'Loans',
         states={
             'invisible': Or(~Eval('is_loan'), ~~Eval('change_loans_order')),
@@ -71,7 +71,7 @@ class Contract:
         end_date = max([x.end_date for x in self.loans])
         self.end_date = end_date
 
-    def get_changer_loans_order(self, name):
+    def get_change_loans_order(self, name):
         return False
 
 

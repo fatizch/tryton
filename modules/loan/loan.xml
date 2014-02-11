@@ -23,10 +23,10 @@
             <field name="type">form</field>
             <field name="name">contract-loan_form</field>
         </record>
-        <record model="ir.ui.view" id="contract-loan_view_tree">
+        <record model="ir.ui.view" id="contract-loan_view_list">
             <field name="model">contract-loan</field>
             <field name="type">tree</field>
-            <field name="name">contract-loan_tree</field>
+            <field name="name">contract-loan_list</field>
         </record>
         <!-- ############################################################ -->
         <!-- ########### Loan Share ########### -->
