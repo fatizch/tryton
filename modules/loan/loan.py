@@ -397,8 +397,6 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     interest = fields.Numeric('Interest',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
-    insurance = fields.Numeric('Insurance',
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     end_balance = fields.Function(
         fields.Numeric('End Balance', digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
