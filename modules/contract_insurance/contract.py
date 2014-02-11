@@ -1006,6 +1006,8 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
         #we only need to have a protocole when the management is effective
         states={'required': ~~Eval('start_date')},
         ondelete='RESTRICT',)
+    agency = fields.Many2One('party.address', 'Agency', ondelete='RESTRICT',
+        domain=[('party', '=', Eval('party'))])
     contract = fields.Many2One('contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
     kind = fields.Selection([('', '')], 'Kind')
