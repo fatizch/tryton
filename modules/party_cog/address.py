@@ -87,7 +87,7 @@ class Address(export.ExportImportMixin):
 
     @classmethod
     def _export_keys(cls):
-        return set(('party.name', 'name'))
+        return set(('party.name', 'street', 'zip', 'city', 'country.code'))
 
     def on_change_with_city(self):
         if self.zip and self.country:
