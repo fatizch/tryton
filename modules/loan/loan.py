@@ -255,6 +255,16 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             increment = Increment()
             increment.start_date = self.funds_release_date
             increments = [increment]
+        else:
+            Increment = Pool().get('loan.increment')
+            increment = Increment()
+            increment.loan = self
+            increment.start_date = self.funds_release_date
+            increment.number_of_payments = self.number_of_payments
+            increment.rate = self.rate
+            increment.end_date = increment.on_change_with_end_date()
+            increment.loan = None
+            increments = [increment]
         if not hasattr(self, 'increments'):
             self.increments = []
         self.increments = list(self.increments)
@@ -285,7 +295,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
                 return share
 
     @classmethod
-    def get_loan_end_date(cls, loans):
+    def get_loan_end_date(cls, loans, name):
         pool = Pool()
         cursor = Transaction().cursor
         loan = pool.get('loan').__table__()
