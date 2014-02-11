@@ -299,7 +299,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_publishing_values(self):
         result = super(Loan, self).get_publishing_values()
         result['amount'] = self.amount
-        result['start_date'] = self.start_date
+        result['start_date'] = self.funds_release_date
         result['number_payments'] = self.number_of_payments
         return result
 
@@ -357,7 +357,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
     def get_publishing_values(self):
         result = super(LoanShare, self).get_publishing_values()
         result.update(self.loan.get_publishing_values())
-        result['share'] = self.share
+        result['share'] = '%.2f %%' % (self.share * 100)
         result['covered_amount'] = self.share * result['amount']
         return result
 

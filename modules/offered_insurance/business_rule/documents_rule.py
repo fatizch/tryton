@@ -198,7 +198,7 @@ class Printable(Model):
     def get_product(self):
         raise NotImplementedError
 
-    def get_publishing_context(self):
+    def get_publishing_context(self, cur_context):
         return {
             'Today': utils.today(),
             }
@@ -578,7 +578,7 @@ class DocumentGenerateReport(Report):
         # localcontext['Logo'] = data['logo']
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
-        localcontext.update(good_obj.get_publishing_context())
+        localcontext.update(good_obj.get_publishing_context(localcontext))
         DocumentTemplate = Pool().get('document.template')
         good_letter = DocumentTemplate(data['doc_template'])
         report.report_content = good_letter.get_good_version(

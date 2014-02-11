@@ -8,6 +8,7 @@ from trytond.modules.cog_utils import export
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'Move',
     'Account',
     'AccountKind',
     'Journal',
@@ -15,6 +16,10 @@ __all__ = [
     'Period',
     'Configuration',
     ]
+
+
+class Move(export.ExportImportMixin):
+    __name__ = 'account.move'
 
 
 class AccountKind(export.ExportImportMixin):

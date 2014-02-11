@@ -635,6 +635,16 @@ class Contract:
                 return True
         return False
 
+    def get_publishing_context(self, cur_context):
+        result = super(Contract, self).get_publishing_context(cur_context)
+        result['BillingData'] = self.get_billing_data(cur_context['Date'])
+        result['LastBill'] = self.last_bill[0]
+        return result
+
+    def get_publishing_values(self):
+        result = super(Contract, self).get_publishing_values()
+        return result
+
 
 class Option:
     __name__ = 'contract.option'

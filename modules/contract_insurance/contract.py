@@ -253,8 +253,8 @@ class Contract:
     def create_extra_premium(cls, instances):
         pass
 
-    def get_publishing_context(self):
-        result = super(Contract, self).get_publishing_context()
+    def get_publishing_context(self, cur_context):
+        result = super(Contract, self).get_publishing_context(cur_context)
         result['Insurers'] = [x.offered.insurer.party for x in self.options]
         return result
 

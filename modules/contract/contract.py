@@ -546,8 +546,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return ['subscriber', ('offered', 'light'), 'extra_data',
             'options', 'covered_elements', 'start_date', 'end_date']
 
-    def get_publishing_context(self):
-        result = super(Contract, self).get_publishing_context()
+    def get_publishing_context(self, cur_context):
+        Lang = Pool().get('ir.lang')
+        result = super(Contract, self).get_publishing_context(cur_context)
         result['Subscriber'] = self.subscriber
         result['Product'] = self.offered
         result['Contract'] = self
@@ -555,8 +556,9 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         result['Currency'] = self.currency
 
         def format_currency(value):
-            template = '%.%sf' % self.currency_digits
-            return template % value
+            return Lang.currency(Lang.search([
+                        ('code', '=', cur_context['Lang'])])[0], value,
+                self.currency, grouping=True, symbol=True)
 
         result['FAmount'] = format_currency
         return result
