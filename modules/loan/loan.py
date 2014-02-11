@@ -115,7 +115,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_currency(self):
         if hasattr(self, 'contracts') and self.contracts:
-            return [x.currency for x in self.contracts][0]
+            return self.contracts[0].currency
 
     def get_currency_id(self, name):
         if 'currency' in Transaction().context:
@@ -313,12 +313,18 @@ class LoanShare(model.CoopSQL, model.CoopView):
     __name__ = 'loan.share'
     _rec_name = 'share'
 
+    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
+        ondelete='CASCADE')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT')
     share = fields.Numeric('Loan Share', digits=(16, 4))
-    person = fields.Many2One('party.party', 'Person', ondelete='RESTRICT',
-        domain=[('is_person', '=', True)])
+    person = fields.Function(
+        fields.Many2One('party.party', 'Person'),
+        'get_person_id')
+    option = fields.Function(
+        fields.Many2One('contract.option', 'Contract Option'),
+        'get_option_id')
 
     @staticmethod
     def default_share():
@@ -331,6 +337,16 @@ class LoanShare(model.CoopSQL, model.CoopView):
     def init_dict_for_rule_engine(self, current_dict):
         self.loan.init_dict_for_rule_engine(current_dict)
         current_dict['share'] = self
+
+    def get_person_id(self, name):
+        return self.covered_data.person.id if self.covered_data else None
+
+    def get_option_id(self, name):
+        return self.covered_data.option.id if self.covered_data else None
+
+    def init_from_option(self, option):
+        self.start_date = option.start_date
+        self.share = 1
 
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):

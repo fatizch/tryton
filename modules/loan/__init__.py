@@ -22,7 +22,6 @@ def register():
         ContractLoanRelation,
         LoanShare,
         CoveredData,
-        CoveredDataLoanShareRelation,
         LoanIncrement,
         LoanPayment,
         # From Loan Create Wizard

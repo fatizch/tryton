@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Or
 
 from trytond.modules.cog_utils import utils, fields, model
@@ -8,7 +8,6 @@ __all__ = [
     'Contract',
     'ContractOption',
     'CoveredData',
-    'CoveredDataLoanShareRelation',
     ]
 
 
@@ -89,12 +88,10 @@ class ContractOption:
 class CoveredData:
     __name__ = 'contract.covered_data'
 
-    loan_shares = fields.Many2Many('contract.covered_data-loan.share',
-        'covered_data', 'loan_share', 'Loan Shares',
+    loan_shares = fields.One2Many('loan.share', 'covered_data', 'Loan Shares',
         states={'invisible': ~Eval('is_loan')}, domain=[
-            ('person', '=', Eval('person')),
             ('loan.contracts', '=', Eval('contract'))],
-        depends=['person', 'contract'])
+        depends=['contract'])
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
         'get_person')
@@ -108,23 +105,14 @@ class CoveredData:
 
     def init_from_option(self, option):
         super(CoveredData, self).init_from_option(option)
+        LoanShare = Pool().get('loan.share')
         if not hasattr(self, 'loan_shares'):
             self.loan_shares = []
         for loan in option.contract.loans:
-            for share in loan.loan_shares:
-                if share.person.id == self.covered_element.party.id:
-                    self.loan_shares.append(share)
+            share = LoanShare()
+            share.loan = loan
+            share.init_from_option(option)
+            self.loan_shares.append(share)
 
     def get_is_loan(self, name):
         return self.option and self.option.is_loan
-
-
-class CoveredDataLoanShareRelation(model.CoopSQL):
-    'Loan Covered Data Loan Share Relation'
-
-    __name__ = 'contract.covered_data-loan.share'
-
-    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
-        ondelete='CASCADE')
-    loan_share = fields.Many2One('loan.share', 'Loan Share',
-        ondelete='RESTRICT')
