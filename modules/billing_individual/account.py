@@ -83,10 +83,14 @@ class MoveBreakdown(model.CoopSQL, model.CoopView, ModelCurrency):
         return ratio
 
     def get_currency(self):
-        try:
-            return self.move.contract.currency
-        except:
+        if not (hasattr(self, 'move') and self.move):
             return None
+        if not (hasattr(self.move, 'contract') and self.move.contract):
+            return None
+        if not (hasattr(self.move.contract, 'currency') and
+                self.move.contract.currency):
+            return None
+        return self.move.contract.currency
 
 
 class Move:
