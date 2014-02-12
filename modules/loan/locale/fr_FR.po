@@ -673,7 +673,7 @@ msgid "Loan Share"
 msgstr "Quotité"
 
 msgctxt "model:tag,name:tag_loan"
-msgid "Prêt"
+msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "selection:contract.covered_data.extra_premium,calculation_kind:"
