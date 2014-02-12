@@ -61,6 +61,7 @@ ORDER = [
     ]
 
 DIMENSION_MAX = int(CONFIG.get('table_dimension', 4))
+MAX_NUMBER_OF_CELLS_FOR_EXPORT = 10000
 
 
 class TableDefinition(ModelSQL, ModelView):
@@ -131,13 +132,12 @@ class TableDefinition(ModelSQL, ModelView):
             result += record.import_json(values)[cls.__name__].values()
         return result
 
-    @classmethod
-    def _export_skips(cls):
-        result = super(TableDefinition, cls)._export_skips()
-        result.add('cells')
-        return result
-
     def _export_override_cells(self, exported, result, my_key):
+        Cell = Pool().get('table.cell')
+        count = Cell.search_count([('definition', '=', self.id)])
+        if count > MAX_NUMBER_OF_CELLS_FOR_EXPORT:
+            return []
+
         def lock_dim_and_export(locked, results, dimensions):
             my_dim = len(locked) + 1
             try:
@@ -168,6 +168,8 @@ class TableDefinition(ModelSQL, ModelView):
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
             field_value, values, created, relink, to_relink):
+        if not field_value:
+            return
         Cell = Pool().get('table.cell')
         if (hasattr(good_instance, 'id') and good_instance.id):
             table_id = good_instance.id
