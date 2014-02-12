@@ -185,6 +185,14 @@ class Address(export.ExportImportMixin):
     def default_country():
         return country.Country.default_country().id
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('street',) + tuple(clause[1:])],
+            [('city',) + tuple(clause[1:])],
+            [('zip',) + tuple(clause[1:])],
+            ]
+
     def get_publishing_values(self):
         result = super(Address, self).get_publishing_values()
         result['multiline'] = self.full_address
