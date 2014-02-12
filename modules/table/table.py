@@ -131,6 +131,12 @@ class TableDefinition(ModelSQL, ModelView):
             result += record.import_json(values)[cls.__name__].values()
         return result
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(TableDefinition, cls)._export_skips()
+        result.add('cells')
+        return result
+
     def _export_override_cells(self, exported, result, my_key):
         def lock_dim_and_export(locked, results, dimensions):
             my_dim = len(locked) + 1
