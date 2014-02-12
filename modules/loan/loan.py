@@ -231,40 +231,32 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             if not utils.is_none(increment, 'number_of_payments'):
                 start_date = coop_date.add_day(increment.end_date, 1)
 
-    def create_increments_from_defferal(self, defferal, duration):
+    def create_increments(self, duration=None, defferal=None):
         Increment = Pool().get('loan.increment')
         increment_1 = Increment()
-        increment_1.defferal = defferal
         increment_1.number_of_payments = duration
         increment_1.rate = self.rate
+        result = [increment_1]
+        if not defferal:
+            return result
+        increment_1.defferal = defferal
         increment_2 = Increment()
         increment_2.number_of_payments = self.number_of_payments - duration
         increment_2.rate = self.rate
-        return [increment_1, increment_2]
+        result.append(increment_2)
+        return result
 
     def calculate_increments(self, defferal=None, defferal_duration=None):
         increments = []
         if defferal and defferal_duration:
-            increments = self.create_increments_from_defferal(defferal,
-                defferal_duration)
+            increments = self.create_increments(defferal_duration, defferal)
         elif self.kind == 'intermediate':
-            increments = self.create_increments_from_defferal('partially',
-                self.number_of_payments - 1)
+            increments = self.create_increments(self.number_of_payments - 1,
+                'partially')
         elif self.kind == 'graduated':
-            Increment = Pool().get('loan.increment')
-            increment = Increment()
-            increment.start_date = self.funds_release_date
-            increments = [increment]
+            increments = self.create_increments()
         else:
-            Increment = Pool().get('loan.increment')
-            increment = Increment()
-            increment.loan = self
-            increment.start_date = self.funds_release_date
-            increment.number_of_payments = self.number_of_payments
-            increment.rate = self.rate
-            increment.end_date = increment.on_change_with_end_date()
-            increment.loan = None
-            increments = [increment]
+            increments = self.create_increments(self.number_of_payments)
         if not hasattr(self, 'increments'):
             self.increments = []
         self.increments = list(self.increments)
