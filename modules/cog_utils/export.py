@@ -47,6 +47,15 @@ class ExportImportMixin(Model):
         fields.Char('XML Id', states={'invisible': True}),
         'get_xml_id', searcher='search_xml_id')
 
+    def get_publishing_values(self):
+        # Returns a dictionary with all strings that may be used when
+        # publishing.
+        return {}
+
+    @property
+    def _ed(self):
+        return self.get_publishing_values()
+
     @classmethod
     def __setup__(cls):
         super(ExportImportMixin, cls).__setup__()

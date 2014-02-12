@@ -71,30 +71,41 @@ class Contract:
                 price.details.append(com_line)
         return (prices, errs)
 
-    def init_billing_work_set(self):
-        res = super(Contract, self).init_billing_work_set()
-        res['coms'] = defaultdict(
-                lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
-        return res
+    @classmethod
+    def work_set_class(cls):
+        class WorkSet(super(Contract, cls).work_set_class()):
+            def __init__(self):
+                super(WorkSet, self).__init__()
+                self.coms = defaultdict(
+                    lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
+        return WorkSet
 
     def calculate_final_coms(self, work_set):
-        for data in work_set['coms'].itervalues():
+        for data in work_set.coms.itervalues():
             account = data['object'].get_account_for_billing()
-            line = work_set['lines'][(data['object'].offered, account)]
+            line = work_set.lines[(data['object'].offered, account)]
             line.party = data['object'].current_policy_owner
             line.account = account
             line.second_origin = data['object'].offered
-            amount = work_set['currency'].round(data['amount'])
+            amount = work_set.currency.round(data['amount'])
             line.credit += amount
-            work_set['total_amount'] += amount
+            work_set.total_amount += amount
 
     def calculate_final_taxes_and_fees(self, work_set):
-        ht_total = work_set['total_amount']
+        ht_total = work_set.total_amount
         super(Contract, self).calculate_final_taxes_and_fees(work_set)
-        new_total = work_set['total_amount']
-        work_set['total_amount'] = ht_total
+        new_total = work_set.total_amount
+        work_set.total_amount = ht_total
         self.calculate_final_coms(work_set)
-        work_set['total_amount'] += new_total - ht_total
+        work_set.total_amount += new_total - ht_total
+
+    def get_publishing_context(self, cur_context):
+        result = super(Contract, self).get_publishing_context(cur_context)
+        result['BusinessProviders'] = [x.party for x in self.agreements
+            if x.kind == 'business_provider']
+        result['BusinessManagers'] = [x.party.id for x in self.agreements
+            if x.kind == 'management']
+        return result
 
 
 class Option:
@@ -228,6 +239,7 @@ class ContractAgreementRelation:
 
     @classmethod
     def get_possible_agreement_kind(cls):
-        res = super(ContractAgreementRelation, cls).get_possible_agreement_kind()
+        res = super(ContractAgreementRelation,
+            cls).get_possible_agreement_kind()
         res.extend(COMMISSION_KIND)
         return list(set(res))

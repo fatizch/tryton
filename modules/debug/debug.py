@@ -31,6 +31,11 @@ class Debug(Wizard):
     def run_code(self):
         # Run your code. return value will be wrote down in the display window
         result = '\n'.join([x.name for x in Pool().get('ir.model').search([])])
+        Move = Pool().get('account.move')
+        print Move
+        print dir(Move)
+        print Move.get_publishing_values
+        print Move.__mro__
         return result
 
     def transition_run(self):

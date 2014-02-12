@@ -505,6 +505,12 @@ class Product(model.CoopSQL, Offered):
     def get_change_coverages_order(self, name):
         return False
 
+    def get_publishing_values(self):
+        result = super(Product, self).get_publishing_values()
+        result['name'] = self.name
+        result['code'] = self.code
+        return result
+
 
 class OptionDescription(model.CoopSQL, Offered):
     'OptionDescription'
@@ -605,6 +611,12 @@ class OptionDescription(model.CoopSQL, Offered):
     def init_dict_for_rule_engine(self, args):
         super(OptionDescription, self).init_dict_for_rule_engine(args)
         args['coverage'] = self
+
+    def get_publishing_values(self):
+        result = super(OptionDescription, self).get_publishing_values()
+        result['name'] = self.name
+        result['code'] = self.code
+        return result
 
 
 class PackageOptionDescription(model.CoopSQL):

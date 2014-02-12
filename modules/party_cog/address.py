@@ -192,3 +192,9 @@ class Address(export.ExportImportMixin):
             [('city',) + tuple(clause[1:])],
             [('zip',) + tuple(clause[1:])],
             ]
+
+    def get_publishing_values(self):
+        result = super(Address, self).get_publishing_values()
+        result['multiline'] = self.full_address
+        result['oneline'] = self.full_address.replace('\n', ' ')
+        return result

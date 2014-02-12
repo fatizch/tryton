@@ -198,6 +198,11 @@ class Printable(Model):
     def get_product(self):
         raise NotImplementedError
 
+    def get_publishing_context(self, cur_context):
+        return {
+            'Today': utils.today(),
+            }
+
 
 class DocumentDescription(model.CoopSQL, model.CoopView):
     'Document Description'
@@ -551,7 +556,8 @@ class DocumentGenerateReport(Report):
         try:
             localcontext['Lang'] = localcontext['Party'].lang.code
         except AttributeError:
-            localcontext['Lang'] = 'en_US'
+            localcontext['Lang'] = Pool().get('ir.lang').search([
+                    ('code', '=', 'en_US')])[0]
         if data['sender']:
             localcontext['Sender'] = Pool().get('party.party')(data['sender'])
         else:
@@ -561,10 +567,18 @@ class DocumentGenerateReport(Report):
                 'party.address')(data['sender_address'])
         else:
             localcontext['SenderAddress'] = None
+
+        def format_date(value, lang=None):
+            if lang is None:
+                lang = localcontext['Party'].lang
+            return Pool().get('ir.lang').strftime(value, lang.code, lang.date)
+
+        localcontext['Date'] = Pool().get('ir.date').today()
+        localcontext['FDate'] = format_date
         # localcontext['Logo'] = data['logo']
-        localcontext['Today'] = utils.today()
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
+        localcontext.update(good_obj.get_publishing_context(localcontext))
         DocumentTemplate = Pool().get('document.template')
         good_letter = DocumentTemplate(data['doc_template'])
         report.report_content = good_letter.get_good_version(

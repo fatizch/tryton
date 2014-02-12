@@ -231,30 +231,32 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             if not utils.is_none(increment, 'number_of_payments'):
                 start_date = coop_date.add_day(increment.end_date, 1)
 
-    def create_increments_from_defferal(self, defferal, duration):
+    def create_increments(self, duration=None, defferal=None):
         Increment = Pool().get('loan.increment')
         increment_1 = Increment()
-        increment_1.defferal = defferal
         increment_1.number_of_payments = duration
         increment_1.rate = self.rate
+        result = [increment_1]
+        if not defferal:
+            return result
+        increment_1.defferal = defferal
         increment_2 = Increment()
         increment_2.number_of_payments = self.number_of_payments - duration
         increment_2.rate = self.rate
-        return [increment_1, increment_2]
+        result.append(increment_2)
+        return result
 
     def calculate_increments(self, defferal=None, defferal_duration=None):
         increments = []
         if defferal and defferal_duration:
-            increments = self.create_increments_from_defferal(defferal,
-                defferal_duration)
+            increments = self.create_increments(defferal_duration, defferal)
         elif self.kind == 'intermediate':
-            increments = self.create_increments_from_defferal('partially',
-                self.number_of_payments - 1)
+            increments = self.create_increments(self.number_of_payments - 1,
+                'partially')
         elif self.kind == 'graduated':
-            Increment = Pool().get('loan.increment')
-            increment = Increment()
-            increment.start_date = self.funds_release_date
-            increments = [increment]
+            increments = self.create_increments()
+        else:
+            increments = self.create_increments(self.number_of_payments)
         if not hasattr(self, 'increments'):
             self.increments = []
         self.increments = list(self.increments)
@@ -285,7 +287,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
                 return share
 
     @classmethod
-    def get_loan_end_date(cls, loans):
+    def get_loan_end_date(cls, loans, name):
         pool = Pool()
         cursor = Transaction().cursor
         loan = pool.get('loan').__table__()
@@ -295,6 +297,13 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         cursor.execute(*query_table.select(loan.id, Max(increment.end_date),
                 group_by=loan.id))
         return dict(cursor.fetchall())
+
+    def get_publishing_values(self):
+        result = super(Loan, self).get_publishing_values()
+        result['amount'] = self.amount
+        result['start_date'] = self.funds_release_date
+        result['number_payments'] = self.number_of_payments
+        return result
 
 
 class ContractLoanRelation(model.CoopSQL, model.CoopView):
@@ -347,6 +356,13 @@ class LoanShare(model.CoopSQL, model.CoopView):
     def init_from_option(self, option):
         self.start_date = option.start_date
 
+    def get_publishing_values(self):
+        result = super(LoanShare, self).get_publishing_values()
+        result.update(self.loan.get_publishing_values())
+        result['share'] = '%.2f %%' % (self.share * 100)
+        result['covered_amount'] = self.share * result['amount']
+        return result
+
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan Increment'
@@ -396,8 +412,6 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
     principal = fields.Numeric('Principal',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     interest = fields.Numeric('Interest',
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
-    insurance = fields.Numeric('Insurance',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     end_balance = fields.Function(
         fields.Numeric('End Balance', digits=(16, Eval('currency_digits', 2)),

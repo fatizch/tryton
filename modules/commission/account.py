@@ -12,8 +12,22 @@ from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'MoveBreakdown',
     'Move',
     ]
+
+
+class MoveBreakdown:
+    __name__ = 'account.move.breakdown'
+
+    commissions = fields.Numeric('Commissions')
+    base_total = fields.Numeric('Base Total')
+
+    def ventilate_amounts(self, work_set):
+        ratio = super(MoveBreakdown, self).ventilate_amounts(work_set)
+        self.commissions = work_set.move.com_amount * ratio
+        self.base_total = self.total_wo_fees - self.commissions
+        return ratio
 
 
 class Move:

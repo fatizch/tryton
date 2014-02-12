@@ -131,7 +131,7 @@ class LoanCreate(model.CoopWizard):
         elif loan.kind == 'intermediate':
             loan.calculate_increments(defferal='partially',
                 defferal_duration=loan.number_of_payments - 1)
-        elif loan.kind == 'graduated':
+        else:
             loan.calculate_increments()
         loan.save()
         if loan.kind != 'graduated' and not loan.increments:

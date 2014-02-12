@@ -253,6 +253,11 @@ class Contract:
     def create_extra_premium(cls, instances):
         pass
 
+    def get_publishing_context(self, cur_context):
+        result = super(Contract, self).get_publishing_context(cur_context)
+        result['Insurers'] = [x.offered.insurer.party for x in self.options]
+        return result
+
 
 class ContractOption:
     __name__ = 'contract.option'
@@ -653,6 +658,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_with_possible_item_desc_nb(self, name=None):
         return len(self.possible_item_desc)
 
+    def get_publishing_values(self):
+        result = super(CoveredElement, self).get_publishing_values()
+        result['party'] = self.party
+        return result
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -886,6 +896,11 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def propagate_exclusions(cls, covered_datas):
         pass
 
+    def get_publishing_values(self):
+        result = super(CoveredData, self).get_publishing_values()
+        result['offered'] = self.option.offered
+        return result
+
 
 class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     'Extra Premium'
@@ -991,6 +1006,8 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
         #we only need to have a protocole when the management is effective
         states={'required': ~~Eval('start_date')},
         ondelete='RESTRICT',)
+    agency = fields.Many2One('party.address', 'Agency', ondelete='RESTRICT',
+        domain=[('party', '=', Eval('party'))])
     contract = fields.Many2One('contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
     kind = fields.Selection([('', '')], 'Kind')
