@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
+import copy
+
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or
 
 from trytond.modules.cog_utils import utils, fields, model
@@ -8,6 +12,7 @@ __all__ = [
     'Contract',
     'ContractOption',
     'CoveredData',
+    'ExtraPremium',
     ]
 
 
@@ -99,6 +104,12 @@ class CoveredData:
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')
 
+    @classmethod
+    def __setup__(cls):
+        super(CoveredData, cls).__setup__()
+        cls.extra_premiums = copy.copy(cls.extra_premiums)
+        cls.extra_premiums.context['is_loan'] = ~~Eval('is_loan')
+
     def get_person(self, name=None):
         if self.covered_element and self.covered_element.party:
             return self.covered_element.party.id
@@ -116,3 +127,26 @@ class CoveredData:
 
     def get_is_loan(self, name):
         return self.option and self.option.is_loan
+
+
+class ExtraPremium:
+    __name__ = 'contract.covered_data.extra_premium'
+
+    capital_per_mil_rate = fields.Numeric('Rate on Capital', states={
+            'invisible': Eval('calculation_kind', '') != 'capital_per_mil',
+            'required': Eval('calculation_kind', '') == 'capital_per_mil'},
+        digits=(16, 5))
+
+    def get_possible_extra_premiums_kind(self):
+        result = super(ExtraPremium, self).get_possible_extra_premiums_kind()
+        if (self.covered_data and self.covered_data.is_loan) or (
+                'is_loan' in Transaction().context and
+                Transaction().context.get('is_loan')):
+            result.append(('capital_per_mil', 'Per mil capital'))
+        return result
+
+    def calculate_premium_amount(self, args, base):
+        if not self.calculation_kind == 'capital_per_mil':
+            return super(ExtraPremium, self).calculate_premium_amount(args,
+                base)
+        return args['loan'].amount * self.capital_per_mil_rate
