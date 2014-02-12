@@ -242,103 +242,145 @@ class Contract:
             billing_period.save()
         return billing_period
 
+    @classmethod
+    def work_set_class(cls):
+        class WorkSet(object):
+            def __init__(self):
+                Line = Pool().get('account.move.line')
+                self.billing_period = None
+                self.contributions = None
+                self.counterparts = None
+                self.currency = None
+                self.detail_lines = None
+                self.fees = defaultdict(
+                    lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
+                self.lines = defaultdict(lambda: Line(credit=0, debit=0))
+                self.move = None
+                self.payment_date = None
+                self.payment_method = None
+                self.payment_term = None
+                self.period = None
+                self.price_lines = None
+                self.taxes = defaultdict(
+                    lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
+                self.total_amount = 0
+        return WorkSet
+
     def init_billing_work_set(self):
-        Line = Pool().get('account.move.line')
-        return {
-            'lines': defaultdict(lambda: Line(credit=0, debit=0)),
-            'total_amount': 0,
-            'taxes': defaultdict(
-                lambda: {'amount': 0, 'base': 0, 'to_recalculate': False}),
-            'fees': defaultdict(
-                lambda: {'amount': 0, 'base': 0, 'to_recalculate': False}),
-            }
+        return self.work_set_class()()
 
     def create_billing_move(self, work_set):
         Move = Pool().get('account.move')
         Period = Pool().get('account.period')
 
-        period_id = Period.find(self.company.id, date=work_set['period'][0])
+        period_id = Period.find(self.company.id, date=work_set.period[0])
         move = Move(
             journal=self.get_journal(),
             period=period_id,
-            date=work_set['period'][0],
+            date=work_set.period[0],
             origin=utils.convert_to_reference(self),
-            billing_period=work_set['billing_period'],
+            billing_period=work_set.billing_period,
             )
         return move
 
     def calculate_base_lines(self, work_set):
-        for period, price_line in work_set['price_lines']:
+        work_set.contributions = []
+        for period, price_line in work_set.price_lines:
             price_line.calculate_bill_contribution(work_set, period)
 
     def calculate_final_taxes_and_fees(self, work_set):
         for type_, data in chain(
-                izip(repeat('tax'), work_set['taxes'].itervalues()),
-                izip(repeat('fee'), work_set['fees'].itervalues())):
+                izip(repeat('tax'), work_set.taxes.itervalues()),
+                izip(repeat('fee'), work_set.fees.itervalues())):
             account = data['object'].get_account_for_billing()
-            line = work_set['lines'][(data['object'], account)]
+            line = work_set.lines[(data['object'], account)]
             line.party = self.subscriber
             line.account = account
             if data['to_recalculate']:
                 good_version = data['object'].get_version_at_date(
-                    work_set['period'][0])
+                    work_set.period[0])
                 amount = getattr(good_version,
                     'apply_%s' % type_)(data['base'])
             else:
                 amount = data['amount']
             line.second_origin = data['object']
-            line.credit = work_set['currency'].round(amount)
-            work_set['total_amount'] += line.credit
+            line.credit = work_set.currency.round(amount)
+            work_set.total_amount += line.credit
 
     def calculate_billing_fees(self, work_set):
-        if not work_set['payment_term']:
+        if not work_set.payment_term:
             return
-        for fee_desc in work_set['payment_term'].appliable_fees:
-            fee_line = work_set['fees'][fee_desc.id]
+        for fee_desc in work_set.payment_term.appliable_fees:
+            fee_line = work_set.fees[fee_desc.id]
             fee_line['object'] = fee_desc
             fee_line['to_recalculate'] = True
             fee_line['amount'] = 0
-            fee_line['base'] = work_set['total_amount']
+            fee_line['base'] = work_set.total_amount
 
     def compensate_existing_moves_on_period(self, work_set):
-        if not work_set['billing_period'].moves:
+        if not work_set.billing_period.moves:
             return
         Move = Pool().get('account.move')
-        for old_move in work_set['billing_period'].moves:
+        for old_move in work_set.billing_period.moves:
             if old_move.state == 'draft':
                 continue
             for old_line in old_move.lines:
                 if old_line.account == self.subscriber.account_receivable:
                     continue
-                line = work_set['lines'][
+                line = work_set.lines[
                     (old_line.second_origin, old_line.account)]
                 line.second_origin = old_line.second_origin
                 line.account = old_line.account
                 if old_line.credit:
                     line.credit -= old_line.credit
-                    work_set['total_amount'] -= old_line.credit
+                    work_set.total_amount -= old_line.credit
                 else:
                     line.credit += old_line.debit
-                    work_set['total_amount'] += old_line.debit
+                    work_set.total_amount += old_line.debit
         Move.delete([
-                x for x in work_set['billing_period'].moves
+                x for x in work_set.billing_period.moves
                 if x.state == 'draft'])
+
+    def calculate_bill_details(self, work_set):
+        MoveBreakdown = Pool().get('account.move.breakdown')
+        work_set.detail_lines = []
+        for idx, line in enumerate(work_set.counterparts):
+            new_line = MoveBreakdown()
+            new_line.move = work_set.move
+            if idx == 0:
+                new_line.start_date = work_set.period[0]
+            else:
+                new_line.start_date = line.maturity_date
+            if idx == len(work_set.counterparts) - 1:
+                end_date = work_set.period[1]
+            else:
+                end_date = coop_date.add_day(
+                    work_set.counterparts[idx + 1].maturity_date, -1)
+            new_line.end_date = end_date
+            new_line.total = line.debit
+            new_line.ventilate_amounts(work_set)
+            new_line.save()
+            work_set.detail_lines.append(new_line)
+
+    def build_computation_logs(self, work_set):
+        ComputationLog = Pool().get('account.move.computation_log')
+        for elem in work_set.contributions:
+            log = ComputationLog()
+            log.init_from_log(elem, work_set)
+            log.save()
 
     def apply_payment_term(self, work_set):
         Line = Pool().get('account.move.line')
         Date = Pool().get('ir.date')
-        for line in work_set['lines'].itervalues():
+        for line in work_set.lines.itervalues():
             if line.credit < 0:
                 line.credit, line.debit = 0, -line.credit
 
-        if work_set['total_amount'] >= 0 and work_set['payment_term']:
-            term_lines = work_set['payment_term'].compute(
-                work_set['period'][0], work_set['period'][1],
-                work_set['total_amount'], work_set['currency'],
-                work_set['payment_date'])
+        if work_set.total_amount >= 0 and work_set.payment_term:
+            term_lines = work_set.payment_term.compute(work_set)
         else:
-            term_lines = [(Date.today(), work_set['currency'].round(
-                        work_set['total_amount']))]
+            term_lines = [(Date.today(), work_set.currency.round(
+                        work_set.total_amount))]
         counterparts = []
         for term_date, amount in term_lines:
             counterpart = Line()
@@ -352,7 +394,7 @@ class Contract:
             counterpart.party = self.subscriber
             counterpart.maturity_date = term_date
             counterparts.append(counterpart)
-        work_set['counterparts'] = counterparts
+        work_set.counterparts = counterparts
 
     def bill(self, *period):
         # Performs billing operations on the contract. It is possible to force
@@ -377,17 +419,17 @@ class Contract:
         # Init the work_set which will be used
         currency = self.get_currency()
         work_set = self.init_billing_work_set()
-        work_set['price_lines'] = price_lines
-        work_set['payment_date'] = billing_data.get_payment_date()
-        work_set['payment_method'] = billing_data.payment_method
-        if work_set['payment_method']:
-            work_set['payment_term'] = work_set['payment_method'].get_rule()
+        work_set.price_lines = price_lines
+        work_set.payment_date = billing_data.get_payment_date()
+        work_set.payment_method = billing_data.payment_method
+        if work_set.payment_method:
+            work_set.payment_term = work_set.payment_method.get_rule()
         else:
-            work_set['payment_term'] = None
-        work_set['period'] = period
-        work_set['currency'] = currency
-        work_set['billing_period'] = billing_period
-        work_set['move'] = self.create_billing_move(work_set)
+            work_set.payment_term = None
+        work_set.period = period
+        work_set.currency = currency
+        work_set.billing_period = billing_period
+        work_set.move = self.create_billing_move(work_set)
 
         # Build the basic lines which represents the total amount due on the
         # period. Those lines include product / coverage rates, taxes and fees
@@ -409,11 +451,13 @@ class Contract:
         # Schedule the payments depending on the chosen rule
         self.apply_payment_term(work_set)
 
-        work_set['move'].lines = work_set['lines'].values() + \
-            work_set['counterparts']
-        if work_set['total_amount'] > 0:
-            work_set['move'].save()
-            return work_set['move']
+        work_set.move.lines = work_set.lines.values() + \
+            work_set.counterparts
+        if work_set.total_amount > 0:
+            work_set.move.save()
+            self.calculate_bill_details(work_set)
+            self.build_computation_logs(work_set)
+            return work_set.move
         else:
             return
 
@@ -650,7 +694,7 @@ class Option:
     __name__ = 'contract.option'
 
     def get_name_for_billing(self):
-        return self.option.name + ' - Base Price'
+        return self.offered.name + ' - Base Price'
 
 
 class CoveredElement:

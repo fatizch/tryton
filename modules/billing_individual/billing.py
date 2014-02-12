@@ -300,18 +300,26 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
         price_line_days = self.get_number_of_days_at_date(*period)
         convert_factor = number_of_days / Decimal(price_line_days)
         amount = self.get_base_amount_for_billing() * convert_factor
-        amount = work_set['currency'].round(amount)
+        amount = work_set.currency.round(amount)
         account = self.get_account_for_billing()
-        line = work_set['lines'][(self.on_object, account)]
+        work_set.contributions.append({
+                'from': self.on_object,
+                'start_date': period[0],
+                'end_date': period[1],
+                'base_amount': self.get_base_amount_for_billing(),
+                'final_amount': amount,
+                'ratio': convert_factor,
+                })
+        line = work_set.lines[(self.on_object, account)]
         line.second_origin = self.on_object
         line.credit += amount
-        work_set['total_amount'] += amount
+        work_set.total_amount += amount
         line.account = account
         line.party = self.contract.subscriber
         for type_, sub_lines, sub_line in chain(
-                izip(repeat('tax'), repeat(work_set['taxes']),
+                izip(repeat('tax'), repeat(work_set.taxes),
                     self.tax_lines),
-                izip(repeat('fee'), repeat(work_set['fees']),
+                izip(repeat('fee'), repeat(work_set.fees),
                     self.fee_lines)):
             desc = getattr(sub_line, '%s_desc' % type_)
             values = sub_lines[desc.id]
@@ -319,6 +327,14 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
             values['to_recalculate'] |= sub_line.to_recalculate
             values['amount'] += sub_line.amount * convert_factor
             values['base'] += amount
+            work_set.contributions.append({
+                'from': desc,
+                'start_date': period[0],
+                'end_date': period[1],
+                'base_amount': sub_line.amount,
+                'final_amount': sub_line.amount * convert_factor,
+                'ratio': convert_factor,
+                })
         return line
 
 

@@ -23,12 +23,20 @@
     <label name="contract"/>
     <field name="contract"/>
   </group>
-  <group id="lines" colspan="6" yexpand="1" yfill="1">
-    <group id="details" colspan="2" col="1" yexpand="1" yfill="1">
-      <field name="coverage_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
-      <field name="tax_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
-      <field name="fee_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
-    </group>
-    <field name="schedule" mode="tree" view_ids="billing_individual.move_line_amount_date_tree"/>
-  </group>
+  <notebook colspan="6">
+    <page string="Line details" id="line_details">
+      <field name="breakdown_details" mode="tree"/>
+    </page>
+    <page string="Computation Details" id="computation_details">
+      <field name="calculation_details" mode="tree"/>
+    </page>
+    <page string="General" id="general_details">
+      <group id="details" colspan="2" col="1" yexpand="1" yfill="1">
+        <field name="coverage_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
+        <field name="tax_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
+        <field name="fee_details" mode="tree,form" view_ids="billing_individual.move_line_detail_tree,billing_individual.move_line_detail_form"/>
+      </group>
+      <field name="schedule" mode="tree" view_ids="billing_individual.move_line_amount_date_tree"/>
+    </page>
+  </notebook>
 </form>
