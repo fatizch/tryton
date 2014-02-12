@@ -914,7 +914,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     start_date = fields.Date('Start date', states={'required': True})
     end_date = fields.Date('End date')
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
-        'Calculation Kind', selection_change_with=['covered_data'],
+        'Calculation Kind', selection_change_with=set(['covered_data']),
         depends=['covered_data'])
     flat_amount = fields.Numeric('Flat amount', states={
             'invisible': Eval('calculation_kind', '') != 'flat',
@@ -959,7 +959,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return 0
 
     def get_possible_extra_premiums_kind(self):
-        return POSSIBLE_EXTRA_PREMIUM_RULES[::-1]
+        return list(POSSIBLE_EXTRA_PREMIUM_RULES)
 
     @classmethod
     def validate(cls, records):

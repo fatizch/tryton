@@ -30,7 +30,7 @@ msgstr "Prêts"
 #, fuzzy
 msgctxt "field:contract-loan,contract:"
 msgid "Contract"
-msgstr "Gestionnaire de Contrats"
+msgstr "Contrat"
 
 #, fuzzy
 msgctxt "field:contract-loan,create_date:"
@@ -69,7 +69,7 @@ msgstr "Must Expand Tree"
 #, fuzzy
 msgctxt "field:contract-loan,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 #, fuzzy
 msgctxt "field:contract-loan,write_date:"
@@ -154,7 +154,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:contract.covered_data.extra_premium,capital_per_mil_rate:"
 msgid "Rate on Capital"
-msgstr "Taux sur le Capital"
+msgstr "Pourmillage"
 
 msgctxt "field:contract.option,is_loan:"
 msgid "Is Loan"
@@ -678,7 +678,7 @@ msgstr "Prêt"
 
 msgctxt "selection:contract.covered_data.extra_premium,calculation_kind:"
 msgid "Per mil capital"
-msgstr "Pourmillage du capital"
+msgstr "Pourmillage"
 
 msgctxt "selection:loan,defferal:"
 msgid ""
