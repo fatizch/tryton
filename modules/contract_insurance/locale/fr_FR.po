@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -151,7 +151,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract-agreement,agency:"
 msgid "Agency"
-msgstr ""
+msgstr "Agence"
 
 msgctxt "field:contract-agreement,contract:"
 msgid "Contract"
