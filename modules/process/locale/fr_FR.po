@@ -603,7 +603,7 @@ msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
 msgctxt "view:contract:"
-msgid "==> Documents"
+msgid "==> Courtier"
 msgstr ""
 
 msgctxt "view:contract:"
@@ -615,7 +615,7 @@ msgid "==> Personnes Couvertes"
 msgstr ""
 
 msgctxt "view:contract:"
-msgid "==> Produit"
+msgid "==> Prélèvement"
 msgstr ""
 
 msgctxt "view:contract:"
@@ -623,7 +623,11 @@ msgid "==> Prêt"
 msgstr ""
 
 msgctxt "view:contract:"
-msgid "==> Tarif"
+msgid "==> Quittance"
+msgstr ""
+
+msgctxt "view:contract:"
+msgid "==> Souscripteur"
 msgstr ""
 
 msgctxt "view:contract:"
@@ -663,10 +667,6 @@ msgid "Create Loan"
 msgstr "Créer un prêt"
 
 msgctxt "view:contract:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "view:contract:"
 msgid "Garanties"
 msgstr "Garanties"
 
@@ -675,8 +675,8 @@ msgid "Modifier Garanties"
 msgstr ""
 
 msgctxt "view:contract:"
-msgid "Next"
-msgstr "Suivant"
+msgid "Next (_k)"
+msgstr ""
 
 msgctxt "view:contract:"
 msgid "Options"
@@ -687,24 +687,28 @@ msgid "Personnes Couvertes"
 msgstr "Personnes Couvertes"
 
 msgctxt "view:contract:"
-msgid "Previous"
-msgstr "Précédent"
+msgid "Previous  (_j)"
+msgstr ""
 
 msgctxt "view:contract:"
-msgid "Produit"
-msgstr "Produit"
+msgid "Prélèvement"
+msgstr ""
 
 msgctxt "view:contract:"
 msgid "Prêt"
 msgstr "Prêt"
 
 msgctxt "view:contract:"
-msgid "Souscription Emprunteur"
-msgstr "Souscription Emprunteur"
+msgid "Quittance"
+msgstr "Quittance"
 
 msgctxt "view:contract:"
-msgid "Tarif"
-msgstr "Tarif"
+msgid "Souscripteur"
+msgstr ""
+
+msgctxt "view:contract:"
+msgid "Souscription Emprunteur"
+msgstr "Souscription Emprunteur"
 
 msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"

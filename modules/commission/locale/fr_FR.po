@@ -22,13 +22,13 @@ msgctxt "field:account.move,wo_tax_amount:"
 msgid "Total Amount w/o taxes"
 msgstr "Montant total hors Taxes"
 
+msgctxt "field:account.move.breakdown,base_total:"
+msgid ""
+msgstr ""
+
 msgctxt "field:account.move.breakdown,commissions:"
 msgid "Commissions"
 msgstr "Commissions"
-
-msgctxt "field:account.move.breakdown,total_base_com:"
-msgid "Total with coms"
-msgstr "Total avec coms"
 
 msgctxt "field:broker,create_date:"
 msgid "Create Date"
@@ -625,6 +625,42 @@ msgstr "Délégation de gestion"
 msgctxt "selection:offered.product,kind:"
 msgid "Commission"
 msgstr "Commission"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Base Amount"
+msgstr "Base"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Breakdown"
+msgstr ""
+
+msgctxt "view:account.move.breakdown:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o Fees"
+msgstr ""
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o taxes"
+msgstr ""
+
+msgctxt "view:account.move:"
+msgid "Commissions"
+msgstr "Commissions"
 
 msgctxt "view:broker:"
 msgid "Broker"

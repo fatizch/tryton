@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -18,13 +18,13 @@ msgctxt "error:party.party:"
 msgid "Invalid format for SSN"
 msgstr "Format non valide pour le numéro de sécu"
 
-msgctxt "field:party.address,name:"
-msgid "Line 2"
-msgstr "Ligne 2"
-
 msgctxt "field:party.address,line3:"
 msgid "Building (Line 3)"
 msgstr "Batiment (Ligne 3)"
+
+msgctxt "field:party.address,name:"
+msgid "Line 2"
+msgstr "Ligne 2"
 
 msgctxt "field:party.party,ssn_key:"
 msgid "SSN Key"
@@ -33,6 +33,15 @@ msgstr "Clé NIR"
 msgctxt "field:party.party,ssn_no_key:"
 msgid "SSN"
 msgstr "NIR"
+
+msgctxt "help:party.address,line3:"
+msgid ""
+"AFNOR - Line 3\n"
+"        Delivery point location\n"
+"        Wing or Building or Construction or Industrial zone"
+msgstr ""
+"AFNOR - Ligne 3\n"
+"        Bâtiment,  entrée, résidence, lotissement"
 
 msgctxt "help:party.address,name:"
 msgid ""
@@ -45,15 +54,6 @@ msgstr ""
 "AFNOR - Ligne 2\n"
 "        Pour un particulier : numéro d’appartement, boite à lettres, étage, couloir, escalier\n"
 "        Pour une entreprise : L’identité du destinataire final au sein de l’entreprise  "
-
-msgctxt "help:party.address,line3:"
-msgid ""
-"AFNOR - Line 3\n"
-"        Delivery point location\n"
-"        Wing or Building or Construction or Industrial zone"
-msgstr ""
-"AFNOR - Ligne 3\n"
-"        Bâtiment,  entrée, résidence, lotissement"
 
 msgctxt "help:party.address,street:"
 msgid ""

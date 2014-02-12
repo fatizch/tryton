@@ -6,10 +6,6 @@ msgctxt "error:contract.covered_data:"
 msgid "A coverage amount must be provided"
 msgstr ""
 
-msgctxt "error:contract.covered_data:"
-msgid "A coverage amount must be provided :"
-msgstr "Saisir le Montant de Couverture"
-
 msgctxt "field:contract.covered_data,beneficiary_clause_override_text:"
 msgid "Beneficiary Clause Override Text"
 msgstr "Texte modifié de la claue bénéficiaire"

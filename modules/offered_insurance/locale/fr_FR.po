@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -527,6 +527,18 @@ msgctxt "field:document.create.attach,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
+msgctxt "field:document.create.preview,email:"
+msgid "eMail"
+msgstr ""
+
+msgctxt "field:document.create.preview,exact_name:"
+msgid "Exact Name"
+msgstr ""
+
+msgctxt "field:document.create.preview,filename:"
+msgid "Filename"
+msgstr "Nom du Fichier"
+
 msgctxt "field:document.create.preview,generated_report:"
 msgid "Generated report"
 msgstr "Rapport généré"
@@ -539,9 +551,9 @@ msgctxt "field:document.create.preview,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:document.create.select,generated_report:"
-msgid "Generated report"
-msgstr "Rapport généré"
+msgctxt "field:document.create.preview,party:"
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt "field:document.create.select,good_address:"
 msgid "Mail Address"
@@ -1007,7 +1019,7 @@ msgctxt "field:document.template-offered.product,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:document.template-offered.product,document:"
+msgctxt "field:document.template-offered.product,document_template:"
 msgid "Document"
 msgstr "Document"
 
@@ -1370,6 +1382,10 @@ msgstr "Mis à jour par"
 msgctxt "field:insurer,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:ir.export_package,exclusions:"
+msgid "Exclusion"
+msgstr "Exclusion"
 
 msgctxt "field:ir.model,printable:"
 msgid "Printable"
@@ -2238,6 +2254,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:offered.package-option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:offered.product,change_coverages_order:"
+msgid "Change Order"
+msgstr ""
 
 msgctxt "field:offered.product,clause_rules:"
 msgid "Clause Rules"
@@ -3576,6 +3596,10 @@ msgctxt "view:document.create.attach:"
 msgid "Attachment"
 msgstr "Pièce jointe"
 
+msgctxt "view:document.create.preview:"
+msgid "Document Preview"
+msgstr "Prévisualisation du Document"
+
 msgctxt "view:document.create.select.template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
@@ -3643,6 +3667,18 @@ msgstr "Modèle de Lettre"
 msgctxt "view:document.template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
+
+msgctxt "view:document.template:"
+msgid "Mail"
+msgstr "Courrier Electronique"
+
+msgctxt "view:document.template:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "view:document.template:"
+msgid "Versions"
+msgstr "Versions"
 
 msgctxt "view:expense.kind:"
 msgid "Expense Kind"
@@ -3792,29 +3828,13 @@ msgctxt "wizard_button:document.create,preview_document,mail:"
 msgid "Mail"
 msgstr "Courrier Electronique"
 
-msgctxt "wizard_button:document.create,preview_document,previous:"
-msgid "Previous"
-msgstr "Précédent"
-
 msgctxt "wizard_button:document.create,preview_document,select_model:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:document.create,select_model,attach:"
-msgid "Attach"
-msgstr "Attacher"
-
 msgctxt "wizard_button:document.create,select_model,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "wizard_button:document.create,select_model,generate:"
-msgid "Generate"
-msgstr "Générer"
-
-msgctxt "wizard_button:document.create,select_model,mail:"
-msgid "Mail"
-msgstr "Courrier Electronique"
 
 msgctxt "wizard_button:document.create,select_model,preview_document:"
 msgid "Preview"

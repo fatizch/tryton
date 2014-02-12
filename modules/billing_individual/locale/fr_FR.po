@@ -1321,6 +1321,34 @@ msgctxt "selection:offered.product,payment_delay:"
 msgid "In Arrears"
 msgstr "Terme échu"
 
+msgctxt "view:account.move.breakdown:"
+msgid "Breakdown"
+msgstr ""
+
+msgctxt "view:account.move.breakdown:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o Fees"
+msgstr ""
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o taxes"
+msgstr ""
+
+msgctxt "view:account.move.computation_log:"
+msgid "Computation Logs"
+msgstr ""
+
 msgctxt "view:account.move.line:"
 msgid "Lines"
 msgstr "Lignes"
@@ -1343,6 +1371,18 @@ msgstr ""
 
 msgctxt "view:account.move.line:"
 msgid "debit"
+msgstr ""
+
+msgctxt "view:account.move:"
+msgid "Computation Details"
+msgstr ""
+
+msgctxt "view:account.move:"
+msgid "General"
+msgstr "Général"
+
+msgctxt "view:account.move:"
+msgid "Line details"
 msgstr ""
 
 msgctxt "view:account.move:"
@@ -1370,11 +1410,11 @@ msgid "Payment Term Lines"
 msgstr ""
 
 msgctxt "view:billing.payment.term:"
-msgid "Payment Terms"
-msgstr ""
+msgid "Payment Term"
+msgstr "Règle de paiement"
 
 msgctxt "view:billing.payment.term:"
-msgid "payment_term"
+msgid "Payment Terms"
 msgstr ""
 
 msgctxt "view:contract.billing.data:"

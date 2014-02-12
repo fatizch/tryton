@@ -92,7 +92,7 @@ msgstr "Date de Début"
 
 msgctxt "field:party.address,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.address,zip_and_city:"
 msgid "Zip"
@@ -100,7 +100,7 @@ msgstr "Code Postal"
 
 msgctxt "field:party.contact_mechanism,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.interaction,address:"
 msgid "Address"
@@ -184,7 +184,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:party.interaction,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.party,birth_date:"
 msgid "Birth Date"
@@ -260,7 +260,7 @@ msgstr "Synthèse"
 
 msgctxt "field:party.party,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.relation,create_date:"
 msgid "Create Date"
@@ -324,7 +324,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:party.relation,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.relation.kind,code:"
 msgid "Code"
@@ -372,11 +372,15 @@ msgstr "Mis à jour par"
 
 msgctxt "field:party.relation.kind,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "model:country.zipcode,name:"
 msgid "ZipCode"
 msgstr "Code Postal"
+
+msgctxt "model:ir.action,name:act_address_relate_form"
+msgid "Addresses"
+msgstr "Adresses"
 
 msgctxt "model:ir.action,name:act_addresses_button"
 msgid "Addresses"

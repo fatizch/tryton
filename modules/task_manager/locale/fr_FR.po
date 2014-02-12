@@ -76,7 +76,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:res.team,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:res.team-res.group,create_date:"
 msgid "Create Date"
@@ -116,7 +116,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:res.team-res.group,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:res.team.add_user.select,id:"
 msgid "ID"
@@ -184,7 +184,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:res.team.priority,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:res.user,team:"
 msgid "Team"

@@ -4,8 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.covered_data.extra_premium:"
 msgid ""
-"Extra premium %s start date (%s) should be greater than the coverage's"
-" (%s)"
+"Extra premium %s start date (%s) should be greater than the coverage's (%s)"
 msgstr ""
 "Surprime %s : la date de début (%s) doit être supérieure à celle de la "
 "garantie associée (%s)"
@@ -13,10 +12,6 @@ msgstr ""
 msgctxt "error:contract.create_extra_premium:"
 msgid "Please select a covered data to continue"
 msgstr "Veuillez sélectionner une garantie pour continuer"
-
-msgctxt "error:contract.manage_exclusion.select:"
-msgid "At least one exclusion must be selected"
-msgstr "Au moins une exclusion doit être sélectionnée"
 
 msgctxt "error:contract.manage_exclusion:"
 msgid "At least one exclusion must be selected"
@@ -154,6 +149,10 @@ msgctxt "field:contract,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract-agreement,agency:"
+msgid "Agency"
+msgstr ""
+
 msgctxt "field:contract-agreement,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -212,7 +211,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract-agreement,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.address,address:"
 msgid "Address"
@@ -372,7 +371,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.covered_data,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.covered_data-exclusion.kind,covered_data:"
 msgid "Covered Data"
@@ -465,10 +464,6 @@ msgstr "Type"
 msgctxt "field:contract.covered_data.extra_premium,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
-
-msgctxt "field:contract.covered_data.extra_premium,option_description:"
-msgid "Option Definition"
-msgstr "Garantie offerte"
 
 msgctxt "field:contract.covered_data.extra_premium,rate:"
 msgid "Rate on Premium"
@@ -586,6 +581,10 @@ msgctxt "field:contract.covered_element,possible_item_desc:"
 msgid "Possible Item Desc"
 msgstr ""
 
+msgctxt "field:contract.covered_element,possible_item_desc_nb:"
+msgid "Possible Item Desc Number"
+msgstr ""
+
 msgctxt "field:contract.covered_element,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -604,7 +603,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.covered_element,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.covered_element-party,covered_element:"
 msgid ""
@@ -644,7 +643,136 @@ msgstr " "
 
 msgctxt "field:contract.covered_element-party,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.create_extra_premium.create,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.create_extra_premium.create,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:contract.create_extra_premium.create,covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:contract.create_extra_premium.create,extra_premium:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "field:contract.create_extra_premium.create,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.create_extra_premium.create,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_exclusion.select,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "field:contract.manage_exclusion.select,exclusions:"
+msgid "Exclusions"
+msgstr "Exclusions"
+
+msgctxt "field:contract.manage_exclusion.select,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_exclusion.select,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_exclusion.select.exclusion,exclusion:"
+msgid "Exclusion"
+msgstr "Exclusion"
+
+msgctxt "field:contract.manage_exclusion.select.exclusion,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_exclusion.select.exclusion,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_exclusion.select.exclusion,selected:"
+msgid "Selected"
+msgstr "Coché"
+
+msgctxt "field:contract.manage_extra_premium.select,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.manage_extra_premium.select,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "field:contract.manage_extra_premium.select,covered_data:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "field:contract.manage_extra_premium.select,covered_element:"
+msgid "Covered Element"
+msgstr "Elément Couvert"
+
+msgctxt "field:contract.manage_extra_premium.select,extra_premiums:"
+msgid "Extra Premiums"
+msgstr "Surprimes"
+
+msgctxt "field:contract.manage_extra_premium.select,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_extra_premium.select,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:contract.manage_extra_premium.select,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_extra_premium.select.coverage,coverage:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt "field:contract.manage_extra_premium.select.coverage,coverage_name:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt "field:contract.manage_extra_premium.select.coverage,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:contract.manage_extra_premium.select.coverage,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_extra_premium.select.coverage,selected:"
+msgid "Selected"
+msgstr "Coché"
+
+msgctxt "field:contract.manage_extra_premium.select.extra,extra_premium:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "field:contract.manage_extra_premium.select.extra,extra_premium_name:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "field:contract.manage_extra_premium.select.extra,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_extra_premium.select.extra,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_extra_premium.select.extra,selected:"
+msgid "Selected"
+msgstr "Coché"
 
 msgctxt "field:contract.option,contract:"
 msgid "Contract"
@@ -758,159 +886,6 @@ msgctxt "field:contract.service,expenses:"
 msgid "Expenses"
 msgstr "Frais"
 
-msgctxt "field:contract.create_extra_premium.create,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.create_extra_premium.create,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:contract.create_extra_premium.create,covered_element:"
-msgid "Covered Element"
-msgstr "Elément Couvert"
-
-msgctxt "field:contract.create_extra_premium.create,extra_premium:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
-msgctxt "field:contract.create_extra_premium.create,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.create_extra_premium.create,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.manage_exclusion.select,coverages:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "field:contract.manage_exclusion.select,exclusions:"
-msgid "Exclusions"
-msgstr "Exclusions"
-
-msgctxt "field:contract.manage_exclusion.select,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.manage_exclusion.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.manage_exclusion.select.exclusion,exclusion:"
-msgid "Exclusion"
-msgstr "Exclusion"
-
-msgctxt "field:contract.manage_exclusion.select.exclusion,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt ""
-"field:contract.manage_exclusion.select.exclusion,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.manage_exclusion.select.exclusion,selected:"
-msgid "Selected"
-msgstr "Coché"
-
-msgctxt "field:contract.manage_extra_premium.select,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.manage_extra_premium.select,coverages:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "field:contract.manage_extra_premium.select,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:contract.manage_extra_premium.select,covered_element:"
-msgid "Covered Element"
-msgstr "Elément Couvert"
-
-msgctxt "field:contract.manage_extra_premium.select,extra_premiums:"
-msgid "Extra Premiums"
-msgstr "Surprimes"
-
-msgctxt "field:contract.manage_extra_premium.select,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.manage_extra_premium.select,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:contract.manage_extra_premium.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.manage_extra_premium.select.coverage,coverage:"
-msgid "Coverage"
-msgstr "Offre"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.coverage,coverage_name:"
-msgid "Coverage"
-msgstr "Offre"
-
-msgctxt "field:contract.manage_extra_premium.select.coverage,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.coverage,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.manage_extra_premium.select.coverage,selected:"
-msgid "Selected"
-msgstr "Coché"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.exclusion,exclusion:"
-msgid "Exclusion"
-msgstr "Exclusion"
-
-msgctxt "field:contract.manage_extra_premium.select.exclusion,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.exclusion,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.exclusion,selected:"
-msgid "Selected"
-msgstr "Coché"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.extra,extra_premium:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.extra,extra_premium_name:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
-msgctxt "field:contract.manage_extra_premium.select.extra,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.extra,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.manage_extra_premium.select.extra,selected:"
-msgid "Selected"
-msgstr "Coché"
-
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,covered_element:"
 msgid "Covered Element"
@@ -983,7 +958,7 @@ msgstr " Mis à jour par"
 
 msgctxt "field:expense,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.party,covered_elements:"
 msgid "Covered Elements"
@@ -1025,22 +1000,6 @@ msgctxt "model:contract.covered_element-party,name:"
 msgid ""
 msgstr " "
 
-msgctxt "model:contract.option,name:"
-msgid "Contract Option"
-msgstr "Garantie"
-
-msgctxt "model:contract.renew.parameters,name:"
-msgid "Renewal Start"
-msgstr "Paramètres du Renouvellement"
-
-msgctxt "model:contract.renew.report,name:"
-msgid "Renewal Result"
-msgstr "Résultat du Renouvellement"
-
-msgctxt "model:contract.service,name:"
-msgid "Contract Service"
-msgstr "Prestation Fournie"
-
 msgctxt "model:contract.create_extra_premium.create,name:"
 msgid "Extra Premium Displayer"
 msgstr "Surprime"
@@ -1061,13 +1020,25 @@ msgctxt "model:contract.manage_extra_premium.select.coverage,name:"
 msgid "Coverage"
 msgstr "Offre"
 
-msgctxt "model:contract.manage_extra_premium.select.exclusion,name:"
-msgid "Exclusion"
-msgstr "Exclusion"
-
 msgctxt "model:contract.manage_extra_premium.select.extra,name:"
 msgid "Extra Premium"
 msgstr "Surprime"
+
+msgctxt "model:contract.option,name:"
+msgid "Contract Option"
+msgstr "Garantie"
+
+msgctxt "model:contract.renew.parameters,name:"
+msgid "Renewal Start"
+msgstr "Paramètres du Renouvellement"
+
+msgctxt "model:contract.renew.report,name:"
+msgid "Renewal Result"
+msgstr "Résultat du Renouvellement"
+
+msgctxt "model:contract.service,name:"
+msgid "Contract Service"
+msgstr "Prestation Fournie"
 
 msgctxt "model:expense,name:"
 msgid "Expense"
@@ -1165,6 +1136,18 @@ msgctxt "selection:contract.covered_data.extra_premium,calculation_kind:"
 msgid "Rate on Premium"
 msgstr "Taux sur prime"
 
+msgctxt "selection:contract.manage_extra_premium.select,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:contract.manage_extra_premium.select,kind:"
+msgid "Covered Data"
+msgstr "Données de Couverture"
+
+msgctxt "selection:contract.manage_extra_premium.select,kind:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
 msgctxt "selection:contract.option,status:"
 msgid "Active"
 msgstr "Actif"
@@ -1201,18 +1184,6 @@ msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
-msgctxt "selection:contract.manage_extra_premium.select,kind:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:contract.manage_extra_premium.select,kind:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "selection:contract.manage_extra_premium.select,kind:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
 msgctxt "selection:document.receive.request,kind:"
 msgid "Contract"
 msgstr "Contrat"
@@ -1244,6 +1215,10 @@ msgstr "Géré par"
 msgctxt "view:contract.address:"
 msgid "Contract Address"
 msgstr "Adresse"
+
+msgctxt "view:contract.covered_data.extra_premium:"
+msgid "%"
+msgstr "%"
 
 msgctxt "view:contract.covered_data.extra_premium:"
 msgid "Extra Premium"
@@ -1301,6 +1276,30 @@ msgctxt "view:contract.covered_element:"
 msgid "Sub Covered Elements"
 msgstr "Sous Eléments Couverts"
 
+msgctxt "view:contract.create_extra_premium.create:"
+msgid "Extra Premium Creation"
+msgstr "Création de surprime"
+
+msgctxt "view:contract.manage_exclusion.select.exclusion:"
+msgid "Exclusions"
+msgstr "Exclusions"
+
+msgctxt "view:contract.manage_exclusion.select:"
+msgid "Manage Exclusions"
+msgstr "Gérer les exclusions"
+
+msgctxt "view:contract.manage_extra_premium.select.coverage:"
+msgid "Select Coverage"
+msgstr "Sélection de garantie"
+
+msgctxt "view:contract.manage_extra_premium.select.extra:"
+msgid "Select Extra Premium"
+msgstr "Sélection de la surprime"
+
+msgctxt "view:contract.manage_extra_premium.select:"
+msgid "Manage Extra Premium"
+msgstr "Gérer les surprimes"
+
 msgctxt "view:contract.option:"
 msgid "Covered Data"
 msgstr "Données de Couverture"
@@ -1316,22 +1315,6 @@ msgstr "Résultat du Renouvellement"
 msgctxt "view:contract.service:"
 msgid "Contract Service"
 msgstr "Prestation Fournie"
-
-msgctxt "view:contract.create_extra_premium.create:"
-msgid "Extra Premium Creation"
-msgstr "Création de surprime"
-
-msgctxt "view:contract.manage_extra_premium.select.coverage:"
-msgid "Select Coverage"
-msgstr "Sélection de garantie"
-
-msgctxt "view:contract.manage_extra_premium.select.extra:"
-msgid "Select Extra Premium"
-msgstr "Sélection de la surprime"
-
-msgctxt "view:contract.manage_extra_premium.select:"
-msgid "Manage Extra Premium"
-msgstr "Gérer les surprimes"
 
 msgctxt "view:contract:"
 msgid "Addresses"
@@ -1361,35 +1344,12 @@ msgctxt "view:party.party:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt "wizard_button:contract.renew,renewal_result,end:"
-msgid "End"
-msgstr "Terminer"
-
-msgctxt "wizard_button:contract.renew,renewal_start,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:contract.renew,renewal_start,renewal_result:"
-msgid "Start"
-msgstr "Commencer"
-
-msgctxt ""
-"wizard_button:contract.create_extra_premium,extra_premium,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt ""
-"wizard_button:contract.create_extra_premium,extra_premium,create:"
-msgid "Create"
-msgstr "Créer"
-
 msgctxt ""
 "wizard_button:contract.create_extra_premium,extra_premium,create_extra:"
 msgid "Create"
 msgstr "Créer"
 
-msgctxt ""
-"wizard_button:contract.create_extra_premium,extra_premium,end:"
+msgctxt "wizard_button:contract.create_extra_premium,extra_premium,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -1397,17 +1357,7 @@ msgctxt "wizard_button:contract.manage_exclusion,existing,end:"
 msgid "End"
 msgstr "Terminer"
 
-msgctxt ""
-"wizard_button:contract.manage_exclusion,existing,propagate_selected:"
-msgid "Propagate Selected"
-msgstr "Propager la sélection"
-
-msgctxt "wizard_button:contract.manage_exclusion.select,existing,end:"
-msgid "End"
-msgstr "Terminer"
-
-msgctxt ""
-"wizard_button:contract.manage_exclusion.select,existing,propagate_selected:"
+msgctxt "wizard_button:contract.manage_exclusion,existing,propagate_selected:"
 msgid "Propagate Selected"
 msgstr "Propager la sélection"
 
@@ -1425,7 +1375,14 @@ msgctxt ""
 msgid "Propagate Selected"
 msgstr "Propager la sélection"
 
-msgctxt ""
-"wizard_button:contract.manage_extra_premium,existing,propagate_whole:"
-msgid "Propagate Whole"
-msgstr "Propager la totalité"
+msgctxt "wizard_button:contract.renew,renewal_result,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "wizard_button:contract.renew,renewal_start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.renew,renewal_start,renewal_result:"
+msgid "Start"
+msgstr "Commencer"
