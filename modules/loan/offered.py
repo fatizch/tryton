@@ -4,7 +4,7 @@ import copy
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import utils, fields, coop_date
+from trytond.modules.cog_utils import utils, fields
 from trytond.modules.offered_insurance import offered
 
 
@@ -23,12 +23,6 @@ class Product:
         'get_is_loan_product')
     calculate_each_payment = fields.Boolean('Calculate each payment', states={
             'invisible': ~Eval('is_loan')}, depends=['is_loan'])
-    calculate_each_year = fields.Boolean('Calculate each year', states={
-            'invisible': ~Eval('is_loan')}, depends=['is_loan'])
-
-    @classmethod
-    def default_calculate_each_year(cls):
-        return True
 
     @classmethod
     def default_calculate_each_payment(cls):
@@ -45,16 +39,6 @@ class Product:
             return
         for payment in loan.payments:
             dates.add(payment.start_date)
-
-    def get_contract_dates(self, dates, contract):
-        if (not self.calculate_each_year or not self.is_loan or not
-                contract.end_date):
-            return
-        # Calculate every anniversary date until contrat termination
-        cur_date = contract.start_date
-        while cur_date <= contract.end_date:
-            dates.add(cur_date)
-            cur_date = coop_date.add_year(cur_date, 1)
 
     def get_dates(self, contract):
         dates = super(Product, self).get_dates(contract)

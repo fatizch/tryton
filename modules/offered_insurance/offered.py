@@ -225,8 +225,15 @@ class Product:
 
     def get_contract_dates(self, dates, contract):
         super(Product, self).get_contract_dates(dates, contract)
-        if (hasattr(contract, 'last_renewed') and contract.last_renewed):
-            dates.add(contract.last_renewed)
+        if contract.next_renewal_date:
+            dates.add(contract.next_renewal_date)
+            if not contract.end_date:
+                return
+            # Calculate every anniversary date until contrat termination
+            cur_date = contract.next_renewal_date
+            while cur_date <= contract.end_date:
+                dates.add(cur_date)
+                cur_date = coop_date.add_year(cur_date, 1)
 
     def get_covered_data_dates(self, dates, covered_data):
         dates.add(covered_data.start_date)
