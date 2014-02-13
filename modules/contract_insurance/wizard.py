@@ -158,8 +158,9 @@ class ExtraPremiumDisplay(model.CoopView):
 
     @classmethod
     def get_extra_premium_name(cls, extra_premium):
-        return '%s on %s' % (extra_premium.kind.rec_name,
-            extra_premium.covered_data.rec_name)
+        return '%s (%s) : %s' % (extra_premium.motive.rec_name,
+            extra_premium.covered_data.rec_name,
+            extra_premium.get_rec_name(None))
 
     @classmethod
     def get_coverage_name(cls, coverage):

@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Or
 
-from trytond.modules.cog_utils import utils, fields, model
+from trytond.modules.cog_utils import utils, fields, model, coop_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -158,3 +158,9 @@ class ExtraPremium:
 
     def get_is_loan(self, name):
         return self.covered_data and self.covered_data.is_loan
+
+    def get_rec_name(self, name):
+        if self.calculation_kind == 'capital_per_mil':
+            return u'%s ‰' % coop_string.format_number('%.2f',
+                self.capital_per_mil_rate * 1000)
+        return super(ExtraPremium, self).get_rec_name(name)

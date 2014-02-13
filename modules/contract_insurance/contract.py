@@ -881,8 +881,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     covered_data = fields.Many2One('contract.covered_data',
         'Covered Data', ondelete='CASCADE')
-    kind = fields.Many2One('extra_premium.kind', 'Kind', ondelete='RESTRICT',
-        states={'required': True})
+    motive = fields.Many2One('extra_premium.kind', 'Motive',
+        ondelete='RESTRICT', states={'required': True})
     start_date = fields.Date('Start date', states={'required': True})
     end_date = fields.Date('End date')
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
@@ -937,7 +937,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     def validate(cls, records):
         for record in records:
             if not record.start_date >= record.covered_data.start_date:
-                record.raise_user_error('bad_start_date', (record.kind.name,
+                record.raise_user_error('bad_start_date', (record.motive.name,
                         record.start_date, record.covered_data.start_date))
 
     def calculate_premium_amount(self, args, base):
@@ -954,6 +954,15 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
     def propagate(cls, extras):
         pass
+
+    def get_rec_name(self, name):
+        if self.calculation_kind == 'flat':
+            return self.currency.amount_as_string(self.flat_amount)
+        elif self.calculation_kind == 'rate':
+            return '%s %%' % coop_string.format_number('%%.2f',
+                self.rate * 100)
+        else:
+            return super(ExtraPremium, self).get_rec_name(name)
 
 
 class CoveredDataExclusionKindRelation(model.CoopSQL):

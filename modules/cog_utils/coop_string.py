@@ -10,6 +10,13 @@ import utils
 __all__ = []
 
 
+def format_number(percent, value, lang=None):
+    Lang = Pool().get('ir.lang')
+    if not lang:
+        lang = utils.get_user_language()
+    return Lang.format(lang, percent, value)
+
+
 def zfill(the_instance, val_name):
     size = utils.get_field_size(the_instance, val_name)
     if size:
