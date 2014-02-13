@@ -14,9 +14,13 @@
       <newline/>
       <field name="step_xml" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>
     </page>
-    <page string="Code" id="code">
-      <field name="code_before" pre_validate="1"/>
-      <field name="code_after" pre_validate="1"/>
+    <page string="Code" id="code" col="4">
+      <field name="code_before" pre_validate="1" colspan="2"/>
+      <field name="code_after" pre_validate="1" colspan="2"/>
+      <label name="entering_wizard"/>
+      <field name="entering_wizard"/>
+      <label name="exiting_wizard"/>
+      <field name="exiting_wizard"/>
     </page>
     <page string="Authorizations" id="authorizations">
       <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
