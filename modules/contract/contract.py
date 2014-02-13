@@ -106,16 +106,6 @@ class Subscribed(model.CoopView, ModelCurrency):
         '''
         raise NotImplementedError
 
-    def get_dates(self, dates=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        res.add(self.start_date)
-        if hasattr(self, 'end_date') and self.end_date:
-            res.add(coop_date.add_day(self.end_date, 1))
-        return res
-
     def init_from_offered(self, offered, start_date=None, end_date=None):
         #TODO : check eligibility
         if not start_date:
@@ -359,13 +349,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                     ['contract'], at_date=option.start_date))
         return set(extra_data_defs)
 
-    def get_dates(self, dates=None):
-        res = super(Contract, self).get_dates(dates)
-        for covered in self.covered_elements:
-            res.update(covered.get_dates(res))
-        for option in self.options:
-            res.update(option.get_dates(res))
-        return res
+    def get_dates(self):
+        return self.offered.get_dates(self)
 
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['contract'] = self
@@ -594,11 +579,6 @@ class ContractOption(model.CoopSQL, Subscribed):
     @classmethod
     def get_offered_name(cls):
         return 'offered.option.description', 'Option Description'
-
-    def get_dates(self, dates=None):
-        res = super(ContractOption, self).get_dates(dates)
-        res.update(self.offered.get_dates(res))
-        return res
 
     def get_rec_name(self, name):
         if self.offered:

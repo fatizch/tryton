@@ -21,6 +21,10 @@ from trytond.model.modelstorage import EvalEnvironment
 __all__ = []
 
 
+def print_log(some_text):
+    print '\033[95m' + str(some_text) + '\033[0md'
+
+
 def get_child_models(from_class):
     if isinstance(from_class, str):
         try:

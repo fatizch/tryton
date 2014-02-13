@@ -25,4 +25,5 @@ def register():
 
     Pool.register(
         ProcessFinder,
+        ProcessEnd,
         module='process_cog', type_='wizard')

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -25,10 +25,6 @@ msgstr "Montant total hors Taxes"
 msgctxt "field:account.move.breakdown,commissions:"
 msgid "Commissions"
 msgstr "Commissions"
-
-msgctxt "field:account.move.breakdown,total_base_com:"
-msgid "Total with coms"
-msgstr "Total avec coms"
 
 msgctxt "field:broker,create_date:"
 msgid "Create Date"
@@ -364,7 +360,7 @@ msgstr "Plans de Commissionnement Hérités"
 
 msgctxt "field:distribution.network,parents_brokers:"
 msgid "Parent Brokers"
-msgstr ""
+msgstr "Courtiers des Niveaux Sup."
 
 msgctxt "field:distribution.network-broker,broker:"
 msgid "Broker"
@@ -625,6 +621,42 @@ msgstr "Délégation de gestion"
 msgctxt "selection:offered.product,kind:"
 msgid "Commission"
 msgstr "Commission"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Base Amount"
+msgstr "Base"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Breakdown"
+msgstr "Ventilation"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o Fees"
+msgstr "Total Sans Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o taxes"
+msgstr "Total Sans Taxes"
+
+msgctxt "view:account.move:"
+msgid "Commissions"
+msgstr "Commissions"
 
 msgctxt "view:broker:"
 msgid "Broker"

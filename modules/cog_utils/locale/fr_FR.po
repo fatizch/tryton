@@ -36,7 +36,7 @@ msgstr ""
 
 msgctxt "field:ir.action.keyword,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.export_package,code:"
 msgid "Code"
@@ -80,7 +80,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ir.export_package,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.export_package.item,create_date:"
 msgid "Create Date"
@@ -116,7 +116,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ir.export_package.item,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.import.select_file,file_content:"
 msgid "File Content"
@@ -136,39 +136,39 @@ msgstr "Importer le Fichier"
 
 msgctxt "field:ir.lang,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.model,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.model.access,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.model.field,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.model.field.access,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.property,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.rule.group,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.sequence,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.test_case,create_date:"
 msgid "Create Date"
@@ -208,7 +208,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ir.test_case,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.test_case.run.select,id:"
 msgid "ID"
@@ -280,11 +280,11 @@ msgstr "Sélection"
 
 msgctxt "field:ir.ui.menu,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.ui.view,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.ui.view.validate,id:"
 msgid "ID"
@@ -296,15 +296,15 @@ msgstr " "
 
 msgctxt "field:res.group,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:res.user,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:res.user.warning,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"

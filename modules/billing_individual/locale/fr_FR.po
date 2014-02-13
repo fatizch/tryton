@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -241,7 +241,7 @@ msgstr "Source"
 
 msgctxt "field:account.move.line,second_origin:"
 msgid "Second Origin"
-msgstr ""
+msgstr "Deuxième Origine"
 
 msgctxt "field:account.move.line,second_origin_name:"
 msgid "Second Origin Name"
@@ -581,7 +581,7 @@ msgstr "Montant Dû"
 
 msgctxt "field:contract,use_prices:"
 msgid "Use Prices"
-msgstr ""
+msgstr "Nécessite Tarif"
 
 msgctxt "field:contract.billing.data,contract:"
 msgid "Contract"
@@ -777,7 +777,7 @@ msgstr "ID"
 
 msgctxt "field:contract.billing.premium,master:"
 msgid "Master Line"
-msgstr ""
+msgstr "Ligne Principale"
 
 msgctxt "field:contract.billing.premium,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -933,7 +933,7 @@ msgstr "ID"
 
 msgctxt "field:contract.do_billing.bill,moves:"
 msgid "Bill"
-msgstr ""
+msgstr "Décompte"
 
 msgctxt "field:contract.do_billing.bill,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -1079,15 +1079,15 @@ msgstr "Ligne de Prime"
 
 msgctxt "model:contract.billing.premium-fee,name:"
 msgid "Premium Fee Relation"
-msgstr ""
+msgstr "Relation Prime Frais"
 
 msgctxt "model:contract.billing.premium-tax,name:"
 msgid "Premium Tax Relation"
-msgstr ""
+msgstr "Relation Prime Taxe"
 
 msgctxt "model:contract.do_billing.bill,name:"
 msgid "Contract Do Billing Bill"
-msgstr ""
+msgstr "Contrat : Lancer la Facturation"
 
 msgctxt "model:contract.do_billing.parameters,name:"
 msgid "Contract Do Billing Parameters"
@@ -1123,7 +1123,7 @@ msgstr "Règle de paiement"
 
 msgctxt "model:offered.product-billing.payment.method,name:"
 msgid "Product Payment Method Relation"
-msgstr ""
+msgstr "Relation Produit Méthode de Paiement"
 
 msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Cash"
@@ -1321,17 +1321,41 @@ msgctxt "selection:offered.product,payment_delay:"
 msgid "In Arrears"
 msgstr "Terme échu"
 
+msgctxt "view:account.move.breakdown:"
+msgid "Breakdown"
+msgstr "Ventilation"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o Fees"
+msgstr "Total Sans Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o taxes"
+msgstr "Total Sans Taxes"
+
+msgctxt "view:account.move.computation_log:"
+msgid "Computation Logs"
+msgstr "Détails du Calcul"
+
 msgctxt "view:account.move.line:"
 msgid "Lines"
 msgstr "Lignes"
 
 msgctxt "view:account.move.line:"
 msgid "Move Lines"
-msgstr ""
-
-msgctxt "view:account.move.line:"
-msgid "Scheduling"
-msgstr ""
+msgstr "Lignes Comptables"
 
 msgctxt "view:account.move.line:"
 msgid "Total Amount"
@@ -1339,11 +1363,23 @@ msgstr "Montant Total"
 
 msgctxt "view:account.move.line:"
 msgid "credit"
-msgstr ""
+msgstr "Crédit"
 
 msgctxt "view:account.move.line:"
 msgid "debit"
-msgstr ""
+msgstr "Débit"
+
+msgctxt "view:account.move:"
+msgid "Computation Details"
+msgstr "Détails du Calcul"
+
+msgctxt "view:account.move:"
+msgid "General"
+msgstr "Général"
+
+msgctxt "view:account.move:"
+msgid "Line details"
+msgstr "Détails de la Ligne"
 
 msgctxt "view:account.move:"
 msgid "Move"
@@ -1365,25 +1401,13 @@ msgctxt "view:billing.payment.term.line:"
 msgid "Payment Term Line"
 msgstr "Ligne de règle de paiement"
 
-msgctxt "view:billing.payment.term.line:"
-msgid "Payment Term Lines"
-msgstr ""
-
 msgctxt "view:billing.payment.term:"
-msgid "Payment Terms"
-msgstr ""
-
-msgctxt "view:billing.payment.term:"
-msgid "payment_term"
-msgstr ""
+msgid "Payment Term"
+msgstr "Règle de paiement"
 
 msgctxt "view:contract.billing.data:"
 msgid "Billing Datas"
 msgstr "Gestionnaires d'Appel de Cotisation"
-
-msgctxt "view:contract.billing.data:"
-msgid "billing_data"
-msgstr ""
 
 msgctxt "view:contract.billing.period:"
 msgid "Billing Period"
@@ -1420,10 +1444,6 @@ msgstr "Ligne de Prime"
 msgctxt "view:contract.billing.premium:"
 msgid "Pricing Lines"
 msgstr "Lignes de Prime"
-
-msgctxt "view:contract.do_billing.bill:"
-msgid "Bill Result"
-msgstr ""
 
 msgctxt "view:contract.do_billing.parameters:"
 msgid "Contract Do Billing Parameters"

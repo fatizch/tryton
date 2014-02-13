@@ -108,7 +108,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:ir.ui.view.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:process,create_date_:"
 msgid "Creation date"
@@ -140,7 +140,7 @@ msgstr "Avec Préc/Suiv."
 
 msgctxt "field:process,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:process-process.step,create_date_:"
 msgid "Creation date"
@@ -148,7 +148,7 @@ msgstr "Creation date"
 
 msgctxt "field:process-process.step,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:process.action,create_date_:"
 msgid "Creation date"
@@ -156,7 +156,7 @@ msgstr "Creation date"
 
 msgctxt "field:process.action,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:process.log,create_date:"
 msgid "Create Date"
@@ -232,7 +232,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:process.log,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:process.start,date:"
 msgid "Date"
@@ -260,7 +260,7 @@ msgstr "Creation date"
 
 msgctxt "field:process.status,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:process.step,create_date_:"
 msgid "Creation date"
@@ -280,7 +280,7 @@ msgstr "Contraintes Pyson"
 
 msgctxt "field:process.step,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:process.transition,choice_if_false:"
 msgid ""
@@ -304,7 +304,7 @@ msgstr " "
 
 msgctxt "field:process.transition,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "model:ir.ui.view.description,name:"
 msgid "View Description"

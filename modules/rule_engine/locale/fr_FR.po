@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -91,7 +91,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:functional_error,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.export_package,contexts:"
 msgid "Contexts"
@@ -207,7 +207,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine-tag,create_date:"
 msgid "Create Date"
@@ -247,7 +247,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine-tag,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine.context,allowed_elements:"
 msgid "Allowed tree elements"
@@ -291,7 +291,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.context,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine.context-function,context:"
 msgid "Context"
@@ -331,7 +331,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.context-function,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine.function,children:"
 msgid "Children"
@@ -415,7 +415,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.function,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine.log,create_date:"
 msgid "Create Date"
@@ -483,7 +483,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.log,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine.parameter,code:"
 msgid "Code"
@@ -543,7 +543,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.parameter,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine.run_tests.results,id:"
 msgid "ID"
@@ -643,7 +643,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.test_case,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:rule_engine.test_case.value,create_date:"
 msgid "Create Date"
@@ -699,7 +699,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:rule_engine.test_case.value,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:tag,childs:"
 msgid "Childs"
@@ -755,7 +755,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:tag,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "model:functional_error,name:"
 msgid "Rule Error"
@@ -978,16 +978,16 @@ msgid "Debug Info"
 msgstr "Information de débogage"
 
 msgctxt "view:rule_engine.test_case:"
+msgid "Recalculate"
+msgstr "Recalculer"
+
+msgctxt "view:rule_engine.test_case:"
 msgid "Result"
 msgstr "Résultat"
 
 msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
 msgstr "Jeu de Test"
-
-msgctxt "view:rule_engine:"
-msgid "Debug"
-msgstr ""
 
 msgctxt "view:rule_engine:"
 msgid "Parameters"

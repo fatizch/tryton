@@ -2,6 +2,7 @@
 import copy
 
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields
 from trytond.modules.offered_insurance import offered
@@ -20,12 +21,30 @@ class Product:
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan_product')
+    calculate_each_payment = fields.Boolean('Calculate each payment', states={
+            'invisible': ~Eval('is_loan')}, depends=['is_loan'])
+
+    @classmethod
+    def default_calculate_each_payment(cls):
+        return True
 
     def get_is_loan_product(self, name):
         for coverage in self.coverages:
             if coverage.is_loan:
                 return True
         return False
+
+    def get_loan_dates(self, dates, loan):
+        if not self.calculate_each_payment:
+            return
+        for payment in loan.payments:
+            dates.add(payment.start_date)
+
+    def get_dates(self, contract):
+        dates = super(Product, self).get_dates(contract)
+        for loan in contract.loans:
+            self.get_loan_dates(dates, loan)
+        return dates
 
 
 class OptionDescription:

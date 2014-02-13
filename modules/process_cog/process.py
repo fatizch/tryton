@@ -28,6 +28,7 @@ __all__ = [
     'ProcessStep',
     'ProcessStart',
     'ProcessFinder',
+    'ProcessEnd',
     ]
 
 
@@ -84,7 +85,8 @@ class ProcessTransition(model.CoopSQL):
                     'on_model'))])
 
         cls._error_messages.update({
-                'missing_pyson': 'Pyson expression and description is mandatory',
+                'missing_pyson': 'Pyson expression and description is '
+                'mandatory',
                 'missing_choice': 'Both choices must be filled !',
                 })
 
@@ -100,13 +102,12 @@ class ProcessTransition(model.CoopSQL):
 
     def execute(self, target):
         if self.kind != 'choice':
-            super(ProcessTransition, self).execute(target)
-            return
+            return super(ProcessTransition, self).execute(target)
         result = utils.pyson_result(self.pyson_choice, target)
         if result:
-            self.choice_if_true.execute(target)
+            return self.choice_if_true.execute(target)
         else:
-            self.choice_if_false.execute(target)
+            return self.choice_if_false.execute(target)
 
     def get_rec_name(self, name):
         if self.kind != 'choice':
@@ -310,14 +311,17 @@ class CogProcessFramework(ProcessFramework):
         def next(works):
             for work in works:
                 good_exec = work.get_next_execution()
-                if good_exec:
-                    with Transaction().set_context(after_executed=True):
-                        if good_exec == 'complete':
-                            cls.build_instruction_complete_method(process,
-                                None)([work])
-                        else:
-                            good_exec.execute(work)
-                            work.save()
+                if not good_exec:
+                    result = None
+                    break
+                with Transaction().set_context(after_executed=True):
+                    if good_exec == 'complete':
+                        result = cls.build_instruction_complete_method(
+                            process, None)([work])
+                    else:
+                        result = good_exec.execute(work)
+                        work.save()
+            return result
         return next
 
     @classmethod
@@ -336,9 +340,11 @@ class CogProcessFramework(ProcessFramework):
         def button_step_generic(works):
             ProcessStep = Pool().get('process.step')
             target = ProcessStep(data[0])
+            result = None
             for work in works:
-                target.execute(work)
+                result = target.execute(work)
                 work.save()
+            return result
 
         return button_step_generic
 
@@ -380,11 +386,18 @@ class CogProcessFramework(ProcessFramework):
 
     @classmethod
     def build_instruction_complete_method(cls, process, data):
+        pool = Pool()
+        Action = pool.get('ir.action')
+        ModelData = pool.get('ir.model.data')
+        action_id = Action.get_action_id(ModelData.get_id('process_cog',
+                'act_end_process'))
+
         def button_complete_generic(works):
             for work in works:
                 work.current_state.step.execute_after(work)
                 work.current_state = None
                 work.save()
+            return action_id
 
         return button_complete_generic
 
@@ -559,16 +572,20 @@ class Process(model.CoopSQL):
                     'end_date': coop_date.add_day(process['start_date'], -1)})
         return super(Process, cls).create(values)
 
-    def step1_before_step2(self, step1, step2):
+    def intermediate_steps(self, step1, step2):
         # Returns True if step1 appears before step2 in self.all_steps
         step1_rank = -1
         step2_rank = -1
-        for elem in self.all_steps:
+        for idx, elem in enumerate(self.all_steps):
             if step1.id == elem.step.id:
                 step1_rank = elem.order
+                step1_idx = idx
             if step2.id == elem.step.id:
                 step2_rank = elem.order
-        return step1_rank < step2_rank
+                step2_idx = idx
+        if step1_rank > step2_rank:
+            return []
+        return map(lambda x: x.step, self.all_steps[step1_idx:step2_idx + 1])
 
     def create_update_menu_entry(self):
         if Transaction().context.get('__importing__'):
@@ -828,12 +845,26 @@ class ProcessStep(model.CoopSQL):
         return self.pyson or ''
 
     def execute(self, target):
+        result = None
         origin = target.current_state.step
-        if target.current_state.process.step1_before_step2(
-                origin, self):
-            origin.execute_after(target)
-        self.execute_before(target)
+        intermediates = target.current_state.process.intermediate_steps(
+            origin, self)
+        for idx, origin in enumerate(intermediates):
+            if result:
+                origin.execute_before(target)
+                target.set_state(origin)
+                return result
+            if idx == len(intermediates) - 1:
+                continue
+            if idx != 0:
+                result = origin.execute_before(target)
+                if result:
+                    target.set_state(origin)
+                    return result
+            result = origin.execute_after(target)
+        result = self.execute_before(target) if not result else result
         target.set_state(self)
+        return result
 
 
 class ProcessStart(model.CoopView):
@@ -908,7 +939,8 @@ class ProcessFinder(Wizard):
         cls.process_parameters.model_name = cls.get_parameters_model()
         cls.process_parameters.view = cls.get_parameters_view()
         cls._error_messages.update({
-                'no_process_selected': 'Please pick a process from the selection'})
+                'no_process_selected': 'Please pick a process from the '
+                'selection'})
 
     def do_action(self, action):
         Action = Pool().get('ir.action')
@@ -969,6 +1001,38 @@ class ProcessFinder(Wizard):
     @classmethod
     def get_parameters_view(cls):
         return 'process_cog.process_parameters_form'
+
+
+class ProcessEnd(Wizard):
+    'End process'
+
+    __name__ = 'process.end'
+
+    class VoidStateAction(StateAction):
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            return None
+
+    start = VoidStateAction()
+
+    def do_start(self, action):
+        pool = Pool()
+        ActWindow = pool.get('ir.action.act_window')
+        Action = pool.get('ir.action')
+        possible_actions = ActWindow.search([
+                ('res_model', '=', Transaction().context.get('active_model'))])
+        good_action = possible_actions[0]
+        good_values = Action.get_action_values(
+            'ir.action.act_window', [good_action.id])
+        good_values[0]['views'] = [
+            view for view in good_values[0]['views'] if view[1] == 'form']
+        return good_values[0], {
+            'res_id': Transaction().context.get('active_id')}
+
+    def end(self):
+        return 'close'
 
 
 class GenerateGraph:

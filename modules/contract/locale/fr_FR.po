@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -128,7 +128,7 @@ msgstr " "
 
 msgctxt "field:contract,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.address,address:"
 msgid ""
@@ -184,7 +184,7 @@ msgstr " "
 
 msgctxt "field:contract.address,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.clause,clause:"
 msgid "Clause"
@@ -192,7 +192,7 @@ msgstr "Clause"
 
 msgctxt "field:contract.clause,contract:"
 msgid "Contract"
-msgstr "Gestionnaire de Contrats"
+msgstr "Contrat"
 
 msgctxt "field:contract.clause,create_date:"
 msgid "Create Date"
@@ -244,7 +244,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.clause,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.option,contract:"
 msgid ""
@@ -340,7 +340,7 @@ msgstr " "
 
 msgctxt "field:contract.option,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.service,contract:"
 msgid "Contract"
@@ -392,7 +392,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.service,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.status.history,create_date:"
 msgid "Create Date"
@@ -448,7 +448,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.status.history,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,contract:"
@@ -492,6 +492,11 @@ msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre l'arbre"
+
+msgctxt ""
+"field:contract.wizard.option_subscription.options_displayer.option,selection:"
+msgid "Selection"
+msgstr "Sélection"
 
 msgctxt "field:party.party,contracts:"
 msgid "Contracts"
@@ -660,6 +665,11 @@ msgstr "Terminé"
 
 msgctxt ""
 "selection:contract.wizard.option_subscription.options_displayer.option,coverage_behaviour:"
+msgid "Defaulted"
+msgstr "Proposée par Défaut"
+
+msgctxt ""
+"selection:contract.wizard.option_subscription.options_displayer.option,coverage_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
 
@@ -669,9 +679,29 @@ msgid "Optional"
 msgstr "En Option"
 
 msgctxt ""
-"selection:contract.wizard.option_subscription.options_displayer.option,coverage_behaviour:"
-msgid "Defaulted"
-msgstr "Proposée par Défaut"
+"selection:contract.wizard.option_subscription.options_displayer.option,selection:"
+msgid ""
+msgstr " "
+
+msgctxt ""
+"selection:contract.wizard.option_subscription.options_displayer.option,selection:"
+msgid "Automatic"
+msgstr "Automatique"
+
+msgctxt ""
+"selection:contract.wizard.option_subscription.options_displayer.option,selection:"
+msgid "Excluded"
+msgstr ""
+
+msgctxt ""
+"selection:contract.wizard.option_subscription.options_displayer.option,selection:"
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgctxt ""
+"selection:contract.wizard.option_subscription.options_displayer.option,selection:"
+msgid "Manual"
+msgstr "Manuelle"
 
 msgctxt "selection:document.template,kind:"
 msgid "Contract Documents"

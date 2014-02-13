@@ -56,7 +56,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:distribution.network,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:res.user,dist_network:"
 msgid "Distribution Network"

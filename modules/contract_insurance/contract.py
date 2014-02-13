@@ -88,12 +88,6 @@ class Contract:
                 errs += errors
         return (res, errs)
 
-    def get_dates(self, dates=None):
-        res = super(Contract, self).get_dates(dates)
-        if self.last_renewed:
-            res.add(self.last_renewed)
-        return res
-
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered,
             start_date, end_date)
@@ -428,18 +422,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                 res = '%s : %s' % (res, self.name)
         elif self.name:
             res = coop_string.concat_strings(res, self.name)
-        return res
-
-    def get_dates(self, dates=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        for data in self.covered_data:
-            res.update(data.get_dates(dates))
-        if hasattr(self, 'sub_covered_elements'):
-            for sub_elem in self.sub_covered_elements:
-                res.update(sub_elem.get_dates(dates))
         return res
 
     def check_at_least_one_covered(self, errors=None):
@@ -783,16 +765,6 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def init_from_covered_element(self, covered_element):
         self.covered_element = covered_element
         pass
-
-    def get_dates(self, dates=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        res.add(self.start_date)
-        if hasattr(self, 'end_date') and self.end_date:
-            res.add(coop_date.add_day(self.end_date, 1))
-        return res
 
     def get_coverage(self):
         if (hasattr(self, 'option') and self.option):
