@@ -239,7 +239,10 @@ class Move:
         result['end_date'] = self.billing_period.end_date
         result['first_payment_date'] = self.schedule[0].maturity_date
         result['first_payment_amount'] = self.schedule[0].debit
-        result['standard_payment_amount'] = self.schedule[1].debit
+        if len(self.schedule) > 1:
+            result['standard_payment_amount'] = self.schedule[1].debit
+        else:
+            result['standard_payment_amount'] = 0
         return result
 
 
