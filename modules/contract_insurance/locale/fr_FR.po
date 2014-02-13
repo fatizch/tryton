@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -459,7 +459,7 @@ msgstr "ID"
 
 msgctxt "field:contract.covered_data.extra_premium,motive:"
 msgid "Motive"
-msgstr ""
+msgstr "Motif"
 
 msgctxt "field:contract.covered_data.extra_premium,must_expand_tree:"
 msgid "Must Expand Tree"
