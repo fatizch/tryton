@@ -227,7 +227,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         if not extra_amount:
             return
         from_detail.amount = extra_amount
-        from_detail.on_object = extra.kind
+        from_detail.on_object = extra.motive
 
     def calculate_components_contribution(self, args, result, errors,
             rated_object_kind):
