@@ -204,7 +204,7 @@ class ManageExtraPremium(Wizard):
     start_state = 'existing'
     existing = StateView('contract.manage_extra_premium.select',
         'contract_insurance.manage_extra_premium_select_view_form', [
-            Button('End', 'end', 'tryton-ok'),
+            Button('End', 'end', 'tryton-cancel'),
             Button('Delete Selected', 'delete_selected', 'tryton-clear',
                 states={'invisible': Eval('kind', '') == 'extra_premium'}),
             Button('Propagate Selected', 'propagate_selected',
@@ -362,7 +362,7 @@ class ManageExclusion(Wizard):
     start_state = 'existing'
     existing = StateView('contract.manage_exclusion.select',
         'contract_insurance.manage_exclusion_select_view_form', [
-            Button('End', 'end', 'tryton-ok'),
+            Button('End', 'end', 'tryton-cancel'),
             Button('Propagate Selected', 'propagate_selected',
                 'tryton-fullscreen'),
             ])
