@@ -88,7 +88,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:salary_range,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:salary_range.version,ceiling:"
 msgid "Ceiling"
@@ -144,7 +144,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:salary_range.version,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "help:salary_range.version,ceiling:"
 msgid "Included"

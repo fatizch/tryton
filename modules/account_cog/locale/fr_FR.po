@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -12,15 +12,15 @@ msgstr "Le code doit être unique"
 
 msgctxt "field:account.account,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.account.type,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.configuration,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.fee.description,code:"
 msgid "Code"
@@ -76,7 +76,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:account.fee.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.fee.description.version,create_date:"
 msgid "Create Date"
@@ -132,19 +132,23 @@ msgstr "Mis à jour par"
 
 msgctxt "field:account.fee.description.version,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.fiscalyear,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.journal,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
+
+msgctxt "field:account.move,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:account.period,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.tax.description,code:"
 msgid "Code"
@@ -200,7 +204,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:account.tax.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:account.tax.description.version,create_date:"
 msgid "Create Date"
@@ -256,11 +260,19 @@ msgstr "Mis à jour par"
 
 msgctxt "field:account.tax.description.version,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:company.company,fiscal_years:"
 msgid ""
 msgstr " "
+
+msgctxt "field:ir.test_case,fiscal_year_periods_frequency:"
+msgid "Fiscal Year periods frequency"
+msgstr "Périodes de l'Année Fiscale"
+
+msgctxt "field:ir.test_case,fiscal_year_sync_date:"
+msgid "Fiscal Year Sync Date"
+msgstr "Date de Synchro Année Fiscale"
 
 msgctxt "model:account.fee.description,name:"
 msgid "Fee Description"
@@ -318,6 +330,22 @@ msgctxt "selection:account.tax.description.version,kind:"
 msgid "Rule"
 msgstr "Règle"
 
+msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
+msgid "Half yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:ir.test_case,fiscal_year_periods_frequency:"
+msgid "Yearly"
+msgstr "Annuel"
+
 msgctxt "view:account.fee.description.version:"
 msgid "Fee Description Version"
 msgstr "Version"
@@ -328,7 +356,7 @@ msgstr "Descripteur de Frais"
 
 msgctxt "view:account.tax.description.version:"
 msgid "Tax Description Version"
-msgstr ""
+msgstr "Version de Taxe"
 
 msgctxt "view:account.tax.description:"
 msgid "Tax Description"

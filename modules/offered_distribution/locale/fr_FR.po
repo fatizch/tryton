@@ -72,7 +72,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:distribution.commercial_product,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:distribution.network,all_com_products:"
 msgid "All Comercial Products"
@@ -128,7 +128,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:distribution.network-commercial_product,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.export_package,com_products:"
 msgid "Com Products"

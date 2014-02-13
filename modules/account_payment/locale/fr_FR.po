@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -10,6 +10,10 @@ msgctxt "error:account.payment:"
 msgid "Payment \"%s\" must be in draft before deletion."
 msgstr ""
 "Le paiement \"%s\" doit être au statut Brouillon pour pouvoir être supprimé"
+
+msgctxt "field:account.move.line,move_description:"
+msgid "Move Description"
+msgstr "Description du Mouvement"
 
 msgctxt "field:account.move.line,payment_amount:"
 msgid "Payment Amount"
