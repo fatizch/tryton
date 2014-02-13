@@ -161,6 +161,6 @@ class ExtraPremium:
 
     def get_rec_name(self, name):
         if self.calculation_kind == 'capital_per_mil':
-            return '%s ‰' % coop_string.format_number('%%.2f',
+            return u'%s ‰' % coop_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
         return super(ExtraPremium, self).get_rec_name(name)
