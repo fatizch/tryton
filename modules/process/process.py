@@ -640,19 +640,23 @@ class ProcessTransition(ModelSQL, ModelView):
     priority = fields.Integer('Priority')
 
     def execute(self, target):
+        result = None
         if (self.kind == 'standard' and self.is_forward() or
                 self.kind == 'complete') and self.method_kind == 'add':
-            self.from_step.execute_after(target)
+            result = self.from_step.execute_after(target)
         if self.methods:
             for method in self.methods:
                 method.execute(target)
         if self.kind == 'standard' and self.is_forward and \
                 self.method_kind == 'add':
-            self.to_step.execute_before(target)
+            result = (self.to_step.execute_before(target)
+                if not result else result)
         if not self.kind == 'complete':
             target.set_state(self.to_step)
         else:
             target.set_state(None)
+            result = 'close'
+        return result
 
     @classmethod
     def default_method_kind(cls):
@@ -738,6 +742,10 @@ class ProcessStep(ModelSQL, ModelView):
         order=[('sequence', 'ASC')])
     colspan = fields.Integer('View columns', required=True)
     processes = fields.One2Many('process-process.step', 'step', 'Transitions')
+    entering_wizard = fields.Many2One('ir.action', 'Entering Wizard', domain=[
+            ('type', '=', 'ir.action.wizard')])
+    exiting_wizard = fields.Many2One('ir.action', 'Exiting Wizard', domain=[
+            ('type', '=', 'ir.action.wizard')])
 
     @classmethod
     def __setup__(cls):
@@ -763,12 +771,15 @@ class ProcessStep(ModelSQL, ModelView):
     def execute_before(self, target):
         for code in self.code_before:
             code.execute(target)
+        if self.entering_wizard:
+            return self.entering_wizard.id
 
     def execute_after(self, target):
-        if 'after_executed' in Transaction().context:
-            return
-        for code in self.code_after:
-            code.execute(target)
+        if not 'after_executed' in Transaction().context:
+            for code in self.code_after:
+                code.execute(target)
+        if self.exiting_wizard:
+            return self.exiting_wizard.id
 
     def build_step_main_view(self, process):
         xml = ''.join(self.step_xml.split('\n'))
@@ -905,4 +916,4 @@ class GenerateGraphWizard(Wizard):
         return 'end'
 
     def do_print_(self, action):
-        return action, {'id': Transaction().context.get('active_id') }
+        return action, {'id': Transaction().context.get('active_id')}

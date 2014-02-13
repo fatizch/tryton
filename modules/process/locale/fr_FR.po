@@ -298,6 +298,14 @@ msgctxt "field:process.step,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:process.step,entering_wizard:"
+msgid "Entering Wizard"
+msgstr "Assistant d'entrée"
+
+msgctxt "field:process.step,exiting_wizard:"
+msgid "Exiting Wizard"
+msgstr "Assistant de sortie"
+
 msgctxt "field:process.step,fancy_name:"
 msgid "Name"
 msgstr "Nom"
