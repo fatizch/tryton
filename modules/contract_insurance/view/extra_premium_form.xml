@@ -5,17 +5,24 @@
   <label name="calculation_kind"/>
   <field name="calculation_kind"/>
   <label name="flat_amount"/>
-  <field name="flat_amount"/>
+  <group id="flat_amount" states="{'invisible': Eval('calculation_kind') != 'flat'}">
+    <field name="flat_amount" xexpand="0"/>
+    <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+  </group>
   <newline/>
   <label name="rate"/>
   <group id="rate">
-      <field name="rate" xexpand="0" factor="100"/>
-      <label string="%" id="rate" xexpand="0" xalign="0"
-        states="{'invisible': Eval('calculation_kind') != 'rate'}"/>
+    <field name="rate" xexpand="0" factor="100"/>
+    <label string="%" id="rate" xexpand="0" xalign="0"
+      states="{'invisible': Eval('calculation_kind') != 'rate'}"/>
   </group>
   <newline/>
   <label name="start_date"/>
   <field name="start_date"/>
   <label name="end_date"/>
   <field name="end_date"/>
+<newline/>
+<group id="invisible" states="{'invisible': True}">
+  <field name="currency"/>
+</group>
 </form>

@@ -16,8 +16,8 @@ from trytond.modules.offered_insurance import offered
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
 POSSIBLE_EXTRA_PREMIUM_RULES = [
-    ('flat', 'Flat Amount'),
-    ('rate', 'Rate on Premium'),
+    ('flat', 'Montant Fixe'),
+    ('rate', 'Pourcentage'),
     ]
 
 __metaclass__ = PoolMeta
@@ -906,6 +906,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                 'greater than the coverage\'s (%s)'})
         cls._buttons.update({'propagate': {}})
 
+        utils.update_on_change_with(cls, 'rec_name',
+            ['flat_amount', 'rate', 'calculation_kind', 'currency'])
+
     @classmethod
     def default_start_date(cls):
         if 'start_date' in Transaction().context:
@@ -921,14 +924,6 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def default_calculation_kind(cls):
         return 'rate'
-
-    @classmethod
-    def default_flat_amount(cls):
-        return 0
-
-    @classmethod
-    def default_rate(cls):
-        return 0
 
     def get_possible_extra_premiums_kind(self):
         return list(POSSIBLE_EXTRA_PREMIUM_RULES)
@@ -956,13 +951,16 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         pass
 
     def get_rec_name(self, name):
-        if self.calculation_kind == 'flat':
+        if self.calculation_kind == 'flat' and self.flat_amount:
             return self.currency.amount_as_string(self.flat_amount)
-        elif self.calculation_kind == 'rate':
+        elif self.calculation_kind == 'rate' and self.rate:
             return '%s %%' % coop_string.format_number('%.2f',
                 self.rate * 100)
         else:
             return super(ExtraPremium, self).get_rec_name(name)
+
+    def on_change_with_rec_name(self, name=None):
+        return self.get_rec_name(name)
 
 
 class CoveredDataExclusionKindRelation(model.CoopSQL):

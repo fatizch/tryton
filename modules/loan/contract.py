@@ -138,6 +138,8 @@ class ExtraPremium:
         cls.calculation_kind.selection_change_with.add('is_loan')
         cls.calculation_kind.depends.append('is_loan')
 
+        utils.update_on_change_with(cls, 'rec_name', ['capital_per_mil_rate'])
+
     @classmethod
     def default_is_loan(cls):
         if 'is_loan' in Transaction().context:
@@ -147,7 +149,7 @@ class ExtraPremium:
     def get_possible_extra_premiums_kind(self):
         result = super(ExtraPremium, self).get_possible_extra_premiums_kind()
         if self.is_loan:
-            result.append(('capital_per_mil', 'Per mil capital'))
+            result.append(('capital_per_mil', 'Pourmillage'))
         return result
 
     def calculate_premium_amount(self, args, base):
@@ -160,7 +162,8 @@ class ExtraPremium:
         return self.covered_data and self.covered_data.is_loan
 
     def get_rec_name(self, name):
-        if self.calculation_kind == 'capital_per_mil':
+        if (self.calculation_kind == 'capital_per_mil'
+                and self.capital_per_mil_rate):
             return u'%s ‰' % coop_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
         return super(ExtraPremium, self).get_rec_name(name)
