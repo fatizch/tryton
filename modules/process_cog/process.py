@@ -28,6 +28,7 @@ __all__ = [
     'ProcessStep',
     'ProcessStart',
     'ProcessFinder',
+    'ProcessEnd',
     ]
 
 
@@ -385,11 +386,18 @@ class CogProcessFramework(ProcessFramework):
 
     @classmethod
     def build_instruction_complete_method(cls, process, data):
+        pool = Pool()
+        Action = pool.get('ir.action')
+        ModelData = pool.get('ir.model.data')
+        action_id = Action.get_action_id(ModelData.get_id('process_cog',
+                'act_end_process'))
+
         def button_complete_generic(works):
             for work in works:
                 work.current_state.step.execute_after(work)
                 work.current_state = None
                 work.save()
+            return action_id
 
         return button_complete_generic
 
@@ -993,6 +1001,38 @@ class ProcessFinder(Wizard):
     @classmethod
     def get_parameters_view(cls):
         return 'process_cog.process_parameters_form'
+
+
+class ProcessEnd(Wizard):
+    'End process'
+
+    __name__ = 'process.end'
+
+    class VoidStateAction(StateAction):
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            return None
+
+    start = VoidStateAction()
+
+    def do_start(self, action):
+        pool = Pool()
+        ActWindow = pool.get('ir.action.act_window')
+        Action = pool.get('ir.action')
+        possible_actions = ActWindow.search([
+                ('res_model', '=', Transaction().context.get('active_model'))])
+        good_action = possible_actions[0]
+        good_values = Action.get_action_values(
+            'ir.action.act_window', [good_action.id])
+        good_values[0]['views'] = [
+            view for view in good_values[0]['views'] if view[1] == 'form']
+        return good_values[0], {
+            'res_id': Transaction().context.get('active_id')}
+
+    def end(self):
+        return 'close'
 
 
 class GenerateGraph:
