@@ -208,7 +208,7 @@ class ManageExtraPremium(Wizard):
             Button('Delete Selected', 'delete_selected', 'tryton-clear',
                 states={'invisible': Eval('kind', '') == 'extra_premium'}),
             Button('Propagate Selected', 'propagate_selected',
-                'tryton-fullscreen'),
+                'tryton-fullscreen', default=True),
             ])
     propagate_selected = StateTransition()
     delete_selected = StateTransition()
@@ -364,7 +364,7 @@ class ManageExclusion(Wizard):
         'contract_insurance.manage_exclusion_select_view_form', [
             Button('End', 'end', 'tryton-cancel'),
             Button('Propagate Selected', 'propagate_selected',
-                'tryton-fullscreen'),
+                'tryton-fullscreen', default=True),
             ])
     propagate_selected = StateTransition()
 
