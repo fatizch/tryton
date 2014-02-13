@@ -26,6 +26,10 @@ msgctxt "error:table:"
 msgid "A clone record already exists : %s(%s)"
 msgstr "Une copie existe déjà : %s(%s)"
 
+msgctxt "error:table:"
+msgid "The code of \"Table Definition\" must be unique"
+msgstr ""
+
 msgctxt "field:table,cells:"
 msgid "Cells"
 msgstr "Cellules"
@@ -48,7 +52,7 @@ msgstr "Créé par"
 
 msgctxt "field:table,dimension10:"
 msgid "Dimension 10"
-msgstr ""
+msgstr "Dimension 10"
 
 msgctxt "field:table,dimension1:"
 msgid "Dimension 1"
@@ -68,23 +72,23 @@ msgstr "Dimension 4"
 
 msgctxt "field:table,dimension5:"
 msgid "Dimension 5"
-msgstr ""
+msgstr "Dimension 5"
 
 msgctxt "field:table,dimension6:"
 msgid "Dimension 6"
-msgstr ""
+msgstr "Dimension 6"
 
 msgctxt "field:table,dimension7:"
 msgid "Dimension 7"
-msgstr ""
+msgstr "Dimension 7"
 
 msgctxt "field:table,dimension8:"
 msgid "Dimension 8"
-msgstr ""
+msgstr "Dimension 8"
 
 msgctxt "field:table,dimension9:"
 msgid "Dimension 9"
-msgstr ""
+msgstr "Dimension 9"
 
 msgctxt "field:table,dimension_kind10:"
 msgid "Dimension Kind 10"
@@ -292,7 +296,7 @@ msgstr "Définition"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension10:"
 msgid "Dimension 10"
-msgstr ""
+msgstr "Dimension 10"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension10_required:"
 msgid "Dimension %s Required"
@@ -316,7 +320,7 @@ msgstr "Dimension %s requise"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension5:"
 msgid "Dimension 5"
-msgstr ""
+msgstr "Dimension 5"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension5_required:"
 msgid "Dimension %s Required"
@@ -324,7 +328,7 @@ msgstr "Dimension %s requise"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension6:"
 msgid "Dimension 6"
-msgstr ""
+msgstr "Dimension 6"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension6_required:"
 msgid "Dimension %s Required"
@@ -332,7 +336,7 @@ msgstr "Dimension %s requise"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension7:"
 msgid "Dimension 7"
-msgstr ""
+msgstr "Dimension 7"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension7_required:"
 msgid "Dimension %s Required"
@@ -340,7 +344,7 @@ msgstr "Dimension %s requise"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension8:"
 msgid "Dimension 8"
-msgstr ""
+msgstr "Dimension 8"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension8_required:"
 msgid "Dimension %s Required"
@@ -348,7 +352,7 @@ msgstr "Dimension %s requise"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension9:"
 msgid "Dimension 9"
-msgstr ""
+msgstr "Dimension 9"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension9_required:"
 msgid "Dimension %s Required"
@@ -380,7 +384,7 @@ msgstr "Définition"
 
 msgctxt "field:table.cell,dimension10:"
 msgid "Dimension 10"
-msgstr ""
+msgstr "Dimension 10"
 
 msgctxt "field:table.cell,dimension1:"
 msgid "Dimension 1"
@@ -400,23 +404,23 @@ msgstr "Dimension 4"
 
 msgctxt "field:table.cell,dimension5:"
 msgid "Dimension 5"
-msgstr ""
+msgstr "Dimension 5"
 
 msgctxt "field:table.cell,dimension6:"
 msgid "Dimension 6"
-msgstr ""
+msgstr "Dimension 6"
 
 msgctxt "field:table.cell,dimension7:"
 msgid "Dimension 7"
-msgstr ""
+msgstr "Dimension 7"
 
 msgctxt "field:table.cell,dimension8:"
 msgid "Dimension 8"
-msgstr ""
+msgstr "Dimension 8"
 
 msgctxt "field:table.cell,dimension9:"
 msgid "Dimension 9"
-msgstr ""
+msgstr "Dimension 9"
 
 msgctxt "field:table.cell,id:"
 msgid "ID"
@@ -468,11 +472,11 @@ msgstr "Définition"
 
 msgctxt "field:table.dimension.value,dimension_kind:"
 msgid "Dimension Kind"
-msgstr ""
+msgstr "Type de Dimension"
 
 msgctxt "field:table.dimension.value,dimension_order:"
 msgid "Dimension Order"
-msgstr ""
+msgstr "Ordre de la Dimension"
 
 msgctxt "field:table.dimension.value,end:"
 msgid "End"
@@ -592,7 +596,7 @@ msgstr "Créer Table"
 
 msgctxt "model:ir.action,name:act_definition_dimension_relate_form"
 msgid "Definition Dimension"
-msgstr ""
+msgstr "Définition de la Dimension"
 
 msgctxt "model:ir.action,name:act_manage_dimension"
 msgid "Manage Dimensions"
@@ -640,7 +644,7 @@ msgstr "Dimension"
 
 msgctxt "model:table.manage_dimension.show.dimension,name:"
 msgid "Dimension Displayer"
-msgstr ""
+msgstr "Affichage Dimension"
 
 msgctxt "selection:table,dimension_kind10:"
 msgid ""
@@ -976,7 +980,7 @@ msgstr "Dimension 1"
 
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 10"
-msgstr ""
+msgstr "Dimension 10"
 
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 2"
@@ -992,23 +996,23 @@ msgstr "Dimension 4"
 
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 5"
-msgstr ""
+msgstr "Dimension 5"
 
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 6"
-msgstr ""
+msgstr "Dimension 6"
 
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 7"
-msgstr ""
+msgstr "Dimension 7"
 
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 8"
-msgstr ""
+msgstr "Dimension 8"
 
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 9"
-msgstr ""
+msgstr "Dimension 9"
 
 msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
 msgid "Boolean"
@@ -1072,7 +1076,7 @@ msgstr ""
 
 msgctxt "view:table:"
 msgid "Manage dimension"
-msgstr ""
+msgstr "Gérer Dimension"
 
 msgctxt "view:table:"
 msgid "Table Definition"
@@ -1092,7 +1096,7 @@ msgstr "Modifier Dimension1"
 
 msgctxt "wizard_button:table.create,new_table,edit_dim_1:"
 msgid "Edit Dimensions"
-msgstr ""
+msgstr "Modifier Dimensions"
 
 msgctxt "wizard_button:table.create,new_table,end:"
 msgid "Exit"
@@ -1100,7 +1104,7 @@ msgstr "Fin"
 
 msgctxt "wizard_button:table.manage_dimension,dimension_management,apply_:"
 msgid "Apply"
-msgstr ""
+msgstr "Appliquer"
 
 msgctxt "wizard_button:table.manage_dimension,dimension_management,end:"
 msgid "Exit"
@@ -1108,12 +1112,12 @@ msgstr "Fin"
 
 msgctxt "wizard_button:table.manage_dimension,dimension_management,next_dim:"
 msgid "Next Dimension"
-msgstr ""
+msgstr "Prochaine Dimension"
 
 msgctxt ""
 "wizard_button:table.manage_dimension,dimension_management,previous_dim:"
 msgid "Previous Dimension"
-msgstr ""
+msgstr "Dimension Précédente"
 
 msgctxt "wizard_button:table.manage_dimension,dimension_management,view_data:"
 msgid "View Data"

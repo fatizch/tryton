@@ -168,7 +168,7 @@ msgstr "Trancge"
 
 msgctxt "model:salary_range.version,name:"
 msgid "Salary Range Version"
-msgstr ""
+msgstr "Version de Tranche"
 
 msgctxt "model:tag,name:tag_life"
 msgid "Life"
@@ -184,7 +184,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "view:salary_range.version:"
 msgid "Salary Range Version"
-msgstr ""
+msgstr "Version de Tranche"
 
 msgctxt "view:salary_range:"
 msgid "Salary Range"

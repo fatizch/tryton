@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -447,7 +447,7 @@ msgstr "Info"
 
 msgctxt "field:rule_engine.log,low_level_debug:"
 msgid "Execution Trace"
-msgstr ""
+msgstr "Trace d'exécution"
 
 msgctxt "field:rule_engine.log,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -611,7 +611,7 @@ msgstr "Erreurs du Résultat"
 
 msgctxt "field:rule_engine.test_case,result_info:"
 msgid "Result Info"
-msgstr ""
+msgstr "Info du Résultat"
 
 msgctxt "field:rule_engine.test_case,result_value:"
 msgid "Result Value"
@@ -988,6 +988,10 @@ msgstr "Résultat"
 msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
 msgstr "Jeu de Test"
+
+msgctxt "view:rule_engine:"
+msgid "Debug"
+msgstr ""
 
 msgctxt "view:rule_engine:"
 msgid "Parameters"

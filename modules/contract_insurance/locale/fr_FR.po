@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -339,7 +339,7 @@ msgstr "Garantie Souscrite"
 
 msgctxt "field:contract.covered_data,parent_covered_data:"
 msgid "Parent Covered Data"
-msgstr ""
+msgstr "Données de Couverture Parente"
 
 msgctxt "field:contract.covered_data,possible_deductible_duration:"
 msgid "Possible Deductible Duration"
@@ -457,9 +457,9 @@ msgctxt "field:contract.covered_data.extra_premium,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.covered_data.extra_premium,kind:"
-msgid "Kind"
-msgstr "Type"
+msgctxt "field:contract.covered_data.extra_premium,motive:"
+msgid "Motive"
+msgstr ""
 
 msgctxt "field:contract.covered_data.extra_premium,must_expand_tree:"
 msgid "Must Expand Tree"
