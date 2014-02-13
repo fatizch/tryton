@@ -987,7 +987,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.calculation_kind == 'flat':
             return self.currency.amount_as_string(self.flat_amount)
         elif self.calculation_kind == 'rate':
-            return '%.2f %%' % (self.rate * 100)
+            return '%s %%' % coop_string.format_number('%%.2f',
+                self.rate * 100)
         else:
             return super(ExtraPremium, self).get_rec_name(name)
 
