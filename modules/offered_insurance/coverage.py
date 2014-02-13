@@ -110,11 +110,6 @@ class OptionDescription:
 
         return ([result_line], errs)
 
-    def get_dates(self, dates=None):
-        if not dates:
-            dates = set()
-        return dates
-
     def give_me_eligibility(self, args):
         try:
             res = self.get_result('eligibility', args, kind='eligibility')
