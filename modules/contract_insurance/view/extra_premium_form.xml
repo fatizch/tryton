@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Extra Premium">
-  <label name="kind"/>
-  <field name="kind" widget="selection"/>
+  <label name="motive"/>
+  <field name="motive" widget="selection"/>
   <label name="calculation_kind"/>
   <field name="calculation_kind"/>
   <label name="flat_amount"/>

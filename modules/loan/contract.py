@@ -167,3 +167,8 @@ class ExtraPremium:
 
     def get_is_loan(self, name):
         return self.covered_data and self.covered_data.is_loan
+
+    def get_rec_name(self, name):
+        if self.calculation_kind == 'capital_per_mil':
+            return '%.2f ‰' % (self.capital_per_mil_rate * 1000)
+        return super(ExtraPremium, self).get_rec_name(name)
