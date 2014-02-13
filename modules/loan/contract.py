@@ -55,15 +55,6 @@ class Contract:
         if not utils.is_none(self, 'loans'):
             cur_dict['loan'] = self.loans[-1]
 
-    def get_dates(self):
-        if not self.is_loan:
-            return super(Contract, self).get_dates()
-        result = set()
-        for loan in self.loans:
-            for payment in loan.payments:
-                result.add(payment.start_date)
-        return result
-
     @classmethod
     @model.CoopView.button_action('loan.launch_loan_creation_wizard')
     def create_loan(cls, loans):

@@ -2,7 +2,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, utils, fields
+from trytond.modules.cog_utils import model, utils, fields, coop_date
 from trytond.modules.cog_utils import coop_string
 
 from trytond.modules.offered import NonExistingRuleKindException
@@ -222,6 +222,36 @@ class Product:
         res = super(Product, cls).get_var_names_for_full_extract()
         res.extend(['item_descriptors'])
         return res
+
+    def get_contract_dates(self, dates, contract):
+        super(Product, self).get_contract_dates(dates, contract)
+        if contract.next_renewal_date:
+            dates.add(contract.next_renewal_date)
+            if not contract.end_date:
+                return
+            # Calculate every anniversary date until contrat termination
+            cur_date = contract.next_renewal_date
+            while cur_date <= contract.end_date:
+                dates.add(cur_date)
+                cur_date = coop_date.add_year(cur_date, 1)
+
+    def get_covered_data_dates(self, dates, covered_data):
+        dates.add(covered_data.start_date)
+        if hasattr(covered_data, 'end_date') and covered_data.end_date:
+            dates.add(coop_date.add_day(covered_data.end_date, 1))
+
+    def get_covered_element_dates(self, dates, covered_element):
+        for data in covered_element.covered_data:
+            self.get_covered_data_dates(dates, data)
+        if hasattr(covered_element, 'sub_covered_elements'):
+            for sub_elem in covered_element.sub_covered_elements:
+                self.get_covered_element_dates(dates, sub_elem)
+
+    def get_dates(self, contract):
+        dates = super(Product, self).get_dates(contract)
+        for covered in contract.covered_elements:
+            self.get_covered_element_dates(dates, covered)
+        return dates
 
 
 class OfferedProduct(Offered):
