@@ -239,6 +239,12 @@ class Product:
         dates.add(covered_data.start_date)
         if hasattr(covered_data, 'end_date') and covered_data.end_date:
             dates.add(coop_date.add_day(covered_data.end_date, 1))
+        if (hasattr(covered_data, 'extra_premiums') and
+                covered_data.extra_premiums):
+            for elem in covered_data.extra_premiums:
+                dates.add(elem.start_date)
+                if elem.end_date:
+                    dates.add(elem.end_date)
 
     def get_covered_element_dates(self, dates, covered_element):
         for data in covered_element.covered_data:
