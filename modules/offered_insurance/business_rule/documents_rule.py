@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import os
+import subprocess
 import copy
 import StringIO
 import functools
@@ -597,10 +598,20 @@ class DocumentFromFilename(Report):
                 'filepath' % cls.__name__)
         if not os.path.isfile(data['filepath']):
             raise Exception('%s is not a valid filename' % data['filepath'])
-        with open(data['filepath'], 'r') as f:
-            value = buffer(f.read())
+        value = buffer(cls.unoconv(data['filepath'], 'odt', 'pdf'))
+        return ('.pdf', value, False, data['filename'])
 
-        return ('.odt', value, False, data['filename'])
+    @classmethod
+    def unoconv(cls, filepath, input_format, output_format):
+        from trytond.report import FORMAT2EXT
+        oext = FORMAT2EXT.get(output_format, output_format)
+        cmd = ['unoconv', '--connection=%s' % CONFIG['unoconv'],
+            '-f', oext, '--stdout', filepath]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        stdoutdata, stderrdata = proc.communicate()
+        if proc.wait() != 0:
+            raise Exception(stderrdata)
+        return stdoutdata
 
 
 class DocumentCreatePreview(model.CoopView):
