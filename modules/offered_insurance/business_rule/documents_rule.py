@@ -61,8 +61,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True)
     versions = fields.One2Many('document.template.version', 'resource',
         'Versions')
-    kind = fields.Selection('get_possible_kinds', 'Kind',
-        selection_change_with=['on_model'])
+    kind = fields.Selection('get_possible_kinds', 'Kind')
     products = fields.Many2Many('document.template-offered.product',
         'document_template', 'product', 'Products')
     mail_subject = fields.Char('eMail Subject')
@@ -80,6 +79,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView):
             if version.end_date >= date:
                 return version
 
+    @fields.depends('on_model')
     def get_possible_kinds(self):
         if self.on_model and self.on_model.model == 'document.request':
             return [('doc_request', 'Document Request')]

@@ -371,8 +371,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     number = fields.Integer('Number', readonly=True)
     start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date', on_change_with=['loan', 'start_date',
-            'number_of_payments'])
+    end_date = fields.Date('End Date')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments')
     rate = fields.Numeric('Annual Rate', digits=(16, 4))
@@ -388,6 +387,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_currency(self):
         return self.loan.currency
 
+    @fields.depends('loan', 'start_date', 'number_of_payments')
     def on_change_with_end_date(self):
         return coop_date.add_duration(self.start_date, self.number_of_payments,
             self.loan.payment_frequency)

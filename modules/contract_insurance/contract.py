@@ -314,8 +314,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_possible_item_desc_ids')
     possible_item_desc_nb = fields.Function(
         fields.Integer('Possible Item Desc Number',
-            states={'invisible': True},
-            on_change_with=['possible_item_desc']),
+            states={'invisible': True}),
         'on_change_with_possible_item_desc_nb')
     covered_data = fields.One2Many('contract.covered_data',
         'covered_element', 'Covered Element Data')
@@ -641,6 +640,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_main_contract(cls):
         return Transaction().context.get('contract')
 
+    @fields.depends('possible_item_desc')
     def on_change_with_possible_item_desc_nb(self, name=None):
         return len(self.possible_item_desc)
 
@@ -890,8 +890,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     start_date = fields.Date('Start date', states={'required': True})
     end_date = fields.Date('End date')
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
-        'Calculation Kind', selection_change_with=set(['covered_data']),
-        depends=['covered_data'])
+        'Calculation Kind', depends=['covered_data'])
     flat_amount = fields.Numeric('Flat amount', states={
             'invisible': Eval('calculation_kind', '') != 'flat',
             'required': Eval('calculation_kind', '') == 'flat',
@@ -929,6 +928,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_calculation_kind(cls):
         return 'rate'
 
+    @fields.depends('covered_data')
     def get_possible_extra_premiums_kind(self):
         return list(POSSIBLE_EXTRA_PREMIUM_RULES)
 

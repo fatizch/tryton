@@ -16,7 +16,6 @@ class ExportPackage:
     exclusions = fields.Function(
         fields.One2Many('offered.exclusion', None, 'Exclusion', states={
                 'invisible': Bool(Eval('model') != 'offered.exclusion')},
-            on_change=['exclusions', 'instances_to_export'],
             add_remove=[]),
         'getter_void', setter='setter_void')
 
@@ -28,5 +27,6 @@ class ExportPackage:
                 ])
         return list(set(res))
 
+    @fields.depends('exclusions', 'instances_to_export')
     def on_change_exclusions(self):
         return self._on_change('exclusions')
