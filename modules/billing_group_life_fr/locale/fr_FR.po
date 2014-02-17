@@ -109,7 +109,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.premium.rate.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.premium.rate.rule.line,config_kind:"
 msgid "Conf. kind"
@@ -173,7 +173,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.premium.rate.rule.line,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.premium_rate.form,amount_expected:"
 msgid "Amount Expected"
@@ -261,7 +261,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.premium_rate.form,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.premium_rate.form.create.param,clients:"
 msgid "Clients"
@@ -476,7 +476,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.premium_rate.form.line,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.premium_rate.form.receive.create_move,id:"
 msgid "ID"
@@ -625,7 +625,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.premium_rate.line,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:fare_class,code:"
 msgid "Code"
@@ -669,7 +669,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:fare_class,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:fare_class.group,code:"
 msgid "Code"
@@ -717,7 +717,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:fare_class.group,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:fare_class.group-fare_class,create_date:"
 msgid "Create Date"
@@ -757,7 +757,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:fare_class.group-fare_class,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,is_rating_by_fare_class:"
 msgid "Rating by Fare Class"
@@ -821,7 +821,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:party.group,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.party,group:"
 msgid "Group"
@@ -837,7 +837,7 @@ msgstr "Règle de Tarification Collective"
 
 msgctxt "model:billing.premium.rate.rule.line,name:"
 msgid "Premium Rate Rule Line"
-msgstr ""
+msgstr "Ligne de Règle de Taux de Cotisation"
 
 msgctxt "model:billing.premium_rate.form,name:"
 msgid "Rate Note"

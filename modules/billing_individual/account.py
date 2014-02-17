@@ -7,15 +7,90 @@ from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, export
+from trytond.modules.cog_utils import fields, export, model
+from trytond.modules.currency_cog import ModelCurrency
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'MoveComputationLog',
+    'MoveBreakdown',
     'Move',
     'MoveLine',
     'TaxDesc',
     'FeeDesc',
     ]
+
+
+class MoveComputationLog(model.CoopSQL, model.CoopView, ModelCurrency):
+    'Move Computation Log'
+
+    __name__ = 'account.move.computation_log'
+
+    move = fields.Many2One('account.move', 'Move', states={'required': True},
+        ondelete='CASCADE')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+    origin = fields.Char('Origin')
+    base_amount = fields.Char('Base Amount')
+    final_amount = fields.Char('Final Amount')
+    ratio = fields.Char('Ratio')
+    level = fields.Integer('Level', states={'invisible': True})
+
+    def get_currency(self):
+        try:
+            return self.move.contract.currency
+        except:
+            return None
+
+    def init_from_log(self, log, work_set):
+        self.currency = work_set.move.contract.currency
+        self.origin = log['from'].get_rec_name(None)
+        self.start_date = log['start_date']
+        self.end_date = log['end_date']
+        self.base_amount = '%s %s' % (log['base_amount'], self.currency.symbol)
+        self.final_amount = '%s %s' % (log['final_amount'],
+            self.currency.symbol)
+        self.ratio = '%.2f %%' % (log['ratio'] * 100)
+        self.move = work_set.move
+        if log['from'].__name__ == 'offered.option.description':
+            if log['from'].kind == 'insurance':
+                self.level = 1
+        else:
+            self.level = 2
+
+
+class MoveBreakdown(model.CoopSQL, model.CoopView, ModelCurrency):
+    'Move Breakdown'
+
+    __name__ = 'account.move.breakdown'
+
+    move = fields.Many2One('account.move', 'Move', states={'required': True},
+        ondelete='CASCADE')
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
+    total_wo_fees = fields.Numeric('Amount w/o fees')
+    fees = fields.Numeric('Fees')
+    total_wo_taxes = fields.Numeric('Total HT')
+    taxes = fields.Numeric('Taxes')
+    total = fields.Numeric('Total')
+
+    def ventilate_amounts(self, work_set):
+        ratio = self.total / work_set.total_amount
+        self.taxes = work_set.move.tax_amount * ratio
+        self.total_wo_taxes = self.total - self.taxes
+        self.fees = work_set.move.fee_amount * ratio
+        self.total_wo_fees = self.total_wo_taxes - self.fees
+        return ratio
+
+    def get_currency(self):
+        if not (hasattr(self, 'move') and self.move):
+            return None
+        if not (hasattr(self.move, 'contract') and self.move.contract):
+            return None
+        if not (hasattr(self.move.contract, 'currency') and
+                self.move.contract.currency):
+            return None
+        return self.move.contract.currency
 
 
 class Move:
@@ -58,6 +133,10 @@ class Move:
     fee_details = fields.One2ManyDomain('account.move.line', 'move', 'Fees',
         domain=[('account.kind', '!=', 'receivable'),
             ('second_origin', 'like', 'account.fee.description,%')])
+    breakdown_details = fields.One2Many('account.move.breakdown',
+        'move', 'Breakdown Details', states={'readonly': True})
+    calculation_details = fields.One2Many('account.move.computation_log',
+        'move', 'Calculation Details')
 
     @classmethod
     def _get_origin(cls):
@@ -81,7 +160,7 @@ class Move:
         sign = 1
         if name in ('tax_amount', 'fee_amount'):
             extra_clause = ((move_line.second_origin.like(
-                        'account_cog.%s_desc,%%' % name[0:3]))
+                        'account.%s.description,%%' % name[0:3]))
                 & (account.kind != 'receivable'))
             sign = -1
 
@@ -153,6 +232,18 @@ class Move:
         if not self.contract:
             return super(Move, self).get_rec_name(name)
         return self.contract.get_rec_name(name)
+
+    def get_publishing_values(self):
+        result = super(Move, self).get_publishing_values()
+        result['start_date'] = self.billing_period.start_date
+        result['end_date'] = self.billing_period.end_date
+        result['first_payment_date'] = self.schedule[0].maturity_date
+        result['first_payment_amount'] = self.schedule[0].debit
+        if len(self.schedule) > 1:
+            result['standard_payment_amount'] = self.schedule[1].debit
+        else:
+            result['standard_payment_amount'] = 0
+        return result
 
 
 class MoveLine:

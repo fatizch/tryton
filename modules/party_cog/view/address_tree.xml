@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree" position="replace_attributes">
+        <tree editable="bottom"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='name']" position="before">
+        <field name="start_date"/>
+        <field name="end_date"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='zip']" position="replace_attributes">
+        <field name="zip" tree_invisible="1"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='city']" position="replace_attributes">
+        <field name="city" tree_invisible="1"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='streetbis']" position="after">
+        <field name="zip_and_city"/>
+    </xpath>
+</data>

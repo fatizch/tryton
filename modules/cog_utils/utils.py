@@ -3,6 +3,8 @@ import os
 import datetime
 import time
 import copy
+import string
+import random
 
 from trytond.pool import Pool
 from trytond.model import Model
@@ -17,6 +19,10 @@ from trytond.model.modelstorage import EvalEnvironment
 
 
 __all__ = []
+
+
+def print_log(some_text):
+    print '\033[95m' + str(some_text) + '\033[0md'
 
 
 def get_child_models(from_class):
@@ -512,6 +518,14 @@ def update_on_change(cls, var_name, new_on_change):
     setattr(cls, var_name, field_name)
 
 
+def update_on_change_with(cls, var_name, new_on_change_with):
+    field_name = copy.copy(getattr(cls, var_name))
+    if not field_name.on_change_with:
+        field_name.on_change_with = set()
+    field_name.on_change_with |= set(new_on_change_with)
+    setattr(cls, var_name, field_name)
+
+
 def update_selection(cls, var_name, tuple_to_add=None, keys_to_remove=None):
     field_name = copy.copy(getattr(cls, var_name))
     if keys_to_remove:
@@ -593,3 +607,20 @@ def extract_object(instance, vars_name=None):
         else:
             res[var_name] = getattr(instance, var_name)
     return res
+
+
+def set_state_view_defaults(wizard, state_name):
+    if not hasattr(wizard, state_name) or not getattr(wizard, state_name):
+        return {}
+    state = getattr(wizard, state_name)
+    result = {}
+    for field_name, _ in state._fields.iteritems():
+        try:
+            result[field_name] = getattr(state, field_name)
+        except:
+            pass
+    return result
+
+
+def id_generator(size=20, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))

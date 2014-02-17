@@ -17,11 +17,12 @@ def register():
         # From Contract
         Contract,
         ContractOption,
+        CoveredData,
+        ExtraPremium,
         # From Loan
         Loan,
+        ContractLoanRelation,
         LoanShare,
-        CoveredData,
-        CoveredDataLoanShareRelation,
         LoanIncrement,
         LoanPayment,
         # From Loan Create Wizard

@@ -49,3 +49,11 @@ msgstr "Acteurs"
 msgctxt "model:party.party,name:party."
 msgid "Party"
 msgstr "Acteur"
+
+msgctxt "field:party.address,streetbis:party."
+msgid "Street (bis)"
+msgstr "Boîte Postale (Ligne 5)"
+
+msgctxt "field:party.address,street:party."
+msgid "Street"
+msgstr "Rue (Ligne 4)"

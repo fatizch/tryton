@@ -93,7 +93,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:collection,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:collection.create.assign,amount:"
 msgid "Amount"

@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
-from trytond.pyson import Eval, Bool, Less
+import StringIO
 
+from trytond.pyson import Eval, Bool, Less
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import utils, fields, model, export
@@ -25,6 +26,7 @@ STATES_COMPANY = Bool(Eval('is_company'))
 class Party(export.ExportImportMixin):
     __name__ = 'party.party'
 
+    name = fields.UnaccentChar('Name', required=True, select=True)
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
@@ -53,11 +55,11 @@ class Party(export.ExportImportMixin):
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             })
-    first_name = fields.Char('First Name', states={
+    first_name = fields.UnaccentChar('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             })
-    maiden_name = fields.Char('Maiden Name', states={
+    maiden_name = fields.UnaccentChar('Maiden Name', states={
             'readonly': Eval('gender') != 'female',
             'invisible': ~STATES_PERSON
             })
@@ -315,3 +317,16 @@ class Party(export.ExportImportMixin):
     @staticmethod
     def default_number_of_contact_mechanisms():
         return 0
+
+    def get_publishing_values(self):
+        result = super(Party, self).get_publishing_values()
+        result['name'] = self.name
+        result['first_name'] = self.first_name
+        result['birth_date'] = self.birth_date
+        result['gender'] = coop_string.translate_value(self, 'gender')
+        try:
+            result['main_address'] = self.addresses[0]
+        except:
+            pass
+        result['logo'] = StringIO.StringIO(str(self.logo)) if self.logo else ''
+        return result

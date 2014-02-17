@@ -22,6 +22,10 @@ msgctxt "field:account.move,wo_tax_amount:"
 msgid "Total Amount w/o taxes"
 msgstr "Montant total hors Taxes"
 
+msgctxt "field:account.move.breakdown,commissions:"
+msgid "Commissions"
+msgstr "Commissions"
+
 msgctxt "field:broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -68,7 +72,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:broker,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:commission.option.description-option.description,component:"
 msgid "Component"
@@ -108,7 +112,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:commission.option.description-option.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:commission.rule,config_kind:"
 msgid "Conf. kind"
@@ -184,7 +188,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:commission.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.billing.premium,com_lines:"
 msgid "Commission lines"
@@ -248,7 +252,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.billing.premium-commission.option,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.option,com_options:"
 msgid "Commissions"
@@ -332,7 +336,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.option-commission.option,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:distribution.network,all_com_plans:"
 msgid "Top Level Commission Plans"
@@ -356,7 +360,7 @@ msgstr "Plans de Commissionnement Hérités"
 
 msgctxt "field:distribution.network,parents_brokers:"
 msgid "Parent Brokers"
-msgstr ""
+msgstr "Courtiers des Niveaux Sup."
 
 msgctxt "field:distribution.network-broker,broker:"
 msgid "Broker"
@@ -400,7 +404,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:distribution.network-broker,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:distribution.network-commission.plan,com_plan:"
 msgid "Commission Plan"
@@ -440,7 +444,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:distribution.network-commission.plan,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,commission_rules:"
 msgid "Commission Rules"
@@ -591,16 +595,16 @@ msgid "Commission"
 msgstr "Commission"
 
 msgctxt "selection:offered.option.description,subscription_behaviour:"
+msgid "Defaulted"
+msgstr "Proposée par Défaut"
+
+msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Mandatory"
 msgstr "Obligatoire"
 
 msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Optional"
 msgstr "En Option"
-
-msgctxt "selection:offered.option.description,subscription_behaviour:"
-msgid "Defaulted"
-msgstr "Proposée par Défaut"
 
 msgctxt "selection:offered.product,commission_kind:"
 msgid ""
@@ -617,6 +621,42 @@ msgstr "Délégation de gestion"
 msgctxt "selection:offered.product,kind:"
 msgid "Commission"
 msgstr "Commission"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Base Amount"
+msgstr "Base"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Breakdown"
+msgstr "Ventilation"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o Fees"
+msgstr "Total Sans Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o taxes"
+msgstr "Total Sans Taxes"
+
+msgctxt "view:account.move:"
+msgid "Commissions"
+msgstr "Commissions"
 
 msgctxt "view:broker:"
 msgid "Broker"

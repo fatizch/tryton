@@ -48,5 +48,13 @@ class Broker(model.CoopSQL, model.CoopView):
         return result
 
     def get_rec_name(self, name):
-        return (self.party.rec_name
-            if self.party else super(Broker, self).get_rec_name(name))
+        return '[%s] %s' % (self.reference,
+            self.party.rec_name if self.party else '')
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('reference',) + tuple(clause[1:])],
+            [('party.name',) + tuple(clause[1:])],
+            [('party.short_name',) + tuple(clause[1:])],
+            ]

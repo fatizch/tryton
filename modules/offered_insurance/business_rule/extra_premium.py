@@ -25,7 +25,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView):
     def on_change_name(self):
         if self.code:
             return {}
-        return {'code': coop_string.remove_invalid_char(self.name)}
+        return {'code': coop_string.remove_blank_and_invalid_char(self.name)}
 
     def get_name_for_billing(self):
         return self.name

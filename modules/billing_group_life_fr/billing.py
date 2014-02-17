@@ -365,15 +365,15 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
             for sub_line in self.childs:
                 sub_line.calculate_bill_line(work_set)
             return
-        bill_line = work_set['lines'][(self.rate_line.covered_element,
+        bill_line = work_set.lines[(self.rate_line.covered_element,
                 self.rate_line.option_.offered.account_for_billing)]
         bill_line.second_origin = self.rate_line.option_.offered
-        bill_line.credit += work_set['currency'].round(self.amount)
-        work_set['_remaining'] += work_set['currency'].round(
-            self.amount) - work_set['currency'].round(self.client_amount)
+        bill_line.credit += work_set.currency.round(self.amount)
+        work_set._remaining += work_set.currency.round(
+            self.amount) - work_set.currency.round(self.client_amount)
         bill_line.account = self.rate_line.option_.offered.account_for_billing
         bill_line.party = self.contract.subscriber
-        work_set['total_amount'] += work_set['currency'].round(self.amount)
+        work_set.total_amount += work_set.currency.round(self.amount)
 
     @fields.depends('childs', 'amount')
     def on_change_with_sum_amount(self, name=None):

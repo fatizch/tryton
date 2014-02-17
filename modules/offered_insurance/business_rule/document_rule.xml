@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
-    <!-- Document Desc -->
+    <!-- ################# -->
+    <!-- # Document Desc # -->
+    <!-- ################# -->
     <record model="ir.ui.view" id="document_desc_form">
       <field name="model">document.description</field>
       <field name="type">form</field>
@@ -27,7 +29,9 @@
       <field name="act_window" ref="act_document_desc"/>
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
-    <!-- Document Rule -->
+    <!-- ################# -->
+    <!-- # Document Rule # -->
+    <!-- ################# -->
     <record model="ir.ui.view" id="document_rule_form">
       <field name="model">document.rule</field>
       <field name="type">form</field>
@@ -40,7 +44,9 @@
       <field name="inherit" ref="businessruleroot_view_tree"/>
       <field name="arch" type="xml"/>
     </record>
-    <!-- Document -->
+    <!-- ############ -->
+    <!-- # Document # -->
+    <!-- ############ -->
     <record model="ir.ui.view" id="document_form">
       <field name="model">document.request.line</field>
       <field name="type">form</field>
@@ -51,7 +57,9 @@
       <field name="type">tree</field>
       <field name="name">document_tree</field>
     </record>
-    <!-- Document Request -->
+    <!-- #################### -->
+    <!-- # Document Request # -->
+    <!-- #################### -->
     <record model="ir.ui.view" id="document_request_form">
       <field name="model">document.request</field>
       <field name="type">form</field>
@@ -62,11 +70,55 @@
       <field name="type">tree</field>
       <field name="name">document_request_tree</field>
     </record>
-    <!-- Report -->
+    <!-- ######################################### -->
+    <!-- # Document Creation - Select - Template # -->
+    <!-- ######################################### -->
+    <record model="ir.ui.view" id="document_create_select_template_list">
+      <field name="model">document.create.select.template</field>
+      <field name="type">tree</field>
+      <field name="name">document_create_select_template_list</field>
+    </record>
+    <!-- ############################## -->
+    <!-- # Document Creation - Select # -->
+    <!-- ############################## -->
+    <record model="ir.ui.view" id="document_create_select_form">
+      <field name="model">document.create.select</field>
+      <field name="type">form</field>
+      <field name="name">document_create_select_form</field>
+    </record>
+    <!-- ############################### -->
+    <!-- # Document Creation - Preview # -->
+    <!-- ############################### -->
+    <record model="ir.ui.view" id="document_create_preview_form">
+      <field name="model">document.create.preview</field>
+      <field name="type">form</field>
+      <field name="name">document_create_preview_form</field>
+    </record>
+    <!-- ############################## -->
+    <!-- # Document Creation - Attach # -->
+    <!-- ############################## -->
+    <record model="ir.ui.view" id="document_create_attach_form">
+      <field name="model">document.create.attach</field>
+      <field name="type">form</field>
+      <field name="name">document_create_attach_form</field>
+    </record>
+    <!-- ############################ -->
+    <!-- # Letter Generation Wizard # -->
+    <!-- ############################ -->
     <record model="ir.action.wizard" id="letter_generation_wizard">
         <field name="name">Letter Generation</field>
         <field name="wiz_name">document.create</field>
     </record>
+    <!-- ############################ -->
+    <!-- # Document Filename Report # -->
+    <!-- ############################ -->
+    <record model="ir.action.report" id="generate_file_report">
+      <field name="name">Document From Filename</field>
+      <field name="report_name">document.generate.file_report</field>
+    </record>
+    <!-- ############################ -->
+    <!-- # Letter Generation Report # -->
+    <!-- ############################ -->
     <record model="ir.action.report" id="letter_generation_report">
       <field name="name">Letter Report</field>
       <field name="report_name">document.generate.report</field>
@@ -76,7 +128,9 @@
       <field name="model">document.request,-1</field>
       <field name="action" ref="letter_generation_wizard"/>
     </record>
-    <!-- Document Template -->
+    <!-- ##################### -->
+    <!-- # Document Template # -->
+    <!-- ##################### -->
     <record model="ir.ui.view" id="document_template_form">
       <field name="model">document.template</field>
       <field name="type">form</field>
@@ -103,7 +157,9 @@
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="30"
       action="act_doc_template" id="menu_doc_template"/>
-    <!-- Document Template Version -->
+    <!-- ############################# -->
+    <!-- # Document Template Version # -->
+    <!-- ############################# -->
     <record model="ir.ui.view" id="document_template_version_form">
       <field name="model">document.template.version</field>
       <field name="type">form</field>
@@ -114,23 +170,9 @@
       <field name="type">tree</field>
       <field name="name">document_template_version_list</field>
     </record>
-    <!-- Document Create Select -->
-    <record model="ir.ui.view" id="document_create_select_form">
-      <field name="model">document.create.select</field>
-      <field name="type">form</field>
-      <field name="name">document_create_select_form</field>
-    </record>
-    <record model="ir.ui.view" id="document_create_attach_form">
-      <field name="model">document.create.attach</field>
-      <field name="type">form</field>
-      <field name="name">document_create_attach_form</field>
-    </record>
-    <record model="ir.ui.view" id="document_create_select_template_list">
-      <field name="model">document.create.select.template</field>
-      <field name="type">tree</field>
-      <field name="name">document_create_select_template_list</field>
-    </record>
-    <!-- Receive Document -->
+    <!-- #################### -->
+    <!-- # Document Receive # -->
+    <!-- #################### -->
     <record model="ir.ui.view" id="document_receive_request_form">
       <field name="model">document.receive.request</field>
       <field name="type">form</field>

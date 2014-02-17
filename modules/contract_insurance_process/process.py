@@ -39,9 +39,7 @@ class ContractSubscribeFindProcess(ProcessStart):
             ), 'on_change_with_possible_brokers')
     business_provider = fields.Many2One('broker', 'Business Provider',
         domain=[('id', 'in', Eval('possible_brokers'))],
-        depends=['possible_brokers'])
-    delegated_manager = fields.Many2One('broker', 'Delegated Manager',
-        domain=[('id', 'in', Eval('possible_brokers'))],
+        on_change=['business_provider', 'dist_network'],
         depends=['possible_brokers'])
     possible_com_product = fields.Function(
         fields.Many2Many('distribution.commercial_product', None,
@@ -75,6 +73,7 @@ class ContractSubscribeFindProcess(ProcessStart):
         result = super(
             ContractSubscribeFindProcess, cls).build_process_depends()
         result.append('product')
+        result.append('com_product')
         return result
 
     @classmethod
@@ -121,12 +120,19 @@ class ContractSubscribeFindProcess(ProcessStart):
         if (not utils.is_none(self, 'business_provider')
                 and self.business_provider.id not in res['possible_brokers']):
             res['business_provider'] = None
-        elif (not utils.is_none(self, 'delegated_manager')
-                and self.delegated_manager.id not in res['possible_brokers']):
-            res['delegated_manager'] = None
         elif len(res['possible_brokers']) == 1:
             res['business_provider'] = res['possible_brokers'][0]
-            res['delegated_manager'] = res['possible_brokers'][0]
+        return res
+
+    def on_change_business_provider(self):
+        res = {}
+        if not self.business_provider:
+            return res
+        if len(self.business_provider.dist_networks) == 1:
+            network = self.business_provider.dist_networks[0]
+            res['dist_network'] = network.id
+            res['possible_com_product'] = [x.id for x in
+                network.all_com_products]
         return res
 
 
@@ -155,10 +161,6 @@ class ContractSubscribe(ProcessFinder):
                     process_param.business_provider):
                 obj.get_or_create_agreement('business_provider',
                     process_param.business_provider.party)
-            if (hasattr(process_param, 'delegated_manager') and
-                    process_param.delegated_manager):
-                obj.get_or_create_agreement('management',
-                    process_param.delegated_manager.party)
             obj.dist_network = process_param.dist_network
             errs += err
         return res, errs

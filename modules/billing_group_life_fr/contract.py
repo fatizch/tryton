@@ -203,24 +203,32 @@ already exists and can't be modified (%s)'''),
                 start_date, end_date)
         return []
 
+    @classmethod
+    def work_set_class(cls):
+        class WorkSet(super(Contract, cls).work_set_class()):
+            def __init__(self):
+                super(WorkSet, self).__init__()
+                self._remaining = None
+        return WorkSet
+
     def calculate_base_lines(self, work_set):
         if not 'rate_note' in Transaction().context:
             return super(Contract, self).calculate_base_lines(
                 work_set)
         rate_note = Transaction().context.get('rate_note')
-        work_set['_remaining'] = Decimal(0)
+        work_set._remaining = Decimal(0)
         for rate_line in rate_note.lines:
             rate_line.calculate_bill_line(work_set)
-        if not work_set['_remaining']:
+        if not work_set._remaining:
             return
 
-        suspense_line = work_set['lines'][(None,
+        suspense_line = work_set.lines[(None,
             rate_note.contract.subscriber.suspense_account)]
         suspense_line.second_origin = rate_note
-        suspense_line.debit = work_set['_remaining']
+        suspense_line.debit = work_set._remaining
         suspense_line.account = rate_note.contract.subscriber.suspense_account
         suspense_line.party = rate_note.contract.subscriber
-        work_set['total_amount'] -= suspense_line.debit
+        work_set.total_amount -= suspense_line.debit
 
     def compensate_existing_moves_on_period(self, work_set):
         if not 'rate_note' in Transaction().context:

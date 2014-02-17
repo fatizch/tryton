@@ -12,9 +12,6 @@
         <label id="percent" string="%" xexpand="0" xalign="0"/>
       </group>
       <newline/>
-      <label name="contract"/>
-      <field name="contract"/>
-      <newline/>
       <label name="amount"/>
       <group id="amount">
         <field name="amount" xexpand="0"/>
@@ -44,6 +41,7 @@
       <newline/>
       <label name="lender"/>
       <field name="lender"/>
+      <field name="contracts" colspan="4"/>
       <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
     </page>
     <page id="increments" string="Increments">

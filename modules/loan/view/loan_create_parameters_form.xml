@@ -5,7 +5,7 @@
     <label name="rate"/>
     <group id="rate">
       <field name="rate" factor="100" xexpand="0"/>
-      <label string="%" id="rate" xexpand="0" xalign="0"/>
+      <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'graduated'}"/>
     </group>
     <label name="amount"/>
     <group id="amount">
@@ -28,7 +28,6 @@
     <label name="lender"/>
     <field name="lender"/>
     <newline/>
-    <field name="loan_shares" colspan="4"/>
     <field name="currency"/>
     <newline/>
     <field name="contract"/>

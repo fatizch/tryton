@@ -1,5 +1,4 @@
 import random
-
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, coop_string
 
@@ -60,7 +59,8 @@ class TestCaseModel:
         bank_file = cls.read_list_file('bank.cfg', MODULE_NAME)
         existing = dict((x.bic, x) for x in Bank.search([]))
         for line in bank_file:
-            if len(existing) >= Configuration.number_of_banks:
+            if (Configuration.number_of_banks > 0
+                    and len(existing) >= Configuration.number_of_banks):
                 break
             try:
                 bic = line[236:247].rstrip().replace(' ', '')
@@ -73,7 +73,8 @@ class TestCaseModel:
                 cls.add_address(line, company)
                 bank.bic = coop_string.check_for_pattern(line[236:247],
                     r'^[0-9A-Z]{8,11}')
-                existing[bank.bic] = bank
+                if bank.bic:
+                    existing[bank.bic] = bank
                 company.save()
                 bank.party = company
                 bank.save()
@@ -81,6 +82,25 @@ class TestCaseModel:
                 cls.get_logger().warning('Impossible to create bank %s' %
                     line[11:51].strip())
                 raise
+
+        bank_file = cls.read_csv_file('bank.csv', MODULE_NAME,
+            reader='dict')
+        for bank_dict in bank_file:
+            if (Configuration.number_of_banks > 0
+                    and len(existing) >= Configuration.number_of_banks):
+                break
+            if bank_dict['bic'] in existing:
+                continue
+            bank = Bank()
+            company = cls.create_company(bank_dict['party'])
+            company.currency = Configuration.currency
+            bank.bic = coop_string.check_for_pattern(bank_dict['bic'],
+                r'^[0-9A-Z]{8,11}')
+            if bank.bic:
+                existing[bank.bic] = bank
+            company.save()
+            bank.party = company
+            bank.save()
 
     @classmethod
     def bank_account_test_case(cls):

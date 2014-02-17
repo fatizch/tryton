@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.cog_utils import model, business, utils, fields
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.cog_utils import coop_string, coop_date
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.rule_engine import RuleEngineResult
@@ -313,6 +313,23 @@ class Offered(model.CoopView, GetResult, Templated):
     def validate_consistency(self, data):
         pass
 
+    def get_contract_dates(self, dates, contract):
+        dates.add(contract.start_date)
+        if (hasattr(contract, 'end_date') and contract.end_date):
+            dates.add(coop_date.add_day(contract.end_date, 1))
+
+    def get_option_dates(self, dates, option):
+        dates.add(option.start_date)
+        if (hasattr(option, 'end_date') and option.end_date):
+            dates.add(option.end_date)
+
+    def get_dates(self, contract):
+        dates = set()
+        self.get_contract_dates(dates, contract)
+        for option in contract.options:
+            self.get_option_dates(dates, option)
+        return dates
+
 
 class Product(model.CoopSQL, Offered):
     'Product'
@@ -505,6 +522,12 @@ class Product(model.CoopSQL, Offered):
     def get_change_coverages_order(self, name):
         return False
 
+    def get_publishing_values(self):
+        result = super(Product, self).get_publishing_values()
+        result['name'] = self.name
+        result['code'] = self.code
+        return result
+
 
 class OptionDescription(model.CoopSQL, Offered):
     'OptionDescription'
@@ -605,6 +628,12 @@ class OptionDescription(model.CoopSQL, Offered):
     def init_dict_for_rule_engine(self, args):
         super(OptionDescription, self).init_dict_for_rule_engine(args)
         args['coverage'] = self
+
+    def get_publishing_values(self):
+        result = super(OptionDescription, self).get_publishing_values()
+        result['name'] = self.name
+        result['code'] = self.code
+        return result
 
 
 class PackageOptionDescription(model.CoopSQL):

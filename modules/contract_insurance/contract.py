@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, If, Or, Bool
+from trytond.pyson import Eval, If, Or, Bool, Equal
 from trytond.transaction import Transaction
 from trytond.model import ModelView
 
@@ -16,8 +16,8 @@ from trytond.modules.offered_insurance import offered
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
 
 POSSIBLE_EXTRA_PREMIUM_RULES = [
-    ('flat', 'Flat Amount'),
-    ('rate', 'Rate on Premium'),
+    ('flat', 'Montant Fixe'),
+    ('rate', 'Pourcentage'),
     ]
 
 __metaclass__ = PoolMeta
@@ -87,12 +87,6 @@ class Contract:
                     errs += eligibility.details
                 errs += errors
         return (res, errs)
-
-    def get_dates(self, dates=None):
-        res = super(Contract, self).get_dates(dates)
-        if self.last_renewed:
-            res.add(self.last_renewed)
-        return res
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered,
@@ -253,6 +247,11 @@ class Contract:
     def create_extra_premium(cls, instances):
         pass
 
+    def get_publishing_context(self, cur_context):
+        result = super(Contract, self).get_publishing_context(cur_context)
+        result['Insurers'] = [x.offered.insurer.party for x in self.options]
+        return result
+
 
 class ContractOption:
     __name__ = 'contract.option'
@@ -304,13 +303,20 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         domain=[If(
                 ~~Eval('possible_item_desc'),
                 ('id', 'in', Eval('possible_item_desc')),
-                ())
-            ], depends=['possible_item_desc', 'extra_data'],
+                ())], states={
+                'invisible': Equal(Eval('possible_item_desc_nb', 0), 1)},
+            depends=['possible_item_desc', 'extra_data',
+                'possible_item_desc_nb'],
             ondelete='RESTRICT')
     possible_item_desc = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Possible Item Desc', states={'invisible': True}),
         'get_possible_item_desc_ids')
+    possible_item_desc_nb = fields.Function(
+        fields.Integer('Possible Item Desc Number',
+            states={'invisible': True},
+            on_change_with=['possible_item_desc']),
+        'on_change_with_possible_item_desc_nb')
     covered_data = fields.One2Many('contract.covered_data',
         'covered_element', 'Covered Element Data')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
@@ -411,18 +417,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                 res = '%s : %s' % (res, self.name)
         elif self.name:
             res = coop_string.concat_strings(res, self.name)
-        return res
-
-    def get_dates(self, dates=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        for data in self.covered_data:
-            res.update(data.get_dates(dates))
-        if hasattr(self, 'sub_covered_elements'):
-            for sub_elem in self.sub_covered_elements:
-                res.update(sub_elem.get_dates(dates))
         return res
 
     def check_at_least_one_covered(self, errors=None):
@@ -647,6 +641,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_main_contract(cls):
         return Transaction().context.get('contract')
 
+    def on_change_with_possible_item_desc_nb(self, name=None):
+        return len(self.possible_item_desc)
+
+    def get_publishing_values(self):
+        result = super(CoveredElement, self).get_publishing_values()
+        result['party'] = self.party
+        return result
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -768,16 +770,6 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         self.covered_element = covered_element
         pass
 
-    def get_dates(self, dates=None):
-        if dates:
-            res = set(dates)
-        else:
-            res = set()
-        res.add(self.start_date)
-        if hasattr(self, 'end_date') and self.end_date:
-            res.add(coop_date.add_day(self.end_date, 1))
-        return res
-
     def get_coverage(self):
         if (hasattr(self, 'option') and self.option):
             return self.option.offered
@@ -880,6 +872,11 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def propagate_exclusions(cls, covered_datas):
         pass
 
+    def get_publishing_values(self):
+        result = super(CoveredData, self).get_publishing_values()
+        result['offered'] = self.option.offered
+        return result
+
 
 class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     'Extra Premium'
@@ -888,12 +885,13 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     covered_data = fields.Many2One('contract.covered_data',
         'Covered Data', ondelete='CASCADE')
-    kind = fields.Many2One('extra_premium.kind', 'Kind', ondelete='RESTRICT',
-        states={'required': True})
+    motive = fields.Many2One('extra_premium.kind', 'Motive',
+        ondelete='RESTRICT', states={'required': True})
     start_date = fields.Date('Start date', states={'required': True})
     end_date = fields.Date('End date')
-    calculation_kind = fields.Selection(POSSIBLE_EXTRA_PREMIUM_RULES,
-        'Calculation Kind')
+    calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
+        'Calculation Kind', selection_change_with=set(['covered_data']),
+        depends=['covered_data'])
     flat_amount = fields.Numeric('Flat amount', states={
             'invisible': Eval('calculation_kind', '') != 'flat',
             'required': Eval('calculation_kind', '') == 'flat',
@@ -901,7 +899,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         depends=['currency_digits'])
     rate = fields.Numeric('Rate on Premium', states={
             'invisible': Eval('calculation_kind', '') != 'rate',
-            'required': Eval('calculation_kind', '') == 'rate'})
+            'required': Eval('calculation_kind', '') == 'rate'},
+        digits=(16, 4))
 
     @classmethod
     def __setup__(cls):
@@ -910,6 +909,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                 'bad_start_date': 'Extra premium %s start date (%s) should be '
                 'greater than the coverage\'s (%s)'})
         cls._buttons.update({'propagate': {}})
+
+        utils.update_on_change_with(cls, 'rec_name',
+            ['flat_amount', 'rate', 'calculation_kind', 'currency'])
 
     @classmethod
     def default_start_date(cls):
@@ -927,19 +929,14 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_calculation_kind(cls):
         return 'rate'
 
-    @classmethod
-    def default_flat_amount(cls):
-        return 0
-
-    @classmethod
-    def default_rate(cls):
-        return 0
+    def get_possible_extra_premiums_kind(self):
+        return list(POSSIBLE_EXTRA_PREMIUM_RULES)
 
     @classmethod
     def validate(cls, records):
         for record in records:
             if not record.start_date >= record.covered_data.start_date:
-                record.raise_user_error('bad_start_date', (record.kind.name,
+                record.raise_user_error('bad_start_date', (record.motive.name,
                         record.start_date, record.covered_data.start_date))
 
     def calculate_premium_amount(self, args, base):
@@ -956,6 +953,18 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
     def propagate(cls, extras):
         pass
+
+    def get_rec_name(self, name):
+        if self.calculation_kind == 'flat' and self.flat_amount:
+            return self.currency.amount_as_string(self.flat_amount)
+        elif self.calculation_kind == 'rate' and self.rate:
+            return '%s %%' % coop_string.format_number('%.2f',
+                self.rate * 100)
+        else:
+            return super(ExtraPremium, self).get_rec_name(name)
+
+    def on_change_with_rec_name(self, name=None):
+        return self.get_rec_name(name)
 
 
 class CoveredDataExclusionKindRelation(model.CoopSQL):
@@ -985,6 +994,8 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
         #we only need to have a protocole when the management is effective
         states={'required': ~~Eval('start_date')},
         ondelete='RESTRICT',)
+    agency = fields.Many2One('party.address', 'Agency', ondelete='RESTRICT',
+        domain=[('party', '=', Eval('party'))])
     contract = fields.Many2One('contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
     kind = fields.Selection([('', '')], 'Kind')

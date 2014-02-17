@@ -9,6 +9,7 @@ from .process import *
 from .party import *
 from .test_case import *
 from .batch import *
+from .export import *
 
 
 def register():
@@ -38,6 +39,7 @@ def register():
         Attachment,
         # From business_rule.documents_rule
         DocumentTemplate,
+        DocumentProductRelation,
         DocumentTemplateVersion,
         DocumentDescription,
         DocumentRule,
@@ -46,6 +48,7 @@ def register():
         DocumentRequestLine,
         DocumentCreateSelectTemplate,
         DocumentCreateSelect,
+        DocumentCreatePreview,
         DocumentCreateAttach,
         DocumentReceiveRequest,
         DocumentReceiveAttach,
@@ -81,10 +84,13 @@ def register():
         ExpenseKind,
         # From test_case
         TestCaseModel,
+        #From export
+        ExportPackage,
         module='offered_insurance', type_='model')
     Pool.register(
         # From business_rule.documents_rule
         DocumentGenerateReport,
+        DocumentFromFilename,
         module='offered_insurance', type_='report')
     Pool.register(
         # From business_rule.documents_rule

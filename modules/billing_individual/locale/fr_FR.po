@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -22,6 +22,14 @@ msgstr "Société"
 msgctxt "field:account.move,billing_period:"
 msgid "Billing Period"
 msgstr "Période de Facturation"
+
+msgctxt "field:account.move,breakdown_details:"
+msgid "Breakdown Details"
+msgstr "Ventilation"
+
+msgctxt "field:account.move,calculation_details:"
+msgid "Calculation Details"
+msgstr "Détail du calcul"
 
 msgctxt "field:account.move,contract:"
 msgid "Contract"
@@ -63,13 +71,177 @@ msgctxt "field:account.move,wo_tax_amount:"
 msgid ""
 msgstr " "
 
+msgctxt "field:account.move.breakdown,base_total:"
+msgid "Base Total"
+msgstr "Base"
+
+msgctxt "field:account.move.breakdown,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.breakdown,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.breakdown,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.move.breakdown,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:account.move.breakdown,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.move.breakdown,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.move.breakdown,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:account.move.breakdown,fees:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:account.move.breakdown,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move.breakdown,move:"
+msgid "Move"
+msgstr "Mouvement"
+
+msgctxt "field:account.move.breakdown,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:account.move.breakdown,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.move.breakdown,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:account.move.breakdown,taxes:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:account.move.breakdown,total:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "field:account.move.breakdown,total_wo_fees:"
+msgid "Amount w/o fees"
+msgstr "Montant hors Frais"
+
+msgctxt "field:account.move.breakdown,total_wo_taxes:"
+msgid "Total HT"
+msgstr "Total HT"
+
+msgctxt "field:account.move.breakdown,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.move.breakdown,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.move.breakdown,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.move.computation_log,base_amount:"
+msgid "Base Amount"
+msgstr "Base"
+
+msgctxt "field:account.move.computation_log,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.computation_log,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.computation_log,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.move.computation_log,currency:"
+msgid "Currency"
+msgstr "Devise"
+
+msgctxt "field:account.move.computation_log,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.move.computation_log,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.move.computation_log,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:account.move.computation_log,final_amount:"
+msgid "Final Amount"
+msgstr "Montant final"
+
+msgctxt "field:account.move.computation_log,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move.computation_log,level:"
+msgid "Level"
+msgstr "Niveau"
+
+msgctxt "field:account.move.computation_log,move:"
+msgid "Move"
+msgstr "Mouvement"
+
+msgctxt "field:account.move.computation_log,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:account.move.computation_log,origin:"
+msgid "Origin"
+msgstr "Origine"
+
+msgctxt "field:account.move.computation_log,ratio:"
+msgid "Ratio"
+msgstr "Ratio"
+
+msgctxt "field:account.move.computation_log,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.move.computation_log,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:account.move.computation_log,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.move.computation_log,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.move.computation_log,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:account.move.line,origin_name:"
 msgid "Origin Name"
 msgstr "Source"
 
 msgctxt "field:account.move.line,second_origin:"
 msgid "Second Origin"
-msgstr ""
+msgstr "Deuxième Origine"
 
 msgctxt "field:account.move.line,second_origin_name:"
 msgid "Second Origin Name"
@@ -141,7 +313,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.payment.method,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.payment.term,appliable_fees:"
 msgid "Appliable fees"
@@ -199,6 +371,10 @@ msgctxt "field:billing.payment.term,remaining_position:"
 msgid "Remaining position"
 msgstr "Position du reste"
 
+msgctxt "field:billing.payment.term,split_method:"
+msgid "Splitting method"
+msgstr "Méthode de calcul"
+
 msgctxt "field:billing.payment.term,start_lines:"
 msgid "Start Lines"
 msgstr "Lignes du début"
@@ -221,7 +397,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.payment.term,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.payment.term-fee,create_date:"
 msgid "Create Date"
@@ -261,7 +437,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.payment.term-fee,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:billing.payment.term.line,add_calculated_period:"
 msgid "Add calculated period"
@@ -365,7 +541,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:billing.payment.term.line,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:company.company,fiscal_years:"
 msgid "Fiscal Years"
@@ -405,7 +581,7 @@ msgstr "Montant Dû"
 
 msgctxt "field:contract,use_prices:"
 msgid "Use Prices"
-msgstr ""
+msgstr "Nécessite Tarif"
 
 msgctxt "field:contract.billing.data,contract:"
 msgid "Contract"
@@ -481,7 +657,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.billing.data,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.billing.period,contract:"
 msgid "Contract"
@@ -533,7 +709,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.billing.period,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.billing.premium,all_lines:"
 msgid "Lines"
@@ -601,7 +777,7 @@ msgstr "ID"
 
 msgctxt "field:contract.billing.premium,master:"
 msgid "Master Line"
-msgstr ""
+msgstr "Ligne Principale"
 
 msgctxt "field:contract.billing.premium,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -637,7 +813,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.billing.premium,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.billing.premium-fee,amount:"
 msgid "Amount"
@@ -689,7 +865,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.billing.premium-fee,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.billing.premium-tax,amount:"
 msgid "Amount"
@@ -741,7 +917,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.billing.premium-tax,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.covered_element,indemnification_bank_account:"
 msgid "Indemnification Bank Account"
@@ -757,7 +933,7 @@ msgstr "ID"
 
 msgctxt "field:contract.do_billing.bill,moves:"
 msgid "Bill"
-msgstr ""
+msgstr "Décompte"
 
 msgctxt "field:contract.do_billing.bill,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -845,7 +1021,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:offered.product-billing.payment.method,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:party.party,payable_lines:"
 msgid "Payable Lines"
@@ -864,6 +1040,14 @@ msgstr ""
 "Une liste de nombres séparés par des virgules, correspondant aux jours du "
 "mois possibles pour le prélèvement automatique.\\n\\nUne liste vide laisse "
 "le choix au client."
+
+msgctxt "model:account.move.breakdown,name:"
+msgid "Move Breakdown"
+msgstr "Ventilation"
+
+msgctxt "model:account.move.computation_log,name:"
+msgid "Move Computation Log"
+msgstr "Trace de calcul"
 
 msgctxt "model:billing.payment.method,name:"
 msgid "Payment Method"
@@ -895,15 +1079,15 @@ msgstr "Ligne de Prime"
 
 msgctxt "model:contract.billing.premium-fee,name:"
 msgid "Premium Fee Relation"
-msgstr ""
+msgstr "Relation Prime Frais"
 
 msgctxt "model:contract.billing.premium-tax,name:"
 msgid "Premium Tax Relation"
-msgstr ""
+msgstr "Relation Prime Taxe"
 
 msgctxt "model:contract.do_billing.bill,name:"
 msgid "Contract Do Billing Bill"
-msgstr ""
+msgstr "Contrat : Lancer la Facturation"
 
 msgctxt "model:contract.do_billing.parameters,name:"
 msgid "Contract Do Billing Parameters"
@@ -939,7 +1123,7 @@ msgstr "Règle de paiement"
 
 msgctxt "model:offered.product-billing.payment.method,name:"
 msgid "Product Payment Method Relation"
-msgstr ""
+msgstr "Relation Produit Méthode de Paiement"
 
 msgctxt "selection:billing.payment.method,payment_mode:"
 msgid "Cash"
@@ -964,6 +1148,10 @@ msgstr "Semestriel"
 msgctxt "selection:billing.payment.term,base_frequency:"
 msgid "Monthly"
 msgstr "Mensuel"
+
+msgctxt "selection:billing.payment.term,base_frequency:"
+msgid "One-Shot"
+msgstr "Entête"
 
 msgctxt "selection:billing.payment.term,base_frequency:"
 msgid "Quarterly"
@@ -996,6 +1184,14 @@ msgstr "Première ligne calculée"
 msgctxt "selection:billing.payment.term,remaining_position:"
 msgid "Last calculated"
 msgstr "Dernière ligne calculée"
+
+msgctxt "selection:billing.payment.term,split_method:"
+msgid "Equal Periods"
+msgstr "Périodes égales"
+
+msgctxt "selection:billing.payment.term,split_method:"
+msgid "Proportional Periods"
+msgstr "Périodes proratisées"
 
 msgctxt "selection:billing.payment.term.line,month:"
 msgid ""
@@ -1106,6 +1302,10 @@ msgid "Monthly"
 msgstr "Mensuel"
 
 msgctxt "selection:contract.billing.premium,frequency:"
+msgid "One-Shot"
+msgstr "Entête"
+
+msgctxt "selection:contract.billing.premium,frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 
@@ -1121,17 +1321,41 @@ msgctxt "selection:offered.product,payment_delay:"
 msgid "In Arrears"
 msgstr "Terme échu"
 
+msgctxt "view:account.move.breakdown:"
+msgid "Breakdown"
+msgstr "Ventilation"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o Fees"
+msgstr "Total Sans Frais"
+
+msgctxt "view:account.move.breakdown:"
+msgid "Total w/o taxes"
+msgstr "Total Sans Taxes"
+
+msgctxt "view:account.move.computation_log:"
+msgid "Computation Logs"
+msgstr "Détails du Calcul"
+
 msgctxt "view:account.move.line:"
 msgid "Lines"
 msgstr "Lignes"
 
 msgctxt "view:account.move.line:"
 msgid "Move Lines"
-msgstr ""
-
-msgctxt "view:account.move.line:"
-msgid "Scheduling"
-msgstr ""
+msgstr "Lignes Comptables"
 
 msgctxt "view:account.move.line:"
 msgid "Total Amount"
@@ -1139,11 +1363,23 @@ msgstr "Montant Total"
 
 msgctxt "view:account.move.line:"
 msgid "credit"
-msgstr ""
+msgstr "Crédit"
 
 msgctxt "view:account.move.line:"
 msgid "debit"
-msgstr ""
+msgstr "Débit"
+
+msgctxt "view:account.move:"
+msgid "Computation Details"
+msgstr "Détails du Calcul"
+
+msgctxt "view:account.move:"
+msgid "General"
+msgstr "Général"
+
+msgctxt "view:account.move:"
+msgid "Line details"
+msgstr "Détails de la Ligne"
 
 msgctxt "view:account.move:"
 msgid "Move"
@@ -1165,25 +1401,13 @@ msgctxt "view:billing.payment.term.line:"
 msgid "Payment Term Line"
 msgstr "Ligne de règle de paiement"
 
-msgctxt "view:billing.payment.term.line:"
-msgid "Payment Term Lines"
-msgstr ""
-
 msgctxt "view:billing.payment.term:"
-msgid "Payment Terms"
-msgstr ""
-
-msgctxt "view:billing.payment.term:"
-msgid "payment_term"
-msgstr ""
+msgid "Payment Term"
+msgstr "Règle de paiement"
 
 msgctxt "view:contract.billing.data:"
 msgid "Billing Datas"
 msgstr "Gestionnaires d'Appel de Cotisation"
-
-msgctxt "view:contract.billing.data:"
-msgid "billing_data"
-msgstr ""
 
 msgctxt "view:contract.billing.period:"
 msgid "Billing Period"
@@ -1220,10 +1444,6 @@ msgstr "Ligne de Prime"
 msgctxt "view:contract.billing.premium:"
 msgid "Pricing Lines"
 msgstr "Lignes de Prime"
-
-msgctxt "view:contract.do_billing.bill:"
-msgid "Bill Result"
-msgstr ""
 
 msgctxt "view:contract.do_billing.parameters:"
 msgid "Contract Do Billing Parameters"

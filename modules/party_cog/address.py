@@ -87,7 +87,7 @@ class Address(export.ExportImportMixin):
 
     @classmethod
     def _export_keys(cls):
-        return set(('party.name', 'name'))
+        return set(('party.name', 'street', 'zip', 'city', 'country.code'))
 
     def on_change_with_city(self):
         if self.zip and self.country:
@@ -185,3 +185,17 @@ class Address(export.ExportImportMixin):
     @staticmethod
     def default_country():
         return country.Country.default_country().id
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('street',) + tuple(clause[1:])],
+            [('city',) + tuple(clause[1:])],
+            [('zip',) + tuple(clause[1:])],
+            ]
+
+    def get_publishing_values(self):
+        result = super(Address, self).get_publishing_values()
+        result['multiline'] = self.full_address
+        result['oneline'] = self.full_address.replace('\n', ' ')
+        return result

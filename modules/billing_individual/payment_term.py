@@ -443,43 +443,45 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
                                     temp_date.month, payment_date), amount))
         return res
 
-    def compute(self, start_date, end_date, amount, currency, due_date):
-        lines_dates = self.get_line_dates(start_date, end_date)
+    def compute(self, work_set):
+        lines_dates = self.get_line_dates(work_set.period[0],
+            work_set.period[1])
         res = dict(((l['date'], 0) for l in lines_dates))
         freq_number = sum([k['freq_amount'] for k in lines_dates])
-        remainder = amount
+        remainder = work_set.total_amount
         flat_total = 0
         for line in (l for l in lines_dates if l['line']):
-            line_amount = line['line'].get_flat_value(start_date, end_date,
-                amount, currency)
+            line_amount = line['line'].get_flat_value(work_set.period[0],
+                work_set.period[1], work_set.total_amount, work_set.currency)
             flat_total += line_amount
             res[line['date']] += line_amount
             remainder -= line_amount
         base_amount = remainder / freq_number if freq_number else remainder
         exact_day_price = remainder / coop_date.number_of_days_between(
-            start_date, end_date)
+            work_set.period[0], work_set.period[1])
         periods = []
         for idx, elem in enumerate([l for l in lines_dates
                     if l['freq_amount']] + [{'date': coop_date.add_day(
-                            end_date, 1)}]):
+                            work_set.period[1], 1)}]):
             if idx != 0:
                 periods[idx - 1][1] = coop_date.add_day(elem['date'], -1)
-            if elem['date'] == coop_date.add_day(end_date, 1):
+            if elem['date'] == coop_date.add_day(work_set.period[1], 1):
                 continue
             periods.append([elem['date'], None, elem])
         for start_date, end_date, elem in periods:
             if (self.split_method == 'equal' or self.base_frequency ==
                     'one_shot'):
-                line_amount = currency.round(base_amount * elem['freq_amount'])
+                line_amount = work_set.currency.round(base_amount *
+                    elem['freq_amount'])
             elif self.split_method == 'proportional':
-                line_amount = currency.round(exact_day_price *
+                line_amount = work_set.currency.round(exact_day_price *
                     coop_date.number_of_days_between(start_date, end_date))
             res[start_date] += line_amount
             remainder -= line_amount
         if remainder:
             remaining_line = next(l for l in lines_dates if l['remaining'])
-            res[remaining_line['date']] += currency.round(remainder)
+            res[remaining_line['date']] += work_set.currency.round(remainder)
 
         result = sorted(list((x for x in res.iteritems() if x[1])),
             key=lambda x: x[0])
-        return self.apply_payment_date(result, due_date)
+        return self.apply_payment_date(result, work_set.payment_date)

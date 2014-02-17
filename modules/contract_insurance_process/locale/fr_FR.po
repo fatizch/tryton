@@ -105,10 +105,6 @@ msgctxt "field:contract.subscribe.find_process,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt "field:contract.subscribe.find_process,delegated_manager:"
-msgid "Delegated Manager"
-msgstr "Délégataire de gestion"
-
 msgctxt "field:contract.subscribe.find_process,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
