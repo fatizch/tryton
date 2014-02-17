@@ -187,7 +187,6 @@ class Contract:
             result_prices.append(price_line)
         for elem in oldest:
             elem.end_date = coop_date.add_day(dates[0], -1)
-            elem.save()
         if to_delete:
             Premium.delete(to_delete)
         self.prices = result_prices

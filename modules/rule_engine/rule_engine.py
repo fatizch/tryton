@@ -18,7 +18,7 @@ from trytond.model import ModelView as TrytonModelView
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.tools.misc import _compile_source
+from trytond.tools.misc import _compile_source, memoize
 from trytond.pyson import Eval, Or
 
 from trytond.modules.cog_utils import fields
@@ -114,6 +114,11 @@ def check_args(*_args):
         wrap.__name__ = f.__name__
         return wrap
     return decorator
+
+
+@memoize(1000)
+def _compile_source_exec(source):
+    return compile(source, '', 'exec')
 
 
 def safe_eval(source, data=None):
@@ -478,21 +483,26 @@ class RuleEngineParameter(ModelView, ModelSQL):
             return wrapper_func
         return debug_wrapper
 
-    def as_context(self, evaluation_context, context, forced_value):
-        debug_wrapper = self.get_wrapper_func(context)
+    def as_context(self, evaluation_context, context, forced_value,
+            debug=False):
         if not forced_value:
             if self.kind == 'kwarg':
                 self.raise_user_error('kwarg_expected', (self.code,
                         self.parent_rule.name))
+        technical_name = self.get_translated_technical_name()
         if forced_value:
-            context[self.get_translated_technical_name()] = debug_wrapper(
-                lambda: forced_value)
+            context[technical_name] = lambda: forced_value
         elif self.kind == 'rule':
-            context[self.get_translated_technical_name()] = debug_wrapper(
-                functools.partial(self.execute_rule, evaluation_context))
+            context[technical_name] = \
+                functools.partial(self.execute_rule, evaluation_context)
         elif self.kind == 'table':
-            context[self.get_translated_technical_name()] = debug_wrapper(
-                functools.partial(table.TableCell.get, self.the_table))
+            context[technical_name] = \
+                functools.partial(table.TableCell.get, self.the_table)
+        else:
+            return context
+        if debug:
+            debug_wrapper = self.get_wrapper_func(context)
+            context[technical_name] = debug_wrapper(context[technical_name])
         return context
 
     @fields.depends('the_rule')
@@ -725,7 +735,8 @@ class Rule(ModelView, ModelSQL):
                 forced_value = execution_kwargs[elem.code]
             else:
                 forced_value = None
-            elem.as_context(evaluation_context, context, forced_value)
+            elem.as_context(evaluation_context, context, forced_value,
+                self.debug_mode)
 
     def prepare_context(self, evaluation_context, execution_kwargs):
         context = self.get_context_for_execution()
@@ -744,7 +755,8 @@ class Rule(ModelView, ModelSQL):
             the_result = context['__result__']
             localcontext = {}
             try:
-                exec self.as_function in context, localcontext
+                comp = _compile_source_exec(self.as_function)
+                exec comp in context, localcontext
                 the_result.result = localcontext[
                     ('result_%s' % hash(self.name)).replace('-', '_')]
                 the_result.result_set = True
@@ -876,7 +888,7 @@ class Rule(ModelView, ModelSQL):
     def execute(self, arguments, parameters=None):
         result = self.compute(arguments,
             {} if parameters is None else parameters)
-        if not (hasattr(self, 'debug_mode') and self.debug_mode):
+        if not getattr(self, 'debug_mode', None):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_cursor() as transaction:
@@ -936,7 +948,7 @@ class Context(ModelView, ModelSQL):
     def get_context(self, rule):
         context = {}
         for element in self.allowed_elements:
-            element.as_context(context)
+            element.as_context(context, rule.debug_mode)
         return context
 
     @classmethod
@@ -1056,7 +1068,7 @@ class RuleFunction(ModelView, ModelSQL):
             return sum([
                 child.as_functions_list() for child in self.children], [])
 
-    def as_context(self, context):
+    def as_context(self, context, debug=False):
         def debug_wrapper(func):
             def wrapper_func(*args, **kwargs):
                 context['__result__'].low_level_debug.append(
@@ -1082,10 +1094,13 @@ class RuleFunction(ModelView, ModelSQL):
         pool = Pool()
         if self.type == 'function':
             namespace_obj = pool.get(self.namespace)
-            context[self.translated_technical_name] = debug_wrapper(
-                functools.partial(getattr(namespace_obj, self.name), context))
+            context[self.translated_technical_name] = \
+                functools.partial(getattr(namespace_obj, self.name), context)
+            if debug:
+                context[self.translated_technical_name] = debug_wrapper(
+                    context[self.translated_technical_name])
         for element in self.children:
-            element.as_context(context)
+            element.as_context(context, debug)
         return context
 
     @fields.depends('rule')

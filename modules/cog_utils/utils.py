@@ -201,15 +201,9 @@ def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
         end_var_name='end_date'):
     if not at_date:
         at_date = today()
-    start_date = None
-    if hasattr(instance, start_var_name):
-        start_date = getattr(instance, start_var_name)
-    end_date = None
-    if hasattr(instance, end_var_name):
-        end_date = getattr(instance, end_var_name)
-    return (
-        (not start_date or at_date >= start_date)
-        and (not end_date or at_date <= end_date))
+    start_date = getattr(instance, start_var_name, None) or datetime.date.min
+    end_date = getattr(instance, end_var_name, None) or datetime.date.max
+    return start_date <= at_date <= end_date
 
 
 def get_good_versions_at_date(instance, var_name, at_date=None,
@@ -221,13 +215,14 @@ def get_good_versions_at_date(instance, var_name, at_date=None,
 
     if not at_date:
         at_date = today()
-    if hasattr(instance, 'get_good_versions_at_date'):
-        return getattr(instance, 'get_good_versions_at_date')(
-            var_name, at_date)
-    res = []
+    get_good_versions_at_date = getattr(instance,
+        'get_good_versions_at_date', None)
+    if get_good_versions_at_date:
+        return get_good_versions_at_date(var_name, at_date)
+    res = set()
     for elem in reversed(getattr(instance, var_name)):
         if is_effective_at_date(elem, at_date, start_var_name, end_var_name):
-            res.insert(0, elem)
+            res.add(elem)
     return list(set(res))
 
 

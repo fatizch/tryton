@@ -1,4 +1,5 @@
 import copy
+import datetime
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
@@ -307,14 +308,14 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return 'offered.product', 'Product'
 
     def get_active_options_at_date(self, at_date):
-        res = []
+        res = set()
         for elem in self.options:
             #TODO : to be replaced with utils.is_effective_at_date
-            if (elem.start_date and elem.start_date <= at_date
-                and (not hasattr(elem, 'end_date') or (
-                    elem.end_date is None or elem.end_date > at_date))):
-                res += [elem]
-        return list(set(res))
+            start_date = elem.start_date or datetime.date.min
+            end_date = getattr(elem, 'end_date', None) or datetime.date.max
+            if start_date <= at_date < end_date:
+                res.add(elem)
+        return list(res)
 
     def get_option_for_coverage_at_date(self, coverage, date):
         for elem in self.get_active_options_at_date(date):

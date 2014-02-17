@@ -72,22 +72,27 @@ class RuleEngineParameter:
             from_object, self.external_extra_data_def.name,
             args['date'])
 
-    def as_context(self, evaluation_context, context, forced_value):
+    def as_context(self, evaluation_context, context, forced_value,
+            debug=False):
         super(RuleEngineParameter, self).as_context(
-            evaluation_context, context, forced_value)
+            evaluation_context, context, forced_value, debug)
         technical_name = self.get_translated_technical_name()
         if technical_name in context:
             # Looks like the value was forced
             return context
-        debug_wrapper = self.get_wrapper_func(context)
         if self.kind == 'rule_compl':
-            context[technical_name] = debug_wrapper(
+            context[technical_name] = \
                 lambda: self.get_complementary_parameter_value(
-                    evaluation_context, self.extra_data_def.name))
+                    evaluation_context, self.extra_data_def.name)
         elif self.kind == 'compl':
-            context[technical_name] = debug_wrapper(
+            context[technical_name] = \
                 lambda: self.get_external_extra_data_def(
-                    evaluation_context))
+                    evaluation_context)
+        else:
+            return context
+        if debug:
+            debug_wrapper = self.get_wrapper_func(context)
+            context[technical_name] = debug_wrapper(context[technical_name])
         return context
 
     @fields.depends('the_rule', 'rule_extra_data')
