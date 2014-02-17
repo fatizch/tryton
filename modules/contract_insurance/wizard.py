@@ -311,15 +311,6 @@ class ManageExtraPremium(Wizard):
             for coverage in self.existing.coverages:
                 if not coverage.selected:
                     continue
-                found = False
-                for extra in coverage.coverage.extra_premiums:
-                    if extra == selected_extra:
-                        continue
-                    if extra.kind == selected_extra.kind:
-                        found = extra
-                        break
-                if found:
-                    found.delete([found])
                 new_extra = selected_extra.copy([selected_extra])[0]
                 new_extra.covered_data = coverage.coverage
                 new_extra.save()
