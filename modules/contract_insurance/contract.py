@@ -995,7 +995,7 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
         states={'required': ~~Eval('start_date')},
         ondelete='RESTRICT',)
     agency = fields.Many2One('party.address', 'Agency', ondelete='RESTRICT',
-        domain=[('party', '=', Eval('party'))])
+        domain=[('party', '=', Eval('party'))], depends=['party'])
     contract = fields.Many2One('contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
     kind = fields.Selection([('', '')], 'Kind')

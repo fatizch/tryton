@@ -626,7 +626,7 @@ class DocumentCreatePreview(model.CoopView):
         states={'invisible': True})
     email = fields.Many2One('party.contact_mechanism', 'eMail', domain=[
             ('party', '=', Eval('party')),
-            ('type', '=', 'email')])
+            ('type', '=', 'email')], depends=['party'])
     filename = fields.Char('Filename', states={'invisible': True})
     exact_name = fields.Char('Exact Name', states={'invisible': True})
 
