@@ -39,7 +39,6 @@ class ContractSubscribeFindProcess(ProcessStart):
             ), 'on_change_with_possible_brokers')
     business_provider = fields.Many2One('broker', 'Business Provider',
         domain=[('id', 'in', Eval('possible_brokers'))],
-        on_change=['business_provider', 'dist_network'],
         depends=['possible_brokers'])
     possible_com_product = fields.Function(
         fields.Many2Many('distribution.commercial_product', None,
@@ -124,6 +123,7 @@ class ContractSubscribeFindProcess(ProcessStart):
             res['business_provider'] = res['possible_brokers'][0]
         return res
 
+    @fields.depends('business_provider', 'dist_network')
     def on_change_business_provider(self):
         res = {}
         if not self.business_provider:

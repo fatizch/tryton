@@ -30,9 +30,7 @@ class LoanCreateParameters(model.CoopView, ModelCurrency):
         'Payment Frequency', required=True, sort=False)
     amount = fields.Numeric('Amount', required=True)
     funds_release_date = fields.Date('Funds Release Date', required=True)
-    first_payment_date = fields.Date('First Payment Date', required=True,
-        on_change_with=['funds_release_date', 'first_payment_date',
-            'payment_frequency'])
+    first_payment_date = fields.Date('First Payment Date', required=True)
     rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
             'required': Eval('kind') != 'graduated',
             'invisible': Eval('kind') == 'graduated',
@@ -41,6 +39,8 @@ class LoanCreateParameters(model.CoopView, ModelCurrency):
     defferal = fields.Selection(DEFFERALS, 'Differal', sort=False)
     defferal_duration = fields.Integer('Differal Duration')
 
+    @fields.depends('funds_release_date', 'first_payment_date',
+        'payment_frequency')
     def on_change_with_first_payment_date(self):
         if self.funds_release_date and self.payment_frequency:
             return coop_date.add_duration(self.funds_release_date, 1,
