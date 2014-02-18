@@ -16,34 +16,35 @@ class Contract:
 
     def set_subscriber_as_covered_element(self):
         CoveredElement = Pool().get('contract.covered_element')
+        item_descs = CoveredElement.get_possible_item_desc(self)
+        if len(item_descs) != 1:
+            return True
+        item_desc = item_descs[0]
         subscriber = self.get_policy_owner(self.start_date)
-        if not utils.is_none(self, 'covered_elements'):
-            for covered_element in self.covered_elements:
-                if covered_element.party == subscriber:
-                    return True
+
+        for covered_element in getattr(self, 'covered_elements', []):
+            if covered_element.party == subscriber:
+                return True
+
+        if (subscriber.is_person and item_desc.kind == 'person'
+                or subscriber.is_company and item_desc.kind == 'company'
+                or item_desc.kind == 'party'):
+            #Delete previous covered element
             CoveredElement.delete(self.covered_elements)
 
-        covered_element = CoveredElement()
-        covered_element.start_date = self.start_date
-        item_descs = CoveredElement.get_possible_item_desc(self)
-        covered_element.contract = self
-        item_descs = CoveredElement.get_possible_item_desc(self)
-        if len(item_descs) == 1:
-            item_desc = item_descs[0]
-            if (subscriber.is_person and item_desc.kind == 'person'
-                    or subscriber.is_company and item_desc.kind == 'company'
-                    or item_desc.kind == 'party'):
-                covered_element.party = subscriber
+            covered_element = CoveredElement()
+            covered_element.party = subscriber
+            covered_element.start_date = self.start_date
             covered_element.item_desc = item_desc
             covered_element.main_contract = self
             cov_as_dict = covered_element.on_change_item_desc()
             for key, val in cov_as_dict.iteritems():
                 setattr(covered_element, key, val)
-        if not hasattr(self, 'covered_elements'):
-            self.covered_elements = [covered_element]
-        else:
-            self.covered_elements = list(self.covered_elements)
-            self.covered_elements.append(covered_element)
+            if not getattr(self, 'covered_elements', None):
+                self.covered_elements = [covered_element]
+            else:
+                self.covered_elements = list(self.covered_elements)
+                self.covered_elements.append(covered_element)
         return True
 
 
