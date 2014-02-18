@@ -1,4 +1,3 @@
-import ConfigParser
 import os
 import datetime
 import time
@@ -25,66 +24,8 @@ def print_log(some_text):
     print '\033[95m' + str(some_text) + '\033[0md'
 
 
-def get_child_models(from_class):
-    if isinstance(from_class, str):
-        try:
-            the_class = Pool().get(from_class)
-        except KeyError:
-            raise
-        cur_models = [model_name
-            for model_name, model in Pool().iterobject()
-            if issubclass(model, the_class)]
-        models = map(lambda x: Pool().get(x), cur_models)
-        return models
-    elif isinstance(from_class, type):
-        res = []
-        names = [elem for elem, _ in Pool().iterobject()]
-        for elem in from_class.__subclasses__():
-            if isinstance(elem, type) and elem.__name__ in names:
-                res.append(elem)
-        return res
-
-
-def get_descendents(from_class, names_only=False):
-    # Used to compute the possible models from a given top level
-    # name
-    if names_only:
-        format_ = lambda x: x
-    else:
-        format_ = lambda x: (x, x)
-    models = get_child_models(from_class)
-    return map(lambda x: format_(x.__name__), models)
-
-
 def get_module_name(cls):
     return cls.__name__.split('.')[0]
-
-
-def change_relation_links(
-        cls, from_module=None, to_module=None, convert_dict=None):
-    for field_name in cls._fields.iterkeys():
-        field = copy.copy(getattr(cls, field_name))
-        attr_name = ''
-        if hasattr(field, 'model_name'):
-            attr_name = 'model_name'
-        if hasattr(field, 'relation_name'):
-            attr_name = 'relation_name'
-        if hasattr(field, 'schema_model'):
-            attr_name = 'schema_model'
-        if attr_name == '':
-            continue
-        model_name = getattr(field, attr_name)
-        if (convert_dict and not model_name in convert_dict or
-                from_module and to_module and
-                not (model_name.startswith(from_module)
-                    and model_name.split('.', 1)[0] == from_module)):
-            continue
-        if convert_dict:
-            converted_name = convert_dict[model_name]
-        elif from_module and to_module:
-            converted_name = to_module + model_name.split(from_module)[1]
-        setattr(field, attr_name, converted_name)
-        setattr(cls, field_name, field)
 
 
 def to_list(data):
@@ -183,14 +124,6 @@ def get_module_path(module_name):
             os.path.normpath(__file__), '..', '..', module_name))
     if os.path.isdir(module_path):
         return module_path
-
-
-def get_coop_config(section, option):
-    cog_utils = get_module_path('cog_utils')
-    if cog_utils:
-        config = ConfigParser.ConfigParser()
-        config.read(os.path.join(cog_utils, 'coop.cfg'))
-        return config.get(section, option)
 
 
 def today():
