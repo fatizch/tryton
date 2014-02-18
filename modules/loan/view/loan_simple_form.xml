@@ -14,9 +14,15 @@
     </group>
     <newline/>
     <label name="number_of_payments"/>
-    <field name="number_of_payments"/>
-    <label name="payment_frequency"/>
-    <field name="payment_frequency"/>
+    <group id="frequency">
+        <field name="number_of_payments" xexpand="0"/>
+        <field name="payment_frequency" xexpand="0" xalign="0"/>
+    </group>
+    <label name="payment_amount"/>
+    <group id="payment_amount">
+        <field name="payment_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'graduated'}"/>
+    </group>
     <label name="defferal"/>
     <field name="defferal"/>
     <label name="defferal_duration"/>
@@ -30,5 +36,7 @@
     <newline/>
     <field name="currency"/>
     <newline/>
-    <field name="contract"/>
+    <group id='contracts' states="{'invisible': True}">
+        <field name="contracts"/>
+    </group>
 </form>

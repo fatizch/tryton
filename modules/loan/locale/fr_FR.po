@@ -131,11 +131,11 @@ msgid "Currency Symbol"
 msgstr "Symbole"
 
 msgctxt "field:loan,defferal:"
-msgid "Differal"
+msgid "Defferal"
 msgstr "Différé"
 
 msgctxt "field:loan,defferal_duration:"
-msgid "Differal Duration"
+msgid "Defferal Duration"
 msgstr "Durée du Différé"
 
 msgctxt "field:loan,early_payments:"
@@ -180,7 +180,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:loan,number_of_payments:"
 msgid "Number of Payments"
-msgstr "Nombre de Mensualités"
+msgstr "Nombre d'Echéances
 
 msgctxt "field:loan,outstanding_capital:"
 msgid "Outstanding Capital"
@@ -218,98 +218,6 @@ msgctxt "field:loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:loan.create.amortization_table,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:loan.create.amortization_table,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:loan.create.amortization_table,payments:"
-msgid "Payments"
-msgstr "Echéances"
-
-msgctxt "field:loan.create.increments,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:loan.create.increments,increments:"
-msgid "Increments"
-msgstr "Paliers"
-
-msgctxt "field:loan.create.increments,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:loan.create.parameters,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:loan.create.parameters,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:loan.create.parameters,currency:"
-msgid "Currency"
-msgstr "Devises"
-
-msgctxt "field:loan.create.parameters,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:loan.create.parameters,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:loan.create.parameters,defferal:"
-msgid "Differal"
-msgstr "Différé"
-
-msgctxt "field:loan.create.parameters,defferal_duration:"
-msgid "Differal Duration"
-msgstr "Durée du Différé"
-
-msgctxt "field:loan.create.parameters,first_payment_date:"
-msgid "First Payment Date"
-msgstr "Date de 1er Paiement"
-
-msgctxt "field:loan.create.parameters,funds_release_date:"
-msgid "Funds Release Date"
-msgstr "Date de Déblocage des Fonds"
-
-msgctxt "field:loan.create.parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:loan.create.parameters,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:loan.create.parameters,lender:"
-msgid "Lender"
-msgstr "Organisme Prêteur"
-
-msgctxt "field:loan.create.parameters,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "field:loan.create.parameters,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:loan.create.parameters,number_of_payments:"
-msgid "Number of Payments"
-msgstr "Nombre de Mensualités"
-
-msgctxt "field:loan.create.parameters,payment_frequency:"
-msgid "Payment Frequency"
-msgstr "Périodicité"
-
-msgctxt "field:loan.create.parameters,rate:"
-msgid "Annual Rate"
-msgstr "Taux Annuel"
-
 msgctxt "field:loan.increment,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -335,7 +243,7 @@ msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
 msgctxt "field:loan.increment,defferal:"
-msgid "Differal"
+msgid "Defferal"
 msgstr "Différé"
 
 msgctxt "field:loan.increment,end_date:"
@@ -360,7 +268,7 @@ msgstr "Numéro"
 
 msgctxt "field:loan.increment,number_of_payments:"
 msgid "Number of Payments"
-msgstr "Nombre de Mensualités"
+msgstr "Nombre d'Echéances"
 
 msgctxt "field:loan.increment,payment_amount:"
 msgid "Amount"

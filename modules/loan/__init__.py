@@ -25,10 +25,6 @@ def register():
         LoanShare,
         LoanIncrement,
         LoanPayment,
-        # From Loan Create Wizard
-        LoanCreateParameters,
-        LoanCreateIncrement,
-        LoanCreateAmortizationTable,
         # From Billing
         BillingPremium,
         module='loan', type_='model')

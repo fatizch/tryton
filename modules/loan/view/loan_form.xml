@@ -48,7 +48,7 @@
       <field name="increments" colspan="4" mode="tree"/>
     </page>
     <page id="table" string="Amortization Table">
-      <button name="calculate_amortization_table" string="Calculate Amortization Table"/>
+      <button name="button_calculate_amortization_table" string="Calculate Amortization Table"/>
       <field name="payments" colspan="4" mode="tree"/>
     </page>
     <page id="early_payments" string="Early Payments">
