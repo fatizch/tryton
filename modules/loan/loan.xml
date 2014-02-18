@@ -9,6 +9,24 @@
             <field name="type">form</field>
             <field name="name">loan_form</field>
         </record>
+            <record model="ir.ui.view" id="loan_simple_view_form">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="priority">20</field>
+            <field name="name">loan_simple_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_only_increments_view_form">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="priority">25</field>
+            <field name="name">loan_only_increments_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_only_payments_view_form">
+            <field name="model">loan</field>
+            <field name="type">form</field>
+            <field name="priority">30</field>
+            <field name="name">loan_only_payments_form</field>
+        </record>
         <record model="ir.ui.view" id="loan_view_tree">
             <field name="model">loan</field>
             <field name="type">tree</field>
@@ -67,21 +85,6 @@
         <record model="ir.action.wizard" id="launch_loan_creation_wizard">
           <field name="name">Loan Create</field>
           <field name="wiz_name">loan.create</field>
-        </record>
-        <record model="ir.ui.view" id="loan_creation_parameters_view_form">
-            <field name="model">loan.create.parameters</field>
-            <field name="type">form</field>
-            <field name="name">loan_create_parameters_form</field>
-        </record>
-        <record model="ir.ui.view" id="loan_creation_increments_view_form">
-            <field name="model">loan.create.increments</field>
-            <field name="type">form</field>
-            <field name="name">loan_create_increments_form</field>
-        </record>
-        <record model="ir.ui.view" id="loan_creation_table_view_form">
-            <field name="model">loan.create.amortization_table</field>
-            <field name="type">form</field>
-            <field name="name">loan_create_amortization_table_form</field>
         </record>
     </data>
 </tryton>

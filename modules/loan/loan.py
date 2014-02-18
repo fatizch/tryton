@@ -33,39 +33,54 @@ DEFFERALS = [
     ('fully', 'Fully deferred'),
     ]
 
+LOAN_DURATION_UNIT = [
+    ('', ''),
+    ('month', 'Month'),
+    ('quarter', 'Quarter'),
+    ('half_year', 'Half-year'),
+    ('year', 'Year'),
+    ]
+
 
 class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan'
 
     __name__ = 'loan'
 
-    kind = fields.Selection(LOAN_KIND, 'Kind', sort=False)
+    kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False)
     contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
         'Contracts')
-    number_of_payments = fields.Integer('Number of Payments')
-    payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
-        'Payment Frequency', sort=False)
+    number_of_payments = fields.Integer('Number of Payments', required=True)
+    payment_frequency = fields.Selection(LOAN_DURATION_UNIT,
+        'Payment Frequency', sort=False, required=True)
     payment_amount = fields.Numeric('Payment Amount',
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
-    amount = fields.Numeric('Amount')
-    funds_release_date = fields.Date('Funds Release Date')
-    first_payment_date = fields.Date('First Payment Date')
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        states={
+            'required': Eval('kind') != 'graduated',
+            'invisible': Eval('kind') == 'graduated', })
+    amount = fields.Numeric('Amount', required=True)
+    funds_release_date = fields.Date('Funds Release Date', required=True)
+    first_payment_date = fields.Date('First Payment Date', required=True)
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
     outstanding_capital = fields.Numeric('Outstanding Capital')
     rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
-            'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])})
+            'required': Eval('kind') != 'graduated',
+            'invisible': Eval('kind') == 'graduated', })
     lender = fields.Many2One('bank', 'Lender')
     payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
     early_payments = fields.One2ManyDomain('loan.payment', 'loan',
         'Early Payments', domain=[('kind', '=', 'early')])
-    increments = fields.One2Many('loan.increment', 'loan', 'Increments')
+    increments = fields.One2Many('loan.increment', 'loan', 'Increments',
+        context={'payment_frequency': Eval('payment_frequency')},
+        depends=['payment_frequency'])
     defferal = fields.Function(
-        fields.Selection(DEFFERALS, 'Differal'),
-        'get_defferal')
+        fields.Selection(DEFFERALS, 'Defferal'),
+        'get_defferal', 'setter_void')
     defferal_duration = fields.Function(
-        fields.Integer('Differal Duration'),
-        'get_defferal_duration')
+        fields.Integer('Defferal Duration',
+            states={'invisible': ~Eval('defferal')}),
+        'get_defferal_duration', 'setter_void')
     end_date = fields.Function(
         fields.Date('End Date'),
         'get_loan_end_date')
@@ -74,11 +89,8 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def __setup__(cls):
         super(Loan, cls).__setup__()
         cls._buttons.update({
-                'calculate_amortization_table': {},
+                'button_calculate_amortization_table': {},
                 })
-
-        utils.update_selection(cls, 'payment_frequency',
-            keys_to_remove=['day'])
 
     @classmethod
     def default_kind(cls):
@@ -110,8 +122,14 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def init_from_contract(self, contract):
         self.funds_release_date = contract.start_date
-        self.first_payment_date = coop_date.add_month(
-            self.funds_release_date, 1)
+        self.first_payment_date = self.on_change_with_first_payment_date()
+
+    @fields.depends('funds_release_date', 'first_payment_date',
+        'payment_frequency')
+    def on_change_with_first_payment_date(self):
+        if self.funds_release_date and self.payment_frequency:
+            return coop_date.add_duration(self.funds_release_date, 1,
+                self.payment_frequency)
 
     def get_currency(self):
         if hasattr(self, 'contracts') and self.contracts:
@@ -170,18 +188,23 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             begin_balance = payment.end_balance
         return res
 
+    def calculate_amortization_table(self):
+        Payment = Pool().get('loan.payment')
+        if getattr(self, 'payments', None):
+            Payment.delete(
+                [x for x in self.payments if x.kind == 'scheduled' and x.id])
+        else:
+            self.payments = []
+        self.payments = list(self.payments)
+        self.payments[:] = [x for x in self.payments
+            if x.kind != 'scheduled']
+        self.payments += self.calculate_payments()
+
     @classmethod
     @model.CoopView.button
-    def calculate_amortization_table(cls, loans):
-        Payment = Pool().get('loan.payment')
+    def button_calculate_amortization_table(cls, loans):
         for loan in loans:
-            if loan.payments:
-                Payment.delete(
-                    [x for x in loan.payments if x.kind == 'scheduled'])
-            loan.payments = list(loan.payments)
-            loan.payments[:] = [x for x in loan.payments
-                if x.kind != 'scheduled']
-            loan.payments += loan.calculate_payments()
+            loan.calculate_amortization_table()
             loan.save()
 
     @staticmethod
@@ -205,8 +228,9 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         return increments[0] if increments else None
 
     def get_early_payments_from_date(self, at_date, to_date):
-        return [x for x in self.early_payments
-            if x.start_date >= at_date and x.start_date <= to_date]
+        return ([x for x in self.early_payments
+                if x.start_date >= at_date and x.start_date <= to_date]
+            if getattr(self, 'early_payments', None) else [])
 
     def update_increments(self):
         start_date = self.first_payment_date
@@ -246,10 +270,11 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         result.append(increment_2)
         return result
 
-    def calculate_increments(self, defferal=None, defferal_duration=None):
+    def calculate_increments(self):
         increments = []
-        if defferal and defferal_duration:
-            increments = self.create_increments(defferal_duration, defferal)
+        if self.defferal and self.defferal_duration:
+            increments = self.create_increments(self.defferal_duration,
+                self.defferal)
         elif self.kind == 'intermediate':
             increments = self.create_increments(self.number_of_payments - 1,
                 'partially')
@@ -259,8 +284,12 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             increments = self.create_increments(self.number_of_payments)
         if not hasattr(self, 'increments'):
             self.increments = []
-        self.increments = list(self.increments)
-        self.increments += increments
+        elif self.increments:
+            incs_to_del = set([x for x in self.increments if x.id])
+            if incs_to_del:
+                Increment = Pool().get('loan.increment')
+                Increment.delete(incs_to_del)
+        self.increments[:] = increments
         self.update_increments()
 
     def get_payment(self, at_date=None):
@@ -370,10 +399,10 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'loan.increment'
 
     number = fields.Integer('Number', readonly=True)
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
+    start_date = fields.Date('Start Date', required=True)
+    end_date = fields.Date('End Date', required=True)
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
-    number_of_payments = fields.Integer('Number of Payments')
+    number_of_payments = fields.Integer('Number of Payments', required=True)
     rate = fields.Numeric('Annual Rate', digits=(16, 4))
     payment_amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
@@ -389,8 +418,12 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('loan', 'start_date', 'number_of_payments')
     def on_change_with_end_date(self):
+        if getattr(self, 'loan', None):
+            frequency = self.loan.payment_frequency
+        else:
+            frequency = Transaction().context.get('payment_frequency')
         return coop_date.add_duration(self.start_date, self.number_of_payments,
-            self.loan.payment_frequency)
+            frequency)
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
@@ -435,14 +468,13 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
         rate = loan.get_rate(increment.rate if increment else loan.rate,)
         payment_amount = (increment.payment_amount
             if increment else loan.payment_amount)
-        self.loan = loan
         self.number = number
         self.start_date = at_date
         self.end_date = end_date
         self.begin_balance = begin_balance
         if early_payments:
             self.begin_balance -= sum(map(lambda x: x.amount, early_payments))
-        self.interest = self.loan.currency.round(begin_balance * rate)
+        self.interest = loan.currency.round(begin_balance * rate)
         if increment and not utils.is_none(increment, 'defferal'):
             if increment.defferal == 'partially':
                 self.principal = 0
@@ -451,7 +483,7 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
                 self.principal = -self.interest
         else:
             if (self.begin_balance > payment_amount
-                    and number < self.loan.number_of_payments):
+                    and number < loan.number_of_payments):
                 self.principal = payment_amount - self.interest
             else:
                 self.principal = self.begin_balance

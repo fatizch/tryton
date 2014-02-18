@@ -61,8 +61,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.payment_amount = loan.on_change_with_payment_amount()
         self.assert_(
             currency.is_zero(loan.payment_amount - Decimal(739.69)))
-
-        loan.calculate_increments('partially', 12)
+        loan.defferal = 'partially'
+        loan.defferal_duration = 12
+        loan.calculate_increments()
         self.assert_(len(loan.increments) == 2)
         increment_1 = loan.get_increment(loan.first_payment_date)
         self.assert_(increment_1)
