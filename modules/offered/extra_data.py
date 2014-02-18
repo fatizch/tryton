@@ -4,7 +4,7 @@ import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin
-from trytond.pyson import Eval, Bool, Or
+from trytond.pyson import Eval, Bool, Or, And
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, utils, coop_string
@@ -88,8 +88,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             cls.selection.on_change = set()
         cls.selection.on_change |= set(['selection',
                 'default_value_selection', 'type_'])
-        cls.selection.states['required'] = (Eval('type_') == 'selection'
-            and ~~Eval('with_default_value'))
+        cls.selection.states['required'] = And(Eval('type_') == 'selection',
+            ~~Eval('with_default_value'))
 
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
