@@ -22,6 +22,10 @@ __all__ = [
 class Bank(export.ExportImportMixin):
     __name__ = 'bank'
 
+    main_address = fields.Function(
+        fields.Many2One('party.address', 'Main Address'),
+        'get_main_address_id')
+
     @classmethod
     def __setup__(cls):
         super(Bank, cls).__setup__()
@@ -72,6 +76,10 @@ class Bank(export.ExportImportMixin):
             [('party.name',) + tuple(clause[1:])],
             [('party.short_name',) + tuple(clause[1:])],
             ]
+
+    def get_main_address_id(self, name):
+        return (self.party.main_address.id
+            if self.party and self.party.main_address else None)
 
 
 class BankAccount(export.ExportImportMixin):

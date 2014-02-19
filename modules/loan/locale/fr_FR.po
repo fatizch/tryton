@@ -166,10 +166,6 @@ msgctxt "field:loan,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:loan,lender:"
-msgid "Lender"
-msgstr "Organisme Prêteur"
-
 msgctxt "field:loan,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"

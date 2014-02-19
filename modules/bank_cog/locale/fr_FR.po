@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -61,3 +61,7 @@ msgstr "Compte bancaire principal"
 msgctxt "view:party.party:"
 msgid "Bank"
 msgstr "Banque"
+
+msgctxt "field:bank,main_address:"
+msgid "Main Address"
+msgstr "Adresse Principale"

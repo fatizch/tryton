@@ -31,8 +31,6 @@
     <field name="funds_release_date"/>
     <label name="first_payment_date"/>
     <field name="first_payment_date"/>
-    <label name="lender"/>
-    <field name="lender"/>
     <newline/>
     <field name="currency"/>
     <newline/>
