@@ -491,14 +491,14 @@ class BillingData(model.CoopSQL, model.CoopView):
         if getattr(self, 'contract', None):
             return self.contract.number_of_billing_data
 
-    @staticmethod
-    def default_number_of_billing_data():
+    @classmethod
+    def default_number_of_billing_data(cls):
         # We need to take into account the item we are creating
         return Transaction().context.get('number_of_billing_data', 0) + 1
 
-    @staticmethod
-    def default_start_date():
-        if BillingData.default_number_of_billing_data() == 1:
+    @classmethod
+    def default_start_date(cls):
+        if cls.default_number_of_billing_data() == 1:
             return Transaction().context.get('start_date')
 
 
