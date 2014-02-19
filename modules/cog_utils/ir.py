@@ -219,6 +219,12 @@ class Action(ExportImportMixin):
     def _export_keys(cls):
         return set(['xml_id'])
 
+    @classmethod
+    def _export_skips(cls):
+        res = super(Action, cls)._export_skips()
+        res.add('keywords')
+        return res
+
 
 class ActionKeyword(ExportImportMixin):
     __name__ = 'ir.action.keyword'
