@@ -502,6 +502,7 @@ class ExportImportMixin(Model):
             try:
                 instance.save()
             except:
+                logging.getLogger('export_import').debug(str(instance))
                 for x in traceback.format_exception(*sys.exc_info()):
                     logging.getLogger('export_import').debug(str(x))
                 raise
