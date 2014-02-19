@@ -651,9 +651,6 @@ class Rule(ModelView, ModelSQL):
         result.add('rule_kwargs')
         result.add('rule_rules')
         result.add('rule_tables')
-        #TODO Temporary remove test cases as they could not be imported
-        # cf. issue #168
-        result.add('test_cases')
         return result
 
     def on_change_rule_parameters(self):
