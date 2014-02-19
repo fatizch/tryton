@@ -349,11 +349,16 @@ class BillingData(model.CoopSQL, model.CoopView):
     __name__ = 'contract.billing.data'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    number_of_billing_data = fields.Function(
+        fields.Integer('Number of Billing Data', states={'invisible': True}),
+        'get_number_of_billing_data')
     policy_owner = fields.Function(
         fields.Many2One('party.party', 'Party', states={'invisible': True}),
         'get_policy_owner_id')
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
+    start_date = fields.Date('Start Date', required=True,
+        states={'invisible': Eval('number_of_billing_data', 0) == 1})
+    end_date = fields.Date('End Date',
+        states={'invisible': Eval('number_of_billing_data', 0) == 1})
     payment_method = fields.Many2One('billing.payment.method',
         'Payment Method', ondelete='RESTRICT')
     payment_mode = fields.Function(
@@ -474,6 +479,27 @@ class BillingData(model.CoopSQL, model.CoopView):
         result['payment_date'] = self.payment_date
         result['sync_date'] = self.payment_method.payment_term.sync_date
         return result
+
+    @fields.depends('disbursment_bank_account', 'payment_bank_account')
+    def on_change_with_disbursment_bank_account(self):
+        if self.disbursment_bank_account:
+            return self.disbursment_bank_account.id
+        if self.payment_bank_account:
+            return self.payment_bank_account.id
+
+    def get_number_of_billing_data(self, name):
+        if getattr(self, 'contract', None):
+            return self.contract.number_of_billing_data
+
+    @classmethod
+    def default_number_of_billing_data(cls):
+        # We need to take into account the item we are creating
+        return Transaction().context.get('number_of_billing_data', 0) + 1
+
+    @classmethod
+    def default_start_date(cls):
+        if cls.default_number_of_billing_data() == 1:
+            return Transaction().context.get('start_date')
 
 
 class BillingPeriod(model.CoopSQL, model.CoopView):

@@ -26,7 +26,14 @@ class Contract:
     __name__ = 'contract'
 
     billing_datas = fields.One2Many('contract.billing.data', 'contract',
-        'Billing Datas')
+        'Billing Datas', context={
+            'start_date': Eval('start_date'),
+            'number_of_billing_data': Eval('number_of_billing_data'),
+            },
+        depends=['number_of_billing_data'])
+    number_of_billing_data = fields.Function(
+        fields.Integer('Number of Billing Data', states={'invisible': True}),
+        'get_number_of_billing_data')
     use_prices = fields.Function(
         fields.Boolean('Use Prices', states={'invisible': True}),
         'get_use_prices')
@@ -688,6 +695,9 @@ class Contract:
     def get_publishing_values(self):
         result = super(Contract, self).get_publishing_values()
         return result
+
+    def get_number_of_billing_data(self, name):
+        return len(self.billing_datas)
 
 
 class Option:

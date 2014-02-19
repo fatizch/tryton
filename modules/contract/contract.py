@@ -181,7 +181,8 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         fields.Char('Product Kind'),
         'on_change_with_product_kind', searcher='search_product_kind')
     status = fields.Selection(CONTRACTSTATUSES, 'Status')
-    options = fields.One2Many('contract.option', 'contract', 'Options')
+    options = fields.One2Many('contract.option', 'contract', 'Options',
+        context={'start_date': Eval('start_date')})
     contract_number = fields.Char('Contract Number', select=1,
         states={'required': Eval('status') == 'active'})
     subscriber_kind = fields.Function(

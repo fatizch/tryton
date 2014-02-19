@@ -16,4 +16,5 @@
     <field name="payment_mode"/>
     <field name="policy_owner"/>
     <field name="payment_date"/>
+    <field name="number_of_billing_data"/>
 </form>
