@@ -630,6 +630,23 @@ class Rule(ModelView, ModelSQL):
             tmp_field = copy.copy(getattr(cls, field_name))
             tmp_field.on_change = [x for x in on_change_fields]
             setattr(cls, field_name, tmp_field)
+        cls._sql_constraints += [
+            ('name_uniq', 'UNIQUE(name)', 'The name must be unique !'),
+            ]
+
+    @classmethod
+    def copy(cls, objects, default=None):
+        clones = super(Rule, cls).copy(objects, default=default)
+        to_del = []
+        for clone in clones:
+            existing = {}
+            for parameter in clone.rule_parameters:
+                if parameter.code in existing:
+                    to_del.append(parameter)
+                else:
+                    existing[parameter.code] = parameter.id
+        Pool().get('rule_engine.parameter').delete(to_del)
+        return clones
 
     @classmethod
     def write(cls, rules, values):
