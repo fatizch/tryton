@@ -651,8 +651,6 @@ class Rule(ModelView, ModelSQL):
         result.add('rule_kwargs')
         result.add('rule_rules')
         result.add('rule_tables')
-        #TODO Temporary remove test cases as they could not be imported cf. issue #168
-        result.add('test_cases')
         return result
 
     def on_change_rule_parameters(self):
@@ -1142,7 +1140,7 @@ class TestCaseValue(ModelView, ModelSQL):
     value = fields.Char('Value', states={'invisible': ~Eval('override_value')})
     override_value = fields.Boolean('Override Value')
     test_case = fields.Many2One('rule_engine.test_case', 'Test Case',
-        ondelete='CASCADE')
+        ondelete='CASCADE', required=True)
     rule = fields.Function(
         fields.Many2One('rule_engine', 'Rule'),
         'get_rule')
