@@ -66,7 +66,6 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
             'required': Eval('kind') != 'graduated',
             'invisible': Eval('kind') == 'graduated', })
-    lender = fields.Many2One('bank', 'Lender')
     payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
     early_payments = fields.One2ManyDomain('loan.payment', 'loan',

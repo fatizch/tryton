@@ -39,8 +39,6 @@
       <label name="defferal_duration"/>
       <field name="defferal_duration"/>
       <newline/>
-      <label name="lender"/>
-      <field name="lender"/>
       <field name="contracts" colspan="4"/>
       <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
     </page>
