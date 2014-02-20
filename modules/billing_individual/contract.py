@@ -128,7 +128,7 @@ class Contract:
 
     def next_billing_period(self):
         start_date = self.next_billing_date
-        last_date = coop_date.add_day(self.start_date, -1)
+        last_date = coop_date.add_day(start_date, -1)
         if not utils.is_none(self, 'billing_periods'):
             for period in self.billing_periods:
                 if (start_date >= period.start_date and (
@@ -142,7 +142,7 @@ class Contract:
             return (new_period_start, self.end_date)
         new_period_end = coop_date.add_frequency(appliable_frequency,
             last_date)
-        if self.next_renewal_date:
+        if self.next_renewal_date and self.next_renewal_date > new_period_end:
             new_period_end = min(new_period_end, coop_date.add_day(
                 self.next_renewal_date, -1))
         if self.end_date and new_period_end > self.end_date:
