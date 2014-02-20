@@ -636,17 +636,13 @@ class Rule(ModelView, ModelSQL):
 
     @classmethod
     def copy(cls, objects, default=None):
-        clones = super(Rule, cls).copy(objects, default=default)
-        to_del = []
-        for clone in clones:
-            existing = {}
-            for parameter in clone.rule_parameters:
-                if parameter.code in existing:
-                    to_del.append(parameter)
-                else:
-                    existing[parameter.code] = parameter.id
-        Pool().get('rule_engine.parameter').delete(to_del)
-        return clones
+        default = {} if default is None else default
+        default.update({
+                'rule_kwargs': [],
+                'rule_rules': [],
+                'rule_tables': [],
+                })
+        return super(Rule, cls).copy(objects, default)
 
     @classmethod
     def write(cls, rules, values):

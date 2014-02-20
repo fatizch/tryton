@@ -165,6 +165,15 @@ class RuleEngine:
                 cls.extra_data_kind.selection))
 
     @classmethod
+    def copy(cls, objects, default=None):
+        default = {} if default is None else default
+        default.update({
+                'rule_external_extra_datas': [],
+                'rule_extra_datas': [],
+                })
+        return super(RuleEngine, cls).copy(objects, default)
+
+    @classmethod
     def _export_skips(cls):
         result = super(RuleEngine, cls)._export_skips()
         result.add('rule_external_extra_datas')
