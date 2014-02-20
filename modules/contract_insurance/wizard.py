@@ -3,7 +3,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, coop_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -164,8 +164,9 @@ class ExtraPremiumDisplay(model.CoopView):
     @classmethod
     def get_coverage_name(cls, coverage):
         return '%s (%s - %s)' % (coverage.option.offered.name,
-            coverage.start_date,
-            coverage.end_date if coverage.end_date else '')
+            coop_string.date_as_string(coverage.start_date),
+            coop_string.date_as_string(coverage.end_date)
+            if coverage.end_date else '')
 
     @fields.depends('covered_element', 'extra_premiums', 'coverages')
     def on_change_covered_element(self):
