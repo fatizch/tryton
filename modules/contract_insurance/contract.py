@@ -900,6 +900,13 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             'invisible': Eval('calculation_kind', '') != 'rate',
             'required': Eval('calculation_kind', '') == 'rate'},
         digits=(16, 4))
+    duration = fields.Function(
+        fields.Integer('Duration'),
+        'get_duration', 'setter_void')
+    duration_unit = fields.Function(
+        fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
+            sort=False),
+        'get_duration_unit', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -963,8 +970,28 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         else:
             return super(ExtraPremium, self).get_rec_name(name)
 
+    @fields.depends('calculation_kind', 'flat_amount', 'rate')
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
+
+    def get_duration(self, name):
+        return coop_date.duration_between(self.start_date, self.end_date,
+            'month') if self.start_date and self.end_date else None
+
+    @staticmethod
+    def default_duration_unit():
+        return 'month'
+
+    def get_duration_unit(self, name):
+        return 'month'
+
+    @fields.depends('start_date', 'end_date', 'duration', 'duration_unit')
+    def on_change_with_end_date(self):
+        print 'on_change'
+        if not self.duration or not self.duration_unit:
+            return
+        return coop_date.add_duration(self.start_date, self.duration,
+            self.duration_unit)
 
 
 class CoveredDataExclusionKindRelation(model.CoopSQL):
