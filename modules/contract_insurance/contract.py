@@ -987,7 +987,6 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('start_date', 'end_date', 'duration', 'duration_unit')
     def on_change_with_end_date(self):
-        print 'on_change'
         if not self.duration or not self.duration_unit:
             return
         return coop_date.add_duration(self.start_date, self.duration,
