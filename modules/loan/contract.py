@@ -49,12 +49,6 @@ class Contract:
                 return True
         return False
 
-    def init_dict_for_rule_engine(self, cur_dict):
-        super(Contract, self).init_dict_for_rule_engine(cur_dict)
-        #TODO : To enhance
-        if not utils.is_none(self, 'loans'):
-            cur_dict['loan'] = self.loans[-1]
-
     @classmethod
     @model.CoopView.button_action('loan.launch_loan_creation_wizard')
     def create_loan(cls, loans):
