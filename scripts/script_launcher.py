@@ -309,10 +309,22 @@ def test(arguments, config, work_data):
 
     # Delete test databases if needed
     if arguments.delete_test_databases:
-        killer = subprocess.Popen('sudo su postgres -c "for db in `psql -l | '
-            + 'grep \'test_1\' | cut -f2 -d \' \'`;do dropdb $db;done"',
-            shell=True)
-        killer.communicate()
+        try:
+            db_user = config.get('parameters', 'test_postgres_user')
+        except:
+            db_user = 'postgres'
+        try:
+            db_password = config.get('parameters', 'test_postgres_password')
+        except:
+            db_password = 'postgres'
+        dbs = subprocess.Popen('PGPASSWORD=%s psql -l -U %s | '
+            'grep \'test_1\' | cut -f2 -d \' \';' % (db_password, db_user),
+            shell=True, stdout=subprocess.PIPE)
+        databases, errs = dbs.communicate()
+        for elem in databases.split('\n'):
+            killer = subprocess.Popen('PGPASSWORD=%s dropdb %s -U %s' %
+                (db_password, elem, db_user), shell=True)
+            killer.communicate()
     format_result(log_dir)
 
 

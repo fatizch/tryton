@@ -5,15 +5,15 @@ import os
 import datetime
 from proteus import config, Model, Wizard
 ##Comment##Create Database
-config = config.set_trytond(database_type='sqlite')
+# config = config.set_trytond(database_type='sqlite')
 # config.pool.test = True
-# config = config.set_trytond(database_type='postgresql',
-    # database_name='test_database',
-    # user='admin',
-    # language='en_US',
-    # password='admin',
-    # config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-        # 'conf', 'trytond.conf'))
+config = config.set_trytond(database_type='postgresql',
+    database_name='test_1_database',
+    user='admin',
+    language='en_US',
+    password='admin',
+    config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+        'conf', 'trytond.conf'))
 Module = Model.get('ir.module.module')
 test_module = Module.find([('name', '=', 'test_module')])[0]
 Module.install([test_module.id], config.context)

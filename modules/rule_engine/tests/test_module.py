@@ -407,24 +407,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(result.errors, ['test error'])
         self.assertEqual(result.warnings, ['test warning'])
         self.assertEqual(result.info, ['test info'])
-        self.assertEqual(result.low_level_debug, [u'Entering table_test_code',
-                "\targs : ('test', 30)",
-                '\tresult = None',
-                u'Entering add_error',
-                "\targs : ('test error',)",
-                '\tresult = None',
-                u'Entering add_warning',
-                "\targs : ('test warning',)",
-                '\tresult = None',
-                u'Entering add_info',
-                "\targs : ('test info',)",
-                '\tresult = None',
-                u'Entering table_test_code',
-                "\targs : ('foo', 1)",
-                '\tresult = ham',
-                u'Entering rule_test_rule',
-                "\tkwargs : {'test_parameter': 20}",
-                '\tresult = 20'])
+        # Debug mode is not activated => no log
+        self.assertEqual(result.low_level_debug, [])
         self.assertEqual(rule.exec_logs, ())
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
@@ -450,7 +434,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 tcv.name = name
                 tcv.value = value
                 tcv.override_value = override
-                tcv.save()
                 return tcv
 
             # Check override of table elements
@@ -461,7 +444,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             tc.test_values = []
             self.maxDiff = None
             self.assertEqual(tc.on_change_test_values(), {
-                    'low_debug': "Entering table_test_code\n"
+                    'low_debug': u"Entering table_test_code\n"
                     "\targs : ('test', 30)\n"
                     "\tresult = None\n"
                     "Entering add_error\n"
@@ -479,13 +462,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     "Entering rule_test_rule\n"
                     "\tkwargs : {'test_parameter': 20}\n"
                     "\tresult = 20",
-                    'result_warning': u'test warning',
-                    'result_value': u'20',
                     'debug': '',
                     'result_errors': u'test error',
                     'expected_result': '[20, [test error], [test warning],'
                     ' [test info]]',
-                    'result_info': u'test info'})
+                    'result_info': u'test info',
+                    'result_value': u'20',
+                    'result_warning': u'test warning',
+                    })
             tc.test_values = [tcv1]
             self.assertEqual(tc.on_change_test_values(), {
                     'low_debug': '',

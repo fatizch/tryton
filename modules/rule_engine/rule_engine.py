@@ -749,7 +749,7 @@ class Rule(ModelView, ModelSQL):
             else:
                 forced_value = None
             elem.as_context(evaluation_context, context, forced_value,
-                self.debug_mode)
+                Transaction().context.get('debug'))
 
     def prepare_context(self, evaluation_context, execution_kwargs):
         context = self.get_context_for_execution()
@@ -762,7 +762,8 @@ class Rule(ModelView, ModelSQL):
         return context
 
     def compute(self, evaluation_context, execution_kwargs):
-        with Transaction().set_context(debug=self.debug_mode):
+        with Transaction().set_context(debug=self.debug_mode or
+                'force_debug_mode' in Transaction().context):
             context = self.prepare_context(evaluation_context,
                 execution_kwargs)
             the_result = context['__result__']
@@ -901,13 +902,13 @@ class Rule(ModelView, ModelSQL):
     def execute(self, arguments, parameters=None):
         result = self.compute(arguments,
             {} if parameters is None else parameters)
-        if not getattr(self, 'debug_mode', None):
+        if not self.id or not getattr(self, 'debug_mode', None):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_cursor() as transaction:
             RuleExecution = Pool().get('rule_engine.log')
             rule_execution = RuleExecution()
-            rule_execution.rule = self
+            rule_execution.rule = self.id
             rule_execution.create_date = datetime.datetime.now()
             rule_execution.user = transaction.user
             rule_execution.init_from_rule_result(result)
@@ -961,7 +962,7 @@ class Context(ModelView, ModelSQL):
     def get_context(self, rule):
         context = {}
         for element in self.allowed_elements:
-            element.as_context(context, rule.debug_mode)
+            element.as_context(context, Transaction().context.get('debug'))
         return context
 
     @classmethod
@@ -1256,7 +1257,8 @@ class TestCase(ModelView, ModelSQL):
         test_context = {
             key: noargs_func(key, value)
             for key, value in test_context.items()}
-        return self.rule.execute(test_context)
+        with Transaction().set_context(force_debug_mode=True):
+            return self.rule.execute(test_context)
 
     @fields.depends('test_values', 'rule')
     def on_change_test_values(self):

@@ -26,6 +26,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'PaymentTerm': 'billing.payment.term',
             'PaymentTermLine': 'billing.payment.term.line',
+            'Contract': 'contract',
             }
 
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
@@ -67,9 +68,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0011_computation_first_following_month(self):
         payment_term = self.PaymentTerm.search([
                 ('code', '=', 'test_first_following_month')])[0]
-        lines = payment_term.compute(datetime.date(2013, 1, 1),
-            datetime.date(2013, 12, 31), Decimal(365),
-            payment_term.company.currency, 1)
+        work_set = self.Contract.work_set_class()()
+        work_set.period = (datetime.date(2013, 1, 1),
+            datetime.date(2013, 12, 31))
+        work_set.total_amount = Decimal(365)
+        work_set.currency = payment_term.company.currency
+        work_set.payment_date = 1
+        lines = payment_term.compute(work_set)
         self.assertEqual(Decimal(365), sum(map(lambda x: x[1], lines)))
 
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
@@ -91,13 +96,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0013_computation_one_shot(self):
         payment_term = self.PaymentTerm.search([
                 ('code', '=', 'test_one_shot')])[0]
-        lines = payment_term.compute(datetime.date(2013, 1, 1),
-            datetime.date(2013, 12, 31), Decimal(365),
-            payment_term.company.currency, 1)
+        work_set = self.Contract.work_set_class()()
+        work_set.period = (datetime.date(2013, 1, 1),
+            datetime.date(2013, 12, 31))
+        work_set.total_amount = Decimal(365)
+        work_set.currency = payment_term.company.currency
+        work_set.payment_date = 1
+        lines = payment_term.compute(work_set)
         self.assertEqual(lines[0], (datetime.date(2013, 1, 1), Decimal(365)))
-        lines = payment_term.compute(datetime.date(2014, 2, 15),
-            datetime.date(2016, 11, 30), Decimal(365),
-            payment_term.company.currency, 1)
+        work_set.period = (datetime.date(2014, 2, 15),
+            datetime.date(2016, 11, 30))
+        lines = payment_term.compute(work_set)
         self.assertEqual(lines[0], (datetime.date(2014, 2, 15), Decimal(365)))
 
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
@@ -120,9 +129,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0015_computation_monthly_exact(self):
         payment_term = self.PaymentTerm.search([
                 ('code', '=', 'test_monthly_exact')])[0]
-        lines = payment_term.compute(datetime.date(2013, 1, 1),
-            datetime.date(2013, 12, 31), Decimal(365),
-            payment_term.company.currency, 1)
+        work_set = self.Contract.work_set_class()()
+        work_set.period = (datetime.date(2013, 1, 1),
+            datetime.date(2013, 12, 31))
+        work_set.total_amount = Decimal(365)
+        work_set.currency = payment_term.company.currency
+        work_set.payment_date = 1
+        lines = payment_term.compute(work_set)
         self.assertEqual(lines, [
                 (datetime.date(2013, 1, 1), Decimal('31.00')),
                 (datetime.date(2013, 2, 1), Decimal('28.00')),
@@ -137,9 +150,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 (datetime.date(2013, 11, 1), Decimal('30.00')),
                 (datetime.date(2013, 12, 1), Decimal('31.00'))])
         self.assertEqual(Decimal(365), sum(map(lambda x: x[1], lines)))
-        lines = payment_term.compute(datetime.date(2013, 1, 12),
-            datetime.date(2014, 1, 11), Decimal(365),
-            payment_term.company.currency, 1)
+        work_set.period = (datetime.date(2013, 1, 12),
+            datetime.date(2014, 1, 11))
+        lines = payment_term.compute(work_set)
         self.assertEqual(lines, [
                 (datetime.date(2013, 1, 12), Decimal('20.00')),
                 (datetime.date(2013, 2, 1), Decimal('28.00')),
@@ -154,9 +167,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 (datetime.date(2013, 11, 1), Decimal('30.00')),
                 (datetime.date(2013, 12, 1), Decimal('31.00')),
                 (datetime.date(2014, 1, 1), Decimal('11.00'))])
-        lines = payment_term.compute(datetime.date(2014, 1, 12),
-            datetime.date(2015, 1, 11), Decimal(366),
-            payment_term.company.currency, 1)
+        work_set.period = (datetime.date(2014, 1, 12),
+            datetime.date(2015, 1, 11))
+        work_set.total_amount = Decimal(366)
+        lines = payment_term.compute(work_set)
         self.assertEqual(lines, [
                 (datetime.date(2014, 1, 12), Decimal('20.05')),
                 (datetime.date(2014, 2, 1), Decimal('28.08')),
@@ -172,9 +186,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 (datetime.date(2014, 12, 1), Decimal('31.08')),
                 (datetime.date(2015, 1, 1), Decimal('11.07'))])
         self.assertEqual(Decimal(366), sum(map(lambda x: x[1], lines)))
-        lines = payment_term.compute(datetime.date(2016, 1, 12),
-            datetime.date(2017, 1, 11), Decimal(366),
-            payment_term.company.currency, 1)
+        work_set.period = (datetime.date(2016, 1, 12),
+            datetime.date(2017, 1, 11))
+        lines = payment_term.compute(work_set)
         self.assertEqual(Decimal(366), sum(map(lambda x: x[1], lines)))
         self.assertEqual(lines, [
                 (datetime.date(2016, 1, 12), Decimal('20.00')),
