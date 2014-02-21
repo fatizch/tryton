@@ -34,12 +34,6 @@
             <field name="inherit" ref="contract_insurance.covered_data_view_form"/>
             <field name="name">covered_data_form</field>
         </record>
-        <record model="ir.ui.view" id="covered_data_view_tree">
-          <field name="model">contract.covered_data</field>
-          <field name="type">tree</field>
-          <field name="field_childs">multi_mixed_view</field>
-          <field name="name">covered_data_tree</field>
-        </record>
         <!-- ################# -->
         <!-- # Extra Premium # -->
         <!-- ################# -->

@@ -102,7 +102,7 @@ class OptionsDisplayer(model.CoopView):
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
     contract = fields.Many2One('contract', 'Contract',
-        states={'invisible': True})
+        states={'invisible': True}, ondelete='RESTRICT')
     options = fields.One2Many(
         'contract.wizard.option_subscription.options_displayer.option',
         None, 'Options')
