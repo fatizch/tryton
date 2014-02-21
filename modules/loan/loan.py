@@ -348,7 +348,6 @@ class LoanShare(model.CoopSQL, model.CoopView):
     'Loan Share'
 
     __name__ = 'loan.share'
-    _rec_name = 'share'
 
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE')
@@ -362,6 +361,9 @@ class LoanShare(model.CoopSQL, model.CoopView):
     option = fields.Function(
         fields.Many2One('contract.option', 'Contract Option'),
         'get_option_id')
+    icon = fields.Function(
+        fields.Char('Icon'),
+        'get_icon')
 
     @staticmethod
     def default_share():
@@ -390,6 +392,12 @@ class LoanShare(model.CoopSQL, model.CoopView):
         result['share'] = '%.2f %%' % (self.share * 100)
         result['covered_amount'] = self.share * result['amount']
         return result
+
+    def get_icon(self, name):
+        return 'loan-interest'
+
+    def get_rec_name(self, name):
+        return '%s (%s%%)' % (self.loan.rec_name, self.share * 100)
 
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):

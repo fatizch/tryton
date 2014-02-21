@@ -94,6 +94,7 @@ class CoveredData:
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')
+    multi_mixed_view = loan_shares
 
     @classmethod
     def __setup__(cls):

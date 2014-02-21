@@ -8,5 +8,6 @@
     <label name="possible_covered_elements"/>
     <field name="possible_covered_elements"/>
     <newline/>
+    <field name="hide_covered_element"/>
     </xpath>
 </data>

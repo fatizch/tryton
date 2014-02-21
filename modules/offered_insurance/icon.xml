@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="umbrella-black_icon">
+            <field name="name">umbrella-black</field>
+            <field name="path">icons/umbrella-black.svg</field>
+        </record>
+    </data>
+</tryton>

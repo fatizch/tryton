@@ -49,6 +49,7 @@ class Contract:
             'invisible': Eval('product_kind') == 'insurance'})
     next_renewal_date = fields.Date('Next Renewal Date')
     last_renewed = fields.Date('Last Renewed')
+    multi_mixed_view = covered_elements
 
     @classmethod
     def __setup__(cls):
@@ -364,6 +365,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     covered_name = fields.Function(
         fields.Char('Name'),
         'on_change_with_covered_name')
+    multi_mixed_view = covered_data
+    icon = fields.Function(
+        fields.Char('Icon'),
+        'get_icon')
 
     @classmethod
     def write(cls, cov_elements, vals):
@@ -649,6 +654,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         result['party'] = self.party
         return result
 
+    def get_icon(self, name):
+        if self.is_person:
+            return 'coopengo-party'
+
 
 class CoveredElementPartyRelation(model.CoopSQL):
     'Relation between Covered Element and Covered Relations'
@@ -665,6 +674,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     'Covered Data'
 
     __name__ = 'contract.covered_data'
+    _rec_name = 'option'
 
     option = fields.Many2One('contract.option', 'Contract Option',
         domain=[('id', 'in', Eval('possible_options'))],
@@ -706,6 +716,9 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     extra_premiums = fields.One2Many('contract.covered_data.extra_premium',
         'covered_data', 'Extra Premiums', context={
             'start_date': Eval('start_date'), 'end_date': Eval('end_date')})
+    icon = fields.Function(
+        fields.Char('Icon'),
+        'get_icon')
 
     @classmethod
     def __setup__(cls):
@@ -876,6 +889,9 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         result = super(CoveredData, self).get_publishing_values()
         result['offered'] = self.option.offered
         return result
+
+    def get_icon(self, name):
+        return 'umbrella-black'
 
 
 class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
