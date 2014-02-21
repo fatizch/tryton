@@ -26,8 +26,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             == 31)
         self.assert_(coop_date.duration_between(start_date, end_date, 'month')
             == 1)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'month',
-                True) == (1, True))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'month') == (1, True))
         self.assert_(coop_date.duration_between(start_date, end_date,
                 'quarter') == 0)
         self.assert_(coop_date.duration_between(start_date, end_date, 'year')
@@ -38,12 +38,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
             == 90)
         self.assert_(coop_date.duration_between(start_date, end_date, 'month')
             == 3)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'month',
-                True) == (3, True))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'month') == (3, True))
         self.assert_(coop_date.duration_between(start_date, end_date,
                 'quarter') == 1)
-        self.assert_(coop_date.duration_between(start_date, end_date,
-                'quarter', True) == (1, True))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'quarter') == (1, True))
         self.assert_(coop_date.duration_between(start_date, end_date, 'year')
             == 0)
 
@@ -52,22 +52,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
             == 365)
         self.assert_(coop_date.duration_between(start_date, end_date, 'month')
             == 12)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'month',
-                True) == (12, True))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'month') == (12, True))
         self.assert_(coop_date.duration_between(start_date, end_date,
             'quarter') == 4)
-        self.assert_(coop_date.duration_between(start_date, end_date,
-            'quarter', True) == (4, True))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'quarter') == (4, True))
         self.assert_(coop_date.duration_between(start_date, end_date, 'year')
             == 1)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'year',
-                True) == (1, True))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'year') == (1, True))
 
         end_date = datetime.date(2014, 1, 1)
-        self.assert_(coop_date.duration_between(start_date, end_date, 'month',
-                True) == (12, False))
-        self.assert_(coop_date.duration_between(start_date, end_date, 'year',
-                True) == (1, False))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'month') == (12, False))
+        self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
+            end_date, 'year') == (1, False))
 
 
 def suite():

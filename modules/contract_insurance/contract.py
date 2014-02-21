@@ -975,10 +975,10 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return self.get_rec_name(name)
 
     def get_duration(self, name):
-        res = coop_date.duration_between(self.start_date, self.end_date,
-            'month', True) if self.start_date and self.end_date else (None,
-            None)
-        if not res[0] or not res[1]:
+        res = (coop_date.duration_between_and_is_it_exact(self.start_date,
+                self.end_date, 'month')
+            if self.start_date and self.end_date else (None, False))
+        if res[0] is None or not res[1]:
             return None
         return res[0]
 
@@ -987,10 +987,10 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return 'month'
 
     def get_duration_unit(self, name):
-        res = coop_date.duration_between(self.start_date, self.end_date,
-            'month', True) if self.start_date and self.end_date else (None,
-            None)
-        if res[0] and res[1]:
+        res = (coop_date.duration_between_and_is_it_exact(self.start_date,
+                self.end_date, 'month')
+            if self.start_date and self.end_date else (None, False))
+        if res[0] is not None and res[1]:
             return 'month'
 
     @fields.depends('start_date', 'end_date', 'duration', 'duration_unit')

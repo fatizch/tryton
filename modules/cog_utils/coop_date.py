@@ -108,24 +108,18 @@ def number_of_days_between(start_date, end_date):
     return end_date.toordinal() - start_date.toordinal() + 1
 
 
-def number_of_years_between(date1, date2, is_it_exact=False):
+def number_of_years_between(date1, date2):
+    date2 = add_day(date2, 1)
+    return relativedelta(date2, date1).years
+
+
+def number_of_months_between(date1, date2):
     date2 = add_day(date2, 1)
     delta = relativedelta(date2, date1)
-    if not is_it_exact:
-        return delta.years
-    return delta.years, delta.months == 0 and delta.days == 0
+    return delta.months + delta.years * 12
 
 
-def number_of_months_between(date1, date2, is_it_exact=False):
-    date2 = add_day(date2, 1)
-    delta = relativedelta(date2, date1)
-    res = delta.months + delta.years * 12
-    if not is_it_exact:
-        return res
-    return res, delta.days == 0
-
-
-def duration_between(date1, date2, duration_unit, is_it_exact=False):
+def duration_between(date1, date2, duration_unit):
     '''
     This function returns for
     date1=01/01/2013 date2=31/01/2013 -> 31 days, 1 Month
@@ -137,24 +131,30 @@ def duration_between(date1, date2, duration_unit, is_it_exact=False):
         (1 year, False)
     '''
     if duration_unit == 'day':
-        res = number_of_days_between(date1, date2)
-        is_exact = True
+        return number_of_days_between(date1, date2)
     elif duration_unit == 'week':
-        days = number_of_days_between(date1, date2)
-        res = days / 7
-        is_exact = days % 7 == 0
+        return number_of_days_between(date1, date2) / 7
     elif duration_unit in ['month', 'quarter', 'half_year']:
-        res, is_exact = number_of_months_between(date1, date2, True)
+        res = number_of_months_between(date1, date2)
         if duration_unit == 'quarter':
-            res = res / 3
+            return res / 3
         elif duration_unit == 'half_year':
-            res = res / 6
+            return res / 6
+        else:
+            return res
     elif duration_unit == 'year':
-        res, is_exact = number_of_years_between(date1, date2, True)
-    if not is_it_exact:
-        return res
-    else:
-        return res, is_exact
+        return number_of_years_between(date1, date2)
+
+
+def duration_between_and_is_it_exact(date1, date2, duration_unit):
+    '''
+    This function returns for
+    date1=01/01/2013 date2=01/01/21014 -> (366 days, True), (12 months, False),
+        (1 year, False)
+    '''
+    res = duration_between(date1, date2, duration_unit)
+    end_date = get_end_of_period(date1, duration_unit, res)
+    return res, end_date == date2
 
 
 def add_frequency(frequency, to_date):
