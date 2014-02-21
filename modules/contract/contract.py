@@ -434,7 +434,7 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             if coverage.code in existing:
                 good_opt = existing[coverage.code]
                 to_delete.remove(good_opt)
-            elif coverage.subscription_behaviour == 'mandatory':
+            elif coverage.subscription_behaviour != 'optional':
                 good_opt = OptionModel()
                 good_opt.init_from_offered(coverage, self.start_date)
                 good_opt.contract = self
