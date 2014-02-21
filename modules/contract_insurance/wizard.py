@@ -27,13 +27,26 @@ class OptionSubscription:
     __name__ = 'contract.wizard.option_subscription'
 
     def default_options_displayer(self, values):
-        Contract = Pool().get('contract')
-        contract = Contract(Transaction().context.get('active_id'))
-        res = super(OptionSubscription, self).default_options_displayer(
-            values)
+        covered_element = None
+        if Transaction().context.get('active_model') == 'contract':
+            Contract = Pool().get('contract')
+            contract = Contract(Transaction().context.get('active_id'))
+        elif Transaction().context.get(
+                'active_model') == 'contract.covered_element':
+            CoveredElement = Pool().get('contract.covered_element')
+            covered_element = CoveredElement(Transaction().context.get(
+                    'active_id'))
+            contract = covered_element.contract
+
+        with Transaction().set_context(contract=contract.id):
+            res = super(OptionSubscription, self).default_options_displayer(
+                values)
         res['possible_covered_elements'] = [
             x.id for x in contract.covered_elements]
-        if len(contract.covered_elements) == 1:
+        if covered_element:
+            res['covered_element'] = covered_element.id
+            res['hide_covered_element'] = True
+        elif len(contract.covered_elements) == 1:
             res['covered_element'] = contract.covered_elements[0].id
         return res
 
@@ -104,7 +117,10 @@ class OptionsDisplayer:
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element',
         domain=[('id', 'in', Eval('possible_covered_elements'))],
+        states={'invisible': ~~Eval('hide_covered_element')},
         depends=['possible_covered_elements'], required=True)
+    hide_covered_element = fields.Boolean('Hide Covered Element',
+        states={'invisible': True})
     possible_covered_elements = fields.Many2Many(
         'contract.covered_element', None, None, 'Covered Elements',
         states={'invisible': True})

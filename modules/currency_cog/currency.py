@@ -33,7 +33,7 @@ class Currency(export.ExportImportMixin):
         Lang = Pool().get('ir.lang')
         if not lang:
             lang = utils.get_user_language()
-        return Lang.currency(lang, amount, self, symbol=symbol)
+        return Lang.currency(lang, amount, self, symbol=symbol, grouping=True)
 
 
 class CurrencyRate(export.ExportImportMixin):

@@ -330,3 +330,9 @@ class Party(export.ExportImportMixin):
             pass
         result['logo'] = StringIO.StringIO(str(self.logo)) if self.logo else ''
         return result
+
+    @classmethod
+    def search_global(cls, text):
+        for id_, rec_name, icon in super(Party, cls).search_global(text):
+            icon = icon or 'coopengo-party'
+            yield id_, rec_name, icon

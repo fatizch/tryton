@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="loan-interest_icon">
+            <field name="name">loan-interest</field>
+            <field name="path">icons/home-loan-interest-rate.svg</field>
+        </record>
+    </data>
+</tryton>

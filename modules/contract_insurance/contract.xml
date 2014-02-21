@@ -76,15 +76,29 @@
         <record model="ir.ui.view" id="covered_elements_clean_tree">
           <field name="model">contract.covered_element</field>
           <field name="type">tree</field>
-          <field name="field_childs">covered_data</field>
+          <field name="field_childs">multi_mixed_view</field>
           <field name="name">covered_elements_clean_tree</field>
+      </record>
+      <!-- ############################################################ -->
+      <!-- ########### Wizard ########### -->
+      <!-- ############################################################ -->
+      <record model="ir.action.wizard" id="manage_options">
+          <field name="name">Manage Options</field>
+          <field name="wiz_name">contract.wizard.option_subscription</field>
+          <field name="model">contract.covered_element</field>
+      </record>
+      <record model="ir.action.keyword" id="manage_options_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract.covered_element,-1</field>
+            <field name="action" ref="manage_options"/>
         </record>
-        <!-- Menus -->
-        <menuitem name="Contract" id="menu_contract" sequence="11"/>
-        <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual"
-            sequence="10"/>
-        <menuitem parent="menu_individual" sequence="1"
-            id="menu_contract_form" icon="tryton-list" action="contract.act_contract_form"/>
+        <!-- ############################################################ -->
+        <!-- ########### Menu ########### -->
+        <!-- ############################################################ -->
+      <menuitem name="Contract" id="menu_contract" sequence="11"/>
+      <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual"
+        sequence="10"/>
+        <menuitem parent="menu_individual" sequence="1" id="menu_contract_form" icon="tryton-list" action="contract.act_contract_form"/>
         <!-- ################# -->
         <!-- # Extra Premium # -->
         <!-- ################# -->
@@ -102,9 +116,9 @@
         <!-- Relate -->
         <!--################################################################ -->
         <record model="ir.action.act_window" id="act_contract_relate_form">
-            <field name="name">Contracts</field>
-            <field name="res_model">contract</field>
-            <field name="domain">[('subscriber', '=', Eval('active_id'))]</field>
+          <field name="name">Contracts</field>
+          <field name="res_model">contract</field>
+          <field name="domain">[('subscriber', '=', Eval('active_id'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_contract_relate_keyword">
             <field name="keyword">form_relate</field>
@@ -126,11 +140,11 @@
           <field name="model">contract-agreement</field>
           <field name="type">form</field>
           <field name="name">contract_agreement_form</field>
-        </record>
-        <record model="ir.ui.view" id="contract_agreement_list">
+      </record>
+      <record model="ir.ui.view" id="contract_agreement_list">
           <field name="model">contract-agreement</field>
           <field name="type">tree</field>
           <field name="name">contract_agreement_list</field>
       </record>
-    </data>
+  </data>
 </tryton>
