@@ -127,7 +127,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         'payment_frequency')
     def on_change_with_first_payment_date(self):
         if self.funds_release_date and self.payment_frequency:
-            return coop_date.add_duration(self.funds_release_date, 1,
+            return coop_date.add_duration(self.funds_release_date,
                 self.payment_frequency)
 
     def get_currency(self):
@@ -429,8 +429,8 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             frequency = self.loan.payment_frequency
         else:
             frequency = Transaction().context.get('payment_frequency')
-        return coop_date.add_duration(self.start_date, self.number_of_payments,
-            frequency)
+        return coop_date.get_end_of_period(self.start_date, frequency,
+            self.number_of_payments)
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):

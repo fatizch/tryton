@@ -162,3 +162,7 @@ class ExtraPremium:
             return u'%s ‰' % coop_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
         return super(ExtraPremium, self).get_rec_name(name)
+
+    @fields.depends('capital_per_mil_rate')
+    def on_change_with_rec_name(self, name=None):
+        return super(ExtraPremium, self).on_change_with_rec_name(name)

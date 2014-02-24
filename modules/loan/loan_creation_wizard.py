@@ -46,7 +46,7 @@ class LoanCreate(model.CoopWizard):
             'currency_symbol': contract.currency.symbol,
             'funds_release_date': contract.start_date,
             'first_payment_date': coop_date.add_duration(
-                contract.start_date, 1, 'month')
+                contract.start_date, 'month')
             }
 
     def default_loan_step_increments(self, values):

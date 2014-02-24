@@ -232,9 +232,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
                 and self.with_revaluation):
             res = datetime.date(from_date.year,
                 self.revaluation_date.month, self.revaluation_date.day)
-            res = coop_date.add_duration(res, -1, 'day')
+            res = coop_date.add_duration(res, 'day', -1)
             if res < from_date:
-                    res = coop_date.add_duration(res, 1, 'year')
+                    res = coop_date.add_duration(res, 'year')
         else:
             return to_date
 
