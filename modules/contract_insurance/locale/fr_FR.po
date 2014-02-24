@@ -906,7 +906,7 @@ msgstr "Elément Couvert"
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,hide_covered_element:"
 msgid "Hide Covered Element"
-msgstr ""
+msgstr "Cacher l'élement couvert"
 
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,possible_covered_elements:"
