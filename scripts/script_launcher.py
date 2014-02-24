@@ -509,6 +509,10 @@ if __name__ == '__main__':
                     'conf', 'py_scripts.conf'), 'r') as fconf:
                 config.readfp(fconf)
 
+    work_data = init_work_data(config)
+    possible_modules = os.listdir(os.path.join(work_data['runtime_dir'],
+            'coopbusiness', 'modules')) + ['all']
+
     # Main parser
     parser = argparse.ArgumentParser(description='Launch utilitary scripts')
     subparsers = parser.add_subparsers(title='Subcommands',
@@ -536,7 +540,7 @@ if __name__ == '__main__':
     parser_database.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
     parser_database.add_argument('--module', '-m', help='Module name',
-        default='all', type=str)
+        default='all', type=str, choices=possible_modules)
     parser_database.add_argument('--test-case', '-t', help='Test case to run',
         default='all')
 
@@ -556,7 +560,7 @@ if __name__ == '__main__':
     parser_unittests = subparsers.add_parser('test', help='Test related '
         'actions')
     parser_unittests.add_argument('--module', '-m', default='all',
-        help='Module to unittest', nargs='+')
+        help='Module to unittest', nargs='+', choices=possible_modules)
     parser_unittests.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
     parser_unittests.add_argument('--with-test-cases', '-t', help='Allow test '
@@ -580,7 +584,6 @@ if __name__ == '__main__':
 
     argcomplete.autocomplete(parser)
     arguments = parser.parse_args()
-    work_data = init_work_data(config)
 
     if arguments.command == 'start':
         start(arguments, config, work_data)
