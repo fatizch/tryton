@@ -71,8 +71,7 @@ class Many2One(tryton_fields.Many2One):
             on_change=None, on_change_with=None, depends=None,
             context=None, loading='eager'):
         if ondelete is None:
-            logging.getLogger('modules').warning('Ondelete is not explicitely '
-                'set for field %s' % string)
+            self._on_delete_not_set = True
             ondelete = 'SET NULL'
         return super(Many2One, self).__init__(model_name, string, left, right,
             ondelete, datetime_field, help, required, readonly, domain, states,
