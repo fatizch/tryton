@@ -1,7 +1,6 @@
 #-*- coding:utf-8 -*-
 import datetime
 import unittest
-from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
 
@@ -34,11 +33,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
         party.is_person = True
         party.name = 'DOE'
         party.first_name = 'John'
-        party.birth_date = datetime.date.today() + relativedelta(years=-39)
+        party.birth_date = datetime.date(1980, 5, 30)
         party.gender = 'male'
         party.save()
 
-        party, = self.Party.search([('name', '=', 'DOE')])
+        party = self.Party.search([('name', '=', 'DOE')])[0]
         self.assert_(party.id)
 
 
