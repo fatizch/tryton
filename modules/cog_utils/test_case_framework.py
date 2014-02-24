@@ -328,6 +328,8 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     @classmethod
     def translate_this(cls, msg_id, module_name):
+        if cls.get_language().code == 'en_US':
+            return msg_id
         cls.load_resources(module_name)
         return cls._loaded_resources[module_name]['translations'][msg_id]
 
