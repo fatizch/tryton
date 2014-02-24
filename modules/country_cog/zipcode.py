@@ -14,7 +14,8 @@ class ZipCode(model.CoopSQL, model.CoopView):
 
     zip = fields.Char('Zip', required=True, select=True)
     city = fields.Char('City', required=True, select=True)
-    country = fields.Many2One('country.country', 'Country', required=True)
+    country = fields.Many2One('country.country', 'Country', required=True,
+        ondelete='CASCADE')
 
     def get_rec_name(self, name=None):
         return '%s %s' % (self.zip, self.city)

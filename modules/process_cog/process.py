@@ -62,13 +62,13 @@ class ProcessTransition(model.CoopSQL):
         domain=[
             ('kind', '=', 'calculated'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
-                'on_model'))])
+                'on_model'))], ondelete='RESTRICT')
     choice_if_false = fields.Many2One('process.transition',
         'Transition if False', states={
             'invisible': Eval('kind') != 'choice'}, domain=[
             ('kind', '=', 'calculated'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
-                'on_model'))])
+                'on_model'))], ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -153,11 +153,11 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 
     __name__ = 'process.log'
 
-    user = fields.Many2One('res.user', 'User')
-    from_state = fields.Many2One(
-        'process-process.step', 'From State')
-    to_state = fields.Many2One(
-        'process-process.step', 'To State', select=True)
+    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
+    from_state = fields.Many2One('process-process.step', 'From State',
+        ondelete='RESTRICT')
+    to_state = fields.Many2One('process-process.step', 'To State', select=True,
+        ondelete='RESTRICT')
     start_time = fields.DateTime('Start Time')
     end_time = fields.DateTime('End Time')
     description = fields.Text('Description')
@@ -621,7 +621,8 @@ class ViewDescription(model.CoopSQL, model.CoopView):
 
     __name__ = 'ir.ui.view.description'
 
-    the_view = fields.Many2One('ir.ui.view', 'View', states={'readonly': True})
+    the_view = fields.Many2One('ir.ui.view', 'View', states={'readonly': True},
+        ondelete='SET NULL')
     view_name = fields.Char('View Name', required=True,
         states={'readonly': Eval('id', 0) > 0},
         depends=['view_name', 'view_model'])
@@ -649,7 +650,7 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             }, depends=['view_kind', 'input_mode'])
     view_content = fields.Text('View Content')
     view_model = fields.Many2One('ir.model', 'View Model', required=True,
-        states={'readonly': Eval('id', 0) > 0})
+        states={'readonly': Eval('id', 0) > 0}, ondelete='RESTRICT')
     for_step = fields.Many2One('process.step', 'For Step', ondelete='CASCADE')
     field_childs = fields.Selection('get_field_childs', 'Children field',
         depends=['view_model'], states={
@@ -825,7 +826,7 @@ class ProcessStep(model.CoopSQL):
     main_model = fields.Many2One('ir.model', 'Main Model', domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework'),
-            ], depends=['processes'], required=True)
+            ], depends=['processes'], required=True, ondelete='RESTRICT')
 
     @classmethod
     def _export_keys(cls):

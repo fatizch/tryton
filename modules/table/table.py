@@ -498,8 +498,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 class TableCell(ModelSQL, ModelView):
     "Cell"
     __name__ = 'table.cell'
-    definition = fields.Many2One(
-        'table', 'Definition',
+    definition = fields.Many2One('table', 'Definition', ondelete='CASCADE',
         required=True)
     value = fields.Char('Value')
 
@@ -905,8 +904,7 @@ class Table2D(ModelSQL, ModelView):
     "Table 2D"
     __name__ = 'table.2d'
 
-    row = fields.Many2One(
-        'table.dimension.value', 'Row',
+    row = fields.Many2One('table.dimension.value', 'Row', ondelete='CASCADE',
         readonly=True)
 
     @classmethod

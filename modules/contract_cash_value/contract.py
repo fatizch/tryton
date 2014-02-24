@@ -23,7 +23,7 @@ class CashValueCollection(model.CoopView, model.CoopSQL):
     contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     collection = fields.Many2One('collection', 'Collection',
-        states={'required': True})
+        ondelete='CASCADE', states={'required': True})
 
     def init_dict_for_rule_engine(self, the_dict):
         the_dict['cash_value_collection'] = self

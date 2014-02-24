@@ -15,9 +15,10 @@ class HealthPartyComplement:
     department = fields.Function(
         fields.Char('Department'),
         'get_department', 'set_void')
-    hc_system = fields.Many2One('health.care_system', 'Health Care System')
+    hc_system = fields.Many2One('health.care_system', 'Health Care System',
+        ondelete='RESTRICT')
     insurance_fund = fields.Many2One('health.insurance_fund', 'Insurance Fund',
-        domain=[
+        ondelete='RESTRICT', domain=[
             [If(
                     ~Eval('department'),
                     (),

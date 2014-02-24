@@ -58,13 +58,14 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     losses = fields.One2Many('claim.loss', 'claim', 'Losses',
         states={'readonly': Eval('status') == 'closed'})
     documents = fields.One2Many('document.request', 'needed_by', 'Documents')
-    company = fields.Many2One('company.company', 'Company')
+    company = fields.Many2One('company.company', 'Company',
+        ondelete='RESTRICT')
     #The Main contract is only used to ease the declaration process for 80%
     #of the claims where there is only one contract involved. This link should
     #not be used for other reason than initiating sub elements on claim.
     #Otherwise use claim.get_contract()
     main_contract = fields.Many2One('contract', 'Main Contract',
-        domain=[('id', 'in', Eval('possible_contracts')),
+        ondelete='RESTRICT', domain=[('id', 'in', Eval('possible_contracts')),
             ('company', '=', Eval('company'))],
         depends=['possible_contracts', 'company'])
     possible_contracts = fields.Function(
@@ -307,8 +308,7 @@ class Loss(model.CoopSQL, model.CoopView):
             'required': Bool(Eval('with_end_date')),
             }, depends=['with_end_date'],)
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
-        ondelete='RESTRICT',
-        domain=[
+        ondelete='RESTRICT', domain=[
             If(~~Eval('_parent_claim', {}).get('main_contract'),
                 ('id', 'in', Eval('possible_loss_descs')), ())
             ],
@@ -702,7 +702,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             'readonly': Or(~Eval('manual'), Eval('status') == 'paid')},
         depends=['local_currency_digits'])
     local_currency = fields.Many2One('currency.currency', 'Local Currency',
-        states={
+        ondelete='RESTRICT', states={
             'invisible': ~Eval('local_currency'),
             'readonly': Or(~Eval('manual'), Eval('status') == 'paid')})
     local_currency_digits = fields.Function(
@@ -894,9 +894,8 @@ class ClaimIndemnificationValidateDisplay(model.CoopView):
     indemnification_displayer = fields.One2Many(
         'claim.indemnification', '', 'Indemnification',
         states={'readonly': True})
-    indemnification = fields.Many2One(
-        'claim.indemnification', 'Indemnification',
-        states={'invisible': True, 'readonly': True})
+    indemnification = fields.Many2One('claim.indemnification',
+        'Indemnification', states={'invisible': True, 'readonly': True})
     amount = fields.Numeric(
         'Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),

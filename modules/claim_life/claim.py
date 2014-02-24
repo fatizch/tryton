@@ -29,7 +29,7 @@ class Loss:
                 ('id', 'in', Eval('possible_covered_persons')),
                 ()
                 )
-            ], depends=['possible_covered_persons'])
+            ], ondelete='RESTRICT', depends=['possible_covered_persons'])
 
     @classmethod
     def super(cls):

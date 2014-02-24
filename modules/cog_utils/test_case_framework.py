@@ -105,7 +105,8 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     __name__ = 'ir.test_case'
 
-    language = fields.Many2One('ir.lang', 'Test Case Language')
+    language = fields.Many2One('ir.lang', 'Test Case Language',
+        ondelete='RESTRICT')
 
     @classmethod
     def check_xml_record(cls, records, values):

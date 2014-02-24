@@ -159,7 +159,7 @@ class DeductibleDuration(model.CoopSQL, model.CoopView):
     __name__ = 'offered.deductible.rule.duration'
 
     deductible_rule = fields.Many2One('offered.deductible.rule',
-        'Deductible Rule')
+        'Deductible Rule', ondelete='RESTRICT')
     duration = fields.Integer('Duration', required=True)
     duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         required=True)

@@ -224,7 +224,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
 
     __name__ = 'rule_engine.log'
 
-    user = fields.Many2One('res.user', 'User')
+    user = fields.Many2One('res.user', 'User', ondelete='SET NULL')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
     errors = fields.Text('Errors', states={'readonly': True})
     warnings = fields.Text('Warnings', states={'readonly': True})
@@ -559,7 +559,8 @@ class Rule(ModelView, ModelSQL):
     __name__ = 'rule_engine'
 
     name = fields.Char('Name', required=True)
-    context = fields.Many2One('rule_engine.context', 'Context', required=True)
+    context = fields.Many2One('rule_engine.context', 'Context', required=True,
+        ondelete='RESTRICT')
     code = fields.Text('Code')
     data_tree = fields.Function(
         fields.Text('Data Tree'),
@@ -981,7 +982,7 @@ class RuleFunction(ModelView, ModelSQL):
     rule = fields.Many2One('rule_engine', 'Rule', states={
             'invisible': Eval('type') != 'rule',
             'required': Eval('type') == 'rule'},
-        depends=['rule'])
+        depends=['rule'], ondelete='RESTRICT')
     name = fields.Char('Name', states={
             'invisible': ~Eval('type').in_(['function']),
             'required': Eval('type').in_(['function'])},
@@ -994,7 +995,8 @@ class RuleFunction(ModelView, ModelSQL):
             ('folder', 'Folder'),
             ('function', 'Function')],
         'Type', required=True)
-    parent = fields.Many2One('rule_engine.function', 'Parent')
+    parent = fields.Many2One('rule_engine.function', 'Parent',
+        ondelete='SET NULL')
     children = fields.One2Many('rule_engine.function', 'parent', 'Children')
     translated_technical_name = fields.Char('Translated technical name',
         states={
@@ -1003,7 +1005,8 @@ class RuleFunction(ModelView, ModelSQL):
         depends=['type'])
     fct_args = fields.Char('Function Arguments',
         states={'invisible': Eval('type') != 'function'})
-    language = fields.Many2One('ir.lang', 'Language', required=True)
+    language = fields.Many2One('ir.lang', 'Language', required=True,
+        ondelete='RESTRICT',)
     long_description = fields.Text('Long Description')
     full_path = fields.Function(
         fields.Char('Full Path'),

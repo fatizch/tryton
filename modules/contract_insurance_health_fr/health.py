@@ -24,7 +24,8 @@ class InsuranceFund(model.CoopSQL, model.CoopView):
     code = fields.Char('Code')
     name = fields.Char('Name')
     department = fields.Char('Department')
-    hc_system = fields.Many2One('health.care_system', 'Health Care System')
+    hc_system = fields.Many2One('health.care_system', 'Health Care System',
+        ondelete='CASCADE')
 
     @classmethod
     def search_from_zipcode_and_hc_system(cls, zipcode, hc_system):

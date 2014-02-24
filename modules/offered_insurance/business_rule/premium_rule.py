@@ -52,9 +52,10 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
     frequency = fields.Selection(PRICING_FREQUENCY, 'Rate Frequency',
         required=True)
     specific_combination_rule = fields.Many2One('rule_engine',
-        'Combination Rule', states={'invisible': STATE_SIMPLE})
+        'Combination Rule', states={'invisible': STATE_SIMPLE},
+        ondelete='RESTRICT')
     sub_item_specific_combination_rule = fields.Many2One('rule_engine',
-        'Sub Item Combination Rule')
+        'Sub Item Combination Rule', ondelete='RESTRICT')
     basic_price = fields.Function(
         fields.Numeric('Amount', states={'invisible': STATE_ADVANCED}, digits=(
                 16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG))),
@@ -313,7 +314,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             ('global', 'Global'),
             ('sub_item', 'Covered Item'),
             ], 'Rated Object Level', required=True)
-    rule = fields.Many2One('rule_engine', 'Rule Engine',
+    rule = fields.Many2One('rule_engine', 'Rule Engine', ondelete='CASCADE',
         depends=['config_kind', 'kind'], states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),

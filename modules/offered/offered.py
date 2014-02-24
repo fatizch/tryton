@@ -49,7 +49,7 @@ class Templated(object):
     __name__ = 'offered.template'
 
     template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))], depends=['id'])
+        domain=[('id', '!=', Eval('id'))], depends=['id'], ondelete='RESTRICT')
     template_behaviour = fields.Selection([
             ('', ''),
             ('pass', 'Add'),
@@ -350,7 +350,8 @@ class Product(model.CoopSQL, Offered):
     ordered_coverages = fields.One2Many('offered.product-option.description',
         'product', 'Ordered Coverages', order=[('order', 'ASC')],
         states={'invisible': ~Eval('change_coverages_order')})
-    currency = fields.Many2One('currency.currency', 'Currency', required=True)
+    currency = fields.Many2One('currency.currency', 'Currency', required=True,
+        ondelete='RESTRICT')
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
         ondelete='RESTRICT', required=True)
@@ -540,7 +541,8 @@ class OptionDescription(model.CoopSQL, Offered):
             ('currency', '=', Eval('currency')),
             ('company', '=', Eval('company'))],
         depends=['currency', 'company'])
-    currency = fields.Many2One('currency.currency', 'Currency', required=True)
+    currency = fields.Many2One('currency.currency', 'Currency', required=True,
+        ondelete='RESTRICT')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
     is_package = fields.Boolean('Package')
