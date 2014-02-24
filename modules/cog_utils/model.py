@@ -1,3 +1,4 @@
+import logging
 import copy
 import time
 import datetime
@@ -56,6 +57,16 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
     def __setup__(cls):
         super(CoopSQL, cls).__setup__()
         cls.__rpc__.update({'extract_object': RPC(instantiate=0)})
+
+    @classmethod
+    def __post_setup__(cls):
+        super(CoopSQL, cls).__post_setup__()
+        for field_name, field in cls._fields.iteritems():
+            if not isinstance(field, fields.Many2One):
+                continue
+            if getattr(field, '_on_delete_not_set', None):
+                logging.getLogger('modules').warning('Ondelete not set for '
+                    'field %s on model %s' % (field_name, cls.__name__))
 
     @classmethod
     def delete(cls, instances):

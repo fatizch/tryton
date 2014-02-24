@@ -11,4 +11,5 @@ __all__ = [
 class TestCaseModel:
     __name__ = 'ir.test_case'
 
-    currency = fields.Many2One('currency.currency', 'Main Currency')
+    currency = fields.Many2One('currency.currency', 'Main Currency',
+        ondelete='RESTRICT')

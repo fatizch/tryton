@@ -31,7 +31,7 @@ class DistributionNetwork:
             'All Comercial Products'),
         'get_all_commercial_products_id')
     company = fields.Many2One('company.company', 'Company',
-            depends=['commercial_products'])
+        ondelete='RESTRICT', depends=['commercial_products'])
 
     def get_parent_com_products_id(self, name):
         ComProduct = Pool().get('distribution.commercial_product')
@@ -63,7 +63,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     product = fields.Many2One('offered.product', 'Technical Product', domain=[
             ('start_date', '<=', Eval('start_date')),
             ('company', '=', Eval('context', {}).get('company'))],
-        depends=['start_date'], required=True)
+        depends=['start_date'], required=True, ondelete='RESTRICT')
     dist_networks = fields.Many2Many('distribution.network-commercial_product',
         'com_product', 'dist_network', 'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)

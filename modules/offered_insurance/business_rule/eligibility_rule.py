@@ -23,7 +23,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
             'required': Eval('offered_kind') == 'offered.option.description',
             })
     sub_elem_rule = fields.Many2One('rule_engine', 'Sub Elem Rule Engine',
-        depends=['config_kind'], states={
+        depends=['config_kind'], ondelete='RESTRICT', states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
     sub_elem_rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',

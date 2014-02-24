@@ -24,7 +24,7 @@ class OptionDescription:
 
     insurer = fields.Many2One('insurer', 'Insurer', states={
             'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
-            }, depends=['is_package'])
+            }, depends=['is_package'], ondelete='RESTRICT')
     family = fields.Selection([('', '')], 'Family', states={
             'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
             'required': And(~Eval('is_package'), offered.IS_INSURANCE),
@@ -33,7 +33,7 @@ class OptionDescription:
         states={
             'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
             'required': And(~Eval('is_package'), offered.IS_INSURANCE),
-            }, depends=['is_package'])
+            }, depends=['is_package'], ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):

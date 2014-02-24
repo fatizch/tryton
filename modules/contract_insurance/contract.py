@@ -320,7 +320,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     covered_data = fields.One2Many('contract.covered_data',
         'covered_element', 'Covered Element Data')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
-    parent = fields.Many2One('contract.covered_element', 'Parent')
+    parent = fields.Many2One('contract.covered_element', 'Parent',
+        ondelete='CASCADE')
     sub_covered_elements = fields.One2Many('contract.covered_element',
         'parent', 'Sub Covered Elements',
         states={'invisible': Eval('item_kind') == 'person'},
@@ -699,7 +700,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
             'invisible': ~Eval('possible_deductible_duration'),
             # 'required': ~~Eval('possible_deductible_duration')
             }, domain=[('id', 'in', Eval('possible_deductible_duration'))],
-        depends=['possible_deductible_duration'])
+        depends=['possible_deductible_duration'], ondelete='RESTRICT')
     possible_deductible_duration = fields.Function(
         fields.Many2Many(
             'offered.deductible.rule.duration', None, None,

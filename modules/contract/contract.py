@@ -207,12 +207,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         # states={'invisible': ~Eval('extra_data')
         )
     # TODO replace single contact by date versionned list
-    contact = fields.Many2One('party.party', 'Contact')
+    contact = fields.Many2One('party.party', 'Contact', ondelete='RESTRICT')
     appliable_conditions_date = fields.Date('Appliable Conditions Date')
     documents = fields.One2Many('document.request', 'needed_by', 'Documents',
         size=1)
     company = fields.Many2One('company.company', 'Company', required=True,
-        select=True)
+        select=True, ondelete='RESTRICT')
     addresses = fields.One2Many('contract.address', 'contract',
         'Addresses', context={
             'policy_owner': Eval('current_policy_owner'),
@@ -633,7 +633,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    address = fields.Many2One('party.address', 'Address',
+    address = fields.Many2One('party.address', 'Address', ondelete='RESTRICT',
         domain=[('party', '=', Eval('policy_owner'))],
         depends=['policy_owner'])
     policy_owner = fields.Function(

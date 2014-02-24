@@ -50,7 +50,7 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
     salary_range = fields.Many2One('salary_range', 'Salary Range',
         ondelete='RESTRICT', states={'invisible': ~Eval('salary_range')})
     fare_class = fields.Many2One('fare_class', 'Fare Class',
-        states={'invisible': ~Eval('fare_class_group')})
+        ondelete='RESTRICT', states={'invisible': ~Eval('fare_class_group')})
     index = fields.Many2One('table', 'Index',
         states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
     index_value = fields.Function(
@@ -196,7 +196,7 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
-    move = fields.Many2One('account.move', 'Move',
+    move = fields.Many2One('account.move', 'Move', ondelete='RESTRICT',
         states={'invisible': ~Eval('move')})
     amount_paid = fields.Function(fields.Numeric('Amount Paid'),
         'get_amount_paid')
@@ -276,7 +276,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
     end_date = fields.Date('End Date')
     base = fields.Numeric('Base', states={'readonly': ~~Eval('childs')})
     rate_line = fields.Many2One('contract.premium_rate.line',
-        'Premium Rate Line')
+        'Premium Rate Line', ondelete='CASCADE')
     amount = fields.Numeric('Amount', states={'readonly': ~~Eval('childs')})
     client_amount = fields.Numeric('Client Amount', states={
             'readonly': ~~Eval('childs')})

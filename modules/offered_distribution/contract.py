@@ -14,7 +14,7 @@ class Contract:
 
     dist_network = fields.Many2One('distribution.network',
         'Distribution Network', domain=[('company', '=', Eval('company'))],
-        depends=['company'])
+        depends=['company'], ondelete='RESTRICT')
     com_product = fields.Function(
         fields.Many2One('distribution.commercial_product',
             'Commercial Product'),

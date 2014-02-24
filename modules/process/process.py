@@ -80,7 +80,7 @@ class Process(ModelSQL, ModelView):
         # This model must be workflow compatible
         domain=[('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')],
-        required=True)
+        required=True, ondelete='RESTRICT')
     all_steps = fields.One2Many('process-process.step', 'process', 'All Steps',
         order=[('order', 'ASC')], states={
             'invisible': Bool(Eval('display_steps_without_status'))})
@@ -743,9 +743,9 @@ class ProcessStep(ModelSQL, ModelView):
     colspan = fields.Integer('View columns', required=True)
     processes = fields.One2Many('process-process.step', 'step', 'Transitions')
     entering_wizard = fields.Many2One('ir.action', 'Entering Wizard', domain=[
-            ('type', '=', 'ir.action.wizard')])
+            ('type', '=', 'ir.action.wizard')], ondelete='RESTRICT')
     exiting_wizard = fields.Many2One('ir.action', 'Exiting Wizard', domain=[
-            ('type', '=', 'ir.action.wizard')])
+            ('type', '=', 'ir.action.wizard')], ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):

@@ -30,8 +30,9 @@ class Collection(model.CoopSQL, model.CoopView):
     kind = fields.Selection(COLLECTION_KIND, 'Kind',
         states={'readonly': True})
     assignment_move = fields.Many2One('account.move', 'Assignment Move',
+        states={'readonly': True}, ondelete='RESTRICT')
+    party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         states={'readonly': True})
-    party = fields.Many2One('party.party', 'Party', states={'readonly': True})
     create_user = fields.Function(
         fields.Many2One('res.user', 'Created by', states={'readonly': True}),
         'get_create_user')

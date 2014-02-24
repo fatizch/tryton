@@ -79,15 +79,15 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
     address = fields.Many2One('party.address', 'Address',
         domain=[('party', '=', Eval('party'))], depends=['party'],
-        states={'invisible': Eval('media') != 'mail'})
-    user = fields.Many2One('res.user', 'User')
+        states={'invisible': Eval('media') != 'mail'}, ondelete='RESTRICT')
+    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
     #in case the user is deleted, we also keep tracks of his name
     user_name = fields.Char('User Name')
     contact_datetime = fields.DateTime('Date and Time')
     comment = fields.Text('Comment')
     attachment = fields.Many2One('ir.attachment', 'Attachment',
         domain=[('resource', '=', Eval('for_object'))], depends=['for_object'],
-        context={'resource': Eval('for_object')})
+        context={'resource': Eval('for_object')}, ondelete='RESTRICT')
     for_object = fields.Function(
         fields.Char('For Object', states={'invisible': True}),
         'on_change_with_for_object')
