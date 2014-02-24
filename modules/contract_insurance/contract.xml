@@ -96,9 +96,8 @@
         <!-- ########### Menu ########### -->
         <!-- ############################################################ -->
       <menuitem name="Contract" id="menu_contract" sequence="11"/>
-      <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual"
-        sequence="10"/>
-        <menuitem parent="menu_individual" sequence="1" id="menu_contract_form" icon="tryton-list" action="contract.act_contract_form"/>
+      <menuitem parent="menu_contract" name="Individual Policy" id="menu_individual" sequence="10" icon="tryton-list"/>
+        <menuitem parent="menu_individual" sequence="1" id="menu_contract_form" icon="contract" action="contract.act_contract_form"/>
         <!-- ################# -->
         <!-- # Extra Premium # -->
         <!-- ################# -->

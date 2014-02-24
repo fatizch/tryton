@@ -557,6 +557,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         result['end_date'] = self.end_date
         return result
 
+    @classmethod
+    def search_global(cls, text):
+        for id_, rec_name, icon in super(Contract, cls).search_global(text):
+            icon = icon or 'contract'
+            yield id_, rec_name, icon
+
 
 class ContractOption(model.CoopSQL, Subscribed):
     'Contract Option'
