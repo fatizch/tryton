@@ -1,12 +1,15 @@
 from trytond.pool import Pool
+from trytond.pyson import Eval
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import coop_date, model
+from trytond.modules.cog_utils import coop_date, model, fields
 
 
 __all__ = [
     'LoanCreate',
+    'LoanSharePropagate',
+    'LoanSharePropagateParameters',
     ]
 
 
@@ -68,3 +71,85 @@ class LoanCreate(model.CoopWizard):
     def transition_save_loan(self):
         self.loan_step_payments.save()
         return 'end'
+
+
+class LoanSharePropagate(model.CoopWizard):
+    'Loan Share Propagate'
+
+    __name__ = 'loan.loan_share_propagate'
+
+    start_state = 'parameters'
+    parameters = StateView('loan.loan_share_propagate.parameters',
+        'loan.loan_share_propagate_parameters_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Propagate', 'propagate', 'tryton-go-next', default=True),
+            ])
+    propagate = StateTransition()
+
+    def default_parameters(self, values):
+        pool = Pool()
+        Contract = pool.get('contract')
+        CoveredElement = pool.get('contract.covered_element')
+        LoanShare = pool.get('loan.share')
+        active_model = Transaction().context.get('active_model')
+        id = Transaction().context.get('active_id')
+        covered_element = None
+        share = 1
+        loan = None
+        if active_model == 'contract':
+            contract = Contract(id)
+        elif active_model == 'contract.covered_element':
+            covered_element = CoveredElement(id)
+            contract = covered_element.contract
+        elif active_model == 'loan.share':
+            loan_share = LoanShare(id)
+            covered_element = loan_share.covered_data.covered_element
+            contract = covered_element.contract
+            share = loan_share.share
+            loan = loan_share.loan
+        return {
+            'contract': contract.id,
+            'possible_loans': [x.id for x in contract.loans],
+            'loans': [loan.id] if loan else [],
+            'possible_covered_elements': [x.id for x in
+                contract.covered_elements],
+            'covered_elements': [covered_element.id]
+                if covered_element else [],
+            'possible_options': [x.id for x in contract.options],
+            'share': share,
+            }
+
+    def transition_propagate(self):
+        for covered_element in self.parameters.covered_elements:
+            for covered_data in [x for x in covered_element.covered_data
+                    if x.option in self.parameters.options]:
+                for loan_share in [x for x in covered_data.loan_shares
+                        if x.loan in self.parameters.loans]:
+                    loan_share.share = self.parameters.share
+                    loan_share.save()
+        return 'end'
+
+
+class LoanSharePropagateParameters(model.CoopView):
+    'Parameters'
+
+    __name__ = 'loan.loan_share_propagate.parameters'
+
+    share = fields.Numeric('Share', digits=(16, 4))
+    contract = fields.Many2One('contract', 'Contract',
+        states={'invisible': True})
+    loans = fields.Many2Many('loan', None, None, 'Loans',
+        domain=[('id', 'in', Eval('possible_loans'))],
+            depends=['possible_loans'], required=True)
+    possible_loans = fields.Many2Many('loan', None, None, 'Possible Loans')
+    covered_elements = fields.Many2Many('contract.covered_element', None, None,
+        'Covered Elements',
+        domain=[('id', 'in', Eval('possible_covered_elements'))],
+        depends=['possible_covered_elements'], required=True)
+    possible_covered_elements = fields.Many2Many('contract.covered_element',
+        None, None, 'Possible Covered Elements')
+    options = fields.Many2Many('contract.option', None, None, 'Options',
+        domain=[('id', 'in', Eval('possible_options'))],
+        depends=['possible_options'], required=True)
+    possible_options = fields.Many2Many('contract.option', None, None,
+        'Possible Options')

@@ -27,7 +27,10 @@ def register():
         LoanPayment,
         # From Billing
         BillingPremium,
+        #From loan_creation_wizard
+        LoanSharePropagateParameters,
         module='loan', type_='model')
     Pool.register(
         LoanCreate,
+        LoanSharePropagate,
         module='loan', type_='wizard')

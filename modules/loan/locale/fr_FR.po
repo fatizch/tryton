@@ -26,6 +26,10 @@ msgctxt "field:contract,loans_ordered:"
 msgid "Loans"
 msgstr "Prêts"
 
+msgctxt "field:contract,multi_mixed_view:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
 msgctxt "field:contract-loan,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -86,6 +90,10 @@ msgctxt "field:contract.covered_data,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"
 
+msgctxt "field:contract.covered_data,multi_mixed_view:"
+msgid "Loan Shares"
+msgstr "Quotités"
+
 msgctxt "field:contract.covered_data,person:"
 msgid "Person"
 msgstr "Personne Physique"
@@ -93,6 +101,18 @@ msgstr "Personne Physique"
 msgctxt "field:contract.covered_data.extra_premium,capital_per_mil_rate:"
 msgid "Rate on Capital"
 msgstr "Pourmillage"
+
+msgctxt "field:contract.covered_data.extra_premium,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:contract.covered_data.extra_premium,duration_unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
+
+msgctxt "field:contract.covered_data.extra_premium,is_loan:"
+msgid "Is Loan"
+msgstr "Emprunteur"
 
 msgctxt "field:contract.option,is_loan:"
 msgid "Is Loan"
@@ -176,7 +196,7 @@ msgstr "Etendre Arbre"
 
 msgctxt "field:loan,number_of_payments:"
 msgid "Number of Payments"
-msgstr "Nombre d'Echéances
+msgstr "Nombre d'Echéance"
 
 msgctxt "field:loan,outstanding_capital:"
 msgid "Outstanding Capital"
@@ -294,6 +314,47 @@ msgctxt "field:loan.increment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:loan.loan_share_propagate.parameters,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:loan.loan_share_propagate.parameters,covered_elements:"
+msgid "Covered Elements"
+msgstr "Eléments Couverts"
+
+msgctxt "field:loan.loan_share_propagate.parameters,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:loan.loan_share_propagate.parameters,loans:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "field:loan.loan_share_propagate.parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:loan.loan_share_propagate.parameters,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt ""
+"field:loan.loan_share_propagate.parameters,possible_covered_elements:"
+msgid "Possible Covered Elements"
+msgstr "Elements Couverts Possibles"
+
+msgctxt "field:loan.loan_share_propagate.parameters,possible_loans:"
+msgid "Possible Loans"
+msgstr "Prêts Possibles"
+
+msgctxt "field:loan.loan_share_propagate.parameters,possible_options:"
+msgid "Possible Options"
+msgstr "Options Possibles"
+
+msgctxt "field:loan.loan_share_propagate.parameters,share:"
+msgid "Share"
+msgstr "Quotité"
+
 msgctxt "field:loan.payment,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -402,6 +463,10 @@ msgctxt "field:loan.share,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:loan.share,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:loan.share,id:"
 msgid "ID"
 msgstr "ID"
@@ -450,6 +515,10 @@ msgctxt "field:offered.option.description,is_loan:"
 msgid ""
 msgstr " "
 
+msgctxt "field:offered.product,calculate_each_payment:"
+msgid "Calculate each payment"
+msgstr "Calculer à Chaque Echéance"
+
 msgctxt "field:offered.product,is_loan:"
 msgid ""
 msgstr " "
@@ -462,25 +531,25 @@ msgctxt "model:ir.action,name:launch_loan_creation_wizard"
 msgid "Loan Create"
 msgstr "Création du Prêt"
 
+msgctxt "model:ir.action,name:launch_loan_share_propagation_wizard"
+msgid "Loan Share Propagation"
+msgstr "Propagation Quotité"
+
+msgctxt "model:ir.action,name:propagate_loan_share"
+msgid "Propagate Loan Share"
+msgstr "Propager Quotité"
+
 msgctxt "model:loan,name:"
 msgid "Loan"
 msgstr "Prêt"
 
-msgctxt "model:loan.create.amortization_table,name:"
-msgid "Amortization Table"
-msgstr "Table d'Amortissement"
-
-msgctxt "model:loan.create.increments,name:"
-msgid "Loan Create Increments"
-msgstr "Paliers"
-
-msgctxt "model:loan.create.parameters,name:"
-msgid "Loan Create Parameters"
-msgstr "Paramètres du Prêt"
-
 msgctxt "model:loan.increment,name:"
 msgid "Loan Increment"
 msgstr "Palier"
+
+msgctxt "model:loan.loan_share_propagate.parameters,name:"
+msgid "Parameters"
+msgstr "Paramètres"
 
 msgctxt "model:loan.payment,name:"
 msgid "Loan Payment"
@@ -498,6 +567,14 @@ msgctxt "selection:contract.covered_data.extra_premium,calculation_kind:"
 msgid "Per mil capital"
 msgstr "Pourmillage"
 
+msgctxt "selection:contract.covered_data.extra_premium,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:contract.covered_data.extra_premium,duration_unit:"
+msgid "Year"
+msgstr "Année"
+
 msgctxt "selection:loan,defferal:"
 msgid ""
 msgstr " "
@@ -559,82 +636,6 @@ msgid "Quarter"
 msgstr "Trimestre"
 
 msgctxt "selection:loan,payment_frequency:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:loan,payment_frequency:"
-msgid "Year"
-msgstr "Année"
-
-msgctxt "selection:loan.create.parameters,defferal:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:loan.create.parameters,defferal:"
-msgid "Fully deferred"
-msgstr "Différé Total"
-
-msgctxt "selection:loan.create.parameters,defferal:"
-msgid "Partially Deferred"
-msgstr "Différé Partiel"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Adjustable Rate"
-msgstr "Taux Variable"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Balloon"
-msgstr "In Fine"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Fixed Rate"
-msgstr "Taux Fixe"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Graduated"
-msgstr "Prêt à Palier"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Interest Free Loan"
-msgstr "Taux Zéro"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Intermediate"
-msgstr "Prêt Relais"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Leasing"
-msgstr "Crédit Bail"
-
-msgctxt "selection:loan.create.parameters,kind:"
-msgid "Revolving"
-msgstr "Crédit Permanent"
-
-msgctxt "selection:loan.create.parameters,payment_frequency:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:loan.create.parameters,payment_frequency:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:loan.create.parameters,payment_frequency:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:loan.create.parameters,payment_frequency:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:loan.create.parameters,payment_frequency:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:loan.create.parameters,payment_frequency:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:loan.create.parameters,payment_frequency:"
 msgid "Year"
 msgstr "Année"
 
@@ -670,6 +671,10 @@ msgctxt "view:contract-loan:"
 msgid "Contract Loan Relation"
 msgstr "Relation Contrat Prêt"
 
+msgctxt "view:contract.covered_data.extra_premium:"
+msgid "‰"
+msgstr "‰"
+
 msgctxt "view:contract:"
 msgid "Create Loan"
 msgstr "Créer un prêt"
@@ -677,22 +682,6 @@ msgstr "Créer un prêt"
 msgctxt "view:contract:"
 msgid "Loans"
 msgstr "Prêts"
-
-msgctxt "view:loan.create.amortization_table:"
-msgid "Amortization Table"
-msgstr "Table d'Amortissement"
-
-msgctxt "view:loan.create.increments:"
-msgid "Increments"
-msgstr "Paliers"
-
-msgctxt "view:loan.create.parameters:"
-msgid "%"
-msgstr "%"
-
-msgctxt "view:loan.create.parameters:"
-msgid "Loan Create Parameters"
-msgstr "Paramètres du Prêt"
 
 msgctxt "view:loan.increment:"
 msgid "%"
@@ -702,13 +691,29 @@ msgctxt "view:loan.increment:"
 msgid "Loan Increments"
 msgstr "Paliers"
 
+msgctxt "view:loan.loan_share_propagate.parameters:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:loan.loan_share_propagate.parameters:"
+msgid "Propagate Loan Share"
+msgstr "Propager Quotité"
+
 msgctxt "view:loan.payment:"
 msgid "Loan Payment"
 msgstr "Echéance"
 
 msgctxt "view:loan.payment:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "view:loan.payment:"
 msgid "Total Interest"
 msgstr "Total Intérêts"
+
+msgctxt "view:loan.payment:"
+msgid "Total Principal"
+msgstr "Total Capital"
 
 msgctxt "view:loan.share:"
 msgid "%"
@@ -750,34 +755,42 @@ msgctxt "view:loan:"
 msgid "Loan Create Parameters"
 msgstr "Paramètres du Prêt"
 
-msgctxt "wizard_button:loan.create,amortization_table,cancel_loan:"
+msgctxt "wizard_button:loan.create,loan,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.create,amortization_table,increments:"
+msgctxt "wizard_button:loan.create,loan,update_loan:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:loan.create,loan_step_increments,create_payments:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:loan.create,loan_step_increments,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:loan.create,loan_step_increments,loan:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:loan.create,amortization_table,validate_loan:"
+msgctxt "wizard_button:loan.create,loan_step_payments,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:loan.create,loan_step_payments,loan_step_increments:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:loan.create,loan_step_payments,save_loan:"
 msgid "End"
 msgstr "Terminer"
 
-msgctxt "wizard_button:loan.create,increments,cancel_loan:"
+msgctxt "wizard_button:loan.loan_share_propagate,parameters,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.create,increments,create_payments:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt "wizard_button:loan.create,increments,loan_parameters:"
-msgid "Previous"
-msgstr "Précédent"
-
-msgctxt "wizard_button:loan.create,loan_parameters,cancel_loan:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:loan.create,loan_parameters,create_loan:"
-msgid "Next"
-msgstr "Suivant"
+msgctxt "wizard_button:loan.loan_share_propagate,parameters,propagate:"
+msgid "Propagate"
+msgstr "Propager"
