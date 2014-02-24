@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="task_menu_icon">
+            <field name="name">task_menu</field>
+            <field name="path">icons/task_menu.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="task_icon">
+            <field name="name">task</field>
+            <field name="path">icons/task.svg</field>
+        </record>
+    </data>
+</tryton>
