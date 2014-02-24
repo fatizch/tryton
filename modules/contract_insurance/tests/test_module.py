@@ -32,13 +32,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0001_testPersonCreation(self):
         party = self.Party()
         party.is_person = True
-        party.name = 'Toto'
-        party.first_name = 'titi'
+        party.name = 'DOE'
+        party.first_name = 'John'
         party.birth_date = datetime.date.today() + relativedelta(years=-39)
         party.gender = 'male'
         party.save()
 
-        party, = self.Party.search([('name', '=', 'Toto')])
+        party, = self.Party.search([('name', '=', 'DOE')])
         self.assert_(party.id)
 
 

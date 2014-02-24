@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If, In
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields, utils, coop_string
@@ -62,7 +62,9 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
 
     product = fields.Many2One('offered.product', 'Technical Product', domain=[
             ('start_date', '<=', Eval('start_date')),
-            ('company', '=', Eval('context', {}).get('company'))],
+            If(In('company', Eval('context', {})),
+                ('company', '=', Eval('context', {}).get('company')),
+                ('id', '>', 0))],
         depends=['start_date'], required=True, ondelete='RESTRICT')
     dist_networks = fields.Many2Many('distribution.network-commercial_product',
         'com_product', 'dist_network', 'Distribution Networks')
