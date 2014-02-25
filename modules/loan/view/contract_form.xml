@@ -12,4 +12,7 @@
             <field name="loans_ordered" colspan="4"/>
         </page>
     </xpath>
+    <xpath expr="//page[@id='cov_elements']" position="inside">
+        <field name="multi_mixed_view" group="covered_elements" mode="form" relation="loan.share" relation_field="covered_data"/>
+    </xpath>
 </data>
