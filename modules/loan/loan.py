@@ -399,6 +399,9 @@ class LoanShare(model.CoopSQL, model.CoopView):
     def get_rec_name(self, name):
         return '%s (%s%%)' % (self.loan.rec_name, self.share * 100)
 
+    def _expand_tree(self, name):
+        return True
+
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan Increment'

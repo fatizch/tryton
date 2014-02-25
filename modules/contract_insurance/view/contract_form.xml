@@ -8,9 +8,9 @@
   </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="before">
     <page string="Covered Elements" id="cov_elements" states="{'invisible': Eval('product_kind') != 'insurance'}">
-      <field name="covered_elements" mode="tree" view_ids="contract_insurance.covered_elements_clean_tree" group="covered_elements" xexpand="0" xfill="0"/>
-      <field name="covered_elements" mode="form" view_ids="contract_insurance.covered_element_view_form" relation="contract.covered_element" relation_field="contract" group="covered_elements"/>
-      <field name="covered_elements" mode="form" view_ids="contract_insurance.covered_data_view_form" relation="contract.covered_data" relation_field="covered_element" group="covered_elements"/>
+      <field name="multi_mixed_view" mode="tree" view_ids="contract_insurance.covered_elements_clean_tree" group="covered_elements" xexpand="0" xfill="0"/>
+      <field name="multi_mixed_view" mode="form" view_ids="contract_insurance.covered_element_view_form" relation="contract.covered_element" relation_field="contract" group="covered_elements"/>
+      <field name="multi_mixed_view" mode="form" view_ids="contract_insurance.covered_data_view_form" relation="contract.covered_data" relation_field="covered_element" group="covered_elements"/>
     </page>
   </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="after">
