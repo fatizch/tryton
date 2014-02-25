@@ -921,7 +921,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Integer('Duration'),
         'get_duration', 'setter_void')
     duration_unit = fields.Function(
-        fields.Selection([('month', 'Month'), ('year', 'Year')],
+        fields.Selection([('', ''), ('month', 'Month'), ('year', 'Year')],
             'Duration Unit', sort=False),
         'get_duration_unit', 'setter_void')
 
