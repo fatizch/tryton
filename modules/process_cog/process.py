@@ -155,9 +155,9 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 
     user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
     from_state = fields.Many2One('process-process.step', 'From State',
-        ondelete='RESTRICT')
+        ondelete='SET NULL')
     to_state = fields.Many2One('process-process.step', 'To State', select=True,
-        ondelete='RESTRICT')
+        ondelete='SET NULL')
     start_time = fields.DateTime('Start Time')
     end_time = fields.DateTime('End Time')
     description = fields.Text('Description')
