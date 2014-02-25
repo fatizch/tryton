@@ -12,6 +12,8 @@ def register():
         # From account
         Move,
         Account,
+        AccountTemplate,
+        AccountTypeTemplate,
         AccountKind,
         Journal,
         FiscalYear,
