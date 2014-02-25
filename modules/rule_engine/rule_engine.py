@@ -24,7 +24,7 @@ from trytond.pyson import Eval, Or
 from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
-from trytond.modules.cog_utils import model, CoopView, utils, coop_string
+from trytond.modules.cog_utils import model, utils, coop_string
 from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.table import table
@@ -41,7 +41,6 @@ __all__ = [
     'RunTests',
     'RunTestsReport',
     'RuleTools',
-    'RuleEngineContext',
     'InternalRuleEngineError',
     'CatchedRuleEngineError',
     'check_args',
@@ -242,25 +241,11 @@ class RuleExecutionLog(ModelSQL, ModelView):
         self.result = result.print_result()
 
 
-# TODO : After refactoring, remove.
-class RuleEngineContext(CoopView):
-
-    @classmethod
-    def get_rules(cls):
-        res = []
-        for elem in dir(cls):
-            if not elem.startswith('_re_'):
-                continue
-            elem = getattr(cls, elem)
-            tmpres = {}
-            tmpres['name'] = elem.__name__
-            res.append(tmpres)
-        return res
-
-    @classmethod
-    def __setup__(cls):
-        super(RuleEngineContext, cls).__setup__()
-        cls.__rpc__.update({'get_rules': RPC()})
+class RuleTools(ModelView):
+    '''
+        Tools functions
+    '''
+    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def get_result(cls, args):
@@ -275,13 +260,6 @@ class RuleEngineContext(CoopView):
     @classmethod
     def debug(cls, args, debug):
         args['__result__'].debug.append(debug)
-
-
-class RuleTools(RuleEngineContext):
-    '''
-        Tools functions
-    '''
-    __name__ = 'rule_engine.runtime'
 
     @classmethod
     def _re_years_between(cls, args, date1, date2):

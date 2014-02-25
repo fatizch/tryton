@@ -1,4 +1,5 @@
-from trytond.modules.rule_engine import RuleEngineContext
+from trytond.pool import PoolMeta
+
 from trytond.modules.rule_engine import check_args
 from trytond.modules.rule_engine import RuleTools
 
@@ -9,12 +10,14 @@ from trytond.modules.rule_engine import RuleTools
 #     a key in the 'args' parameter of the function                           #
 ###############################################################################
 
+__metaclass__ = PoolMeta
+
 __all__ = [
     'RuleEngineRuntime',
     ]
 
 
-class RuleEngineRuntime(RuleEngineContext):
+class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
