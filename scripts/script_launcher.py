@@ -285,7 +285,13 @@ def test(arguments, config, work_data):
     argument_list = arguments.module
     if argument_list == 'all':
         argument_list = os.listdir(work_data['modules'])
-        argument_list.sort(reverse=True)
+        # TODO : Improve ordering
+        # Currently, we use the fact that pop takes the last element of the
+        # alphabetically ordered list to make sure test_module is run asap to
+        # better leverage multiprocessing.
+        # In the future, we would need to have a consistent way to make heavy
+        # test modules like test_module be tested first.
+        argument_list.sort()
 
     num_processes = multiprocessing.cpu_count()
     threads = []
