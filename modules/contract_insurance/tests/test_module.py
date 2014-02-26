@@ -37,7 +37,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         party.gender = 'male'
         party.save()
 
-        party = self.Party.search([('name', '=', 'DOE')])[0]
+        party, = self.Party.search([('name', '=', 'DOE')])
         self.assert_(party.id)
 
 

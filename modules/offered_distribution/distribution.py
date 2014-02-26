@@ -62,7 +62,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
 
     product = fields.Many2One('offered.product', 'Technical Product', domain=[
             ('start_date', '<=', Eval('start_date')),
-            If(In('company', Eval('context', {})),
+            If(Eval('context', {}).contains('company'),
                 ('company', '=', Eval('context', {}).get('company')),
                 ('id', '>', 0))],
         depends=['start_date'], required=True, ondelete='RESTRICT')

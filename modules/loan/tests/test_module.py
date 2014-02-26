@@ -122,16 +122,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.save()
 
     def test0025_CreateAccountKind(self):
+        company, = self.Company.search([('party.name', '=', 'Coop')])
         product_account_kind = self.AccountKind()
         product_account_kind.name = 'Product Account Kind'
-        product_account_kind.company = self.Company.search([
-                ('party.name', '=', 'Coop')])[0]
+        product_account_kind.company = company
         product_account_kind.save()
 
     @test_framework.prepare_test('loan.test0025_CreateAccountKind')
     def test0026_CreateAccounts(self):
-        product_account_kind = self.AccountKind.search([
-                ('name', '=', 'Product Account Kind')])[0]
+        product_account_kind, = self.AccountKind.search([
+                ('name', '=', 'Product Account Kind'),
+                ])
         company, = self.Company.search([('party.name', '=', 'Coop')])
         loan_account = self.Account()
         loan_account.name = 'Loan Product Account'
@@ -169,7 +170,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         main_date = date(2014, 1, 1)
         company, = self.Company.search([('party.name', '=', 'Coop')])
         item_desc, = self.ItemDescription.search([
-                ('code', '=', 'person_item_desc')])
+                ('code', '=', 'person_item_desc'),
+                ])
 
         # Death Coverage
         pricing_comp_death = self.PremiumRuleComponent()
@@ -187,8 +189,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         death.family = 'loan'
         death.start_date = main_date
         death.company = company
-        death.account_for_billing = self.Account.search([
-                ('name', '=', 'Death Option Account')])[0]
+        death.account_for_billing, = self.Account.search([
+                ('name', '=', 'Death Option Account'),
+                ])
         death.item_desc = item_desc
         death.kind = 'insurance'
         death.premium_rules = [premium_rule_death]
@@ -210,8 +213,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         disability.family = 'loan'
         disability.start_date = main_date
         disability.company = company
-        disability.account_for_billing = self.Account.search([
-                ('name', '=', 'Disability Option Account')])[0]
+        disability.account_for_billing, = self.Account.search([
+                ('name', '=', 'Disability Option Account'),
+                ])
         disability.item_desc = item_desc
         disability.kind = 'insurance'
         disability.premium_rules = [premium_rule_disability]
@@ -228,8 +232,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan_contract_sequence.save()
         loan_payment_method = self.OfferedPaymentMethod()
         loan_payment_method.order = 1
-        loan_payment_method.payment_method = self.PaymentMethod.search([
-                ('code', '=', 'test_payment_method')])[0]
+        loan_payment_method.payment_method, = self.PaymentMethod.search([
+                ('code', '=', 'test_payment_method'),
+                ])
         loan = self.Product()
         loan.name = 'Loan Product'
         loan.code = 'LOAN'
@@ -237,8 +242,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.company = company
         loan.kind = 'insurance'
         loan.contract_generator = loan_contract_sequence
-        loan.account_for_billing = self.Account.search([
-                ('name', '=', 'Loan Product Account')])[0]
+        loan.account_for_billing, = self.Account.search([
+                ('name', '=', 'Loan Product Account'),
+                ])
         loan.coverages = [death, disability]
         loan.item_descriptors = [item_desc]
         loan.payment_methods = [loan_payment_method]
@@ -258,8 +264,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         commercial_product.name = 'Loan Commercial Product'
         commercial_product.code = 'loan_commercial_product'
         commercial_product.description = 'Test Description'
-        commercial_product.product = self.Product.search([
-                ('code', '=', 'LOAN')])[0]
+        commercial_product.product, = self.Product.search([
+                ('code', '=', 'LOAN'),
+                ])
         commercial_product.start_date = commercial_product.product.start_date
         commercial_product.dist_networks = self.DistNetwork.search([])
         commercial_product.save()
@@ -313,7 +320,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             contract.save()
             self.assertEqual(contract.billing_datas[0].payment_method,
                 self.PaymentMethod.search([
-                        ('code', '=', 'test_payment_method')])[0])
+                        ('code', '=', 'test_payment_method'),
+                        ])[0])
             contract.check_billing_data()
             contract.activate_contract()
             contract.finalize_contract()
@@ -322,16 +330,18 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test('loan.test0040_LoanContractSubscription')
     def test0041_TestPremiumModification(self):
-        contract = self.Contract.search([
+        contract, = self.Contract.search([
                 ('start_date', '=', date(2014, 2, 25)),
                 ('subscriber.name', '=', 'DOE'),
-                ('offered.code', '=', 'LOAN')])[0]
+                ('offered.code', '=', 'LOAN'),
+                ])
         self.assertEqual(contract.prices[6].amount, Decimal('200'))
         covered_data = contract.covered_elements[0].covered_data[0]
         extra_premium = self.ExtraPremium()
         extra_premium.covered_data = covered_data
-        extra_premium.motive = self.ExtraPremiumKind.search([
-                ('code', '=', 'medical_risk')])[0]
+        extra_premium.motive, = self.ExtraPremiumKind.search([
+                ('code', '=', 'medical_risk'),
+                ])
         extra_premium.start_date = date(2014, 2, 25)
         extra_premium.end_date = date(2015, 2, 24)
         extra_premium.calculation_kind = 'flat'
