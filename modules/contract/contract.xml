@@ -36,11 +36,13 @@
       <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
       <field name="rule_group" ref="rule_group_contract"/>
     </record>
-    <!-- Entry point -->
+    <!-- ############################################################ -->
+    <!-- ########### Contract ########### -->
+    <!-- ############################################################ -->
     <record model="ir.action.act_window" id="act_contract_form">
-      <field name="name">Contract</field>
+      <field name="name">Contracts</field>
       <field name="res_model">contract</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
+      <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('status', '!=', 'quote')]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_contract_form_view1">
       <field name="sequence" eval="10"/>
@@ -52,6 +54,36 @@
       <field name="view" ref="contract_view_form"/>
       <field name="act_window" ref="act_contract_form"/>
     </record>
+    <!-- ############################################################ -->
+    <!-- ########### Quote ########### -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="quote_view_tree">
+      <field name="model">contract</field>
+      <field name="type">tree</field>
+      <field name="name">quote_tree</field>
+    </record>
+    <record model="ir.action.act_window" id="act_quote_form">
+      <field name="name">Quotes</field>
+      <field name="res_model">contract</field>
+      <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('status', '=', 'quote')]</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_quote_form_view1">
+      <field name="sequence" eval="10"/>
+      <field name="view" ref="quote_view_tree"/>
+      <field name="act_window" ref="act_quote_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_quote_form_view2">
+      <field name="sequence" eval="20"/>
+      <field name="view" ref="contract_view_form"/>
+      <field name="act_window" ref="act_quote_form"/>
+    </record>
+    <!-- ############################################################ -->
+    <!-- ########### Menu ########### -->
+    <!-- ############################################################ -->
+    <menuitem name="Contract" id="menu_contract" sequence="10" icon="contract"/>
+    <menuitem parent="menu_contract" sequence="1" id="menu_quote_form" icon="quote" action="act_quote_form"/>
+    <menuitem parent="menu_contract" sequence="2" id="menu_contract_form" icon="contract" action="act_contract_form"/>
+    <menuitem name="Batch" parent="menu_contract" sequence="99" id="menu_contract_batch" icon="batch"/>
     <!--################################################################ -->
     <!-- Options Screens -->
     <!--################################################################ -->

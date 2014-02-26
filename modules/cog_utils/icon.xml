@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="batch_icon">
+            <field name="name">batch</field>
+            <field name="path">icons/batch.svg</field>
+        </record>
+    </data>
+</tryton>

@@ -5,5 +5,9 @@
             <field name="name">contract</field>
             <field name="path">icons/contract.svg</field>
         </record>
+        <record model="ir.ui.icon" id="quote_icon">
+            <field name="name">quote</field>
+            <field name="path">icons/quote.svg</field>
+        </record>
     </data>
 </tryton>

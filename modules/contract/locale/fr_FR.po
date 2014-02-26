@@ -548,7 +548,7 @@ msgstr "Historique des Statuts"
 
 msgctxt "model:contract.wizard.option_subscription.options_displayer,name:"
 msgid "Select Covered Element"
-msgstr ""
+msgstr "Choisir l'Element Couvert"
 
 msgctxt ""
 "model:contract.wizard.option_subscription.options_displayer.option,name:"
@@ -560,16 +560,36 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "model:ir.action,name:act_contract_form"
-msgid "Contract"
-msgstr "Contrat"
+msgid "Contracts"
+msgstr "Contrats"
 
 msgctxt "model:ir.action,name:act_quote_button"
 msgid "Contracts"
 msgstr "Contrats"
 
+msgctxt "model:ir.action,name:act_quote_form"
+msgid "Quotes"
+msgstr "Devis"
+
 msgctxt "model:ir.action,name:option_subscription_wizard"
 msgid "Option Subscription"
 msgstr "Souscription d'Option"
+
+msgctxt "model:ir.ui.menu,name:menu_contract"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_batch"
+msgid "Batch"
+msgstr "Traitement"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_form"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_quote_form"
+msgid "Quotes"
+msgstr "Devis"
 
 msgctxt "selection:contract,status:"
 msgid ""
@@ -691,7 +711,7 @@ msgstr "Automatique"
 msgctxt ""
 "selection:contract.wizard.option_subscription.options_displayer.option,selection:"
 msgid "Excluded"
-msgstr ""
+msgstr "Exclues"
 
 msgctxt ""
 "selection:contract.wizard.option_subscription.options_displayer.option,selection:"
