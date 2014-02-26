@@ -39,7 +39,9 @@ class Contract:
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
-        cls._buttons.update({'create_loan': {}})
+        cls._buttons.update({
+                    'create_loan': {'invisible': Eval('status') != 'quote'},
+                    })
 
     def get_is_loan(self, name):
         if not self.options and self.offered:

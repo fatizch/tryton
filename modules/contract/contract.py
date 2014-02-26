@@ -233,6 +233,12 @@ class Contract(model.CoopSQL, Subscribed, Printable):
 
         cls._buttons.update({'option_subscription': {}})
 
+        if not getattr(cls, '_fields', None):
+            return
+        for field_name in cls._fields.iterkeys():
+            utils.update_states(cls, field_name,
+                {'readonly': Eval('status') != 'quote'})
+
     @classmethod
     @model.CoopView.button_action('contract.option_subscription_wizard')
     def option_subscription(cls, contracts):
