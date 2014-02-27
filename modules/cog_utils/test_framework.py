@@ -44,7 +44,9 @@ def prepare_test(*_args):
             if not (Transaction() and Transaction().context and
                     'master' in Transaction().context):
                 with Transaction().start(DB_NAME, USER, context=CONTEXT):
-                    with Transaction().new_cursor():
+                    # Run all tests as root. Access management tests should
+                    # manually set the user in the transaction
+                    with Transaction().new_cursor(), Transaction().set_user(0):
                         with Transaction().set_context(master=args[0]):
                             args[0]._executed = []
                             for arg in _args:
@@ -78,6 +80,10 @@ class CoopTestCase(unittest.TestCase):
 
     @classmethod
     def depending_modules(cls):
+        return []
+
+    @classmethod
+    def get_test_cases_to_run(cls):
         return []
 
     @classmethod
@@ -116,8 +122,8 @@ class CoopTestCase(unittest.TestCase):
             module.ModuleTestCase.install_module()
 
         models = {'TestCaseModel': 'ir.test_case'}
-        for modules in modules.itervalues():
-            models.update(modules.ModuleTestCase.get_models())
+        for module in modules.itervalues():
+            models.update(module.ModuleTestCase.get_models())
 
         self._models = {}
         for k, v in models.iteritems():
@@ -127,6 +133,14 @@ class CoopTestCase(unittest.TestCase):
                 good_model = trytond.tests.test_tryton.POOL.get(
                     v, type='wizard')
             self._models.update({k: good_model})
+
+        from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+                with Transaction().new_cursor(), Transaction().set_user(0):
+                    self.TestCaseModel.run_test_cases([
+                            getattr(self.TestCaseModel, x)
+                            for x in self.get_test_cases_to_run()])
+                    Transaction().cursor.commit()
 
     def test0005views(self):
         '''

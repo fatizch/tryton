@@ -1,1 +1,1 @@
-from .test_product import suite
+from .test_module import suite

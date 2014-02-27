@@ -209,7 +209,7 @@ return True'''
         )
     def test0010Coverage_creation(self):
         '''
-            Tests process desc creation
+            Tests coverage creation
         '''
         company, = self.Company.search([('party.name', '=', 'World Company')])
         rule = self.RuleEngine.search([('name', '=', 'test_rule')])[0]
