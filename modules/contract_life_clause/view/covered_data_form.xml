@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <xpath expr="/form/notebook/page[@id='main_data']/field[@name='covered_element']" position="after">
+    <newline/>
+    <label name="beneficiary_clause_selection"/>
+    <field name="beneficiary_clause_selection" colspan="3"/>
+    <field name="beneficiary_clause_override_text" colspan="4" widget="richtext"/>
+    <newline/>
+    <field name="need_to_chose_beneficiary_clause"/>
+    <field name="may_override_beneficiary_clause_text"/>
+    <field name="possible_beneficiary_clauses"/>
+  </xpath>
+  <xpath expr="/form/notebook/page[@id='main_data']/field[@name='clauses']" position="replace_attributes">
+    <field name="clauses" invisible="1"/>
+  </xpath>
+</data>

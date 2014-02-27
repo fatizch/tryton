@@ -709,8 +709,6 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     parent_covered_data = fields.Function(
         fields.Many2One('contract.covered_data', 'Parent Covered Data'),
         'get_parent_covered_data_id')
-    clauses = fields.One2Many('contract.clause', 'covered_data',
-        'Clauses', context={'start_date': Eval('start_date')})
     exclusions = fields.Many2Many(
         'contract.covered_data-exclusion.kind', 'covered_data', 'exclusion',
         'Exclusions')
@@ -747,29 +745,10 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         self.extra_data = self.on_change_extra_data()[
             'extra_data']
 
-    def init_clauses(self, option):
-        clauses, errs = self.option.offered.get_result('all_clauses', {
-                'date': option.start_date,
-                'appliable_conditions_date':
-                self.option.contract.appliable_conditions_date,
-            })
-        self.clauses = []
-        if errs or not clauses:
-            return
-        ContractClause = Pool().get('contract.clause')
-        for clause in clauses:
-            new_clause = ContractClause()
-            new_clause.clause = clause
-            new_clause.text = clause.get_version_at_date(
-                option.start_date).content
-            new_clause.contract = option.contract
-            self.clauses.append(new_clause)
-
     def init_from_option(self, option):
         self.option = option
         self.start_date = option.start_date
         self.end_date = option.end_date
-        self.init_clauses(option)
         self.init_extra_data()
 
     @fields.depends('extra_data', 'option', 'start_date',

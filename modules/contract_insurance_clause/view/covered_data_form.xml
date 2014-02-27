@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+  <xpath expr="/form/notebook/page[@id='main_data']/field[@name='extra_data']" position="after">
+    <newline/>
+    <field name="clauses" colspan="2"/>
+  </xpath>
+</data>

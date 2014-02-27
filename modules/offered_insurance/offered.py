@@ -31,7 +31,6 @@ class Offered:
         'Premium Rules')
     eligibility_rules = fields.One2Many('offered.eligibility.rule', 'offered',
         'Eligibility Rules')
-    clause_rules = fields.One2Many('clause.rule', 'offered', 'Clause Rules')
     deductible_rules = fields.One2Many('offered.deductible.rule', 'offered',
         'Deductible Rules')
     document_rules = fields.One2ManyDomain('document.rule', 'offered',
@@ -64,12 +63,6 @@ class Offered:
     def give_me_documents(self, args):
         try:
             return self.get_result('documents', args, kind='document')
-        except NonExistingRuleKindException:
-            return [], ()
-
-    def give_me_all_clauses(self, args):
-        try:
-            return self.get_result('all_clauses', args, kind='clause')
         except NonExistingRuleKindException:
             return [], ()
 

@@ -4,7 +4,6 @@ from .offered import *
 from .expense import *
 from .business_rule import *
 from .coverage import *
-from .clause import *
 from .process import *
 from .party import *
 from .test_case import *
@@ -72,11 +71,6 @@ def register():
         ExtraPremiumKind,
         # From rule_engine
         RuleEngineRuntime,
-        #From Clause
-        ClauseRule,
-        Clause,
-        RuleClauseRelation,
-        ClauseVersion,
         # From process
         ProcessProductRelation,
         Process,

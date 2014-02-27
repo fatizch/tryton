@@ -218,8 +218,6 @@ class Contract(model.CoopSQL, Subscribed, Printable):
             'policy_owner': Eval('current_policy_owner'),
             'start_date': Eval('start_date'),
             }, depends=['current_policy_owner'])
-    clauses = fields.One2Many('contract.clause', 'contract',
-        'Clauses', context={'start_date': Eval('start_date')})
 
     @classmethod
     def __setup__(cls):
@@ -281,27 +279,10 @@ class Contract(model.CoopSQL, Subscribed, Printable):
                 ], ('status', '=', 'active'),
                 ])
 
-    def init_clauses(self, offered):
-        ContractClause = Pool().get('contract.clause')
-        clauses, errs = offered.get_result('all_clauses', {
-                'date': self.start_date,
-                'appliable_conditions_date': self.appliable_conditions_date,
-            })
-        if errs or not clauses:
-            return
-        self.clauses = []
-        for clause in clauses:
-            new_clause = ContractClause()
-            new_clause.clause = clause
-            new_clause.text = clause.get_good_version_at_date(
-                self.start_date).content
-            self.clauses.append(new_clause)
-
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered, start_date,
             end_date)
         self.appliable_conditions_date = self.start_date
-        self.init_clauses(offered)
         return res
 
     @classmethod

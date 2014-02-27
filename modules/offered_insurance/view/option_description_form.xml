@@ -22,10 +22,6 @@
             states="{'invisible': Or(Eval('kind') != 'insurance', ~~Eval('is_package'))}">
             <field name="deductible_rules" colspan="4"/>
         </page>
-        <page string="Clause" id="clause"
-            states="{'invisible': Or(Eval('kind') != 'insurance', ~~Eval('is_package'))}">
-            <field name="clause_rules" colspan="4"/>
-        </page>
         <page string="Documents" id="documents"
             states="{'invisible': Or(Eval('kind') != 'insurance', ~~Eval('is_package'))}">
             <field name="document_rules"/>

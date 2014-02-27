@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
   <data>
+    <!-- ################### -->
+    <!-- # Contract Clause # -->
+    <!-- ################### -->
     <record model="ir.ui.view" id="clause_form">
       <field name="model">contract.clause</field>
       <field name="type">form</field>
+      <field name="inherit" ref="contract_clause.clause_form"/>
       <field name="name">clause_form</field>
     </record>
     <record model="ir.ui.view" id="clause_tree">
       <field name="model">contract.clause</field>
       <field name="type">tree</field>
+      <field name="inherit" ref="contract_clause.clause_tree"/>
       <field name="name">clause_tree</field>
     </record>
   </data>

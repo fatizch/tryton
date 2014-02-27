@@ -31,3 +31,4 @@ class RuleClauseRelation(model.CoopSQL):
         ondelete='CASCADE')
     clause = fields.Many2One('clause', 'Clause', select=1, required=True,
         ondelete='RESTRICT')
+

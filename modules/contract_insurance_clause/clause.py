@@ -14,4 +14,3 @@ class ContractClause:
 
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE', states={'invisible': ~Eval('covered_data')})
-
