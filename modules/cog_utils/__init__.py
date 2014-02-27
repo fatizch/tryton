@@ -34,6 +34,7 @@ def register():
         ModelAccess,
         Property,
         Lang,
+        Icon,
         # From res
         Group,
         User,

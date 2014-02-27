@@ -10,7 +10,9 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Move',
     'Account',
+    'AccountTemplate',
     'AccountKind',
+    'AccountTypeTemplate',
     'Journal',
     'FiscalYear',
     'Period',
@@ -30,6 +32,10 @@ class AccountKind(export.ExportImportMixin):
         return set(['name', 'company.party.name'])
 
 
+class AccountTypeTemplate(export.ExportImportMixin):
+    __name__ = 'account.account.type.template'
+
+
 class Account(export.ExportImportMixin):
     __name__ = 'account.account'
 
@@ -42,7 +48,12 @@ class Account(export.ExportImportMixin):
         res = super(Account, cls)._export_skips()
         res.add('left')
         res.add('right')
+        res.add('taxes')
         return res
+
+
+class AccountTemplate(export.ExportImportMixin):
+    __name__ = 'account.account.template'
 
 
 class Journal(export.ExportImportMixin):
@@ -57,6 +68,12 @@ class Journal(export.ExportImportMixin):
         cls.debit_account = copy.copy(cls.debit_account)
         cls.debit_account.domain = export.clean_domain_for_import(
             cls.debit_account.domain, 'company')
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Journal, cls)._export_skips()
+        result.add('view')
+        return result
 
 
 class FiscalYear(export.ExportImportMixin):

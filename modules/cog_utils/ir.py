@@ -27,6 +27,7 @@ __all__ = [
     'ModelAccess',
     'Property',
     'Lang',
+    'Icon',
     ]
 
 
@@ -225,6 +226,12 @@ class Action(ExportImportMixin):
         res.add('keywords')
         return res
 
+    @classmethod
+    def _export_light(cls):
+        result = super(Action, cls)._export_light()
+        result.add('icon')
+        return result
+
 
 class ActionKeyword(ExportImportMixin):
     __name__ = 'ir.action.keyword'
@@ -300,6 +307,12 @@ class Property(ExportImportMixin):
     def _export_light(cls):
         return set(['field'])
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Property, cls)._export_skips()
+        result.add('res')
+        return result
+
 
 class Lang(ExportImportMixin):
     __name__ = 'ir.lang'
@@ -307,3 +320,7 @@ class Lang(ExportImportMixin):
     @classmethod
     def _export_keys(cls):
         return set(['code'])
+
+
+class Icon(ExportImportMixin):
+    __name__ = 'ir.ui.icon'

@@ -280,6 +280,9 @@ class ExportImportMixin(Model):
     @classmethod
     def _export_single_link(cls, exported, export_result, field_name, field,
             field_value, from_field, force_key, values):
+        if field_value is None:
+            values[field_name] = None
+            return
         if isinstance(field, tryton_fields.Reference):
             f = lambda x: (field_value.__name__, x)
         else:
@@ -348,12 +351,6 @@ class ExportImportMixin(Model):
                     field_name)(exported, export_result, my_key)
                 continue
             field_value = getattr(self, field_name)
-            # We cannot just test "if field_value:" because 0 or '' might be
-            # acceptable non-default values
-            if field_value is None:
-                continue
-            if isinstance(field_value, tuple) and len(field_value) == 0:
-                continue
             self._export_check_value_exportable(field_name, field, field_value)
             logging.getLogger('export_import').debug('Exporting field %s.%s' %
                 (self.__name__, field_name))
@@ -414,7 +411,9 @@ class ExportImportMixin(Model):
     def _import_single_link(cls, instance, field_name, field, field_value,
             created, relink, target_model, to_relink):
         check_req = False
-        if isinstance(field_value, tuple):
+        if field_value is None:
+            setattr(instance, field_name, None)
+        elif isinstance(field_value, tuple):
             if (target_model.__name__ in created and
                     field_value in created[target_model.__name__]):
                 target_value = created[
