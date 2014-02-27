@@ -34,6 +34,8 @@ __all__ = [
     'ImportWizard',
     'ExportInstance',
     'ExportPackage',
+    'Add2ExportPackageWizard',
+    'Add2ExportPackageWizardStart',
     ]
 
 
@@ -819,6 +821,39 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
         if self.code:
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
+
+
+class Add2ExportPackageWizardStart(ModelView):
+    'Export Package Selector'
+    __name__ = 'ir.export_package.add_records.start'
+
+    export_package = fields.Many2One('ir.export_package', 'Package',
+        required=True)
+
+
+class Add2ExportPackageWizard(Wizard):
+    'Wizard to add records to Export Packages'
+
+    __name__ = 'ir.export_package.add_records'
+
+    start = StateView('ir.export_package.add_records.start',
+        'cog_utils.ir_export_package_add_records_start', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Add', 'add', 'tryton-ok'),
+            ])
+    add = StateTransition()
+
+    def transition_add(self):
+        pool = Pool()
+        ExportPackageItem = pool.get('ir.export_package.item')
+        ids = Transaction().context['active_ids']
+        print Transaction().context
+        model = Transaction().context['active_model']
+        ExportPackageItem.create([{
+                    'to_export': '%s,%s' % (model, id_),
+                    'package': self.start.export_package,
+                    } for id_ in ids])
+        return 'end'
 
 
 def clean_domain_for_import(domain, detect_key=None):
