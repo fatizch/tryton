@@ -238,6 +238,30 @@ class Contract:
         self.store_prices(prices_update)
         return True
 
+    def check_contract_extra_data(self):
+        return Pool().get('extra_data').check_extra_data(self, 'extra_data')
+
+    def check_covered_element_extra_data(self):
+        ExtraData = Pool().get('extra_data')
+        final_res, final_errs = True, []
+        for covered_element in self.covered_elements:
+            res, errs = ExtraData.check_extra_data(covered_element,
+                'extra_data')
+            final_res = final_res and res
+            final_errs.extend(errs)
+        return final_res, final_errs
+
+    def check_covered_data_extra_data(self):
+        ExtraData = Pool().get('extra_data')
+        final_res, final_errs = True, []
+        for covered_element in self.covered_elements:
+            for covered_data in covered_element.covered_data:
+                res, errs = ExtraData.check_extra_data(covered_data,
+                    'extra_data')
+                final_res = final_res and res
+                final_errs.extend(errs)
+        return final_res, final_errs
+
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
     def manage_extra_premium(cls, instances):

@@ -27,7 +27,7 @@
       action="act_test_case_model" id="menu_test_case_model"/>
     <!-- Data -->
     <record model="ir.test_case" id="test_case_configuration">
-      <field name="language" ref="ir.lang_fr"/>
+      <field name="language" ref="ir.lang_en"/>
     </record>
     <!-- ############################################################ -->
     <!-- Test Case Selector -->
