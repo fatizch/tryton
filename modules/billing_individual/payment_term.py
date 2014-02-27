@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import fields, model, coop_date
+from trytond.modules.cog_utils import fields, model, coop_date, coop_string
 from trytond.modules.offered_insurance.business_rule.premium_rule import \
     PRICING_FREQUENCY
 
@@ -485,3 +485,9 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
         result = sorted(list((x for x in res.iteritems() if x[1])),
             key=lambda x: x[0])
         return self.apply_payment_date(result, work_set.payment_date)
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)

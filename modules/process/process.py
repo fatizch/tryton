@@ -36,6 +36,12 @@ class Status(ModelSQL, ModelView):
     relations = fields.One2Many('process-process.step', 'status', 'Relations',
         states={'readonly': True})
 
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
 
 class ProcessStepRelation(ModelSQL, ModelView):
     'Process to Step relation'

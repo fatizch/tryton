@@ -24,6 +24,7 @@ from trytond.pyson import Eval, If, PYSONEncoder
 
 import utils
 import fields
+import coop_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -812,6 +813,12 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     @classmethod
     def setter_void(cls, instances, name, value):
         pass
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 def clean_domain_for_import(domain, detect_key=None):
