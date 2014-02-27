@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, coop_string
 
 
 __all__ = [
@@ -29,6 +29,12 @@ class Clause(model.CoopSQL, model.VersionedObject):
             ('', ''),
             ('beneficiary', 'Beneficiary'),
             ]
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 class ClauseVersion(model.CoopSQL, model.VersionObject):

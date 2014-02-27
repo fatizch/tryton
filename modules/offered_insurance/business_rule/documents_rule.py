@@ -85,6 +85,12 @@ class DocumentTemplate(model.CoopSQL, model.CoopView):
             return [('doc_request', 'Document Request')]
         return []
 
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
 
 class DocumentProductRelation(model.CoopSQL):
     'Document template to Product relation'
@@ -215,6 +221,12 @@ class DocumentDescription(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True, translate=True)
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 class DocumentRule(BusinessRuleRoot, model.CoopSQL):
