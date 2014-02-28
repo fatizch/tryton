@@ -10,7 +10,6 @@ from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
     'Loan',
-    'ContractLoanRelation',
     'LoanShare',
     'LoanIncrement',
     'LoanPayment',
@@ -47,9 +46,10 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'loan'
 
+    order = fields.Integer('Order')
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False)
-    contracts = fields.Many2Many('contract-loan', 'loan', 'contract',
-        'Contracts')
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
+        required=True)
     number_of_payments = fields.Integer('Number of Payments', required=True)
     payment_frequency = fields.Selection(LOAN_DURATION_UNIT,
         'Payment Frequency', sort=False, required=True)
@@ -131,14 +131,8 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
                 self.payment_frequency)
 
     def get_currency(self):
-        if hasattr(self, 'contracts') and self.contracts:
-            return self.contracts[0].currency
-
-    def get_currency_id(self, name):
-        if 'currency' in Transaction().context:
-            return Transaction().context.get('currency')
-        else:
-            return super(Loan, self).get_currency_id(name)
+        if getattr(self, 'contract', None):
+            return self.contract.currency
 
     def get_rate(self, annual_rate=None):
         if not annual_rate:
@@ -332,16 +326,6 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         result['start_date'] = self.funds_release_date
         result['number_payments'] = self.number_of_payments
         return result
-
-
-class ContractLoanRelation(model.CoopSQL, model.CoopView):
-    'Contract Loan Relation'
-
-    __name__ = 'contract-loan'
-
-    loan_number = fields.Integer('Loan Number')
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
-    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT')
 
 
 class LoanShare(model.CoopSQL, model.CoopView):
