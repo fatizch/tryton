@@ -3,7 +3,7 @@ import copy
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields, model, coop_string
 
@@ -22,18 +22,10 @@ class Contract:
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')
-    change_loans_order = fields.Function(
-        fields.Boolean('Change Order', states={'invisible': ~Eval('is_loan')}),
-        'get_change_loans_order', 'setter_void')
-    loans = fields.Many2Many('contract-loan', 'contract', 'loan', 'Loans',
-        states={
-            'invisible': Or(~Eval('is_loan'), ~~Eval('change_loans_order')),
-            }, depends=['is_loan', 'currency'],
-        context={'currency': Eval('currency')})
-    loans_ordered = fields.One2Many('contract-loan', 'contract', 'Loans',
-        states={
-            'invisible': Or(~Eval('is_loan'), ~Eval('change_loans_order')),
-            }, depends=['is_loan', 'currency'],
+    loans = fields.One2Many('loan', 'contract', 'Loans',
+        order=[('order', 'ASC')],
+        states={'invisible': ~Eval('is_loan')},
+        depends=['is_loan', 'currency'],
         context={'currency': Eval('currency')})
 
     @classmethod
@@ -60,9 +52,6 @@ class Contract:
         end_date = max([x.end_date for x in self.loans])
         self.end_date = end_date
 
-    def get_change_loans_order(self, name):
-        return False
-
 
 class ContractOption:
     __name__ = 'contract.option'
@@ -80,7 +69,7 @@ class CoveredData:
 
     loan_shares = fields.One2Many('loan.share', 'covered_data', 'Loan Shares',
         states={'invisible': ~Eval('is_loan')}, domain=[
-            ('loan.contracts', '=', Eval('contract'))],
+            ('loan.contract', '=', Eval('contract'))],
         depends=['contract'])
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),

@@ -813,11 +813,11 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     def setter_void(cls, instances, name, value):
         pass
 
-    @fields.depends('code', 'name')
+    @fields.depends('code', 'package_name')
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.remove_blank_and_invalid_char(self.name)
+        return coop_string.remove_blank_and_invalid_char(self.package_name)
 
 
 def clean_domain_for_import(domain, detect_key=None):
