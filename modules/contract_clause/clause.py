@@ -48,3 +48,6 @@ class ContractClause(model.CoopSQL, model.CoopView):
         if not self.clause:
             return ''
         return self.clause.kind
+
+    def get_rec_name(self, name):
+        return self.clause.get_rec_name(name)

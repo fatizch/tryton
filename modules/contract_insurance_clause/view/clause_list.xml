@@ -2,5 +2,6 @@
 <data>
   <xpath expr="/tree/field[@name='override_text']" position="after">
     <field name="covered_data"/>
+    <field name="beneficiaries" tree_invisible="1"/>
   </xpath>
 </data>

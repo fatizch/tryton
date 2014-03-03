@@ -4,11 +4,11 @@
     <!-- ########## -->
     <!-- # Clause # -->
     <!-- ########## -->
-    <record model="ir.ui.view" id="clause_view_tree">
+    <record model="ir.ui.view" id="clause_view_list">
       <field name="model">clause</field>
       <field name="type">tree</field>
       <field name="inherit" ref="cog_utils.versionned_object_view_tree"/>
-      <field name="name">clause_tree</field>
+      <field name="name">clause_list</field>
     </record>
     <record model="ir.ui.view" id="clause_view_form">
       <field name="model">clause</field>
@@ -22,7 +22,7 @@
     </record>
     <record model="ir.action.act_window.view" id="act_model_clause_tree">
       <field name="sequence" eval="10"/>
-      <field name="view" ref="clause_view_tree"/>
+      <field name="view" ref="clause_view_list"/>
       <field name="act_window" ref="act_model_clause"/>
     </record>
     <record model="ir.action.act_window.view" id="act_model_clause_form">
@@ -34,11 +34,11 @@
     <!-- ################## -->
     <!-- # Clause Version # -->
     <!-- ################## -->
-    <record model="ir.ui.view" id="clause_version_view_tree">
+    <record model="ir.ui.view" id="clause_version_view_list">
       <field name="model">clause.version</field>
       <field name="type">tree</field>
       <field name="inherit" ref="cog_utils.version_object_view_tree"/>
-      <field name="name">clause_version_tree</field>
+      <field name="name">clause_version_list</field>
     </record>
     <record model="ir.ui.view" id="clause_version_view_form">
       <field name="model">clause.version</field>

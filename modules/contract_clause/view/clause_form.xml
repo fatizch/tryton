@@ -4,7 +4,7 @@
   <field name="clause" colspan="3"/>
   <label name="kind"/>
   <field name="kind" colspan="3"/>
-  <field name="visual_text" colspan="4"/>
+  <field name="visual_text" colspan="4" widget="richtext"/>
   <field name="text"/>
   <field name="override_text"/>
 </form>

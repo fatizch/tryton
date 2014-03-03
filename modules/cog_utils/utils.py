@@ -21,7 +21,7 @@ __all__ = []
 
 
 def print_log(some_text):
-    print '\033[95m' + str(some_text) + '\033[0md'
+    print '\033[95m' + str(some_text) + '\033[0m'
 
 
 def get_module_name(cls):

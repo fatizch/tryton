@@ -30,7 +30,7 @@ class Contract:
                 self.start_date).content
             self.clauses.append(new_clause)
 
-    def init_from_offered(self, offered, start_date, end_date):
+    def init_from_offered(self, offered, start_date=None, end_date=None):
         result = super(Contract, self).init_from_offered(offered, start_date,
             end_date)
         self.init_clauses(offered)

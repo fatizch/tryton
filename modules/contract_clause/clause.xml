@@ -4,15 +4,15 @@
     <!-- ################### -->
     <!-- # Contract Clause # -->
     <!-- ################### -->
-    <record model="ir.ui.view" id="clause_form">
+    <record model="ir.ui.view" id="clause_view_form">
       <field name="model">contract.clause</field>
       <field name="type">form</field>
       <field name="name">clause_form</field>
     </record>
-    <record model="ir.ui.view" id="clause_tree">
+    <record model="ir.ui.view" id="clause_view_list">
       <field name="model">contract.clause</field>
       <field name="type">tree</field>
-      <field name="name">clause_tree</field>
+      <field name="name">clause_list</field>
     </record>
   </data>
 </tryton>

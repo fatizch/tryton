@@ -2,6 +2,8 @@
 <form string="Beneficiary">
   <label name="party"/>
   <field name="party"/>
+  <label name="share"/>
+  <field name="share" factor="100"/>
   <label name="accepting"/>
   <field name="accepting"/>
   <field name="incomplete_beneficiary" colspan="4"/>

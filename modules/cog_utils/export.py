@@ -566,8 +566,8 @@ class ExportImportMixin(Model):
             counter += 1
             cur_errs, to_del, idx = [], [], 0
             for key, value in relink:
-                logging.getLogger('export_import').debug('Relinking %s' %
-                    str(key))
+                logging.getLogger('export_import').debug('Relinking %s : %s' %
+                    (str(key), str(value)))
                 working_instance = created[key[0]][key[1]]
                 all_done = True
                 clean_keys = []
