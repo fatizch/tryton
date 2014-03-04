@@ -1,0 +1,183 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:clause.rule:"
+msgid "You can not have 2 business rules that overlaps!"
+msgstr "2 règles se chevauchent!"
+
+msgctxt "field:clause.rule,clauses:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,config_kind:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,create_date_:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,must_expand_tree:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,offered:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,rule:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,rule_extra_data:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,template:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,template_behaviour:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,view_rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule,xml_id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,clause:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,create_date_:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,rule:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.rule-clause,xml_id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered,clause_rules:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.option.description,clause_rules:"
+msgid ""
+msgstr ""
+
+msgctxt "field:offered.product,clause_rules:"
+msgid ""
+msgstr ""
+
+msgctxt "model:clause.rule,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:clause.rule-clause,name:"
+msgid ""
+msgstr ""
+
+msgctxt "selection:clause.rule,config_kind:"
+msgid "Advanced"
+msgstr "Avancé"
+
+msgctxt "selection:clause.rule,config_kind:"
+msgid "Simple"
+msgstr "Simple"
+
+msgctxt "selection:clause.rule,offered:"
+msgid "Option Description"
+msgstr "Garantie offerte"
+
+msgctxt "selection:clause.rule,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "selection:clause.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:clause.rule,template_behaviour:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:clause.rule,template_behaviour:"
+msgid "Remove"
+msgstr "Retirer"
+
+msgctxt "view:clause.rule:"
+msgid "Clause rule"
+msgstr "Clause"
+
+msgctxt "view:offered.option.description:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "view:offered.product:"
+msgid "Clause"
+msgstr "Clause"

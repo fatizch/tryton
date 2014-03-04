@@ -16,7 +16,7 @@ class ContractClause:
     loan_share = fields.Many2One('loan.share', 'Loan Share', domain=[
             ('id', 'in', Eval('_parent_covered_data', {}).get(
                     'loan_shares', []))],
-        states={'invisible': ~Eval('is_loan')})
+        states={'invisible': ~Eval('is_loan')}, ondelete='CASCADE')
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')

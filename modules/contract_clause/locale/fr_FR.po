@@ -1,0 +1,75 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract,clauses:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,clause:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,contract:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,create_date_:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,kind:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,must_expand_tree:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,override_text:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,text:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,visual_text:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.clause,xml_id:"
+msgid ""
+msgstr ""
+
+msgctxt "model:contract.clause,name:"
+msgid ""
+msgstr ""
+
+msgctxt "view:contract.clause:"
+msgid "Clauses"
+msgstr "Clauses"

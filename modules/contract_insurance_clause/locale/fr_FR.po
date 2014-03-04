@@ -1,0 +1,19 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract.clause,covered_data:"
+msgid ""
+msgstr ""
+
+msgctxt "field:contract.covered_data,clauses:"
+msgid ""
+msgstr ""
+
+msgctxt "view:contract.covered_data:"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "view:contract:"
+msgid "Clauses"
+msgstr "Clauses"

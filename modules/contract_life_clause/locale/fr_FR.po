@@ -1,0 +1,87 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract.clause,beneficiaries:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "field:contract.clause,with_beneficiary_list:"
+msgid "With Beneficiay list"
+msgstr "Avec bénéficiaires"
+
+msgctxt "field:contract.clause.beneficiary,accepting:"
+msgid "Accepting"
+msgstr "Acceptant"
+
+msgctxt "field:contract.clause.beneficiary,beneficiary_description:"
+msgid "Beneficiary Description"
+msgstr "Bénéficiaire"
+
+msgctxt "field:contract.clause.beneficiary,clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "field:contract.clause.beneficiary,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.clause.beneficiary,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.clause.beneficiary,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.clause.beneficiary,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.clause.beneficiary,incomplete_beneficiary:"
+msgid "Incomplete Beneficiary"
+msgstr "Bénéficiaire incomplet"
+
+msgctxt "field:contract.clause.beneficiary,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.clause.beneficiary,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:contract.clause.beneficiary,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.clause.beneficiary,share:"
+msgid "Share"
+msgstr "Quotité"
+
+msgctxt "field:contract.clause.beneficiary,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.clause.beneficiary,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.clause.beneficiary,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.covered_data,beneficiary_clauses:"
+msgid "Beneficiary clauses"
+msgstr "Clauses bénéficiaires"
+
+msgctxt "model:contract.clause.beneficiary,name:"
+msgid "Contract Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "view:contract.clause.beneficiary:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "view:contract.clause.beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"

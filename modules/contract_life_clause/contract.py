@@ -22,9 +22,10 @@ class Beneficiary(model.CoopSQL, model.CoopView):
 
     accepting = fields.Boolean('Accepting')
     clause = fields.Many2One('contract.clause', 'Clause', required=True,
-        states={'invisible': True})
+        states={'invisible': True}, ondelete='RESTRICT')
     party = fields.Many2One('party.party', 'Party', states={
-            'required': ~~Eval('accepting')}, depends=['accepting'])
+            'required': ~~Eval('accepting')}, depends=['accepting'],
+        ondelete='RESTRICT')
     incomplete_beneficiary = fields.Text('Incomplete Beneficiary',
         states={'invisible': ~~Eval('accepting')})
     share = fields.Numeric('Share', digits=(4, 4), required=True)

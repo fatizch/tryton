@@ -1,0 +1,155 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:clause,code:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,create_date_:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,current_rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,kind:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,may_be_overriden:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,must_expand_tree:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,title:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,versions:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause,xml_id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,content:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,create_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,create_date_:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,create_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,end_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,id:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,main_elem:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,must_expand_tree:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,rec_name:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,start_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,write_date:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,write_uid:"
+msgid ""
+msgstr ""
+
+msgctxt "field:clause.version,xml_id:"
+msgid ""
+msgstr ""
+
+msgctxt "model:clause,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:clause.version,name:"
+msgid ""
+msgstr ""
+
+msgctxt "model:ir.action,name:act_model_clause"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "model:ir.ui.menu,name:menu_model_clause"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "selection:clause,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "view:clause.version:"
+msgid "Clause Version"
+msgstr "Version de Clause"
+
+msgctxt "view:clause.version:"
+msgid "Clause rule"
+msgstr "Clause"
+
+msgctxt "view:clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "view:clause:"
+msgid "Clauses"
+msgstr "Clauses"

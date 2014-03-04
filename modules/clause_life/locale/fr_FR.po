@@ -1,0 +1,18 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:clause:"
+msgid ""
+"It is not possible to allow overriding of clauses with beneficiary list"
+msgstr ""
+"Il n'est pas possible de surcharger les clauses ayant une liste de "
+"bénéficiaires"
+
+msgctxt "field:clause,with_beneficiary_list:"
+msgid "With beneficiary list"
+msgstr "Avec bénéficiaires"
+
+msgctxt "selection:clause,kind:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
