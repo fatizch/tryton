@@ -824,11 +824,11 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
     def init_dict_for_rule_engine(self, args):
         args['data'] = self
         args['deductible_duration'] = self.get_deductible_duration()
-        if hasattr(self, 'extra_premiums'):
-            args['extra_premiums'] = self.extra_premiums
-        else:
-            args['extra_premiums'] = []
-        # if not utils.is_none(self, 'covered_element'):
+        args['extra_premiums'] = []
+        for elem in getattr(self, 'extra_premiums', []):
+            if elem.start_date <= args['date'] and (elem.end_date >=
+                    args['date'] or not elem.end_date):
+                args['extra_premiums'].append(elem)
         self.covered_element.init_dict_for_rule_engine(args)
         self.option.init_dict_for_rule_engine(args)
 

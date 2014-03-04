@@ -163,11 +163,8 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         cur_user = Transaction().user
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
         with Transaction().new_cursor(), Transaction().set_user(0):
-            if cur_user:
-                with Transaction().set_context(user=cur_user):
-                    cls.run_test_case_method(test_case)
-            else:
-                    cls.run_test_case_method(test_case)
+            with Transaction().set_context(user=cur_user if cur_user else 1):
+                cls.run_test_case_method(test_case)
             try:
                 Transaction().cursor.commit()
             except DatabaseOperationalError:

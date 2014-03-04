@@ -121,7 +121,10 @@ class CoopTestCase(unittest.TestCase):
         for module in modules.itervalues():
             module.ModuleTestCase.install_module()
 
-        models = {'TestCaseModel': 'ir.test_case'}
+        models = {
+            'TestCaseModel': 'ir.test_case',
+            'Lang': 'ir.lang',
+            }
         for module in modules.itervalues():
             models.update(module.ModuleTestCase.get_models())
 
@@ -165,7 +168,15 @@ class CoopTestCase(unittest.TestCase):
     def test9999_launch_test_cases(self):
         if os.environ.get('DO_NOT_TEST_CASES'):
             return
-        self.TestCaseModel.run_all_test_cases()
+        with Transaction().new_cursor():
+            test_case_instance = self.TestCaseModel.get_instance()
+            test_case_instance.language, = self.Lang.search([
+                    ('code', '=', 'fr_FR')])
+            test_case_instance.save()
+            Transaction().cursor.commit()
+        with Transaction().new_cursor(), Transaction().set_context(
+                TESTING=True):
+            self.TestCaseModel.run_all_test_cases()
 
     def __getattr__(self, name):
         if name == '_models':

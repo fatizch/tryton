@@ -97,3 +97,14 @@ class CoveredData:
         cls.clauses = copy.copy(cls.clauses)
         cls.clauses = fields.One2ManyDomain.init_from_One2Many(cls.clauses)
         cls.clauses.domain = [('clause.kind', '!=', 'beneficiary')]
+
+    def init_clauses(self, option):
+        super(CoveredData, self).init_clauses(option)
+        self.beneficiary_clauses = []
+        new_clauses = []
+        for elem in self.clauses:
+            if elem.clause.kind == 'beneficiary':
+                self.beneficiary_clauses.append(elem)
+            else:
+                new_clauses.append(elem)
+        self.clauses = new_clauses
