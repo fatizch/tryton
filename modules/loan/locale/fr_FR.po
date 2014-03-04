@@ -152,7 +152,7 @@ msgstr "Capital Restant Du"
 
 msgctxt "field:loan,payment_amount:"
 msgid "Payment Amount"
-msgstr "Mensualité"
+msgstr "Montant Echéance"
 
 msgctxt "field:loan,payment_frequency:"
 msgid "Payment Frequency"
