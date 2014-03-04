@@ -63,5 +63,15 @@
       <field name="act_window" ref="act_export_package"/>
     </record>
     <menuitem parent="menu_export_import" sequence="1" action="act_export_package" id="menu_export_package"/>
+
+    <record model="ir.ui.view" id="ir_export_package_add_records_start">
+        <field name="model">ir.export_package.add_records.start</field>
+        <field name="type">form</field>
+        <field name="name">export_package_add_records_start</field>
+    </record>
+    <record model="ir.action.wizard" id="export_package_wizard">
+        <field name="name">Select Export Package</field>
+        <field name="wiz_name">ir.export_package.add_records</field>
+    </record>
   </data>
 </tryton>
