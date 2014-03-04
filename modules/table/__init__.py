@@ -8,6 +8,7 @@ def register():
         # From table
         TableDefinition,
         TableDefinitionDimension,
+        TableDefinitionDimensionOpenAskType,
         TableCell,
         TableOpen2DAskDimensions,
         Table2D,
@@ -18,6 +19,7 @@ def register():
 
     Pool.register(
         # From table
+        TableDefinitionDimensionOpen,
         TableOpen2D,
         ManageDimension,
         TableCreation,
