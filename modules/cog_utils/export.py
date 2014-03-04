@@ -453,14 +453,23 @@ class ExportImportMixin(Model):
         existing_values = getattr(instance, field_name) if hasattr(instance,
             field_name) else None
         TargetModel = Pool().get(field.model_name)
+        to_delete = []
         if not instance.id:
             pass
         elif field_name in cls._export_force_recreate():
             TargetModel.delete([elem for elem in existing_values])
+        else:
+            if TargetModel._export_keys():
+                to_delete = dict([
+                        (x._export_get_key(), x) for x in existing_values])
         for elem in field_value:
             if isinstance(elem, tuple):
+                if elem in to_delete:
+                    del to_delete[elem]
                 continue
             TargetModel._import_json(elem, created=created, relink=relink)
+        if to_delete:
+            TargetModel.delete(list(to_delete.itervalues()))
 
     @classmethod
     def _import_many2many(cls, instance, field_name, field, field_value,
@@ -528,7 +537,7 @@ class ExportImportMixin(Model):
             logging.getLogger('export_import').debug('Importing field %s : %s'
                 % (field_name, field_value))
             if hasattr(cls, '_import_override_%s' % field_name):
-                values[field_name] = getattr(cls, '_import_override_%s' %
+                getattr(cls, '_import_override_%s' %
                     field_name)(my_key, good_instance, field_value, values,
                         created, relink, to_relink)
                 continue
