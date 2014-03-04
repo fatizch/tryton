@@ -95,6 +95,12 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
             ]
         cls.__rpc__.update({'get_default_value_selection': RPC(instantiate=0)})
+        cls._error_messages.update({
+                'invalid_value': 'Invalid value %s for key %s in field %s of '
+                '%s',
+                'expected_value': 'Expected key %s to be set in field %s of '
+                '%s',
+                })
 
     @staticmethod
     def default_start_date():
@@ -313,6 +319,45 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def get_var_names_for_full_extract(cls):
         return ['name', 'string', 'type_', 'selection_json']
+
+    def validate_value(self, value):
+        if self.type_ == 'selection':
+            if not value:
+                return False
+            selection = [[w[0].strip() for w in v.split(':', 1)]
+                for v in self.selection.splitlines() if v]
+            if value not in selection:
+                return False
+        return True
+
+    @classmethod
+    def check_extra_data(cls, instance, field_name):
+        field_value = getattr(instance, field_name, None)
+        if field_value is None:
+            return True, []
+        expected_values = getattr(instance, 'on_change_with_%s' % field_name,
+            None)
+        if expected_values is not None:
+            expected_values = expected_values()
+        res, errs = True, []
+        for k, v in field_value.iteritems():
+            if expected_values is not None:
+                if k in expected_values:
+                    del expected_values[k]
+                else:
+                    continue
+            key, = cls.search([('name', '=', k)])
+            if not key.validate_value(v):
+                res = False
+                errs.append(('invalid_value', (v, k, field_name,
+                            instance.get_rec_name(None))))
+        if expected_values is not None:
+            for k, v in expected_values.iteritems():
+                # This is a serious error, as the user should have no way to
+                # manage it on his own
+                cls.raise_user_error('expected_value', (k, field_name,
+                        instance.get_rec_name(None)))
+        return res, errs
 
 
 class ExtraDataSubExtraDataRelation(model.CoopSQL, model.CoopView):
