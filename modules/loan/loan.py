@@ -97,12 +97,10 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('payment_amount', 'kind', 'rate', 'amount',
         'number_of_payments', 'currency', 'payment_frequency',
-        'first_payment_date', 'increments')
+        'increments')
     def on_change_with_payment_amount(self):
-        if (not self.amount or not self.number_of_payments
-                or not self.first_payment_date):
-            return self.payment_amount
-        return self.calculate_payment_amount()
+        if self.amount and self.number_of_payments and self.payment_frequency:
+            return self.calculate_payment_amount()
 
     def get_rec_name(self, name):
         res = ''
