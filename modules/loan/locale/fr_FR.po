@@ -1,10 +1,6 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "field:contract,change_loans_order:"
-msgid "Change Order"
-msgstr "Modifier l'ordre"
 
 msgctxt "field:contract,doc_received:"
 msgid "All Document Received"
@@ -22,61 +18,9 @@ msgctxt "field:contract,loans:"
 msgid "Loans"
 msgstr "Prêts"
 
-msgctxt "field:contract,loans_ordered:"
-msgid "Loans"
-msgstr "Prêts"
-
 msgctxt "field:contract,multi_mixed_view:"
 msgid "Covered Elements"
 msgstr "Eléments Couverts"
-
-msgctxt "field:contract-loan,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract-loan,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract-loan,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:contract-loan,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract-loan,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract-loan,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "field:contract-loan,loan_number:"
-msgid "Loan Number"
-msgstr "Numéro du Prêt"
-
-msgctxt "field:contract-loan,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract-loan,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract-loan,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract-loan,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract-loan,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
 
 msgctxt "field:contract.covered_data,contract:"
 msgid "Contract"
@@ -122,9 +66,9 @@ msgctxt "field:loan,amount:"
 msgid "Amount"
 msgstr "Montant"
 
-msgctxt "field:loan,contracts:"
-msgid "Contracts"
-msgstr "Contrats"
+msgctxt "field:loan,contract:"
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:loan,create_date:"
 msgid "Create Date"
@@ -198,13 +142,17 @@ msgctxt "field:loan,number_of_payments:"
 msgid "Number of Payments"
 msgstr "Nombre d'Echéance"
 
+msgctxt "field:loan,order:"
+msgid "Order"
+msgstr "Ordre"
+
 msgctxt "field:loan,outstanding_capital:"
 msgid "Outstanding Capital"
 msgstr "Capital Restant Du"
 
 msgctxt "field:loan,payment_amount:"
 msgid "Payment Amount"
-msgstr "Mensualité"
+msgstr "Montant Echéance"
 
 msgctxt "field:loan,payment_frequency:"
 msgid "Payment Frequency"
@@ -523,10 +471,6 @@ msgctxt "field:offered.product,is_loan:"
 msgid ""
 msgstr " "
 
-msgctxt "model:contract-loan,name:"
-msgid "Contract Loan Relation"
-msgstr "Relation Prêt Contrat"
-
 msgctxt "model:ir.action,name:launch_loan_creation_wizard"
 msgid "Loan Create"
 msgstr "Création du Prêt"
@@ -666,10 +610,6 @@ msgstr "Planifié"
 msgctxt "selection:offered.option.description,family:"
 msgid "Loan"
 msgstr "Emprunteur"
-
-msgctxt "view:contract-loan:"
-msgid "Contract Loan Relation"
-msgstr "Relation Contrat Prêt"
 
 msgctxt "view:contract.covered_data.extra_premium:"
 msgid "‰"

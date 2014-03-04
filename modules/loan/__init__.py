@@ -24,7 +24,6 @@ def register():
         ExtraPremium,
         # From Loan
         Loan,
-        ContractLoanRelation,
         LoanShare,
         LoanIncrement,
         LoanPayment,

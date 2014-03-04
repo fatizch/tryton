@@ -44,7 +44,8 @@ class LoanCreate(model.CoopWizard):
         Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
         return {
-            'contracts': [contract.id],
+            'contract': contract.id,
+            'order': len(contract.loans) + 1,
             'currency': contract.currency.id,
             'currency_symbol': contract.currency.symbol,
             'funds_release_date': contract.start_date,

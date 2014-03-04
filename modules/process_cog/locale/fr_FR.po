@@ -306,6 +306,10 @@ msgctxt "field:process.transition,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "model:ir.action,name:act_end_process"
+msgid "End Process"
+msgstr ""
+
 msgctxt "model:ir.ui.view.description,name:"
 msgid "View Description"
 msgstr "Descripteur de Vue XML"
@@ -369,6 +373,10 @@ msgstr "Vues Personnalisées"
 msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
+
+msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr ""
 
 msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
 msgid "Cancel"

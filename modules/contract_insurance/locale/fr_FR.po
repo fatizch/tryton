@@ -551,7 +551,7 @@ msgstr "ID"
 
 msgctxt "field:contract.covered_element,is_person:"
 msgid "Is Person"
-msgstr ""
+msgstr "Est Une Personne"
 
 msgctxt "field:contract.covered_element,item_desc:"
 msgid "Item Desc"
@@ -591,11 +591,11 @@ msgstr "Données Complémentaires"
 
 msgctxt "field:contract.covered_element,possible_item_desc:"
 msgid "Possible Item Desc"
-msgstr ""
+msgstr "Desc. de Biens Possibles"
 
 msgctxt "field:contract.covered_element,possible_item_desc_nb:"
 msgid "Possible Item Desc Number"
-msgstr ""
+msgstr "Nombre de Desc. de Biens Possibles"
 
 msgctxt "field:contract.covered_element,rec_name:"
 msgid "Name"
@@ -876,7 +876,7 @@ msgstr "Seulement ce contrat"
 
 msgctxt "field:contract.renew.parameters,will_be_renewed:"
 msgid "Will be renewed"
-msgstr "A renouveller"
+msgstr "A renouveler"
 
 msgctxt "field:contract.renew.report,id:"
 msgid "ID"
@@ -1089,19 +1089,7 @@ msgctxt "model:ir.action,name:manage_options"
 msgid "Manage Options"
 msgstr "Gérer les Options"
 
-msgctxt "model:ir.ui.menu,name:menu_contract"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "model:ir.ui.menu,name:menu_contract_form"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "model:ir.ui.menu,name:menu_individual"
-msgid "Individual Policy"
-msgstr "Individuel"
-
-msgctxt "model:ir.ui.menu,name:menu_renew_contract"
+msgctxt "model:ir.ui.menu,name:menu_contract_renewal"
 msgid "Renew Contracts"
 msgstr "Renouvellement"
 

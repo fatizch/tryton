@@ -427,13 +427,12 @@ class BillingData(model.CoopSQL, model.CoopView):
             self.payment_date = int(good_payment_date)
         if self.payment_method.payment_mode == 'direct_debit':
             BankAccount = Pool().get('bank.account')
-            try:
-                party = contract.get_policy_owner(self.start_date)
-                if party:
-                    self.payment_bank_account = BankAccount.search([
-                            ('party', '=', party.id)])[0]
-            except IndexError:
-                pass
+            party = contract.get_policy_owner(self.start_date)
+            if not party:
+                return
+            bank_accounts = BankAccount.search([('owners', '=', party.id)])
+            if bank_accounts:
+                self.payment_bank_account = bank_accounts[0]
 
     @fields.depends('payment_method')
     def on_change_with_payment_mode(self, name=None):

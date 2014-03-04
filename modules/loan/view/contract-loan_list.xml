@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Contract Loan Relation">
-    <field name="contract"/>
-    <field name="loan_number"/>
-    <field name="loan"/>
-</tree>

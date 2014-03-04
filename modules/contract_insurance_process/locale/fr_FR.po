@@ -59,7 +59,7 @@ msgstr "Saisir un élement couvert"
 
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
-msgstr ""
+msgstr "Trace Courante"
 
 msgctxt "field:contract,current_state:"
 msgid ""
@@ -151,7 +151,7 @@ msgstr "Paramètres du Processus de Souscription"
 
 msgctxt "model:ir.action,name:act_contract_logs"
 msgid "Logs"
-msgstr ""
+msgstr "Traces"
 
 msgctxt "model:ir.action,name:subscription_process_launcher"
 msgid "Start Subscription"
@@ -176,6 +176,10 @@ msgstr "Garanties"
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
+
+msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr "Démarrer Processus (_k)"
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,end:"
 msgid "Cancel"

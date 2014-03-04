@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, coop_date, fields
+from trytond.modules.cog_utils import model, coop_date, fields, coop_string
 from trytond.modules.offered import offered
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.offered_insurance import offered as product
@@ -58,6 +58,12 @@ class EventDescription(model.CoopSQL, model.CoopView):
     @classmethod
     def default_company(cls):
         return Transaction().context.get('company') or None
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 class LossDescription(model.CoopSQL, model.CoopView):

@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.covered_data:"
 msgid "A coverage amount must be provided"
-msgstr ""
+msgstr "Montant de Couverture Requis"
 
 msgctxt "field:contract.covered_data,beneficiary_clause_override_text:"
 msgid "Beneficiary Clause Override Text"
