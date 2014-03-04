@@ -150,28 +150,5 @@
       <field name="perm_create" eval="False"/>
       <field name="perm_delete" eval="False"/>
     </record>
-    <!-- ############################################################ -->
-    <!-- Dimension Displayer -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="dimension_displayer_view_form">
-      <field name="model">table.manage_dimension.show.dimension</field>
-      <field name="type">form</field>
-      <field name="name">table_manage_dimension_show_dimension_form</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Manage Dimensions Wizard -->
-    <!-- ############################################################ -->
-    <record model="ir.action.wizard" id="act_manage_dimension">
-      <field name="name">Manage Dimensions</field>
-      <field name="wiz_name">table.manage_dimension</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Create Table -->
-    <!-- ############################################################ -->
-    <record model="ir.action.wizard" id="act_create_table">
-      <field name="name">Create Table</field>
-      <field name="wiz_name">table.create</field>
-    </record>
-    <menuitem name="Create Table" id="menu_create_table" action="act_create_table" sequence="4"/>
   </data>
 </tryton>
