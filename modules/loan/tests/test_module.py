@@ -3,6 +3,7 @@ from datetime import date
 from decimal import Decimal
 import unittest
 
+from trytond.error import UserError
 import trytond.tests.test_tryton
 
 from trytond.modules.cog_utils import test_framework
@@ -45,6 +46,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'OfferedPaymentMethod': 'offered.product-billing.payment.method',
             'ExtraPremiumKind': 'extra_premium.kind',
             'ExtraPremium': 'contract.covered_data.extra_premium',
+            'ExtraData': 'extra_data',
             }
 
     def test0010loan_basic_data(self):
@@ -260,6 +262,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             contract.init_extra_data()
             contract.save()
             self.assertEqual(len(contract.covered_elements[0].covered_data), 2)
+            contract.check_contract_extra_data()
+            contract.check_covered_element_extra_data()
+            contract.check_covered_data_extra_data()
             contract.check_options_eligibility()
             contract.check_at_least_one_covered()
             contract.check_sub_elem_eligibility()
@@ -347,7 +352,40 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 payment.end_balance - end_balance))
 
     @test_framework.prepare_test('loan.test0040_LoanContractSubscription')
-    def test0042loan_validation(self):
+    def test0042_TestCheckExtraData(self):
+        contract, = self.Contract.search([
+                ('start_date', '=', date(2014, 2, 25)),
+                ('subscriber.name', '=', 'DOE'),
+                ('offered.code', '=', 'LOAN'),
+                ])
+        product = contract.offered
+        coverage = product.coverages[0]
+        covered_element = contract.covered_elements[0]
+        test_extra_data = self.ExtraData()
+        test_extra_data.name = 'test_extra_data'
+        test_extra_data.start_date = product.start_date
+        test_extra_data.string = 'Test Extra Data'
+        test_extra_data.type_ = 'selection'
+        test_extra_data.kind = 'sub_elem'
+        test_extra_data.selection = 'test_key: test_value'
+        test_extra_data.save()
+        product.extra_data_def = [test_extra_data]
+        product.save()
+        contract.check_contract_extra_data()
+        self.assertRaises(UserError,
+            contract.check_covered_element_extra_data)
+        covered_element.extra_data = {'test_extra_data': ''}
+        covered_element.save()
+        self.assertEqual(False, contract.check_covered_element_extra_data()[0])
+        covered_element.extra_data['test_extra_data'] = 'foo'
+        covered_element.save()
+        self.assertEqual(False, contract.check_covered_element_extra_data()[0])
+        covered_element.extra_data['test_extra_data'] = 'test_key'
+        covered_element.save()
+        contract.check_covered_element_extra_data()
+
+    @test_framework.prepare_test('loan.test0040_LoanContractSubscription')
+    def test0043loan_validation(self):
         currency, = self.Currency.search([('code', '=', 'EUR')], limit=1)
         contract, = self.Contract.search([
                 ('start_date', '=', date(2014, 2, 25)),

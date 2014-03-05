@@ -3,7 +3,6 @@ from trytond.pool import Pool
 from .distribution import *
 from .offered import *
 from .contract import *
-from .export import *
 from .test_case import *
 
 
@@ -17,8 +16,6 @@ def register():
         Product,
         # from contract
         Contract,
-        # from export
-        ExportPackage,
         # from test_case
         TestCaseModel,
         module='offered_distribution', type_='model')
