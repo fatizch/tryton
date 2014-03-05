@@ -1,4 +1,3 @@
-import vimpdb
 import traceback
 import sys
 import copy
@@ -545,7 +544,6 @@ class ExportImportMixin(Model):
                 logging.getLogger('export_import').debug(str(instance))
                 for x in traceback.format_exception(*sys.exc_info()):
                     logging.getLogger('export_import').debug(str(x))
-                vimpdb.set_trace()  # ####### Breakpoint # #######
                 raise
 
     @classmethod
