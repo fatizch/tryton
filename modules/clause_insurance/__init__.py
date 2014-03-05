@@ -9,7 +9,7 @@ def register():
         ClauseRule,
         RuleClauseRelation,
         # From file offered
-        Offered,
+        OfferedMixin,
         Product,
         OptionDescription,
         module='clause_insurance', type_='model')

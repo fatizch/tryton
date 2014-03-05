@@ -6,7 +6,7 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
 
 __all__ = [
     'ClauseRule',
-    'RuleClauseRelation'
+    'RuleClauseRelation',
     ]
 
 
@@ -23,12 +23,11 @@ class ClauseRule(BusinessRuleRoot, model.CoopSQL):
 
 
 class RuleClauseRelation(model.CoopSQL):
-    'Rule to Clause Relation'
+    'Rule Clause Relation'
 
     __name__ = 'clause.rule-clause'
 
-    rule = fields.Many2One('clause.rule', 'Rule', select=1, required=True,
+    rule = fields.Many2One('clause.rule', 'Rule', select=True, required=True,
         ondelete='CASCADE')
-    clause = fields.Many2One('clause', 'Clause', select=1, required=True,
+    clause = fields.Many2One('clause', 'Clause', select=True, required=True,
         ondelete='RESTRICT')
-

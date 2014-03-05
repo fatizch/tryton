@@ -1,3 +1,4 @@
+import datetime
 import copy
 
 from trytond.pool import Pool, PoolMeta
@@ -826,8 +827,8 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
         args['deductible_duration'] = self.get_deductible_duration()
         args['extra_premiums'] = []
         for elem in getattr(self, 'extra_premiums', []):
-            if elem.start_date <= args['date'] and (elem.end_date >=
-                    args['date'] or not elem.end_date):
+            if elem.start_date <= args['date'] <= (elem.end_date or
+                    datetime.date.max):
                 args['extra_premiums'].append(elem)
         self.covered_element.init_dict_for_rule_engine(args)
         self.option.init_dict_for_rule_engine(args)

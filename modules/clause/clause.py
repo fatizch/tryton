@@ -1,10 +1,9 @@
-#-*- coding:utf-8 -*-
 from trytond.modules.cog_utils import model, fields, coop_string
 
 
 __all__ = [
     'Clause',
-    'ClauseVersion'
+    'ClauseVersion',
     ]
 
 

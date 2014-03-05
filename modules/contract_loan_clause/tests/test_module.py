@@ -53,7 +53,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('subscriber.name', '=', 'DOE'),
                 ('offered.code', '=', 'LOAN'),
                 ])
-        covered_element = contract.covered_elements[0]
+        covered_element, = contract.covered_elements
         for covered_data in covered_element.covered_data:
             if covered_data.option.offered.code == 'DH':
                 break

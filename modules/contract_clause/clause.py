@@ -20,7 +20,7 @@ class ContractClause(model.CoopSQL, model.CoopView):
     text = fields.Text('Text', states={
             'readonly': ~Eval('override_text'),
             'invisible': True,
-        })
+            }, depends=['override_text'])
     visual_text = fields.Function(
         fields.Text('Clause Text'),
         'on_change_with_visual_text')

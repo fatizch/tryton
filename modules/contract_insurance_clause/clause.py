@@ -17,11 +17,9 @@ class ContractClause:
 
     @fields.depends('covered_data')
     def on_change_with_visual_text(self, name=None):
-        try:
+        if self.contract:
             return super(ContractClause, self).on_change_with_visual_text()
-        except AttributeError:
-            if not self.contract:
-                good_version = self.clause.get_version_at_date(
-                    self.covered_data.contract.appliable_conditions_date)
-                return good_version.content
-            raise
+        else:
+            good_version = self.clause.get_version_at_date(
+                self.covered_data.contract.appliable_conditions_date)
+            return good_version.content

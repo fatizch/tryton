@@ -24,7 +24,7 @@ class Beneficiary(model.CoopSQL, model.CoopView):
     clause = fields.Many2One('contract.clause', 'Clause', required=True,
         states={'invisible': True}, ondelete='RESTRICT')
     party = fields.Many2One('party.party', 'Party', states={
-            'required': ~~Eval('accepting')}, depends=['accepting'],
+            'required': Eval('accepting', False)}, depends=['accepting'],
         ondelete='RESTRICT')
     incomplete_beneficiary = fields.Text('Incomplete Beneficiary',
         states={'invisible': ~~Eval('accepting')})
@@ -36,8 +36,8 @@ class Beneficiary(model.CoopSQL, model.CoopView):
     @fields.depends('party', 'incomplete_beneficiary')
     def on_change_with_beneficiary_description(self, name=None):
         if self.party:
-            return self.party.get_rec_name(name)
-        return self.incomplete_beneficiary.replace('\n', ' ')
+            return self.party.rec_name
+        return self.incomplete_beneficiary.splitlines().join(' ')
 
     @classmethod
     def default_share(cls):
@@ -58,11 +58,11 @@ class ContractClause:
     def __setup__(cls):
         super(ContractClause, cls).__setup__()
         cls._error_messages.update({
-            'no_beneficiary_declared': 'No beneficiaries declared for clause '
-                '%s',
-            'invalid_beneficiary_shares': 'Total share for clause %s is'
+                'no_beneficiary_declared':
+                'No beneficiaries declared for clause %s',
+                'invalid_beneficiary_shares': 'Total share for clause %s is'
                 'invalid',
-        })
+                })
 
     @fields.depends('clause')
     def on_change_with_with_beneficiary_list(self, name=None):
@@ -78,11 +78,11 @@ class ContractClause:
                 continue
             if not clause.beneficiaries:
                 cls.raise_user_error('no_beneficiary_declared',
-                    (clause.get_rec_name(None)))
-            if not(sum([x.share for x in clause.beneficiaries]) ==
+                    (clause.rec_name))
+            if not(sum((x.share for x in clause.beneficiaries)) ==
                     Decimal('1')):
                 cls.raise_user_error('invalid_beneficiary_shares',
-                    (clause.get_rec_name(None)))
+                    (clause.rec_name))
 
 
 class CoveredData:

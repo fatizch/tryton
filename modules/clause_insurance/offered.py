@@ -5,13 +5,13 @@ from trytond.modules.offered import NonExistingRuleKindException
 __metaclass__ = PoolMeta
 
 __all__ = [
-    'Offered',
+    'OfferedMixin',
     'Product',
     'OptionDescription',
     ]
 
 
-class Offered:
+class OfferedMixin:
     __name__ = 'offered'
 
     clause_rules = fields.One2Many('clause.rule', 'offered', 'Clause Rules')
@@ -23,9 +23,9 @@ class Offered:
             return [], ()
 
 
-class Product(Offered):
+class Product(OfferedMixin):
     __name__ = 'offered.product'
 
 
-class OptionDescription(Offered):
+class OptionDescription(OfferedMixin):
     __name__ = 'offered.option.description'

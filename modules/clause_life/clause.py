@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields
 
@@ -14,9 +14,8 @@ class Clause:
     __name__ = 'clause'
 
     with_beneficiary_list = fields.Boolean('With beneficiary list',
-        states={'invisible': Or(
-                Eval('kind', '') != 'beneficiary',
-                ~~Eval('may_be_overriden'))})
+        states={'invisible': (Eval('kind', '') != 'beneficiary')
+                | Eval('may_be_overriden', False)})
 
     @classmethod
     def __setup__(cls):
