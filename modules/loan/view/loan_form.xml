@@ -11,33 +11,43 @@
       <label name="kind"/>
       <field name="kind"/>
       <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])}"/>
-      <group id="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])}">
-        <field name="rate" xexpand="0" factor="100"/>
-        <label id="percent" string="%" xexpand="0" xalign="0"/>
+      <group id="rate">
+          <field name="rate" factor="100" xexpand="0"/>
+          <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])}"/>
       </group>
       <newline/>
       <label name="amount"/>
       <group id="amount">
-        <field name="amount" xexpand="0"/>
-        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+          <field name="amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'leasing'}"/>
+      </group>
+      <newline/>
+      <label name="first_payment_amount"/>
+      <group id="first_payment_amount">
+          <field name="first_payment_amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') != 'leasing'}"/>
       </group>
       <newline/>
       <label name="number_of_payments"/>
-      <group id='number_of_payments'>
-        <field name="number_of_payments"/>
-        <field name="payment_frequency"/>
+      <group id="frequency">
+          <field name="number_of_payments"/>
+          <field name="payment_frequency"/>
       </group>
       <label name="payment_amount"/>
       <group id="payment_amount">
-        <field name="payment_amount" xexpand="0"/>
-        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+          <field name="payment_amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'graduated'}"/>
+      </group>
+      <label name="last_payment_amount"/>
+      <group id="last_payment_amount">
+          <field name="last_payment_amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') != 'leasing'}"/>
       </group>
       <newline/>
       <label name="funds_release_date"/>
       <field name="funds_release_date"/>
       <label name="first_payment_date"/>
       <field name="first_payment_date"/>
-      <newline/>
       <label name="defferal"/>
       <field name="defferal"/>
       <label name="defferal_duration"/>
