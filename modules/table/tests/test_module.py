@@ -3,7 +3,6 @@ import datetime
 from decimal import Decimal
 
 import trytond.tests.test_tryton
-from trytond.transaction import Transaction
 from trytond.modules.cog_utils import test_framework
 
 
@@ -21,7 +20,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Definition': 'table',
             'Dimension': 'table.dimension.value',
             'Cell': 'table.cell',
-            'ManageDimension': 'table.manage_dimension',
         }
 
     def test0010definition_get(self):
@@ -335,26 +333,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 self.Cell._load_value(
                     self.Cell._dump_value({'value': value})['value'],
                     type_), value)
-
-    @test_framework.prepare_test('table.test0060table_2dim')
-    def test0080test_manage_dimension1_wizard(self):
-        table = self.Definition.search([('code', '=', 'test_code')])[0]
-        with Transaction().set_context({'active_id': table.id}):
-            wizard_id, _, _ = self.ManageDimension.create()
-            wizard = self.ManageDimension(wizard_id)
-            wizard._execute('dimension_management')
-            res = wizard.default_dimension_management(None)
-            self.assertEqual(len(res['values']), 2)
-            self.assertEqual(res, {
-                    'date_format': "%d%m%y",
-                    'kind': u'value',
-                    'name': u'Value',
-                    'cur_dimension': 1,
-                    'converted_text': "bar\nfoo",
-                    'values': res['values'],
-                    'table': res['table'],
-                    'order': u'alpha',
-                    })
 
     @test_framework.prepare_test('table.test0060table_2dim')
     def test0090test_export(self):
