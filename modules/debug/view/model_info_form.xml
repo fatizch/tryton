@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Model Debug">
+  <label name="model_name"/>
+  <field name="model_name"/>
+  <label name="filter_value"/>
+  <field name="filter_value"/>
+  <field name="field_infos" colspan="4" readonly="1"/>
+  <label name="hide_functions"/>
+  <field name="hide_functions"/>
+</form>
