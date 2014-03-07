@@ -70,7 +70,6 @@ class ContractClause:
 
     @classmethod
     def validate(cls, clauses):
-        # TODO : reactivate when clause.beneficiaries is properly populated
         for clause in clauses:
             if not clause.with_beneficiary_list:
                 continue
