@@ -111,6 +111,13 @@ class TableDefinition(ModelSQL, ModelView):
                 cursor.rollback()
 
     @classmethod
+    def _export_force_recreate(cls):
+        result = super(TableDefinition, cls)._export_force_recreate()
+        for i in range(1, DIMENSION_MAX + 1):
+            result.remove('dimension%s' % i)
+        return result
+
+    @classmethod
     def copy(cls, records, default=None):
         result = []
         for record in records:
@@ -166,45 +173,49 @@ class TableDefinition(ModelSQL, ModelView):
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
             field_value, values, created, relink, to_relink):
-        if not field_value:
-            return
+        return
+
+    @classmethod
+    def _import_json(cls, values, created, relink, force_recreate=False):
+        table = super(TableDefinition, cls)._import_json(values, created,
+            relink, force_recreate)
+        if not values['cells']:
+            return table
+        # Import cells
         Cell = Pool().get('table.cell')
-        if (hasattr(good_instance, 'id') and good_instance.id):
-            table_id = good_instance.id
-            Cell.delete(Cell.search([('definition', '=', table_id)]))
-        else:
-            table_id = None
-        dimensions, cell_values = field_value
-        cells_number = len(cell_values)
+        Cell.delete(Cell.search([('definition', '=', table.id)]))
+        dimensions, cell_values = values['cells']
         cell_values = list(cell_values)
 
-        def lock_dim_and_import(locked, relink_template):
+        to_create = []
+        dim_ids = {}
+        for dim in xrange(len(dimensions)):
+            for idx, dim_val in enumerate(getattr(table, 'dimension%s' % (
+                            dim + 1))):
+                dim_ids[(dim + 1, idx)] = dim_val.id
+
+        def lock_dim_and_import(locked):
             my_dim = len(locked) + 1
             if my_dim > len(dimensions):
-                to_relink = list(relink_template)
-                cell = Cell()
-                cell.value = cell_values.pop(0)
-                cell.definition = table_id
-                cell._import_finalize((instance_key,
-                        cells_number - len(cell_values)),
-                    cell, False, created, relink, to_relink)
+                cell_desc = {
+                    'definition': table.id,
+                    'value': cell_values.pop(0),
+                    }
+                if cell_desc['value'] is None:
+                    return
+                for idx, key in enumerate(locked):
+                    cell_desc['dimension%s' % (idx + 1)] = dim_ids[key]
+                to_create.append(cell_desc)
             else:
                 for elem in xrange(dimensions[my_dim - 1]):
-                    relink_template.append(('dimension%s' % my_dim, (
-                                'table.dimension.value', (
-                                    instance_key, 'dimension%s' % my_dim,
-                                    elem + 1))))
-                    locked.append(elem + 1)
-                    lock_dim_and_import(locked, relink_template)
+                    locked.append((my_dim, elem))
+                    lock_dim_and_import(locked)
                     locked.pop()
-                    relink_template.pop()
+
         locks = []
-        if table_id:
-            template = []
-        else:
-            template = [('definition', ('table',
-                   instance_key))]
-        lock_dim_and_import(locks, template)
+        lock_dim_and_import(locks)
+        Cell.create(to_create)
+        return table
 
     @classmethod
     def default_dimension_order(cls):
@@ -297,7 +308,7 @@ class TableDefinition(ModelSQL, ModelView):
         Cell = Pool().get('table.cell')
         if not at_date:
             at_date = utils.today()
-        cell = Cell.get_cell(self, (at_date))
+        cell = Cell.get_cell(self, at_date)
         return cell.get_value_with_type() if cell else None
 
     def get_rec_name(self, name):
@@ -353,9 +364,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         states={
             'invisible': Eval('dimension_order') == 'alpha',
             }, depends=['dimension_order'])
-    definition = fields.Many2One(
-        'table', 'Definition',
-        required=True, ondelete='CASCADE')
+    definition = fields.Many2One('table', 'Definition', required=True,
+        ondelete='CASCADE')
     type = fields.Selection(
         [('dimension%s' % i, 'Dimension %s' % i)
             for i in range(1, DIMENSION_MAX + 1)],
@@ -522,7 +532,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
     @classmethod
     def _export_keys(cls):
-        return set([])
+        return set(['definition.code', 'type', 'name'])
 
 
 class TableDefinitionDimensionOpenAskType(ModelView):
