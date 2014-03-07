@@ -58,8 +58,6 @@ class ContractClause:
     def __setup__(cls):
         super(ContractClause, cls).__setup__()
         cls._error_messages.update({
-                'no_beneficiary_declared':
-                'No beneficiaries declared for clause %s',
                 'invalid_beneficiary_shares': 'Total share for clause %s is'
                 'invalid',
                 })
@@ -71,14 +69,13 @@ class ContractClause:
         return self.clause.with_beneficiary_list
 
     @classmethod
-    def __validate(cls, clauses):
+    def validate(cls, clauses):
         # TODO : reactivate when clause.beneficiaries is properly populated
         for clause in clauses:
             if not clause.with_beneficiary_list:
                 continue
             if not clause.beneficiaries:
-                cls.raise_user_error('no_beneficiary_declared',
-                    (clause.rec_name))
+                return
             if not(sum((x.share for x in clause.beneficiaries)) ==
                     Decimal('1')):
                 cls.raise_user_error('invalid_beneficiary_shares',
