@@ -539,7 +539,7 @@ class TableDefinitionDimensionOpenAskType(ModelView):
     'Table Open Definition Dimension'
     __name__ = 'table.dimension.value.open.ask_type'
     table = fields.Many2One('table', 'Table', required=True)
-    type = fields.Selection('get_types', 'Type', required=True)
+    type = fields.Selection('get_types', 'Type', required=True, sort=False)
 
     @staticmethod
     def default_table():
