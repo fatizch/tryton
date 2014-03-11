@@ -5,16 +5,22 @@
     <newline/>
     <label name="kind"/>
     <field name="kind"/>
-    <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])}"/>
-    <group id="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])}">
+    <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon'])}"/>
+    <group id="rate">
         <field name="rate" factor="100" xexpand="0"/>
-        <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'graduated'}"/>
+        <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon'])}"/>
     </group>
     <newline/>
     <label name="amount"/>
     <group id="amount">
         <field name="amount" xexpand="0"/>
-        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'leasing'}"/>
+    </group>
+    <newline/>
+    <label name="first_payment_amount"/>
+    <group id="first_payment_amount">
+        <field name="first_payment_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') != 'leasing'}"/>
     </group>
     <newline/>
     <label name="number_of_payments"/>
@@ -25,16 +31,22 @@
     <label name="payment_amount"/>
     <group id="payment_amount">
         <field name="payment_amount" xexpand="0"/>
-        <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'graduated'}"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Or(Eval('kind') == 'graduated', ~~Eval('deferal'))}"/>
     </group>
+    <label name="last_payment_amount"/>
+    <group id="last_payment_amount">
+        <field name="last_payment_amount" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') != 'leasing'}"/>
+    </group>
+    <newline/>
     <label name="funds_release_date"/>
     <field name="funds_release_date"/>
     <label name="first_payment_date"/>
     <field name="first_payment_date"/>
-    <label name="defferal"/>
-    <field name="defferal"/>
-    <label name="defferal_duration"/>
-    <field name="defferal_duration"/>
+    <label name="deferal"/>
+    <field name="deferal"/>
+    <label name="deferal_duration"/>
+    <field name="deferal_duration"/>
     <newline/>
     <field name="currency"/>
     <group id="contract" states="{'invisible': True}">

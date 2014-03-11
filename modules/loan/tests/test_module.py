@@ -56,73 +56,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'symbol': u'€',
                     }])
 
-    def assert_payment(self, loan, at_date, number, begin_balance, amount,
-            principal, interest, end_balance):
-        payment = loan.get_payment(at_date)
-        self.assert_(payment)
-        self.assert_(payment.number == number)
-        self.assert_(loan.currency.is_zero(
-                payment.begin_balance - begin_balance))
-        self.assert_(loan.currency.is_zero(payment.amount - amount))
-        self.assert_(loan.currency.is_zero(payment.principal - principal))
-        self.assert_(loan.currency.is_zero(payment.interest - interest))
-        self.assert_(loan.currency.is_zero(
-                payment.end_balance - end_balance))
-
-    @test_framework.prepare_test('loan.test0010loan_basic_data')
-    def test0020loan_creation(self):
-        '''
-        Test basic loan
-        '''
-        currency, = self.Currency.search([], limit=1)
-        loan = self.Loan()
-        loan.kind = 'fixed_rate'
-        loan.rate = Decimal('0.04')
-        loan.funds_release_date = date(2012, 7, 1)
-        loan.first_payment_date = date(2012, 7, 15)
-        loan.payment_frequency = 'month'
-        loan.amount = 100000
-        loan.number_of_payments = 180
-        loan.currency = currency
-        loan.payment_amount = loan.on_change_with_payment_amount()
-        self.assert_(
-            currency.is_zero(loan.payment_amount - Decimal(739.69)))
-        loan.defferal = 'partially'
-        loan.defferal_duration = 12
-        loan.calculate_increments()
-        self.assert_(len(loan.increments) == 2)
-        increment_1 = loan.get_increment(loan.first_payment_date)
-        self.assert_(increment_1)
-        self.assert_(increment_1.defferal == 'partially')
-        self.assert_(increment_1.number_of_payments == 12)
-        self.assert_(
-            currency.is_zero(increment_1.payment_amount - Decimal(333.33)))
-        increment_2 = loan.get_increment(date(2013, 7, 15))
-        self.assert_(increment_2)
-        self.assert_(
-            currency.is_zero(increment_2.payment_amount - Decimal(778.35)))
-
-        loan.early_payments = []
-        loan.payments = loan.calculate_payments()
-        self.assert_(len(loan.payments) == loan.number_of_payments)
-
-        self.assert_payment(loan, date(2013, 7, 14), 12, loan.amount,
-            Decimal(333.33), Decimal(0.0), Decimal(333.33), loan.amount)
-
-        self.assert_payment(loan, date(2013, 7, 15), 13, loan.amount,
-            Decimal(778.35), Decimal(445.02), Decimal(333.33),
-            Decimal(99554.98))
-
-        self.assert_payment(loan, date(2021, 1, 15), 103,
-            Decimal(53381.95), Decimal(778.35), Decimal(600.41),
-            Decimal(177.94), Decimal(52781.54))
-
-        self.assert_payment(loan, date(2027, 6, 15), 180,
-            Decimal(774.70), Decimal(777.28), Decimal(774.70),
-            Decimal(2.58), Decimal(0.0))
-
-        loan.save()
-
     def test0025_CreateAccountKind(self):
         company, = self.Company.search([('party.name', '=', 'Coop')])
         product_account_kind = self.AccountKind()
@@ -274,10 +207,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         commercial_product.save()
 
     @test_framework.prepare_test(
-        'loan.test0020loan_creation',
         'contract_insurance.test0001_testPersonCreation',
         'loan.test0032_LoanCommercialProduct')
-    def test0040_LoanContractSubscription(self):
+    def test0035_BasicLoanContract(self):
         company, = self.Company.search([('party.name', '=', 'Coop')])
         with Transaction().set_context(user=1):
             commercial_product = self.CommercialProduct.search([])
@@ -291,6 +223,161 @@ class ModuleTestCase(test_framework.CoopTestCase):
             contract.init_from_offered(commercial_product.product, main_date)
             contract.company = company
             contract.save()
+
+    def assert_payment(self, loan, at_date, number, begin_balance, amount,
+            principal, interest, end_balance):
+        payment = loan.get_payment(at_date)
+        self.assert_(payment)
+        self.assert_(payment.number == number)
+        self.assert_(payment.begin_balance == begin_balance)
+        self.assert_(payment.amount == amount)
+        self.assert_(payment.principal == principal)
+        self.assert_(payment.interest == interest)
+        self.assert_(payment.end_balance == end_balance)
+
+    @test_framework.prepare_test('loan.test0035_BasicLoanContract')
+    def test0037loan_creation(self):
+        '''
+        Test basic loan
+        '''
+        contract, = self.Contract.search([
+                ('offered.code', '=', 'LOAN'),
+                ])
+        currency, = self.Currency.search([], limit=1)
+        loan = self.Loan()
+        loan.contract = contract
+        loan.kind = 'fixed_rate'
+        loan.rate = Decimal('0.04')
+        loan.funds_release_date = date(2012, 7, 1)
+        loan.first_payment_date = date(2012, 7, 15)
+        loan.payment_frequency = 'month'
+        loan.amount = Decimal(100000)
+        loan.number_of_payments = 180
+        loan.currency = currency
+        loan.payment_amount = loan.on_change_with_payment_amount()
+        self.assert_(loan.payment_amount == Decimal('739.69'))
+        loan.deferal = 'partially'
+        loan.deferal_duration = 12
+        loan.calculate_increments()
+        loan.early_payments = []
+        loan.payments = loan.calculate_payments()
+        self.assert_(len(loan.increments) == 2)
+        increment_1 = loan.increments[0]
+        self.assert_(increment_1)
+        self.assert_(increment_1.deferal == 'partially')
+        self.assert_(increment_1.number_of_payments == 12)
+        self.assert_(increment_1.payment_amount == Decimal('333.33'))
+        increment_2 = loan.increments[-1]
+        self.assert_(increment_2)
+        self.assert_(increment_2.payment_amount == Decimal('778.35'))
+
+        self.assert_(len(loan.payments) == loan.number_of_payments)
+        self.assert_payment(loan, date(2013, 7, 14), 12, loan.amount,
+            Decimal('333.33'), Decimal(0), Decimal('333.33'), loan.amount)
+        self.assert_payment(loan, date(2013, 7, 15), 13, loan.amount,
+            Decimal('778.35'), Decimal('445.02'), Decimal('333.33'),
+            Decimal('99554.98'))
+        self.assert_payment(loan, date(2021, 1, 15), 103,
+            Decimal('53381.95'), Decimal('778.35'), Decimal('600.41'),
+            Decimal('177.94'), Decimal('52781.54'))
+        self.assert_payment(loan, date(2027, 6, 15), 180,
+            Decimal('774.70'), Decimal('777.28'), Decimal('774.70'),
+            Decimal('2.58'), Decimal(0))
+
+        loan.save()
+
+        loan = self.Loan()
+        loan.contract = contract
+        loan.currency = currency
+        loan.kind = 'fixed_rate'
+        loan.rate = Decimal('0.0752')
+        loan.funds_release_date = date(2014, 3, 5)
+        loan.payment_frequency = 'quarter'
+        loan.first_payment_date = loan.on_change_with_first_payment_date()
+        self.assert_(loan.first_payment_date == date(2014, 6, 5))
+        loan.number_of_payments = 56
+        loan.amount = Decimal(134566)
+        loan.deferal = 'fully'
+        loan.deferal_duration = 8
+        loan.payment_amount = loan.on_change_with_payment_amount()
+        self.assert_(loan.payment_amount is None)
+        loan.calculate_increments()
+        loan.early_payments = []
+        loan.payments = loan.calculate_payments()
+        self.assert_(len(loan.increments) == 2)
+        increment_1 = loan.increments[0]
+        self.assert_(increment_1)
+        self.assert_(increment_1.deferal == 'fully')
+        self.assert_(increment_1.number_of_payments == 8)
+        self.assert_(increment_1.start_date == date(2014, 6, 5))
+        self.assert_(increment_1.begin_balance == Decimal(134566))
+        increment_2 = loan.increments[-1]
+        self.assert_(increment_2)
+        self.assert_(increment_2.number_of_payments == 48)
+        self.assert_(increment_2.start_date == date(2016, 6, 5))
+        self.assert_(increment_2.begin_balance == Decimal('156187.70'))
+
+        self.assert_payment(loan, date(2014, 12, 5), 3, Decimal('139673.24'),
+            Decimal(0), Decimal('-2625.86'), Decimal('2625.86'),
+            Decimal('142299.10'))
+        self.assert_payment(loan, date(2016, 6, 5), 9, Decimal('156187.70'),
+            Decimal('4968.47'), Decimal('2032.14'), Decimal('2936.33'),
+            Decimal('154155.56'))
+        self.assert_payment(loan, date(2019, 6, 5), 21, Decimal('129115.62'),
+            Decimal('4968.47'), Decimal('2541.10'), Decimal('2427.37'),
+            Decimal('126574.52'))
+        self.assert_payment(loan, date(2027, 12, 5), 55, Decimal('9663.48'),
+            Decimal('4968.47'), Decimal('4786.80'), Decimal('181.67'),
+            Decimal('4876.68'))
+        self.assert_payment(loan, date(2028, 3, 5), 56, Decimal('4876.68'),
+            Decimal('4968.36'), Decimal('4876.68'), Decimal('91.68'),
+            Decimal('0'))
+
+        loan = self.Loan()
+        loan.contract = contract
+        loan.currency = currency
+        loan.kind = 'balloon'
+        loan.rate = Decimal('0.0677')
+        loan.funds_release_date = date(2014, 3, 5)
+        loan.payment_frequency = 'half_year'
+        loan.first_payment_date = loan.on_change_with_first_payment_date()
+        self.assert_(loan.first_payment_date == date(2014, 9, 5))
+        loan.number_of_payments = 30
+        loan.amount = Decimal(243455)
+        loan.deferal = loan.on_change_with_deferal()
+        loan.deferal_duration = loan.on_change_with_deferal_duration()
+        loan.payment_amount = loan.on_change_with_payment_amount()
+        self.assert_(loan.payment_amount is None)
+        loan.calculate_increments()
+        loan.payments = loan.calculate_payments()
+        self.assert_(len(loan.increments) == 2)
+        increment_1 = loan.increments[0]
+        self.assert_(increment_1)
+        self.assert_(increment_1.deferal == 'partially')
+        self.assert_(increment_1.number_of_payments == 29)
+        self.assert_(increment_1.start_date == date(2014, 9, 5))
+        self.assert_(increment_1.begin_balance == loan.amount)
+        increment_2 = loan.increments[-1]
+        self.assert_(increment_2)
+        self.assert_(increment_2.number_of_payments == 1)
+        self.assert_(increment_2.start_date == date(2029, 3, 5))
+        self.assert_(increment_2.begin_balance == loan.amount)
+
+        self.assert_payment(loan, date(2022, 3, 5), 16, loan.amount,
+            Decimal('8240.95'), Decimal(0), Decimal('8240.95'), loan.amount)
+        self.assert_payment(loan, date(2029, 3, 5), 30, loan.amount,
+            Decimal('251695.95'), loan.amount, Decimal('8240.95'),
+            Decimal('0'))
+
+    @test_framework.prepare_test(
+        'loan.test0037loan_creation',
+        )
+    def test0040_LoanContractSubscription(self):
+        company, = self.Company.search([('party.name', '=', 'Coop')])
+        with Transaction().set_context(user=1):
+            contract, = self.Contract.search([
+                ('offered.code', '=', 'LOAN'),
+                ])
             contract.subscriber, = self.Party.search([('name', '=', 'DOE')])
             contract.save()
             contract.check_product_not_null()
@@ -372,7 +459,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('offered.code', '=', 'LOAN'),
                 ])
         product = contract.offered
-        coverage = product.coverages[0]
         covered_element = contract.covered_elements[0]
         test_extra_data = self.ExtraData()
         test_extra_data.name = 'test_extra_data'
