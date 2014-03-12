@@ -21,6 +21,11 @@ __all__ = [
     'CoveredData',
     ]
 
+_STATES = {
+    'readonly': Eval('status') != 'quote',
+    }
+_DEPENDS = ['status']
+
 
 class Contract:
     __name__ = 'contract'
@@ -30,7 +35,8 @@ class Contract:
             'start_date': Eval('start_date'),
             'number_of_billing_data': Eval('number_of_billing_data'),
             },
-        depends=['number_of_billing_data'])
+        states=_STATES,
+        depends=['number_of_billing_data', 'status'])
     number_of_billing_data = fields.Function(
         fields.Integer('Number of Billing Data', states={'invisible': True}),
         'get_number_of_billing_data')
@@ -38,13 +44,20 @@ class Contract:
         fields.Boolean('Use Prices', states={'invisible': True}),
         'get_use_prices')
     next_billing_date = fields.Date('Next Billing Date',
-        states={'invisible': ~Eval('use_prices')})
+        states={
+            'invisible': Eval('use_prices', False),
+            'readonly': Eval('status') != 'quote',
+            })
     prices = fields.One2Many(
         'contract.billing.premium', 'contract', 'Prices',
-        states={'invisible': ~Eval('use_prices')},
-        order=[('start_date', 'ASC'), ('on_object', 'ASC')])
+        states={
+            'invisible': ~Eval('use_prices'),
+            'readonly': Eval('status') != 'quote',
+            },
+        order=[('start_date', 'ASC'), ('on_object', 'ASC')],
+        depends=_DEPENDS)
     billing_periods = fields.One2Many('contract.billing.period', 'contract',
-        'Billing Periods')
+        'Billing Periods', states=_STATES, depends=_DEPENDS)
     receivable_lines = fields.Function(
         fields.One2Many('account.move.line', None, 'Receivable Lines',
             depends=['display_all_lines', 'id'],

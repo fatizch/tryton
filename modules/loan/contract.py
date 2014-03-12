@@ -28,7 +28,8 @@ class Contract:
     loans = fields.Many2Many('contract-loan', 'contract', 'loan', 'Loans',
         states={
             'invisible': Or(~Eval('is_loan'), ~~Eval('change_loans_order')),
-            }, depends=['is_loan', 'currency'],
+            'readonly': Eval('status') != 'quote',
+            }, depends=['is_loan', 'currency', 'status'],
         context={'currency': Eval('currency')})
     loans_ordered = fields.One2Many('contract-loan', 'contract', 'Loans',
         states={

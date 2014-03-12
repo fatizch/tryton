@@ -32,23 +32,34 @@ __all__ = [
     'ContractAgreementRelation',
     ]
 
+_STATES = {
+    'readonly': Eval('status') != 'quote',
+    }
+_DEPENDS = ['status']
+
 
 class Contract:
     __name__ = 'contract'
 
     covered_elements = fields.One2ManyDomain('contract.covered_element',
         'contract', 'Covered Elements', domain=[('parent', '=', None)],
-        context={'contract': Eval('id')})
+        context={'contract': Eval('id')}, states=_STATES, depends=_DEPENDS)
     covered_datas = fields.One2Many('contract.covered_data', 'contract',
-        'Covered Datas')
+        'Covered Datas', states=_STATES, depends=_DEPENDS)
     agreements = fields.One2Many('contract-agreement', 'contract',
         'Contract-Agreement Relations', states={
-            'invisible': Eval('product_kind') != 'insurance'})
+            'invisible': Eval('product_kind') != 'insurance',
+            'readonly': Eval('status') != 'quote',
+            }, depends=_DEPENDS)
     contracts = fields.One2Many('contract-agreement',
         'protocol', 'Managing Roles', states={
-            'invisible': Eval('product_kind') == 'insurance'})
-    next_renewal_date = fields.Date('Next Renewal Date')
-    last_renewed = fields.Date('Last Renewed')
+            'invisible': Eval('product_kind') == 'insurance',
+            'readonly': Eval('status') != 'quote',
+            }, depends=_DEPENDS)
+    next_renewal_date = fields.Date('Next Renewal Date', states=_STATES,
+        depends=_DEPENDS)
+    last_renewed = fields.Date('Last Renewed', states=_STATES,
+        depends=_DEPENDS)
     multi_mixed_view = covered_elements
 
     @classmethod
