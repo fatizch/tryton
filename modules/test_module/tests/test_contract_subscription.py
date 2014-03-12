@@ -20,6 +20,10 @@ Module.install([test_module.id], config.context)
 wizard = Wizard('ir.module.module.install_upgrade')
 wizard.execute('upgrade')
 ##Comment##Import Exported DB
+TestCaseConfig = Model.get('ir.test_case')(1)
+TestCaseConfig.language = Model.get('ir.lang').find([
+        ('code', '=', 'fr_FR')])[0]
+TestCaseConfig.save()
 wizard = Wizard('ir.test_case.run')
 wizard.form.select_all_test_cases = True
 wizard.execute('execute_test_cases')
@@ -109,7 +113,7 @@ cd2 = covered_element.covered_data[1]
 cd2.option.offered.code
 ##Res##u'DC'
 cd2.__class__.get_possible_amounts([cd2.id], {})
-##Res##[[('', ''), (u'25000,00 \u20ac', u'25000,00 \u20ac'), (u'50000,00 \u20ac', u'50000,00 \u20ac'), (u'75000,00 \u20ac', u'75000,00 \u20ac'), (u'100000,00 \u20ac', u'100000,00 \u20ac')]]
+##Res##[[('', ''), (u'25 000,00 \u20ac', u'25 000,00 \u20ac'), (u'50 000,00 \u20ac', u'50 000,00 \u20ac'), (u'75 000,00 \u20ac', u'75 000,00 \u20ac'), (u'100 000,00 \u20ac', u'100 000,00 \u20ac')]]
 cd2.coverage_amount_selection = '75000.00'
 cd2.save()
 # import pdb;pdb.set_trace()

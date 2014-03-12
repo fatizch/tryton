@@ -3,43 +3,56 @@
   <notebook>
     <page id="main" string="Loan Create Parameters">
       <newline/>
+      <label name="order"/>
+      <field name="order"/>
+      <label name="contract"/>
+      <field name="contract"/>
+      <newline/>
       <label name="kind"/>
       <field name="kind"/>
-      <label name="rate"/>
-      <group id="rate" states="{
-            'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate'])}">
-        <field name="rate" xexpand="0" factor="100"/>
-        <label id="percent" string="%" xexpand="0" xalign="0"/>
+      <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon'])}"/>
+      <group id="rate">
+          <field name="rate" factor="100" xexpand="0"/>
+          <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon'])}"/>
       </group>
       <newline/>
       <label name="amount"/>
       <group id="amount">
-        <field name="amount" xexpand="0"/>
-        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+          <field name="amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'leasing'}"/>
+      </group>
+      <newline/>
+      <label name="first_payment_amount"/>
+      <group id="first_payment_amount">
+          <field name="first_payment_amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') != 'leasing'}"/>
       </group>
       <newline/>
       <label name="number_of_payments"/>
-      <group id='number_of_payments'>
-        <field name="number_of_payments"/>
-        <field name="payment_frequency"/>
+      <group id="frequency">
+          <field name="number_of_payments"/>
+          <field name="payment_frequency"/>
       </group>
       <label name="payment_amount"/>
       <group id="payment_amount">
-        <field name="payment_amount" xexpand="0"/>
-        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+          <field name="payment_amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Or(Eval('kind') == 'graduated', ~~Eval('deferal'))}"/>
+      </group>
+      <label name="last_payment_amount"/>
+      <group id="last_payment_amount">
+          <field name="last_payment_amount" xexpand="0"/>
+          <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') != 'leasing'}"/>
       </group>
       <newline/>
       <label name="funds_release_date"/>
       <field name="funds_release_date"/>
       <label name="first_payment_date"/>
       <field name="first_payment_date"/>
+      <label name="deferal"/>
+      <field name="deferal"/>
+      <label name="deferal_duration"/>
+      <field name="deferal_duration"/>
       <newline/>
-      <label name="defferal"/>
-      <field name="defferal"/>
-      <label name="defferal_duration"/>
-      <field name="defferal_duration"/>
-      <newline/>
-      <field name="contracts" colspan="4"/>
       <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
     </page>
     <page id="increments" string="Increments">

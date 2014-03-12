@@ -282,7 +282,8 @@ class Contract:
                 self.period = None
                 self.price_lines = None
                 self.taxes = defaultdict(
-                    lambda: {'amount': 0, 'base': 0, 'to_recalculate': False})
+                        lambda: {'amount': 0, 'base': 0,
+                        'to_recalculate': False})
                 self.total_amount = 0
         return WorkSet
 
@@ -487,7 +488,6 @@ class Contract:
                 ('origin', '=', utils.convert_to_reference(self)),
                 ('state', '=', 'draft'),
                 ]))
-        Transaction().cursor.commit()
         move = self.bill()
         if move and post:
             self.next_billing_date = coop_date.add_day(

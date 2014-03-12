@@ -1,7 +1,6 @@
 #-*- coding:utf-8 -*-
-import os
-import ibanlib
 import unittest
+from stdnum import iban
 
 import trytond.tests.test_tryton
 from trytond.exceptions import UserError
@@ -37,15 +36,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         bank1, = self.Bank.create([{'party': party1.id}])
         self.assert_(bank1.id)
 
-    def test0015ibanlibconfiguration(self):
-        '''
-        Check that the module ibanlib is well installed
-        '''
-        config_file = os.path.abspath(os.path.join(ibanlib.__file__, '..',
-                'iban_countries.cfg'))
-        self.assert_(os.path.isfile(config_file),
-            'Impossible to found iban lib config file %s' % config_file)
-
     @test_framework.prepare_test('bank_cog.test0010bank')
     def test0020bankaccount(self):
         '''
@@ -64,11 +54,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
         bank_account.bank = bank1
         bank_account.owners = [party1]
         bank_account.currency = currency
-        iban = self.BankAccountNumber()
-        iban.type = 'iban'
-        iban.number = 'FR7615970003860000690570007'
+        cur_iban = self.BankAccountNumber()
+        cur_iban.type = 'iban'
+        cur_iban.number = 'FR7615970003860000690570007'
 
-        bank_account.numbers = [iban]
+        bank_account.numbers = [cur_iban]
         bank_account.save()
         self.assert_(bank_account.id)
 
@@ -86,7 +76,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             ('099100031044T8477', False),
         )
         for value, test in values:
-            self.assert_(ibanlib.iban.valid(value) == test)
+            self.assert_(iban.is_valid(value) == test)
 
     @test_framework.prepare_test('bank_cog.test0010bank')
     def test0040banknumberunicity(self):

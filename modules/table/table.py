@@ -1,4 +1,3 @@
-import re
 import copy
 from datetime import datetime
 from decimal import Decimal
@@ -15,7 +14,7 @@ from sql.functions import Function, Now
 from trytond.config import CONFIG
 from trytond import backend
 from trytond.pool import Pool
-from trytond.pyson import Not, Eval, Bool, Or, PYSONEncoder
+from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
@@ -31,12 +30,11 @@ __all__ = [
     'TableCell',
     'TableDefinition',
     'TableDefinitionDimension',
+    'TableDefinitionDimensionOpenAskType',
+    'TableDefinitionDimensionOpen',
     'TableOpen2DAskDimensions',
     'TableOpen2D',
     'Table2D',
-    'ManageDimension',
-    'DimensionDisplayer',
-    'TableCreation',
     ]
 
 TYPE = [
@@ -113,6 +111,13 @@ class TableDefinition(ModelSQL, ModelView):
                 cursor.rollback()
 
     @classmethod
+    def _export_force_recreate(cls):
+        result = super(TableDefinition, cls)._export_force_recreate()
+        for i in range(1, DIMENSION_MAX + 1):
+            result.remove('dimension%s' % i)
+        return result
+
+    @classmethod
     def copy(cls, records, default=None):
         result = []
         for record in records:
@@ -168,45 +173,49 @@ class TableDefinition(ModelSQL, ModelView):
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
             field_value, values, created, relink, to_relink):
-        if not field_value:
-            return
+        return
+
+    @classmethod
+    def _import_json(cls, values, created, relink, force_recreate=False):
+        table = super(TableDefinition, cls)._import_json(values, created,
+            relink, force_recreate)
+        if not values['cells']:
+            return table
+        # Import cells
         Cell = Pool().get('table.cell')
-        if (hasattr(good_instance, 'id') and good_instance.id):
-            table_id = good_instance.id
-            Cell.delete(Cell.search([('definition', '=', table_id)]))
-        else:
-            table_id = None
-        dimensions, cell_values = field_value
-        cells_number = len(cell_values)
+        Cell.delete(Cell.search([('definition', '=', table.id)]))
+        dimensions, cell_values = values['cells']
         cell_values = list(cell_values)
 
-        def lock_dim_and_import(locked, relink_template):
+        to_create = []
+        dim_ids = {}
+        for dim in xrange(len(dimensions)):
+            for idx, dim_val in enumerate(getattr(table, 'dimension%s' % (
+                            dim + 1))):
+                dim_ids[(dim + 1, idx)] = dim_val.id
+
+        def lock_dim_and_import(locked):
             my_dim = len(locked) + 1
             if my_dim > len(dimensions):
-                to_relink = list(relink_template)
-                cell = Cell()
-                cell.value = cell_values.pop(0)
-                cell.definition = table_id
-                cell._import_finalize((instance_key,
-                        cells_number - len(cell_values)),
-                    cell, False, created, relink, to_relink)
+                cell_desc = {
+                    'definition': table.id,
+                    'value': cell_values.pop(0),
+                    }
+                if cell_desc['value'] is None:
+                    return
+                for idx, key in enumerate(locked):
+                    cell_desc['dimension%s' % (idx + 1)] = dim_ids[key]
+                to_create.append(cell_desc)
             else:
                 for elem in xrange(dimensions[my_dim - 1]):
-                    relink_template.append(('dimension%s' % my_dim, (
-                                'table.dimension.value', (
-                                    instance_key, 'dimension%s' % my_dim,
-                                    elem + 1))))
-                    locked.append(elem + 1)
-                    lock_dim_and_import(locked, relink_template)
+                    locked.append((my_dim, elem))
+                    lock_dim_and_import(locked)
                     locked.pop()
-                    relink_template.pop()
+
         locks = []
-        if table_id:
-            template = []
-        else:
-            template = [('definition', ('table',
-                   instance_key))]
-        lock_dim_and_import(locks, template)
+        lock_dim_and_import(locks)
+        Cell.create(to_create)
+        return table
 
     @classmethod
     def default_dimension_order(cls):
@@ -299,7 +308,7 @@ class TableDefinition(ModelSQL, ModelView):
         Cell = Pool().get('table.cell')
         if not at_date:
             at_date = utils.today()
-        cell = Cell.get_cell(self, (at_date))
+        cell = Cell.get_cell(self, at_date)
         return cell.get_value_with_type() if cell else None
 
     def get_rec_name(self, name):
@@ -355,9 +364,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         states={
             'invisible': Eval('dimension_order') == 'alpha',
             }, depends=['dimension_order'])
-    definition = fields.Many2One(
-        'table', 'Definition',
-        required=True, ondelete='CASCADE')
+    definition = fields.Many2One('table', 'Definition', required=True,
+        ondelete='CASCADE')
     type = fields.Selection(
         [('dimension%s' % i, 'Dimension %s' % i)
             for i in range(1, DIMENSION_MAX + 1)],
@@ -439,6 +447,38 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         cls.set_name(records)
 
     @classmethod
+    def _view_look_dom_arch(cls, tree, type, field_children=None):
+        pool = Pool()
+        TableDefinition = pool.get('table')
+        context = Transaction().context
+        if type == 'tree' and 'table' in context and 'type' in context:
+            result = tree.xpath("//field[@name='rec_name']")
+            table = TableDefinition(context['table'])
+            if result:
+                rec_name, = result
+                kind = getattr(table, 'dimension_kind%s' %
+                    context['type'][len('dimension'):])
+                if kind in ('value', 'date'):
+                    value = copy.copy(rec_name)
+                    value.set('name', kind)
+                    rec_name.addnext(value)
+                elif kind in ('range', 'range-date'):
+                    if kind == 'range-date':
+                        suffix = '_date'
+                    else:
+                        suffix = ''
+                    start = copy.copy(rec_name)
+                    start.set('name', 'start' + suffix)
+                    rec_name.addnext(start)
+                    end = copy.copy(start)
+                    end.set('name', 'end' + suffix)
+                    start.addnext(end)
+                if kind is not None:
+                    rec_name.getparent().remove(rec_name)
+        return super(TableDefinitionDimension, cls)._view_look_dom_arch(tree,
+            type, field_children=field_children)
+
+    @classmethod
     def set_name(cls, dimensions):
         pool = Pool()
         Lang = pool.get('ir.lang')
@@ -492,7 +532,54 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
     @classmethod
     def _export_keys(cls):
-        return set([])
+        return set(['definition.code', 'type', 'name'])
+
+
+class TableDefinitionDimensionOpenAskType(ModelView):
+    'Table Open Definition Dimension'
+    __name__ = 'table.dimension.value.open.ask_type'
+    table = fields.Many2One('table', 'Table', required=True)
+    type = fields.Selection('get_types', 'Type', required=True, sort=False)
+
+    @staticmethod
+    def default_table():
+        return Transaction().context['active_id']
+
+    @fields.depends('table')
+    def get_types(self):
+        if not self.table:
+            return []
+        types = []
+        for i in range(1, DIMENSION_MAX + 1):
+            if getattr(self.table, 'dimension_kind%s' % i):
+                types.append(('dimension%s' % i,
+                        getattr(self.table, 'dimension_name%s' % i)))
+        return types
+
+
+class TableDefinitionDimensionOpen(Wizard):
+    'Table Open Definition Dimension'
+    __name__ = 'table.dimension.value.open'
+    start_state = 'ask_type'
+    ask_type = StateView('table.dimension.value.open.ask_type',
+        'table.table_dimension_value_open_ask_type_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Open', 'open_', 'tryton-ok', True),
+            ])
+    open_ = StateAction('table.act_definition_dimension_form')
+
+    def do_open_(self, action):
+        context = {
+            'table': self.ask_type.table.id,
+            'type': self.ask_type.type,
+            }
+        domain = [
+            ('definition', '=', self.ask_type.table.id),
+            ('type', '=', self.ask_type.type),
+            ]
+        action['pyson_context'] = PYSONEncoder().encode(context)
+        action['pyson_domain'] = PYSONEncoder().encode(domain)
+        return action, {}
 
 
 class TableCell(ModelSQL, ModelView):
@@ -1103,305 +1190,3 @@ class Table2D(ModelSQL, ModelView):
                     value[field] = TableCell._load_value(value[field],
                         definition.type_)
         return result
-
-
-class DimensionDisplayer(ModelView):
-    'Dimension Displayer'
-
-    __name__ = 'table.manage_dimension.show.dimension'
-
-    name = fields.Char('Name')
-    order = fields.Selection(ORDER, 'Order')
-    kind = fields.Selection(KIND, 'Kind')
-    input_mode = fields.Selection(
-        [('flat_file', 'Flat data'), ('boolean', 'Boolean')], 'Input Mode',
-        states={'invisible': Eval('kind', '') != 'value'})
-    values = fields.One2Many('table.dimension.value', None, 'Dimension Values')
-    converted_text = fields.Text('Converted Text')
-    table = fields.Many2One('table', 'Table', states={
-            'invisible': True})
-    cur_dimension = fields.Integer('Current Dimension', states={
-            'invisible': True})
-    input_text = fields.Text('Input Text', states={
-            'invisible': Eval('input_mode', '') != 'flat_file'},)
-    date_format = fields.Char('Date Format', states={
-            'invisible': Not(Or(
-                    Eval('kind', '') == 'date',
-                    Eval('kind', '') == 'range-date'))})
-
-    @classmethod
-    def __setup__(cls):
-        super(DimensionDisplayer, cls).__setup__()
-        cls._error_messages.update({
-            'invalid_format': 'Impossible to convert data %s with format %s'})
-
-    @classmethod
-    def default_input_mode(cls):
-        return 'flat_file'
-
-    @staticmethod
-    def default_cur_dimension():
-        return 1
-
-    @fields.depends('input_text', 'date_format', 'kind', 'values',
-        'input_mode')
-    def on_change_input_text(self):
-        if self.input_text:
-            return {'converted_text': self.convert_values()}
-        else:
-            return self.on_change_values()
-
-    @fields.depends('date_format', 'values', 'input_text', 'kind',
-        'input_mode')
-    def on_change_date_format(self):
-        if self.kind not in ('date', 'range-date'):
-            return {'date_format': ''}
-        if self.input_text:
-            return self.on_change_input_text()
-        return self.on_change_values()
-
-    @fields.depends('values', 'order', 'kind', 'date_format', 'input_mode')
-    def on_change_values(self):
-        if not self.values:
-            return {'converted_text': ''}
-        existing = self.get_existing_values(self.kind, self.values)
-        return {'converted_text': self.convert_existing_values(existing,
-                self.kind, self.date_format)}
-
-    @fields.depends('values', 'order', 'input_mode', 'kind', 'date_format',
-        'input_mode')
-    def on_change_input_mode(self):
-        if self.input_mode == 'boolean':
-            return {
-                'input_text': '',
-                'converted_text': 'True\nFalse'}
-        elif self.input_mode == 'flat_file':
-            if (hasattr(self, 'input_text') and self.input_text):
-                return self.on_change_input_text()
-            else:
-                return {'converted_text': ''}
-        return {}
-
-    def changing_ok(self):
-        if not self.table.cells:
-            return True
-        if self.kind != getattr(self.table, 'dimension_kind%s' %
-                self.cur_dimension):
-            return False
-        if not self.input_text and self.input_mode == 'flat_file':
-            return True
-        if self.input_text:
-            return False
-        if self.get_existing_values(self.kind, self.values) != \
-                self.format_text_values(self.convert_values()):
-            return False
-
-    def convert_values(self):
-        if self.input_mode == 'boolean':
-            return 'True\nFalse'
-        elif self.input_mode == 'flat_file' and self.input_text:
-            result = [x for x in re.split(r'[ ,|;\n\t]+', self.input_text)]
-            if self.kind in ('date', 'range-date'):
-                try:
-                    datetime.strptime(result[0], self.date_format)
-                except:
-                    self.raise_user_error('invalid_format', (result[0],
-                            self.date_format))
-            return '\n'.join(result)
-
-    @classmethod
-    def get_existing_values(cls, kind, values):
-        res = []
-        the_func = lambda x: x.value
-        if kind == 'range':
-            the_func = lambda x: x.start
-        elif kind == 'date':
-            the_func = lambda x: x.date
-        elif kind == 'range-date':
-            the_func = lambda x: x.start_date
-        for elem in values:
-            res.append(the_func(elem))
-        return res
-
-    @classmethod
-    def convert_existing_values(cls, values, kind, date_format=None):
-        res = []
-        if kind in ('value', 'range'):
-            the_func = lambda x: str(x)
-        elif kind in ('date', 'range-date'):
-            the_func = lambda x: datetime.strftime(x, date_format)
-        for elem in values:
-            res.append(the_func(elem))
-        return '\n'.join(res)
-
-    def format_text_values(self, text_values):
-        if self.kind in ('value', 'range'):
-            the_list = text_values
-            if self.order == 'alpha':
-                the_list = sorted(text_values)
-        elif self.kind in ('date', 'range-date'):
-            the_list = []
-            for elem in text_values:
-                if elem == 'None':
-                    the_list.append(None)
-                    continue
-                try:
-                    the_list.append(datetime.strptime(elem, self.date_format))
-                except ValueError:
-                    self.raise_user_error('invalid_format', (elem,
-                            self.date_format))
-        return the_list
-
-
-class ManageDimension(Wizard):
-    'Manage Dimension'
-    __name__ = 'table.manage_dimension'
-
-    start_state = 'dimension_management'
-    dimension_management = StateView('table.manage_dimension.show.dimension',
-        'table.dimension_displayer_view_form', [
-            Button('Exit', 'end', 'tryton-cancel'),
-            Button('Apply', 'apply_', 'tryton-ok', True),
-            Button('Previous Dimension', 'previous_dim', 'tryton-go-previous',
-                states={
-                    'invisible': Eval('cur_dimension', 1) <= 1,
-                    }),
-            Button('Next Dimension', 'next_dim', 'tryton-go-next', states={
-                    'invisible': Eval('cur_dimension', 1) >= DIMENSION_MAX,
-                    }),
-            Button('View Data', 'view_data', 'tryton-find')])
-    apply_ = StateTransition()
-    next_dim = StateTransition()
-    previous_dim = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(ManageDimension, cls).__setup__()
-        cls._error_messages.update({
-            'dangerous_change': 'The requested change might delete data.',
-        })
-        setattr(cls, 'view_data', StateAction('table.act_table_2d_open'))
-
-    def get_my_dimension(self):
-        if not getattr(self.dimension_management, 'cur_dimension', None):
-            return 1
-        else:
-            return self.dimension_management.cur_dimension
-
-    def default_dimension_management(self, data):
-        TableDef = Pool().get('table')
-        TableDimension = Pool().get('table.dimension.value')
-        Displayer = Pool().get('table.manage_dimension.show.dimension')
-        selected_table = TableDef(Transaction().context.get('active_id'))
-        selected_dimension = self.get_my_dimension()
-
-        values = TableDimension.search([
-                ('type', '=', 'dimension%s' % selected_dimension),
-                ('definition', '=', selected_table.id)])
-        res = {
-            'table': selected_table.id,
-            'cur_dimension': selected_dimension,
-            'name': getattr(selected_table, 'dimension_name%s' %
-                selected_dimension),
-            'kind': getattr(selected_table, 'dimension_kind%s' %
-                selected_dimension),
-            'order': getattr(selected_table, 'dimension_order%s' %
-                selected_dimension),
-            'date_format': '%d%m%y',
-            'values': [x.id for x in values]}
-        res['converted_text'] = Displayer.convert_existing_values(
-            Displayer.get_existing_values(res['kind'], values), res['kind'],
-            res['date_format'])
-        return res
-
-    def transition_apply_(self):
-        if not self.dimension_management.changing_ok():
-            self.raise_user_warning('dangerous_change', 'dangerous_change')
-        the_table = self.dimension_management.table
-        idx = self.dimension_management.cur_dimension
-        setattr(the_table, 'dimension_order%s' % idx,
-            self.dimension_management.order)
-        setattr(the_table, 'dimension_kind%s' % idx,
-            self.dimension_management.kind)
-        setattr(the_table, 'dimension_name%s' % idx,
-            self.dimension_management.name)
-        existing_values = self.dimension_management.get_existing_values(
-            self.dimension_management.order, self.dimension_management.values)
-        new_values = self.dimension_management.convert_values()
-        the_table.save()
-        if not new_values:
-            return 'dimension_management'
-        new_values = self.dimension_management.format_text_values(
-            new_values.split('\n'))
-        if existing_values == new_values:
-            return 'dimension_management'
-        Dimension = Pool().get('table.dimension.value')
-        Dimension.delete(Dimension.search([
-                    ('type', '=', 'dimension%s' % idx),
-                    ('definition', '=', the_table.id)]))
-        dim_type = self.dimension_management.kind
-        for i, elem in enumerate(new_values):
-            new_dim = Dimension()
-            new_dim.type = 'dimension%s' % idx
-            new_dim.definition = the_table.id
-            new_dim.sequence = i
-            if dim_type == 'date':
-                new_dim.date = elem
-            elif dim_type == 'value':
-                new_dim.value = elem
-            elif dim_type == 'range':
-                new_dim.start = elem
-                new_dim.end = new_values[i + 1] if len(new_values) > i + 1 \
-                    else None
-            elif dim_type == 'range-date':
-                new_dim.start_date = elem
-                new_dim.end_date = new_values[i + 1] \
-                    if len(new_values) > i + 1 else None
-            new_dim.save()
-        return 'dimension_management'
-
-    def transition_previous_dim(self):
-        self.transition_apply_()
-        self.dimension_management.cur_dimension -= 1
-        return 'dimension_management'
-
-    def transition_next_dim(self):
-        self.transition_apply_()
-        self.dimension_management.cur_dimension += 1
-        return 'dimension_management'
-
-    def do_view_data(self, action):
-        self.transition_apply_()
-        table_id = Transaction().context.get('active_id')
-        data = {
-            'model': 'table',
-            'id': table_id,
-            'ids': [table_id],
-            }
-        return action, data
-
-
-class TableCreation(Wizard):
-    'Create New Table'
-
-    __name__ = 'table.create'
-
-    start_state = 'new_table'
-    new_table = StateView('table', 'table.table_basic_data_view_form', [
-            Button('Exit', 'end', 'tryton-cancel'),
-            Button('Edit Dimensions', 'edit_dim_1', 'tryton-go-next',
-                default=True)])
-    edit_dim_1 = StateTransition()
-    launch_edition = StateAction('table.act_manage_dimension')
-
-    def transition_edit_dim_1(self):
-        self.new_table.save()
-        return 'launch_edition'
-
-    def do_launch_edition(self, action):
-        data = {
-            'model': 'table',
-            'id': self.new_table.id,
-            'ids': [self.new_table.id],
-            }
-        return action, data

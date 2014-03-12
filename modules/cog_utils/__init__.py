@@ -19,6 +19,7 @@ def register():
         # From export
         ExportPackage,
         ExportInstance,
+        Add2ExportPackageWizardStart,
         # From ir
         Sequence,
         DateClass,
@@ -34,6 +35,7 @@ def register():
         ModelAccess,
         Property,
         Lang,
+        Icon,
         # From res
         Group,
         User,
@@ -53,6 +55,7 @@ def register():
     Pool.register(
         # From export
         ImportWizard,
+        Add2ExportPackageWizard,
         # From test_case_framework
         TestCaseWizard,
         module='cog_utils', type_='wizard')

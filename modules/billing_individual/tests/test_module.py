@@ -27,6 +27,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'PaymentTerm': 'billing.payment.term',
             'PaymentTermLine': 'billing.payment.term.line',
             'Contract': 'contract',
+            'PaymentMethod': 'billing.payment.method',
             }
 
     @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
@@ -204,6 +205,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 (datetime.date(2016, 11, 1), Decimal('30.00')),
                 (datetime.date(2016, 12, 1), Decimal('31.00')),
                 (datetime.date(2017, 1, 1), Decimal('11.00'))])
+
+    @test_framework.prepare_test(
+        'billing_individual.test0010_payment_term_first_following_month')
+    def test0016_PaymentMethod(self):
+        payment_method = self.PaymentMethod()
+        payment_method.name = 'Test Payment Method'
+        payment_method.code = 'test_payment_method'
+        payment_method.payment_mode = 'cash'
+        payment_method.payment_term = self.PaymentTerm.search([
+                ('code', '=', 'test_first_following_month')])[0]
+        payment_method.save()
 
 
 def suite():

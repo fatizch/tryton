@@ -81,8 +81,8 @@
     <!-- ########### Menu ########### -->
     <!-- ############################################################ -->
     <menuitem name="Contract" id="menu_contract" sequence="10" icon="contract"/>
-    <menuitem parent="menu_contract" sequence="1" id="menu_quote_form" icon="quote" action="act_quote_form"/>
-    <menuitem parent="menu_contract" sequence="2" id="menu_contract_form" icon="contract" action="act_contract_form"/>
+    <menuitem parent="menu_contract" sequence="10" id="menu_quote_form" icon="quote" action="act_quote_form"/>
+    <menuitem parent="menu_contract" sequence="20" id="menu_contract_form" icon="contract" action="act_contract_form"/>
     <menuitem name="Batch" parent="menu_contract" sequence="99" id="menu_contract_batch" icon="batch"/>
     <!--################################################################ -->
     <!-- Options Screens -->

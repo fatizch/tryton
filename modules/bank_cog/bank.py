@@ -1,5 +1,4 @@
 import copy
-from ibanlib import iban
 
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -48,7 +47,7 @@ class Bank(export.ExportImportMixin):
         self.check_bic()
 
     def check_bic(self):
-        if self.bic and not iban.valid_BIC(self.bic):
+        if self.bic and not self.valid_BIC(self.bic):
             self.raise_user_error('invalid_bic', (self.bic))
 
     @classmethod
@@ -80,6 +79,18 @@ class Bank(export.ExportImportMixin):
     def get_main_address_id(self, name):
         return (self.party.main_address.id
             if self.party and self.party.main_address else None)
+
+    @classmethod
+    def valid_BIC(cls, bic):
+        """Check validity of BIC"""
+        bic = bic.strip()
+        if len(bic) != 8 and len(bic) != 11:
+            return False
+        if not bic[:6].isalpha():
+            return False
+        if not bic[6:8].isalnum():
+            return False
+        return True
 
 
 class BankAccount(export.ExportImportMixin):
@@ -173,16 +184,9 @@ class BankAccountNumber(export.ExportImportMixin):
             ('number_uniq', 'UNIQUE(number)', 'The number must be unique!'),
             ]
 
-    def check_iban(self):
-        return self.number != '' and iban.valid(self.number)
-
     @staticmethod
     def default_type():
         return 'iban'
-
-    def pre_validate(self):
-        super(BankAccountNumber, self).pre_validate()
-        self.validate([self])
 
     @classmethod
     def get_summary(cls, numbers, name=None, at_date=None, lang=None):

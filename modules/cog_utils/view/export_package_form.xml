@@ -5,7 +5,5 @@
     <label name="code"/>
     <field name="code"/>
     <field name="instances_to_export" colspan="4"/>
-    <label name="model"/>
-    <field name="model" widget="selection"/>
     <newline/>
 </form>

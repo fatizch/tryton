@@ -25,6 +25,10 @@ Create Database::
 
 Import Exported DB::
 
+    >>> TestCaseConfig = Model.get('ir.test_case')(1)
+    >>> TestCaseConfig.language = Model.get('ir.lang').find([
+    ...         ('code', '=', 'fr_FR')])[0]
+    >>> TestCaseConfig.save()
     >>> wizard = Wizard('ir.test_case.run')
     >>> wizard.form.select_all_test_cases = True
     >>> wizard.execute('execute_test_cases')
@@ -121,6 +125,6 @@ Get contract::
     >>> cd2.option.offered.code
     u'DC'
     >>> cd2.__class__.get_possible_amounts([cd2.id], {})
-    [[('', ''), (u'25000,00 \u20ac', u'25000,00 \u20ac'), (u'50000,00 \u20ac', u'50000,00 \u20ac'), (u'75000,00 \u20ac', u'75000,00 \u20ac'), (u'100000,00 \u20ac', u'100000,00 \u20ac')]]
+    [[('', ''), (u'25 000,00 \u20ac', u'25 000,00 \u20ac'), (u'50 000,00 \u20ac', u'50 000,00 \u20ac'), (u'75 000,00 \u20ac', u'75 000,00 \u20ac'), (u'100 000,00 \u20ac', u'100 000,00 \u20ac')]]
     >>> cd2.coverage_amount_selection = '75000.00'
     >>> cd2.save()

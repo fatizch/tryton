@@ -14,6 +14,7 @@ def register():
         Property,
         # From res
         User,
+        Employee,
         # From test_case
         TestCaseModel,
         module='company_cog', type_='model')
