@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form string="Field Info" col="2">
+  <label name="name"/>
+  <field name="name"/>
+  <label name="string"/>
+  <field name="string"/>
+  <label name="is_function"/>
+  <field name="is_function"/>
+  <label name="kind"/>
+  <field name="kind"/>
+  <label name="target_model"/>
+  <field name="target_model"/>
+</form>

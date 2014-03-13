@@ -80,7 +80,8 @@ class Bank(export.ExportImportMixin):
         return (self.party.main_address.id
             if self.party and self.party.main_address else None)
 
-    def valid_BIC(bic):
+    @classmethod
+    def valid_BIC(cls, bic):
         """Check validity of BIC"""
         bic = bic.strip()
         if len(bic) != 8 and len(bic) != 11:

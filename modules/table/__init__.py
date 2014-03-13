@@ -12,7 +12,6 @@ def register():
         TableCell,
         TableOpen2DAskDimensions,
         Table2D,
-        DimensionDisplayer,
         # From test_case
         TestCaseModel,
         module='table', type_='model')
@@ -21,6 +20,4 @@ def register():
         # From table
         TableDefinitionDimensionOpen,
         TableOpen2D,
-        ManageDimension,
-        TableCreation,
         module='table', type_='wizard')

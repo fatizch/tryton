@@ -3,7 +3,6 @@ import datetime
 from decimal import Decimal
 
 import trytond.tests.test_tryton
-from trytond.transaction import Transaction
 from trytond.modules.cog_utils import test_framework
 
 
@@ -21,7 +20,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Definition': 'table',
             'Dimension': 'table.dimension.value',
             'Cell': 'table.cell',
-            'ManageDimension': 'table.manage_dimension',
         }
 
     def test0010definition_get(self):
@@ -337,81 +335,101 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     type_), value)
 
     @test_framework.prepare_test('table.test0060table_2dim')
-    def test0080test_manage_dimension1_wizard(self):
-        table = self.Definition.search([('code', '=', 'test_code')])[0]
-        with Transaction().set_context({'active_id': table.id}):
-            wizard_id, _, _ = self.ManageDimension.create()
-            wizard = self.ManageDimension(wizard_id)
-            wizard._execute('dimension_management')
-            res = wizard.default_dimension_management(None)
-            self.assertEqual(len(res['values']), 2)
-            self.assertEqual(res, {
-                    'date_format': "%d%m%y",
-                    'kind': u'value',
-                    'name': u'Value',
-                    'cur_dimension': 1,
-                    'converted_text': "bar\nfoo",
-                    'values': res['values'],
-                    'table': res['table'],
-                    'order': u'alpha',
-                    })
-
-    @test_framework.prepare_test('table.test0060table_2dim')
     def test0090test_export(self):
         test_table = self.Definition.search([('code', '=', 'test_code')])[0]
         file_name, result, _ = test_table.export_json()
         self.assertEqual(file_name, '[%s][table]test_code.json' %
             datetime.date.today().strftime('%Y-%m-%d'))
-        self.assertEqual(result, [{
-                    '__name__': 'table',
-                    '_export_key': (('code', u'test_code'),),
-                    'cells': [[2, 2], [u'spam', u'chicken', u'ham', u'egg']],
-                    'code': u'test_code',
-                    'dimension1': [{'__name__': 'table.dimension.value',
-                            '_export_key': ((('code', u'test_code'),),
-                                'dimension1',
-                                1),
-                            'definition': (('code', u'test_code'),),
-                            'name': u'bar',
-                            'type': u'dimension1',
-                            'value': u'bar'},
-                        {'__name__': 'table.dimension.value',
-                            '_export_key': ((('code', u'test_code'),),
-                                'dimension1',
-                                2),
-                            'definition': (('code', u'test_code'),),
-                            'name': u'foo',
-                            'type': u'dimension1',
-                            'value': u'foo'}],
-                    'dimension2': [{'__name__': 'table.dimension.value',
-                            '_export_key': ((('code', u'test_code'),),
-                                'dimension2',
-                                1),
-                            'definition': (('code', u'test_code'),),
-                            'end': 10.0,
-                            'name': u'[1.0 - 10.0[',
-                            'start': 1.0,
-                            'type': u'dimension2'},
-                        {'__name__': 'table.dimension.value',
-                            '_export_key': ((('code', u'test_code'),),
-                                'dimension2',
-                                2),
-                            'definition': (('code', u'test_code'),),
-                            'end': 42.0,
-                            'name': u'[20.0 - 42.0[',
-                            'start': 20.0,
-                            'type': u'dimension2'}],
-                    'dimension_kind1': u'value',
-                    'dimension_kind2': u'range',
-                    'dimension_name1': u'Value',
-                    'dimension_name2': u'Range',
-                    'dimension_order1': u'alpha',
-                    'dimension_order2': u'alpha',
-                    'dimension_order3': u'alpha',
-                    'dimension_order4': u'alpha',
-                    'name': u'Test',
-                    'number_of_digits': 2,
-                    'type_': u'char'}])
+        self.assertEqual(result, [
+                {'__name__': 'table.dimension.value',
+                    '_export_key': (('definition.code', u'test_code'),
+                        ('type', u'dimension1'),
+                        ('name', u'bar')),
+                    'date': None,
+                    'definition': (('code', u'test_code'),),
+                    'end': None,
+                    'end_date': None,
+                    'name': u'bar',
+                    'sequence': None,
+                    'start': None,
+                    'start_date': None,
+                    'type': u'dimension1',
+                    'value': u'bar'},
+                {'__name__': 'table.dimension.value',
+                    '_export_key': (('definition.code', u'test_code'),
+                        ('type', u'dimension1'),
+                        ('name', u'foo')),
+                    'date': None,
+                    'definition': (('code', u'test_code'),),
+                    'end': None,
+                    'end_date': None,
+                    'name': u'foo',
+                    'sequence': None,
+                    'start': None,
+                    'start_date': None,
+                    'type': u'dimension1',
+                    'value': u'foo'},
+                {'__name__': 'table.dimension.value',
+                    '_export_key': (('definition.code', u'test_code'),
+                        ('type', u'dimension2'),
+                        ('name', u'[1.0 - 10.0[')),
+                    'date': None,
+                    'definition': (('code', u'test_code'),),
+                    'end': 10.0,
+                    'end_date': None,
+                    'name': u'[1.0 - 10.0[',
+                    'sequence': None,
+                    'start': 1.0,
+                    'start_date': None,
+                    'type': u'dimension2',
+                    'value': None},
+                {'__name__': 'table.dimension.value',
+                    '_export_key': (('definition.code', u'test_code'),
+                        ('type', u'dimension2'),
+                        ('name', u'[20.0 - 42.0[')),
+                    'date': None,
+                    'definition': (('code', u'test_code'),),
+                    'end': 42.0,
+                    'end_date': None,
+                    'name': u'[20.0 - 42.0[',
+                    'sequence': None,
+                    'start': 20.0,
+                    'start_date': None,
+                    'type': u'dimension2',
+                    'value': None},
+                     {'__name__': 'table',
+                         '_export_key': (('code', u'test_code'),),
+                         'cells': [[2, 2], [u'spam', u'chicken', u'ham', u'egg']],
+                         'code': u'test_code',
+                         'dimension1': [(('definition.code', u'test_code'),
+                                 ('type', u'dimension1'),
+                                 ('name', u'bar')),
+                             (('definition.code', u'test_code'),
+                                 ('type', u'dimension1'),
+                                 ('name', u'foo'))],
+                         'dimension2': [(('definition.code', u'test_code'),
+                                 ('type', u'dimension2'),
+                                 ('name', u'[1.0 - 10.0[')),
+                             (('definition.code', u'test_code'),
+                                 ('type', u'dimension2'),
+                                 ('name', u'[20.0 - 42.0['))],
+                         'dimension3': [],
+                         'dimension4': [],
+                         'dimension_kind1': u'value',
+                         'dimension_kind2': u'range',
+                         'dimension_kind3': None,
+                         'dimension_kind4': None,
+                         'dimension_name1': u'Value',
+                         'dimension_name2': u'Range',
+                         'dimension_name3': None,
+                         'dimension_name4': None,
+                         'dimension_order1': u'alpha',
+                         'dimension_order2': u'alpha',
+                         'dimension_order3': u'alpha',
+                         'dimension_order4': u'alpha',
+                         'name': u'Test',
+                         'number_of_digits': 2,
+                         'type_': u'char'}])
 
     @test_framework.prepare_test('table.test0060table_2dim')
     def test0091test_copy(self):
