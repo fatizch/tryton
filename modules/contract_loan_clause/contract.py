@@ -19,9 +19,10 @@ class ContractClause:
         states={'invisible': ~Eval('is_loan')}, ondelete='CASCADE')
     is_loan = fields.Function(
         fields.Boolean('Is Loan', states={'invisible': True}),
-        'get_is_loan')
+        'on_change_with_is_loan')
 
-    def get_is_loan(self, name):
+    @fields.depends('covered_data', 'contract')
+    def on_change_with_is_loan(self, name=None):
         if self.covered_data:
             return self.covered_data.is_loan
         if self.contract:

@@ -28,6 +28,10 @@ class Clause(model.CoopSQL, model.VersionedObject):
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
 
+    @classmethod
+    def default_kind(cls):
+        return ''
+
 
 class ClauseVersion(model.CoopSQL, model.VersionObject):
     'Clause Version'

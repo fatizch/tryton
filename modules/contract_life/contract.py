@@ -170,3 +170,4 @@ class CoveredData:
             to_delete.append(idx)
         for idx in reversed(to_delete[1:]):
             self.clauses.pop(idx)
+        print list(self.clauses)

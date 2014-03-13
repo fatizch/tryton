@@ -29,6 +29,7 @@ class Contract:
             new_clause.text = clause.get_good_version_at_date(
                 self.start_date).content
             self.clauses.append(new_clause)
+        return clauses
 
     def init_from_offered(self, offered, start_date=None, end_date=None):
         result = super(Contract, self).init_from_offered(offered, start_date,
@@ -60,6 +61,7 @@ class CoveredData:
                 option.start_date).content
             new_clause.contract = option.contract
             self.clauses.append(new_clause)
+        return clauses
 
     def init_from_option(self, option):
         super(CoveredData, self).init_from_option(option)

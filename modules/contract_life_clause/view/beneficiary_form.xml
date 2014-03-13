@@ -6,5 +6,5 @@
   <field name="share" factor="100"/>
   <label name="accepting"/>
   <field name="accepting"/>
-  <field name="incomplete_beneficiary" colspan="4"/>
+  <field name="details" colspan="4"/>
 </form>

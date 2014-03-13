@@ -2,5 +2,5 @@
 <tree string="Beneficiaries">
   <field name="accepting"/>
   <field name="share" factor="100"/>
-  <field name="beneficiary_description"/>
+  <field name="description"/>
 </tree>

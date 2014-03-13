@@ -31,7 +31,7 @@ class ContractClause(model.CoopSQL, model.CoopView):
     @fields.depends('clause')
     def on_change_with_override_text(self, name=None):
         if not self.clause:
-            return False
+            return True
         return self.clause.may_be_overriden
 
     @fields.depends('text', 'clause', 'override_text', 'contract')

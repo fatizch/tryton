@@ -14,9 +14,9 @@ msgctxt "field:contract.clause.beneficiary,accepting:"
 msgid "Accepting"
 msgstr "Acceptant"
 
-msgctxt "field:contract.clause.beneficiary,beneficiary_description:"
-msgid "Beneficiary Description"
-msgstr "Bénéficiaire"
+msgctxt "field:contract.clause.beneficiary,description:"
+msgid "Description"
+msgstr "Description"
 
 msgctxt "field:contract.clause.beneficiary,clause:"
 msgid "Clause"
@@ -38,9 +38,9 @@ msgctxt "field:contract.clause.beneficiary,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.clause.beneficiary,incomplete_beneficiary:"
-msgid "Incomplete Beneficiary"
-msgstr "Bénéficiaire incomplet"
+msgctxt "field:contract.clause.beneficiary,details:"
+msgid "Details"
+msgstr "Détails"
 
 msgctxt "field:contract.clause.beneficiary,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -48,7 +48,7 @@ msgstr "Must Expand Tree"
 
 msgctxt "field:contract.clause.beneficiary,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:contract.clause.beneficiary,rec_name:"
 msgid "Name"
@@ -56,7 +56,7 @@ msgstr "Nom"
 
 msgctxt "field:contract.clause.beneficiary,share:"
 msgid "Share"
-msgstr "Quotité"
+msgstr "Quote-Part"
 
 msgctxt "field:contract.clause.beneficiary,write_date:"
 msgid "Write Date"

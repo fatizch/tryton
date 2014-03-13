@@ -22,22 +22,21 @@ class Beneficiary(model.CoopSQL, model.CoopView):
 
     accepting = fields.Boolean('Accepting')
     clause = fields.Many2One('contract.clause', 'Clause', required=True,
-        states={'invisible': True}, ondelete='RESTRICT')
+        ondelete='RESTRICT')
     party = fields.Many2One('party.party', 'Party', states={
             'required': Eval('accepting', False)}, depends=['accepting'],
         ondelete='RESTRICT')
-    incomplete_beneficiary = fields.Text('Incomplete Beneficiary',
-        states={'invisible': ~~Eval('accepting')})
+    details = fields.Text('Details', states={'invisible': ~~Eval('accepting')})
     share = fields.Numeric('Share', digits=(4, 4), required=True)
-    beneficiary_description = fields.Function(
-        fields.Char('Beneficiary Description'),
-        'on_change_with_beneficiary_description')
+    description = fields.Function(
+        fields.Char('Description'),
+        'on_change_with_description')
 
-    @fields.depends('party', 'incomplete_beneficiary')
-    def on_change_with_beneficiary_description(self, name=None):
+    @fields.depends('party', 'details')
+    def on_change_with_description(self, name=None):
         if self.party:
             return self.party.rec_name
-        return self.incomplete_beneficiary.splitlines().join(' ')
+        return self.details.splitlines().join(' ')
 
     @classmethod
     def default_share(cls):
@@ -105,3 +104,4 @@ class CoveredData:
             else:
                 new_clauses.append(elem)
         self.clauses = new_clauses
+        return new_clauses
