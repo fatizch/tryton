@@ -8,6 +8,10 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
+    <newline/>
+    <label name="subscriber_kind"/>
+    <field name="subscriber_kind"/>
+    <newline/>
     <label name="subscriber"/>
     <field name="subscriber"/>
   <notebook colspan="4">
@@ -30,5 +34,4 @@
     </page>
   </notebook>
   <newline/>
-  <field name="subscriber_kind"/>
 </form>

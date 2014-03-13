@@ -7,6 +7,7 @@ from trytond.pool import Pool
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.offered import offered
 from trytond.modules.offered_insurance import Printable
 
 CONTRACTSTATUSES = [
@@ -185,9 +186,18 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         context={'start_date': Eval('start_date')})
     contract_number = fields.Char('Contract Number', select=1,
         states={'required': Eval('status') == 'active'})
+    offered_subscriber_kind = fields.Function(
+        fields.Selection(offered.SUBSCRIBER_KIND, 'Offered Subscriber Kind',
+            states={'invisible': True}),
+        'on_change_with_offered_subscriber_kind')
     subscriber_kind = fields.Function(
-        fields.Char('Subscriber Kind', states={'invisible': True}),
-        'on_change_with_subscriber_kind')
+        fields.Selection(offered.SUBSCRIBER_KIND, 'Subscriber Kind',
+            states={
+                'readonly': Eval('offered_subscriber_kind') != 'all',
+                'invisible': Eval('status') != 'quote',
+                },
+            depends=['offered_subscriber_kind', 'status']),
+        'on_change_with_subscriber_kind', 'setter_void')
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[[If(
                     Eval('subscriber_kind') == 'person',
@@ -525,8 +535,17 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return ''
 
     @fields.depends('offered')
-    def on_change_with_subscriber_kind(self, name=None):
+    def on_change_with_offered_subscriber_kind(self, name=None):
         return self.offered.subscriber_kind if self.offered else 'all'
+
+    @fields.depends('offered_subscriber_kind', 'subscriber')
+    def on_change_with_subscriber_kind(self, name=None):
+        if self.subscriber and self.subscriber.is_person:
+            return 'person'
+        elif self.subscriber and self.subscriber.is_company:
+            return 'company'
+        else:
+            return self.offered_subscriber_kind
 
     @classmethod
     def get_var_names_for_full_extract(cls):
