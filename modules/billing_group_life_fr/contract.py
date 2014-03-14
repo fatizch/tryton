@@ -27,7 +27,7 @@ class Contract:
         'get_use_rates')
     rates = fields.One2Many('contract.premium_rate.line', 'contract', 'Rates',
         states={
-            'invisible': Eval('use_rates', False),
+            'invisible': ~Eval('use_rates'),
             'readonly': Eval('status') != 'quote',
             }, depends=_DEPENDS)
     next_assessment_date = fields.Date('Next Assessment Date',

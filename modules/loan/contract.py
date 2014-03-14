@@ -3,7 +3,7 @@ import copy
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields, model, coop_string
 
@@ -24,7 +24,7 @@ class Contract:
         'get_is_loan')
     loans = fields.One2Many('loan', 'contract', 'Loans',
         states={
-            'invisible': Or(~Eval('is_loan'), ~~Eval('change_loans_order')),
+            'invisible': ~Eval('is_loan', False),
             'readonly': Eval('status') != 'quote',
             }, depends=['is_loan', 'currency', 'status'],
         context={'currency': Eval('currency')})

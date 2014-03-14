@@ -45,9 +45,9 @@ class Contract:
         'get_use_prices')
     next_billing_date = fields.Date('Next Billing Date',
         states={
-            'invisible': Eval('use_prices', False),
+            'invisible': ~Eval('use_prices'),
             'readonly': Eval('status') != 'quote',
-            })
+            }, depends=_DEPENDS)
     prices = fields.One2Many(
         'contract.billing.premium', 'contract', 'Prices',
         states={
