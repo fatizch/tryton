@@ -112,6 +112,7 @@ class RuleEngineParameter:
         result['name'] = self.extra_data_def.string
         return result
 
+    @fields.depends('external_extra_data_def')
     def on_change_external_extra_data_def(self):
         result = {}
         if not (hasattr(self, 'external_extra_data_def') and
