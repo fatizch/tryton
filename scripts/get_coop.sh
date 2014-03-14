@@ -1,17 +1,12 @@
 #!/bin/bash
 SEP=------------------------------------------------
-EXPECTED_ARGS=2
+EXPECTED_ARGS=3
 
 if [ $# -ne $EXPECTED_ARGS ]
 then
         echo $SEP
-        echo "Usage: `basename $0` {path} {bitbucket username}"
-        echo $SEP
-elif [ ! -e "$1" ]
-then
-        echo $SEP
-        echo $1 must be an existing directory
-        echo $SEP
+        echo "Usage: `basename $0` {path} {bitbucket username} {bitbucket
+        email}"
 else
 	cd $1
 	echo $SEP
@@ -27,7 +22,7 @@ else
 	echo $SEP
 	echo Getting Coop modules
 	echo $SEP
-	hg clone https://$2@bitbucket.org/coopengo/coopbusiness -r default
+	hg clone https://$3@bitbucket.org/$2/coopbusiness -r default
 	echo $SEP
 	echo Done
 	echo $SEP
