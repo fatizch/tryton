@@ -161,7 +161,7 @@ msgstr "Date de Début"
 
 msgctxt "field:billing.premium.rule,sub_item_components:"
 msgid "Covered Item Components"
-msgstr "Composantes Eléments Couverts"
+msgstr "Composantes Risques Couverts"
 
 msgctxt "field:billing.premium.rule,sub_item_specific_combination_rule:"
 msgid "Sub Item Combination Rule"
@@ -1433,7 +1433,7 @@ msgstr "Date de Début"
 
 msgctxt "field:offered,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr "Documents Eléments Couverts"
+msgstr "Documents Risques Couverts"
 
 msgctxt "field:offered,summary:"
 msgid "Summary"
@@ -2153,7 +2153,7 @@ msgstr "Date de Début"
 
 msgctxt "field:offered.option.description,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr "Documents Eléments Couverts"
+msgstr "Documents Risques Couverts"
 
 msgctxt "field:offered.option.description,summary:"
 msgid "Summary"
@@ -2329,7 +2329,7 @@ msgstr "Date de Début"
 
 msgctxt "field:offered.product,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr "Documents Eléments Couverts"
+msgstr "Documents Risques Couverts"
 
 msgctxt "field:offered.product,summary:"
 msgid "Summary"
@@ -2962,7 +2962,7 @@ msgstr "Taxe"
 
 msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
 msgid "Covered Item"
-msgstr "Elèment Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
 msgid "Global"
@@ -3010,7 +3010,7 @@ msgstr "Principale"
 
 msgctxt "selection:document.rule,kind:"
 msgid "Sub Elem"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "selection:document.rule,offered:"
 msgid "Option Description"
@@ -3066,7 +3066,7 @@ msgstr "Contrat"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Loss"
@@ -3230,7 +3230,7 @@ msgstr "Offre"
 
 msgctxt "selection:offered.deductible.rule,scope:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "selection:offered.deductible.rule,simple_config_choice:"
 msgid "List"
@@ -3454,7 +3454,7 @@ msgstr "Composantes de Cotisation"
 
 msgctxt "view:billing.premium.rule:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "view:billing.premium.rule:"
 msgid "Pricing rule"
@@ -3614,7 +3614,7 @@ msgstr "Franchise"
 
 msgctxt "view:offered.eligibility.rule:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "view:offered.eligibility.rule:"
 msgid "Eligibility rule"

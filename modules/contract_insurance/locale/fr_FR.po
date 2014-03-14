@@ -55,7 +55,7 @@ msgstr "Données de couverture"
 
 msgctxt "field:contract,covered_elements:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "field:contract,create_date:"
 msgid "Create Date"
@@ -279,7 +279,7 @@ msgstr " "
 
 msgctxt "field:contract.covered_data,covered_element:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "field:contract.covered_data,create_date:"
 msgid "Create Date"
@@ -603,7 +603,7 @@ msgstr "Nom"
 
 msgctxt "field:contract.covered_element,sub_covered_elements:"
 msgid "Sub Covered Elements"
-msgstr "Sous Eléments Couverts"
+msgstr "Sous Risques Couverts"
 
 msgctxt "field:contract.covered_element,write_date:"
 msgid "Write Date"
@@ -667,7 +667,7 @@ msgstr "Données de Couverture"
 
 msgctxt "field:contract.create_extra_premium.create,covered_element:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "field:contract.create_extra_premium.create,extra_premium:"
 msgid "Extra Premium"
@@ -727,7 +727,7 @@ msgstr "Données de Couverture"
 
 msgctxt "field:contract.manage_extra_premium.select,covered_element:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "field:contract.manage_extra_premium.select,extra_premiums:"
 msgid "Extra Premiums"
@@ -901,17 +901,17 @@ msgstr "Frais"
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,covered_element:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,hide_covered_element:"
 msgid "Hide Covered Element"
-msgstr "Cacher l'élement couvert"
+msgstr "Cacher le risque couvert"
 
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,possible_covered_elements:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "field:document.receive.request,tmp_0:"
 msgid "Contract"
@@ -979,7 +979,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:party.party,covered_elements:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "field:party.party,extra_data:"
 msgid "Extra Data"
@@ -1011,7 +1011,7 @@ msgstr "Surprime"
 
 msgctxt "model:contract.covered_element,name:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "model:contract.covered_element-party,name:"
 msgid ""
@@ -1207,7 +1207,7 @@ msgstr "Contrat"
 
 msgctxt "selection:document.request.line,for_object:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "selection:document.request.line,for_object:"
 msgid "Option"
@@ -1271,11 +1271,11 @@ msgstr "Données de Couverture"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Relations"
@@ -1283,7 +1283,7 @@ msgstr "Relations Couvertes"
 
 msgctxt "view:contract.covered_element:"
 msgid "Sub Covered Elements"
-msgstr "Sous Eléments Couverts"
+msgstr "Sous Risques Couverts"
 
 msgctxt "view:contract.create_extra_premium.create:"
 msgid "Extra Premium Creation"
@@ -1335,7 +1335,7 @@ msgstr "Clauses"
 
 msgctxt "view:contract:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "view:contract:"
 msgid "Managing Entities"

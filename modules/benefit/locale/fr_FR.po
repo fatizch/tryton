@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -116,7 +116,7 @@ msgstr "Date de Début"
 
 msgctxt "field:benefit,sub_document_rules:"
 msgid "Sub Document Rules"
-msgstr "Documents Eléments Couverts"
+msgstr "Documents Risques Couverts"
 
 msgctxt "field:benefit,summary:"
 msgid "Summary"

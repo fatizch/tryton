@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -20,7 +20,7 @@ msgstr "Prêts"
 
 msgctxt "field:contract,multi_mixed_view:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "field:contract.covered_data,contract:"
 msgid "Contract"
@@ -281,7 +281,7 @@ msgstr "Contrat"
 
 msgctxt "field:loan.loan_share_propagate.parameters,covered_elements:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "field:loan.loan_share_propagate.parameters,id:"
 msgid "ID"

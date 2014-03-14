@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -12,7 +12,7 @@ msgstr " "
 
 msgctxt "field:contract.covered_element-party,covered_element:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "field:contract.covered_element-party,create_date:"
 msgid "Create Date"
@@ -44,7 +44,7 @@ msgstr "Mis à jour par"
 
 msgctxt "model:contract.covered_element-party,name:"
 msgid "Relation between Covered Element and Covered Relations"
-msgstr "Relation Element Couvert et Relations"
+msgstr "Relation Risque Couvert et Relations"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Person"

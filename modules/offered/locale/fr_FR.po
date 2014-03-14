@@ -396,7 +396,7 @@ msgstr "Contrat"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Loss"

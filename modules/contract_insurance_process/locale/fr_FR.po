@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -55,7 +55,7 @@ msgstr ""
 
 msgctxt "error:contract:"
 msgid "There must be at least one covered element"
-msgstr "Saisir un élement couvert"
+msgstr "Saisir un risque couvert"
 
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
