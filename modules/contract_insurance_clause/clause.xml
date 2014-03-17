@@ -14,7 +14,7 @@
       <field name="model">contract.clause</field>
       <field name="type">tree</field>
       <field name="inherit" ref="contract_clause.clause_view_list"/>
-      <field name="name">clause_tree</field>
+      <field name="name">clause_list</field>
     </record>
   </data>
 </tryton>

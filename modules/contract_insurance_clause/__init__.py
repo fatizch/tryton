@@ -8,6 +8,5 @@ def register():
         # From file clause
         ContractClause,
         # From file contract
-        Contract,
         CoveredData,
         module='contract_insurance_clause', type_='model')

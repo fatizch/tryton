@@ -8,4 +8,5 @@ def register():
         Beneficiary,
         ContractClause,
         CoveredData,
+        Contract,
         module='contract_life_clause', type_='model')

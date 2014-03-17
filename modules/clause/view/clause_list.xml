@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tree string="Clauses">
-  <field name="name"/>
-  <field name="code"/>
-  <field name="kind"/>
+    <field name="name"/>
+    <field name="code"/>
+    <field name="kind"/>
 </tree>

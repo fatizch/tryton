@@ -1,4 +1,4 @@
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields, model
 
@@ -22,7 +22,9 @@ class ContractClause(model.CoopSQL, model.CoopView):
             'invisible': True,
             }, depends=['override_text'])
     visual_text = fields.Function(
-        fields.Text('Clause Text'),
+        fields.Text('Clause Text', states={
+                'invisible': (~Bool(Eval('visual_text', '')))
+                & (~Eval('override_text', False))}),
         'on_change_with_visual_text')
     kind = fields.Function(
         fields.Char('Kind'),

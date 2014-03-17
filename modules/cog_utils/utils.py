@@ -165,6 +165,14 @@ def get_good_version_at_date(instance, var_name, at_date=None):
         return res[0]
 
 
+def find_date(list_to_filter, date):
+    for elem in list_to_filter:
+        if (elem.start_date or datetime.date.min) < date < (elem.end_date or
+                datetime.date.max):
+            return elem
+    raise KeyError('Date %s undefined in list %s')
+
+
 def get_those_objects(model_name, domain, limit=None):
     the_model = Pool().get(model_name)
     return the_model.search(domain, limit=limit)

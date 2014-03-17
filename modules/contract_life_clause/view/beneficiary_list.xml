@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <tree string="Beneficiaries">
-  <field name="accepting"/>
-  <field name="share" factor="100"/>
-  <field name="description"/>
+    <field name="accepting"/>
+    <field name="share" factor="100">
+        <suffix string="%"/>
+    </field>
+    <field name="description"/>
 </tree>

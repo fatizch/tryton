@@ -32,6 +32,9 @@ class Clause(model.CoopSQL, model.VersionedObject):
     def default_kind(cls):
         return ''
 
+    def get_rec_name(self, name):
+        return self.name
+
 
 class ClauseVersion(model.CoopSQL, model.VersionObject):
     'Clause Version'

@@ -7,7 +7,6 @@
     <record model="ir.ui.view" id="clause_view_list">
       <field name="model">clause</field>
       <field name="type">tree</field>
-      <field name="inherit" ref="cog_utils.versionned_object_view_tree"/>
       <field name="name">clause_list</field>
     </record>
     <record model="ir.ui.view" id="clause_view_form">

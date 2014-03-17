@@ -1,68 +1,30 @@
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 __metaclass__ = PoolMeta
 
 __all__ = [
-    'Contract',
     'CoveredData',
     ]
-
-
-class Contract:
-    __name__ = 'contract'
-
-    def init_clauses(self, offered):
-        ContractClause = Pool().get('contract.clause')
-        clauses, errs = offered.get_result('all_clauses', {
-                'date': self.start_date,
-                'appliable_conditions_date': self.appliable_conditions_date,
-                })
-        if errs or not clauses:
-            return
-        self.clauses = []
-        for clause in clauses:
-            new_clause = ContractClause()
-            new_clause.clause = clause
-            new_clause.text = clause.get_good_version_at_date(
-                self.start_date).content
-            self.clauses.append(new_clause)
-        return clauses
-
-    def init_from_offered(self, offered, start_date=None, end_date=None):
-        result = super(Contract, self).init_from_offered(offered, start_date,
-            end_date)
-        self.init_clauses(offered)
-        return result
 
 
 class CoveredData:
     __name__ = 'contract.covered_data'
 
     clauses = fields.One2Many('contract.clause', 'covered_data',
-        'Clauses', context={'start_date': Eval('start_date')})
+        'Clauses', context={'start_date': Eval('start_date')},
+        domain=[('clause', 'in', Eval('possible_clauses'))],
+        depends=['possible_clauses'])
+    possible_clauses = fields.Function(
+        fields.One2Many('clause', '', 'Possible clauses'),
+        'on_change_with_possible_clauses')
 
-    def init_clauses(self, option):
-        clauses, errs = self.option.offered.get_result('all_clauses', {
-                'date': option.start_date,
-                'appliable_conditions_date':
-                self.option.contract.appliable_conditions_date,
-            })
-        self.clauses = []
-        if errs or not clauses:
-            return
-        ContractClause = Pool().get('contract.clause')
-        for clause in clauses:
-            new_clause = ContractClause()
-            new_clause.clause = clause
-            new_clause.text = clause.get_version_at_date(
-                option.start_date).content
-            new_clause.contract = option.contract
-            self.clauses.append(new_clause)
-        return clauses
-
-    def init_from_option(self, option):
-        super(CoveredData, self).init_from_option(option)
-        self.init_clauses(option)
+    @fields.depends('option')
+    def on_change_with_possible_clauses(self, name=None):
+        if not self.option.offered.clause_rules:
+            return []
+        good_rule = utils.find_date(self.option.offered.clause_rules,
+            self.option.contract.appliable_conditions_date)
+        return [elem.id for elem in good_rule.clauses]

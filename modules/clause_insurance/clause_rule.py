@@ -15,6 +15,7 @@ class ClauseRule(BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'clause.rule'
 
+    name = fields.Char('Name', required=True)
     clauses = fields.Many2Many('clause.rule-clause', 'rule', 'clause',
         'Clauses')
 

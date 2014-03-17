@@ -15,9 +15,9 @@ class ContractClause:
     covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
         ondelete='CASCADE', states={'invisible': ~Eval('covered_data')})
 
-    @fields.depends('covered_data', 'clause')
+    @fields.depends('covered_data', 'clause', 'contract')
     def on_change_with_visual_text(self, name=None):
-        if self.contract:
+        if self.contract or not self.clause:
             return super(ContractClause, self).on_change_with_visual_text()
         else:
             good_version = self.clause.get_version_at_date(

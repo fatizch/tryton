@@ -120,7 +120,7 @@ class One2ManyDomain(One2Many):
                     for elem in the_domain[1:]:
                         good_domain = clean_domain(elem)
                         if not good_domain:
-                            final_domain.append(True)
+                            final_domain.append(())
                         else:
                             final_domain.append(good_domain)
                 elif isinstance(the_domain[0], (tuple, list)):
@@ -128,7 +128,7 @@ class One2ManyDomain(One2Many):
                     for elem in the_domain:
                         good_domain = clean_domain(elem)
                         if not good_domain:
-                            final_domain.append(True)
+                            final_domain.append(())
                         else:
                             final_domain.append(good_domain)
                 else:

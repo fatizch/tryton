@@ -157,17 +157,3 @@ class CoveredData:
     @classmethod
     def default_coverage_amount(cls):
         return None
-
-    def init_clauses(self, option):
-        # In life insurance, the beneficiary clause requires a special
-        # treatment. We let only one of those selected (the first one should be
-        # the highest level in the product definition)
-        super(CoveredData, self).init_clauses(option)
-        to_delete = []
-        for idx, clause in enumerate(self.clauses):
-            if not clause.clause.kind == 'beneficiary':
-                continue
-            to_delete.append(idx)
-        for idx in reversed(to_delete[1:]):
-            self.clauses.pop(idx)
-        print list(self.clauses)
