@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -296,7 +296,7 @@ msgstr "Numéro de Sinistre"
 
 msgctxt "field:claim.indemnification.validate.display,covered_element:"
 msgid "Covered Element"
-msgstr "Elément Couvert"
+msgstr "Risque Couvert"
 
 msgctxt "field:claim.indemnification.validate.display,currency_digits:"
 msgid "Currency Digits"
