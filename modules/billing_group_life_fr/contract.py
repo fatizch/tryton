@@ -13,6 +13,11 @@ __all__ = [
     'CoveredData',
     ]
 
+_STATES = {
+    'readonly': Eval('status') != 'quote',
+    }
+_DEPENDS = ['status']
+
 
 class Contract:
     __name__ = 'contract'
@@ -21,9 +26,15 @@ class Contract:
         fields.Boolean('Use Rates', states={'invisible': True}),
         'get_use_rates')
     rates = fields.One2Many('contract.premium_rate.line', 'contract', 'Rates',
-        states={'invisible': ~Eval('use_rates')})
+        states={
+            'invisible': ~Eval('use_rates'),
+            'readonly': Eval('status') != 'quote',
+            }, depends=_DEPENDS)
     next_assessment_date = fields.Date('Next Assessment Date',
-        states={'invisible': ~Eval('use_rates')})
+        states={
+            'invisible': ~Eval('use_rates'),
+            'readonly': Eval('status') != 'quote',
+            }, depends=_DEPENDS)
 
     @classmethod
     def __setup__(cls):

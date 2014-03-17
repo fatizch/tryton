@@ -23,15 +23,18 @@ class Contract:
         fields.Boolean('Is Loan', states={'invisible': True}),
         'get_is_loan')
     loans = fields.One2Many('loan', 'contract', 'Loans',
-        order=[('order', 'ASC')],
-        states={'invisible': ~Eval('is_loan')},
-        depends=['is_loan', 'currency'],
+        states={
+            'invisible': ~Eval('is_loan', False),
+            'readonly': Eval('status') != 'quote',
+            }, depends=['is_loan', 'currency', 'status'],
         context={'currency': Eval('currency')})
 
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
-        cls._buttons.update({'create_loan': {}})
+        cls._buttons.update({
+                    'create_loan': {'invisible': Eval('status') != 'quote'},
+                    })
 
     def get_is_loan(self, name):
         if not self.options and self.offered:
