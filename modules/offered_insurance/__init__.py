@@ -31,7 +31,6 @@ def register():
         # From business_rule
         RuleEngineParameter,
         RuleEngine,
-        TableManageDimensionShowDimension,
         BusinessRuleRoot,
         # From business_rule.ir
         Model,

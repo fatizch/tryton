@@ -85,11 +85,6 @@ class TableDefinition(ModelSQL, ModelView):
         cls._order.insert(0, ('name', 'ASC'))
         cls._error_messages.update({
                 'existing_clone': ('A clone record already exists : %s(%s)')})
-        cls._buttons.update({
-                'manage_dimension': {
-                    'icon': 'tryton-go-jump',
-                    },
-                })
 
     @classmethod
     def __register__(cls, module_name):
@@ -298,11 +293,6 @@ class TableDefinition(ModelSQL, ModelView):
     @classmethod
     def default_number_of_digits(cls):
         return 2
-
-    @classmethod
-    @ModelView.button_action('table.act_manage_dimension')
-    def manage_dimension(cls, tables):
-        pass
 
     def get_index_value(self, at_date=None):
         Cell = Pool().get('table.cell')

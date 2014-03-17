@@ -542,10 +542,6 @@ msgctxt "model:ir.action,name:act_definition_dimension_relate_form"
 msgid "Definition Dimension"
 msgstr "Définition de la Dimension"
 
-msgctxt "model:ir.action,name:act_manage_dimension"
-msgid "Manage Dimensions"
-msgstr "Gérer les Dimensions"
-
 msgctxt "model:ir.action,name:act_table_2d_open"
 msgid "Table 2D"
 msgstr "Table 2D"

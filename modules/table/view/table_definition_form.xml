@@ -12,5 +12,4 @@
   </group>
   <field name="dimensions"/>
   <newline/>
-  <button name="manage_dimension" string="Manage dimension"/>
 </form>

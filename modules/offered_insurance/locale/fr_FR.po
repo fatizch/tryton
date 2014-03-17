@@ -2627,10 +2627,6 @@ msgctxt "field:rule_engine.parameter,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:table.manage_dimension.show.dimension,extra_data:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
@@ -3439,10 +3435,6 @@ msgstr "Donnée Complémentaire Externe"
 msgctxt "selection:rule_engine.parameter,kind:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
-
-msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
-msgid "Complementary data"
-msgstr "Données Complémentaires"
 
 msgctxt "view:billing.premium.rule.component:"
 msgid "Premium Rule Component"
