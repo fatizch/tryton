@@ -169,7 +169,7 @@ class CoveredData:
             }
         result['clauses'] = {
             'remove': existing_beneficiary_clauses,
-            'add': [{
+            'add': [(-1, {
                     'clause': self.beneficiary_clause_selection.id,
                     'override_text':
                     self.beneficiary_clause_selection.may_be_overriden,
@@ -177,7 +177,7 @@ class CoveredData:
                     'text': (
                         result['beneficiary_clause_override_text']
                         if self.beneficiary_clause_selection.may_be_overriden
-                        else '')}]}
+                        else '')})]}
         return result
 
     def get_may_override_beneficiary_clause_text(self, name):

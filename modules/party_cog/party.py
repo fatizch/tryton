@@ -167,7 +167,7 @@ class Party(export.ExportImportMixin):
         if type(getattr(self, role)) == bool:
             return res
         if getattr(self, is_role) and not getattr(self, role):
-            res[role]['add'] = [{}]
+            res[role]['add'] = [(-1, {})]
         elif not getattr(self, is_role) and getattr(self, role):
             res[role].setdefault('remove', [])
             res[role]['remove'].append(getattr(self, role)[0].id)

@@ -101,9 +101,9 @@ class CoveredElement:
                 and not self.party.health_complement):
             address = self.party.address_get() if self.party else None
             department = address.get_department() if address else ''
-            return {'add': [{
+            return {'add': [(-1, {
                         'party': self.party.id,
-                        'department': department}]}
+                        'department': department})]}
         else:
             return [x.id for x in self.party.health_complement]
 

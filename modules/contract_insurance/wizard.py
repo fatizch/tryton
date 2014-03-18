@@ -198,17 +198,17 @@ class ExtraPremiumDisplay(model.CoopView):
         existing_coverages = []
         for covered_data in self.covered_element.covered_data:
             for extra_premium in covered_data.extra_premiums:
-                existing_extras.append({
+                existing_extras.append((-1, {
+                            'selected': False,
+                            'extra_premium': extra_premium.id,
+                            'extra_premium_name': self.get_extra_premium_name(
+                                extra_premium),
+                            }))
+            existing_coverages.append((-1, {
                         'selected': False,
-                        'extra_premium': extra_premium.id,
-                        'extra_premium_name': self.get_extra_premium_name(
-                            extra_premium),
-                        })
-            existing_coverages.append({
-                    'selected': False,
-                    'coverage': covered_data.id,
-                    'coverage_name': self.get_coverage_name(covered_data),
-                    })
+                        'coverage': covered_data.id,
+                        'coverage_name': self.get_coverage_name(covered_data),
+                        }))
         result['extra_premiums']['add'] = existing_extras
         result['coverages']['add'] = existing_coverages
         return result
@@ -470,13 +470,13 @@ class ExtraPremiumDisplayer(model.CoopView):
                 [x.id for x in self.extra_premium]}}
         if not self.covered_data:
             return result
-        result['extra_premium']['add'] = [{
-                'covered_data': self.covered_data.id,
-                'start_date': self.covered_data.start_date,
-                'end_date': self.covered_data.end_date,
-                'calculation_kind': 'rate',
-                'rate': 0,
-                'flat_amount': 0}]
+        result['extra_premium']['add'] = [(-1, {
+                    'covered_data': self.covered_data.id,
+                    'start_date': self.covered_data.start_date,
+                    'end_date': self.covered_data.end_date,
+                    'calculation_kind': 'rate',
+                    'rate': 0,
+                    'flat_amount': 0})]
         return result
 
 

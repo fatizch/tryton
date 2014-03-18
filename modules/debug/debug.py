@@ -85,12 +85,12 @@ class ModelInfo(ModelView):
             result = {}
         if not self.model_name:
             return result
-        result['add'] = sorted(
-            filter(None,
-                list([self.get_field_info(field, field_name)
-                        for field_name, field
-                        in TargetModel._fields.iteritems()])),
-            key=lambda x: x[self.filter_value])
+        result['add'] = [(-1, x) for x in sorted(
+                    filter(None,
+                        list([self.get_field_info(field, field_name)
+                                for field_name, field
+                                in TargetModel._fields.iteritems()])),
+                    key=lambda x: x[self.filter_value])]
         return result
 
 
