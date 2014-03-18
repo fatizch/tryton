@@ -10,4 +10,13 @@
   <field name="kind"/>
   <label name="target_model"/>
   <field name="target_model"/>
+  <label name="is_required"/>
+  <field name="is_required"/>
+  <field name="state_required" colspan="2"/>
+  <label name="is_readonly"/>
+  <field name="is_readonly"/>
+  <field name="state_readonly" colspan="2"/>
+  <label name="is_invisible"/>
+  <field name="is_invisible"/>
+  <field name="state_invisible" colspan="2"/>
 </form>

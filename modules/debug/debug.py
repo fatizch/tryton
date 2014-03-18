@@ -23,6 +23,12 @@ class FieldInfo(ModelView):
     is_function = fields.Boolean('Is Function')
     target_model = fields.Char('Target Model')
     string = fields.Char('String')
+    state_required = fields.Text('State Required')
+    is_required = fields.Boolean('Is required')
+    state_readonly = fields.Text('State Readonly')
+    is_readonly = fields.Boolean('Is readonly')
+    state_invisible = fields.Text('State Invisible')
+    is_invisible = fields.Boolean('Is invisible')
 
 
 class ModelInfo(ModelView):
@@ -60,6 +66,9 @@ class ModelInfo(ModelView):
             result['target_model'] = field.model_name
         else:
             result['target_model'] = ''
+        for elem in ('required', 'readonly', 'invisible'):
+            result['is_%s' % elem] = getattr(field, elem, False)
+            result['state_%s' % elem] = repr(field.states.get(elem, {}))
         return result
 
     @classmethod
