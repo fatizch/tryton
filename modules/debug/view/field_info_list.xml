@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <tree string="Fields">
-  <field name="name"/>
-  <field name="string"/>
-  <field name="kind"/>
-  <field name="is_function"/>
-  <field name="is_required"/>
-  <field name="is_readonly"/>
-  <field name="is_invisible"/>
+    <field name="name"/>
+    <field name="string"/>
+    <field name="kind"/>
+    <field name="is_function"/>
+    <field name="is_required"/>
+    <field name="is_readonly"/>
+    <field name="is_invisible"/>
+    <field name="has_domain"/>
 </tree>
