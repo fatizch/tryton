@@ -3,7 +3,7 @@ from sql.aggregate import Max
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, And, Or, Bool, Len
+from trytond.pyson import Eval, And, Or, Bool, Len, If
 
 from trytond.modules.cog_utils import utils, coop_date, fields, model
 from trytond.modules.currency_cog import ModelCurrency
@@ -73,7 +73,12 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
                 ['fixed_rate', 'intermediate', 'balloon']),
             'invisible': ~Eval('kind').in_(
                 ['fixed_rate', 'intermediate', 'balloon', 'graduated']),
-            })
+            },
+        domain=[If(
+                Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon']),
+                ('rate', '>', 0),
+                (),
+                )],)
     payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
     early_payments = fields.One2ManyDomain('loan.payment', 'loan',
