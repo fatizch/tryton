@@ -3,12 +3,16 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:contract.clause,covered_data:"
-msgid ""
-msgstr ""
+msgid "Covered Data"
+msgstr "Données de Couverture"
 
 msgctxt "field:contract.covered_data,clauses:"
-msgid ""
-msgstr ""
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "field:contract.covered_data,possible_clauses:"
+msgid "Possible clauses"
+msgstr "Clauses possibles"
 
 msgctxt "view:contract.covered_data:"
 msgid "Clauses"

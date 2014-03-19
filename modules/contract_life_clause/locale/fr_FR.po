@@ -2,21 +2,25 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.clause:"
+msgid "Total share for clause %s isinvalid"
+msgstr "Le cumul des parts pour la clause %s n'est pas valide"
+
+msgctxt "error:contract:"
+msgid "No beneficiary clause selected on %s"
+msgstr "Pas de clause bénéficiaire sélectionée sur %s"
+
 msgctxt "field:contract.clause,beneficiaries:"
 msgid "Beneficiaries"
 msgstr "Bénéficiaires"
 
 msgctxt "field:contract.clause,with_beneficiary_list:"
 msgid "With Beneficiay list"
-msgstr "Avec bénéficiaires"
+msgstr "Liste nominative"
 
 msgctxt "field:contract.clause.beneficiary,accepting:"
 msgid "Accepting"
 msgstr "Acceptant"
-
-msgctxt "field:contract.clause.beneficiary,description:"
-msgid "Description"
-msgstr "Description"
 
 msgctxt "field:contract.clause.beneficiary,clause:"
 msgid "Clause"
@@ -34,13 +38,17 @@ msgctxt "field:contract.clause.beneficiary,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:contract.clause.beneficiary,id:"
-msgid "ID"
-msgstr "ID"
+msgctxt "field:contract.clause.beneficiary,description:"
+msgid "Description"
+msgstr "Description"
 
 msgctxt "field:contract.clause.beneficiary,details:"
 msgid "Details"
 msgstr "Détails"
+
+msgctxt "field:contract.clause.beneficiary,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:contract.clause.beneficiary,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -79,9 +87,17 @@ msgid "Contract Beneficiary"
 msgstr "Bénéficiaire"
 
 msgctxt "view:contract.clause.beneficiary:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:contract.clause.beneficiary:"
 msgid "Beneficiaries"
 msgstr "Bénéficiaires"
 
 msgctxt "view:contract.clause.beneficiary:"
 msgid "Beneficiary"
 msgstr "Bénéficiaire"
+
+msgctxt "view:contract.covered_data:"
+msgid "Beneficiary Clauses"
+msgstr "Clauses Bénéficiaires"
