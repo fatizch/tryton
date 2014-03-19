@@ -86,7 +86,8 @@ class Subscribed(model.CoopView, ModelCurrency):
     start_date = fields.Date('Effective Date', required=True, states=_STATES,
         depends=_DEPENDS)
     end_date = fields.Date('End Date',
-        domain=[('start_date', '<=', 'end_date')],
+        domain=[['OR', ('end_date', '=', None),
+                ('end_date', '>=', Eval('start_date'))]],
         states=_STATES, depends=_DEPENDS)
     # Management date is the date at which the company started to manage the
     # contract. Default value is start_date
