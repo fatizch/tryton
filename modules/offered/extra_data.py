@@ -245,7 +245,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         try:
             cur_value = init_dict[self.name]
         except KeyError:
-            cur_value = self.get_default_value(None)
+            cur_value = (self.get_default_value(None)
+                if self.with_default_value else None)
         # We set a boolean to know if the value is forced through rule engine
         new_vals[self.name] = (cur_value, False)
         if self.sub_data_config_kind == 'advanced' and self.rule:
