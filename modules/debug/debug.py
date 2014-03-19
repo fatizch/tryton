@@ -23,6 +23,14 @@ class FieldInfo(ModelView):
     is_function = fields.Boolean('Is Function')
     target_model = fields.Char('Target Model')
     string = fields.Char('String')
+    state_required = fields.Text('State Required')
+    is_required = fields.Boolean('Is required')
+    state_readonly = fields.Text('State Readonly')
+    is_readonly = fields.Boolean('Is readonly')
+    state_invisible = fields.Text('State Invisible')
+    is_invisible = fields.Boolean('Is invisible')
+    has_domain = fields.Boolean('Has domain')
+    field_domain = fields.Text('Domain')
 
 
 class ModelInfo(ModelView):
@@ -60,6 +68,13 @@ class ModelInfo(ModelView):
             result['target_model'] = field.model_name
         else:
             result['target_model'] = ''
+        for elem in ('required', 'readonly', 'invisible'):
+            result['is_%s' % elem] = getattr(field, elem, False)
+            result['state_%s' % elem] = repr(field.states.get(elem, {}))
+        field_domain = getattr(field, 'domain', None)
+        if field_domain:
+            result['has_domain'] = True
+            result['field_domain'] = repr(field_domain)
         return result
 
     @classmethod
@@ -76,12 +91,12 @@ class ModelInfo(ModelView):
             result = {}
         if not self.model_name:
             return result
-        result['add'] = sorted(
-            filter(None,
-                list([self.get_field_info(field, field_name)
-                        for field_name, field
-                        in TargetModel._fields.iteritems()])),
-            key=lambda x: x[self.filter_value])
+        result['add'] = [(-1, x) for x in sorted(
+                    filter(None,
+                        list([self.get_field_info(field, field_name)
+                                for field_name, field
+                                in TargetModel._fields.iteritems()])),
+                    key=lambda x: x[self.filter_value])]
         return result
 
 
@@ -105,8 +120,8 @@ class DebugModel(Wizard):
         self.model_info.hide_functions = False
         self.model_info.filter_value = 'name'
         result = self.model_info._default_values
-        result['field_infos'] = self.model_info.on_change_with_field_infos(
-            )['add']
+        result['field_infos'] = [x[1] for x in
+            self.model_info.on_change_with_field_infos()['add']]
         return result
 
 

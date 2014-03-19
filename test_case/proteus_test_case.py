@@ -63,9 +63,11 @@ def install_modules(config, modules_to_install, cfg_dict, only_this_module):
 def execute_test_cases(cfg_dict, files=False):
     if cfg_dict['only_install']:
         return
+    # TODO: Use database language rather than hardcoding.
     config = Model.get('ir.test_case')(1)
-    config.language = Model.get('ir.lang').find([
-            ('code', '=', cfg_dict['language'])])[0]
+    Lang = Model.get('ir.lang')
+    lang, = Lang.find([('code','=','fr_FR')])
+    config.language = lang
     config.save()
     wizard = Wizard('ir.test_case.run')
     if files:

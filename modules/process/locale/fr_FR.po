@@ -660,7 +660,7 @@ msgstr "Terminer"
 
 msgctxt "view:contract:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
+msgstr "Risques Couverts"
 
 msgctxt "view:contract:"
 msgid "Create Loan"

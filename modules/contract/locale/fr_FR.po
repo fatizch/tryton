@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -548,7 +548,7 @@ msgstr "Historique des Statuts"
 
 msgctxt "model:contract.wizard.option_subscription.options_displayer,name:"
 msgid "Select Covered Element"
-msgstr "Choisir l'Element Couvert"
+msgstr "Choisir Le Risque Couvert"
 
 msgctxt ""
 "model:contract.wizard.option_subscription.options_displayer.option,name:"

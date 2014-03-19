@@ -17,7 +17,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineParameter',
     'RuleEngine',
-    'TableManageDimensionShowDimension',
     'BusinessRuleRoot',
     ]
 
@@ -112,6 +111,7 @@ class RuleEngineParameter:
         result['name'] = self.extra_data_def.string
         return result
 
+    @fields.depends('external_extra_data_def')
     def on_change_external_extra_data_def(self):
         result = {}
         if not (hasattr(self, 'external_extra_data_def') and
@@ -195,46 +195,6 @@ class RuleEngine:
 
     def on_change_rule_external_extra_datas(self):
         return self.on_change_rule_parameters()
-
-
-class TableManageDimensionShowDimension:
-    __name__ = 'table.manage_dimension.show.dimension'
-
-    extra_data = fields.Many2One('extra_data', 'Extra Data',
-        domain=[('type_', '=', 'selection')], states={
-            'invisible': Eval('input_mode', '') != 'extra_data',
-            })
-
-    @classmethod
-    def __setup__(cls):
-        super(TableManageDimensionShowDimension, cls).__setup__()
-        cls.input_mode = copy.copy(cls.input_mode)
-        cls.input_mode.selection.append(('extra_data', 'Complementary data'))
-
-    @fields.depends('input_mode', 'extra_data')
-    def on_change_extra_data(self):
-        if self.input_mode == 'extra_data' and self.extra_data:
-            return {'converted_text': '\n'.join([x.split(':')[0] for x in
-                        self.extra_data.selection.split('\n')])}
-        else:
-            return {'extra_data': None}
-
-    def on_change_input_mode(self):
-        result = super(TableManageDimensionShowDimension,
-            self).on_change_input_mode()
-        if self.input_mode != 'extra_data':
-            result.update({'extra_data': None})
-            return result
-        self.input_text = ''
-        result = self.on_change_input_text()
-        result.update({'input_text': ''})
-        return result
-
-    def convert_values(self):
-        if self.input_mode == 'extra_data':
-            return '\n'.join([x.split(':')[0] for x in
-                self.extra_data.selection.split('\n')])
-        return super(TableManageDimensionShowDimension, self).convert_values()
 
 
 class BusinessRuleRoot(model.CoopView, GetResult, Templated):

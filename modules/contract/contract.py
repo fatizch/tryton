@@ -7,6 +7,7 @@ from trytond.pool import Pool
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.offered import offered
 from trytond.modules.offered_insurance import Printable
 
 CONTRACTSTATUSES = [
@@ -62,11 +63,17 @@ class StatusHistory(model.CoopSQL, model.CoopView):
         if previous_status == 'active':
             reference.end_date = previous_status.end_date
 
+_STATES = {
+    'readonly': Eval('status') != 'quote',
+    }
+_DEPENDS = ['status']
+
 
 class Subscribed(model.CoopView, ModelCurrency):
     'Subscribed'
 
     offered = fields.Many2One(None, 'Offered', ondelete='RESTRICT',
+        readonly=True,
         states={'required': Eval('status') == 'active'},
         domain=[['OR',
                 [('end_date', '>=', Eval('start_date'))],
@@ -76,17 +83,22 @@ class Subscribed(model.CoopView, ModelCurrency):
                 [('start_date', '=', None)],
                 ],
             ], depends=['start_date'])
-    start_date = fields.Date('Effective Date', required=True)
-    end_date = fields.Date(
-        'End Date', domain=[('start_date', '<=', 'end_date')])
+    start_date = fields.Date('Effective Date', required=True, states=_STATES,
+        depends=_DEPENDS)
+    end_date = fields.Date('End Date',
+        domain=[['OR', ('end_date', '=', None),
+                ('end_date', '>=', Eval('start_date'))]],
+        states=_STATES, depends=_DEPENDS)
     # Management date is the date at which the company started to manage the
     # contract. Default value is start_date
-    start_management_date = fields.Date('Management Date')
+    start_management_date = fields.Date('Management Date', states=_STATES,
+        depends=_DEPENDS)
     summary = fields.Function(
         fields.Text('Summary'),
         'get_summary')
     status_history = fields.One2Many(
-        'contract.status.history', 'reference', 'Status History')
+        'contract.status.history', 'reference', 'Status History',
+        readonly=True)
 
     @classmethod
     def __setup__(cls):
@@ -180,14 +192,27 @@ class Contract(model.CoopSQL, Subscribed, Printable):
     product_kind = fields.Function(
         fields.Char('Product Kind'),
         'on_change_with_product_kind', searcher='search_product_kind')
-    status = fields.Selection(CONTRACTSTATUSES, 'Status')
+    status = fields.Selection(CONTRACTSTATUSES, 'Status', readonly=True)
     options = fields.One2Many('contract.option', 'contract', 'Options',
-        context={'start_date': Eval('start_date')})
+        context={'start_date': Eval('start_date')},
+        states=_STATES, depends=_DEPENDS)
     contract_number = fields.Char('Contract Number', select=1,
-        states={'required': Eval('status') == 'active'})
+        states={
+            'required': Eval('status') == 'active',
+            'readonly': Eval('status') != 'quote',
+            }, depends=_DEPENDS)
+    offered_subscriber_kind = fields.Function(
+        fields.Selection(offered.SUBSCRIBER_KIND, 'Offered Subscriber Kind',
+            states={'invisible': True}),
+        'on_change_with_offered_subscriber_kind')
     subscriber_kind = fields.Function(
-        fields.Char('Subscriber Kind', states={'invisible': True}),
-        'on_change_with_subscriber_kind')
+        fields.Selection(offered.SUBSCRIBER_KIND, 'Subscriber Kind',
+            states={
+                'readonly': Eval('offered_subscriber_kind') != 'all',
+                'invisible': Eval('status') != 'quote',
+                },
+            depends=['offered_subscriber_kind', 'status']),
+        'on_change_with_subscriber_kind', 'setter_void')
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[[If(
                     Eval('subscriber_kind') == 'person',
@@ -203,21 +228,25 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         fields.Many2One('party.party', 'Current Policy Owner'),
         'get_current_policy_owner')
     extra_data = fields.Dict('extra_data', 'Complementary Data',
-        depends=['extra_data', 'start_date', 'options', 'offered'],
+        depends=['extra_data', 'start_date', 'options', 'offered', 'status'],
+        states=_STATES,
         # states={'invisible': ~Eval('extra_data')
         )
     # TODO replace single contact by date versionned list
     contact = fields.Many2One('party.party', 'Contact', ondelete='RESTRICT')
-    appliable_conditions_date = fields.Date('Appliable Conditions Date')
+    appliable_conditions_date = fields.Date('Appliable Conditions Date',
+        states=_STATES, depends=_DEPENDS)
     documents = fields.One2Many('document.request', 'needed_by', 'Documents',
+        states=_STATES, depends=_DEPENDS,
         size=1)
     company = fields.Many2One('company.company', 'Company', required=True,
-        select=True, ondelete='RESTRICT')
+        select=True, ondelete='RESTRICT', states=_STATES, depends=_DEPENDS)
     addresses = fields.One2Many('contract.address', 'contract',
         'Addresses', context={
             'policy_owner': Eval('current_policy_owner'),
             'start_date': Eval('start_date'),
-            }, depends=['current_policy_owner'])
+            }, depends=['current_policy_owner', 'status'],
+            states=_STATES)
 
     @classmethod
     def __setup__(cls):
@@ -506,8 +535,17 @@ class Contract(model.CoopSQL, Subscribed, Printable):
         return ''
 
     @fields.depends('offered')
-    def on_change_with_subscriber_kind(self, name=None):
+    def on_change_with_offered_subscriber_kind(self, name=None):
         return self.offered.subscriber_kind if self.offered else 'all'
+
+    @fields.depends('offered_subscriber_kind', 'subscriber')
+    def on_change_with_subscriber_kind(self, name=None):
+        if self.subscriber and self.subscriber.is_person:
+            return 'person'
+        elif self.subscriber and self.subscriber.is_company:
+            return 'company'
+        else:
+            return self.offered_subscriber_kind
 
     @classmethod
     def get_var_names_for_full_extract(cls):
