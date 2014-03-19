@@ -1,7 +1,7 @@
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, If, In
+from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields, utils, coop_string
@@ -80,6 +80,15 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
         cls.product = copy.copy(cls.product)
         cls.product.domain = export.clean_domain_for_import(
             cls.product.domain, 'company')
+
+    @classmethod
+    def copy(cls, products, default=None):
+        if default is None:
+            default = {}
+        else:
+            default = default.copy()
+        default.setdefault('dist_networks', None)
+        return super(CommercialProduct, cls).copy(products, default=default)
 
     @staticmethod
     def default_start_date():

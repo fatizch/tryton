@@ -2,14 +2,6 @@
 <form string="Covered Data">
   <notebook>
     <page string="Main Data" id="main_data">
-      <label name="status"/>
-      <field name="status"/>
-      <newline/>
-      <label name="start_date"/>
-      <field name="start_date"/>
-      <label name="end_date"/>
-      <field name="end_date"/>
-      <newline/>
       <label name="option"/>
       <field name="option" xfill="1"/>
       <newline/>

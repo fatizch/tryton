@@ -110,5 +110,22 @@
       <field name="type">form</field>
       <field name="name">contract_address_form</field>
     </record>
+    <!-- ############################################################ -->
+    <!-- ########### Rights ########### -->
+    <!-- ############################################################ -->
+    <record model="res.group" id="group_contract">
+        <field name="name">Contract</field>
+    </record>
+    <record model="res.group" id="group_contract_admin">
+        <field name="name">Contract Administration</field>
+    </record>
+    <record model="res.user-res.group" id="user_admin_group_contract">
+        <field name="user" ref="res.user_admin"/>
+        <field name="group" ref="group_contract"/>
+    </record>
+    <record model="res.user-res.group" id="user_admin_group_contract_admin">
+        <field name="user" ref="res.user_admin"/>
+        <field name="group" ref="group_contract_admin"/>
+    </record>
   </data>
 </tryton>

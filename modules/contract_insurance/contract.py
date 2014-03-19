@@ -714,7 +714,7 @@ class CoveredData(model.CoopSQL, model.CoopView, ModelCurrency):
 
     option = fields.Many2One('contract.option', 'Contract Option',
         domain=[('id', 'in', Eval('possible_options'))],
-        depends=['possible_options'], ondelete='CASCADE')
+        depends=['possible_options'], readonly=True, ondelete='CASCADE')
     possible_options = fields.Function(
         fields.Many2Many('contract.option', None, None,
             'Possible Options', states={'invisible': True}),
@@ -939,8 +939,12 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         'Covered Data', ondelete='CASCADE')
     motive = fields.Many2One('extra_premium.kind', 'Motive',
         ondelete='RESTRICT', states={'required': True})
-    start_date = fields.Date('Start date', states={'required': True})
-    end_date = fields.Date('End date')
+    start_date = fields.Date('Start date', states={
+        'required': True,
+        'invisible': ~Eval('time_limited'),
+        })
+    end_date = fields.Date('End date',
+        states={'invisible': ~Eval('time_limited')})
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
         'Calculation Kind', depends=['covered_data'])
     flat_amount = fields.Numeric('Flat amount', states={
@@ -952,12 +956,17 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             'invisible': Eval('calculation_kind', '') != 'rate',
             'required': Eval('calculation_kind', '') == 'rate'},
         digits=(16, 4))
+    time_limited = fields.Function(
+        fields.Boolean('Time Limited'),
+        'get_time_limited', 'setter_void')
     duration = fields.Function(
-        fields.Integer('Duration'),
+        fields.Integer('Duration',
+            states={'invisible': ~Eval('time_limited')}),
         'get_duration', 'setter_void')
     duration_unit = fields.Function(
         fields.Selection([('', ''), ('month', 'Month'), ('year', 'Year')],
-            'Duration Unit', sort=False),
+            'Duration Unit', sort=False,
+            states={'invisible': ~Eval('time_limited')}),
         'get_duration_unit', 'setter_void')
 
     @classmethod
@@ -1052,6 +1061,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return coop_date.get_end_of_period(self.start_date, self.duration_unit,
             self.duration)
 
+    def get_time_limited(self):
+        return getattr(self, 'end_date', None) is not None
+
 
 class CoveredDataExclusionKindRelation(model.CoopSQL):
     'Covered Data to Exclusion Kind relation'
@@ -1069,9 +1081,14 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract-agreement'
 
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
-    party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT')
+    start_date = fields.Date('Start Date', states={
+            'invisible': Eval('_parent_contract', {}).get('status') == 'quote',
+            })
+    end_date = fields.Date('End Date', states={
+            'invisible': Eval('_parent_contract', {}).get('status') == 'quote',
+            })
+    party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
+        readonly=True)
     protocol = fields.Many2One('contract', 'Protocol', domain=[
             utils.get_versioning_domain('start_date', 'end_date'),
             ('product_kind', '!=', 'insurance'),
@@ -1084,7 +1101,8 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
         domain=[('party', '=', Eval('party'))], depends=['party'])
     contract = fields.Many2One('contract', 'Contract',
         depends=['party'], ondelete='CASCADE')
-    kind = fields.Selection([('', '')], 'Kind')
+    kind = fields.Selection([('', '')], 'Kind', readonly=True)
+    contact_info = fields.Char('Contact Information')
 
     @classmethod
     def __setup__(cls):
