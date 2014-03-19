@@ -1,5 +1,6 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, utils
 
@@ -30,9 +31,20 @@ class ContractClause:
         if self.contract:
             return self.contract.is_loan
 
+    @classmethod
+    def default_is_loan(cls):
+        return Transaction().context.get('is_loan', False)
+
 
 class CoveredData:
     __name__ = 'contract.covered_data'
+
+    @classmethod
+    def __setup__(cls):
+        super(CoveredData, cls).__setup__()
+        cls.beneficiary_clauses.context.update({
+                'is_loan': Eval('is_loan', False)})
+        cls.beneficiary_clauses.depends.append('is_loan')
 
     def check_loan_beneficiary_clauses(self):
         if not self.option.offered.clause_rules:

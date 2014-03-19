@@ -225,14 +225,14 @@ class CogProcessFramework(ProcessFramework):
         return current_log[0].id if current_log else None
 
     @classmethod
-    def write(cls, instances, values):
+    def write(cls, instances, values, *_args):
         for instance in instances:
             if instance.current_log and instance.current_log.locked:
                 if instance.current_log.user.id != Transaction().user:
                     cls.raise_user_error('lock_fault', (
                             instance.get_rec_name(None),
                             instance.current_log.user.get_rec_name(None)))
-        super(CogProcessFramework, cls).write(instances, values)
+        super(CogProcessFramework, cls).write(instances, values, *_args)
         Session = Pool().get('ir.session')
         Log = Pool().get('process.log')
         try:
