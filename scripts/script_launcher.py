@@ -7,6 +7,7 @@ import ConfigParser
 import argparse
 import argcomplete
 import subprocess
+from path import path
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -376,7 +377,74 @@ def export(arguments, config, work_data):
         process.communicate()
 
 
+def create_symlinks(modules_path, lang, root, remove=True):
+    import glob
+
+    # TODO : called symlinks.py available in trydoc
+    if remove:
+        # Removing existing symlinks
+        for root_file in path(root).listdir():
+            if root_file.islink():
+                print "removing %s" % root_file
+                root_file.remove()
+
+    for module_doc_dir in glob.glob('%s/*/doc/%s' % (modules_path, lang)):
+        print "symlink to %s" % module_doc_dir
+        module_name = str(path(module_doc_dir).parent.parent.basename())
+        print "module name %s" % module_name
+        symlink = path(root).joinpath(module_name)
+        if not symlink.exists():
+            path(root).relpathto(path(module_doc_dir)).symlink(symlink)
+
+    rootIndex = os.path.join(root, 'index.rst')
+    if os.path.exists(rootIndex):
+        os.remove(rootIndex)
+    indexFileName = os.path.join(modules_path, 'index_' + lang + '.rst')
+    if os.path.exists(indexFileName):
+        os.symlink(indexFileName, rootIndex)
+
+
+def documentation(arguments, config, work_data):
+    from sphinxcontrib import trydoc
+
+    doc_files = os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+        'doc_files')
+    if arguments.initialize:
+        if not os.path.exists(doc_files):
+            os.makedirs(doc_files)
+        trydocdir = os.path.dirname(trydoc.__file__)
+        if not os.path.exists(os.path.join(trydocdir,
+                'index.rst.' + arguments.language + '.template')):
+            shutil.copyfile(os.path.join(trydocdir, 'index.rst.es.template'),
+                os.path.join(trydocdir, 'index.rst.' + arguments.language +
+                    '.template'))
+        process = subprocess.Popen(['trydoc-quickstart', arguments.language,
+            doc_files])
+        process.communicate()
+        if os.path.exists(os.path.join(doc_files, 'conf.py')):
+            with open(os.path.join(doc_files, 'conf.py'), 'a') as config:
+                config.write('')
+                config.write('#-- Options for Coog-----------------\n')
+                config.write("language = '" + arguments.language + "'")
+    elif arguments.generate:
+        create_symlinks(os.path.join(os.environ['VIRTUAL_ENV'],
+            'tryton-workspace', 'coopbusiness', 'doc'), arguments.language,
+            doc_files, True)
+        process = subprocess.Popen(['make', arguments.format],
+            cwd=doc_files)
+        process.communicate()
+    elif arguments.update_module:
+        process = subprocess.Popen(['trydoc-update-modules',
+            arguments.database, '-c',
+            os.path.join(doc_files, 'modules.cfg'), '-t',
+            os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+                'trytond')])
+        process.communicate()
+
+
 def configure(target_env):
+    import proteus
+
     root = os.path.normpath(os.path.abspath(target_env))
     base_name = os.path.basename(root)
     workspace = os.path.join(root, 'tryton-workspace')
@@ -481,6 +549,14 @@ def configure(target_env):
                         '',
                         '[form]',
                         'statusbar = True']))
+    #configure documentation
+    proteusdir = os.path.dirname(proteus.__file__)
+    if not os.path.islink(proteusdir):
+        shutil.rmtree(proteusdir)
+        os.symlink(os.path.join(workspace, 'proteus', 'proteus'), proteusdir)
+    os.remove(os.path.join(workspace, 'trytond', 'etc', 'trytond.conf'))
+    os.symlink(os.path.join(workspace, 'conf', 'trytond.conf'),
+        os.path.join(workspace, 'trytond', 'etc', 'trytond.conf'))
 
     def path_inserter(target, filename):
         target_file = os.path.join(root, 'lib', 'python2.7', 'site-packages',
@@ -597,6 +673,22 @@ if __name__ == '__main__':
     parser_configure.add_argument('--env', '-e', help='Root of environment '
         'to configure', default=os.environ['VIRTUAL_ENV'])
 
+    # Doc parser
+    parser_doc = subparsers.add_parser('doc', help='Generate documentation')
+    parser_doc.add_argument('--database', '-d', help='Define the '
+        'database to used',
+        default=os.path.basename(os.environ['VIRTUAL_ENV']))
+    parser_doc.add_argument('--language', '-l', help='Documentation language',
+        default='fr')
+    parser_doc.add_argument('--generate', '-g', help='Generate the '
+        'documentation', action='store_true')
+    parser_doc.add_argument('--initialize', '-i', help='Launch the '
+        'tyrdoc quickstart process', action='store_true')
+    parser_doc.add_argument('--update_module', '-u', help='Update the '
+        'configuration file containing modules', action='store_true')
+    parser_doc.add_argument('--format', '-f', help='format for documentation '
+        'generation : html, ...', default='html')
+
     argcomplete.autocomplete(parser)
     arguments = parser.parse_args()
 
@@ -616,3 +708,5 @@ if __name__ == '__main__':
         export(arguments, config, work_data)
     elif arguments.command == 'configure':
         configure(arguments.env)
+    elif arguments.command == 'doc':
+        documentation(arguments, config, work_data)

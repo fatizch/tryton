@@ -76,6 +76,8 @@ else
     echo $SEP
     # Postgres support
     pip install psycopg2
+    # documentation tools
+    pip install proteus sphinx path.py trydoc sphinxcontrib-inheritance
     # Batchs managing
     pip install celery flower
     echo $SEP
@@ -88,5 +90,5 @@ else
 	echo	'server = http://codereview.tryton.org'
 	echo	'send_email = False (True if you are sure of what you are doing)'
 	echo to your home hgrc file before calling coopinstall.sh
-	echo $SEP
+    echo $SEP
 fi
