@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -14,7 +14,15 @@ msgctxt "field:account.account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.account.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:account.account.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.account.type.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -263,8 +271,8 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:company.company,fiscal_years:"
-msgid ""
-msgstr " "
+msgid "Fiscal Years"
+msgstr "Années fiscales"
 
 msgctxt "field:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Fiscal Year periods frequency"

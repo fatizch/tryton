@@ -22,6 +22,10 @@ msgctxt "field:clause,current_rec_name:"
 msgid "Current Value"
 msgstr "Valeur Courante"
 
+msgctxt "field:clause,customizable:"
+msgid "Customizable"
+msgstr "Customisable"
+
 msgctxt "field:clause,id:"
 msgid "ID"
 msgstr "ID"
@@ -29,10 +33,6 @@ msgstr "ID"
 msgctxt "field:clause,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:clause,customizable:"
-msgid "Customizable"
-msgstr "Customisable"
 
 msgctxt "field:clause,must_expand_tree:"
 msgid "Must Expand Tree"

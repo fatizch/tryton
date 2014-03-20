@@ -23,7 +23,7 @@ msgid "Kind"
 msgstr "Type"
 
 msgctxt "field:offered.option.description,coverage_amount_rules:"
-msgid ""
+msgid "Coverage Amount Rules"
 msgstr " "
 
 msgctxt "field:offered.option.description,is_coverage_amount_needed:"

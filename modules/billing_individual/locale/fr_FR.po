@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -68,8 +68,8 @@ msgid "Amount w/o fees"
 msgstr "Montant hors Frais"
 
 msgctxt "field:account.move,wo_tax_amount:"
-msgid ""
-msgstr " "
+msgid "Total Amount w/o taxes"
+msgstr "Montant total hors Taxes"
 
 msgctxt "field:account.move.breakdown,base_total:"
 msgid "Base Total"
@@ -567,6 +567,10 @@ msgctxt "field:contract,next_billing_date:"
 msgid "Next Billing Date"
 msgstr "Date du Prochain Calcul"
 
+msgctxt "field:contract,number_of_billing_data:"
+msgid "Number of Billing Data"
+msgstr "Nombre de Gestionnaires de Facturation"
+
 msgctxt "field:contract,prices:"
 msgid "Prices"
 msgstr "Primes"
@@ -614,6 +618,10 @@ msgstr "ID"
 msgctxt "field:contract.billing.data,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
+
+msgctxt "field:contract.billing.data,number_of_billing_data:"
+msgid "Number of Billing Data"
+msgstr "Nombre de Gestionnaires de Facturation"
 
 msgctxt "field:contract.billing.data,payment_bank_account:"
 msgid "Payment Bank Account"
@@ -1358,6 +1366,10 @@ msgid "Move Lines"
 msgstr "Lignes Comptables"
 
 msgctxt "view:account.move.line:"
+msgid "Scheduling"
+msgstr ""
+
+msgctxt "view:account.move.line:"
 msgid "Total Amount"
 msgstr "Montant Total"
 
@@ -1401,13 +1413,25 @@ msgctxt "view:billing.payment.term.line:"
 msgid "Payment Term Line"
 msgstr "Ligne de règle de paiement"
 
+msgctxt "view:billing.payment.term.line:"
+msgid "Payment Term Lines"
+msgstr ""
+
 msgctxt "view:billing.payment.term:"
 msgid "Payment Term"
 msgstr "Règle de paiement"
 
+msgctxt "view:billing.payment.term:"
+msgid "Payment Terms"
+msgstr ""
+
 msgctxt "view:contract.billing.data:"
 msgid "Billing Datas"
 msgstr "Gestionnaires d'Appel de Cotisation"
+
+msgctxt "view:contract.billing.data:"
+msgid "billing_data"
+msgstr ""
 
 msgctxt "view:contract.billing.period:"
 msgid "Billing Period"
@@ -1444,6 +1468,10 @@ msgstr "Ligne de Prime"
 msgctxt "view:contract.billing.premium:"
 msgid "Pricing Lines"
 msgstr "Lignes de Prime"
+
+msgctxt "view:contract.do_billing.bill:"
+msgid "Bill Result"
+msgstr ""
 
 msgctxt "view:contract.do_billing.parameters:"
 msgid "Contract Do Billing Parameters"

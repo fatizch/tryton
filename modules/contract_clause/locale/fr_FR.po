@@ -30,6 +30,10 @@ msgctxt "field:contract.clause,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:contract.clause,customized_text:"
+msgid "Customized Text"
+msgstr "Texte customisable"
+
 msgctxt "field:contract.clause,id:"
 msgid "ID"
 msgstr "ID"
@@ -41,10 +45,6 @@ msgstr "Type"
 msgctxt "field:contract.clause,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
-
-msgctxt "field:contract.clause,customized_text:"
-msgid "Customized Text"
-msgstr "Texte customisable"
 
 msgctxt "field:contract.clause,rec_name:"
 msgid "Name"

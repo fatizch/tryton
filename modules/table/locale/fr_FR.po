@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -12,7 +12,7 @@ msgstr "Trop peu de valeur de dimension \"%s\" pour \"%s\""
 
 msgctxt "error:table.cell:"
 msgid "Too many dimension values \"%s\" for \"%s\""
-msgstr "Trop de valeur de dimension \"%s\" pour \"%s\"
+msgstr "Trop de valeur de dimension \"%s\" pour \"%s\\"
 
 msgctxt "error:table:"
 msgid "A clone record already exists : %s(%s)"
@@ -526,6 +526,26 @@ msgctxt "field:table.dimension.value,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:table.dimension.value.open.ask_type,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:table.dimension.value.open.ask_type,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:table.dimension.value.open.ask_type,table:"
+msgid "Table"
+msgstr "Table"
+
+msgctxt "field:table.dimension.value.open.ask_type,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "model:ir.action,name:"
+msgid "Create Table"
+msgstr "Définition de la Dimension"
+
 msgctxt "model:ir.action,name:act_cell_form"
 msgid "Cells"
 msgstr "Cellules"
@@ -534,13 +554,13 @@ msgctxt "model:ir.action,name:act_cell_relate_form"
 msgid "Cells"
 msgstr "Cellules"
 
-msgctxt "model:ir.action,name:act_create_table"
-msgid "Create Table"
-msgstr "Créer Table"
-
-msgctxt "model:ir.action,name:act_definition_dimension_relate_form"
+msgctxt "model:ir.action,name:act_definition_dimension_form"
 msgid "Definition Dimension"
-msgstr "Définition de la Dimension"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_dimension_value_open"
+msgid "Definition Dimension"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_table_2d_open"
 msgid "Table 2D"
@@ -554,7 +574,7 @@ msgctxt "model:ir.action,name:act_table_definition_form"
 msgid "Tables"
 msgstr "Tables"
 
-msgctxt "model:ir.ui.menu,name:menu_create_table"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Create Table"
 msgstr "Créer Table"
 
@@ -581,6 +601,10 @@ msgstr "Cellule"
 msgctxt "model:table.dimension.value,name:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
+
+msgctxt "model:table.dimension.value.open.ask_type,name:"
+msgid "Table Open Definition Dimension"
+msgstr ""
 
 msgctxt "selection:table,dimension_kind10:"
 msgid ""
@@ -958,6 +982,10 @@ msgctxt "view:table.cell:"
 msgid "Table"
 msgstr "Table"
 
+msgctxt "view:table.dimension.value.open.ask_type:"
+msgid "Definition Dimension"
+msgstr ""
+
 msgctxt "view:table.dimension.value:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
@@ -971,10 +999,6 @@ msgid "Basic Table Definition"
 msgstr ""
 
 msgctxt "view:table:"
-msgid "Manage dimension"
-msgstr "Gérer Dimension"
-
-msgctxt "view:table:"
 msgid "Table Definition"
 msgstr "Table"
 
@@ -985,3 +1009,11 @@ msgstr "Annuler"
 msgctxt "wizard_button:table.2d.open,ask_dimensions,open_:"
 msgid "Open"
 msgstr "Ouvert"
+
+msgctxt "wizard_button:table.dimension.value.open,ask_type,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:table.dimension.value.open,ask_type,open_:"
+msgid "Open"
+msgstr "Ouvrir"

@@ -18,14 +18,6 @@ msgctxt "error:process.transition:"
 msgid "Pyson expression and description is mandatory"
 msgstr "Expression Pyson et la description sont obligatoires"
 
-msgctxt "field:ir.export_package,process:"
-msgid "Process"
-msgstr "Processus"
-
-msgctxt "field:ir.export_package,steps:"
-msgid "Steps"
-msgstr "Etapes"
-
 msgctxt "field:ir.ui.view.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -283,11 +275,11 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:process.transition,choice_if_false:"
-msgid ""
+msgid "Transition if False"
 msgstr " "
 
 msgctxt "field:process.transition,choice_if_true:"
-msgid ""
+msgid "Transition if True"
 msgstr " "
 
 msgctxt "field:process.transition,create_date_:"
@@ -295,11 +287,11 @@ msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:process.transition,pyson_choice:"
-msgid ""
+msgid "Choice"
 msgstr " "
 
 msgctxt "field:process.transition,pyson_description:"
-msgid ""
+msgid "Pyson Description"
 msgstr " "
 
 msgctxt "field:process.transition,xml_id:"
@@ -360,7 +352,7 @@ msgstr ""
 
 msgctxt "view:process.log:"
 msgid "Logs"
-msgstr ""
+msgstr "Traces"
 
 msgctxt "view:process.start:"
 msgid "Process Start"

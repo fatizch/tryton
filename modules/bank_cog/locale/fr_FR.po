@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,6 +9,10 @@ msgstr "Le numéro de compte doit être unique"
 msgctxt "error:bank:"
 msgid "Invalid BIC : %s"
 msgstr ""
+
+msgctxt "field:bank,main_address:"
+msgid "Main Address"
+msgstr "Adresse Principale"
 
 msgctxt "field:bank,xml_id:"
 msgid "XML Id"
@@ -61,7 +65,3 @@ msgstr "Compte bancaire principal"
 msgctxt "view:party.party:"
 msgid "Bank"
 msgstr "Banque"
-
-msgctxt "field:bank,main_address:"
-msgid "Main Address"
-msgstr "Adresse Principale"
