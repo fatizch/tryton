@@ -19,7 +19,14 @@ class ContractClause:
     def on_change_with_visual_text(self, name=None):
         if self.contract or not self.clause:
             return super(ContractClause, self).on_change_with_visual_text()
-        else:
-            good_version = self.clause.get_version_at_date(
-                self.covered_data.contract.appliable_conditions_date)
-            return good_version.content
+        good_version = self.clause.get_version_at_date(
+            self.covered_data.contract.appliable_conditions_date)
+        return good_version.content
+
+    @fields.depends('clause', 'contract', 'covered_data')
+    def on_change_with_text(self):
+        if self.contract or not self.clause:
+            return super(ContractClause, self).on_change_with_text()
+        good_version = self.clause.get_version_at_date(
+            self.covered_data.contract.appliable_conditions_date)
+        return good_version.content
