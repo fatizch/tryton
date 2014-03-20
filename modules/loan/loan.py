@@ -5,7 +5,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, And, Or, Bool, Len, If
 
-from trytond.modules.cog_utils import utils, coop_date, fields, model
+from trytond.modules.cog_utils import utils, coop_date, fields, model, coop_string
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -177,8 +177,10 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_rec_name(self, name):
         res = ''
+        if self.kind:
+            res += coop_string.translate_value(self, 'kind') + ' '
         if self.amount:
-            res = self.currency.amount_as_string(self.amount)
+            res += self.currency.amount_as_string(self.amount)
         return res
 
     def init_from_borrowers(self, parties):
@@ -334,7 +336,7 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         elif self.kind == 'leasing':
             increments = [
                 self.create_increment(1, self.first_payment_amount),
-                self.create_increment(self.number_of_payments,
+                self.create_increment(self.number_of_payments - 2,
                     self.payment_amount),
                 self.create_increment(1, self.last_payment_amount)
                 ]
@@ -502,7 +504,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments', required=True)
     rate = fields.Numeric('Annual Rate', digits=(16, 4))
-    payment_amount = fields.Numeric('Amount',
+    payment_amount = fields.Numeric('Amount', required=True,
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     deferal = fields.Selection(DEFERALS, 'Deferal', sort=False)
 
