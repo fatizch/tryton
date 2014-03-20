@@ -7,10 +7,7 @@ import ConfigParser
 import argparse
 import argcomplete
 import subprocess
-from sphinxcontrib import trydoc
 from path import path
-import glob
-import proteus
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -374,6 +371,8 @@ def export(arguments, config, work_data):
 
 
 def create_symlinks(modules_path, lang, root, remove=True):
+    import glob
+
     # TODO : called symlinks.py available in trydoc
     if remove:
         # Removing existing symlinks
@@ -399,6 +398,8 @@ def create_symlinks(modules_path, lang, root, remove=True):
 
 
 def documentation(arguments, config, work_data):
+    from sphinxcontrib import trydoc
+
     doc_files = os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
         'doc_files')
     if arguments.initialize:
@@ -435,6 +436,8 @@ def documentation(arguments, config, work_data):
 
 
 def configure(target_env):
+    import proteus
+
     root = os.path.normpath(os.path.abspath(target_env))
     base_name = os.path.basename(root)
     workspace = os.path.join(root, 'tryton-workspace')
