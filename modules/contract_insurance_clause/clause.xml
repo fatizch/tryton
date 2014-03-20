@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+  <data>
+    <!-- ################### -->
+    <!-- # Contract Clause # -->
+    <!-- ################### -->
+    <record model="ir.ui.view" id="clause_view_form">
+      <field name="model">contract.clause</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="contract_clause.clause_view_form"/>
+      <field name="name">clause_form</field>
+    </record>
+    <record model="ir.ui.view" id="clause_view_list">
+      <field name="model">contract.clause</field>
+      <field name="type">tree</field>
+      <field name="inherit" ref="contract_clause.clause_view_list"/>
+      <field name="name">clause_list</field>
+    </record>
+  </data>
+</tryton>

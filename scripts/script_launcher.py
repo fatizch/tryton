@@ -361,11 +361,18 @@ def batch(arguments, config, work_data):
 
 def export(arguments, config, work_data):
     if arguments.target == 'translations':
-        process = subprocess.Popen(['env', 'DB_NAME=%s' % arguments.database,
-                work_data['python_exec'], work_data['tryton_script_launcher'],
-                os.path.join(
-                    work_data['runtime_dir'], 'coopbusiness', 'test_case',
-                    'export_translations.py')])
+        if arguments.module == 'all':
+            process = subprocess.Popen(['env', 'DB_NAME=%s' %
+                    arguments.database, work_data['python_exec'],
+                    work_data['tryton_script_launcher'], os.path.join(
+                        work_data['runtime_dir'], 'coopbusiness', 'test_case',
+                        'export_translations.py')])
+        else:
+            process = subprocess.Popen(['env', 'DB_NAME=%s' %
+                    arguments.database, work_data['python_exec'],
+                    work_data['tryton_script_launcher'], os.path.join(
+                        work_data['runtime_dir'], 'coopbusiness', 'test_case',
+                        'export_translations.py')] + arguments.module)
         process.communicate()
 
 
@@ -581,6 +588,8 @@ if __name__ == '__main__':
         help='What to export')
     parser_export.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
+    parser_export.add_argument('--module', '-m', default='all',
+        help='Module to unittest', nargs='+', choices=possible_modules)
 
     # Configure parser
     parser_configure = subparsers.add_parser('configure', help='Configure '

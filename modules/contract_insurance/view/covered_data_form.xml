@@ -15,8 +15,6 @@
       <field name="currency"/>
       <newline/>
       <field name="extra_data" colspan="2" no_command="1"/>
-      <newline/>
-      <field name="clauses" colspan="2"/>
     </page>
     <page string="Extra Premium" id="extra_premium">
       <field name="extra_premiums" colspan="4"/>

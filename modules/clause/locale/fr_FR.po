@@ -1,0 +1,155 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:clause,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:clause,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:clause,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:clause,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:clause,current_rec_name:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:clause,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:clause,kind:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "field:clause,customizable:"
+msgid "Customizable"
+msgstr "Customisable"
+
+msgctxt "field:clause,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:clause,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause,title:"
+msgid "Title"
+msgstr "Titre"
+
+msgctxt "field:clause,versions:"
+msgid "Versions"
+msgstr "Versions"
+
+msgctxt "field:clause,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:clause,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:clause,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:clause.version,content:"
+msgid "Content"
+msgstr "Contenu"
+
+msgctxt "field:clause.version,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:clause.version,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:clause.version,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:clause.version,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:clause.version,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:clause.version,main_elem:"
+msgid "Descriptor"
+msgstr "Descripteur"
+
+msgctxt "field:clause.version,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:clause.version,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:clause.version,start_date:"
+msgid "Start Date"
+msgstr "Date de Début"
+
+msgctxt "field:clause.version,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:clause.version,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:clause.version,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:clause,name:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "model:clause.version,name:"
+msgid "Clause Version"
+msgstr "Version de Clause"
+
+msgctxt "model:ir.action,name:act_model_clause"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "model:ir.ui.menu,name:menu_model_clause"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "selection:clause,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "view:clause.version:"
+msgid "Clause Version"
+msgstr "Version de Clause"
+
+msgctxt "view:clause.version:"
+msgid "Clause rule"
+msgstr "Clause"
+
+msgctxt "view:clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "view:clause:"
+msgid "Clauses"
+msgstr "Clauses"

@@ -5,7 +5,6 @@ from .rule_engine import *
 from .party import *
 from .test_case import *
 from .wizard import *
-from .clause import *
 from .service import *
 from .document import *
 
@@ -19,8 +18,6 @@ def register():
         ContractAddress,
         # From Service
         ContractService,
-        # From Clause
-        ContractClause,
         # From Document
         DocumentTemplate,
         #From Rule Engine

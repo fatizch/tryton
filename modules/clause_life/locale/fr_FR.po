@@ -1,0 +1,30 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:clause:"
+msgid ""
+"It is not possible to allow customization of clauses with beneficiary list"
+msgstr ""
+"Il n'est pas possible de customiser les clauses ayant une liste de "
+"bénéficiaires"
+
+msgctxt "field:clause,with_beneficiary_list:"
+msgid "With beneficiary list"
+msgstr "Liste nominative"
+
+msgctxt "field:clause.rule,default_beneficiary_clause:"
+msgid "Default Beneficiary Clause"
+msgstr "Clause bénéficiaire par défaut"
+
+msgctxt "field:clause.rule,has_beneficiary_clauses:"
+msgid "With Beneficiary Clauses"
+msgstr "Avec clauses bénéficiaires"
+
+msgctxt "field:clause.rule,has_default_beneficiary_clause:"
+msgid "With Default Beneficiary Clause"
+msgstr "Avec clause bénéficiaire par défaut"
+
+msgctxt "selection:clause,kind:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"

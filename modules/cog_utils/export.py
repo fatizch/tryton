@@ -18,7 +18,6 @@ from trytond.model import ModelSingleton
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
-from trytond import backend
 from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, PYSONEncoder
@@ -86,30 +85,6 @@ class ExportImportMixin(Model):
                         field_name, cls.__name__))
             tmp_field.states['required'] = True
             setattr(cls, field_name, tmp_field)
-
-    @classmethod
-    def __register__(cls, module_name):
-        super(ExportImportMixin, cls).__register__(module_name)
-        if not hasattr(cls, '_fields'):
-            return
-        cursor = Transaction().cursor
-        try:
-            table = backend.get('TableHandler')(cursor, cls, module_name)
-        except AttributeError:
-            # No _table defined for model
-            return
-        for field_name, field in cls._fields.iteritems():
-            if (not 'required' in field.states or field.states['required'] is
-                    not True):
-                continue
-            if not table.column_exist(field_name):
-                continue
-            if not table._columns[field_name]['notnull']:
-                continue
-            table.cursor.execute('ALTER TABLE "%s" '
-                'ALTER COLUMN "%s" DROP NOT NULL' % (table.table_name,
-                    field_name))
-            table._update_definitions()
 
     @classmethod
     def get_xml_id(cls, objects, name):
@@ -648,8 +623,8 @@ class ExportImportMixin(Model):
             counter += 1
             cur_errs, to_del, idx = [], [], 0
             for key, value in relink:
-                logging.getLogger('export_import').debug('Relinking %s' %
-                    str(key))
+                logging.getLogger('export_import').debug('Relinking %s : %s' %
+                    (str(key), str(value)))
                 working_instance = created[key[0]][key[1]]
                 all_done = True
                 clean_keys = []

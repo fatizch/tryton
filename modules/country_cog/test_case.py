@@ -1,4 +1,6 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
+
 from trytond.modules.cog_utils import fields
 
 MODULE_NAME = 'country_cog'
@@ -26,6 +28,8 @@ class TestCaseModel:
 
     @classmethod
     def zip_code_test_case(cls):
+        if Transaction().context.get('TESTING', False):
+            return
         Country = Pool().get('country.country')
         Zip = Pool().get('country.zipcode')
         country = Country.search([

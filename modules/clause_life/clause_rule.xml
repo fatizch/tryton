@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+  <data>
+    <!-- ############### -->
+    <!-- # Clause Rule # -->
+    <!-- ############### -->
+    <record model="ir.ui.view" id="rule_view_form">
+        <field name="model">clause.rule</field>
+        <field name="type">form</field>
+        <field name="inherit" ref="clause_insurance.clause_rule_view_form"/>
+        <field name="name">rule_form</field>
+    </record>
+  </data>
+</tryton>

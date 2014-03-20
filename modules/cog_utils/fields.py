@@ -1,4 +1,3 @@
-import logging
 from itertools import chain
 
 from sql import Column, Literal, operators, functions
@@ -73,7 +72,7 @@ class Many2One(tryton_fields.Many2One):
         if ondelete is None:
             self._on_delete_not_set = True
             ondelete = 'SET NULL'
-        return super(Many2One, self).__init__(model_name, string, left, right,
+        super(Many2One, self).__init__(model_name, string, left, right,
             ondelete, datetime_field, help, required, readonly, domain, states,
             select, on_change, on_change_with, depends, context, loading)
 
@@ -83,6 +82,14 @@ class One2Many(tryton_fields.One2Many):
 
 
 class One2ManyDomain(One2Many):
+    @classmethod
+    def init_from_One2Many(cls, source):
+        return cls(source.model_name, source.field, source.string,
+            source.add_remove, source.order, source.datetime_field,
+            source.size, source.help, source.required, source.readonly,
+            source.domain, source.states, source.on_change,
+            source.on_change_with, source.depends, source.context,
+            source.loading)
 
     def get(self, ids, model, name, values=None):
         '''
@@ -113,7 +120,7 @@ class One2ManyDomain(One2Many):
                     for elem in the_domain[1:]:
                         good_domain = clean_domain(elem)
                         if not good_domain:
-                            final_domain.append(True)
+                            final_domain.append(())
                         else:
                             final_domain.append(good_domain)
                 elif isinstance(the_domain[0], (tuple, list)):
@@ -121,7 +128,7 @@ class One2ManyDomain(One2Many):
                     for elem in the_domain:
                         good_domain = clean_domain(elem)
                         if not good_domain:
-                            final_domain.append(True)
+                            final_domain.append(())
                         else:
                             final_domain.append(good_domain)
                 else:

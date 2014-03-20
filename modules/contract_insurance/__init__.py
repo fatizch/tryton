@@ -5,7 +5,6 @@ from .document import *
 from .renewal import *
 from .rule_engine import *
 from .wizard import *
-from .clause import *
 from .service import *
 
 from trytond.modules.cog_utils import expand_tree
@@ -35,8 +34,6 @@ def register():
         # From Service
         ContractService,
         Expense,
-        # From Clause
-        ContractClause,
         # from renewal
         RenewalStart,
         RenewalResult,

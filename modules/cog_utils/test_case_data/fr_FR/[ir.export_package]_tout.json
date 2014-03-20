@@ -16761,6 +16761,7 @@
                 ],
                 "config_kind": "simple",
                 "end_date": null,
+                "name": "Generation 1",
                 "offered": [
                     "offered.option.description",
                     [

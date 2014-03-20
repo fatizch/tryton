@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import sys
 import logging
 from proteus import Model, Wizard
 
@@ -33,10 +34,11 @@ def generate_module_translation(cfg_dict, base_path, module_name):
         csv_file.write(result)
 
 
-def launch_proteus_test_case(test_config_file):
+def launch_proteus_test_case(test_config_file, modules):
     cfg_dict = proteus_tools.get_test_cfg(test_config_file)
     proteus_tools.get_config(cfg_dict)
-    modules = proteus_tools.get_modules_to_update(cfg_dict['modules'])
+    if modules is None:
+        modules = proteus_tools.get_modules_to_update(cfg_dict['modules'])
     for cur_module in modules:
         if cur_module == 'cog_translation':
             #Manual translations to override tryton translations
@@ -67,5 +69,8 @@ def update_views(test_config_file):
 
 
 if __name__ == '__main__':
-    #update_views(os.path.join(DIR, 'test_case.cfg'))
-    launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))
+    if len(sys.argv) > 1:
+        modules = sys.argv[1:]
+    else:
+        modules = None
+    launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'), modules)

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+  <xpath expr="/tree/field[@name='clause']" position="after">
+    <field name="covered_data"/>
+    <field name="beneficiaries" tree_invisible="1"/>
+  </xpath>
+</data>

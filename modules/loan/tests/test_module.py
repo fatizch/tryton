@@ -50,7 +50,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             }
 
     def test0010loan_basic_data(self):
-        currency, = self.Currency.create([{
+        self.Currency.create([{
                     'name': 'Euro',
                     'code': 'EUR',
                     'symbol': u'€',
@@ -429,6 +429,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ])
         self.assertEqual(contract.prices[6].amount, Decimal('200'))
         covered_data = contract.covered_elements[0].covered_data[0]
+
+        # Create Extra Premium
         extra_premium = self.ExtraPremium()
         extra_premium.covered_data = covered_data
         extra_premium.motive, = self.ExtraPremiumKind.search([
@@ -439,6 +441,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         extra_premium.calculation_kind = 'flat'
         extra_premium.flat_amount = 10000
         extra_premium.save()
+
+        # Check calculation result
         contract.calculate_prices()
         self.assertEqual(contract.prices[6].amount, Decimal('10200'))
         line = contract.prices[6].all_lines[0]
@@ -450,6 +454,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
             extra_premium.motive)
         self.assertEqual(line.all_lines[0].all_lines[-1].amount,
             Decimal('10000'))
+
+        # Check end of calculation
+        self.assertEqual(contract.prices[26].amount, Decimal('200'))
+        self.assertEqual(contract.prices[26].start_date,
+            date(2015, 2, 25))
+
+        # Check rate extra_premium
+        extra_premium.calculation_kind = 'rate'
+        extra_premium.rate = Decimal('0.4')
+        extra_premium.save()
+        contract.calculate_prices()
+        self.assertEqual(contract.prices[6].amount, Decimal('280'))
+
+        # Check rate extra_premium
+        extra_premium.calculation_kind = 'capital_per_mil'
+        extra_premium.capital_per_mil_rate = Decimal('0.005')
+        extra_premium.save()
+        contract.calculate_prices()
+        self.assertEqual(contract.prices[6].amount, Decimal('700'))
 
     @test_framework.prepare_test('loan.test0040_LoanContractSubscription')
     def test0042_TestCheckExtraData(self):

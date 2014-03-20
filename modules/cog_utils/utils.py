@@ -21,7 +21,7 @@ __all__ = []
 
 
 def print_log(some_text):
-    print '\033[95m' + str(some_text) + '\033[0md'
+    print '\033[95m' + str(some_text) + '\033[0m'
 
 
 def get_module_name(cls):
@@ -163,6 +163,14 @@ def get_good_version_at_date(instance, var_name, at_date=None):
     res = get_good_versions_at_date(instance, var_name, at_date)
     if len(res) == 1:
         return res[0]
+
+
+def find_date(list_to_filter, date):
+    for elem in list_to_filter:
+        if (elem.start_date or datetime.date.min) < date < (elem.end_date or
+                datetime.date.max):
+            return elem
+    raise KeyError('Date %s undefined in list %s')
 
 
 def get_those_objects(model_name, domain, limit=None):
