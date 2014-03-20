@@ -6,6 +6,11 @@ if [ $# -ne $EXPECTED_ARGS ]
 then
         echo $SEP
         echo "Usage: `basename $0` {path} {bitbucket fork repository}"
+elif [ ! -e "$1" ]
+then
+        echo $SEP
+        echo $1 must be an existing directory
+        echo $SEP
 else
 	cd $1
 	echo $SEP
