@@ -1,4 +1,4 @@
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, model
 
@@ -19,12 +19,11 @@ class ContractClause(model.CoopSQL, model.CoopView):
         'on_change_with_customized_text')
     text = fields.Text('Text', states={
             'readonly': ~Eval('customized_text'),
-            'invisible': True,
             }, depends=['customized_text'])
     visual_text = fields.Function(
         fields.Text('Clause Text', states={
-                'invisible': (~Bool(Eval('visual_text', '')))
-                & (~Eval('customized_text', False))}),
+                'invisible': Eval('customized_text', False)},
+            depends=['customized_text']),
         'on_change_with_visual_text')
     kind = fields.Function(
         fields.Char('Kind'),
@@ -50,6 +49,13 @@ class ContractClause(model.CoopSQL, model.CoopView):
         if not self.clause:
             return ''
         return self.clause.kind
+
+    @fields.depends('clause', 'contract')
+    def on_change_with_text(self):
+        if not self.clause:
+            return ''
+        return self.clause.get_version_at_date(
+            self.contract.appliable_conditions_date).content
 
     def get_rec_name(self, name):
         return self.clause.get_rec_name(name)
