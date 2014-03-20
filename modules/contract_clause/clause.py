@@ -14,33 +14,33 @@ class ContractClause(model.CoopSQL, model.CoopView):
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     clause = fields.Many2One('clause', 'Clause', ondelete='RESTRICT')
-    override_text = fields.Function(
-        fields.Boolean('Override Text', states={'invisible': True}),
-        'on_change_with_override_text')
+    customized_text = fields.Function(
+        fields.Boolean('Customized Text', states={'invisible': True}),
+        'on_change_with_customized_text')
     text = fields.Text('Text', states={
-            'readonly': ~Eval('override_text'),
+            'readonly': ~Eval('customized_text'),
             'invisible': True,
-            }, depends=['override_text'])
+            }, depends=['customized_text'])
     visual_text = fields.Function(
         fields.Text('Clause Text', states={
                 'invisible': (~Bool(Eval('visual_text', '')))
-                & (~Eval('override_text', False))}),
+                & (~Eval('customized_text', False))}),
         'on_change_with_visual_text')
     kind = fields.Function(
         fields.Char('Kind'),
         'on_change_with_kind')
 
     @fields.depends('clause')
-    def on_change_with_override_text(self, name=None):
+    def on_change_with_customized_text(self, name=None):
         if not self.clause:
             return True
-        return self.clause.may_be_overriden
+        return self.clause.customizable
 
-    @fields.depends('text', 'clause', 'override_text', 'contract')
+    @fields.depends('text', 'clause', 'customized_text', 'contract')
     def on_change_with_visual_text(self, name=None):
         if not self.clause:
             return ''
-        if self.override_text:
+        if self.customized_text:
             return self.text
         return self.clause.get_version_at_date(
             self.contract.appliable_conditions_date).content

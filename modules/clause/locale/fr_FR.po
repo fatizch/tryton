@@ -30,8 +30,8 @@ msgctxt "field:clause,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:clause,may_be_overriden:"
-msgid "May be Overriden"
+msgctxt "field:clause,customizable:"
+msgid "Customizable"
 msgstr "Customisable"
 
 msgctxt "field:clause,must_expand_tree:"

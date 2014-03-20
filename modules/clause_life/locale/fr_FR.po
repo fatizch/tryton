@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:clause:"
 msgid ""
-"It is not possible to allow overriding of clauses with beneficiary list"
+"It is not possible to allow customization of clauses with beneficiary list"
 msgstr ""
 "Il n'est pas possible de customiser les clauses ayant une liste de "
 "bénéficiaires"

@@ -1,3 +1,5 @@
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import coop_string
 
@@ -29,8 +31,9 @@ class TestCaseModel:
         Version = pool.get('clause.version')
         clause = Clause(name=line[0], title=line[0], kind=kind,
             code=coop_string.remove_blank_and_invalid_char(
-                line[0].decode('utf8')))
-        clause.versions = [Version(content=line[1])]
+                line[0].decode('utf8')), customizable=True)
+        clause.versions = [Version(content=line[1],
+                start_date=datetime.date(1900, 1, 1))]
         return clause
 
     @classmethod

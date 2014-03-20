@@ -16,7 +16,7 @@ class Clause(model.CoopSQL, model.VersionedObject):
     name = fields.Char('Name', required=True)
     title = fields.Char('Title')
     kind = fields.Selection([('', '')], 'Kind')
-    may_be_overriden = fields.Boolean('May be Overriden')
+    customizable = fields.Boolean('Customizable')
 
     @classmethod
     def version_model(cls):

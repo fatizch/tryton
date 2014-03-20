@@ -14,8 +14,8 @@
     <label name="title"/>
     <field name="title" colspan="11"/>
     <newline/>
-    <label name="may_be_overriden"/>
-    <field name="may_be_overriden"/>
+    <label name="customizable"/>
+    <field name="customizable"/>
   </xpath>
   <xpath expr="/form/group[@id='versions']/field[@name='versions']" position="replace_attributes">
     <field name="versions" mode="form, tree"/>

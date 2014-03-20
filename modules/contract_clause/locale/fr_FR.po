@@ -42,8 +42,8 @@ msgctxt "field:contract.clause,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:contract.clause,override_text:"
-msgid "Override Text"
+msgctxt "field:contract.clause,customized_text:"
+msgid "Customized Text"
 msgstr "Texte customisable"
 
 msgctxt "field:contract.clause,rec_name:"

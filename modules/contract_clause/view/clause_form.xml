@@ -5,5 +5,5 @@
     <field name="visual_text" colspan="4" widget="richtext"/>
     <field name="text"/>
     <newline/>
-    <field name="override_text"/>
+    <field name="customized_text"/>
 </form>
