@@ -399,9 +399,11 @@ def create_symlinks(modules_path, lang, root, remove=True):
 
 
 def documentation(arguments, config, work_data):
-    if arguments.quickstart:
-        if not os.path.exists(arguments.directory):
-            os.makedirs(arguments.directory)
+    doc_files = os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+        'doc_files')
+    if arguments.initialize:
+        if not os.path.exists(doc_files):
+            os.makedirs(doc_files)
         trydocdir = os.path.dirname(trydoc.__file__)
         if not os.path.exists(os.path.join(trydocdir,
                 'index.rst.' + arguments.language + '.template')):
@@ -409,21 +411,26 @@ def documentation(arguments, config, work_data):
                 os.path.join(trydocdir, 'index.rst.' + arguments.language +
                     '.template'))
         process = subprocess.Popen(['trydoc-quickstart', arguments.language,
-            arguments.directory])
+            doc_files])
         process.communicate()
-        if os.path.exists(os.path.join(arguments.directory, 'conf.py')):
-                config = open(os.path.join(arguments.directory, 'conf.py'),
-                    'a')
+        if os.path.exists(os.path.join(doc_files, 'conf.py')):
+            with open(os.path.join(doc_files, 'conf.py'), 'a') as config:
                 config.write('')
                 config.write('#-- Options for Coog-----------------\n')
                 config.write("language = '" + arguments.language + "'")
-                config.close()
     elif arguments.generate:
-        docdir = os.environ['VIRTUAL_ENV']
-        create_symlinks(os.path.join(docdir, 'tryton-workspace',
-            'coopbusiness', 'doc'), arguments.language, arguments.directory,
-            True)
-        process = subprocess.Popen(['make', 'html'], cwd=arguments.directory)
+        create_symlinks(os.path.join(os.environ['VIRTUAL_ENV'],
+            'tryton-workspace', 'coopbusiness', 'doc'), arguments.language,
+            doc_files, True)
+        process = subprocess.Popen(['make', arguments.format],
+            cwd=doc_files)
+        process.communicate()
+    elif arguments.update_module:
+        process = subprocess.Popen(['trydoc-update-modules',
+            arguments.database, '-c',
+            os.path.join(doc_files, 'modules.cfg'), '-t',
+            os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+                'trytond')])
         process.communicate()
 
 
@@ -656,16 +663,19 @@ if __name__ == '__main__':
 
     # Doc parser
     parser_doc = subparsers.add_parser('doc', help='Generate documentation')
-    parser_doc.add_argument('--directory', '-d',
-        help='Define the work directory for documentation',
-        default=os.path.join(os.environ['VIRTUAL_ENV'],
-            'tryton-workspace', 'doc_generation'))
+    parser_doc.add_argument('--database', '-d', help='Define the '
+        'database to used',
+        default=os.path.basename(os.environ['VIRTUAL_ENV']))
     parser_doc.add_argument('--language', '-l', help='Documentation language',
         default='fr')
     parser_doc.add_argument('--generate', '-g', help='Generate the '
         'documentation', action='store_true')
-    parser_doc.add_argument('--quickstart', '-q', help='Launch the '
+    parser_doc.add_argument('--initialize', '-i', help='Launch the '
         'tyrdoc quickstart process', action='store_true')
+    parser_doc.add_argument('--update_module', '-u', help='Update the '
+        'configuration file containing modules', action='store_true')
+    parser_doc.add_argument('--format', '-f', help='format for documentation '
+        'generation : html, ...', default='html')
 
     argcomplete.autocomplete(parser)
     arguments = parser.parse_args()
