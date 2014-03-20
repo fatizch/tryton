@@ -802,7 +802,7 @@ class DocumentCreate(Wizard):
                 Attachment = Pool().get('ir.attachment')
                 attachment = Attachment()
                 attachment.resource = contact.for_object_ref
-                with open(self.preview_document.generated_report, 'r') as f:
+                with open(self.preview_document.filename, 'r') as f:
                     attachment.data = buffer(f.read())
                 attachment.name = self.attach.name
                 attachment.save()
