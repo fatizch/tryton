@@ -268,6 +268,11 @@ class VersionedObject(CoopView):
             return vers.rec_name
         return ''
 
+    @classmethod
+    def default_versions(cls):
+        return [{'start_date': Transaction().context.get('start_date',
+                    Pool().get('ir.date').today())}]
+
 
 class VersionObject(CoopView):
     'Version Object'
