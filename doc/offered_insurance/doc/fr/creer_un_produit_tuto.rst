@@ -44,9 +44,9 @@ Les données complémentaires
 Les données complémentaires permettent de définir des informations supplémentaires qui vont être demandées lors de la souscription. Ces informations pourront ensuite être utilisées dans le moteur de règles.
 Au niveau du produit on définit les données supplémentaires porter par le contrat. Ces données se définissent dans l'onglet Données complémentaires. Les questions suivantes peuvent aider à savoir si des données complémentaires sont nécessaires au niveau du contrat.
 
-- Quels sont les critères tarifiants? Ce critère existe-t-il dans Coog? Si non, ce critère est-il global à un contrat? Si oui ce critère est potentiellement une donnée complémentaires à ajouter.
+- Quels sont les critères tarifiants? Ce critère existe-t-il dans Coog? Si non, ce critère est-il global à un contrat? Si oui ce critère est potentiellement une donnée complémentaire à ajouter.
     Ex: Type de cotisation: Famille, Isolé, Adulte/Enfant...
-- Existe-il des critères non tarifiants qui doivent être utilisé par une règle métier? Si oui ce critère existe-il dans l'application. Si non est-il global à un contrat. Si oui ce critère est potentiellement une donnée complémentaires à ajouter.
+- Existe-il des critères non tarifiants qui doivent être utilisé par une règle métier? Si oui ce critère existe-il dans l'application. Si non est-il global à un contrat. Si oui ce critère est potentiellement une donnée complémentaire à ajouter.
 
 Une fois les données à ajouter identifiées, il est possible de les chercher ou de les créer.
 
@@ -60,7 +60,7 @@ L'onglet Règles permet de définir le comportement du contrat durant la souscri
 - *Règles d'éligibilité*: Qui a le droit de souscrire ce produit? Si tout le monde a le droit alors il n'est pas nécessaire de définir cette règle.
 - *Règles de cotisation*: Existe-il un frais global au contrat ou une composante du tarif global au contrat? Si oui alors cette règle doit être renseignée.
 - *Règles de franchise*: 
-- *Clause*: le produit a-t-il des clauses global au contrat? 
+- *Clause*: le produit a-t-il des clauses globales au contrat? 
 - *Documents*: des documents sont-ils demandés à la souscription? Si oui est-il global au contrat ou spécifique à une garantie. Si il est global au contrat alors le document peut être ajouter dans la règle.
 - *Terme - Renouvellement*: Le contrat a-t-il un terme? Se renouvelle-t-il?
 
@@ -77,7 +77,7 @@ L'onglet Méthodes de paiement permet de définir quels sont les moyens de paiem
 
 Paramétrage des garanties
 .........................
-Les garanties peuvent être créer depuis le menu |menu_garantie| et ajouter ensuite au produit ou depuis le produit dans l'onglet Garanties.
+Les garanties peuvent être créées depuis le menu |menu_garantie| et ajoutées ensuite au produit ou depuis le produit dans l'onglet Garanties.
 
 .. |menu_garantie| tryref:: offered.menu_coverage_form/complete_name
 
@@ -102,18 +102,18 @@ Des informations sont nécessaires à la création d'un garantie.
 Les données complémentaires
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
-De la même façon que des données supplémentaires peuvent être définies au niveau du contrat, des données peuvent être ajoutées au niveau de la garantie.Les questions suivantes peuvent aider à savoir si des données complémentaires sont nécessaires.
+De la même façon que des données supplémentaires peuvent être définies au niveau du contrat, des données peuvent être ajoutées au niveau de la garantie. Les questions suivantes peuvent aider à savoir si des données complémentaires sont nécessaires.
 
-- Quels sont les critères tarifiants pour la garantie? Ce critère existe-t-il dans Coog? Si non, ce critère est-il lié à cette garantie? Si oui ce critère est potentiellement une donnée complémentaires à ajouter.
+- Quels sont les critères tarifiants pour la garantie? Ce critère existe-t-il dans Coog? Si non, ce critère est-il lié à cette garantie? Si oui ce critère est potentiellement une donnée complémentaire à ajouter.
     Ex: Type de cotisation: Famille, Isolé, Adulte/Enfant...
-- Existe-il des critères non tarifiants qui doivent être utilisé par une règle métier? Si oui ce critère existe-il dans l'application. Si non est-il spécifique à une garantie. Si oui ce critère est potentiellement une donnée complémentaires à ajouter.
+- Existe-il des critères non tarifiants qui doivent être utilisé par une règle métier? Si oui ce critère existe-il dans l'application. Si non est-il spécifique à une garantie. Si oui ce critère est potentiellement une donnée complémentaire à ajouter.
 
 .. image :: images/garantie-donnees-complementaires.png
 
 Les dépendances entre garanties
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
-L'onglet 'Souscription' permet de définir les dépendances entre garantie. Il est possible de définir qu'une garantie est obligatoire, optionnelle, proposé par défaut. Une garantie peut exclure d'autres garanties. Des garanties peuvent être requises pour souscrire la garanties.
+L'onglet 'Souscription' permet de définir les dépendances entre garanties. Il est possible de définir qu'une garantie est obligatoire, optionnelle, proposée par défaut. Une garantie peut exclure d'autres garanties. Des garanties peuvent être requises pour souscrire la garantie.
 
 .. image :: images/garantie-souscription.png
 
@@ -125,7 +125,7 @@ L'onglet Règles permet de définir le comportement de la garantie durant la sou
 - *Règles d'éligibilité*: Qui a le droit de souscrire cette garantie produit? Si tout le monde a le droit alors il n'est pas nécessaire de définir cette règle.
 - *Règles de cotisation*: Définie le tarif de la garantie
 - *Règles de franchise*:
-- *Clause*: le produit a-t-il des clauses global au contrat?
+- *Clause*: le produit a-t-il des clauses globales au contrat?
 - *Documents*: des documents sont-ils demandés à la souscription spécifiquement pour cette garantie? 
 
 .. image :: images/garantie-regles.png
