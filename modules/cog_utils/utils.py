@@ -170,7 +170,7 @@ def find_date(list_to_filter, date):
         if (elem.start_date or datetime.date.min) < date < (elem.end_date or
                 datetime.date.max):
             return elem
-    raise KeyError('Date %s undefined in list %s')
+    return None
 
 
 def get_those_objects(model_name, domain, limit=None):
