@@ -130,10 +130,6 @@ msgctxt "field:distribution.network-commercial_product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:ir.export_package,com_products:"
-msgid "Com Products"
-msgstr ""
-
 msgctxt "field:offered.product,com_products:"
 msgid "Commercial Products"
 msgstr "Produits Commerciaux"

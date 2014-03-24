@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -153,6 +153,10 @@ msgctxt "field:contract-agreement,agency:"
 msgid "Agency"
 msgstr "Agence"
 
+msgctxt "field:contract-agreement,contact_info:"
+msgid "Contact Information"
+msgstr "Contact"
+
 msgctxt "field:contract-agreement,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -270,7 +274,7 @@ msgid "Clauses"
 msgstr "Clauses"
 
 msgctxt "field:contract.covered_data,contract:"
-msgid ""
+msgid "Contract"
 msgstr " "
 
 msgctxt "field:contract.covered_data,coverage_amount:"
@@ -294,7 +298,7 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:contract.covered_data,currency:"
-msgid ""
+msgid "Currency"
 msgstr " "
 
 msgctxt "field:contract.covered_data,currency_digits:"
@@ -481,6 +485,10 @@ msgctxt "field:contract.covered_data.extra_premium,start_date:"
 msgid "Start date"
 msgstr "Date de Début"
 
+msgctxt "field:contract.covered_data.extra_premium,time_limited:"
+msgid "Time Limited"
+msgstr ""
+
 msgctxt "field:contract.covered_data.extra_premium,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -618,39 +626,39 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:contract.covered_element-party,covered_element:"
-msgid ""
-msgstr " "
+msgid "Covered Element"
+msgstr "Risque Couvert"
 
 msgctxt "field:contract.covered_element-party,create_date:"
-msgid ""
-msgstr " "
+msgid "Create Date"
+msgstr "Date de création"
 
 msgctxt "field:contract.covered_element-party,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:contract.covered_element-party,create_uid:"
-msgid ""
+msgid "Create User"
 msgstr " "
 
 msgctxt "field:contract.covered_element-party,id:"
-msgid ""
+msgid "ID"
 msgstr " "
 
 msgctxt "field:contract.covered_element-party,party_relation:"
-msgid ""
+msgid "Party Relation"
 msgstr " "
 
 msgctxt "field:contract.covered_element-party,rec_name:"
-msgid ""
+msgid "Name"
 msgstr " "
 
 msgctxt "field:contract.covered_element-party,write_date:"
-msgid ""
+msgid "Write Date"
 msgstr " "
 
 msgctxt "field:contract.covered_element-party,write_uid:"
-msgid ""
+msgid "Write User"
 msgstr " "
 
 msgctxt "field:contract.covered_element-party,xml_id:"
@@ -1014,7 +1022,7 @@ msgid "Covered Element"
 msgstr "Risque Couvert"
 
 msgctxt "model:contract.covered_element-party,name:"
-msgid ""
+msgid "Relation between Covered Element and Covered Relations"
 msgstr " "
 
 msgctxt "model:contract.create_extra_premium.create,name:"
@@ -1144,6 +1152,10 @@ msgstr "Montant fixe"
 msgctxt "selection:contract.covered_data.extra_premium,calculation_kind:"
 msgid "Rate on Premium"
 msgstr "Taux sur prime"
+
+msgctxt "selection:contract.covered_data.extra_premium,duration_unit:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:contract.manage_extra_premium.select,kind:"
 msgid "Contract"
@@ -1328,10 +1340,6 @@ msgstr "Prestation Fournie"
 msgctxt "view:contract:"
 msgid "Addresses"
 msgstr "Adresses"
-
-msgctxt "view:contract:"
-msgid "Clauses"
-msgstr "Clauses"
 
 msgctxt "view:contract:"
 msgid "Covered Elements"

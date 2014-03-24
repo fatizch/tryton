@@ -38,6 +38,10 @@ msgstr ""
 "consulter les logs.\\n\\nInformations sur l'erreur :\\n%s"
 
 msgctxt "error:rule_engine:"
+msgid "The name must be unique !"
+msgstr ""
+
+msgctxt "error:rule_engine:"
 msgid "Your code has errors!"
 msgstr "L'algorithme contient des erreurs"
 
@@ -92,22 +96,6 @@ msgstr "Mis à jour par"
 msgctxt "field:functional_error,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:ir.export_package,contexts:"
-msgid "Contexts"
-msgstr "Contextes"
-
-msgctxt "field:ir.export_package,rules:"
-msgid "Rules"
-msgstr "Règles"
-
-msgctxt "field:ir.export_package,tags:"
-msgid "Tags"
-msgstr "Labels"
-
-msgctxt "field:ir.export_package,tree_elements:"
-msgid "Rule Functions"
-msgstr "Fonctions du Moteur de règle"
 
 msgctxt "field:rule_engine,code:"
 msgid "Code"

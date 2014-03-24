@@ -1,6 +1,14 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:billing.premium.rule:"
+msgid "%s : Rule combination unavailable with fee (%s) version (%s)"
+msgstr ""
+
+msgctxt "error:billing.premium.rule:"
+msgid "%s : Rule combination unavailable with tax (%s) version (%s)"
+msgstr ""
 
 msgctxt "error:billing.premium.rule:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -298,10 +306,6 @@ msgstr "ID"
 msgctxt "field:clause,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:clause,may_be_overriden:"
-msgid "May be Overriden"
-msgstr "Peut être surchargé"
 
 msgctxt "field:clause,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -714,6 +718,10 @@ msgstr "Etendre Arbre"
 msgctxt "field:document.request,needed_by:"
 msgid "Requested for"
 msgstr "Nécessaire Pour"
+
+msgctxt "field:document.request,needed_by_str:"
+msgid "Master as String"
+msgstr ""
 
 msgctxt "field:document.request,rec_name:"
 msgid "Name"
@@ -1371,10 +1379,6 @@ msgctxt "field:insurer,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:ir.export_package,exclusions:"
-msgid "Exclusion"
-msgstr "Exclusion"
-
 msgctxt "field:ir.model,printable:"
 msgid "Printable"
 msgstr "Imprimable"
@@ -1943,6 +1947,10 @@ msgctxt "field:offered.item.description,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:offered.item.description,kind:"
+msgid "Kind"
+msgstr "Type"
+
 msgctxt "field:offered.item.description,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
@@ -2138,10 +2146,6 @@ msgstr "Nom"
 msgctxt "field:offered.option.description,premium_rules:"
 msgid "Premium Rules"
 msgstr "Règles de Cotisation"
-
-msgctxt "field:offered.option.description,products:"
-msgid "Products"
-msgstr "Produits"
 
 msgctxt "field:offered.option.description,rec_name:"
 msgid "Name"
@@ -2652,7 +2656,7 @@ msgid "Clause Rule"
 msgstr "Clause"
 
 msgctxt "model:clause.rule-clause,name:"
-msgid "Rule to Clause Relation"
+msgid "Rule Clause Relation"
 msgstr "Table intermédiaire entre l'offre et le clause"
 
 msgctxt "model:clause.version,name:"
@@ -2695,9 +2699,17 @@ msgctxt "model:document.request,name:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
+msgctxt "model:document.request.batch,name:"
+msgid "Document Request Batch Definition"
+msgstr ""
+
 msgctxt "model:document.request.line,name:"
 msgid "Document Request Line"
 msgstr "Document"
+
+msgctxt "model:document.rule,name:"
+msgid "Document Managing Rule"
+msgstr ""
 
 msgctxt "model:document.rule-document.description,name:"
 msgid "Rule to Document Description Relation"
@@ -2735,6 +2747,10 @@ msgctxt "model:insurer,name:"
 msgid "Insurer"
 msgstr "Assureur"
 
+msgctxt "model:ir.action,name:"
+msgid "Clauses"
+msgstr "Clauses"
+
 msgctxt "model:ir.action,name:act_doc_template"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
@@ -2755,10 +2771,6 @@ msgctxt "model:ir.action,name:act_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
 
-msgctxt "model:ir.action,name:act_model_clause"
-msgid "Clauses"
-msgstr "Clauses"
-
 msgctxt "model:ir.action,name:act_model_expense_kind"
 msgid "Expenses Kind"
 msgstr "Type de Frais"
@@ -2767,6 +2779,10 @@ msgctxt "model:ir.action,name:generate_file_report"
 msgid "Document From Filename"
 msgstr "Document à partir d'un fichier"
 
+msgctxt "model:ir.action,name:letter_generation_report"
+msgid "Letter Report"
+msgstr ""
+
 msgctxt "model:ir.action,name:letter_generation_wizard"
 msgid "Letter Generation"
 msgstr "Impression du Courrier"
@@ -2774,6 +2790,10 @@ msgstr "Impression du Courrier"
 msgctxt "model:ir.action,name:receive_documents_wizard"
 msgid "Document Reception"
 msgstr "Réception de Document"
+
+msgctxt "model:ir.ui.menu,name:"
+msgid "Clauses"
+msgstr "Clauses"
 
 msgctxt "model:ir.ui.menu,name:menu_doc_template"
 msgid "Document Templates"
@@ -2798,10 +2818,6 @@ msgstr "Type de Surprime"
 msgctxt "model:ir.ui.menu,name:menu_item_desc_form"
 msgid "Item Descriptions"
 msgstr "Descriptions des Risques"
-
-msgctxt "model:ir.ui.menu,name:menu_model_clause"
-msgid "Clauses"
-msgstr "Clauses"
 
 msgctxt "model:ir.ui.menu,name:menu_model_expense_kind"
 msgid "Expenses Kind"
@@ -2852,6 +2868,10 @@ msgctxt "model:offered.item.description-extra_data,name:"
 msgid "Item Description to Extra Data Relation"
 msgstr "Relation Risque - Données Complémentaires"
 
+msgctxt "model:offered.item.description-sub_item.description,name:"
+msgid "Relation between Item Desc and Sub Item Desc"
+msgstr ""
+
 msgctxt "model:offered.option.description,name:"
 msgid "OptionDescription"
 msgstr "Garantie"
@@ -2883,6 +2903,10 @@ msgstr "Relations Produit Garantie"
 msgctxt "model:offered.term.rule,name:"
 msgid "Term Rule"
 msgstr "Règle de Terme - Renouvellement"
+
+msgctxt "model:offered.validate.batch,name:"
+msgid "Product Validation Batch"
+msgstr ""
 
 msgctxt "model:process-offered.product,name:"
 msgid "Process Product Relation"
@@ -2923,6 +2947,10 @@ msgstr "Garantie"
 msgctxt "selection:billing.premium.rule,offered:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "selection:billing.premium.rule,template_behaviour:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:billing.premium.rule,template_behaviour:"
 msgid "Add"
@@ -2981,12 +3009,28 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "selection:clause.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:clause.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:clause.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:document.receive.request,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.request,needed_by:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.request.line,for_object:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:document.rule,config_kind:"
 msgid "Advanced"
@@ -2995,6 +3039,10 @@ msgstr "Avancé"
 msgctxt "selection:document.rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:document.rule,kind:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:document.rule,kind:"
 msgid "Loss"
@@ -3017,12 +3065,20 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "selection:document.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:document.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:document.template,kind:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:document.template,kind:"
 msgid "Document Request"
@@ -3125,6 +3181,10 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "selection:offered.business_rule_root,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.business_rule_root,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -3161,6 +3221,10 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "selection:offered.coverage_amount.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.coverage_amount.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -3175,6 +3239,10 @@ msgstr "Avancé"
 msgctxt "selection:offered.deductible.rule,config_kind:"
 msgid "Simple"
 msgstr "Simple"
+
+msgctxt "selection:offered.deductible.rule,duration_unit:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:offered.deductible.rule,duration_unit:"
 msgid "Day"
@@ -3237,12 +3305,20 @@ msgid "Value"
 msgstr "Valeur"
 
 msgctxt "selection:offered.deductible.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.deductible.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:offered.deductible.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
 msgid "Day"
@@ -3309,12 +3385,20 @@ msgid "Society"
 msgstr "Société"
 
 msgctxt "selection:offered.eligibility.rule,template_behaviour:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.eligibility.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:offered.eligibility.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
+
+msgctxt "selection:offered.item.description,kind:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:offered.item.description,kind:"
 msgid "Company"
@@ -3327,6 +3411,10 @@ msgstr "Acteur"
 msgctxt "selection:offered.item.description,kind:"
 msgid "Person"
 msgstr "Personne Physique"
+
+msgctxt "selection:offered.option.description,family:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:offered.option.description,family:"
 msgid "Life"
@@ -3403,6 +3491,10 @@ msgstr "Garantie"
 msgctxt "selection:offered.term.rule,offered:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "selection:offered.term.rule,template_behaviour:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:offered.term.rule,template_behaviour:"
 msgid "Add"
@@ -3621,10 +3713,6 @@ msgid "Exclusion Kinds"
 msgstr "Types d'exclusions"
 
 msgctxt "view:offered.option.description:"
-msgid "Clause"
-msgstr "Clause"
-
-msgctxt "view:offered.option.description:"
 msgid "Coverage"
 msgstr "Garantie"
 
@@ -3635,10 +3723,6 @@ msgstr "Franchise"
 msgctxt "view:offered.option.description:"
 msgid "Documents"
 msgstr "Documents"
-
-msgctxt "view:offered.product:"
-msgid "Clause"
-msgstr "Clause"
 
 msgctxt "view:offered.product:"
 msgid "Deductible"

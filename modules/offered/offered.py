@@ -536,11 +536,6 @@ class OptionDescription(model.CoopSQL, Offered):
     __name__ = 'offered.option.description'
 
     kind = fields.Selection(None, 'Option Description Kind')
-    products = fields.Many2Many('offered.product-option.description',
-        'coverage', 'product', 'Products', domain=[
-            ('currency', '=', Eval('currency')),
-            ('company', '=', Eval('company'))],
-        depends=['currency', 'company'])
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,

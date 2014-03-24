@@ -1,6 +1,14 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:loan:"
+msgid ""
+"The sum of increments number of payments (%s) does not match the loan number"
+" of payments (%s)"
+msgstr ""
+"La somme des échéances des paliers (%s) ne correspond pas au nombre "
+"d'échéances du prêt (%s)"
 
 msgctxt "field:contract,doc_received:"
 msgid "All Document Received"
@@ -130,6 +138,10 @@ msgctxt "field:loan,increments:"
 msgid "Increments"
 msgstr "Paliers"
 
+msgctxt "field:loan,increments_end_date:"
+msgid "Increments End Date"
+msgstr "Fin des Paliers"
+
 msgctxt "field:loan,kind:"
 msgid "Kind"
 msgstr "Type"
@@ -190,7 +202,6 @@ msgctxt "field:loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-#, fuzzy
 msgctxt "field:loan.increment,begin_balance:"
 msgid "Begin Balance"
 msgstr "Capital Restant Dû Initial"
@@ -302,7 +313,7 @@ msgstr "Options"
 msgctxt ""
 "field:loan.loan_share_propagate.parameters,possible_covered_elements:"
 msgid "Possible Covered Elements"
-msgstr "Elements Couverts Possibles"
+msgstr "Risques Couverts Possibles"
 
 msgctxt "field:loan.loan_share_propagate.parameters,possible_loans:"
 msgid "Possible Loans"
@@ -473,16 +484,16 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,is_loan:"
-msgid ""
-msgstr " "
+msgid "Is Loan"
+msgstr "Emprunteur"
 
 msgctxt "field:offered.product,calculate_each_payment:"
 msgid "Calculate each payment"
 msgstr "Calculer à Chaque Echéance"
 
 msgctxt "field:offered.product,is_loan:"
-msgid ""
-msgstr " "
+msgid "Is Loan"
+msgstr "Emprunteur"
 
 msgctxt "model:ir.action,name:launch_loan_creation_wizard"
 msgid "Loan Create"
@@ -720,7 +731,7 @@ msgctxt "wizard_button:loan.create,loan_step_increments,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.create,loan_step_increments,loan:"
+msgctxt "wizard_button:loan.create,loan_step_increments,return_to_loan:"
 msgid "Previous"
 msgstr "Précédent"
 
@@ -728,7 +739,7 @@ msgctxt "wizard_button:loan.create,loan_step_payments,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:loan.create,loan_step_payments,loan_step_increments:"
+msgctxt "wizard_button:loan.create,loan_step_payments,return_to_increments:"
 msgid "Previous"
 msgstr "Précédent"
 

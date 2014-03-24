@@ -24,7 +24,7 @@ class Contract:
             for covered_data in covered_element.covered_data:
                 values[covered_data.option.offered.id] = \
                     covered_data.coverage_amount
-                rule_dict = {}
+                rule_dict = {'date': at_date}
                 covered_data.init_dict_for_rule_engine(rule_dict)
                 result, errs = covered_data.option.offered.get_result(
                     'dependant_amount_coverage', rule_dict)

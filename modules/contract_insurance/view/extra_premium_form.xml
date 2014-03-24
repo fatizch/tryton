@@ -15,19 +15,21 @@
     <field name="rate" xexpand="0" factor="100"/>
     <label string="%" id="rate" xexpand="0" xalign="0"
       states="{'invisible': Eval('calculation_kind') != 'rate'}"/>
-  </group>
-  <newline/>
-  <label name="start_date"/>
-  <group id="duration">
-    <field name="start_date"/>
+    </group>
+    <newline/>
+    <label name="time_limited"/>
+    <field name="time_limited"/>
     <label name="duration"/>
-    <field name="duration" xexpand="0"/>
-    <field name="duration_unit" xexpand="0" xalign="0"/>
-  </group>
-  <label name="end_date"/>
-  <field name="end_date"/>
-<newline/>
-<group id="invisible" states="{'invisible': True}">
-  <field name="currency"/>
-</group>
-</form>
+    <group id="duration">
+      <field name="duration" xexpand="0"/>
+      <field name="duration_unit" xexpand="0" xalign="0"/>
+    </group>
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
+    <group id="invisible" states="{'invisible': True}">
+      <field name="currency"/>
+    </group>
+  </form>

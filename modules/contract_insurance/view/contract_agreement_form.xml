@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Manager" col="6">
+<form string="Manager">
   <label name="start_date"/>
   <field name="start_date"/>
   <label name="end_date"/>
@@ -7,11 +7,12 @@
   <newline/>
   <label name="kind"/>
   <field name="kind"/>
-  <newline/>
   <label name="party"/>
   <field name="party"/>
   <label name="agency"/>
   <field name="agency"/>
+  <label name="contact_info"/>
+  <field name="contact_info"/>
   <label name="protocol"/>
   <field name="protocol"/>
   <newline/>

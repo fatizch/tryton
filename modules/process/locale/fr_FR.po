@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -46,6 +46,10 @@ msgctxt "field:process,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:process,display_steps_without_status:"
+msgid "Display Steps Without Status"
+msgstr "Afficher les Etapes sans Statut"
+
 msgctxt "field:process,fancy_name:"
 msgid "Name"
 msgstr "Nom"
@@ -77,6 +81,10 @@ msgstr "Nom"
 msgctxt "field:process,step_button_group_position:"
 msgid "Process Overview Positioning"
 msgstr "Position des Boutons"
+
+msgctxt "field:process,steps_to_display:"
+msgid "Steps"
+msgstr "Etapes"
 
 msgctxt "field:process,technical_name:"
 msgid "Technical Name"
@@ -659,6 +667,10 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:contract:"
+msgid "Courtier"
+msgstr "Courtier"
+
+msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
 
@@ -669,10 +681,6 @@ msgstr "Créer un prêt"
 msgctxt "view:contract:"
 msgid "Garanties"
 msgstr "Garanties"
-
-msgctxt "view:contract:"
-msgid "Modifier Garanties"
-msgstr ""
 
 msgctxt "view:contract:"
 msgid "Next (_k)"

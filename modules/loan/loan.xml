@@ -32,6 +32,22 @@
             <field name="type">tree</field>
             <field name="name">loan_tree</field>
         </record>
+        <record model="ir.model.access" id="access_loan">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="group" ref="contract.group_contract"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_loan_admin">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="group" ref="contract.group_contract_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Loan Share ########### -->
         <!-- ############################################################ -->

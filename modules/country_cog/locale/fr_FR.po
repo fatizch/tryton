@@ -11,27 +11,27 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:country.zipcode,city:"
-msgid ""
-msgstr " "
+msgid "City"
+msgstr "Ville"
 
 msgctxt "field:country.zipcode,country:"
-msgid ""
-msgstr " "
+msgid "Country"
+msgstr "Pays"
 
 msgctxt "field:country.zipcode,create_date:"
-msgid ""
-msgstr " "
+msgid "Create Date"
+msgstr "Date de création"
 
 msgctxt "field:country.zipcode,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:country.zipcode,create_uid:"
-msgid ""
+msgid "Create User"
 msgstr " "
 
 msgctxt "field:country.zipcode,id:"
-msgid ""
+msgid "ID"
 msgstr " "
 
 msgctxt "field:country.zipcode,must_expand_tree:"
@@ -39,15 +39,15 @@ msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
 msgctxt "field:country.zipcode,rec_name:"
-msgid ""
+msgid "Name"
 msgstr " "
 
 msgctxt "field:country.zipcode,write_date:"
-msgid ""
+msgid "Write Date"
 msgstr " "
 
 msgctxt "field:country.zipcode,write_uid:"
-msgid ""
+msgid "Write User"
 msgstr " "
 
 msgctxt "field:country.zipcode,xml_id:"
@@ -55,7 +55,7 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:country.zipcode,zip:"
-msgid ""
+msgid "Zip"
 msgstr " "
 
 msgctxt "field:ir.test_case,load_all_zipcodes:"
@@ -67,7 +67,7 @@ msgid "Main Zip"
 msgstr "Code postal principal"
 
 msgctxt "model:country.zipcode,name:"
-msgid ""
+msgid "ZipCode"
 msgstr " "
 
 msgctxt "model:ir.action,name:act_zipcode_form"

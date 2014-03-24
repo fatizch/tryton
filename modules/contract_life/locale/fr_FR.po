@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -7,7 +7,7 @@ msgid "Coverage Amount"
 msgstr "Montant de Couverture"
 
 msgctxt "field:contract.covered_data,with_coverage_amount:"
-msgid ""
+msgid "With Coverage Amount"
 msgstr " "
 
 msgctxt "field:contract.covered_element-party,covered_element:"

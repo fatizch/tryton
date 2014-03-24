@@ -10,10 +10,10 @@
       <newline/>
       <label name="kind"/>
       <field name="kind"/>
-      <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon'])}"/>
+      <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon', 'graduated'])}"/>
       <group id="rate">
           <field name="rate" factor="100" xexpand="0"/>
-          <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon'])}"/>
+          <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon', 'graduated'])}"/>
       </group>
       <newline/>
       <label name="amount"/>
@@ -56,7 +56,7 @@
       <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
     </page>
     <page id="increments" string="Increments">
-      <field name="increments" colspan="4" mode="tree"/>
+      <field name="increments" colspan="4" mode="tree" pre_validate="1"/>
     </page>
     <page id="table" string="Amortization Table">
       <button name="button_calculate_amortization_table" string="Calculate Amortization Table"/>

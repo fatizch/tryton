@@ -4,7 +4,7 @@
         <page id="loans" string="Loans"
             states="{'invisible': ~Eval('is_loan')}">
             <button name="create_loan" string="Create Loan" colspan="4"/>
-            <field name="loans" colspan="4"/>
+            <field name="loans" colspan="4" pre_validate="1"/>
         </page>
     </xpath>
     <xpath expr="//page[@id='cov_elements']" position="inside">
