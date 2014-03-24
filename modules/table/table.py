@@ -59,7 +59,7 @@ ORDER = [
     ]
 
 DIMENSION_MAX = int(CONFIG.get('table_dimension', 4))
-MAX_NUMBER_OF_CELLS_FOR_EXPORT = 10000
+EXPORT_CELL_RATIO = 0.2
 
 
 class TableDefinition(ModelSQL, ModelView):
@@ -74,6 +74,9 @@ class TableDefinition(ModelSQL, ModelView):
     cells = fields.One2Many('table.cell', 'definition', 'Cells')
     number_of_digits = fields.Integer('Number of Digits', states={
             'invisible': Eval('type_', '') != 'numeric'})
+    number_of_dimensions = fields.Function(
+        fields.Integer('Number of dimension'),
+        'get_number_of_dimensions')
 
     @classmethod
     def __setup__(cls):
@@ -106,13 +109,6 @@ class TableDefinition(ModelSQL, ModelView):
                 cursor.rollback()
 
     @classmethod
-    def _export_force_recreate(cls):
-        result = super(TableDefinition, cls)._export_force_recreate()
-        for i in range(1, DIMENSION_MAX + 1):
-            result.remove('dimension%s' % i)
-        return result
-
-    @classmethod
     def copy(cls, records, default=None):
         result = []
         for record in records:
@@ -125,6 +121,8 @@ class TableDefinition(ModelSQL, ModelView):
             values = json.dumps(record.export_json()[1], cls=JSONEncoder)
             values = values.replace('["code", "%s"]' % record.code,
                 '["code", "%s_clone"]' % record.code)
+            values = values.replace('["definition.code", "%s"]' % record.code,
+                '["definition.code", "%s_clone"]' % record.code)
             values = values.replace('"code": "%s"' % record.code,
                 '"code": "%s_clone"' % record.code)
             values = values.replace(u'"name": "%s"' % record.name,
@@ -133,37 +131,52 @@ class TableDefinition(ModelSQL, ModelView):
         return result
 
     def _export_override_cells(self, exported, result, my_key):
-        Cell = Pool().get('table.cell')
-        count = Cell.search_count([('definition', '=', self.id)])
-        if count > MAX_NUMBER_OF_CELLS_FOR_EXPORT:
-            return []
+        pool = Pool()
+        Cell = pool.get('table.cell')
+        cell_count = Cell.search_count([('definition', '=', self.id),
+                ('value', '!=', None)])
+        theoretical_cell_count = 1.0
+        for i in range(1, DIMENSION_MAX + 1):
+            theoretical_cell_count = (len(getattr(self, 'dimension%s' % i, []))
+                or 1) * theoretical_cell_count
+        if cell_count / theoretical_cell_count > EXPORT_CELL_RATIO:
+            # Enough cells to justify exporting the whole table (with None
+            # values for void cells)
+            result = []
+            dimensions = []
 
-        def lock_dim_and_export(locked, results, dimensions):
-            my_dim = len(locked) + 1
-            try:
-                dims = getattr(self, 'dimension%s' % my_dim)
-            except AttributeError:
-                dims = None
-            if not dims:
-                matches = TableCell.search([('definition', '=', self.id)] + [
-                    ('dimension%s' % (i + 1), '=', locked[i])
-                    for i in xrange(my_dim - 1)])
-                if not matches:
-                    results.append(None)
+            def lock_dim_and_export(locked, results, dimensions):
+                my_dim = len(locked) + 1
+                try:
+                    dims = getattr(self, 'dimension%s' % my_dim)
+                except AttributeError:
+                    dims = None
+                if not dims:
+                    matches = TableCell.search([('definition', '=', self.id)] +
+                        [('dimension%s' % (i + 1), '=', locked[i])
+                            for i in xrange(my_dim - 1)])
+                    if not matches:
+                        results.append(None)
+                    else:
+                        results.append(matches[0].value)
+                    return
                 else:
-                    results.append(matches[0].value)
-                return
-            else:
-                if len(dimensions) == len(locked):
-                    dimensions.append(len(dims))
-                for elem in dims:
-                    locked.append(elem.id)
-                    lock_dim_and_export(locked, results, dimensions)
-                    locked.pop()
-        result = []
-        dimensions = []
-        lock_dim_and_export([], result, dimensions)
-        return [dimensions, result]
+                    if len(dimensions) == len(locked):
+                        dimensions.append(len(dims))
+                    for elem in dims:
+                        locked.append(elem.id)
+                        lock_dim_and_export(locked, results, dimensions)
+                        locked.pop()
+            lock_dim_and_export([], result, dimensions)
+            return [dimensions, result]
+        else:
+            # Not enough cells to export everything, just detail every cell.
+            result = []
+            for elem in self.cells:
+                result.append([getattr(elem, 'dimension%s' % i).value
+                        for i in range(1, self.number_of_dimensions)]
+                    + [elem.value])
+        return result
 
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
@@ -179,38 +192,54 @@ class TableDefinition(ModelSQL, ModelView):
         # Import cells
         Cell = Pool().get('table.cell')
         Cell.delete(Cell.search([('definition', '=', table.id)]))
-        dimensions, cell_values = values['cells']
-        cell_values = list(cell_values)
+        if len(values['cells']) == 2:
+            dimensions, cell_values = values['cells']
+            cell_values = list(cell_values)
 
-        to_create = []
-        dim_ids = {}
-        for dim in xrange(len(dimensions)):
-            for idx, dim_val in enumerate(getattr(table, 'dimension%s' % (
-                            dim + 1))):
-                dim_ids[(dim + 1, idx)] = dim_val.id
+            to_create = []
+            dim_ids = {}
+            for dim in xrange(len(dimensions)):
+                for idx, dim_val in enumerate(getattr(table, 'dimension%s' % (
+                                dim + 1))):
+                    dim_ids[(dim + 1, idx)] = dim_val.id
 
-        def lock_dim_and_import(locked):
-            my_dim = len(locked) + 1
-            if my_dim > len(dimensions):
-                cell_desc = {
-                    'definition': table.id,
-                    'value': cell_values.pop(0),
-                    }
-                if cell_desc['value'] is None:
-                    return
-                for idx, key in enumerate(locked):
-                    cell_desc['dimension%s' % (idx + 1)] = dim_ids[key]
-                to_create.append(cell_desc)
-            else:
-                for elem in xrange(dimensions[my_dim - 1]):
-                    locked.append((my_dim, elem))
-                    lock_dim_and_import(locked)
-                    locked.pop()
+            def lock_dim_and_import(locked):
+                my_dim = len(locked) + 1
+                if my_dim > len(dimensions):
+                    cell_desc = {
+                        'definition': table.id,
+                        'value': cell_values.pop(0),
+                        }
+                    if cell_desc['value'] is None:
+                        return
+                    for idx, key in enumerate(locked):
+                        cell_desc['dimension%s' % (idx + 1)] = dim_ids[key]
+                    to_create.append(cell_desc)
+                else:
+                    for elem in xrange(dimensions[my_dim - 1]):
+                        locked.append((my_dim, elem))
+                        lock_dim_and_import(locked)
+                        locked.pop()
 
-        locks = []
-        lock_dim_and_import(locks)
-        Cell.create(to_create)
-        return table
+            locks = []
+            lock_dim_and_import(locks)
+            Cell.create(to_create)
+            return table
+        else:
+            dimension_matcher = {}
+            for i in range(1, DIMENSION_MAX + 1):
+                dimension_values = getattr(table, 'dimension%s' % i)
+                dimension_matcher[i] = dict([
+                        (x.value, x.id) for x in dimension_values])
+            to_create = []
+            for elem in values['cells']:
+                to_create.append(dict([
+                            ('dimension%s' % i, dimension_matcher[i][x])
+                            for i, x in enumerate(elem[:-1], 1)] +
+                        [('value', elem[-1])] +
+                        [('definition', table.id)]))
+            Cell.create(to_create)
+            return table
 
     @classmethod
     def default_dimension_order(cls):
@@ -219,6 +248,12 @@ class TableDefinition(ModelSQL, ModelView):
     @staticmethod
     def default_type_():
         return 'char'
+
+    def get_number_of_dimensions(self, name):
+        for i in range(1, DIMENSION_MAX + 1):
+            if not getattr(self, 'dimension%s' % i):
+                return i - 1
+        return i
 
     @classmethod
     def _view_look_dom_arch(cls, tree, type, field_children=None):
