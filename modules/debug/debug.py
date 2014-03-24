@@ -84,13 +84,13 @@ class ModelInfo(ModelView):
     @fields.depends('model_name', 'field_infos', 'hide_functions',
         'filter_value')
     def on_change_with_field_infos(self):
-        TargetModel = Pool().get(self.model_name)
         if self.field_infos:
             result = {'remove': [x.id for x in self.field_infos]}
         else:
             result = {}
         if not self.model_name:
             return result
+        TargetModel = Pool().get(self.model_name)
         result['add'] = [(-1, x) for x in sorted(
                     filter(None,
                         list([self.get_field_info(field, field_name)

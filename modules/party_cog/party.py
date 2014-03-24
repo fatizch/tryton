@@ -306,6 +306,10 @@ class Party(export.ExportImportMixin):
     def open_contact_mechanisms(cls, objs):
         pass
 
+    @staticmethod
+    def default_number_of_addresses():
+        return 0
+
     @fields.depends('addresses')
     def on_change_with_number_of_addresses(self, name=None):
         return len(self.addresses)
