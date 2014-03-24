@@ -938,7 +938,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         digits=(16, 4))
     time_limited = fields.Function(
         fields.Boolean('Time Limited'),
-        'get_time_limited', 'setter_void')
+        'on_change_with_time_limited', 'setter_void')
     duration = fields.Function(
         fields.Integer('Duration',
             states={'invisible': ~Eval('time_limited')}),
@@ -1041,7 +1041,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return coop_date.get_end_of_period(self.start_date, self.duration_unit,
             self.duration)
 
-    def get_time_limited(self):
+    @fields.depends('end_date')
+    def on_change_with_time_limited(self, name=None):
         return getattr(self, 'end_date', None) is not None
 
 
