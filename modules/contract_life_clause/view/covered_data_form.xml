@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form/notebook/page[@id='clauses']" position="after">
-        <page string="Beneficiary Clauses" id="beneficiary_clauses">
+        <page string="Beneficiary Clauses" name="beneficiary_clauses">
             <field name="beneficiary_clauses"/>
         </page>
     </xpath>

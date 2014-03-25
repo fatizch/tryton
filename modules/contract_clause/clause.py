@@ -20,11 +20,6 @@ class ContractClause(model.CoopSQL, model.CoopView):
     text = fields.Text('Text', states={
             'readonly': ~Eval('customized_text'),
             }, depends=['customized_text'])
-    visual_text = fields.Function(
-        fields.Text('Clause Text', states={
-                'invisible': Eval('customized_text', False)},
-            depends=['customized_text']),
-        'on_change_with_visual_text')
     kind = fields.Function(
         fields.Char('Kind'),
         'on_change_with_kind')
@@ -34,15 +29,6 @@ class ContractClause(model.CoopSQL, model.CoopView):
         if not self.clause:
             return True
         return self.clause.customizable
-
-    @fields.depends('text', 'clause', 'customized_text', 'contract')
-    def on_change_with_visual_text(self, name=None):
-        if not self.clause:
-            return ''
-        if self.customized_text:
-            return self.text
-        return self.clause.get_version_at_date(
-            self.contract.appliable_conditions_date).content
 
     @fields.depends('clause', 'contract')
     def on_change_with_kind(self, name=None):

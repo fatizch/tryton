@@ -2,7 +2,6 @@
 <form string="Clauses">
     <label name="clause"/>
     <field name="clause"/>
-    <field name="visual_text" colspan="4" widget="richtext"/>
     <field name="text" colspan="4" widget="richtext"/>
     <newline/>
     <field name="customized_text"/>

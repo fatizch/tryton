@@ -1,8 +1,9 @@
 import copy
 from decimal import Decimal
 
+from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields, model, utils
 
@@ -69,6 +70,35 @@ class ContractClause:
         return self.clause.with_beneficiary_list
 
     @classmethod
+    def default_clause(cls):
+        default_clause = Transaction().context.get('default_clause', None)
+        return default_clause if default_clause else None
+
+    @classmethod
+    def default_text(cls):
+        default_clause = Transaction().context.get('default_clause', None)
+        if not default_clause:
+            return None
+        Clause = Pool().get('clause')
+        return Clause(default_clause).versions[-1].content
+
+    @classmethod
+    def default_with_beneficiary_list(cls):
+        default_clause = Transaction().context.get('default_clause', None)
+        if not default_clause:
+            return False
+        Clause = Pool().get('clause')
+        return Clause(default_clause).with_beneficiary_list
+
+    @classmethod
+    def default_customized_text(cls):
+        default_clause = Transaction().context.get('default_clause', None)
+        if not default_clause:
+            return False
+        Clause = Pool().get('clause')
+        return Clause(default_clause).customizable
+
+    @classmethod
     def validate(cls, clauses):
         for clause in clauses:
             if not clause.with_beneficiary_list:
@@ -88,7 +118,16 @@ class CoveredData:
         'covered_data', 'Beneficiary clauses', domain=[
             ('clause.kind', '=', 'beneficiary'),
             ('clause', 'in', Eval('possible_clauses'))],
-        depends=['possible_clauses'])
+        context={'default_clause': Eval('default_beneficiary_clause', 0)},
+        states={'invisible': ~Bool(Eval('has_beneficiary_clause', False))},
+        depends=['possible_clauses', 'has_beneficiary_clause',
+            'default_beneficiary_clause'])
+    default_beneficiary_clause = fields.Function(
+        fields.Many2One('clause', 'Default Beneficiary Clause'),
+        'on_change_with_default_beneficiary_clause')
+    has_beneficiary_clause = fields.Function(
+        fields.Boolean('Has Beneficiary Clause'),
+        'on_change_with_has_beneficiary_clause')
 
     @classmethod
     def __setup__(cls):
@@ -96,6 +135,25 @@ class CoveredData:
         cls.clauses = copy.copy(cls.clauses)
         cls.clauses = fields.One2ManyDomain.init_from_One2Many(cls.clauses)
         cls.clauses.domain += [('clause.kind', '!=', 'beneficiary')]
+
+    @fields.depends('option')
+    def on_change_with_default_beneficiary_clause(self, name=None):
+        good_rule = utils.find_date(self.option.offered.clause_rules,
+            self.option.contract.appliable_conditions_date)
+        if good_rule is None or good_rule.default_beneficiary_clause is None:
+            return None
+        return good_rule.default_beneficiary_clause.id
+
+    @fields.depends('option')
+    def on_change_with_has_beneficiary_clause(self, name=None):
+        good_rule = utils.find_date(self.option.offered.clause_rules,
+            self.option.contract.appliable_conditions_date)
+        if good_rule is None:
+            return False
+        for elem in good_rule.clauses:
+            if elem.kind == 'beneficiary':
+                return True
+        return False
 
     def init_from_option(self, option):
         super(CoveredData, self).init_from_option(option)
@@ -106,7 +164,7 @@ class CoveredData:
             return None
         good_rule = utils.find_date(option.offered.clause_rules,
             self.option.contract.appliable_conditions_date)
-        if not good_rule.default_beneficiary_clause:
+        if not good_rule or not good_rule.default_beneficiary_clause:
             return None
         ContractClause = Pool().get('contract.clause')
         clause = ContractClause()
