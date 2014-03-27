@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -77,6 +77,10 @@ msgstr "Etendre Arbre"
 msgctxt "field:contract,offered:"
 msgid ""
 msgstr " "
+
+msgctxt "field:contract,offered_subscriber_kind:"
+msgid "Offered Subscriber Kind"
+msgstr ""
 
 msgctxt "field:contract,options:"
 msgid ""
@@ -564,7 +568,7 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "model:ir.action,name:act_quote_form"
-msgid "Quotes"
+msgid "Devis"
 msgstr "Devis"
 
 msgctxt "model:ir.action,name:option_subscription_wizard"
@@ -580,12 +584,32 @@ msgid "Batch"
 msgstr "Traitement"
 
 msgctxt "model:ir.ui.menu,name:menu_contract_form"
-msgid "Contract"
-msgstr "Contrat"
+msgid "Contracts"
+msgstr "Contrats"
 
 msgctxt "model:ir.ui.menu,name:menu_quote_form"
 msgid "Quotes"
 msgstr "Devis"
+
+msgctxt "model:res.group,name:group_contract"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:res.group,name:group_contract_admin"
+msgid "Contract Administration"
+msgstr "Administration contrat"
+
+msgctxt "selection:contract,offered_subscriber_kind:"
+msgid "All"
+msgstr "Tous"
+
+msgctxt "selection:contract,offered_subscriber_kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:contract,offered_subscriber_kind:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "selection:contract,status:"
 msgid ""
@@ -606,6 +630,18 @@ msgstr "Devis"
 msgctxt "selection:contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:contract,subscriber_kind:"
+msgid "All"
+msgstr "Tous"
+
+msgctxt "selection:contract,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:contract,subscriber_kind:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "selection:contract.option,status:"
 msgid ""
