@@ -90,12 +90,12 @@
     <record model="ir.ui.view" id="option_view_tree">
       <field name="model">contract.option</field>
       <field name="type">tree</field>
-      <field name="name">option-commission_option_list</field>
+      <field name="name">option_list</field>
     </record>
     <record model="ir.ui.view" id="option_view_form">
       <field name="model">contract.option</field>
       <field name="type">form</field>
-      <field name="name">option-commission_option_form</field>
+      <field name="name">option_form</field>
     </record>
     <!--################################################################ -->
     <!-- Contract Address -->

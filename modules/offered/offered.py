@@ -439,10 +439,11 @@ class Product(model.CoopSQL, Offered):
                 str([k for k in args.iterkeys()])))
         all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
         if not 'sub_elem' in args:
-            for coverage in args['contract'].get_active_coverages_at_date(
-                    args['date']):
+            for option in args['contract'].options:
+                if not option.coverage:
+                    continue
                 coverage_all, coverage_possible = \
-                    coverage.get_extra_data_for_exec(args)
+                    option.coverage.get_extra_data_for_exec(args)
                 all_schemas |= coverage_all
                 possible_schemas |= coverage_possible
         else:

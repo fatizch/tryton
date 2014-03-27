@@ -14,6 +14,9 @@
     </page>
   </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="after">
+    <page string="Documents" id="documents">
+      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
+    </page>
     <page string="Managing Entities" id="managing_entities">
       <field name="agreements" colspan="4"/>
       <newline/>

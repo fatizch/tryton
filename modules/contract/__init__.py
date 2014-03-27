@@ -6,7 +6,6 @@ from .party import *
 from .test_case import *
 from .wizard import *
 from .service import *
-from .document import *
 
 
 def register():
@@ -18,8 +17,6 @@ def register():
         ContractAddress,
         # From Service
         ContractService,
-        # From Document
-        DocumentTemplate,
         #From Rule Engine
         RuleEngineRuntime,
         # from party

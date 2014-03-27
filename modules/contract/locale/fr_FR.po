@@ -1,49 +1,53 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.option:"
+msgid "Coverage %s is inactive at date %s"
+msgstr "La garantie %s est inactive le %s"
+
+msgctxt "error:contract:"
+msgid "Product %s is inactive at date %s"
+msgstr "Le produit %s est inactif le %s"
+
 msgctxt "field:contract,addresses:"
-msgid ""
-msgstr " "
+msgid "Addresses"
+msgstr "Adresses"
 
 msgctxt "field:contract,appliable_conditions_date:"
 msgid "Appliable Conditions Date"
 msgstr "Date de Conditions"
-
-msgctxt "field:contract,clauses:"
-msgid "Clauses"
-msgstr "Clauses"
 
 msgctxt "field:contract,company:"
 msgid "Company"
 msgstr "Société"
 
 msgctxt "field:contract,contact:"
-msgid ""
-msgstr " "
+msgid "Contact"
+msgstr "Contact"
 
 msgctxt "field:contract,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
 
 msgctxt "field:contract,create_date:"
-msgid ""
-msgstr " "
+msgid "Create Date"
+msgstr "Date de création"
 
 msgctxt "field:contract,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:contract,create_uid:"
-msgid ""
+msgid "Create User"
 msgstr " "
 
 msgctxt "field:contract,currency:"
-msgid ""
-msgstr " "
+msgid "Currency"
+msgstr "Devise"
 
 msgctxt "field:contract,currency_digits:"
-msgid ""
+msgid "Currency Digits"
 msgstr " "
 
 msgctxt "field:contract,currency_symbol:"
@@ -51,79 +55,75 @@ msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
 msgctxt "field:contract,current_policy_owner:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract,documents:"
-msgid ""
-msgstr " "
+msgid "Current Policy Owner"
+msgstr ""
 
 msgctxt "field:contract,end_date:"
-msgid ""
-msgstr " "
+msgid "End Date"
+msgstr "Date de fin"
 
 msgctxt "field:contract,extra_data:"
-msgid ""
-msgstr " "
+msgid "Complementary Data"
+msgstr "Données complémentaires"
 
 msgctxt "field:contract,id:"
-msgid ""
+msgid "ID"
 msgstr " "
 
 msgctxt "field:contract,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:contract,offered:"
-msgid ""
-msgstr " "
-
 msgctxt "field:contract,options:"
-msgid ""
-msgstr " "
+msgid "Options"
+msgstr "Garanties"
+
+msgctxt "field:contract,product:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "field:contract,product_kind:"
 msgid "Product Kind"
 msgstr "Type de Produit"
 
+msgctxt "field:contract,product_subscriber_kind:"
+msgid "Product Subscriber Kind"
+msgstr ""
+
 msgctxt "field:contract,rec_name:"
-msgid ""
-msgstr " "
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:contract,start_date:"
-msgid ""
-msgstr " "
+msgid "Effective Date"
+msgstr "Date d'effet"
 
 msgctxt "field:contract,start_management_date:"
-msgid ""
+msgid "Management Date"
 msgstr " "
 
 msgctxt "field:contract,status:"
-msgid ""
-msgstr " "
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:contract,status_history:"
-msgid ""
-msgstr " "
+msgid "Status History"
+msgstr "Historique des statuts"
 
 msgctxt "field:contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
 msgctxt "field:contract,subscriber_kind:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract,summary:"
-msgid ""
-msgstr " "
+msgid "Subscriber Kind"
+msgstr "Type de souscripteur"
 
 msgctxt "field:contract,write_date:"
-msgid ""
+msgid "Write Date"
 msgstr " "
 
 msgctxt "field:contract,write_uid:"
-msgid ""
+msgid "Write User"
 msgstr " "
 
 msgctxt "field:contract,xml_id:"
@@ -131,147 +131,95 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "field:contract.address,address:"
-msgid ""
-msgstr " "
+msgid "Address"
+msgstr "Adresse"
 
 msgctxt "field:contract.address,contract:"
-msgid ""
-msgstr " "
+msgid "Contract"
+msgstr "Contrat"
 
 msgctxt "field:contract.address,create_date:"
-msgid ""
-msgstr " "
+msgid "Create Date"
+msgstr "Date de création"
 
 msgctxt "field:contract.address,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:contract.address,create_uid:"
-msgid ""
+msgid "Create User"
 msgstr " "
 
 msgctxt "field:contract.address,end_date:"
-msgid ""
-msgstr " "
+msgid "End Date"
+msgstr "Date de fin"
 
 msgctxt "field:contract.address,id:"
-msgid ""
+msgid "ID"
 msgstr " "
 
 msgctxt "field:contract.address,must_expand_tree:"
-msgid ""
-msgstr " "
+msgid "Must Expand Tree"
+msgstr "Déplier l'arbre"
 
 msgctxt "field:contract.address,policy_owner:"
-msgid ""
+msgid "Policy Owner"
 msgstr " "
 
 msgctxt "field:contract.address,rec_name:"
-msgid ""
-msgstr " "
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:contract.address,start_date:"
-msgid ""
-msgstr " "
+msgid "Start Date"
+msgstr "Date de début"
 
 msgctxt "field:contract.address,write_date:"
-msgid ""
+msgid "Write Date"
 msgstr " "
 
 msgctxt "field:contract.address,write_uid:"
-msgid ""
+msgid "Write User"
 msgstr " "
 
 msgctxt "field:contract.address,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:contract.clause,clause:"
-msgid "Clause"
-msgstr "Clause"
-
-msgctxt "field:contract.clause,contract:"
+msgctxt "field:contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "field:contract.clause,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:contract.clause,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:contract.clause,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.clause,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.clause,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:contract.clause,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.clause,override_text:"
-msgid "Override Text"
-msgstr "Texte surchargeable"
-
-msgctxt "field:contract.clause,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.clause,text:"
-msgid "Text"
-msgstr "Texte"
-
-msgctxt "field:contract.clause,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.clause,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.clause,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:contract.option,contract:"
-msgid ""
-msgstr " "
 
 msgctxt "field:contract.option,contract_number:"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
+
+msgctxt "field:contract.option,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
 
 msgctxt "field:contract.option,coverage_kind:"
 msgid "Coverage Kind"
 msgstr "Type de Garantie"
 
 msgctxt "field:contract.option,create_date:"
-msgid ""
-msgstr " "
+msgid "Create Date"
+msgstr "Date de création"
 
 msgctxt "field:contract.option,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
 msgctxt "field:contract.option,create_uid:"
-msgid ""
+msgid "Create User"
 msgstr " "
 
 msgctxt "field:contract.option,currency:"
-msgid ""
-msgstr " "
+msgid "Currency"
+msgstr "Devise"
 
 msgctxt "field:contract.option,currency_digits:"
-msgid ""
+msgid "Currency Digits"
 msgstr " "
 
 msgctxt "field:contract.option,currency_symbol:"
@@ -282,56 +230,36 @@ msgctxt "field:contract.option,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr "Responsable Courant de la Police"
 
-msgctxt "field:contract.option,end_date:"
-msgid ""
-msgstr " "
-
 msgctxt "field:contract.option,id:"
-msgid ""
+msgid "ID"
 msgstr " "
 
 msgctxt "field:contract.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
-msgctxt "field:contract.option,offered:"
-msgid "Option Description"
-msgstr "Description d'Option"
-
 msgctxt "field:contract.option,product:"
 msgid "Product"
 msgstr "Produit"
 
 msgctxt "field:contract.option,rec_name:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract.option,start_date:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract.option,start_management_date:"
-msgid ""
-msgstr " "
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:contract.option,status:"
-msgid ""
-msgstr " "
+msgid "Status"
+msgstr "Statut"
 
 msgctxt "field:contract.option,status_history:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract.option,summary:"
-msgid ""
-msgstr " "
+msgid "Status History"
+msgstr "Historique des statuts"
 
 msgctxt "field:contract.option,write_date:"
-msgid ""
+msgid "Write Date"
 msgstr " "
 
 msgctxt "field:contract.option,write_uid:"
-msgid ""
+msgid "Write User"
 msgstr " "
 
 msgctxt "field:contract.option,xml_id:"
@@ -506,14 +434,6 @@ msgctxt "field:party.party,main_contract:"
 msgid "Main Contract"
 msgstr "Contrat Principal"
 
-msgctxt "field:party.party,number_of_contracts:"
-msgid "Number of Contracts"
-msgstr "Nombre de contrats"
-
-msgctxt "field:party.party,number_of_quotes:"
-msgid "Number of Quotes"
-msgstr "Nombre de devis"
-
 msgctxt "field:party.party,quotes:"
 msgid "Quotes"
 msgstr "Devis"
@@ -523,20 +443,16 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "model:contract.address,name:"
-msgid ""
-msgstr " "
-
-msgctxt "model:contract.clause,name:"
-msgid "Contract Clause"
-msgstr "Clauses du contrat"
+msgid "Contract Address"
+msgstr "Adresse du contrat"
 
 msgctxt "model:contract.option,name:"
-msgid ""
-msgstr " "
+msgid "Contract Option"
+msgstr "Garantie"
 
 msgctxt "model:contract.service,name:"
-msgid ""
-msgstr " "
+msgid "Contract Service"
+msgstr "Service délivré"
 
 msgctxt "model:contract.status.history,name:"
 msgid "Status History"
@@ -580,12 +496,32 @@ msgid "Batch"
 msgstr "Traitement"
 
 msgctxt "model:ir.ui.menu,name:menu_contract_form"
-msgid "Contract"
+msgid "Contracts"
 msgstr "Contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_quote_form"
 msgid "Quotes"
 msgstr "Devis"
+
+msgctxt "model:res.group,name:group_contract"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "model:res.group,name:group_contract_admin"
+msgid "Contract Administration"
+msgstr "Administration des contrats"
+
+msgctxt "selection:contract,product_subscriber_kind:"
+msgid "All"
+msgstr "Tous"
+
+msgctxt "selection:contract,product_subscriber_kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:contract,product_subscriber_kind:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "selection:contract,status:"
 msgid ""
@@ -606,6 +542,18 @@ msgstr "Devis"
 msgctxt "selection:contract,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:contract,subscriber_kind:"
+msgid "All"
+msgstr "Tous"
+
+msgctxt "selection:contract,subscriber_kind:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "selection:contract,subscriber_kind:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "selection:contract.option,status:"
 msgid ""
@@ -719,10 +667,6 @@ msgctxt ""
 msgid "Manual"
 msgstr "Manuelle"
 
-msgctxt "selection:document.template,kind:"
-msgid "Contract Documents"
-msgstr "Documents du contrat"
-
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Contract"
 msgstr "Contrat"
@@ -730,10 +674,6 @@ msgstr "Contrat"
 msgctxt "view:contract.address:"
 msgid "Contract Address"
 msgstr "Adresse"
-
-msgctxt "view:contract.clause:"
-msgid "Clauses"
-msgstr "Clauses"
 
 msgctxt "view:contract.option:"
 msgid "Administration"
@@ -774,10 +714,6 @@ msgstr "Données Complémentaires"
 msgctxt "view:contract:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "view:contract:"
-msgid "Documents"
-msgstr "Documents"
 
 msgctxt "view:contract:"
 msgid "Options"

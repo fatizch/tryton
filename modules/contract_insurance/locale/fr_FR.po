@@ -1225,6 +1225,10 @@ msgctxt "selection:document.request.line,for_object:"
 msgid "Option"
 msgstr "Garantie"
 
+msgctxt "selection:document.template,kind:"
+msgid "Contract Documents"
+msgstr "Documents du contrat"
+
 msgctxt "view:contract-agreement:"
 msgid "Management"
 msgstr "Gestionnaire"

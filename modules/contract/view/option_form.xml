@@ -3,8 +3,8 @@
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
-    <label name="offered"/>
-    <field name="offered"/>
+    <label name="coverage"/>
+    <field name="coverage"/>
     <label name="status"/>
     <field name="status" readonly="1"/>
     <newline/>

@@ -11,7 +11,7 @@ from trytond.modules.cog_utils import utils, coop_date
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import contract
-from trytond.modules.offered_insurance import offered
+from trytond.modules.offered_insurance import offered, Printable
 
 
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])
@@ -39,7 +39,7 @@ _STATES = {
 _DEPENDS = ['status']
 
 
-class Contract:
+class Contract(Printable):
     __name__ = 'contract'
 
     covered_elements = fields.One2ManyDomain('contract.covered_element',
@@ -47,6 +47,8 @@ class Contract:
         context={'contract': Eval('id')}, states=_STATES, depends=_DEPENDS)
     covered_datas = fields.One2Many('contract.covered_data', 'contract',
         'Covered Datas', states=_STATES, depends=_DEPENDS)
+    documents = fields.One2Many('document.request', 'needed_by', 'Documents',
+        states=_STATES, depends=_DEPENDS, size=1)
     agreements = fields.One2Many('contract-agreement', 'contract',
         'Contract-Agreement Relations', states={
             'invisible': Eval('product_kind') != 'insurance',

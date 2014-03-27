@@ -1,5 +1,5 @@
 from trytond.pool import Pool
-from contract import *
+from .contract import *
 from .party import *
 from .document import *
 from .renewal import *
@@ -31,6 +31,7 @@ def register():
         DocumentRequestLine,
         DocumentRequest,
         DocumentReceiveRequest,
+        DocumentTemplate,
         # From Service
         ContractService,
         Expense,
