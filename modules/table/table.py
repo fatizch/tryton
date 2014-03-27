@@ -374,16 +374,18 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         depends=DIMENSION_DEPENDS)
     start = fields.Float(
         'Start', states=dimension_state('range'),
-        depends=DIMENSION_DEPENDS)
+        depends=DIMENSION_DEPENDS, help='Value Included')
     end = fields.Float(
         'End', states=dimension_state('range'),
-        depends=DIMENSION_DEPENDS, help='Not included')
+        depends=DIMENSION_DEPENDS, help='Value Excluded')
     start_date = fields.Date(
         'Start Date',
-        states=dimension_state('range-date'), depends=DIMENSION_DEPENDS)
+        states=dimension_state('range-date'), depends=DIMENSION_DEPENDS,
+        help='Date Included')
     end_date = fields.Date(
         'End Date',
-        states=dimension_state('range-date'), depends=DIMENSION_DEPENDS)
+        states=dimension_state('range-date'), depends=DIMENSION_DEPENDS,
+        help='Date Excluded')
 
     @classmethod
     def __setup__(cls):
@@ -526,7 +528,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
 
 class TableDefinitionDimensionOpenAskType(ModelView):
-    'Table Open Definition Dimension'
+    'Open Table Value Dimension'
     __name__ = 'table.dimension.value.open.ask_type'
     table = fields.Many2One('table', 'Table', required=True)
     type = fields.Selection('get_types', 'Type', required=True, sort=False)
