@@ -93,17 +93,10 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
                 [(field_name, 'in', instance_list)]))
 
     @classmethod
-    def search_rec_name(cls, name, clause):
-        if (hasattr(cls, 'code') and cls.search([
-                        ('code',) + tuple(clause[1:])], limit=1)):
-            return [('code',) + tuple(clause[1:])]
-        return [(cls._rec_name,) + tuple(clause[1:])]
-
-    @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query=False):
         #Set your class here to see the domain on the search
-        # if cls.__name__ == 'ins_contract.loan_share':
+        # if cls.__name__ == 'rule_engine':
         #     print domain
         return super(CoopSQL, cls).search(domain=domain, offset=offset,
             limit=limit, order=order, count=count, query=query)
