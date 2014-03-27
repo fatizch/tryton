@@ -29,6 +29,7 @@ __all__ = [
     'Lang',
     'Icon',
     ]
+SEPARATOR = ' / '
 
 
 class Sequence(ExportImportMixin):
@@ -89,6 +90,11 @@ class UIMenu(ExportImportMixin):
             cursor.execute('CREATE EXTENSION IF NOT EXISTS unaccent', ())
             cursor.commit()
 
+    @classmethod
+    def __setup__(cls):
+        super(UIMenu, cls).__setup__()
+        cls.complete_name.getter = 'get_full_name'
+
     def get_rec_name(self, name):
         return self.name
 
@@ -100,6 +106,14 @@ class UIMenu(ExportImportMixin):
     def search_rec_name(cls, name, clause):
         #Bypass Tryton default search on parent
         return [('name',) + tuple(clause[1:])]
+
+    def get_full_name(self, name):
+        parent = self.parent
+        name = self.name
+        while parent:
+            name = parent.name + SEPARATOR + name
+            parent = parent.parent
+        return name
 
 
 class Rule(ExportImportMixin):
