@@ -77,7 +77,7 @@ else
     # Postgres support
     pip install psycopg2
     # documentation tools
-    pip install proteus sphinx path.py trydoc sphinxcontrib-inheritance
+    pip install proteus sphinx trydoc sphinxcontrib-inheritance
     # Batchs managing
     pip install celery flower
     echo $SEP

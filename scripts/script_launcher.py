@@ -7,7 +7,6 @@ import ConfigParser
 import argparse
 import argcomplete
 import subprocess
-from path import path
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -383,18 +382,19 @@ def create_symlinks(modules_path, lang, root, remove=True):
     # TODO : called symlinks.py available in trydoc
     if remove:
         # Removing existing symlinks
-        for root_file in path(root).listdir():
-            if root_file.islink():
+        for root_file in os.listdir(root):
+            if os.path.islink(root_file):
                 print "removing %s" % root_file
-                root_file.remove()
+                os.remove(root_file)
 
     for module_doc_dir in glob.glob('%s/*/doc/%s' % (modules_path, lang)):
         print "symlink to %s" % module_doc_dir
-        module_name = str(path(module_doc_dir).parent.parent.basename())
+        module_name_dir = os.path.dirname(os.path.dirname(module_doc_dir))
+        module_name = os.path.basename(module_name_dir)
         print "module name %s" % module_name
-        symlink = path(root).joinpath(module_name)
-        if not symlink.exists():
-            path(root).relpathto(path(module_doc_dir)).symlink(symlink)
+        symlink = os.path.join(root, module_name)
+        if not os.path.exists(symlink):
+            os.symlink(module_name_dir, symlink)
 
     rootIndex = os.path.join(root, 'index.rst')
     if os.path.exists(rootIndex):
