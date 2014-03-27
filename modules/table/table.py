@@ -377,7 +377,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         depends=DIMENSION_DEPENDS)
     end = fields.Float(
         'End', states=dimension_state('range'),
-        depends=DIMENSION_DEPENDS)
+        depends=DIMENSION_DEPENDS, help='Not included')
     start_date = fields.Date(
         'Start Date',
         states=dimension_state('range-date'), depends=DIMENSION_DEPENDS)
