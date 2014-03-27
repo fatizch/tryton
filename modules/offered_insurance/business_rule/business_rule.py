@@ -33,7 +33,7 @@ class RuleEngineParameter:
         states={'invisible': Or(
                 Eval('kind', '') != 'rule', ~Eval('rule_extra_data'))})
     external_extra_data_def = fields.Many2One('extra_data',
-        'External Extra Data', domain=[('kind', '!=', 'rime_engine')],
+        'External Extra Data', domain=[('kind', '!=', 'rule_engine')],
         ondelete='RESTRICT', states={
             'invisible': Eval('kind', '') != 'compl',
             'required': Eval('kind', '') == 'compl',
