@@ -18,7 +18,7 @@
     <field name="customizable"/>
   </xpath>
   <xpath expr="/form/group[@id='versions']/field[@name='versions']" position="replace_attributes">
-    <field name="versions" mode="form, tree"/>
+    <field name="versions" mode="form,tree"/>
   </xpath>
 </data>
 
