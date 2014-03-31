@@ -5,7 +5,8 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, And, Or, Bool, Len, If
 
-from trytond.modules.cog_utils import utils, coop_date, fields, model, coop_string
+from trytond.modules.cog_utils import utils, coop_date, fields, model
+from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -76,9 +77,12 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             },
         domain=[If(
                 Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon']),
-                ('rate', '>', 0),
-                (),
-                )],)
+                ['OR', ('rate', '>', 0), ('rate', '=', None)],
+                [],
+                )],
+        depends=['kind'],
+        )
+
     payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
     early_payments = fields.One2ManyDomain('loan.payment', 'loan',
