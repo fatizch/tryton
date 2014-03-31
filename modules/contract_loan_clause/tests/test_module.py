@@ -37,6 +37,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('code', '=', 'DH')])
 
         death_clause_rule = self.ClauseRule()
+        death_clause_rule.name = 'Generation 1'
         death_clause_rule.start_date = death_coverage.start_date
         death_clause_rule.clauses = self.Clause.search([
                 ('code', '=', 'test_beneficiary_clause')])

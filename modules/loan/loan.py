@@ -78,7 +78,8 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
                 Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon']),
                 ('rate', '>', 0),
                 (),
-                )],)
+                )],
+        depends=['kind'])
     payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
     early_payments = fields.One2ManyDomain('loan.payment', 'loan',

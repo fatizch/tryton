@@ -28,7 +28,8 @@ class ClauseRule:
             'invisible': ~Eval('has_beneficiary_clauses', False),
             'readonly': ~Eval('has_default_beneficiary_clause', False),
             'required': Eval('has_default_beneficiary_clause', False)},
-        depends=['has_default_beneficiary_clause', 'has_beneficiary_clauses'])
+        depends=['has_default_beneficiary_clause', 'has_beneficiary_clauses',
+            'clauses'])
 
     def give_me_all_clauses(self, args):
         # Only add one benficiary clause by default
