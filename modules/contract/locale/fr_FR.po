@@ -40,7 +40,7 @@ msgstr "Creation date"
 
 msgctxt "field:contract,create_uid:"
 msgid "Create User"
-msgstr " "
+msgstr "Créé par"
 
 msgctxt "field:contract,currency:"
 msgid "Currency"
@@ -48,7 +48,7 @@ msgstr "Devise"
 
 msgctxt "field:contract,currency_digits:"
 msgid "Currency Digits"
-msgstr " "
+msgstr "Décimales de la monnaie"
 
 msgctxt "field:contract,currency_symbol:"
 msgid "Currency Symbol"
@@ -56,7 +56,7 @@ msgstr "Symbole de la Devise"
 
 msgctxt "field:contract,current_policy_owner:"
 msgid "Current Policy Owner"
-msgstr ""
+msgstr "Responsable Courant de la Police"
 
 msgctxt "field:contract,end_date:"
 msgid "End Date"
@@ -68,7 +68,7 @@ msgstr "Données complémentaires"
 
 msgctxt "field:contract,id:"
 msgid "ID"
-msgstr " "
+msgstr "ID"
 
 msgctxt "field:contract,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -88,7 +88,7 @@ msgstr "Type de Produit"
 
 msgctxt "field:contract,product_subscriber_kind:"
 msgid "Product Subscriber Kind"
-msgstr ""
+msgstr "Type de souscripteur"
 
 msgctxt "field:contract,rec_name:"
 msgid "Name"
@@ -100,7 +100,7 @@ msgstr "Date d'effet"
 
 msgctxt "field:contract,start_management_date:"
 msgid "Management Date"
-msgstr " "
+msgstr "Date de début de gestion"
 
 msgctxt "field:contract,status:"
 msgid "Status"
@@ -120,11 +120,11 @@ msgstr "Type de souscripteur"
 
 msgctxt "field:contract,write_date:"
 msgid "Write Date"
-msgstr " "
+msgstr "Date de mise à jour"
 
 msgctxt "field:contract,write_uid:"
 msgid "Write User"
-msgstr " "
+msgstr "Mis à jour par"
 
 msgctxt "field:contract,xml_id:"
 msgid "XML Id"
@@ -148,7 +148,7 @@ msgstr "Creation date"
 
 msgctxt "field:contract.address,create_uid:"
 msgid "Create User"
-msgstr " "
+msgstr "Créé par"
 
 msgctxt "field:contract.address,end_date:"
 msgid "End Date"
@@ -156,7 +156,7 @@ msgstr "Date de fin"
 
 msgctxt "field:contract.address,id:"
 msgid "ID"
-msgstr " "
+msgstr "ID"
 
 msgctxt "field:contract.address,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -164,7 +164,7 @@ msgstr "Déplier l'arbre"
 
 msgctxt "field:contract.address,policy_owner:"
 msgid "Policy Owner"
-msgstr " "
+msgstr "Détenteur du contrat"
 
 msgctxt "field:contract.address,rec_name:"
 msgid "Name"
@@ -176,11 +176,11 @@ msgstr "Date de début"
 
 msgctxt "field:contract.address,write_date:"
 msgid "Write Date"
-msgstr " "
+msgstr "Date de mise à jour"
 
 msgctxt "field:contract.address,write_uid:"
 msgid "Write User"
-msgstr " "
+msgstr "Mis à jour par"
 
 msgctxt "field:contract.address,xml_id:"
 msgid "XML Id"
@@ -212,7 +212,7 @@ msgstr "Creation date"
 
 msgctxt "field:contract.option,create_uid:"
 msgid "Create User"
-msgstr " "
+msgstr "Créé par"
 
 msgctxt "field:contract.option,currency:"
 msgid "Currency"
@@ -220,7 +220,7 @@ msgstr "Devise"
 
 msgctxt "field:contract.option,currency_digits:"
 msgid "Currency Digits"
-msgstr " "
+msgstr "Décimales de la monnaie"
 
 msgctxt "field:contract.option,currency_symbol:"
 msgid "Currency Symbol"
@@ -232,7 +232,7 @@ msgstr "Responsable Courant de la Police"
 
 msgctxt "field:contract.option,id:"
 msgid "ID"
-msgstr " "
+msgstr "ID"
 
 msgctxt "field:contract.option,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -256,11 +256,11 @@ msgstr "Historique des statuts"
 
 msgctxt "field:contract.option,write_date:"
 msgid "Write Date"
-msgstr " "
+msgstr "Date de mise à jour"
 
 msgctxt "field:contract.option,write_uid:"
 msgid "Write User"
-msgstr " "
+msgstr "Mis à jour par"
 
 msgctxt "field:contract.option,xml_id:"
 msgid "XML Id"
@@ -480,7 +480,7 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "model:ir.action,name:act_quote_form"
-msgid "Quotes"
+msgid "Devis"
 msgstr "Devis"
 
 msgctxt "model:ir.action,name:option_subscription_wizard"

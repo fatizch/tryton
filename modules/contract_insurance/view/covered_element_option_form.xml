@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Covered Data">
+<form string="Option">
   <notebook>
     <page string="Main Data" id="main_data">
-      <label name="option"/>
-      <field name="option" xfill="1"/>
+      <label name="coverage"/>
+      <field name="coverage" xfill="1"/>
       <newline/>
       <label name="covered_element"/>
       <field name="covered_element"/>
-      <newline/>
-      <label name="deductible_duration"/>
-      <field name="deductible_duration" widget="selection"/>
       <newline/>
       <label name="currency"/>
       <field name="currency"/>

@@ -2,24 +2,17 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.covered_data.extra_premium:"
-msgid ""
-"Extra premium %s start date (%s) should be greater than the coverage's (%s)"
-msgstr ""
-"Surprime %s : la date de début (%s) doit être supérieure à celle de la "
-"garantie associée (%s)"
-
 msgctxt "error:contract.create_extra_premium:"
-msgid "Please select a covered data to continue"
-msgstr "Veuillez sélectionner une garantie pour continuer"
+msgid "Please select a option to continue"
+msgstr "Veuillez choisir une garantie pour continue"
 
 msgctxt "error:contract.manage_exclusion:"
 msgid "At least one exclusion must be selected"
 msgstr "Au moins une exclusion doit être sélectionnée"
 
 msgctxt "error:contract.manage_exclusion:"
-msgid "No covered data found in the context, please report this"
-msgstr "Aucune garantie dans le contexte"
+msgid "No opion found in the context, please report this"
+msgstr "Impossible de retrouver une garantie"
 
 msgctxt "error:contract.manage_extra_premium:"
 msgid "At least one extra premium must be selected"
@@ -28,6 +21,13 @@ msgstr "Au moins une surprime doit être sélectionnée"
 msgctxt "error:contract.manage_extra_premium:"
 msgid "There may be only one coverage selected for this action"
 msgstr "Une seule garantie doit être sélectionnée pour continuer"
+
+msgctxt "error:contract.option.extra_premium:"
+msgid ""
+"Extra premium %s start date (%s) should be greater than the coverage's (%s)"
+msgstr ""
+"Sur la surprime %s, la date de début (%s) doit être postérieure à celle de "
+"la garantie (%s)"
 
 msgctxt "field:contract,addresses:"
 msgid "Addresses"
@@ -48,10 +48,6 @@ msgstr "Numéro de Contrat"
 msgctxt "field:contract,contracts:"
 msgid "Managing Roles"
 msgstr "Gérant les Contrats"
-
-msgctxt "field:contract,covered_datas:"
-msgid "Covered Datas"
-msgstr "Données de couverture"
 
 msgctxt "field:contract,covered_elements:"
 msgid "Covered Elements"
@@ -77,10 +73,6 @@ msgctxt "field:contract,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr "Responsable Courant de la Police"
 
-msgctxt "field:contract,current_state:"
-msgid "Current State"
-msgstr "Etat Courant"
-
 msgctxt "field:contract,documents:"
 msgid "Documents"
 msgstr "Documents"
@@ -101,13 +93,13 @@ msgctxt "field:contract,last_renewed:"
 msgid "Last Renewed"
 msgstr "Dernier renouvellement"
 
+msgctxt "field:contract,multi_mixed_view:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
 msgctxt "field:contract,next_renewal_date:"
 msgid "Next Renewal Date"
 msgstr "Prochain renouvellement"
-
-msgctxt "field:contract,offered:"
-msgid "Product"
-msgstr "Produit"
 
 msgctxt "field:contract,options:"
 msgid "Options"
@@ -136,10 +128,6 @@ msgstr "Historique des Statuts"
 msgctxt "field:contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
-
-msgctxt "field:contract,summary:"
-msgid "Summary"
-msgstr "Synthèse"
 
 msgctxt "field:contract,write_date:"
 msgid "Write Date"
@@ -265,249 +253,9 @@ msgctxt "field:contract.address,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.clause,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:contract.covered_data,clauses:"
-msgid "Clauses"
-msgstr "Clauses"
-
-msgctxt "field:contract.covered_data,contract:"
-msgid "Contract"
-msgstr " "
-
-msgctxt "field:contract.covered_data,coverage_amount:"
-msgid ""
-msgstr " "
-
-msgctxt "field:contract.covered_data,covered_element:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "field:contract.covered_data,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:contract.covered_data,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:contract.covered_data,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.covered_data,currency:"
-msgid "Currency"
-msgstr " "
-
-msgctxt "field:contract.covered_data,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:contract.covered_data,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:contract.covered_data,deductible_duration:"
-msgid "Deductible Duration"
-msgstr "Franchise"
-
-msgctxt "field:contract.covered_data,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
-msgctxt "field:contract.covered_data,exclusions:"
-msgid "Exclusions"
-msgstr "Exclusions"
-
-msgctxt "field:contract.covered_data,extra_data:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
-
-msgctxt "field:contract.covered_data,extra_premiums:"
-msgid "Extra Premiums"
-msgstr "Surprimes"
-
-msgctxt "field:contract.covered_data,icon:"
-msgid "Icon"
-msgstr "Icône"
-
-msgctxt "field:contract.covered_data,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.covered_data,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
-msgctxt "field:contract.covered_data,option:"
-msgid "Contract Option"
-msgstr "Garantie Souscrite"
-
-msgctxt "field:contract.covered_data,parent_covered_data:"
-msgid "Parent Covered Data"
-msgstr "Données de Couverture Parente"
-
-msgctxt "field:contract.covered_data,possible_deductible_duration:"
-msgid "Possible Deductible Duration"
-msgstr "Franchises Possibles"
-
-msgctxt "field:contract.covered_data,possible_options:"
-msgid "Possible Options"
-msgstr "Options Possibles"
-
-msgctxt "field:contract.covered_data,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.covered_data,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
-
-msgctxt "field:contract.covered_data,status:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt "field:contract.covered_data,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.covered_data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.covered_data,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:contract.covered_data-exclusion.kind,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:contract.covered_data-exclusion.kind,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.covered_data-exclusion.kind,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.covered_data-exclusion.kind,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.covered_data-exclusion.kind,exclusion:"
-msgid "Exclusion"
-msgstr "Exclusion"
-
-msgctxt "field:contract.covered_data-exclusion.kind,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.covered_data-exclusion.kind,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.covered_data-exclusion.kind,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.covered_data-exclusion.kind,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.covered_data-exclusion.kind,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:contract.covered_data.extra_premium,calculation_kind:"
-msgid "Calculation Kind"
-msgstr "Type de calcul"
-
-msgctxt "field:contract.covered_data.extra_premium,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "field:contract.covered_data.extra_premium,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.covered_data.extra_premium,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.covered_data.extra_premium,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.covered_data.extra_premium,currency:"
-msgid "Currency"
-msgstr "Devise"
-
-msgctxt "field:contract.covered_data.extra_premium,currency_digits:"
-msgid "Currency Digits"
-msgstr "Précision"
-
-msgctxt "field:contract.covered_data.extra_premium,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:contract.covered_data.extra_premium,end_date:"
-msgid "End date"
-msgstr "Date de Fin"
-
-msgctxt "field:contract.covered_data.extra_premium,flat_amount:"
-msgid "Flat amount"
-msgstr "Montant fixe"
-
-msgctxt "field:contract.covered_data.extra_premium,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.covered_data.extra_premium,motive:"
-msgid "Motive"
-msgstr "Motif"
-
-msgctxt "field:contract.covered_data.extra_premium,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.covered_data.extra_premium,rate:"
-msgid "Rate on Premium"
-msgstr "Taux sur prime"
-
-msgctxt "field:contract.covered_data.extra_premium,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.covered_data.extra_premium,start_date:"
-msgid "Start date"
-msgstr "Date de Début"
-
-msgctxt "field:contract.covered_data.extra_premium,time_limited:"
-msgid "Time Limited"
-msgstr ""
-
-msgctxt "field:contract.covered_data.extra_premium,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.covered_data.extra_premium,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:contract.covered_data.extra_premium,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:contract.covered_element,contract:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "field:contract.covered_element,covered_data:"
-msgid "Covered Element Data"
-msgstr "Données de Couverture"
 
 msgctxt "field:contract.covered_element,covered_name:"
 msgid "Name"
@@ -574,7 +322,7 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "field:contract.covered_element,multi_mixed_view:"
-msgid "Covered Element Data"
+msgid "Options"
 msgstr "Données de Couverture"
 
 msgctxt "field:contract.covered_element,must_expand_tree:"
@@ -584,6 +332,10 @@ msgstr "Must Expand Tree"
 msgctxt "field:contract.covered_element,name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:contract.covered_element,options:"
+msgid "Options"
+msgstr "Options"
 
 msgctxt "field:contract.covered_element,parent:"
 msgid "Parent"
@@ -600,10 +352,6 @@ msgstr "Données Complémentaires"
 msgctxt "field:contract.covered_element,possible_item_desc:"
 msgid "Possible Item Desc"
 msgstr "Desc. de Biens Possibles"
-
-msgctxt "field:contract.covered_element,possible_item_desc_nb:"
-msgid "Possible Item Desc Number"
-msgstr "Nombre de Desc. de Biens Possibles"
 
 msgctxt "field:contract.covered_element,rec_name:"
 msgid "Name"
@@ -639,27 +387,27 @@ msgstr "Creation date"
 
 msgctxt "field:contract.covered_element-party,create_uid:"
 msgid "Create User"
-msgstr " "
+msgstr "Créé par"
 
 msgctxt "field:contract.covered_element-party,id:"
 msgid "ID"
-msgstr " "
+msgstr "ID"
 
 msgctxt "field:contract.covered_element-party,party_relation:"
 msgid "Party Relation"
-msgstr " "
+msgstr "Relation"
 
 msgctxt "field:contract.covered_element-party,rec_name:"
 msgid "Name"
-msgstr " "
+msgstr "Nom"
 
 msgctxt "field:contract.covered_element-party,write_date:"
 msgid "Write Date"
-msgstr " "
+msgstr "Date de mise à jour"
 
 msgctxt "field:contract.covered_element-party,write_uid:"
 msgid "Write User"
-msgstr " "
+msgstr "Mis à jour par"
 
 msgctxt "field:contract.covered_element-party,xml_id:"
 msgid "XML Id"
@@ -668,10 +416,6 @@ msgstr "Identifiant XML"
 msgctxt "field:contract.create_extra_premium.create,contract:"
 msgid "Contract"
 msgstr "Contrat"
-
-msgctxt "field:contract.create_extra_premium.create,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
 
 msgctxt "field:contract.create_extra_premium.create,covered_element:"
 msgid "Covered Element"
@@ -689,9 +433,9 @@ msgctxt "field:contract.create_extra_premium.create,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:contract.manage_exclusion.select,coverages:"
-msgid "Coverages"
-msgstr "Garanties"
+msgctxt "field:contract.create_extra_premium.create,option:"
+msgid "Option"
+msgstr "Option"
 
 msgctxt "field:contract.manage_exclusion.select,exclusions:"
 msgid "Exclusions"
@@ -704,6 +448,10 @@ msgstr "ID"
 msgctxt "field:contract.manage_exclusion.select,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_exclusion.select,options:"
+msgid "Options"
+msgstr "Options"
 
 msgctxt "field:contract.manage_exclusion.select.exclusion,exclusion:"
 msgid "Exclusion"
@@ -725,14 +473,6 @@ msgctxt "field:contract.manage_extra_premium.select,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:contract.manage_extra_premium.select,coverages:"
-msgid "Coverages"
-msgstr "Garanties"
-
-msgctxt "field:contract.manage_extra_premium.select,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
 msgctxt "field:contract.manage_extra_premium.select,covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
@@ -753,26 +493,13 @@ msgctxt "field:contract.manage_extra_premium.select,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:contract.manage_extra_premium.select.coverage,coverage:"
-msgid "Coverage"
-msgstr "Offre"
+msgctxt "field:contract.manage_extra_premium.select,option:"
+msgid "Option"
+msgstr "Option"
 
-msgctxt "field:contract.manage_extra_premium.select.coverage,coverage_name:"
-msgid "Coverage"
-msgstr "Offre"
-
-msgctxt "field:contract.manage_extra_premium.select.coverage,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt ""
-"field:contract.manage_extra_premium.select.coverage,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.manage_extra_premium.select.coverage,selected:"
-msgid "Selected"
-msgstr "Coché"
+msgctxt "field:contract.manage_extra_premium.select,options:"
+msgid "Options"
+msgstr "Options"
 
 msgctxt "field:contract.manage_extra_premium.select.extra,extra_premium:"
 msgid "Extra Premium"
@@ -794,13 +521,33 @@ msgctxt "field:contract.manage_extra_premium.select.extra,selected:"
 msgid "Selected"
 msgstr "Coché"
 
+msgctxt "field:contract.manage_extra_premium.select.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.manage_extra_premium.select.option,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.manage_extra_premium.select.option,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.manage_extra_premium.select.option,option_name:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.manage_extra_premium.select.option,selected:"
+msgid "Selected"
+msgstr "Coché"
+
 msgctxt "field:contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
-msgctxt "field:contract.option,covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
+msgctxt "field:contract.option,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
 
 msgctxt "field:contract.option,create_date:"
 msgid "Create Date"
@@ -822,25 +569,41 @@ msgctxt "field:contract.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:contract.option,exclusions:"
+msgid "Exclusions"
+msgstr "Exclusions"
+
+msgctxt "field:contract.option,extra_data:"
+msgid "Complementary Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.option,extra_premiums:"
+msgid "Extra Premiums"
+msgstr "Surprimes"
+
+msgctxt "field:contract.option,icon:"
+msgid "Icon"
+msgstr "Icône"
+
 msgctxt "field:contract.option,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.option,offered:"
-msgid "Option Description"
-msgstr "Garantie"
+msgctxt "field:contract.option,parent_option:"
+msgid "Parent Covered Data"
+msgstr "Parents"
+
+msgctxt "field:contract.option,possible_coverages:"
+msgid "Possible Coverages"
+msgstr "Garanties possibles"
 
 msgctxt "field:contract.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:contract.option,start_date:"
-msgid "Effective Date"
+msgid "Start Date"
 msgstr "Date d'Effet"
-
-msgctxt "field:contract.option,start_management_date:"
-msgid "Management Date"
-msgstr "Date de Début de Gestion"
 
 msgctxt "field:contract.option,status:"
 msgid "Status"
@@ -850,10 +613,6 @@ msgctxt "field:contract.option,status_history:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
-msgctxt "field:contract.option,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt "field:contract.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -861,6 +620,134 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract.option,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:contract.option-exclusion.kind,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option-exclusion.kind,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option-exclusion.kind,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.option-exclusion.kind,exclusion:"
+msgid "Exclusion"
+msgstr "Exclusion"
+
+msgctxt "field:contract.option-exclusion.kind,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.option-exclusion.kind,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.option-exclusion.kind,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.option-exclusion.kind,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.option-exclusion.kind,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.option-exclusion.kind,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.option.extra_premium,calculation_kind:"
+msgid "Calculation Kind"
+msgstr "Type de calcul"
+
+msgctxt "field:contract.option.extra_premium,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.extra_premium,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.extra_premium,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.option.extra_premium,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.option.extra_premium,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.option.extra_premium,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.option.extra_premium,duration:"
+msgid "Duration"
+msgstr "Durée"
+
+msgctxt "field:contract.option.extra_premium,duration_unit:"
+msgid "Duration Unit"
+msgstr "Unité de la Durée"
+
+msgctxt "field:contract.option.extra_premium,end_date:"
+msgid "End date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.option.extra_premium,flat_amount:"
+msgid "Flat amount"
+msgstr "Montant fixe"
+
+msgctxt "field:contract.option.extra_premium,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.option.extra_premium,motive:"
+msgid "Motive"
+msgstr "Motif"
+
+msgctxt "field:contract.option.extra_premium,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.option.extra_premium,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.option.extra_premium,rate:"
+msgid "Rate on Premium"
+msgstr "Taux sur prime"
+
+msgctxt "field:contract.option.extra_premium,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.option.extra_premium,start_date:"
+msgid "Start date"
+msgstr "Date de Début"
+
+msgctxt "field:contract.option.extra_premium,time_limited:"
+msgid "Time Limited"
+msgstr "Limité dans le temps"
+
+msgctxt "field:contract.option.extra_premium,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.option.extra_premium,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.option.extra_premium,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.renew.parameters,id:"
 msgid "ID"
@@ -1005,25 +892,13 @@ msgctxt "model:contract.address,name:"
 msgid "Contract Address"
 msgstr "Adresse"
 
-msgctxt "model:contract.covered_data,name:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "model:contract.covered_data-exclusion.kind,name:"
-msgid "Covered Data to Exclusion Kind relation"
-msgstr "Relation Donnée de couverture - Exclusion"
-
-msgctxt "model:contract.covered_data.extra_premium,name:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
 msgctxt "model:contract.covered_element,name:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
 
 msgctxt "model:contract.covered_element-party,name:"
 msgid "Relation between Covered Element and Covered Relations"
-msgstr " "
+msgstr "Relation de l'élément couvert"
 
 msgctxt "model:contract.create_extra_premium.create,name:"
 msgid "Extra Premium Displayer"
@@ -1041,17 +916,25 @@ msgctxt "model:contract.manage_extra_premium.select,name:"
 msgid "Extra Premium Display"
 msgstr "Surprime"
 
-msgctxt "model:contract.manage_extra_premium.select.coverage,name:"
-msgid "Coverage"
-msgstr "Offre"
-
 msgctxt "model:contract.manage_extra_premium.select.extra,name:"
 msgid "Extra Premium"
 msgstr "Surprime"
 
+msgctxt "model:contract.manage_extra_premium.select.option,name:"
+msgid "Option"
+msgstr "Option"
+
 msgctxt "model:contract.option,name:"
 msgid "Contract Option"
 msgstr "Garantie"
+
+msgctxt "model:contract.option-exclusion.kind,name:"
+msgid "Option to Exclusion Kind relation"
+msgstr "Relation garantie exclusion"
+
+msgctxt "model:contract.option.extra_premium,name:"
+msgid "Extra Premium"
+msgstr "Surprime"
 
 msgctxt "model:contract.renew.parameters,name:"
 msgid "Renewal Start"
@@ -1121,53 +1004,17 @@ msgctxt "selection:contract-agreement,kind:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:contract.covered_data,status:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:contract.covered_data,status:"
-msgid "Active"
-msgstr "Actif"
-
-msgctxt "selection:contract.covered_data,status:"
-msgid "Hold"
-msgstr "Suspendre"
-
-msgctxt "selection:contract.covered_data,status:"
-msgid "Quote"
-msgstr "Devis"
-
-msgctxt "selection:contract.covered_data,status:"
-msgid "Refused"
-msgstr "Refusé"
-
-msgctxt "selection:contract.covered_data,status:"
-msgid "Terminated"
-msgstr "Terminé"
-
-msgctxt "selection:contract.covered_data.extra_premium,calculation_kind:"
-msgid "Flat Amount"
-msgstr "Montant fixe"
-
-msgctxt "selection:contract.covered_data.extra_premium,calculation_kind:"
-msgid "Rate on Premium"
-msgstr "Taux sur prime"
-
-msgctxt "selection:contract.covered_data.extra_premium,duration_unit:"
-msgid ""
-msgstr " "
-
 msgctxt "selection:contract.manage_extra_premium.select,kind:"
 msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "selection:contract.manage_extra_premium.select,kind:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "selection:contract.manage_extra_premium.select,kind:"
 msgid "Extra Premium"
 msgstr "Surprime"
+
+msgctxt "selection:contract.manage_extra_premium.select,kind:"
+msgid "Option"
+msgstr "Option"
 
 msgctxt "selection:contract.option,status:"
 msgid "Active"
@@ -1188,6 +1035,18 @@ msgstr "Refusé"
 msgctxt "selection:contract.option,status:"
 msgid "Terminated"
 msgstr "Terminé"
+
+msgctxt "selection:contract.option.extra_premium,duration_unit:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.option.extra_premium,duration_unit:"
+msgid "Month"
+msgstr "Mois"
+
+msgctxt "selection:contract.option.extra_premium,duration_unit:"
+msgid "Year"
+msgstr "Année"
 
 msgctxt "selection:contract.service,status:"
 msgid "Calculated"
@@ -1241,49 +1100,9 @@ msgctxt "view:contract.address:"
 msgid "Contract Address"
 msgstr "Adresse"
 
-msgctxt "view:contract.covered_data.extra_premium:"
-msgid "%"
-msgstr "%"
-
-msgctxt "view:contract.covered_data.extra_premium:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
-msgctxt "view:contract.covered_data.extra_premium:"
-msgid "Propagate"
-msgstr "Propager"
-
-msgctxt "view:contract.covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
-msgctxt "view:contract.covered_data:"
-msgid "Data"
-msgstr "Données"
-
-msgctxt "view:contract.covered_data:"
-msgid "Exclusions"
-msgstr "Exclusions"
-
-msgctxt "view:contract.covered_data:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
-msgctxt "view:contract.covered_data:"
-msgid "Main Data"
-msgstr "Données principales"
-
-msgctxt "view:contract.covered_data:"
-msgid "Propagate"
-msgstr "Propager"
-
 msgctxt "view:contract.covered_element:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
-
-msgctxt "view:contract.covered_element:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
 
 msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
@@ -1296,6 +1115,10 @@ msgstr "Risques Couverts"
 msgctxt "view:contract.covered_element:"
 msgid "Covered Relations"
 msgstr "Relations Couvertes"
+
+msgctxt "view:contract.covered_element:"
+msgid "Options"
+msgstr "Options"
 
 msgctxt "view:contract.covered_element:"
 msgid "Sub Covered Elements"
@@ -1313,21 +1136,49 @@ msgctxt "view:contract.manage_exclusion.select:"
 msgid "Manage Exclusions"
 msgstr "Gérer les exclusions"
 
-msgctxt "view:contract.manage_extra_premium.select.coverage:"
-msgid "Select Coverage"
-msgstr "Sélection de garantie"
-
 msgctxt "view:contract.manage_extra_premium.select.extra:"
 msgid "Select Extra Premium"
 msgstr "Sélection de la surprime"
+
+msgctxt "view:contract.manage_extra_premium.select.option:"
+msgid "Select Option"
+msgstr "Choix des garanties"
 
 msgctxt "view:contract.manage_extra_premium.select:"
 msgid "Manage Extra Premium"
 msgstr "Gérer les surprimes"
 
+msgctxt "view:contract.option.extra_premium:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:contract.option.extra_premium:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "view:contract.option.extra_premium:"
+msgid "Propagate"
+msgstr "Propager"
+
 msgctxt "view:contract.option:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
+msgid "Exclusions"
+msgstr "Exclusions"
+
+msgctxt "view:contract.option:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "view:contract.option:"
+msgid "Main Data"
+msgstr "Parent"
+
+msgctxt "view:contract.option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "view:contract.option:"
+msgid "Propagate"
+msgstr "Propager"
 
 msgctxt "view:contract.renew.parameters:"
 msgid "Renewal Start"
@@ -1348,6 +1199,10 @@ msgstr "Adresses"
 msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
+
+msgctxt "view:contract:"
+msgid "Documents"
+msgstr "Documents"
 
 msgctxt "view:contract:"
 msgid "Managing Entities"

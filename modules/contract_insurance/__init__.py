@@ -9,7 +9,7 @@ from .service import *
 
 from trytond.modules.cog_utils import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
-CoveredDataTreeExpansion = expand_tree('contract.covered_data')
+OptionTreeExpansion = expand_tree('contract.option')
 
 
 def register():
@@ -19,14 +19,13 @@ def register():
         # From contract
         Contract,
         ContractAgreementRelation,
-        ContractOption,
         CoveredElement,
+        ContractOption,
         CoveredElementTreeExpansion,
         CoveredElementPartyRelation,
-        CoveredData,
         ExtraPremium,
-        CoveredDataExclusionKindRelation,
-        CoveredDataTreeExpansion,
+        OptionExclusionKindRelation,
+        OptionTreeExpansion,
         # From document
         DocumentRequestLine,
         DocumentRequest,
@@ -43,7 +42,7 @@ def register():
         #From Wizard
         OptionsDisplayer,
         ExtraPremiumSelector,
-        CoveredDataSelector,
+        OptionSelector,
         ExtraPremiumDisplay,
         ExclusionSelector,
         ExclusionDisplay,

@@ -25,7 +25,7 @@ class OptionDescription:
     insurer = fields.Many2One('insurer', 'Insurer', states={
             'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
             }, depends=['is_package'], ondelete='RESTRICT')
-    family = fields.Selection([('', '')], 'Family', states={
+    family = fields.Selection([('generic', 'Generic')], 'Family', states={
             'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
             'required': And(~Eval('is_package'), offered.IS_INSURANCE),
             }, depends=['is_package'])
@@ -48,6 +48,10 @@ class OptionDescription:
             #cur_attr.context['for_family'] = Eval('family')
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
+
+    @classmethod
+    def default_family(cls):
+        return 'generic'
 
     @classmethod
     def delete(cls, entities):

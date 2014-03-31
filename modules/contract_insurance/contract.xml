@@ -34,25 +34,16 @@
       <field name="inherit" ref="contract.option_view_tree"/>
       <field name="arch" type="xml"/>
     </record>
-    <!-- form view -->
-    <record model="ir.ui.view" id="option_view_form">
+    <!-- Covered element option views -->
+    <record model="ir.ui.view" id="covered_element_option_view_list">
+      <field name="model">contract.option</field>
+      <field name="type">tree</field>
+      <field name="name">covered_element_option_list</field>
+    </record>
+    <record model="ir.ui.view" id="covered_element_option_view_form">
       <field name="model">contract.option</field>
       <field name="type">form</field>
-      <field name="inherit" ref="contract.option_view_form"/>
-      <field name="name">option-commission_option_form</field>
-    </record>
-    <!--################################################################ -->
-    <!-- Covered Data -->
-    <!--################################################################ -->
-    <record model="ir.ui.view" id="covered_data_view_tree">
-      <field name="model">contract.covered_data</field>
-      <field name="type">tree</field>
-      <field name="name">covered_data_tree</field>
-    </record>
-    <record model="ir.ui.view" id="covered_data_view_form">
-      <field name="model">contract.covered_data</field>
-      <field name="type">form</field>
-      <field name="name">covered_data_form</field>
+      <field name="name">covered_element_option_form</field>
     </record>
     <!--################################################################ -->
     <!-- Covered Elements -->
@@ -96,12 +87,12 @@
     <!-- # Extra Premium # -->
     <!-- ################# -->
     <record model="ir.ui.view" id="extra_premium_form">
-      <field name="model">contract.covered_data.extra_premium</field>
+      <field name="model">contract.option.extra_premium</field>
       <field name="type">form</field>
       <field name="name">extra_premium_form</field>
     </record>
     <record model="ir.ui.view" id="extra_premium_list">
-      <field name="model">contract.covered_data.extra_premium</field>
+      <field name="model">contract.option.extra_premium</field>
       <field name="type">tree</field>
       <field name="name">extra_premium_list</field>
     </record>

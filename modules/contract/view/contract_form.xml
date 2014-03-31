@@ -18,7 +18,7 @@
     <page string="Options" id="options">
       <field name="options" colspan="4"/>
     </page>
-    <page string="Complementary Data" id="extra_data" name="extra_data">
+    <page string="Complementary Data" name="extra_data">
       <field name="extra_data" no_command="1"/>
     </page>
     <page string="Administration" id="admin">

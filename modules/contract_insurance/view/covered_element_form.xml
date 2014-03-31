@@ -20,8 +20,8 @@
             <field name="party_extra_data" colspan="2" no_command="1"/>
             <newline/>
         </page>
-        <page id="covered_data" string="Covered Data">
-            <field name="covered_data" colspan="4"/>
+        <page id="options" string="Options">
+            <field name="options" colspan="4" view_ids="contract_insurance.covered_element_option_view_list,contract_insurance.covered_element_option_view_form"/>
         </page>
         <page id="covered_relations" string="Covered Relations"
             states="{'invisible': ~Eval('item_kind').in_(['person', 'company', 'party'])}">
