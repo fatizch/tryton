@@ -22349,7 +22349,7 @@
         "end_date": null,
         "extra_data": {},
         "extra_data_def": [],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": null,
         "is_group": false,
         "is_package": false,
@@ -24501,7 +24501,7 @@
         "end_date": null,
         "extra_data": {},
         "extra_data_def": [],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": [
             [
                 "party.name",
@@ -25203,7 +25203,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": [
             [
                 "party.name",
@@ -26908,7 +26908,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": [
             [
                 "party.name",
@@ -45427,7 +45427,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": null,
         "is_group": true,
         "is_package": false,
@@ -45741,7 +45741,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": null,
         "is_group": true,
         "is_package": false,
@@ -46507,7 +46507,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": null,
         "is_group": true,
         "is_package": false,
@@ -46972,7 +46972,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": null,
         "is_group": true,
         "is_package": false,
@@ -49023,7 +49023,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": null,
         "is_group": true,
         "is_package": false,
@@ -53532,7 +53532,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": null,
         "is_group": true,
         "is_package": false,
@@ -54578,7 +54578,7 @@
                 ]
             ]
         ],
-        "family": "offered_life.definition",
+        "family": "life",
         "insurer": [
             [
                 "party.name",

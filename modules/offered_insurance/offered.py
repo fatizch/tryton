@@ -158,9 +158,7 @@ class Product:
         result = []
         errors = []
         for coverage in self.get_valid_coverages():
-            res, errs = coverage.get_result('family', args)
-            result.append(res)
-            errors += errs
+            result.append(coverage.family)
         return (result, errors)
 
     def give_me_frequency(self, args):

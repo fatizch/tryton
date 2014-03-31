@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 
-from trytond.pool import Pool, PoolMeta
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, And
 
 from trytond.modules.cog_utils import utils, fields
@@ -116,9 +116,6 @@ class OptionDescription:
         except offered.NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
-
-    def give_me_family(self, args):
-        return (Pool().get(self.family), [])
 
     def give_me_covered_elements_at_date(self, args):
         contract = args['contract']

@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
@@ -12,8 +10,7 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
     STATE_ADVANCED, STATE_SUB_SIMPLE
 
 STATE_LIFE = (
-    Eval('_parent_offered', {}).get('family') != 'offered_life.definition')
-FAMILY_LIFE = 'offered_life.definition'
+    Eval('_parent_offered', {}).get('family') != 'life')
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -29,7 +26,7 @@ class OptionDescription:
         'offered', 'Coverage Amount Rules', states={
             'invisible': Or(
                 Bool(Eval('is_package')),
-                Eval('family') != FAMILY_LIFE,
+                Eval('family') != 'life',
                 )
             })
     is_coverage_amount_needed = fields.Function(
@@ -39,14 +36,10 @@ class OptionDescription:
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        cls.family = copy.copy(cls.family)
-        if not cls.family.selection:
-            cls.family.selection = []
-        utils.append_inexisting(cls.family.selection,
-            (FAMILY_LIFE, 'Life'))
+        cls.family.selection.append(('life', 'Life'))
 
     def get_is_coverage_amount_needed(self, name=None):
-        return not self.is_package and self.family == FAMILY_LIFE
+        return not self.is_package and self.family == 'life'
 
 
 class EligibilityRule:

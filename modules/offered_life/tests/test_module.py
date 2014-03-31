@@ -24,7 +24,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         coverages = self.OptionDescription.search([
             ('code', 'in', ['ALP', 'BET', 'GAM', 'DEL'])])
         self.OptionDescription.write(coverages, {
-                'family': 'offered_life.definition'})
+                'family': 'life'})
 
 
 def suite():

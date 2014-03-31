@@ -1,10 +1,8 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 from trytond.modules.offered_insurance import offered
 from trytond.modules.offered import PricingResultLine
 
@@ -58,11 +56,7 @@ class OptionDescription:
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        cls.family = copy.copy(cls.family)
-        if not cls.family.selection:
-            cls.family.selection = []
-        utils.append_inexisting(cls.family.selection,
-            ('loan', 'Loan'))
+        cls.family.selection.append(('loan', 'Loan'))
 
     def get_is_loan_coverage(self, name):
         return self.family == 'loan'

@@ -4,7 +4,7 @@
         expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
         position="before">
         <page string="Coverage Amount" id="coverage_amount"
-            states="{'invisible': Or(Bool(Eval('is_package')), Eval('family') != 'offered_life.definition')}">
+            states="{'invisible': Or(Bool(Eval('is_package')), Eval('family') != 'life')}">
             <field name="coverage_amount_rules"/>
         </page>
     </xpath>
