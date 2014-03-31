@@ -49,6 +49,10 @@ class OptionDescription:
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
 
+    @staticmethod
+    def default_family():
+        return ''
+
     @classmethod
     def delete(cls, entities):
         cls.delete_rules(entities)
