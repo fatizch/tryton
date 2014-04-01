@@ -408,14 +408,15 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_icon')
 
     @classmethod
-    def write(cls, cov_elements, vals):
+    def write(cls, cov_elements, vals, *_args):
+        # TODO : apply treatment to all parameters, not just the first ones
         if 'sub_covered_elements' in vals:
             for cov_element in cov_elements:
                 for val in vals['sub_covered_elements']:
                     if val[0] == 'create':
                         for sub_cov_elem in val[1]:
                             sub_cov_elem['contract'] = cov_element.contract.id
-        super(CoveredElement, cls).write(cov_elements, vals)
+        super(CoveredElement, cls).write(cov_elements, vals, *_args)
 
     @classmethod
     def get_var_names_for_full_extract(cls):
