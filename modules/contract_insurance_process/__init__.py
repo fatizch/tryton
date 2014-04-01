@@ -8,8 +8,6 @@ def register():
     Pool.register(
         Contract,
         ContractOption,
-        CoveredElement,
-        CoveredData,
         Process,
         ContractSubscribeFindProcess,
         module='contract_insurance_process', type_='model')

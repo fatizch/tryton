@@ -461,7 +461,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             ondelete='RESTRICT')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
     options = fields.One2Many('contract.option', 'covered_element', 'Options',
-        context={'covered_element': Eval('id')}, depends=['id'])
+        context={
+            'covered_element': Eval('id'),
+            'item_desc': Eval('item_desc'),
+            }, depends=['id', 'item_desc'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[

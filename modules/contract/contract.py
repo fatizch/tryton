@@ -179,7 +179,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 Eval('subscriber_kind') == 'company',
                 ('is_company', '=', True),
                 ())
-                ],  states=_STATES,depends=['subscriber_kind', 'status'],
+                ], states=_STATES, depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
 
     # Function fields

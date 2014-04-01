@@ -1,7 +1,7 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import model, fields, utils
+from trytond.modules.cog_utils import fields
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
@@ -10,8 +10,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption',
-    'CoveredData',
-    'CoveredElement',
     ]
 
 
@@ -19,15 +17,15 @@ class Contract(CogProcessFramework):
     __name__ = 'contract'
     __metaclass__ = ClassAttr
 
-    subscriber_desc = fields.Function(
-        fields.Text('Summary', readonly=True),
-        'on_change_with_subscriber_desc', 'setter_void', )
-    product_desc = fields.Function(
-        fields.Text('Description', readonly=True),
-        'on_change_with_product_desc', 'setter_void', )
     doc_received = fields.Function(
         fields.Boolean('All Document Received', depends=['documents']),
         'on_change_with_doc_received')
+    product_desc = fields.Function(
+        fields.Text('Description', readonly=True),
+        'on_change_with_product_desc', 'setter_void', )
+    subscriber_desc = fields.Function(
+        fields.Text('Summary', readonly=True),
+        'on_change_with_subscriber_desc', 'setter_void', )
 
     @classmethod
     def __setup__(cls):
@@ -47,103 +45,45 @@ class Contract(CogProcessFramework):
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
-    @fields.depends('subscriber')
-    def on_change_with_subscriber_desc(self, name=None):
-        res = ''
-        if self.subscriber:
-            res = self.subscriber.summary
-        return res
-
-    @fields.depends('offered', 'com_product')
-    def on_change_with_product_desc(self, name=None):
-        res = ''
-        if self.com_product:
-            res = self.com_product.description
-        return res
-
     @fields.depends('documents')
     def on_change_with_doc_received(self, name=None):
-        if not (hasattr(self, 'documents') and self.documents):
+        if not self.documents:
             return False
-
         for doc in self.documents:
             if not doc.is_complete:
                 return False
-
         return True
 
-    def get_allowed_payment_methods(self):
-        result = []
-        if not utils.is_none(self, 'offered'):
-            for elem in self.offered.get_allowed_payment_methods():
-                result.append((str(elem.id), elem.name))
-        return result if result else [('', '')]
+    @fields.depends('com_product')
+    def on_change_with_product_desc(self, name=None):
+        return self.com_product.description if self.com_product else ''
 
-    def on_change_payment_method(self):
-        if not (hasattr(self, 'payment_method') and self.payment_method):
-            return {}
-        PaymentMethod = Pool().get('billing.payment.method')
-        payment_method = PaymentMethod(int(self.payment_method))
-        return {
-            'payment_mode': payment_method.payment_mode,
-            'billing_datas': {
-                'update': [
-                    {'id': self.billing_datas[0].id,
-                    'payment_method': int(self.payment_method)}]}}
-
-    def get_payment_method(self, name):
-        if (hasattr(self, 'billing_datas') and self.billing_datas):
-            return str(self.billing_datas[0].payment_method.id)
-        if (hasattr(self, 'offered') and self.offered):
-            payment_method = self.offered.get_default_payment_method()
-            return str(payment_method.id) if payment_method else ''
-
-    def get_payment_mode(self, name):
-        if not (hasattr(self, 'payment_method') and self.payment_method):
-            return ''
-        PaymentMethod = Pool().get('billing.payment.method')
-        payment_method = PaymentMethod(int(self.payment_method))
-        return payment_method.payment_mode
-
-    def on_change_payment_bank_account(self):
-        if not (hasattr(self, 'payment_bank_account') and
-                self.payment_bank_account):
-            return {}
-        return {
-            'billing_datas': {'update': [{'id': self.billing_datas[0].id,
-                'payment_bank_account': self.payment_bank_account.id}]}}
-
-    def get_payment_bank_account(self, name):
-        if (hasattr(self, 'billing_datas') and self.billing_datas):
-            the_billing_data = self.billing_datas[0]
-            if (hasattr(the_billing_data, 'payment_bank_account')
-                    and the_billing_data.payment_bank_account):
-                return the_billing_data.payment_bank_account.id
+    @fields.depends('subscriber')
+    def on_change_with_subscriber_desc(self, name=None):
+        return self.subscriber.summary if self.subscriber else ''
 
     def check_product_not_null(self):
-        if not (hasattr(self, 'offered') and self.offered):
+        if not self.product:
             return False, (('no_product', ()),)
         return True, ()
 
     def check_subscriber_not_null(self):
-        if not (hasattr(self, 'subscriber') and self.subscriber):
+        if not self.subscriber:
             return False, (('no_subscriber', ()),)
         return True, ()
 
     def check_start_date_valid(self):
-        if not (hasattr(self, 'start_date') and self.start_date):
+        if not self.start_date:
             return False, (('no_start_date', ()),)
-        if self.start_date >= self.offered.start_date and (
-                not self.offered.end_date
-                or self.start_date < self.offered.end_date):
+        if self.start_date >= self.product.start_date and (
+                not self.product.end_date
+                or self.start_date < self.product.end_date):
             return True, ()
-
         return False, (('bad_date', (
-            self.start_date, self.offered.get_rec_name(None))),)
+            self.start_date, self.product.get_rec_name(None))),)
 
     def check_product_eligibility(self):
-        eligibility, errors = self.get_product().get_result(
-            'eligibility',
+        eligibility, errors = self.product.get_result('eligibility',
             {
                 'subscriber': self.subscriber,
                 'date': self.start_date,
@@ -153,17 +93,13 @@ class Contract(CogProcessFramework):
             return eligibility.eligible, eligibility.details + errors
         return True, ()
 
-        return eligibility.eligible, errors
-
     def check_options_eligibility(self):
         errs = []
         eligible = True
-
         for option in self.options:
             if option.status != 'active':
                 continue
-
-            eligibility, errors = option.offered.get_result(
+            eligibility, errors = option.coveragej.get_result(
                 'eligibility',
                 {
                     'date': self.start_date,
@@ -171,24 +107,22 @@ class Contract(CogProcessFramework):
                     'appliable_conditions_date':
                     self.appliable_conditions_date,
                 })
-
             if eligibility and not eligibility.eligible:
-                errs.append(('option_not_eligible', (option.offered.code)))
+                errs.append(('option_not_eligible', (option.coverage.code)))
                 errs += (
                     ('%s' % elem, ())
                     for elem in eligibility.details + errors)
                 eligible = False
-
         return eligible, errs
 
     def check_option_selected(self):
         for option in self.options:
             if option.status == 'active':
                 return True, ()
-
         return False, (('no_option', ()),)
 
     def check_billing_data(self):
+        # TODO : Move to billing_individual
         result = True
         errs = []
         for manager in self.billing_datas:
@@ -208,15 +142,14 @@ class Contract(CogProcessFramework):
                 result = False
                 errs.append((
                     'bad_start_date', (
-                        option.offered.code,
+                        option.coverage.code,
                         self.start_date)))
-            elif option.start_date < option.offered.start_date:
+            elif option.start_date < option.coverage.start_date:
                 result = False
                 errs.append((
                     'bad_start_date', (
-                        option.offered.code,
-                        option.offered.start_date)))
-
+                        option.coverage.code,
+                        option.coverage.start_date)))
         return result, errs
 
     def finalize_contract(self):
@@ -231,26 +164,23 @@ class Contract(CogProcessFramework):
             good_req.save()
         else:
             good_req = self.documents[0]
-
         documents = []
-        product_docs, errs = self.get_product().get_result(
+        product_docs, errs = self.product.get_result(
             'documents', {
                 'contract': self,
                 'date': self.start_date,
                 'appliable_conditions_date': self.appliable_conditions_date})
-
         if errs:
             return False, errs
         if product_docs:
             documents.extend([(doc_desc, self) for doc_desc in product_docs])
-
         for option in self.options:
             if not option.status == 'active':
                 continue
-            option_docs, errs = self.get_product().get_result(
+            option_docs, errs = self.product.get_result(
                 'documents', {
                     'contract': self,
-                    'option': option.offered.code,
+                    'option': option.coverage.code,
                     'appliable_conditions_date':
                     self.appliable_conditions_date,
                     'date': self.start_date})
@@ -259,15 +189,14 @@ class Contract(CogProcessFramework):
             if not option_docs:
                 continue
             documents.extend([(doc_desc, self) for doc_desc in option_docs])
-
         for elem in self.covered_elements:
-            for data in elem.covered_data:
-                if not data.status == 'active':
+            for option in elem.options:
+                if not option.status == 'active':
                     continue
-                sub_docs, errs = self.get_product().get_result(
+                sub_docs, errs = self.product.get_result(
                     'documents', {
                         'contract': self,
-                        'option': data.option.offered.code,
+                        'option': option.coverage.code,
                         'date': self.start_date,
                         'appliable_conditions_date':
                         self.appliable_conditions_date,
@@ -278,19 +207,17 @@ class Contract(CogProcessFramework):
                 if not sub_docs:
                     continue
                 documents.extend([(doc_desc, elem) for doc_desc in sub_docs])
-
         good_req.add_documents(self.start_date, documents)
         good_req.clean_extras(documents)
         return True, ()
 
     def subscribe_contract(self, *args, **kwargs):
-        result = super(Contract, self).subscribe_contract(
-            *args, **kwargs)
-        # Make sure that using the subscribe_contract does not create a
-        # process task
-        result.current_state = None
-        result.save()
-        return result
+        # Set running process to None to avoid associating the new contract to
+        # a process
+        with Transaction().set_context(running_process=None):
+            result = super(Contract, self).subscribe_contract(*args, **kwargs)
+            result.save()
+            return result
 
 
 class ContractOption:
@@ -298,78 +225,16 @@ class ContractOption:
 
     status_selection = fields.Function(
         fields.Boolean('Status'),
-        'get_status_selection', 'setter_void')
-
-    @fields.depends('status_selection', 'status')
-    def on_change_status_selection(self):
-        if self.status_selection:
-            return {'status': 'active'}
-        else:
-            return {'status': 'refused'}
-
-    def get_status_selection(self, name):
-        if self.status == 'active':
-            return True
-        return False
+        'on_change_with_status_selection', 'setter_void')
 
     @classmethod
     def default_status_selection(cls):
         return True
 
-    @classmethod
-    def setter_void(cls, contracts, name, values):
-        pass
-
-
-class CoveredElement:
-    __name__ = 'contract.covered_element'
-
-    @classmethod
-    def default_covered_data(cls):
-        if '_master_covered' in Transaction().context:
-            return super(CoveredElement, cls).default_covered_data()
-        contract = Transaction().context.get('current_contract')
-        if not contract:
-            return []
-
-        Contract = Pool().get('contract')
-        contract = Contract(contract)
-        CoveredData = Pool().get('contract.covered_data')
-        covered_datas = []
-        for option in contract.options:
-            good_data = CoveredData()
-            good_data.init_from_option(option)
-            # good_data.start_date = max(
-                # good_data.start_date, contract.start_date)
-            # good_data.init_extra_data(option.offered, contract)
-            good_data.status_selection = True
-            covered_datas.append(good_data)
-        return model.serialize_this(covered_datas)
-
-
-class CoveredData:
-    __name__ = 'contract.covered_data'
-
-    status_selection = fields.Function(
-        fields.Boolean('Status'),
-        'get_status_selection', 'setter_void')
-
     @fields.depends('status_selection', 'status')
     def on_change_status_selection(self):
-        if self.status_selection:
-            return {'status': 'active'}
-        else:
-            return {'status': 'refused'}
+        return {'status': 'active' if self.status_selection else 'refused'}
 
-    def get_status_selection(self, name):
-        if self.status == 'active':
-            return True
-        return False
-
-    @classmethod
-    def default_status_selection(cls):
-        return True
-
-    @classmethod
-    def setter_void(cls, contracts, name, values):
-        pass
+    @fields.depends('status')
+    def on_change_with_status_selection(self, name=None):
+        return self.status and self.status == 'active'
