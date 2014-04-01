@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="option">
-    <label name="coverage"/>
-    <field name="coverage"/>
-    <label name="status"/>
-    <field name="status" readonly="1"/>
     <notebook colspan="4">
+        <page string="Main Data" id="main_data">
+            <label name="coverage"/>
+            <field name="coverage"/>
+            <label name="status"/>
+            <field name="status" readonly="1"/>
+        </page>
         <page string="Status History" id="status_history">
             <field name="status_history" colspan="4"/>
         </page>

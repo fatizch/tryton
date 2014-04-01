@@ -34,7 +34,7 @@ class Contract:
 class ContractOption:
     __name__ = 'contract.option'
 
-    clauses = fields.One2Many('contract.clause', 'option',
+    clauses = fields.One2Many('contract.clause', 'option', 'Clauses',
         domain=[('clause', 'in', Eval('possible_clauses'))],
         depends=['possible_clauses'])
     possible_clauses = fields.Function(
