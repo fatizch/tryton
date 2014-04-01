@@ -26,8 +26,11 @@
         <page string="Administration" id="admin" col="2">
             <group id="left">
             </group>
-            <group id="right">
-                <field name="extra_data"/>
+            <group id="right" col="2">
+                <label name="company"/>
+                <field name="company"/>
+                <newline/>
+                <field name="extra_data" colspan="2"/>
             </group>
         </page>
     </notebook>
