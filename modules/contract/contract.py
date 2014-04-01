@@ -170,16 +170,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
     subscriber = fields.Many2One('party.party', 'Subscriber',
-        domain=[[If(
-                    Eval('subscriber_kind') == 'person',
-                    ('is_person', '=', True),
-                    ())
-                ], [
-                If(
-                    Eval('subscriber_kind') == 'company',
-                    ('is_company', '=', True),
-                    ())
-                ]],  states=_STATES,depends=['subscriber_kind', 'status'],
+        domain=[If(
+                Eval('subscriber_kind') == 'person',
+                ('is_person', '=', True),
+                ())
+            ,
+            If(
+                Eval('subscriber_kind') == 'company',
+                ('is_company', '=', True),
+                ())
+                ],  states=_STATES,depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
 
     # Function fields
@@ -539,6 +539,9 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             'product'])
 
     # Function fields
+    appliable_conditions_date = fields.Function(
+        fields.Date('Appliable Conditions Date'),
+        'on_change_with_appliable_conditions_date')
     contract_number = fields.Function(
         fields.Char('Contract Number'),
         'on_change_with_contract_number')
@@ -571,6 +574,13 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
                 })
 
     @classmethod
+    def default_appliable_conditions_date(cls):
+        contract_id = Transaction().context.get('contract', -1)
+        if contract_id <= 0:
+            return cls.default_start_date()
+        return Pool().get('contract')(contract_id).appliable_conditions_date
+
+    @classmethod
     def default_possible_coverages(cls):
         Product = Pool().get('offered.product')
         product = cls.default_product()
@@ -589,6 +599,12 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
     @classmethod
     def default_status(cls):
         return 'quote'
+
+    @fields.depends('contract', 'start_date')
+    def on_change_with_appliable_conditions_date(self, name=None):
+        if not self.contract:
+            return self.start_date if self.start_date else None
+        return self.contract.appliable_conditions_date
 
     @fields.depends('contract')
     def on_change_with_contract_number(self, name=None):

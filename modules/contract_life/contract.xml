@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="covered_data_view_form">
-            <field name="model">contract.covered_data</field>
+        <!-- ########## -->
+        <!-- # Option # -->
+        <!-- ########## -->
+        <record model="ir.ui.view" id="covered_element_option_view_form">
+            <field name="model">contract.option</field>
             <field name="type">form</field>
-            <field name="inherit" ref='contract_insurance.covered_data_view_form'/>
-            <field name="name">covered_data_form</field>
+            <field name="inherit" ref="contract_insurance.covered_element_option_view_form"/>
+            <field name="name">covered_element_option_form</field>
+        </record>
+        <record model="ir.ui.view" id="covered_element_option_view_list">
+            <field name="model">contract.option</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="contract_insurance.covered_element_option_view_list"/>
+            <field name="name">covered_element_option_list</field>
         </record>
     </data>
 </tryton>

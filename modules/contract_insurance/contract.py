@@ -307,12 +307,24 @@ class ContractOption:
                 'propagate_exclusions': {},
                 })
 
-    @fields.depends('extra_data', 'coverage', 'covered_element')
-    def on_change_extra_data(self):
+    @fields.depends('extra_data', 'coverage', 'covered_element.contract')
+    def on_change_with_extra_data(self):
+        if (not self.covered_element or self.covered_element.id < 0
+                or not self.coverage):
+            return {}
         args = {'date': self.start_date, 'level': 'option'}
         self.init_dict_for_rule_engine(args)
-        return {'extra_data': self.covered_element.contract.product.get_result(
-                'calculated_extra_datas', args)[0]}
+        return self.covered_element.contract.product.get_result(
+                'calculated_extra_datas', args)[0]
+
+    @fields.depends('covered_element', 'start_date')
+    def on_change_with_appliable_conditions_date(self, name=None):
+        if not self.covered_element:
+            return super(ContractOption,
+                self).on_change_with_appliable_conditions_date()
+        contract = getattr(self.covered_element, 'contract', None)
+        return (contract.appliable_conditions_date if
+            contract else self.start_date)
 
     @fields.depends('covered_element')
     def on_change_with_end_date(self, name=None):
@@ -394,10 +406,8 @@ class ContractOption:
     def get_all_extra_data(self, at_date):
         res = getattr(self, 'extra_data', {})
         res.update(self.covered_element.get_all_extra_data(at_date))
-        res.update(self.option.get_all_extra_data(at_date))
-        parent_option = self.parent_option
-        if parent_option:
-            res.update(parent_option.get_all_extra_data(at_date))
+        if self.parent_option:
+            res.update(self.parent_option.get_all_extra_data(at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):
@@ -798,7 +808,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         return res
 
     def init_dict_for_rule_engine(self, args):
-        args['sub_elem'] = self
+        if self.contract:
+            args['elem'] = self
+            self.contract.init_dict_for_rule_engine(args)
+        elif self.parent:
+            args['sub_elem'] = self
+            self.parent.init_dict_for_rule_engine(args)
+        else:
+            raise Exception('Orphan covered element')
 
     def get_publishing_values(self):
         result = super(CoveredElement, self).get_publishing_values()

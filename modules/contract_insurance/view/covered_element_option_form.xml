@@ -5,12 +5,6 @@
       <label name="coverage"/>
       <field name="coverage" xfill="1"/>
       <newline/>
-      <label name="covered_element"/>
-      <field name="covered_element"/>
-      <newline/>
-      <label name="currency"/>
-      <field name="currency"/>
-      <newline/>
       <field name="extra_data" colspan="2" no_command="1"/>
     </page>
     <page string="Extra Premium" id="extra_premium">
