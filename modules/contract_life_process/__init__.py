@@ -7,5 +7,4 @@ def register():
     Pool.register(
         # from contract
         Contract,
-        CoveredData,
         module='contract_life_process', type_='model')
