@@ -167,8 +167,7 @@ class Offered(model.CoopView, GetResult, Templated):
         context={'extra_data_kind': 'product'},
         domain=[('kind', '=', 'product')])
     company = fields.Many2One('company.company', 'Company', required=True,
-        ondelete='RESTRICT', states={'readonly': Eval('id', -1) >= 0},
-        depends=['id'])
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
