@@ -33,7 +33,7 @@ class ContractClause(model.CoopSQL, model.CoopView):
     def on_change_with_kind(self, name=None):
         return self.clause.kind if self.clause else ''
 
-    @fields.depends('clause')
+    @fields.depends('clause', 'contract', 'option')
     def on_change_with_text(self):
         if not self.clause:
             return ''
