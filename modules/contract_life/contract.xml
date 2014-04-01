@@ -4,17 +4,17 @@
         <!-- ########## -->
         <!-- # Option # -->
         <!-- ########## -->
-        <record model="ir.ui.view" id="covered_element_option_view_form">
+        <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option</field>
             <field name="type">form</field>
-            <field name="inherit" ref="contract_insurance.covered_element_option_view_form"/>
-            <field name="name">covered_element_option_form</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option_form</field>
         </record>
-        <record model="ir.ui.view" id="covered_element_option_view_list">
+        <record model="ir.ui.view" id="option_view_list">
             <field name="model">contract.option</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="contract_insurance.covered_element_option_view_list"/>
-            <field name="name">covered_element_option_list</field>
+            <field name="inherit" ref="contract.option_view_list"/>
+            <field name="name">option_list</field>
         </record>
     </data>
 </tryton>
