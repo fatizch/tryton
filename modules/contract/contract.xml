@@ -42,7 +42,7 @@
     <record model="ir.action.act_window" id="act_contract_form">
       <field name="name">Contracts</field>
       <field name="res_model">contract</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('status', '!=', 'quote')]</field>
+      <field name="domain">[('company', '=', Eval('context', {}).get('company', -1)), ('status', '!=', 'quote')]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_contract_form_view1">
       <field name="sequence" eval="10"/>
