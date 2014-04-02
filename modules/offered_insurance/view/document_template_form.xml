@@ -19,7 +19,7 @@
       <label name="mail_subject"/>
       <field name="mail_subject"/>
       <newline/>
-      <field name="mail_body" colspan="2" widget="richtext"/>
+      <field name="mail_body" colspan="2"/>
     </page>
   </notebook>
 </form>
