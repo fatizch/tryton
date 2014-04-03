@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<form>
-    <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
-    <newline/>
-    <label name="relation_kind"/>
-    <field name="relation_kind"/>
-    <label name="relation_name"/>
-    <field name="relation_name"/>
-    <label name="from_party"/>
-    <field name="from_party"/>
-    <label name="to_party"/>
-    <field name="to_party"/>
-</form>
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/label[@name='from_']" position="before">
+        <label name="start_date"/>
+        <field name="start_date"/>
+        <label name="end_date"/>
+        <field name="end_date"/>
+        <newline/>
+    </xpath>
+    <xpath expr="/form/field[@name='from_']" position="after">
+        <newline/>
+    </xpath>
+</data>

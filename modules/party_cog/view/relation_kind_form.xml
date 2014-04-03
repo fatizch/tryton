@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<form string="Party Relation Kind">
-    <label name="name"/>
-    <field name="name"/>
-    <label name="code"/>
-    <field name="code"/>
-    <label name="reversed_name"/>
-    <field name="reversed_name"/>
-</form>

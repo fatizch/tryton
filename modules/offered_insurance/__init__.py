@@ -58,7 +58,6 @@ def register():
         FeeVersion,
         # From business_rule.eligibility_rule
         EligibilityRule,
-        EligibilityRelationKind,
         CoverageAmountRule,
         DeductibleRule,
         DeductibleDuration,

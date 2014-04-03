@@ -57,7 +57,11 @@ class TestCaseModel:
         if hasattr(Configuration, '_company_cache'):
             return Configuration._company_cache
         Company = Pool().get('company.company')
-        result = Company.search([('party.name', '=',
+        companies = Company.search([])
+        if len(companies) == 1:
+            result = companies[0]
+        elif len(companies):
+            result = Company.search([('party.name', '=',
                     Configuration.main_company_name)])[0]
         Configuration._company_cache = result
         return result
