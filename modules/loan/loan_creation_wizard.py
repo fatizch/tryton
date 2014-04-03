@@ -45,6 +45,9 @@ class LoanCreate(model.CoopWizard):
             return self.loan._default_values
         Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
+        party = Transaction().context.get('party', None)
+        if party is None:
+            party = contract.subscriber.id
         return {
             'contract': contract.id,
             'order': len(contract.loans) + 1,
@@ -52,7 +55,8 @@ class LoanCreate(model.CoopWizard):
             'currency_symbol': contract.currency.symbol,
             'funds_release_date': contract.start_date,
             'first_payment_date': coop_date.add_duration(
-                contract.start_date, 'month')
+                contract.start_date, 'month'),
+            'parties': [party] if party else [],
             }
 
     def default_loan_step_increments(self, values):
@@ -122,7 +126,7 @@ class LoanSharePropagate(model.CoopWizard):
             contract = covered_element.contract
         elif active_model == 'loan.share':
             loan_share = LoanShare(id)
-            covered_element = loan_share.covered_data.covered_element
+            covered_element = loan_share.option.covered_element
             contract = covered_element.contract
             share = loan_share.share
             loan = loan_share.loan
@@ -140,9 +144,9 @@ class LoanSharePropagate(model.CoopWizard):
 
     def transition_propagate(self):
         for covered_element in self.parameters.covered_elements:
-            for covered_data in [x for x in covered_element.covered_data
+            for option in [x for x in covered_element.options
                     if x.option in self.parameters.options]:
-                for loan_share in [x for x in covered_data.loan_shares
+                for loan_share in [x for x in option.loan_shares
                         if x.loan in self.parameters.loans]:
                     loan_share.share = self.parameters.share
                     loan_share.save()

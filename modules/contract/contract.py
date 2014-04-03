@@ -146,9 +146,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             'readonly': Eval('status') != 'quote',
             }, depends=['extra_data', 'status'])
     product = fields.Many2One('offered.product', 'Product',
-        ondelete='RESTRICT', states={
-            'required': Eval('status') == 'active',
-            'readonly': Bool(Eval('product', False))},
+        ondelete='RESTRICT', states={'readonly': Bool(Eval('product', False))},
         domain=[['OR',
                 [('end_date', '>=', Eval('start_date'))],
                 [('end_date', '=', None)],
@@ -161,8 +159,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     options = fields.One2Many('contract.option', 'contract', 'Options',
         context={
             'start_date': Eval('start_date'),
-            'product': Eval('product')},
-        states=_STATES, depends=['status', 'start_date', 'product'])
+            'product': Eval('product'),
+            'parties': Eval('parties')},
+        states=_STATES, depends=['parties', 'status', 'start_date', 'product'])
     start_date = fields.Date('Effective Date', required=True, states=_STATES,
         depends=_DEPENDS)
     # Management date is the date at which the company started to manage the
@@ -186,6 +185,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
+    parties = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Parties'),
+        'on_change_with_parties')
     product_subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind',
             states={'invisible': True}),
@@ -246,6 +248,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         'appliable_conditions_date')
     def on_change_with_extra_data(self):
         return self.on_change_extra_data()['extra_data']
+
+    @fields.depends('subscriber')
+    def on_change_with_parties(self, name=None):
+        if not self.subscriber:
+            return []
+        return [self.subscriber.id]
 
     @fields.depends('product')
     def on_change_with_product_subscriber_kind(self, name=None):
@@ -554,6 +562,9 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
     end_date = fields.Function(
         fields.Date('End Date'),
         'on_change_with_end_date')
+    parties = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Parties'),
+        'on_change_with_parties')
     possible_coverages = fields.Function(
         fields.Many2Many('offered.option.description', None, None,
             'Possible Coverages'),
@@ -579,6 +590,10 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         if contract_id <= 0:
             return cls.default_start_date()
         return Pool().get('contract')(contract_id).appliable_conditions_date
+
+    @classmethod
+    def default_parties(cls):
+        return Transaction().context.get('parties', [])
 
     @classmethod
     def default_possible_coverages(cls):
@@ -625,6 +640,12 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         if self.contract:
             return self.contract.end_date or None
         return Transaction().context.get('end_date', None)
+
+    @fields.depends('contract')
+    def on_change_with_parties(self, name=None):
+        if not self.contract or self.contract.id <= 0:
+            return Transaction().context.get('parties', [])
+        return [x.id for x in self.contract.parties]
 
     @fields.depends('product')
     def on_change_with_possible_coverages(self, name=None):

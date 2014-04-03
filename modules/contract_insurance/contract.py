@@ -95,7 +95,7 @@ class Contract(Printable):
         return (res, errs)
 
     def init_from_product(self, product, start_date=None, end_date=None):
-        res = super(Contract, self).init_from_product(product, start_date,
+        super(Contract, self).init_from_product(product, start_date,
             end_date)
         self.last_renewed = self.start_date
         self.next_renewal_date = None
@@ -104,6 +104,7 @@ class Contract(Printable):
                 'date': self.start_date,
                 'appliable_conditions_date': self.appliable_conditions_date,
                 'contract': self})
+        res = True, []
         if len(errors) == 1 and errors[0][0] == 'no_renewal_rule_configured':
             return res[0], []
         else:
@@ -307,12 +308,12 @@ class ContractOption:
                 'propagate_exclusions': {},
                 })
 
-    @fields.depends('extra_data', 'coverage', 'covered_element.contract')
+    @fields.depends('extra_data', 'coverage', 'covered_element')
     def on_change_with_extra_data(self):
         if (not self.covered_element or self.covered_element.id < 0
                 or not self.coverage):
             return {}
-        args = {'date': self.start_date, 'level': 'option'}
+        args = {'date': self.start_date, 'level': 'sub_elem'}
         self.init_dict_for_rule_engine(args)
         return self.covered_element.contract.product.get_result(
                 'calculated_extra_datas', args)[0]
@@ -342,6 +343,14 @@ class ContractOption:
         for option in self.covered_element.parent.options:
             if option.coverage == self.coverage:
                 return option.id
+
+    @fields.depends('covered_element', 'contract')
+    def on_change_with_parties(self, name=None):
+        if self.contract:
+            return super(ContractOption, self).on_change_with_parties(name)
+        if not self.covered_element or self.covered_element.id <= 0:
+            return Transaction().context.get('parties', [])
+        return [x.id for x in self.covered_element.parties]
 
     @fields.depends('covered_element')
     def on_change_with_product(self, name=None):
@@ -464,7 +473,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         context={
             'covered_element': Eval('id'),
             'item_desc': Eval('item_desc'),
-            }, depends=['id', 'item_desc'])
+            'parties': Eval('parties'),
+            }, depends=['id', 'item_desc', 'parties'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[
@@ -509,6 +519,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             states={'invisible': Bool(Eval('contract'))},
             depends=['contract']),
         'on_change_with_main_contract')
+    parties = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Parties'),
+        'on_change_with_parties')
     party_extra_data = fields.Function(
         fields.Dict('extra_data', 'Party Complementary Data',
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))},
@@ -543,6 +556,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             tmp_covered.coverage = option.coverage
             result.append(tmp_covered)
         return model.serialize_this(result)
+
+    @classmethod
+    def default_parties(cls):
+        return Transaction().context.get('parties', [])
 
     @classmethod
     def default_possible_item_desc(cls):
@@ -595,6 +612,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.item_desc.kind
         return ''
 
+    @fields.depends('contract', 'party')
+    def on_change_with_parties(self, name=None):
+        if not self.contract or self.contract.id <= 0:
+            result = Transaction().context.get('parties', [])
+        else:
+            result = [x.id for x in self.contract.parties]
+        return result + ([self.party.id] if self.party else [])
+
     @fields.depends('item_desc', 'extra_data', 'party')
     def on_change_with_party_extra_data(self, name=None):
         res = {}
@@ -642,14 +667,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                 covered.party.save()
 
     @classmethod
-    def write(cls, cov_elements, vals):
+    def write(cls, cov_elements, vals, *args):
         if 'sub_covered_elements' in vals:
             for cov_element in cov_elements:
                 for val in vals['sub_covered_elements']:
                     if val[0] == 'create':
                         for sub_cov_elem in val[1]:
                             sub_cov_elem['contract'] = cov_element.contract.id
-        super(CoveredElement, cls).write(cov_elements, vals)
+        super(CoveredElement, cls).write(cov_elements, vals, *args)
 
     @classmethod
     def get_var_names_for_full_extract(cls):

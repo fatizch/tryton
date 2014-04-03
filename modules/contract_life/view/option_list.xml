@@ -5,6 +5,6 @@
             <suffix name="currency_symbol"/>
         </field>
         <field name="currency" tree_invisible="1"/>
-        <field name="with_coverage_amount" tree_invisible="1"/>
+        <field name="has_coverage_amount" tree_invisible="1"/>
     </xpath>
 </data>

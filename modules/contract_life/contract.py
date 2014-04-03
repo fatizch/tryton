@@ -83,16 +83,19 @@ class ContractOption:
     __name__ = 'contract.option'
 
     coverage_amount = fields.Numeric('Coverage Amount', states={
-            'invisible': ~Eval('with_coverage_amount'),
-            }, depends=['with_coverage_amount'])
+            'invisible': ~Eval('has_coverage_amount'),
+            }, depends=['has_coverage_amount'])
     coverage_amount_selection = fields.Function(
         fields.Selection('get_possible_amounts', 'Coverage Amount',
-            states={'invisible': ~Eval('with_coverage_amount')},
-            depends=['with_coverage_amount'], sort=False),
+            states={'invisible': ~Eval('has_coverage_amount')},
+            depends=['has_coverage_amount'], sort=False),
         'on_change_with_coverage_amount_selection', 'setter_void')
-    with_coverage_amount = fields.Function(
-        fields.Boolean('With Coverage Amount'),
-        'on_change_with_with_coverage_amount')
+    person = fields.Function(
+        fields.Many2One('party.party', 'Person'),
+        'on_change_with_person')
+    has_coverage_amount = fields.Function(
+        fields.Boolean('Has Coverage Amount'),
+        'on_change_with_has_coverage_amount')
 
     @classmethod
     def __setup__(cls):
@@ -120,7 +123,7 @@ class ContractOption:
         return [('', '')]
 
     @fields.depends('coverage_amount_selection', 'coverage')
-    def on_change_with_coverage_amount(self, name):
+    def on_change_with_coverage_amount(self, name=None):
         if not self.coverage:
             return None
         if self.coverage_amount_selection:
@@ -136,9 +139,14 @@ class ContractOption:
             return self.currency.amount_as_string(self.coverage_amount)
         return ''
 
+    @fields.depends('covered_element')
+    def on_change_with_person(self, name=None):
+        if self.covered_element and self.covered_element.party:
+            return self.covered_element.party.id
+
     @fields.depends('coverage', 'start_date', 'covered_element', 'currency',
         'appliable_conditions_date')
-    def on_change_with_with_coverage_amount(self, name=None):
+    def on_change_with_has_coverage_amount(self, name=None):
         if not self.coverage:
             return False
         if not len(self.get_possible_amounts()) > 1:

@@ -99,6 +99,8 @@ class CoopTestCase(unittest.TestCase):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
+        with open('/tmp/log.toto', 'w') as f:
+            f.write('Launching test %s' % (self._testMethodName))
         super(CoopTestCase, self).run(result)
 
     @classmethod

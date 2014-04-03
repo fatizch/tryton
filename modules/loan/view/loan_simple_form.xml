@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Loan Create Parameters" cursor="kind">
-    <label name="order"/>
-    <field name="order"/>
-    <newline/>
     <label name="kind"/>
     <field name="kind"/>
     <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon', 'graduated'])}"/>
@@ -16,6 +13,8 @@
         <field name="amount" xexpand="0"/>
         <label name="currency_symbol" string="" xexpand="0" xalign="0" states="{'invisible': Eval('kind') == 'leasing'}"/>
     </group>
+    <label name="currency"/>
+    <field name="currency"/>
     <newline/>
     <label name="first_payment_amount"/>
     <group id="first_payment_amount">
@@ -49,8 +48,6 @@
     <field name="deferal_duration"/>
     <newline/>
     <field name="currency"/>
-    <group id="contract" states="{'invisible': True}">
-        <field name="contract"/>
-    </group>
+    <field name="parties" invisible="1"/>
     <newline/>
 </form>
