@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -568,7 +568,7 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "model:ir.action,name:act_quote_form"
-msgid "Devis"
+msgid "Quotes"
 msgstr "Devis"
 
 msgctxt "model:ir.action,name:option_subscription_wizard"
