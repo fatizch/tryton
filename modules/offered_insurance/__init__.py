@@ -27,9 +27,10 @@ def register():
         ProductItemDescriptionRelation,
         # From Batch
         ProductValidationBatch,
-        # From business_rule
-        RuleEngineParameter,
+        # From rule engine
+        RuleEngineExtraData,
         RuleEngine,
+        # From business_rule
         BusinessRuleRoot,
         # From business_rule.ir
         Model,

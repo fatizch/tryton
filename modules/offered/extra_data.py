@@ -42,7 +42,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             ('sub_elem', 'Covered Element'),
             ('loss', 'Loss'),
             ('benefit', 'Benefit'),
-            ('rule_engine', 'Rule Engine'),
             ], 'Kind')
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
         'Sub Data', context={'kind': Eval('extra_data_kind')},
@@ -71,23 +70,14 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             [(elem, getattr(cls, elem)) for elem in dir(cls) if
                 elem.startswith('default_value_')])
 
-        cls.name = copy.copy(cls.name)
-        if not cls.name.on_change_with:
-            cls.name.on_change_with = set()
-        cls.name.on_change_with.add('string')
-        cls.name.on_change_with.add('name')
         cls.name.string = 'Code'
+        cls.string.string = 'Name'
 
         cls.type_ = copy.copy(cls.type_)
         if not cls.type_.on_change:
             cls.type_.on_change = set()
         cls.type_.on_change.add('type_')
 
-        cls.selection = copy.copy(cls.selection)
-        if not cls.selection.on_change:
-            cls.selection.on_change = set()
-        cls.selection.on_change |= set(['selection',
-                'default_value_selection', 'type_'])
         cls.selection.states['required'] = And(Eval('type_') == 'selection',
             ~~Eval('with_default_value'))
 
@@ -119,6 +109,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             res['default'] = ''
         return res
 
+    @fields.depends('default_value_selection', 'selection', 'type_')
     def on_change_selection(self):
         if not getattr(self, 'default_value_selection', None):
             return {}
@@ -209,6 +200,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             return Transaction().context['extra_data_kind']
         return 'contract'
 
+    @fields.depends('string', 'name')
     def on_change_with_name(self):
         if not self.name and self.string:
             return coop_string.remove_blank_and_invalid_char(self.string)

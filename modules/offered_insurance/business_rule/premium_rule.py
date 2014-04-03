@@ -319,7 +319,8 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
-    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data', states={
+    rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Rule Extra Data', states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})

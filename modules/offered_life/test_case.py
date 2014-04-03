@@ -57,7 +57,7 @@ class TestCaseModel:
     @classmethod
     def create_rule(cls, name, code, tables=None):
         RuleEngine = Pool().get('rule_engine')
-        RuleParameter = Pool().get('rule_engine.parameter')
+        TableParameter = Pool().get('rule_engine.rule_engine-table')
         Table = Pool().get('table')
         Context = Pool().get('rule_engine.context')
         existing = RuleEngine.search([('name', '=', name)])
@@ -70,13 +70,12 @@ class TestCaseModel:
         rule.code = code
         rule.rule_parameters = []
         rule.context = Context(1)
+        rule.tables_used = []
         for elem in tables:
-            param = RuleParameter()
-            param.kind = 'table'
-            param.code = elem
-            param.the_table = Table.search([('code', '=', elem)])[0]
+            param = TableParameter()
+            param.table = Table.search([('code', '=', elem)])[0]
             param.name = param.the_table.name
-            rule.rule_parameters.append(param)
+            rule.tables_used.append(param)
         return rule
 
     @classmethod

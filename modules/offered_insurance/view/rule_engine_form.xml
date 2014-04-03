@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form/notebook/page[@name='code']/field[@name='rule_tables']" position="after">
+  <xpath expr="/form/notebook/page[@name='code']/field[@name=
+    'parameters']" position="after">
     <newline/>
-    <field name="rule_external_extra_datas" view_ids="offered_insurance.rule_external_parameter_list,rule_engine.parameter_form" colspan="4"/>
-    <newline/>
-    <field name="rule_extra_datas" view_ids="offered_insurance.rule_parameter_list,rule_engine.parameter_form" colspan="4"/>
+    <field name="extra_data_parameters" colspan="4"/>
   </xpath>
 </data>
