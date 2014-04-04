@@ -29,9 +29,6 @@ def register():
         DistributionNetwork,
         DistributionNetworkComPlanRelation,
         DistributionNetworkBrokerRelation,
-        # From billing
-        BillingPremiumCommissionOptionRelation,
-        Premium,
         #Rule Engine
         RuleEngineRuntime,
         # Account

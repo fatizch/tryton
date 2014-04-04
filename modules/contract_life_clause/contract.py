@@ -151,8 +151,9 @@ class ContractOption:
                 return True
         return False
 
-    def init_from_coverage(self, coverage):
-        super(ContractOption, self).init_from_coverage(coverage)
+    def init_from_coverage(self, coverage, start_date=None, end_date=None):
+        super(ContractOption, self).init_from_coverage(coverage, start_date,
+            end_date)
         self.beneficiary_clauses = self.init_beneficiary_clauses(coverage)
 
     def init_beneficiary_clauses(self, coverage):
@@ -166,7 +167,10 @@ class ContractOption:
         clause = ContractClause()
         the_clause = good_rule.default_beneficiary_clause
         clause.clause = the_clause
-        clause.text = the_clause.get_version_at_date(self.start_date).content
+        clause_version = the_clause.get_version_at_date(self.start_date)
+        if not clause_version:
+            clause_version = the_clause.versions[0]
+        clause.text = clause_version.content
         return [clause]
 
     def check_beneficiary_clauses(self):

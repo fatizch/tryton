@@ -63,7 +63,7 @@ def add_status_history(possible_status):
     class WithStatusHistoryMixin(object):
         'Mixin to add Status History on instances'
 
-        status = fields.Selection(possible_status, 'Status', readonly=True)
+        status = fields.Selection(possible_status, 'Status')
         status_history = fields.One2Many(
             'contract.status.history', 'reference', 'Status History',
             readonly=True)
@@ -618,7 +618,8 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
     @fields.depends('contract', 'start_date')
     def on_change_with_appliable_conditions_date(self, name=None):
         if not self.contract:
-            return self.start_date if self.start_date else None
+            return (self.start_date if self.start_date else
+                Transaction().context.get('start_date'))
         return self.contract.appliable_conditions_date
 
     @fields.depends('contract')
@@ -700,6 +701,9 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         if utils.is_effective_at_date(coverage, start_date):
             self.coverage = coverage
             self.update_status('quote', start_date)
+            # TODO : remove once computed properly
+            self.start_date = start_date
+            self.appliable_conditions_date = start_date
         else:
             self.raise_user_error('inactive_coverage_at_date', (coverage.name,
                     start_date))

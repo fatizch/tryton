@@ -87,17 +87,6 @@ class ContractOption:
     def on_change_with_is_loan(self, name=None):
         return self.coverage.is_loan if self.coverage else False
 
-    def init_from_coverage(self, coverage):
-        super(ContractOption, self).init_from_coverage(coverage)
-        LoanShare = Pool().get('loan.share')
-        if not hasattr(self, 'loan_shares'):
-            self.loan_shares = []
-        for loan in coverage.contract.loans:
-            share = LoanShare()
-            share.loan = loan
-            share.init_from_coverage(coverage)
-            self.loan_shares.append(share)
-
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'

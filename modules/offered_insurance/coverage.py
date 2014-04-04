@@ -30,10 +30,7 @@ class OptionDescription:
             'required': And(~Eval('is_package'), offered.IS_INSURANCE),
             }, depends=['is_package'])
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
-        states={
-            'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
-            'required': And(~Eval('is_package'), offered.IS_INSURANCE),
-            }, depends=['is_package'], ondelete='RESTRICT')
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):

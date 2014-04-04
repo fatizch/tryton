@@ -40,7 +40,7 @@ class Contract:
         res, errs = (True, [])
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                if not option.with_coverage_amount:
+                if not option.has_coverage_amount:
                     continue
                 validity, errors = option.coverage.get_result(
                     'coverage_amount_validity', {

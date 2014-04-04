@@ -4,8 +4,9 @@
         <page string="Main Data" id="main_data">
             <label name="coverage"/>
             <field name="coverage"/>
+            <newline/>
             <label name="status"/>
-            <field name="status" readonly="1"/>
+            <field name="status"/>
         </page>
         <page string="Status History" id="status_history">
             <field name="status_history" colspan="4"/>

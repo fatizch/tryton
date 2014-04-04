@@ -144,7 +144,7 @@ class Contract(Printable):
                     good_option.init_from_covered_element(elem)
                     good_option.init_from_coverage(coverage)
                     good_option.status_selection = True
-                    good_option.append(good_option)
+                    good_options.append(good_option)
             Option.delete(to_delete)
             elem.options = good_options
             elem.save()
@@ -192,6 +192,8 @@ class Contract(Printable):
                 if not protocol_offered:
                     #TODO : We can't find anything
                     return
+                # TODO : Fix this
+                return
                 contracts = self.search_contract(protocol_offered, role.party,
                     self.start_date)
                 protocol = None
@@ -308,6 +310,16 @@ class ContractOption:
                 'propagate_exclusions': {},
                 })
 
+    @fields.depends('extra_data', 'start_date', 'coverage', 'contract',
+        'appliable_conditions_date')
+    def on_change_extra_data(self):
+        if not self.coverage or not self.contract:
+            return {'extra_data': {}}
+        args = {'date': self.start_date, 'level': 'option'}
+        self.init_dict_for_rule_engine(args)
+        return {'extra_data': self.contract.product.get_result(
+                'calculated_extra_datas', args)[0]}
+
     @fields.depends('extra_data', 'coverage', 'covered_element')
     def on_change_with_extra_data(self):
         if (not self.covered_element or self.covered_element.id < 0
@@ -385,8 +397,9 @@ class ContractOption:
         self.extra_data = getattr(self, 'extra_data', {})
         self.extra_data.update(self.on_change_extra_data()['extra_data'])
 
-    def init_from_coverage(self, coverage):
-        self.coverage = coverage
+    def init_from_coverage(self, coverage, start_date=None, end_date=None):
+        super(ContractOption, self).init_from_coverage(coverage, start_date,
+            end_date)
         self.init_extra_data()
 
     def init_from_covered_element(self, covered_element):
@@ -426,7 +439,9 @@ class ContractOption:
             if elem.start_date <= args['date'] <= (elem.end_date or
                     datetime.date.max):
                 args['extra_premiums'].append(elem)
-        self.covered_element.init_dict_for_rule_engine(args)
+        covered_element = getattr(self, 'covered_element', None)
+        if covered_element is not None:
+            covered_element.init_dict_for_rule_engine(args)
         self.coverage.init_dict_for_rule_engine(args)
 
     def get_publishing_values(self):
