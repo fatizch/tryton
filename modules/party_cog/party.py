@@ -129,6 +129,12 @@ class Party(export.ExportImportMixin):
         res.add('code_length')
         return res
 
+    @classmethod
+    def _export_force_recreate(cls):
+        res = super(Party, cls)._export_force_recreate()
+        res.remove('addresses')
+        return res
+
     @staticmethod
     def get_is_actor_var_name(var_name):
         res = 'is_'

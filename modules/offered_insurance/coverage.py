@@ -46,6 +46,10 @@ class OptionDescription:
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
 
+    @staticmethod
+    def default_family():
+        return ''
+
     @classmethod
     def default_family(cls):
         return 'generic'
