@@ -127,5 +127,13 @@
         <field name="user" ref="res.user_admin"/>
         <field name="group" ref="group_contract_admin"/>
     </record>
+    <record model="ir.ui.menu-res.group" id="group_contract_menu_contract">
+       <field name="group" ref="group_contract"/>
+       <field name="menu" ref="menu_contract"/>
+    </record>
+    <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract">
+       <field name="group" ref="group_contract_admin"/>
+       <field name="menu" ref="menu_contract"/>
+    </record>
   </data>
 </tryton>
