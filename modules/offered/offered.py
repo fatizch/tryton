@@ -354,7 +354,8 @@ class Product(model.CoopSQL, Offered):
         ondelete='RESTRICT')
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
-        ondelete='RESTRICT', required=True)
+        ondelete='RESTRICT', required=True,
+        domain=[('code', '=', 'offered.product')])
     extra_data_def = fields.Many2Many('offered.product-extra_data',
         'product', 'extra_data_def', 'Extra Data',
         domain=[('kind', 'in', ['contract', 'sub_elem'])])
