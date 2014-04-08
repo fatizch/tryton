@@ -2,5 +2,6 @@
 <tree string="Rules">
     <field name="name"/>
     <field name="context"/>
+    <field name="status"/>
     <field name="tags_name"/>
 </tree>

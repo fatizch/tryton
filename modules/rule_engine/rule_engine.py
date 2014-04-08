@@ -524,6 +524,9 @@ class RuleEngine(ModelView, ModelSQL):
                 'bad_rule_computation': 'An error occured in rule %s.'
                 'For more information, activate debug mode and see the logs'
                 '\n\nError info :\n%s',
+                'execute_draft_rule': 'The rule %s is a draft.'
+                'Update the rule status to "Validated"',
+                'kwarg_expected': 'Expected %s as a parameter for rule %s',
                 })
         cls._sql_constraints += [
             ('code_unique', 'UNIQUE(short_name)',
@@ -628,7 +631,8 @@ class RuleEngine(ModelView, ModelSQL):
     def validate(cls, rules):
         super(RuleEngine, cls).validate(rules)
         for rule in rules:
-            rule.check_code()
+            if rule.status == 'validated':
+                rule.check_code()
 
     @staticmethod
     def default_status():
@@ -756,6 +760,9 @@ class RuleEngine(ModelView, ModelSQL):
             try:
                 comp = _compile_source_exec(self.as_function)
                 exec comp in context, localcontext
+                if (not Transaction().context.get('debug') and
+                        self.status == 'draft'):
+                    self.raise_user_error('execute_draft_rule', (self.name))
                 the_result.result = localcontext[
                     ('result_%s' % hash(self.name)).replace('-', '_')]
                 the_result.result_set = True
