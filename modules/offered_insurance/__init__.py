@@ -24,7 +24,6 @@ def register():
         OfferedProduct,
         ItemDescSubItemDescRelation,
         ItemDescriptionExtraDataRelation,
-        ProductItemDescriptionRelation,
         # From Batch
         ProductValidationBatch,
         # From business_rule

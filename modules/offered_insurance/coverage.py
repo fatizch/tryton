@@ -30,11 +30,17 @@ class OptionDescription:
             'required': And(~Eval('is_package'), offered.IS_INSURANCE),
             }, depends=['is_package'])
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
-        ondelete='RESTRICT')
+        ondelete='RESTRICT', states={'required': ~Eval('is_service')},
+        depends=['is_service'])
+    is_service = fields.Function(
+        fields.Boolean('Is a Service'),
+        'on_change_with_is_service', 'setter_void')
 
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
+        cls.extra_data_def.domain = [
+            ('kind', 'in', ['contract', 'covered_element', 'option'])]
         for field_name in (mgr for mgr in dir(cls) if mgr.endswith('_mgr')):
             cur_attr = copy.copy(getattr(cls, field_name))
             if not hasattr(cur_attr, 'context') or not isinstance(
@@ -46,13 +52,22 @@ class OptionDescription:
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
 
-    @staticmethod
-    def default_family():
-        return ''
-
     @classmethod
     def default_family(cls):
         return 'generic'
+
+    @classmethod
+    def default_is_service(cls):
+        return True
+
+    @fields.depends('item_desc')
+    def on_change_with_is_service(self, name=None):
+        return not self.item_desc
+
+    @fields.depends('is_service')
+    def on_change_wth_item_desc(self):
+        if self.is_service:
+            return None
 
     @classmethod
     def delete(cls, entities):

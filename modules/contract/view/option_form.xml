@@ -9,6 +9,11 @@
             <field name="status"/>
         </page>
         <page string="Status History" id="status_history">
+            <label name="start_date"/>
+            <field name="start_date"/>
+            <label name="end_date"/>
+            <field name="end_date"/>
+            <newline/>
             <field name="status_history" colspan="4"/>
         </page>
         <page string="Administration" id="admin">

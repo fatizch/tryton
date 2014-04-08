@@ -2,7 +2,7 @@ import datetime
 import copy
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, If, Or, Bool
+from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
 from trytond.model import ModelView
 
@@ -51,19 +51,31 @@ class Contract(Printable):
             'readonly': Eval('status') != 'quote',
             }, depends=['status', 'product_kind'])
     covered_elements = fields.One2ManyDomain('contract.covered_element',
-        'contract', 'Covered Elements', domain=[('parent', '=', None)],
+        'contract', 'Covered Elements',
         context={
             'contract': Eval('id'),
             'product': Eval('product'),
             'start_date': Eval('start_date'),
+            'all_extra_datas': Eval('extra_data')},
+        domain=[
+            ('item_desc', 'in', Eval('possible_item_desc', [])),
+            ('parent', '=', None)],
+        states={
+            'readonly': Eval('status') != 'quote',
+            'invisible': Len(Eval('possible_item_desc', [])) <= 0,
             },
-        states=_STATES, depends=['status', 'id', 'product', 'start_date'])
+        depends=['status', 'id', 'product', 'start_date', 'extra_data',
+            'possible_item_desc'])
     documents = fields.One2Many('document.request', 'needed_by', 'Documents',
         states=_STATES, depends=_DEPENDS, size=1)
     last_renewed = fields.Date('Last Renewed', states=_STATES,
         depends=_DEPENDS)
     next_renewal_date = fields.Date('Next Renewal Date', states=_STATES,
         depends=_DEPENDS)
+    possible_item_desc = fields.Function(
+        fields.Many2Many('offered.item.description', None, None,
+            'Possible Item Desc', states={'invisible': True}),
+        'on_change_with_possible_item_desc')
     multi_mixed_view = covered_elements
 
     @classmethod
@@ -73,6 +85,21 @@ class Contract(Printable):
                 'manage_extra_premium': {},
                 'create_extra_premium': {},
                 })
+
+    @fields.depends('product')
+    def on_change_product(self):
+        result = super(Contract, self).on_change_product()
+        if not self.product:
+            return result
+        result['possible_item_desc'] = [
+            x.id for x in self.product.item_descriptors]
+        return result
+
+    @fields.depends('product')
+    def on_change_with_possible_item_desc(self, name=None):
+        if not self.product:
+            return []
+        return [x.id for x in self.product.item_descriptors]
 
     def check_sub_elem_eligibility(self, ext=None):
         errors = []
@@ -121,34 +148,15 @@ class Contract(Printable):
             return False, errors
         return True, ()
 
+    @classmethod
+    def get_coverages(cls, product):
+        return [x.coverage for x in product.ordered_coverages
+            if x.coverage.is_service]
+
     def init_covered_elements(self):
         for elem in self.covered_elements:
-            Option = Pool().get('contract.option')
-            if getattr(elem, 'options'):
-                existing_options = dict([
-                    (option.coverage, option)
-                    for option in elem.options])
-            else:
-                existing_options = {}
-            elem.options = []
-            to_delete = [option for option in existing_options.itervalues()]
-            good_options = []
-            for coverage in self.product.coverages:
-                if coverage in existing_options:
-                    existing_options[coverage].init_extra_data()
-                    good_options.append(existing_options[coverage])
-                    to_delete.remove(existing_options[coverage])
-                    continue
-                else:
-                    good_option = Option()
-                    good_option.init_from_covered_element(elem)
-                    good_option.init_from_coverage(coverage)
-                    good_option.status_selection = True
-                    good_options.append(good_option)
-            Option.delete(to_delete)
-            elem.options = good_options
+            elem.init_options(self.product)
             elem.save()
-        return True, ()
 
     def get_agreement(self, kind, party=None, only_active_at_date=False,
             at_date=None):
@@ -295,6 +303,9 @@ class ContractOption:
         states={'invisible': ~Eval('extra_data')}, depends=['extra_data'])
     extra_premiums = fields.One2Many('contract.option.extra_premium',
         'option', 'Extra Premiums')
+    all_extra_datas = fields.Function(
+        fields.Dict('extra_data', 'All Extra Datas'),
+        'on_change_with_all_extra_data')
     icon = fields.Function(
         fields.Char('Icon'),
         'on_change_with_icon')
@@ -310,25 +321,58 @@ class ContractOption:
                 'propagate_exclusions': {},
                 })
 
-    @fields.depends('extra_data', 'start_date', 'coverage', 'contract',
-        'appliable_conditions_date')
-    def on_change_extra_data(self):
-        if not self.coverage or not self.contract:
-            return {'extra_data': {}}
-        args = {'date': self.start_date, 'level': 'option'}
-        self.init_dict_for_rule_engine(args)
-        return {'extra_data': self.contract.product.get_result(
-                'calculated_extra_datas', args)[0]}
+    @classmethod
+    def default_all_extra_datas(cls):
+        return {}
 
-    @fields.depends('extra_data', 'coverage', 'covered_element')
-    def on_change_with_extra_data(self):
-        if (not self.covered_element or self.covered_element.id < 0
-                or not self.coverage):
-            return {}
-        args = {'date': self.start_date, 'level': 'sub_elem'}
-        self.init_dict_for_rule_engine(args)
-        return self.covered_element.contract.product.get_result(
-                'calculated_extra_datas', args)[0]
+    @classmethod
+    def default_extra_data(cls):
+        return {}
+
+    @fields.depends('all_extra_datas', 'start_date', 'coverage', 'contract',
+        'appliable_conditions_date', 'product', 'covered_element')
+    def on_change_coverage(self):
+        result = super(ContractOption, self).on_change_coverage()
+        result.update(self.on_change_extra_data())
+        return result
+
+    @fields.depends('all_extra_datas', 'start_date', 'coverage', 'contract',
+        'appliable_conditions_date', 'product', 'covered_element')
+    def on_change_extra_data(self):
+        if not self.coverage or not self.product:
+            self.extra_data = {}
+            return {
+                'extra_data': self.extra_data,
+                'all_extra_datas': self.on_change_with_all_extra_data(),
+                }
+        item_desc_id = Transaction().context.get('item_desc', None)
+        item_desc = None
+        if item_desc_id is None:
+            if self.covered_element and self.covered_element.id > 0:
+                item_desc = self.covered_element.item_desc
+        else:
+            item_desc = Pool().get('offered.item.description')(item_desc_id)
+        self.extra_data = self.product.get_extra_data_def('option',
+                self.all_extra_datas, self.appliable_conditions_date,
+                coverage=self.coverage, item_desc=item_desc)
+        return {
+            'extra_data': self.extra_data,
+            'all_extra_datas': self.on_change_with_all_extra_data(),
+            }
+
+    @fields.depends('covered_element', 'contract', 'extra_data')
+    def on_change_with_all_extra_data(self, name=None):
+        all_extra_datas = Transaction().context.get('all_extra_datas', {})
+        if all_extra_datas:
+            parent_extra_data = all_extra_datas
+        elif self.contract and self.contract.id > 0:
+            parent_extra_data = dict(self.contract.extra_data)
+        elif self.covered_element and self.covered_element.id > 0:
+            parent_extra_data = dict(self.covered_element.all_extra_datas)
+        else:
+            parent_extra_data = {}
+        parent_extra_data.update(self.extra_data if self.extra_data else {})
+        return parent_extra_data
 
     @fields.depends('covered_element', 'start_date')
     def on_change_with_appliable_conditions_date(self, name=None):
@@ -370,12 +414,6 @@ class ContractOption:
             return self.covered_element.contract.product.id
         return super(ContractOption, self).on_change_with_product(name)
 
-    @fields.depends('covered_element')
-    def on_change_with_start_date(self, name=None):
-        if self.covered_element:
-            return self.covered_element.contract.start_date
-        return super(ContractOption, self).on_change_with_start_date(name)
-
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
     def propagate_extra_premiums(cls, options):
@@ -396,6 +434,34 @@ class ContractOption:
     def init_extra_data(self):
         self.extra_data = getattr(self, 'extra_data', {})
         self.extra_data.update(self.on_change_extra_data()['extra_data'])
+
+    @classmethod
+    def init_default_values_from_coverage(cls, coverage, product,
+            item_desc=None, start_date=None, end_date=None):
+        result = super(ContractOption,
+            cls).init_default_values_from_coverage(coverage, product,
+                start_date, end_date)
+        all_extra_datas = cls.default_all_extra_datas()
+        result['extra_data'] = product.get_extra_data_def('option',
+            all_extra_datas, result['appliable_conditions_date'],
+            coverage=coverage, item_desc=item_desc)
+        all_extra_datas.update(result['extra_data'])
+        result['all_extra_datas'] = all_extra_datas
+        return result
+
+    @classmethod
+    def init_on_change_values_from_coverage(cls, coverage, product,
+            item_desc=None, start_date=None, end_date=None):
+        result = super(ContractOption,
+            cls).init_on_change_values_from_coverage(coverage, product,
+                start_date, end_date)
+        all_extra_datas = cls.default_all_extra_datas()
+        result['extra_data'] = product.get_extra_data_def('option',
+            all_extra_datas, result['appliable_conditions_date'],
+            coverage=coverage, item_desc=item_desc)
+        all_extra_datas.update(result['extra_data'])
+        result['all_extra_datas'] = all_extra_datas
+        return result
 
     def init_from_coverage(self, coverage, start_date=None, end_date=None):
         super(ContractOption, self).init_from_coverage(coverage, start_date,
@@ -477,19 +543,16 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     #data are set through on_change_with and the item desc can be set on an
     #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
-        domain=[If(
-                ~~Eval('possible_item_desc'),
-                ('id', 'in', Eval('possible_item_desc')),
-                ())],
-            depends=['possible_item_desc', 'extra_data'],
-            ondelete='RESTRICT')
+        ondelete='RESTRICT')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
     options = fields.One2Many('contract.option', 'covered_element', 'Options',
+        domain=[('coverage.item_desc', '=', Eval('item_desc'))],
         context={
             'covered_element': Eval('id'),
             'item_desc': Eval('item_desc'),
             'parties': Eval('parties'),
-            }, depends=['id', 'item_desc', 'parties'])
+            'all_extra_datas': Eval('all_extra_datas'),
+            }, depends=['id', 'item_desc', 'parties', 'all_extra_datas'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[
@@ -529,6 +592,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Char('Item Kind', states={'invisible': True}),
         'on_change_with_item_kind')
     # The link to use either for direct covered element or sub covered element
+    all_extra_datas = fields.Function(
+        fields.Dict('extra_data', 'All Extra Datas'),
+        'on_change_with_all_extra_data')
     main_contract = fields.Function(
         fields.Many2One('contract', 'Contract',
             states={'invisible': Bool(Eval('contract'))},
@@ -542,17 +608,27 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))},
             depends=['party_extra_data', 'item_kind']),
         'on_change_with_party_extra_data', 'set_party_extra_data')
-    possible_item_desc = fields.Function(
-        fields.Many2Many('offered.item.description', None, None,
-            'Possible Item Desc', states={'invisible': True}),
-        'on_change_with_possible_item_desc')
+    product = fields.Function(
+        fields.Many2One('offered.product', 'Product'),
+        'on_change_with_product')
     multi_mixed_view = options
 
     @classmethod
+    def default_all_extra_datas(cls):
+        return Transaction().context.get('all_extra_datas', {})
+
+    @classmethod
+    def default_extra_data(cls):
+        return {}
+
+    @classmethod
     def default_item_desc(cls):
-        item_descs = cls.get_possible_item_desc()
-        if len(item_descs) == 1:
-            return item_descs[0].id
+        product_id = cls.default_product()
+        if not product_id:
+            return None
+        product = Pool().get('offered.product')(product_id)
+        if len(product.item_descriptors) == 1:
+            return product.item_descriptors[0].id
 
     @classmethod
     def default_main_contract(cls):
@@ -560,48 +636,88 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         return result if result and result > 0 else None
 
     @classmethod
-    def default_options(cls):
-        master = cls.get_parent_in_transaction()
-        if not master:
-            return []
-        Option = Pool().get('contract.option')
-        result = []
-        for option in master.options:
-            tmp_covered = Option()
-            tmp_covered.coverage = option.coverage
-            result.append(tmp_covered)
-        return model.serialize_this(result)
-
-    @classmethod
     def default_parties(cls):
         return Transaction().context.get('parties', [])
 
     @classmethod
-    def default_possible_item_desc(cls):
-        return [x.id for x in cls.get_possible_item_desc()]
+    def default_product(cls):
+        product_id = Transaction().context.get('product', None)
+        if product_id:
+            return product_id
+        contract_id = Transaction().context.get('contract', None)
+        if contract_id:
+            Contract = Pool().get('contract')
+            return Contract(contract_id).product.id
 
-    @fields.depends('item_desc', 'extra_data', 'party', 'main_contract',
-        'start_date')
+    @fields.depends('all_extra_datas', 'start_date', 'item_desc', 'contract',
+        'appliable_conditions_date', 'product')
+    def on_change_extra_data(self):
+        if not self.item_desc or not self.product:
+            self.extra_data = {}
+            return {
+                'extra_data': self.extra_data,
+                'all_extra_datas': self.on_change_with_all_extra_data(),
+                }
+        self.extra_data = self.product.get_extra_data_def('covered_element',
+                self.all_extra_datas, self.appliable_conditions_date,
+                item_desc=self.item_desc)
+        return {
+            'extra_data': self.extra_data,
+            'all_extra_datas': self.on_change_with_all_extra_data(),
+            }
+
+    @fields.depends('item_desc', 'all_extra_datas', 'party', 'product',
+        'start_date', 'options')
     def on_change_item_desc(self):
-        res = {}
-        if not (getattr(self, 'item_desc', None)):
-            res['extra_data'] = {}
-        else:
-            res['extra_data'] = self.on_change_with_extra_data()
+        res = self.on_change_extra_data()
         res['item_kind'] = self.on_change_with_item_kind()
         res['party_extra_data'] = self.on_change_with_party_extra_data()
+        if self.item_desc is None:
+            res['options'] = []
+            return res
+        available_coverages = self.get_coverages(self.product, self.item_desc)
+        to_remove = []
+        if self.options:
+            for elem in self.options:
+                if elem.coverage not in available_coverages:
+                    to_remove.append(elem.id)
+                else:
+                    available_coverages.remove(elem.coverage)
+        Option = Pool().get('contract.option')
+        to_add = []
+        for elem in available_coverages:
+            if elem.subscription_behaviour == 'optional':
+                continue
+            new_opt = Option.init_default_values_from_coverage(elem,
+                self.product, item_desc=self.item_desc)
+            to_add.append(new_opt)
+        if not to_add and not to_remove:
+            return res
+        # TODO : Find how to make it both work in defaults and on_changes
+        res['options'] = to_add
         return res
+        if to_add:
+            res['options']['add'] = to_add
+        if to_remove:
+            res['options']['remove'] = to_remove
+        return res
+
+    @fields.depends('contract', 'extra_data')
+    def on_change_with_all_extra_data(self, name=None):
+        contract_extra_data = Transaction().context.get('all_extra_datas',
+            {})
+        if contract_extra_data is None:
+            if self.contract and self.contract.id > 0:
+                contract_extra_data = self.contract.extra_data
+        result = dict(contract_extra_data)
+        result.update(dict(self.extra_data if self.extra_data else {}))
+        return result
 
     @fields.depends('party')
     def on_change_with_covered_name(self, name=None):
         if self.party:
             return self.party.rec_name
         return ''
-
-    @fields.depends('item_desc', 'extra_data', 'contract', 'start_date',
-        'main_contract')
-    def on_change_with_extra_data(self):
-        return utils.init_extra_data(self.get_extra_data_def())
 
     @fields.depends('extra_data')
     def on_change_with_extra_data_summary(self, name=None):
@@ -663,9 +779,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.parent.main_contract.id
 
     @fields.depends('contract', 'parent', 'main_contract')
-    def on_change_with_possible_item_desc(self, name=None):
-        return [x.id for x in
-            self.get_possible_item_desc(self.main_contract, self.parent)]
+    def on_change_with_product(self, name=None):
+        if self.contract and self.contract.product:
+            return self.contract.product.id
+        if self.main_contract and self.main_contract.product:
+            return self.main_contract.product.id
+        if self.parent:
+            return self.parent.product.id
+        return Transaction().context.get('product', None)
 
     @classmethod
     def set_party_extra_data(cls, instances, name, vals):
@@ -719,6 +840,31 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         elif self.name:
             res = coop_string.concat_strings(res, self.name)
         return res
+
+    @classmethod
+    def get_coverages(cls, product, item_desc):
+        return [x.coverage for x in product.ordered_coverages
+            if x.coverage.item_desc == item_desc]
+
+    def init_options(self, product):
+        existing = dict(((x.coverage, x) for x in getattr(
+                    self, 'options', [])))
+        good_options = []
+        to_delete = [elem for elem in existing.itervalues()]
+        OptionModel = Pool().get('contract.option')
+        for coverage in self.get_coverages(product, self.item_desc):
+            if coverage in existing:
+                good_opt = existing[coverage.code]
+                to_delete.remove(good_opt)
+            elif coverage.subscription_behaviour == 'mandatory':
+                good_opt = OptionModel()
+                good_opt.init_from_coverage(coverage, self.start_date)
+                good_opt.contract = self
+            good_opt.save()
+            good_options.append(good_opt)
+        if to_delete:
+            OptionModel.delete(to_delete)
+        self.options = good_options
 
     def check_at_least_one_covered(self, errors=None):
         if not errors:
@@ -809,26 +955,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_currency(self):
         return self.main_contract.currency if self.main_contract else None
-
-    @classmethod
-    def get_possible_item_desc(cls, contract=None, parent=None):
-        pool = Pool()
-        if not parent:
-            parent = cls.get_parent_in_transaction()
-        if parent and parent.item_desc:
-            return parent.item_desc.sub_item_descs
-        if not contract:
-            Contract = pool.get('contract')
-            contract = Contract(Transaction().context.get('contract'))
-            if contract.id <= 0:
-                contract = None
-        if contract and contract.product:
-            return contract.product.item_descriptors
-        product = Transaction().context.get('product', None)
-        if product:
-            Product = pool.get('offered.product')
-            return Product(product).item_descriptors
-        return []
 
     def match_key(self, from_name=None, party=None):
         if (from_name and self.name == from_name

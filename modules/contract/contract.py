@@ -1,7 +1,9 @@
 import datetime
+from sql import Cast
+from sql.operators import Concat
 
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval, If
 from trytond.pool import Pool
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
@@ -63,45 +65,125 @@ def add_status_history(possible_status):
     class WithStatusHistoryMixin(object):
         'Mixin to add Status History on instances'
 
-        status = fields.Selection(possible_status, 'Status')
-        status_history = fields.One2Many(
-            'contract.status.history', 'reference', 'Status History',
-            readonly=True)
+        status_history = fields.One2Many('contract.status.history',
+            'reference', 'Status History', order=[('start_date', 'ASC')])
+        end_date = fields.Function(
+            fields.Date('End Date'),
+            'on_change_with_end_date', 'setter_void')
+        start_date = fields.Function(
+            fields.Date('Start Date'),
+            'on_change_with_start_date', 'setter_void')
+        status = fields.Function(
+            fields.Selection(possible_status, 'Status'),
+            'on_change_with_status', 'setter_void', 'search_status')
 
-        @staticmethod
-        def get_status_transition_authorized(from_status):
-            res = []
-            if from_status == 'quote':
-                res = ['active', 'refused']
-            elif from_status == 'active':
-                res = ['terminated']
-            return res
+        @classmethod
+        def default_status(cls):
+            raise NotImplementedError
 
-        def update_status(self, to_status, at_date, sub_status=None):
-            if (hasattr(self, 'status') and not to_status in
-                    self.get_status_transition_authorized(self.status)):
-                return False, [
-                    ('transition_unauthorized', (self.status, to_status))]
-            if not hasattr(self, 'status_history'):
-                self.status_history = []
+        @fields.depends('status_history', 'end_date')
+        def on_change_end_date(self):
+            for idx, elem in enumerate(self.status_history):
+                if elem.status in ('terminated'):
+                    update = [{
+                            'id': elem.id,
+                            'start_date': self.end_date,
+                            }]
+                    if idx > 0:
+                        update.append({
+                                'id': self.status_history[idx - 1].id,
+                                'end_date': coop_date.add_day(
+                                    self.end_date, -1),
+                                })
+                    return {'status_history': {'update': update}}
+            status_history = {'add': [[-1, {
+                            'start_date': self.end_date,
+                            'status': 'terminated'}]]}
+            if self.status_history:
+                status_history['update'] = [{
+                        'id': self.status_history[-1].id,
+                        'end_date': coop_date.add_day(self.end_date, -1),
+                        }]
+            return {'status_history': status_history}
+
+        @fields.depends('status_history', 'start_date')
+        def on_change_start_date(self):
+            for elem in self.status_history:
+                if elem.status in ('active', 'quote'):
+                    return {
+                        'status_history': {
+                            'update': [{
+                                    'id': elem.id,
+                                    'start_date': self.start_date,
+                                    }]}}
+            if self.status_history:
+                end_date = coop_date.add_day(
+                    self.status_history[0].start_date, -1)
             else:
-                self.status_history = list(self.status_history)
-            status_history = utils.instanciate_relation(
-                self.__class__, 'status_history')
-            status_history.init_from_reference(self, to_status, at_date,
-                sub_status)
-            self.status_history.append(status_history)
-            self.status = to_status
-            if hasattr(self, 'sub_status'):
-                self.sub_status = sub_status
-            return True, []
+                end_date = None
+            return {
+                'status_history': {
+                    'add': [[0, {
+                                'start_date': self.start_date,
+                                'status': 'quote',
+                                'end_date': end_date,
+                                }]]}}
 
-        def is_active_at_date(self, at_date):
-            for status_hist in self.status_history:
-                if (status_hist.status == 'active'
-                        and utils.is_effective_at_date(status_hist)):
-                    return True
-            return False
+        @fields.depends('status_history')
+        def on_change_with_start_date(self, name=None):
+            if self.status_history:
+                for elem in self.status_history:
+                    if elem.status in ('active', 'quote'):
+                        return elem.start_date
+            return None
+
+        @fields.depends('status_history')
+        def on_change_with_end_date(self, name=None):
+            if self.status_history:
+                for elem in self.status_history:
+                    if elem.status == 'terminated':
+                        return elem.end_date
+            return None
+
+        @fields.depends('status_history')
+        def on_change_with_status(self, name=None):
+            if self.status_history:
+                for elem in self.status_history:
+                    if ((elem.start_date or datetime.date.min)
+                            <= utils.today()
+                            <= (elem.end_date or datetime.date.max)):
+                        return elem.status
+            return self.default_status()
+
+        @classmethod
+        def search_status(cls, name, clause):
+            pool = Pool()
+            MainModel = pool.get(cls.__name__)
+            StatusHistory = pool.get('contract.status.history')
+            cursor = Transaction().cursor
+            _, operator, value = clause
+            Operator = fields.SQL_OPERATORS[operator]
+
+            main_model_table = MainModel.__table__()
+            history_table = StatusHistory.__table__()
+            date_clause = ((
+                    (history_table.start_date == None)
+                    | (history_table.start_date <= utils.today()))
+                & (
+                    (history_table.end_date == None)
+                    | (history_table.end_date >= utils.today())))
+
+            query_table = main_model_table.join(history_table,
+                condition=(history_table.reference == Concat(
+                        '%s,' % cls.__name__,
+                        Cast(main_model_table.id, 'VARCHAR'))))
+
+            cursor.execute(*query_table.select(main_model_table.id,
+                    where=(date_clause & (
+                            Operator(history_table.status,
+                                getattr(cls, name).sql_format(value))))))
+
+            return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     return WithStatusHistoryMixin
 
@@ -137,17 +219,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             'required': Eval('status') == 'active',
             'readonly': Eval('status') != 'quote',
             }, depends=_DEPENDS)
-    end_date = fields.Date('End Date',
-        domain=[['OR', ('end_date', '=', None),
-                ('end_date', '>=', Eval('start_date'))]],
-        states=_STATES, depends=['status', 'start_date'])
     extra_data = fields.Dict('extra_data', 'Complementary Data', states={
             'invisible': ~Eval('extra_data'),
             'readonly': Eval('status') != 'quote',
             }, depends=['extra_data', 'status'])
     product = fields.Many2One('offered.product', 'Product',
-        ondelete='RESTRICT', states={'readonly': Bool(Eval('product', False))},
-        domain=[['OR',
+        ondelete='RESTRICT', domain=[['OR',
                 [('end_date', '>=', Eval('start_date'))],
                 [('end_date', '=', None)],
                 ], ['OR',
@@ -155,13 +232,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 [('start_date', '=', None)],
                 ],
             ('company', '=', Eval('company')),
-            ], depends=['start_date', 'product', 'status', 'company'])
+            ], depends=['start_date', 'status', 'company'])
     options = fields.One2Many('contract.option', 'contract', 'Options',
         context={
             'start_date': Eval('start_date'),
             'product': Eval('product'),
-            'parties': Eval('parties')},
-        states=_STATES, depends=['parties', 'status', 'start_date', 'product'])
+            'parties': Eval('parties'),
+            'all_extra_datas': Eval('extra_data')},
+        domain=[('coverage.products', '=', Eval('product'))],
+        states=_STATES, depends=['parties', 'status', 'start_date', 'product',
+            'extra_data'])
     start_date = fields.Date('Effective Date', required=True, states=_STATES,
         depends=_DEPENDS)
     # Management date is the date at which the company started to manage the
@@ -172,13 +252,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         domain=[If(
                 Eval('subscriber_kind') == 'person',
                 ('is_person', '=', True),
-                ())
-            ,
+                ('id', '>', 0)),
             If(
                 Eval('subscriber_kind') == 'company',
                 ('is_company', '=', True),
-                ())
-                ], states=_STATES, depends=['subscriber_kind', 'status'],
+                ('id', '>', 0))],
+        states=_STATES, depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
 
     # Function fields
@@ -188,20 +267,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'on_change_with_parties')
-    product_subscriber_kind = fields.Function(
-        fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind',
-            states={'invisible': True}),
-        'on_change_with_product_subscriber_kind')
     product_kind = fields.Function(
         fields.Char('Product Kind'),
         'on_change_with_product_kind', searcher='search_product_kind')
     subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Subscriber Kind',
             states={
-                'readonly': Eval('product_subscriber_kind') != 'all',
+                'readonly': Eval('subscriber_kind') != 'all',
                 'invisible': Eval('status') != 'quote',
                 },
-            depends=['product_subscriber_kind', 'status']),
+            depends=['status']),
         'on_change_with_subscriber_kind', 'setter_void')
 
     @classmethod
@@ -217,6 +292,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     def default_company(cls):
         return Transaction().context.get('company', None)
 
+    @classmethod
+    def default_extra_data(cls):
+        return {}
+
     @staticmethod
     def default_start_date():
         return utils.today()
@@ -225,29 +304,69 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     def default_status():
         return 'quote'
 
-    @fields.depends('subscriber')
-    def on_change_with_current_policy_owner(self, name=None):
-        policy_owner = self.get_policy_owner(utils.today())
-        return policy_owner.id if policy_owner else None
+    @classmethod
+    def default_subscriber_kind(cls):
+        return 'all'
+
+    @fields.depends('product', 'options', 'start_date', 'extra_data',
+        'appliable_conditions_date')
+    def on_change_product(self):
+        if self.product is None:
+            return {
+                'product_kind': '',
+                'subscriber_kind': 'all',
+                'options': {'remove': [x.id for x in self.options]},
+                'extra_data': {},
+                }
+        available_coverages = self.get_coverages(self.product)
+        to_remove = []
+        if self.options:
+            for elem in self.options:
+                if elem.coverage not in available_coverages:
+                    to_remove.append(elem.id)
+                else:
+                    available_coverages.remove(elem.coverage)
+        Option = Pool().get('contract.option')
+        to_add = []
+        for elem in available_coverages:
+            if elem.subscription_behaviour == 'optional':
+                continue
+            new_opt = Option.init_default_values_from_coverage(elem,
+                self.product)
+            to_add.append([-1, new_opt])
+        result = {
+            'product_kind': self.product.kind,
+            'subscriber_kind': self.product.subscriber_kind,
+            'extra_data': self.product.get_extra_data_def('contract',
+                self.extra_data, self.appliable_conditions_date),
+            }
+        if not to_add and not to_remove:
+            return result
+        result['options'] = {}
+        if to_add:
+            result['options']['add'] = to_add
+        if to_remove:
+            result['options']['remove'] = to_remove
+        return result
 
     @fields.depends('extra_data', 'start_date', 'options', 'product',
         'appliable_conditions_date')
     def on_change_extra_data(self):
         if not self.product:
             return {'extra_data': {}}
-        args = {'date': self.start_date, 'level': 'contract'}
-        self.init_dict_for_rule_engine(args)
-        return {'extra_data': self.product.get_result(
-                'calculated_extra_datas', args)[0]}
+        return {'extra_data': self.product.get_extra_data_def('contract',
+                self.extra_data, self.appliable_conditions_date)}
 
     @fields.depends('start_date')
     def on_change_start_date(self):
-        return {'appliable_conditions_date': self.start_date}
+        result = super(Contract, self).on_change_start_date()
+        result['appliable_conditions_date'] = self.start_date
+        return result
 
-    @fields.depends('extra_data', 'start_date', 'options', 'product',
-        'appliable_conditions_date')
-    def on_change_with_extra_data(self):
-        return self.on_change_extra_data()['extra_data']
+    @fields.depends('subscriber')
+    def on_change_with_current_policy_owner(self, name=None):
+        policy_owner = self.get_policy_owner(utils.today())
+        return policy_owner.id if policy_owner else None
 
     @fields.depends('subscriber')
     def on_change_with_parties(self, name=None):
@@ -256,21 +375,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         return [self.subscriber.id]
 
     @fields.depends('product')
-    def on_change_with_product_subscriber_kind(self, name=None):
-        return self.product.subscriber_kind if self.product else 'all'
+    def on_change_with_product_kind(self, name=None):
+        if not self.product:
+            return ''
+        return self.product.kind
 
     @fields.depends('product')
-    def on_change_with_product_kind(self, name=None):
-        return self.product.kind if self.product else ''
-
-    @fields.depends('product_subscriber_kind', 'subscriber')
     def on_change_with_subscriber_kind(self, name=None):
-        if self.subscriber and self.subscriber.is_person:
-            return 'person'
-        elif self.subscriber and self.subscriber.is_company:
-            return 'company'
-        else:
-            return self.product_subscriber_kind
+        if not self.product:
+            return 'all'
+        return self.product.subscriber_kind
 
     @classmethod
     def search_product_kind(cls, name, clause):
@@ -401,19 +515,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 option.save()
         self.update_status('active', self.start_date)
 
+    @classmethod
+    def get_coverages(cls, product):
+        return [x.coverage for x in product.ordered_coverages]
+
     def init_options(self):
-        existing = {}
-        if not utils.is_none(self, 'options'):
-            for opt in self.options:
-                existing[opt.coverage.code] = opt
+        existing = dict(((x.coverage, x) for x in getattr(
+                    self, 'options', [])))
         good_options = []
         to_delete = [elem for elem in existing.itervalues()]
         OptionModel = Pool().get('contract.option')
-        for coverage in [x.coverage for x in self.product.ordered_coverages]:
-            if coverage.code in existing:
+        for coverage in self.get_coverages(self.product):
+            if coverage in existing:
                 good_opt = existing[coverage.code]
                 to_delete.remove(good_opt)
-            elif coverage.subscription_behaviour != 'optional':
+            elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel()
                 good_opt.init_from_coverage(coverage, self.start_date)
                 good_opt.contract = self
@@ -533,18 +649,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             'required': Eval('status') == 'active',
             'readonly': Eval('status') != 'quote',
             },
-        domain=[['OR',
-                ('end_date', '>=', Eval('end_date', datetime.date.min)),
-                ('end_date', '=', None),
-                ],
-            ['OR',
-                ('start_date', '<=', Eval('start_date', datetime.date.max)),
-                ('start_date', '=', None),
-                ],
-            ('id', 'in', Eval('possible_coverages')),
-            ],
-        depends=['status', 'start_date', 'end_date', 'possible_coverages',
-            'product'])
+        depends=['status', 'start_date', 'end_date', 'product'])
 
     # Function fields
     appliable_conditions_date = fields.Function(
@@ -559,22 +664,12 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
-    end_date = fields.Function(
-        fields.Date('End Date'),
-        'on_change_with_end_date')
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'on_change_with_parties')
-    possible_coverages = fields.Function(
-        fields.Many2Many('offered.option.description', None, None,
-            'Possible Coverages'),
-        'on_change_with_possible_coverages')
     product = fields.Function(
         fields.Many2One('offered.product', 'Product'),
         'on_change_with_product')
-    start_date = fields.Function(
-        fields.Date('Start Date'),
-        'on_change_with_start_date')
 
     @classmethod
     def __setup__(cls):
@@ -596,30 +691,28 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         return Transaction().context.get('parties', [])
 
     @classmethod
-    def default_possible_coverages(cls):
-        Product = Pool().get('offered.product')
-        product = cls.default_product()
-        if not product:
-            return []
-        return [x.id for x in Product(product).coverages]
-
-    @classmethod
     def default_product(cls):
         return Transaction().context.get('product', None)
 
-    @classmethod
-    def default_start_date(cls):
-        return Transaction().context.get('start_date', None)
+    @staticmethod
+    def default_start_date():
+        return utils.today()
 
     @classmethod
     def default_status(cls):
         return 'quote'
 
+    @fields.depends('coverage')
+    def on_change_coverage(self):
+        return {
+            'coverage_kind': self.on_change_with_coverage_kind(),
+            }
+
     @fields.depends('contract', 'start_date')
     def on_change_with_appliable_conditions_date(self, name=None):
-        if not self.contract:
-            return (self.start_date if self.start_date else
-                Transaction().context.get('start_date'))
+        start_date = Transaction().context.get('start_date', None)
+        if start_date:
+            return start_date
         return self.contract.appliable_conditions_date
 
     @fields.depends('contract')
@@ -648,24 +741,13 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             return Transaction().context.get('parties', [])
         return [x.id for x in self.contract.parties]
 
-    @fields.depends('product')
-    def on_change_with_possible_coverages(self, name=None):
-        if not self.product:
-            return []
-        return [x.id for x in self.product.coverages]
-
     @fields.depends('contract')
     def on_change_with_product(self, name=None):
+        product = Transaction().context.get('product', None)
+        if product:
+            return product
         if self.contract and self.contract.product:
             return self.contract.product.id
-        return Transaction().context.get('product', None)
-
-    @fields.depends('contract')
-    def on_change_with_start_date(self, name=None):
-        # TODO : compute from status history
-        if self.contract:
-            return self.contract.start_date
-        return Transaction().context.get('start_date', None)
 
     def get_rec_name(self, name):
         if self.coverage:
@@ -694,6 +776,46 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
     @classmethod
     def get_var_names_for_full_extract(cls):
         return [('coverage', 'light'), 'start_date', 'end_date']
+
+    @classmethod
+    def init_default_values_from_coverage(cls, coverage, product,
+            start_date=None, end_date=None):
+        if not start_date:
+            start_date = utils.today()
+        if utils.is_effective_at_date(coverage, start_date):
+            result = {}
+            result['coverage'] = coverage.id
+            result['status'] = 'quote'
+            result['status_history'] = [{
+                    'start_date': start_date,
+                    'status': 'quote'}]
+            # TODO : remove once computed properly
+            result['start_date'] = start_date
+            result['appliable_conditions_date'] = start_date
+            return result
+        else:
+            cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
+                    start_date))
+
+    @classmethod
+    def init_on_change_values_from_coverage(cls, coverage, product,
+            start_date=None, end_date=None):
+        if not start_date:
+            start_date = utils.today()
+        if utils.is_effective_at_date(coverage, start_date):
+            result = {}
+            result['coverage'] = coverage.id
+            result['status'] = 'quote'
+            result['status_history'] = {'add': [[-1, {
+                            'start_date': start_date,
+                            'status': 'quote'}]]}
+            # TODO : remove once computed properly
+            result['start_date'] = start_date
+            result['appliable_conditions_date'] = start_date
+            return result
+        else:
+            cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
+                    start_date))
 
     def init_from_coverage(self, coverage, start_date=None, end_date=None):
         if not start_date:

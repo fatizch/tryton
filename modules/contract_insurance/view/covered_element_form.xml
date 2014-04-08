@@ -15,7 +15,7 @@
     <field name="party"/>
     <newline/>
     <notebook>
-        <page name="data" string="Complementary Data">
+        <page name="extra_data" string="Complementary Data">
             <field name="extra_data" colspan="2" no_command="1"/>
             <field name="party_extra_data" colspan="2" no_command="1"/>
             <newline/>
@@ -35,6 +35,7 @@
     <field name="item_kind"/>
     <field name="possible_item_desc"/>
     <newline/>
-    <field name="is_person"/>
+    <field name="is_person" invisible="1"/>
     <newline/>
+    <field name="product" invisible="1"/>
 </form>

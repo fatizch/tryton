@@ -18,7 +18,6 @@ __all__ = [
     'ItemDescription',
     'ItemDescSubItemDescRelation',
     'ItemDescriptionExtraDataRelation',
-    'ProductItemDescriptionRelation',
     ]
 
 IS_INSURANCE = Eval('kind') == 'insurance'
@@ -72,23 +71,38 @@ class Product:
 
     term_renewal_rules = fields.One2Many('offered.term.rule', 'offered',
         'Term - Renewal')
-    item_descriptors = fields.Many2Many('offered.product-item.description',
-        'product', 'item_desc', 'Item Descriptions',
-        depends=['possible_item_descs'], states={
-            'required': IS_INSURANCE,
-            'invisible': ~IS_INSURANCE,
-            })
-    possible_item_descs = fields.Function(
+    item_descriptors = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
-            'Possible Item Descriptions'),
-        'on_change_with_possible_item_descs')
+            'Item Descriptions'),
+        'on_change_with_item_descriptors')
 
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
+        cls.extra_data_def.domain = [
+            ('kind', 'in', ['contract', 'covered_element', 'option'])]
         cls._error_messages.update({
                 'no_renewal_rule_configured': 'No renewal rule configured',
+                'missing_covered_element_extra_data': 'The following covered '
+                'element extra data should be set on the product: %s',
                 })
+
+    @classmethod
+    def validate(cls, instances):
+        super(Product, cls).validate(instances)
+        cls.validate_covered_element_extra_data(instances)
+
+    @classmethod
+    def validate_covered_element_extra_data(cls, instances):
+        for instance in instances:
+            from_option = set(extra_data for coverage in instance.coverages
+                for extra_data in coverage.extra_data_def
+                if extra_data.kind == 'covered_element')
+            remaining = from_option - set(instance.extra_data_def)
+            if remaining:
+                instance.raise_user_error('missing_covered_element_extra_data',
+                    (', '.join((extra_data.string
+                                for extra_data in remaining))))
 
     @classmethod
     def delete(cls, entities):
@@ -192,12 +206,12 @@ class Product:
         return [], ()
 
     @fields.depends('coverages')
-    def on_change_with_possible_item_descs(self, name=None):
-        res = []
+    def on_change_with_item_descriptors(self, name=None):
+        res = set()
         for coverage in self.coverages:
             if not utils.is_none(coverage, 'item_desc'):
-                res.append(coverage.item_desc.id)
-        return res
+                res.add(coverage.item_desc.id)
+        return list(res)
 
     def get_cmpl_data_looking_for_what(self, args):
         if 'sub_elem' in args and args['level'] == 'covered_data':
@@ -283,6 +297,8 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         'offered.item.description-sub_item.description',
         'item_desc', 'sub_item_desc', 'Sub Item Descriptions',
         states={'invisible': Eval('kind') == 'person'})
+    coverages = fields.One2Many('offered.option.description', 'item_desc',
+        'Coverages')
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):
@@ -296,6 +312,12 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         res = super(ItemDescription, cls).get_var_names_for_full_extract()
         res.extend(['extra_data_def', 'kind', 'sub_item_descs'])
         return res
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(ItemDescription, cls)._export_skips()
+        result.remove('coverages')
+        return result
 
 
 class ItemDescSubItemDescRelation(model.CoopSQL):
@@ -318,13 +340,3 @@ class ItemDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='CASCADE')
     extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT', )
-
-
-class ProductItemDescriptionRelation(model.CoopSQL):
-    'Relation between Product and Item Description'
-
-    __name__ = 'offered.product-item.description'
-
-    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
-    item_desc = fields.Many2One('offered.item.description', 'Item Description',
-        ondelete='RESTRICT')
