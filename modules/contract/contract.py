@@ -244,8 +244,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             'extra_data'])
     start_date = fields.Date('Effective Date', required=True, states=_STATES,
         depends=_DEPENDS)
-    # Management date is the date at which the company started to manage the
-    # contract. Default value is start_date
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
     subscriber = fields.Many2One('party.party', 'Subscriber',
@@ -259,8 +257,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 ('id', '>', 0))],
         states=_STATES, depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
-
-    # Function fields
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
