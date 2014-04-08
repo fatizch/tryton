@@ -71,7 +71,8 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     def give_me_sub_elem_eligibility(self, args):
         if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
-            result = self.sub_elem_rule.execute(args)
+            result = self.sub_elem_rule.execute(args,
+                self.sub_elem_rule_extra_data)
             return (EligibilityResultLine(eligible=result.result,
                     details=result.warnings), result.errors)
         return (EligibilityResultLine(True), [])
