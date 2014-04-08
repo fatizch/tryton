@@ -336,7 +336,7 @@ class ContractOption:
         result.update(self.on_change_extra_data())
         return result
 
-    @fields.depends('all_extra_datas', 'start_date', 'coverage', 'contract',
+    @fields.depends('extra_data', 'start_date', 'coverage', 'contract',
         'appliable_conditions_date', 'product', 'covered_element')
     def on_change_extra_data(self):
         if not self.coverage or not self.product:
@@ -353,8 +353,9 @@ class ContractOption:
         else:
             item_desc = Pool().get('offered.item.description')(item_desc_id)
         self.extra_data = self.product.get_extra_data_def('option',
-                self.all_extra_datas, self.appliable_conditions_date,
-                coverage=self.coverage, item_desc=item_desc)
+            self.on_change_with_all_extra_data(),
+            self.appliable_conditions_date, coverage=self.coverage,
+            item_desc=item_desc)
         return {
             'extra_data': self.extra_data,
             'all_extra_datas': self.on_change_with_all_extra_data(),
@@ -546,13 +547,16 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         ondelete='RESTRICT')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
     options = fields.One2Many('contract.option', 'covered_element', 'Options',
-        domain=[('coverage.item_desc', '=', Eval('item_desc'))],
+        domain=[
+            ('coverage.products', '=', Eval('product')),
+            ('coverage.item_desc', '=', Eval('item_desc'))],
         context={
             'covered_element': Eval('id'),
             'item_desc': Eval('item_desc'),
             'parties': Eval('parties'),
             'all_extra_datas': Eval('all_extra_datas'),
-            }, depends=['id', 'item_desc', 'parties', 'all_extra_datas'])
+            },
+        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'products'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[
@@ -649,7 +653,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             Contract = Pool().get('contract')
             return Contract(contract_id).product.id
 
-    @fields.depends('all_extra_datas', 'start_date', 'item_desc', 'contract',
+    @fields.depends('extra_data', 'start_date', 'item_desc', 'contract',
         'appliable_conditions_date', 'product')
     def on_change_extra_data(self):
         if not self.item_desc or not self.product:
@@ -659,8 +663,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                 'all_extra_datas': self.on_change_with_all_extra_data(),
                 }
         self.extra_data = self.product.get_extra_data_def('covered_element',
-                self.all_extra_datas, self.appliable_conditions_date,
-                item_desc=self.item_desc)
+            self.on_change_with_all_extra_data(),
+            self.appliable_conditions_date, item_desc=self.item_desc)
         return {
             'extra_data': self.extra_data,
             'all_extra_datas': self.on_change_with_all_extra_data(),

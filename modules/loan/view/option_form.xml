@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form/notebook/page[@id='main_data']" position="after">
-        <page string="Loan Shares" id="loan_shares">
+        <page string="Loan Shares" name="loan_shares">
             <field name="loan_shares"/>
         </page>
     </xpath>

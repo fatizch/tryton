@@ -81,8 +81,21 @@ def add_status_history(possible_status):
         def default_status(cls):
             raise NotImplementedError
 
+        @classmethod
+        def default_start_date(cls):
+            return Transaction().context.get('start_date', None)
+
+        @classmethod
+        def default_status_history(cls):
+            return [{
+                    'status': cls.default_status(),
+                    'start_date': cls.default_start_date(),
+                    }]
+
         @fields.depends('status_history', 'end_date')
         def on_change_end_date(self):
+            # TODO : fix once default and on_change work properly
+            return {}
             for idx, elem in enumerate(self.status_history):
                 if elem.status in ('terminated'):
                     update = [{
@@ -108,6 +121,8 @@ def add_status_history(possible_status):
 
         @fields.depends('status_history', 'start_date')
         def on_change_start_date(self):
+            # TODO : fix once default and on_change work properly
+            return {}
             for elem in self.status_history:
                 if elem.status in ('active', 'quote'):
                     return {
@@ -646,14 +661,15 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             'readonly': Eval('status') != 'quote',
             },
         depends=['status', 'start_date', 'end_date', 'product'])
-
-    # Function fields
     appliable_conditions_date = fields.Function(
         fields.Date('Appliable Conditions Date'),
         'on_change_with_appliable_conditions_date')
     contract_number = fields.Function(
         fields.Char('Contract Number'),
         'on_change_with_contract_number')
+    coverage_family = fields.Function(
+        fields.Char('Coverage Family'),
+        'on_change_with_coverage_family')
     coverage_kind = fields.Function(
         fields.Char('Coverage Kind'),
         'on_change_with_coverage_kind', searcher='search_coverage_kind')
@@ -702,6 +718,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
     def on_change_coverage(self):
         return {
             'coverage_kind': self.on_change_with_coverage_kind(),
+            'coverage_family': self.on_change_with_coverage_family(),
             }
 
     @fields.depends('contract', 'start_date')
@@ -716,6 +733,10 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         return self.contract.contract_number if self.contract else ''
 
     @fields.depends('coverage')
+    def on_change_with_coverage_family(self, name=None):
+        return self.coverage.family if self.coverage else ''
+
+    @fields.depends('coverage')
     def on_change_with_coverage_kind(self, name=None):
         return self.coverage.kind if self.coverage else ''
 
@@ -723,13 +744,6 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
     def on_change_with_current_policy_owner(self, name=None):
         if self.contract:
             return self.contract.current_policy_owner
-
-    @fields.depends('contract')
-    def on_change_with_end_date(self, name=None):
-        # TODO : compute from status history
-        if self.contract:
-            return self.contract.end_date or None
-        return Transaction().context.get('end_date', None)
 
     @fields.depends('contract')
     def on_change_with_parties(self, name=None):
@@ -801,6 +815,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         if utils.is_effective_at_date(coverage, start_date):
             result = {}
             result['coverage'] = coverage.id
+            result['coverage_family'] = coverage.family
             result['status'] = 'quote'
             result['status_history'] = {'add': [[-1, {
                             'start_date': start_date,
@@ -818,6 +833,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             start_date = utils.today()
         if utils.is_effective_at_date(coverage, start_date):
             self.coverage = coverage
+            self.coverage_family = coverage.family
             self.update_status('quote', start_date)
             # TODO : remove once computed properly
             self.start_date = start_date

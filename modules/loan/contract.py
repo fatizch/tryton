@@ -49,6 +49,14 @@ class Contract:
                 })
 
     @fields.depends('product')
+    def on_change_product(self):
+        result = super(Contract, self).on_change_product()
+        result['is_loan'] = self.product.is_loan if self.product else False
+        if not result['is_loan']:
+            result['loans'] = []
+        return result
+
+    @fields.depends('product')
     def on_change_with_is_loan(self, name=None):
         return self.product.is_loan if self.product else False
 
@@ -75,17 +83,18 @@ class ContractOption:
     __name__ = 'contract.option'
 
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
-        states={'invisible': ~Eval('is_loan')}, domain=[
+        states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
                 ('loan.parties', 'in', Eval('parties', []))],
-        depends=['is_loan', 'parties'])
-    is_loan = fields.Function(
-        fields.Boolean('Is Loan'),
-        'on_change_with_is_loan')
+        depends=['coverage_family', 'parties'])
     multi_mixed_view = loan_shares
 
-    @fields.depends('coverage')
-    def on_change_with_is_loan(self, name=None):
-        return self.coverage.is_loan if self.coverage else False
+    @fields.depends('coverage', 'loan_shares')
+    def on_change_coverage(self):
+        result = super(ContractOption, self).on_change_coverage()
+        if result['coverage_family'] != 'loan':
+            result['loan_shares'] = {
+                'remove': [x.id for x in self.loan_shares]}
+        return result
 
 
 class ExtraPremium:
