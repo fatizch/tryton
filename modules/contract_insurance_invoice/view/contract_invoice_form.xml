@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Contract Invoice">
+    <label name="start"/>
+    <field name="start"/>
+    <label name="end"/>
+    <field name="end"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="invoice"/>
+    <field name="invoice" view_ids="contract_insurance_invoice.invoice_view_form,contract_insurance_invoice.invoice_view_list"/>
+</form>

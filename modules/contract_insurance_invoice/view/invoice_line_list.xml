@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Invoice Lines">
+  <field name="description"/>
+  <field name="contract_insurance_start"/>
+  <field name="contract_insurance_end"/>
+  <field name="amount"/>
+</tree>

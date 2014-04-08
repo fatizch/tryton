@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tree string="Invoices">
+  <field name="type"/>
+  <field name="number"/>
+  <field name="invoice_date"/>
+  <field name="untaxed_amount"/>
+  <field name="tax_amount"/>
+  <field name="total_amount"/>
+  <field name="state"/>
+  <field name="amount_to_pay_today"/>
+</tree>

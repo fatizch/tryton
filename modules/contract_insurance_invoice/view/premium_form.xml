@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<form string="Premium">
+    <label name="rated_entity"/>
+    <field name="rated_entity"/>
+    <label name="account"/>
+    <field name="account"/>
+    <label name="start"/>
+    <field name="start"/>
+    <label name="end"/>
+    <field name="end"/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <label name="frequency"/>
+    <field name="frequency"/>
+    <field name="taxes" colspan="2"/>
+    <field name="invoice_lines" colspan="2"/>
+</form>

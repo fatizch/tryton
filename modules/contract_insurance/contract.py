@@ -312,6 +312,9 @@ class ContractOption:
     parent_option = fields.Function(
         fields.Many2One('contract.option', 'Parent Covered Data'),
         'on_change_with_parent_option')
+    parent_contract = fields.Function(
+        fields.Many2One('contract', 'Parent Contract'),
+        'on_change_with_parent_contract')
 
     @classmethod
     def __setup__(cls):
@@ -392,6 +395,15 @@ class ContractOption:
 
     def on_change_with_icon(self, name=None):
         return 'umbrella-black'
+
+    @fields.depends('contract', 'covered_element')
+    def on_change_with_parent_contract(self, name=None):
+        if self.contract:
+            return self.contract.id
+        elif self.covered_element:
+            contract = getattr(self.covered_element, 'contract')
+            if contract:
+                return contract.id
 
     @fields.depends('covered_element', 'coverage')
     def on_change_with_parent_option(self, name=None):
