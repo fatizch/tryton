@@ -385,8 +385,10 @@ class Product(model.CoopSQL, Offered):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        return ['OR', [(u'name',) + tuple(clause[1:])],
-        [(u'code',) + tuple(clause[1:])]]
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
 
     def get_valid_coverages(self):
         for coverage in self.coverages:
@@ -594,8 +596,10 @@ class OptionDescription(model.CoopSQL, Offered):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        return ['OR', [(u'name',) + tuple(clause[1:])],
-        [(u'code',) + tuple(clause[1:])]]
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
 
     def is_valid(self):
         if self.template_behaviour == 'remove':
