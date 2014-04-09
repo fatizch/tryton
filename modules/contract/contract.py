@@ -177,9 +177,9 @@ class Subscribed(model.CoopView, ModelCurrency):
         return False
 
     def get_all_extra_data(self, at_date):
-        if not utils.is_none(self, 'extra_data'):
-            return self.extra_data
-        return {}
+        res = self.offered.get_all_extra_data(at_date)
+        res.update(getattr(self, 'extra_data', {}))
+        return res
 
 
 class Contract(model.CoopSQL, Subscribed, Printable):
