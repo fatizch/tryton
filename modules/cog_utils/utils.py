@@ -232,7 +232,7 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     field = getattr(from_class, field_name)
     if not isinstance(field, fields.Many2One):
         if action:
-            res = {action: [CurModel.default_get(fields_names)]}
+            res = {action: [[0, CurModel.default_get(fields_names)]]}
         else:
             res = [CurModel.default_get(fields_names)]
     else:
