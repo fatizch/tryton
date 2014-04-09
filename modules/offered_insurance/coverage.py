@@ -89,18 +89,17 @@ class OptionDescription:
             coverage_line = None
             coverage_errs = []
         if coverage_line and coverage_line.amount:
-            for_option = contract.get_option_for_coverage_at_date(
-                self, date)
+            for_option = contract.get_option_for_coverage_at_date(self)
             if for_option:
                 coverage_line.on_object = for_option
             result_line.add_detail_from_line(coverage_line)
         errs += coverage_errs
 
     def calculate_sub_elem_price(self, args, result_line, errs):
-        for covered, covered_data in self.give_me_covered_elements_at_date(
+        for covered, option in self.give_me_covered_elements_at_date(
                 args)[0]:
             tmp_args = args.copy()
-            covered_data.init_dict_for_rule_engine(tmp_args)
+            option.init_dict_for_rule_engine(tmp_args)
             try:
                 sub_elem_line, sub_elem_errs = self.get_result(
                     'sub_elem_price', tmp_args, kind='premium')
@@ -108,7 +107,7 @@ class OptionDescription:
                 sub_elem_line = None
                 sub_elem_errs = []
             if sub_elem_line and sub_elem_line.amount:
-                sub_elem_line.on_object = covered_data
+                sub_elem_line.on_object = option
                 result_line.add_detail_from_line(sub_elem_line)
             errs += sub_elem_errs
 
@@ -118,10 +117,6 @@ class OptionDescription:
             return ([], errs)
         contract = data_dict['contract']
         date = data_dict['date']
-        active_coverages = contract.get_active_coverages_at_date(date)
-        if not self in active_coverages:
-            return (None, [])
-
         result_line = PricingResultLine(on_object=self)
         result_line.init_from_args(args)
         self.calculate_main_price(args, result_line, errs, date, contract)
@@ -147,18 +142,18 @@ class OptionDescription:
         for covered in contract.covered_elements:
             # We must check that the current covered element is
             # covered by self.
-            for covered_data in covered.covered_data:
+            for option in covered.options:
                 coverage = utils.convert_ref_to_obj(
-                    covered_data.option.offered)
+                    option.coverage)
                 if not coverage.code == self.code:
                     continue
 
                 # And that this coverage is effective at the requested
                 # computation date.
-                if (date >= covered_data.start_date and
-                        (not covered_data.end_date
-                            or covered_data.end_date >= date)):
-                    res.append((covered, covered_data))
+                if (date >= option.start_date and
+                        (not option.end_date
+                            or option.end_date >= date)):
+                    res.append((covered, option))
         return res, []
 
     def give_me_allowed_amounts(self, args):

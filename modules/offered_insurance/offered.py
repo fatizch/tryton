@@ -214,7 +214,7 @@ class Product:
         return list(res)
 
     def get_cmpl_data_looking_for_what(self, args):
-        if 'sub_elem' in args and args['level'] == 'covered_data':
+        if 'sub_elem' in args and args['level'] == 'option':
             return ''
         return super(Product, self).get_cmpl_data_looking_for_what(args)
 
@@ -243,20 +243,18 @@ class Product:
                 dates.add(cur_date)
                 cur_date = coop_date.add_year(cur_date, 1)
 
-    def get_covered_data_dates(self, dates, covered_data):
-        dates.add(covered_data.start_date)
-        if hasattr(covered_data, 'end_date') and covered_data.end_date:
-            dates.add(coop_date.add_day(covered_data.end_date, 1))
-        if (hasattr(covered_data, 'extra_premiums') and
-                covered_data.extra_premiums):
-            for elem in covered_data.extra_premiums:
+    def get_option_dates(self, dates, option):
+        super(Product, self).get_option_dates(dates, option)
+        if (hasattr(option, 'extra_premiums') and
+                option.extra_premiums):
+            for elem in option.extra_premiums:
                 dates.add(elem.start_date)
                 if elem.end_date:
                     dates.add(coop_date.add_day(elem.end_date, 1))
 
     def get_covered_element_dates(self, dates, covered_element):
-        for data in covered_element.covered_data:
-            self.get_covered_data_dates(dates, data)
+        for data in covered_element.options:
+            self.get_option_dates(dates, data)
         if hasattr(covered_element, 'sub_covered_elements'):
             for sub_elem in covered_element.sub_covered_elements:
                 self.get_covered_element_dates(dates, sub_elem)

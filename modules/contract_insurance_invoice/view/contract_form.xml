@@ -10,6 +10,7 @@
             <field name="invoice_frequencies" colspan="4"/>
         </page>
         <page string="Premium" id="premium">
+            <button string="Calculate Premiums" name="button_calculate_prices" colspan="4"/>
             <field name="premiums"/>
         </page>
     </xpath>

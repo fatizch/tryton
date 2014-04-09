@@ -71,13 +71,13 @@ class OptionDescription:
         if not self.is_loan:
             return super(OptionDescription, self).calculate_sub_elem_price(
                 args, result_line, errs)
-        for covered, covered_data in self.give_me_covered_elements_at_date(
+        for covered, option in self.give_me_covered_elements_at_date(
                 args)[0]:
             tmp_args = args.copy()
             result = PricingResultLine()
-            result.on_object = covered_data
-            covered_data.init_dict_for_rule_engine(tmp_args)
-            for share in covered_data.loan_shares:
+            result.on_object = option
+            option.init_dict_for_rule_engine(tmp_args)
+            for share in option.loan_shares:
                 share.init_dict_for_rule_engine(tmp_args)
                 try:
                     sub_elem_line, sub_elem_errs = self.get_result(

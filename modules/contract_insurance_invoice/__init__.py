@@ -1,11 +1,14 @@
 from trytond.pool import Pool
 
 from .invoice import *
+from .offered import *
 from .contract import *
 
 
 def register():
     Pool.register(
+        Product,
+        OptionDescription,
         InvoiceLine,
         Contract,
         ContractPaymentTerm,

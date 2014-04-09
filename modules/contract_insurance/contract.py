@@ -291,6 +291,12 @@ class Contract(Printable):
         result['Insurers'] = [x.coverage.insurer.party for x in self.options]
         return result
 
+    def get_option_for_coverage_at_date(self, coverage):
+        for option in self.options:
+            if option.coverage == coverage:
+                return option
+        return None
+
 
 class ContractOption:
     __name__ = 'contract.option'

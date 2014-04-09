@@ -14,6 +14,8 @@ from trytond.transaction import Transaction
 from trytond.tools import reduce_ids
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
+from trytond.modules.cog_utils import coop_date, utils
+
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
@@ -61,6 +63,13 @@ class Contract:
     last_invoice_end = fields.Function(
         fields.Date('Last Invoice End Date'), 'get_last_invoice',
         searcher='search_last_invoice')
+
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'button_calculate_prices': {},
+                })
 
     @classmethod
     def get_revision_value(cls, contracts, ContractRevision):
@@ -271,6 +280,99 @@ class Contract:
             return True
         return False
 
+    @classmethod
+    @ModelView.button
+    def button_calculate_prices(cls, contracts):
+        for contract in contracts:
+            contract.calculate_prices()
+
+    def calculate_prices(self):
+        prices, errs = self.calculate_prices_between_dates()
+        if errs:
+            return False, errs
+        self.store_prices(prices)
+        return True, ()
+
+    def calculate_price_at_date(self, date):
+        cur_dict = {
+            'date': date,
+            'appliable_conditions_date': self.appliable_conditions_date}
+        self.init_dict_for_rule_engine(cur_dict)
+        prices, errs = self.product.get_result('total_price', cur_dict)
+        return (prices, errs)
+
+    def calculate_prices_between_dates(self, start=None, end=None):
+        if not start:
+            start = self.start_date
+        prices = []
+        errs = []
+        dates = self.get_dates()
+        dates = utils.limit_dates(dates, self.start_date)
+        for cur_date in dates:
+            price, err = self.calculate_price_at_date(cur_date)
+            if price:
+                prices.extend(price)
+            errs += err
+            if errs:
+                return [], errs
+        return prices, errs
+
+    def store_price(self, price, start_date, end_date):
+        to_check_for_deletion = set()
+        to_save = []
+        Premium = Pool().get('contract.premium')
+        if price.amount:
+            new_premium = Premium.new_line(price, start_date, end_date)
+            if new_premium:
+                parent = new_premium.get_parent()
+                if isinstance(parent.premiums, tuple):
+                    parent.premiums = list(parent.premiums)
+                parent.premiums.append(new_premium)
+                to_check_for_deletion.add(parent)
+                to_save.append(new_premium)
+        for elem in price.details:
+            detail_save, detail_delete = self.store_price(elem, start_date,
+                end_date)
+            to_save += detail_save
+            to_check_for_deletion.union(detail_delete)
+        return to_save, to_check_for_deletion
+
+    def store_prices(self, prices):
+        if not prices:
+            return
+        Premium = Pool().get('contract.premium')
+        dates = list(set([elem.start_date for elem in prices]))
+        dates.sort()
+        to_check_for_deletion = set()
+        to_save = []
+        for price in prices:
+            date_pos = dates.index(price.start_date)
+            if date_pos < len(dates) - 1:
+                end_date = dates[date_pos + 1] + datetime.timedelta(days=-1)
+            else:
+                end_date = None
+            price_save, price_delete = self.store_price(price,
+                start_date=price.start_date, end_date=end_date)
+            to_save += price_save
+            to_check_for_deletion.union(price_delete)
+        to_delete = set()
+        for elem in to_check_for_deletion:
+            existing = [x for x in getattr(elem, 'premiums', []) if x.id > 0]
+            if not existing:
+                continue
+            to_delete.union(set(x.id for x in existing
+                    if existing.start_date >= dates[0]))
+            for elem in existing:
+                if (datetime.date.min or elem.start_date) <= dates[0] <= (
+                        elem.end_date or datetime.date.max):
+                    elem.end_date = coop_date.add_day(dates[0], -1)
+                    break
+        if to_delete:
+            Premium.delete(to_delete)
+        if to_save:
+            Premium.create([x._save_values for x in to_save])
+        self.save()
+
 
 class _ContractRevisionMixin(object):
     contract = fields.Many2One('contract', 'Contract', required=True,
@@ -462,8 +564,9 @@ class Premium(ModelSQL, ModelView):
         ondelete='CASCADE')
     extra_premium = fields.Many2One('contract.option.extra_premium',
         'Extra Premium', select=True, ondelete='CASCADE')
-    rated_entity = fields.Reference('Rated Entity', 'get_rated_entities')
-    start = fields.Date('Start')
+    rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
+        required=True)
+    start = fields.Date('Start', required=True)
     end = fields.Date('End')
     amount = fields.Numeric('Amount', required=True)
     frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)
@@ -504,6 +607,16 @@ class Premium(ModelSQL, ModelView):
                 ])
         return [(None, '')] + [(m.model, m.name) for m in models]
 
+    @classmethod
+    def get_possible_parent_field(cls):
+        return set(['contract', 'covered_element', 'option', 'extra_premium'])
+
+    def get_parent(self):
+        for elem in self.get_possible_parent_field():
+            value = getattr(self, elem, None)
+            if value:
+                return value
+
     def get_main_contract(self, name=None):
         if self.contract:
             return self.contract.id
@@ -513,14 +626,6 @@ class Premium(ModelSQL, ModelView):
             return self.option.parent_contract.id
         if self.extra_premium:
             return self.extra_premium.option.parent_contract.id
-
-    def get_parent(self):
-        if self.option:
-            return self.option
-        elif self.covered_element:
-            return self.covered_element
-        elif self.contract:
-            return self.contract
 
     def get_description(self):
         return '%s - %s' % (self.get_parent().rec_name,
@@ -591,6 +696,51 @@ class Premium(ModelSQL, ModelView):
                 contract_insurance_start=start,
                 contract_insurance_end=end,
                 )]
+
+    def set_parent_from_line(self, line):
+        for elem in self.get_possible_parent_field():
+            field = self._fields[elem]
+            if field.model_name == line.on_object.__name__:
+                setattr(self, elem, line.on_object)
+                break
+
+    def calculate_rated_entity(self):
+        # TODO : use the line rated_entity once it is implemented
+        parent = self.get_parent()
+        if parent.__name__ == 'contract':
+            rated_entity = parent.product
+        elif parent.__name__ == 'contract.option':
+            rated_entity = parent.coverage
+        elif parent.__name__ == 'contract.covered_element':
+            rated_entity = parent.contract
+        elif parent.__name__ == 'extra_premium':
+            rated_entity = parent.option
+        else:
+            rated_entity = None
+        return rated_entity
+
+    @classmethod
+    def new_line(cls, line, start_date, end_date):
+        if not line.on_object:
+            return None
+        new_instance = cls()
+        new_instance.set_parent_from_line(line)
+        if not new_instance.get_parent():
+            # TODO : Should raise an error
+            return None
+        new_instance.rated_entity = new_instance.calculate_rated_entity()
+        # TODO : use the line account once it is implemented
+        new_instance.account = new_instance.rated_entity.account_for_billing
+        new_instance.start = start_date
+        new_instance.end = end_date
+        new_instance.amount = line.amount
+        new_instance.taxes = []
+        # TODO : get from line once properly set
+        new_instance.frequency = 'yearly'
+        for elem in line.details:
+            if elem.on_object.__name__ == 'account.tax':
+                new_instance.taxes.append(elem.on_object)
+        return new_instance
 
 
 class PremiumTax(ModelSQL):
