@@ -463,9 +463,6 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(RuleParameter, cls).__setup__()
-        # cls._sql_constraints += [
-        #     ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
-        #     ]
         cls.name.string = 'Code'
         cls.string.string = 'Name'
 
@@ -478,6 +475,7 @@ class RuleEngine(ModelView, ModelSQL):
     context = fields.Many2One('rule_engine.context', 'Context',
         ondelete='RESTRICT')
     short_name = fields.Char('Code', required=True)
+        #TODO : rename as code (before code was the name for algorithm)
     algorithm = fields.Text('Algorithm')
     data_tree = fields.Function(fields.Text('Data Tree'),
         'on_change_with_data_tree')
@@ -493,14 +491,25 @@ class RuleEngine(ModelView, ModelSQL):
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
         depends=['debug_mode'], order=[('create_date', 'DESC')])
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
-        'Parameters', states={'invisible': Or(~Eval('extra_data'),
-                Eval('extra_data_kind') != 'rule_parameter')})
+        'Parameters', states={'invisible': Or(
+                Eval('extra_data_kind') != 'rule_parameter',
+                ~Eval('extra_data'),
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
     rules_used = fields.Many2Many(
         'rule_engine.rule_engine-rule_engine', 'parent_rule', 'rule', 'Rules',
-        states={'invisible': Eval('extra_data_kind') != 'rule', })
+        states={'invisible': Or(
+                Eval('extra_data_kind') != 'rule',
+                ~Eval('extra_data'),
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
     tables_used = fields.Many2Many(
         'rule_engine.rule_engine-table', 'parent_rule', 'table', 'Tables',
-        states={'invisible': Eval('extra_data_kind') != 'table', })
+        states={'invisible': Or(
+                Eval('extra_data_kind') != 'table',
+                ~Eval('extra_data'),
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
     extra_data = fields.Function(fields.Boolean('Display Extra Data'),
         'get_extra_data', 'setter_void')
     extra_data_kind = fields.Function(
@@ -570,41 +579,28 @@ class RuleEngine(ModelView, ModelSQL):
 
     @classmethod
     def _export_keys(cls):
-        return set(['name'])
+        return set(['short_name'])
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(RuleEngine, cls)._export_skips()
+        result.add('debug_mode')
+        result.add('exec_logs')
 
     @classmethod
     def fill_empty_data_tree(cls):
         res = []
-        tmp_node = {}
-        tmp_node['name'] = ''
-        tmp_node['translated'] = ''
-        tmp_node['fct_args'] = ''
-        tmp_node['description'] = coop_string.translate_label(cls,
-            'parameters')
-        tmp_node['type'] = 'folder'
-        tmp_node['long_description'] = ''
-        tmp_node['children'] = []
-        res.append(tmp_node)
-        tmp_node = {}
-        tmp_node['name'] = ''
-        tmp_node['translated'] = ''
-        tmp_node['fct_args'] = ''
-        tmp_node['description'] = coop_string.translate_label(cls,
-            'rules_used')
-        tmp_node['type'] = 'folder'
-        tmp_node['long_description'] = ''
-        tmp_node['children'] = []
-        res.append(tmp_node)
-        tmp_node = {}
-        tmp_node['name'] = ''
-        tmp_node['translated'] = ''
-        tmp_node['fct_args'] = ''
-        tmp_node['description'] = coop_string.translate_label(cls,
-            'tables_used')
-        tmp_node['type'] = 'folder'
-        tmp_node['long_description'] = ''
-        tmp_node['children'] = []
-        res.append(tmp_node)
+        for label_type in ('parameters', 'rules_used', 'tables_used'):
+            tmp_node = {}
+            tmp_node['name'] = ''
+            tmp_node['translated'] = ''
+            tmp_node['fct_args'] = ''
+            tmp_node['description'] = coop_string.translate_label(cls,
+                label_type)
+            tmp_node['type'] = 'folder'
+            tmp_node['long_description'] = ''
+            tmp_node['children'] = []
+            res.append(tmp_node)
         return res
 
     @classmethod
@@ -658,8 +654,7 @@ class RuleEngine(ModelView, ModelSQL):
         self.raise_user_error('invalid_code')
 
     def get_extra_data_for_on_change(self, existing_values):
-        if not (hasattr(self, 'parameters') and
-                self.parameters):
+        if not getattr(self, 'parameters', None):
             return None
         return dict([(elem.name, existing_values.get(
                         elem.name, None))
@@ -692,11 +687,10 @@ class RuleEngine(ModelView, ModelSQL):
             context[technical_name] = \
                 functools.partial(table.TableCell.get, elem)
         else:
-            return context
+            return
         if debug:
             debug_wrapper = self.get_wrapper_func(context)
             context[technical_name] = debug_wrapper(context[technical_name])
-        return context
 
     def add_rule_parameters_to_context(self, evaluation_context,
             execution_kwargs, context):
@@ -726,7 +720,6 @@ class RuleEngine(ModelView, ModelSQL):
         return context
 
     def get_wrapper_func(self, context):
-        # TOREVIEW FLA
         def debug_wrapper(func):
             def wrapper_func(*args, **kwargs):
                 context['__result__'].low_level_debug.append(
@@ -839,17 +832,10 @@ class RuleEngine(ModelView, ModelSQL):
         if kind == 'table':
             dimension_names = []
             for idx in range(1, table.DIMENSION_MAX + 1):
-                try:
-                    dim = getattr(elem, 'dimension_kind%s' % idx)
-                except AttributeError:
-                    break
+                dim = getattr(elem, 'dimension_kind%s' % idx, None)
                 if not dim:
                     break
-                try:
-                    dim_name = getattr(elem,
-                        'dimension_name%s' % idx)
-                except AttributeError:
-                    dim_name = None
+                dim_name = getattr(elem, 'dimension_name%s' % idx, None)
                 if not dim_name:
                     dim_name = 'Col #%s' % idx
                 dimension_names.append(dim_name)
@@ -863,16 +849,15 @@ class RuleEngine(ModelView, ModelSQL):
         return res
 
     def build_node(self, elem, kind):
-        param_node = {}
-        param_node['name'] = name
-        param_node['description'] = elem.get_rec_name(None)
-        param_node['type'] = 'function'
-        param_node['long_description'] = '%s (%s)' % (elem.get_rec_name(None),
-            kind)
-        param_node['children'] = []
-        param_node['translated'] = self.get_translated_name(elem, kind)
-        param_node['fct_args'] = self.get_fct_args(elem, kind)
-        return param_node
+        return {
+            'name': name,
+            'description': elem.get_rec_name(None),
+            'type': 'function',
+            'long_description': '%s (%s)' % (elem.get_rec_name(None), kind),
+            'children': [],
+            'translated': self.get_translated_name(elem, kind),
+            'fct_args': self.get_fct_args(elem, kind),
+            }
 
     def data_tree_structure_for_kind(self, data_tree, tree_node_name,
             kind_code, elements):

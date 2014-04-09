@@ -3,7 +3,7 @@ import copy
 
 from trytond.pool import PoolMeta
 
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Or
 from trytond.modules.cog_utils import model, coop_string
 from trytond.modules.cog_utils import fields
 from trytond import backend
@@ -67,8 +67,11 @@ class RuleEngine:
     extra_data_parameters = fields.Many2Many(
         'rule_engine.rule_engine-extra_data', 'parent_rule',
         'extra_data', 'Extra Data Parameters', states={
-            'invisible': Eval('extra_data_kind') != 'compl',
-            })
+            'invisible': Or(
+                Eval('extra_data_kind') != 'compl',
+                ~Eval('extra_data'),
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
 
     @classmethod
     def __setup__(cls):
@@ -110,14 +113,13 @@ class RuleEngine:
         return res
 
     def get_translated_name(self, elem, kind):
-        if kind == 'compl':
-            return '%s_%s' % (kind, elem.name)
-        else:
+        if kind != 'compl':
             return super(RuleEngine, self).get_translated_name(elem, kind)
+        return '%s_%s' % (kind, elem.name)
 
     def data_tree_structure(self):
         res = super(RuleEngine, self).data_tree_structure()
-        super(RuleEngine, self).data_tree_structure_for_kind(res,
+        self.data_tree_structure_for_kind(res,
             coop_string.translate_label(self, 'extra_data_parameters'),
             'compl', self.extra_data_parameters)
         return res
@@ -132,18 +134,18 @@ class RuleEngine:
             debug=False):
         super(RuleEngine, self).as_context(elem, kind, evaluation_context,
             context, forced_value, debug)
+        if kind != 'compl':
+            return
         technical_name = self.get_translated_name(elem, kind)
-        if kind == 'compl':
-            if technical_name in context:
-                # Looks like the value was forced
-                return context
-            context[technical_name] = \
-                lambda: self.get_external_extra_data_def(elem,
-                    evaluation_context)
+        if technical_name in context:
+            # Looks like the value was forced
+            return
+        context[technical_name] = \
+            lambda: self.get_external_extra_data_def(elem,
+                evaluation_context)
         if debug:
             debug_wrapper = self.get_wrapper_func(context)
             context[technical_name] = debug_wrapper(context[technical_name])
-        return context
 
     def add_rule_parameters_to_context(self, evaluation_context,
             execution_kwargs, context):
