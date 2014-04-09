@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -34,8 +34,18 @@ msgstr ""
 "consulter les logs.\\n\\nInformations sur l'erreur :\\n%s"
 
 msgctxt "error:rule_engine:"
+msgid "Expected %s as a parameter for rule %s"
+msgstr "Le paramètre %s est requis pour exécuter la règle %s"
+
+msgctxt "error:rule_engine:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
+
+msgctxt "error:rule_engine:"
+msgid "The rule %s is a draft.Update the rule status to \"Validated\""
+msgstr ""
+"La règle %s est un brouillon. Mettre le statut à 'Validé' pour ne plus avoir"
+" ce message"
 
 msgctxt "error:rule_engine:"
 msgid "Your algorithm has errors!"
@@ -67,7 +77,7 @@ msgstr "ID"
 
 msgctxt "field:functional_error,kind:"
 msgid "Kind"
-msgstr "Type"
+msgstr "Portée de la donnée"
 
 msgctxt "field:functional_error,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -131,7 +141,7 @@ msgstr "Afficher Plus de Données"
 
 msgctxt "field:rule_engine,extra_data_kind:"
 msgid "Kind"
-msgstr "Type"
+msgstr "Portée de la donnée"
 
 msgctxt "field:rule_engine,id:"
 msgid "ID"
@@ -667,7 +677,7 @@ msgstr "ID"
 
 msgctxt "field:rule_engine.test_case,low_debug:"
 msgid "Low Level Debug Info"
-msgstr ""
+msgstr "Niveau bas de debug"
 
 msgctxt "field:rule_engine.test_case,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -699,7 +709,7 @@ msgstr "Règle"
 
 msgctxt "field:rule_engine.test_case,rule_text:"
 msgid "Rule Text"
-msgstr ""
+msgstr "Texte de la règle"
 
 msgctxt "field:rule_engine.test_case,test_values:"
 msgid "Values"
@@ -903,7 +913,7 @@ msgstr "Contexte"
 
 msgctxt "model:rule_engine.context-function,name:"
 msgid "Context Rule Function"
-msgstr ""
+msgstr "Fonction du contexte"
 
 msgctxt "model:rule_engine.function,name:"
 msgid "Rule Engine Function"
@@ -944,6 +954,30 @@ msgstr "Valeur du Test"
 msgctxt "model:tag,name:"
 msgid "Tag"
 msgstr "Label"
+
+msgctxt "model:tag,name:tag_configuration_predefinie"
+msgid "Configuration prédéfinie"
+msgstr ""
+
+msgctxt "model:tag,name:tag_configuration_predefinie"
+msgid "Configuration prédéfinie"
+msgstr ""
+
+msgctxt "model:tag,name:tag_configuration_predefinie"
+msgid "Configuration prédéfinie"
+msgstr ""
+
+msgctxt "model:tag,name:tag_configuration_predefinie"
+msgid "Configuration prédéfinie"
+msgstr ""
+
+msgctxt "model:tag,name:tag_configuration_predefinie"
+msgid "Configuration prédéfinie"
+msgstr ""
+
+msgctxt "model:tag,name:tag_configuration_predefinie"
+msgid "Configuration prédéfinie"
+msgstr ""
 
 msgctxt "selection:functional_error,kind:"
 msgid "Error"
@@ -1084,6 +1118,30 @@ msgstr "Algorithme"
 msgctxt "view:rule_engine:"
 msgid "Debug"
 msgstr "Debug"
+
+msgctxt "view:rule_engine:"
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgctxt "view:rule_engine:"
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgctxt "view:rule_engine:"
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgctxt "view:rule_engine:"
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgctxt "view:rule_engine:"
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgctxt "view:rule_engine:"
+msgid "Parameters"
+msgstr "Paramètres"
 
 msgctxt "view:rule_engine:"
 msgid "Rule"
