@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -25,10 +25,6 @@ msgstr "Créé par"
 msgctxt "field:contract.covered_element-party,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.covered_element-party,party_relation:"
-msgid "Party Relation"
-msgstr "Relations entre Acteurs"
 
 msgctxt "field:contract.covered_element-party,rec_name:"
 msgid "Name"

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tree>
-    <field name="from_party"/>
-    <field name="to_party"/>
-    <field name="relation_kind"/>
-</tree>

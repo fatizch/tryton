@@ -30,10 +30,6 @@ class Party(export.ExportImportMixin):
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
-    relations = fields.One2Many('party.relation', 'from_party', 'Relations',
-        context={'direction': 'normal'})
-    in_relation_with = fields.One2Many('party.relation', 'to_party',
-        'in relation with', context={'direction': 'reverse'})
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
@@ -117,6 +113,10 @@ class Party(export.ExportImportMixin):
             if not getattr(cls, on_change_method, None):
                 setattr(cls, on_change_method, fields.depends(field_name,
                         is_actor_var_name)(get_on_change(is_actor_var_name)))
+
+    @staticmethod
+    def default_gender():
+        return ''
 
     @classmethod
     def _export_keys(cls):
@@ -205,12 +205,9 @@ class Party(export.ExportImportMixin):
     def get_relation_with(self, target, at_date=None):
         if not at_date:
             at_date = utils.today()
-        kind = [rel.relation_kind.name for rel in
+        kind = [rel.type.code for rel in
             utils.get_good_versions_at_date(self, 'relations', at_date)
-            if rel.to_party.id == target.id]
-        kind += [rel.relation_kind.reversed_name for rel in
-            utils.get_good_versions_at_date(self, 'in_relation_with', at_date)
-            if rel.from_party.id == target.id]
+            if rel.to.id == target.id]
         if kind:
             return kind[0]
         return None
@@ -241,10 +238,6 @@ class Party(export.ExportImportMixin):
             #    party, 'extra_data', True, at_date, lang=lang)
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'addresses', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'relations', True, at_date, lang=lang)
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'in_relation_with', True, at_date, lang=lang)
         return res
 
     @classmethod
@@ -292,9 +285,9 @@ class Party(export.ExportImportMixin):
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(Party, cls).get_var_names_for_full_extract()
-        res.extend(['is_person', 'is_company', 'relations',
-            'gender', 'first_name', 'maiden_name', 'birth_date', 'ssn',
-            'short_name', 'addresses', 'contact_mechanisms',
+        res.extend(['is_person', 'is_company', 'gender', 'first_name',
+            'maiden_name', 'birth_date', 'ssn', 'short_name', 'addresses',
+            'contact_mechanisms',
             ('lang', 'light')])
         return res
 
