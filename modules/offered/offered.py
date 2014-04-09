@@ -384,6 +384,13 @@ class Product(model.CoopSQL, Offered):
     def get_possible_product_kind(cls):
         return [('', '')]
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
+
     def get_valid_coverages(self):
         for coverage in self.coverages:
             if coverage.is_valid():
@@ -587,6 +594,13 @@ class OptionDescription(model.CoopSQL, Offered):
     @classmethod
     def default_currency(cls):
         return ModelCurrency.default_currency()
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
 
     def is_valid(self):
         if self.template_behaviour == 'remove':
