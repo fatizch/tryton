@@ -14,6 +14,7 @@ from trytond.transaction import Transaction
 from trytond.tools import reduce_ids
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractPaymentTerm',
@@ -26,7 +27,6 @@ __all__ = [
     'PremiumTax',
     'InvoiceContract',
     'InvoiceContractStart']
-__metaclass__ = PoolMeta
 
 FREQUENCIES = [
     ('one', 'One'),
