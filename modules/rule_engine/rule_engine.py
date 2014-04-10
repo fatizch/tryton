@@ -453,7 +453,6 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
                     values=[[cur_rule_parameter['parent_rule'],
                     cur_rule_parameter['code'], cur_rule_parameter['name'],
                     'numeric']]))
-            parameter_definition.drop_column('code')
 
     @fields.depends('string', 'name')
     def on_change_with_name(self):
