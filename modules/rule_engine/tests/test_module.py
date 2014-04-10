@@ -28,8 +28,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'RunTests': 'rule_engine.run_tests',
             'Language': 'ir.lang',
             'RuleParameter': 'rule_engine.rule_parameter',
-            'RuleEngineRuleEngine': 'rule_engine.rule_engine-rule_engine',
-            'RuleEngineTable': 'rule_engine.rule_engine-table',
+            'RuleEngineRuleEngine': 'rule_engine-rule_engine',
+            'RuleEngineTable': 'rule_engine-table',
             'Table': 'table',
             'Log': 'rule_engine.log',
         }

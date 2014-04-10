@@ -3,6 +3,6 @@
   <xpath expr="/form/notebook/page[@name='code']/field[@name=
     'parameters']" position="after">
     <newline/>
-    <field name="extra_data_parameters" colspan="4"/>
+    <field name="extra_data_used" colspan="4"/>
   </xpath>
 </data>

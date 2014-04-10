@@ -27,7 +27,7 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
     sub_elem_rule_extra_data = fields.Dict('rule_engine.rule_parameter',
-        'Rule Extra Data', states={
+        'Rule Parameters', states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
     subscriber_classes = fields.Selection([

@@ -479,83 +479,83 @@ msgctxt "field:rule_engine.log,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,create_date:"
+msgctxt "field:rule_engine-rule_engine,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,create_date_:"
+msgctxt "field:rule_engine-rule_engine,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,create_uid:"
+msgctxt "field:rule_engine-rule_engine,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,id:"
+msgctxt "field:rule_engine-rule_engine,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,parent_rule:"
+msgctxt "field:rule_engine-rule_engine,parent_rule:"
 msgid "Parent Rule"
 msgstr "Règle parent"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,rec_name:"
+msgctxt "field:rule_engine-rule_engine,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,rule:"
+msgctxt "field:rule_engine-rule_engine,rule:"
 msgid "Rule"
 msgstr "Règle"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,write_date:"
+msgctxt "field:rule_engine-rule_engine,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,write_uid:"
+msgctxt "field:rule_engine-rule_engine,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.rule_engine-rule_engine,xml_id:"
+msgctxt "field:rule_engine-rule_engine,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:rule_engine.rule_engine-table,create_date:"
+msgctxt "field:rule_engine-table,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:rule_engine.rule_engine-table,create_date_:"
+msgctxt "field:rule_engine-table,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:rule_engine.rule_engine-table,create_uid:"
+msgctxt "field:rule_engine-table,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:rule_engine.rule_engine-table,id:"
+msgctxt "field:rule_engine-table,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.rule_engine-table,parent_rule:"
+msgctxt "field:rule_engine-table,parent_rule:"
 msgid "Parent Rule"
 msgstr "Règle parent"
 
-msgctxt "field:rule_engine.rule_engine-table,rec_name:"
+msgctxt "field:rule_engine-table,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:rule_engine.rule_engine-table,table:"
+msgctxt "field:rule_engine-table,table:"
 msgid "Table"
 msgstr "Table"
 
-msgctxt "field:rule_engine.rule_engine-table,write_date:"
+msgctxt "field:rule_engine-table,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:rule_engine.rule_engine-table,write_uid:"
+msgctxt "field:rule_engine-table,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.rule_engine-table,xml_id:"
+msgctxt "field:rule_engine-table,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -923,11 +923,11 @@ msgctxt "model:rule_engine.log,name:"
 msgid "Rule Execution Log"
 msgstr "Log d'exécution de la règle"
 
-msgctxt "model:rule_engine.rule_engine-rule_engine,name:"
+msgctxt "model:rule_engine-rule_engine,name:"
 msgid "Rule Engine - Rule Engine"
 msgstr "Règle - Règle"
 
-msgctxt "model:rule_engine.rule_engine-table,name:"
+msgctxt "model:rule_engine-table,name:"
 msgid "Rule_Engine - Table"
 msgstr "Règle - Table"
 
@@ -954,26 +954,6 @@ msgstr "Valeur du Test"
 msgctxt "model:tag,name:"
 msgid "Tag"
 msgstr "Label"
-
-msgctxt "model:tag,name:tag_configuration_predefinie"
-msgid "Configuration prédéfinie"
-msgstr ""
-
-msgctxt "model:tag,name:tag_configuration_predefinie"
-msgid "Configuration prédéfinie"
-msgstr ""
-
-msgctxt "model:tag,name:tag_configuration_predefinie"
-msgid "Configuration prédéfinie"
-msgstr ""
-
-msgctxt "model:tag,name:tag_configuration_predefinie"
-msgid "Configuration prédéfinie"
-msgstr ""
-
-msgctxt "model:tag,name:tag_configuration_predefinie"
-msgid "Configuration prédéfinie"
-msgstr ""
 
 msgctxt "model:tag,name:tag_configuration_predefinie"
 msgid "Configuration prédéfinie"
@@ -1118,26 +1098,6 @@ msgstr "Algorithme"
 msgctxt "view:rule_engine:"
 msgid "Debug"
 msgstr "Debug"
-
-msgctxt "view:rule_engine:"
-msgid "Parameters"
-msgstr "Paramètres"
-
-msgctxt "view:rule_engine:"
-msgid "Parameters"
-msgstr "Paramètres"
-
-msgctxt "view:rule_engine:"
-msgid "Parameters"
-msgstr "Paramètres"
-
-msgctxt "view:rule_engine:"
-msgid "Parameters"
-msgstr "Paramètres"
-
-msgctxt "view:rule_engine:"
-msgid "Parameters"
-msgstr "Paramètres"
 
 msgctxt "view:rule_engine:"
 msgid "Parameters"

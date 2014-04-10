@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.modules.cog_utils import coop_string
 
 MODULE_NAME = 'offered_life'
 
@@ -57,7 +58,6 @@ class TestCaseModel:
     @classmethod
     def create_rule(cls, name, code, tables=None):
         RuleEngine = Pool().get('rule_engine')
-        TableParameter = Pool().get('rule_engine.rule_engine-table')
         Table = Pool().get('table')
         Context = Pool().get('rule_engine.context')
         existing = RuleEngine.search([('name', '=', name)])
@@ -67,15 +67,11 @@ class TestCaseModel:
             tables = []
         rule = RuleEngine()
         rule.name = name
-        rule.code = code
-        rule.rule_parameters = []
+        rule.short_name = coop_string.remove_blank_and_invalid_char(name)
+        rule.algorithm = code
+        rule.parameters = []
         rule.context = Context(1)
-        rule.tables_used = []
-        for elem in tables:
-            param = TableParameter()
-            param.table = Table.search([('code', '=', elem)])[0]
-            param.name = param.the_table.name
-            rule.tables_used.append(param)
+        rule.tables_used = Table.search([('code', 'in', tables)])
         return rule
 
     @classmethod

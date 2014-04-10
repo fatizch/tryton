@@ -32,7 +32,7 @@ __all__ = [
 class RuleEngineExtraData(model.CoopSQL):
     'Rule Engine - Extra Data'
 
-    __name__ = 'rule_engine.rule_engine-extra_data'
+    __name__ = 'rule_engine-extra_data'
 
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE')
@@ -59,14 +59,16 @@ class RuleEngineExtraData(model.CoopSQL):
                     extradata_definition.extra_data],
                     values=[[cur_rule_parameter['parent_rule'],
                     cur_rule_parameter['external_extra_data_def']]]))
+            TableHandler.table_rename(cursor, 'rule_engine_parameter',
+                'rule_engine_parameter_backup')
 
 
 class RuleEngine:
     __name__ = 'rule_engine'
 
-    extra_data_parameters = fields.Many2Many(
-        'rule_engine.rule_engine-extra_data', 'parent_rule',
-        'extra_data', 'Extra Data Parameters', states={
+    extra_data_used = fields.Many2Many(
+        'rule_engine-extra_data', 'parent_rule',
+        'extra_data', 'Extra Data', states={
             'invisible': Or(
                 Eval('extra_data_kind') != 'compl',
                 ~Eval('extra_data'),
@@ -89,14 +91,14 @@ class RuleEngine:
         tmp_node['translated'] = ''
         tmp_node['fct_args'] = ''
         tmp_node['description'] = coop_string.translate_label(cls,
-            'extra_data_parameters')
+            'extra_data_used')
         tmp_node['type'] = 'folder'
         tmp_node['long_description'] = ''
         tmp_node['children'] = []
         res.append(tmp_node)
         return res
 
-    @fields.depends('extra_data_parameters')
+    @fields.depends('extra_data_used')
     def on_change_with_data_tree(self, name=None):
         return super(RuleEngine, self).on_change_with_data_tree(name)
 
@@ -109,7 +111,7 @@ class RuleEngine:
     def allowed_functions(self):
         res = super(RuleEngine, self).allowed_functions()
         res += [self.get_translated_name(elem, 'compl')
-            for elem in self.extra_data_parameters]
+            for elem in self.extra_data_used]
         return res
 
     def get_translated_name(self, elem, kind):
@@ -120,8 +122,8 @@ class RuleEngine:
     def data_tree_structure(self):
         res = super(RuleEngine, self).data_tree_structure()
         self.data_tree_structure_for_kind(res,
-            coop_string.translate_label(self, 'extra_data_parameters'),
-            'compl', self.extra_data_parameters)
+            coop_string.translate_label(self, 'extra_data_used'),
+            'compl', self.extra_data_used)
         return res
 
     def get_external_extra_data_def(self, elem, args):
@@ -151,7 +153,7 @@ class RuleEngine:
             execution_kwargs, context):
         super(RuleEngine, self).add_rule_parameters_to_context(
             evaluation_context, execution_kwargs, context)
-        for elem in self.extra_data_parameters:
+        for elem in self.extra_data_used:
             self.as_context(elem, 'compl', evaluation_context, context, None,
                 Transaction().context.get('debug'))
 

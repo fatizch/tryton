@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -2635,43 +2635,43 @@ msgctxt "field:rule_engine.parameter,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,create_date:"
+msgctxt "field:rule_engine-extra_data,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,create_date_:"
+msgctxt "field:rule_engine-extra_data,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,create_uid:"
+msgctxt "field:rule_engine-extra_data,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,extra_data:"
+msgctxt "field:rule_engine-extra_data,extra_data:"
 msgid "External Data"
 msgstr ""
 
-msgctxt "field:rule_engine.rule_engine-extra_data,id:"
+msgctxt "field:rule_engine-extra_data,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,parent_rule:"
+msgctxt "field:rule_engine-extra_data,parent_rule:"
 msgid "Parent Rule"
 msgstr "Règle parent"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,rec_name:"
+msgctxt "field:rule_engine-extra_data,rec_name:"
 msgid "Name"
 msgstr "Valeur"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,write_date:"
+msgctxt "field:rule_engine-extra_data,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,write_uid:"
+msgctxt "field:rule_engine-extra_data,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:rule_engine.rule_engine-extra_data,xml_id:"
+msgctxt "field:rule_engine-extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -2956,7 +2956,7 @@ msgctxt "model:process-offered.product,name:"
 msgid "Process Product Relation"
 msgstr "Relation Processus Produit"
 
-msgctxt "model:rule_engine.rule_engine-extra_data,name:"
+msgctxt "model:rule_engine-extra_data,name:"
 msgid "Rule Engine - Extra Data"
 msgstr ""
 

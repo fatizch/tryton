@@ -353,7 +353,7 @@ class FunctionFinder(ast.NodeVisitor):
 class RuleEngineTable(model.CoopSQL):
     'Rule_Engine - Table'
 
-    __name__ = 'rule_engine.rule_engine-table'
+    __name__ = 'rule_engine-table'
 
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE')
@@ -384,7 +384,7 @@ class RuleEngineTable(model.CoopSQL):
 class RuleEngineRuleEngine(model.CoopSQL):
     'Rule Engine - Rule Engine'
 
-    __name__ = 'rule_engine.rule_engine-rule_engine'
+    __name__ = 'rule_engine-rule_engine'
 
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE')
@@ -453,6 +453,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
                     values=[[cur_rule_parameter['parent_rule'],
                     cur_rule_parameter['code'], cur_rule_parameter['name'],
                     'numeric']]))
+            parameter_definition.drop_column('code')
 
     @fields.depends('string', 'name')
     def on_change_with_name(self):
@@ -492,19 +493,19 @@ class RuleEngine(ModelView, ModelSQL):
         depends=['debug_mode'], order=[('create_date', 'DESC')])
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
         'Parameters', states={'invisible': Or(
-                Eval('extra_data_kind') != 'rule_parameter',
+                Eval('extra_data_kind') != 'parameter',
                 ~Eval('extra_data'),
                 )
             }, depends=['extra_data_kind', 'extra_data'])
     rules_used = fields.Many2Many(
-        'rule_engine.rule_engine-rule_engine', 'parent_rule', 'rule', 'Rules',
+        'rule_engine-rule_engine', 'parent_rule', 'rule', 'Rules',
         states={'invisible': Or(
                 Eval('extra_data_kind') != 'rule',
                 ~Eval('extra_data'),
                 )
             }, depends=['extra_data_kind', 'extra_data'])
     tables_used = fields.Many2Many(
-        'rule_engine.rule_engine-table', 'parent_rule', 'table', 'Tables',
+        'rule_engine-table', 'parent_rule', 'table', 'Tables',
         states={'invisible': Or(
                 Eval('extra_data_kind') != 'table',
                 ~Eval('extra_data'),
@@ -515,7 +516,7 @@ class RuleEngine(ModelView, ModelSQL):
     extra_data_kind = fields.Function(
         fields.Selection([
                 ('', ''),
-                ('rule_parameter', 'Rule Parameter'),
+                ('parameter', 'Parameter'),
                 ('rule', 'Rule'),
                 ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
@@ -586,6 +587,7 @@ class RuleEngine(ModelView, ModelSQL):
         result = super(RuleEngine, cls)._export_skips()
         result.add('debug_mode')
         result.add('exec_logs')
+        return result
 
     @classmethod
     def fill_empty_data_tree(cls):

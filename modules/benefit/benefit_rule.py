@@ -322,7 +322,7 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     rule = fields.Many2One('rule_engine', 'Amount', ondelete='RESTRICT',
         states={'invisible': STATE_SIMPLE})
     rule_extra_data = fields.Dict('rule_engine.rule_parameter',
-        'Rule Extra Data', states={'invisible': STATE_SIMPLE})
+        'Rule Parameters', states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={'invisible': STATE_ADVANCED})
