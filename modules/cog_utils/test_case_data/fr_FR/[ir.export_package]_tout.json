@@ -6602,7 +6602,7 @@
         "_export_key": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -6610,7 +6610,7 @@
             ]
         ],
         "active": true,
-        "code": "offered.product",
+        "code": "contract",
         "company": null,
         "last_timestamp": 0,
         "name": "S\u00e9quence",
@@ -15976,7 +15976,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -22719,7 +22719,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -27127,7 +27127,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -40536,7 +40536,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -47160,7 +47160,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -49164,7 +49164,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -53673,7 +53673,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -54723,7 +54723,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -63579,7 +63579,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -64494,7 +64494,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -65334,7 +65334,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -65463,7 +65463,7 @@
         "_export_key": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -65471,7 +65471,7 @@
             ]
         ],
         "active": true,
-        "code": "offered.product",
+        "code": "contract",
         "company": [
             [
                 "party.name",
@@ -65775,7 +65775,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -66303,7 +66303,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -66714,7 +66714,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",
@@ -66988,7 +66988,7 @@
         "contract_generator": [
             [
                 "code",
-                "offered.product"
+                "contract"
             ],
             [
                 "name",

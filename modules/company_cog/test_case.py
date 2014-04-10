@@ -26,11 +26,11 @@ class TestCaseModel:
 
     @classmethod
     def run_test_case_method(cls, method):
-        try:
-            company = cls.get_company()
+        company = cls.get_company()
+        if company:
             with Transaction().set_context(company=company.id):
                 super(TestCaseModel, cls).run_test_case_method(method)
-        except IndexError:
+        else:
             super(TestCaseModel, cls).run_test_case_method(method)
 
     @classmethod
@@ -58,10 +58,12 @@ class TestCaseModel:
             return Configuration._company_cache
         Company = Pool().get('company.company')
         companies = Company.search([])
+        result = None
         if len(companies) == 1:
             result = companies[0]
         elif len(companies):
             result = Company.search([('party.name', '=',
                     Configuration.main_company_name)])[0]
-        Configuration._company_cache = result
+        if result:
+            Configuration._company_cache = result
         return result
