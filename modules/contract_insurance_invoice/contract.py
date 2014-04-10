@@ -31,7 +31,7 @@ __all__ = [
     'InvoiceContractStart']
 
 FREQUENCIES = [
-    ('one', 'One'),
+    ('once_per_invoice', 'Once per Invoice'),
     ('monthly', 'Monthly'),
     ('quarterly', 'Quarterly'),
     ('biannual', 'Biannual'),
@@ -164,7 +164,7 @@ class Contract:
         elif frequency == 'yearly':
             freq = YEARLY
             interval = 1
-        elif frequency == 'one':
+        elif frequency == 'once_per_invoice':
             return [start, self.end_date + relativedelta(days=+1)], until
         else:
             return [], until
@@ -304,74 +304,69 @@ class Contract:
     def calculate_prices_between_dates(self, start=None, end=None):
         if not start:
             start = self.start_date
-        prices = []
+        prices = {}
         errs = []
         dates = self.get_dates()
         dates = utils.limit_dates(dates, self.start_date)
         for cur_date in dates:
             price, err = self.calculate_price_at_date(cur_date)
             if price:
-                prices.extend(price)
+                prices[cur_date] = price
             errs += err
             if errs:
-                return [], errs
+                return {}, errs
         return prices, errs
 
     def store_price(self, price, start_date, end_date):
         to_check_for_deletion = set()
         to_save = []
         Premium = Pool().get('contract.premium')
-        if price.amount:
-            new_premium = Premium.new_line(price, start_date, end_date)
-            if new_premium:
-                parent = new_premium.get_parent()
-                if isinstance(parent.premiums, tuple):
-                    parent.premiums = list(parent.premiums)
-                parent.premiums.append(new_premium)
-                to_check_for_deletion.add(parent)
-                to_save.append(new_premium)
-        for elem in price.details:
-            detail_save, detail_delete = self.store_price(elem, start_date,
-                end_date)
-            to_save += detail_save
-            to_check_for_deletion.union(detail_delete)
+        new_premium = Premium.new_line(price, start_date, end_date)
+        if new_premium:
+            parent = new_premium.get_parent()
+            if isinstance(parent.premiums, tuple):
+                parent.premiums = list(parent.premiums)
+            parent.premiums.append(new_premium)
+            to_check_for_deletion.add(parent)
+            to_save.append(new_premium)
         return to_save, to_check_for_deletion
 
     def store_prices(self, prices):
         if not prices:
             return
         Premium = Pool().get('contract.premium')
-        dates = list(set([elem.start_date for elem in prices]))
+        dates = list(prices.iterkeys())
         dates.sort()
         to_check_for_deletion = set()
         to_save = []
-        for price in prices:
-            date_pos = dates.index(price.start_date)
+        for date, price_list in prices.iteritems():
+            date_pos = dates.index(date)
             if date_pos < len(dates) - 1:
                 end_date = dates[date_pos + 1] + datetime.timedelta(days=-1)
             else:
                 end_date = None
-            price_save, price_delete = self.store_price(price,
-                start_date=price.start_date, end_date=end_date)
-            to_save += price_save
-            to_check_for_deletion.union(price_delete)
+            for price in price_list:
+                price_save, price_delete = self.store_price(price,
+                    start_date=date, end_date=end_date)
+                to_save += price_save
+                to_check_for_deletion.update(price_delete)
         to_delete = set()
         for elem in to_check_for_deletion:
             existing = [x for x in getattr(elem, 'premiums', []) if x.id > 0]
             if not existing:
                 continue
-            to_delete.union(set(x.id for x in existing
-                    if existing.start_date >= dates[0]))
+            to_delete.update(set(
+                    x for x in existing if x.start >= dates[0]))
             for elem in existing:
-                if (datetime.date.min or elem.start_date) <= dates[0] <= (
-                        elem.end_date or datetime.date.max):
-                    elem.end_date = coop_date.add_day(dates[0], -1)
+                if (datetime.date.min or elem.start) < dates[0] <= (
+                        elem.end or datetime.date.max):
+                    elem.end = coop_date.add_day(dates[0], -1)
+                    elem.save()
                     break
         if to_delete:
-            Premium.delete(to_delete)
+            Premium.delete(list(to_delete))
         if to_save:
             Premium.create([x._save_values for x in to_save])
-        self.save()
 
 
 class _ContractRevisionMixin(object):
@@ -596,6 +591,7 @@ class Premium(ModelSQL, ModelView):
         return [
             'offered.product',
             'offered.option.description',
+            'account.fee.description',
             ]
 
     @classmethod
@@ -642,14 +638,14 @@ class Premium(ModelSQL, ModelView):
         elif self.frequency == 'yearly':
             freq = YEARLY
             interval = 1
-        elif self.frequency in ('one', 'once_per_contract'):
+        elif self.frequency in ('once_per_invoice', 'once_per_contract'):
             return rrule(MONTHLY, dtstart=self.start, count=1)
         else:
             return
         return rrule(freq, interval=interval, dtstart=start)
 
     def get_amount(self, start, end):
-        if self.frequency in ('one', 'once_per_contract'):
+        if self.frequency in ('once_per_invoice', 'once_per_contract'):
             return self.amount
         rrule = self._get_rrule(start)
         start = datetime.datetime.combine(start, datetime.time())
@@ -700,8 +696,8 @@ class Premium(ModelSQL, ModelView):
     def set_parent_from_line(self, line):
         for elem in self.get_possible_parent_field():
             field = self._fields[elem]
-            if field.model_name == line.on_object.__name__:
-                setattr(self, elem, line.on_object)
+            if field.model_name == line['target'].__name__:
+                setattr(self, elem, line['target'])
                 break
 
     def calculate_rated_entity(self):
@@ -721,25 +717,23 @@ class Premium(ModelSQL, ModelView):
 
     @classmethod
     def new_line(cls, line, start_date, end_date):
-        if not line.on_object:
+        if 'target' not in line:
             return None
         new_instance = cls()
         new_instance.set_parent_from_line(line)
         if not new_instance.get_parent():
             # TODO : Should raise an error
             return None
-        new_instance.rated_entity = new_instance.calculate_rated_entity()
+        new_instance.rated_entity = line['rated_entity']
         # TODO : use the line account once it is implemented
         new_instance.account = new_instance.rated_entity.account_for_billing
         new_instance.start = start_date
         new_instance.end = end_date
-        new_instance.amount = line.amount
-        new_instance.taxes = []
+        new_instance.amount = line['amount']
+        if line['taxes']:
+            new_instance.taxes = line['taxes']
         # TODO : get from line once properly set
-        new_instance.frequency = 'yearly'
-        for elem in line.details:
-            if elem.on_object.__name__ == 'account.tax':
-                new_instance.taxes.append(elem.on_object)
+        new_instance.frequency = line['frequency']
         return new_instance
 
 

@@ -6,7 +6,6 @@ from trytond.modules.cog_utils import model, utils, fields, coop_date
 from trytond.modules.cog_utils import coop_string
 
 from trytond.modules.offered import NonExistingRuleKindException
-from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import EligibilityResultLine
 
 
@@ -132,40 +131,28 @@ class Product:
         for coverage in self.get_valid_coverages():
             _res, _errs = coverage.get_result('price', args)
             if _res:
-                res.extend(_res)
+                res += _res
             errs += _errs
-        return (res, errs)
+        return res, errs
 
     def give_me_product_price(self, args):
         # There is a pricing manager on the products so we can just forward the
         # request.
         self.init_dict_for_rule_engine(args)
-        result_line = PricingResultLine(on_object=self)
-        result_line.init_from_args(args)
         try:
-            product_line, product_errs = self.get_result('price', args,
+            product_lines, product_errs = self.get_result('price', args,
                 kind='premium')
         except NonExistingRuleKindException:
-            product_line = None
+            product_lines = []
             product_errs = []
-        if product_line and product_line.amount:
-            product_line.on_object = args['contract']
-            result_line.add_detail_from_line(product_line)
-        return [result_line] if result_line.amount else [], product_errs
+        return product_lines, product_errs
 
     def give_me_total_price(self, args):
         # Total price is the sum of coverages price and Product price
-        (p_price, errs_product) = self.give_me_product_price(args)
-        (o_price, errs_coverages) = self.give_me_coverages_price(args)
+        p_price, errs_product = self.give_me_product_price(args)
+        o_price, errs_coverages = self.give_me_coverages_price(args)
 
-        lines = p_price + o_price
-        # lines = []
-        # for line in p_price + o_price:
-            # if line.value == 0:
-                # continue
-            # lines.append(line)
-
-        return (lines, errs_product + errs_coverages)
+        return (p_price + o_price, errs_product + errs_coverages)
 
     def give_me_families(self, args):
         self.update_args(args)

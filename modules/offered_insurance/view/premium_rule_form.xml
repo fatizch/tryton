@@ -6,6 +6,8 @@
     <xpath expr="/form/label[@name='config_kind']" position="before">
         <label name="frequency"/>
         <field name="frequency" xexpand="1"/>
+        <label name="match_contract_frequency"/>
+        <field name="match_contract_frequency"/>
     </xpath>
     <xpath expr="/form/label[@name='rule']" position="before">
         <label name="basic_price"/>

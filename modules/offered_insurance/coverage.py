@@ -81,35 +81,29 @@ class OptionDescription:
         res.append(('insurance', 'Insurance'))
         return res
 
-    def calculate_main_price(self, args, result_line, errs, date, contract):
+    def calculate_main_price(self, args, errs, date, contract):
         try:
-            coverage_line, coverage_errs = self.get_result(
+            coverage_lines, coverage_errs = self.get_result(
                 'price', args, kind='premium')
         except offered.NonExistingRuleKindException:
-            coverage_line = None
+            coverage_lines = None
             coverage_errs = []
-        if coverage_line and coverage_line.amount:
-            for_option = contract.get_option_for_coverage_at_date(self)
-            if for_option:
-                coverage_line.on_object = for_option
-            result_line.add_detail_from_line(coverage_line)
         errs += coverage_errs
+        return coverage_lines
 
-    def calculate_sub_elem_price(self, args, result_line, errs):
+    def calculate_sub_elem_price(self, args, errs):
         for covered, option in self.give_me_covered_elements_at_date(
                 args)[0]:
             tmp_args = args.copy()
             option.init_dict_for_rule_engine(tmp_args)
             try:
-                sub_elem_line, sub_elem_errs = self.get_result(
+                sub_elem_lines, sub_elem_errs = self.get_result(
                     'sub_elem_price', tmp_args, kind='premium')
             except offered.NonExistingRuleKindException:
-                sub_elem_line = None
+                sub_elem_lines = []
                 sub_elem_errs = []
-            if sub_elem_line and sub_elem_line.amount:
-                sub_elem_line.on_object = option
-                result_line.add_detail_from_line(sub_elem_line)
             errs += sub_elem_errs
+            return sub_elem_lines
 
     def give_me_price(self, args):
         data_dict, errs = utils.get_data_from_dict(['contract', 'date'], args)
@@ -117,13 +111,11 @@ class OptionDescription:
             return ([], errs)
         contract = data_dict['contract']
         date = data_dict['date']
-        result_line = PricingResultLine(on_object=self)
-        result_line.init_from_args(args)
-        self.calculate_main_price(args, result_line, errs, date, contract)
+        result = []
+        result += self.calculate_main_price(args, errs, date, contract)
+        result += self.calculate_sub_elem_price(args, errs)
 
-        self.calculate_sub_elem_price(args, result_line, errs)
-
-        return ([result_line], errs)
+        return (result, errs)
 
     def give_me_eligibility(self, args):
         try:

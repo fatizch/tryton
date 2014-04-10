@@ -15,6 +15,7 @@ def register():
         # From offered
         Product,
         OptionDescription,
+        PremiumRule,
         # From rule_engine
         RuleEngineRuntime,
         # From Loan

@@ -19,6 +19,8 @@ def register():
         ExtraPremium,
         Premium,
         PremiumTax,
+        FeeDesc,
+        TaxDesc,
         InvoiceContractStart,
         module='contract_insurance_invoice', type_='model')
     Pool.register(

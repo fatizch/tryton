@@ -8,6 +8,8 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'OptionDescription',
+    'FeeDesc',
+    'TaxDesc',
     ]
 
 
@@ -30,3 +32,19 @@ class OptionDescription:
             'required': ~Eval('is_package'),
             'invisible': ~~Eval('is_package'),
             }, ondelete='RESTRICT')
+
+
+class FeeDesc:
+    __name__ = 'account.fee.description'
+
+    account_for_billing = fields.Many2One('account.account',
+        'Account for billing', domain=[
+            ('kind', '=', 'revenue'),
+            ('company', '=', Eval('context', {}).get('company'))],
+        required=True, ondelete='RESTRICT')
+
+
+class TaxDesc:
+    __name__ = 'account.tax.description'
+
+    tax = fields.Many2One('account.tax', 'Tax')
