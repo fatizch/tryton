@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Invoice Frequencies">
+    <field name="frequency"/>
+    <field name="sync_day"/>
+    <field name="sync_month"/>
+</tree>

@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <record model="ir.ui.view" id="offered_invoice_frequency_view_form">
+            <field name="model">offered.invoice.frequency</field>
+            <field name="type">form</field>
+            <field name="name">offered_invoice_frequency_form</field>
+        </record>
+        <record model="ir.ui.view" id="offered_invoice_frequency_view_list">
+            <field name="model">offered.invoice.frequency</field>
+            <field name="type">tree</field>
+            <field name="name">offered_invoice_frequency_list</field>
+        </record>
         <record model="ir.ui.view" id="product_view_form">
             <field name="model">offered.product</field>
             <field name="inherit" ref="offered.product_view_form"/>

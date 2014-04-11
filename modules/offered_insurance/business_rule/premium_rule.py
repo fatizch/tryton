@@ -123,6 +123,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
                                 'kind': 'tax',
                                 'code': tax.code,
                                 'rated_object_kind': 'global',
+                                'value': tax.id,
                                 }])]})
 
     @classmethod
@@ -326,8 +327,10 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             ContractInvoiceFrequency = Pool().get('contract.invoice_frequency')
             contract_frequency = ContractInvoiceFrequency.get_value(
                 [args['contract']], args['date'])[args['contract'].id]
+            frequency = Pool().get('offered.invoice.frequency')(
+                contract_frequency).frequency
             for elem in (lines + fee_lines):
-                self.convert_premium_frequency(elem, contract_frequency)
+                self.convert_premium_frequency(elem, frequency)
 
         return lines + fee_lines, errors
 

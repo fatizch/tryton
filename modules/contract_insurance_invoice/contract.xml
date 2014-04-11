@@ -48,15 +48,15 @@
             <field name="name">payment_term_form</field>
         </record>
 
-        <record model="ir.ui.view" id="invoice_frequency_view_list">
+        <record model="ir.ui.view" id="contract_invoice_frequency_view_list">
             <field name="model">contract.invoice_frequency</field>
             <field name="type">tree</field>
-            <field name="name">invoice_frequency_list</field>
+            <field name="name">contract_invoice_frequency_list</field>
         </record>
-        <record model="ir.ui.view" id="invoice_frequency_view_form">
+        <record model="ir.ui.view" id="contract_invoice_frequency_view_form">
             <field name="model">contract.invoice_frequency</field>
             <field name="type">form</field>
-            <field name="name">invoice_frequency_form</field>
+            <field name="name">contract_invoice_frequency_form</field>
         </record>
 
         <record model="ir.ui.view" id="contract_invoice_view_list">

@@ -7,7 +7,9 @@ from .contract import *
 
 def register():
     Pool.register(
+        InvoiceFrequency,
         Product,
+        ProductInvoiceFrequencyRelation,
         OptionDescription,
         InvoiceLine,
         Contract,

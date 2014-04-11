@@ -31,7 +31,7 @@ __all__ = [
     'InvoiceContractStart']
 
 FREQUENCIES = [
-    ('once_per_invoice', 'Once per Invoice'),
+    ('once_per_contract', 'Once Per Contract'),
     ('monthly', 'Monthly'),
     ('quarterly', 'Quarterly'),
     ('biannual', 'Biannual'),
@@ -39,7 +39,7 @@ FREQUENCIES = [
     ]
 
 PREMIUM_FREQUENCIES = FREQUENCIES + [
-    ('once_per_contract', 'Once Per Contract'),
+    ('once_per_invoice', 'Once per Invoice'),
     ]
 
 
@@ -54,9 +54,12 @@ class Contract:
             'account.invoice.payment_term', 'Payment Term'),
         'get_payment_term')
     invoice_frequencies = fields.One2Many('contract.invoice_frequency',
-        'contract', 'Invoice Frequencies', required=True)
-    invoice_frequency = fields.Function(fields.Selection(FREQUENCIES,
-            'Invoice Frequency', sort=False), 'get_invoice_frequency')
+        'contract', 'Invoice Frequencies', required=True,
+        domain=[('value.products', '=', Eval('product'))],
+        depends=['product'])
+    invoice_frequency = fields.Function(
+        fields.Many2One('offered.invoice.frequency', 'Invoice Frequency'),
+        'get_invoice_frequency')
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
         searcher='search_last_invoice')
@@ -70,6 +73,42 @@ class Contract:
         cls._buttons.update({
                 'button_calculate_prices': {},
                 })
+
+    @fields.depends('invoice_frequencies', 'product', 'start_date')
+    def on_change_product(self):
+        result = super(Contract, self).on_change_product()
+        if not self.product:
+            result['invoice_frequencies'] = {
+                'remove': [x.id for x in self.invoice_frequencies]}
+            return result
+        result['invoice_frequencies'] = {
+            'remove': [x.id for x in self.invoice_frequencies
+                if x.value not in self.product.frequencies]}
+        if (len(self.invoice_frequencies) !=
+                len(result['invoice_frequencies']['remove'])):
+            for elem in self.invoice_frequencies:
+                if elem.value in self.product.frequencies:
+                    break
+            result['invoice_frequencies']['update'] = {
+                'id':  elem.id,
+                'date': self.start_date,
+                }
+            return result
+        result['invoice_frequencies']['add'] = [[-1, {
+                    'date': self.start_date,
+                    'value': self.product.default_frequency.id,
+                    }]]
+        return result
+
+    @fields.depends('start_date', 'invoice_frequencies')
+    def on_change_with_invoice_frequency(self):
+        if not self.invoice_frequencies:
+            return None
+        date = max(self.start_date, Pool().get('ir.date').today())
+        for elem in self.invoice_frequencies[::-1]:
+            if elem.date <= date:
+                return elem.value.id
+        return elem.value.id
 
     @classmethod
     def get_revision_value(cls, contracts, ContractRevision):
@@ -152,24 +191,7 @@ class Contract:
         until = None
         if next_frequency:
             until = next_frequency.date
-        frequency = frequency.value
-
-        if frequency in ('monthly', 'quarterly', 'biannual'):
-            freq = MONTHLY
-            interval = {
-                'monthly': 1,
-                'quarterly': 3,
-                'biannual': 6,
-                }.get(frequency)
-        elif frequency == 'yearly':
-            freq = YEARLY
-            interval = 1
-        elif frequency == 'once_per_invoice':
-            return [start, self.end_date + relativedelta(days=+1)], until
-        else:
-            return [], until
-        return (rrule(freq, interval=interval, dtstart=start, until=until),
-            until)
+        return frequency.value.get_rrule(start, until)
 
     def get_invoice_periods(self, up_to_date):
         'Return the list of invoice periods up to the date'
@@ -184,8 +206,8 @@ class Contract:
         periods = []
 
         while start < up_to_date:
-            rrule, until = self._get_invoice_rrule(start)
-            for date in rrule:
+            rule, until = self._get_invoice_rrule(start)
+            for date in rule:
                 if hasattr(date, 'date'):
                     date = date.date()
                 if date == start:
@@ -194,7 +216,7 @@ class Contract:
                 periods.append((start, end))
                 start = date
                 if start >= up_to_date:
-                    break
+                   break
             if until and until < up_to_date:
                 end = until + relativedelta(days=-1)
                 periods.append((start, end))
@@ -423,8 +445,8 @@ class ContractPaymentTerm(_ContractRevisionMixin, ModelSQL, ModelView):
 class ContractInvoiceFrequency(_ContractRevisionMixin, ModelSQL, ModelView):
     'Contract Invoice Frequency'
     __name__ = 'contract.invoice_frequency'
-    value = fields.Selection(FREQUENCIES, 'Invoice Frequency', required=True,
-        sort=False)
+    value = fields.Many2One('offered.invoice.frequency', 'Invoice Frequency',
+        required=True)
 
 
 class ContractInvoice(ModelSQL, ModelView):
@@ -584,6 +606,11 @@ class Premium(ModelSQL, ModelView):
     main_contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_main_contract')
+
+    @classmethod
+    def __setup__(cls):
+        super(Premium, cls).__setup__()
+        cls._order = [('start', 'ASC')]
 
     @classmethod
     def _get_rated_entities(cls):
