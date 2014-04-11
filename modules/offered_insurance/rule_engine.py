@@ -70,7 +70,7 @@ class RuleEngine:
         'rule_engine-extra_data', 'parent_rule',
         'extra_data', 'Extra Data', states={
             'invisible': Or(
-                Eval('extra_data_kind') != 'compl',
+                Eval('extra_data_kind') != 'extra_data',
                 ~Eval('extra_data'),
                 )
             }, depends=['extra_data_kind', 'extra_data'])
@@ -79,7 +79,7 @@ class RuleEngine:
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
         cls.extra_data_kind = copy.copy(cls.extra_data_kind)
-        cls.extra_data_kind.selection.extend([('compl', 'Extra Data')])
+        cls.extra_data_kind.selection.extend([('extra_data', 'Extra Data')])
         cls.extra_data_kind.selection = list(set(
                 cls.extra_data_kind.selection))
 
