@@ -335,7 +335,8 @@ class Product(model.CoopSQL, Offered):
         ondelete='RESTRICT')
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
-        ondelete='RESTRICT', required=True)
+        ondelete='RESTRICT', required=True,
+        domain=[('code', '=', 'contract')])
     extra_data_def = fields.Many2Many('offered.product-extra_data',
         'product', 'extra_data_def', 'Extra Data',
         domain=[('kind', 'in', ['contract', 'option'])])
@@ -384,6 +385,13 @@ class Product(model.CoopSQL, Offered):
     @classmethod
     def get_possible_product_kind(cls):
         return [('', '')]
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
 
     def get_valid_coverages(self):
         for coverage in self.coverages:
@@ -614,6 +622,13 @@ class OptionDescription(model.CoopSQL, Offered):
     @classmethod
     def default_currency(cls):
         return ModelCurrency.default_currency()
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
 
     def is_valid(self):
         if self.template_behaviour == 'remove':

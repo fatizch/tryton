@@ -19,3 +19,7 @@ class Party:
     def get_subscribed_contracts(self):
         Contract = Pool().get('contract')
         return Contract.search(['subscriber', '=', self.id])
+
+    @staticmethod
+    def default_extra_data():
+        return {}
