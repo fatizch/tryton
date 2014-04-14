@@ -6,7 +6,6 @@ from trytond.pyson import Eval, Or, And
 
 from trytond.modules.cog_utils import utils, fields
 from trytond.modules.offered_insurance import offered
-from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import EligibilityResultLine
 
 
@@ -86,7 +85,7 @@ class OptionDescription:
             coverage_lines, coverage_errs = self.get_result(
                 'price', args, kind='premium')
         except offered.NonExistingRuleKindException:
-            coverage_lines = None
+            coverage_lines = []
             coverage_errs = []
         errs += coverage_errs
         return coverage_lines

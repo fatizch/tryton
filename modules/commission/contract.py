@@ -57,7 +57,9 @@ class Contract:
                 return comp_plan
 
     def calculate_price_at_date(self, date):
+        # TODO : plug back commission computation
         prices, errs = super(Contract, self).calculate_price_at_date(date)
+        return prices, errs
         for price in prices:
             target = price.on_object
             if target.__name__ != 'offered.option.description':

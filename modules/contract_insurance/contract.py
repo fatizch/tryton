@@ -112,7 +112,7 @@ class Contract(Printable):
                         'date': self.start_date,
                         'appliable_conditions_date':
                         self.appliable_conditions_date,
-                        'sub_elem': covered_element,
+                        'elem': covered_element,
                         'option': option,
                     })
                 res = res and (not eligibility or eligibility.eligible)
@@ -448,7 +448,7 @@ class ContractOption:
 
     def get_extra_data_def(self):
         return self.coverage.get_extra_data_def(
-            ['sub_elem'])
+            ['elem'])
 
     def init_extra_data(self):
         self.extra_data = getattr(self, 'extra_data', {})
@@ -518,7 +518,7 @@ class ContractOption:
         return res
 
     def init_dict_for_rule_engine(self, args):
-        args['data'] = self
+        args['option'] = self
         args['extra_premiums'] = []
         for elem in getattr(self, 'extra_premiums', []):
             if elem.start_date <= args['date'] <= (elem.end_date or
@@ -921,7 +921,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         if (self.item_desc and not self.item_desc.kind in
                 ['party', 'person', 'company']):
             res.extend(self.item_desc.extra_data_def)
-        res.extend(product.get_extra_data_def(['sub_elem'], at_date=at_date))
+        res.extend(product.get_extra_data_def(['elem'], at_date=at_date))
         return res
 
     def get_party_extra_data_def(self):
@@ -997,6 +997,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_all_extra_data(self, at_date):
         res = getattr(self, 'extra_data', {})
         res.update(getattr(self, 'party_extra_data', {}))
+        res.update(self.contract.get_all_extra_data(at_date))
         return res
 
     def init_dict_for_rule_engine(self, args):
@@ -1004,7 +1005,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             args['elem'] = self
             self.contract.init_dict_for_rule_engine(args)
         elif self.parent:
-            args['sub_elem'] = self
+            args['elem'] = self
             self.parent.init_dict_for_rule_engine(args)
         else:
             raise Exception('Orphan covered element')

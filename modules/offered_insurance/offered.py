@@ -201,7 +201,7 @@ class Product:
         return list(res)
 
     def get_cmpl_data_looking_for_what(self, args):
-        if 'sub_elem' in args and args['level'] == 'option':
+        if 'elem' in args and args['level'] == 'option':
             return ''
         return super(Product, self).get_cmpl_data_looking_for_what(args)
 
@@ -271,7 +271,7 @@ class ItemDescription(model.CoopSQL, model.CoopView):
     extra_data_def = fields.Many2Many(
         'offered.item.description-extra_data',
         'item_desc', 'extra_data_def', 'Extra Data',
-        domain=[('kind', '=', 'sub_elem')], )
+        domain=[('kind', '=', 'covered_element')], )
     kind = fields.Selection([
             ('', ''),
             ('party', 'Party'),

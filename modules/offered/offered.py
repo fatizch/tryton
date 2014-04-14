@@ -485,8 +485,8 @@ class Product(model.CoopSQL, Offered):
         if args['contract'].extra_data:
             existing_data.update(args['contract'].extra_data)
         key = None
-        if 'data' in args:
-            key = 'data'
+        if 'option' in args:
+            key = 'option'
         elif 'sub_elem' in args:
             key = 'sub_elem'
         elif 'contract' in args:

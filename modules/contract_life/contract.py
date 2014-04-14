@@ -45,8 +45,8 @@ class Contract:
                 validity, errors = option.coverage.get_result(
                     'coverage_amount_validity', {
                         'date': at_date,
-                        'sub_elem': covered_element,
-                        'data': option,
+                        'elem': covered_element,
+                        'option': option,
                         'contract': self,
                         'appliable_conditions_date':
                         self.appliable_conditions_date,

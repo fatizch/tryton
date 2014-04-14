@@ -46,8 +46,8 @@ class RuleEngineRuntime:
     def get_person(cls, args):
         if 'person' in args:
             return args['person']
-        elif 'sub_elem' in args:
-            return args['sub_elem'].party
+        elif 'elem' in args:
+            return args['elem'].party
         cls.append_error(args, 'Cannot find a person to get')
 
     @classmethod
@@ -106,7 +106,7 @@ class RuleEngineRuntime:
             cls.append_error(args, 'No end date defined on provided data')
 
     @classmethod
-    @check_args('data')
+    @check_args('option')
     def _re_option_extra_data(cls, args, data_name):
         cls.append_error(args, 'deprecated_method')
 

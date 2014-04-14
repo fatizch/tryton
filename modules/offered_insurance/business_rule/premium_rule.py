@@ -336,11 +336,11 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
 
     def get_lowest_level_instance(self, args):
         if 'covered_element' in args:
-            if 'data' in args:
-                return args['data']
+            if 'option' in args:
+                return args['option']
             return args['covered_element']
-        elif 'data' in args:
-            return args['data']
+        elif 'option' in args:
+            return args['option']
         elif 'contract' in args:
             return args['contract']
         return None
