@@ -239,7 +239,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             'readonly': Eval('status') != 'quote',
             }, depends=['extra_data', 'status'])
     product = fields.Many2One('offered.product', 'Product',
-        ondelete='RESTRICT', domain=[['OR',
+        ondelete='RESTRICT', required=True, domain=[['OR',
                 [('end_date', '>=', Eval('start_date'))],
                 [('end_date', '=', None)],
                 ], ['OR',
