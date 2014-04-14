@@ -90,7 +90,7 @@ class Product:
         domain=[('kind', '=', 'revenue'), ('company', '=', Eval('company'))],
         ondelete='RESTRICT')
     frequencies = fields.Many2Many('offered.product-offered.invoice.frequency',
-        'product', 'invoice_frequency', 'Products')
+        'product', 'invoice_frequency', 'Frequencies')
     default_frequency = fields.Many2One('offered.invoice.frequency',
         'Default Frequency', domain=[('id', 'in', Eval('frequencies'))],
         depends=['frequencies'], ondelete='RESTRICT')
