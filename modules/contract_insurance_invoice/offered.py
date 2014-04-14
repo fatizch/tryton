@@ -93,7 +93,7 @@ class Product:
         'product', 'invoice_frequency', 'Products')
     default_frequency = fields.Many2One('offered.invoice.frequency',
         'Default Frequency', domain=[('id', 'in', Eval('frequencies'))],
-        required=True, depends=['frequencies'], ondelete='RESTRICT')
+        depends=['frequencies'], ondelete='RESTRICT')
 
     @fields.depends('frequencies', 'default_frequency')
     def on_change_frequencies(self):

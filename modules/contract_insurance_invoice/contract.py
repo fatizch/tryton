@@ -251,6 +251,7 @@ class Contract:
         new_invoices = Invoice.create([i._save_values
                 for contract_invoices in invoices.itervalues()
                 for c, i in contract_invoices])
+        Invoice.validate_invoice(new_invoices)
         contract_invoices_to_create = []
         for period, contract_invoices in invoices.iteritems():
             start, end = period

@@ -12,6 +12,5 @@
     <field name="amount"/>
     <label name="frequency"/>
     <field name="frequency"/>
-    <field name="taxes" colspan="2"/>
-    <field name="invoice_lines" colspan="2"/>
+    <field name="taxes" colspan="4"/>
 </form>

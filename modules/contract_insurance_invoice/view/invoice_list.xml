@@ -2,6 +2,8 @@
 <tree string="Invoices">
   <field name="type"/>
   <field name="number"/>
+  <field name="start"/>
+  <field name="end"/>
   <field name="invoice_date"/>
   <field name="untaxed_amount"/>
   <field name="tax_amount"/>

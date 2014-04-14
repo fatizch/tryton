@@ -11,6 +11,7 @@ def register():
         Product,
         ProductInvoiceFrequencyRelation,
         OptionDescription,
+        Invoice,
         InvoiceLine,
         Contract,
         ContractPaymentTerm,
