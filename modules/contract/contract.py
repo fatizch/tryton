@@ -75,7 +75,7 @@ def add_status_history(possible_status):
             'on_change_with_start_date', 'setter_void')
         status = fields.Function(
             fields.Selection(possible_status, 'Status'),
-            'on_change_with_status', 'setter_void', 'search_status')
+            'on_change_with_status', searcher='search_status')
 
         @classmethod
         def default_status(cls):
