@@ -59,6 +59,25 @@ class Invoice:
 
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
+    def _order_contract_invoice_field(name):
+        def order_field(tables):
+            ContractInvoice = Pool().get('contract.invoice')
+            field = ContractInvoice._fields[name]
+            table, _ = tables[None]
+            contract_invoice_tables = tables.get('contract_invoice')
+            if contract_invoice_tables is None:
+                contract_invoice = ContractInvoice.__table__()
+                contract_invoice_tables = {
+                    None: (contract_invoice,
+                        contract_invoice.invoice == table.id),
+                    }
+                tables['contract_invoice'] = contract_invoice_tables
+            return field.convert_order(name, contract_invoice_tables,
+                ContractInvoice)
+        return staticmethod(order_field)
+    order_start = _order_contract_invoice_field('start')
+    order_end = _order_contract_invoice_field('end')
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
