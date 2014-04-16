@@ -69,13 +69,13 @@ def add_status_history(possible_status):
             'reference', 'Status History', order=[('start_date', 'ASC')])
         end_date = fields.Function(
             fields.Date('End Date'),
-            'on_change_with_end_date', 'setter_void')
+            'on_change_with_end_date', searcher='search_status_history')
         start_date = fields.Function(
             fields.Date('Start Date'),
-            'on_change_with_start_date', 'setter_void')
+            'on_change_with_start_date', searcher='search_status_history')
         status = fields.Function(
             fields.Selection(possible_status, 'Status'),
-            'on_change_with_status', searcher='search_status')
+            'on_change_with_status', searcher='search_status_history')
 
         @classmethod
         def default_status(cls):
@@ -91,58 +91,6 @@ def add_status_history(possible_status):
                     'status': cls.default_status(),
                     'start_date': cls.default_start_date(),
                     }]
-
-        @fields.depends('status_history', 'end_date')
-        def on_change_end_date(self):
-            # TODO : fix once default and on_change work properly
-            return {}
-            for idx, elem in enumerate(self.status_history):
-                if elem.status in ('terminated'):
-                    update = [{
-                            'id': elem.id,
-                            'start_date': self.end_date,
-                            }]
-                    if idx > 0:
-                        update.append({
-                                'id': self.status_history[idx - 1].id,
-                                'end_date': coop_date.add_day(
-                                    self.end_date, -1),
-                                })
-                    return {'status_history': {'update': update}}
-            status_history = {'add': [[-1, {
-                            'start_date': self.end_date,
-                            'status': 'terminated'}]]}
-            if self.status_history:
-                status_history['update'] = [{
-                        'id': self.status_history[-1].id,
-                        'end_date': coop_date.add_day(self.end_date, -1),
-                        }]
-            return {'status_history': status_history}
-
-        @fields.depends('status_history', 'start_date')
-        def on_change_start_date(self):
-            # TODO : fix once default and on_change work properly
-            return {}
-            for elem in self.status_history:
-                if elem.status in ('active', 'quote'):
-                    return {
-                        'status_history': {
-                            'update': [{
-                                    'id': elem.id,
-                                    'start_date': self.start_date,
-                                    }]}}
-            if self.status_history:
-                end_date = coop_date.add_day(
-                    self.status_history[0].start_date, -1)
-            else:
-                end_date = None
-            return {
-                'status_history': {
-                    'add': [[0, {
-                                'start_date': self.start_date,
-                                'status': 'quote',
-                                'end_date': end_date,
-                                }]]}}
 
         @fields.depends('status_history')
         def on_change_with_start_date(self, name=None):
@@ -171,7 +119,7 @@ def add_status_history(possible_status):
             return self.default_status()
 
         @classmethod
-        def search_status(cls, name, clause):
+        def search_status_history(cls, name, clause):
             pool = Pool()
             MainModel = pool.get(cls.__name__)
             StatusHistory = pool.get('contract.status.history')
@@ -181,12 +129,19 @@ def add_status_history(possible_status):
 
             main_model_table = MainModel.__table__()
             history_table = StatusHistory.__table__()
-            date_clause = ((
-                    (history_table.start_date == None)
-                    | (history_table.start_date <= utils.today()))
-                & (
-                    (history_table.end_date == None)
-                    | (history_table.end_date >= utils.today())))
+            if name == 'status':
+                date_clause = ((
+                        (history_table.start_date == None)
+                        | (history_table.start_date <= utils.today()))
+                    & (
+                        (history_table.end_date == None)
+                        | (history_table.end_date >= utils.today())))
+            elif name == 'start_date':
+                date_clause = (
+                    (history_table.status == 'quote')
+                    | (history_table.status == 'active'))
+            elif name == 'end_date':
+                date_clause = (history_table.status == 'terminated')
 
             query_table = main_model_table.join(history_table,
                 condition=(history_table.reference == Concat(
@@ -195,7 +150,7 @@ def add_status_history(possible_status):
 
             cursor.execute(*query_table.select(main_model_table.id,
                     where=(date_clause & (
-                            Operator(history_table.status,
+                            Operator(getattr(history_table, name),
                                 getattr(cls, name).sql_format(value))))))
 
             return [('id', 'in', [x[0] for x in cursor.fetchall()])]
