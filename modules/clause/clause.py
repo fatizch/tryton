@@ -32,8 +32,14 @@ class Clause(model.CoopSQL, model.VersionedObject):
     def default_kind(cls):
         return ''
 
-    def get_rec_name(self, name):
-        return self.name
+    def get_rec_name(self):
+        return '[%s] %s' % (self.code, self.name)
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        if cls.search([('code',) + tuple(clause[1:])], limit=1):
+            return [('code',) + tuple(clause[1:])]
+        return [(cls._rec_name,) + tuple(clause[1:])]
 
 
 class ClauseVersion(model.CoopSQL, model.VersionObject):
