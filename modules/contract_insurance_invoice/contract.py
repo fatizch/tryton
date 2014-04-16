@@ -100,16 +100,6 @@ class Contract:
                     }]]
         return result
 
-    @fields.depends('start_date', 'invoice_frequencies')
-    def on_change_with_invoice_frequency(self):
-        if not self.invoice_frequencies:
-            return None
-        date = max(self.start_date, Pool().get('ir.date').today())
-        for elem in self.invoice_frequencies[::-1]:
-            if elem.date <= date:
-                return elem.value.id
-        return elem.value.id
-
     @classmethod
     def get_revision_value(cls, contracts, ContractRevision):
         pool = Pool()
