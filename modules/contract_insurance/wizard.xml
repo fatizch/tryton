@@ -19,12 +19,12 @@
       <field name="name">manage_extra_premium_select_extra_list</field>
     </record>
     <!-- ######################### -->
-    <!-- # Covered Data Selector # -->
+    <!-- # Option Selector # -->
     <!-- ######################### -->
-    <record model="ir.ui.view" id="manage_extra_premium_select_coverage_view_list">
-      <field name="model">contract.manage_extra_premium.select.coverage</field>
+    <record model="ir.ui.view" id="manage_extra_premium_select_option_view_list">
+      <field name="model">contract.manage_extra_premium.select.option</field>
       <field name="type">tree</field>
-      <field name="name">manage_extra_premium_select_coverage_list</field>
+      <field name="name">manage_extra_premium_select_option_list</field>
     </record>
     <!-- ######################### -->
     <!-- # Extra Premium Display # -->

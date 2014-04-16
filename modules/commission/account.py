@@ -36,8 +36,6 @@ class Move:
     com_details = fields.One2ManyDomain('account.move.line', 'move',
         'Commissions', domain=[
             ('account.kind', '!=', 'receivable'),
-            ('second_origin.kind', '=', 'commission',
-                'offered.option.description'),
             ])
     com_amount = fields.Function(
         fields.Numeric('Com amount'),
@@ -48,6 +46,8 @@ class Move:
 
     @classmethod
     def get_com_amount(cls, moves, name):
+        # TODO : Fix once commissions work again
+        return dict([(x.id, 0) for x in moves])
         res = dict((m.id, Decimal('0.0')) for m in moves)
         pool = Pool()
         cursor = Transaction().cursor

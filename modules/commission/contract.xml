@@ -44,7 +44,7 @@
         <record model="ir.ui.view" id="option_view_tree">
             <field name="model">contract.option</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="contract.option_view_tree"/>
+            <field name="inherit" ref="contract.option_view_list"/>
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="option_view_form">

@@ -46,8 +46,8 @@ class RuleEngineRuntime:
     def get_person(cls, args):
         if 'person' in args:
             return args['person']
-        elif 'sub_elem' in args:
-            return args['sub_elem'].party
+        elif 'elem' in args:
+            return args['elem'].party
         cls.append_error(args, 'Cannot find a person to get')
 
     @classmethod
@@ -87,27 +87,27 @@ class RuleEngineRuntime:
         return person.get_relation_with(subscriber, args['date'])
 
     @classmethod
-    def get_covered_data(cls, args):
-        if 'data' in args:
-            return args['data']
+    def get_option(cls, args):
+        if 'option' in args:
+            return args['option']
         else:
-            cls.append_error(args, 'Cannot find a covered data to get')
+            cls.append_error(args, 'Cannot find an option to get')
 
     @classmethod
     def _re_get_initial_subscription_date(cls, args):
-        return cls.get_covered_data(args).start_date
+        return cls.get_option(args).start_date
 
     @classmethod
     def _re_get_subscription_end_date(cls, args):
-        data = cls.get_covered_data(args)
+        data = cls.get_option(args)
         if hasattr(data, 'end_date') and data.end_date:
             return data.end_date
         else:
             cls.append_error(args, 'No end date defined on provided data')
 
     @classmethod
-    @check_args('data')
-    def _re_covered_data_extra_data(cls, args, data_name):
+    @check_args('option')
+    def _re_option_extra_data(cls, args, data_name):
         cls.append_error(args, 'deprecated_method')
 
     @classmethod

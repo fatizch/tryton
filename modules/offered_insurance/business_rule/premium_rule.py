@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
+from decimal import Decimal
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
@@ -29,10 +30,11 @@ PRICING_LINE_KINDS = [
 
 PRICING_FREQUENCY = [
     ('yearly', 'Yearly'),
-    ('half_yearly', 'Half Yearly'),
+    ('biannual', 'Half Yearly'),
     ('quarterly', 'Quarterly'),
     ('monthly', 'Monthly'),
-    ('one_shot', 'One-Shot'),
+    ('once_per_contract', 'Once per Contract'),
+    ('once_per_invoice', 'Once per Invoice'),
     ]
 
 
@@ -49,6 +51,8 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         'billing.premium.rule.component',
         'premium_rule', 'Covered Item Components',
         domain=[('rated_object_kind', '=', 'sub_item')])
+    match_contract_frequency = fields.Boolean('Match Contract Frequency',
+        help='Should the premium be stored at the contract\'s frequency ?')
     frequency = fields.Selection(PRICING_FREQUENCY, 'Rate Frequency',
         required=True)
     specific_combination_rule = fields.Many2One('rule_engine',
@@ -119,6 +123,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
                                 'kind': 'tax',
                                 'code': tax.code,
                                 'rated_object_kind': 'global',
+                                'value': tax.id,
                                 }])]})
 
     @classmethod
@@ -292,7 +297,68 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             for detail in tax_details:
                 result.add_detail(detail)
         result.frequency = self.frequency
-        return result, errors
+        lines = []
+        fee_lines = []
+        template = {
+            'frequency': self.frequency,
+            'target': self.get_lowest_level_instance(args),
+            'product': args['product'],
+            }
+        taxes = []
+        for detail in result.details:
+            if detail.kind in ('base', 'extra'):
+                new_line = dict(template)
+                new_line['amount'] = detail.amount
+                new_line['rated_entity'] = args.get('coverage',
+                    args.get('product'))
+                if detail.amount:
+                    lines.append(new_line)
+            elif detail.kind == 'fee':
+                new_line = dict(template)
+                new_line['amount'] = detail.amount
+                new_line['rated_entity'] = detail.on_object.fee
+                if detail.amount:
+                    fee_lines.append(new_line)
+            elif detail.kind == 'tax':
+                taxes.append(detail.on_object.tax.tax)
+        for elem in (lines + fee_lines):
+            elem['taxes'] = list(taxes)
+        if self.match_contract_frequency:
+            ContractInvoiceFrequency = Pool().get('contract.invoice_frequency')
+            contract_frequency = ContractInvoiceFrequency.get_value(
+                [args['contract']], args['date'])[args['contract'].id]
+            frequency = Pool().get('offered.invoice.frequency')(
+                contract_frequency).frequency
+            for elem in (lines + fee_lines):
+                self.convert_premium_frequency(elem, frequency)
+
+        return lines + fee_lines, errors
+
+    def get_lowest_level_instance(self, args):
+        if 'covered_element' in args:
+            if 'option' in args:
+                return args['option']
+            return args['covered_element']
+        elif 'option' in args:
+            return args['option']
+        elif 'contract' in args:
+            return args['contract']
+        return None
+
+    def convert_premium_frequency(self, line, frequency):
+        if line['frequency'] in ('once_per_invoice', 'once_per_contract'):
+            return
+        if frequency in ('once_per_invoice', 'once_per_contract'):
+            return
+        conversion_table = {
+            'yearly': Decimal(12),
+            'biannual': Decimal(6),
+            'quarterly': Decimal(3),
+            'monthly': Decimal(1),
+            }
+        line['amount'] = line['amount'] / (conversion_table[line['frequency']]
+            / conversion_table[frequency])
+        line['frequency'] = frequency
 
 
 class PremiumRuleComponent(model.CoopSQL, model.CoopView):

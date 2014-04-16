@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="loan_share_view_form">
+            <field name="model">loan.share</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="loan.loan_share_view_form"/>
+            <field name="name">loan_share_form</field>
+        </record>
+    </data>
+</tryton>

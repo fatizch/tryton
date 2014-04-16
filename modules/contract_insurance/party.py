@@ -13,8 +13,8 @@ class Party:
     __name__ = 'party.party'
 
     extra_data = fields.Dict('extra_data', 'Extra Data')
-    covered_elements = fields.One2Many('contract.covered_element',
-        'party', 'Covered Elements')
+    covered_elements = fields.One2Many('contract.covered_element', 'party',
+        'Covered Elements')
 
     def get_subscribed_contracts(self):
         Contract = Pool().get('contract')

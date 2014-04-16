@@ -9,4 +9,5 @@ def register():
         ContractClause,
         # From file contract
         Contract,
+        ContractOption,
         module='contract_clause', type_='model')

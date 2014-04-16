@@ -229,25 +229,6 @@ class Offered(model.CoopView, GetResult, Templated):
             res[se.name] = se.get_default_value(None)
         return res
 
-    def get_extra_data_def(self, kinds=None, at_date=None):
-        return [
-            x for x in self.extra_data_def
-            if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
-
-    def get_cmpl_data_looking_for_what(self, args):
-        return 'contract' if not 'sub_elem' in args else 'sub_elem'
-
-    def get_extra_data_for_exec(self, args):
-        looking_for = self.get_cmpl_data_looking_for_what(args)
-        all_schemas = set(self.get_extra_data_def(
-            ('contract', looking_for), args['date']))
-        if looking_for:
-            possible_schemas = set(self.get_extra_data_def(
-                (looking_for), args['date']))
-        else:
-            possible_schemas = set([])
-        return all_schemas, possible_schemas
-
     @fields.depends('extra_data')
     def on_change_with_extra_data(self):
         if not hasattr(self, 'extra_data_def'):
@@ -358,7 +339,7 @@ class Product(model.CoopSQL, Offered):
         domain=[('code', '=', 'contract')])
     extra_data_def = fields.Many2Many('offered.product-extra_data',
         'product', 'extra_data_def', 'Extra Data',
-        domain=[('kind', 'in', ['contract', 'sub_elem'])])
+        domain=[('kind', 'in', ['contract', 'option'])])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
 
     @classmethod
@@ -372,6 +353,10 @@ class Product(model.CoopSQL, Offered):
         cls.kind = copy.copy(cls.kind)
         cls.kind.selection = cls.get_possible_product_kind()
         cls.kind.selection = list(set(cls.kind.selection))
+        cls._error_messages.update({
+                'missing_contract_extra_data': 'The following contract extra'
+                'data should be set on the product: %s',
+                })
 
     @classmethod
     def _export_skips(cls):
@@ -379,6 +364,23 @@ class Product(model.CoopSQL, Offered):
         # ordered_coverages should be enough
         result.add('coverages')
         return result
+
+    @classmethod
+    def validate(cls, instances):
+        super(Product, cls).validate(instances)
+        cls.validate_contract_extra_data(instances)
+
+    @classmethod
+    def validate_contract_extra_data(cls, instances):
+        for instance in instances:
+            from_option = set(extra_data for coverage in instance.coverages
+                for extra_data in coverage.extra_data_def
+                if extra_data.kind == 'contract')
+            remaining = from_option - set(instance.extra_data_def)
+            if remaining:
+                instance.raise_user_error('missing_contract_extra_data',
+                    (', '.join((extra_data.string
+                                for extra_data in remaining))))
 
     @classmethod
     def get_possible_product_kind(cls):
@@ -400,6 +402,25 @@ class Product(model.CoopSQL, Offered):
         super(Product, self).init_dict_for_rule_engine(args)
         if not 'product' in args:
             args['product'] = self
+
+    def get_extra_data_def(self, type_, existing_data, condition_date,
+            item_desc=None, coverage=None):
+        ExtraData = Pool().get('extra_data')
+        all_schemas, possible_schemas = ExtraData.get_extra_data_definitions(
+            self, 'extra_data_def', type_, condition_date)
+        if item_desc:
+            tmp_all, tmp_possible = ExtraData.get_extra_data_definitions(
+                item_desc, 'extra_data_def', type_, condition_date)
+            all_schemas |= tmp_all
+            possible_schemas |= tmp_possible
+        if coverage:
+            tmp_all, tmp_possible = ExtraData.get_extra_data_definitions(
+                coverage, 'extra_data_def', type_, condition_date)
+            all_schemas |= tmp_all
+            possible_schemas |= tmp_possible
+        result = ExtraData.calculate_value_set(possible_schemas, all_schemas,
+            existing_data)
+        return result
 
     @classmethod
     def default_currency(cls):
@@ -447,10 +468,11 @@ class Product(model.CoopSQL, Offered):
                 str([k for k in args.iterkeys()])))
         all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
         if not 'sub_elem' in args:
-            for coverage in args['contract'].get_active_coverages_at_date(
-                    args['date']):
+            for option in args['contract'].options:
+                if not option.coverage:
+                    continue
                 coverage_all, coverage_possible = \
-                    coverage.get_extra_data_for_exec(args)
+                    option.coverage.get_extra_data_for_exec(args)
                 all_schemas |= coverage_all
                 possible_schemas |= coverage_possible
         else:
@@ -463,8 +485,8 @@ class Product(model.CoopSQL, Offered):
         if args['contract'].extra_data:
             existing_data.update(args['contract'].extra_data)
         key = None
-        if 'data' in args:
-            key = 'data'
+        if 'option' in args:
+            key = 'option'
         elif 'sub_elem' in args:
             key = 'sub_elem'
         elif 'contract' in args:
@@ -558,7 +580,7 @@ class OptionDescription(model.CoopSQL, Offered):
     extra_data_def = fields.Many2Many(
         'offered.option.description-extra_data',
         'coverage', 'extra_data_def', 'Extra Data',
-        domain=[('kind', 'in', ['contract', 'sub_elem'])])
+        domain=[('kind', 'in', ['contract', 'option'])])
     options_required = fields.Many2Many('offered.option.description.required',
         'from_option_desc', 'to_option_desc', 'Options Required', domain=[
             ('kind', '=', Eval('kind')),
@@ -571,6 +593,12 @@ class OptionDescription(model.CoopSQL, Offered):
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_required')),
             ], depends=['kind', 'id', 'options_required'])
+    products = fields.Many2Many('offered.product-option.description',
+        'coverage', 'product', 'OptionDescriptions', domain=[
+            ('currency', '=', Eval('currency')),
+            ('kind', '=', Eval('kind')),
+            ('company', '=', Eval('company')),
+            ], depends=['currency', 'kind', 'company'])
 
     @classmethod
     def __setup__(cls):

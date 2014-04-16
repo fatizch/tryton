@@ -523,8 +523,6 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _import_do_relink(cls, key, instance, relink, created):
-        if instance.__name__ == 'table' and instance.code == 'tarif_divinea':
-            pass
         if not instance.id:
             return
         for src_key, source in relink[(cls.__name__, key)]['from'].iteritems():
@@ -733,10 +731,8 @@ class ExportImportMixin(Model):
 
     @classmethod
     def import_json(cls, values):
-        Config = Pool().get('ir.configuration')
         with Transaction().set_user(0), Transaction().set_context(
-                company=None, __importing__=True,
-                language=Config.get_language()):
+                __importing__=True, language='en_US'):
             if isinstance(values, basestring):
                 values = json.loads(values, object_hook=object_hook)
                 values = map(utils.recursive_list_tuple_convert, values)

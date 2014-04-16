@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<data>
-  <xpath expr="/form/notebook/page[@id='options']" position="after">
-    <page string="Clauses" id="clauses">
-      <field name="clauses"/>
-    </page>
-  </xpath>
-</data>

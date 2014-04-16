@@ -21,8 +21,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def depending_modules(cls):
         return ['offered_insurance', 'contract_insurance',
-            'billing_individual', 'contract_insurance_process',
-            'contract_life_process']
+            'contract_insurance_process', 'contract_life_process']
 
     @classmethod
     def get_test_cases_to_run(cls):
@@ -45,7 +44,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'CommercialProduct': 'distribution.commercial_product',
             'OfferedPaymentMethod': 'offered.product-billing.payment.method',
             'ExtraPremiumKind': 'extra_premium.kind',
-            'ExtraPremium': 'contract.covered_data.extra_premium',
+            'ExtraPremium': 'contract.option.extra_premium',
             'ExtraData': 'extra_data',
             }
 
@@ -206,24 +205,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         commercial_product.dist_networks = self.DistNetwork.search([])
         commercial_product.save()
 
-    @test_framework.prepare_test(
-        'contract_insurance.test0001_testPersonCreation',
-        'loan.test0032_LoanCommercialProduct')
-    def test0035_BasicLoanContract(self):
-        company, = self.Company.search([('party.name', '=', 'Coop')])
-        with Transaction().set_context(user=1):
-            commercial_product = self.CommercialProduct.search([])
-            self.assertEqual(len(commercial_product), 1)
-            commercial_product = commercial_product[0]
-            self.assertEqual(commercial_product.code,
-                'loan_commercial_product')
-            main_date = date(2014, 2, 25)
-
-            contract = self.Contract()
-            contract.init_from_offered(commercial_product.product, main_date)
-            contract.company = company
-            contract.save()
-
     def assert_payment(self, loan, at_date, number, begin_balance, amount,
             principal, interest, end_balance):
         payment = loan.get_payment(at_date)
@@ -235,17 +216,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(payment.interest == interest)
         self.assert_(payment.end_balance == end_balance)
 
-    @test_framework.prepare_test('loan.test0035_BasicLoanContract')
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation')
     def test0037loan_creation(self):
         '''
         Test basic loan
         '''
-        contract, = self.Contract.search([
-                ('offered.code', '=', 'LOAN'),
-                ])
         currency, = self.Currency.search([], limit=1)
         loan = self.Loan()
-        loan.contract = contract
         loan.kind = 'fixed_rate'
         loan.rate = Decimal('0.04')
         loan.funds_release_date = date(2012, 7, 1)
@@ -255,6 +233,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.number_of_payments = 180
         loan.currency = currency
         loan.payment_amount = loan.on_change_with_payment_amount()
+        loan.parties = self.Party.search([('name', '=', 'DOE')])
         self.assert_(loan.payment_amount == Decimal('739.69'))
         loan.deferal = 'partially'
         loan.deferal_duration = 12
@@ -287,13 +266,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.save()
 
         loan = self.Loan()
-        loan.contract = contract
         loan.currency = currency
         loan.kind = 'fixed_rate'
         loan.rate = Decimal('0.0752')
         loan.funds_release_date = date(2014, 3, 5)
         loan.payment_frequency = 'quarter'
         loan.first_payment_date = loan.on_change_with_first_payment_date()
+        loan.parties = self.Party.search([('name', '=', 'DOE')])
         self.assert_(loan.first_payment_date == date(2014, 6, 5))
         loan.number_of_payments = 56
         loan.amount = Decimal(134566)
@@ -334,7 +313,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             Decimal('0'))
 
         loan = self.Loan()
-        loan.contract = contract
         loan.currency = currency
         loan.kind = 'balloon'
         loan.rate = Decimal('0.0677')
@@ -369,15 +347,20 @@ class ModuleTestCase(test_framework.CoopTestCase):
             Decimal('251695.95'), loan.amount, Decimal('8240.95'),
             Decimal('0'))
 
-    @test_framework.prepare_test(
-        'loan.test0037loan_creation',
-        )
+    @test_framework.prepare_test('loan.test0037loan_creation',
+        'loan.test0032_LoanCommercialProduct')
     def test0040_LoanContractSubscription(self):
         company, = self.Company.search([('party.name', '=', 'Coop')])
         with Transaction().set_context(user=1):
-            contract, = self.Contract.search([
-                ('offered.code', '=', 'LOAN'),
-                ])
+            commercial_product = self.CommercialProduct.search([])
+            self.assertEqual(len(commercial_product), 1)
+            commercial_product = commercial_product[0]
+            self.assertEqual(commercial_product.code,
+                'loan_commercial_product')
+            contract = self.Contract()
+            contract.init_from_product(commercial_product.product,
+                date(2014, 2, 25))
+            contract.company = company
             contract.subscriber, = self.Party.search([('name', '=', 'DOE')])
             contract.save()
             contract.check_product_not_null()
@@ -397,10 +380,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
             contract.init_covered_elements()
             contract.init_extra_data()
             contract.save()
-            self.assertEqual(len(contract.covered_elements[0].covered_data), 2)
+            self.assertEqual(len(contract.covered_elements[0].options), 2)
             contract.check_contract_extra_data()
             contract.check_covered_element_extra_data()
-            contract.check_covered_data_extra_data()
+            contract.check_option_extra_data()
             contract.check_options_eligibility()
             contract.check_at_least_one_covered()
             contract.check_sub_elem_eligibility()
@@ -425,14 +408,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract, = self.Contract.search([
                 ('start_date', '=', date(2014, 2, 25)),
                 ('subscriber.name', '=', 'DOE'),
-                ('offered.code', '=', 'LOAN'),
+                ('product.code', '=', 'LOAN'),
                 ])
         self.assertEqual(contract.prices[6].amount, Decimal('200'))
-        covered_data = contract.covered_elements[0].covered_data[0]
+        option = contract.covered_elements[0].options[0]
 
         # Create Extra Premium
         extra_premium = self.ExtraPremium()
-        extra_premium.covered_data = covered_data
+        extra_premium.option = option
         extra_premium.motive, = self.ExtraPremiumKind.search([
                 ('code', '=', 'medical_risk'),
                 ])
@@ -446,7 +429,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract.calculate_prices()
         self.assertEqual(contract.prices[6].amount, Decimal('10200'))
         line = contract.prices[6].all_lines[0]
-        self.assertEqual(line.on_object, covered_data)
+        self.assertEqual(line.on_object, option)
         self.assertEqual(len(line.all_lines), 1)
         self.assertEqual(line.all_lines[0].on_object.__name__, 'loan.share')
         self.assertEqual(len(line.all_lines[0].all_lines), 2)
@@ -479,9 +462,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract, = self.Contract.search([
                 ('start_date', '=', date(2014, 2, 25)),
                 ('subscriber.name', '=', 'DOE'),
-                ('offered.code', '=', 'LOAN'),
+                ('product.code', '=', 'LOAN'),
                 ])
-        product = contract.offered
+        product = contract.product
         covered_element = contract.covered_elements[0]
         test_extra_data = self.ExtraData()
         test_extra_data.name = 'test_extra_data'
