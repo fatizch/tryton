@@ -236,8 +236,6 @@ class Product:
                 option.extra_premiums):
             for elem in option.extra_premiums:
                 dates.add(elem.start_date)
-                if elem.end_date:
-                    dates.add(coop_date.add_day(elem.end_date, 1))
 
     def get_covered_element_dates(self, dates, covered_element):
         for data in covered_element.options:

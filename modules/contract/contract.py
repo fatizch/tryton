@@ -157,7 +157,7 @@ def add_status_history(possible_status):
             if self.status_history:
                 for elem in self.status_history:
                     if elem.status == 'terminated':
-                        return elem.end_date
+                        return coop_date.add_day(elem.start_date, -1)
             return None
 
         @fields.depends('status_history')

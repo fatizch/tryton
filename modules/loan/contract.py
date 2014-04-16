@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -84,8 +86,10 @@ class ContractOption:
 
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
         states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
-                ('loan.parties', 'in', Eval('parties', []))],
-        depends=['coverage_family', 'parties'])
+            ('loan.parties', 'in', Eval('parties', [])),
+            ('start_date', '>=', Eval('start_date', datetime.date.min)),
+            ('end_date', '<=', Eval('end_date', datetime.date.max))],
+        depends=['coverage_family', 'parties', 'start_date', 'end_date'])
     multi_mixed_view = loan_shares
 
     @fields.depends('coverage', 'loan_shares')
@@ -95,6 +99,21 @@ class ContractOption:
             result['loan_shares'] = {
                 'remove': [x.id for x in self.loan_shares]}
         return result
+
+    @fields.depends('start_date', 'end_date', 'loan_shares')
+    def on_change_with_loan_shares(self):
+        to_update = []
+        for share in self.loan_shares:
+            res = {'id': share.id}
+            if share.start_date < self.start_date:
+                res['start_date'] = self.start_date
+            if self.end_date and (not share.end_date or
+                    share.end_date > self.end_date):
+                res['end_date'] = self.end_date
+            if len(res) > 1:
+                to_update.append(res)
+        if to_update:
+            return {'update': to_update}
 
 
 class ExtraPremium:
