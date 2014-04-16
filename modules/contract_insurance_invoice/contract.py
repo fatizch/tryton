@@ -216,7 +216,7 @@ class Contract:
                 periods.append((start, end))
                 start = date
                 if start >= up_to_date:
-                   break
+                    break
             if until and until < up_to_date:
                 end = until + relativedelta(days=-1)
                 periods.append((start, end))
@@ -240,17 +240,32 @@ class Contract:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
+        Journal = pool.get('account.journal')
+        journals = Journal.search([
+                ('type', '=', 'revenue'),
+                ], limit=1)
+        if journals:
+            journal, = journals
+        else:
+            journal = None
+
         invoices = defaultdict(list)
-        invoice_list = []
         for period, contracts in periods.iteritems():
             with Transaction().set_context(contract_revision_date=period[0]):
                 contracts = cls.browse(contracts)
             for contract in contracts:
                 invoice = contract.get_invoice(*period)
+                if not invoice.journal:
+                    invoice.journal = journal
                 invoice.lines = contract.get_invoice_lines(*period)
-                invoice_list.append(invoice)
-                invoices[period].append((contract, len(invoice_list) - 1))
-        new_invoices = Invoice.create([i._save_values for i in invoice_list])
+                invoices[period].append((contract, invoice))
+        new_invoices = Invoice.create([i._save_values
+                 for contract_invoices in invoices.itervalues()
+                 for c, i in contract_invoices])
+        # Set the new ids
+        old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
+        for invoice, new_invoice in zip(old_invoices, new_invoices):
+            invoice.id = new_invoice.id
         Invoice.validate_invoice(new_invoices)
         contract_invoices_to_create = []
         for period, contract_invoices in invoices.iteritems():
@@ -258,7 +273,7 @@ class Contract:
             for contract, invoice in contract_invoices:
                 contract_invoices_to_create.append(ContractInvoice(
                         contract=contract,
-                        invoice=new_invoices[invoice].id,
+                        invoice=invoice,
                         start=start,
                         end=end))
         ContractInvoice.create([c._save_values
@@ -268,18 +283,10 @@ class Contract:
     def get_invoice(self, start, end):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        Journal = pool.get('account.journal')
-        journals = Journal.search([
-                ('type', '=', 'revenue'),
-                ], limit=1)
-        if journals:
-            journal, = journals
-        else:
-            journal = None
         return Invoice(
             company=self.company,
             type='out_invoice',
-            journal=journal,
+            journal=None,
             party=self.subscriber,
             invoice_address=self.get_contract_address(),
             currency=self.get_currency(),
@@ -605,7 +612,7 @@ class Premium(ModelSQL, ModelView):
         'Extra Premium', select=True, ondelete='CASCADE')
     rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
         required=True)
-    start = fields.Date('Start', required=True)
+    start = fields.Date('Start')
     end = fields.Date('End')
     amount = fields.Numeric('Amount', required=True)
     frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)

@@ -1,6 +1,7 @@
 import unittest
 from decimal import Decimal
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
@@ -54,7 +55,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                 self.assertEqual(premium_yearly.get_amount(*period), amount)
 
             premium_one = Premium(
-                frequency='one',
+                frequency='once_per_contract',
                 amount=Decimal(100),
                 start=date(2014, 1, 1),
                 )
@@ -71,6 +72,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
         ContractPaymentTerm = POOL.get('contract.payment_term')
         PaymentTerm = POOL.get('account.invoice.payment_term')
         ContractInvoiceFrequency = POOL.get('contract.invoice_frequency')
+        InvoiceFrequency = POOL.get('offered.invoice.frequency')
         Company = POOL.get('company.company')
         User = POOL.get('res.user')
 
@@ -93,7 +95,8 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'lines': [('create', [{}])],
                         }])
             contract = Contract(company=company,
-                invoice_frequencies=[ContractInvoiceFrequency(value='monthly')])
+                invoice_frequencies=[ContractInvoiceFrequency(
+                        value=InvoiceFrequency(frequency='monthly'))])
             contract.payment_terms = [
                 ContractPaymentTerm(date=None, value=payment_term1),
                 ContractPaymentTerm(date=date(2014, 4, 1),
@@ -129,6 +132,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
         ContractPaymentTerm = POOL.get('contract.payment_term')
         PaymentTerm = POOL.get('account.invoice.payment_term')
         ContractInvoiceFrequency = POOL.get('contract.invoice_frequency')
+        InvoiceFrequency = POOL.get('offered.invoice.frequency')
         Company = POOL.get('company.company')
         User = POOL.get('res.user')
 
@@ -149,9 +153,10 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                 payment_terms=[ContractPaymentTerm(value=payment_term)],
                 start_date=date(2014, 4, 15),
                 invoice_frequencies=[
-                    ContractInvoiceFrequency(date=None, value='monthly'),
+                    ContractInvoiceFrequency(date=None,
+                        value=InvoiceFrequency(frequency='monthly')),
                     ContractInvoiceFrequency(date=date(2014, 7, 1),
-                        value='quarterly'),
+                        value=InvoiceFrequency(frequency='quarterly')),
                     ])
             contract.save()
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
@@ -167,15 +172,15 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
             contract = Contract(company=company,
                 payment_terms=[ContractPaymentTerm(value=payment_term)],
                 start_date=date(2014, 4, 15),
-                end_date=date(2014, 11, 1),
                 invoice_frequencies=[
-                    ContractInvoiceFrequency(date=None, value='one'),
+                    ContractInvoiceFrequency(date=None,
+                        value=InvoiceFrequency(frequency='once_per_contract')),
                     ])
             contract.save()
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
                 [])
             self.assertEqual(contract.get_invoice_periods(date(2014, 4, 16)),
-                [(date(2014, 4, 15), date(2014, 11, 1))])
+                [(date(2014, 4, 15), date.max + relativedelta(days=-1))])
 
 
 def suite():
