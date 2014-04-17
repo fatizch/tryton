@@ -49,12 +49,12 @@ class Contract:
     premiums = fields.One2Many('contract.premium', 'contract',
         'Premiums')
     payment_terms = fields.One2Many('contract.payment_term', 'contract',
-        'Payment Terms', required=True)
+        'Payment Terms')
     payment_term = fields.Function(fields.Many2One(
             'account.invoice.payment_term', 'Payment Term'),
         'get_payment_term')
     invoice_frequencies = fields.One2Many('contract.invoice_frequency',
-        'contract', 'Invoice Frequencies', required=True,
+        'contract', 'Invoice Frequencies',
         domain=[('value.products', '=', Eval('product'))],
         depends=['product'])
     invoice_frequency = fields.Function(

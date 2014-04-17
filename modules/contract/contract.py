@@ -459,14 +459,22 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(product, start_date):
+            StatusHistory = Pool().get('contract.status.history')
             self.product = product
-            self.start_date = (
+            start_date = (
                 max(product.start_date, start_date)
                 if start_date else product.start_date)
-            self.end_date = (
+            self.status_history = [StatusHistory(
+                    start_date=start_date, status='quote')]
+            end_date = (
                 min(product.end_date, end_date)
                 if end_date else product.end_date)
-            self.update_status('quote', self.start_date)
+            if end_date:
+                self.status_history[0].end_date = coop_date.add_day(end_date,
+                    -1)
+                self.status_history.append(StatusHistory(
+                        start_date=end_date, status='terminated'))
+            self.start_date, self.end_date = start_date, end_date
         else:
             self.raise_user_error('inactive_product_at_date',
                 (product.name, start_date))
@@ -522,9 +530,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             return
         for option in self.options:
             if option.status == 'quote':
-                option.update_status('active', self.start_date)
+                option.activate_status()
                 option.save()
-        self.update_status('active', self.start_date)
+        self.activate_status()
 
     @classmethod
     def get_coverages(cls, product):
@@ -832,9 +840,11 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(coverage, start_date):
+            StatusHistory = Pool().get('contract.status.history')
             self.coverage = coverage
             self.coverage_family = coverage.family
-            self.update_status('quote', start_date)
+            self.status_history = [StatusHistory(
+                    start_date=start_date, status='quote')]
             # TODO : remove once computed properly
             self.start_date = start_date
             self.appliable_conditions_date = start_date

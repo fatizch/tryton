@@ -11,8 +11,7 @@ class Contract:
     __name__ = 'contract'
 
     def set_subscriber_as_covered_element(self):
-        CoveredElement = Pool().get('contract.covered_element')
-        item_descs = CoveredElement.get_possible_item_desc(self)
+        item_descs = self.product.item_descriptors
         if len(item_descs) != 1:
             return True
         item_desc = item_descs[0]
@@ -24,12 +23,14 @@ class Contract:
                 or subscriber.is_company and item_desc.kind == 'company'
                 or item_desc.kind == 'party'):
             #Delete previous covered element
+            CoveredElement = Pool().get('contract.covered_element')
             CoveredElement.delete(self.covered_elements)
             covered_element = CoveredElement()
             covered_element.party = subscriber
             covered_element.start_date = self.start_date
             covered_element.item_desc = item_desc
             covered_element.main_contract = self
+            covered_element.product = self.product
             cov_as_dict = covered_element.on_change_item_desc()
             for key, val in cov_as_dict.iteritems():
                 setattr(covered_element, key, val)

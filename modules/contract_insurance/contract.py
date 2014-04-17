@@ -876,7 +876,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         OptionModel = Pool().get('contract.option')
         for coverage in self.get_coverages(product, self.item_desc):
             if coverage in existing:
-                good_opt = existing[coverage.code]
+                good_opt = existing[coverage]
                 to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel()
