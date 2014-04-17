@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -14,87 +14,83 @@ msgctxt "field:contract.clause,beneficiaries:"
 msgid "Beneficiaries"
 msgstr "Bénéficiaires"
 
-msgctxt "field:contract.clause,with_beneficiary_list:"
-msgid "With Beneficiay list"
-msgstr "Liste nominative"
-
-msgctxt "field:contract.clause.beneficiary,accepting:"
+msgctxt "field:contract.option.beneficiary,accepting:"
 msgid "Accepting"
 msgstr "Acceptant"
 
-msgctxt "field:contract.clause.beneficiary,clause:"
+msgctxt "field:contract.option.beneficiary,clause:"
 msgid "Clause"
 msgstr "Clause"
 
-msgctxt "field:contract.clause.beneficiary,create_date:"
+msgctxt "field:contract.option.beneficiary,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:contract.clause.beneficiary,create_date_:"
+msgctxt "field:contract.option.beneficiary,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:contract.clause.beneficiary,create_uid:"
+msgctxt "field:contract.option.beneficiary,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:contract.clause.beneficiary,description:"
+msgctxt "field:contract.option.beneficiary,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:contract.clause.beneficiary,details:"
+msgctxt "field:contract.option.beneficiary,details:"
 msgid "Details"
 msgstr "Détails"
 
-msgctxt "field:contract.clause.beneficiary,id:"
+msgctxt "field:contract.option.beneficiary,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.clause.beneficiary,must_expand_tree:"
+msgctxt "field:contract.option.beneficiary,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:contract.clause.beneficiary,party:"
+msgctxt "field:contract.option.beneficiary,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:contract.clause.beneficiary,rec_name:"
+msgctxt "field:contract.option.beneficiary,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:contract.clause.beneficiary,share:"
+msgctxt "field:contract.option.beneficiary,share:"
 msgid "Share"
 msgstr "Quote-Part"
 
-msgctxt "field:contract.clause.beneficiary,write_date:"
+msgctxt "field:contract.option.beneficiary,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:contract.clause.beneficiary,write_uid:"
+msgctxt "field:contract.option.beneficiary,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:contract.clause.beneficiary,xml_id:"
+msgctxt "field:contract.option.beneficiary,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:contract.covered_data,beneficiary_clauses:"
+msgctxt "field:contract.covered_data,beneficiaries_clauses:"
 msgid "Beneficiary clauses"
 msgstr "Clauses bénéficiaires"
 
-msgctxt "model:contract.clause.beneficiary,name:"
+msgctxt "model:contract.option.beneficiary,name:"
 msgid "Contract Beneficiary"
 msgstr "Bénéficiaire"
 
-msgctxt "view:contract.clause.beneficiary:"
+msgctxt "view:contract.option.beneficiary:"
 msgid "%"
 msgstr "%"
 
-msgctxt "view:contract.clause.beneficiary:"
+msgctxt "view:contract.option.beneficiary:"
 msgid "Beneficiaries"
 msgstr "Bénéficiaires"
 
-msgctxt "view:contract.clause.beneficiary:"
+msgctxt "view:contract.option.beneficiary:"
 msgid "Beneficiary"
 msgstr "Bénéficiaire"
 

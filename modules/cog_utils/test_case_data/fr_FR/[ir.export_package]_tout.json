@@ -483,7 +483,7 @@
                     "code_after",
                     10
                 ],
-                "method_name": "check_beneficiary_clauses",
+                "method_name": "check_beneficiaries_clauses",
                 "parent_step": [
                     [
                         "technical_name",
@@ -16480,7 +16480,6 @@
         "customizable": false,
         "kind": "beneficiary",
         "name": "Clause b\u00e9n\u00e9ficiaire Personnalis\u00e9e",
-        "title": "Clause B\u00e9n\u00e9ficiaire personnalisable",
         "versions": [
             {
                 "__name__": "clause.version",
@@ -16537,7 +16536,6 @@
                 }
             }
         ],
-        "with_beneficiary_list": false
     },
     {
         "__name__": "clause",
@@ -16551,7 +16549,6 @@
         "customizable": false,
         "kind": "beneficiary",
         "name": "Clause B\u00e9n\u00e9ficiaire Standard",
-        "title": "Clause B\u00e9n\u00e9ficiaire Standard Pr\u00e9voyance",
         "versions": [
             {
                 "__name__": "clause.version",
@@ -16608,7 +16605,6 @@
                 }
             }
         ],
-        "with_beneficiary_list": false
     },
     {
         "__name__": "rule_engine",

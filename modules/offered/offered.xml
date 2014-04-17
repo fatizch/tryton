@@ -4,6 +4,7 @@
     <!-- ############################################################ -->
     <!-- Menus -->
     <!-- ############################################################ -->
+    <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
     <menuitem name="Laboratory" id="menu_product" sequence="20"/>
     <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
     <!-- Moving existing Entry Points -->

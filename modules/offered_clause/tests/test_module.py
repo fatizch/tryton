@@ -7,14 +7,8 @@ from trytond.modules.cog_utils import test_framework
 
 class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
-    def get_models(cls):
-        return {
-            'Clause': 'clause',
-            }
-
-    @classmethod
     def get_module_name(cls):
-        return 'clause'
+        return 'offered_clause'
 
 
 def suite():
