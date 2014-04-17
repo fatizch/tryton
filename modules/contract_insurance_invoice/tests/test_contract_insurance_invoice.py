@@ -68,6 +68,11 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
 
     def test_contract_revision_value(self):
         'Test Contract revision_value'
+        Sequence = POOL.get('ir.sequence')
+        SequenceType = POOL.get('ir.sequence.type')
+        Account = POOL.get('account.account')
+        AccountKind = POOL.get('account.account.type')
+        Product = POOL.get('offered.product')
         Contract = POOL.get('contract')
         ContractPaymentTerm = POOL.get('contract.payment_term')
         PaymentTerm = POOL.get('account.invoice.payment_term')
@@ -94,9 +99,43 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': '3',
                         'lines': [('create', [{}])],
                         }])
+            freq_month, freq_quart = InvoiceFrequency.create([
+                    {'frequency': 'monthly'},
+                    {'frequency':'quarterly'},
+                    ])
+            sequence_code, = SequenceType.create([{
+                        'name': 'Product sequence',
+                        'code': 'product_sequence',
+                        }])
+            sequence = Sequence.create([{
+                        'name': 'Contract sequence',
+                        'code': sequence_code.code,
+                        'company': company.id,
+                        }])
+            account_kind, = AccountKind.create([{
+                        'name':'Product',
+                        'company': company.id,
+                        }])
+            account, = Account.create([{
+                        'name':'Account for Product',
+                        'code': 'Account for Product',
+                        'kind': 'revenue',
+                        'company': company.id,
+                        'type': account_kind.id,
+                        }])
+            product, = Product.create([{'company': company.id,
+                        'name': 'Test Product',
+                        'code': 'test_product',
+                        'start_date': date(2014, 4, 1),
+                        'frequencies': [freq_month.id, freq_quart.id],
+                        'default_frequency': freq_month.id,
+                        'account_for_billing': account.id,
+                        'contract_generator': sequence.id,
+                        }])
             contract = Contract(company=company,
+                product=product,
                 invoice_frequencies=[ContractInvoiceFrequency(
-                        value=InvoiceFrequency(frequency='monthly'))])
+                        value=freq_month)])
             contract.payment_terms = [
                 ContractPaymentTerm(date=None, value=payment_term1),
                 ContractPaymentTerm(date=date(2014, 4, 1),
@@ -128,6 +167,11 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
 
     def test_contract_get_invoice_periods(self):
         'Test Contract get_invoice_periods'
+        Sequence = POOL.get('ir.sequence')
+        SequenceType = POOL.get('ir.sequence.type')
+        Account = POOL.get('account.account')
+        AccountKind = POOL.get('account.account.type')
+        Product = POOL.get('offered.product')
         Contract = POOL.get('contract')
         ContractPaymentTerm = POOL.get('contract.payment_term')
         PaymentTerm = POOL.get('account.invoice.payment_term')
@@ -148,16 +192,49 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': 'direct',
                         'lines': [('create', [{}])],
                         }])
-
+            freq_month, freq_quart = InvoiceFrequency.create([
+                    {'frequency': 'monthly'},
+                    {'frequency':'quarterly'},
+                    ])
+            sequence_code, = SequenceType.create([{
+                        'name': 'Product sequence',
+                        'code': 'product_sequence',
+                        }])
+            sequence = Sequence.create([{
+                        'name': 'Contract sequence',
+                        'code': sequence_code.code,
+                        'company': company.id,
+                        }])
+            account_kind, = AccountKind.create([{
+                        'name':'Product',
+                        'company': company.id,
+                        }])
+            account, = Account.create([{
+                        'name':'Account for Product',
+                        'code': 'Account for Product',
+                        'kind': 'revenue',
+                        'company': company.id,
+                        'type': account_kind.id,
+                        }])
+            product, = Product.create([{'company': company.id,
+                        'name': 'Test Product',
+                        'code': 'test_product',
+                        'start_date': date(2014, 4, 1),
+                        'frequencies': [freq_month.id, freq_quart.id],
+                        'default_frequency': freq_month.id,
+                        'account_for_billing': account.id,
+                        'contract_generator': sequence.id,
+                        }])
             contract = Contract(company=company,
                 payment_terms=[ContractPaymentTerm(value=payment_term)],
                 start_date=date(2014, 4, 15),
+                product=product,
                 invoice_frequencies=[
-                    ContractInvoiceFrequency(date=None,
-                        value=InvoiceFrequency(frequency='monthly')),
+                    ContractInvoiceFrequency(date=None, value=freq_month),
                     ContractInvoiceFrequency(date=date(2014, 7, 1),
-                        value=InvoiceFrequency(frequency='quarterly')),
-                    ])
+                        value=freq_quart),
+                    ],
+                )
             contract.save()
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
                 [])

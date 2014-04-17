@@ -574,7 +574,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             'parties': Eval('parties'),
             'all_extra_datas': Eval('all_extra_datas'),
             },
-        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'products'])
+        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'product'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[
