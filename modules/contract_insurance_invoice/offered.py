@@ -1,10 +1,11 @@
+import datetime
 from dateutil.rrule import rrule, YEARLY, MONTHLY
 from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, utils, coop_string
 
 from .contract import FREQUENCIES
 
@@ -14,6 +15,7 @@ __all__ = [
     'InvoiceFrequency',
     'Product',
     'ProductInvoiceFrequencyRelation',
+    'ProductPaymentTermRelation',
     'OptionDescription',
     'FeeDesc',
     'TaxDesc',
@@ -81,6 +83,15 @@ class InvoiceFrequency(model.CoopSQL, model.CoopView):
         return (rrule(freq, interval=interval, dtstart=start, until=until,
                 bymonthday=sync_date), until)
 
+    def get_rec_name(self, name):
+        result = coop_string.translate_value(self, 'frequency')
+        if self.sync_month:
+            lang = utils.get_user_language()
+            result += ' (%s)' % lang.strftime(datetime.date(1900,
+                    int(self.sync_month), int(self.sync_day)), lang.code,
+                '%d %b')
+        return result
+
 
 class Product:
     __name__ = 'offered.product'
@@ -94,6 +105,12 @@ class Product:
     default_frequency = fields.Many2One('offered.invoice.frequency',
         'Default Frequency', domain=[('id', 'in', Eval('frequencies'))],
         depends=['frequencies'], ondelete='RESTRICT')
+    payment_terms = fields.Many2Many(
+        'offered.product-account.invoice.payment_term', 'product',
+        'payment_term', 'Payment Terms')
+    default_payment_term = fields.Many2One('account.invoice.payment_term',
+        'Default Payment Term', domain=[('id', 'in', Eval('payment_terms'))],
+        depends=['payment_terms'], ondelete='RESTRICT')
 
     @fields.depends('frequencies', 'default_frequency')
     def on_change_frequencies(self):
@@ -104,6 +121,15 @@ class Product:
             return {}
         return {'default_frequency': self.frequencies[0].id}
 
+    @fields.depends('payment_terms', 'default_payment_term')
+    def on_change_payment_terms(self):
+        if not self.payment_terms:
+            return {'default_payment_term': None}
+        if (self.default_payment_term and
+                self.default_payment_term in self.payment_terms):
+            return {}
+        return {'default_payment_term': self.payment_terms[0].id}
+
 
 class ProductInvoiceFrequencyRelation(model.CoopSQL):
     'Product Invoice Frequency Relation'
@@ -112,6 +138,17 @@ class ProductInvoiceFrequencyRelation(model.CoopSQL):
 
     invoice_frequency = fields.Many2One('offered.invoice.frequency',
         'Invoice Frequency', ondelete='RESTRICT', required=True)
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
+        required=True)
+
+
+class ProductPaymentTermRelation(model.CoopSQL):
+    'Product Payment Term Relation'
+
+    __name__ = 'offered.product-account.invoice.payment_term'
+
+    payment_term = fields.Many2One('account.invoice.payment_term',
+        'Payment Term', ondelete='RESTRICT', required=True)
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
         required=True)
 

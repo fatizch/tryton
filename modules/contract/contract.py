@@ -200,6 +200,12 @@ def add_status_history(possible_status):
 
             return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
+        def activate_status(self):
+            for elem in self.status_history:
+                if elem.status != 'quote':
+                    continue
+                elem.status = 'activate'
+
     return WithStatusHistoryMixin
 
 

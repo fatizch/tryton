@@ -51,7 +51,9 @@ class Contract:
     payment_terms = fields.One2Many('contract.payment_term', 'contract',
         'Payment Terms')
     payment_term = fields.Function(fields.Many2One(
-            'account.invoice.payment_term', 'Payment Term'),
+            'account.invoice.payment_term', 'Payment Term',
+            domain=[('value.products', '=', Eval('product'))],
+            depends=['product']),
         'get_payment_term')
     invoice_frequencies = fields.One2Many('contract.invoice_frequency',
         'contract', 'Invoice Frequencies',
@@ -74,12 +76,15 @@ class Contract:
                 'button_calculate_prices': {},
                 })
 
-    @fields.depends('invoice_frequencies', 'product', 'start_date')
+    @fields.depends('invoice_frequencies', 'product', 'start_date',
+        'payment_terms')
     def on_change_product(self):
         result = super(Contract, self).on_change_product()
         if not self.product:
             result['invoice_frequencies'] = {
                 'remove': [x.id for x in self.invoice_frequencies]}
+            result['payment_terms'] = {
+                'remove': [x.id for x in self.payment_terms]}
             return result
         result['invoice_frequencies'] = {
             'remove': [x.id for x in self.invoice_frequencies
@@ -93,11 +98,28 @@ class Contract:
                 'id':  elem.id,
                 'date': self.start_date,
                 }
-            return result
-        result['invoice_frequencies']['add'] = [[-1, {
-                    'date': self.start_date,
-                    'value': self.product.default_frequency.id,
-                    }]]
+        else:
+            result['invoice_frequencies']['add'] = [[-1, {
+                        'date': self.start_date,
+                        'value': self.product.default_frequency.id,
+                        }]]
+        result['payment_terms'] = {
+            'remove': [x.id for x in self.payment_terms
+                if x.value not in self.product.payment_terms]}
+        if (len(self.payment_terms) !=
+                len(result['payment_terms']['remove'])):
+            for elem in self.payment_terms:
+                if elem.value in self.product.payment_terms:
+                    break
+            result['payment_terms']['update'] = {
+                'id':  elem.id,
+                'date': self.start_date,
+                }
+        else:
+            result['payment_terms']['add'] = [[-1, {
+                        'date': self.start_date,
+                        'value': self.product.default_payment_term.id,
+                        }]]
         return result
 
     @classmethod
@@ -381,10 +403,22 @@ class Contract:
         if to_save:
             Premium.create([x._save_values for x in to_save])
 
+    def init_from_product(self, product, start_date=None, end_date=None):
+        res, errs = super(Contract, self).init_from_product(product,
+            start_date, end_date)
+        pool = Pool()
+        InvoiceFrequency = pool.get('contract.invoice_frequency')
+        PaymentTerm = pool.get('contract.payment_term')
+        self.invoice_frequencies = [InvoiceFrequency(start=self.start_date,
+                value=product.default_frequency)]
+        self.payment_terms = [PaymentTerm(start=self.start_date,
+                value=product.default_payment_term)]
+        return res, errs
+
 
 class _ContractRevisionMixin(object):
     contract = fields.Many2One('contract', 'Contract', required=True,
-        select=True)
+        select=True, ondelete='CASCADE')
     date = fields.Date('Date')
     value = None
 

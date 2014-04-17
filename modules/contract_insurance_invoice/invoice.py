@@ -21,6 +21,8 @@ class Invoice:
     contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_contract_invoice', searcher='search_contract_invoice')
+    products = fields.Many2Many('offered.product-account.invoice.payment_term',
+        'payment_term', 'product', 'Products', readonly=True)
 
     @classmethod
     def get_contract_invoice(cls, instances, name):

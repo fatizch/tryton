@@ -256,7 +256,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         self.calculate_components_contribution(args, result, errors,
             rated_object_kind)
         if errors:
-            return None, errors
+            return [], errors
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)

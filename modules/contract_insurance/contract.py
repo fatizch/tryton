@@ -122,8 +122,7 @@ class Contract(Printable):
         return (res, errs)
 
     def init_from_product(self, product, start_date=None, end_date=None):
-        super(Contract, self).init_from_product(product, start_date,
-            end_date)
+        super(Contract, self).init_from_product(product, start_date, end_date)
         self.last_renewed = self.start_date
         self.next_renewal_date = None
         self.next_renewal_date, errors = self.product.get_result(
@@ -296,6 +295,9 @@ class Contract(Printable):
             if option.coverage == coverage:
                 return option
         return None
+
+    def get_contact(self):
+        return self.subscriber
 
 
 class ContractOption:
