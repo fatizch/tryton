@@ -1,7 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import coop_string
 
-
 MODULE_NAME = 'offered_clause'
 
 __metaclass__ = PoolMeta
@@ -18,17 +17,17 @@ class TestCaseModel:
         result = super(TestCaseModel, cls)._get_test_case_dependencies()
         result['clause_test_case'] = {
             'name': 'Clause Test Case',
-            'dependencies': set([]),
+            'dependencies': set(),
             }
         return result
 
     @classmethod
-    def create_clause_from_line(cls, line, kind=''):
+    def create_clause_from_line(cls, name, content, kind=''):
         pool = Pool()
         Clause = pool.get('clause')
-        clause = Clause(name=line[0], kind=kind, content=line[1],
+        clause = Clause(name=name, kind=kind, content=content,
             code=coop_string.remove_blank_and_invalid_char(
-                line[0].decode('utf8')), customizable=True)
+                name), customizable=True)
         return clause
 
     @classmethod
@@ -38,5 +37,6 @@ class TestCaseModel:
         result = []
         for line in cls._loaded_resources[MODULE_NAME]['files'][
                 'clause_examples.csv']:
-            result.append(cls.create_clause_from_line(line))
+            result.append(cls.create_clause_from_line(line[0].decode('utf8'),
+                line[1].decode('utf8')))
         return result

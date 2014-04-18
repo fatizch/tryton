@@ -15,7 +15,7 @@ class Contract:
 
     clauses = fields.One2Many('contract.clause', 'contract', 'Clauses',
         context={'start_date': Eval('start_date')},
-        domain=[['OR',
-                [('clause', '=', None)],
-                [('clause.products', '=', Eval('product'))],
-                ]], depends=['product'])
+        domain=['OR',
+            [('clause', '=', None)],
+            [('clause.products', '=', Eval('product'))],
+            ], depends=['product'])

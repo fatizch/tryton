@@ -15,6 +15,6 @@ class Clause:
 
     @classmethod
     def _export_skips(cls):
-        res = super(Clause, cls)._export_skips()
-        res.add('products')
-        return res
+        skips = super(Clause, cls)._export_skips()
+        skips.add('products')
+        return skips

@@ -32,6 +32,6 @@ class Clause(model.CoopSQL, model.CoopView):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        if cls.search([('code',) + tuple(clause[1:])], limit=1):
+        if cls.search([('code',) + tuple(clause[1:])], limit=1, order=[]):
             return [('code',) + tuple(clause[1:])]
         return [(cls._rec_name,) + tuple(clause[1:])]

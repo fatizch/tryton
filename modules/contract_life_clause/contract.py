@@ -17,7 +17,7 @@ class ContractOption:
     __name__ = 'contract.option'
 
     with_beneficiary_clause = fields.Function(
-        fields.Boolean('With Beneficiary Clause', states={'invisible': True}),
+        fields.Boolean('With Beneficiary Clause'),
         'on_change_with_with_beneficiary_clause')
     beneficiary_clause = fields.Many2One('clause', 'Beneficiary Clause',
         domain=[('coverages', '=', Eval('coverage'))], states={
@@ -26,11 +26,12 @@ class ContractOption:
             }, depends=['coverage', 'with_beneficiary_clause'],
             ondelete='RESTRICT')
     customized_beneficiary_clause = fields.Text('Customized Beneficiary Clause',
-        states={
-            'invisible': ~Eval('with_beneficiary_clause')})
+        states={'invisible': ~Eval('with_beneficiary_clause')},
+        depends=['with_beneficiary_clause'])
     beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
-        'Beneficiaries', states={
-            'invisible': ~Eval('with_beneficiary_clause')})
+        'Beneficiaries',
+        states={'invisible': ~Eval('with_beneficiary_clause')},
+        depends=['with_beneficiary_clause'])
 
     @classmethod
     def __setup__(cls):
@@ -56,7 +57,8 @@ class ContractOption:
 
     @fields.depends('coverage')
     def on_change_with_beneficiary_clause(self, name=None):
-        if not self.coverage:
+        if (not self.coverage
+                or not self.self.coverage.default_beneficiary_clause):
             return
         return self.coverage.default_beneficiary_clause.id
 
@@ -64,18 +66,18 @@ class ContractOption:
     def on_change_with_with_beneficiary_clause(self, name=None):
         if not self.coverage:
             return False
-        return len(self.coverage.beneficiaries_clauses)
+        return bool(self.coverage.beneficiaries_clauses)
 
     def check_beneficiaries(self):
         if not self.beneficiaries:
             return
-        if None in [getattr(x, 'share', None) for x in self.beneficiaries]:
-            if len([x.share for x in self.beneficiaries
-                    if getattr(x, 'share', None)]):
+        if any(getattr(x, 'share', None) is None for x in self.beneficiaries):
+            if [x.share for x in self.beneficiaries
+                    if getattr(x, 'share', None)]:
                 self.raise_user_error('mix_share_and_none')
             else:
                 return
-        if not(sum(x.share for x in self.beneficiaries)) == Decimal(1):
+        if sum(x.share for x in self.beneficiaries) != Decimal(1):
             self.raise_user_error('invalid_beneficiary_shares',
                 (self.rec_name))
 
@@ -106,7 +108,7 @@ class Beneficiary(model.CoopSQL, model.CoopView):
             }, depends=['accepting'],
         ondelete='RESTRICT')
     address = fields.Many2One('party.address', 'Address',
-        domain=[('party', '=', Eval('party'))], states={
+        domain=[('party', '=', Eval('party', None))], states={
             'invisible': ~Eval('accepting'),
             'required': Bool(Eval('accepting')),
             }, depends=['party', 'accepting'], ondelete='RESTRICT')

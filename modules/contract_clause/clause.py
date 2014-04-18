@@ -25,7 +25,7 @@ class ContractClause(model.CoopSQL, model.CoopView):
     def on_change_with_customized_text(self, name=None):
         return self.clause.customizable if self.clause else True
 
-    @fields.depends('clause', 'contract')
+    @fields.depends('clause')
     def on_change_with_text(self):
         if not self.clause:
             return ''

@@ -1,5 +1,4 @@
 import unittest
-import datetime
 
 import trytond.tests.test_tryton
 
@@ -16,18 +15,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return 'offered_life_clause'
 
     def test0001_testBeneficiaryClauseCreation(self):
-        # Clause Version
-        version = self.ClauseVersion()
-        version.content = 'Clause content testing'
-        version.start_date = datetime.date(2013, 2, 3)
-
         # Clause
         clause = self.Clause()
         clause.name = 'Test beneficiary Clause'
         clause.code = clause.on_change_with_code()
         self.assertEqual(clause.code, 'test_beneficiary_clause')
         clause.kind = 'beneficiary'
-        clause.versions = [version]
+        clause.content = 'Clause content testing'
         clause.save()
 
 

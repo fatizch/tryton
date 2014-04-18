@@ -17,7 +17,7 @@ class TestCaseModel:
         result = super(TestCaseModel, cls)._get_test_case_dependencies()
         result['beneficiary_clause_test_case'] = {
             'name': 'Beneficiary Clause Test Case',
-            'dependencies': set([]),
+            'dependencies': set(),
             }
         return result
 
