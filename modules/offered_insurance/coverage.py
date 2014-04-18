@@ -128,23 +128,10 @@ class OptionDescription:
 
     def give_me_covered_elements_at_date(self, args):
         contract = args['contract']
-        date = args['date']
         res = []
         for covered in contract.covered_elements:
-            # We must check that the current covered element is
-            # covered by self.
-            for option in covered.options:
-                coverage = utils.convert_ref_to_obj(
-                    option.coverage)
-                if not coverage.code == self.code:
-                    continue
-
-                # And that this coverage is effective at the requested
-                # computation date.
-                if (date >= option.start_date and
-                        (not option.end_date
-                            or option.end_date >= date)):
-                    res.append((covered, option))
+            res.extend([(covered, x) for x in covered.options
+                    if x.coverage == self])
         return res, []
 
     def give_me_allowed_amounts(self, args):

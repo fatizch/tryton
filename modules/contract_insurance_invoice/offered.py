@@ -1,6 +1,5 @@
 import datetime
 from dateutil.rrule import rrule, YEARLY, MONTHLY
-from dateutil.relativedelta import relativedelta
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
@@ -22,6 +21,7 @@ __all__ = [
     ]
 
 MONTHS = [
+    ('', ''),
     ('1', 'January'),
     ('2', 'February'),
     ('3', 'March'),
@@ -56,6 +56,14 @@ class InvoiceFrequency(model.CoopSQL, model.CoopView):
     def default_frequency(cls):
         return 'yearly'
 
+    @staticmethod
+    def default_sync_day():
+        return ''
+
+    @staticmethod
+    def default_sync_month():
+        return ''
+
     @classmethod
     def _export_skips(cls):
         result = super(InvoiceFrequency, cls)._export_skips()
@@ -74,7 +82,7 @@ class InvoiceFrequency(model.CoopSQL, model.CoopView):
             freq = YEARLY
             interval = 1
         elif self.frequency == 'once_per_contract':
-            return [start, self.end_date + relativedelta(days=+1)], until
+            return [start, datetime.date.max], until
         else:
             return [], until
         sync_date = None

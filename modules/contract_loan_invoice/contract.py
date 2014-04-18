@@ -20,17 +20,26 @@ class ContractOption:
             lines.extend(loan_share.get_invoice_lines(start, end))
         return lines
 
+    def get_premium_list(self, values):
+        super(ContractOption, self).get_premium_list(values)
+        for share in self.loan_shares:
+            share.get_premium_list(values)
+
 
 class LoanShare:
     __name__ = 'loan.share'
 
-    premiums = fields.One2Many('contract.premium', 'loan_share', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'loan_share', 'Premiums',
+        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
 
     def get_invoice_lines(self, start, end):
         lines = []
         for premium in self.premiums:
             lines.extend(premium.get_invoice_lines(start, end))
         return lines
+
+    def get_premium_list(self, values):
+        values.extend(self.premiums)
 
 
 class Premium:

@@ -299,6 +299,15 @@ class Contract(Printable):
     def get_contact(self):
         return self.subscriber
 
+    def set_end_date(self, end_date):
+        super(Contract, self).set_end_date(end_date)
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                if option.end_date and option.end_date <= end_date:
+                    continue
+                option.set_end_date(end_date)
+                print option._save_values
+
 
 class ContractOption:
     __name__ = 'contract.option'
@@ -394,12 +403,6 @@ class ContractOption:
         contract = getattr(self.covered_element, 'contract', None)
         return (contract.appliable_conditions_date if
             contract else self.start_date)
-
-    @fields.depends('covered_element')
-    def on_change_with_end_date(self, name=None):
-        if self.covered_element:
-            return self.covered_element.contract.end_date
-        return super(ContractOption, self).on_change_with_end_date(name)
 
     def on_change_with_icon(self, name=None):
         return 'umbrella-black'
@@ -576,7 +579,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             'parties': Eval('parties'),
             'all_extra_datas': Eval('all_extra_datas'),
             },
-        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'products'])
+        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'product'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[

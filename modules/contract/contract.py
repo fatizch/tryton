@@ -45,21 +45,6 @@ class StatusHistory(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
 
-    def init_from_reference(self, reference, to_status, at_date,
-            sub_status=None):
-        self.status = to_status
-        self.start_date = at_date
-        self.sub_status = sub_status
-        if not reference.status_history:
-            return
-        previous_status = reference.status_history[-1]
-        if not previous_status:
-            return
-        previous_status.end_date = max(coop_date.add_day(at_date, -1),
-            previous_status.start_date)
-        if previous_status == 'active':
-            reference.end_date = previous_status.end_date
-
 
 def add_status_history(possible_status):
     class WithStatusHistoryMixin(object):
@@ -157,7 +142,7 @@ def add_status_history(possible_status):
             if self.status_history:
                 for elem in self.status_history:
                     if elem.status == 'terminated':
-                        return elem.end_date
+                        return coop_date.add_day(elem.start_date, -1)
             return None
 
         @fields.depends('status_history')
@@ -205,6 +190,37 @@ def add_status_history(possible_status):
                 if elem.status != 'quote':
                     continue
                 elem.status = 'activate'
+
+        def set_end_date(self, end_date):
+            self.end_date = end_date
+            StatusHistory = Pool().get('contract.status.history')
+            terminated_date = coop_date.add_day(end_date, 1)
+            idx_to_del = []
+            prev_non_terminated = None
+            for idx, elem in enumerate(self.status_history):
+                if elem.status == 'terminated':
+                    if elem.start_date != terminated_date:
+                        elem.start_date = terminated_date
+                    break
+                if elem.start_date > end_date:
+                    idx_to_del.insert(0, idx)
+                    continue
+                prev_non_terminated = elem
+            if isinstance(self.status_history, tuple):
+                self.status_history = list(self.status_history)
+            if not prev_non_terminated:
+                self.status_history = [StatusHistory(
+                        start_date=terminated_date, status='terminated')]
+            else:
+                if prev_non_terminated.end_date != end_date:
+                    prev_non_terminated.end_date = end_date
+                if elem and elem.status != 'terminated':
+                    self.status_history.append(StatusHistory(
+                            start_date=terminated_date, status='terminated'))
+            if not idx_to_del:
+                return
+            for elem in idx_to_del:
+                self.status_history.pop(elem)
 
     return WithStatusHistoryMixin
 
@@ -659,6 +675,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
 
     def get_all_extra_data(self, at_date):
         return getattr(self, 'extra_data', {})
+
+    def set_end_date(self, end_date):
+        super(Contract, self).set_end_date(end_date)
+        for option in self.options:
+            if option.end_date and option.end_date <= end_date:
+                continue
+            option.set_end_date(end_date)
 
 
 class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,

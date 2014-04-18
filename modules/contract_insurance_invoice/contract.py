@@ -47,7 +47,7 @@ class Contract:
     __name__ = 'contract'
     invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices')
     premiums = fields.One2Many('contract.premium', 'contract',
-        'Premiums')
+        'Premiums', order=[('rated_entity', 'ASC'), ('start', 'ASC')])
     payment_terms = fields.One2Many('contract.payment_term', 'contract',
         'Payment Terms')
     payment_term = fields.Function(fields.Many2One(
@@ -68,6 +68,8 @@ class Contract:
     last_invoice_end = fields.Function(
         fields.Date('Last Invoice End Date'), 'get_last_invoice',
         searcher='search_last_invoice')
+    account_invoices = fields.Many2Many('contract.invoice', 'contract',
+        'invoice', 'Invoices')
 
     @classmethod
     def __setup__(cls):
@@ -207,6 +209,7 @@ class Contract:
 
     def get_invoice_periods(self, up_to_date):
         'Return the list of invoice periods up to the date'
+        up_to_date = min(up_to_date, self.end_date or datetime.date.max)
         if self.last_invoice_end:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
@@ -228,12 +231,23 @@ class Contract:
                 periods.append((start, end))
                 start = date
                 if start >= up_to_date:
-                   break
+                    break
             if until and until < up_to_date:
                 end = until + relativedelta(days=-1)
                 periods.append((start, end))
                 start = until
         return periods
+
+    def clean_up_invoices(self):
+        pool = Pool()
+        ContractInvoice = pool.get('contract.invoice')
+        AccountInvoice = pool.get('account.invoice')
+        AccountInvoice.delete(AccountInvoice.search([
+                    ('contract', '=', self.id)]))
+        ContractInvoice.delete(ContractInvoice.search([
+                    ('contract', '=', self.id)]))
+        self.invoices = []
+        self.account_invoices = []
 
     @classmethod
     def invoice(cls, contracts, up_to_date):
@@ -252,17 +266,32 @@ class Contract:
         pool = Pool()
         Invoice = pool.get('account.invoice')
         ContractInvoice = pool.get('contract.invoice')
+        Journal = pool.get('account.journal')
+        journals = Journal.search([
+                ('type', '=', 'revenue'),
+                ], limit=1)
+        if journals:
+            journal, = journals
+        else:
+            journal = None
+
         invoices = defaultdict(list)
         for period, contracts in periods.iteritems():
             with Transaction().set_context(contract_revision_date=period[0]):
                 contracts = cls.browse(contracts)
             for contract in contracts:
                 invoice = contract.get_invoice(*period)
+                if not invoice.journal:
+                    invoice.journal = journal
                 invoice.lines = contract.get_invoice_lines(*period)
                 invoices[period].append((contract, invoice))
         new_invoices = Invoice.create([i._save_values
-                for contract_invoices in invoices.itervalues()
-                for c, i in contract_invoices])
+                 for contract_invoices in invoices.itervalues()
+                 for c, i in contract_invoices])
+        # Set the new ids
+        old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
+        for invoice, new_invoice in zip(old_invoices, new_invoices):
+            invoice.id = new_invoice.id
         Invoice.validate_invoice(new_invoices)
         contract_invoices_to_create = []
         for period, contract_invoices in invoices.iteritems():
@@ -280,18 +309,10 @@ class Contract:
     def get_invoice(self, start, end):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        Journal = pool.get('account.journal')
-        journals = Journal.search([
-                ('type', '=', 'revenue'),
-                ], limit=1)
-        if journals:
-            journal, = journals
-        else:
-            journal = None
         return Invoice(
             company=self.company,
             type='out_invoice',
-            journal=journal,
+            journal=None,
             party=self.subscriber,
             invoice_address=self.get_contract_address(),
             currency=self.get_currency(),
@@ -308,12 +329,6 @@ class Contract:
         for covered_element in self.covered_elements:
             lines.extend(covered_element.get_invoice_lines(start, end))
         return lines
-
-    def is_first_invoice(self, start):
-        # TODO : think over it
-        if start == self.start_date:
-            return True
-        return False
 
     @classmethod
     @ModelView.button
@@ -359,6 +374,8 @@ class Contract:
         new_premium = Premium.new_line(price, start_date, end_date)
         if new_premium:
             parent = new_premium.get_parent()
+            if not end_date:
+                new_premium.end = getattr(parent, 'end_date', None)
             if isinstance(parent.premiums, tuple):
                 parent.premiums = list(parent.premiums)
             parent.premiums.append(new_premium)
@@ -402,6 +419,26 @@ class Contract:
             Premium.delete(list(to_delete))
         if to_save:
             Premium.create([x._save_values for x in to_save])
+        self.browse([self.id])[0].remove_premium_duplicates()
+        # TODO : Remove this once premium changes are stored in the instances
+        # and saved once globally
+        for elem in to_check_for_deletion:
+            elem.premiums = tuple(Premium.search([
+                        (elem._fields['premiums'].field, '=', elem)]))
+
+    def get_premium_list(self, values=None):
+        if values is None:
+            values = []
+        values.extend(self.premiums)
+        for option in self.options:
+            option.get_premium_list(values)
+        for covered_element in self.covered_elements:
+            covered_element.get_premium_list(values)
+        return values
+
+    def remove_premium_duplicates(self):
+        Pool().get('contract.premium').remove_duplicates(
+            self.get_premium_list())
 
     def init_from_product(self, product, start_date=None, end_date=None):
         res, errs = super(Contract, self).init_from_product(product,
@@ -464,14 +501,14 @@ class ContractPaymentTerm(_ContractRevisionMixin, ModelSQL, ModelView):
     'Contract Payment Term'
     __name__ = 'contract.payment_term'
     value = fields.Many2One('account.invoice.payment_term', 'Payment Term',
-        required=True)
+        required=True, ondelete='CASCADE')
 
 
 class ContractInvoiceFrequency(_ContractRevisionMixin, ModelSQL, ModelView):
     'Contract Invoice Frequency'
     __name__ = 'contract.invoice_frequency'
     value = fields.Many2One('offered.invoice.frequency', 'Invoice Frequency',
-        required=True)
+        required=True, ondelete='CASCADE')
 
 
 class ContractInvoice(ModelSQL, ModelView):
@@ -554,7 +591,7 @@ class CoveredElement:
     __name__ = 'contract.covered_element'
 
     premiums = fields.One2Many('contract.premium', 'covered_element',
-        'Premiums')
+        'Premiums', order=[('rated_entity', 'ASC'), ('start', 'ASC')])
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -564,11 +601,17 @@ class CoveredElement:
             lines.extend(option.get_invoice_lines(start, end))
         return lines
 
+    def get_premium_list(self, values):
+        values.extend(self.premiums)
+        for option in self.options:
+            option.get_premium_list(values)
+
 
 class ContractOption:
     __name__ = 'contract.option'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
+        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -580,11 +623,15 @@ class ContractOption:
                 lines.extend(extra_premium.get_invoice_lines(start, end))
         return lines
 
+    def get_premium_list(self, values):
+        values.extend(self.premiums)
+
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
+        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -608,7 +655,7 @@ class Premium(ModelSQL, ModelView):
         'Extra Premium', select=True, ondelete='CASCADE')
     rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
         required=True)
-    start = fields.Date('Start', required=True)
+    start = fields.Date('Start')
     end = fields.Date('End')
     amount = fields.Numeric('Amount', required=True)
     frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)
@@ -690,14 +737,14 @@ class Premium(ModelSQL, ModelView):
         elif self.frequency == 'yearly':
             freq = YEARLY
             interval = 1
-        elif self.frequency in ('once_per_invoice', 'once_per_contract'):
-            return rrule(MONTHLY, dtstart=self.start, count=1)
+        elif self.frequency in ('once_per_contract'):
+            return rrule(MONTHLY, dtstart=self.start, count=2)
         else:
             return
         return rrule(freq, interval=interval, dtstart=start)
 
     def get_amount(self, start, end):
-        if self.frequency in ('once_per_invoice', 'once_per_contract'):
+        if self.frequency in ('once_per_invoice'):
             return self.amount
         rrule = self._get_rrule(start)
         start = datetime.datetime.combine(start, datetime.time())
@@ -709,6 +756,12 @@ class Premium(ModelSQL, ModelView):
         except IndexError:
             last_date = start
         next_date = rrule.after(last_date)
+        if self.frequency in ('once_per_contract'):
+            if (last_date <= datetime.datetime.combine(self.start,
+                    datetime.time()) <= next_date):
+                return self.amount
+            else:
+                return 0
         if next_date and (next_date - end).days > 1:
             if (end - last_date).days != 0:
                 ratio = (((end - last_date).days + 1.)
@@ -717,9 +770,6 @@ class Premium(ModelSQL, ModelView):
         return amount
 
     def get_invoice_lines(self, start, end):
-        if (self.frequency == 'once_per_contract' and
-                not self.main_contract.is_first_invoice(start)):
-            return []
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
         if ((self.start or datetime.date.min) > end
@@ -787,6 +837,43 @@ class Premium(ModelSQL, ModelView):
         # TODO : get from line once properly set
         new_instance.frequency = line['frequency']
         return new_instance
+
+    @classmethod
+    def remove_duplicates(cls, elems):
+        to_del = []
+        to_write = set()
+        prev = None
+        for elem in elems:
+            if not prev:
+                prev = elem
+                continue
+            if prev.rated_entity != elem.rated_entity:
+                prev = elem
+                continue
+            if prev.same_value(elem):
+                prev.end = elem.end
+                to_del.append(elem)
+                to_write.add(prev)
+                continue
+            prev = elem
+        if to_del:
+            cls.delete(to_del)
+        if to_write:
+            values = []
+            for elem in to_write:
+                values.extend([[elem], elem._save_values])
+            cls.write(*values)
+
+    def same_value(self, other):
+        ident_fields = ('amount', 'frequency', 'rated_entity', 'account')
+        for elem in ident_fields:
+            if getattr(self, elem) != getattr(other, elem):
+                return False
+        if self.get_parent() != other.get_parent():
+            return False
+        if set(self.taxes) != set(other.taxes):
+            return False
+        return True
 
 
 class PremiumTax(ModelSQL):
