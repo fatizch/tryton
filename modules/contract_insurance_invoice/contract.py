@@ -69,7 +69,7 @@ class Contract:
         fields.Date('Last Invoice End Date'), 'get_last_invoice',
         searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
-        'invoice', 'Invoices')
+        'invoice', 'Invoices', order=[('start', 'ASC')])
 
     @classmethod
     def __setup__(cls):
@@ -208,19 +208,21 @@ class Contract:
         return frequency.value.get_rrule(start, until)
 
     def get_invoice_periods(self, up_to_date):
-        'Return the list of invoice periods up to the date'
-        up_to_date = min(up_to_date, self.end_date or datetime.date.max)
+        'Return the list of invoice periods up to the date. If no date is '
+        'given, try the end_date. If none exists, return the first period'
+        if up_to_date:
+            up_to_date = min(up_to_date, self.end_date or datetime.date.max)
+        else:
+            up_to_date = self.end_date
         if self.last_invoice_end:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
             start = self.start_date
-        if self.end_date and self.end_date < up_to_date:
-            up_to_date = self.end_date
-        if start > up_to_date:
+        if up_to_date and start > up_to_date:
             return []
         periods = []
 
-        while start < up_to_date:
+        while (up_to_date and start < up_to_date) or len(periods) < 1:
             rule, until = self._get_invoice_rrule(start)
             for date in rule:
                 if hasattr(date, 'date'):
@@ -230,9 +232,9 @@ class Contract:
                 end = date + relativedelta(days=-1)
                 periods.append((start, end))
                 start = date
-                if start >= up_to_date:
+                if (up_to_date and start >= up_to_date) or not up_to_date:
                     break
-            if until and until < up_to_date:
+            if until and (up_to_date or until < up_to_date):
                 end = until + relativedelta(days=-1)
                 periods.append((start, end))
                 start = until
@@ -249,12 +251,15 @@ class Contract:
         self.invoices = []
         self.account_invoices = []
 
+    def first_invoice(self):
+        self.invoices = self.invoice([self])
+
     @classmethod
-    def invoice(cls, contracts, up_to_date):
+    def invoice(cls, contracts, up_to_date=None):
         'Invoice contracts up to the date'
         periods = defaultdict(list)
         for contract in contracts:
-            if contract.status in ('', 'quote', 'hold'):
+            if contract.status in ('hold'):
                 continue
             for period in contract.get_invoice_periods(up_to_date):
                 periods[period].append(contract)

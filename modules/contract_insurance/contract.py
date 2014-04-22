@@ -303,10 +303,9 @@ class Contract(Printable):
         super(Contract, self).set_end_date(end_date)
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                if option.end_date and option.end_date <= end_date:
-                    continue
                 option.set_end_date(end_date)
-                print option._save_values
+            covered_element.options = covered_element.options
+        self.covered_elements = self.covered_elements
 
 
 class ContractOption:
@@ -458,6 +457,7 @@ class ContractOption:
     def init_extra_data(self):
         self.extra_data = getattr(self, 'extra_data', {})
         self.extra_data.update(self.on_change_extra_data()['extra_data'])
+        print self.extra_data
 
     @classmethod
     def init_default_values_from_coverage(cls, coverage, product,

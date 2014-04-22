@@ -130,6 +130,7 @@ class ContractOption:
             if share.end_date and share.end_date <= end_date:
                 continue
             share.end_date = end_date
+        self.loan_shares = self.loan_shares
 
 
 class ExtraPremium:

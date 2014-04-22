@@ -51,46 +51,35 @@ class OptionSubscription:
             res['covered_element'] = contract.covered_elements[0].id
         return res
 
-    def subscribe_option(self, coverage):
-        contract = self.options_displayer.contract
-        options = [x for x in contract.options if x.coverage == coverage]
-        if len(options) == 1:
-            option = options[0]
-        else:
-            option = super(OptionSubscription, self).subscribe_option(coverage)
-            option.save()
-            self.options_displayer.contract.save()
-        return option
+    def add_option_to_covered_element(self, covered_element, coverage):
+        Option = Pool().get('contract.option')
+        new_option = Option()
+        new_option.covered_element = covered_element
+        new_option.product = covered_element.contract.product
+        new_option.item_desc = covered_element.item_desc
+        new_option.init_from_coverage(coverage)
+        if isinstance(covered_element.options, tuple):
+            covered_element.options = list(covered_element.options)
+        covered_element.options.append(new_option)
 
     def delete_options(self, options):
         Option = Pool().get('contract.option')
         Option.delete(options)
 
     def transition_update_options(self):
-        # TODO : rewrite without covered_data
         cov_element = self.options_displayer.covered_element
+        to_subscribe = set([x.coverage for x in self.options_displayer.options
+                if x.is_selected])
+        subscribed = set([x.coverage for x in cov_element.options])
         to_delete = []
-        to_subscribe = [x.coverage for x in self.options_displayer.options
-            if x.is_selected]
-        contract = self.options_displayer.contract
-        if contract.options:
-            contract.options = list(contract.options)
-        for option in contract.options:
-            if option.coverage in to_subscribe:
-                for cov_data in option.option:
-                    if cov_data.covered_element == cov_element:
-                        to_subscribe.remove(option.coverage)
-            else:
+        for option in cov_element.options:
+            if option.coverage not in to_subscribe:
                 to_delete.append(option)
-        for coverage in to_subscribe:
-            self.subscribe_option(coverage)
-        contract.options = list(contract.options)
-        contract.options[:] = [x for x in contract.options
-            if not x in to_delete]
+        for coverage in to_subscribe - subscribed:
+            self.add_option_to_covered_element(cov_element, coverage)
         if to_delete:
             self.delete_options(to_delete)
-        contract.init_extra_data()
-        contract.save()
+        cov_element.save()
         return 'end'
 
 
