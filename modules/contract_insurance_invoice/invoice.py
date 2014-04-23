@@ -18,11 +18,28 @@ class Invoice:
     end = fields.Function(
         fields.Date('End Date'),
         'get_contract_invoice', searcher='search_contract_invoice')
+    base_amount = fields.Function(
+        fields.Numeric('Base amount'),
+        'get_base_amount')
     contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_contract_invoice', searcher='search_contract_invoice')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
+    fees = fields.Function(
+        fields.Numeric('Fees'),
+        'get_fees')
     products = fields.Many2Many('offered.product-account.invoice.payment_term',
         'payment_term', 'product', 'Products', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls._order.insert(0, ('start', 'ASC'))
+
+    def get_base_amount(self, name):
+        return self.untaxed_amount - self.fees
 
     @classmethod
     def get_contract_invoice(cls, instances, name):
@@ -41,6 +58,18 @@ class Invoice:
         for invoice_id, value in cursor.fetchall():
             res[invoice_id] = value
         return res
+
+    def get_currency_symbol(self, name):
+        return self.currency.symbol if self.currency else ''
+
+    def get_fees(self, name):
+        result = 0
+        for elem in self.lines:
+            if elem.origin.__name__ != 'contract.premium':
+                continue
+            if elem.origin.rated_entity.__name__ == 'account.fee.description':
+                result += elem.amount
+        return result
 
     @classmethod
     def search_contract_invoice(cls, name, clause):
@@ -86,6 +115,9 @@ class InvoiceLine:
     # XXX maybe change for the description
     contract_insurance_start = fields.Date('Start Date')
     contract_insurance_end = fields.Date('End Date')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'get_currency_symbol')
 
     @property
     def origin_name(self):
@@ -100,3 +132,6 @@ class InvoiceLine:
     def _get_origin(cls):
         return super(InvoiceLine, cls)._get_origin() + [
             'contract.premium']
+
+    def get_currency_symbol(self, name):
+        return self.currency.symbol if self.currency else ''

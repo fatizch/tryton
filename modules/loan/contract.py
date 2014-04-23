@@ -85,7 +85,6 @@ class Contract:
             return
         end_date = max([x.end_date for x in loans])
         self.set_end_date(end_date)
-        print self._save_values
 
 
 class ContractOption:
