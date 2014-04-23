@@ -50,7 +50,8 @@ class ModelCurrency(object):
         return {'currency_digits': digits, 'currency_symbol': symbol}
 
     def get_currency_id(self, name):
-        return self.get_currency().id
+        currency = self.get_currency()
+        return currency.id if currency else None
 
     def get_currency_digits(self, name):
         return self.on_change_currency()['currency_digits']

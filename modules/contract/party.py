@@ -1,6 +1,6 @@
 import copy
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Less
+from trytond.pyson import Eval, Len
 
 from trytond.modules.cog_utils import fields, utils, coop_string, model
 
@@ -14,33 +14,28 @@ __all__ = [
 class Party:
     __name__ = 'party.party'
 
-    quotes = fields.One2ManyDomain('contract', 'subscriber', 'Quotes',
-        domain=[('status', '=', 'quote')])
-    last_quote = fields.Function(
-        fields.Many2One('contract', 'Last Quote'),
-        'get_last_quote_id')
-    number_of_quotes = fields.Function(
-        fields.Integer('Number of Quotes', states={'invisible': True}),
-        'on_change_with_number_of_quotes')
-    number_of_contracts = fields.Function(
-        fields.Integer('Number of Contracts', states={'invisible': True}),
-        'on_change_with_number_of_contracts')
-    main_contract = fields.Function(
-        fields.Many2One('contract', 'Main Contract'),
-        'get_main_contract_id')
     contracts = fields.One2ManyDomain('contract', 'subscriber',
         'Contracts', domain=[('status', '!=', 'quote')])
+    quotes = fields.One2ManyDomain('contract', 'subscriber', 'Quotes',
+        domain=[('status', '=', 'quote')])
+
+    # Function fields
+    last_quote = fields.Function(
+        fields.Many2One('contract', 'Last Quote'),
+        'on_change_with_last_quote')
+    main_contract = fields.Function(
+        fields.Many2One('contract', 'Main Contract'),
+        'on_change_with_main_contract')
 
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
         cls._buttons.update({
                 'open_contracts': {
-                    'invisible': Less(Eval('number_of_contracts', 0), 1, True),
+                    'invisible': Len(Eval('contracts', [])) > 0,
                     },
                 'open_quotes': {
-                    'invisible': Less(Eval('number_of_quotes', 0), 1, True),
-                    }
+                    'invisible': Len(Eval('quotes', [])) > 0,                    }
                 })
 
     @classmethod
@@ -49,6 +44,14 @@ class Party:
         result.add('quotes')
         result.add('contracts')
         return result
+
+    @fields.depends('quotes')
+    def on_change_with_last_quote(self, name=None):
+        return self.quotes[-1].id if self.quotes else None
+
+    @fields.depends('contracts')
+    def on_change_with_main_contract(self, name=None):
+        return self.contracts[-1].id if self.contracts else None
 
     @classmethod
     @model.CoopView.button_action('contract.act_contract_button')
@@ -60,20 +63,6 @@ class Party:
     def open_quotes(cls, objs):
         pass
 
-    @fields.depends('contracts')
-    def on_change_with_number_of_contracts(self, name=None):
-        return len(self.contracts)
-
-    @fields.depends('quotes')
-    def on_change_with_number_of_quotes(self, name=None):
-        return len(self.quotes)
-
-    def get_main_contract_id(self, name):
-        return self.contracts[-1].id if self.contracts else None
-
-    def get_last_quote_id(self, name):
-        return self.quotes[-1].id if self.quotes else None
-
     @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
         if not lang:
@@ -83,14 +72,6 @@ class Party:
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'contracts', True, at_date, lang=lang)
         return res
-
-    @staticmethod
-    def default_number_of_quotes():
-        return 0
-
-    @staticmethod
-    def default_number_of_contracts():
-        return 0
 
 
 class PartyInteraction:

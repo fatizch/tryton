@@ -24,7 +24,6 @@ def register():
         OfferedProduct,
         ItemDescSubItemDescRelation,
         ItemDescriptionExtraDataRelation,
-        ProductItemDescriptionRelation,
         # From Batch
         ProductValidationBatch,
         # From rule engine
@@ -59,7 +58,6 @@ def register():
         FeeVersion,
         # From business_rule.eligibility_rule
         EligibilityRule,
-        EligibilityRelationKind,
         CoverageAmountRule,
         DeductibleRule,
         DeductibleDuration,

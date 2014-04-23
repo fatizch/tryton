@@ -1,18 +1,19 @@
 #-*- coding:utf-8 -*-
 import copy
+import datetime
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields
 from trytond.modules.offered_insurance import offered
-from trytond.modules.offered import PricingResultLine
 
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'OptionDescription',
+    'PremiumRule',
     ]
 
 
@@ -41,6 +42,11 @@ class Product:
         for payment in loan.payments:
             dates.add(payment.start_date)
 
+    def get_option_dates(self, dates, option):
+        super(Product, self).get_option_dates(dates, option)
+        for elem in option.loan_shares:
+            dates.add(elem.start_date)
+
     def get_dates(self, contract):
         dates = super(Product, self).get_dates(contract)
         for loan in contract.loans:
@@ -67,26 +73,35 @@ class OptionDescription:
     def get_is_loan_coverage(self, name):
         return self.family == 'loan'
 
-    def calculate_sub_elem_price(self, args, result_line, errs):
+    def calculate_sub_elem_price(self, args, errs):
         if not self.is_loan:
             return super(OptionDescription, self).calculate_sub_elem_price(
-                args, result_line, errs)
-        for covered, covered_data in self.give_me_covered_elements_at_date(
+                args, errs)
+        lines = []
+        for covered, option in self.give_me_covered_elements_at_date(
                 args)[0]:
             tmp_args = args.copy()
-            result = PricingResultLine()
-            result.on_object = covered_data
-            covered_data.init_dict_for_rule_engine(tmp_args)
-            for share in covered_data.loan_shares:
+            option.init_dict_for_rule_engine(tmp_args)
+            for share in option.loan_shares:
+                if not (share.start_date <= args['date'] <=
+                        (share.end_date or datetime.date.max)):
+                    continue
                 share.init_dict_for_rule_engine(tmp_args)
                 try:
-                    sub_elem_line, sub_elem_errs = self.get_result(
+                    sub_elem_lines, sub_elem_errs = self.get_result(
                         'sub_elem_price', tmp_args, kind='premium')
                 except offered.NonExistingRuleKindException:
-                    sub_elem_line = None
+                    sub_elem_lines = []
                     sub_elem_errs = []
-                if sub_elem_line and sub_elem_line.amount:
-                    sub_elem_line.on_object = share
-                    result.add_detail_from_line(sub_elem_line)
                 errs += sub_elem_errs
-            result_line.add_detail_from_line(result)
+                lines += sub_elem_lines
+        return lines
+
+
+class PremiumRule:
+    __name__ = 'billing.premium.rule'
+
+    def get_lowest_level_instance(self, args):
+        if 'share' not in args:
+            return super(PremiumRule, self).get_lowest_level_instance(args)
+        return args['share']

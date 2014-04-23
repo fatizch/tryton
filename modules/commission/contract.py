@@ -46,7 +46,7 @@ class Contract:
         dist_network = self.get_dist_network()
         if kind not in ['business_provider', 'management'] or not dist_network:
             return super(Contract, self).get_protocol(kind)
-        coverages = [x.offered for x in self.options]
+        coverages = [x.coverage for x in self.options]
         for comp_plan in [x for x in dist_network.all_com_plans
                 if x.commission_kind == kind
                 and (not x.end_date or x.end_date >= self.start_date)]:
@@ -57,7 +57,9 @@ class Contract:
                 return comp_plan
 
     def calculate_price_at_date(self, date):
+        # TODO : plug back commission computation
         prices, errs = super(Contract, self).calculate_price_at_date(date)
+        return prices, errs
         for price in prices:
             target = price.on_object
             if target.__name__ != 'offered.option.description':
@@ -83,10 +85,10 @@ class Contract:
     def calculate_final_coms(self, work_set):
         for data in work_set.coms.itervalues():
             account = data['object'].get_account_for_billing()
-            line = work_set.lines[(data['object'].offered, account)]
+            line = work_set.lines[(data['object'].coverage, account)]
             line.party = data['object'].current_policy_owner
             line.account = account
-            line.second_origin = data['object'].offered
+            line.second_origin = data['object'].coverage
             amount = work_set.currency.round(data['amount'])
             line.credit += amount
             work_set.total_amount += amount
@@ -123,7 +125,7 @@ class Option:
     def update_com_options(self, agreement):
         CompOption = Pool().get('contract.option-commission.option')
         for com_option in agreement.options:
-            if not self.offered in com_option.offered.coverages:
+            if not self.coverage in com_option.coverage.coverages:
                 continue
             good_comp_option = None
             for comp_option in self.com_options:
@@ -149,7 +151,7 @@ class Option:
 
     def get_account_for_billing(self):
         if self.coverage_kind != 'commission':
-            return self.offered.get_account_for_billing()
+            return self.coverage.get_account_for_billing()
         return self.current_policy_owner.account_payable
 
 
@@ -207,7 +209,7 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
             return 0, None
         cur_dict = {'date': at_date}
         self.init_dict_for_rule_engine(cur_dict)
-        rer = self.com_option.offered.get_result('commission', cur_dict)
+        rer = self.com_option.coverage.get_result('commission', cur_dict)
         if hasattr(rer, 'errors') and not rer.errors:
             return rer.result
         else:
@@ -220,7 +222,7 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
 
     def get_com_amount(self, name):
         for price_line in self.option.contract.prices:
-            if price_line.on_object == self.option.offered:
+            if price_line.on_object == self.option.coverage:
                 return self.calculate_com(price_line.amount).result
 
     def get_currency(self):

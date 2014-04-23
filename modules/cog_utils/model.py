@@ -98,8 +98,13 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
         #Set your class here to see the domain on the search
         # if cls.__name__ == 'rule_engine':
         #     print domain
-        return super(CoopSQL, cls).search(domain=domain, offset=offset,
-            limit=limit, order=order, count=count, query=query)
+        try:
+            return super(CoopSQL, cls).search(domain=domain, offset=offset,
+                limit=limit, order=order, count=count, query=query)
+        except:
+            logging.getLogger('root').debug('Bad domain on model %s : %r' % (
+                    cls.__name__, domain))
+            raise
 
     def _get_creation_date(self, name):
         if not (hasattr(self, 'create_date') and self.create_date):

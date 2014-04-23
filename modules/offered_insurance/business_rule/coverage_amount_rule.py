@@ -95,15 +95,15 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
             return res, rule_result.print_errors() + errs
 
     def give_me_coverage_amount_validity(self, args):
-        if not('data' in args and hasattr(args['data'], 'coverage_amount')
-                and not args['data'].coverage_amount is None):
+        if not('option' in args and hasattr(args['option'], 'coverage_amount')
+                and not args['option'].coverage_amount is None):
             return (False, []), ['Coverage amount not found']
-        amount = args['data'].coverage_amount
+        amount = args['option'].coverage_amount
         if hasattr(self, 'amounts') and self.amounts:
             if not amount in self.give_me_allowed_amounts(args)[0]:
                 errs = ['Amount %.2f not allowed on coverage %s' % (
                     amount,
-                    args['data'].coverage.code)]
+                    args['option'].coverage.code)]
                 return (False, errs), []
         return (True, []), []
 

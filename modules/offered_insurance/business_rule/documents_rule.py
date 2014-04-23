@@ -166,7 +166,7 @@ class Printable(Model):
         DocumentTemplate = Pool().get('document.template')
         domain = [
             ('on_model.model', '=', self.__name__),
-            ('products', '=', self.get_product().id),
+            ('products', '=', self.product.id),
             ['OR',
                 ('kind', '=', kind or self.get_doc_template_kind()),
                 ('kind', '=', '')],

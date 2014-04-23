@@ -22,6 +22,7 @@ def register():
         Add2ExportPackageWizardStart,
         # From ir
         Sequence,
+        SequenceStrict,
         DateClass,
         View,
         UIMenu,

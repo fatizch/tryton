@@ -149,7 +149,7 @@
     <!--################################################################ -->
     <record model="ir.sequence.type" id="sequence_type_contract_number">
       <field name="name">Contract Number</field>
-      <field name="code">offered.product</field>
+      <field name="code">contract</field>
     </record>
     <record model="ir.sequence.type-res.group" id="sequence_type_contract_number_group_admin">
       <field name="sequence_type" ref="sequence_type_contract_number"/>

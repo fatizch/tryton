@@ -7,6 +7,6 @@ def register():
         # From file contract
         Beneficiary,
         ContractClause,
-        CoveredData,
+        ContractOption,
         Contract,
         module='contract_life_clause', type_='model')
