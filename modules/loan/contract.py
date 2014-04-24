@@ -158,7 +158,7 @@ class ExtraPremium:
 
     @fields.depends('option')
     def on_change_with_is_loan(self, name=None):
-        return (self.option.is_loan if self.option else
+        return (self.option.coverage.family == 'loan' if self.option else
             Transaction().context.get('is_loan', False))
 
     def get_possible_extra_premiums_kind(self):
