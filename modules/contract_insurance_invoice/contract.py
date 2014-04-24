@@ -242,6 +242,8 @@ class Contract:
 
     def clean_up_invoices(self):
         pool = Pool()
+        # TODO : find out how to have valid values
+        prev_values = dict(self._values or {})
         ContractInvoice = pool.get('contract.invoice')
         AccountInvoice = pool.get('account.invoice')
         AccountInvoice.delete(AccountInvoice.search([
@@ -250,9 +252,13 @@ class Contract:
                     ('contract', '=', self.id)]))
         self.invoices = []
         self.account_invoices = []
+        self._values = prev_values
 
     def first_invoice(self):
+        # TODO : find out how to have valid values
+        prev_values = dict(self._values or {})
         self.invoices = self.invoice([self])
+        self._values = prev_values
 
     @classmethod
     def invoice(cls, contracts, up_to_date=None):
@@ -342,10 +348,13 @@ class Contract:
             contract.calculate_prices()
 
     def calculate_prices(self):
+        # TODO : find out how to have valid values
+        prev_values = dict(self._values or {})
         prices, errs = self.calculate_prices_between_dates()
         if errs:
             return False, errs
         self.store_prices(prices)
+        self._values = prev_values
         return True, ()
 
     def calculate_price_at_date(self, date):
