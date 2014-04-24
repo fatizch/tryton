@@ -144,7 +144,7 @@ def add_status_history(possible_status):
             for elem in self.status_history:
                 if elem.status != 'quote':
                     continue
-                elem.status = 'activate'
+                elem.status = 'active'
 
         def set_end_date(self, end_date):
             self.end_date = end_date
@@ -452,6 +452,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 self.status_history.append(StatusHistory(
                         start_date=end_date, status='terminated'))
             self.start_date, self.end_date = start_date, end_date
+            self.status = 'quote'
         else:
             self.raise_user_error('inactive_product_at_date',
                 (product.name, start_date))
@@ -832,6 +833,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             # TODO : remove once computed properly
             self.start_date = start_date
             self.appliable_conditions_date = start_date
+            self.status = 'active'
         else:
             self.raise_user_error('inactive_coverage_at_date', (coverage.name,
                     start_date))

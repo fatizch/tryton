@@ -187,6 +187,13 @@ class Contract(Printable):
         #what if several protocols exist?
         return None
 
+    @classmethod
+    def search_contract(cls, product, subscriber, at_date):
+        return cls.search([
+                ('product', '=', product),
+                ('subscriber', '=', subscriber),
+                ('start_date', '<=', at_date)])
+
     def update_agreements(self):
         #This method will update the management role and find the good protocol
         #based on real coverage subscribed
@@ -199,8 +206,6 @@ class Contract(Printable):
                 if not protocol_offered:
                     #TODO : We can't find anything
                     return
-                # TODO : Fix this
-                return
                 contracts = self.search_contract(protocol_offered, role.party,
                     self.start_date)
                 protocol = None
@@ -1192,8 +1197,15 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         readonly=True)
     protocol = fields.Many2One('contract', 'Protocol', domain=[
-            utils.get_versioning_domain('start_date', 'end_date'),
-            ('product_kind', '!=', 'insurance'),
+            # ['OR',
+                # [('end_date', '>=', Eval('start_date'))],
+                # [('end_date', '=', None)],
+                # ],
+            # ['OR',
+                # [('start_date', '<=', Eval('start_date'))],
+                # [('start_date', '=', None)],
+                # ],
+            ('product.kind', '!=', 'insurance'),
             ('subscriber', '=', Eval('party')),
             ], depends=['start_date', 'end_date', 'party'],
         #we only need to have a protocole when the management is effective
