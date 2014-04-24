@@ -704,7 +704,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
 
     @classmethod
     def default_status(cls):
-        return 'quote'
+        return 'active'
 
     @fields.depends('coverage')
     def on_change_coverage(self):
@@ -790,7 +790,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             result['status'] = 'quote'
             result['status_history'] = [{
                     'start_date': start_date,
-                    'status': 'quote'}]
+                    'status': 'active'}]
             # TODO : remove once computed properly
             result['start_date'] = start_date
             result['appliable_conditions_date'] = start_date
@@ -811,7 +811,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             result['status'] = 'quote'
             result['status_history'] = {'add': [[-1, {
                             'start_date': start_date,
-                            'status': 'quote'}]]}
+                            'status': 'active'}]]}
             # TODO : remove once computed properly
             result['start_date'] = start_date
             result['appliable_conditions_date'] = start_date
@@ -828,7 +828,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             self.coverage = coverage
             self.coverage_family = coverage.family
             self.status_history = [StatusHistory(
-                    start_date=start_date, status='quote')]
+                    start_date=start_date, status='active')]
             # TODO : remove once computed properly
             self.start_date = start_date
             self.appliable_conditions_date = start_date
