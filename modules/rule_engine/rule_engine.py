@@ -767,6 +767,7 @@ class RuleEngine(ModelView, ModelSQL):
                 pass
                 the_result.result = None
             except Exception, exc:
+                raise
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 tmp = traceback.extract_tb(exc_traceback)
                 last_frame = tmp[-1]

@@ -313,9 +313,8 @@ class Contract:
                         invoice=invoice,
                         start=start,
                         end=end))
-        ContractInvoice.create([c._save_values
+        return ContractInvoice.create([c._save_values
                 for c in contract_invoices_to_create])
-        return new_invoices
 
     def get_invoice(self, start, end):
         pool = Pool()

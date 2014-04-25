@@ -14,16 +14,16 @@ class Invoice:
 
     start = fields.Function(
         fields.Date('Start Date'),
-        'get_contract_invoice', searcher='search_contract_invoice')
+        'get_contract_invoice_field', searcher='search_contract_invoice')
     end = fields.Function(
         fields.Date('End Date'),
-        'get_contract_invoice', searcher='search_contract_invoice')
+        'get_contract_invoice_field', searcher='search_contract_invoice')
     base_amount = fields.Function(
         fields.Numeric('Base amount'),
         'get_base_amount')
     contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
-        'get_contract_invoice', searcher='search_contract_invoice')
+        'get_contract_invoice_field', searcher='search_contract_invoice')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
@@ -42,18 +42,19 @@ class Invoice:
         return self.untaxed_amount - self.fees
 
     @classmethod
-    def get_contract_invoice(cls, instances, name):
+    def get_contract_invoice_field(cls, instances, name):
         res = dict((m.id, None) for m in instances)
         cursor = Transaction().cursor
 
         contract_invoice = Pool().get('contract.invoice').__table__()
         invoice = cls.__table__()
 
-        query_table = invoice.join(contract_invoice, type_='LEFT',
+        query_table = invoice.join(contract_invoice,
             condition=(contract_invoice.invoice == invoice.id))
 
         cursor.execute(*query_table.select(invoice.id,
-                getattr(contract_invoice, name)))
+                getattr(contract_invoice, name),
+                where=(invoice.id.in_([x.id for x in instances]))))
 
         for invoice_id, value in cursor.fetchall():
             res[invoice_id] = value
@@ -65,6 +66,8 @@ class Invoice:
     def get_fees(self, name):
         result = 0
         for elem in self.lines:
+            if not elem.origin:
+                continue
             if elem.origin.__name__ != 'contract.premium':
                 continue
             if elem.origin.rated_entity.__name__ == 'account.fee.description':
