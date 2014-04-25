@@ -29,7 +29,8 @@ __all__ = [
     'PremiumTax',
     'InvoiceContract',
     'InvoiceContractStart',
-    'InvoiceContractBatch',
+    'CreateInvoiceContractBatch',
+    'PostInvoiceContractBatch',
     ]
 
 FREQUENCIES = [
@@ -924,10 +925,10 @@ class InvoiceContract(Wizard):
         return 'end'
 
 
-class InvoiceContractBatch(batchs.BatchRoot):
-    'Contract Invoice Batch'
+class CreateInvoiceContractBatch(batchs.BatchRoot):
+    'Contract Invoice Creation Batch'
 
-    __name__ = 'contract.invoice.batch'
+    __name__ = 'contract.invoice.create'
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -935,7 +936,7 @@ class InvoiceContractBatch(batchs.BatchRoot):
 
     @classmethod
     def get_batch_name(cls):
-        return 'Invoicing batch'
+        return 'Contract invoice creation'
 
     @classmethod
     def get_batch_stepping_mode(cls):
@@ -966,3 +967,46 @@ class InvoiceContractBatch(batchs.BatchRoot):
     @classmethod
     def execute(cls, objects, ids, logger):
         Pool().get('contract').invoice(objects, utils.today())
+
+
+class PostInvoiceContractBatch(batchs.BatchRoot):
+    'Post Contract Invoice Batch'
+
+    __name__ = 'contract.invoice.post'
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'account.invoice'
+
+    @classmethod
+    def get_batch_name(cls):
+        return 'Contract invoice posting'
+
+    @classmethod
+    def get_batch_stepping_mode(cls):
+        return 'divide'
+
+    @classmethod
+    def get_batch_step(cls):
+        return 4
+
+    @classmethod
+    def select_ids(cls):
+        cursor = Transaction().cursor
+        pool = Pool()
+
+        account_invoice = pool.get('account.invoice').__table__()
+        contract_invoice = pool.get('contract.invoice').__table__()
+
+        query_table = contract_invoice.join(account_invoice, 'LEFT',
+            condition=(account_invoice.id == contract_invoice.invoice))
+
+        cursor.execute(*query_table.select(account_invoice.id,
+                where=((contract_invoice.start <= utils.today())
+                    & (account_invoice.state == 'validated'))))
+
+        return cursor.fetchall()
+
+    @classmethod
+    def execute(cls, objects, ids, logger):
+        Pool().get('account.invoice').post(objects)
