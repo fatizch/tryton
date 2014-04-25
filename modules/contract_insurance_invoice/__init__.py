@@ -26,6 +26,7 @@ def register():
         FeeDesc,
         TaxDesc,
         InvoiceContractStart,
+        InvoiceContractBatch,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

@@ -14,7 +14,7 @@ from trytond.transaction import Transaction
 from trytond.tools import reduce_ids
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
-from trytond.modules.cog_utils import coop_date, utils
+from trytond.modules.cog_utils import coop_date, utils, batchs
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -28,7 +28,9 @@ __all__ = [
     'Premium',
     'PremiumTax',
     'InvoiceContract',
-    'InvoiceContractStart']
+    'InvoiceContractStart',
+    'InvoiceContractBatch',
+    ]
 
 FREQUENCIES = [
     ('once_per_contract', 'Once Per Contract'),
@@ -920,3 +922,47 @@ class InvoiceContract(Wizard):
         contracts = Contract.browse(Transaction().context['active_ids'])
         Contract.invoice(contracts, self.start.up_to_date)
         return 'end'
+
+
+class InvoiceContractBatch(batchs.BatchRoot):
+    'Contract Invoice Batch'
+
+    __name__ = 'contract.invoice.batch'
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'contract'
+
+    @classmethod
+    def get_batch_name(cls):
+        return 'Invoicing batch'
+
+    @classmethod
+    def get_batch_stepping_mode(cls):
+        return 'divide'
+
+    @classmethod
+    def get_batch_step(cls):
+        return 4
+
+    @classmethod
+    def select_ids(cls):
+        cursor = Transaction().cursor
+        pool = Pool()
+
+        contract = pool.get('contract').__table__()
+        contract_invoice = pool.get('contract.invoice').__table__()
+
+        query_table = contract.join(contract_invoice, 'LEFT', condition=(
+                contract.id == contract_invoice.contract))
+
+        cursor.execute(*query_table.select(contract.id, group_by=contract.id,
+                having=(
+                    (Max(contract_invoice.end) < utils.today())
+                    | (Max(contract_invoice.end) == None))))
+
+        return cursor.fetchall()
+
+    @classmethod
+    def execute(cls, objects, ids, logger):
+        Pool().get('contract').invoice(objects, utils.today())
