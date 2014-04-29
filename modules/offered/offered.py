@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
 from trytond.modules.cog_utils import model, business, utils, fields
-from trytond.modules.cog_utils import coop_string, coop_date
+from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.rule_engine import RuleEngineResult
@@ -296,13 +296,9 @@ class Offered(model.CoopView, GetResult, Templated):
 
     def get_contract_dates(self, dates, contract):
         dates.add(contract.start_date)
-        if (hasattr(contract, 'end_date') and contract.end_date):
-            dates.add(coop_date.add_day(contract.end_date, 1))
 
     def get_option_dates(self, dates, option):
         dates.add(option.start_date)
-        if (hasattr(option, 'end_date') and option.end_date):
-            dates.add(option.end_date)
 
     def get_dates(self, contract):
         dates = set()

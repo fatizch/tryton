@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Commission Invoices">
+    <field name="party"/>
+    <field name="total_amount" sum="Total Amount">
+        <suffix name="currency_symbol"/>
+    </field>
+</tree>

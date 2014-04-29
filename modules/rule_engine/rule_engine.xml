@@ -55,29 +55,14 @@
     <!-- Rule Parameters -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="parameter_form">
-      <field name="model">rule_engine.parameter</field>
+      <field name="model">rule_engine.rule_parameter</field>
       <field name="type">form</field>
       <field name="name">parameter_form</field>
     </record>
     <record model="ir.ui.view" id="parameter_tree">
-      <field name="model">rule_engine.parameter</field>
+      <field name="model">rule_engine.rule_parameter</field>
       <field name="type">tree</field>
       <field name="name">parameter_tree</field>
-    </record>
-    <record model="ir.ui.view" id="kwarg_parameter_tree">
-      <field name="model">rule_engine.parameter</field>
-      <field name="type">tree</field>
-      <field name="name">kwarg_parameter_tree</field>
-    </record>
-    <record model="ir.ui.view" id="rule_parameter_tree">
-      <field name="model">rule_engine.parameter</field>
-      <field name="type">tree</field>
-      <field name="name">rule_parameter_tree</field>
-    </record>
-    <record model="ir.ui.view" id="table_parameter_tree">
-      <field name="model">rule_engine.parameter</field>
-      <field name="type">tree</field>
-      <field name="name">table_parameter_tree</field>
     </record>
     <!-- ############################################################ -->
     <!-- Test Case Values -->

@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.offered_insurance.business_rule import business_rule
@@ -31,6 +31,15 @@ class Product:
             'required': ~~(Eval('kind') == 'commission'),
             })
 
+    @classmethod
+    def __setup__(cls):
+        super(Product, cls).__setup__()
+        cls.account_for_billing.domain = [
+            cls.account_for_billing.domain[1],
+            If(Eval('kind', '') == 'commission',
+                ('kind', '=', 'expense'),
+                ('kind', '=', 'revenue')
+                )]
     @classmethod
     def get_possible_product_kind(cls):
         res = super(Product, cls).get_possible_product_kind()

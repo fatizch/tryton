@@ -256,7 +256,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         self.calculate_components_contribution(args, result, errors,
             rated_object_kind)
         if errors:
-            return None, errors
+            return [], errors
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)
@@ -385,7 +385,8 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
-    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data', states={
+    rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Rule Extra Data', states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})

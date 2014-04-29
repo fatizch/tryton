@@ -1,4 +1,14 @@
+#-*- coding:utf-8 -*-
+import copy
+
 from trytond.pool import PoolMeta
+
+from trytond.pyson import Eval, Or
+from trytond.modules.cog_utils import model, coop_string
+from trytond.modules.cog_utils import fields
+from trytond import backend
+from trytond.transaction import Transaction
+from trytond.pool import Pool
 
 from trytond.modules.rule_engine import check_args
 from trytond.modules.rule_engine import RuleTools
@@ -13,8 +23,139 @@ from trytond.modules.rule_engine import RuleTools
 __metaclass__ = PoolMeta
 
 __all__ = [
+    'RuleEngineExtraData',
+    'RuleEngine',
     'RuleEngineRuntime',
     ]
+
+
+class RuleEngineExtraData(model.CoopSQL):
+    'Rule Engine - Extra Data'
+
+    __name__ = 'rule_engine-extra_data'
+
+    parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
+        ondelete='CASCADE')
+    extra_data = fields.Many2One('extra_data', 'External Data',
+        ondelete='RESTRICT')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+
+        super(RuleEngineExtraData, cls).__register__(module_name)
+
+         # Migration from 1.1: split rule parameters in multiple table
+        extradata_definition = cls.__table__()
+        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+            cursor.execute(*extradata_definition.delete())
+            cursor.execute("SELECT external_extra_data_def, parent_rule "
+                "FROM rule_engine_parameter "
+                "WHERE kind = 'compl'")
+            for cur_rule_parameter in cursor.dictfetchall():
+                cursor.execute(*extradata_definition.insert(
+                    columns=[extradata_definition.parent_rule,
+                    extradata_definition.extra_data],
+                    values=[[cur_rule_parameter['parent_rule'],
+                    cur_rule_parameter['external_extra_data_def']]]))
+            TableHandler.table_rename(cursor, 'rule_engine_parameter',
+                'rule_engine_parameter_backup')
+
+
+class RuleEngine:
+    __name__ = 'rule_engine'
+
+    extra_data_used = fields.Many2Many(
+        'rule_engine-extra_data', 'parent_rule',
+        'extra_data', 'Extra Data', states={
+            'invisible': Or(
+                Eval('extra_data_kind') != 'extra_data',
+                ~Eval('extra_data'),
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngine, cls).__setup__()
+        cls.extra_data_kind = copy.copy(cls.extra_data_kind)
+        cls.extra_data_kind.selection.extend([('extra_data', 'Extra Data')])
+        cls.extra_data_kind.selection = list(set(
+                cls.extra_data_kind.selection))
+
+    @classmethod
+    def fill_empty_data_tree(cls):
+        res = super(RuleEngine, cls).fill_empty_data_tree()
+        tmp_node = {}
+        tmp_node['name'] = ''
+        tmp_node['translated'] = ''
+        tmp_node['fct_args'] = ''
+        tmp_node['description'] = coop_string.translate_label(cls,
+            'extra_data_used')
+        tmp_node['type'] = 'folder'
+        tmp_node['long_description'] = ''
+        tmp_node['children'] = []
+        res.append(tmp_node)
+        return res
+
+    @fields.depends('extra_data_used')
+    def on_change_with_data_tree(self, name=None):
+        return super(RuleEngine, self).on_change_with_data_tree(name)
+
+    def build_node(self, elem, kind):
+        res = super(RuleEngine, self).build_node(elem, kind)
+        if kind == 'extra_data':
+            res['translated'] = '%s_%s' % (kind, elem.string)
+        return res
+
+    def allowed_functions(self):
+        res = super(RuleEngine, self).allowed_functions()
+        res += [self.get_translated_name(elem, 'compl')
+            for elem in self.extra_data_used]
+        return res
+
+    def get_translated_name(self, elem, kind):
+        if kind != 'compl':
+            return super(RuleEngine, self).get_translated_name(elem, kind)
+        return '%s_%s' % (kind, elem.name)
+
+    def data_tree_structure(self):
+        res = super(RuleEngine, self).data_tree_structure()
+        self.data_tree_structure_for_kind(res,
+            coop_string.translate_label(self, 'extra_data_used'),
+            'compl', self.extra_data_used)
+        return res
+
+    def get_external_extra_data_def(self, elem, args):
+        OfferedSet = Pool().get('rule_engine.runtime')
+        from_object = OfferedSet.get_lowest_level_object(args)
+        res = elem.get_extra_data_value(from_object, elem.name, args['date'])
+        return res
+
+    def as_context(self, elem, kind, evaluation_context, context, forced_value,
+            debug=False):
+        super(RuleEngine, self).as_context(elem, kind, evaluation_context,
+            context, forced_value, debug)
+        if kind != 'compl':
+            return
+        technical_name = self.get_translated_name(elem, kind)
+        if technical_name in context:
+            # Looks like the value was forced
+            return
+        context[technical_name] = \
+            lambda: self.get_external_extra_data_def(elem,
+                evaluation_context)
+        if debug:
+            debug_wrapper = self.get_wrapper_func(context)
+            context[technical_name] = debug_wrapper(context[technical_name])
+
+    def add_rule_parameters_to_context(self, evaluation_context,
+            execution_kwargs, context):
+        super(RuleEngine, self).add_rule_parameters_to_context(
+            evaluation_context, execution_kwargs, context)
+        for elem in self.extra_data_used:
+            self.as_context(elem, 'compl', evaluation_context, context, None,
+                Transaction().context.get('debug'))
 
 
 class RuleEngineRuntime:

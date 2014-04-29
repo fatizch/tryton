@@ -25,8 +25,8 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
         depends=['config_kind'], ondelete='RESTRICT', states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
-    sub_elem_rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
-        states={
+    sub_elem_rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Rule Parameters', states={
             'invisible': Eval('offered_kind') != 'offered.option.description',
             })
     subscriber_classes = fields.Selection([
@@ -62,7 +62,8 @@ class EligibilityRule(BusinessRuleRoot, model.CoopSQL):
 
     def give_me_sub_elem_eligibility(self, args):
         if hasattr(self, 'sub_elem_rule') and self.sub_elem_rule:
-            result = self.sub_elem_rule.execute(args)
+            result = self.sub_elem_rule.execute(args,
+                self.sub_elem_rule_extra_data)
             return (EligibilityResultLine(eligible=result.result,
                     details=result.warnings), result.errors)
         return (EligibilityResultLine(True), [])

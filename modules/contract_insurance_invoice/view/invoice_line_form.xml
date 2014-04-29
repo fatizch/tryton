@@ -4,17 +4,17 @@
     <field name="invoice" colspan="3"/>
     <notebook>
         <page string="General" id="general">
-            <label name="type"/>
-            <field name="type"/>
-            <newline/>
-            <label name="description"/>
-            <field name="description"/>
-            <label name="origin"/>
-            <field name="origin"/>
             <label name="account"/>
             <field name="account"/>
             <label name="amount"/>
-            <field name="amount"/>
+            <group id="amount">
+                <field name="amount" xexpand="0"/>
+                <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+            </group>
+            <newline/>
+            <label name="origin"/>
+            <field name="origin"/>
+            <field name="description" colspan="4"/>
             <field name="taxes" colspan="4"/>
         </page>
         <page string="Notes" id="notes">

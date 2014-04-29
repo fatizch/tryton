@@ -45,21 +45,6 @@ class StatusHistory(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
 
-    def init_from_reference(self, reference, to_status, at_date,
-            sub_status=None):
-        self.status = to_status
-        self.start_date = at_date
-        self.sub_status = sub_status
-        if not reference.status_history:
-            return
-        previous_status = reference.status_history[-1]
-        if not previous_status:
-            return
-        previous_status.end_date = max(coop_date.add_day(at_date, -1),
-            previous_status.start_date)
-        if previous_status == 'active':
-            reference.end_date = previous_status.end_date
-
 
 def add_status_history(possible_status):
     class WithStatusHistoryMixin(object):
@@ -69,13 +54,13 @@ def add_status_history(possible_status):
             'reference', 'Status History', order=[('start_date', 'ASC')])
         end_date = fields.Function(
             fields.Date('End Date'),
-            'on_change_with_end_date', 'setter_void')
+            'on_change_with_end_date', searcher='search_status_history')
         start_date = fields.Function(
             fields.Date('Start Date'),
-            'on_change_with_start_date', 'setter_void')
+            'on_change_with_start_date', searcher='search_status_history')
         status = fields.Function(
             fields.Selection(possible_status, 'Status'),
-            'on_change_with_status', searcher='search_status')
+            'on_change_with_status', searcher='search_status_history')
 
         @classmethod
         def default_status(cls):
@@ -92,58 +77,6 @@ def add_status_history(possible_status):
                     'start_date': cls.default_start_date(),
                     }]
 
-        @fields.depends('status_history', 'end_date')
-        def on_change_end_date(self):
-            # TODO : fix once default and on_change work properly
-            return {}
-            for idx, elem in enumerate(self.status_history):
-                if elem.status in ('terminated'):
-                    update = [{
-                            'id': elem.id,
-                            'start_date': self.end_date,
-                            }]
-                    if idx > 0:
-                        update.append({
-                                'id': self.status_history[idx - 1].id,
-                                'end_date': coop_date.add_day(
-                                    self.end_date, -1),
-                                })
-                    return {'status_history': {'update': update}}
-            status_history = {'add': [[-1, {
-                            'start_date': self.end_date,
-                            'status': 'terminated'}]]}
-            if self.status_history:
-                status_history['update'] = [{
-                        'id': self.status_history[-1].id,
-                        'end_date': coop_date.add_day(self.end_date, -1),
-                        }]
-            return {'status_history': status_history}
-
-        @fields.depends('status_history', 'start_date')
-        def on_change_start_date(self):
-            # TODO : fix once default and on_change work properly
-            return {}
-            for elem in self.status_history:
-                if elem.status in ('active', 'quote'):
-                    return {
-                        'status_history': {
-                            'update': [{
-                                    'id': elem.id,
-                                    'start_date': self.start_date,
-                                    }]}}
-            if self.status_history:
-                end_date = coop_date.add_day(
-                    self.status_history[0].start_date, -1)
-            else:
-                end_date = None
-            return {
-                'status_history': {
-                    'add': [[0, {
-                                'start_date': self.start_date,
-                                'status': 'quote',
-                                'end_date': end_date,
-                                }]]}}
-
         @fields.depends('status_history')
         def on_change_with_start_date(self, name=None):
             if self.status_history:
@@ -157,7 +90,7 @@ def add_status_history(possible_status):
             if self.status_history:
                 for elem in self.status_history:
                     if elem.status == 'terminated':
-                        return elem.end_date
+                        return coop_date.add_day(elem.start_date, -1)
             return None
 
         @fields.depends('status_history')
@@ -171,7 +104,7 @@ def add_status_history(possible_status):
             return self.default_status()
 
         @classmethod
-        def search_status(cls, name, clause):
+        def search_status_history(cls, name, clause):
             pool = Pool()
             MainModel = pool.get(cls.__name__)
             StatusHistory = pool.get('contract.status.history')
@@ -181,12 +114,19 @@ def add_status_history(possible_status):
 
             main_model_table = MainModel.__table__()
             history_table = StatusHistory.__table__()
-            date_clause = ((
-                    (history_table.start_date == None)
-                    | (history_table.start_date <= utils.today()))
-                & (
-                    (history_table.end_date == None)
-                    | (history_table.end_date >= utils.today())))
+            if name == 'status':
+                date_clause = ((
+                        (history_table.start_date == None)
+                        | (history_table.start_date <= utils.today()))
+                    & (
+                        (history_table.end_date == None)
+                        | (history_table.end_date >= utils.today())))
+            elif name == 'start_date':
+                date_clause = (
+                    (history_table.status == 'quote')
+                    | (history_table.status == 'active'))
+            elif name == 'end_date':
+                date_clause = (history_table.status == 'terminated')
 
             query_table = main_model_table.join(history_table,
                 condition=(history_table.reference == Concat(
@@ -195,10 +135,47 @@ def add_status_history(possible_status):
 
             cursor.execute(*query_table.select(main_model_table.id,
                     where=(date_clause & (
-                            Operator(history_table.status,
+                            Operator(getattr(history_table, name),
                                 getattr(cls, name).sql_format(value))))))
 
             return [('id', 'in', [x[0] for x in cursor.fetchall()])]
+
+        def activate_status(self):
+            for elem in self.status_history:
+                if elem.status != 'quote':
+                    continue
+                elem.status = 'active'
+
+        def set_end_date(self, end_date):
+            self.end_date = end_date
+            StatusHistory = Pool().get('contract.status.history')
+            terminated_date = coop_date.add_day(end_date, 1)
+            idx_to_del = []
+            prev_non_terminated = None
+            for idx, elem in enumerate(self.status_history):
+                if elem.status == 'terminated':
+                    if elem.start_date != terminated_date:
+                        elem.start_date = terminated_date
+                    break
+                if elem.start_date > end_date:
+                    idx_to_del.insert(0, idx)
+                    continue
+                prev_non_terminated = elem
+            if isinstance(self.status_history, tuple):
+                self.status_history = list(self.status_history)
+            if not prev_non_terminated:
+                self.status_history = [StatusHistory(
+                        start_date=terminated_date, status='terminated')]
+            else:
+                if prev_non_terminated.end_date != end_date:
+                    prev_non_terminated.end_date = end_date
+                if elem and elem.status != 'terminated':
+                    self.status_history.append(StatusHistory(
+                            start_date=terminated_date, status='terminated'))
+            if not idx_to_del:
+                return
+            for elem in idx_to_del:
+                self.status_history.pop(elem)
 
     return WithStatusHistoryMixin
 
@@ -459,14 +436,23 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(product, start_date):
+            StatusHistory = Pool().get('contract.status.history')
             self.product = product
-            self.start_date = (
+            start_date = (
                 max(product.start_date, start_date)
                 if start_date else product.start_date)
-            self.end_date = (
+            self.status_history = [StatusHistory(
+                    start_date=start_date, status='quote')]
+            end_date = (
                 min(product.end_date, end_date)
                 if end_date else product.end_date)
-            self.update_status('quote', self.start_date)
+            if end_date:
+                self.status_history[0].end_date = coop_date.add_day(end_date,
+                    -1)
+                self.status_history.append(StatusHistory(
+                        start_date=end_date, status='terminated'))
+            self.start_date, self.end_date = start_date, end_date
+            self.status = 'quote'
         else:
             self.raise_user_error('inactive_product_at_date',
                 (product.name, start_date))
@@ -522,9 +508,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             return
         for option in self.options:
             if option.status == 'quote':
-                option.update_status('active', self.start_date)
+                option.activate_status()
                 option.save()
-        self.update_status('active', self.start_date)
+        self.activate_status()
 
     @classmethod
     def get_coverages(cls, product):
@@ -646,6 +632,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     def get_all_extra_data(self, at_date):
         return getattr(self, 'extra_data', {})
 
+    def set_end_date(self, end_date):
+        super(Contract, self).set_end_date(end_date)
+        for option in self.options:
+            if option.end_date and option.end_date <= end_date:
+                continue
+            option.set_end_date(end_date)
+
 
 class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         add_status_history(OPTIONSTATUS)):
@@ -712,7 +705,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
 
     @classmethod
     def default_status(cls):
-        return 'quote'
+        return 'active'
 
     @fields.depends('coverage')
     def on_change_coverage(self):
@@ -798,7 +791,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             result['status'] = 'quote'
             result['status_history'] = [{
                     'start_date': start_date,
-                    'status': 'quote'}]
+                    'status': 'active'}]
             # TODO : remove once computed properly
             result['start_date'] = start_date
             result['appliable_conditions_date'] = start_date
@@ -819,7 +812,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             result['status'] = 'quote'
             result['status_history'] = {'add': [[-1, {
                             'start_date': start_date,
-                            'status': 'quote'}]]}
+                            'status': 'active'}]]}
             # TODO : remove once computed properly
             result['start_date'] = start_date
             result['appliable_conditions_date'] = start_date
@@ -832,12 +825,15 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(coverage, start_date):
+            StatusHistory = Pool().get('contract.status.history')
             self.coverage = coverage
             self.coverage_family = coverage.family
-            self.update_status('quote', start_date)
+            self.status_history = [StatusHistory(
+                    start_date=start_date, status='active')]
             # TODO : remove once computed properly
             self.start_date = start_date
             self.appliable_conditions_date = start_date
+            self.status = 'active'
         else:
             self.raise_user_error('inactive_coverage_at_date', (coverage.name,
                     start_date))

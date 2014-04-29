@@ -4,10 +4,10 @@
         <page string="Invoice" id="invoice" col="6">
             <label name="invoice_date"/>
             <field name="invoice_date"/>
-            <label name="payment_term"/>
-            <field name="payment_term"/>
-            <label name="currency"/>
-            <field name="currency"/>
+            <label name="start"/>
+            <field name="start"/>
+            <label name="end"/>
+            <field name="end"/>
             <field name="lines" colspan="6" view_ids="contract_insurance_invoice.invoice_line_view_list,contract_insurance_invoice.invoice_line_view_form"/>
             <group col="2" colspan="6" id="taxes_amount_state_buttons">
                 <group col="1" colspan="1" id="taxes">
@@ -21,12 +21,26 @@
                         <field name="state"/>
                     </group>
                     <group col="2" colspan="2" id="amount">
-                        <label name="untaxed_amount" xalign="1.0" xexpand="1"/>
-                        <field name="untaxed_amount" xalign="1.0" xexpand="0"/>
+                        <label name="base_amount" xalign="1.0" xexpand="1"/>
+                        <group id="base_amount">
+                            <field name="base_amount" xalign="1.0" xexpand="0"/>
+                            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+                        </group>
+                        <label name="fees" xalign="1.0" xexpand="1"/>
+                        <group id="fees">
+                            <field name="fees" xalign="1.0" xexpand="0"/>
+                            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+                        </group>
                         <label name="tax_amount" xalign="1.0" xexpand="1"/>
-                        <field name="tax_amount" xalign="1.0" xexpand="0"/>
+                        <group id="tax_amount">
+                            <field name="tax_amount" xalign="1.0" xexpand="0"/>
+                            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+                        </group>
                         <label name="total_amount" xalign="1.0" xexpand="1"/>
-                        <field name="total_amount" xalign="1.0" xexpand="0"/>
+                        <group id="total_amount">
+                            <field name="total_amount" xalign="1.0" xexpand="0"/>
+                            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+                        </group>
                     </group>
                     <group col="5" colspan="4" id="buttons">
                         <button name="cancel" string="_Cancel" icon="tryton-cancel" confirm="Are you sure to cancel the invoice?"/>
@@ -41,6 +55,10 @@
         <page string="Other Info" id="info">
             <label name="company"/>
             <field name="company"/>
+            <label name="payment_term"/>
+            <field name="payment_term"/>
+            <label name="currency"/>
+            <field name="currency"/>
             <newline/>
             <label name="account"/>
             <field name="account"/>

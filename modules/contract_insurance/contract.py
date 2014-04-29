@@ -122,8 +122,7 @@ class Contract(Printable):
         return (res, errs)
 
     def init_from_product(self, product, start_date=None, end_date=None):
-        super(Contract, self).init_from_product(product, start_date,
-            end_date)
+        super(Contract, self).init_from_product(product, start_date, end_date)
         self.last_renewed = self.start_date
         self.next_renewal_date = None
         self.next_renewal_date, errors = self.product.get_result(
@@ -188,6 +187,13 @@ class Contract(Printable):
         #what if several protocols exist?
         return None
 
+    @classmethod
+    def search_contract(cls, product, subscriber, at_date):
+        return cls.search([
+                ('product', '=', product),
+                ('subscriber', '=', subscriber),
+                ('start_date', '<=', at_date)])
+
     def update_agreements(self):
         #This method will update the management role and find the good protocol
         #based on real coverage subscribed
@@ -200,8 +206,6 @@ class Contract(Printable):
                 if not protocol_offered:
                     #TODO : We can't find anything
                     return
-                # TODO : Fix this
-                return
                 contracts = self.search_contract(protocol_offered, role.party,
                     self.start_date)
                 protocol = None
@@ -296,6 +300,17 @@ class Contract(Printable):
             if option.coverage == coverage:
                 return option
         return None
+
+    def get_contact(self):
+        return self.subscriber
+
+    def set_end_date(self, end_date):
+        super(Contract, self).set_end_date(end_date)
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                option.set_end_date(end_date)
+            covered_element.options = covered_element.options
+        self.covered_elements = self.covered_elements
 
 
 class ContractOption:
@@ -393,12 +408,6 @@ class ContractOption:
         return (contract.appliable_conditions_date if
             contract else self.start_date)
 
-    @fields.depends('covered_element')
-    def on_change_with_end_date(self, name=None):
-        if self.covered_element:
-            return self.covered_element.contract.end_date
-        return super(ContractOption, self).on_change_with_end_date(name)
-
     def on_change_with_icon(self, name=None):
         return 'umbrella-black'
 
@@ -453,6 +462,7 @@ class ContractOption:
     def init_extra_data(self):
         self.extra_data = getattr(self, 'extra_data', {})
         self.extra_data.update(self.on_change_extra_data()['extra_data'])
+        print self.extra_data
 
     @classmethod
     def init_default_values_from_coverage(cls, coverage, product,
@@ -574,7 +584,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             'parties': Eval('parties'),
             'all_extra_datas': Eval('all_extra_datas'),
             },
-        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'products'])
+        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'product'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[
@@ -876,7 +886,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         OptionModel = Pool().get('contract.option')
         for coverage in self.get_coverages(product, self.item_desc):
             if coverage in existing:
-                good_opt = existing[coverage.code]
+                good_opt = existing[coverage]
                 to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel()
@@ -1187,8 +1197,15 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         readonly=True)
     protocol = fields.Many2One('contract', 'Protocol', domain=[
-            utils.get_versioning_domain('start_date', 'end_date'),
-            ('product_kind', '!=', 'insurance'),
+            # ['OR',
+                # [('end_date', '>=', Eval('start_date'))],
+                # [('end_date', '=', None)],
+                # ],
+            # ['OR',
+                # [('start_date', '<=', Eval('start_date'))],
+                # [('start_date', '=', None)],
+                # ],
+            ('product.kind', '!=', 'insurance'),
             ('subscriber', '=', Eval('party')),
             ], depends=['start_date', 'end_date', 'party'],
         #we only need to have a protocole when the management is effective

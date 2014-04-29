@@ -1,13 +1,21 @@
 <?xml version="1.0"?>
 <tree string="Invoices">
-  <field name="type"/>
-  <field name="number"/>
+  <field name="state"/>
   <field name="start"/>
   <field name="end"/>
-  <field name="invoice_date"/>
-  <field name="untaxed_amount"/>
-  <field name="tax_amount"/>
-  <field name="total_amount"/>
-  <field name="state"/>
-  <field name="amount_to_pay_today"/>
+  <field name="base_amount" sum="Base Amount">
+      <suffix name="currency_symbol"/>
+  </field>
+  <field name="fees" sum="Fees">
+      <suffix name="currency_symbol"/>
+  </field>
+  <field name="tax_amount" sum="Tax Amount">
+      <suffix name="currency_symbol"/>
+  </field>
+  <field name="total_amount" sum="Total Amount">
+      <suffix name="currency_symbol"/>
+  </field>
+  <field name="amount_to_pay_today" sum="To be paid">
+      <suffix name="currency_symbol"/>
+  </field>
 </tree>

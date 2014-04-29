@@ -3,5 +3,7 @@
   <field name="description"/>
   <field name="contract_insurance_start"/>
   <field name="contract_insurance_end"/>
-  <field name="amount"/>
+  <field name="amount">
+      <suffix name="currency_symbol"/>
+  </field>
 </tree>

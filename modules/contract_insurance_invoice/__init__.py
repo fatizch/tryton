@@ -10,6 +10,7 @@ def register():
         InvoiceFrequency,
         Product,
         ProductInvoiceFrequencyRelation,
+        ProductPaymentTermRelation,
         OptionDescription,
         Invoice,
         InvoiceLine,
@@ -25,6 +26,8 @@ def register():
         FeeDesc,
         TaxDesc,
         InvoiceContractStart,
+        CreateInvoiceContractBatch,
+        PostInvoiceContractBatch,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

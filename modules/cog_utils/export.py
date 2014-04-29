@@ -483,6 +483,8 @@ class ExportImportMixin(Model):
                     if good_value:
                         good_values.append(good_value)
                         check_req = False
+                    else:
+                        check_req = True
             else:
                 good_values.append(TargetModel._import_json(elem,
                         created=created, relink=relink))
@@ -535,6 +537,10 @@ class ExportImportMixin(Model):
                 if isinstance(link_key, dict):
                     if not (cls.__name__, key) in link_key:
                         continue
+                    source_value = getattr(source, field_name)
+                    if isinstance(source_value, tuple):
+                        source_value = list(source_value)
+                        setattr(source, field_name, source_value)
                     getattr(source, field_name).append(instance)
                     del link_key[(cls.__name__, key)]
                     if not link_key:

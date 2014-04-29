@@ -43,7 +43,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             ('option', 'Option'),
             ('loss', 'Loss'),
             ('benefit', 'Benefit'),
-            ('rule_engine', 'Rule Engine'),
             ], 'Kind')
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
         'Sub Data', context={'kind': Eval('extra_data_kind')},
@@ -72,23 +71,14 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             [(elem, getattr(cls, elem)) for elem in dir(cls) if
                 elem.startswith('default_value_')])
 
-        cls.name = copy.copy(cls.name)
-        if not cls.name.on_change_with:
-            cls.name.on_change_with = set()
-        cls.name.on_change_with.add('string')
-        cls.name.on_change_with.add('name')
         cls.name.string = 'Code'
+        cls.string.string = 'Name'
 
         cls.type_ = copy.copy(cls.type_)
         if not cls.type_.on_change:
             cls.type_.on_change = set()
         cls.type_.on_change.add('type_')
 
-        cls.selection = copy.copy(cls.selection)
-        if not cls.selection.on_change:
-            cls.selection.on_change = set()
-        cls.selection.on_change |= set(['selection',
-                'default_value_selection', 'type_'])
         cls.selection.states['required'] = And(Eval('type_') == 'selection',
             ~~Eval('with_default_value'))
 

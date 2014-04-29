@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -73,10 +75,16 @@ class Contract:
         pass
 
     def set_contract_end_date_from_loans(self):
-        if not self.loans:
+        if not self.is_loan:
             return
-        end_date = max([x.end_date for x in self.loans])
-        self.end_date = end_date
+        loans = set([share.loan
+                for covered_element in self.covered_elements
+                for option in covered_element.options
+                for share in option.loan_shares])
+        if not loans:
+            return
+        end_date = max([x.end_date for x in loans])
+        self.set_end_date(end_date)
 
 
 class ContractOption:
@@ -84,8 +92,12 @@ class ContractOption:
 
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
         states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
-                ('loan.parties', 'in', Eval('parties', []))],
-        depends=['coverage_family', 'parties'])
+            ('loan.parties', 'in', Eval('parties', [])),
+            ('start_date', '>=', Eval('start_date', datetime.date.min)),
+            ['OR',
+                ('end_date', '=', None),
+                ('end_date', '<=', Eval('end_date', datetime.date.max))]],
+        depends=['coverage_family', 'parties', 'start_date', 'end_date'])
     multi_mixed_view = loan_shares
 
     @fields.depends('coverage', 'loan_shares')
@@ -95,6 +107,29 @@ class ContractOption:
             result['loan_shares'] = {
                 'remove': [x.id for x in self.loan_shares]}
         return result
+
+    @fields.depends('start_date', 'end_date', 'loan_shares')
+    def on_change_with_loan_shares(self):
+        to_update = []
+        for share in self.loan_shares:
+            res = {'id': share.id}
+            if share.start_date < self.start_date:
+                res['start_date'] = self.start_date
+            if self.end_date and (not share.end_date or
+                    share.end_date > self.end_date):
+                res['end_date'] = self.end_date
+            if len(res) > 1:
+                to_update.append(res)
+        if to_update:
+            return {'update': to_update}
+
+    def set_end_date(self, end_date):
+        super(ContractOption, self).set_end_date(end_date)
+        for share in self.loan_shares:
+            if share.end_date and share.end_date <= end_date:
+                continue
+            share.end_date = end_date
+        self.loan_shares = self.loan_shares
 
 
 class ExtraPremium:
@@ -123,7 +158,7 @@ class ExtraPremium:
 
     @fields.depends('option')
     def on_change_with_is_loan(self, name=None):
-        return (self.option.is_loan if self.option else
+        return (self.option.coverage.family == 'loan' if self.option else
             Transaction().context.get('is_loan', False))
 
     def get_possible_extra_premiums_kind(self):
@@ -152,9 +187,9 @@ class LoanShare(model.CoopSQL, model.CoopView):
     __name__ = 'loan.share'
 
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
-    start_date = fields.Date('Start Date')
+    start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
-    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT')
+    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True)
     share = fields.Numeric('Loan Share', digits=(16, 4))
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
@@ -166,6 +201,14 @@ class LoanShare(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_share():
         return 1
+
+    @classmethod
+    def default_start_date(cls):
+        return Transaction().context.get('start_date', utils.today())
+
+    @fields.depends('loan')
+    def on_change_loan(self):
+        return {'end_date': self.loan.end_date if self.loan else None}
 
     def on_change_with_icon(self, name=None):
         return 'loan-interest'

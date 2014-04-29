@@ -95,7 +95,7 @@ msgid "Start Date"
 msgstr "Date de Début"
 
 msgctxt "field:extra_data,string:"
-msgid "String"
+msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:extra_data,sub_data_config_kind:"
@@ -550,6 +550,10 @@ msgctxt "field:offered.package-option.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:offered.product,change_coverages_order:"
+msgid ""
+msgstr ""
+
 msgctxt "field:offered.product,code:"
 msgid "Code"
 msgstr "Code"
@@ -866,10 +870,6 @@ msgctxt "selection:extra_data,kind:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:extra_data,kind:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
 msgctxt "selection:extra_data,sub_data_config_kind:"
 msgid "Advanced"
 msgstr "Avancé"
@@ -892,11 +892,11 @@ msgstr "Date"
 
 msgctxt "selection:extra_data,type_:"
 msgid "DateTime"
-msgstr ""
+msgstr "Date-Heure"
 
 msgctxt "selection:extra_data,type_:"
 msgid "Float"
-msgstr ""
+msgstr "Numeric (Virgule flottante)"
 
 msgctxt "selection:extra_data,type_:"
 msgid "Integer"
