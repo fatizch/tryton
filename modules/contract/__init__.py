@@ -6,6 +6,7 @@ from .party import *
 from .test_case import *
 from .wizard import *
 from .service import *
+from .contact_type import *
 
 
 def register():
@@ -27,6 +28,8 @@ def register():
         #From Wizard
         OptionsDisplayer,
         WizardOption,
+        ContactType,
+        ContractContact,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
