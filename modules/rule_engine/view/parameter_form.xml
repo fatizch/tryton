@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Parameter">
+  <label name="string"/>
+  <field name="string"/>
   <label name="name"/>
   <field name="name"/>
-  <label name="code"/>
-  <field name="code"/>
-  <label name="kind"/>
-  <field name="kind"/>
-  <label name="the_rule"/>
-  <field name="the_rule"/>
-  <label name="the_table"/>
-  <field name="the_table"/>
+  <newline/>
+  <label name="type_"/>
+  <field name="type_"/>
+  <label name="digits"/>
+  <field name="digits"/>
+  <label name="sort_selection"/>
+  <field name="sort_selection"/>
+  <newline/>
+  <label name="selection"/>
+  <field name="selection" colspan="3"/>
 </form>

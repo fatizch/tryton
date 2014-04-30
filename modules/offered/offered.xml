@@ -4,6 +4,7 @@
     <!-- ############################################################ -->
     <!-- Menus -->
     <!-- ############################################################ -->
+    <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
     <menuitem name="Laboratory" id="menu_product" sequence="20"/>
     <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
     <!-- Moving existing Entry Points -->
@@ -149,7 +150,7 @@
     <!--################################################################ -->
     <record model="ir.sequence.type" id="sequence_type_contract_number">
       <field name="name">Contract Number</field>
-      <field name="code">offered.product</field>
+      <field name="code">contract</field>
     </record>
     <record model="ir.sequence.type-res.group" id="sequence_type_contract_number_group_admin">
       <field name="sequence_type" ref="sequence_type_contract_number"/>

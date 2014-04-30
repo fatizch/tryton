@@ -7,6 +7,7 @@ import ConfigParser
 import argparse
 import argcomplete
 import subprocess
+import datetime
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -348,13 +349,13 @@ def batch(arguments, config, work_data):
             arguments.name + '.log'),
         subprocess.Popen('celery worker -l info '
             '--config=celeryconfig '
-            '--app=trytond.modules.coop_utils.batch_launcher'
+            '--app=trytond.modules.cog_utils.batch_launcher'
             ' --logfile=%s' % log_path, shell=True, stdout=subprocess.PIPE)
         time.sleep(2)
         _execution = subprocess.Popen('celery call '
-            'trytond.modules.coop_utils.batch_launcher.generate_all '
-            '--args=\'["%s"]\'' % arguments.name, shell=True,
-            stdout=subprocess.PIPE)
+            'trytond.modules.cog_utils.batch_launcher.generate_all '
+            '--args=\'["%s", "%s"]\'' % (arguments.name, arguments.date),
+            shell=True, stdout=subprocess.PIPE)
         _execution.communicate()
         print 'See log at %s' % log_path
 
@@ -620,6 +621,8 @@ if __name__ == '__main__':
     parser_batch.add_argument('action', choices=['kill', 'execute'])
     parser_batch.add_argument('--name', type=str, help='Name of the batch'
         'to launch')
+    parser_batch.add_argument('--date', type=str, help='Launch Date',
+        default=datetime.date.today().isoformat())
 
     # Database parser
     parser_database = subparsers.add_parser('database', help='Execute a '

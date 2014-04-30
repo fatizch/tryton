@@ -66,12 +66,6 @@
             <label name="logo" xalign="0"/>
             <field name="logo" colspan="3"/>
         </page>
-        <page string="Relations" id="rel">
-            <field name="relations" view_ids="party_cog.party_relation_view_tree_from"
-                colspan="4"/>
-            <field name="in_relation_with" view_ids="party_cog.party_relation_view_tree_to"
-                colspan="4"/>
-        </page>
         <page string="Roles" id="role">
             <group id="role_group" colspan="4">
             </group>

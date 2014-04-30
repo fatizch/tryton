@@ -2,5 +2,6 @@
 <tree string="Clauses">
     <field name="name"/>
     <field name="code"/>
-    <field name="kind"/>
+    <field name="content"/>
+    <field name="kind" tree_invisible="1"/>
 </tree>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Invoice Frequency">
+    <label name="frequency"/>
+    <field name="frequency"/>
+    <newline/>
+    <label name="sync_day"/>
+    <field name="sync_day"/>
+    <label name="sync_month"/>
+    <field name="sync_month"/>
+    <field name="products" colspan="4"/>
+</form>

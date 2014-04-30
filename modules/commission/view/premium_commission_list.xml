@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Commissions">
+    <field name="com_option"/>
+    <field name="party"/>
+    <field name="rate" factor="100">
+        <suffix string="%"/>
+    </field>
+</tree>

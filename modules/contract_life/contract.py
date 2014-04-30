@@ -2,13 +2,12 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.rpc import RPC
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractOption',
-    'CoveredData',
     ]
 
 
@@ -21,43 +20,33 @@ class Contract:
         for covered_element in self.covered_elements:
             values = {}
             to_update = {}
-            for covered_data in covered_element.covered_data:
-                values[covered_data.option.offered.id] = \
-                    covered_data.coverage_amount
+            for option in covered_element.options:
+                values[option.coverage.id] = option.coverage_amount
                 rule_dict = {'date': at_date}
-                covered_data.init_dict_for_rule_engine(rule_dict)
-                result, errs = covered_data.option.offered.get_result(
+                option.init_dict_for_rule_engine(rule_dict)
+                result, errs = option.coverage.get_result(
                     'dependant_amount_coverage', rule_dict)
                 if errs or result is None:
                     continue
-                to_update[covered_data] = result.id
-            for data, offered in to_update.iteritems():
-                data.coverage_amount = values[offered]
-                data.save()
+                to_update[option] = result.id
+            for option, offered in to_update.iteritems():
+                option.coverage_amount = values[offered]
+                option.save()
         return True
 
     def check_covered_amounts(self, at_date=None):
         if not at_date:
             at_date = self.start_date
-        options = dict([
-            (option.offered.code, option) for option in self.options])
         res, errs = (True, [])
         for covered_element in self.covered_elements:
-            for covered_data in covered_element.covered_data:
-                if (covered_data.start_date > at_date
-                        or hasattr(covered_data, 'end_date') and
-                        covered_data.end_date and
-                        covered_data.end_date > at_date):
+            for option in covered_element.options:
+                if not option.has_coverage_amount:
                     continue
-                if not covered_data.with_coverage_amount:
-                    continue
-                coverage = covered_data.option.offered
-                validity, errors = coverage.get_result(
+                validity, errors = option.coverage.get_result(
                     'coverage_amount_validity', {
                         'date': at_date,
-                        'sub_elem': covered_element,
-                        'data': covered_data,
-                        'option': options[coverage.code],
+                        'elem': covered_element,
+                        'option': option,
                         'contract': self,
                         'appliable_conditions_date':
                         self.appliable_conditions_date,
@@ -70,6 +59,7 @@ class Contract:
 
     @classmethod
     def get_possible_contracts_from_party(cls, party, at_date):
+        # TODO : Move to claim ?
         res = super(Contract, cls).get_possible_contracts_from_party(party,
             at_date)
         if not party:
@@ -84,6 +74,7 @@ class Contract:
 
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):
+        # TODO : Move to claim ?
         CoveredElement = Pool().get('contract.covered_element')
         return CoveredElement.get_possible_covered_elements(party, at_date)
 
@@ -91,69 +82,80 @@ class Contract:
 class ContractOption:
     __name__ = 'contract.option'
 
-    def get_covered_data(self, covered_person):
-        for covered_data in self.covered_data:
-            if not hasattr(covered_data.covered_element, 'person'):
-                continue
-            if covered_data.covered_element.party == covered_person:
-                return covered_data
-
-    def get_coverage_amount(self, covered_person):
-        covered_data = self.get_covered_data(covered_person)
-        if covered_data:
-            return covered_data.coverage_amount
-        return 0
-
-
-class CoveredData:
-    __name__ = 'contract.covered_data'
-
     coverage_amount = fields.Numeric('Coverage Amount', states={
-            'invisible': ~Eval('with_coverage_amount'),
-            # 'required': ~~Eval('with_coverage_amount'),
-            }, depends=['with_coverage_amount', 'currency'])
-    with_coverage_amount = fields.Function(
-        fields.Boolean('With Coverage Amount', states={'invisible': True}),
-        'get_with_coverage_amount')
+            'invisible': ~Eval('has_coverage_amount'),
+            }, depends=['has_coverage_amount'])
+    coverage_amount_selection = fields.Function(
+        fields.Selection('get_possible_amounts', 'Coverage Amount',
+            states={'invisible': ~Eval('has_coverage_amount')},
+            depends=['has_coverage_amount'], sort=False),
+        'on_change_with_coverage_amount_selection', 'setter_void')
+    person = fields.Function(
+        fields.Many2One('party.party', 'Person'),
+        'on_change_with_person')
+    has_coverage_amount = fields.Function(
+        fields.Boolean('Has Coverage Amount'),
+        'on_change_with_has_coverage_amount')
 
     @classmethod
     def __setup__(cls):
-        super(CoveredData, cls).__setup__()
+        super(ContractOption, cls).__setup__()
         cls.__rpc__.update({'get_possible_amounts': RPC(instantiate=0)})
 
+    @classmethod
+    def default_coverage_amount(cls):
+        return None
+
+    @fields.depends('coverage', 'start_date', 'covered_element', 'currency',
+        'appliable_conditions_date')
     def get_possible_amounts(self):
-        if utils.is_none(self, 'option'):
+        if not self.covered_element or not self.coverage:
             return [('', '')]
-        the_coverage = self.get_coverage()
-        vals = the_coverage.get_result(
+        vals = self.coverage.get_result(
             'allowed_amounts', {
                 'date': self.start_date,
-                'appliable_conditions_date':
-                self.option.contract.appliable_conditions_date,
-                },)[0]
+                'appliable_conditions_date': self.appliable_conditions_date,
+                })[0]
         if vals:
             res = map(lambda x: (x, x),
                 map(lambda x: self.currency.amount_as_string(x), vals))
             return [('', '')] + res
         return [('', '')]
 
-    def get_with_coverage_amount(self, name):
-        has_coverage_amount = len(self.get_possible_amounts()) > 1
-        if not has_coverage_amount:
+    @fields.depends('coverage_amount_selection', 'coverage')
+    def on_change_with_coverage_amount(self, name=None):
+        if not self.coverage:
+            return None
+        if self.coverage_amount_selection:
+            return self.currency.get_amount_from_string(
+                    self.coverage_amount_selection)
+        return None
+
+    @fields.depends('coverage_amount', 'currency', 'coverage')
+    def on_change_with_coverage_amount_selection(self, name=None):
+        if not self.coverage:
+            return ''
+        if self.coverage_amount:
+            return self.currency.amount_as_string(self.coverage_amount)
+        return ''
+
+    @fields.depends('covered_element')
+    def on_change_with_person(self, name=None):
+        if self.covered_element and self.covered_element.party:
+            return self.covered_element.party.id
+
+    @fields.depends('coverage', 'start_date', 'covered_element', 'currency',
+        'appliable_conditions_date')
+    def on_change_with_has_coverage_amount(self, name=None):
+        if not self.coverage:
             return False
-        if not self.get_coverage().get_result(
+        if not len(self.get_possible_amounts()) > 1:
+            return False
+        if not self.coverage.get_result(
                 'dependant_amount_coverage', {
                     'date': self.start_date,
                     'appliable_conditions_date':
-                    self.option.contract.appliable_conditions_date,
+                    self.appliable_conditions_date,
                 })[0]:
             return True
         return False
-
-    def is_party_covered(self, party, at_date):
-        return self.covered_element.is_party_covered(party, at_date,
-            self.option)
-
-    @classmethod
-    def default_coverage_amount(cls):
-        return None

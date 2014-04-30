@@ -5,8 +5,6 @@ from .contract import *
 
 def register():
     Pool.register(
-        # From file clause
-        ContractClause,
-        # From file contract
         Contract,
+        ContractClause,
         module='contract_clause', type_='model')

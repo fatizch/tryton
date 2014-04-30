@@ -10,8 +10,10 @@ def register():
         # From rule_engine
         RuleTools,
         Context,
-        Rule,
-        RuleEngineParameter,
+        RuleEngine,
+        RuleEngineTable,
+        RuleEngineRuleEngine,
+        RuleParameter,
         RuleExecutionLog,
         TestCase,
         TestCaseValue,

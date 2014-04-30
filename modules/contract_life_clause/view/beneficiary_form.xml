@@ -1,14 +1,22 @@
 <?xml version="1.0"?>
 <form string="Beneficiary">
+    <label name="option"/>
+    <field name="option"/>
+    <newline/>
+    <label name="accepting"/>
+    <field name="accepting"/>
+    <newline/>
     <label name="party"/>
     <field name="party"/>
+    <label name="address"/>
+    <field name="address"/>
+    <newline/>
+    <label name="reference"/>
+    <field name="reference"/>
+    <newline/>
     <label name="share"/>
     <group id="share">
         <field name="share" factor="100" xexpand="0"/>
         <label name="share" string="%" xalign="0.0" xexpand="1"/>
     </group>
-    <label name="accepting"/>
-    <field name="accepting"/>
-    <separator name="details" colspan="4"/>
-    <field name="details" colspan="4"/>
 </form>

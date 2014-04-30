@@ -14,9 +14,4 @@
     </group>
     <newline/>
  </xpath>
- <xpath expr="/form" position="inside">
-    <newline/>
-    <field name="number_of_contracts"/>
-    <field name="number_of_quotes"/>
- </xpath>
 </data>

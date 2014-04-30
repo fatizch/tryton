@@ -87,15 +87,15 @@
     <!--################################################################ -->
     <!-- Options Screens -->
     <!--################################################################ -->
-    <record model="ir.ui.view" id="option_view_tree">
+    <record model="ir.ui.view" id="option_view_list">
       <field name="model">contract.option</field>
       <field name="type">tree</field>
-      <field name="name">option-commission_option_list</field>
+      <field name="name">option_list</field>
     </record>
     <record model="ir.ui.view" id="option_view_form">
       <field name="model">contract.option</field>
       <field name="type">form</field>
-      <field name="name">option-commission_option_form</field>
+      <field name="name">option_form</field>
     </record>
     <!--################################################################ -->
     <!-- Contract Address -->
@@ -126,6 +126,14 @@
     <record model="res.user-res.group" id="user_admin_group_contract_admin">
         <field name="user" ref="res.user_admin"/>
         <field name="group" ref="group_contract_admin"/>
+    </record>
+    <record model="ir.ui.menu-res.group" id="group_contract_menu_contract">
+       <field name="group" ref="group_contract"/>
+       <field name="menu" ref="menu_contract"/>
+    </record>
+    <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract">
+       <field name="group" ref="group_contract_admin"/>
+       <field name="menu" ref="menu_contract"/>
     </record>
   </data>
 </tryton>

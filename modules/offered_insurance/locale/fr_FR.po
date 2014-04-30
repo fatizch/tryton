@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -1236,7 +1236,7 @@ msgid "Start Date"
 msgstr "Date de Début"
 
 msgctxt "field:extra_data,string:"
-msgid "String"
+msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:extra_data,sub_datas:"
@@ -1779,10 +1779,6 @@ msgctxt "field:offered.eligibility.rule,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.eligibility.rule,relation_kinds:"
-msgid "Relations Authorized"
-msgstr "Relations Autorisées"
-
 msgctxt "field:offered.eligibility.rule,rule:"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
@@ -1832,46 +1828,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:offered.eligibility.rule,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,eligibility_rule:"
-msgid "Eligibility Rule"
-msgstr "Eligibilite"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,relation_kind:"
-msgid "Relation Kind"
-msgstr "Type de Relation"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.eligibility.rule-relation.kind,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -2611,6 +2567,10 @@ msgctxt "field:process-offered.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:rule_engine,extra_data_parameters:"
+msgid "Extra Data Parameters"
+msgstr "Données complémentaires"
+
 msgctxt "field:rule_engine,rule_external_extra_datas:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
@@ -2630,6 +2590,46 @@ msgstr "Paramètres Complémentaires"
 msgctxt "field:rule_engine.parameter,rule_extra_data:"
 msgid "Rule Extra Data"
 msgstr "Paramètres de Rêgle"
+
+msgctxt "field:rule_engine-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:rule_engine-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:rule_engine-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:rule_engine-extra_data,extra_data:"
+msgid "External Data"
+msgstr ""
+
+msgctxt "field:rule_engine-extra_data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:rule_engine-extra_data,parent_rule:"
+msgid "Parent Rule"
+msgstr "Règle parent"
+
+msgctxt "field:rule_engine-extra_data,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:rule_engine-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:rule_engine-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:rule_engine-extra_data,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
@@ -2911,6 +2911,10 @@ msgstr ""
 msgctxt "model:process-offered.product,name:"
 msgid "Process Product Relation"
 msgstr "Relation Processus Produit"
+
+msgctxt "model:rule_engine-extra_data,name:"
+msgid "Rule Engine - Extra Data"
+msgstr ""
 
 msgctxt "selection:billing.premium.rule,config_kind:"
 msgid "Advanced"
