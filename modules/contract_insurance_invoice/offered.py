@@ -112,13 +112,13 @@ class Product:
         'product', 'invoice_frequency', 'Frequencies')
     default_frequency = fields.Many2One('offered.invoice.frequency',
         'Default Frequency', domain=[('id', 'in', Eval('frequencies'))],
-        depends=['frequencies'], ondelete='RESTRICT')
+        depends=['frequencies'], ondelete='RESTRICT', required=True)
     payment_terms = fields.Many2Many(
         'offered.product-account.invoice.payment_term', 'product',
         'payment_term', 'Payment Terms')
     default_payment_term = fields.Many2One('account.invoice.payment_term',
         'Default Payment Term', domain=[('id', 'in', Eval('payment_terms'))],
-        depends=['payment_terms'], ondelete='RESTRICT')
+        depends=['payment_terms'], ondelete='RESTRICT', required=True)
 
     @fields.depends('frequencies', 'default_frequency')
     def on_change_frequencies(self):
