@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<form string="Loan Mean Rate Rule">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <newline/>
+    <label name="use_default_rule"/>
+    <field name="use_default_rule"/>
+    <label name="default_fee_action"/>
+    <field name="default_fee_action"/>
+    <newline/>
+    <label name="contract_rule"/>
+    <field name="contract_rule"/>
+    <label name="option_rule"/>
+    <field name="option_rule"/>
+    <newline/>
+    <field name="fee_rules" colspan="4"/>
+</form>

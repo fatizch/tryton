@@ -7,7 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils, coop_date
+from trytond.modules.cog_utils import fields, model, utils
 
 
 __metaclass__ = PoolMeta
@@ -48,16 +48,8 @@ class LoanShare:
 
     def get_mean_premium(self, name):
         contract = self.option.covered_element.contract
-        premium_aggregates = contract.calculate_premium_aggregates()
-        share_amount = premium_aggregates('contract', self) or 0
-        fee_amount = 0
-        for k, v in premium_aggregates('offered').iteritems():
-            if k.__name__ != 'account.fee.description':
-                continue
-            fee_amount += v
-        return (share_amount + fee_amount) * 100 / (self.loan.amount *
-            coop_date.number_of_years_between(self.loan.funds_release_date,
-                self.loan.end_date) * self.share)
+        return contract.product.loan_mean_rule.calculate_option_rule(contract,
+            self)
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -198,22 +190,8 @@ class Loan:
                 contract = Pool().get('contract')(contract_id)
             else:
                 return None
-        premium_aggregates = contract.calculate_premium_aggregates()
-        loan_amount = 0
-        for k, v in premium_aggregates('contract').iteritems():
-            if k.__name__ != 'loan.share':
-                continue
-            if k.loan != self:
-                continue
-            loan_amount += v / k.share
-        fee_amount = 0
-        for k, v in premium_aggregates('offered').iteritems():
-            if k.__name__ != 'account.fee.description':
-                continue
-            fee_amount += v
-        return (loan_amount + fee_amount) * 100 / (self.amount *
-            coop_date.number_of_years_between(self.funds_release_date,
-                self.end_date))
+        return contract.product.loan_mean_rule.calculate_contract_mean(self,
+            contract)
 
 
 class DisplayLoanMeanPremiumValues(model.CoopView):

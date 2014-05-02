@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Loan Mean Rules">
+    <field name="name"/>
+    <field name="code"/>
+    <field name="use_default_rule"/>
+    <field name="default_fee_action"/>
+</tree>
