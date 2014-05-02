@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Loans">
+    <field name="rec_name"/>
+    <field name="mean_premium">
+        <suffix string="%"/>
+    </field>
+</tree>

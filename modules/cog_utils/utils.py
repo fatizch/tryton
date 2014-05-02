@@ -70,20 +70,8 @@ def get_data_from_dict(data, the_dict):
 
 
 def convert_ref_to_obj(ref):
-    # Currently (version 2.4), tryton does not convert automatically Reference
-    # fields from string concatenation to browse objects.
-    # That might evolve in the future, meanwhile this litlle method should make
-    # it easier to do.
-    #
-    # Warning : it is not failsafe
-    if isinstance(ref, Model):
-        return ref
-    try:
-        model, id = ref.split(',')
-    except Exception:
-        raise
-    model_obj = Pool().get(model)
-    return model_obj(id)
+    model, id = ref.split(',')
+    return Pool().get(model)(int(id))
 
 
 def limit_dates(dates, start=None, end=None):

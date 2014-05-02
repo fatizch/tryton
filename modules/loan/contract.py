@@ -197,6 +197,9 @@ class LoanShare(model.CoopSQL, model.CoopView):
     icon = fields.Function(
         fields.Char('Icon'),
         'on_change_with_icon')
+    contract = fields.Function(
+        fields.Many2One('contract', 'Contract'),
+        'get_contract', searcher='search_contract')
 
     @staticmethod
     def default_share():
@@ -221,6 +224,13 @@ class LoanShare(model.CoopSQL, model.CoopView):
         if covered_element is None:
             return None
         return covered_element.party.id if covered_element.party else None
+
+    def get_contract(self, name):
+        return self.option.covered_element.contract
+
+    @classmethod
+    def search_contract(cls, name, clause):
+        return [('option.covered_element.contract', ) + tuple(clause[1:])]
 
     def get_name_for_billing(self):
         return '%s %s%% %s' % (self.person.get_rec_name(None),

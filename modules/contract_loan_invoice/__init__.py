@@ -7,4 +7,11 @@ def register():
         ContractOption,
         LoanShare,
         Premium,
+        Contract,
+        Loan,
+        DisplayLoanMeanPremiumValues,
         module='contract_loan_invoice', type_='model')
+
+    Pool.register(
+        DisplayLoanMeanPremium,
+        module='contract_loan_invoice', type_='wizard')
