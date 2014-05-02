@@ -299,7 +299,7 @@ class ItemDescription(model.CoopSQL, model.CoopView):
     @classmethod
     def _export_skips(cls):
         result = super(ItemDescription, cls)._export_skips()
-        result.remove('coverages')
+        result.add('coverages')
         return result
 
 
