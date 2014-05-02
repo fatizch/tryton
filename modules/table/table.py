@@ -515,9 +515,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         if operator == '=' and isinstance(value, (int, long)):
             return [('id', '=', value)]
         if operator == 'ilike':
-            records = cls.search([('name', 'ilike', value.strip('%'))])
-            if len(records) == 1:
-                return [('id', '=', records[0].id)]
+            return [('name', 'ilike', value.strip('%'))]
         return [('name',) + tuple(clause[1:])]
 
     @classmethod
