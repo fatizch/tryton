@@ -5,7 +5,7 @@
     <!-- Menus -->
     <!-- ############################################################ -->
     <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
-    <menuitem name="Laboratory" id="menu_product" sequence="20"/>
+    <menuitem name="Laboratory" id="menu_product" sequence="20" icon="laboratory"/>
     <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
     <!-- Moving existing Entry Points -->
     <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
