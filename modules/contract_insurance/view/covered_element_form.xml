@@ -15,7 +15,7 @@
     <field name="party"/>
     <newline/>
     <notebook>
-        <page name="extra_data" string="Complementary Data">
+        <page id="data" string="Complementary Data">
             <field name="extra_data" colspan="2" no_command="1"/>
             <field name="party_extra_data" colspan="2" no_command="1"/>
             <newline/>

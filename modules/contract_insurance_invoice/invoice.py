@@ -2,6 +2,8 @@ from trytond.model import fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
+from trytond.modules.cog_utils import coop_string
+
 __metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
@@ -111,6 +113,34 @@ class Invoice:
         return staticmethod(order_field)
     order_start = _order_contract_invoice_field('start')
     order_end = _order_contract_invoice_field('end')
+
+    def get_rec_name(self, name):
+        if self.number:
+            if self.start and self.end:
+                return '%s - %s - (%s - %s) [%s]' % (
+                    self.number,
+                    self.currency.amount_as_string(self.total_amount),
+                    coop_string.date_as_string(self.start),
+                    coop_string.date_as_string(self.end),
+                    coop_string.translate_value(self, 'state'))
+            else:
+                return '%s - %s [%s]' % (self.number,
+                    self.currency.amount_as_string(self.total_amount),
+                    coop_string.translate_value(self, 'state'))
+        else:
+            if self.start and self.end:
+                return '- %s - (%s - %s) [%s]' % (
+                    self.currency.amount_as_string(self.total_amount),
+                    coop_string.date_as_string(self.start),
+                    coop_string.date_as_string(self.end),
+                    coop_string.translate_value(self, 'state'))
+            else:
+                return '%s - %s [%s]' % (self.number,
+                    self.currency.amount_as_string(self.total_amount),
+                    coop_string.translate_value(self, 'state'))
+
+    def get_icon(self, name=None):
+        return 'invoice'
 
 
 class InvoiceLine:

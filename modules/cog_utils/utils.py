@@ -530,6 +530,9 @@ def extract_object(instance, vars_name=None):
         if not getattr(instance, var_name):
             continue
         if isinstance(instance._fields[var_name],
+                fields.Function):
+            continue
+        if isinstance(instance._fields[var_name],
                 (fields.Many2Many, fields.One2Many)):
             res[var_name] = []
             for sub_inst in getattr(instance, var_name):

@@ -27,7 +27,10 @@ def register():
         #From Wizard
         OptionsDisplayer,
         WizardOption,
+        SynthesisMenu,
+        SynthesisMenuContrat,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
+        SynthesisMenuOpen,
         module='contract', type_='wizard')

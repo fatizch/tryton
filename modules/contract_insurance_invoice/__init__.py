@@ -1,6 +1,7 @@
 from trytond.pool import Pool
 
 from .invoice import *
+from .party import *
 from .offered import *
 from .contract import *
 
@@ -28,7 +29,10 @@ def register():
         InvoiceContractStart,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,
+        SynthesisMenuInvoice,
+        SynthesisMenu,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,
+        SynthesisMenuOpen,
         module='contract_insurance_invoice', type_='wizard')

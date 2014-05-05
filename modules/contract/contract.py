@@ -1,14 +1,21 @@
+import copy
 import datetime
-from sql import Cast
+from sql import Cast, Literal
 from sql.operators import Concat
+from sql.aggregate import Max
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool
+from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.pyson import PYSONEncoder
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
+from trytond.modules.cog_utils import MergedMixin
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import offered
+from trytond.modules.cog_utils import coop_string
+
 
 CONTRACTSTATUSES = [
     ('', ''),
@@ -28,6 +35,9 @@ __all__ = [
     'Contract',
     'ContractOption',
     'ContractAddress',
+    'SynthesisMenu',
+    'SynthesisMenuOpen',
+    'SynthesisMenuContrat',
     ]
 
 
@@ -276,6 +286,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 'Product %s is inactive at date %s',
                 })
 
+    def get_icon(self, name=None):
+        if self.status == 'active':
+            return 'contract_green'
+        return 'contract'
+
     @classmethod
     def default_company(cls):
         return Transaction().context.get('company', None)
@@ -390,6 +405,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                     self.current_policy_owner.get_rec_name(name))
         else:
             return super(Contract, self).get_rec_name(name)
+
+    def get_synthesis_rec_name(self, name):
+        if self.end_date:
+            return '%s (%s)[%s - %s]' % (self.contract_number,
+                self.product.rec_name,
+                coop_string.date_as_string(self.start_date),
+                coop_string.date_as_string(self.end_date))
+        else:
+            return '%s (%s)[%s ]' % (self.contract_number,
+                self.product.rec_name,
+                coop_string.date_as_string(self.start_date))
 
     @classmethod
     def search_global(cls, text):
@@ -871,3 +897,74 @@ class ContractAddress(model.CoopSQL, model.CoopView):
             res = self.default_policy_owner()
         if res:
             return res.id
+
+class SynthesisMenuContrat(model.CoopSQL):
+    'Party Synthesis Menu Contract'
+    __name__ = 'party.synthesis.menu.contract'
+    name = fields.Char('Contract')
+    subscriber = fields.Many2One('party.party', 'Subscriber')
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        Contract = pool.get('contract')
+        ContractSynthesis = pool.get('party.synthesis.menu.contract')
+        contract = Contract.__table__()
+        return contract.select(
+            contract.subscriber.as_('id'),
+            Max(contract.create_uid).as_('create_uid'),
+            Max(contract.create_date).as_('create_date'),
+            Max(contract.write_uid).as_('write_uid'),
+            Max(contract.write_date).as_('write_date'),
+            Literal(coop_string.translate_label(ContractSynthesis, 'name')).
+            as_('name'), contract.subscriber,
+            group_by=contract.subscriber)
+
+    def get_icon(self, name=None):
+        return 'contract'
+
+
+class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
+    'Party Synthesis Menu'
+    __name__ = 'party.synthesis.menu'
+
+    @classmethod
+    def merged_models(cls):
+        res = super(SynthesisMenu, cls).merged_models()
+        res.extend([
+            'party.synthesis.menu.contract',
+            'contract',
+            ])
+        return res
+
+    @classmethod
+    def merged_field(cls, name, Model):
+        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
+        if Model.__name__ == 'party.synthesis.menu.contract':
+            if name == 'parent':
+                return Model._fields['subscriber']
+        elif Model.__name__ == 'contract':
+            if name == 'parent':
+                merged_field = copy.deepcopy(Model._fields['subscriber'])
+                merged_field.model_name = 'party.synthesis.menu.contract'
+                return merged_field
+            elif name == 'name':
+                return Model._fields['contract_number']
+        return merged_field
+
+
+class SynthesisMenuOpen(Wizard):
+    'Open Party Synthesis Menu'
+    __name__ = 'party.synthesis.menu.open'
+
+    def get_action(self, record):
+        Model = record.__class__
+        if Model.__name__ != 'party.synthesis.menu.contract':
+            return super(SynthesisMenuOpen, self).get_action(record)
+        domain = PYSONEncoder().encode([('subscriber', '=', record.id)])
+        actions = {
+            'res_model': 'contract',
+            'pyson_domain': domain,
+            'views': [(None, 'tree'), (None, 'form')]
+        }
+        return actions
