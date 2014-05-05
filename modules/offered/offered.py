@@ -595,6 +595,9 @@ class OptionDescription(model.CoopSQL, Offered):
             ('kind', '=', Eval('kind')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'kind', 'company'])
+    is_service = fields.Function(
+        fields.Boolean('Is a Service'),
+        'on_change_with_is_service', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -670,6 +673,13 @@ class OptionDescription(model.CoopSQL, Offered):
         result['name'] = self.name
         result['code'] = self.code
         return result
+
+    def on_change_with_is_service(self, name=None):
+        return True
+
+    @staticmethod
+    def default_is_service():
+        return True
 
 
 class PackageOptionDescription(model.CoopSQL):

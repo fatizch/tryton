@@ -31,9 +31,6 @@ class OptionDescription:
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
         depends=['is_service'])
-    is_service = fields.Function(
-        fields.Boolean('Is a Service'),
-        'on_change_with_is_service', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -54,10 +51,6 @@ class OptionDescription:
     @classmethod
     def default_family(cls):
         return 'generic'
-
-    @classmethod
-    def default_is_service(cls):
-        return True
 
     @fields.depends('item_desc')
     def on_change_with_is_service(self, name=None):
