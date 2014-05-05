@@ -73,6 +73,10 @@ class Contract:
         searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')])
+    total_invoice_amount = fields.Function(
+        fields.Numeric('Total Invoice Amount', digits=(16,
+                Eval('currency_digits', 2)), depends=['currency_digits']),
+        'get_total_invoice_amount')
 
     @classmethod
     def __setup__(cls):
@@ -128,6 +132,12 @@ class Contract:
         return result
 
     @classmethod
+    def get_payment_term(cls, contracts, name):
+        pool = Pool()
+        ContractPaymentTerm = pool.get('contract.payment_term')
+        return cls.get_revision_value(contracts, ContractPaymentTerm)
+
+    @classmethod
     def get_revision_value(cls, contracts, ContractRevision):
         pool = Pool()
         Date = pool.get('ir.date')
@@ -135,11 +145,10 @@ class Contract:
             Date.today())
         return ContractRevision.get_value(contracts, date)
 
-    @classmethod
-    def get_payment_term(cls, contracts, name):
-        pool = Pool()
-        ContractPaymentTerm = pool.get('contract.payment_term')
-        return cls.get_revision_value(contracts, ContractPaymentTerm)
+    def get_total_invoice_amount(self, name):
+        return sum([x.invoice.total_amount
+                for x in self.invoices
+                if x.invoice.state in ('paid', 'validated', 'posted')])
 
     @classmethod
     def get_invoice_frequency(cls, contracts, name):
