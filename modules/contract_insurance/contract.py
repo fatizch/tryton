@@ -201,7 +201,7 @@ class Contract(Printable):
             return
         for role in [x for x in self.agreements]:
             #we browse all roles that need to be updated on contract
-            if not role.protocol:
+            if not getattr(role, 'protocol', None):
                 protocol_offered = self.get_protocol_offered(role.kind)
                 if not protocol_offered:
                     #TODO : We can't find anything
@@ -216,7 +216,8 @@ class Contract(Printable):
                     raise
                 else:
                     protocol = self.subscribe_contract(protocol_offered,
-                        role.party, protocol_offered.start_date)
+                        role.party,
+                        {'start_date': protocol_offered.start_date})
                     protocol.save()
                 role.protocol = protocol.id
             role.start_date = self.start_date
@@ -311,6 +312,31 @@ class Contract(Printable):
                 option.set_end_date(end_date)
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
+
+    def activate_contract(self):
+        super(Contract, self).activate_contract()
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                option.activate_status()
+                option.save()
+
+    def init_contract(self, product, party, contract_dict=None):
+        CoveredElement = Pool().get('contract.covered_element')
+        super(Contract, self).init_contract(product, party, contract_dict)
+        if not contract_dict:
+            return
+        if not 'covered_elements' in contract_dict:
+            return
+        item_descs = product.item_descriptors
+        if len(item_descs) != 1:
+            return
+        item_desc = item_descs[0]
+        self.covered_elements = []
+        for cov_dict in contract_dict['covered_elements']:
+            covered_element = CoveredElement()
+            covered_element.start_date = contract_dict['start_date']
+            covered_element.init_covered_element(product, item_desc, cov_dict)
+            self.covered_elements.append(covered_element)
 
 
 class ContractOption:
@@ -462,7 +488,6 @@ class ContractOption:
     def init_extra_data(self):
         self.extra_data = getattr(self, 'extra_data', {})
         self.extra_data.update(self.on_change_extra_data()['extra_data'])
-        print self.extra_data
 
     @classmethod
     def init_default_values_from_coverage(cls, coverage, product,
@@ -721,7 +746,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             if elem.subscription_behaviour == 'optional':
                 continue
             new_opt = Option.init_default_values_from_coverage(elem,
-                self.product, item_desc=self.item_desc)
+                self.product, item_desc=self.item_desc,
+                start_date=self.start_date)
             to_add.append(new_opt)
         if not to_add and not to_remove:
             return res
@@ -1024,6 +1050,22 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         result = super(CoveredElement, self).get_publishing_values()
         result['party'] = self.party
         return result
+
+    def init_covered_element(self, product, item_desc, cov_dict):
+        if (item_desc.kind in ['person', 'party', 'company']
+                and 'party' in cov_dict):
+            #TODO to enhance if the party is not created yet
+            self.party, = Pool().get('party.party').search(
+                [('code', '=', cov_dict['party']['code'])], limit=1, order=[])
+        self.product = product
+        self.item_desc = item_desc
+        if 'name' in cov_dict:
+            self.name = cov_dict['name']
+        cov_as_dict = self.on_change_item_desc()
+        for key, val in cov_as_dict.iteritems():
+            setattr(self, key, val)
+        if 'extra_data' in cov_dict:
+            self.extra_data.update(cov_dict['extra_data'])
 
 
 class CoveredElementPartyRelation(model.CoopSQL):

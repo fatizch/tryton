@@ -349,6 +349,11 @@ class Contract:
         for contract in contracts:
             contract.calculate_prices()
 
+    def before_activate(self, contract_dict=None):
+        super(Contract, self).before_activate(contract_dict)
+        self.save()
+        self.calculate_prices()
+
     def calculate_prices(self):
         # TODO : find out how to have valid values
         prev_values = dict(self._values or {})

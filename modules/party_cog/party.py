@@ -2,11 +2,10 @@
 import StringIO
 
 from trytond.pyson import Eval, Bool, Less
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import utils, fields, model, export
-from trytond.modules.cog_utils import coop_string
-
+from trytond.rpc import RPC
+from trytond.modules.cog_utils import utils, fields, model, export, coop_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -79,6 +78,7 @@ class Party(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
+        cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
         cls._buttons.update({
                 'open_addresses': {
                     'invisible': Less(Eval('number_of_addresses', 0), 1, True),
@@ -339,3 +339,41 @@ class Party(export.ExportImportMixin):
         for id_, rec_name, icon in super(Party, cls).search_global(text):
             icon = icon or 'coopengo-party'
             yield id_, rec_name, icon
+
+    @classmethod
+    def ws_create_person(cls, person_dict):
+        Party = Pool().get('party.party')
+        curParties = Party.search([('ssn', '=', person_dict['ssn'])], limit=1)
+        if not curParties:
+            bank_account_info = person_dict['bank_accounts']
+            del person_dict['bank_accounts']
+            if person_dict['addresses']:
+                for cur_address in person_dict['addresses']:
+                    if cur_address['country']:
+                        Country = Pool().get('country.country')
+                        country, = Country.search([
+                            ('name', '=', cur_address['country'])])
+                        cur_address['country'] = country
+            party = Party(**person_dict)
+            party.is_person = True
+            party.save()
+            if bank_account_info:
+                for cur_bank_account in bank_account_info:
+                    if cur_bank_account['bank']:
+                        Bank = Pool().get('bank')
+                        bank, = Bank.search([
+                            ('bic', '=', cur_bank_account['bank'])], limit=1)
+                        cur_bank_account['bank'] = bank
+                    if cur_bank_account['currency']:
+                        Currency = Pool().get('currency.currency')
+                        currency, = Currency.search([
+                            ('code', '=', cur_bank_account['currency'])])
+                        cur_bank_account['currency'] = currency
+                    cur_bank_account['owners'] = [('add', [party.id])]
+                    cur_bank_account['numbers'] = [
+                        ('create', cur_bank_account['numbers'])]
+                    BankAccount = Pool().get('bank.account')
+                    BankAccount.create([cur_bank_account, ])
+            return party.id, party.code
+        else:
+            return curParties[0].id, curParties[0].code

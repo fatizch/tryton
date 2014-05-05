@@ -2,6 +2,7 @@ import datetime
 from sql import Cast
 from sql.operators import Concat
 
+from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool
@@ -270,6 +271,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
+        cls.__rpc__.update({'ws_subscribe_contract': RPC(readonly=False)})
         cls._buttons.update({'option_subscription': {}})
         cls._error_messages.update({
                 'inactive_product_at_date':
@@ -406,31 +408,82 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         ])
         return [('id', 'in', [c.id for c in contracts])]
 
+    def init_contract(self, product, party, contract_dict=None):
+        self.subscriber = party
+        at_date = contract_dict.get('start_date', utils.today())
+        self.init_from_product(product, at_date)
+        self.init_default_address()
+        if not contract_dict or not 'extra_data' in contract_dict:
+            return
+        extra_data = self.on_change_extra_data()['extra_data']
+        for key in extra_data.iterkeys():
+            if key in contract_dict['extra_data']:
+                self.extra_data[key] = contract_dict['extra_data'][key]
+
+    def before_activate(self, contract_dict=None):
+        pass
+
     @classmethod
-    def subscribe_contract(cls, product, party, at_date=None,
-            options_code=None):
+    def subscribe_contract(cls, product, party, contract_dict=None):
         'WIP : This method should be the basic API to have a contract.'
         pool = Pool()
         Contract = pool.get('contract')
         SubscribedOpt = pool.get('contract.option')
+        at_date = contract_dict.get('start_date', utils.today())
         contract = Contract()
-        contract.subscriber = party
-        contract.init_from_product(product, at_date)
-        contract.init_default_address()
+        contract.init_contract(product, party, contract_dict)
         contract.options = []
-        for coverage in [x.coverage for x in product.ordered_coverages]:
-            if options_code and coverage.code not in options_code:
-                continue
+        for coverage in [x.coverage for x in product.ordered_coverages
+                if x.coverage.is_service]:
             sub_option = SubscribedOpt()
             sub_option.init_from_coverage(coverage, at_date)
             contract.options.append(sub_option)
+        contract.before_activate(contract_dict)
         contract.activate_contract()
         contract.finalize_contract()
+        contract.save()
         return contract
 
     @classmethod
     def ws_subscribe_contract(cls, contract_dict):
         'This method is a standard API for webservice use'
+        pool = Pool()
+        Party = pool.get('party.party')
+        Product = pool.get('offered.product')
+        sub_dict = contract_dict['subscriber']
+        if not 'code' in sub_dict:
+            party_id, code = Party.ws_create_person(sub_dict)
+        else:
+            code = sub_dict['code']
+        subscribers = Party.search([('code', '=', code)],
+            limit=1, order=[])
+        if not subscribers:
+            return {
+                'return': False,
+                'error_code': 'unknown_subscriber',
+                'error_message': 'No subscriber found for code %s' % code,
+                }
+        subscriber = subscribers[0]
+
+        products = Product.search(
+            [('code', '=', contract_dict['product']['code'])], limit=1,
+            order=[])
+        if not products:
+            return {
+                'return': False,
+                'error_code': 'unknown_product',
+                'error_message': 'No product available with code %s' % (
+                    contract_dict['product']['code'],
+                    ),
+            }
+        product = products[0]
+
+        contract = cls.subscribe_contract(product, subscriber, contract_dict)
+        contract.save()
+        return {
+            'return': True,
+            'contract_number': contract.contract_number,
+            }
 
     def init_from_product(self, product, start_date=None, end_date=None):
         if not start_date:
@@ -504,13 +557,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             return self.subscriber
 
     def activate_contract(self):
-        if not self.status == 'quote':
-            return
-        for option in self.options:
-            if option.status == 'quote':
-                option.activate_status()
-                option.save()
         self.activate_status()
+        for option in self.options:
+            option.activate_status()
+            option.save()
 
     @classmethod
     def get_coverages(cls, product):
