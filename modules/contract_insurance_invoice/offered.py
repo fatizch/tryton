@@ -4,7 +4,7 @@ from dateutil.rrule import rrule, YEARLY, MONTHLY
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model, utils, coop_string
+from trytond.modules.cog_utils import fields, model, utils, coop_string, export
 
 from .contract import FREQUENCIES
 
@@ -18,6 +18,8 @@ __all__ = [
     'OptionDescription',
     'FeeDesc',
     'TaxDesc',
+    'PaymentTerm',
+    'PaymentTermLine',
     ]
 
 MONTHS = [
@@ -99,6 +101,22 @@ class InvoiceFrequency(model.CoopSQL, model.CoopView):
                     int(self.sync_month), int(self.sync_day)), lang.code,
                 '%d %b')
         return result
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['frequency', 'sync_day', 'sync_month'])
+
+
+class PaymentTerm(export.ExportImportMixin):
+    __name__ = 'account.invoice.payment_term'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
+
+class PaymentTermLine(export.ExportImportMixin):
+    __name__ = 'account.invoice.payment_term.line'
 
 
 class Product:

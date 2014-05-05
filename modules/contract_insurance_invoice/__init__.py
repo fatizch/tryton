@@ -28,6 +28,8 @@ def register():
         InvoiceContractStart,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,
+        PaymentTerm,
+        PaymentTermLine,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,

@@ -37,15 +37,15 @@
             <field name="name">premium_list</field>
         </record>
 
-        <record model="ir.ui.view" id="payment_term_view_list">
+        <record model="ir.ui.view" id="contract_payment_term_view_list">
             <field name="model">contract.payment_term</field>
             <field name="type">tree</field>
-            <field name="name">payment_term_list</field>
+            <field name="name">contract_payment_term_list</field>
         </record>
-        <record model="ir.ui.view" id="payment_term_view_form">
+        <record model="ir.ui.view" id="contract_payment_term_view_form">
             <field name="model">contract.payment_term</field>
             <field name="type">form</field>
-            <field name="name">payment_term_form</field>
+            <field name="name">contract_payment_term_form</field>
         </record>
 
         <record model="ir.ui.view" id="contract_invoice_frequency_view_list">
@@ -77,12 +77,12 @@
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="contract_invoice_view_list"/>
+            <field name="view" ref="invoice_view_list"/>
             <field name="act_window" ref="act_invoice_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_view2">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="contract_invoice_view_form"/>
+            <field name="view" ref="invoice_view_form"/>
             <field name="act_window" ref="act_invoice_form"/>
         </record>
 
