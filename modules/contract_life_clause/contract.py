@@ -44,12 +44,11 @@ class Contract:
         Contact.delete(to_del)
         self.contacts = list(getattr(self, 'contacts', []))
         for benef in accepting_benefs:
-            if not benef.party in contact_parties:
-                contact = Contact()
-                contact.type = contact_type
-                contact.party = benef.party
-                contact.address = benef.address
-                self.contacts.append(contact)
+            if benef.party in contact_parties:
+                continue
+            contact = Contact(type=contact_type, party=benef.party,
+                address=benef.address)
+            self.contacts.append(contact)
 
 
 class ContractOption:
