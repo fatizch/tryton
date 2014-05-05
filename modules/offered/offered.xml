@@ -75,7 +75,7 @@
       <field name="model">offered.option.description</field>
       <field name="type">tree</field>
       <field name="inherit" ref="offered_view_tree"/>
-      <field name="arch" type="xml"/>
+      <field name="name">option_description_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_coverage">

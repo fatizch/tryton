@@ -229,6 +229,7 @@ class Product:
             while cur_date <= contract.end_date:
                 dates.add(cur_date)
                 cur_date = coop_date.add_year(cur_date, 1)
+        return dates
 
     def get_option_dates(self, dates, option):
         super(Product, self).get_option_dates(dates, option)
@@ -295,12 +296,6 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         res = super(ItemDescription, cls).get_var_names_for_full_extract()
         res.extend(['extra_data_def', 'kind', 'sub_item_descs'])
         return res
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(ItemDescription, cls)._export_skips()
-        result.remove('coverages')
-        return result
 
 
 class ItemDescSubItemDescRelation(model.CoopSQL):
