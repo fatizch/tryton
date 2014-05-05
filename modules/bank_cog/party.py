@@ -4,6 +4,7 @@ from trytond.pyson import Not
 from trytond.modules.cog_utils import coop_string, fields, utils
 from trytond.modules.party_cog.party import STATES_COMPANY
 
+
 __metaclass__ = PoolMeta
 
 __all__ = [
