@@ -182,7 +182,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         if self.type_ == 'selection':
             if not value:
                 return False
-            selection = [[w[0].strip() for w in v.split(':', 1)]
+            selection = [v.split(':')[0].strip()
                 for v in self.selection.splitlines() if v]
             if value not in selection:
                 return False
