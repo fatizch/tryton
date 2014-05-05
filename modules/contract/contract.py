@@ -5,6 +5,7 @@ from sql.operators import Concat
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool
+from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
 from trytond.modules.currency_cog import ModelCurrency
@@ -28,6 +29,8 @@ __all__ = [
     'Contract',
     'ContractOption',
     'ContractAddress',
+    'ContractSelectEndDate',
+    'ContractEnd',
     ]
 
 
@@ -61,6 +64,9 @@ def add_status_history(possible_status):
         status = fields.Function(
             fields.Selection(possible_status, 'Status'),
             'on_change_with_status', searcher='search_status_history')
+        first_status = fields.Function(
+            fields.Char('First Status'),
+            'get_first_status', searcher='search_first_status')
 
         @classmethod
         def default_status(cls):
@@ -101,7 +107,7 @@ def add_status_history(possible_status):
                             <= utils.today()
                             <= (elem.end_date or datetime.date.max)):
                         return elem.status
-            return self.default_status()
+            return self.first_status
 
         @classmethod
         def search_status_history(cls, name, clause):
@@ -145,6 +151,7 @@ def add_status_history(possible_status):
                 if elem.status != 'quote':
                     continue
                 elem.status = 'active'
+            self.status_history = self.status_history
 
         def set_end_date(self, end_date):
             self.end_date = end_date
@@ -176,6 +183,63 @@ def add_status_history(possible_status):
                 return
             for elem in idx_to_del:
                 self.status_history.pop(elem)
+
+        def get_status_at_date(self, date=None):
+            for elem in self.status_history:
+                if date is None:
+                    return elem.status
+                if elem.start_date and elem.start_date > date:
+                    continue
+                if getattr(elem, 'end_date', None) and elem.end_date < date:
+                    continue
+                return elem.status
+            return None
+
+        @classmethod
+        def get_first_status(cls, instances, name):
+            values = dict.fromkeys((c.id for c in instances), None)
+            cursor = Transaction().cursor
+            pool = Pool()
+            history = pool.get('contract.status.history').__table__()
+            inner_history = pool.get('contract.status.history').__table__()
+            main_model = cls.__table__()
+            query_table = main_model.join(history, 'LEFT', condition=(
+                    history.id.in_(inner_history.select(
+                            inner_history.id,
+                            where=(inner_history.reference == Concat(
+                                    '%s,' % cls.__name__,
+                                    Cast(main_model.id, 'VARCHAR'))),
+                                limit=1, order_by=inner_history.start_date))))
+
+            cursor.execute(*query_table.select(main_model.id, history.status,
+                    where=(main_model.id.in_([x.id for x in instances]))))
+
+            values.update(cursor.dictfetchall())
+            return values
+
+        @classmethod
+        def search_first_status(cls, name, clause):
+            cursor = Transaction().cursor
+            pool = Pool()
+            _, operator, value = clause
+            Operator = fields.SQL_OPERATORS[operator]
+            history = pool.get('contract.status.history').__table__()
+            inner_history = pool.get('contract.status.history').__table__()
+            main_model = cls.__table__()
+            query_table = main_model.join(history, condition=(
+                        (history.id.in_(inner_history.select(inner_history.id,
+                                    where=(inner_history.reference == Concat(
+                                            '%s,' % cls.__name__,
+                                            Cast(main_model.id, 'VARCHAR'))),
+                                    limit=1,
+                                    order_by=inner_history.start_date)))
+                        & Operator(history.status, getattr(cls,
+                                name).sql_format(value))
+                        ))
+
+            cursor.execute(*query_table.select(main_model.id, history.status))
+
+            return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     return WithStatusHistoryMixin
 
@@ -342,14 +406,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     def on_change_extra_data(self):
         if not self.product:
             return {'extra_data': {}}
-        return {'extra_data': self.product.get_extra_data_def('contract',
-                self.extra_data, self.appliable_conditions_date)}
+        if not self.extra_data:
+            self.extra_data = {}
+        return {
+            'extra_data': self.product.get_extra_data_def('contract',
+                self.extra_data,
+                self.appliable_conditions_date),
+            }
 
     @fields.depends('start_date')
     def on_change_start_date(self):
-        result = super(Contract, self).on_change_start_date()
-        result['appliable_conditions_date'] = self.start_date
-        return result
+        return {'appliable_conditions_date': self.start_date}
 
     @fields.depends('subscriber')
     def on_change_with_current_policy_owner(self, name=None):
@@ -386,7 +453,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                     self.current_policy_owner.get_rec_name(name))
             else:
                 return 'Contract %s - %s' % (
-                    self.product.get_rec_name(name),
+                    self.product.rec_name,
                     self.current_policy_owner.get_rec_name(name))
         else:
             return super(Contract, self).get_rec_name(name)
@@ -871,3 +938,38 @@ class ContractAddress(model.CoopSQL, model.CoopView):
             res = self.default_policy_owner()
         if res:
             return res.id
+
+
+class ContractSelectEndDate(model.CoopView):
+    'End date selector for contract'
+
+    __name__ = 'contract.end.select_date'
+
+    end_date = fields.Date('End date', required=True)
+
+
+class ContractEnd(Wizard):
+    'End Contract wizard'
+
+    __name__ = 'contract.end'
+
+    start_state = 'select_date'
+    select_date = StateView('contract.end.select_date',
+        'contract.contract_end_select_date_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next')])
+    apply = StateTransition()
+
+    def default_select_date(self, name):
+        return {'end_date': utils.today()}
+
+    def transition_apply(self):
+        Contract = Pool().get('contract')
+        contracts = []
+        for contract in Contract.browse(
+                Transaction().context.get('active_ids')):
+            contract.set_end_date(self.select_date.end_date)
+            contracts.append([contract])
+            contracts.append(contract._save_values)
+        Contract.write(*contracts)
+        return 'end'

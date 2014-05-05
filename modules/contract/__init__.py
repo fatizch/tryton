@@ -15,6 +15,7 @@ def register():
         Contract,
         ContractOption,
         ContractAddress,
+        ContractSelectEndDate,
         # From Service
         ContractService,
         #From Rule Engine
@@ -30,4 +31,5 @@ def register():
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
+        ContractEnd,
         module='contract', type_='wizard')
