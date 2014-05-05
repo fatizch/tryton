@@ -4,8 +4,10 @@ from decimal import Decimal
 
 from dateutil.rrule import rrule, YEARLY, MONTHLY
 from dateutil.relativedelta import relativedelta
+from sql import Cast
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
+from sql.operators import Concat
 
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
@@ -100,7 +102,7 @@ class Contract:
                 if elem.value in self.product.frequencies:
                     break
             result['invoice_frequencies']['update'] = {
-                'id':  elem.id,
+                'id': elem.id,
                 'date': self.start_date,
                 }
         else:
@@ -117,7 +119,7 @@ class Contract:
                 if elem.value in self.product.payment_terms:
                     break
             result['payment_terms']['update'] = {
-                'id':  elem.id,
+                'id': elem.id,
                 'date': self.start_date,
                 }
         else:
@@ -224,7 +226,6 @@ class Contract:
         if up_to_date and start > up_to_date:
             return []
         periods = []
-
         while (up_to_date and start < up_to_date) or len(periods) < 1:
             rule, until = self._get_invoice_rrule(start)
             for date in rule:
@@ -233,11 +234,15 @@ class Contract:
                 if date == start:
                     continue
                 end = date + relativedelta(days=-1)
-                periods.append((start, end))
+                periods.append((start, min(end, self.end_date or
+                            datetime.date.max)))
                 start = date
                 if (up_to_date and start >= up_to_date) or not up_to_date:
                     break
             if until and (up_to_date or until < up_to_date):
+                if self.end_date and self.end_date < up_to_date:
+                    if until > self.end_date:
+                        until = self.end_date
                 end = until + relativedelta(days=-1)
                 periods.append((start, end))
                 start = until
@@ -268,7 +273,8 @@ class Contract:
         'Invoice contracts up to the date'
         periods = defaultdict(list)
         for contract in contracts:
-            if contract.status in ('hold'):
+            if contract.get_status_at_date(contract.last_invoice_end) not in (
+                    'active', 'quote'):
                 continue
             for period in contract.get_invoice_periods(up_to_date):
                 periods[period].append(contract)
@@ -776,6 +782,9 @@ class Premium(ModelSQL, ModelView):
             if (last_date <= datetime.datetime.combine(self.start,
                     datetime.time()) <= next_date):
                 return self.amount
+            elif (start <= datetime.datetime.combine(self.start,
+                    datetime.time())):
+                return self.amount
             else:
                 return 0
         if next_date and (next_date - end).days > 1:
@@ -851,6 +860,10 @@ class Premium(ModelSQL, ModelView):
         if line['taxes']:
             new_instance.taxes = line['taxes']
         # TODO : get from line once properly set
+        # Fee = Pool().get('account.fee.description')
+        # if isinstance(new_instance.rated_entity, Fee):
+        #     new_instance.frequency = 'once_per_contract'
+        # else:
         new_instance.frequency = line['frequency']
         return new_instance
 
@@ -953,11 +966,24 @@ class CreateInvoiceContractBatch(batchs.BatchRoot):
 
         contract = pool.get('contract').__table__()
         contract_invoice = pool.get('contract.invoice').__table__()
+        status_history = pool.get('contract.status.history').__table__()
+        date_clause = ((
+                (status_history.start_date == None)
+                | (status_history.start_date <= utils.today()))
+            & (
+                (status_history.end_date == None)
+                | (status_history.end_date >= utils.today())))
 
-        query_table = contract.join(contract_invoice, 'LEFT', condition=(
-                contract.id == contract_invoice.contract))
+        query_table = contract.join(status_history,
+            condition=(
+                (status_history.reference == Concat(
+                        'contract,', Cast(contract.id, 'VARCHAR')))
+                & date_clause)
+            ).join(contract_invoice, 'LEFT', condition=(
+                    contract.id == contract_invoice.contract))
 
         cursor.execute(*query_table.select(contract.id, group_by=contract.id,
+                where=(status_history.status == 'active'),
                 having=(
                     (Max(contract_invoice.end) < utils.today())
                     | (Max(contract_invoice.end) == None))))
