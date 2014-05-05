@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
-    <record model="ir.ui.view" id="contract_form">
+<!--     <record model="ir.ui.view" id="contract_form">
       <field name="model">contract</field>
       <field name="type">form</field>
       <field name="inherit" ref="contract.contract_view_form"/>
@@ -12,6 +12,6 @@
       <field name="type">tree</field>
       <field name="inherit" ref="contract.contract_view_tree"/>
       <field name="name">contract_tree</field>
-    </record>
+    </record> -->
   </data>
 </tryton>
