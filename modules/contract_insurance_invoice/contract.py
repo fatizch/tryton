@@ -72,7 +72,7 @@ class Contract:
         fields.Date('Last Invoice End Date'), 'get_last_invoice',
         searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
-        'invoice', 'Invoices', order=[('start', 'ASC')])
+        'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
 
     @classmethod
     def __setup__(cls):
