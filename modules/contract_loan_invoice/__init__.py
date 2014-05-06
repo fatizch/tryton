@@ -10,12 +10,12 @@ def register():
         Premium,
         Contract,
         Loan,
-        DisplayLoanMeanPremiumValues,
-        LoanMeanRateRule,
+        DisplayLoanAveragePremiumValues,
+        LoanAveragePremiumRule,
         FeeRule,
         Product,
         module='contract_loan_invoice', type_='model')
 
     Pool.register(
-        DisplayLoanMeanPremium,
+        DisplayLoanAveragePremium,
         module='contract_loan_invoice', type_='wizard')

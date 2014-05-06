@@ -17,8 +17,8 @@ __all__ = [
     'Premium',
     'Contract',
     'Loan',
-    'DisplayLoanMeanPremiumValues',
-    'DisplayLoanMeanPremium',
+    'DisplayLoanAveragePremiumValues',
+    'DisplayLoanAveragePremium',
     ]
 
 
@@ -42,14 +42,14 @@ class LoanShare:
 
     premiums = fields.One2Many('contract.premium', 'loan_share', 'Premiums',
         order=[('rated_entity', 'ASC'), ('start', 'ASC')])
-    mean_premium = fields.Function(
-        fields.Numeric('Mean Premium', digits=(6, 4)),
-        'get_mean_premium')
+    average_premium_rate = fields.Function(
+        fields.Numeric('Average Premium Rate', digits=(6, 4)),
+        'get_average_premium_rate')
 
-    def get_mean_premium(self, name):
+    def get_average_premium_rate(self, name):
         contract = self.option.covered_element.contract
-        return contract.product.loan_mean_rule.calculate_option_rule(contract,
-            self)
+        rule = contract.product.average_loan_premium_rule
+        return rule.calculate_average_premium_for_option(contract, self)
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -179,25 +179,25 @@ class Contract:
 class Loan:
     __name__ = 'loan'
 
-    mean_premium = fields.Function(
-        fields.Numeric('Mean Premium', digits=(6, 4)),
-        'get_mean_premium')
+    average_premium_rate = fields.Function(
+        fields.Numeric('Average Premium Rate', digits=(6, 4)),
+        'get_average_premium_rate')
 
-    def get_mean_premium(self, name, contract=None):
+    def get_average_premium_rate(self, name, contract=None):
         if not contract:
             contract_id = Transaction().context.get('contract', None)
             if contract_id:
                 contract = Pool().get('contract')(contract_id)
             else:
                 return None
-        return contract.product.loan_mean_rule.calculate_contract_mean(self,
-            contract)
+        rule = contract.product.average_loan_premium_rule
+        return rule.calculate_average_premium_for_contract(self, contract)
 
 
-class DisplayLoanMeanPremiumValues(model.CoopView):
-    'Display Loan Mean Premium Values'
+class DisplayLoanAveragePremiumValues(model.CoopView):
+    'Display Loan Average Premium Values'
 
-    __name__ = 'loan.mean_premium.display.values'
+    __name__ = 'loan.average_premium_rate.display.values'
 
     loans = fields.One2Many('loan', None, 'Loans',
         context={'contract': Eval('contract')},
@@ -205,14 +205,14 @@ class DisplayLoanMeanPremiumValues(model.CoopView):
     contract = fields.Many2One('contract', 'Contract')
 
 
-class DisplayLoanMeanPremium(Wizard):
-    'Display Loan Mean Premium'
+class DisplayLoanAveragePremium(Wizard):
+    'Display Loan Average Premium'
 
-    __name__ = 'loan.mean_premium.display'
+    __name__ = 'loan.average_premium_rate.display'
 
     start_state = 'display_loans'
-    display_loans = StateView('loan.mean_premium.display.values',
-        'contract_loan_invoice.display_mean_premium_values_view_form', [
+    display_loans = StateView('loan.average_premium_rate.display.values',
+        'contract_loan_invoice.display_average_premium_values_view_form', [
             Button('Cancel', 'end', 'tryton-cancel')])
 
     def default_display_loans(self, name):

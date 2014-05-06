@@ -7,7 +7,7 @@ from trytond.modules.cog_utils import model, fields, coop_string, coop_date
 __metaclass__ = PoolMeta
 __all__ = [
     'Product',
-    'LoanMeanRateRule',
+    'LoanAveragePremiumRule',
     'FeeRule',
     ]
 FEE_ACTIONS = [
@@ -21,15 +21,16 @@ FEE_ACTIONS = [
 class Product:
     __name__ = 'offered.product'
 
-    loan_mean_rule = fields.Many2One('loan.mean_rate_rule', 'Loan Mean Rule',
-        states={'required': Bool(Eval('is_loan', False))}, depends=['is_loan'],
-        ondelete='RESTRICT')
+    average_loan_premium_rule = fields.Many2One('loan.average_premium_rule',
+        'Average Loan Premium Rule', states={
+            'required': Bool(Eval('is_loan', False))},
+        depends=['is_loan'], ondelete='RESTRICT')
 
 
-class LoanMeanRateRule(model.CoopSQL, model.CoopView):
-    'Loan Mean Rate Rule'
+class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
+    'Loan Average Premium Rule'
 
-    __name__ = 'loan.mean_rate_rule'
+    __name__ = 'loan.average_premium_rule'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
@@ -47,7 +48,7 @@ class LoanMeanRateRule(model.CoopSQL, model.CoopView):
             'required': ~Eval('use_default_rule'),
             'invisible': Bool(Eval('use_default_rule', False))},
         depends=['use_default_rule'])
-    fee_rules = fields.One2Many('loan.mean_rate_rule.fee_rule', 'rule',
+    fee_rules = fields.One2Many('loan.average_premium_rule.fee_rule', 'rule',
         'Fee Rules', states={'invisible': ~Eval('use_default_rule')},
         depends=['use_default_rule'])
 
@@ -76,7 +77,7 @@ class LoanMeanRateRule(model.CoopSQL, model.CoopView):
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
 
-    def calculate_contract_mean(self, loan, contract):
+    def calculate_average_premium_for_contract(self, loan, contract):
         if not self.use_default_rule:
             # TODO : Plug in rules
             return 0
@@ -89,11 +90,11 @@ class LoanMeanRateRule(model.CoopSQL, model.CoopView):
                 continue
             loan_amount += v / k.share
         biggest = max([x.amount for x in contract.used_loans]) == loan.amount
-        longest = max([coop_date.number_of_years_between(
+        longest = max([coop_date.number_of_days_between(
                     x.funds_release_date,
                     x.end_date)
                 for x in contract.used_loans]
-            ) == coop_date.number_of_years_between(loan.funds_release_date,
+            ) == coop_date.number_of_days_between(loan.funds_release_date,
                         loan.end_date)
         prorata_ratio = loan.amount / sum(
             [x.amount for x in contract.used_loans])
@@ -115,7 +116,7 @@ class LoanMeanRateRule(model.CoopSQL, model.CoopView):
             coop_date.number_of_years_between(loan.funds_release_date,
                 loan.end_date))
 
-    def calculate_option_rule(self, contract, share):
+    def calculate_average_premium_for_option(self, contract, share):
         if not self.use_default_rule:
             # TODO : Plug in rules
             return 0
@@ -123,11 +124,11 @@ class LoanMeanRateRule(model.CoopSQL, model.CoopView):
         premium_aggregates = contract.calculate_premium_aggregates()
         share_amount = premium_aggregates('contract', share) or 0
         biggest = max([x.amount for x in contract.used_loans]) == loan.amount
-        longest = max([coop_date.number_of_years_between(
+        longest = max([coop_date.number_of_days_between(
                     x.funds_release_date,
                     x.end_date)
                 for x in contract.used_loans]
-            ) == coop_date.number_of_years_between(loan.funds_release_date,
+            ) == coop_date.number_of_days_between(loan.funds_release_date,
                         loan.end_date)
         prorata_ratio = loan.amount / sum(
             [x.amount for x in contract.used_loans])
@@ -153,10 +154,10 @@ class LoanMeanRateRule(model.CoopSQL, model.CoopView):
 class FeeRule(model.CoopSQL, model.CoopView):
     'Fee Rule'
 
-    __name__ = 'loan.mean_rate_rule.fee_rule'
+    __name__ = 'loan.average_premium_rule.fee_rule'
 
     fee = fields.Many2One('account.fee.description', 'Fee', required=True,
         ondelete='CASCADE')
-    rule = fields.Many2One('loan.mean_rate_rule', 'Rule', required=True,
+    rule = fields.Many2One('loan.average_premium_rule', 'Rule', required=True,
         ondelete='CASCADE')
     action = fields.Selection(FEE_ACTIONS, 'Behaviour')

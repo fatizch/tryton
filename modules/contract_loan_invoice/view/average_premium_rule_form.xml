@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<form string="Loan Mean Rate Rule">
+<form string="Loan Average Premium Rule">
     <label name="name"/>
     <field name="name"/>
     <label name="code"/>

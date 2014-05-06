@@ -226,7 +226,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
         return covered_element.party.id if covered_element.party else None
 
     def get_contract(self, name):
-        return self.option.covered_element.contract
+        return self.option.covered_element.contract.id
 
     @classmethod
     def search_contract(cls, name, clause):

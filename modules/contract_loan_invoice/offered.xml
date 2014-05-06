@@ -11,44 +11,44 @@
             <field name="name">product_form</field>
         </record>
         <!-- ####################### -->
-        <!-- # Loan Mean Rate Rule # -->
+        <!-- # Loan Average Premium Rule # -->
         <!-- ####################### -->
-        <record model="ir.ui.view" id="mean_rate_rule_view_form">
-            <field name="model">loan.mean_rate_rule</field>
+        <record model="ir.ui.view" id="average_premium_rule_view_form">
+            <field name="model">loan.average_premium_rule</field>
             <field name="type">form</field>
-            <field name="name">mean_rate_rule_form</field>
+            <field name="name">average_premium_rule_form</field>
         </record>
-        <record model="ir.ui.view" id="mean_rate_rule_view_list">
-            <field name="model">loan.mean_rate_rule</field>
+        <record model="ir.ui.view" id="average_premium_rule_view_list">
+            <field name="model">loan.average_premium_rule</field>
             <field name="type">tree</field>
-            <field name="name">mean_rate_rule_list</field>
+            <field name="name">average_premium_rule_list</field>
         </record>
         <!-- Entry Point -->
-        <record model="ir.action.act_window" id="act_mean_rate_rule">
-            <field name="name">Mean Rate Rule</field>
-            <field name="res_model">loan.mean_rate_rule</field>
+        <record model="ir.action.act_window" id="act_average_premium_rule">
+            <field name="name">Loan Average Premium Rule</field>
+            <field name="res_model">loan.average_premium_rule</field>
         </record>
-        <record model="ir.action.act_window.view" id="act_mean_rate_rule_view1">
+        <record model="ir.action.act_window.view" id="act_average_premium_rule_view1">
             <field name="sequence" eval="16"/>
-            <field name="view" ref="mean_rate_rule_view_list"/>
-            <field name="act_window" ref="act_mean_rate_rule"/>
+            <field name="view" ref="average_premium_rule_view_list"/>
+            <field name="act_window" ref="act_average_premium_rule"/>
         </record>
-        <record model="ir.action.act_window.view" id="act_mean_rate_rule_view2">
+        <record model="ir.action.act_window.view" id="act_average_premium_rule_view2">
             <field name="sequence" eval="16"/>
-            <field name="view" ref="mean_rate_rule_view_form"/>
-            <field name="act_window" ref="act_mean_rate_rule"/>
+            <field name="view" ref="average_premium_rule_view_form"/>
+            <field name="act_window" ref="act_average_premium_rule"/>
         </record>
-        <menuitem parent="offered.menu_product_configuration" sequence="20" action="act_mean_rate_rule" id="menu_mean_rate_rule"/>
+        <menuitem parent="offered.menu_product_configuration" sequence="20" action="act_average_premium_rule" id="menu_average_premium_rule"/>
         <!-- ############ -->
         <!-- # Fee Rule # -->
         <!-- ############ -->
         <record model="ir.ui.view" id="fee_rule_view_form">
-            <field name="model">loan.mean_rate_rule.fee_rule</field>
+            <field name="model">loan.average_premium_rule.fee_rule</field>
             <field name="type">form</field>
             <field name="name">fee_rule_form</field>
         </record>
         <record model="ir.ui.view" id="fee_rule_view_list">
-            <field name="model">loan.mean_rate_rule.fee_rule</field>
+            <field name="model">loan.average_premium_rule.fee_rule</field>
             <field name="type">tree</field>
             <field name="name">fee_rule_list</field>
         </record>
