@@ -452,7 +452,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         Product = pool.get('offered.product')
         sub_dict = contract_dict['subscriber']
         if not 'code' in sub_dict:
-            party_id, code = Party.ws_create_person(sub_dict)
+            party_res = Party.ws_create_person(sub_dict)
+            if not party_res.get('return'):
+                return {
+                    'return': False,
+                    'error_code': 'subscriber_creation_impossible',
+                    'error_message': "Can't create subscriber record",
+                }
+            code = party_res['party_code']
         else:
             code = sub_dict['code']
         subscribers = Party.search([('code', '=', code)],

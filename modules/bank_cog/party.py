@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Not
 
 from trytond.modules.cog_utils import coop_string, fields, utils
@@ -52,3 +52,41 @@ class Party:
     def get_main_bank_account_id(self, name):
         bank_accounts = self.get_bank_accounts(utils.today())
         return bank_accounts[0].id if bank_accounts else None
+
+    @classmethod
+    def ws_create_person(cls, person_dict):
+        Bank = Pool().get('bank')
+        Currency = Pool().get('currency.currency')
+        BankAccount = Pool().get('bank.account')
+        bank_account_info = person_dict.get('bank_accounts', None)
+        if bank_account_info:
+            del person_dict['bank_accounts']
+        res = super(Party, cls).ws_create_person(person_dict)
+        if not bank_account_info or not res['return']:
+            return res
+        for cur_bank_account in bank_account_info:
+            if cur_bank_account['bank']:
+                banks = Bank.search([
+                    ('bic', '=', cur_bank_account['bank'])], limit=1)
+                if not banks:
+                    return {'return': False,
+                        'error_code': 'unknown_bic',
+                        'error_message': 'No bank found for bic %s' %
+                            cur_bank_account['bank'],
+                        }
+                cur_bank_account['bank'] = banks[0]
+            if cur_bank_account['currency']:
+                currencies = Currency.search([
+                    ('code', '=', cur_bank_account['currency'])])
+                if not currencies:
+                    return {'return': False,
+                        'error_code': 'unknown_currency',
+                        'error_message': 'No currency found for code\
+                            %s' % cur_bank_account['currency'],
+                        }
+                cur_bank_account['currency'] = currencies[0]
+            cur_bank_account['owners'] = [('add', [res['party_id']])]
+            cur_bank_account['numbers'] = [
+                ('create', cur_bank_account['numbers'])]
+            BankAccount.create([cur_bank_account, ])
+            return res

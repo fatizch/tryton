@@ -1,5 +1,5 @@
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, coop_string
 
 __all__ = [
     'DistributionNetwork',
@@ -12,12 +12,25 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
     __name__ = 'distribution.network'
 
     name = fields.Char('Name')
-    code = fields.Char('Code')
+    code = fields.Char('Code', required=True)
     parent = fields.Many2One('distribution.network', 'Top Level', select=True,
         left="left", right="right", ondelete='CASCADE')
     childs = fields.One2Many('distribution.network', 'parent', 'Sub Levels')
     left = fields.Integer('Left', required=True, select=True)
     right = fields.Integer('Right', required=True, select=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(DistributionNetwork, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ]
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
     @staticmethod
     def default_left():

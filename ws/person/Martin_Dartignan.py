@@ -17,7 +17,7 @@
             'street': '12 rue Richet',
             'zip': '75019',
             'city': 'Paris',
-            'country': 'France',
+            'country': 'FR',
         }],
     'bank_accounts': [{
         'currency': 'EUR',

@@ -180,16 +180,18 @@ class Contract:
         self.agreements = []
         for agreement_dict in contract_dict['agreements']:
             agreement = Agreement()
-            if 'kind' in agreement_dict:
-                agreement.kind = agreement_dict['kind']
-            else:
-                agreement.kind = agreement.default_kind()
+            agreement.kind = agreement_dict.get('kind',
+                agreement.default_kind())
             if ('broker' in agreement_dict
                     and 'code' in agreement_dict['broker']):
-                agreement.party, = Party.search([
+                parties = Party.search([
                         ('broker_role.reference', '=',
                             agreement_dict['broker']['code']),
                     ], limit=1, order=[])
+                if not parties:
+                    #TODO raise error
+                    continue
+                agreement.party = parties[0]
             self.agreements.append(agreement)
         self.update_agreements()
         super(Contract, self).before_activate(contract_dict)

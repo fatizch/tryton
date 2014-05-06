@@ -151,9 +151,9 @@ class Offered(model.CoopView, GetResult, Templated):
     __name__ = 'offered'
     _export_name = 'code'
 
-    code = fields.Char('Code', required=True, select=1)
-    name = fields.Char('Name', required=True, select=1, translate=True)
-    start_date = fields.Date('Start Date', required=True, select=1)
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+    start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     description = fields.Text('Description', translate=True)
     summary = fields.Function(

@@ -296,12 +296,6 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         res.extend(['extra_data_def', 'kind', 'sub_item_descs'])
         return res
 
-    @classmethod
-    def _export_skips(cls):
-        result = super(ItemDescription, cls)._export_skips()
-        result.remove('coverages')
-        return result
-
 
 class ItemDescSubItemDescRelation(model.CoopSQL):
     'Relation between Item Desc and Sub Item Desc'

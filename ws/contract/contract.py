@@ -2,7 +2,7 @@
     'subscriber': {
         'code': '210',
         },
-    'product': {'code': 'neoliane_sante_pro'},
+    'product': {'code': 'sante'},
     'start_date': {
         '__class__': 'date',
         'year': 2014,
@@ -12,12 +12,11 @@
     'extra_data': {
         'departement': 75,
     },
-    'dist_network': {'code': 'santiane'},
+    'dist_network': {'code': 'Racine'},
     'covered_elements': [{
             'party': {'code': '210'},
             'options': [],
             'extra_data': {
-                'formule_neoliane': 'SP3',
                 },
             }],
     'agreements': [{

@@ -341,39 +341,44 @@ class Party(export.ExportImportMixin):
             yield id_, rec_name, icon
 
     @classmethod
+    def update_create_person_dict(cls, person_dict):
+        if person_dict['addresses']:
+            for cur_address in person_dict['addresses']:
+                if not cur_address['country']:
+                    continue
+                Country = Pool().get('country.country')
+                countries = Country.search([
+                    ('code', '=', cur_address['country'])])
+                if not countries:
+                    return {
+                        'return': False,
+                        'error_code': 'unknown_country',
+                        'error_message': 'No country found for code %s' %
+                            cur_address['country'],
+                        }
+                else:
+                    cur_address['country'] = countries[0]
+        return person_dict
+
+    @classmethod
     def ws_create_person(cls, person_dict):
         Party = Pool().get('party.party')
-        curParties = Party.search([('ssn', '=', person_dict['ssn'])], limit=1)
-        if not curParties:
-            bank_account_info = person_dict['bank_accounts']
-            del person_dict['bank_accounts']
-            if person_dict['addresses']:
-                for cur_address in person_dict['addresses']:
-                    if cur_address['country']:
-                        Country = Pool().get('country.country')
-                        country, = Country.search([
-                            ('name', '=', cur_address['country'])])
-                        cur_address['country'] = country
-            party = Party(**person_dict)
-            party.is_person = True
-            party.save()
-            if bank_account_info:
-                for cur_bank_account in bank_account_info:
-                    if cur_bank_account['bank']:
-                        Bank = Pool().get('bank')
-                        bank, = Bank.search([
-                            ('bic', '=', cur_bank_account['bank'])], limit=1)
-                        cur_bank_account['bank'] = bank
-                    if cur_bank_account['currency']:
-                        Currency = Pool().get('currency.currency')
-                        currency, = Currency.search([
-                            ('code', '=', cur_bank_account['currency'])])
-                        cur_bank_account['currency'] = currency
-                    cur_bank_account['owners'] = [('add', [party.id])]
-                    cur_bank_account['numbers'] = [
-                        ('create', cur_bank_account['numbers'])]
-                    BankAccount = Pool().get('bank.account')
-                    BankAccount.create([cur_bank_account, ])
-            return party.id, party.code
-        else:
-            return curParties[0].id, curParties[0].code
+        # TODO : USE person constraint
+        # if person_dict.get('code', None):
+        #     domain = [('code', '=', person_dict['code'])]
+        # elif person_dict.get('ssn', None):
+        #     domain = [('ssn', '=', person_dict['ssn'])]
+        # else:
+        #     domain = [('name', '=', person_dict['name']),
+        #         ('first_name', '=', person_dict['first_name']),
+        #         ('birth_date', '=', person_dict['birth_date'])]
+        res = cls.update_create_person_dict(person_dict)
+        if not res.get('return', True):
+            return res
+        party = Party(**res)
+        party.is_person = True
+        party.save()
+        return {'return': True,
+            'party_id': party.id,
+            'party_code': party.code,
+            }
