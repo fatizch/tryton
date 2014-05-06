@@ -159,7 +159,7 @@ class Contract:
             parent = utils.convert_ref_to_obj(elem['rated_entity'])
             per_offered_entity[parent] = elem['sum']
 
-        def result_parser(kind, value=None):
+        def result_parser(kind, value=None, model_name=''):
             # kind must be one of 'offered' or 'contract'
             if kind not in ('offered', 'contract'):
                 raise KeyError('First parameter must be one of offered /'
@@ -171,6 +171,9 @@ class Contract:
                 values = per_contract_entity
             if value:
                 return values.get(value, None)
+            if model_name:
+                return sum([v for k, v in values.iteritems()
+                        if k.__name__ == model_name])
             return values
 
         return result_parser

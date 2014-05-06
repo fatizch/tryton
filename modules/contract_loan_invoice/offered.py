@@ -146,7 +146,10 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             if action == 'do_not_use':
                 continue
             fee_amount += v * ratios[action]
-        return (share_amount + fee_amount) * 100 / (loan.amount *
+        fee_ratio = share_amount / (premium_aggregates('offered',
+                model_name='offered.product') + premium_aggregates('offered',
+                model_name='offered.option.description'))
+        return (share_amount + fee_amount * fee_ratio) * 100 / (loan.amount *
             coop_date.number_of_years_between(loan.funds_release_date,
                 loan.end_date) * share.share)
 
