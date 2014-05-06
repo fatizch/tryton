@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="contact_type_view_form">
+            <field name="model">contract.contact.type</field>
+            <field name="type">form</field>
+            <field name="name">contact_type_form</field>
+        </record>
+        <record model="ir.ui.view" id="contact_type_view_list">
+            <field name="model">contract.contact.type</field>
+            <field name="type">tree</field>
+            <field name="name">contact_type_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_contact_type_form">
+            <field name="name">Contact Type</field>
+            <field name="res_model">contract.contact.type</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_contact_type_form_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contact_type_view_list"/>
+            <field name="act_window" ref="act_contact_type_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contact_type_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contact_type_view_form"/>
+            <field name="act_window" ref="act_contact_type_form"/>
+        </record>
+        <menuitem parent="offered.menu_contract_configuration" id="menu_contact_type_form"
+            icon="tryton-tree" action="act_contact_type_form"/>
+
+        <record model="ir.ui.view" id="contract_contact_view_form">
+            <field name="model">contract.contact</field>
+            <field name="type">form</field>
+            <field name="name">contract_contact_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_contact_view_list">
+            <field name="model">contract.contact</field>
+            <field name="type">tree</field>
+            <field name="name">contract_contact_list</field>
+        </record>
+
+    </data>
+</tryton>

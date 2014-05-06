@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields, model
@@ -8,9 +8,47 @@ from trytond.modules.cog_utils import fields, model
 __metaclass__ = PoolMeta
 
 __all__ = [
+    'Contract',
     'ContractOption',
     'Beneficiary',
     ]
+
+
+class Contract:
+    __name__ = 'contract'
+
+    def update_contacts(self):
+        super(Contract, self).update_contacts()
+        pool = Pool()
+        Contact = pool.get('contract.contact')
+        ContactType = pool.get('contract.contact.type')
+        accepting_benefs = []
+        benef_parties = []
+        contact_type, = ContactType.search(
+            [('code', '=', 'accepting_beneficiary')], limit=1, order=[])
+        for cov_element in self.covered_elements:
+            for option in cov_element.options:
+                for benef in option.beneficiaries:
+                    if not benef.accepting:
+                        continue
+                    accepting_benefs.append(benef)
+                    benef_parties.append(benef.party)
+        contact_parties = [x.party for x in self.contacts
+            if x.type == contact_type]
+
+        to_del = []
+        for contact in self.contacts:
+            if (contact.type == contact_type
+                    and contact.party not in benef_parties):
+                to_del.append(contact)
+        Contact.delete(to_del)
+        self.contacts = list(getattr(self, 'contacts', []))
+        for benef in accepting_benefs:
+            if benef.party in contact_parties:
+                continue
+            contact = Contact(type=contact_type, party=benef.party,
+                address=benef.address)
+            self.contacts.append(contact)
 
 
 class ContractOption:
@@ -25,7 +63,8 @@ class ContractOption:
             'required': Bool(Eval('with_beneficiary_clause')),
             }, depends=['coverage', 'with_beneficiary_clause'],
             ondelete='RESTRICT')
-    customized_beneficiary_clause = fields.Text('Customized Beneficiary Clause',
+    customized_beneficiary_clause = fields.Text(
+        'Customized Beneficiary Clause',
         states={'invisible': ~Eval('with_beneficiary_clause')},
         depends=['with_beneficiary_clause'])
     beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
