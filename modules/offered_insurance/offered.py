@@ -196,7 +196,7 @@ class Product:
     def on_change_with_item_descriptors(self, name=None):
         res = set()
         for coverage in self.coverages:
-            if not utils.is_none(coverage, 'item_desc'):
+            if getattr(coverage, 'item_desc', None):
                 res.add(coverage.item_desc.id)
         return list(res)
 

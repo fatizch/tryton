@@ -108,12 +108,12 @@ class Contract:
         return res
 
     def init_billing_data(self):
-        if utils.is_none(self, 'billing_datas'):
+        if not getattr(self, 'billing_datas', None):
             bm = self.new_billing_data()
             bm.init_from_contract(self, self.start_date)
             self.billing_datas = [bm]
             bm.save()
-        if utils.is_none(self, 'next_billing_date'):
+        if not getattr(self, 'next_billing_date', None):
             self.next_billing_date = self.start_date
 
     def get_billing_data(self, date=None):
@@ -142,7 +142,7 @@ class Contract:
     def next_billing_period(self):
         start_date = self.next_billing_date
         last_date = coop_date.add_day(start_date, -1)
-        if not utils.is_none(self, 'billing_periods'):
+        if getattr(self, 'billing_periods', None):
             for period in self.billing_periods:
                 if (start_date >= period.start_date and (
                         not period.end_date or period.end_date >= start_date)):

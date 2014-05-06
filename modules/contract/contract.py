@@ -500,7 +500,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         the direct link subscriber
         '''
         # TODO: to enhance
-        if not utils.is_none(self, 'subscriber'):
+        if getattr(self, 'subscriber', None):
             return self.subscriber
 
     def activate_contract(self):
@@ -575,7 +575,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         return coop_date.add_frequency('yearly', self.start_date)
 
     def init_default_address(self):
-        if not utils.is_none(self, 'addresses'):
+        if getattr(self, 'addresses', None):
             return True
         addresses = self.subscriber.address_get(
             at_date=self.start_date)

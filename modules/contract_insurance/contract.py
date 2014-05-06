@@ -162,7 +162,7 @@ class Contract(Printable):
         if only_active_at_date:
             roles = utils.get_good_versions_at_date(self, 'agreements',
                 at_date)
-        elif not utils.is_none(self, 'agreements'):
+        elif getattr(self, 'agreements', None):
             roles = self.agreements
         else:
             roles = []
@@ -176,7 +176,7 @@ class Contract(Printable):
             role = utils.instanciate_relation(self, 'agreements')
             role.party = party
             role.kind = kind
-            if utils.is_none(self, 'agreements'):
+            if not getattr(self, 'agreements', None):
                 self.agreements = []
             else:
                 self.agreements = list(self.agreements)
@@ -197,7 +197,7 @@ class Contract(Printable):
     def update_agreements(self):
         #This method will update the management role and find the good protocol
         #based on real coverage subscribed
-        if utils.is_none(self, 'agreements'):
+        if not getattr(self, 'agreements', None):
             return
         for role in [x for x in self.agreements]:
             #we browse all roles that need to be updated on contract
@@ -786,11 +786,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('item_desc', 'extra_data', 'party')
     def on_change_with_party_extra_data(self, name=None):
         res = {}
-        if utils.is_none(self, 'party') or not (self.item_desc
+        if not getattr(self, 'party', None) or not (self.item_desc
                 and self.item_desc.kind in ['party', 'person', 'company']):
             return res
         for extra_data_def in self.item_desc.extra_data_def:
-            if (self.party and not utils.is_none(self.party, 'extra_data')
+            if (self.party and getattr(self.party, 'extra_data', None)
                     and extra_data_def.name in self.party.extra_data):
                 res[extra_data_def.name] = self.party.extra_data[
                     extra_data_def.name]
@@ -828,7 +828,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         for covered in instances:
             if not covered.party:
                 continue
-            if utils.is_none(covered.party, 'extra_data'):
+            if not getattr(covered.party, 'extra_data', None):
                 Party.write([covered.party], {'extra_data': vals})
             else:
                 covered.party.extra_data.update(vals)

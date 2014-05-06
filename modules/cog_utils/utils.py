@@ -501,12 +501,6 @@ def recursive_list_tuple_convert(the_list):
         return the_list
 
 
-def is_none(instance, field_name):
-    return (
-        not hasattr(instance, field_name)
-        or not getattr(instance, field_name))
-
-
 def concat_res(res1, res2):
     res = list(res1)
     res[0] = res[0] and res2[0]

@@ -37,7 +37,7 @@ class OptionDescription:
         'Rating Rules', states={'invisible': ~Eval('is_group')})
 
     def get_rating_by_fare_class(self, name):
-        if utils.is_none(self, 'rating_rules'):
+        if not getattr(self, 'rating_rules', None):
             return False
         for rating_rule in self.rating_rules:
             if rating_rule.rating_kind == 'fare_class':
