@@ -2,7 +2,6 @@ from trytond.pool import Pool
 
 from .payment import *
 from .company import *
-from .contract import *
 
 
 def register():
@@ -11,8 +10,6 @@ def register():
         CreateReceivablePaymentStart,
         # from company
         Company,
-        # from contract
-        Contract,
         module='account_payment_cog', type_='model')
     Pool.register(
         CreateReceivablePayment,
