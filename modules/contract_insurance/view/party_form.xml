@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/notebook" position="inside">
-        <page string="Complementary Data" id="extra_data">
-            <field name="extra_data" no_command="1"/>
-        </page>
+    <xpath expr="/form/notebook/page/field[@name='relations']" position="after">
+        <newline/>
+        <field name="extra_data" no_command="1"/>
     </xpath>
 </data>

@@ -22,25 +22,16 @@
         <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option</field>
             <field name="type">form</field>
-            <field name="inherit" ref="contract_insurance.option_view_form"/>
-            <field name="name">option-commission_option_form</field>
-        </record>
-        <!-- ############################################################ -->
-        <!-- ########### Covered Data ########### -->
-        <!-- ############################################################ -->
-        <record model="ir.ui.view" id="covered_data_view_form">
-            <field name="model">contract.covered_data</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="contract_insurance.covered_data_view_form"/>
-            <field name="name">covered_data_form</field>
+            <field name="inherit" ref="contract.option_view_form"/>
+            <field name="name">option_form</field>
         </record>
         <!-- ################# -->
         <!-- # Extra Premium # -->
         <!-- ################# -->
         <record model="ir.ui.view" id="extra_premium_view_form">
-          <field name="model">contract.covered_data.extra_premium</field>
+          <field name="model">contract.option.extra_premium</field>
           <field name="type">form</field>
-          <field name="inherit" ref="contract_insurance.extra_premium_form"/>
+          <field name="inherit" ref="contract_insurance.extra_premium_view_form"/>
           <field name="name">extra_premium_form</field>
         </record>
     </data>

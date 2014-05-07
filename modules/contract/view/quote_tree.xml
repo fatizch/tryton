@@ -2,5 +2,5 @@
 <tree string="Contract">
     <field name="subscriber"/>
     <field name="start_date"/>
-    <field name="offered"/>
+    <field name="product"/>
 </tree>

@@ -79,11 +79,11 @@ class EligibilityRule:
             age = coop_date.number_of_years_between(subscriber.birth_date,
                 args['date'])
             res = True
-            if not utils.is_none(self, 'min_age') and age < self.min_age:
+            if getattr(self, 'min_age', None) and age < self.min_age:
                 res = False
                 details.append(
                     'Subscriber must be older than %s' % self.min_age)
-            if not utils.is_none(self, 'max_age') and age > self.max_age:
+            if getattr(self, 'max_age', None) and age > self.max_age:
                 res = False
                 details.append(
                     'Subscriber must be younger than %s' % self.max_age)

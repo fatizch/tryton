@@ -45,6 +45,9 @@ class LoanCreate(model.CoopWizard):
             return self.loan._default_values
         Contract = Pool().get('contract')
         contract = Contract(Transaction().context.get('active_id'))
+        party = Transaction().context.get('party', None)
+        if party is None:
+            party = contract.subscriber.id
         return {
             'contract': contract.id,
             'order': len(contract.loans) + 1,
@@ -52,7 +55,8 @@ class LoanCreate(model.CoopWizard):
             'currency_symbol': contract.currency.symbol,
             'funds_release_date': contract.start_date,
             'first_payment_date': coop_date.add_duration(
-                contract.start_date, 'month')
+                contract.start_date, 'month'),
+            'parties': [party] if party else [],
             }
 
     def default_loan_step_increments(self, values):
@@ -122,7 +126,7 @@ class LoanSharePropagate(model.CoopWizard):
             contract = covered_element.contract
         elif active_model == 'loan.share':
             loan_share = LoanShare(id)
-            covered_element = loan_share.covered_data.covered_element
+            covered_element = loan_share.option.covered_element
             contract = covered_element.contract
             share = loan_share.share
             loan = loan_share.loan
@@ -134,18 +138,30 @@ class LoanSharePropagate(model.CoopWizard):
                 contract.covered_elements],
             'covered_elements': [covered_element.id]
                 if covered_element else [],
-            'possible_options': [x.id for x in contract.options],
+            'possible_options': [option.coverage.id
+                for covered_element in contract.covered_elements
+                for option in covered_element.options],
             'share': share,
             }
 
     def transition_propagate(self):
+        to_create = []
         for covered_element in self.parameters.covered_elements:
-            for covered_data in [x for x in covered_element.covered_data
-                    if x.option in self.parameters.options]:
-                for loan_share in [x for x in covered_data.loan_shares
+            for option in [x for x in covered_element.options
+                    if x.coverage in self.parameters.options]:
+                found = set([])
+                for loan_share in [x for x in option.loan_shares
                         if x.loan in self.parameters.loans]:
                     loan_share.share = self.parameters.share
                     loan_share.save()
+                    found.add(loan_share.loan)
+                for elem in set(self.parameters.loans) - found:
+                    to_create.append({
+                            'loan': elem.id,
+                            'share': self.parameters.share,
+                            'option': option.id,
+                            })
+        Pool().get('loan.share').create(to_create)
         return 'end'
 
 
@@ -167,8 +183,8 @@ class LoanSharePropagateParameters(model.CoopView):
         depends=['possible_covered_elements'], required=True)
     possible_covered_elements = fields.Many2Many('contract.covered_element',
         None, None, 'Possible Covered Elements')
-    options = fields.Many2Many('contract.option', None, None, 'Options',
-        domain=[('id', 'in', Eval('possible_options'))],
+    options = fields.Many2Many('offered.option.description', None, None,
+        'Options', domain=[('id', 'in', Eval('possible_options'))],
         depends=['possible_options'], required=True)
-    possible_options = fields.Many2Many('contract.option', None, None,
-        'Possible Options')
+    possible_options = fields.Many2Many('offered.option.description', None,
+        None, 'Possible Options')

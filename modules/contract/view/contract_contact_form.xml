@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<form string="Contract Contact">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="type"/>
+    <field name="type"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="address"/>
+    <field name="address"/>
+</form>

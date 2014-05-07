@@ -15,18 +15,19 @@ def register():
         # From offered
         Product,
         OptionDescription,
+        PremiumRule,
         # From rule_engine
         RuleEngineRuntime,
+        # From Loan
+        Loan,
+        LoanIncrement,
+        LoanPayment,
+        LoanParty,
         # From Contract
         Contract,
         ContractOption,
-        CoveredData,
         ExtraPremium,
-        # From Loan
-        Loan,
         LoanShare,
-        LoanIncrement,
-        LoanPayment,
         # From Billing
         BillingPremium,
         #From loan_creation_wizard

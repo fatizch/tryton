@@ -12,7 +12,6 @@
     <record model="ir.ui.view" id="clause_view_form">
       <field name="model">clause</field>
       <field name="type">form</field>
-      <field name="inherit" ref="cog_utils.versionned_object_view_form"/>
       <field name="name">clause_form</field>
     </record>
     <record model="ir.action.act_window" id="act_model_clause">
@@ -29,21 +28,7 @@
       <field name="view" ref="clause_view_form"/>
       <field name="act_window" ref="act_model_clause"/>
     </record>
-    <menuitem parent="offered.menu_product_configuration" action="act_model_clause" id="menu_model_clause"/>
-    <!-- ################## -->
-    <!-- # Clause Version # -->
-    <!-- ################## -->
-    <record model="ir.ui.view" id="clause_version_view_list">
-      <field name="model">clause.version</field>
-      <field name="type">tree</field>
-      <field name="inherit" ref="cog_utils.version_object_view_tree"/>
-      <field name="name">clause_version_list</field>
-    </record>
-    <record model="ir.ui.view" id="clause_version_view_form">
-      <field name="model">clause.version</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="cog_utils.version_object_view_form"/>
-      <field name="name">clause_version_form</field>
-    </record>
+    <menuitem name="Clause" parent="offered.menu_contract_configuration" id="menu_root_clause" icon="clause"/>
+    <menuitem parent="menu_root_clause" action="act_model_clause" id="menu_model_clause" icon="clause"/>
   </data>
 </tryton>

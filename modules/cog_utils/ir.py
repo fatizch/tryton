@@ -14,6 +14,7 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Sequence',
+    'SequenceStrict',
     'DateClass',
     'View',
     'UIMenu',
@@ -42,6 +43,20 @@ class Sequence(ExportImportMixin):
     @classmethod
     def _export_skips(cls):
         result = super(Sequence, cls)._export_skips()
+        result.add('number_next_internal')
+        return result
+
+
+class SequenceStrict(ExportImportMixin):
+    __name__ = 'ir.sequence.strict'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['code', 'name'])
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(SequenceStrict, cls)._export_skips()
         result.add('number_next_internal')
         return result
 

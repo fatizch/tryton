@@ -20,16 +20,13 @@ class Contract:
         'get_is_health', searcher='search_is_health')
 
     def get_is_health(self, name):
-        if not self.options and self.offered:
-            return self.offered.is_health
-        for option in self.options:
-            if option.is_health:
-                return True
+        if not self.options and self.product:
+            return self.product.is_health
         return False
 
     @classmethod
     def search_is_health(cls, name, clause):
-        return [('offered.is_health',) + tuple(clause[1:])]
+        return [('product.is_health',) + tuple(clause[1:])]
 
 
 class Option:
@@ -40,7 +37,7 @@ class Option:
         'get_is_health')
 
     def get_is_health(self, name=None):
-        return self.offered and self.offered.is_health
+        return self.product and self.product.is_health
 
 
 class CoveredElement:

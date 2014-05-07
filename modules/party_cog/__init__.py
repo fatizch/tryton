@@ -3,24 +3,29 @@ from .party import *
 from .category import *
 from .contact_mechanism import *
 from .address import *
-from .relation import *
 from .test_case import *
+from .relationship import *
+from .res import *
 
 
 def register():
     Pool.register(
-        # From party
+        SynthesisMenuContact,
+        SynthesisMenuAddress,
+        SynthesisMenuPartyInteraction,
+        SynthesisMenu,
         Party,
-        # From category
         PartyCategory,
-        # From address
         Address,
-        # From relation
-        PartyRelationKind,
-        PartyRelation,
-        # From contact_mechanism
         ContactMechanism,
         PartyInteraction,
-        # from test_case
         TestCaseModel,
+        RelationType,
+        PartyRelation,
+        PartyRelationAll,
+        User,
         module='party_cog', type_='model')
+    Pool.register(
+        SynthesisMenuSet,
+        SynthesisMenuOpen,
+        module='party_cog', type_='wizard')

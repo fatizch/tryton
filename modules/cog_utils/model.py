@@ -4,6 +4,7 @@ import time
 import datetime
 import json
 
+from sql import Union, Column, Literal, Cast
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -23,6 +24,7 @@ __all__ = [
     'VersionObject',
     'ObjectHistory',
     'expand_tree',
+    'MergedMixin',
     ]
 
 
@@ -98,8 +100,13 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
         #Set your class here to see the domain on the search
         # if cls.__name__ == 'rule_engine':
         #     print domain
-        return super(CoopSQL, cls).search(domain=domain, offset=offset,
-            limit=limit, order=order, count=count, query=query)
+        try:
+            return super(CoopSQL, cls).search(domain=domain, offset=offset,
+                limit=limit, order=order, count=count, query=query)
+        except:
+            logging.getLogger('root').debug('Bad domain on model %s : %r' % (
+                    cls.__name__, domain))
+            raise
 
     def _get_creation_date(self, name):
         if not (hasattr(self, 'create_date') and self.create_date):
@@ -370,3 +377,65 @@ class ObjectHistory(CoopSQL, CoopView):
                             values['date'], '%Y-%m-%d %H:%M:%S.%f')[:6])
                 values['date'] = values['date'].replace(microsecond=0)
         return res
+
+
+class MergedMixin:
+
+    @staticmethod
+    def merged_models():
+        return []
+
+    @classmethod
+    def merged_shard(cls, column, model):
+        models = cls.merged_models()
+        length = len(models)
+        i = models.index(model)
+        return ((column * length) + i)
+
+    @classmethod
+    def merged_unshard(cls, record_id):
+        pool = Pool()
+        models = cls.merged_models()
+        length = len(models)
+        record_id, i = divmod(record_id, length)
+        Model = pool.get(models[i])
+        return Model(record_id)
+
+    @classmethod
+    def merged_field(cls, name, Model):
+        return Model._fields.get(name)
+
+    @classmethod
+    def merged_columns(cls, model):
+        pool = Pool()
+        Model = pool.get(model)
+        table = Model.__table__()
+        models = cls.merged_models()
+        columns = [
+            cls.merged_shard(table.id, model).as_('id'),
+            ]
+        for name in sorted(cls._fields.keys()):
+            field = cls._fields[name]
+            if name == 'id' or hasattr(field, 'set'):
+                continue
+            column = Literal(None)
+            merged_field = cls.merged_field(name, Model)
+            if merged_field:
+                column = Column(table, merged_field.name)
+                if (isinstance(field, fields.Many2One)
+                        and field.model_name == cls.__name__):
+                    target_model = merged_field.model_name
+                    if target_model in models:
+                        column = cls.merged_shard(column, target_model)
+                    else:
+                        column = Literal(None)
+            columns.append(Cast(column, field.sql_type().base).as_(name))
+        return table, columns
+
+    @classmethod
+    def table_query(cls):
+        queries = []
+        for model in cls.merged_models():
+            table, columns = cls.merged_columns(model)
+            queries.append(table.select(*columns))
+        return Union(*queries)

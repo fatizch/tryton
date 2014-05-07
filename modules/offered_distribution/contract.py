@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, utils
@@ -26,9 +26,18 @@ class Contract:
             return None
         com_products = utils.get_good_versions_at_date(self.dist_network,
             'all_com_products', self.start_date)
-        com_product = [x for x in com_products if x.product == self.offered]
+        com_product = [x for x in com_products if x.product == self.product]
         if com_product:
             return com_product[0].id
 
     def get_dist_network(self):
         return self.dist_network
+
+    def init_contract(self, product, party, contract_dict=None):
+        super(Contract, self).init_contract(product, party, contract_dict)
+        if not contract_dict or not 'dist_network' in contract_dict:
+            return
+        DistributionNetwork = Pool().get('distribution.network')
+        self.dist_network, = DistributionNetwork.search(
+            [('code', '=', contract_dict['dist_network']['code'])], limit=1,
+            order=[])

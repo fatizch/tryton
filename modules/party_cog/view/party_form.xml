@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-
-    <xpath expr="/form/notebook/page[@id='general']" position="before">
-        <page string="Summary" id="summary" col="6">
-            <label name="main_address"/>
-            <group id='main_address' col='50' colspan="3">
-                <field name="main_address" colspan="49"/>
-                <button string="+" name="open_addresses"/>
-            </group>
-            <label name="main_contact_mechanism"/>
-            <group id='main_contact_mechanism' col="50">
-                <field name="main_contact_mechanism" colspan="49"/>
-                <button string="+" name="open_contact_mechanisms"/>
-            </group>
-            <field name="summary" colspan="6" widget="richtext"/>
-        </page>
-    </xpath>
+    <!-- form header -->
     <xpath expr="/form/group[@id='checkboxes']/label[@name='active']"
         position="before">
         <label name="code"/>
@@ -55,6 +40,42 @@
     <xpath expr="/form/label[@name='name']" position="replace"/>
     <xpath expr="/form/field[@name='code']" position="replace"/>
     <xpath expr="/form/label[@name='code']" position="replace"/>
+    <!-- Remove accounting, relations, bank page -->
+    <!-- <xpath expr="/form/notebook/page[@id='accounting']" position="replace"/> -->
+    <xpath expr="/form/notebook/page[@id='relations']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='banking']" position="replace"/>
+    <!-- General page modification -->
+    <xpath expr="/form/notebook/page/group[@id='lang']" position="replace"/>
+    <xpath expr="/form/notebook/page/field[@name='categories']" position="replace"/>
+    <xpath expr="/form/notebook/page/field[@name='contact_mechanisms']"
+        position="replace"/>
+    <xpath expr="/form/notebook/page/field[@name='addresses']"
+        position="after">
+        <group col="6" colspan="4" id="contact_shortcut">
+            <label name="phone"/>
+            <field name="phone"/>
+            <label name="mobile"/>
+            <field name="mobile"/>
+            <label name="email"/>
+            <field name="email"/>
+        </group>
+        <newline/>
+        <field name="bank_accounts" widget="one2many"/>
+    </xpath>
+    <!-- Add Extra Data pages-->
+    <xpath expr="/form/notebook/page[@id='general']" position="after">
+        <page string="Complementary Data" id="extra_data">
+            <group col="2" colspan="2" id="lang">
+                <label name="lang"/>
+                <field name="lang" widget="selection"/>
+            </group>
+            <newline/>
+            <field name="contact_mechanisms" colspan="2"
+                view_ids="party.contact_mechanism_view_tree_sequence"/>
+            <field name="relations" colspan="2"/>
+        </page>
+    </xpath>
+        <!-- Add Company and Role pages-->
     <xpath expr="/form/notebook" position="inside">
         <page string="Company" id="tree" states="{'invisible': ~Eval('is_company')}">
             <label name="parent"/>
@@ -66,37 +87,10 @@
             <label name="logo" xalign="0"/>
             <field name="logo" colspan="3"/>
         </page>
-        <page string="Relations" id="rel">
-            <field name="relations" view_ids="party_cog.party_relation_view_tree_from"
-                colspan="4"/>
-            <field name="in_relation_with" view_ids="party_cog.party_relation_view_tree_to"
-                colspan="4"/>
-        </page>
         <page string="Roles" id="role">
             <group id="role_group" colspan="4">
             </group>
             <notebook/>
         </page>
-    </xpath>
-    <xpath expr="/form/notebook/page/field[@name='categories']" position="replace"/>
-    <xpath expr="/form/notebook/page/field[@name='addresses']" position="replace_attributes">
-        <field name="addresses" colspan="4" mode="tree,form" view_ids="party.address_view_tree_sequence,party.address_view_form"/>
-    </xpath>
-    <xpath expr="/form/notebook/page/group[@id='lang']" position="replace"/>
-    <xpath expr="/form/notebook/page[@id='general']/field[@name='addresses']"
-        position="before">
-        <label name="lang"/>
-        <field name="lang" widget="selection"/>
-        <newline/>
-    </xpath>
-    <xpath expr="/form/notebook/page/field[@name='contact_mechanisms']"
-        position="replace_attributes">
-        <field name="contact_mechanisms" colspan="2"
-            view_ids="party.contact_mechanism_view_tree_sequence" pre_validate="1"/>
-    </xpath>
-    <xpath expr="/form" position="inside">
-        <newline/>
-        <field name="number_of_addresses"/>
-        <field name="number_of_contact_mechanisms"/>
     </xpath>
 </data>

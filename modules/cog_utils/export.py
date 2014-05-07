@@ -483,6 +483,8 @@ class ExportImportMixin(Model):
                     if good_value:
                         good_values.append(good_value)
                         check_req = False
+                    else:
+                        check_req = True
             else:
                 good_values.append(TargetModel._import_json(elem,
                         created=created, relink=relink))
@@ -523,8 +525,6 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _import_do_relink(cls, key, instance, relink, created):
-        if instance.__name__ == 'table' and instance.code == 'tarif_divinea':
-            pass
         if not instance.id:
             return
         for src_key, source in relink[(cls.__name__, key)]['from'].iteritems():
@@ -537,6 +537,10 @@ class ExportImportMixin(Model):
                 if isinstance(link_key, dict):
                     if not (cls.__name__, key) in link_key:
                         continue
+                    source_value = getattr(source, field_name)
+                    if isinstance(source_value, tuple):
+                        source_value = list(source_value)
+                        setattr(source, field_name, source_value)
                     getattr(source, field_name).append(instance)
                     del link_key[(cls.__name__, key)]
                     if not link_key:
@@ -733,10 +737,8 @@ class ExportImportMixin(Model):
 
     @classmethod
     def import_json(cls, values):
-        Config = Pool().get('ir.configuration')
         with Transaction().set_user(0), Transaction().set_context(
-                company=None, __importing__=True,
-                language=Config.get_language()):
+                __importing__=True, language='en_US'):
             if isinstance(values, basestring):
                 values = json.loads(values, object_hook=object_hook)
                 values = map(utils.recursive_list_tuple_convert, values)

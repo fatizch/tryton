@@ -12,7 +12,7 @@ class RuleEngineRuntime:
 
     @classmethod
     def _re_get_coverage_amount(cls, args):
-        data = cls.get_covered_data(args)
-        if data.coverage_amount:
-            return data.coverage_amount
+        option = cls.get_option(args)
+        if option.coverage_amount:
+            return option.coverage_amount
         cls.append_error(args, 'Coverage amount undefined')
