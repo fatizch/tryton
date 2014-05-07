@@ -50,7 +50,7 @@
             <field name="act_window" ref="act_person_form"/>
         </record>
         <menuitem parent="party.menu_party" sequence="0" id="menu_person_form"
-            icon="tryton-list" action="act_person_form"/>
+            icon="coopengo-party" action="act_person_form"/>
 
         <!-- *******************************************
             ******** Company **********
@@ -82,7 +82,7 @@
             <field name="act_window" ref="act_company_form"/>
         </record>
         <menuitem parent="party.menu_party" sequence="0" id="menu_company_form"
-            icon="tryton-list" action="act_company_form"/>
+            icon="coopengo-company" action="act_company_form"/>
 
         <record model="ir.ui.view" id="company_view_tree_hierarchical">
             <field name="model">party.party</field>

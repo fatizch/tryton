@@ -3,24 +3,19 @@ from trytond.modules.cog_utils import model, fields, coop_string
 
 __all__ = [
     'Clause',
-    'ClauseVersion',
     ]
 
 
-class Clause(model.CoopSQL, model.VersionedObject):
+class Clause(model.CoopSQL, model.CoopView):
     'Clause'
 
     __name__ = 'clause'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
-    title = fields.Char('Title')
-    kind = fields.Selection([('', '')], 'Kind')
+    kind = fields.Selection([('specific', 'Specific')], 'Kind')
     customizable = fields.Boolean('Customizable')
-
-    @classmethod
-    def version_model(cls):
-        return 'clause.version'
+    content = fields.Text('Content')
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
@@ -30,19 +25,13 @@ class Clause(model.CoopSQL, model.VersionedObject):
 
     @classmethod
     def default_kind(cls):
-        return ''
+        return 'specific'
 
     def get_rec_name(self, name):
-        return self.name
-
-
-class ClauseVersion(model.CoopSQL, model.VersionObject):
-    'Clause Version'
-
-    __name__ = 'clause.version'
-
-    content = fields.Text('Content')
+        return '[%s] %s' % (self.code, self.name)
 
     @classmethod
-    def main_model(cls):
-        return 'clause'
+    def search_rec_name(cls, name, clause):
+        if cls.search([('code',) + tuple(clause[1:])], limit=1, order=[]):
+            return [('code',) + tuple(clause[1:])]
+        return [(cls._rec_name,) + tuple(clause[1:])]

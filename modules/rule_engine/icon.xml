@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="tag_icon">
+            <field name="name">tag</field>
+            <field name="path">icons/tag.svg</field>
+        </record>
+    </data>
+</tryton>

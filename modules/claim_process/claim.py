@@ -196,7 +196,7 @@ class Loss:
         if not self.services:
             res['services'] = utils.create_inst_with_default_val(
                 self, 'services', 'add')
-            del_serv_dict = res['services']['add'][0]
+            del_serv_dict = res['services']['add'][0][1]
         elif (len(self.services) == 1
                 and self.services[0].status == 'calculating'):
             res['services'] = {'update':

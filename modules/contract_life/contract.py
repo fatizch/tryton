@@ -117,8 +117,8 @@ class ContractOption:
                 'appliable_conditions_date': self.appliable_conditions_date,
                 })[0]
         if vals:
-            res = map(lambda x: (x, x),
-                map(lambda x: self.currency.amount_as_string(x), vals))
+            res = map(lambda x: (str(x), self.currency.amount_as_string(x)),
+                vals)
             return [('', '')] + res
         return [('', '')]
 

@@ -62,5 +62,4 @@
       <field name="early_payments" colspan="4"/>
     </page>
   </notebook>
-  <field name="currency"/>
 </form>

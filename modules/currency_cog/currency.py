@@ -1,4 +1,4 @@
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import ROUND_HALF_UP
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import export, utils
@@ -22,12 +22,6 @@ class Currency(export.ExportImportMixin):
     @classmethod
     def _export_keys(cls):
         return set(['code'])
-
-    def get_amount_from_string(self, amount):
-        from locale import atof
-        amount = amount.strip(self.symbol)
-        amount = amount.replace(self.mon_decimal_point, '.')
-        return Decimal(atof(amount))
 
     def amount_as_string(self, amount, symbol=True, lang=None):
         Lang = Pool().get('ir.lang')

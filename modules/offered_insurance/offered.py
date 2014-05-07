@@ -196,7 +196,7 @@ class Product:
     def on_change_with_item_descriptors(self, name=None):
         res = set()
         for coverage in self.coverages:
-            if not utils.is_none(coverage, 'item_desc'):
+            if getattr(coverage, 'item_desc', None):
                 res.add(coverage.item_desc.id)
         return list(res)
 
@@ -229,6 +229,7 @@ class Product:
             while cur_date <= contract.end_date:
                 dates.add(cur_date)
                 cur_date = coop_date.add_year(cur_date, 1)
+        return dates
 
     def get_option_dates(self, dates, option):
         super(Product, self).get_option_dates(dates, option)
@@ -295,6 +296,12 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         res = super(ItemDescription, cls).get_var_names_for_full_extract()
         res.extend(['extra_data_def', 'kind', 'sub_item_descs'])
         return res
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(ItemDescription, cls)._export_skips()
+        result.add('coverages')
+        return result
 
 
 class ItemDescSubItemDescRelation(model.CoopSQL):

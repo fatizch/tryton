@@ -1,34 +1,6 @@
 <?xml version="1.0"?>
 <tryton>
   <data>
-    <!-- ############### -->
-    <!-- # Beneficiary # -->
-    <!-- ############### -->
-    <record model="ir.ui.view" id="beneficiary_view_form">
-      <field name="model">contract.clause.beneficiary</field>
-      <field name="type">form</field>
-      <field name="name">beneficiary_form</field>
-    </record>
-    <record model="ir.ui.view" id="beneficiary_view_list">
-      <field name="model">contract.clause.beneficiary</field>
-      <field name="type">tree</field>
-      <field name="name">beneficiary_list</field>
-    </record>
-    <!-- ################### -->
-    <!-- # Contract Clause # -->
-    <!-- ################### -->
-    <record model="ir.ui.view" id="clause_view_form">
-      <field name="model">contract.clause</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="contract_clause.clause_view_form"/>
-      <field name="name">clause_form</field>
-    </record>
-    <record model="ir.ui.view" id="clause_view_list">
-      <field name="model">contract.clause</field>
-      <field name="type">tree</field>
-      <field name="inherit" ref="contract_clause.clause_view_list"/>
-      <field name="name">clause_list</field>
-    </record>
     <!-- ################### -->
     <!-- # Contract Option # -->
     <!-- ################### -->
@@ -37,6 +9,19 @@
       <field name="type">form</field>
       <field name="inherit" ref="contract.option_view_form"/>
       <field name="name">option_form</field>
+    </record>
+    <!-- ############### -->
+    <!-- # Beneficiary # -->
+    <!-- ############### -->
+    <record model="ir.ui.view" id="beneficiary_view_form">
+      <field name="model">contract.option.beneficiary</field>
+      <field name="type">form</field>
+      <field name="name">beneficiary_form</field>
+    </record>
+    <record model="ir.ui.view" id="beneficiary_view_list">
+      <field name="model">contract.option.beneficiary</field>
+      <field name="type">tree</field>
+      <field name="name">beneficiary_list</field>
     </record>
   </data>
 </tryton>

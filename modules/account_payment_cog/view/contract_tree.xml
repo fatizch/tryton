@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-  <xpath expr="/tree/field[@name='receivable_today']" position="after">
-    <field name="paid_today"/>
-    <field name="due_today"/>
-  </xpath>
-</data>

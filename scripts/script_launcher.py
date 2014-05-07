@@ -33,8 +33,10 @@ def init_work_data(config):
         'coopbusiness', 'scripts', 'python_scripts', 'launch_tryton_script.py')
     result['trytond_test_runner'] = os.path.join(result['runtime_dir'],
         'trytond', 'trytond', 'tests', 'run-tests.py')
-    result['modules'] = os.path.join(result['runtime_dir'], 'coopbusiness',
-        'modules')
+    result['coop_modules'] = os.path.join(result['runtime_dir'],
+        'coopbusiness', 'modules')
+    result['modules'] = os.path.join(result['runtime_dir'], 'trytond',
+        'trytond', 'modules')
     return result
 
 
@@ -285,7 +287,7 @@ def test(arguments, config, work_data):
             work_data['tests_conf'], '-m'])
     argument_list = arguments.module
     if argument_list == 'all':
-        argument_list = os.listdir(work_data['modules'])
+        argument_list = os.listdir(work_data['coop_modules'])
         # TODO : Improve ordering
         # Currently, we use the fact that pop takes the last element of the
         # alphabetically ordered list to make sure test_module is run asap to
@@ -303,7 +305,7 @@ def test(arguments, config, work_data):
         if (len(threads) < num_processes) and argument_list:
             t = threading.Thread(
                 target=test_module, args=[argument_list.pop(),
-                    work_data['modules'],
+                    work_data['coop_modules'],
                     log_dir, base_command_line])
             t.setDaemon(True)
             time.sleep(1)
@@ -600,8 +602,8 @@ if __name__ == '__main__':
                 config.readfp(fconf)
 
     work_data = init_work_data(config)
-    possible_modules = os.listdir(os.path.join(work_data['runtime_dir'],
-            'coopbusiness', 'modules')) + ['all']
+    possible_modules = os.listdir(work_data['modules']) + ['all']
+    possible_coop_modules = os.listdir(work_data['coop_modules']) + ['all']
 
     # Main parser
     parser = argparse.ArgumentParser(description='Launch utilitary scripts')
@@ -652,7 +654,7 @@ if __name__ == '__main__':
     parser_unittests = subparsers.add_parser('test', help='Test related '
         'actions')
     parser_unittests.add_argument('--module', '-m', default='all',
-        help='Module to unittest', nargs='+', choices=possible_modules)
+        help='Module to unittest', nargs='+', choices=possible_coop_modules)
     parser_unittests.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
     parser_unittests.add_argument('--with-test-cases', '-t', help='Allow test '
@@ -668,7 +670,7 @@ if __name__ == '__main__':
     parser_export.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
     parser_export.add_argument('--module', '-m', default='all',
-        help='Module to unittest', nargs='+', choices=possible_modules)
+        help='Module to unittest', nargs='+', choices=possible_coop_modules)
 
     # Configure parser
     parser_configure = subparsers.add_parser('configure', help='Configure '

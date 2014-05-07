@@ -1,4 +1,5 @@
 from trytond.model import fields
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
@@ -32,11 +33,17 @@ class Invoice:
         'get_fees')
     products = fields.Many2Many('offered.product-account.invoice.payment_term',
         'payment_term', 'product', 'Products', readonly=True)
+    reconciliation_lines = fields.Function(
+        fields.One2Many('account.move.line', None, 'Reconciliation Lines',
+            states={'invisible': ~Bool(Eval('move', False))},
+            depends=['move']),
+        'get_reconciliation_lines')
 
     @classmethod
     def __setup__(cls):
         super(Invoice, cls).__setup__()
         cls._order.insert(0, ('start', 'ASC'))
+        cls.invoice_address.required = False
 
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
@@ -73,6 +80,13 @@ class Invoice:
             if elem.origin.rated_entity.__name__ == 'account.fee.description':
                 result += elem.amount
         return result
+
+    def get_reconciliation_lines(self, name):
+        if not self.move:
+            return []
+        Line = Pool().get('account.move.line')
+        return [x.id for x in Line.search([
+                    ('reconciliation.lines.move', '=', self.move)])]
 
     @classmethod
     def search_contract_invoice(cls, name, clause):
