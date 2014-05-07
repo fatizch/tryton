@@ -268,8 +268,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         states=_STATES, depends=_DEPENDS)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT', states=_STATES, depends=_DEPENDS)
-    # TODO replace single contact by date versionned list
-    contact = fields.Many2One('party.party', 'Contact', ondelete='RESTRICT')
     contract_number = fields.Char('Contract Number', select=1,
         states={
             'required': Eval('status') == 'active',
@@ -330,6 +328,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 },
             depends=['status']),
         'on_change_with_subscriber_kind', 'setter_void')
+    contacts = fields.One2Many('contract.contact', 'contract', 'Contacts')
 
     @classmethod
     def __setup__(cls):
@@ -567,7 +566,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         the direct link subscriber
         '''
         # TODO: to enhance
-        if not utils.is_none(self, 'subscriber'):
+        if getattr(self, 'subscriber', None):
             return self.subscriber
 
     def activate_contract(self):
@@ -642,7 +641,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         return coop_date.add_frequency('yearly', self.start_date)
 
     def init_default_address(self):
-        if not utils.is_none(self, 'addresses'):
+        if getattr(self, 'addresses', None):
             return True
         addresses = self.subscriber.address_get(
             at_date=self.start_date)
@@ -697,7 +696,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         pass
 
     def get_all_extra_data(self, at_date):
-        return getattr(self, 'extra_data', {})
+        res = self.product.get_all_extra_data(at_date)
+        res.update(getattr(self, 'extra_data', {}))
+        return res
 
     def set_end_date(self, end_date):
         super(Contract, self).set_end_date(end_date)
@@ -833,8 +834,8 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         return [('coverage.kind', ) + tuple(clause[1:])]
 
     def get_all_extra_data(self, at_date):
-        res = super(ContractOption, self).get_all_extra_data(
-            at_date)
+        res = self.coverage.get_all_extra_data(at_date)
+        res.update(getattr(self, 'extra_data', {}))
         res.update(self.contract.get_all_extra_data(at_date))
         return res
 

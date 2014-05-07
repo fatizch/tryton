@@ -307,6 +307,9 @@ class Offered(model.CoopView, GetResult, Templated):
             self.get_option_dates(dates, option)
         return dates
 
+    def get_all_extra_data(self, at_date):
+        return getattr(self, 'extra_data', {})
+
 
 class Product(model.CoopSQL, Offered):
     'Product'

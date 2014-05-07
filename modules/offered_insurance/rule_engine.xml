@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data noupdate="1">
+  <data>
     <record model="rule_engine.function" id="dossier_personne_couverte">
       <field name="translated_technical_name">dossier_personne_couverte</field>
       <field name="description">Personne Couverte</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-function" id="cte_default_dossier_personne_couverte">
-      <field name="context" ref="rule_engine.default_context"/>
-      <field name="tree_element" ref="dossier_personne_couverte"/>
-    </record>
-  </data>
-  <data>
     <record model="rule_engine.function" id="a_souscrit_le_produit">
       <field name="translated_technical_name">a_souscrit_le_produit</field>
       <field name="description">A souscrit le produit...</field>
@@ -62,20 +56,12 @@
       <field name="name">_re_get_person_living_country</field>
       <field name="parent" ref="dossier_personne_couverte"/>
     </record>
-  </data>
-  <data noupdate="1">
     <record model="rule_engine.function" id="dossier_souscripteur">
       <field name="translated_technical_name">dossier_souscripteur</field>
       <field name="description">Souscripteur</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-function" id="cte_default_dossier_souscripteur">
-      <field name="context" ref="rule_engine.default_context"/>
-      <field name="tree_element" ref="dossier_souscripteur"/>
-    </record>
-  </data>
-  <data>
     <record model="rule_engine.function" id="date_de_naissance_souscripteur">
       <field name="translated_technical_name">date_de_naissance_souscripteur</field>
       <field name="description">Date de naissance</field>
@@ -103,17 +89,20 @@
       <field name="name">_re_subscriber_subscribed</field>
       <field name="parent" ref="dossier_souscripteur"/>
     </record>
-  </data>
-  <data noupdate="1">
-    <record model="rule_engine.function" id="dossier_option">
-      <field name="translated_technical_name">dossier_option</field>
-      <field name="description">Option</field>
+    <record model="rule_engine.function" id="dossier_garantie">
+      <field name="translated_technical_name">dossier_garantie</field>
+      <field name="description">Garantie</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-function" id="cte_default_dossier_option">
-      <field name="context" ref="rule_engine.default_context"/>
-      <field name="tree_element" ref="dossier_option"/>
+    <record model="rule_engine.function" id="code_garantie">
+      <field name="translated_technical_name">code_garantie</field>
+      <field name="description">Code Garantie</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_option_code</field>
+      <field name="parent" ref="dossier_garantie"/>
     </record>
     <record model="rule_engine.function" id="dossier_donnees_couverture">
       <field name="translated_technical_name">dossier_donnees_couverture</field>
@@ -121,12 +110,6 @@
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-function" id="cte_default_dossier_donnees_couverture">
-      <field name="context" ref="rule_engine.default_context"/>
-      <field name="tree_element" ref="dossier_donnees_couverture"/>
-    </record>
-  </data>
-  <data>
     <record model="rule_engine.function" id="date_debut_souscription">
       <field name="translated_technical_name">date_debut_souscription</field>
       <field name="description">Date d'effet de la Garantie</field>
@@ -164,20 +147,12 @@
       <field name="fct_args">Code donnee complementaire</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
-  </data>
-  <data noupdate="1">
     <record model="rule_engine.function" id="dossier_rule_combination">
       <field name="translated_technical_name">dossier_rule_combination</field>
       <field name="description">Combinaison de règles</field>
       <field name="type">folder</field>
       <field name="language" ref="ir.lang_fr"/>
     </record>
-    <record model="rule_engine.context-function" id="cte_default_dossier_rule_combination">
-      <field name="context" ref="rule_engine.default_context"/>
-      <field name="tree_element" ref="dossier_rule_combination"/>
-    </record>
-  </data>
-  <data>
     <record model="rule_engine.function" id="ajouter_detail">
       <field name="translated_technical_name">ajouter_detail</field>
       <field name="description">Ajouter un détail</field>
@@ -217,6 +192,28 @@
       <field name="name">_re_apply_tax</field>
       <field name="fct_args">Code Taxe, Assiette</field>
       <field name="parent" ref="dossier_rule_combination"/>
+    </record>
+  </data>
+  <data noupdate="1">
+    <record model="rule_engine.context-function" id="cte_default_dossier_personne_couverte">
+      <field name="context" ref="rule_engine.default_context"/>
+      <field name="tree_element" ref="dossier_personne_couverte"/>
+    </record>
+    <record model="rule_engine.context-function" id="cte_default_dossier_souscripteur">
+      <field name="context" ref="rule_engine.default_context"/>
+      <field name="tree_element" ref="dossier_souscripteur"/>
+    </record>
+    <record model="rule_engine.context-function" id="cte_default_dossier_garantie">
+      <field name="context" ref="rule_engine.default_context"/>
+      <field name="tree_element" ref="dossier_garantie"/>
+    </record>
+    <record model="rule_engine.context-function" id="cte_default_dossier_donnees_couverture">
+      <field name="context" ref="rule_engine.default_context"/>
+      <field name="tree_element" ref="dossier_donnees_couverture"/>
+    </record>
+    <record model="rule_engine.context-function" id="cte_default_dossier_rule_combination">
+      <field name="context" ref="rule_engine.default_context"/>
+      <field name="tree_element" ref="dossier_rule_combination"/>
     </record>
   </data>
 </tryton>

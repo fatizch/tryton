@@ -87,18 +87,11 @@ def convert_ref_to_obj(ref):
 
 
 def limit_dates(dates, start=None, end=None):
-    res = list(dates)
-    res.sort()
-    filter_func = lambda x: (x >= start if start else True) and (
-        x < end if end else True)
-    res = filter(filter_func, res)
-    res = set(res)
+    res = set([x for x in dates
+            if (not start or x >= start) and (not end or x < end)])
     if end:
         res.add(end)
-    # The list was sorted before filtering so the resulting set should be
-    # properly sorted as well. 'end' should be the greatest elem of the set
-    # so adding it later should not change the iteration order
-    return res
+    return sorted(res)
 
 
 def to_date(string, format='ymd'):
@@ -232,7 +225,7 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     field = getattr(from_class, field_name)
     if not isinstance(field, fields.Many2One):
         if action:
-            res = {action: [CurModel.default_get(fields_names)]}
+            res = {action: [[0, CurModel.default_get(fields_names)]]}
         else:
             res = [CurModel.default_get(fields_names)]
     else:
@@ -506,12 +499,6 @@ def recursive_list_tuple_convert(the_list):
                 for key, value in the_list.iteritems()))
     else:
         return the_list
-
-
-def is_none(instance, field_name):
-    return (
-        not hasattr(instance, field_name)
-        or not getattr(instance, field_name))
 
 
 def concat_res(res1, res2):

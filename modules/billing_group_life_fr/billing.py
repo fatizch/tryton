@@ -72,7 +72,7 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
         states={'readonly': Or(~Eval('manual_billing'), ~~Eval('childs'))})
 
     def add_child(self):
-        if utils.is_none(self, 'childs'):
+        if not getattr(self, 'childs', None):
             self.childs = []
         child_line = self.__class__()
         self.childs.append(child_line)

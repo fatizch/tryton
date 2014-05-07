@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<form string="Clauses">
-    <label name="clause"/>
-    <field name="clause"/>
-    <field name="text" colspan="4" widget="richtext"/>
-    <newline/>
-    <field name="customized_text"/>
-</form>

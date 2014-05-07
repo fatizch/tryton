@@ -43,7 +43,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
             ('option', 'Option'),
             ('loss', 'Loss'),
             ('benefit', 'Benefit'),
-            ], 'Kind')
+            ], 'Kind', required=True)
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
         'Sub Data', context={'kind': Eval('extra_data_kind')},
         states={'invisible': Eval('sub_data_config_kind') != 'simple'})

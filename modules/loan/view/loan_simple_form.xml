@@ -47,7 +47,6 @@
     <label name="deferal_duration"/>
     <field name="deferal_duration"/>
     <newline/>
-    <field name="currency"/>
     <field name="parties" invisible="1"/>
     <newline/>
 </form>

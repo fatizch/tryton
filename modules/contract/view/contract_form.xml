@@ -21,6 +21,9 @@
         <page string="Complementary Data" name="extra_data">
             <field name="extra_data" no_command="1"/>
         </page>
+        <page string="Contacts" name="Contacts">
+            <field name="contacts" colspan="4"/>
+        </page>
         <page string="Administration" id="admin">
             <label name="product_kind"/>
             <field name="product_kind"/>

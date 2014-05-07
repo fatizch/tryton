@@ -63,6 +63,8 @@ class TestCaseModel:
     def relation_type_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         RelationType = Pool().get('party.relation.type')
+        if RelationType.search([('code', '=', 'spouse')]):
+            return
         spouse = RelationType()
         spouse.code = 'spouse'
         spouse.name = translater('Spouse')

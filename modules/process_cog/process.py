@@ -983,7 +983,7 @@ class ProcessFinder(Wizard):
         return res
 
     def init_state(self, obj):
-        if utils.is_none(obj, 'current_state'):
+        if not getattr(obj, 'current_state', None):
             obj.current_state = \
                 self.process_parameters.good_process.all_steps[0]
 
