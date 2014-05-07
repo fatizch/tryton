@@ -29,6 +29,8 @@ def register():
         InvoiceContractStart,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,
+        PaymentTerm,
+        PaymentTermLine,
         SynthesisMenuInvoice,
         SynthesisMenu,
         module='contract_insurance_invoice', type_='model')

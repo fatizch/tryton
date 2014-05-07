@@ -30,6 +30,6 @@
       <field name="view" ref="tag_view_form"/>
       <field name="act_window" ref="act_tag_form"/>
     </record>
-    <menuitem parent="menu_rule_engine" id="menu_tag_form" icon="tryton-list" action="act_tag_form"/>
+    <menuitem parent="menu_rule_engine" id="menu_tag_form" icon="tag" action="act_tag_form"/>
   </data>
 </tryton>

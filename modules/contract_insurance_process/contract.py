@@ -152,10 +152,6 @@ class Contract(CogProcessFramework):
                         option.coverage.start_date)))
         return result, errs
 
-    def finalize_contract(self):
-        res = super(Contract, self).finalize_contract()
-        return res
-
     def init_subscription_document_request(self):
         DocRequest = Pool().get('document.request')
         if not (hasattr(self, 'documents') and self.documents):
@@ -211,11 +207,12 @@ class Contract(CogProcessFramework):
         good_req.clean_extras(documents)
         return True, ()
 
-    def subscribe_contract(self, *args, **kwargs):
+    @classmethod
+    def subscribe_contract(cls, *args, **kwargs):
         # Set running process to None to avoid associating the new contract to
         # a process
         with Transaction().set_context(running_process=None):
-            result = super(Contract, self).subscribe_contract(*args, **kwargs)
+            result = super(Contract, cls).subscribe_contract(*args, **kwargs)
             result.save()
             return result
 

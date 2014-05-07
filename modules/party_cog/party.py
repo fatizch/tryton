@@ -13,6 +13,7 @@ from sql import Literal
 from trytond.pyson import Eval, Bool, Less
 from trytond.pool import PoolMeta, Pool
 
+from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition
 from trytond.pyson import PYSONEncoder
@@ -107,6 +108,7 @@ class Party(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
+        cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
         cls._buttons.update({
                 'open_addresses': {
                     'invisible': Less(Eval('number_of_addresses', 0), 1, True),
@@ -394,6 +396,49 @@ class Party(export.ExportImportMixin):
         for id_, rec_name, icon in super(Party, cls).search_global(text):
             icon = icon or 'coopengo-party'
             yield id_, rec_name, icon
+
+    @classmethod
+    def update_create_person_dict(cls, person_dict):
+        if person_dict['addresses']:
+            for cur_address in person_dict['addresses']:
+                if not cur_address['country']:
+                    continue
+                Country = Pool().get('country.country')
+                countries = Country.search([
+                    ('code', '=', cur_address['country'])])
+                if not countries:
+                    return {
+                        'return': False,
+                        'error_code': 'unknown_country',
+                        'error_message': 'No country found for code %s' %
+                            cur_address['country'],
+                        }
+                else:
+                    cur_address['country'] = countries[0]
+        return person_dict
+
+    @classmethod
+    def ws_create_person(cls, person_dict):
+        Party = Pool().get('party.party')
+        # TODO : USE person constraint
+        # if person_dict.get('code', None):
+        #     domain = [('code', '=', person_dict['code'])]
+        # elif person_dict.get('ssn', None):
+        #     domain = [('ssn', '=', person_dict['ssn'])]
+        # else:
+        #     domain = [('name', '=', person_dict['name']),
+        #         ('first_name', '=', person_dict['first_name']),
+        #         ('birth_date', '=', person_dict['birth_date'])]
+        res = cls.update_create_person_dict(person_dict)
+        if not res.get('return', True):
+            return res
+        party = Party(**res)
+        party.is_person = True
+        party.save()
+        return {'return': True,
+            'party_id': party.id,
+            'party_code': party.code,
+            }
 
 
 class SynthesisMenuPartyInteraction(model.CoopSQL):

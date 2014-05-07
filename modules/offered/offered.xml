@@ -4,7 +4,8 @@
     <!-- ############################################################ -->
     <!-- Menus -->
     <!-- ############################################################ -->
-    <menuitem name="Laboratory" id="menu_product" sequence="20"/>
+    <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
+    <menuitem name="Laboratory" id="menu_product" sequence="20" icon="laboratory"/>
     <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
     <!-- Moving existing Entry Points -->
     <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
@@ -75,7 +76,7 @@
       <field name="model">offered.option.description</field>
       <field name="type">tree</field>
       <field name="inherit" ref="offered_view_tree"/>
-      <field name="arch" type="xml"/>
+      <field name="name">option_description_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_coverage">

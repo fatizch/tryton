@@ -11,7 +11,7 @@
       <field name="name">Start Subscription</field>
       <field name="wiz_name">contract.subscribe</field>
     </record>
-    <menuitem parent="contract.menu_contract" sequence="1" action="subscription_process_launcher" id="menu_start_subscription"/>
+    <menuitem parent="contract.menu_contract" sequence="1" action="subscription_process_launcher" id="menu_start_subscription" icon="contract-action"/>
     <record model="ir.action.act_window" id="act_contract_logs">
       <field name="name">Logs</field>
       <field name="res_model">process.log</field>

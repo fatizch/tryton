@@ -10,11 +10,17 @@
             <field name="sequence">9</field>
             <field name="path">icons/coopengo-party.svg</field>
         </record>
+        <record model="ir.ui.icon" id="coopengo-company_icon">
+            <field name="name">coopengo-company</field>
+            <field name="path">icons/company.svg</field>
+        <record model="ir.ui.icon" id="company-person_icon">
+            <field name="name">coopengo-company-person</field>
+            <field name="path">icons/company-person.svg</field>
         <record model="ir.ui.icon" id="coopengo-phone_icon">
             <field name="name">coopengo-phone</field>
             <field name="path">icons/coopengo-phone.svg</field>
-        </record>
-        <record model="ir.ui.icon" id="coopengo-email_icon">
+        </record>        
+		<record model="ir.ui.icon" id="coopengo-email_icon">
             <field name="name">coopengo-email</field>
             <field name="path">icons/coopengo-email.svg</field>
         </record>

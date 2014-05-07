@@ -305,3 +305,8 @@ class RuleEngineRuntime:
 
         fee_vers = fee.get_version_at_date(args['date'])
         return fee_vers.apply_fee(base)
+
+    @classmethod
+    @check_args('option')
+    def _re_option_code(cls, args):
+        return args['option'].coverage.code

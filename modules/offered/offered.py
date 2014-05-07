@@ -151,9 +151,9 @@ class Offered(model.CoopView, GetResult, Templated):
     __name__ = 'offered'
     _export_name = 'code'
 
-    code = fields.Char('Code', required=True, select=1)
-    name = fields.Char('Name', required=True, select=1, translate=True)
-    start_date = fields.Date('Start Date', required=True, select=1)
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+    start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     description = fields.Text('Description', translate=True)
     summary = fields.Function(
@@ -306,6 +306,9 @@ class Offered(model.CoopView, GetResult, Templated):
         for option in contract.options:
             self.get_option_dates(dates, option)
         return dates
+
+    def get_all_extra_data(self, at_date):
+        return getattr(self, 'extra_data', {})
 
 
 class Product(model.CoopSQL, Offered):
@@ -595,6 +598,9 @@ class OptionDescription(model.CoopSQL, Offered):
             ('kind', '=', Eval('kind')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'kind', 'company'])
+    is_service = fields.Function(
+        fields.Boolean('Is a Service'),
+        'on_change_with_is_service', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -670,6 +676,13 @@ class OptionDescription(model.CoopSQL, Offered):
         result['name'] = self.name
         result['code'] = self.code
         return result
+
+    def on_change_with_is_service(self, name=None):
+        return True
+
+    @staticmethod
+    def default_is_service():
+        return True
 
 
 class PackageOptionDescription(model.CoopSQL):

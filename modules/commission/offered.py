@@ -40,6 +40,7 @@ class Product:
                 ('kind', '=', 'expense'),
                 ('kind', '=', 'revenue')
                 )]
+
     @classmethod
     def get_possible_product_kind(cls):
         res = super(Product, cls).get_possible_product_kind()
@@ -61,6 +62,16 @@ class OptionDescription:
     coverages = fields.Many2Many(
         'commission.option.description-option.description', 'component',
         'coverage', 'Coverages', domain=[('kind', '=', 'insurance')])
+
+    @classmethod
+    def __setup__(cls):
+        super(OptionDescription, cls).__setup__()
+        cls.account_for_billing.domain = [
+            cls.account_for_billing.domain[1],
+            If(Eval('kind', '') == 'commission',
+                ('kind', '=', 'expense'),
+                ('kind', '=', 'revenue')
+                )]
 
     @classmethod
     def get_possible_option_description_kind(cls):

@@ -169,6 +169,33 @@ class Contract:
                     for i in contract_com_invoices])
         return invoices
 
+    def before_activate(self, contract_dict=None):
+        if not contract_dict:
+            return
+        if not 'agreements' in contract_dict:
+            return
+        pool = Pool()
+        Agreement = pool.get('contract-agreement')
+        Party = pool.get('party.party')
+        self.agreements = []
+        for agreement_dict in contract_dict['agreements']:
+            agreement = Agreement()
+            agreement.kind = agreement_dict.get('kind',
+                agreement.default_kind())
+            if ('broker' in agreement_dict
+                    and 'code' in agreement_dict['broker']):
+                parties = Party.search([
+                        ('broker_role.reference', '=',
+                            agreement_dict['broker']['code']),
+                    ], limit=1, order=[])
+                if not parties:
+                    #TODO raise error
+                    continue
+                agreement.party = parties[0]
+            self.agreements.append(agreement)
+        self.update_agreements()
+        super(Contract, self).before_activate(contract_dict)
+
 
 class Option:
     __name__ = 'contract.option'
@@ -188,14 +215,14 @@ class Option:
             if not self.coverage in com_option.coverage.coverages:
                 continue
             good_comp_option = None
-            for comp_option in self.com_options:
+            for comp_option in getattr(self, 'com_options', []):
                 if comp_option.com_option == com_option:
                     good_comp_option = comp_option
                     break
             if not good_comp_option:
                 good_comp_option = CompOption()
                 good_comp_option.com_option = com_option
-                if not self.com_options:
+                if not getattr(self, 'com_options', []):
                     self.com_options = []
                 self.com_options = list(self.com_options)
                 self.com_options.append(good_comp_option)
@@ -313,6 +340,10 @@ class ContractAgreementRelation:
         res.extend(COMMISSION_KIND)
         return list(set(res))
 
+    @staticmethod
+    def default_kind():
+        return 'business_provider'
+
 
 class ContractInvoice:
     __name__ = 'contract.invoice'
@@ -416,7 +447,7 @@ class Premium:
 
     def same_value(self, other):
         result = super(Premium, self).same_value(other)
-        if result:
+        if not result:
             return result
         self_dict = dict((x.com_option.id, x.rate) for x in self.commissions)
         other_dict = dict((x.com_option.id, x.rate) for x in other.commissions)

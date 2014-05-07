@@ -4,7 +4,7 @@ from dateutil.rrule import rrule, YEARLY, MONTHLY
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model, utils, coop_string
+from trytond.modules.cog_utils import fields, model, utils, coop_string, export
 
 from .contract import FREQUENCIES
 
@@ -18,6 +18,8 @@ __all__ = [
     'OptionDescription',
     'FeeDesc',
     'TaxDesc',
+    'PaymentTerm',
+    'PaymentTermLine',
     ]
 
 MONTHS = [
@@ -100,6 +102,22 @@ class InvoiceFrequency(model.CoopSQL, model.CoopView):
                 '%d %b')
         return result
 
+    @classmethod
+    def _export_keys(cls):
+        return set(['frequency', 'sync_day', 'sync_month'])
+
+
+class PaymentTerm(export.ExportImportMixin):
+    __name__ = 'account.invoice.payment_term'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['name'])
+
+
+class PaymentTermLine(export.ExportImportMixin):
+    __name__ = 'account.invoice.payment_term.line'
+
 
 class Product:
     __name__ = 'offered.product'
@@ -112,13 +130,13 @@ class Product:
         'product', 'invoice_frequency', 'Frequencies')
     default_frequency = fields.Many2One('offered.invoice.frequency',
         'Default Frequency', domain=[('id', 'in', Eval('frequencies'))],
-        depends=['frequencies'], ondelete='RESTRICT')
+        depends=['frequencies'], ondelete='RESTRICT', required=True)
     payment_terms = fields.Many2Many(
         'offered.product-account.invoice.payment_term', 'product',
         'payment_term', 'Payment Terms')
     default_payment_term = fields.Many2One('account.invoice.payment_term',
         'Default Payment Term', domain=[('id', 'in', Eval('payment_terms'))],
-        depends=['payment_terms'], ondelete='RESTRICT')
+        depends=['payment_terms'], ondelete='RESTRICT', required=True)
 
     @fields.depends('frequencies', 'default_frequency')
     def on_change_frequencies(self):

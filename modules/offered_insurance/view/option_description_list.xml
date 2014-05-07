@@ -2,7 +2,6 @@
 <data>
     <xpath expr="/tree/field[@name='code']" position="after">
         <field name="family"/>
-        <field name="is_service"/>
         <field name="kind" tree_invisible="1"/>
     </xpath>
     <xpath expr="/tree" position="inside">

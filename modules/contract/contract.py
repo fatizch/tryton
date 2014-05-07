@@ -4,10 +4,11 @@ from sql import Cast, Literal
 from sql.operators import Concat
 from sql.aggregate import Max
 
+from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool
-from trytond.wizard import Wizard
+from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pyson import PYSONEncoder
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
@@ -35,6 +36,8 @@ __all__ = [
     'Contract',
     'ContractOption',
     'ContractAddress',
+    'ContractSelectEndDate',
+    'ContractEnd',
     'SynthesisMenu',
     'SynthesisMenuOpen',
     'SynthesisMenuContrat',
@@ -71,6 +74,9 @@ def add_status_history(possible_status):
         status = fields.Function(
             fields.Selection(possible_status, 'Status'),
             'on_change_with_status', searcher='search_status_history')
+        first_status = fields.Function(
+            fields.Char('First Status'),
+            'get_first_status', searcher='search_first_status')
 
         @classmethod
         def default_status(cls):
@@ -111,7 +117,7 @@ def add_status_history(possible_status):
                             <= utils.today()
                             <= (elem.end_date or datetime.date.max)):
                         return elem.status
-            return self.default_status()
+            return self.first_status
 
         @classmethod
         def search_status_history(cls, name, clause):
@@ -155,6 +161,7 @@ def add_status_history(possible_status):
                 if elem.status != 'quote':
                     continue
                 elem.status = 'active'
+            self.status_history = self.status_history
 
         def set_end_date(self, end_date):
             self.end_date = end_date
@@ -187,6 +194,63 @@ def add_status_history(possible_status):
             for elem in idx_to_del:
                 self.status_history.pop(elem)
 
+        def get_status_at_date(self, date=None):
+            for elem in self.status_history:
+                if date is None:
+                    return elem.status
+                if elem.start_date and elem.start_date > date:
+                    continue
+                if getattr(elem, 'end_date', None) and elem.end_date < date:
+                    continue
+                return elem.status
+            return None
+
+        @classmethod
+        def get_first_status(cls, instances, name):
+            values = dict.fromkeys((c.id for c in instances), None)
+            cursor = Transaction().cursor
+            pool = Pool()
+            history = pool.get('contract.status.history').__table__()
+            inner_history = pool.get('contract.status.history').__table__()
+            main_model = cls.__table__()
+            query_table = main_model.join(history, 'LEFT', condition=(
+                    history.id.in_(inner_history.select(
+                            inner_history.id,
+                            where=(inner_history.reference == Concat(
+                                    '%s,' % cls.__name__,
+                                    Cast(main_model.id, 'VARCHAR'))),
+                                limit=1, order_by=inner_history.start_date))))
+
+            cursor.execute(*query_table.select(main_model.id, history.status,
+                    where=(main_model.id.in_([x.id for x in instances]))))
+
+            values.update(cursor.dictfetchall())
+            return values
+
+        @classmethod
+        def search_first_status(cls, name, clause):
+            cursor = Transaction().cursor
+            pool = Pool()
+            _, operator, value = clause
+            Operator = fields.SQL_OPERATORS[operator]
+            history = pool.get('contract.status.history').__table__()
+            inner_history = pool.get('contract.status.history').__table__()
+            main_model = cls.__table__()
+            query_table = main_model.join(history, condition=(
+                        (history.id.in_(inner_history.select(inner_history.id,
+                                    where=(inner_history.reference == Concat(
+                                            '%s,' % cls.__name__,
+                                            Cast(main_model.id, 'VARCHAR'))),
+                                    limit=1,
+                                    order_by=inner_history.start_date)))
+                        & Operator(history.status, getattr(cls,
+                                name).sql_format(value))
+                        ))
+
+            cursor.execute(*query_table.select(main_model.id, history.status))
+
+            return [('id', 'in', [x[0] for x in cursor.fetchall()])]
+
     return WithStatusHistoryMixin
 
 
@@ -214,8 +278,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         states=_STATES, depends=_DEPENDS)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT', states=_STATES, depends=_DEPENDS)
-    # TODO replace single contact by date versionned list
-    contact = fields.Many2One('party.party', 'Contact', ondelete='RESTRICT')
     contract_number = fields.Char('Contract Number', select=1,
         states={
             'required': Eval('status') == 'active',
@@ -276,10 +338,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 },
             depends=['status']),
         'on_change_with_subscriber_kind', 'setter_void')
+    contacts = fields.One2Many('contract.contact', 'contract', 'Contacts')
 
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
+        cls.__rpc__.update({'ws_subscribe_contract': RPC(readonly=False)})
         cls._buttons.update({'option_subscription': {}})
         cls._error_messages.update({
                 'inactive_product_at_date':
@@ -357,14 +421,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     def on_change_extra_data(self):
         if not self.product:
             return {'extra_data': {}}
-        return {'extra_data': self.product.get_extra_data_def('contract',
-                self.extra_data, self.appliable_conditions_date)}
+        if not self.extra_data:
+            self.extra_data = {}
+        return {
+            'extra_data': self.product.get_extra_data_def('contract',
+                self.extra_data,
+                self.appliable_conditions_date),
+            }
 
     @fields.depends('start_date')
     def on_change_start_date(self):
-        result = super(Contract, self).on_change_start_date()
-        result['appliable_conditions_date'] = self.start_date
-        return result
+        return {'appliable_conditions_date': self.start_date}
 
     @fields.depends('subscriber')
     def on_change_with_current_policy_owner(self, name=None):
@@ -432,31 +499,89 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         ])
         return [('id', 'in', [c.id for c in contracts])]
 
+    def init_contract(self, product, party, contract_dict=None):
+        self.subscriber = party
+        at_date = contract_dict.get('start_date', utils.today())
+        self.init_from_product(product, at_date)
+        self.init_default_address()
+        if not contract_dict or not 'extra_data' in contract_dict:
+            return
+        extra_data = self.on_change_extra_data()['extra_data']
+        for key in extra_data.iterkeys():
+            if key in contract_dict['extra_data']:
+                self.extra_data[key] = contract_dict['extra_data'][key]
+
+    def before_activate(self, contract_dict=None):
+        pass
+
     @classmethod
-    def subscribe_contract(cls, product, party, at_date=None,
-            options_code=None):
+    def subscribe_contract(cls, product, party, contract_dict=None):
         'WIP : This method should be the basic API to have a contract.'
         pool = Pool()
         Contract = pool.get('contract')
         SubscribedOpt = pool.get('contract.option')
+        at_date = contract_dict.get('start_date', utils.today())
         contract = Contract()
-        contract.subscriber = party
-        contract.init_from_product(product, at_date)
-        contract.init_default_address()
+        contract.init_contract(product, party, contract_dict)
         contract.options = []
-        for coverage in [x.coverage for x in product.ordered_coverages]:
-            if options_code and coverage.code not in options_code:
-                continue
+        for coverage in [x.coverage for x in product.ordered_coverages
+                if x.coverage.is_service]:
             sub_option = SubscribedOpt()
             sub_option.init_from_coverage(coverage, at_date)
             contract.options.append(sub_option)
+        contract.before_activate(contract_dict)
         contract.activate_contract()
         contract.finalize_contract()
+        contract.save()
         return contract
 
     @classmethod
     def ws_subscribe_contract(cls, contract_dict):
         'This method is a standard API for webservice use'
+        pool = Pool()
+        Party = pool.get('party.party')
+        Product = pool.get('offered.product')
+        sub_dict = contract_dict['subscriber']
+        if not 'code' in sub_dict:
+            party_res = Party.ws_create_person(sub_dict)
+            if not party_res.get('return'):
+                return {
+                    'return': False,
+                    'error_code': 'subscriber_creation_impossible',
+                    'error_message': "Can't create subscriber record",
+                }
+            code = party_res['party_code']
+        else:
+            code = sub_dict['code']
+        subscribers = Party.search([('code', '=', code)],
+            limit=1, order=[])
+        if not subscribers:
+            return {
+                'return': False,
+                'error_code': 'unknown_subscriber',
+                'error_message': 'No subscriber found for code %s' % code,
+                }
+        subscriber = subscribers[0]
+
+        products = Product.search(
+            [('code', '=', contract_dict['product']['code'])], limit=1,
+            order=[])
+        if not products:
+            return {
+                'return': False,
+                'error_code': 'unknown_product',
+                'error_message': 'No product available with code %s' % (
+                    contract_dict['product']['code'],
+                    ),
+            }
+        product = products[0]
+
+        contract = cls.subscribe_contract(product, subscriber, contract_dict)
+        contract.save()
+        return {
+            'return': True,
+            'contract_number': contract.contract_number,
+            }
 
     def init_from_product(self, product, start_date=None, end_date=None):
         if not start_date:
@@ -526,17 +651,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         the direct link subscriber
         '''
         # TODO: to enhance
-        if not utils.is_none(self, 'subscriber'):
+        if getattr(self, 'subscriber', None):
             return self.subscriber
 
     def activate_contract(self):
-        if not self.status == 'quote':
-            return
-        for option in self.options:
-            if option.status == 'quote':
-                option.activate_status()
-                option.save()
         self.activate_status()
+        for option in self.options:
+            option.activate_status()
+            option.save()
 
     @classmethod
     def get_coverages(cls, product):
@@ -601,7 +723,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         return coop_date.add_frequency('yearly', self.start_date)
 
     def init_default_address(self):
-        if not utils.is_none(self, 'addresses'):
+        if getattr(self, 'addresses', None):
             return True
         addresses = self.subscriber.address_get(
             at_date=self.start_date)
@@ -656,7 +778,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         pass
 
     def get_all_extra_data(self, at_date):
-        return getattr(self, 'extra_data', {})
+        res = self.product.get_all_extra_data(at_date)
+        res.update(getattr(self, 'extra_data', {}))
+        return res
 
     def set_end_date(self, end_date):
         super(Contract, self).set_end_date(end_date)
@@ -792,8 +916,8 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         return [('coverage.kind', ) + tuple(clause[1:])]
 
     def get_all_extra_data(self, at_date):
-        res = super(ContractOption, self).get_all_extra_data(
-            at_date)
+        res = self.coverage.get_all_extra_data(at_date)
+        res.update(getattr(self, 'extra_data', {}))
         res.update(self.contract.get_all_extra_data(at_date))
         return res
 
@@ -897,6 +1021,41 @@ class ContractAddress(model.CoopSQL, model.CoopView):
             res = self.default_policy_owner()
         if res:
             return res.id
+
+
+class ContractSelectEndDate(model.CoopView):
+    'End date selector for contract'
+
+    __name__ = 'contract.end.select_date'
+
+    end_date = fields.Date('End date', required=True)
+
+
+class ContractEnd(Wizard):
+    'End Contract wizard'
+
+    __name__ = 'contract.end'
+
+    start_state = 'select_date'
+    select_date = StateView('contract.end.select_date',
+        'contract.contract_end_select_date_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next')])
+    apply = StateTransition()
+
+    def default_select_date(self, name):
+        return {'end_date': utils.today()}
+
+    def transition_apply(self):
+        Contract = Pool().get('contract')
+        contracts = []
+        for contract in Contract.browse(
+                Transaction().context.get('active_ids')):
+            contract.set_end_date(self.select_date.end_date)
+            contracts.append([contract])
+            contracts.append(contract._save_values)
+        Contract.write(*contracts)
+        return 'end'
 
 
 class SynthesisMenuContrat(model.CoopSQL):

@@ -31,9 +31,6 @@ class OptionDescription:
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
         depends=['is_service'])
-    is_service = fields.Function(
-        fields.Boolean('Is a Service'),
-        'on_change_with_is_service', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -54,10 +51,6 @@ class OptionDescription:
     @classmethod
     def default_family(cls):
         return 'generic'
-
-    @classmethod
-    def default_is_service(cls):
-        return True
 
     @fields.depends('item_desc')
     def on_change_with_is_service(self, name=None):
@@ -91,6 +84,7 @@ class OptionDescription:
         return coverage_lines
 
     def calculate_sub_elem_price(self, args, errs):
+        lines, errs = [], []
         for covered, option in self.give_me_covered_elements_at_date(
                 args)[0]:
             tmp_args = args.copy()
@@ -102,7 +96,8 @@ class OptionDescription:
                 sub_elem_lines = []
                 sub_elem_errs = []
             errs += sub_elem_errs
-            return sub_elem_lines
+            lines += sub_elem_lines
+        return lines
 
     def give_me_price(self, args):
         data_dict, errs = utils.get_data_from_dict(['contract', 'date'], args)
@@ -130,8 +125,14 @@ class OptionDescription:
         contract = args['contract']
         res = []
         for covered in contract.covered_elements:
-            res.extend([(covered, x) for x in covered.options
-                    if x.coverage == self])
+            for x in covered.options:
+                if x.coverage != self:
+                    continue
+                status = x.get_status_at_date(args['date'])
+                if status is None:
+                    continue
+                if status in ('quote', 'active'):
+                    res.append((covered, x))
         return res, []
 
     def give_me_allowed_amounts(self, args):
