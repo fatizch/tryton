@@ -1,10 +1,18 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:distribution.network:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
 
 msgctxt "field:distribution.network,childs:"
 msgid "Sub Levels"
 msgstr "Niveaux Inférieurs"
+
+msgctxt "field:distribution.network,code:"
+msgid "Code"
+msgstr "Code"
 
 msgctxt "field:distribution.network,create_date:"
 msgid "Create Date"

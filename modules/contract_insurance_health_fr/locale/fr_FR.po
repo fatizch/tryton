@@ -56,7 +56,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:health.care_system,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:health.insurance_fund,code:"
 msgid "Code"
@@ -108,7 +108,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:health.insurance_fund,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:health.party_complement,department:"
 msgid "Department"

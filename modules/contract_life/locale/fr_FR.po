@@ -1,14 +1,6 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "field:contract.covered_data,coverage_amount:"
-msgid "Coverage Amount"
-msgstr "Montant de Couverture"
-
-msgctxt "field:contract.covered_data,with_coverage_amount:"
-msgid "With Coverage Amount"
-msgstr " "
 
 msgctxt "field:contract.covered_element-party,covered_element:"
 msgid "Covered Element"
@@ -37,6 +29,22 @@ msgstr "Date de mise à jour"
 msgctxt "field:contract.covered_element-party,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:contract.option,coverage_amount:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:contract.option,coverage_amount_selection:"
+msgid "Coverage Amount"
+msgstr "Montant de Couverture"
+
+msgctxt "field:contract.option,has_coverage_amount:"
+msgid "Has Coverage Amount"
+msgstr "Montant de couverture défini"
+
+msgctxt "field:contract.option,person:"
+msgid "Person"
+msgstr "Personne Physique"
 
 msgctxt "model:contract.covered_element-party,name:"
 msgid "Relation between Covered Element and Covered Relations"

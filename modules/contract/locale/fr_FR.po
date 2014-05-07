@@ -22,9 +22,9 @@ msgctxt "field:contract,company:"
 msgid "Company"
 msgstr "Société"
 
-msgctxt "field:contract,contact:"
-msgid "Contact"
-msgstr "Contact"
+msgctxt "field:contract,contacts:"
+msgid "Contacts"
+msgstr "Contacts"
 
 msgctxt "field:contract,contract_number:"
 msgid "Contract Number"
@@ -66,6 +66,10 @@ msgctxt "field:contract,extra_data:"
 msgid "Complementary Data"
 msgstr "Données complémentaires"
 
+msgctxt "field:contract,first_status:"
+msgid "First Status"
+msgstr "Premier statut"
+
 msgctxt "field:contract,id:"
 msgid "ID"
 msgstr "ID"
@@ -78,6 +82,10 @@ msgctxt "field:contract,options:"
 msgid "Options"
 msgstr "Garanties"
 
+msgctxt "field:contract,parties:"
+msgid "Parties"
+msgstr "Tiers"
+
 msgctxt "field:contract,product:"
 msgid "Product"
 msgstr "Produit"
@@ -85,10 +93,6 @@ msgstr "Produit"
 msgctxt "field:contract,product_kind:"
 msgid "Product Kind"
 msgstr "Type de Produit"
-
-msgctxt "field:contract,product_subscriber_kind:"
-msgid "Product Subscriber Kind"
-msgstr "Type de souscripteur"
 
 msgctxt "field:contract,rec_name:"
 msgid "Name"
@@ -186,6 +190,118 @@ msgctxt "field:contract.address,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.contact,address:"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "field:contract.contact,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.contact,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.contact,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.contact,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.contact,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.contact,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.contact,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:contract.contact,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.contact,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:contract.contact,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.contact,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.contact,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.contact.type,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:contract.contact.type,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.contact.type,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.contact.type,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.contact.type,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.contact.type,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.contact.type,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.contact.type,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.contact.type,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.contact.type,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.contact.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.end.select_date,end_date:"
+msgid "End date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.end.select_date,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.end.select_date,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.option,appliable_conditions_date:"
+msgid "Appliable Conditions Date"
+msgstr "Date de Conditions"
+
 msgctxt "field:contract.option,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -197,6 +313,10 @@ msgstr "Numéro de Contrat"
 msgctxt "field:contract.option,coverage:"
 msgid "Coverage"
 msgstr "Garantie"
+
+msgctxt "field:contract.option,coverage_family:"
+msgid "Coverage Family"
+msgstr "Famille de garantie"
 
 msgctxt "field:contract.option,coverage_kind:"
 msgid "Coverage Kind"
@@ -230,6 +350,14 @@ msgctxt "field:contract.option,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr "Responsable Courant de la Police"
 
+msgctxt "field:contract.option,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.option,first_status:"
+msgid "First Status"
+msgstr "Premier statut"
+
 msgctxt "field:contract.option,id:"
 msgid "ID"
 msgstr "ID"
@@ -238,6 +366,10 @@ msgctxt "field:contract.option,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
 
+msgctxt "field:contract.option,parties:"
+msgid "Parties"
+msgstr "Tiers"
+
 msgctxt "field:contract.option,product:"
 msgid "Product"
 msgstr "Produit"
@@ -245,6 +377,10 @@ msgstr "Produit"
 msgctxt "field:contract.option,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:contract.option,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
 
 msgctxt "field:contract.option,status:"
 msgid "Status"
@@ -438,6 +574,46 @@ msgctxt "field:party.party,quotes:"
 msgid "Quotes"
 msgstr "Devis"
 
+msgctxt "field:party.synthesis.menu.contract,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.contract,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.contract,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.synthesis.menu.contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.contract,name:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:party.synthesis.menu.contract,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.synthesis.menu.contract,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:party.synthesis.menu.contract,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.contract,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.contract,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "model:contract,name:"
 msgid "Contract"
 msgstr "Contrat"
@@ -445,6 +621,18 @@ msgstr "Contrat"
 msgctxt "model:contract.address,name:"
 msgid "Contract Address"
 msgstr "Adresse du contrat"
+
+msgctxt "model:contract.contact,name:"
+msgid "Contract Contact"
+msgstr "Contact du contrat"
+
+msgctxt "model:contract.contact.type,name:"
+msgid "Contact Type"
+msgstr "Type de contact"
+
+msgctxt "model:contract.end.select_date,name:"
+msgid "End date selector for contract"
+msgstr ""
 
 msgctxt "model:contract.option,name:"
 msgid "Contract Option"
@@ -467,6 +655,10 @@ msgctxt ""
 msgid "Option"
 msgstr "Option"
 
+msgctxt "model:ir.action,name:act_contact_type_form"
+msgid "Contact Type"
+msgstr "Type de contact"
+
 msgctxt "model:ir.action,name:act_contract_button"
 msgid "Contracts"
 msgstr "Contrats"
@@ -474,6 +666,10 @@ msgstr "Contrats"
 msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contracts"
 msgstr "Contrats"
+
+msgctxt "model:ir.action,name:act_end"
+msgid "End Contract"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_quote_button"
 msgid "Contracts"
@@ -486,6 +682,10 @@ msgstr "Devis"
 msgctxt "model:ir.action,name:option_subscription_wizard"
 msgid "Option Subscription"
 msgstr "Souscription d'Option"
+
+msgctxt "model:ir.ui.menu,name:menu_contact_type_form"
+msgid "Contact Type"
+msgstr "Type de contact"
 
 msgctxt "model:ir.ui.menu,name:menu_contract"
 msgid "Contract"
@@ -503,6 +703,10 @@ msgctxt "model:ir.ui.menu,name:menu_quote_form"
 msgid "Quotes"
 msgstr "Devis"
 
+msgctxt "model:party.synthesis.menu.contract,name:"
+msgid "Party Synthesis Menu Contract"
+msgstr "Synthèse acteur - Contrat"
+
 msgctxt "model:res.group,name:group_contract"
 msgid "Contract"
 msgstr "Contrat"
@@ -510,18 +714,6 @@ msgstr "Contrat"
 msgctxt "model:res.group,name:group_contract_admin"
 msgid "Contract Administration"
 msgstr "Administration des contrats"
-
-msgctxt "selection:contract,product_subscriber_kind:"
-msgid "All"
-msgstr "Tous"
-
-msgctxt "selection:contract,product_subscriber_kind:"
-msgid "Company"
-msgstr "Société"
-
-msgctxt "selection:contract,product_subscriber_kind:"
-msgid "Person"
-msgstr "Personne Physique"
 
 msgctxt "selection:contract,status:"
 msgid ""
@@ -675,9 +867,25 @@ msgctxt "view:contract.address:"
 msgid "Contract Address"
 msgstr "Adresse"
 
+msgctxt "view:contract.contact.type:"
+msgid "Contact Type"
+msgstr "Type de contact"
+
+msgctxt "view:contract.contact:"
+msgid "Contract Contact"
+msgstr "Contact du contrat"
+
+msgctxt "view:contract.end.select_date:"
+msgid "Select End Date"
+msgstr "Séléctionner la date de fin"
+
 msgctxt "view:contract.option:"
 msgid "Administration"
 msgstr "Administration"
+
+msgctxt "view:contract.option:"
+msgid "Main Data"
+msgstr "Données principales"
 
 msgctxt "view:contract.option:"
 msgid "Status History"
@@ -712,6 +920,10 @@ msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:contract:"
+msgid "Contacts"
+msgstr "Contacts"
+
+msgctxt "view:contract:"
 msgid "Contract"
 msgstr "Contrat"
 
@@ -719,9 +931,21 @@ msgctxt "view:contract:"
 msgid "Options"
 msgstr "Options"
 
+msgctxt "view:contract:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
 msgctxt "view:party.party:"
 msgid "+"
 msgstr "+"
+
+msgctxt "wizard_button:contract.end,select_date,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:contract.end,select_date,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:contract.wizard.option_subscription,options_displayer,end:"

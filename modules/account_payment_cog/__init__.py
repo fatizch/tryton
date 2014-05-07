@@ -10,11 +10,10 @@ def register():
         # from payment
         Payment,
         CreateReceivablePaymentStart,
-        # from company
-        Company,
-        # from contract
         SynthesisMenuPayment,
         SynthesisMenu,
+        # from company
+        Company,
         module='account_payment_cog', type_='model')
     Pool.register(
         CreateReceivablePayment,

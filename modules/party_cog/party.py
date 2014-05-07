@@ -684,7 +684,6 @@ class SynthesisMenuSet(Wizard):
         with Transaction().set_user(0):
             user = User(user)
             ids = set(Transaction().context['active_ids'])
-            print ids
             if user.party_synthesis_previous:
                 ids.update(set(json.loads(user.party_synthesis_previous)))
             ids = sorted(ids)

@@ -10,29 +10,49 @@ msgctxt "field:account.payment.create.parameters,until:"
 msgid "Until"
 msgstr "Jusqu'à"
 
-msgctxt "field:account.payment.group,sepa_msg:"
-msgid "Sepa Message"
-msgstr ""
-
 msgctxt "field:account.payment.journal,sepa_bank_account_number:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
 
-msgctxt "field:contract,display_all_lines:"
-msgid "Display all lines"
-msgstr "Afficher Toutes les Lignes"
+msgctxt "field:party.synthesis.menu.payment,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
 
-msgctxt "field:contract,due_today:"
-msgid "Due today"
-msgstr "Restant Dû"
+msgctxt "field:party.synthesis.menu.payment,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
 
-msgctxt "field:contract,paid_today:"
-msgid "Paid today"
-msgstr "Payé"
+msgctxt "field:party.synthesis.menu.payment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
 
-msgctxt "field:contract,payment_lines:"
-msgid "Payment Lines"
-msgstr "Lignes de Paiement"
+msgctxt "field:party.synthesis.menu.payment,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.payment,name:"
+msgid "Payment"
+msgstr "Paiement"
+
+msgctxt "field:party.synthesis.menu.payment,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.synthesis.menu.payment,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.synthesis.menu.payment,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.payment,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.payment,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "model:account.payment.create.parameters,name:"
 msgid "Create Receivable Payment"
@@ -50,9 +70,9 @@ msgctxt "model:ir.ui.menu,name:menu_create_receivable"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"
 
-msgctxt "selection:account.payment.journal,process_method:"
-msgid "Sepa"
-msgstr ""
+msgctxt "model:party.synthesis.menu.payment,name:"
+msgid "Party Synthesis Menu payment"
+msgstr "Synthèse acteur - Paiement"
 
 msgctxt "view:account.move.line:"
 msgid "Payments"
