@@ -3,7 +3,6 @@ from trytond.pool import Pool
 from .party import *
 from .payment import *
 from .company import *
-from .contract import *
 
 
 def register():
@@ -14,7 +13,6 @@ def register():
         # from company
         Company,
         # from contract
-        Contract,
         SynthesisMenuPayment,
         SynthesisMenu,
         module='account_payment_cog', type_='model')
