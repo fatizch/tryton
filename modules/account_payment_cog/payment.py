@@ -4,7 +4,8 @@ from trytond.pool import Pool
 
 from trytond.modules.cog_utils import coop_string
 
-__all__ = ['CreateReceivablePaymentStart', 'CreateReceivablePayment']
+__all__ = ['CreateReceivablePaymentStart', 'CreateReceivablePayment',
+    'Payment']
 
 
 class CreateReceivablePaymentStart(ModelView):

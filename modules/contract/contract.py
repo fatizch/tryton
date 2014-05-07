@@ -7,7 +7,7 @@ from sql.aggregate import Max
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If
 from trytond.pool import Pool
-from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
@@ -898,6 +898,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
         if res:
             return res.id
 
+
 class SynthesisMenuContrat(model.CoopSQL):
     'Party Synthesis Menu Contract'
     __name__ = 'party.synthesis.menu.contract'
@@ -909,16 +910,20 @@ class SynthesisMenuContrat(model.CoopSQL):
         pool = Pool()
         Contract = pool.get('contract')
         ContractSynthesis = pool.get('party.synthesis.menu.contract')
+        party = pool.get('party.party').__table__()
         contract = Contract.__table__()
-        return contract.select(
-            contract.subscriber.as_('id'),
+        query_table = party.join(contract, 'LEFT OUTER', condition=(
+            party.id == contract.subscriber))
+        return query_table.select(
+            party.id,
             Max(contract.create_uid).as_('create_uid'),
             Max(contract.create_date).as_('create_date'),
             Max(contract.write_uid).as_('write_uid'),
             Max(contract.write_date).as_('write_date'),
             Literal(coop_string.translate_label(ContractSynthesis, 'name')).
-            as_('name'), contract.subscriber,
-            group_by=contract.subscriber)
+            as_('name'), party.id.as_('subscriber'),
+            # where=(contract.status != 'active'),
+            group_by=party.id)
 
     def get_icon(self, name=None):
         return 'contract'

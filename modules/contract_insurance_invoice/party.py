@@ -26,16 +26,19 @@ class SynthesisMenuInvoice(model.CoopSQL):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         InvoiceSynthesis = pool.get('party.synthesis.menu.invoice')
+        party = pool.get('party.party').__table__()
         invoice = Invoice.__table__()
-        return invoice.select(
-            invoice.party.as_('id'),
+        query_table = party.join(invoice, 'LEFT OUTER', condition=(
+            party.id == invoice.party))
+        return query_table.select(
+            party.id,
             Max(invoice.create_uid).as_('create_uid'),
             Max(invoice.create_date).as_('create_date'),
             Max(invoice.write_uid).as_('write_uid'),
             Max(invoice.write_date).as_('write_date'),
             Literal(coop_string.translate_label(InvoiceSynthesis, 'name')).
-            as_('name'), invoice.party,
-            group_by=invoice.party)
+            as_('name'), party.id.as_('party'),
+            group_by=party.id)
 
     def get_icon(self, name=None):
         return 'invoice'

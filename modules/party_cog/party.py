@@ -457,16 +457,19 @@ class SynthesisMenuContact(model.CoopSQL):
         pool = Pool()
         Contact = pool.get('party.contact_mechanism')
         ContactSynthesis = pool.get('party.synthesis.menu.contact')
+        party = pool.get('party.party').__table__()
         contact = Contact.__table__()
-        return contact.select(
-            contact.party.as_('id'),
+        query_table = party.join(contact, 'LEFT OUTER', condition=(
+            party.id == contact.party))
+        return query_table.select(
+            party.id,
             Max(contact.create_uid).as_('create_uid'),
             Max(contact.create_date).as_('create_date'),
             Max(contact.write_uid).as_('write_uid'),
             Max(contact.write_date).as_('write_date'),
             Literal(coop_string.translate_label(ContactSynthesis, 'name')).
-            as_('name'), contact.party,
-            group_by=contact.party)
+            as_('name'), party.id.as_('party'),
+            group_by=party.id)
 
     def get_icon(self, name=None):
         return 'contact'

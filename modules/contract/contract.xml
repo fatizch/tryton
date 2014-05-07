@@ -135,5 +135,13 @@
        <field name="group" ref="group_contract_admin"/>
        <field name="menu" ref="menu_contract"/>
     </record>
+    <!--################################################################ -->
+    <!-- Synthesis -->
+    <!--################################################################ -->
+    <record model="ir.action.keyword" id="act_menu_subscribe_contract">
+      <field name="keyword">form_action</field>
+      <field name="model">party.synthesis.menu,-1</field>
+      <field name="action" ref="contract_insurance_process.subscription_process_launcher"/>
+    </record>
   </data>
 </tryton>

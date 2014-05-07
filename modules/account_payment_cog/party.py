@@ -26,16 +26,19 @@ class SynthesisMenuPayment(model.CoopSQL):
         pool = Pool()
         Payment = pool.get('account.payment')
         payment = Payment.__table__()
+        party = pool.get('party.party').__table__()
         PaymentSynthesis = pool.get('party.synthesis.menu.payment')
-        return payment.select(
-            payment.party.as_('id'),
+        query_table = party.join(payment, 'LEFT OUTER', condition=(
+            party.id == payment.party))
+        return query_table.select(
+            party.id,
             Max(payment.create_uid).as_('create_uid'),
             Max(payment.create_date).as_('create_date'),
             Max(payment.write_uid).as_('write_uid'),
             Max(payment.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PaymentSynthesis, 'name')).
-            as_('name'), payment.party,
-            group_by=payment.party)
+            as_('name'), party.id.as_('party'),
+            group_by=party.id)
 
     def get_icon(self, name=None):
         return 'payment'
