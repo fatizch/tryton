@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Fee Rules" editable="bottom">
+    <field name="fee"/>
+    <field name="action"/>
+</tree>

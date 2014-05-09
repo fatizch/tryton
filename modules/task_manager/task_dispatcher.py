@@ -329,7 +329,7 @@ class TaskDispatcher(Wizard):
         new_log = Log()
         new_log.user = Transaction().user
         new_log.locked = True
-        new_log.task = utils.convert_ref_to_obj(good_object)
+        new_log.task = good_object
         new_log.from_state = good_object.current_state.id
         new_log.to_state = good_object.current_state.id
         new_log.start_time = datetime.datetime.now()
@@ -392,7 +392,7 @@ class LaunchTask(Wizard):
         new_log = Log()
         new_log.user = Transaction().user
         new_log.locked = True
-        new_log.task = utils.convert_ref_to_obj(good_object)
+        new_log.task = good_object
         new_log.from_state = good_object.current_state.id
         new_log.to_state = good_object.current_state.id
         new_log.start_time = datetime.datetime.now()
