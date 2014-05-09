@@ -136,6 +136,9 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     current_loan_shares = fields.Function(
         fields.One2Many('loan.share', None, 'Current Loan Share'),
         'get_current_loan_shares')
+    order = fields.Function(
+        fields.Integer('Order'),
+        'get_order')
 
     @classmethod
     def __setup__(cls):
@@ -199,6 +202,16 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.amount:
             res += self.currency.amount_as_string(self.amount)
         return res
+
+    def get_order(self, name):
+        contract_id = Transaction().context.get('contract', None)
+        if not contract_id:
+            return None
+        contract = Pool().get('contract')(contract_id)
+        for idx, loan in enumerate(contract.used_loans, 1):
+            if loan == self:
+                return idx
+        return None
 
     def init_from_borrowers(self, parties):
         if hasattr(self, 'loan_shares') and self.loan_shares:
