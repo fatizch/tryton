@@ -120,10 +120,9 @@ class ContractSubscribeFindProcess(ProcessStart):
 
     @fields.depends('com_product', 'product')
     def on_change_with_product(self):
-        if (self.product and self.com_product and self.com_product.product ==
-                self.product):
-            return self.product.id
-        return None
+        if not self.com_product:
+            return None
+        return self.com_product.product.id
 
 
 class ContractSubscribe(ProcessFinder):

@@ -312,6 +312,10 @@ class Contract:
                 invoice = contract.get_invoice(*period)
                 if not invoice.journal:
                     invoice.journal = journal
+                if (not invoice.invoice_address
+                        and contract.subscriber.addresses):
+                    #TODO : To enhance
+                    invoice.invoice_address = contract.subscriber.addresses[0]
                 invoice.lines = contract.get_invoice_lines(*period)
                 invoices[period].append((contract, invoice))
         new_invoices = Invoice.create([i._save_values
@@ -321,7 +325,6 @@ class Contract:
         old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
         for invoice, new_invoice in zip(old_invoices, new_invoices):
             invoice.id = new_invoice.id
-        Invoice.validate_invoice(new_invoices)
         contract_invoices_to_create = []
         for period, contract_invoices in invoices.iteritems():
             start, end = period
@@ -346,6 +349,7 @@ class Contract:
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
             payment_term=self.payment_term,
+            state='validated',
             )
 
     def get_invoice_lines(self, start, end):

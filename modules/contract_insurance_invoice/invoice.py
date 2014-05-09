@@ -45,7 +45,6 @@ class Invoice:
     def __setup__(cls):
         super(Invoice, cls).__setup__()
         cls._order.insert(0, ('start', 'ASC'))
-        cls.invoice_address.required = False
 
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees

@@ -154,7 +154,7 @@ class Contract(Printable):
 
     def init_covered_elements(self):
         for elem in self.covered_elements:
-            elem.init_options(self.product)
+            elem.init_options(self.product, self.start_date)
             elem.save()
 
     def get_agreement(self, kind, party=None, only_active_at_date=False,
@@ -397,7 +397,7 @@ class ContractOption:
                 }
         item_desc_id = Transaction().context.get('item_desc', None)
         item_desc = None
-        if item_desc_id is None:
+        if not item_desc_id:
             if self.covered_element and self.covered_element.id > 0:
                 item_desc = self.covered_element.item_desc
         else:
@@ -491,7 +491,7 @@ class ContractOption:
 
     @classmethod
     def init_default_values_from_coverage(cls, coverage, product,
-            item_desc=None, start_date=None, end_date=None):
+            start_date=None, end_date=None, item_desc=None):
         result = super(ContractOption,
             cls).init_default_values_from_coverage(coverage, product,
                 start_date, end_date)
@@ -517,9 +517,10 @@ class ContractOption:
         result['all_extra_datas'] = all_extra_datas
         return result
 
-    def init_from_coverage(self, coverage, start_date=None, end_date=None):
-        super(ContractOption, self).init_from_coverage(coverage, start_date,
-            end_date)
+    def init_from_coverage(self, coverage, product, start_date=None,
+            end_date=None):
+        super(ContractOption, self).init_from_coverage(coverage, product,
+            start_date, end_date)
         self.init_extra_data()
 
     def init_from_covered_element(self, covered_element):
@@ -593,11 +594,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         states={'invisible': ~IS_PARTY})
     extra_data = fields.Dict('extra_data', 'Contract Complementary Data',
         states={'invisible': ~Eval('extra_data')})
-    #We need to put complementary data in depends, because the complementary
-    #data are set through on_change_with and the item desc can be set on an
-    #editable tree, or we can not display for the moment dictionnary in tree
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
-        ondelete='RESTRICT')
+        depends=['product', 'options', 'extra_data'], ondelete='RESTRICT')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
     options = fields.One2Many('contract.option', 'covered_element', 'Options',
         domain=[
@@ -751,14 +749,14 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             to_add.append(new_opt)
         if not to_add and not to_remove:
             return res
-        # TODO : Find how to make it both work in defaults and on_changes
         res['options'] = to_add
         return res
-        if to_add:
-            res['options']['add'] = to_add
-        if to_remove:
-            res['options']['remove'] = to_remove
-        return res
+        # TODO : Find how to make it both work in defaults and on_changes
+        # if to_add:
+        #     res['options']['add'] = to_add
+        # if to_remove:
+        #     res['options']['remove'] = to_remove
+        # return res
 
     @fields.depends('contract', 'extra_data')
     def on_change_with_all_extra_data(self, name=None):
@@ -904,7 +902,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         return [x.coverage for x in product.ordered_coverages
             if x.coverage.item_desc == item_desc]
 
-    def init_options(self, product):
+    def init_options(self, product, start_date):
         existing = dict(((x.coverage, x) for x in getattr(
                     self, 'options', [])))
         good_options = []
@@ -916,8 +914,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                 to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel()
-                good_opt.init_from_coverage(coverage, self.start_date)
-                good_opt.contract = self
+                good_opt.init_from_coverage(coverage, product, start_date)
             good_opt.save()
             good_options.append(good_opt)
         if to_delete:

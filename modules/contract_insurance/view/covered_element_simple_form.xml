@@ -18,7 +18,6 @@
     <field name="party_extra_data" colspan="2" no_command="1"/>
     <newline/>
     <field name="item_kind"/>
-    <field name="possible_item_desc"/>
     <newline/>
     <field name="is_person"/>
     <newline/>

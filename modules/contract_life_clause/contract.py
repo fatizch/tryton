@@ -84,9 +84,9 @@ class ContractOption:
 
     @classmethod
     def init_default_values_from_coverage(cls, coverage, product,
-            item_desc=None, start_date=None, end_date=None):
+            start_date=None, end_date=None, item_desc=None):
         res = super(ContractOption, cls).init_default_values_from_coverage(
-            coverage, product, item_desc, start_date, end_date)
+            coverage, product, start_date, end_date, item_desc)
         res['with_beneficiary_clause'] = len(coverage.beneficiaries_clauses)
         if coverage.default_beneficiary_clause:
             res['beneficiary_clause'] = coverage.default_beneficiary_clause.id

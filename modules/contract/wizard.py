@@ -61,10 +61,10 @@ class OptionSubscription(model.CoopWizard):
             'options': options,
             }
 
-    def subscribe_option(self, coverage):
+    def subscribe_option(self, coverage, product):
         Option = Pool().get('contract.option')
         option = Option()
-        option.init_from_coverage(coverage,
+        option.init_from_coverage(coverage, product,
             self.options_displayer.contract.start_date)
         self.options_displayer.contract.options = list(
             self.options_displayer.contract.options)
@@ -85,7 +85,7 @@ class OptionSubscription(model.CoopWizard):
             else:
                 to_delete.append(option)
         for coverage in to_subscribe:
-            self.subscribe_option(coverage)
+            self.subscribe_option(coverage, contract.product)
         contract.options = list(contract.options)
         contract.options[:] = [x for x in contract.options
             if not x in to_delete]

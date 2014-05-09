@@ -57,7 +57,7 @@ class OptionSubscription:
         new_option.covered_element = covered_element
         new_option.product = covered_element.contract.product
         new_option.item_desc = covered_element.item_desc
-        new_option.init_from_coverage(coverage)
+        new_option.init_from_coverage(coverage, new_option.product)
         if isinstance(covered_element.options, tuple):
             covered_element.options = list(covered_element.options)
         covered_element.options.append(new_option)
@@ -242,7 +242,7 @@ class ManageExtraPremium(Wizard):
             kind = 'option'
             selected_option = Option(active_id)
             covered_element = selected_option.covered_element
-            contract = selected_option.contract
+            contract = selected_option.parent_contract
             existing_extras = []
             existing_options = []
             for extra_premium in selected_option.extra_premiums:
@@ -251,7 +251,7 @@ class ManageExtraPremium(Wizard):
                         'extra_premium': extra_premium.id,
                         'extra_premium_name':
                         Selector.get_extra_premium_name(extra_premium)})
-            for option in covered_element.option:
+            for option in covered_element.options:
                 if option == selected_option:
                     continue
                 existing_options.append({
@@ -263,8 +263,7 @@ class ManageExtraPremium(Wizard):
             source_extra = ExtraPremium(active_id)
             selected_option = source_extra.option
             covered_element = selected_option.covered_element
-            contract = selected_option.contract
-            contract = selected_option.contract
+            contract = selected_option.parent_contract
             existing_extras = [{
                     'selected': True,
                     'extra_premium': source_extra.id,

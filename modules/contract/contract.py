@@ -330,13 +330,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
     product_kind = fields.Function(
         fields.Char('Product Kind'),
         'on_change_with_product_kind', searcher='search_product_kind')
+    product_subscriber_kind = fields.Function(
+        fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
+        'get_product_subscriber_kind')
     subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Subscriber Kind',
             states={
-                'readonly': Eval('subscriber_kind') != 'all',
+                'readonly': Eval('product_subscriber_kind') != 'all',
                 'invisible': Eval('status') != 'quote',
                 },
-            depends=['status']),
+            depends=['status', 'product_subscriber_kind']),
         'on_change_with_subscriber_kind', 'setter_void')
     contacts = fields.One2Many('contract.contact', 'contract', 'Contacts')
 
@@ -527,7 +530,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         for coverage in [x.coverage for x in product.ordered_coverages
                 if x.coverage.is_service]:
             sub_option = SubscribedOpt()
-            sub_option.init_from_coverage(coverage, at_date)
+            sub_option.init_from_coverage(coverage, product, at_date)
             contract.options.append(sub_option)
         contract.before_activate(contract_dict)
         contract.activate_contract()
@@ -676,7 +679,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel()
-                good_opt.init_from_coverage(coverage, self.start_date)
+                good_opt.init_from_coverage(coverage, self.product,
+                    self.start_date)
                 good_opt.contract = self
             good_opt.save()
             good_options.append(good_opt)
@@ -789,6 +793,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 continue
             option.set_end_date(end_date)
 
+    def update_contacts(self):
+        pass
+
+    def get_product_subscriber_kind(self, name):
+        return self.product.subscriber_kind if self.product else ''
+
 
 class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         add_status_history(OPTIONSTATUS)):
@@ -814,7 +824,7 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
         fields.Char('Coverage Family'),
         'on_change_with_coverage_family')
     coverage_kind = fields.Function(
-        fields.Char('Coverage Kind'),
+        fields.Char('Coverage Kind', states={'invisible': True}),
         'on_change_with_coverage_kind', searcher='search_coverage_kind')
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
@@ -971,22 +981,12 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency,
             cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
                     start_date))
 
-    def init_from_coverage(self, coverage, start_date=None, end_date=None):
-        if not start_date:
-            start_date = utils.today()
-        if utils.is_effective_at_date(coverage, start_date):
-            StatusHistory = Pool().get('contract.status.history')
-            self.coverage = coverage
-            self.coverage_family = coverage.family
-            self.status_history = [StatusHistory(
-                    start_date=start_date, status='active')]
-            # TODO : remove once computed properly
-            self.start_date = start_date
-            self.appliable_conditions_date = start_date
-            self.status = 'active'
-        else:
-            self.raise_user_error('inactive_coverage_at_date', (coverage.name,
-                    start_date))
+    def init_from_coverage(self, coverage, product, start_date=None,
+            end_date=None):
+        cur_dict = self.init_default_values_from_coverage(coverage, product,
+            start_date, end_date)
+        for key, val in cur_dict.iteritems():
+            setattr(self, key, val)
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):
