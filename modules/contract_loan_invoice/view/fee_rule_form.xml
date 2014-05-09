@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Fee Rule">
+    <label name="fee"/>
+    <field name="fee"/>
+    <label name="action"/>
+    <field name="action"/>
+</form>

@@ -133,6 +133,9 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     end_date = fields.Function(
         fields.Date('End Date'),
         'get_loan_end_date')
+    current_loan_shares = fields.Function(
+        fields.One2Many('loan.share', None, 'Current Loan Share'),
+        'get_current_loan_shares')
 
     @classmethod
     def __setup__(cls):
@@ -180,6 +183,14 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.calculate_payment_amount()
         else:
             return None
+
+    def get_current_loan_shares(self, name):
+        contract_id = Transaction().context.get('contract', None)
+        if not contract_id:
+            return []
+        return [x.id for x in Pool().get('loan.share').search([
+                    ('loan', '=', self.id),
+                    ('contract', '=', contract_id)])]
 
     def get_rec_name(self, name):
         res = ''
