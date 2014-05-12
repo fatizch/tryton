@@ -5,7 +5,8 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, And, Or, Bool, Len, If
 
-from trytond.modules.cog_utils import utils, coop_date, fields, model, coop_string
+from trytond.modules.cog_utils import utils, coop_date, fields, model
+from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -40,13 +41,19 @@ LOAN_DURATION_UNIT = [
     ]
 
 
-class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
+class Loan(model.CoopSQL, model.CoopView):
     'Loan'
 
     __name__ = 'loan'
 
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False)
     currency = fields.Many2One('currency.currency', 'Currency')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'on_change_with_currency_digits')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'),
+        'on_change_with_currency_symbol')
     number_of_payments = fields.Integer('Number of Payments', required=True)
     payment_frequency = fields.Selection(LOAN_DURATION_UNIT,
         'Payment Frequency', sort=False, required=True)
@@ -452,6 +459,21 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_with_increments_end_date(self, name=None):
         if self.increments:
             return self.increments[-1].end_date
+
+    @staticmethod
+    def default_currency():
+        if Transaction().context.get('company'):
+            Company = Pool().get('company.company')
+            company = Company(Transaction().context['company'])
+            return company.currency.id
+
+    @fields.depends('currency')
+    def on_change_with_currency_digits(self, name=None):
+        return self.currency.digits if self.currency else 2
+
+    @fields.depends('currency')
+    def on_change_with_currency_symbol(self, name=None):
+        return self.currency.symbol if self.currency else ''
 
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):

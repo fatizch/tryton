@@ -20,10 +20,10 @@ class ModelCurrency(object):
         'get_currency_id')
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
-        'get_currency_digits')
+        'on_change_with_currency_digits')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
-        'get_currency_symbol')
+        'on_change_with_currency_symbol')
 
     @classmethod
     def default_currency(cls):
@@ -53,8 +53,10 @@ class ModelCurrency(object):
         currency = self.get_currency()
         return currency.id if currency else None
 
-    def get_currency_digits(self, name):
+    @fields.depends('currency')
+    def on_change_with_currency_digits(self, name=None):
         return self.on_change_currency()['currency_digits']
 
-    def get_currency_symbol(self, name):
+    @fields.depends('currency')
+    def on_change_with_currency_symbol(self, name=None):
         return self.on_change_currency()['currency_symbol']
