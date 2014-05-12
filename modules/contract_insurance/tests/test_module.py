@@ -16,16 +16,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return 'contract_insurance'
 
     @classmethod
-    def depending_modules(cls):
-        return ['contract_life', 'offered_insurance', 'billing']
-
-    @classmethod
     def get_models(cls):
         return {
-            'Contract': 'contract',
             'Party': 'party.party',
-            'Sequence': 'ir.sequence',
-            # 'BillingProcess': 'contract.do_billing',
             }
 
     def test0001_testPersonCreation(self):

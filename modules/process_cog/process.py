@@ -343,6 +343,10 @@ class CogProcessFramework(ProcessFramework):
             result = None
             for work in works:
                 result = target.execute(work)
+                if work.current_state.step.technical_name == 'quittance':
+                    work.write([work], {
+                            'current_state': work.current_state.id})
+                    continue
                 work.save()
             return result
 
@@ -979,7 +983,7 @@ class ProcessFinder(Wizard):
         return res
 
     def init_state(self, obj):
-        if utils.is_none(obj, 'current_state'):
+        if not getattr(obj, 'current_state', None):
             obj.current_state = \
                 self.process_parameters.good_process.all_steps[0]
 

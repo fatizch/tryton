@@ -10,9 +10,9 @@ from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
     'Loan',
-    'LoanShare',
     'LoanIncrement',
     'LoanPayment',
+    'LoanParty',
     ]
 
 LOAN_KIND = [
@@ -45,10 +45,8 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'loan'
 
-    order = fields.Integer('Order')
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False)
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
-        required=True)
+    currency = fields.Many2One('currency.currency', 'Currency')
     number_of_payments = fields.Integer('Number of Payments', required=True)
     payment_frequency = fields.Selection(LOAN_DURATION_UNIT,
         'Payment Frequency', sort=False, required=True)
@@ -68,6 +66,8 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     first_payment_date = fields.Date('First Payment Date', required=True)
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
     outstanding_capital = fields.Numeric('Outstanding Capital')
+    parties = fields.Many2Many('loan-party', 'loan', 'party', 'Parties',
+        required=True)
     rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
             'required': Eval('kind').in_(
                 ['fixed_rate', 'intermediate', 'balloon']),
@@ -76,9 +76,10 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             },
         domain=[If(
                 Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon']),
-                ('rate', '>', 0),
-                (),
-                )],)
+                ['OR', ('rate', '>', 0), ('rate', '=', None)],
+                [],
+                )],
+        depends=['kind'])
     payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
     early_payments = fields.One2ManyDomain('loan.payment', 'loan',
@@ -132,6 +133,12 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     end_date = fields.Function(
         fields.Date('End Date'),
         'get_loan_end_date')
+    current_loan_shares = fields.Function(
+        fields.One2Many('loan.share', None, 'Current Loan Share'),
+        'get_current_loan_shares')
+    order = fields.Function(
+        fields.Integer('Order'),
+        'get_order')
 
     @classmethod
     def __setup__(cls):
@@ -165,6 +172,11 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
     def default_kind(cls):
         return 'fixed_rate'
 
+    @classmethod
+    def default_parties(cls):
+        party = Transaction().context.get('party', None)
+        return [party] if party else []
+
     @fields.depends('payment_amount', 'kind', 'rate', 'amount',
         'number_of_payments', 'currency', 'payment_frequency',
         'increments', 'deferal', 'deferal_duration')
@@ -175,6 +187,14 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         else:
             return None
 
+    def get_current_loan_shares(self, name):
+        contract_id = Transaction().context.get('contract', None)
+        if not contract_id:
+            return []
+        return [x.id for x in Pool().get('loan.share').search([
+                    ('loan', '=', self.id),
+                    ('contract', '=', contract_id)])]
+
     def get_rec_name(self, name):
         res = ''
         if self.kind:
@@ -182,6 +202,16 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.amount:
             res += self.currency.amount_as_string(self.amount)
         return res
+
+    def get_order(self, name):
+        contract_id = Transaction().context.get('contract', None)
+        if not contract_id:
+            return None
+        contract = Pool().get('contract')(contract_id)
+        for idx, loan in enumerate(contract.used_loans, 1):
+            if loan == self:
+                return idx
+        return None
 
     def init_from_borrowers(self, parties):
         if hasattr(self, 'loan_shares') and self.loan_shares:
@@ -192,19 +222,11 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             share.person = party
             self.loan_shares.append(share)
 
-    def init_from_contract(self, contract):
-        self.funds_release_date = contract.start_date
-        self.first_payment_date = self.on_change_with_first_payment_date()
-
     @fields.depends('funds_release_date', 'payment_frequency')
     def on_change_with_first_payment_date(self):
         if self.funds_release_date and self.payment_frequency:
             return coop_date.add_duration(self.funds_release_date,
                 self.payment_frequency)
-
-    def get_currency(self):
-        if getattr(self, 'contract', None):
-            return self.contract.currency
 
     def get_rate(self, annual_rate=None):
         if not annual_rate:
@@ -432,65 +454,6 @@ class Loan(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.increments[-1].end_date
 
 
-class LoanShare(model.CoopSQL, model.CoopView):
-    'Loan Share'
-
-    __name__ = 'loan.share'
-
-    covered_data = fields.Many2One('contract.covered_data', 'Covered Data',
-        ondelete='CASCADE')
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
-    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', readonly=True)
-    share = fields.Numeric('Loan Share', digits=(16, 4))
-    person = fields.Function(
-        fields.Many2One('party.party', 'Person'),
-        'get_person_id')
-    option = fields.Function(
-        fields.Many2One('contract.option', 'Contract Option'),
-        'get_option_id')
-    icon = fields.Function(
-        fields.Char('Icon'),
-        'get_icon')
-
-    @staticmethod
-    def default_share():
-        return 1
-
-    def get_name_for_billing(self):
-        return '%s %s%% %s' % (self.person.get_rec_name(None),
-            str(self.share * 100), self.loan.get_rec_name(None))
-
-    def init_dict_for_rule_engine(self, current_dict):
-        self.loan.init_dict_for_rule_engine(current_dict)
-        current_dict['share'] = self
-
-    def get_person_id(self, name):
-        return self.covered_data.person.id if self.covered_data else None
-
-    def get_option_id(self, name):
-        return self.covered_data.option.id if self.covered_data else None
-
-    def init_from_option(self, option):
-        self.start_date = option.start_date
-
-    def get_publishing_values(self):
-        result = super(LoanShare, self).get_publishing_values()
-        result.update(self.loan.get_publishing_values())
-        result['share'] = '%.2f %%' % (self.share * 100)
-        result['covered_amount'] = self.share * result['amount']
-        return result
-
-    def get_icon(self, name):
-        return 'loan-interest'
-
-    def get_rec_name(self, name):
-        return '%s (%s%%)' % (self.loan.rec_name, self.share * 100)
-
-    def _expand_tree(self, name):
-        return True
-
-
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan Increment'
 
@@ -624,3 +587,12 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_end_balance(self, name=None):
         if self.begin_balance is not None and self.principal is not None:
             return self.begin_balance - self.principal
+
+
+class LoanParty(model.CoopSQL):
+    'Loan Party relation'
+
+    __name__ = 'loan-party'
+
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')

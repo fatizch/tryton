@@ -6,7 +6,6 @@
         <newline/>
         <label name="name"/>
         <field name="name"/>
-        <newline/>
         <label name="line3"/>
         <field name="line3"/>
     </xpath>

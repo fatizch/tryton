@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tree string="Select Coverage" editable="bottom">
-  <field name="selected"/>
-  <field name="coverage_name"/>
-</tree>

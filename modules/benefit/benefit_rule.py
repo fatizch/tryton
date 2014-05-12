@@ -321,8 +321,8 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
     rule = fields.Many2One('rule_engine', 'Amount', ondelete='RESTRICT',
         states={'invisible': STATE_SIMPLE})
-    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
-        states={'invisible': STATE_SIMPLE})
+    rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Rule Parameters', states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={'invisible': STATE_ADVANCED})

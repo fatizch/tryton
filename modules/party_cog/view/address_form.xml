@@ -9,12 +9,11 @@
             <field name="end_date"/>
         </group>
     </xpath>
-    <xpath expr="/form/label[@name='zip']" position="before">
+    <xpath expr="/form/label[@name='country']" position="before">
         <label name="zip_and_city"/>
         <field name="zip_and_city"/>
-        <newline/>
     </xpath>
-    <xpath expr="/form/label[@name='streetbis']" position="before">
+<!--     <xpath expr="/form/label[@name='streetbis']" position="before">
         <newline/>
-    </xpath>
+    </xpath> -->
 </data>

@@ -61,12 +61,12 @@
     </record>
 
     <record model="ir.action.act_window" id="act_definition_dimension_form">
-        <field name="name">Definition Dimension</field>
+        <field name="name">Dimension Value</field>
         <field name="res_model">table.dimension.value</field>
     </record>
 
     <record model="ir.action.wizard" id="act_dimension_value_open">
-        <field name="name">Definition Dimension</field>
+        <field name="name">Define Dimension Value</field>
         <field name="wiz_name">table.dimension.value.open</field>
     </record>
     <record model="ir.action.keyword" id="act_dimension_value_open_keyword1">

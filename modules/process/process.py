@@ -586,7 +586,12 @@ class Code(ModelSQL, ModelView):
         if not target.__name__ == self.on_model.model:
             raise Exception('Bad models ! Expected %s got %s' % (
                     self.on_model.model, target.__name__))
-        result = getattr(target, self.method_name)()
+        # Test if classmethod or not
+        method = getattr(target.__class__, self.method_name)
+        if not hasattr(method, 'im_self') or method.im_self:
+            result = method([target])
+        else:
+            result = method(target)
         if (not result or
                 not isinstance(result, (list, tuple)) and result is True):
             return

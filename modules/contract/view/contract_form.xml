@@ -14,24 +14,27 @@
     <newline/>
     <label name="subscriber"/>
     <field name="subscriber"/>
-  <notebook colspan="4">
-    <page string="Options" id="options">
-      <field name="options" colspan="4"/>
-    </page>
-    <page string="Complementary Data" id="extra_data">
-      <field name="extra_data" no_command="1"/>
-    </page>
-    <page string="Documents" id="documents">
-      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
-    </page>
-    <page string="Administration" id="admin">
-      <label name="product_kind"/>
-      <field name="product_kind"/>
-      <label name="offered"/>
-      <field name="offered"/>
-      <label name="appliable_conditions_date"/>
-      <field name="appliable_conditions_date"/>
-    </page>
-  </notebook>
-  <newline/>
+    <notebook colspan="4">
+        <page string="Options" id="options">
+            <field name="options" colspan="4"/>
+        </page>
+        <page string="Complementary Data" name="extra_data">
+            <field name="extra_data" no_command="1"/>
+        </page>
+        <page string="Contacts" name="Contacts">
+            <field name="contacts" colspan="4"/>
+        </page>
+        <page string="Administration" id="admin">
+            <label name="product_kind"/>
+            <field name="product_kind"/>
+            <label name="product"/>
+            <field name="product"/>
+            <label name="appliable_conditions_date"/>
+            <field name="appliable_conditions_date"/>
+        </page>
+        <page string="Status History" name="status_history">
+            <field name="status_history"/>
+        </page>
+    </notebook>
+    <newline/>
 </form>

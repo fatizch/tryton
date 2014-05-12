@@ -15,15 +15,15 @@ def get_product_def(server_proxy, code, context, output_kind='python'):
 
 
 def export_contract(server_proxy, code, context, output_kind='python'):
-    ids = server_proxy.model.contract.contract.search(
-        [('offered.code', '=', code), ('id', '=', 5)], context)
+    ids = server_proxy.model.contract.search(
+        [('product.code', '=', code), ('id', '=', 5)], context)
     for id in ids:
-        res = server_proxy.model.contract.contract.extract_objects(id, context)
+        res = server_proxy.model.contract.extract_objects(id, context)
         if output_kind == 'python':
             pprint.pprint(res)
         elif output_kind == 'xml':
             print xmlrpclib.dumps(('contract_dict', res),
-                'model.contract.contract.ws_subscribe_contract')
+                'model.contract.ws_subscribe_contract')
         else:
             print json.dumps(res)
         break
@@ -36,11 +36,12 @@ if __name__ == '__main__':
     # server_address = 'coopengo.dtdns.net'
     user = 'admin'
     password = 'admin'
-    db_name = 'quickfix'
+    db_name = 'demo'
     port = 8069
     server_address = 'localhost'
     #for internal use
     #for external
+    # output_kind = 'python'
     output_kind = 'python'
 
     # Get user_id and session
@@ -51,5 +52,5 @@ if __name__ == '__main__':
     # Get the user context
     context = s.model.res.user.get_preferences(True, {})
 
-    get_product_def(s, 'kayes', context, output_kind=output_kind)
-    export_contract(s, 'kayes', context, output_kind=output_kind)
+    get_product_def(s, 'neoliane_sante_pro', context, output_kind=output_kind)
+    # export_contract(s, 'kayes', context, output_kind=output_kind)

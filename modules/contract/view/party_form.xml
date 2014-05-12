@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="//page[@id='summary']/field[@name='summary']" position="before">
-    <newline/>
-    <label name="last_quote"/>
-    <group id='quote' col="50" colspan="2">
-        <field name="last_quote" colspan="49"/>
-        <button string="+" name="open_quotes"/>
-    </group>
-    <label name="main_contract"/>
-    <group id='contract' col="50" colspan="2">
-        <field name="main_contract" colspan="49"/>
-        <button string="+" name="open_contracts"/>
-    </group>
-    <newline/>
- </xpath>
- <xpath expr="/form" position="inside">
-    <newline/>
-    <field name="number_of_contracts"/>
-    <field name="number_of_quotes"/>
- </xpath>
+
 </data>

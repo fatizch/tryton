@@ -60,6 +60,12 @@ class ContactMechanism(export.ExportImportMixin):
     def _export_keys(cls):
         return ('party.name', 'type', 'value')
 
+    def get_icon(self):
+        if self.type == 'phone' or self.type == 'mobile':
+            return 'coopengo-phone'
+        elif self.type == 'email':
+            return 'coopengo-email'
+
 
 class PartyInteraction(model.CoopSQL, model.CoopView):
     'Party Interaction'

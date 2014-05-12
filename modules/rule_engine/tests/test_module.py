@@ -27,7 +27,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'TestCaseValue': 'rule_engine.test_case.value',
             'RunTests': 'rule_engine.run_tests',
             'Language': 'ir.lang',
-            'RuleParameter': 'rule_engine.parameter',
+            'RuleParameter': 'rule_engine.rule_parameter',
+            'RuleEngineRuleEngine': 'rule_engine-rule_engine',
+            'RuleEngineTable': 'rule_engine-table',
             'Table': 'table',
             'Log': 'rule_engine.log',
         }
@@ -100,11 +102,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0014_testRuleEngineCreation(self):
         ct = self.Context.search([('name', '=', 'test_context')])[0]
         rule = self.RuleEngine()
-        rule.code = rule.default_code()
-        self.assertEqual(rule.code, 'return')
+        rule.algorithm = rule.default_algorithm()
+        self.assertEqual(rule.algorithm, 'return')
         rule.name = 'Test Rule'
-        rule.rule_parameters = []
+        rule.short_name = 'test_rule'
         rule.context = ct
+        rule.parameters = []
+        rule.rules_used = []
+        rule.tables_used = []
         tree_structure = rule.data_tree_structure()
         target_tree_structure = [
             {
@@ -170,30 +175,58 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 'children': [],
                 'name': "_re_today",
                 },
+            {
+                'children': [],
+                'description': 'Parameters',
+                'fct_args': '',
+                'long_description': '',
+                'name': '',
+                'translated': '',
+                'type': 'folder'
+                },
+            {
+                'children': [],
+                'description': 'Rules',
+                'fct_args': '',
+                'long_description': '',
+                'name': '',
+                'translated': '',
+                'type': 'folder'
+                },
+            {
+                'children': [],
+                'description': 'Tables',
+                'fct_args': '',
+                'long_description': '',
+                'name': '',
+                'translated': '',
+                'type': 'folder'
+                }
             ]
+
         self.assertEqual(tree_structure, target_tree_structure)
 
         # Check default code validates
         self.assertEqual(rule.check_code(), True)
         # Check context elem code validates
-        rule.code = 'return today()'
+        rule.algorithm = 'return today()'
         self.assertEqual(rule.check_code(), True)
         # Check warnings validates
-        rule.code = 'toto = 10\n'
-        rule.code += 'return today()'
+        rule.algorithm = 'toto = 10\n'
+        rule.algorithm += 'return today()'
         self.assertEqual(rule.check_code(), True)
         # Check unknown symbols fail
-        rule.code = 'return some_unknown_symbol'
+        rule.algorithm = 'return some_unknown_symbol'
         self.assertRaises(UserError, rule.check_code)
         # Check syntax errors fail
-        rule.code = 'if 10'
-        rule.code += ' return'
+        rule.algorithm = 'if 10'
+        rule.algorithm += ' return'
         self.assertRaises(UserError, rule.check_code)
 
-        rule.code = 'return 10.0'
+        rule.algorithm = 'return 10.0'
         rule.save()
 
-        self.assertEqual(rule.allowed_functions, [
+        self.assertEqual(rule.allowed_functions(), [
                 'add_debug', 'add_error', 'add_error_code', 'add_info',
                 'add_warning', 'calculation_date', 'today'])
         # Check as_function, code template and decistmt behaviour
@@ -212,86 +245,63 @@ class ModuleTestCase(test_framework.CoopTestCase):
         'rule_engine.test0014_testRuleEngineCreation')
     def test0015_testExternalParameterTable(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
-        rule.code = 'return table_test_code(\'bar\', 5)'
+        rule.algorithm = 'return table_test_code(\'bar\', 5)'
         self.assertRaises(UserError, rule.check_code)
 
         table = self.Table.search([('code', '=', 'test_code')])[0]
-        table_parameter = self.RuleParameter()
-        table_parameter.kind = 'table'
-        table_parameter.the_table = table
-        self.assertEqual(table_parameter.on_change_the_table(), {
-                'code': table.code, 'name': table.name})
-        table_parameter.code = table.code
-        table_parameter.name = table.name
+        table_parameter = self.RuleEngineTable()
+        table_parameter.table = table
         table_parameter.parent_rule = rule
         table_parameter.save()
 
         tree_structure = rule.data_tree_structure()[-1]
         self.assertEqual(tree_structure, {
-                'description': 'Extra Args',
-                'fct_args': '',
-                'long_description': '',
-                'name': 'extra args',
-                'translated': 'extra args',
-                'type': 'folder',
-                'children': [{
-                        'description': 'Tables',
-                        'fct_args': '',
-                        'long_description': '',
-                        'name': 'tables',
-                        'translated': 'tables',
-                        'type': 'folder',
-                        'children': [
-                            {
-                                'description': u'Test',
-                                'fct_args': u'Value, Range',
-                                'long_description': u'Test (table)',
-                                'name': u'Test',
-                                'translated': u'table_test_code',
-                                'type': 'function',
-                                'children': [],
-                                }]}]})
+            'description': 'Tables',
+            'fct_args': '',
+            'long_description': '',
+            'name': '',
+            'translated': '',
+            'type': 'folder',
+            'children': [{'children': [],
+                          'description': u'Test',
+                          'fct_args': u'Value, Range',
+                          'long_description': u'Test (table)',
+                          'name': 'UnusedVariable',
+                          'translated': u'table_test_code',
+                          'type': 'function'}]})
 
         self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('rule_engine.test0014_testRuleEngineCreation')
     def test0016_testExternalParameterKwarg(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
-        rule.code = 'return kwarg_test_parameter()'
+        rule.algorithm = 'return param_test_parameter()'
         self.assertRaises(UserError, rule.check_code)
 
         kwarg_parameter = self.RuleParameter()
-        kwarg_parameter.kind = 'kwarg'
-        kwarg_parameter.code = 'test_parameter'
-        kwarg_parameter.name = 'Test Parameter'
+        kwarg_parameter.name = 'test_parameter'
+        kwarg_parameter.string = 'Test Parameter'
+        kwarg_parameter.type_ = 'boolean'
         kwarg_parameter.parent_rule = rule
         kwarg_parameter.save()
-
-        tree_structure = rule.data_tree_structure()[-1]
+        full_tree_structure = rule.data_tree_structure()
+        nbnode = len(full_tree_structure)
+        # Parameter node is the third starting from the end
+        tree_structure = full_tree_structure[nbnode - 3]
         self.assertEqual(tree_structure, {
-                'description': 'Extra Args',
-                'fct_args': '',
-                'long_description': '',
-                'name': 'extra args',
-                'translated': 'extra args',
-                'type': 'folder',
-                'children': [{
-                        'description': 'X-Y-Z',
-                        'fct_args': '',
-                        'long_description': '',
-                        'name': 'x-y-z',
-                        'translated': 'x-y-z',
-                        'type': 'folder',
-                        'children': [
-                            {
-                                'description': u'Test Parameter',
-                                'fct_args': '',
-                                'long_description': u'Test Parameter (kwarg)',
-                                'name': u'Test Parameter',
-                                'translated': u'kwarg_test_parameter',
-                                'type': 'function',
-                                'children': [],
-                                }]}]})
+            'description': 'Parameters',
+            'fct_args': '',
+            'long_description': '',
+            'name': '',
+            'translated': '',
+            'type': 'folder',
+            'children': [{'children': [],
+                          'description': u'Test Parameter',
+                          'fct_args': '',
+                          'long_description': u'Test Parameter (param)',
+                          'name': 'UnusedVariable',
+                          'translated': u'param_test_parameter',
+                          'type': 'function'}]})
 
         self.assertEqual(rule.check_code(), True)
 
@@ -299,62 +309,47 @@ class ModuleTestCase(test_framework.CoopTestCase):
         'rule_engine.test0016_testExternalParameterKwarg')
     def test0017_testExternalParameterRule(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
-        rule.code = 'return rule_test_rule(test_parameter=True)'
+        rule.algorithm = 'return rule_test_rule(test_parameter=True)'
         self.assertRaises(UserError, rule.check_code)
 
-        rule_parameter = self.RuleParameter()
-        rule_parameter.kind = 'rule'
-        rule_parameter.the_rule = rule
-        self.assertEqual(rule_parameter.on_change_the_rule(), {
-                'code': 'test_rule', 'name': rule.name})
-        rule_parameter.name = 'Test Rule'
-        rule_parameter.code = 'test_rule'
+        rule_parameter = self.RuleEngineRuleEngine()
+        rule_parameter.rule = rule
         rule_parameter.parent_rule = rule
         rule_parameter.save()
 
-        tree_structure = rule.data_tree_structure()[-1]
+        full_tree_structure = rule.data_tree_structure()
+        nbnode = len(full_tree_structure)
+        # Parameter node is the third starting from the end
+        tree_structure = full_tree_structure[nbnode - 3]
         self.assertEqual(tree_structure, {
-                'description': 'Extra Args',
-                'fct_args': '',
-                'long_description': '',
-                'name': 'extra args',
-                'translated': 'extra args',
-                'type': 'folder',
-                'children': [{
-                        'description': 'X-Y-Z',
-                        'fct_args': '',
-                        'long_description': '',
-                        'name': 'x-y-z',
-                        'translated': 'x-y-z',
-                        'type': 'folder',
-                        'children': [
-                            {
-                                'description': u'Test Parameter',
-                                'fct_args': '',
-                                'long_description': u'Test Parameter (kwarg)',
-                                'name': u'Test Parameter',
-                                'translated': u'kwarg_test_parameter',
-                                'type': 'function',
-                                'children': [],
-                                }]},
-                    {
-                        'description': 'Rules',
-                        'fct_args': '',
-                        'long_description': '',
-                        'name': 'rule',
-                        'translated': 'rule',
-                        'type': 'folder',
-                        'children': [
-                            {
-                                'description': u'Test Rule',
-                                'fct_args': 'test_parameter=',
-                                'long_description': u'Test Rule (rule)',
-                                'name': u'Test Rule',
-                                'translated': u'rule_test_rule',
-                                'type': 'function',
-                                'children': [],
-                                }]}]})
-
+            'description': 'Parameters',
+            'fct_args': '',
+            'long_description': '',
+            'name': '',
+            'translated': '',
+            'type': 'folder',
+            'children': [{'children': [],
+                          'description': u'Test Parameter',
+                          'fct_args': '',
+                          'long_description': u'Test Parameter (param)',
+                          'name': 'UnusedVariable',
+                          'translated': u'param_test_parameter',
+                          'type': 'function'}]})
+        tree_structure = full_tree_structure[nbnode - 2]
+        self.assertEqual(tree_structure, {
+            'description': 'Rules',
+            'fct_args': '',
+            'long_description': '',
+            'name': '',
+            'translated': '',
+            'type': 'folder',
+            'children': [{'children': [],
+                          'description': u'Test Rule',
+                          'fct_args': u'test_parameter=',
+                          'long_description': u'Test Rule (rule)',
+                          'name': 'UnusedVariable',
+                          'translated': u'rule_test_rule',
+                          'type': 'function'}]})
         self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('table.test0060table_2dim',
@@ -363,40 +358,36 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule1 = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         table = self.Table.search([('code', '=', 'test_code')])[0]
         kwarg_parameter = self.RuleParameter()
-        kwarg_parameter.kind = 'kwarg'
-        kwarg_parameter.code = 'test_parameter'
-        kwarg_parameter.name = 'Test Parameter'
+        kwarg_parameter.name = 'test_parameter'
+        kwarg_parameter.string = 'Test Parameter'
         kwarg_parameter.parent_rule = rule1
+        kwarg_parameter.type_ = 'numeric'
         kwarg_parameter.save()
-        rule1.code = 'return kwarg_test_parameter()'
+        rule1.algorithm = 'return param_test_parameter()'
         rule1.save()
 
         rule = self.RuleEngine()
         rule.name = 'Test Rule Advanced'
+        rule.short_name = 'test_rule_advanced'
         rule.context = rule1.context
-        rule_parameter = self.RuleParameter()
-        rule_parameter.kind = 'rule'
-        rule_parameter.the_rule = rule1
-        rule_parameter.name = 'Test Rule'
-        rule_parameter.code = 'test_rule'
+        rule_parameter = self.RuleEngineRuleEngine()
+        rule_parameter.rule = rule1
         rule_parameter.parent_rule = rule
         rule_parameter.save()
-        table_parameter = self.RuleParameter()
-        table_parameter.kind = 'table'
-        table_parameter.the_table = table
-        table_parameter.code = table.code
-        table_parameter.name = table.name
+        table_parameter = self.RuleEngineTable()
+        table_parameter.table = table
         table_parameter.parent_rule = rule
         table_parameter.save()
 
-        rule.code = '\n'.join([
-                'if table_test_code(\'test\', 30):',
-                '    return 10',
-                'add_error(\'test error\')',
-                'add_warning(\'test warning\')',
-                'add_info(\'test info\')',
-                'if table_test_code(\'foo\', 1) == \'ham\':',
-                '    return rule_test_rule(test_parameter=20)'])
+        rule.algorithm = '\n'.join([
+                "if table_test_code('test', 30):",
+                "    return 10",
+                "add_error('test error')",
+                "add_warning('test warning')",
+                "add_info('test info')",
+                "if table_test_code('foo', 1) == 'ham':",
+                "   return rule_test_rule(test_parameter=20)",
+                ])
         rule.save()
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
@@ -444,24 +435,24 @@ class ModuleTestCase(test_framework.CoopTestCase):
             tc.test_values = []
             self.maxDiff = None
             self.assertEqual(tc.on_change_test_values(), {
-                    'low_debug': u"Entering table_test_code\n"
-                    "\targs : ('test', 30)\n"
-                    "\tresult = None\n"
-                    "Entering add_error\n"
-                    "\targs : ('test error',)\n"
-                    "\tresult = None\n"
-                    "Entering add_warning\n"
-                    "\targs : ('test warning',)\n"
-                    "\tresult = None\n"
-                    "Entering add_info\n"
-                    "\targs : ('test info',)\n"
-                    "\tresult = None\n"
-                    "Entering table_test_code\n"
-                    "\targs : ('foo', 1)\n"
-                    "\tresult = ham\n"
-                    "Entering rule_test_rule\n"
-                    "\tkwargs : {'test_parameter': 20}\n"
-                    "\tresult = 20",
+                    'low_debug': u"Entering Test Rule Advanced\n\t"
+                    "args : ('test', 30)\n\t"
+                    "result = None\n"
+                    "Entering add_error\n\t"
+                    "args : ('test error',)\n\t"
+                    "result = None\n"
+                    "Entering add_warning\n\t"
+                    "args : ('test warning',)\n\t"
+                    "result = None\n"
+                    "Entering add_info\n\t"
+                    "args : ('test info',)\n\t"
+                    "result = None\n"
+                    "Entering Test Rule Advanced\n\t"
+                    "args : ('foo', 1)\n\t"
+                    "result = ham\n"
+                    "Entering Test Rule Advanced\n\t"
+                    "kwargs : {'test_parameter': 20}\n\t"
+                    'result = 20',
                     'debug': '',
                     'result_errors': u'test error',
                     'expected_result': '[20, [test error], [test warning],'
@@ -529,10 +520,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         # Check execution errors raise UserErrors
         rule.debug_mode = False
-        rule.code = 'return rule_test_rule()'
+        rule.algorithm = 'return rule_test_rule()'
         rule.save()
         self.assertRaises(UserError, rule.execute, {})
-        rule.code = 'return 1 / 0'
+        rule.algorithm = 'return 1 / 0'
         rule.save()
         self.assertRaises(UserError, rule.execute, {})
 

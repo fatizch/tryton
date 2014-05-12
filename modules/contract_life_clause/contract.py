@@ -1,206 +1,174 @@
-import copy
 from decimal import Decimal
 
-from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.cog_utils import fields, model
 
 __metaclass__ = PoolMeta
 
 __all__ = [
-    'Beneficiary',
-    'ContractClause',
-    'CoveredData',
     'Contract',
+    'ContractOption',
+    'Beneficiary',
     ]
-
-
-class Beneficiary(model.CoopSQL, model.CoopView):
-    'Contract Beneficiary'
-
-    __name__ = 'contract.clause.beneficiary'
-
-    accepting = fields.Boolean('Accepting')
-    clause = fields.Many2One('contract.clause', 'Clause', required=True,
-        ondelete='RESTRICT')
-    party = fields.Many2One('party.party', 'Party', states={
-            'required': Eval('accepting', False)}, depends=['accepting'],
-        ondelete='RESTRICT')
-    details = fields.Text('Details', states={'invisible': ~~Eval('accepting')})
-    share = fields.Numeric('Share', digits=(4, 4), required=True)
-    description = fields.Function(
-        fields.Char('Description'),
-        'on_change_with_description')
-
-    @fields.depends('party', 'details')
-    def on_change_with_description(self, name=None):
-        if self.party:
-            return self.party.rec_name
-        return self.details.splitlines().join(' ')
-
-    @classmethod
-    def default_share(cls):
-        return Decimal('1')
-
-
-class ContractClause:
-    __name__ = 'contract.clause'
-
-    beneficiaries = fields.One2Many('contract.clause.beneficiary', 'clause',
-        'Beneficiaries', states={'invisible': ~Eval('with_beneficiary_list')},
-        depends=['with_beneficiary_list'])
-    with_beneficiary_list = fields.Function(
-        fields.Boolean('With Beneficiay list', states={'invisible': True}),
-        'on_change_with_with_beneficiary_list')
-
-    @classmethod
-    def __setup__(cls):
-        super(ContractClause, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_beneficiary_shares': 'Total share for clause %s is'
-                'invalid',
-                })
-
-    @fields.depends('clause')
-    def on_change_with_with_beneficiary_list(self, name=None):
-        if not self.clause:
-            return False
-        return self.clause.with_beneficiary_list
-
-    @classmethod
-    def default_clause(cls):
-        default_clause = Transaction().context.get('default_clause', None)
-        return default_clause if default_clause else None
-
-    @classmethod
-    def default_text(cls):
-        default_clause = Transaction().context.get('default_clause', None)
-        if not default_clause:
-            return None
-        Clause = Pool().get('clause')
-        return Clause(default_clause).versions[-1].content
-
-    @classmethod
-    def default_with_beneficiary_list(cls):
-        default_clause = Transaction().context.get('default_clause', None)
-        if not default_clause:
-            return False
-        Clause = Pool().get('clause')
-        return Clause(default_clause).with_beneficiary_list
-
-    @classmethod
-    def default_customized_text(cls):
-        default_clause = Transaction().context.get('default_clause', None)
-        if not default_clause:
-            return False
-        Clause = Pool().get('clause')
-        return Clause(default_clause).customizable
-
-    @classmethod
-    def validate(cls, clauses):
-        for clause in clauses:
-            if not clause.with_beneficiary_list:
-                continue
-            if not clause.beneficiaries:
-                return
-            if not(sum((x.share for x in clause.beneficiaries)) ==
-                    Decimal('1')):
-                cls.raise_user_error('invalid_beneficiary_shares',
-                    (clause.rec_name))
-
-
-class CoveredData:
-    __name__ = 'contract.covered_data'
-
-    beneficiary_clauses = fields.One2ManyDomain('contract.clause',
-        'covered_data', 'Beneficiary clauses', domain=[
-            ('clause.kind', '=', 'beneficiary'),
-            ('clause', 'in', Eval('possible_clauses'))],
-        context={'default_clause': Eval('default_beneficiary_clause', 0)},
-        states={'invisible': ~Bool(Eval('has_beneficiary_clause', False))},
-        depends=['possible_clauses', 'has_beneficiary_clause',
-            'default_beneficiary_clause'])
-    default_beneficiary_clause = fields.Function(
-        fields.Many2One('clause', 'Default Beneficiary Clause'),
-        'on_change_with_default_beneficiary_clause')
-    has_beneficiary_clause = fields.Function(
-        fields.Boolean('Has Beneficiary Clause'),
-        'on_change_with_has_beneficiary_clause')
-
-    @classmethod
-    def __setup__(cls):
-        super(CoveredData, cls).__setup__()
-        cls.clauses = copy.copy(cls.clauses)
-        cls.clauses = fields.One2ManyDomain.init_from_One2Many(cls.clauses)
-        cls.clauses.domain += [('clause.kind', '!=', 'beneficiary')]
-
-    @fields.depends('option')
-    def on_change_with_default_beneficiary_clause(self, name=None):
-        good_rule = utils.find_date(self.option.offered.clause_rules,
-            self.option.contract.appliable_conditions_date)
-        if good_rule is None or good_rule.default_beneficiary_clause is None:
-            return None
-        return good_rule.default_beneficiary_clause.id
-
-    @fields.depends('option')
-    def on_change_with_has_beneficiary_clause(self, name=None):
-        good_rule = utils.find_date(self.option.offered.clause_rules,
-            self.option.contract.appliable_conditions_date)
-        if good_rule is None:
-            return False
-        for elem in good_rule.clauses:
-            if elem.kind == 'beneficiary':
-                return True
-        return False
-
-    def init_from_option(self, option):
-        super(CoveredData, self).init_from_option(option)
-        self.beneficiary_clauses = self.init_beneficiary_clauses(option)
-
-    def init_beneficiary_clauses(self, option):
-        if not option.offered.clause_rules:
-            return None
-        good_rule = utils.find_date(option.offered.clause_rules,
-            self.option.contract.appliable_conditions_date)
-        if not good_rule or not good_rule.default_beneficiary_clause:
-            return None
-        ContractClause = Pool().get('contract.clause')
-        clause = ContractClause()
-        the_clause = good_rule.default_beneficiary_clause
-        clause.clause = the_clause
-        clause.text = the_clause.get_version_at_date(option.start_date).content
-        return [clause]
-
-    def check_beneficiary_clauses(self):
-        if not self.option.offered.clause_rules:
-            return True, []
-        good_rule = utils.find_date(self.option.offered.clause_rules,
-            self.option.contract.appliable_conditions_date)
-        if not good_rule.has_beneficiary_clauses:
-            return True, []
-        if not self.beneficiary_clauses:
-            return False, [('no_beneficiary_clause_selected', (self.rec_name))]
-        return True, []
 
 
 class Contract:
     __name__ = 'contract'
 
+    def update_contacts(self):
+        super(Contract, self).update_contacts()
+        pool = Pool()
+        Contact = pool.get('contract.contact')
+        ContactType = pool.get('contract.contact.type')
+        accepting_benefs = []
+        benef_parties = []
+        contact_type, = ContactType.search(
+            [('code', '=', 'accepting_beneficiary')], limit=1, order=[])
+        for cov_element in self.covered_elements:
+            for option in cov_element.options:
+                for benef in option.beneficiaries:
+                    if not benef.accepting:
+                        continue
+                    accepting_benefs.append(benef)
+                    benef_parties.append(benef.party)
+        contact_parties = [x.party for x in self.contacts
+            if x.type == contact_type]
+
+        to_del = []
+        for contact in self.contacts:
+            if (contact.type == contact_type
+                    and contact.party not in benef_parties):
+                to_del.append(contact)
+        Contact.delete(to_del)
+        self.contacts = list(getattr(self, 'contacts', []))
+        for benef in accepting_benefs:
+            if benef.party in contact_parties:
+                continue
+            contact = Contact(type=contact_type, party=benef.party,
+                address=benef.address)
+            self.contacts.append(contact)
+
+
+class ContractOption:
+    __name__ = 'contract.option'
+
+    with_beneficiary_clause = fields.Function(
+        fields.Boolean('With Beneficiary Clause'),
+        'on_change_with_with_beneficiary_clause')
+    beneficiary_clause = fields.Many2One('clause', 'Beneficiary Clause',
+        domain=[('coverages', '=', Eval('coverage'))], states={
+            'invisible': ~Eval('with_beneficiary_clause'),
+            'required': Bool(Eval('with_beneficiary_clause')),
+            }, depends=['coverage', 'with_beneficiary_clause'],
+            ondelete='RESTRICT')
+    customized_beneficiary_clause = fields.Text(
+        'Customized Beneficiary Clause',
+        states={'invisible': ~Eval('with_beneficiary_clause')},
+        depends=['with_beneficiary_clause'])
+    beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
+        'Beneficiaries',
+        states={'invisible': ~Eval('with_beneficiary_clause')},
+        depends=['with_beneficiary_clause'])
+
     @classmethod
     def __setup__(cls):
-        super(Contract, cls).__setup__()
+        super(ContractOption, cls).__setup__()
         cls._error_messages.update({
-                'no_beneficiary_clause_selected': 'No beneficiary clause selected '
-                'on %s',
+                'invalid_beneficiary_shares': 'Total share for clause %s is '
+                'invalid',
+                'mix_share_and_none': 'Either all share must be completed or '
+                'none',
                 })
 
-    def check_beneficiary_clauses(self):
-        res, errs = True, []
-        for elem in [x for y in self.covered_elements for x in y.covered_data]:
-            data_res, data_errs = elem.check_beneficiary_clauses()
-            res = res and data_res
-            if data_errs:
-                errs += data_errs
-        return res, errs
+    @classmethod
+    def init_default_values_from_coverage(cls, coverage, product,
+            start_date=None, end_date=None, item_desc=None):
+        res = super(ContractOption, cls).init_default_values_from_coverage(
+            coverage, product, start_date, end_date, item_desc)
+        res['with_beneficiary_clause'] = len(coverage.beneficiaries_clauses)
+        if coverage.default_beneficiary_clause:
+            res['beneficiary_clause'] = coverage.default_beneficiary_clause.id
+            res['customized_beneficiary_clause'] = \
+                coverage.default_beneficiary_clause.content
+        return res
+
+    @fields.depends('coverage')
+    def on_change_with_beneficiary_clause(self, name=None):
+        if (not self.coverage
+                or not self.self.coverage.default_beneficiary_clause):
+            return
+        return self.coverage.default_beneficiary_clause.id
+
+    @fields.depends('coverage')
+    def on_change_with_with_beneficiary_clause(self, name=None):
+        if not self.coverage:
+            return False
+        return bool(self.coverage.beneficiaries_clauses)
+
+    def check_beneficiaries(self):
+        if not self.beneficiaries:
+            return
+        if any(getattr(x, 'share', None) is None for x in self.beneficiaries):
+            if [x.share for x in self.beneficiaries
+                    if getattr(x, 'share', None)]:
+                self.raise_user_error('mix_share_and_none')
+            else:
+                return
+        if sum(x.share for x in self.beneficiaries) != Decimal(1):
+            self.raise_user_error('invalid_beneficiary_shares',
+                (self.rec_name))
+
+    @fields.depends('beneficiary_clause')
+    def on_change_with_customized_beneficiary_clause(self):
+        if not self.beneficiary_clause:
+            return ''
+        return self.beneficiary_clause.content
+
+    @classmethod
+    def validate(cls, options):
+        super(ContractOption, cls).validate(options)
+        for option in options:
+            option.check_beneficiaries()
+
+
+class Beneficiary(model.CoopSQL, model.CoopView):
+    'Contract Beneficiary'
+
+    __name__ = 'contract.option.beneficiary'
+
+    option = fields.Many2One('contract.option', 'Option', required=True,
+        ondelete='CASCADE')
+    accepting = fields.Boolean('Accepting')
+    party = fields.Many2One('party.party', 'Party', states={
+            'invisible': ~Eval('accepting'),
+            'required': Bool(Eval('accepting')),
+            }, depends=['accepting'],
+        ondelete='RESTRICT')
+    address = fields.Many2One('party.address', 'Address',
+        domain=[('party', '=', Eval('party', None))], states={
+            'invisible': ~Eval('accepting'),
+            'required': Bool(Eval('accepting')),
+            }, depends=['party', 'accepting'], ondelete='RESTRICT')
+    reference = fields.Char('Reference', states={
+            'invisible': Bool(Eval('accepting')),
+            'required': ~Eval('accepting'),
+            })
+    share = fields.Numeric('Share', digits=(4, 4))
+    description = fields.Function(
+        fields.Char('Description'),
+        'on_change_with_description')
+
+    @fields.depends('party', 'reference')
+    def on_change_with_description(self, name=None):
+        if self.party:
+            return self.party.rec_name
+        else:
+            return self.reference
+
+    @fields.depends('accepting')
+    def on_change_accepting(self):
+        if not self.accepting:
+            return {'party': None, 'address': None}
+        return {'reference': ''}

@@ -121,7 +121,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return [('', '')]
 
     def is_waiting_for_documents(self):
-        if not utils.is_none(self, 'documents'):
+        if getattr(self, 'documents', None):
             for doc in self.documents:
                 if not doc.is_complete:
                     return True
@@ -461,7 +461,7 @@ class Loss(model.CoopSQL, model.CoopView):
 
     def get_all_extra_data(self, at_date):
         res = {}
-        if not utils.is_none(self, 'extra_data'):
+        if getattr(self, 'extra_data', None):
             res = self.extra_data
         return res
 
@@ -635,7 +635,7 @@ class DeliveredService:
             return None
         for indemn in self.indemnifications:
             if (indemn.status == 'calculated'
-                    and (utils.is_none(indemn, 'local_currency')
+                    and (not getattr(indemn, 'local_currency', None)
                         or indemn.local_currency == cur_dict['currency'])):
                 return indemn
 
@@ -653,7 +653,7 @@ class DeliveredService:
 
     def get_all_extra_data(self, at_date):
         res = {}
-        if not utils.is_none(self, 'extra_data'):
+        if getattr(self, 'extra_data', None):
             res = self.extra_data
         res.update(self.get_covered_data().get_all_extra_data(at_date))
         res.update(self.loss.get_all_extra_data(at_date))
@@ -747,7 +747,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         return res
 
     def create_details_from_dict(self, details_dict, del_service, currency):
-        if utils.is_none(self, 'details'):
+        if not getattr(self, 'details', None):
             self.details = []
         else:
             self.details = list(self.details)
@@ -764,13 +764,13 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
                 for field_name, value in detail_dict.iteritems():
                     #TODO: Temporary Hack
                     if (field_name == 'beneficiary_kind'
-                            and utils.is_none(self, 'beneficiary')):
+                            and not getattr(self, 'beneficiary', None)):
                         self.beneficiary = self.get_beneficiary(value,
                             del_service)
                     else:
                         setattr(detail, field_name, value)
                 if ('start_date' in detail_dict
-                        and (utils.is_none(self, 'start_date')
+                        and (not getattr(self, 'start_date', None)
                             or detail.start_date < self.start_date)):
                     self.start_date = detail.start_date
         self.calculate_amount_and_end_date_from_details(del_service, currency)

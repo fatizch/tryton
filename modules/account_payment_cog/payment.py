@@ -1,9 +1,11 @@
-from trytond.model import ModelView, fields
+from trytond.model import ModelView, fields, ModelSQL
 from trytond.wizard import Wizard, StateView, StateAction, Button
 from trytond.pool import Pool
 
+from trytond.modules.cog_utils import coop_string
 
-__all__ = ['CreateReceivablePaymentStart', 'CreateReceivablePayment']
+__all__ = ['CreateReceivablePaymentStart', 'CreateReceivablePayment',
+    'Payment']
 
 
 class CreateReceivablePaymentStart(ModelView):
@@ -68,3 +70,22 @@ class CreateReceivablePayment(Wizard):
             payment.state = 'approved'
             payment.save()
         return action, {}
+
+
+class Payment(ModelSQL, ModelView):
+    __name__ = 'account.payment'
+
+    def get_icon(self, name=None):
+        return 'payment'
+
+    def get_rec_name(self, name):
+        if self.date:
+            return '%s - %s - [%s]' % (
+                coop_string.date_as_string(self.date),
+                self.currency.amount_as_string(self.amount),
+                coop_string.translate_value(self, 'state'))
+        else:
+            return '%s - [%s]' % (
+                coop_string.date_as_string(self.date),
+                self.currency.amount_as_string(self.amount),
+                coop_string.translate_value(self, 'state'))

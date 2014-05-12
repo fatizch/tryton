@@ -2,25 +2,6 @@
 <tryton>
   <data>
     <!-- ############################################################ -->
-    <!-- Rule Engine Parameter -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="parameter_form">
-      <field name="model">rule_engine.parameter</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="rule_engine.parameter_form"/>
-      <field name="name">parameter_form</field>
-    </record>
-    <record model="ir.ui.view" id="rule_parameter_list">
-      <field name="model">rule_engine.parameter</field>
-      <field name="type">tree</field>
-      <field name="name">rule_parameter_list</field>
-    </record>
-    <record model="ir.ui.view" id="rule_external_parameter_list">
-      <field name="model">rule_engine.parameter</field>
-      <field name="type">tree</field>
-      <field name="name">rule_external_parameter_list</field>
-    </record>
-    <!-- ############################################################ -->
     <!-- Rule Engine -->
     <!-- ############################################################ -->
     <record model="ir.ui.view" id="rule_engine_form">

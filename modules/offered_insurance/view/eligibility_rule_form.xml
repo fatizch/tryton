@@ -21,7 +21,6 @@
                 <label name="sub_elem_rule_extra_data"/>
                 <field name="sub_elem_rule_extra_data"/>
             </group>
-            <field name="relation_kinds" colspan="4" xexpand="1" yfill="1"/>
         </group>
     </xpath>
     <xpath expr="/form" position="inside">

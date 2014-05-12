@@ -1,4 +1,4 @@
-import copy
+# encoding: utf-8
 import sys
 import traceback
 import ast
@@ -28,10 +28,13 @@ from trytond.modules.cog_utils import model, utils, coop_string
 from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.table import table
+from trytond.model import DictSchemaMixin
 
 __all__ = [
-    'Rule',
-    'RuleEngineParameter',
+    'RuleEngine',
+    'RuleEngineTable',
+    'RuleEngineRuleEngine',
+    'RuleParameter',
     'RuleExecutionLog',
     'Context',
     'RuleFunction',
@@ -58,11 +61,11 @@ result_%s = fct_%s()
 """
 
 
-def check_code(code):
+def check_code(algorithm):
     try:
-        tree = compile(code, 'test', 'exec', _ast.PyCF_ONLY_AST)
+        tree = compile(algorithm, 'test', 'exec', _ast.PyCF_ONLY_AST)
     except SyntaxError, syn_error:
-        error = pyflakes.messages.Message('test', syn_error.lineno)
+        error = pyflakes.messages.Message('test', syn_error)
         error.message = 'Syntax Error'
         return [error]
     else:
@@ -347,202 +350,135 @@ class FunctionFinder(ast.NodeVisitor):
         return super(FunctionFinder, self).visit(node)
 
 
-class RuleEngineParameter(ModelView, ModelSQL):
-    'Rule Engine Parameter'
+class RuleEngineTable(model.CoopSQL):
+    'Rule_Engine - Table'
 
-    __name__ = 'rule_engine.parameter'
+    __name__ = 'rule_engine-table'
 
-    name = fields.Char('Name')
-    code = fields.Char('Code', required=True)
-    kind = fields.Selection([
-            ('rule', 'Rule'),
-            ('kwarg', 'Keyword Argument'),
-            ('table', 'Table')],
-        'Kind')
-    the_rule = fields.Many2One('rule_engine', 'Rule to use', states={
-            'invisible': Eval('kind', '') != 'rule',
-            'required': Eval('kind', '') == 'rule'},
-        ondelete='RESTRICT')
-    the_table = fields.Many2One('table', 'Table to use', states={
-            'invisible': Eval('kind', '') != 'table',
-            'required': Eval('kind', '') == 'table'},
-        ondelete='RESTRICT')
+    parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
+        ondelete='CASCADE')
+    table = fields.Many2One('table', 'Table', ondelete='RESTRICT')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+
+        super(RuleEngineTable, cls).__register__(module_name)
+
+         # Migration from 1.1: split rule parameters in multiple table
+        table_definition = cls.__table__()
+        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+            cursor.execute(*table_definition.delete())
+            cursor.execute("SELECT the_table, parent_rule "
+                "FROM rule_engine_parameter "
+                "WHERE kind = 'table'")
+            for cur_rule_parameter in cursor.dictfetchall():
+                cursor.execute(*table_definition.insert(
+                    columns=[table_definition.parent_rule,
+                    table_definition.table],
+                    values=[[cur_rule_parameter['parent_rule'],
+                    cur_rule_parameter['the_table']]]))
+
+
+class RuleEngineRuleEngine(model.CoopSQL):
+    'Rule Engine - Rule Engine'
+
+    __name__ = 'rule_engine-rule_engine'
+
+    parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
+        ondelete='CASCADE')
+    rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT')
+
+    @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+
+        super(RuleEngineRuleEngine, cls).__register__(module_name)
+
+         # Migration from 1.1: split rule parameters in multiple table
+        rule_definition = cls.__table__()
+        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+            cursor.execute(*rule_definition.delete())
+            cursor.execute("SELECT the_rule, parent_rule "
+                "FROM rule_engine_parameter "
+                "WHERE kind = 'rule'")
+            for cur_rule_parameter in cursor.dictfetchall():
+                cursor.execute(*rule_definition.insert(
+                    columns=[rule_definition.parent_rule,
+                    rule_definition.rule],
+                    values=[[cur_rule_parameter['parent_rule'],
+                    cur_rule_parameter['the_rule']]]))
+
+
+class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
+    'Rule Parameter'
+
+    __name__ = 'rule_engine.rule_parameter'
+
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
         ondelete='CASCADE')
 
     @classmethod
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+
+        super(RuleParameter, cls).__register__(module_name)
+
+         # Migration from 1.1: split rule parameters in multiple table
+        parameter_definition = cls.__table__()
+        if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
+            cursor.execute(*parameter_definition.delete())
+            cursor.execute("SELECT name, code, parent_rule "
+                "FROM rule_engine_parameter "
+                "WHERE kind = 'kwarg'")
+            for cur_rule_parameter in cursor.dictfetchall():
+                cursor.execute(*parameter_definition.insert(
+                    columns=[parameter_definition.parent_rule,
+                    parameter_definition.name, parameter_definition.string,
+                    parameter_definition.type_],
+                    values=[[cur_rule_parameter['parent_rule'],
+                    cur_rule_parameter['code'], cur_rule_parameter['name'],
+                    'numeric']]))
+            cursor.execute("SELECT name, code, parent_rule "
+                "FROM rule_engine_parameter "
+                "WHERE kind = 'rule_compl'")
+            for cur_rule_parameter in cursor.dictfetchall():
+                cursor.execute(*parameter_definition.insert(
+                    columns=[parameter_definition.parent_rule,
+                    parameter_definition.name, parameter_definition.string,
+                    parameter_definition.type_],
+                    values=[[cur_rule_parameter['parent_rule'],
+                    cur_rule_parameter['code'], cur_rule_parameter['name'],
+                    'numeric']]))
+
+    @fields.depends('string', 'name')
+    def on_change_with_name(self):
+        if self.name:
+            return self.name
+        return coop_string.remove_blank_and_invalid_char(self.string)
+
+    @classmethod
     def __setup__(cls):
-        super(RuleEngineParameter, cls).__setup__()
-        cls._error_messages.update({
-                'kwarg_expected': 'Expected %s as a parameter for rule %s',
-                })
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['code', 'parent_rule.name'])
-
-    @fields.depends('kind')
-    def on_change_kind(self):
-        result = {}
-        if (hasattr(self, 'kind') and self.kind != 'rule'):
-            result['the_rule'] = None
-        if (hasattr(self, 'kind') and self.kind != 'table'):
-            result['the_table'] = None
-        return result
-
-    def get_fct_args(self):
-        if self.kind == 'rule':
-            if not (hasattr(self, 'the_rule') and self.the_rule):
-                return ''
-            return ', '.join(('%s=' % elem.code for elem in
-                    self.the_rule.rule_parameters if elem.kind == 'kwarg'))
-        if self.kind == 'table':
-            if not (hasattr(self, 'the_table') and self.the_table):
-                return ''
-            dimension_names = []
-            for idx in range(1, table.DIMENSION_MAX + 1):
-                try:
-                    dim = getattr(self.the_table, 'dimension_kind%s' % idx)
-                except AttributeError:
-                    break
-                if not dim:
-                    break
-                try:
-                    dim_name = getattr(self.the_table,
-                        'dimension_name%s' % idx)
-                except AttributeError:
-                    dim_name = None
-                if not dim_name:
-                    dim_name = 'Col #%s' % idx
-                dimension_names.append(dim_name)
-            return ', '.join(map(coop_string.remove_invalid_char,
-                    dimension_names))
-        return ''
-
-    def get_long_description(self):
-        return (self.name if self.name else '') + ' (' + (
-            self.kind if self.kind else '') + ')'
-
-    def get_description(self):
-        return self.name
-
-    def get_translated_technical_name(self):
-        return '%s_%s' % (self.kind, self.code)
-
-    def execute_rule(self, evaluation_context, **execution_kwargs):
-        result = self.the_rule.execute(evaluation_context, execution_kwargs)
-        if result.has_errors:
-            raise InternalRuleEngineError(
-                'Impossible to evaluate parameter %s when computing rule %s' %
-                (self.code, self.parent_rule.name))
-        return result.result
-
-    def get_wrapper_func(self, context):
-        def debug_wrapper(func):
-            def wrapper_func(*args, **kwargs):
-                context['__result__'].low_level_debug.append(
-                    'Entering %s' % self.get_translated_technical_name())
-                if args:
-                    context['__result__'].low_level_debug.append(
-                        '\targs : %s' % str(args))
-                if kwargs:
-                    context['__result__'].low_level_debug.append(
-                        '\tkwargs : %s' % str(kwargs))
-                try:
-                    result = func(*args, **kwargs)
-                except Exception, exc:
-                    context['__result__'].errors.append(
-                        'ERROR in %s : %s' % (
-                            self.get_translated_technical_name(), str(exc)))
-                    raise
-                context['__result__'].low_level_debug.append(
-                    '\tresult = %s' % str(result))
-                return result
-            return wrapper_func
-        return debug_wrapper
-
-    def as_context(self, evaluation_context, context, forced_value,
-            debug=False):
-        if not forced_value:
-            if self.kind == 'kwarg':
-                self.raise_user_error('kwarg_expected', (self.code,
-                        self.parent_rule.name))
-        technical_name = self.get_translated_technical_name()
-        if forced_value:
-            context[technical_name] = lambda: forced_value
-        elif self.kind == 'rule':
-            context[technical_name] = \
-                functools.partial(self.execute_rule, evaluation_context)
-        elif self.kind == 'table':
-            context[technical_name] = \
-                functools.partial(table.TableCell.get, self.the_table)
-        else:
-            return context
-        if debug:
-            debug_wrapper = self.get_wrapper_func(context)
-            context[technical_name] = debug_wrapper(context[technical_name])
-        return context
-
-    @fields.depends('the_rule')
-    def on_change_the_rule(self):
-        result = {}
-        if not (hasattr(self, 'the_rule') and self.the_rule):
-            return result
-        result['code'] = coop_string.remove_blank_and_invalid_char(
-            self.the_rule.name)
-        result['name'] = self.the_rule.name
-        return result
-
-    @fields.depends('the_table')
-    def on_change_the_table(self):
-        result = {}
-        if not (hasattr(self, 'the_table') and self.the_table):
-            return result
-        result['code'] = self.the_table.code
-        result['name'] = self.the_table.name
-        return result
-
-    @classmethod
-    def build_root_node(cls, kind):
-        tmp_node = {}
-        if kind == 'kwarg':
-            tmp_node['name'] = 'x-y-z'
-            tmp_node['translated'] = 'x-y-z'
-            tmp_node['fct_args'] = ''
-            tmp_node['description'] = 'X-Y-Z'
-            tmp_node['type'] = 'folder'
-            tmp_node['long_description'] = ''
-            tmp_node['children'] = []
-        elif kind == 'rule':
-            tmp_node['name'] = 'rule'
-            tmp_node['translated'] = 'rule'
-            tmp_node['fct_args'] = ''
-            tmp_node['description'] = 'Rules'
-            tmp_node['type'] = 'folder'
-            tmp_node['long_description'] = ''
-            tmp_node['children'] = []
-        elif kind == 'table':
-            tmp_node['name'] = 'tables'
-            tmp_node['translated'] = 'tables'
-            tmp_node['fct_args'] = ''
-            tmp_node['description'] = 'Tables'
-            tmp_node['type'] = 'folder'
-            tmp_node['long_description'] = ''
-            tmp_node['children'] = []
-        return tmp_node
+        super(RuleParameter, cls).__setup__()
+        cls.name.string = 'Code'
+        cls.string.string = 'Name'
 
 
-class Rule(ModelView, ModelSQL):
+class RuleEngine(ModelView, ModelSQL):
     "Rule"
     __name__ = 'rule_engine'
 
     name = fields.Char('Name', required=True)
-    context = fields.Many2One('rule_engine.context', 'Context', required=True,
+    context = fields.Many2One('rule_engine.context', 'Context',
         ondelete='RESTRICT')
-    code = fields.Text('Code')
-    data_tree = fields.Function(
-        fields.Text('Data Tree'),
-        'get_data_tree')
+    short_name = fields.Char('Code', required=True)
+        #TODO : rename as code (before code was the name for algorithm)
+    algorithm = fields.Text('Algorithm')
+    data_tree = fields.Function(fields.Text('Data Tree'),
+        'on_change_with_data_tree')
     test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases',
         states={'invisible': Eval('id', 0) <= 0},
         context={'rule_id': Eval('id')})
@@ -554,29 +490,32 @@ class Rule(ModelView, ModelSQL):
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
         depends=['debug_mode'], order=[('create_date', 'DESC')])
-    rule_parameters = fields.One2Many('rule_engine.parameter', 'parent_rule',
-        'Rule parameters')
-    rule_kwargs = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
-        'Extra Kwargs', domain=[('kind', '=', 'kwarg')],
-        states={'invisible': Or(
+    parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
+        'Parameters', states={'invisible': Or(
+                Eval('extra_data_kind') != 'parameter',
                 ~Eval('extra_data'),
-                Eval('extra_data_kind') != 'kwarg')})
-    rule_rules = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
-        'Extra Rules', domain=[('kind', '=', 'rule')],
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
+    rules_used = fields.Many2Many(
+        'rule_engine-rule_engine', 'parent_rule', 'rule', 'Rules',
         states={'invisible': Or(
+                Eval('extra_data_kind') != 'rule',
                 ~Eval('extra_data'),
-                Eval('extra_data_kind') != 'rule')})
-    rule_tables = fields.One2ManyDomain('rule_engine.parameter', 'parent_rule',
-        'Extra Tables', domain=[('kind', '=', 'table')],
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
+    tables_used = fields.Many2Many(
+        'rule_engine-table', 'parent_rule', 'table', 'Tables',
         states={'invisible': Or(
+                Eval('extra_data_kind') != 'table',
                 ~Eval('extra_data'),
-                Eval('extra_data_kind') != 'table')})
+                )
+            }, depends=['extra_data_kind', 'extra_data'])
     extra_data = fields.Function(fields.Boolean('Display Extra Data'),
         'get_extra_data', 'setter_void')
     extra_data_kind = fields.Function(
         fields.Selection([
                 ('', ''),
-                ('kwarg', 'kwarg'),
+                ('parameter', 'Parameter'),
                 ('rule', 'Rule'),
                 ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
@@ -588,40 +527,47 @@ class Rule(ModelView, ModelSQL):
 
     @classmethod
     def __setup__(cls):
-        super(Rule, cls).__setup__()
+        super(RuleEngine, cls).__setup__()
         cls._error_messages.update({
-                'invalid_code': 'Your code has errors!',
+                'invalid_code': 'Your algorithm has errors!',
                 'bad_rule_computation': 'An error occured in rule %s.'
                 'For more information, activate debug mode and see the logs'
                 '\n\nError info :\n%s',
+                'execute_draft_rule': 'The rule %s is a draft.'
+                'Update the rule status to "Validated"',
+                'kwarg_expected': 'Expected %s as a parameter for rule %s',
                 })
-        on_change_fields = ['context', 'rule_parameters']
-        for field_name in dir(cls):
-            field = getattr(cls, field_name)
-            if not isinstance(field, fields.One2ManyDomain):
-                continue
-            if not field.model_name == 'rule_engine.parameter':
-                continue
-            if not field.field == 'parent_rule':
-                continue
-            on_change_fields.append(field_name)
-        for field_name in on_change_fields:
-            tmp_field = copy.copy(getattr(cls, field_name))
-            tmp_field.on_change = [x for x in on_change_fields]
-            setattr(cls, field_name, tmp_field)
         cls._sql_constraints += [
-            ('name_uniq', 'UNIQUE(name)', 'The name must be unique !'),
+            ('code_unique', 'UNIQUE(short_name)',
+                'The code must be unique'),
             ]
 
     @classmethod
-    def copy(cls, objects, default=None):
-        default = {} if default is None else default
-        default.update({
-                'rule_kwargs': [],
-                'rule_rules': [],
-                'rule_tables': [],
-                })
-        return super(Rule, cls).copy(objects, default)
+    def __register__(cls, module_name):
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+
+        super(RuleEngine, cls).__register__(module_name)
+
+        the_table = TableHandler(cursor, cls, module_name)
+        rule = cls.__table__()
+        # Migration from 1.1: move code to algorithm - add short_name
+        if the_table.column_exist('code'):
+            the_table.drop_constraint('name_unique')
+            cursor.execute(*rule.update(
+                    [rule.algorithm],
+                    [rule.code]))
+            cursor.execute("UPDATE rule_engine "
+                "SET algorithm = REPLACE(algorithm, 'rule_compl_', 'param_')")
+            cursor.execute("UPDATE rule_engine "
+                "SET algorithm = REPLACE(algorithm, 'kwarg_', 'param_')")
+            the_table.drop_column('code')
+            cursor.execute(*rule.update(
+                    [rule.short_name],
+                    [rule.name]))
+            cursor.execute("UPDATE rule_engine "
+                "SET short_name = TRANSLATE(short_name,"
+                "'éèêàù-%+:. ', 'eeeau______')")
 
     @classmethod
     def write(cls, rules, values):
@@ -629,64 +575,71 @@ class Rule(ModelView, ModelSQL):
             RuleExecutionLog = Pool().get('rule_engine.log')
             RuleExecutionLog.delete(RuleExecutionLog.search([
                 ('rule', 'in', [x.id for x in rules])]))
-        super(Rule, cls).write(rules, values)
+        super(RuleEngine, cls).write(rules, values)
 
     @classmethod
     def _export_keys(cls):
-        return set(['name'])
+        return set(['short_name'])
 
     @classmethod
     def _export_skips(cls):
-        result = super(Rule, cls)._export_skips()
+        result = super(RuleEngine, cls)._export_skips()
         result.add('debug_mode')
         result.add('exec_logs')
-        result.add('rule_kwargs')
-        result.add('rule_rules')
-        result.add('rule_tables')
         return result
 
-    def on_change_rule_parameters(self):
-        # TODO : Currently uses the fact that the Transaction will be
-        # rollbacked to pseudo-update self.rule_parameters to include new
-        # parameters from One2ManyDomain fields.
-        # A better way would be to include the rule_parameters update in the
-        # on_change result
-        rule_parameters = []
-        for field_name, field in self._fields.iteritems():
-            if not isinstance(field, fields.One2ManyDomain):
-                continue
-            if not field.model_name == 'rule_engine.parameter':
-                continue
-            if not field.field == 'parent_rule':
-                continue
-            value = getattr(self, field_name, [])
-            rule_parameters += value
-        keys = [(x.kind, x.code) for x in rule_parameters]
-        for elem in self.rule_parameters:
-            if (elem.kind, elem.code) in keys:
-                continue
-            rule_parameters.append(elem)
-        self.rule_parameters = filter(lambda x: x.kind is not None,
-            rule_parameters)
-        return {'data_tree': self.get_data_tree(None)}
+    @classmethod
+    def fill_empty_data_tree(cls):
+        res = []
+        for label_type in ('parameters', 'rules_used', 'tables_used'):
+            tmp_node = {}
+            tmp_node['name'] = ''
+            tmp_node['translated'] = ''
+            tmp_node['fct_args'] = ''
+            tmp_node['description'] = coop_string.translate_label(cls,
+                label_type)
+            tmp_node['type'] = 'folder'
+            tmp_node['long_description'] = ''
+            tmp_node['children'] = []
+            res.append(tmp_node)
+        return res
 
-    def on_change_rule_kwargs(self):
-        return self.on_change_rule_parameters()
+    @classmethod
+    def default_data_tree(cls):
+        data_tree = cls.fill_empty_data_tree()
+        return json.dumps(data_tree)
 
-    def on_change_rule_rules(self):
-        return self.on_change_rule_parameters()
+    @fields.depends('rules_used', 'tables_used',
+        'parameters', 'context')
+    def on_change_with_data_tree(self, name=None):
+        return json.dumps(self.data_tree_structure())
 
-    def on_change_rule_tables(self):
-        return self.on_change_rule_parameters()
+    @fields.depends('short_name', 'name')
+    def on_change_with_short_name(self):
+        if self.short_name:
+            return self.short_name
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
-    def on_change_context(self):
-        return self.on_change_rule_parameters()
+    @classmethod
+    def _post_import(cls, rules):
+        cls.validate(rules)
+
+    @classmethod
+    def validate(cls, rules):
+        super(RuleEngine, cls).validate(rules)
+        for rule in rules:
+            if rule.status == 'validated':
+                rule.check_code()
+
+    @staticmethod
+    def default_status():
+        return 'draft'
 
     def filter_errors(self, error):
         if isinstance(error, WARNINGS):
             return False
         elif (isinstance(error, pyflakes.messages.UndefinedName)
-                and error.message_args[0] in self.allowed_functions):
+                and error.message_args[0] in self.allowed_functions()):
             return False
         else:
             return True
@@ -701,33 +654,60 @@ class Rule(ModelView, ModelSQL):
             return True
         self.raise_user_error('invalid_code')
 
-    @classmethod
-    def _post_import(cls, rules):
-        cls.validate(rules)
-
-    @classmethod
-    def validate(cls, rules):
-        super(Rule, cls).validate(rules)
-        for rule in rules:
-            rule.check_code()
-
-    @staticmethod
-    def default_status():
-        return 'draft'
+    def get_extra_data_for_on_change(self, existing_values):
+        if not getattr(self, 'parameters', None):
+            return None
+        return dict([(elem.name, existing_values.get(
+                        elem.name, None))
+                for elem in self.parameters])
 
     def get_context_for_execution(self):
         return self.context.get_context(self)
 
+    def execute_rule(self, the_rule, evaluation_context, **execution_kwargs):
+        result = the_rule.execute(evaluation_context, execution_kwargs)
+        if result.has_errors:
+            raise InternalRuleEngineError(
+                'Impossible to evaluate parameter %s when computing rule %s' %
+                (the_rule.short_name, self.name))
+        return result.result
+
+    def as_context(self, elem, kind, evaluation_context, context, forced_value,
+            debug=False):
+        if not forced_value:
+            if kind == 'param':
+                self.raise_user_error('kwarg_expected', (elem.name,
+                        self.name))
+        technical_name = self.get_translated_name(elem, kind)
+        if forced_value:
+            context[technical_name] = lambda: forced_value
+        elif kind == 'rule':
+            context[technical_name] = \
+                functools.partial(self.execute_rule, elem, evaluation_context)
+        elif kind == 'table':
+            context[technical_name] = \
+                functools.partial(table.TableCell.get, elem)
+        else:
+            return
+        if debug:
+            debug_wrapper = self.get_wrapper_func(context)
+            context[technical_name] = debug_wrapper(context[technical_name])
+
     def add_rule_parameters_to_context(self, evaluation_context,
             execution_kwargs, context):
-        for elem in self.rule_parameters:
-            if elem.code in execution_kwargs:
-                forced_value = execution_kwargs[elem.code]
-            elif elem.code in execution_kwargs:
-                forced_value = execution_kwargs[elem.code]
+
+        for elem in self.parameters:
+            if elem.name in execution_kwargs:
+                forced_value = execution_kwargs[elem.name]
             else:
                 forced_value = None
-            elem.as_context(evaluation_context, context, forced_value,
+            self.as_context(elem, 'param', evaluation_context, context,
+                forced_value, Transaction().context.get('debug'))
+        for elem in self.tables_used:
+            self.as_context(elem, 'table', evaluation_context, context, None,
+                Transaction().context.get('debug'))
+        for elem in self.rules_used:
+            self.as_context(elem, 'rule', evaluation_context, context, None,
                 Transaction().context.get('debug'))
 
     def prepare_context(self, evaluation_context, execution_kwargs):
@@ -740,6 +720,30 @@ class Rule(ModelView, ModelSQL):
         context['context'] = context
         return context
 
+    def get_wrapper_func(self, context):
+        def debug_wrapper(func):
+            def wrapper_func(*args, **kwargs):
+                context['__result__'].low_level_debug.append(
+                    'Entering %s' % self.get_rec_name(None))
+                if args:
+                    context['__result__'].low_level_debug.append(
+                        '\targs : %s' % str(args))
+                if kwargs:
+                    context['__result__'].low_level_debug.append(
+                        '\tkwargs : %s' % str(kwargs))
+                try:
+                    result = func(*args, **kwargs)
+                except Exception, exc:
+                    context['__result__'].errors.append(
+                        'ERROR in %s : %s' % (
+                            self.get_rec_name(None), str(exc)))
+                    raise
+                context['__result__'].low_level_debug.append(
+                    '\tresult = %s' % str(result))
+                return result
+            return wrapper_func
+        return debug_wrapper
+
     def compute(self, evaluation_context, execution_kwargs):
         with Transaction().set_context(debug=self.debug_mode or
                 'force_debug_mode' in Transaction().context):
@@ -750,6 +754,9 @@ class Rule(ModelView, ModelSQL):
             try:
                 comp = _compile_source_exec(self.as_function)
                 exec comp in context, localcontext
+                if (not Transaction().context.get('debug') and
+                        self.status == 'draft'):
+                    self.raise_user_error('execute_draft_rule', (self.name))
                 the_result.result = localcontext[
                     ('result_%s' % hash(self.name)).replace('-', '_')]
                 the_result.result_set = True
@@ -770,7 +777,7 @@ class Rule(ModelView, ModelSQL):
                     'in rule definition line %d:\n' % lineno
                     stack_info += '\n'
                     for line_number, line in enumerate(
-                            self.code.split('\n'), 1):
+                            self.algorithm.split('\n'), 1):
                         if (line_number >= lineno - 2 and
                                 line_number <= lineno + 2):
                             if line_number == lineno:
@@ -809,52 +816,91 @@ class Rule(ModelView, ModelSQL):
 
     @property
     def as_function(self):
-        code = '\n'.join(' ' + l for l in self.code.splitlines())
+        code = '\n'.join(' ' + l for l in self.algorithm.splitlines())
         name = ('%s' % hash(self.name)).replace('-', '_')
         code_template = CODE_TEMPLATE % (name, name, name)
         return decistmt(code_template % code)
 
-    def data_tree_structure(self):
-        if self.context:
-            tmp_result = [e.as_tree() for e in self.context.allowed_elements]
+    def get_translated_name(self, elem, kind):
+        if kind == 'table':
+            return '%s_%s' % (kind, elem.code)
+        elif kind == 'rule':
+            return '%s_%s' % (kind, elem.short_name)
+        elif kind == 'param':
+            return '%s_%s' % (kind, elem.name)
+
+    def get_fct_args(self, elem, kind):
+        if kind == 'table':
+            dimension_names = []
+            for idx in range(1, table.DIMENSION_MAX + 1):
+                dim = getattr(elem, 'dimension_kind%s' % idx, None)
+                if not dim:
+                    break
+                dim_name = getattr(elem, 'dimension_name%s' % idx, None)
+                if not dim_name:
+                    dim_name = 'Col #%s' % idx
+                dimension_names.append(dim_name)
+            res = ', '.join(
+                map(coop_string.remove_invalid_char, dimension_names))
+        elif kind == 'rule':
+            res = ', '.join(('%s=' % elem.name
+                for elem in elem.parameters))
         else:
-            tmp_result = []
-        if not (hasattr(self, 'rule_parameters') and self.rule_parameters):
-            return tmp_result
+            res = ''
+        return res
+
+    def build_node(self, elem, kind):
+        return {
+            'name': name,
+            'description': elem.get_rec_name(None),
+            'type': 'function',
+            'long_description': '%s (%s)' % (elem.get_rec_name(None), kind),
+            'children': [],
+            'translated': self.get_translated_name(elem, kind),
+            'fct_args': self.get_fct_args(elem, kind),
+            }
+
+    def data_tree_structure_for_kind(self, data_tree, tree_node_name,
+            kind_code, elements):
         tmp_node = {}
-        tmp_node['name'] = 'extra args'
-        tmp_node['translated'] = 'extra args'
+        tmp_node['name'] = ''
+        tmp_node['translated'] = ''
         tmp_node['fct_args'] = ''
-        tmp_node['description'] = 'Extra Args'
+        tmp_node['description'] = tree_node_name
         tmp_node['type'] = 'folder'
         tmp_node['long_description'] = ''
         tmp_node['children'] = []
-        param_nodes = {}
-        for elem in self.rule_parameters:
-            param_node = {}
-            param_node['name'] = elem.name
-            param_node['translated'] = elem.get_translated_technical_name()
-            param_node['fct_args'] = elem.get_fct_args()
-            param_node['description'] = elem.get_description()
-            param_node['type'] = 'function'
-            param_node['long_description'] = elem.get_long_description()
-            param_node['children'] = []
-            if not elem.kind in param_nodes:
-                param_nodes[elem.kind] = elem.build_root_node(elem.kind)
-            param_nodes[elem.kind]['children'].append(param_node)
-        tmp_node['children'] = [x for x in param_nodes.itervalues()]
-        tmp_result.append(tmp_node)
-        return tmp_result
+        for elem in elements:
+            param_node = self.build_node(elem, kind_code)
+            tmp_node['children'].append(param_node)
+        data_tree.append(tmp_node)
 
-    def get_data_tree(self, name):
-        return json.dumps(self.data_tree_structure())
+    def data_tree_structure(self):
+        if self.context:
+            res = [e.as_tree() for e in self.context.allowed_elements]
+        else:
+            res = []
 
-    @property
+        self.data_tree_structure_for_kind(res,
+            coop_string.translate_label(self, 'parameters'),
+            'param', self.parameters)
+        self.data_tree_structure_for_kind(res,
+            coop_string.translate_label(self, 'rules_used'), 'rule',
+            self.rules_used)
+        self.data_tree_structure_for_kind(res,
+            coop_string.translate_label(self, 'tables_used'), 'table',
+            self.tables_used)
+        return res
+
     def allowed_functions(self):
         result = sum([e.as_functions_list()
                 for e in self.context.allowed_elements], [])
-        result += [elem.get_translated_technical_name()
-            for elem in self.rule_parameters]
+        result += [self.get_translated_name(elem, 'table')
+            for elem in self.tables_used]
+        result += [self.get_translated_name(elem, 'rule')
+            for elem in self.rules_used]
+        result += [self.get_translated_name(elem, 'param')
+            for elem in self.parameters]
         return result
 
     def get_rec_name(self, name=None):
@@ -867,7 +913,7 @@ class Rule(ModelView, ModelSQL):
         return ''
 
     @classmethod
-    def default_code(cls):
+    def default_algorithm(cls):
         return 'return'
 
     @fields.depends('tags')
@@ -1178,7 +1224,7 @@ class TestCaseValue(ModelView, ModelSQL):
             return [('', '')]
         rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
         func_finder = FunctionFinder(
-            ['Decimal', rule_name] + rule.allowed_functions)
+            ['Decimal', rule_name] + rule.allowed_functions())
         ast_node = ast.parse(rule.as_function)
         func_finder.visit(ast_node)
         test_values = list(set([
@@ -1223,10 +1269,10 @@ class TestCase(ModelView, ModelSQL):
         if 'rule_id' not in Transaction().context:
             return ''
         Rule = Pool().get('rule_engine')
-        return Rule(Transaction().context.get('rule_id')).code
+        return Rule(Transaction().context.get('rule_id')).algorithm
 
     def get_rule_text(self, name):
-        return self.rule.code
+        return self.rule.algorithm
 
     def execute_test(self):
         test_context = {}
@@ -1299,9 +1345,10 @@ class TestCase(ModelView, ModelSQL):
         the_rule = Rule(Transaction().context.get('rule_id'))
         errors = check_code(the_rule.as_function)
         result = []
+        allowed_functions = the_rule.allowed_functions()
         for error in errors:
             if (isinstance(error, pyflakes.messages.UndefinedName)
-                    and error.message_args[0] in the_rule.allowed_functions):
+                    and error.message_args[0] in allowed_functions):
                 element_name = error.message_args[0]
                 result.append({
                         'name': element_name,

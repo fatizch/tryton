@@ -38,10 +38,10 @@ class OptionSubscription(model.CoopWizard):
         contract = Contract(contract_id)
         options = []
         excluded = []
-        for coverage in contract.options:
-            excluded += coverage.offered.options_excluded
+        for option in contract.options:
+            excluded += option.coverage.options_excluded
         for coverage in [x.coverage
-                for x in contract.offered.ordered_coverages]:
+                for x in contract.product.ordered_coverages]:
             if coverage.subscription_behaviour == 'mandatory':
                 selection = 'mandatory'
             elif coverage in excluded:
@@ -49,7 +49,7 @@ class OptionSubscription(model.CoopWizard):
             else:
                 selection = ''
             options.append({
-                    'is_selected': (coverage.id in [x.offered.id
+                    'is_selected': (coverage.id in [x.product.id
                             for x in contract.options]
                         or coverage.subscription_behaviour != 'optional'),
                     'coverage_behaviour': coverage.subscription_behaviour,
@@ -58,13 +58,13 @@ class OptionSubscription(model.CoopWizard):
                     })
         return {
             'contract': contract.id,
-            'options': options
+            'options': options,
             }
 
-    def subscribe_option(self, coverage):
+    def subscribe_option(self, coverage, product):
         Option = Pool().get('contract.option')
         option = Option()
-        option.init_from_offered(coverage,
+        option.init_from_coverage(coverage, product,
             self.options_displayer.contract.start_date)
         self.options_displayer.contract.options = list(
             self.options_displayer.contract.options)
@@ -80,12 +80,12 @@ class OptionSubscription(model.CoopWizard):
         if contract.options:
             contract.options = list(contract.options)
         for option in contract.options:
-            if option.offered in to_subscribe:
-                to_subscribe.remove(option.offered)
+            if option.coverage in to_subscribe:
+                to_subscribe.remove(option.coverage)
             else:
                 to_delete.append(option)
         for coverage in to_subscribe:
-            self.subscribe_option(coverage)
+            self.subscribe_option(coverage, contract.product)
         contract.options = list(contract.options)
         contract.options[:] = [x for x in contract.options
             if not x in to_delete]

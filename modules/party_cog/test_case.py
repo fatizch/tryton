@@ -35,13 +35,13 @@ class TestCaseModel:
     @classmethod
     def _get_test_case_dependencies(cls):
         result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['relation_kind_test_case'] = {
-            'name': 'Relation Kind Test Case',
+        result['relation_type_test_case'] = {
+            'name': 'Relation Type Test Case',
             'dependencies': set([]),
             }
         result['party_test_case'] = {
             'name': 'Party Test Case',
-            'dependencies': set(['relation_kind_test_case']),
+            'dependencies': set(['relation_type_test_case']),
             }
         result['hierarchy_test_case'] = {
             'name': 'Hierarchy Test Case',
@@ -60,17 +60,31 @@ class TestCaseModel:
         return res
 
     @classmethod
-    def relation_kind_test_case(cls):
+    def relation_type_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
-        RelationKind = Pool().get('party.relation.kind')
-        spouse = RelationKind()
+        RelationType = Pool().get('party.relation.type')
+        if RelationType.search([('code', '=', 'spouse')]):
+            return
+        spouse = RelationType()
         spouse.code = 'spouse'
         spouse.name = translater('Spouse')
         spouse.reversed_name = translater('Spouse')
-        parent = RelationKind()
+        spouse.save()
+        spouse.reverse = spouse
+        spouse.save()
+        parent = RelationType()
         parent.code = 'parent'
         parent.name = translater('Parent')
-        parent.reversed_name = translater('Children')
+        parent.save()
+
+        children = RelationType()
+        children.code = 'children'
+        children.name = translater('Children')
+        children.reverse = parent
+        children.save()
+
+        parent.reverse = children
+        parent.save()
         return [spouse, parent]
 
     @classmethod
@@ -167,8 +181,8 @@ class TestCaseModel:
     @classmethod
     def party_test_case(cls):
         Party = Pool().get('party.party')
-        PartyRelation = Pool().get('party.relation')
-        RelationKind = Pool().get('party.relation.kind')
+        PartyRelation = Pool().get('party.relation.all')
+        RelationType = Pool().get('party.relation.type')
         Configuration = cls.get_instance()
         nb_males = Party.search_count([('is_person', '=', True),
                 ('gender', '=', 'male')])
@@ -187,8 +201,8 @@ class TestCaseModel:
         cls.read_list_file('last_name', MODULE_NAME)
         cls.read_csv_file('address_person.csv', MODULE_NAME, sep=';',
             reader='dict')
-        relation_spouse = RelationKind.search([('code', '=', 'spouse')])[0]
-        relation_child = RelationKind.search([('code', '=', 'parent')])[0]
+        relation_spouse = RelationType.search([('code', '=', 'spouse')])[0]
+        relation_parent = RelationType.search([('code', '=', 'parent')])[0]
         persons = []
         i = 0
         while i <= total_nb:
@@ -209,8 +223,8 @@ class TestCaseModel:
                         Configuration.percent_of_couple_with_same_name):
                     person2.name = person1.name
                 relation = PartyRelation()
-                relation.to_party = person2
-                relation.relation_kind = relation_spouse
+                relation.to = person2
+                relation.type = relation_spouse
                 person1.relations.append(relation)
                 if not cls.launch_dice(
                         Configuration.percent_of_couple_with_children):
@@ -222,8 +236,8 @@ class TestCaseModel:
                     persons.append(child)
                     for parent in (person1, person2):
                         relation = PartyRelation()
-                        relation.to_party = child
-                        relation.relation_kind = relation_child
+                        relation.to = child
+                        relation.type = relation_parent
                         parent.relations.append(relation)
         return persons
 

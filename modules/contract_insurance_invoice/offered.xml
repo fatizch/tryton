@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="offered_invoice_frequency_view_form">
+            <field name="model">offered.invoice.frequency</field>
+            <field name="type">form</field>
+            <field name="name">offered_invoice_frequency_form</field>
+        </record>
+        <record model="ir.ui.view" id="offered_invoice_frequency_view_list">
+            <field name="model">offered.invoice.frequency</field>
+            <field name="type">tree</field>
+            <field name="name">offered_invoice_frequency_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_offered_invoice_frequency">
+            <field name="name">Invoice Frequencies</field>
+            <field name="res_model">offered.invoice.frequency</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_offered_invoice_frequency_view1">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="offered_invoice_frequency_view_list"/>
+            <field name="act_window" ref="act_offered_invoice_frequency"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_offered_invoice_frequency_view2">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="offered_invoice_frequency_view_form"/>
+            <field name="act_window" ref="act_offered_invoice_frequency"/>
+        </record>
+        <menuitem parent="offered.menu_product_configuration" sequence="20" action="act_offered_invoice_frequency" id="menu_offered_invoice_frequency"/>
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+        <record model="ir.ui.view" id="option_description_view_form">
+            <field name="model">offered.option.description</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="name">option_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="fee_description_view_form">
+            <field name="model">account.fee.description</field>
+            <field name="inherit" ref="account_cog.fee_description_view_form"/>
+            <field name="name">fee_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="tax_description_view_form">
+            <field name="model">account.tax.description</field>
+            <field name="inherit" ref="account_cog.tax_desc_view_form"/>
+            <field name="name">tax_description_form</field>
+        </record>
+    </data>
+</tryton>

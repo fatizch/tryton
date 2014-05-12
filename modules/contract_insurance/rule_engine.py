@@ -14,8 +14,8 @@ class RuleEngineRuntime:
 
     @classmethod
     def get_lowest_level_object(cls, args):
-        if 'data' in args:
-            return args['data']
+        if 'option' in args:
+            return args['option']
         return super(RuleEngineRuntime, cls).get_lowest_level_object(args)
 
     @classmethod

@@ -199,3 +199,6 @@ class Address(export.ExportImportMixin):
         result['multiline'] = self.full_address
         result['oneline'] = self.full_address.replace('\n', ' ')
         return result
+
+    def get_icon(self):
+        return 'coopengo-address'

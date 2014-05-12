@@ -6,7 +6,7 @@ from .party import *
 from .test_case import *
 from .wizard import *
 from .service import *
-from .document import *
+from .contact_type import *
 
 
 def register():
@@ -16,10 +16,9 @@ def register():
         Contract,
         ContractOption,
         ContractAddress,
+        ContractSelectEndDate,
         # From Service
         ContractService,
-        # From Document
-        DocumentTemplate,
         #From Rule Engine
         RuleEngineRuntime,
         # from party
@@ -30,7 +29,13 @@ def register():
         #From Wizard
         OptionsDisplayer,
         WizardOption,
+        SynthesisMenu,
+        SynthesisMenuContrat,
+        ContactType,
+        ContractContact,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
+        SynthesisMenuOpen,
+        ContractEnd,
         module='contract', type_='wizard')

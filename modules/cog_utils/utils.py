@@ -70,35 +70,16 @@ def get_data_from_dict(data, the_dict):
 
 
 def convert_ref_to_obj(ref):
-    # Currently (version 2.4), tryton does not convert automatically Reference
-    # fields from string concatenation to browse objects.
-    # That might evolve in the future, meanwhile this litlle method should make
-    # it easier to do.
-    #
-    # Warning : it is not failsafe
-    if isinstance(ref, Model):
-        return ref
-    try:
-        model, id = ref.split(',')
-    except Exception:
-        raise
-    model_obj = Pool().get(model)
-    return model_obj(id)
+    model, id = ref.split(',')
+    return Pool().get(model)(int(id))
 
 
 def limit_dates(dates, start=None, end=None):
-    res = list(dates)
-    res.sort()
-    filter_func = lambda x: (x >= start if start else True) and (
-        x < end if end else True)
-    res = filter(filter_func, res)
-    res = set(res)
+    res = set([x for x in dates
+            if (not start or x >= start) and (not end or x < end)])
     if end:
         res.add(end)
-    # The list was sorted before filtering so the resulting set should be
-    # properly sorted as well. 'end' should be the greatest elem of the set
-    # so adding it later should not change the iteration order
-    return res
+    return sorted(res)
 
 
 def to_date(string, format='ymd'):
@@ -232,7 +213,7 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     field = getattr(from_class, field_name)
     if not isinstance(field, fields.Many2One):
         if action:
-            res = {action: [CurModel.default_get(fields_names)]}
+            res = {action: [[0, CurModel.default_get(fields_names)]]}
         else:
             res = [CurModel.default_get(fields_names)]
     else:
@@ -508,12 +489,6 @@ def recursive_list_tuple_convert(the_list):
         return the_list
 
 
-def is_none(instance, field_name):
-    return (
-        not hasattr(instance, field_name)
-        or not getattr(instance, field_name))
-
-
 def concat_res(res1, res2):
     res = list(res1)
     res[0] = res[0] and res2[0]
@@ -528,6 +503,9 @@ def extract_object(instance, vars_name=None):
         if len(var_name) == 2:
             var_name, extract_kind = var_name
         if not getattr(instance, var_name):
+            continue
+        if isinstance(instance._fields[var_name],
+                fields.Function):
             continue
         if isinstance(instance._fields[var_name],
                 (fields.Many2Many, fields.One2Many)):
