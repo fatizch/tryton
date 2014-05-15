@@ -1,5 +1,4 @@
 import datetime
-import copy
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool, Len
@@ -1256,8 +1255,7 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
 
     @classmethod
     def __setup__(cls):
-        cls.kind = copy.copy(cls.kind)
-        cls.kind.selection = list(set(cls.get_possible_agreement_kind()))
+        cls.kind.selection = cls.get_possible_agreement_kind()
         super(ContractAgreementRelation, cls).__setup__()
 
     @classmethod
