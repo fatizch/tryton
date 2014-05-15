@@ -4,10 +4,8 @@ from decimal import Decimal
 
 from dateutil.rrule import rrule, YEARLY, MONTHLY
 from dateutil.relativedelta import relativedelta
-from sql import Cast
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
-from sql.operators import Concat
 
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
@@ -282,8 +280,7 @@ class Contract:
         'Invoice contracts up to the date'
         periods = defaultdict(list)
         for contract in contracts:
-            if contract.get_status_at_date(contract.last_invoice_end) not in (
-                    'active', 'quote'):
+            if contract.status not in ('active', 'quote'):
                 continue
             for period in contract.get_invoice_periods(up_to_date):
                 periods[period].append(contract)
@@ -984,24 +981,12 @@ class CreateInvoiceContractBatch(batchs.BatchRoot):
 
         contract = pool.get('contract').__table__()
         contract_invoice = pool.get('contract.invoice').__table__()
-        status_history = pool.get('contract.status.history').__table__()
-        date_clause = ((
-                (status_history.start_date == None)
-                | (status_history.start_date <= utils.today()))
-            & (
-                (status_history.end_date == None)
-                | (status_history.end_date >= utils.today())))
 
-        query_table = contract.join(status_history,
-            condition=(
-                (status_history.reference == Concat(
-                        'contract,', Cast(contract.id, 'VARCHAR')))
-                & date_clause)
-            ).join(contract_invoice, 'LEFT', condition=(
-                    contract.id == contract_invoice.contract))
+        query_table = contract.join(contract_invoice, 'LEFT', condition=(
+                contract.id == contract_invoice.contract))
 
         cursor.execute(*query_table.select(contract.id, group_by=contract.id,
-                where=(status_history.status == 'active'),
+                where=(contract.status == 'active'),
                 having=(
                     (Max(contract_invoice.end) < utils.today())
                     | (Max(contract_invoice.end) == None))))

@@ -12,8 +12,8 @@ from .contact_type import *
 def register():
     Pool.register(
         # from contract
-        StatusHistory,
         Contract,
+        ActivationHistory,
         ContractOption,
         ContractAddress,
         ContractSelectEndDate,

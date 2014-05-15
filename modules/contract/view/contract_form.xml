@@ -32,8 +32,8 @@
             <label name="appliable_conditions_date"/>
             <field name="appliable_conditions_date"/>
         </page>
-        <page string="Status History" name="status_history">
-            <field name="status_history"/>
+        <page string="Activation History" name="activation_history">
+            <field name="activation_history"/>
         </page>
     </notebook>
     <newline/>

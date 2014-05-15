@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
+import datetime
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, And
@@ -125,10 +126,10 @@ class OptionDescription:
             for x in covered.options:
                 if x.coverage != self:
                     continue
-                status = x.get_status_at_date(args['date'])
-                if status is None:
+                if not(x.start_date <= args['date'] <= (x.end_date or
+                            datetime.date.max)):
                     continue
-                if status in ('quote', 'active'):
+                if x.status in ('quote', 'active'):
                     res.append((covered, x))
         return res, []
 
