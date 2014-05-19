@@ -51,7 +51,10 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
     start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
+    end_date = fields.Date('End Date', domain=['OR',
+            ('end_date', '=', None),
+            ('end_date', '>=', Eval('start_date', datetime.date.min))],
+        depends=['start_date'])
 
 
 _STATES = {
@@ -157,6 +160,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cls._error_messages.update({
                 'inactive_product_at_date':
                 'Product %s is inactive at date %s',
+                'activation_period_overlaps': 'Activation Periods "%(first)s"'
+                ' and "%(second)s" overlap.',
                 })
 
     def get_icon(self, name=None):
@@ -340,6 +345,27 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             group_by=activation_history.contract)
 
         return [('id', 'in', query)]
+
+    @classmethod
+    def validate(cls, contract):
+        super(Contract, cls).validate(contract)
+        for contract in contract:
+            contract.check_activation_dates()
+
+    def check_activation_dates(self):
+        prev_entry = None
+        for entry in sorted(self.activation_history,
+                key=lambda x: x.start_date):
+            if not prev_entry:
+                prev_entry = entry
+                continue
+            if not prev_entry.end_date or (
+                    entry.start_date <= prev_entry.end_date):
+                self.raise_user_error('activation_period_overlaps', {
+                        'first': entry.rec_name,
+                        'second': prev_entry.rec_name,
+                        })
+            prev_entry = entry
 
     def set_end_date(self, end_date):
         self.end_date = end_date

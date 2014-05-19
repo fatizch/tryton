@@ -94,7 +94,7 @@ class ContractOption:
         states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
             ('loan.parties', 'in', Eval('parties', [])),
             ('start_date', '>=', Eval('start_date', datetime.date.min)),
-            If(Bool(Eval('end_date', False)),
+            If(Bool(Eval('end_date', None)),
                 [('end_date', '<=', Eval('end_date'))],
                 [])],
         depends=['coverage_family', 'parties', 'start_date', 'end_date'])
