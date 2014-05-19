@@ -41,6 +41,7 @@ def register():
         RuleEngineRuntime,
         #From Wizard
         OptionsDisplayer,
+        WizardOption,
         ExtraPremiumSelector,
         OptionSelector,
         ExtraPremiumDisplay,

@@ -88,27 +88,5 @@
           <field name="name">Loan Create</field>
           <field name="wiz_name">loan.create</field>
         </record>
-        <!-- ############################################################ -->
-        <!-- ########### Loan Share Propagation Wizard ########### -->
-        <!-- ############################################################ -->
-        <record model="ir.action.wizard" id="launch_loan_share_propagation_wizard">
-          <field name="name">Loan Share Propagation</field>
-          <field name="wiz_name">loan.loan_share_propagate</field>
-        </record>
-        <record model="ir.ui.view" id="loan_share_propagate_parameters_view_form">
-            <field name="model">loan.loan_share_propagate.parameters</field>
-            <field name="type">form</field>
-            <field name="name">loan_share_propagate_parameters_form</field>
-        </record>
-        <record model="ir.action.wizard" id="propagate_loan_share">
-          <field name="name">Propagate Loan Share</field>
-          <field name="wiz_name">loan.loan_share_propagate</field>
-          <field name="model">loan.share</field>
-        </record>
-        <record model="ir.action.keyword" id="propagate_loan_share_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">loan.share,-1</field>
-            <field name="action" ref="propagate_loan_share"/>
-        </record>
     </data>
 </tryton>

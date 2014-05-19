@@ -28,13 +28,15 @@ def register():
         ContractOption,
         ExtraPremium,
         LoanShare,
+        OptionsDisplayer,
+        WizardOption,
         # From Billing
         BillingPremium,
         #From loan_creation_wizard
-        LoanSharePropagateParameters,
         LoanShareTreeExpansion,
         module='loan', type_='model')
     Pool.register(
         LoanCreate,
-        LoanSharePropagate,
+        OptionSubscription,
+        OptionSubscriptionWizardLauncher,
         module='loan', type_='wizard')

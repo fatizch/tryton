@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model
@@ -17,6 +17,7 @@ __all__ = [
     'ExclusionDisplay',
     'ManageExclusion',
     'ExtraPremiumDisplayer',
+    'WizardOption',
     'CreateExtraPremium',
     ]
 
@@ -32,53 +33,29 @@ class OptionSubscription:
         if Transaction().context.get('active_model') == 'contract':
             Contract = pool.get('contract')
             contract = Contract(Transaction().context.get('active_id'))
+            if len(contract.covered_elements) == 1:
+                covered_element = contract.covered_elements[0]
         elif (Transaction().context.get('active_model') ==
                 'contract.covered_element'):
             CoveredElement = pool.get('contract.covered_element')
             covered_element = CoveredElement(Transaction().context.get(
                     'active_id'))
             contract = covered_element.contract
-
-        with Transaction().set_context(contract=contract.id):
-            res = super(OptionSubscription, self).default_options_displayer(
-                values)
+        if covered_element:
+            res = self.init_default_options(contract, covered_element.options)
+            res['covered_element'] = covered_element.id
+            res['party'] = covered_element.party.id
+            res['hide_covered_element'] = True
+        else:
+            res = {}
         res['possible_covered_elements'] = [
             x.id for x in contract.covered_elements]
-        if covered_element:
-            res['covered_element'] = covered_element.id
-            res['hide_covered_element'] = True
-        elif len(contract.covered_elements) == 1:
-            res['covered_element'] = contract.covered_elements[0].id
         return res
-
-    def add_option_to_covered_element(self, covered_element, coverage):
-        Option = Pool().get('contract.option')
-        new_option = Option()
-        new_option.covered_element = covered_element
-        new_option.product = covered_element.contract.product
-        new_option.item_desc = covered_element.item_desc
-        new_option.init_from_coverage(coverage, new_option.product)
-        if isinstance(covered_element.options, tuple):
-            covered_element.options = list(covered_element.options)
-        covered_element.options.append(new_option)
-
-    def delete_options(self, options):
-        Option = Pool().get('contract.option')
-        Option.delete(options)
 
     def transition_update_options(self):
         cov_element = self.options_displayer.covered_element
-        to_subscribe = set([x.coverage for x in self.options_displayer.options
-                if x.is_selected])
-        subscribed = set([x.coverage for x in cov_element.options])
-        to_delete = []
-        for option in cov_element.options:
-            if option.coverage not in to_subscribe:
-                to_delete.append(option)
-        for coverage in to_subscribe - subscribed:
-            self.add_option_to_covered_element(cov_element, coverage)
-        if to_delete:
-            self.delete_options(to_delete)
+        cov_element.options = list(getattr(cov_element, 'options', []))
+        self.add_remove_options(cov_element.options)
         cov_element.save()
         return 'end'
 
@@ -91,13 +68,45 @@ class OptionsDisplayer:
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element',
         domain=[('id', 'in', Eval('possible_covered_elements'))],
-        states={'invisible': ~~Eval('hide_covered_element')},
-        depends=['possible_covered_elements'], required=True)
+        states={'invisible': Bool(Eval('hide_covered_element'))},
+        depends=['possible_covered_elements', 'hide_covered_element'],
+        required=True)
     hide_covered_element = fields.Boolean('Hide Covered Element',
         states={'invisible': True})
     possible_covered_elements = fields.Many2Many(
         'contract.covered_element', None, None, 'Covered Elements',
         states={'invisible': True})
+    party = fields.Function(
+        fields.Many2One('party.party', 'Party'),
+        'on_change_with_party')
+
+    @fields.depends('covered_element')
+    def on_change_with_party(self):
+        return (self.covered_element.party.id
+            if self.covered_element and self.covered_element.party else None)
+
+    @fields.depends('covered_element', 'options')
+    def on_change_covered_element(self):
+        Wizard = Pool().get('contract.wizard.option_subscription',
+            type='wizard')
+        if self.covered_element:
+            res = Wizard.init_default_options(self.covered_element.contract,
+                self.covered_element.options)
+            res['options'] = {'add': [(-1, x) for x in res['options']]}
+        else:
+            res = {}
+        if self.options:
+            res.setdefault('options', {})
+            res['options']['remove'] = [x.id for x in self.options]
+        return res
+
+
+class WizardOption:
+    __name__ = 'contract.wizard.option_subscription.options_displayer.option'
+
+    def init_subscribed_option(self, displayer, option):
+        option.item_desc = displayer.covered_element.item_desc
+        super(WizardOption, self).init_subscribed_option(displayer, option)
 
 
 class ExtraPremiumSelector(model.CoopView):
@@ -458,7 +467,7 @@ class CreateExtraPremium(Wizard):
     def __setup__(cls):
         super(CreateExtraPremium, cls).__setup__()
         cls._error_messages.update({
-                'no_option': 'Please select a option to continue',
+                'no_option': 'Please select an option to continue',
                 })
 
     def default_extra_premium(self, name):

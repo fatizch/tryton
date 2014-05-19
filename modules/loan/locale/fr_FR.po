@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -286,47 +286,6 @@ msgctxt "field:loan.increment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:loan.loan_share_propagate.parameters,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:loan.loan_share_propagate.parameters,covered_elements:"
-msgid "Covered Elements"
-msgstr "Risques Couverts"
-
-msgctxt "field:loan.loan_share_propagate.parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:loan.loan_share_propagate.parameters,loans:"
-msgid "Loans"
-msgstr "Prêts"
-
-msgctxt "field:loan.loan_share_propagate.parameters,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:loan.loan_share_propagate.parameters,options:"
-msgid "Options"
-msgstr "Options"
-
-msgctxt ""
-"field:loan.loan_share_propagate.parameters,possible_covered_elements:"
-msgid "Possible Covered Elements"
-msgstr "Risques Couverts Possibles"
-
-msgctxt "field:loan.loan_share_propagate.parameters,possible_loans:"
-msgid "Possible Loans"
-msgstr "Prêts Possibles"
-
-msgctxt "field:loan.loan_share_propagate.parameters,possible_options:"
-msgid "Possible Options"
-msgstr "Options Possibles"
-
-msgctxt "field:loan.loan_share_propagate.parameters,share:"
-msgid "Share"
-msgstr "Quotité"
-
 msgctxt "field:loan.payment,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -515,10 +474,6 @@ msgctxt "model:loan.increment,name:"
 msgid "Loan Increment"
 msgstr "Palier"
 
-msgctxt "model:loan.loan_share_propagate.parameters,name:"
-msgid "Parameters"
-msgstr "Paramètres"
-
 msgctxt "model:loan.payment,name:"
 msgid "Loan Payment"
 msgstr "Echéance"
@@ -651,14 +606,6 @@ msgctxt "view:loan.increment:"
 msgid "Loan Increments"
 msgstr "Paliers"
 
-msgctxt "view:loan.loan_share_propagate.parameters:"
-msgid "%"
-msgstr "%"
-
-msgctxt "view:loan.loan_share_propagate.parameters:"
-msgid "Propagate Loan Share"
-msgstr "Propager Quotité"
-
 msgctxt "view:loan.payment:"
 msgid "Loan Payment"
 msgstr "Echéance"
@@ -746,11 +693,3 @@ msgstr "Précédent"
 msgctxt "wizard_button:loan.create,loan_step_payments,save_loan:"
 msgid "End"
 msgstr "Terminer"
-
-msgctxt "wizard_button:loan.loan_share_propagate,parameters,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:loan.loan_share_propagate,parameters,propagate:"
-msgid "Propagate"
-msgstr "Propager"

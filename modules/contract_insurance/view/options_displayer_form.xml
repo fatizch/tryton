@@ -2,7 +2,7 @@
 <data>
     <xpath expr="/form/field[@name='options']" position="before">
         <label name="covered_element"/>
-        <field name="covered_element" colspan="3"/>
+        <field name="covered_element" widget="selection"/>
         <newline/>
     </xpath>
 </data>
