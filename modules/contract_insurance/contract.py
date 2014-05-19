@@ -304,6 +304,15 @@ class Contract(Printable):
     def get_contact(self):
         return self.subscriber
 
+    def get_main_contact(self):
+        return self.get_policy_owner()
+
+    def get_sender(self):
+        return self.company.party
+
+    def get_doc_template_kind(self):
+        return 'contract'
+
     def set_end_date(self, end_date):
         super(Contract, self).set_end_date(end_date)
         for covered_element in self.covered_elements:
@@ -908,14 +917,16 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         to_delete = [elem for elem in existing.itervalues()]
         OptionModel = Pool().get('contract.option')
         for coverage in self.get_coverages(product, self.item_desc):
+            good_opt = None
             if coverage in existing:
                 good_opt = existing[coverage]
                 to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
                 good_opt = OptionModel()
                 good_opt.init_from_coverage(coverage, product, start_date)
-            good_opt.save()
-            good_options.append(good_opt)
+            if good_opt:
+                good_opt.save()
+                good_options.append(good_opt)
         if to_delete:
             OptionModel.delete(to_delete)
         self.options = good_options
