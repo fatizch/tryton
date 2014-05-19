@@ -351,7 +351,7 @@ class OptionsDisplayer:
         for option in self.options:
             option_dict = None
             for child in option.childs:
-                if not child.loan or not child.is_selected:
+                if not child.loan:
                     continue
                 if not option_dict:
                     option_dict = {'id': option.id, 'childs': {'update': []}}
