@@ -323,9 +323,9 @@ class Contract(Printable):
 
     def activate_contract(self):
         super(Contract, self).activate_contract()
-        for covered_element in self.covered_elements:
+        for covered_element in getattr(self, 'covered_elements', []):
             for option in covered_element.options:
-                option.activate_status()
+                option.status = 'active'
                 option.save()
 
     def init_contract(self, product, party, contract_dict=None):
@@ -502,20 +502,6 @@ class ContractOption:
             start_date=None, end_date=None, item_desc=None):
         result = super(ContractOption,
             cls).init_default_values_from_coverage(coverage, product,
-                start_date, end_date)
-        all_extra_datas = cls.default_all_extra_datas()
-        result['extra_data'] = product.get_extra_data_def('option',
-            all_extra_datas, result['appliable_conditions_date'],
-            coverage=coverage, item_desc=item_desc)
-        all_extra_datas.update(result['extra_data'])
-        result['all_extra_datas'] = all_extra_datas
-        return result
-
-    @classmethod
-    def init_on_change_values_from_coverage(cls, coverage, product,
-            item_desc=None, start_date=None, end_date=None):
-        result = super(ContractOption,
-            cls).init_on_change_values_from_coverage(coverage, product,
                 start_date, end_date)
         all_extra_datas = cls.default_all_extra_datas()
         result['extra_data'] = product.get_extra_data_def('option',

@@ -160,6 +160,8 @@ class LoanSharePropagate(model.CoopWizard):
                             'loan': elem.id,
                             'share': self.parameters.share,
                             'option': option.id,
+                            'start_date': option.start_date,
+                            'end_date': option.end_date or elem.end_date,
                             })
         Pool().get('loan.share').create(to_create)
         return 'end'

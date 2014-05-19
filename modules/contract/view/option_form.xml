@@ -4,6 +4,13 @@
         <page string="Main Data" id="main_data">
             <label name="coverage"/>
             <field name="coverage"/>
+            <newline/>
+            <label name="start_date"/>
+            <field name="start_date"/>
+            <label name="end_date"/>
+            <field name="end_date"/>
+            <label name="status"/>
+            <field name="status"/>
         </page>
     </notebook>
     <field name="coverage_kind"/>

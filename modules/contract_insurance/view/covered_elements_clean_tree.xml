@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Covered Elements">
-  <field name="rec_name" icon="icon"/>
+  <field name="rec_name" icon="icon" expand="1"/>
 </tree>
