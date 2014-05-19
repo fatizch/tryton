@@ -62,6 +62,23 @@ class Contract(CogProcessFramework):
     def on_change_with_subscriber_desc(self, name=None):
         return self.subscriber.summary if self.subscriber else ''
 
+    def on_change_subscriber_as_company(self):
+        res = super(Contract, self).on_change_subscriber_as_company()
+        res['subscriber_desc'] = (self.subscriber_as_company.summary
+            if self.subscriber_as_company else '')
+        return res
+
+    def on_change_subscriber_as_person(self):
+        res = super(Contract, self).on_change_subscriber_as_person()
+        res['subscriber_desc'] = (self.subscriber_as_person.summary
+            if self.subscriber_as_person else '')
+        return res
+
+    def on_change_subscriber_kind(self):
+        res = super(Contract, self).on_change_subscriber_kind()
+        res['subscriber_desc'] = ''
+        return res
+
     def check_product_not_null(self):
         if not self.product:
             return False, (('no_product', ()),)

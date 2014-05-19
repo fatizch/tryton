@@ -146,13 +146,25 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Date('Start Date'),
         'getter_contract_date', searcher='search_contract_date')
     subscriber_kind = fields.Function(
-        fields.Selection(offered.SUBSCRIBER_KIND, 'Subscriber Kind',
+        fields.Selection(
+            [x for x in offered.SUBSCRIBER_KIND if x != ('all', 'All')],
+            'Subscriber Kind',
             states={
                 'readonly': Eval('product_subscriber_kind') != 'all',
                 'invisible': Eval('status') != 'quote',
                 },
             depends=['status', 'product_subscriber_kind']),
         'on_change_with_subscriber_kind', 'setter_void')
+    subscriber_as_person = fields.Function(
+        fields.Many2One('party.party', 'Subscriber',
+            domain=[('is_person', '=', True)],
+            states={'invisible': Eval('subscriber_kind') != 'person'}),
+        'on_change_with_subscriber_as_person', 'setter_void')
+    subscriber_as_company = fields.Function(
+        fields.Many2One('party.party', 'Subscriber',
+            domain=[('is_company', '=', True)],
+            states={'invisible': Eval('subscriber_kind') != 'company'}),
+        'on_change_with_subscriber_as_company', 'setter_void')
     contacts = fields.One2Many('contract.contact', 'contract', 'Contacts')
 
     @classmethod
@@ -297,9 +309,22 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('product')
     def on_change_with_subscriber_kind(self, name=None):
+        if self.subscriber:
+            if self.subscriber.is_person:
+                return 'person'
+            elif self.subscriber.is_company:
+                return 'company'
+        if self.subscriber:
+            if self.subscriber.is_person:
+                return 'person'
+            elif self.subscriber.is_company:
+                return 'company'
         if not self.product:
-            return 'all'
-        return self.product.subscriber_kind
+            return 'person'
+        if self.product.subscriber_kind in ['all', 'person']:
+            return 'person'
+        else:
+            return self.product.subscriber_kind
 
     @classmethod
     def search_contract_date(cls, name, clause):
@@ -693,6 +718,70 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''
+
+    @fields.depends('subscriber')
+    def on_change_with_subscriber_as_person(self, name=None):
+        return (self.subscriber.id
+            if self.subscriber and self.subscriber.is_person else None)
+
+    @fields.depends('subscriber_as_person')
+    def on_change_subscriber_as_person(self):
+        return {'subscriber': self.subscriber_as_person.id
+            if self.subscriber_as_person
+            and self.subscriber_as_person.is_person else None}
+
+    @fields.depends('subscriber')
+    def on_change_with_subscriber_as_company(self, name=None):
+        return (self.subscriber.id
+            if self.subscriber and self.subscriber.is_company else None)
+
+    @fields.depends('subscriber_as_company')
+    def on_change_subscriber_as_company(self):
+        return {'subscriber': self.subscriber_as_company.id
+            if self.subscriber_as_company
+            and self.subscriber_as_company.is_company else None}
+
+    @fields.depends('subscriber_kind', 'subscriber_as_company',
+        'subscriber_as_person')
+    def on_change_subscriber_kind(self):
+        if self.subscriber_kind == 'person' and self.subscriber_as_company:
+            return {'subscriber_as_company': None, 'subscriber': None}
+        elif self.subscriber_kind == 'company' and self.subscriber_as_person:
+            return {'subscriber_as_person': None, 'subscriber': None}
+        else:
+            return {}
+
+    @fields.depends('subscriber')
+    def on_change_with_subscriber_as_person(self, name=None):
+        return (self.subscriber.id
+            if self.subscriber and self.subscriber.is_person else None)
+
+    @fields.depends('subscriber_as_person')
+    def on_change_subscriber_as_person(self):
+        return {'subscriber': self.subscriber_as_person.id
+            if self.subscriber_as_person
+            and self.subscriber_as_person.is_person else None}
+
+    @fields.depends('subscriber')
+    def on_change_with_subscriber_as_company(self, name=None):
+        return (self.subscriber.id
+            if self.subscriber and self.subscriber.is_company else None)
+
+    @fields.depends('subscriber_as_company')
+    def on_change_subscriber_as_company(self):
+        return {'subscriber': self.subscriber_as_company.id
+            if self.subscriber_as_company
+            and self.subscriber_as_company.is_company else None}
+
+    @fields.depends('subscriber_kind', 'subscriber_as_company',
+        'subscriber_as_person')
+    def on_change_subscriber_kind(self):
+        if self.subscriber_kind == 'person' and self.subscriber_as_company:
+            return {'subscriber_as_company': None, 'subscriber': None}
+        elif self.subscriber_kind == 'company' and self.subscriber_as_person:
+            return {'subscriber_as_person': None, 'subscriber': None}
+        else:
+            return {}
 
 
 class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency):
