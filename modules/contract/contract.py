@@ -674,6 +674,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
         to_delete = [elem for elem in existing.itervalues()]
         OptionModel = Pool().get('contract.option')
         for coverage in self.get_coverages(self.product):
+            good_opt = None
             if coverage in existing:
                 good_opt = existing[coverage.code]
                 to_delete.remove(good_opt)
@@ -682,20 +683,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
                 good_opt.init_from_coverage(coverage, self.product,
                     self.start_date)
                 good_opt.contract = self
-            good_opt.save()
-            good_options.append(good_opt)
+            if good_opt:
+                good_opt.save()
+                good_options.append(good_opt)
         if to_delete:
             OptionModel.delete(to_delete)
         self.options = good_options
-
-    def get_main_contact(self):
-        return self.get_policy_owner()
-
-    def get_contact(self):
-        return self.get_policy_owner()
-
-    def get_sender(self):
-        return self.company.party
 
     def get_currency(self):
         if hasattr(self, 'product') and self.product:
@@ -737,9 +730,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency,
             cur_address.start_date = self.start_date
             self.addresses = [cur_address]
         return True
-
-    def get_doc_template_kind(self):
-        return 'contract'
 
     def get_appliable_logo(self, kind=''):
         if self.company:

@@ -2,7 +2,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.offered import EligibilityResultLine
@@ -67,19 +67,20 @@ class EligibilityRule:
                 hasattr(self, 'min_age') or hasattr(self, 'max_age')):
             return res, errs
         details = []
-        if 'subscriber_person' in args:
-            subscriber = args['subscriber_person']
-            age = coop_date.number_of_years_between(subscriber.birth_date,
-                args['date'])
-            res = True
-            if getattr(self, 'min_age', None) and age < self.min_age:
-                res = False
-                details.append(
-                    'Subscriber must be older than %s' % self.min_age)
-            if getattr(self, 'max_age', None) and age > self.max_age:
-                res = False
-                details.append(
-                    'Subscriber must be younger than %s' % self.max_age)
+        if 'subscriber' in args:
+            subscriber = args['subscriber']
+            if hasattr(subscriber, 'is_person') and subscriber.is_person:
+                age = coop_date.number_of_years_between(subscriber.birth_date,
+                    args['date'])
+                res = True
+                if getattr(self, 'min_age', None) and age < self.min_age:
+                    res = False
+                    details.append(
+                        'Subscriber must be older than %s' % self.min_age)
+                if getattr(self, 'max_age', None) and age > self.max_age:
+                    res = False
+                    details.append(
+                        'Subscriber must be younger than %s' % self.max_age)
         return (EligibilityResultLine(eligible=res, details=details), errs)
 
     def give_me_sub_elem_eligibility(self, args):

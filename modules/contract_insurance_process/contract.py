@@ -99,7 +99,7 @@ class Contract(CogProcessFramework):
         for option in self.options:
             if option.status != 'active':
                 continue
-            eligibility, errors = option.coveragej.get_result(
+            eligibility, errors = option.coverage.get_result(
                 'eligibility',
                 {
                     'date': self.start_date,

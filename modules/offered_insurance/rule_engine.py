@@ -162,10 +162,11 @@ class RuleEngineRuntime:
     __name__ = 'rule_engine.runtime'
 
     @classmethod
-    @check_args('subscriber_person')
+    @check_args('subscriber')
     def _re_get_subscriber_birthdate(cls, args):
-        subscriber = args['subscriber_person']
-        if hasattr(subscriber, 'birth_date'):
+        subscriber = args['subscriber']
+        if (hasattr(subscriber, 'birth_date') and hasattr(subscriber,
+                'is_person') and subscriber.is_person):
             return subscriber.birth_date
         cls.append_error(args, 'Subscriber does not have a birth date')
 
