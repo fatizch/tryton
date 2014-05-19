@@ -123,14 +123,14 @@ class OptionDescription:
         contract = args['contract']
         res = []
         for covered in contract.covered_elements:
-            for x in covered.options:
-                if x.coverage != self:
+            for option in covered.options:
+                if option.coverage != self:
                     continue
-                if not(x.start_date <= args['date'] <= (x.end_date or
-                            datetime.date.max)):
+                if not(option.start_date <= args['date']
+                        <= (option.end_date or datetime.date.max)):
                     continue
-                if x.status in ('quote', 'active'):
-                    res.append((covered, x))
+                if option.status in ('quote', 'active'):
+                    res.append((covered, option))
         return res, []
 
     def give_me_allowed_amounts(self, args):

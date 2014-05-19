@@ -6,7 +6,7 @@ from sql.aggregate import Max, Min
 
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Bool
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pyson import PYSONEncoder
@@ -50,7 +50,10 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
 
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
-    start_date = fields.Date('Start Date', required=True)
+    start_date = fields.Date('Start Date', required=True, domain=[If(
+                Bool(Eval('end_date', None)),
+                ('start_date', '<=', Eval('end_date')),
+                ('start_date', '>=', datetime.date.min))])
     end_date = fields.Date('End Date', domain=['OR',
             ('end_date', '=', None),
             ('end_date', '>=', Eval('start_date', datetime.date.min))],
@@ -129,7 +132,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'on_change_with_current_policy_owner')
     end_date = fields.Function(
         fields.Date('End Date'),
-        'getter_end_date', searcher='search_end_date')
+        'getter_contract_date', searcher='search_contract_date')
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'on_change_with_parties')
@@ -141,7 +144,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_product_subscriber_kind')
     start_date = fields.Function(
         fields.Date('Start Date'),
-        'getter_start_date', searcher='search_start_date')
+        'getter_contract_date', searcher='search_contract_date')
     subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Subscriber Kind',
             states={
@@ -196,35 +199,22 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return 'all'
 
     @classmethod
-    def getter_end_date(cls, contracts, name):
+    def getter_contract_date(cls, contracts, name):
         cursor = Transaction().cursor
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
         activation_history = ActivationHistory.__table__()
+        if name == 'end_date':
+            column = NullIf(Max(Coalesce(
+                        activation_history.end_date, datetime.date.max)),
+                datetime.date.max).as_('end_date')
+        elif name == 'start_date':
+            column = Min(activation_history.start_date).as_('start_date')
 
         cursor.execute(*activation_history.select(
-                activation_history.contract.as_('id'),
-                NullIf(Max(Coalesce(
-                            activation_history.end_date, datetime.date.max)),
-                    datetime.date.max).as_('end_date'),
+                activation_history.contract.as_('id'), column,
                 where=(
                     activation_history.contract.in_(
-                        [x.id for x in contracts])),
-                group_by=activation_history.contract))
-
-        return dict([(id, value) for id, value in cursor.fetchall()])
-
-    @classmethod
-    def getter_start_date(cls, contracts, name):
-        cursor = Transaction().cursor
-        pool = Pool()
-        ActivationHistory = pool.get('contract.activation_history')
-        activation_history = ActivationHistory.__table__()
-
-        cursor.execute(*activation_history.select(
-                activation_history.contract.as_('id'),
-                Min(activation_history.start_date).as_('start_date'),
-                where=(activation_history.contract.in_(
                         [x.id for x in contracts])),
                 group_by=activation_history.contract))
 
@@ -312,18 +302,22 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return self.product.subscriber_kind
 
     @classmethod
-    def search_end_date(cls, name, clause):
+    def search_contract_date(cls, name, clause):
         pool = Pool()
         _, operator, value = clause
         Operator = fields.SQL_OPERATORS[operator]
         ActivationHistory = pool.get('contract.activation_history')
         activation_history = ActivationHistory.__table__()
 
+        if name == 'end_date':
+            column = NullIf(Max(Coalesce(
+                        activation_history.end_date, datetime.date.max)),
+                datetime.date.max)
+        elif name == 'start_date':
+            column = Max(activation_history.start_date)
+
         query = activation_history.select(activation_history.contract,
-            having=Operator(NullIf(Max(Coalesce(
-                            activation_history.end_date, datetime.date.max)),
-                    datetime.date.max),
-                value),
+            having=Operator(column, value),
             group_by=activation_history.contract)
 
         return [('id', 'in', query)]
@@ -333,41 +327,28 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return [('product.kind', ) + tuple(clause[1:])]
 
     @classmethod
-    def search_start_date(cls, name, clause):
-        pool = Pool()
-        _, operator, value = clause
-        Operator = fields.SQL_OPERATORS[operator]
-        ActivationHistory = pool.get('contract.activation_history')
-        activation_history = ActivationHistory.__table__()
-
-        query = activation_history.select(activation_history.contract,
-            having=Operator(Max(activation_history.start_date), value),
-            group_by=activation_history.contract)
-
-        return [('id', 'in', query)]
-
-    @classmethod
     def validate(cls, contract):
         super(Contract, cls).validate(contract)
         for contract in contract:
             contract.check_activation_dates()
 
     def check_activation_dates(self):
-        prev_entry = None
-        for entry in sorted(self.activation_history,
-                key=lambda x: x.start_date):
-            if not prev_entry:
-                prev_entry = entry
+        previous_period = None
+        for period in self.activation_history:
+            if not previous_period:
+                previous_period = period
                 continue
-            if not prev_entry.end_date or (
-                    entry.start_date <= prev_entry.end_date):
+            if not previous_period.end_date or (
+                    period.start_date <= previous_period.end_date):
                 self.raise_user_error('activation_period_overlaps', {
-                        'first': entry.rec_name,
-                        'second': prev_entry.rec_name,
+                        'first': period.rec_name,
+                        'second': previous_period.rec_name,
                         })
-            prev_entry = entry
+            previous_period = period
 
     def set_end_date(self, end_date):
+        # Allows to set the contract's end_date and cascading the change in the
+        # contract's one2manys (options, history, etc...)
         self.end_date = end_date
         ActivationHistory = Pool().get('contract.activation_history')
         to_delete = []
@@ -514,10 +495,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             }
 
     def init_from_product(self, product, start_date=None, end_date=None):
+        ActivationHistory = Pool().get('contract.activation_history')
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(product, start_date):
-            ActivationHistory = Pool().get('contract.activation_history')
             self.product = product
             start_date = (
                 max(product.start_date, start_date)
@@ -639,7 +620,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 (contract.id == history.contract)
                 & (contract.subscriber == party.id)
                 & (history.start_date <= at_date)
-                & (Coalesce(history.end_date, datetime.date.max) >= at_date)
+                & (
+                    (history.end_date == None)
+                    | (history.end_date >= at_date))
                 ))
         company_id = Transaction().context.get('company', None)
         cursor.execute(*query_table.select(contract.id,
