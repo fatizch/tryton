@@ -15,6 +15,13 @@
     </xpath>
     <xpath expr="/form/notebook" position="inside">
         <page string="Invoicing" id="invoicing">
+            <label name="direct_debit"/>
+            <field name="direct_debit"/>
+            <label name="direct_debit_day"/>
+            <field name="direct_debit_day"/>
+            <label name="direct_debit_account"/>
+            <field name="direct_debit_account"/>
+            <newline/>
             <label name="payment_term"/>
             <field name="payment_term"/>
             <field name="payment_terms" colspan="4"/>

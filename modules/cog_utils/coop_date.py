@@ -200,3 +200,11 @@ def calculate_date_interval(age_min, age_max):
     end_date = datetime.date.today()
     end_date = end_date.replace(year=end_date.year - int(age_min)).toordinal()
     return [start_date, end_date]
+
+
+def get_next_date_in_sync_with(date, day):
+    if date:
+        res = datetime.date(date.year, date.month, day)
+    if res < date:
+        res = add_month(res, 1)
+    return res
