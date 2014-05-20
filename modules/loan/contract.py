@@ -440,4 +440,5 @@ class OptionSubscriptionWizardLauncher:
             for option in covered_element.options:
                 for loan_share in option.loan_shares:
                     return True
-        return False
+        return super(OptionSubscriptionWizardLauncher, self).skip_wizard(
+            contract)
