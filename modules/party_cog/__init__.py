@@ -7,6 +7,9 @@ from .test_case import *
 from .relationship import *
 from .res import *
 
+from trytond.modules.cog_utils import expand_tree
+PartyMenuTreeExpansion = expand_tree('party.synthesis.menu')
+
 
 def register():
     Pool.register(
@@ -14,6 +17,7 @@ def register():
         SynthesisMenuAddress,
         SynthesisMenuPartyInteraction,
         SynthesisMenu,
+        PartyMenuTreeExpansion,
         Party,
         PartyCategory,
         Address,

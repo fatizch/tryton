@@ -62,6 +62,11 @@ class Contract(CogProcessFramework):
     def on_change_with_subscriber_desc(self, name=None):
         return self.subscriber.summary if self.subscriber else ''
 
+    def on_change_subscriber_kind(self):
+        res = super(Contract, self).on_change_subscriber_kind()
+        res['subscriber_desc'] = ''
+        return res
+
     def check_product_not_null(self):
         if not self.product:
             return False, (('no_product', ()),)
@@ -99,7 +104,7 @@ class Contract(CogProcessFramework):
         for option in self.options:
             if option.status != 'active':
                 continue
-            eligibility, errors = option.coveragej.get_result(
+            eligibility, errors = option.coverage.get_result(
                 'eligibility',
                 {
                     'date': self.start_date,

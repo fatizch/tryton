@@ -3,7 +3,7 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.cog_utils import utils, fields, model, coop_string
 
@@ -98,9 +98,9 @@ class ContractOption:
         states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
             ('loan.parties', 'in', Eval('parties', [])),
             ('start_date', '>=', Eval('start_date', datetime.date.min)),
-            ['OR',
-                ('end_date', '=', None),
-                ('end_date', '<=', Eval('end_date', datetime.date.max))]],
+            If(Bool(Eval('end_date', None)),
+                [('end_date', '<=', Eval('end_date'))],
+                [])],
         depends=['coverage_family', 'parties', 'start_date', 'end_date'])
     multi_mixed_view = loan_shares
 
@@ -128,7 +128,6 @@ class ContractOption:
             return {'update': to_update}
 
     def set_end_date(self, end_date):
-        super(ContractOption, self).set_end_date(end_date)
         for share in self.loan_shares:
             if share.end_date and share.end_date <= end_date:
                 continue

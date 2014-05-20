@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import copy
+import datetime
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, And
@@ -122,14 +123,14 @@ class OptionDescription:
         contract = args['contract']
         res = []
         for covered in contract.covered_elements:
-            for x in covered.options:
-                if x.coverage != self:
+            for option in covered.options:
+                if option.coverage != self:
                     continue
-                status = x.get_status_at_date(args['date'])
-                if status is None:
+                if not(option.start_date <= args['date']
+                        <= (option.end_date or datetime.date.max)):
                     continue
-                if status in ('quote', 'active'):
-                    res.append((covered, x))
+                if option.status in ('quote', 'active'):
+                    res.append((covered, option))
         return res, []
 
     def give_me_allowed_amounts(self, args):

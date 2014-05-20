@@ -476,16 +476,19 @@ class SynthesisMenuAddress(model.CoopSQL):
         pool = Pool()
         Address = pool.get('party.address')
         AddressSynthesis = pool.get('party.synthesis.menu.address')
+        party = pool.get('party.party').__table__()
         address = Address.__table__()
-        return address.select(
-            address.party.as_('id'),
+        query_table = party.join(address, 'LEFT OUTER', condition=(
+            party.id == address.party))
+        return query_table.select(
+            party.id,
             Max(address.create_uid).as_('create_uid'),
             Max(address.create_date).as_('create_date'),
             Max(address.write_uid).as_('write_uid'),
             Max(address.write_date).as_('write_date'),
             Literal(coop_string.translate_label(AddressSynthesis, 'name')).
-            as_('name'), address.party,
-            group_by=address.party)
+            as_('name'), party.id.as_('party'),
+            group_by=party.id)
 
     def get_icon(self, name=None):
         return 'coopengo-address'
@@ -527,8 +530,14 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     name = fields.Char('Name')
     icon = fields.Function(fields.Char('Icon'), 'get_icon')
     party = fields.Many2One('party.party', 'Party')
+    sequence = fields.Integer('Sequence')
     parent = fields.Many2One('party.synthesis.menu', 'Parent')
     childs = fields.One2Many('party.synthesis.menu', 'parent', 'Childs')
+
+    @classmethod
+    def __setup__(cls):
+        super(SynthesisMenu, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'DESC'))
 
     @staticmethod
     def merged_models():
@@ -618,11 +627,17 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     def get_rec_name(self, name):
         instance = self.merged_unshard(self.id)
         if getattr(instance, 'get_synthesis_rec_name', None) is not None:
-            return instance.get_synthesis_rec_name(name)
+            res = instance.get_synthesis_rec_name(name)
         elif getattr(instance, 'get_rec_name', None) is not None:
-            return instance.get_rec_name(name)
+            res = instance.get_rec_name(name)
         else:
-            return self.name
+            res = self.name
+        if self.childs:
+            res += ' (%s)' % len(self.childs)
+        return res
+
+    def _expand_tree(self, name):
+        return not self.parent or self.parent and not self.parent.parent
 
 
 class SynthesisMenuOpen(Wizard):
