@@ -9,11 +9,16 @@
     <label name="end_date"/>
     <field name="end_date"/>
     <newline/>
-    <label name="subscriber_kind"/>
-    <field name="subscriber_kind"/>
-    <newline/>
     <label name="subscriber"/>
-    <field name="subscriber"/>
+    <group id="subscriber" col="99">
+        <field name="subscriber_kind"/>
+        <group id="person" states="{'invisible': Eval('subscriber_kind') != 'person'}">
+            <field name="subscriber" view_ids="party_cog.person_view_tree"/>
+        </group>
+        <group id="company" states="{'invisible': Eval('subscriber_kind')== 'person'}">
+            <field name="subscriber"/>
+        </group>
+    </group>
     <notebook colspan="4">
         <page string="Options" id="options">
             <field name="options" colspan="4"/>

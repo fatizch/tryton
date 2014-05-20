@@ -155,16 +155,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 },
             depends=['status', 'product_subscriber_kind']),
         'on_change_with_subscriber_kind', 'setter_void')
-    subscriber_as_person = fields.Function(
-        fields.Many2One('party.party', 'Subscriber',
-            domain=[('is_person', '=', True)],
-            states={'invisible': Eval('subscriber_kind') != 'person'}),
-        'on_change_with_subscriber_as_person', 'setter_void')
-    subscriber_as_company = fields.Function(
-        fields.Many2One('party.party', 'Subscriber',
-            domain=[('is_company', '=', True)],
-            states={'invisible': Eval('subscriber_kind') != 'company'}),
-        'on_change_with_subscriber_as_company', 'setter_void')
     contacts = fields.One2Many('contract.contact', 'contract', 'Contacts')
 
     @classmethod
@@ -208,7 +198,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def default_subscriber_kind(cls):
-        return 'all'
+        return 'person'
 
     @classmethod
     def getter_contract_date(cls, contracts, name):
@@ -238,7 +228,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.product is None:
             return {
                 'product_kind': '',
-                'subscriber_kind': 'all',
+                'subscriber_kind': 'person',
                 'options': {'remove': [x.id for x in self.options]},
                 'extra_data': {},
                 }
@@ -260,9 +250,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             to_add.append([-1, new_opt])
         result = {
             'product_kind': self.product.kind,
-            'subscriber_kind': self.product.subscriber_kind,
+            'subscriber_kind': ('person' if self.product.subscriber_kind in
+                ['all', 'person'] else 'company'),
             'extra_data': self.product.get_extra_data_def('contract',
                 self.extra_data, self.appliable_conditions_date),
+            'product_subscriber_kind': self.product.subscriber_kind,
             }
         if not to_add and not to_remove:
             return result
@@ -309,12 +301,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('product')
     def on_change_with_subscriber_kind(self, name=None):
-        if self.subscriber:
-            if self.subscriber.is_person:
-                return 'person'
-            elif self.subscriber.is_company:
-                return 'company'
-        if self.subscriber:
+        if getattr(self, 'subscriber', None):
             if self.subscriber.is_person:
                 return 'person'
             elif self.subscriber.is_company:
@@ -719,67 +706,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''
 
-    @fields.depends('subscriber')
-    def on_change_with_subscriber_as_person(self, name=None):
-        return (self.subscriber.id
-            if self.subscriber and self.subscriber.is_person else None)
-
-    @fields.depends('subscriber_as_person')
-    def on_change_subscriber_as_person(self):
-        return {'subscriber': self.subscriber_as_person.id
-            if self.subscriber_as_person
-            and self.subscriber_as_person.is_person else None}
-
-    @fields.depends('subscriber')
-    def on_change_with_subscriber_as_company(self, name=None):
-        return (self.subscriber.id
-            if self.subscriber and self.subscriber.is_company else None)
-
-    @fields.depends('subscriber_as_company')
-    def on_change_subscriber_as_company(self):
-        return {'subscriber': self.subscriber_as_company.id
-            if self.subscriber_as_company
-            and self.subscriber_as_company.is_company else None}
-
-    @fields.depends('subscriber_kind', 'subscriber_as_company',
-        'subscriber_as_person')
+    @fields.depends('subscriber_kind', 'subscriber')
     def on_change_subscriber_kind(self):
-        if self.subscriber_kind == 'person' and self.subscriber_as_company:
-            return {'subscriber_as_company': None, 'subscriber': None}
-        elif self.subscriber_kind == 'company' and self.subscriber_as_person:
-            return {'subscriber_as_person': None, 'subscriber': None}
-        else:
-            return {}
-
-    @fields.depends('subscriber')
-    def on_change_with_subscriber_as_person(self, name=None):
-        return (self.subscriber.id
-            if self.subscriber and self.subscriber.is_person else None)
-
-    @fields.depends('subscriber_as_person')
-    def on_change_subscriber_as_person(self):
-        return {'subscriber': self.subscriber_as_person.id
-            if self.subscriber_as_person
-            and self.subscriber_as_person.is_person else None}
-
-    @fields.depends('subscriber')
-    def on_change_with_subscriber_as_company(self, name=None):
-        return (self.subscriber.id
-            if self.subscriber and self.subscriber.is_company else None)
-
-    @fields.depends('subscriber_as_company')
-    def on_change_subscriber_as_company(self):
-        return {'subscriber': self.subscriber_as_company.id
-            if self.subscriber_as_company
-            and self.subscriber_as_company.is_company else None}
-
-    @fields.depends('subscriber_kind', 'subscriber_as_company',
-        'subscriber_as_person')
-    def on_change_subscriber_kind(self):
-        if self.subscriber_kind == 'person' and self.subscriber_as_company:
-            return {'subscriber_as_company': None, 'subscriber': None}
-        elif self.subscriber_kind == 'company' and self.subscriber_as_person:
-            return {'subscriber_as_person': None, 'subscriber': None}
+        if self.subscriber and (self.subscriber_kind == 'person'
+                and not self.subscriber.is_person
+                or self.subscriber_kind == 'company'
+                and not self.subscriber.is_company):
+            return {'subscriber': None}
         else:
             return {}
 
