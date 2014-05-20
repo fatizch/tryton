@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Insurer # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="insurer_view_list">
+            <field name="model">insurer</field>
+            <field name="type">tree</field>
+            <field name="name">insurer_list</field>
+        </record>
+    </data>
+</tryton>

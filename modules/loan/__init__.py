@@ -5,6 +5,7 @@ from .rule_engine import *
 from .loan import *
 from .loan_creation_wizard import *
 from .billing import *
+from .party import *
 
 from trytond.modules.cog_utils import expand_tree
 LoanShareTreeExpansion = expand_tree('loan.share')
@@ -12,27 +13,23 @@ LoanShareTreeExpansion = expand_tree('loan.share')
 
 def register():
     Pool.register(
-        # From offered
         Product,
         OptionDescription,
         PremiumRule,
-        # From rule_engine
         RuleEngineRuntime,
-        # From Loan
         Loan,
         LoanIncrement,
         LoanPayment,
         LoanParty,
-        # From Contract
         Contract,
         ContractOption,
         ExtraPremium,
         LoanShare,
-        # From Billing
         BillingPremium,
-        #From loan_creation_wizard
         LoanSharePropagateParameters,
         LoanShareTreeExpansion,
+        Party,
+        Insurer,
         module='loan', type_='model')
     Pool.register(
         LoanCreate,
