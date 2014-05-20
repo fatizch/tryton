@@ -14,9 +14,7 @@ OptionTreeExpansion = expand_tree('contract.option')
 
 def register():
     Pool.register(
-        # From party
         Party,
-        # From contract
         Contract,
         ContractAgreementRelation,
         CoveredElement,
@@ -26,28 +24,23 @@ def register():
         ExtraPremium,
         OptionExclusionKindRelation,
         OptionTreeExpansion,
-        # From document
         DocumentRequestLine,
         DocumentRequest,
         DocumentReceiveRequest,
         DocumentTemplate,
-        # From Service
         ContractService,
         Expense,
-        # from renewal
         RenewalStart,
         RenewalResult,
-        #From Rule Engine,
         RuleEngineRuntime,
-        #From Wizard
         OptionsDisplayer,
         WizardOption,
         ExtraPremiumSelector,
+        CreateExtraPremiumOptionSelector,
         OptionSelector,
         ExtraPremiumDisplay,
         ExclusionSelector,
         ExclusionDisplay,
-        ExtraPremiumDisplayer,
         module='contract_insurance', type_='model')
 
     Pool.register(

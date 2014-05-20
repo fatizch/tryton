@@ -2,8 +2,7 @@
 <form string="Extra Premium Creation">
   <label name="covered_element"/>
   <field name="covered_element" widget="selection"/>
-  <label name="option"/>
-  <field name="option" widget="selection"/>
-  <field name="extra_premium" mode="form" colspan="4"/>
+  <newline/>
+  <field name="options" colspan="2"/>
   <field name="contract" invisible="1"/>
 </form>

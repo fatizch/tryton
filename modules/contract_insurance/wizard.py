@@ -13,12 +13,12 @@ __all__ = [
     'OptionSelector',
     'ExtraPremiumDisplay',
     'ManageExtraPremium',
+    'CreateExtraPremium',
+    'CreateExtraPremiumOptionSelector',
     'ExclusionSelector',
     'ExclusionDisplay',
     'ManageExclusion',
-    'ExtraPremiumDisplayer',
     'WizardOption',
-    'CreateExtraPremium',
     ]
 
 
@@ -116,7 +116,7 @@ class ExtraPremiumSelector(model.CoopView):
 
     extra_premium = fields.Many2One('contract.option.extra_premium',
         'Extra Premium')
-    extra_premium_name = fields.Char('Extra Premium')
+    extra_premium_name = fields.Char('Extra Premium', readonly=True)
     selected = fields.Boolean('Selected')
 
 
@@ -125,8 +125,8 @@ class OptionSelector(model.CoopView):
 
     __name__ = 'contract.manage_extra_premium.select.option'
 
-    option = fields.Many2One('contract.option', 'Option')
-    option_name = fields.Char('Option')
+    option = fields.Many2One('contract.option', 'Option', readonly=True)
+    option_name = fields.Char('Option', readonly=True)
     selected = fields.Boolean('Selected')
 
 
@@ -236,7 +236,7 @@ class ManageExtraPremium(Wizard):
             selected_option = None
             existing_extras = []
             existing_options = []
-            for option in covered_element.option:
+            for option in covered_element.options:
                 for extra_premium in option.extra_premiums:
                     existing_extras.append({
                             'selected': False,
@@ -279,7 +279,7 @@ class ManageExtraPremium(Wizard):
                     'extra_premium_name': Selector.get_extra_premium_name(
                         source_extra)}]
             existing_options = []
-            for option in covered_element.option:
+            for option in covered_element.options:
                 if option == selected_option:
                     continue
                 existing_options.append({
@@ -290,7 +290,7 @@ class ManageExtraPremium(Wizard):
             'contract': contract.id,
             'covered_element': covered_element.id,
             'kind': kind,
-            'option': selected_option.id,
+            'option': selected_option.id if selected_option else None,
             'extra_premiums': existing_extras,
             'options': existing_options,
             }
@@ -307,7 +307,7 @@ class ManageExtraPremium(Wizard):
                 new_extra = selected_extra.copy([selected_extra])[0]
                 new_extra.option = option.option
                 new_extra.save()
-        return 'end'
+        return 'existing'
 
     def transition_delete_selected(self):
         selected = [x for x in self.existing.extra_premiums if x.selected]
@@ -315,6 +315,100 @@ class ManageExtraPremium(Wizard):
             self.raise_user_error('no_extra_selected')
         selected[0].extra_premium.delete([x.extra_premium for x in selected])
         return 'existing'
+
+
+class CreateExtraPremium(Wizard):
+    'Create Extra Premium'
+
+    __name__ = 'contract.option.extra_premium.create'
+
+    start_state = 'extra_premium_data'
+    extra_premium_data = StateView('contract.option.extra_premium',
+        'contract_insurance.extra_premium_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Select Options', 'select_options', 'tryton-go-next',
+                default=True)])
+    select_options = StateView(
+        'contract.option.extra_premium.create.option_selector',
+        'contract_insurance.extra_premium_create_option_selector_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Modify Extra Premium', 'extra_premium_data',
+                'tryton-go-previous'),
+            Button('Apply', 'apply', 'tryton-go-next', default=True)])
+    apply = StateTransition()
+
+    def default_extra_premium_data(self, name):
+        if self.extra_premium_data._default_values:
+            return self.extra_premium_data._default_values
+        return {}
+
+    def default_select_options(self, name):
+        if self.select_options._default_values:
+            return self.select_options._default_values
+        contract = Transaction().context.get('active_id')
+        self.select_options.contract = contract
+        self.select_options.covered_element = None
+        self.select_options.options = []
+        return {
+            'options': self.select_options.on_change_with_options()['create'],
+            'contract': contract,
+            }
+
+    def transition_apply(self):
+        ExtraPremium = Pool().get('contract.option.extra_premium')
+        to_create = []
+        for option in self.select_options.options:
+            if not option.selected:
+                continue
+            new_extra_premium = self.extra_premium_data._default_values
+            new_extra_premium['option'] = option.option
+            to_create.append(new_extra_premium)
+        ExtraPremium.create(to_create)
+        return 'end'
+
+
+class CreateExtraPremiumOptionSelector(model.CoopView):
+    'Create Extra Premium Option Selector'
+
+    __name__ = 'contract.option.extra_premium.create.option_selector'
+
+    contract = fields.Many2One('contract', 'Contract')
+    covered_element = fields.Many2One('contract.covered_element',
+        'Covered Element', domain=[('contract', '=', Eval('contract'))],
+        states={'invisible': ~Eval('hide_covered_element')},
+        depends=['contract', 'hide_covered_element'])
+    hide_covered_element = fields.Boolean('Hide Covered Element')
+    options = fields.One2Many('contract.manage_extra_premium.select.option',
+        None, 'Options')
+
+    @classmethod
+    def get_option_name(cls, option):
+        return '[%s] %s' % (option.covered_element.rec_name,
+            option.coverage.name)
+
+    @fields.depends('contract', 'options', 'covered_element')
+    def on_change_with_options(self):
+        to_create = []
+        existing_options = dict([(x.option, x) for x in self.options])
+        covered_elements = []
+        if self.covered_element:
+            covered_elements = [self.covered_element]
+        for option in [option for covered_element in covered_elements
+                for option in covered_element.options]:
+            if option in existing_options:
+                del existing_options[option]
+                continue
+            to_create.append({
+                    'option': option.id,
+                    'selected': True,
+                    'option_name': self.get_option_name(option),
+                    })
+        result = {}
+        if to_create:
+            result['create'] = to_create
+        if existing_options:
+            result['remove'] = [x.id for x in existing_options.itervalues()]
+        return result
 
 
 class ExclusionSelector(model.CoopView):
@@ -401,93 +495,4 @@ class ManageExclusion(Wizard):
             values.extend(list(exclusions - set(option.option.exclusions)))
             option.option.exclusions = values
             option.option.save()
-        return 'end'
-
-
-class ExtraPremiumDisplayer(model.CoopView):
-    'Extra Premium Displayer'
-
-    __name__ = 'contract.create_extra_premium.create'
-
-    contract = fields.Many2One('contract', 'Contract')
-    covered_element = fields.Many2One('contract.covered_element',
-        'Covered Element', domain=[('contract', '=', Eval('contract'))],
-        depends=['contract'])
-    option = fields.Many2One('contract.option', 'Option',
-        domain=[('covered_element', '=', Eval('covered_element'))],
-        states={'invisible': ~Eval('covered_element')},
-        depends=['covered_element'])
-    extra_premium = fields.One2Many('contract.option.extra_premium',
-        None, 'Extra Premium', domain=[
-            ('option', '=', Eval('option'))], states={
-                'invisible': ~Eval('option')},
-        depends=['option'])
-
-    @fields.depends('covered_element', 'extra_premium')
-    def on_change_covered_element(self):
-        result = {}
-        if not self.covered_element:
-            result = {'covered_data': None}
-        else:
-            result = {
-                'option': self.covered_element.options[0].id,
-                'extra_premium': {'update': [{
-                            'id': self.extra_premium[0].id,
-                            'option': self.covered_element.option[0].id}]}}
-        return result
-
-    @fields.depends('option', 'extra_premium')
-    def on_change_option(self):
-        result = {'extra_premium': {'remove':
-                [x.id for x in self.extra_premium]}}
-        if not self.option:
-            return result
-        result['extra_premium']['add'] = [(-1, {
-                    'option': self.option.id,
-                    'calculation_kind': 'rate',
-                    'rate': 0,
-                    'flat_amount': 0})]
-        return result
-
-
-class CreateExtraPremium(Wizard):
-    'Create Extra Premium'
-
-    __name__ = 'contract.create_extra_premium'
-
-    start_state = 'extra_premium'
-    extra_premium = StateView('contract.create_extra_premium.create',
-        'contract_insurance.create_extra_premium_create_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Create', 'create_extra', 'tryton-ok', states={
-                    'readonly': ~Eval('covered_data')})])
-    create_extra = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(CreateExtraPremium, cls).__setup__()
-        cls._error_messages.update({
-                'no_option': 'Please select an option to continue',
-                })
-
-    def default_extra_premium(self, name):
-        assert Transaction().context.get('active_model') == 'contract'
-        pool = Pool()
-        contract = pool.get('contract')(Transaction().context.get('active_id'))
-        covered_element = contract.covered_elements[0]
-        option = covered_element.option[0]
-        return {
-            'contract': contract.id,
-            'covered_element': covered_element.id,
-            'option': option.id,
-            'extra_premium': [{
-                    'option': option.id,
-                    'calculation_kind': 'rate',
-                    'rate': 0,
-                    'flat_amount': 0}]}
-
-    def transition_create_extra(self):
-        if not self.extra_premium.option:
-            self.raise_user_error('no_option')
-        self.extra_premium.extra_premium[0].save()
         return 'end'
