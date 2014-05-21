@@ -28,7 +28,6 @@ def register():
         OptionsDisplayer,
         WizardOption,
         BillingPremium,
-        LoanSharePropagateParameters,
         LoanShareTreeExpansion,
         Party,
         Insurer,
