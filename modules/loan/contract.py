@@ -17,6 +17,7 @@ __all__ = [
     'OptionsDisplayer',
     'WizardOption',
     'OptionSubscriptionWizardLauncher',
+    'DisplayContractPremium',
     ]
 
 
@@ -442,3 +443,13 @@ class OptionSubscriptionWizardLauncher:
                     return True
         return super(OptionSubscriptionWizardLauncher, self).skip_wizard(
             contract)
+
+
+class DisplayContractPremium:
+    __name__ = 'contract.premium.display'
+
+    @classmethod
+    def get_children_fields(cls):
+        result = super(DisplayContractPremium, cls).get_children_fields()
+        result['contract.option'].append('loan_shares')
+        return result
