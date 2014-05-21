@@ -15,16 +15,19 @@
     </xpath>
     <xpath expr="/form/notebook" position="inside">
         <page string="Invoicing" id="invoicing">
+            <label name="direct_debit"/>
+            <field name="direct_debit"/>
+            <label name="direct_debit_day"/>
+            <field name="direct_debit_day"/>
+            <label name="direct_debit_account"/>
+            <field name="direct_debit_account"/>
+            <newline/>
             <label name="payment_term"/>
             <field name="payment_term"/>
             <field name="payment_terms" colspan="4"/>
             <label name="invoice_frequency"/>
             <field name="invoice_frequency"/>
             <field name="invoice_frequencies" colspan="4"/>
-        </page>
-        <page string="Premium" id="premium">
-            <button string="Calculate Premiums" name="button_calculate_prices" colspan="4"/>
-            <field name="premiums"/>
         </page>
     </xpath>
 </data>

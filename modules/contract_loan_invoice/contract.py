@@ -102,7 +102,7 @@ class Contract:
             for option in covered_element.options
             for share in option.loan_shares])
 
-        # Use the loan start date to ensure consistent ordering
+        # Use the loan creation date to ensure consistent ordering
         return [x.id for x in sorted(list(loans), key=lambda x: x.create_date)]
 
     def calculate_premium_aggregates(self, start=None, end=None):

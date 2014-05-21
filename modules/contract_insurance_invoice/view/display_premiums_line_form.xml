@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Premium">
+    <field name="premiums" mode="form" expand_toolbar="0"/>
+</form>

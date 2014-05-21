@@ -146,7 +146,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Date('Start Date'),
         'getter_contract_date', searcher='search_contract_date')
     subscriber_kind = fields.Function(
-        fields.Selection(offered.SUBSCRIBER_KIND, 'Subscriber Kind',
+        fields.Selection(
+            [x for x in offered.SUBSCRIBER_KIND if x != ('all', 'All')],
+            'Subscriber Kind',
             states={
                 'readonly': Eval('product_subscriber_kind') != 'all',
                 'invisible': Eval('status') != 'quote',
@@ -196,7 +198,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def default_subscriber_kind(cls):
-        return 'all'
+        return 'person'
 
     @classmethod
     def getter_contract_date(cls, contracts, name):
@@ -226,7 +228,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.product is None:
             return {
                 'product_kind': '',
-                'subscriber_kind': 'all',
+                'subscriber_kind': 'person',
                 'options': {'remove': [x.id for x in self.options]},
                 'extra_data': {},
                 }
@@ -248,9 +250,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             to_add.append([-1, new_opt])
         result = {
             'product_kind': self.product.kind,
-            'subscriber_kind': self.product.subscriber_kind,
+            'subscriber_kind': ('person' if self.product.subscriber_kind in
+                ['all', 'person'] else 'company'),
             'extra_data': self.product.get_extra_data_def('contract',
                 self.extra_data, self.appliable_conditions_date),
+            'product_subscriber_kind': self.product.subscriber_kind,
             }
         if not to_add and not to_remove:
             return result
@@ -297,9 +301,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('product')
     def on_change_with_subscriber_kind(self, name=None):
+        if getattr(self, 'subscriber', None):
+            if self.subscriber.is_person:
+                return 'person'
+            elif self.subscriber.is_company:
+                return 'company'
         if not self.product:
-            return 'all'
-        return self.product.subscriber_kind
+            return 'person'
+        if self.product.subscriber_kind in ['all', 'person']:
+            return 'person'
+        else:
+            return self.product.subscriber_kind
 
     @classmethod
     def search_contract_date(cls, name, clause):
@@ -693,6 +705,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''
+
+    @fields.depends('subscriber_kind', 'subscriber')
+    def on_change_subscriber_kind(self):
+        if self.subscriber and (self.subscriber_kind == 'person'
+                and not self.subscriber.is_person
+                or self.subscriber_kind == 'company'
+                and not self.subscriber.is_company):
+            return {'subscriber': None}
+        else:
+            return {}
 
 
 class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency):

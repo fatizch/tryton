@@ -3,6 +3,6 @@
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
-    <field name="options" colspan="4" mode="tree"/>
+    <field name="options" colspan="4" mode="tree" expand_toolbar="0"/>
     <newline/>
 </form>

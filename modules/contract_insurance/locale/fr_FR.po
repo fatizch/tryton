@@ -1,10 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.create_extra_premium:"
-msgid "Please select a option to continue"
-msgstr "Veuillez choisir une garantie pour continue"
+msgid "Please select an option to continue"
+msgstr "Veuillez choisir une garantie pour continuer"
 
 msgctxt "error:contract.manage_exclusion:"
 msgid "At least one exclusion must be selected"
