@@ -27,6 +27,8 @@ def register():
         FeeDesc,
         TaxDesc,
         InvoiceContractStart,
+        DisplayContractPremiumDisplayer,
+        DisplayContractPremiumDisplayerPremiumLine,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,
         PaymentTerm,
@@ -37,4 +39,5 @@ def register():
     Pool.register(
         InvoiceContract,
         SynthesisMenuOpen,
+        DisplayContractPremium,
         module='contract_insurance_invoice', type_='wizard')

@@ -39,4 +39,5 @@ def register():
         LoanCreate,
         OptionSubscription,
         OptionSubscriptionWizardLauncher,
+        DisplayContractPremium,
         module='loan', type_='wizard')
