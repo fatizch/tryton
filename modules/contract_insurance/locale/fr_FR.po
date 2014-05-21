@@ -963,6 +963,10 @@ msgctxt "model:ir.action,name:"
 msgid "Status History"
 msgstr "Historique des Statuts"
 
+msgctxt "model:ir.action,name:None"
+msgid "Manage Options"
+msgstr "Gérer les Options"
+
 msgctxt "model:ir.action,name:act_contract_activation_history_relate_form"
 msgid "Activation History"
 msgstr "Historique d'activation"
@@ -1154,6 +1158,10 @@ msgstr "Choix des garanties"
 msgctxt "view:contract.manage_extra_premium.select:"
 msgid "Manage Extra Premium"
 msgstr "Gérer les surprimes"
+
+msgctxt "view:contract.option.extra_premium.create.option_selector:"
+msgid "Extra Premium Creation"
+msgstr ""
 
 msgctxt "view:contract.option.extra_premium:"
 msgid "%"

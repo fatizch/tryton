@@ -1,26 +1,38 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.clause:"
-msgid "Total share for clause %s isinvalid"
-msgstr "Le cumul des parts pour la clause %s n'est pas valide"
+msgctxt "error:contract.option:"
+msgid "Either all share must be completed or none"
+msgstr ""
 
-msgctxt "error:contract:"
-msgid "No beneficiary clause selected on %s"
-msgstr "Pas de clause bénéficiaire sélectionée sur %s"
+msgctxt "error:contract.option:"
+msgid "Total share for clause %s is invalid"
+msgstr ""
 
-msgctxt "field:contract.clause,beneficiaries:"
+msgctxt "field:contract.option,beneficiaries:"
 msgid "Beneficiaries"
 msgstr "Bénéficiaires"
+
+msgctxt "field:contract.option,beneficiary_clause:"
+msgid "Beneficiary Clause"
+msgstr "Clause bénéficiaire"
+
+msgctxt "field:contract.option,customized_beneficiary_clause:"
+msgid "Customized Beneficiary Clause"
+msgstr "Clause bénéficiare personnalisée"
+
+msgctxt "field:contract.option,with_beneficiary_clause:"
+msgid "With Beneficiary Clause"
+msgstr "Avec clause bénéficiaire"
 
 msgctxt "field:contract.option.beneficiary,accepting:"
 msgid "Accepting"
 msgstr "Acceptant"
 
-msgctxt "field:contract.option.beneficiary,clause:"
-msgid "Clause"
-msgstr "Clause"
+msgctxt "field:contract.option.beneficiary,address:"
+msgid "Address"
+msgstr "Adresse"
 
 msgctxt "field:contract.option.beneficiary,create_date:"
 msgid "Create Date"
@@ -38,10 +50,6 @@ msgctxt "field:contract.option.beneficiary,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:contract.option.beneficiary,details:"
-msgid "Details"
-msgstr "Détails"
-
 msgctxt "field:contract.option.beneficiary,id:"
 msgid "ID"
 msgstr "ID"
@@ -50,6 +58,10 @@ msgctxt "field:contract.option.beneficiary,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
+msgctxt "field:contract.option.beneficiary,option:"
+msgid "Option"
+msgstr "Option"
+
 msgctxt "field:contract.option.beneficiary,party:"
 msgid "Party"
 msgstr "Acteur"
@@ -57,6 +69,10 @@ msgstr "Acteur"
 msgctxt "field:contract.option.beneficiary,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:contract.option.beneficiary,reference:"
+msgid "Reference"
+msgstr "Référence"
 
 msgctxt "field:contract.option.beneficiary,share:"
 msgid "Share"
@@ -74,9 +90,9 @@ msgctxt "field:contract.option.beneficiary,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:contract.covered_data,beneficiaries_clauses:"
-msgid "Beneficiary clauses"
-msgstr "Clauses bénéficiaires"
+msgctxt "model:contract.contact.type,name:accepting_benef"
+msgid "Accepting Beneficiary"
+msgstr "Bénéficiaire acceptant"
 
 msgctxt "model:contract.option.beneficiary,name:"
 msgid "Contract Beneficiary"
@@ -94,6 +110,6 @@ msgctxt "view:contract.option.beneficiary:"
 msgid "Beneficiary"
 msgstr "Bénéficiaire"
 
-msgctxt "view:contract.covered_data:"
-msgid "Beneficiary Clauses"
-msgstr "Clauses Bénéficiaires"
+msgctxt "view:contract.option:"
+msgid "Beneficiary Clause"
+msgstr "Clause bénéficiaire"

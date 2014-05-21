@@ -846,6 +846,10 @@ msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "view:contract.activation_history:"
+msgid "Activation History"
+msgstr "Historique d'activation"
+
 msgctxt "view:contract.address:"
 msgid "Contract Address"
 msgstr "Adresse"
@@ -863,16 +867,8 @@ msgid "Select End Date"
 msgstr "Séléctionner la date de fin"
 
 msgctxt "view:contract.option:"
-msgid "Administration"
-msgstr "Administration"
-
-msgctxt "view:contract.option:"
 msgid "Main Data"
 msgstr "Données principales"
-
-msgctxt "view:contract.option:"
-msgid "Status History"
-msgstr "Historique des Statuts"
 
 msgctxt "view:contract.option:"
 msgid "option"
@@ -889,6 +885,10 @@ msgstr "Option"
 msgctxt "view:contract.wizard.option_subscription.options_displayer:"
 msgid "Options"
 msgstr "Options"
+
+msgctxt "view:contract:"
+msgid "Activation History"
+msgstr "Historique d'activation"
 
 msgctxt "view:contract:"
 msgid "Administration"
@@ -909,10 +909,6 @@ msgstr "Contrat"
 msgctxt "view:contract:"
 msgid "Options"
 msgstr "Options"
-
-msgctxt "view:contract:"
-msgid "Status History"
-msgstr "Historique des Statuts"
 
 msgctxt "view:party.party:"
 msgid "+"

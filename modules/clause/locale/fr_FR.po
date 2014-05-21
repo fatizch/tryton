@@ -6,6 +6,10 @@ msgctxt "field:clause,code:"
 msgid "Code"
 msgstr "Code"
 
+msgctxt "field:clause,content:"
+msgid "Content"
+msgstr "Contenu"
+
 msgctxt "field:clause,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -54,10 +58,6 @@ msgctxt "field:clause,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:clause,content:"
-msgid "Content"
-msgstr "Contenu"
-
 msgctxt "model:clause,name:"
 msgid "Clause"
 msgstr "Clause"
@@ -70,13 +70,13 @@ msgctxt "model:ir.ui.menu,name:menu_model_clause"
 msgid "Clauses"
 msgstr "Clauses"
 
-msgctxt "selection:clause,kind:"
-msgid ""
-msgstr " "
-
-msgctxt "view:clause:"
+msgctxt "model:ir.ui.menu,name:menu_root_clause"
 msgid "Clause"
 msgstr "Clause"
+
+msgctxt "selection:clause,kind:"
+msgid "Specific"
+msgstr "Particulière"
 
 msgctxt "view:clause:"
 msgid "Clauses"

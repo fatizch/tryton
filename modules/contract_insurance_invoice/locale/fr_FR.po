@@ -1042,6 +1042,18 @@ msgctxt "view:contract.payment_term:"
 msgid "Contract Payment Terms"
 msgstr "Conditions de paiement"
 
+msgctxt "view:contract.premium.display.premiums.line:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "view:contract.premium.display.premiums.line:"
+msgid "Premiums"
+msgstr "Primes"
+
+msgctxt "view:contract.premium.display.premiums:"
+msgid "Contract Premiums"
+msgstr ""
+
 msgctxt "view:contract.premium:"
 msgid "Premium"
 msgstr "Prime"
@@ -1051,20 +1063,12 @@ msgid "Premiums"
 msgstr "Primes"
 
 msgctxt "view:contract:"
-msgid "Calculate Premiums"
-msgstr "Calculer les primes"
-
-msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
 
 msgctxt "view:contract:"
 msgid "Invoicing"
 msgstr "Quittancement"
-
-msgctxt "view:contract:"
-msgid "Premium"
-msgstr "Prime"
 
 msgctxt "view:offered.invoice.frequency:"
 msgid "Invoice Frequencies"

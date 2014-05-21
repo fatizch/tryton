@@ -2,186 +2,62 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:clause.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
+msgctxt "field:clause,products:"
+msgid "Products"
+msgstr "Produits"
 
-msgctxt "field:clause.rule,clauses:"
+msgctxt "field:offered.product,clauses:"
 msgid "Clauses"
 msgstr "Clauses"
 
-msgctxt "field:clause.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:clause.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:clause.rule,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:clause.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:clause.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:clause.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:clause.rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:clause.rule,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:clause.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:clause.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:clause.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:clause.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:clause.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:clause.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:clause.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:clause.rule,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:clause.rule-clause,clause:"
+msgctxt "field:offered.product-clause,clause:"
 msgid "Clause"
 msgstr "Clause"
 
-msgctxt "field:clause.rule-clause,create_date:"
+msgctxt "field:offered.product-clause,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:clause.rule-clause,create_date_:"
+msgctxt "field:offered.product-clause,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:clause.rule-clause,create_uid:"
+msgctxt "field:offered.product-clause,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:clause.rule-clause,id:"
+msgctxt "field:offered.product-clause,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:clause.rule-clause,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:clause.rule-clause,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:clause.rule-clause,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:clause.rule-clause,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:clause.rule-clause,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered,clause_rules:"
-msgid "Clause Rules"
-msgstr "Clauses"
-
-msgctxt "field:offered.option.description,clause_rules:"
-msgid "Clause Rules"
-msgstr "Clauses"
-
-msgctxt "field:offered.product,clause_rules:"
-msgid "Clause Rules"
-msgstr "Clauses"
-
-msgctxt "model:clause.rule,name:"
-msgid "Clause Rule"
-msgstr "Clause"
-
-msgctxt "model:clause.rule-clause,name:"
-msgid "Rule Clause Relation"
-msgstr "Table intermédiaire entre l'offre et le clause"
-
-msgctxt "selection:clause.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:clause.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:clause.rule,offered:"
-msgid "Option Description"
-msgstr "Offre"
-
-msgctxt "selection:clause.rule,offered:"
+msgctxt "field:offered.product-clause,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "selection:clause.rule,template_behaviour:"
-msgid ""
-msgstr " "
+msgctxt "field:offered.product-clause,rec_name:"
+msgid "Name"
+msgstr "Valeur"
 
-msgctxt "selection:clause.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
+msgctxt "field:offered.product-clause,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
 
-msgctxt "selection:clause.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
+msgctxt "field:offered.product-clause,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
-msgctxt "view:clause.rule:"
-msgid "Clause rule"
-msgstr "Clause"
+msgctxt "field:offered.product-clause,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:offered.product-clause,name:"
+msgid "Product Clause Relation"
+msgstr ""
 
 msgctxt "view:offered.option.description:"
 msgid "Clause"
 msgstr "Clause"
 
 msgctxt "view:offered.product:"
-msgid "Clause"
-msgstr "Clause"
+msgid "Clauses"
+msgstr "Clauses"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -503,7 +503,7 @@ msgstr "Emprunteur"
 
 msgctxt "field:party.party,loan_insurers:"
 msgid "Loan Insurers"
-msgstr ""
+msgstr "Assureurs"
 
 msgctxt "model:ir.action,name:"
 msgid "Loan Share Propagation"
@@ -625,6 +625,18 @@ msgctxt "selection:offered.option.description,family:"
 msgid "Loan"
 msgstr "Emprunteur"
 
+msgctxt "view:contract.option.extra_premium:"
+msgid "‰"
+msgstr ""
+
+msgctxt "view:contract.wizard.option_subscription.options_displayer.option:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:contract.wizard.option_subscription.options_displayer:"
+msgid "%"
+msgstr "%"
+
 msgctxt "view:contract:"
 msgid "Create Loan"
 msgstr "Créer un prêt"
@@ -632,6 +644,10 @@ msgstr "Créer un prêt"
 msgctxt "view:contract:"
 msgid "Loans"
 msgstr "Prêts"
+
+msgctxt "view:insurer:"
+msgid "Insurers"
+msgstr "Assureurs"
 
 msgctxt "view:loan.increment:"
 msgid "%"
@@ -696,6 +712,10 @@ msgstr "Prêt"
 msgctxt "view:loan:"
 msgid "Loan Create Parameters"
 msgstr "Paramètres du Prêt"
+
+msgctxt "view:party.party:"
+msgid "Loan Information"
+msgstr "Emprunteur"
 
 msgctxt "wizard_button:loan.create,loan,end:"
 msgid "Cancel"

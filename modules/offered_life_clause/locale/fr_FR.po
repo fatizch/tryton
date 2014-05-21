@@ -1,26 +1,67 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:clause:"
-msgid ""
-"It is not possible to allow customization of clauses with beneficiary list"
-msgstr ""
-"Il n'est pas possible de customiser les clauses ayant une liste de "
-"bénéficiaires"
+msgctxt "field:clause,coverages:"
+msgid "Coverages"
+msgstr "Garanties"
 
-msgctxt "field:clause.rule,default_beneficiary_clause:"
-msgid "Default Beneficiary Clause"
-msgstr "Clause bénéficiaire par défaut"
+msgctxt "field:offered.option.description,beneficiaries_clauses:"
+msgid "Beneficiaries Clauses"
+msgstr "Clauses bénéficiaires"
 
-msgctxt "field:clause.rule,with_beneficiaries_clauses:"
-msgid "With Beneficiary Clauses"
-msgstr "Avec clauses bénéficiaires"
+msgctxt "field:offered.option.description,default_beneficiary_clause:"
+msgid "Clause"
+msgstr "Clause"
 
-msgctxt "field:clause.rule,has_default_beneficiary_clause:"
-msgid "With Default Beneficiary Clause"
-msgstr "Avec clause bénéficiaire par défaut"
+msgctxt "field:offered.option.description-beneficiary_clause,clause:"
+msgid "Clause"
+msgstr "Clause"
+
+msgctxt "field:offered.option.description-beneficiary_clause,coverage:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt "field:offered.option.description-beneficiary_clause,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description-beneficiary_clause,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description-beneficiary_clause,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description-beneficiary_clause,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description-beneficiary_clause,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:offered.option.description-beneficiary_clause,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description-beneficiary_clause,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description-beneficiary_clause,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:offered.option.description-beneficiary_clause,name:"
+msgid "Relation Option Description To Beneficiary Clause"
+msgstr "Relation Option - Clause Bénéficiaire"
 
 msgctxt "selection:clause,kind:"
 msgid "Beneficiary"
 msgstr "Bénéficiaire"
+
+msgctxt "view:offered.option.description:"
+msgid "Beneficiaries Clauses"
+msgstr "Clauses bénéficiaires"

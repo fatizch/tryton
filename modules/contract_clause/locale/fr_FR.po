@@ -6,10 +6,6 @@ msgctxt "field:contract,clauses:"
 msgid "Clauses"
 msgstr "Clauses"
 
-msgctxt "field:contract,possible_clauses:"
-msgid "Possible clauses"
-msgstr "Clauses possibles"
-
 msgctxt "field:contract.clause,clause:"
 msgid "Clause"
 msgstr "Clause"
@@ -37,10 +33,6 @@ msgstr "Texte customisable"
 msgctxt "field:contract.clause,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.clause,kind:"
-msgid "Kind"
-msgstr "Type"
 
 msgctxt "field:contract.clause,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -71,5 +63,9 @@ msgid "Contract Clause"
 msgstr "Clauses du contrat"
 
 msgctxt "view:contract.clause:"
+msgid "Clauses"
+msgstr "Clauses"
+
+msgctxt "view:contract:"
 msgid "Clauses"
 msgstr "Clauses"
