@@ -53,6 +53,18 @@ class Contract:
         'Premiums', order=[('rated_entity', 'ASC'), ('start', 'ASC')])
     payment_terms = fields.One2Many('contract.payment_term', 'contract',
         'Payment Terms')
+    direct_debit = fields.Boolean('Direct Debit Payment')
+    direct_debit_day = fields.Integer('Direct Debit Payment Day',
+        states={'invisible': ~Eval('direct_debit'),
+            'required': Eval('direct_debit', False)},
+        depends=['direct_debit'])
+    direct_debit_account = fields.Many2One('bank.account',
+        'Direct Debit Account',
+        states={'invisible': ~Eval('direct_debit'),
+            'required': Eval('direct_debit', False)},
+        depends=['direct_debit', 'currency', 'subscriber'],
+        domain=[('currency', '=', Eval('currency')),
+            ('owners', '=', Eval('subscriber'))])
     payment_term = fields.Function(fields.Many2One(
             'account.invoice.payment_term', 'Payment Term',
             domain=[('value.products', '=', Eval('product'))],

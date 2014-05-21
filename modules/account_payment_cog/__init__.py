@@ -12,6 +12,8 @@ def register():
         CreateReceivablePaymentStart,
         SynthesisMenuPayment,
         SynthesisMenu,
+        PaymentCreationBatch,
+        PaymentTreatmentBatch,
         # from company
         Company,
         module='account_payment_cog', type_='model')

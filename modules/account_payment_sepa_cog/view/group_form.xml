@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-  <xpath expr="/form/field[@name='kind']" position="after">
-    <field name="payments" colspan="2"/>
-    <field name="sepa_msg" colspan="2"/>
-  </xpath>
-</data>
