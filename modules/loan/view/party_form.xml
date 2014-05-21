@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='extra_data']" position="after">
+        <page string="Loan Information" id="loan_information">
+            <separator name="loan_insurers" colspan="6"/>
+             <field name="loan_insurers" view_ids="loan.insurer_view_list" colspan="6" expand_toolbar="0"/>
+        </page>
+    </xpath>
+</data>

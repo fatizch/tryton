@@ -433,9 +433,13 @@ class MergedMixin:
         return table, columns
 
     @classmethod
+    def build_sub_query(cls, model, table, columns):
+        return table.select(*columns)
+
+    @classmethod
     def table_query(cls):
         queries = []
         for model in cls.merged_models():
             table, columns = cls.merged_columns(model)
-            queries.append(table.select(*columns))
+            queries.append(cls.build_sub_query(model, table, columns))
         return Union(*queries)

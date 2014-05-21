@@ -18,7 +18,7 @@ __all__ = [
 class SynthesisMenuPayment(model.CoopSQL):
     'Party Synthesis Menu payment'
     __name__ = 'party.synthesis.menu.payment'
-    name = fields.Char('Payment')
+    name = fields.Char('Payments')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod

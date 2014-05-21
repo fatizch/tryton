@@ -955,7 +955,7 @@ class ContractEnd(Wizard):
 class SynthesisMenuContrat(model.CoopSQL):
     'Party Synthesis Menu Contract'
     __name__ = 'party.synthesis.menu.contract'
-    name = fields.Char('Contract')
+    name = fields.Char('Contracts')
     subscriber = fields.Many2One('party.party', 'Subscriber')
 
     @staticmethod

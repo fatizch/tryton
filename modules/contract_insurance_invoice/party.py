@@ -2,7 +2,7 @@ import copy
 from sql.aggregate import Max
 from sql import Literal
 
-from trytond.modules.cog_utils import MergedMixin
+from trytond.modules.cog_utils import MergedMixin, utils
 from trytond.pool import Pool
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
@@ -18,7 +18,7 @@ __all__ = [
 class SynthesisMenuInvoice(model.CoopSQL):
     'Party Synthesis Menu Invoice'
     __name__ = 'party.synthesis.menu.invoice'
-    name = fields.Char('Invoice')
+    name = fields.Char('Invoices')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod
@@ -71,6 +71,19 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             elif name == 'name':
                 return Model._fields['number']
         return merged_field
+
+    @classmethod
+    def build_sub_query(cls, model, table, columns):
+        if model != 'account.invoice':
+            return super(SynthesisMenu, cls).build_sub_query(model, table,
+                columns)
+        invoice_start_date = utils.today()
+        invoice_start_date = invoice_start_date.replace(
+            year=invoice_start_date.year - 1)
+        return table.select(*columns,
+            where=((table.state != 'validated')
+                & (table.state != 'draft')
+                & (table.invoice_date >= invoice_start_date)))
 
 
 class SynthesisMenuOpen(Wizard):

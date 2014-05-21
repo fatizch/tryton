@@ -69,30 +69,32 @@ class Party(export.ExportImportMixin):
     gender = fields.Selection(GENDER, 'Gender', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-            })
+            }, depends=['is_person'])
     first_name = fields.UnaccentChar('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-            })
+            }, depends=['is_person'])
     maiden_name = fields.UnaccentChar('Maiden Name', states={
             'readonly': Eval('gender') != 'female',
             'invisible': ~STATES_PERSON
-            })
+            }, depends=['is_person'])
     birth_date = fields.Date('Birth Date', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
-            })
-    ssn = fields.Char('SSN', states={'invisible': ~STATES_PERSON})
+            }, depends=['is_person'])
+    ssn = fields.Char('SSN', states={'invisible': ~STATES_PERSON},
+        depends=['is_person'])
     ####################################
     #Company information
     short_name = fields.Char('Short Name',
         states={'invisible': ~STATES_COMPANY},
         depends=['is_company'])
     parent = fields.Many2One('party.party', 'Parent',
-        states={'invisible': ~STATES_COMPANY})
+        states={'invisible': ~STATES_COMPANY}, depends=['is_company'])
     children = fields.One2Many('party.party', 'parent', 'Children',
-        states={'invisible': ~STATES_COMPANY})
-    logo = fields.Binary('Logo', states={'invisible': ~STATES_COMPANY})
+        states={'invisible': ~STATES_COMPANY}, depends=['is_company'])
+    logo = fields.Binary('Logo', states={'invisible': ~STATES_COMPANY},
+        depends=['is_company'])
     ####################################
     synthesis = fields.One2Many('party.synthesis.menu', 'party', 'Synthesis',
         readonly=True)
@@ -444,7 +446,7 @@ class Party(export.ExportImportMixin):
 class SynthesisMenuPartyInteraction(model.CoopSQL):
     'Party Synthesis Menu Interaction'
     __name__ = 'party.synthesis.menu.party_interaction'
-    name = fields.Char('Interaction')
+    name = fields.Char('Interactions')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod
@@ -468,7 +470,7 @@ class SynthesisMenuPartyInteraction(model.CoopSQL):
 class SynthesisMenuAddress(model.CoopSQL):
     'Party Synthesis Menu Address'
     __name__ = 'party.synthesis.menu.address'
-    name = fields.Char('Address')
+    name = fields.Char('Addresses')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod
@@ -497,7 +499,7 @@ class SynthesisMenuAddress(model.CoopSQL):
 class SynthesisMenuContact(model.CoopSQL):
     'Party Synthesis Menu Contact'
     __name__ = 'party.synthesis.menu.contact'
-    name = fields.Char('Contact')
+    name = fields.Char('Contacts')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod
@@ -537,7 +539,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(SynthesisMenu, cls).__setup__()
-        cls._order.insert(0, ('sequence', 'DESC'))
+        # cls._order.insert(0, ('sequence', 'DESC'))
 
     @staticmethod
     def merged_models():
@@ -678,8 +680,9 @@ class SynthesisMenuOpen(Wizard):
             actions['views'] = list(reversed(actions['views']))
         elif Model.__name__ == 'party.party':
             actions['views'] = [(Pool().get('ir.ui.view').search([
-                    ('xml_id', '=', 'party_cog.party_view_form')])[0].id,
-                    'form')]
+                    ('xml_id', '=',
+                        'party_cog.party_view_form')])[0].id,
+                            'form')]
             actions['res_id'] = record.id
         else:
             actions['res_id'] = record.id
