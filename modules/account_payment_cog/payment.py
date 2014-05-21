@@ -98,7 +98,7 @@ class Payment(ModelSQL, ModelView):
 
 
 class PaymentTreatmentBatch(batchs.BatchRoot):
-
+    "Payment Treatment Batch"
     __name__ = 'account.payment.treatment'
 
     @classmethod
@@ -150,6 +150,7 @@ class PaymentTreatmentBatch(batchs.BatchRoot):
 
 
 class PaymentCreationBatch(batchs.BatchRoot):
+    "Payment Creation Batch"
     __name__ = 'account.payment.creation'
 
     @classmethod
