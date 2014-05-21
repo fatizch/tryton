@@ -1,10 +1,6 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:contract.create_extra_premium:"
-msgid "Please select an option to continue"
-msgstr "Veuillez choisir une garantie pour continuer"
 
 msgctxt "error:contract.manage_exclusion:"
 msgid "At least one exclusion must be selected"
@@ -120,10 +116,6 @@ msgstr "Date de Début de Gestion"
 msgctxt "field:contract,status:"
 msgid "Status"
 msgstr "Statut"
-
-msgctxt "field:contract,status_history:"
-msgid "Status History"
-msgstr "Historique des Statuts"
 
 msgctxt "field:contract,subscriber:"
 msgid "Subscriber"
@@ -421,30 +413,6 @@ msgctxt "field:contract.covered_element-party,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:contract.create_extra_premium.create,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.create_extra_premium.create,covered_element:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "field:contract.create_extra_premium.create,extra_premium:"
-msgid "Extra Premium"
-msgstr "Surprime"
-
-msgctxt "field:contract.create_extra_premium.create,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.create_extra_premium.create,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
-msgctxt "field:contract.create_extra_premium.create,option:"
-msgid "Option"
-msgstr "Option"
-
 msgctxt "field:contract.manage_exclusion.select,exclusions:"
 msgid "Exclusions"
 msgstr "Exclusions"
@@ -621,10 +589,6 @@ msgctxt "field:contract.option,status:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.option,status_history:"
-msgid "Status History"
-msgstr "Historique des Statuts"
-
 msgctxt "field:contract.option,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -761,6 +725,33 @@ msgctxt "field:contract.option.extra_premium,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.option.extra_premium.create.option_selector,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt ""
+"field:contract.option.extra_premium.create.option_selector,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt ""
+"field:contract.option.extra_premium.create.option_selector,hide_covered_element:"
+msgid "Hide Covered Element"
+msgstr "Cacher le risque couvert"
+
+msgctxt "field:contract.option.extra_premium.create.option_selector,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:contract.option.extra_premium.create.option_selector,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.option.extra_premium.create.option_selector,options:"
+msgid "Options"
+msgstr "Options"
+
 msgctxt "field:contract.renew.parameters,id:"
 msgid "ID"
 msgstr "ID"
@@ -814,6 +805,10 @@ msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,hide_covered_element:"
 msgid "Hide Covered Element"
 msgstr "Cacher le risque couvert"
+
+msgctxt "field:contract.wizard.option_subscription.options_displayer,party:"
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,possible_covered_elements:"
@@ -912,10 +907,6 @@ msgctxt "model:contract.covered_element-party,name:"
 msgid "Relation between Covered Element and Covered Relations"
 msgstr "Relation de l'élément couvert"
 
-msgctxt "model:contract.create_extra_premium.create,name:"
-msgid "Extra Premium Displayer"
-msgstr "Surprime"
-
 msgctxt "model:contract.manage_exclusion.select,name:"
 msgid "Exclusion Display"
 msgstr "Exclusion"
@@ -948,6 +939,10 @@ msgctxt "model:contract.option.extra_premium,name:"
 msgid "Extra Premium"
 msgstr "Surprime"
 
+msgctxt "model:contract.option.extra_premium.create.option_selector,name:"
+msgid "Create Extra Premium Option Selector"
+msgstr "Selecteur d'option pour la création des surprimes"
+
 msgctxt "model:contract.renew.parameters,name:"
 msgid "Renewal Start"
 msgstr "Paramètres du Renouvellement"
@@ -964,13 +959,17 @@ msgctxt "model:expense,name:"
 msgid "Expense"
 msgstr "Dépense"
 
+msgctxt "model:ir.action,name:"
+msgid "Status History"
+msgstr "Historique des Statuts"
+
+msgctxt "model:ir.action,name:act_contract_activation_history_relate_form"
+msgid "Activation History"
+msgstr "Historique d'activation"
+
 msgctxt "model:ir.action,name:act_contract_relate_form"
 msgid "Contracts"
 msgstr "Contrats"
-
-msgctxt "model:ir.action,name:act_contract_status_history_relate_form"
-msgid "Status History"
-msgstr "Historique des Statuts"
 
 msgctxt "model:ir.action,name:act_create_extra_premium"
 msgid "Create Extra Premium"
@@ -1136,10 +1135,6 @@ msgctxt "view:contract.covered_element:"
 msgid "Sub Covered Elements"
 msgstr "Sous Risques Couverts"
 
-msgctxt "view:contract.create_extra_premium.create:"
-msgid "Extra Premium Creation"
-msgstr "Création de surprime"
-
 msgctxt "view:contract.manage_exclusion.select.exclusion:"
 msgid "Exclusions"
 msgstr "Exclusions"
@@ -1228,15 +1223,6 @@ msgctxt "view:party.party:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
 
-msgctxt ""
-"wizard_button:contract.create_extra_premium,extra_premium,create_extra:"
-msgid "Create"
-msgstr "Créer"
-
-msgctxt "wizard_button:contract.create_extra_premium,extra_premium,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
 msgctxt "wizard_button:contract.manage_exclusion,existing,end:"
 msgid "End"
 msgstr "Terminer"
@@ -1258,6 +1244,31 @@ msgctxt ""
 "wizard_button:contract.manage_extra_premium,existing,propagate_selected:"
 msgid "Propagate Selected"
 msgstr "Propager la sélection"
+
+msgctxt ""
+"wizard_button:contract.option.extra_premium.create,extra_premium_data,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract.option.extra_premium.create,extra_premium_data,select_options:"
+msgid "Select Options"
+msgstr "Selectionner les options"
+
+msgctxt ""
+"wizard_button:contract.option.extra_premium.create,select_options,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt ""
+"wizard_button:contract.option.extra_premium.create,select_options,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:contract.option.extra_premium.create,select_options,extra_premium_data:"
+msgid "Modify Extra Premium"
+msgstr "Modifier les surprimes"
 
 msgctxt "wizard_button:contract.renew,renewal_result,end:"
 msgid "End"

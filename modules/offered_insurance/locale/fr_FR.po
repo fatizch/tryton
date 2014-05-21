@@ -1063,7 +1063,7 @@ msgid "Start Date"
 msgstr "Date de Début"
 
 msgctxt "field:extra_data,string:"
-msgid "Name"
+msgid "String"
 msgstr "Nom"
 
 msgctxt "field:extra_data,sub_datas:"
@@ -2535,7 +2535,7 @@ msgid "Letter Report"
 msgstr ""
 
 msgctxt "model:ir.action,name:letter_generation_wizard"
-msgid "Letter Generation"
+msgid "Impression du Courrier"
 msgstr "Impression du Courrier"
 
 msgctxt "model:ir.action,name:receive_documents_wizard"

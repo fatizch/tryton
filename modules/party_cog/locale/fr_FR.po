@@ -326,6 +326,10 @@ msgctxt "field:party.synthesis.menu,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:party.synthesis.menu,sequence:"
+msgid "Sequence"
+msgstr "Séquence"
+
 msgctxt "field:party.synthesis.menu,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -355,8 +359,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.address,name:"
-msgid "Address"
-msgstr "Adresse"
+msgid "Addresses"
+msgstr "Adresses"
 
 msgctxt "field:party.synthesis.menu.address,party:"
 msgid "Party"
@@ -395,8 +399,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.contact,name:"
-msgid "Contact"
-msgstr "Contact"
+msgid "Contacts"
+msgstr "Contacts"
 
 msgctxt "field:party.synthesis.menu.contact,party:"
 msgid "Party"
@@ -435,7 +439,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.party_interaction,name:"
-msgid "Interaction"
+msgid "Interactions"
 msgstr "Historique des contacts"
 
 msgctxt "field:party.synthesis.menu.party_interaction,party:"

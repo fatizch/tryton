@@ -10,6 +10,10 @@ msgctxt "error:contract.invoice.post:"
 msgid "No Batch Path Specified"
 msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
+msgctxt "error:contract.premium.display:"
+msgid "No contract found in context"
+msgstr "Pas de contrat trouver dans le contexte"
+
 msgctxt "field:account.fee.description,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte pour le quittancement"
@@ -74,6 +78,18 @@ msgctxt "field:contract,account_invoices:"
 msgid "Invoices"
 msgstr "Factures"
 
+msgctxt "field:contract,direct_debit:"
+msgid "Direct Debit Payment"
+msgstr "Prélevement"
+
+msgctxt "field:contract,direct_debit_account:"
+msgid "Direct Debit Account"
+msgstr "Compte bancaire de prélevement"
+
+msgctxt "field:contract,direct_debit_day:"
+msgid "Direct Debit Payment Day"
+msgstr "Jour du prélevement"
+
 msgctxt "field:contract,invoice_frequencies:"
 msgid "Invoice Frequencies"
 msgstr "Fréquences de quittancement"
@@ -105,6 +121,10 @@ msgstr "Conditions de paiement"
 msgctxt "field:contract,premiums:"
 msgid "Premiums"
 msgstr "Primes"
+
+msgctxt "field:contract,total_invoice_amount:"
+msgid "Total Invoice Amount"
+msgstr "Montant total des primes"
 
 msgctxt "field:contract.covered_element,premiums:"
 msgid "Premiums"
@@ -358,6 +378,46 @@ msgctxt "field:contract.premium-account.tax,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:contract.premium.display.premiums,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium.display.premiums,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.premium.display.premiums,premiums:"
+msgid "Premiums"
+msgstr "Primes"
+
+msgctxt "field:contract.premium.display.premiums.line,amount:"
+msgid "Amount Today"
+msgstr "Montant à la date du jour"
+
+msgctxt "field:contract.premium.display.premiums.line,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:contract.premium.display.premiums.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium.display.premiums.line,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.premium.display.premiums.line,name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:contract.premium.display.premiums.line,premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "field:contract.premium.display.premiums.line,premiums:"
+msgid "Premium"
+msgstr "Prime"
+
 msgctxt "field:offered.invoice.frequency,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -531,8 +591,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.invoice,name:"
-msgid "Invoice"
-msgstr "Quittance"
+msgid "Invoices"
+msgstr "Quittances"
 
 msgctxt "field:party.synthesis.menu.invoice,party:"
 msgid "Party"
@@ -586,6 +646,14 @@ msgctxt "model:contract.premium-account.tax,name:"
 msgid "Premium - Tax"
 msgstr ""
 
+msgctxt "model:contract.premium.display.premiums,name:"
+msgid "Display Contract Premium Displayer"
+msgstr "Ecran d'affichage des primes du contrat"
+
+msgctxt "model:contract.premium.display.premiums.line,name:"
+msgid "Display Contract Premium Displayer Prmeium Line"
+msgstr "Ecran d'affichage des primes du contrat par ligne"
+
 msgctxt "model:ir.action,name:act_invoice"
 msgid "Invoice Contracts"
 msgstr "Génération des quittances"
@@ -597,6 +665,10 @@ msgstr "Quittances"
 msgctxt "model:ir.action,name:act_offered_invoice_frequency"
 msgid "Invoice Frequencies"
 msgstr "Fréquences de quittancement"
+
+msgctxt "model:ir.action,name:act_premium_display"
+msgid "Display Contract Premium"
+msgstr "Afficher la prime du contrat"
 
 msgctxt "model:ir.ui.menu,name:menu_offered_invoice_frequency"
 msgid "Invoice Frequencies"
@@ -1013,3 +1085,11 @@ msgstr "Annuler"
 msgctxt "wizard_button:contract.invoice,start,invoice:"
 msgid "Ok"
 msgstr "Ok"
+
+msgctxt "wizard_button:contract.premium.display,display,calculate_prices:"
+msgid "Calculate Prices"
+msgstr "Calculer les Primes"
+
+msgctxt "wizard_button:contract.premium.display,display,end:"
+msgid "Exit"
+msgstr "Sortir"

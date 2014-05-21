@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.payment.creation:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
+
+msgctxt "error:account.payment.treatment:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
+
 msgctxt "field:account.payment.create.parameters,id:"
 msgid "ID"
 msgstr "ID"
@@ -10,9 +18,17 @@ msgctxt "field:account.payment.create.parameters,until:"
 msgid "Until"
 msgstr "Jusqu'à"
 
+msgctxt "field:account.payment.creation,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:account.payment.journal,sepa_bank_account_number:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
+
+msgctxt "field:account.payment.treatment,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.payment,create_date:"
 msgid "Create Date"
@@ -31,8 +47,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.payment,name:"
-msgid "Payment"
-msgstr "Paiement"
+msgid "Payments"
+msgstr "Paiements"
 
 msgctxt "field:party.synthesis.menu.payment,party:"
 msgid "Party"
@@ -57,6 +73,14 @@ msgstr "Identifiant XML"
 msgctxt "model:account.payment.create.parameters,name:"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"
+
+msgctxt "model:account.payment.creation,name:"
+msgid "Payment Creation Batch"
+msgstr "Batch de création des paiements"
+
+msgctxt "model:account.payment.treatment,name:"
+msgid "Payment Treatment Batch"
+msgstr "Batch de traitement des paiements"
 
 msgctxt "model:ir.action,name:act_payment_receivable_form"
 msgid "Receivable Payments"

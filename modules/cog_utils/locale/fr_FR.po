@@ -31,8 +31,8 @@ msgid ""
 msgstr " "
 
 msgctxt "field:ir.action,xml_id:"
-msgid "Xml Id"
-msgstr ""
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.action.keyword,xml_id:"
 msgid "XML Id"
