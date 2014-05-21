@@ -64,20 +64,20 @@
       <field name="name">Manage Exclusions</field>
       <field name="wiz_name">contract.manage_exclusion</field>
     </record>
-    <!-- ########################### -->
-    <!-- # Extra Premium Displayer # -->
-    <!-- ########################### -->
-    <record model="ir.ui.view" id="create_extra_premium_create_view_form">
-      <field name="model">contract.create_extra_premium.create</field>
+    <!-- ######################################## -->
+    <!-- # Create Extra Premium Option Selector # -->
+    <!-- ######################################## -->
+    <record model="ir.ui.view" id="extra_premium_create_option_selector_view_form">
+      <field name="model">contract.option.extra_premium.create.option_selector</field>
       <field name="type">form</field>
-      <field name="name">create_extra_premium_create_form</field>
+      <field name="name">extra_premium_create_option_selector_form</field>
     </record>
     <!-- ######################## -->
     <!-- # Create Extra Premium # -->
     <!-- ######################## -->
     <record model="ir.action.wizard" id="act_create_extra_premium">
       <field name="name">Create Extra Premium</field>
-      <field name="wiz_name">contract.create_extra_premium</field>
+      <field name="wiz_name">contract.option.extra_premium.create</field>
     </record>
   </data>
 </tryton>
