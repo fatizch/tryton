@@ -397,7 +397,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return super(Contract, self).get_rec_name(name)
 
     def get_synthesis_rec_name(self, name):
-        if self.end_date:
+        if self.status == 'quote':
+            return '%s (%s)[%s]' % (
+                coop_string.translate_value(self, 'status'),
+                self.product.rec_name,
+                coop_string.date_as_string(self.start_date))
+        elif self.end_date:
             return '%s (%s)[%s - %s]' % (self.contract_number,
                 self.product.rec_name,
                 coop_string.date_as_string(self.start_date),
@@ -631,7 +636,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 ))
         company_id = Transaction().context.get('company', None)
         cursor.execute(*query_table.select(contract.id,
-                where=(contract.company == company_id) if company_id else None))
+                where=(contract.company == company_id) if company_id else
+                None))
         return cls.browse(cursor.fetchall())
 
     def get_contract_address(self, at_date=None):
@@ -975,7 +981,6 @@ class SynthesisMenuContrat(model.CoopSQL):
             Max(contract.write_date).as_('write_date'),
             Literal(coop_string.translate_label(ContractSynthesis, 'name')).
             as_('name'), party.id.as_('subscriber'),
-            # where=(contract.status != 'active'),
             group_by=party.id)
 
     def get_icon(self, name=None):
@@ -998,7 +1003,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def merged_field(cls, name, Model):
         merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
-        if Model.__name__ == 'party.synthesis.menu.contract':
+        if (Model.__name__ == 'party.synthesis.menu.contract'):
             if name == 'parent':
                 return Model._fields['subscriber']
         elif Model.__name__ == 'contract':
@@ -1017,7 +1022,7 @@ class SynthesisMenuOpen(Wizard):
 
     def get_action(self, record):
         Model = record.__class__
-        if Model.__name__ != 'party.synthesis.menu.contract':
+        if (Model.__name__ != 'party.synthesis.menu.contract'):
             return super(SynthesisMenuOpen, self).get_action(record)
         domain = PYSONEncoder().encode([('subscriber', '=', record.id)])
         actions = {
