@@ -174,7 +174,7 @@ class Invoice:
             return None
         date = self.invoice_date
         date = coop_date.get_next_date_in_sync_with(date,
-            self.contract.direct_debit_day)
+            int(self.contract.direct_debit_day))
         date = max(utils.today(), date)
         return Payment(
             company=self.company,

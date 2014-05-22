@@ -57,7 +57,8 @@ class Contract:
     payment_terms = fields.One2Many('contract.payment_term', 'contract',
         'Payment Terms')
     direct_debit = fields.Boolean('Direct Debit Payment')
-    direct_debit_day = fields.Integer('Direct Debit Payment Day',
+    direct_debit_day = fields.Selection('get_possible_direct_debit_day',
+        'Direct Debit Payment Day',
         states={'invisible': ~Eval('direct_debit'),
             'required': Eval('direct_debit', False)},
         depends=['direct_debit'])
@@ -503,6 +504,10 @@ class Contract:
         self.payment_terms = [PaymentTerm(start=self.start_date,
                 value=product.default_payment_term)]
         return res, errs
+
+    @staticmethod
+    def get_possible_direct_debit_day():
+        return [('', ''), ('5', '5'), ('15', '15')]
 
 
 class _ContractRevisionMixin(object):
