@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -505,6 +505,46 @@ msgctxt "field:party.party,loan_insurers:"
 msgid "Loan Insurers"
 msgstr "Assureurs"
 
+msgctxt "field:party.synthesis.menu.loan,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.loan,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.loan,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.synthesis.menu.loan,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.loan,name:"
+msgid "Loans"
+msgstr "Prets"
+
+msgctxt "field:party.synthesis.menu.loan,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:party.synthesis.menu.loan,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:party.synthesis.menu.loan,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.loan,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.loan,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "model:ir.action,name:"
 msgid "Loan Share Propagation"
 msgstr "Propager Quotité"
@@ -532,6 +572,10 @@ msgstr "Echéance"
 msgctxt "model:loan.share,name:"
 msgid "Loan Share"
 msgstr "Quotité"
+
+msgctxt "model:party.synthesis.menu.loan,name:"
+msgid "Party Synthesis Menu Loan"
+msgstr "Synthèse acteur - Prêts"
 
 msgctxt "model:tag,name:tag_loan"
 msgid "Prêt"

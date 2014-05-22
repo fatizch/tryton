@@ -32,6 +32,8 @@ def register():
         LoanShareTreeExpansion,
         Party,
         Insurer,
+        SynthesisMenuLoan,
+        SynthesisMenu,
         module='loan', type_='model')
     Pool.register(
         LoanCreate,
@@ -39,4 +41,5 @@ def register():
         OptionSubscriptionWizardLauncher,
         DisplayContractPremium,
         CreateExtraPremium,
+        SynthesisMenuOpen,
         module='loan', type_='wizard')
