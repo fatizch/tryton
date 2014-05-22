@@ -345,13 +345,20 @@ class CreateExtraPremium(Wizard):
     def default_select_options(self, name):
         if self.select_options._default_values:
             return self.select_options._default_values
-        contract = Transaction().context.get('active_id')
-        self.select_options.contract = contract
-        self.select_options.covered_element = None
+        contract_id = Transaction().context.get('active_id')
+        self.select_options.contract = contract_id
+        Contract = Pool().get('contract')
+	contract = Contract(contract_id)
+        if len(contract.covered_elements) == 1:
+            self.select_options.covered_element = contract.covered_elements[0].id
+        else:
+            self.select_options.covered_element = None
         self.select_options.options = []
         return {
-            'options': self.select_options.on_change_with_options()['create'],
-            'contract': contract,
+            'options': [x[1] for x in
+                self.select_options.on_change_with_options()['add']],
+            'contract': contract.id,
+            'hide_covered_element': len(contract.covered_elements) == 1,
             }
 
     def transition_apply(self):
@@ -375,7 +382,7 @@ class CreateExtraPremiumOptionSelector(model.CoopView):
     contract = fields.Many2One('contract', 'Contract')
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', domain=[('contract', '=', Eval('contract'))],
-        states={'invisible': ~Eval('hide_covered_element')},
+        states={'invisible': Eval('hide_covered_element', False)},
         depends=['contract', 'hide_covered_element'])
     hide_covered_element = fields.Boolean('Hide Covered Element')
     options = fields.One2Many('contract.manage_extra_premium.select.option',
@@ -390,11 +397,8 @@ class CreateExtraPremiumOptionSelector(model.CoopView):
     def on_change_with_options(self):
         to_create = []
         existing_options = dict([(x.option, x) for x in self.options])
-        covered_elements = []
-        if self.covered_element:
-            covered_elements = [self.covered_element]
-        for option in [option for covered_element in covered_elements
-                for option in covered_element.options]:
+        for option in (
+                self.covered_element.options if self.covered_element else []):
             if option in existing_options:
                 del existing_options[option]
                 continue
@@ -403,9 +407,7 @@ class CreateExtraPremiumOptionSelector(model.CoopView):
                     'selected': True,
                     'option_name': self.get_option_name(option),
                     })
-        result = {}
-        if to_create:
-            result['create'] = to_create
+        result = {'add': [(-1, x) for x in to_create]}
         if existing_options:
             result['remove'] = [x.id for x in existing_options.itervalues()]
         return result

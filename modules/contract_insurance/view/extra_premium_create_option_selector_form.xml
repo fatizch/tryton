@@ -5,4 +5,5 @@
   <newline/>
   <field name="options" colspan="2"/>
   <field name="contract" invisible="1"/>
+  <field name="hide_covered_element" invisible="1"/>
 </form>
