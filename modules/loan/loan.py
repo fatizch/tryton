@@ -189,7 +189,7 @@ class Loan(model.CoopSQL, model.CoopView):
         'increments', 'deferal', 'deferal_duration')
     def on_change_with_payment_amount(self):
         if (self.amount and self.number_of_payments and self.payment_frequency
-                and self.deferal is None):
+                and not self.deferal):
             return self.calculate_payment_amount()
         else:
             return None
