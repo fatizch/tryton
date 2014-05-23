@@ -96,6 +96,18 @@ class Payment(ModelSQL, ModelView):
                 self.currency.amount_as_string(self.amount),
                 coop_string.translate_value(self, 'state'))
 
+    def get_synthesis_rec_name(self, name):
+        if self.date:
+            return '%s - %s - %s - [%s]' % (self.journal.rec_name,
+                coop_string.date_as_string(self.date),
+                self.currency.amount_as_string(self.amount),
+                coop_string.translate_value(self, 'state'))
+        else:
+            return '%s - %s - [%s]' % (
+                coop_string.date_as_string(self.date),
+                self.currency.amount_as_string(self.amount),
+                coop_string.translate_value(self, 'state'))
+
 
 class PaymentTreatmentBatch(batchs.BatchRoot):
     "Payment Treatment Batch"

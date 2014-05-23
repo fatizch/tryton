@@ -6,7 +6,7 @@ from trytond.modules.cog_utils import MergedMixin
 from trytond.pool import Pool
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields, coop_string, utils
 
 __all__ = [
     'SynthesisMenuPayment',
@@ -18,7 +18,7 @@ __all__ = [
 class SynthesisMenuPayment(model.CoopSQL):
     'Party Synthesis Menu payment'
     __name__ = 'party.synthesis.menu.payment'
-    name = fields.Char('Payments')
+    name = fields.Char('Outstanding/Failed Payments')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod
@@ -26,19 +26,16 @@ class SynthesisMenuPayment(model.CoopSQL):
         pool = Pool()
         Payment = pool.get('account.payment')
         payment = Payment.__table__()
-        party = pool.get('party.party').__table__()
         PaymentSynthesis = pool.get('party.synthesis.menu.payment')
-        query_table = party.join(payment, 'LEFT OUTER', condition=(
-            party.id == payment.party))
-        return query_table.select(
-            party.id,
+        return payment.select(
+            payment.party.as_('id'),
             Max(payment.create_uid).as_('create_uid'),
             Max(payment.create_date).as_('create_date'),
             Max(payment.write_uid).as_('write_uid'),
             Max(payment.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PaymentSynthesis, 'name')).
-            as_('name'), party.id.as_('party'),
-            group_by=party.id)
+            as_('name'), payment.party,
+            group_by=payment.party)
 
     def get_icon(self, name=None):
         return 'payment'
@@ -71,6 +68,18 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             elif name == 'name':
                 return Model._fields['state']
         return merged_field
+
+    @classmethod
+    def build_sub_query(cls, model, table, columns):
+        if model != 'account.payment':
+            return super(SynthesisMenu, cls).build_sub_query(model, table,
+                columns)
+        filter_date = utils.today()
+        filter_date = filter_date.replace(
+            year=filter_date.year - 1)
+        return table.select(*columns,
+            where=(((table.state == 'processing') | (table.state == 'failed'))
+                & (table.date >= filter_date)))
 
 
 class SynthesisMenuOpen(Wizard):

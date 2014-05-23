@@ -5,12 +5,15 @@ from .company import *
 from .tax import *
 from .fee import *
 from .test_case import *
+from .party import *
+from .move import *
 
 
 def register():
     Pool.register(
         # From account
         Move,
+        Line,
         Account,
         AccountTemplate,
         AccountTypeTemplate,
@@ -29,4 +32,9 @@ def register():
         FeeDescriptionVersion,
         # From test_case
         TestCaseModel,
+        SynthesisMenuMoveLine,
+        SynthesisMenu,
         module='account_cog', type_='model')
+    Pool.register(
+        SynthesisMenuOpen,
+        module='account_cog', type_='wizard')
