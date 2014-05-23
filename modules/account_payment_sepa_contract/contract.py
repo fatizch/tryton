@@ -22,7 +22,8 @@ class Contract:
         domain=[('party', '=', Eval('subscriber')),
             ('company', '=', Eval('company')),
             ('account_number.account', '=', Eval('direct_debit_account'))],
-        depends=['subscriber', 'company', 'direct_debit']
+        depends=['subscriber', 'company', 'direct_debit',
+            'direct_debit_account']
         )
 
     def init_SEPA_mandate(self):

@@ -41,9 +41,7 @@
     <xpath expr="/form/field[@name='code']" position="replace"/>
     <xpath expr="/form/label[@name='code']" position="replace"/>
     <!-- Remove accounting, relations, bank page -->
-    <!-- <xpath expr="/form/notebook/page[@id='accounting']" position="replace"/> -->
     <xpath expr="/form/notebook/page[@id='relations']" position="replace"/>
-    <xpath expr="/form/notebook/page[@id='banking']" position="replace"/>
     <!-- General page modification -->
     <xpath expr="/form/notebook/page/group[@id='lang']" position="replace"/>
     <xpath expr="/form/notebook/page/field[@name='categories']" position="replace"/>
@@ -60,7 +58,6 @@
             <field name="email"/>
         </group>
         <newline/>
-        <field name="bank_accounts" widget="one2many"/>
     </xpath>
     <!-- Add Extra Data pages-->
     <xpath expr="/form/notebook/page[@id='general']" position="after">

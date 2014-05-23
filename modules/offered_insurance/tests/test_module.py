@@ -110,7 +110,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule = self.RuleEngine()
         rule.name = 'test_rule'
         rule.context = ct
-        rule.code = '''
+        rule.algorithm = '''
 birthdate = date_de_naissance_souscripteur()
 if annees_entre(birthdate, aujourd_hui()) > 40.0:
     ajouter_warning('Subscriber too old (max: 40)')
@@ -137,6 +137,8 @@ return True'''
             "[False, [], [Subscriber too old (max: 40)], []]"
 
         rule.test_cases = [tc, tc1]
+        rule.short_name = 'Test Rule'
+        rule.status = 'validated'
 
         rule.save()
         with Transaction().set_context({'active_id': rule.id}):
@@ -185,7 +187,7 @@ return True'''
     def test0004_testNumberGeneratorCreation(self):
         ng = self.Sequence()
         ng.name = 'Contract Sequence'
-        ng.code = 'offered.product'
+        ng.code = 'contract'
         ng.prefix = 'Ctr'
         ng.suffix = 'Y${year}'
         ng.save()
@@ -213,7 +215,8 @@ return True'''
         '''
         company, = self.Company.search([('party.name', '=', 'World Company')])
         rule = self.RuleEngine.search([('name', '=', 'test_rule')])[0]
-        ng = self.Sequence.search([('code', '=', 'offered.product')])[0]
+        ng = self.Sequence.search([
+                ('code', '=', 'contract')])[0]
 
         # Coverage A
 

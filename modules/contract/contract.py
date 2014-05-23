@@ -53,7 +53,8 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     start_date = fields.Date('Start Date', required=True, domain=[If(
                 Bool(Eval('end_date', None)),
                 ('start_date', '<=', Eval('end_date')),
-                ('start_date', '>=', datetime.date.min))])
+                ('start_date', '>=', datetime.date.min))],
+        depends=['end_date'])
     end_date = fields.Date('End Date', domain=['OR',
             ('end_date', '=', None),
             ('end_date', '>=', Eval('start_date', datetime.date.min))],

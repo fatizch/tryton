@@ -364,6 +364,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         kwarg_parameter.type_ = 'numeric'
         kwarg_parameter.save()
         rule1.algorithm = 'return param_test_parameter()'
+        rule1.status = 'validated'
         rule1.save()
 
         rule = self.RuleEngine()
@@ -388,6 +389,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 "if table_test_code('foo', 1) == 'ham':",
                 "   return rule_test_rule(test_parameter=20)",
                 ])
+        rule.status = 'validated'
         rule.save()
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')

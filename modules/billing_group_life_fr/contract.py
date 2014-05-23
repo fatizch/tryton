@@ -253,7 +253,7 @@ already exists and can't be modified (%s)'''),
 class CoveredData():
     'Covered Data'
 
-    __name__ = 'contract.covered_data'
+    __name__ = 'contract.option'
 
     is_rating_by_fare_class = fields.Function(
         fields.Boolean('Rating by Fare Class', states={'invisible': True}),

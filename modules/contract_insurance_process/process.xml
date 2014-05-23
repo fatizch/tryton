@@ -39,5 +39,13 @@
       <field name="perm_create" eval="False"/>
       <field name="perm_delete" eval="True"/>
     </record>
+    <!--################################################################ -->
+    <!-- Synthesis -->
+    <!--################################################################ -->
+    <record model="ir.action.keyword" id="act_menu_subscribe_contract">
+      <field name="keyword">form_action</field>
+      <field name="model">party.synthesis.menu,-1</field>
+      <field name="action" ref="contract_insurance_process.subscription_process_launcher"/>
+    </record>
   </data>
 </tryton>

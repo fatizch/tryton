@@ -40,6 +40,7 @@ class Product:
                 ('kind', '=', 'expense'),
                 ('kind', '=', 'revenue')
                 )]
+        cls.account_for_billing.depends.append('kind')
 
     @classmethod
     def get_possible_product_kind(cls):
@@ -72,6 +73,7 @@ class OptionDescription:
                 ('kind', '=', 'expense'),
                 ('kind', '=', 'revenue')
                 )]
+        cls.account_for_billing.depends.append('kind')
 
     @classmethod
     def get_possible_option_description_kind(cls):

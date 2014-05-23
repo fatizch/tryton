@@ -159,7 +159,8 @@ class Contract:
         Date = pool.get('ir.date')
         date = Transaction().context.get('contract_revision_date',
             Date.today())
-        return ContractRevision.get_value(contracts, date)
+        result = ContractRevision.get_value(contracts, date)
+        return result
 
     def get_total_invoice_amount(self, name):
         return sum([x.invoice.total_amount
@@ -262,7 +263,7 @@ class Contract:
                 start = date
                 if (up_to_date and start >= up_to_date) or not up_to_date:
                     break
-            if until and (up_to_date or until < up_to_date):
+            if until and (up_to_date and until < up_to_date):
                 if self.end_date and self.end_date < up_to_date:
                     if until > self.end_date:
                         until = self.end_date
@@ -539,14 +540,14 @@ class _ContractRevisionMixin(object):
             where_contract = reduce_ids(table.contract, sub_ids)
 
             subquery = table.select(
-                table.id.as_('id'),
+                table.contract,
                 Max(Coalesce(table.date, datetime.date.min)).as_('date'),
                 where=((table.date <= date) | (table.date == None))
                 & where_contract,
-                group_by=table.id)
+                group_by=table.contract)
 
             cursor.execute(*table.join(subquery,
-                    condition=(table.id == subquery.id)
+                    condition=(table.contract == subquery.contract)
                     & (Coalesce(table.date, datetime.date.min) ==
                         Coalesce(subquery.date, datetime.date.min))
                     ).select(table.contract, table.value))

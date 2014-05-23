@@ -7,10 +7,10 @@
           <field name="inherit" ref="contract.contract_view_form"/>
           <field name="name">contract_form</field>
         </record>
-        <record model="ir.ui.view" id="covered_data_view_form">
-            <field name="model">contract.covered_data</field>
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.option</field>
             <field name="type">form</field>
-            <field name="inherit" ref="contract_insurance.covered_data_view_form"/>
+            <field name="inherit" ref="contract.option_view_form"/>
             <field name="name">covered_data_form</field>
         </record>
     </data>
