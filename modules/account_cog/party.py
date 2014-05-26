@@ -26,12 +26,9 @@ class SynthesisMenuMoveLine(model.CoopSQL):
         pool = Pool()
         move_line = pool.get('account.move.line').__table__()
         party = pool.get('party.party').__table__()
-        account = pool.get('account.account').__table__()
         Move_Line_Synthesis = pool.get('party.synthesis.menu.move.line')
         query_table = party.join(move_line, condition=(
             party.id == move_line.party))
-        # .join(account, condition=(
-        #     move_line.account == account.id))
         return query_table.select(
             party.id,
             Max(move_line.create_uid).as_('create_uid'),
