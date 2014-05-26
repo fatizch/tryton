@@ -9,15 +9,11 @@ def register():
     Pool.register(
         # from payment
         Payment,
-        CreateReceivablePaymentStart,
         SynthesisMenuPayment,
         SynthesisMenu,
-        PaymentCreationBatch,
-        PaymentTreatmentBatch,
         # from company
         Company,
         module='account_payment_cog', type_='model')
     Pool.register(
-        CreateReceivablePayment,
         SynthesisMenuOpen,
         module='account_payment_cog', type_='wizard')
