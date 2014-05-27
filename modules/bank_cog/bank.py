@@ -175,8 +175,8 @@ class BankAccount(export.ExportImportMixin):
             return self.numbers[-1].number
 
     def get_synthesis_rec_name(self, name):
-        if self.bank:
-            return self.bank.rec_name
+        return '%s : %s' % (self.numbers[0].type,
+            self.numbers[0].number)
 
 
 class BankAccountNumber(export.ExportImportMixin):
