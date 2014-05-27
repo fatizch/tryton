@@ -1,13 +1,22 @@
 import copy
-from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Len
+
+from sql.aggregate import Max
+from sql import Literal
+
+from trytond.wizard import Wizard
+from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, Len, PYSONEncoder
 
 from trytond.modules.cog_utils import fields, utils, coop_string, model
+from trytond.modules.cog_utils import MergedMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
     'PartyInteraction',
+    'SynthesisMenu',
+    'SynthesisMenuOpen',
+    'SynthesisMenuContrat',
     ]
 
 
@@ -35,7 +44,8 @@ class Party:
                     'invisible': Len(Eval('contracts', [])) > 0,
                     },
                 'open_quotes': {
-                    'invisible': Len(Eval('quotes', [])) > 0,                    }
+                    'invisible': Len(Eval('quotes', [])) > 0,
+                    }
                 })
 
     @classmethod
@@ -82,3 +92,79 @@ class PartyInteraction:
         super(PartyInteraction, cls).__setup__()
         cls.for_object_ref = copy.copy(cls.for_object_ref)
         cls.for_object_ref.selection.append(('contract', 'Contract'))
+
+
+class SynthesisMenuContrat(model.CoopSQL):
+    'Party Synthesis Menu Contract'
+    __name__ = 'party.synthesis.menu.contract'
+    name = fields.Char('Contracts')
+    subscriber = fields.Many2One('party.party', 'Subscriber')
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        Contract = pool.get('contract')
+        ContractSynthesis = pool.get('party.synthesis.menu.contract')
+        party = pool.get('party.party').__table__()
+        contract = Contract.__table__()
+        query_table = party.join(contract, 'LEFT OUTER', condition=(
+            party.id == contract.subscriber))
+        return query_table.select(
+            party.id,
+            Max(contract.create_uid).as_('create_uid'),
+            Max(contract.create_date).as_('create_date'),
+            Max(contract.write_uid).as_('write_uid'),
+            Max(contract.write_date).as_('write_date'),
+            Literal(coop_string.translate_label(ContractSynthesis, 'name')).
+            as_('name'), Literal(8).as_('sequence'),
+            party.id.as_('subscriber'),
+            group_by=party.id)
+
+    def get_icon(self, name=None):
+        return 'contract'
+
+
+class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
+    'Party Synthesis Menu'
+    __name__ = 'party.synthesis.menu'
+
+    @classmethod
+    def merged_models(cls):
+        res = super(SynthesisMenu, cls).merged_models()
+        res.extend([
+            'party.synthesis.menu.contract',
+            'contract',
+            ])
+        return res
+
+    @classmethod
+    def merged_field(cls, name, Model):
+        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
+        if (Model.__name__ == 'party.synthesis.menu.contract'):
+            if name == 'parent':
+                return Model._fields['subscriber']
+        elif Model.__name__ == 'contract':
+            if name == 'parent':
+                merged_field = copy.deepcopy(Model._fields['subscriber'])
+                merged_field.model_name = 'party.synthesis.menu.contract'
+                return merged_field
+            elif name == 'name':
+                return Model._fields['contract_number']
+        return merged_field
+
+
+class SynthesisMenuOpen(Wizard):
+    'Open Party Synthesis Menu'
+    __name__ = 'party.synthesis.menu.open'
+
+    def get_action(self, record):
+        Model = record.__class__
+        if (Model.__name__ != 'party.synthesis.menu.contract'):
+            return super(SynthesisMenuOpen, self).get_action(record)
+        domain = PYSONEncoder().encode([('subscriber', '=', record.id)])
+        actions = {
+            'res_model': 'contract',
+            'pyson_domain': domain,
+            'views': [(None, 'tree'), (None, 'form')]
+        }
+        return actions
