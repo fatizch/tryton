@@ -108,7 +108,7 @@ class Contract:
     def calculate_premium_aggregates(self, start=None, end=None):
         cursor = Transaction().cursor
         pool = Pool()
-        Premium= pool.get('contract.premium')
+        Premium = pool.get('contract.premium')
         invoice = pool.get('account.invoice').__table__()
         invoice_line = pool.get('account.invoice.line').__table__()
         invoice_contract = pool.get('contract.invoice').__table__()
@@ -194,7 +194,8 @@ class Loan:
             else:
                 return None
         rule = contract.product.average_loan_premium_rule
-        return rule.calculate_average_premium_for_contract(self, contract)
+        return (rule.calculate_average_premium_for_contract(self, contract)
+            if rule else None)
 
 
 class DisplayLoanAveragePremiumValues(model.CoopView):

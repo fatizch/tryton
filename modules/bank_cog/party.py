@@ -19,9 +19,6 @@ class Party:
         'bank', 'party', 'Bank', size=1, states={
             'invisible': Not(STATES_COMPANY),
         })
-    main_bank_account = fields.Function(
-        fields.Many2One('bank.account', 'Main Bank Account'),
-        'get_main_bank_account_id')
 
     @classmethod
     def _export_force_recreate(cls):
@@ -49,10 +46,6 @@ class Party:
         res = super(Party, cls).get_var_names_for_full_extract()
         res.extend(['bank_accounts'])
         return res
-
-    def get_main_bank_account_id(self, name):
-        bank_accounts = self.get_bank_accounts(utils.today())
-        return bank_accounts[0].id if bank_accounts else None
 
     @classmethod
     def ws_create_person(cls, person_dict):
