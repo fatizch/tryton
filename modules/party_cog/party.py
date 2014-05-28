@@ -215,23 +215,10 @@ class Party(export.ExportImportMixin):
     def set_is_actor(cls, parties, name, value):
         pass
 
-    def get_clean_name(self):
-        if self.is_person:
-            res = "%s %s %s" % (coop_string.translate_value(
-                self, 'gender'), self.name.upper(), self.first_name)
-        return res
-
     def get_rec_name(self, name):
-        res = ''
         if self.is_person:
-            res = "%s %s %s" % (coop_string.translate_value(
+            return "%s %s %s" % (coop_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
-            if self.ssn:
-                res += ' (%s)' % self.ssn
-        if self.is_company:
-            res = super(Party, self).get_rec_name(name)
-        if res:
-            return res
         return super(Party, self).get_rec_name(name)
 
     def get_relation_with(self, target, at_date=None):
