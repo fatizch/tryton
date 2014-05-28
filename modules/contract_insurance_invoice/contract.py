@@ -339,6 +339,7 @@ class Contract:
         old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
         for invoice, new_invoice in zip(old_invoices, new_invoices):
             invoice.id = new_invoice.id
+        Invoice.validate_invoice(new_invoices)
         contract_invoices_to_create = []
         for period, contract_invoices in invoices.iteritems():
             start, end = period
@@ -363,7 +364,6 @@ class Contract:
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
             payment_term=self.payment_term,
-            state='validated',
             )
 
     def get_invoice_lines(self, start, end):
@@ -941,7 +941,7 @@ class Premium(ModelSQL, ModelView):
         return True
 
     def get_rec_name(self, name):
-        return '(%s - %s) %s' % (self.start, self.end or '', self.amount) 
+        return '(%s - %s) %s' % (self.start, self.end or '', self.amount)
 
 
 class PremiumTax(ModelSQL):
