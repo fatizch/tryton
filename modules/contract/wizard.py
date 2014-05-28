@@ -194,9 +194,9 @@ class WizardOption(model.CoopView):
         option.init_from_coverage(self.coverage, option.product,
             displayer.contract.start_date)
 
-    def update_option_if_needed(self, option):
+    def update_option_if_needed(self, option, parent=None):
         for child in self.childs:
-            child.update_option_if_needed(option)
+            child.update_option_if_needed(option, self)
 
     @staticmethod
     def default_selection():

@@ -408,9 +408,9 @@ class WizardOption:
         else:
             return super(WizardOption, self).on_change_with_name(name)
 
-    def update_option_if_needed(self, option):
+    def update_option_if_needed(self, option, parent=None):
         super(WizardOption, self).update_option_if_needed(option)
-        if not getattr(self, 'loan', None):
+        if parent is None or not getattr(self, 'loan', None):
             return
         LoanShare = Pool().get('loan.share')
         option.loan_shares = list(getattr(option, 'loan_shares', []))
@@ -420,7 +420,7 @@ class WizardOption:
             if loan_share.loan == self.loan:
                 existing_loan_share = loan_share
                 break
-        if self.is_selected and self.parent.is_selected:
+        if self.is_selected and parent.is_selected:
             if not self.loan in loans:
                 loan_share = LoanShare()
                 loan_share.loan = self.loan
