@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Test Case Instance # -->
+        <!-- ###################### -->
+        <!-- Data -->
+        <record model="ir.test_case.instance" id="table_test_case">
+            <field name="name">Table Test Case</field>
+            <field name="method_name">table_test_case</field>
+            <field name="test_method_name">table_test_case_test_method</field>
+        </record>
+    </data>
+</tryton>

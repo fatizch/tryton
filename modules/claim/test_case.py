@@ -17,40 +17,19 @@ class TestCaseModel:
     _get_document_desc_cache = Cache('get_document_desc')
 
     @classmethod
-    def _get_test_case_dependencies(cls):
-        result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['document_desc_test_case'] = {
-            'name': 'Document Desc Test Case',
-            'dependencies': set([]),
-            }
-        result['event_desc_test_case'] = {
-            'name': 'Event Desc Test Case',
-            'dependencies': set([]),
-            }
-        result['loss_desc_test_case'] = {
-            'name': 'Loss Desc Test Case',
-            'dependencies': set(['document_desc_test_case',
-                    'event_desc_test_case']),
-            }
-        return result
-
-    @classmethod
     def global_search_list(cls):
         result = super(TestCaseModel, cls).global_search_list()
-        result.add('ins_claim.claim')
+        result.add('claim')
         return result
 
     @classmethod
-    def create_document(cls, code, name):
+    def create_document(cls, **kwargs):
         Document = Pool().get('document.description')
-        doc = Document()
-        doc.code = code
-        doc.name = name
-        return doc
+        return Document(**kwargs)
 
     @classmethod
     def document_desc_test_case(cls):
-        return []
+        pass
 
     @classmethod
     def get_document_desc(cls, code):
@@ -63,17 +42,15 @@ class TestCaseModel:
         return result
 
     @classmethod
-    def create_event_desc(cls, code, name):
+    def create_event_desc(cls, **kwargs):
         EventDesc = Pool().get('benefit.event.description')
-        event_desc = EventDesc()
-        event_desc.code = code
-        event_desc.name = name
-        event_desc.company = cls.get_company()
-        return event_desc
+        if 'company' not in kwargs:
+            kwargs['company'] = cls.get_company()
+        return EventDesc(**kwargs)
 
     @classmethod
     def event_desc_test_case(cls):
-        return []
+        pass
 
     @classmethod
     def get_event_desc(cls, code):
@@ -87,23 +64,12 @@ class TestCaseModel:
         return result
 
     @classmethod
-    def create_loss_desc(cls, code, name, item_kind, with_end_date,
-            events, documents):
+    def create_loss_desc(cls, **kwargs):
         LossDesc = Pool().get('benefit.loss.description')
-        loss_desc = LossDesc()
-        loss_desc.code = code
-        loss_desc.name = name
-        loss_desc.item_kind = item_kind
-        loss_desc.with_end_date = with_end_date
-        loss_desc.company = cls.get_company()
-        loss_desc.event_descs = []
-        loss_desc.documents = []
-        for elem in events:
-            loss_desc.event_descs.append(cls.get_event_desc(elem))
-        for elem in documents:
-            loss_desc.documents.append(cls.get_document_desc(elem))
-        return loss_desc
+        if 'company' not in kwargs:
+            kwargs['company'] = cls.get_company()
+        return LossDesc(**kwargs)
 
     @classmethod
     def loss_desc_test_case(cls):
-        return []
+        pass

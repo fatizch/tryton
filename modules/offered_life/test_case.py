@@ -30,87 +30,92 @@ class TestCaseModel:
         return result
 
     @classmethod
-    def get_or_create_extra_data(cls, name, string=None, type_=None,
-            kind=None, selection=None):
+    def create_extra_data(cls, **kwargs):
         ComplementaryData = Pool().get('extra_data')
-        schema_el = ComplementaryData()
-        schema_el.name = name
-        schema_el.string = string
-        schema_el.type_ = type_
-        schema_el.kind = kind
-        schema_el.selection = selection
-        return schema_el
+        return ComplementaryData(**kwargs)
 
     @classmethod
-    def shared_extra_data_test_case(cls):
+    def extra_data_test_case(cls):
+        ComplementaryData = Pool().get('extra_data')
         translater = cls.get_translater(MODULE_NAME)
         schemas = []
-        schemas.append(cls.get_or_create_extra_data('is_vip',
-                translater('Is VIP'), 'boolean', 'contract'))
-        schemas.append(cls.get_or_create_extra_data('salary',
-                translater('Annual Salary'), 'numeric', 'sub_elem'))
-        schemas.append(cls.get_or_create_extra_data('CSP',
-                translater('CSP'), 'selection', 'sub_elem', '\n'.join([
+        schemas.append(cls.create_extra_data(
+                name='is_vip',
+                string=translater('Is VIP'),
+                type_='boolean',
+                kind='contract'))
+        schemas.append(cls.create_extra_data(
+                name='salary',
+                string=translater('Annual Salary'),
+                type_='numeric',
+                kind='covered_element'))
+        schemas.append(cls.create_extra_data(
+                name='CSP',
+                string=translater('CSP'),
+                type_='selection',
+                kind='covered_element',
+                selection='\n'.join([
                                 'CSP1: CSP1', 'CSP2: CSP2', 'CSP3: CSP3',
                                 'CSP4: CSP4'])))
-        return schemas
+        ComplementaryData.create([x._save_values for x in schemas])
 
     @classmethod
-    def create_rule(cls, name, code, tables=None):
+    def create_rule(cls, **kwargs):
         RuleEngine = Pool().get('rule_engine')
+        return RuleEngine(**kwargs)
+
+    @classmethod
+    def new_rule(cls, name, code, tables=None):
         Table = Pool().get('table')
         Context = Pool().get('rule_engine.context')
-        existing = RuleEngine.search([('name', '=', name)])
-        if existing:
-            return existing[0]
         if not tables:
             tables = []
-        rule = RuleEngine()
-        rule.name = name
-        rule.short_name = coop_string.remove_blank_and_invalid_char(name)
-        rule.algorithm = code
-        rule.parameters = []
-        rule.context = Context(1)
-        rule.tables_used = Table.search([('code', 'in', tables)])
-        return rule
+        return cls.create_rule(
+            name=name,
+            short_name=coop_string.remove_blank_and_invalid_char(name),
+            algorithm=code,
+            parameters=[],
+            context=Context(1),
+            tables_used=Table.search([('code', 'in', tables)]))
 
     @classmethod
     def ceiling_rule_test_case(cls):
+        RuleEngine = Pool().get('rule_engine')
         rules = []
         for (name, factor) in [('Plafond TA', 1), ('Plafond TB', 4),
                     ('Plafond TC', 8), ('Plafond T2', 3)]:
-            rules.append(cls.create_rule(name,
+            rules.append(cls.new_rule(name,
                     'PMSS = table_PMSS(date_de_calcul())\n'
                     'return %s * PMSS' % factor,
                     tables=['PMSS']))
-        return rules
+        RuleEngine.create([x._save_values for x in rules])
 
     @classmethod
-    def create_salary_range(cls, code, floor_name=None, ceiling_name=None):
-        pool = Pool()
-        SalaryRange = pool.get('salary_range')
-        SalaryRangeVersion = pool.get('salary_range.version')
-        Rule = pool.get('rule_engine')
-        salary_range = SalaryRange()
-        salary_range.code = code
-        version = SalaryRangeVersion()
-        if floor_name:
-            version.floor = Rule.search([('name', '=', floor_name)])[0]
-        if ceiling_name:
-            version.floor = Rule.search([('name', '=', ceiling_name)])[0]
-        salary_range.versions = [version]
-        return salary_range
+    def create_salary_range(cls, **kwargs):
+        SalaryRange = Pool().get('salary_range')
+        return SalaryRange(**kwargs)
+
+    @classmethod
+    def new_salary_range(cls, code, floor_name=None, ceiling_name=None):
+        Rule = Pool().get('rule_engine')
+        floor = Rule.search([
+                ('name', '=', floor_name)])[0].id if floor_name else None
+        ceiling = Rule.search([
+                ('name', '=', ceiling_name)])[0].id if ceiling_name else None
+        return cls.create_salary_range(
+            code=code, versions=[{'floor': floor, 'ceiling': ceiling}])
 
     @classmethod
     def salary_range_test_case(cls):
+        SalaryRange = Pool().get('salary_range')
         result = []
-        result.append(cls.create_salary_range('TA', ceiling_name='Plafond TA'))
-        result.append(cls.create_salary_range('TB', floor_name='Plafond TA',
+        result.append(cls.new_salary_range('TA', ceiling_name='Plafond TA'))
+        result.append(cls.new_salary_range('TB', floor_name='Plafond TA',
                 ceiling_name='Plafond TB'))
-        result.append(cls.create_salary_range('TC', floor_name='Plafond TB',
+        result.append(cls.new_salary_range('TC', floor_name='Plafond TB',
                 ceiling_name='Plafond TC'))
-        result.append(cls.create_salary_range('TD', floor_name='Plafond TC'))
-        result.append(cls.create_salary_range('T1', ceiling_name='Plafond TA'))
-        result.append(cls.create_salary_range('T2', floor_name='Plafond TA',
+        result.append(cls.new_salary_range('TD', floor_name='Plafond TC'))
+        result.append(cls.new_salary_range('T1', ceiling_name='Plafond TA'))
+        result.append(cls.new_salary_range('T2', floor_name='Plafond TA',
                 ceiling_name='Plafond T2'))
-        return result
+        SalaryRange.create([x._save_values for x in result])

@@ -15,16 +15,9 @@ class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
-    def _get_test_case_dependencies(cls):
-        result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['table_test_case'] = {
-            'name': 'Table Test Case',
-            'dependencies': set([]),
-        }
-        return result
-
-    @classmethod
     def create_table_from_filename(cls, filename):
+        # Remove leading table_
+        filename = filename[6:]
         # Remove file extension
         filename = filename.split('.')[0]
         Table = Pool().get('table')
@@ -115,14 +108,11 @@ class TestCaseModel:
     @classmethod
     def table_test_case(cls):
         cls.load_resources(MODULE_NAME)
-        cls.read_csv_file('IPC;Indice des prix consommation;numeric.csv',
-            MODULE_NAME)
-        cls.read_csv_file('MORTAL;Table de mortalite;numeric.csv', MODULE_NAME)
-        cls.read_csv_file(
-            'PMSS;Plafond Mensuel de la Securite Sociale;numeric.csv',
-            MODULE_NAME)
-        cls.load_table_from_file(
-            'IPC;Indice des prix consommation;numeric.csv')
-        cls.load_table_from_file('MORTAL;Table de mortalite;numeric.csv')
-        cls.load_table_from_file(
-            'PMSS;Plafond Mensuel de la Securite Sociale;numeric.csv')
+        for file_name in cls._loaded_resources[MODULE_NAME]['files']:
+            if file_name.startswith('table_'):
+                cls.read_csv_file(file_name, MODULE_NAME)
+                cls.load_table_from_file(file_name)
+
+    @classmethod
+    def table_test_case_test_method(cls):
+        return True

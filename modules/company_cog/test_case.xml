@@ -14,5 +14,13 @@
     <record model="ir.test_case" id="cog_utils.test_case_configuration">
       <field name="main_company_name">Coop</field>
     </record>
+    <!-- ###################### -->
+    <!-- # Test Case Instance # -->
+    <!-- ###################### -->
+    <record model="ir.test_case.instance" id="main_company_test_case">
+        <field name="name">Main Company Test Case</field>
+        <field name="method_name">main_company_test_case</field>
+        <field name="test_method_name">main_company_test_case_test_method</field>
+    </record>
   </data>
 </tryton>

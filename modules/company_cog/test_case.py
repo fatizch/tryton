@@ -14,19 +14,11 @@ class TestCaseModel:
     main_company_name = fields.Char('Main Company Name')
 
     @classmethod
-    def _get_test_case_dependencies(cls):
-        result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['contact_mechanism_test_case']['dependencies'].add(
-            'main_company_test_case')
-        result['main_company_test_case'] = {
-            'name': 'Main Company Test Case',
-            'dependencies': set([]),
-            }
-        return result
-
-    @classmethod
     def run_test_case_method(cls, method):
-        company = cls.get_company()
+        try:
+            company = cls.get_company()
+        except:
+            company = None
         if company:
             with Transaction().set_context(company=company.id):
                 super(TestCaseModel, cls).run_test_case_method(method)
@@ -34,22 +26,32 @@ class TestCaseModel:
             super(TestCaseModel, cls).run_test_case_method(method)
 
     @classmethod
+    def create_company(cls, **kwargs):
+        Company = Pool().get('company.company')
+        return Company(**kwargs)
+
+    @classmethod
     def main_company_test_case(cls):
         Configuration = cls.get_instance()
         User = Pool().get('res.user')
-        Company = Pool().get('company.company')
-        if Company.search([]):
-            return
-        company_party = cls.create_company(Configuration.main_company_name)
-        company = Company()
-        company.party = company_party
-        company.currency = Configuration.currency
+        company_party = cls.create_party(name=Configuration.main_company_name,
+            short_name=Configuration.main_company_name, is_company=True)
+        company = cls.create_company(party=company_party,
+            currency=Configuration.currency)
+        company.save()
         for user in User.search([('main_company', '=', None)]):
             user.main_company = company
             user.company = company
             # User already exist in the db, so no auto-save for them
             user.save()
-        return [company]
+
+    @classmethod
+    def main_company_test_case_test_method(cls):
+        try:
+            cls.get_company()
+            return False
+        except:
+            return True
 
     @classmethod
     def get_company(cls):
@@ -66,4 +68,6 @@ class TestCaseModel:
                     Configuration.main_company_name)])[0]
         if result:
             Configuration._company_cache = result
+        if result is None:
+            raise Exception('Could not find a valid company')
         return result
