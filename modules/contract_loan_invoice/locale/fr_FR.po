@@ -1,10 +1,6 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "field:contract,used_loans:"
-msgid "Used Loans"
-msgstr "Prêts rattachés au contrat"
 
 msgctxt "field:contract.premium,loan_share:"
 msgid "Loan Share"

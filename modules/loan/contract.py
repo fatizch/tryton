@@ -37,6 +37,19 @@ class Contract:
             depends=['is_loan', 'currency', 'status', 'subscriber', 'parties'],
             context={'currency': Eval('currency')}),
         'on_change_with_loans', 'setter_void')
+    used_loans = fields.Function(
+        fields.Many2Many('loan', None, None, 'Used Loans',
+            context={'contract': Eval('id')}, depends=['id']),
+        'get_used_loans')
+
+    def get_used_loans(self, name):
+        loans = set([share.loan
+            for covered_element in self.covered_elements
+            for option in covered_element.options
+            for share in option.loan_shares])
+
+        # Use the loan creation date to ensure consistent ordering
+        return [x.id for x in sorted(list(loans), key=lambda x: x.create_date)]
 
     @classmethod
     def __setup__(cls):
@@ -130,7 +143,8 @@ class ContractOption:
         for share in self.loan_shares:
             if share.end_date and share.end_date <= end_date:
                 continue
-            share.end_date = end_date
+            #TEMP fix before removing start_date/end_date from share
+            share.end_date = min(end_date, share.loan.end_date)
         self.loan_shares = self.loan_shares
 
 
