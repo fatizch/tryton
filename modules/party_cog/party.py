@@ -8,7 +8,7 @@ except ImportError:
     import json
 
 from sql.aggregate import Max
-from sql import Literal
+from sql import Literal, Cast
 
 from trytond.pyson import Eval, Bool, Less
 from trytond.pool import PoolMeta, Pool
@@ -463,7 +463,8 @@ class SynthesisMenuPartyInteraction(model.CoopSQL):
             Max(party_interaction.write_uid).as_('write_uid'),
             Max(party_interaction.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PartyInteractionSynthesis,
-                'name')).as_('name'), party_interaction.party,
+                'name')).as_('name'),
+            Literal(33).as_('sequence'), party_interaction.party,
             group_by=party_interaction.party)
 
 
@@ -489,7 +490,7 @@ class SynthesisMenuAddress(model.CoopSQL):
             Max(address.write_uid).as_('write_uid'),
             Max(address.write_date).as_('write_date'),
             Literal(coop_string.translate_label(AddressSynthesis, 'name')).
-            as_('name'), party.id.as_('party'),
+            as_('name'), Literal(3).as_('sequence'), party.id.as_('party'),
             group_by=party.id)
 
     def get_icon(self, name=None):
@@ -518,7 +519,7 @@ class SynthesisMenuContact(model.CoopSQL):
             Max(contact.write_uid).as_('write_uid'),
             Max(contact.write_date).as_('write_date'),
             Literal(coop_string.translate_label(ContactSynthesis, 'name')).
-            as_('name'), party.id.as_('party'),
+            as_('name'), Literal(2).as_('sequence'), party.id.as_('party'),
             group_by=party.id)
 
     def get_icon(self, name=None):
@@ -539,16 +540,16 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(SynthesisMenu, cls).__setup__()
-        # cls._order.insert(0, ('sequence', 'DESC'))
+        cls._order.insert(0, ('sequence', 'ASC'))
 
     @staticmethod
     def merged_models():
         return [
             'party.party',
-            'party.synthesis.menu.address',
-            'party.address',
             'party.synthesis.menu.contact',
             'party.contact_mechanism',
+            'party.synthesis.menu.address',
+            'party.address',
             'party.synthesis.menu.party_interaction',
             'party.interaction',
             ]
@@ -595,6 +596,32 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         return merged_field
 
     @classmethod
+    def menu_order(cls, model):
+        if model == 'party.synthesis.menu.address':
+            return 2
+        elif model == 'party.synthesis.menu.contact':
+            return 1
+        elif model == 'party.synthesis.menu.party_interaction':
+            return 3
+
+    @classmethod
+    def merged_columns(cls, model):
+        table, columns = super(SynthesisMenu, cls).merged_columns(model)
+        order = cls.menu_order(model)
+        print model, order
+        field = cls._fields['sequence']
+        for idx, column in enumerate(columns):
+            if getattr(column, 'output_name', None) == 'sequence':
+                columns.pop(idx)
+        if order:
+            columns.append(Cast(Literal(order), field.sql_type().base).
+                as_('sequence'))
+        else:
+            columns.append(Cast(Literal(0), field.sql_type().base).
+                as_('sequence'))
+        return table, columns
+
+    @classmethod
     def view_header_get(cls, value, view_type='form'):
         pool = Pool()
         Party = pool.get('party.party')
@@ -623,8 +650,6 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         instance = self.merged_unshard(self.id)
         if getattr(instance, 'get_icon', None) is not None:
             return instance.get_icon()
-        else:
-            return 'coopengo-party'
 
     def get_rec_name(self, name):
         instance = self.merged_unshard(self.id)
@@ -634,7 +659,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             res = instance.get_rec_name(name)
         else:
             res = self.name
-        if self.childs:
+        if self.childs and self.parent:
             res += ' (%s)' % len(self.childs)
         return res
 

@@ -127,7 +127,7 @@ class Invoice:
     order_start = _order_contract_invoice_field('start')
     order_end = _order_contract_invoice_field('end')
 
-    def get_rec_name(self, name):
+    def get_synthesis_rec_name(self, name):
         if self.number:
             if self.start and self.end:
                 return '%s - %s - (%s - %s) [%s]' % (
@@ -153,7 +153,8 @@ class Invoice:
                     coop_string.translate_value(self, 'state'))
 
     def get_icon(self, name=None):
-        return 'invoice'
+        if self.reconciled:
+            return 'coopengo-reconciliation'
 
     def get_payment(self):
         pool = Pool()

@@ -2,11 +2,10 @@ import copy
 from sql.aggregate import Max
 from sql import Literal
 
-from trytond.modules.cog_utils import MergedMixin, utils
 from trytond.pool import Pool
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields, coop_string, MergedMixin
 
 __all__ = [
     'SynthesisMenuInvoice',
@@ -38,6 +37,7 @@ class SynthesisMenuInvoice(model.CoopSQL):
             Max(invoice.write_date).as_('write_date'),
             Literal(coop_string.translate_label(InvoiceSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
+            Literal(9).as_('sequence'),
             group_by=party.id)
 
     def get_icon(self, name=None):
@@ -77,13 +77,15 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         if model != 'account.invoice':
             return super(SynthesisMenu, cls).build_sub_query(model, table,
                 columns)
-        invoice_start_date = utils.today()
-        invoice_start_date = invoice_start_date.replace(
-            year=invoice_start_date.year - 1)
         return table.select(*columns,
-            where=((table.state != 'validated')
-                & (table.state != 'draft')
-                & (table.invoice_date >= invoice_start_date)))
+            where=(table.state == 'posted'))
+
+    @classmethod
+    def menu_order(cls, model):
+        res = super(SynthesisMenu, cls).menu_order(model)
+        if model == 'party.synthesis.menu.invoice':
+            res = 21
+        return res
 
 
 class SynthesisMenuOpen(Wizard):

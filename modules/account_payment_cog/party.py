@@ -34,7 +34,7 @@ class SynthesisMenuPayment(model.CoopSQL):
             Max(payment.write_uid).as_('write_uid'),
             Max(payment.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PaymentSynthesis, 'name')).
-            as_('name'), payment.party,
+            as_('name'), Literal(6).as_('sequence'), payment.party,
             group_by=payment.party)
 
     def get_icon(self, name=None):
@@ -80,6 +80,13 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         return table.select(*columns,
             where=(((table.state == 'processing') | (table.state == 'failed'))
                 & (table.date >= filter_date)))
+
+    @classmethod
+    def menu_order(cls, model):
+        res = super(SynthesisMenu, cls).menu_order(model)
+        if model == 'party.synthesis.menu.payment':
+            res = 29
+        return res
 
 
 class SynthesisMenuOpen(Wizard):

@@ -174,6 +174,13 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return Model._fields['loan']
         return merged_field
 
+    @classmethod
+    def menu_order(cls, model):
+        res = super(SynthesisMenu, cls).menu_order(model)
+        if model == 'party.synthesis.menu.loan':
+            res = 5
+        return res
+
 
 class SynthesisMenuOpen(Wizard):
     'Open Party Synthesis Menu'
