@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from trytond.pyson import Eval, Equal, If, Bool
+from trytond.pyson import Eval, Equal, If
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
@@ -96,78 +96,6 @@ class Contract:
         result['BusinessManagers'] = [x.party.id for x in self.agreements
             if x.kind == 'management']
         return result
-
-    @classmethod
-    def invoice_periods(cls, periods):
-        contract_invoices = super(Contract, cls).invoice_periods(periods)
-        pool = Pool()
-        Invoice = pool.get('account.invoice')
-        InvoiceLine = pool.get('account.invoice.line')
-        Journal = pool.get('account.journal')
-        CommissionInvoice = pool.get('contract.invoice.commission')
-        journals = Journal.search([
-                ('type', '=', 'expense'),
-                ], limit=1)
-        journal = journals[0] if journals else None
-        invoices = defaultdict(list)
-        for contract_invoice in contract_invoices:
-            lines = defaultdict(list)
-            for line in contract_invoice.invoice.lines:
-                if not line.origin:
-                    continue
-                if not line.origin.__name__ == 'contract.premium':
-                    continue
-                if not line.origin.commissions:
-                    continue
-                for com_line in line.origin.commissions:
-                    lines[com_line.party].append(InvoiceLine(
-                            type='line',
-                            description=com_line.get_description(),
-                            origin=line.origin,
-                            quantity=1,
-                            unit=None,
-                            unit_price=contract_invoice.invoice.currency.round(
-                                com_line.rate * line.unit_price),
-                            taxes=[],
-                            invoice_type='in_invoice',
-                            account=com_line.com_option.account_for_billing,
-                            contract_insurance_start= \
-                                line.contract_insurance_start,
-                            contract_insurance_end=line.contract_insurance_end,
-                            ))
-            if not lines:
-                continue
-            for party, com_lines in lines.iteritems():
-                com_invoice = Invoice(
-                    company=contract_invoice.invoice.company,
-                    type='in_invoice',
-                    journal=journal,
-                    party=party,
-                    invoice_address=party.addresses[0],
-                    currency=contract_invoice.invoice.currency,
-                    account=party.account_payable,
-                    payment_term=contract_invoice.invoice.payment_term,
-                    )
-                com_invoice.lines = com_lines
-                invoices[contract_invoice].append(com_invoice)
-        if not invoices:
-            return contract_invoices
-        com_invoices = Invoice.create([i._save_values
-                for j in invoices.itervalues()
-                for i in j])
-        for com_invoice, old_invoice in zip(com_invoices,
-                [i for j in invoices.itervalues() for i in j]):
-            old_invoice.id = com_invoice.id
-        contract_com_invoices = []
-        for contract_invoice, com_invoices in invoices.iteritems():
-            for invoice in com_invoices:
-                contract_com_invoices.append(CommissionInvoice(
-                        contract_invoice=contract_invoice.id,
-                        com_invoice=invoice.id))
-        if contract_com_invoices:
-            CommissionInvoice.create([i._save_values
-                    for i in contract_com_invoices])
-        return invoices
 
     def before_activate(self, contract_dict=None):
         if not contract_dict:
@@ -362,44 +290,21 @@ class CommissionInvoice(model.CoopSQL, model.CoopView):
     com_invoice = fields.Many2One('account.invoice', 'Commission Invoice',
         domain=[('type', '=', 'in_invoice')], ondelete='RESTRICT')
 
+    @classmethod
+    def delete(cls, com_invoices):
+        Invoice = Pool().get('account.invoice')
+        Invoice.delete([x.invoice for x in com_invoices])
+        super(CommissionInvoice, cls).delete(com_invoices)
+
 
 class Invoice:
     __name__ = 'account.invoice'
 
     com_invoices = fields.Function(
         fields.One2Many('account.invoice', None, 'Commission Invoices',
-            states={'invisible': Bool(Eval('contract_invoice', False))},
+            states={'invisible': ~Eval('contract_invoice', False)},
             depends=['contract_invoice']),
         'get_com_invoices')
-    contract_invoice = fields.Function(
-        fields.Many2One('account.invoice', 'Contract Invoice',
-            states={'invisible': ~Eval('contract_invoice')}),
-        'get_contract_invoice')
-
-    @classmethod
-    def get_contract_invoice(cls, instances, name):
-        res = dict((m.id, None) for m in instances)
-        cursor = Transaction().cursor
-
-        pool = Pool()
-        contract_invoice = pool.get('contract.invoice').__table__()
-        contract_commission_invoice = pool.get(
-            'contract.invoice.commission').__table__()
-        invoice = cls.__table__()
-
-        query_table = invoice.join(contract_commission_invoice,
-            condition=(contract_commission_invoice.com_invoice == invoice.id)
-            ).join(contract_invoice, condition=(
-                    contract_commission_invoice.contract_invoice ==
-                    contract_invoice.id))
-
-        cursor.execute(*query_table.select(invoice.id,
-                contract_invoice.invoice,
-                where=(invoice.id.in_([x.id for x in instances]))))
-
-        for invoice_id, value in cursor.fetchall():
-            res[invoice_id] = value
-        return res
 
     @classmethod
     def get_com_invoices(cls, instances, name):
@@ -425,6 +330,78 @@ class Invoice:
         for invoice_id, value in cursor.fetchall():
             res[invoice_id].append(value)
         return res
+
+    @classmethod
+    def post(cls, invoices):
+        super(Invoice, cls).post(invoices)
+
+        pool = Pool()
+        InvoiceLine = pool.get('account.invoice.line')
+        Journal = pool.get('account.journal')
+        CommissionInvoice = pool.get('contract.invoice.commission')
+        journals = Journal.search([
+                ('type', '=', 'expense'),
+                ], limit=1)
+        journal = journals[0] if journals else None
+        com_invoices = defaultdict(list)
+        for invoice in invoices:
+            if not invoice.contract_invoice:
+                continue
+            lines = defaultdict(list)
+            for line in invoice.lines:
+                if not line.origin:
+                    continue
+                if not line.origin.__name__ == 'contract.premium':
+                    continue
+                if not line.origin.commissions:
+                    continue
+                for com_line in line.origin.commissions:
+                    lines[com_line.party].append(InvoiceLine(
+                            type='line',
+                            description=com_line.get_description(),
+                            origin=line.origin,
+                            quantity=1,
+                            unit=None,
+                            unit_price=invoice.currency.round(com_line.rate *
+                                line.unit_price),
+                            taxes=[],
+                            invoice_type='in_invoice',
+                            account=com_line.com_option.account_for_billing,
+                            start_date=line.start_date,
+                            end_date=line.end_date,
+                            ))
+            if not lines:
+                continue
+            for party, com_lines in lines.iteritems():
+                com_invoice = cls(
+                    company=invoice.company,
+                    type='in_invoice',
+                    journal=journal,
+                    party=party,
+                    invoice_address=party.addresses[0],
+                    currency=invoice.currency,
+                    account=party.account_payable,
+                    payment_term=invoice.payment_term,
+                    )
+                com_invoice.lines = com_lines
+                com_invoices[invoice.contract_invoice].append(com_invoice)
+        if not com_invoices:
+            return
+        new_com_invoices = cls.create([i._save_values
+                for j in com_invoices.itervalues()
+                for i in j])
+        for com_invoice, old_invoice in zip(new_com_invoices,
+                [i for j in com_invoices.itervalues() for i in j]):
+            old_invoice.id = com_invoice.id
+        contract_com_invoices = []
+        for contract_invoice, new_invoices in com_invoices.iteritems():
+            for invoice in new_invoices:
+                contract_com_invoices.append(CommissionInvoice(
+                        contract_invoice=contract_invoice.id,
+                        com_invoice=invoice.id))
+        if contract_com_invoices:
+            CommissionInvoice.create([i._save_values
+                    for i in contract_com_invoices])
 
 
 class Premium:

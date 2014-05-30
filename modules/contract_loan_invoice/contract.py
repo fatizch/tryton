@@ -115,12 +115,12 @@ class Contract:
         premium = Premium.__table__()
 
         if start:
-            date_clause = invoice_line.contract_insurance_start >= start
+            date_clause = invoice_line.start_date >= start
         else:
             date_clause = None
         if end:
             if date_clause:
-                date_clause &= (invoice_line.contract_insurance_start <= end)
+                date_clause &= (invoice_line.start_date <= end)
 
         query_table = invoice.join(invoice_contract, condition=(
                 (invoice_contract.invoice == invoice.id)

@@ -91,7 +91,8 @@ class Contract:
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
     total_invoice_amount = fields.Function(
         fields.Numeric('Total Invoice Amount', digits=(16,
-                Eval('currency_digits', 2)), depends=['currency_digits']),
+                Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_total_invoice_amount')
 
     @classmethod
@@ -162,11 +163,6 @@ class Contract:
         result = ContractRevision.get_value(contracts, date)
         return result
 
-    def get_total_invoice_amount(self, name):
-        return sum([x.invoice.total_amount
-                for x in self.invoices
-                if x.invoice.state in ('paid', 'validated', 'posted')])
-
     @classmethod
     def get_invoice_frequency(cls, contracts, name):
         pool = Pool()
@@ -197,6 +193,10 @@ class Contract:
                     group_by=table.id))
             values.update(dict(cursor.fetchall()))
         return values
+
+    def get_total_invoice_amount(self, name):
+        return sum([x.invoice.total_amount for x in self.invoices
+                if x.invoice.state in ('paid', 'validated', 'posted')])
 
     @classmethod
     def search_last_invoice(cls, name, domain):
@@ -236,7 +236,7 @@ class Contract:
             until = next_frequency.date
         return frequency.value.get_rrule(start, until)
 
-    def get_invoice_periods(self, up_to_date):
+    def get_invoice_periods(self, up_to_date=None):
         'Return the list of invoice periods up to the date. If no date is '
         'given, try the end_date. If none exists, return the first period'
         if up_to_date:
@@ -272,25 +272,10 @@ class Contract:
                 start = until
         return periods
 
-    def clean_up_invoices(self):
-        pool = Pool()
-        # TODO : find out how to have valid values
-        prev_values = dict(self._values or {})
-        ContractInvoice = pool.get('contract.invoice')
-        AccountInvoice = pool.get('account.invoice')
-        AccountInvoice.delete(AccountInvoice.search([
-                    ('contract', '=', self.id)]))
-        ContractInvoice.delete(ContractInvoice.search([
-                    ('contract', '=', self.id)]))
-        self.invoices = []
-        self.account_invoices = []
-        self._values = prev_values
-
     def first_invoice(self):
-        # TODO : find out how to have valid values
-        prev_values = dict(self._values or {})
-        self.invoices = self.invoice([self])
-        self._values = prev_values
+        ContractInvoice = Pool().get('contract.invoice')
+        ContractInvoice.delete(self.invoices)
+        self.invoice([self])
 
     @classmethod
     def invoice(cls, contracts, up_to_date=None):
@@ -320,8 +305,6 @@ class Contract:
 
         invoices = defaultdict(list)
         for period, contracts in periods.iteritems():
-            with Transaction().set_context(contract_revision_date=period[0]):
-                contracts = cls.browse(contracts)
             for contract in contracts:
                 invoice = contract.get_invoice(*period)
                 if not invoice.journal:
@@ -388,13 +371,10 @@ class Contract:
         self.calculate_prices()
 
     def calculate_prices(self):
-        # TODO : find out how to have valid values
-        prev_values = dict(self._values or {})
         prices, errs = self.calculate_prices_between_dates()
         if errs:
             return False, errs
         self.store_prices(prices)
-        self._values = prev_values
         return True, ()
 
     def calculate_price_at_date(self, date):
@@ -644,6 +624,12 @@ class ContractInvoice(ModelSQL, ModelView):
             periods[period].append(contract_invoice.contract)
         Contract.invoice_periods(periods)
 
+    @classmethod
+    def delete(cls, contract_invoices):
+        Invoice = Pool().get('account.invoice')
+        Invoice.delete([x.invoice for x in contract_invoices])
+        super(ContractInvoice, cls).delete(contract_invoices)
+
 
 class CoveredElement:
     __name__ = 'contract.covered_element'
@@ -852,8 +838,8 @@ class Premium(ModelSQL, ModelView):
                 taxes=self.taxes,
                 invoice_type='out_invoice',
                 account=self.account,
-                contract_insurance_start=start,
-                contract_insurance_end=end,
+                start_date=start,
+                end_date=end,
                 )]
 
     def set_parent_from_line(self, line):
