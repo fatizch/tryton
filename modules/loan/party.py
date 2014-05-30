@@ -139,7 +139,6 @@ class SynthesisMenuLoan(model.CoopSQL):
             Max(loan_party.write_date).as_('write_date'),
             Literal(coop_string.translate_label(LoanSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
-            Literal(10).as_('sequence'),
             group_by=party.id)
 
     def get_icon(self, name=None):

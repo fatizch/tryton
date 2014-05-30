@@ -36,7 +36,7 @@ class SynthesisMenuMoveLine(model.CoopSQL):
             Max(move_line.write_uid).as_('write_uid'),
             Max(move_line.write_date).as_('write_date'),
             Literal(coop_string.translate_label(Move_Line_Synthesis, 'name')).
-            as_('name'), Literal(5).as_('sequence'),
+            as_('name'),
             party.id.as_('party'), group_by=party.id)
 
     def get_icon(self, name=None):

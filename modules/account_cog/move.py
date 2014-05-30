@@ -31,8 +31,7 @@ class Line:
         return[line.id for line in self.reconciliation.lines]
 
     def get_currency_symbol(self, name):
-        res = self.account.currency.symbol if self.account else ''
-        return res
+        return self.account.currency.symbol if self.account else ''
 
     def get_icon(self, name=None):
         if self.reconciliation:

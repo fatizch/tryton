@@ -125,7 +125,7 @@ class SynthesisMenuBankAccoount(model.CoopSQL):
             Max(bank_account.write_uid).as_('write_uid'),
             Max(bank_account.write_date).as_('write_date'),
             Literal(coop_string.translate_label(BankAccountSynthesis, 'name')).
-            as_('name'), Literal(8).as_('sequence'),
+            as_('name'),
             party.id.as_('owner'),
             group_by=party.id)
 

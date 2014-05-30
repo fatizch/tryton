@@ -464,7 +464,7 @@ class SynthesisMenuPartyInteraction(model.CoopSQL):
             Max(party_interaction.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PartyInteractionSynthesis,
                 'name')).as_('name'),
-            Literal(33).as_('sequence'), party_interaction.party,
+            party_interaction.party,
             group_by=party_interaction.party)
 
 
@@ -490,7 +490,7 @@ class SynthesisMenuAddress(model.CoopSQL):
             Max(address.write_uid).as_('write_uid'),
             Max(address.write_date).as_('write_date'),
             Literal(coop_string.translate_label(AddressSynthesis, 'name')).
-            as_('name'), Literal(3).as_('sequence'), party.id.as_('party'),
+            as_('name'), party.id.as_('party'),
             group_by=party.id)
 
     def get_icon(self, name=None):
@@ -519,7 +519,7 @@ class SynthesisMenuContact(model.CoopSQL):
             Max(contact.write_uid).as_('write_uid'),
             Max(contact.write_date).as_('write_date'),
             Literal(coop_string.translate_label(ContactSynthesis, 'name')).
-            as_('name'), Literal(2).as_('sequence'), party.id.as_('party'),
+            as_('name'), party.id.as_('party'),
             group_by=party.id)
 
     def get_icon(self, name=None):
@@ -608,7 +608,6 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     def merged_columns(cls, model):
         table, columns = super(SynthesisMenu, cls).merged_columns(model)
         order = cls.menu_order(model)
-        print model, order
         field = cls._fields['sequence']
         for idx, column in enumerate(columns):
             if getattr(column, 'output_name', None) == 'sequence':

@@ -34,7 +34,7 @@ class SynthesisMenuPayment(model.CoopSQL):
             Max(payment.write_uid).as_('write_uid'),
             Max(payment.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PaymentSynthesis, 'name')).
-            as_('name'), Literal(6).as_('sequence'), payment.party,
+            as_('name'), payment.party,
             group_by=payment.party)
 
     def get_icon(self, name=None):

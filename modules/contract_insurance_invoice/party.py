@@ -37,7 +37,6 @@ class SynthesisMenuInvoice(model.CoopSQL):
             Max(invoice.write_date).as_('write_date'),
             Literal(coop_string.translate_label(InvoiceSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
-            Literal(9).as_('sequence'),
             group_by=party.id)
 
     def get_icon(self, name=None):

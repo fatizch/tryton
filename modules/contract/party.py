@@ -116,7 +116,7 @@ class SynthesisMenuContrat(model.CoopSQL):
             Max(contract.write_uid).as_('write_uid'),
             Max(contract.write_date).as_('write_date'),
             Literal(coop_string.translate_label(ContractSynthesis, 'name')).
-            as_('name'), Literal(8).as_('sequence'),
+            as_('name'),
             party.id.as_('subscriber'),
             group_by=party.id)
 
