@@ -25,7 +25,6 @@ __all__ = [
 
 LOAN_KIND = [
     ('fixed_rate', 'Fixed Rate'),
-    ('adjustable_rate', 'Adjustable Rate'),
     ('balloon', 'Balloon'),
     ('leasing', 'Leasing'),
     ('graduated', 'Graduated'),
@@ -39,20 +38,20 @@ DEFERALS = [
     ('fully', 'Fully deferred'),
     ]
 
-LOAN_DURATION_UNIT = [
-    ('', ''),
-    ('month', 'Month'),
-    ('quarter', 'Quarter'),
-    ('half_year', 'Half-year'),
-    ('year', 'Year'),
-    ]
-
 
 class Loan(model.CoopSQL, model.CoopView):
     'Loan'
 
     __name__ = 'loan'
 
+    number = fields.Char('Number', required=True, readonly=True, select=True)
+    company = fields.Many2One('company.company', 'Company', required=True,
+        select=True,
+        domain=[
+            ('id', If(Eval('context', {}).contains('company'), '=', '!='),
+                Eval('context', {}).get('company', -1)),
+            ],
+        )
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False)
     currency = fields.Many2One('currency.currency', 'Currency')
     currency_digits = fields.Function(
@@ -62,8 +61,10 @@ class Loan(model.CoopSQL, model.CoopView):
         fields.Char('Currency Symbol'),
         'on_change_with_currency_symbol')
     number_of_payments = fields.Integer('Number of Payments', required=True)
-    payment_frequency = fields.Selection(LOAN_DURATION_UNIT,
-        'Payment Frequency', sort=False, required=True)
+    payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
+        'Payment Frequency', sort=False, required=True,
+        domain=[('payment_frequency', 'in',
+                ['month', 'quarter', 'half_year', 'year'])])
     payment_amount = fields.Numeric('Payment Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
         states={
@@ -79,10 +80,10 @@ class Loan(model.CoopSQL, model.CoopView):
     funds_release_date = fields.Date('Funds Release Date', required=True)
     first_payment_date = fields.Date('First Payment Date', required=True)
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
-    outstanding_capital = fields.Numeric('Outstanding Capital')
     parties = fields.Many2Many('loan-party', 'loan', 'party', 'Parties',
         required=True)
-    rate = fields.Numeric('Annual Rate', digits=(16, 4), states={
+    rate = fields.Numeric('Annual Rate', digits=(16, 4),
+        states={
             'required': Eval('kind').in_(
                 ['fixed_rate', 'intermediate', 'balloon']),
             'invisible': ~Eval('kind').in_(
@@ -96,8 +97,6 @@ class Loan(model.CoopSQL, model.CoopView):
         depends=['kind'])
     payments = fields.One2Many('loan.payment', 'loan',
         'Payments')
-    early_payments = fields.One2ManyDomain('loan.payment', 'loan',
-        'Early Payments', domain=[('kind', '=', 'early')])
     increments = fields.One2Many('loan.increment', 'loan', 'Increments',
         context={
             'payment_frequency': Eval('payment_frequency'),
@@ -153,6 +152,11 @@ class Loan(model.CoopSQL, model.CoopView):
     order = fields.Function(
         fields.Integer('Order'),
         'get_order')
+    outstanding_balance = fields.Function(
+        fields.Numeric('Outstanding Balance',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_outstanding_loan_balance')
 
     @classmethod
     def __setup__(cls):
@@ -163,8 +167,23 @@ class Loan(model.CoopSQL, model.CoopView):
         cls._error_messages.update({
                 'invalid_number_of_payments_sum': (
                     'The sum of increments number of payments (%s) does not '
-                    'match the loan number of payments (%s)')
+                    'match the loan number of payments (%s)'),
+                'no_sequence': 'No loan sequence defined',
                 })
+
+    @classmethod
+    def create(cls, vlist):
+        Sequence = Pool().get('ir.sequence')
+        loan_sequences = Sequence.search([('code', '=', 'loan')])
+        sequences_dict = dict([(x.company.id, x) for x in loan_sequences])
+        vlist = [x.copy() for x in vlist]
+        for vals in vlist:
+            if not vals.get('number'):
+                sequence = sequences_dict.get(vals.get('company'), None)
+                if not sequence:
+                    cls.raise_user_error('no_sequence')
+                vals['number'] = Sequence.get_id(sequence.id)
+        return super(Loan, cls).create(vlist)
 
     @classmethod
     def validate(cls, loans):
@@ -181,6 +200,10 @@ class Loan(model.CoopSQL, model.CoopView):
         if not the_sum == self.number_of_payments:
             self.raise_user_error('invalid_number_of_payments_sum',
                 (the_sum, self.number_of_payments))
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
 
     @classmethod
     def default_kind(cls):
@@ -210,11 +233,11 @@ class Loan(model.CoopSQL, model.CoopView):
                     ('contract', '=', contract_id)])]
 
     def get_rec_name(self, name):
-        res = ''
+        res = self.number if self.number is not None else ''
         if self.kind:
-            res += coop_string.translate_value(self, 'kind') + ' '
+            res += ' ' + coop_string.translate_value(self, 'kind')
         if self.amount:
-            res += self.currency.amount_as_string(self.amount)
+            res += ' ' + self.currency.amount_as_string(self.amount)
         return res
 
     def get_order(self, name):
@@ -271,7 +294,12 @@ class Loan(model.CoopSQL, model.CoopView):
 
     def calculate_payments(self):
         Payment = Pool().get('loan.payment')
-        res = []
+        res = [Payment(
+                kind='releasing_funds',
+                number=0,
+                start_date=self.funds_release_date,
+                outstanding_balance=self.amount,
+                )]
         from_date = self.first_payment_date
         begin_balance = self.amount
         i = 0
@@ -285,21 +313,19 @@ class Loan(model.CoopSQL, model.CoopView):
                 i += 1
                 payment = Payment()
                 payment.kind = 'scheduled'
-                end_date = coop_date.get_end_of_period(from_date,
-                    self.payment_frequency)
-                payment.calculate(self, from_date, end_date, i, begin_balance,
-                    increment,
-                    self.get_early_payments_from_date(from_date, end_date))
+                payment.calculate(self, from_date, i, begin_balance, increment)
                 res.append(payment)
-                from_date = coop_date.add_day(end_date, 1)
-                begin_balance = payment.end_balance
+                from_date = coop_date.add_duration(from_date,
+                    self.payment_frequency)
+                begin_balance = payment.outstanding_balance
         return res
 
     def calculate_amortization_table(self):
         Payment = Pool().get('loan.payment')
         if getattr(self, 'payments', None):
             Payment.delete(
-                [x for x in self.payments if x.kind == 'scheduled' and x.id])
+                [x for x in self.payments
+                    if x.kind in['scheduled', 'releasing_funds'] and x.id])
         else:
             self.payments = []
         self.payments = list(self.payments)
@@ -326,11 +352,6 @@ class Loan(model.CoopSQL, model.CoopView):
         if self.increments:
             return self.increments[0].number_of_payments
 
-    def get_early_payments_from_date(self, at_date, to_date):
-        return ([x for x in self.early_payments
-                if x.start_date >= at_date and x.start_date <= to_date]
-            if getattr(self, 'early_payments', None) else [])
-
     def update_increments(self):
         start_date = self.first_payment_date
         i = 0
@@ -339,10 +360,10 @@ class Loan(model.CoopSQL, model.CoopView):
             increment.number = i
             increment.start_date = start_date
             if getattr(increment, 'number_of_payments', None):
-                increment.end_date = coop_date.get_end_of_period(start_date,
-                    self.payment_frequency, increment.number_of_payments)
-            if getattr(increment, 'number_of_payments', None):
-                start_date = coop_date.add_day(increment.end_date, 1)
+                increment.end_date = coop_date.add_duration(start_date,
+                    self.payment_frequency, increment.number_of_payments - 1)
+                start_date = coop_date.add_duration(increment.end_date,
+                    self.payment_frequency, 1)
 
     def create_increment(self, duration=None, payment_amount=None,
             deferal=None):
@@ -391,17 +412,16 @@ class Loan(model.CoopSQL, model.CoopView):
     def get_payment(self, at_date=None):
         if not at_date:
             at_date = utils.today()
-        payments = [x for x in self.payments
-            if x.start_date <= at_date and x.end_date >= at_date
-            and x.kind == 'scheduled']
-        if len(payments) == 1:
-            return payments[0]
+        payment = self.payments[0] if self.payments else None
+        for cur_payment in self.payments:
+            if cur_payment.start_date > at_date:
+                return payment
+            payment = cur_payment
+        return payment
 
-    def get_remaining_capital(self, at_date=None):
+    def get_outstanding_loan_balance(self, name=None, at_date=None):
         payment = self.get_payment(at_date)
-        if not payment:
-            return 0
-        return payment.end_balance
+        return payment.outstanding_balance if payment else None
 
     def init_dict_for_rule_engine(self, current_dict):
         current_dict['loan'] = self
@@ -488,7 +508,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'loan.increment'
 
-    number = fields.Integer('Number', readonly=True)
+    number = fields.Integer('Number')
     begin_balance = fields.Numeric('Begin Balance',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     start_date = fields.Date('Start Date', required=True)
@@ -519,14 +539,15 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             frequency = self.loan.payment_frequency
         else:
             frequency = Transaction().context.get('payment_frequency')
-        return coop_date.get_end_of_period(self.start_date, frequency,
-            self.number_of_payments)
+        return coop_date.add_duration(self.start_date, frequency,
+            self.number_of_payments - 1)
 
     @staticmethod
     def default_start_date():
         increments_end_date = Transaction().context.get('increments_end_date')
         if increments_end_date:
-            return coop_date.add_day(increments_end_date, 1)
+            return coop_date.add_duration(increments_end_date,
+                Transaction().context.get('payment_frequency'), 1)
         else:
             return Transaction().context.get('start_date')
 
@@ -550,24 +571,26 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
 
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     kind = fields.Selection([
+            ('releasing_funds', 'Releasing Funds'),
             ('scheduled', 'Scheduled'),
             ('early', 'Early'),
             ('deffered', 'Deffered')], 'Kind')
     number = fields.Integer('Number')
     start_date = fields.Date('Date')
-    end_date = fields.Date('End Date')
-    begin_balance = fields.Numeric('Begin Balance',
-        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+    begin_balance = fields.Function(
+        fields.Numeric('Begin Balance',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_begin_balance')
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     principal = fields.Numeric('Principal',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     interest = fields.Numeric('Interest',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
-    end_balance = fields.Function(
-        fields.Numeric('End Balance', digits=(16, Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_end_balance')
+    outstanding_balance = fields.Numeric('Outstanding Balance',
+        digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
 
     @classmethod
     def __setup__(cls):
@@ -581,19 +604,15 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_currency(self):
         return self.loan.currency
 
-    def calculate(self, loan, at_date, end_date, number, begin_balance,
-            increment, early_payments=None):
+    def calculate(self, loan, at_date, number, begin_balance, increment):
         rate = loan.get_rate(increment.rate)
         self.amount = increment.payment_amount
         self.number = number
         self.start_date = at_date
-        self.end_date = end_date
         self.begin_balance = begin_balance
-        if early_payments:
-            self.begin_balance -= sum(map(lambda x: x.amount, early_payments))
         self.interest = (loan.currency.round(begin_balance * rate)
             if rate else None)
-        if increment and getattr(increment, 'deferal', None):
+        if getattr(increment, 'deferal', None):
             if increment.deferal == 'partially':
                 self.principal = Decimal(0.0)
                 self.interest = self.amount
@@ -611,11 +630,11 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
                 if (getattr(self, 'principal', None)
                         and getattr(self, 'interest', None)):
                     self.amount = self.principal + self.interest
-        self.end_balance = self.get_end_balance()
+        self.outstanding_balance = self.begin_balance - self.principal
 
-    def get_end_balance(self, name=None):
-        if self.begin_balance is not None and self.principal is not None:
-            return self.begin_balance - self.principal
+    def get_begin_balance(self, name=None):
+        if self.outstanding_balance is not None and self.principal is not None:
+            return self.outstanding_balance + self.principal
 
 
 class LoanParty(model.CoopSQL):

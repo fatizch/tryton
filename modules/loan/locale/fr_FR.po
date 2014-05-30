@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -69,9 +69,9 @@ msgctxt "field:insurer,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:insurer,total_loan_outstanding_capital:"
-msgid "Total Loan Outstanding Capital"
-msgstr "En cours total "
+msgctxt "field:insurer,total_outstanding_loan_balance:"
+msgid "Total Outstanding Loan Balance"
+msgstr "Encours total"
 
 msgctxt "field:loan,amount:"
 msgid "Amount"
@@ -169,10 +169,6 @@ msgctxt "field:loan,order:"
 msgid "Order"
 msgstr "Ordre"
 
-msgctxt "field:loan,outstanding_capital:"
-msgid "Outstanding Capital"
-msgstr "Capital Restant Du"
-
 msgctxt "field:loan,parties:"
 msgid "Parties"
 msgstr "Tiers"
@@ -251,7 +247,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:loan.increment,begin_balance:"
 msgid "Begin Balance"
-msgstr "Capital Restant Dû Initial"
+msgstr "Balance Initiale"
 
 msgctxt "field:loan.increment,create_date:"
 msgid "Create Date"
@@ -339,7 +335,7 @@ msgstr "Montant"
 
 msgctxt "field:loan.payment,begin_balance:"
 msgid "Begin Balance"
-msgstr "Capital Restant Dû Initial"
+msgstr "Balance Initiale"
 
 msgctxt "field:loan.payment,create_date:"
 msgid "Create Date"
@@ -365,9 +361,9 @@ msgctxt "field:loan.payment,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
-msgctxt "field:loan.payment,end_balance:"
-msgid "End Balance"
-msgstr "Balance finale"
+msgctxt "field:loan.payment,outstanding_balance:"
+msgid "Outstanding Balance"
+msgstr "Capital restant dû"
 
 msgctxt "field:loan.payment,end_date:"
 msgid "End Date"

@@ -41,13 +41,14 @@ class LoanCreate(model.CoopWizard):
         if self.loan._default_values:
             return self.loan._default_values
         Contract = Pool().get('contract')
-        contract = Contract(Transaction().context.get('active_id'))
-        party = Transaction().context.get('party', None)
-        if party is None:
+        cur_model = Transaction().context.get('active_model')
+        party = None
+        if cur_model == 'contract':
+            contract = Contract(Transaction().context.get('active_id'))
             party = contract.subscriber.id
+        else:
+            return {}
         return {
-            'contract': contract.id,
-            'order': len(contract.loans) + 1,
             'currency': contract.currency.id,
             'currency_symbol': contract.currency.symbol,
             'funds_release_date': contract.start_date,

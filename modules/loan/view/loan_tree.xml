@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree>
+    <field name="number"/>
     <field name="kind"/>
     <field name="rate" factor="100">
         <suffix string="%"/>
@@ -11,4 +12,5 @@
     </field>
     <field name="funds_release_date"/>
     <field name="first_payment_date"/>
+    <field name="end_date"/>
 </tree>

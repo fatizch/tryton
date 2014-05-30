@@ -112,9 +112,9 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             if action == 'do_not_use':
                 continue
             fee_amount += v * ratios[action]
-        return (loan_amount + fee_amount) * 100 / (loan.amount *
-            coop_date.number_of_years_between(loan.funds_release_date,
-                loan.end_date))
+        den = loan.amount * coop_date.number_of_years_between(
+            loan.funds_release_date, loan.end_date)
+        return (loan_amount + fee_amount) * 100 / den if den else None
 
     def calculate_average_premium_for_option(self, contract, share):
         if not self.use_default_rule:

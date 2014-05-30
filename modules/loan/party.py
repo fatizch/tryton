@@ -51,9 +51,9 @@ class Party:
 class Insurer:
     __name__ = 'insurer'
 
-    total_loan_outstanding_capital = fields.Function(
+    total_outstanding_loan_balance = fields.Function(
         fields.Numeric('Total Loan Outstanding Capital'),
-        'getter_total_loan_outstanding_capital')
+        'get_total_outstanding_loan_balance')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'getter_currency_symbol')
@@ -63,7 +63,7 @@ class Insurer:
         return Company(Transaction().context.get('company')).currency.symbol
 
     @classmethod
-    def getter_total_loan_outstanding_capital(cls, insurers, name):
+    def get_total_outstanding_loan_balance(cls, insurers, name):
         party_id = Transaction().context.get('party', None)
         if party_id is None:
             return 0
@@ -91,8 +91,7 @@ class Insurer:
             ).join(loan_share, condition=(loan_share.option == option.id)
             ).join(payment, condition=(
                 (payment.loan == loan_share.loan)
-                & (payment.start_date <= today)
-                & (payment.end_date >= today))
+                & (payment.start_date <= today))
             ).join(loan, condition=(loan.id == payment.loan))
 
         cursor.execute(*query_table.select(coverage.insurer, loan.id,
@@ -102,7 +101,7 @@ class Insurer:
 
         company = Company(Transaction().context.get('company'))
         target_currency = company.currency
-        result = defaultdict(lambda :Decimal(0))
+        result = defaultdict(lambda: Decimal(0))
         for insurer, _, currency, outstanding_amount in cursor.fetchall():
             result[insurer] += Currency.compute(Currency(currency),
                 outstanding_amount, target_currency)

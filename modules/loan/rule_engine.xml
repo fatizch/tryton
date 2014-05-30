@@ -73,7 +73,7 @@
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_get_loan_remaining_capital</field>
+      <field name="name">_re_get_outstanding_loan_balance</field>
       <field name="parent" ref="pret"/>
     </record>
     <record model="rule_engine.function" id="quotite">

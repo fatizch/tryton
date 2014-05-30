@@ -55,8 +55,8 @@ class RuleEngineRuntime:
 
     @classmethod
     @check_args('loan')
-    def _re_get_loan_remaining_capital(cls, args):
-        return args['loan'].get_remaining_capital(args['date'])
+    def _re_get_outstanding_loan_balance(cls, args):
+        return args['loan'].get_outstanding_loan_balance(at_date=args['date'])
 
     @classmethod
     @check_args('share')
