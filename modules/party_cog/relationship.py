@@ -31,3 +31,6 @@ class PartyRelation:
 
 class PartyRelationAll(PartyRelation):
     __name__ = 'party.relation.all'
+
+    def get_synthesis_rec_name(self, name):
+        return '%s: %s' % (self.type.rec_name, self.to.rec_name)
