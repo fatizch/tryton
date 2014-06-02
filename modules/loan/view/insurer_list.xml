@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Insurers">
     <field name="rec_name"/>
-    <field name="total_loan_outstanding_capital">
+    <field name="total_outstanding_loan_balance">
         <suffix name="currency_symbol"/>
     </field>
 </tree>

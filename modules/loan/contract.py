@@ -35,9 +35,7 @@ class Contract:
                 'readonly': Eval('status') != 'quote',
                 },
             depends=['is_loan', 'currency', 'status', 'subscriber', 'parties'],
-            context={
-                'currency': Eval('currency'),
-                'party': Eval('subscriber')}),
+            context={'currency': Eval('currency')}),
         'on_change_with_loans', 'setter_void')
 
     @classmethod

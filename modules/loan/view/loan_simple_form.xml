@@ -46,7 +46,8 @@
     <field name="deferal"/>
     <label name="deferal_duration"/>
     <field name="deferal_duration"/>
-    <newline/>
-    <field name="parties" invisible="1"/>
+    <field name="parties" colspan="4" view_ids="party_cog.person_view_tree,party.party_view_form"/>
+    <label name="company"/>
+    <field name="company"/>
     <newline/>
 </form>

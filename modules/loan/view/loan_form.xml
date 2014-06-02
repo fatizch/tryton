@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Loan">
   <notebook>
-    <page id="main" string="Loan Create Parameters">
+    <page id="main" string="Loan Parameters">
+      <label name="number"/>
+      <field name="number"/>
+      <label name="company"/>
+      <field name="company"/>
       <label name="kind"/>
       <field name="kind"/>
       <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon', 'graduated'])}"/>
@@ -44,12 +48,14 @@
       <field name="funds_release_date"/>
       <label name="first_payment_date"/>
       <field name="first_payment_date"/>
+      <label name="end_date"/>
+      <field name="end_date"/>
+      <newline/>
       <label name="deferal"/>
       <field name="deferal"/>
       <label name="deferal_duration"/>
       <field name="deferal_duration"/>
-      <newline/>
-      <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
+      <field name="parties" colspan="4" view_ids="party_cog.person_view_tree,party.party_view_form"/>
     </page>
     <page id="increments" string="Increments">
       <field name="increments" colspan="4" mode="tree" pre_validate="1"/>
@@ -58,8 +64,8 @@
       <button name="button_calculate_amortization_table" string="Calculate Amortization Table"/>
       <field name="payments" colspan="4" mode="tree"/>
     </page>
-    <page id="early_payments" string="Early Payments">
-      <field name="early_payments" colspan="4"/>
+    <page id="quota_share" string="Quota share">
+      <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
     </page>
   </notebook>
 </form>

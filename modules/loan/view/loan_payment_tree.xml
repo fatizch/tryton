@@ -7,5 +7,5 @@
     <field name="amount" sum="Total Amount"/>
     <field name="principal" sum="Total Principal"/>
     <field name="interest" sum="Total Interest"/>
-    <field name="end_balance"/>
+    <field name="outstanding_balance"/>
 </tree>
