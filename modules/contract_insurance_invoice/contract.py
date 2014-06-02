@@ -52,8 +52,7 @@ PREMIUM_FREQUENCIES = FREQUENCIES + [
 class Contract:
     __name__ = 'contract'
     invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices')
-    premiums = fields.One2Many('contract.premium', 'contract',
-        'Premiums', order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+    premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
     payment_terms = fields.One2Many('contract.payment_term', 'contract',
         'Payment Terms')
     direct_debit = fields.Boolean('Direct Debit Payment')
@@ -649,7 +648,7 @@ class CoveredElement:
     __name__ = 'contract.covered_element'
 
     premiums = fields.One2Many('contract.premium', 'covered_element',
-        'Premiums', order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+        'Premiums')
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -668,8 +667,7 @@ class CoveredElement:
 class ContractOption:
     __name__ = 'contract.option'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
-        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -683,13 +681,14 @@ class ContractOption:
 
     def get_premium_list(self, values):
         values.extend(self.premiums)
+        for extra_premium in self.extra_premiums:
+            extra_premium.get_premium_list(values)
 
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
-        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -698,6 +697,9 @@ class ExtraPremium:
             for premium in self.premiums:
                 lines.extend(premium.get_invoice_lines(start, end))
         return lines
+
+    def get_premium_list(self, values):
+        values.extend(self.premiums)
 
 
 class Premium(ModelSQL, ModelView):
@@ -740,7 +742,7 @@ class Premium(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Premium, cls).__setup__()
-        cls._order = [('start', 'ASC')]
+        cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
 
     @classmethod
     def _get_rated_entities(cls):
@@ -895,11 +897,6 @@ class Premium(ModelSQL, ModelView):
         new_instance.amount = line['amount']
         if line['taxes']:
             new_instance.taxes = line['taxes']
-        # TODO : get from line once properly set
-        # Fee = Pool().get('account.fee.description')
-        # if isinstance(new_instance.rated_entity, Fee):
-        #     new_instance.frequency = 'once_per_contract'
-        # else:
         new_instance.frequency = line['frequency']
         return new_instance
 
@@ -1005,30 +1002,22 @@ class DisplayContractPremium(Wizard):
             }
 
     @classmethod
-    def get_default_line_model(cls, **kwargs):
-        result = {
-            'amount': 0,
-            'childs': [],
-            'premium': None,
-            'premiums': [],
-            'name': '',
+    def get_default_line_model(cls, name='', amount=0, childs=None,
+            premium=None, premiums=None, line=None):
+        if line:
+            name = '%s - %s' % (line.start, line.end or '')
+            premium = line.id
+            premiums = [line.id]
+            amount = line.amount
+        return {
+            'name': name,
+            'amount': amount,
+            'childs': childs or [],
+            'premium': premium,
+            'premiums': premiums or [],
             }
-        result.update(kwargs)
-        return result
 
     def add_lines(self, source, parent):
-        if source.premiums:
-            premium_root = self.get_default_line_model(name='Premium')
-            for elem in source.premiums:
-                premium_line = self.get_default_line_model(amount=elem.amount,
-                    premium=elem.id, premiums=[elem.id], name='%s - %s' % (
-                        elem.start, elem.end or ''))
-                if elem.start <= utils.today() <= (
-                        elem.end or datetime.date.max):
-                    premium_root['amount'] += elem.amount
-                premium_root['childs'].append(premium_line)
-            parent['childs'].append(premium_root)
-            parent['amount'] += premium_root['amount']
         for field_name in self.get_children_fields().get(source.__name__, ()):
             values = getattr(source, field_name, None)
             if not values:
@@ -1038,6 +1027,16 @@ class DisplayContractPremium(Wizard):
                 self.add_lines(elem, base_line)
                 parent['childs'].append(base_line)
                 parent['amount'] += base_line['amount']
+        if source.premiums:
+            premium_root = self.get_default_line_model(name='Premium')
+            for elem in source.premiums:
+                premium_line = self.get_default_line_model(line=elem)
+                if elem.start <= utils.today() <= (
+                        elem.end or datetime.date.max):
+                    premium_root['amount'] += elem.amount
+                premium_root['childs'].append(premium_line)
+            parent['childs'].append(premium_root)
+            parent['amount'] += premium_root['amount']
         return parent
 
     def default_display(self, name):

@@ -447,7 +447,11 @@ class DisplayContractPremium:
     __name__ = 'contract.premium.display'
 
     @classmethod
-    def get_children_fields(cls):
-        result = super(DisplayContractPremium, cls).get_children_fields()
-        result['contract.option'].append('loan_shares')
+    def get_default_line_model(cls, **kwargs):
+        result = super(DisplayContractPremium, cls).get_default_line_model(
+            **kwargs)
+        if not 'line' in kwargs or not kwargs['line'].loan:
+            return result
+        result['name'] = '[%s] %s' % (kwargs['line'].loan.number,
+            result['name'])
         return result

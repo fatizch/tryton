@@ -436,7 +436,7 @@ class Premium:
     @classmethod
     def new_line(cls, line, start_date, end_date):
         new_instance = super(Premium, cls).new_line(line, start_date, end_date)
-        if not line['commissions']:
+        if 'commissions' not in line:
             return new_instance
         new_instance.commissions = [{
                 'com_option': com_def['option'].com_option.coverage.id,
