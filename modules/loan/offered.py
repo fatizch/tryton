@@ -1,11 +1,10 @@
 #-*- coding:utf-8 -*-
-import copy
 import datetime
 
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 from trytond.modules.offered_insurance import offered
 
 
@@ -36,12 +35,6 @@ class Product:
                 return True
         return False
 
-    def get_loan_dates(self, dates, loan):
-        if not self.calculate_each_payment:
-            return
-        for payment in loan.payments:
-            dates.add(payment.start_date)
-
     def get_option_dates(self, dates, option):
         super(Product, self).get_option_dates(dates, option)
         for elem in option.loan_shares:
@@ -49,8 +42,13 @@ class Product:
 
     def get_dates(self, contract):
         dates = super(Product, self).get_dates(contract)
-        for loan in contract.loans:
-            self.get_loan_dates(dates, loan)
+        for loan in contract.used_loans:
+            dates.add(loan.funds_release_date)
+            dates.add(loan.first_payment_date)
+            dates.add(loan.end_date)
+            if self.calculate_each_payment:
+                for payment in loan.payments:
+                    dates.add(payment.start_date)
         return dates
 
 

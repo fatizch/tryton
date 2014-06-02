@@ -91,20 +91,6 @@ class Premium:
 class Contract:
     __name__ = 'contract'
 
-    used_loans = fields.Function(
-        fields.Many2Many('loan', None, None, 'Used Loans',
-            context={'contract': Eval('id')}, depends=['id']),
-        'get_used_loans')
-
-    def get_used_loans(self, name):
-        loans = set([share.loan
-            for covered_element in self.covered_elements
-            for option in covered_element.options
-            for share in option.loan_shares])
-
-        # Use the loan creation date to ensure consistent ordering
-        return [x.id for x in sorted(list(loans), key=lambda x: x.create_date)]
-
     def calculate_premium_aggregates(self, start=None, end=None):
         cursor = Transaction().cursor
         pool = Pool()
