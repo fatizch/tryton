@@ -161,6 +161,7 @@ class Loan(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(Loan, cls).__setup__()
+        cls._order.insert(0, ('number', 'ASC'))
         cls._buttons.update({
                 'button_calculate_amortization_table': {},
                 })

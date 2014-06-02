@@ -48,8 +48,7 @@ class Contract:
             for option in covered_element.options
             for share in option.loan_shares])
 
-        # Use the loan creation date to ensure consistent ordering
-        return [x.id for x in sorted(list(loans), key=lambda x: x.create_date)]
+        return [x.id for x in sorted(list(loans), key=lambda x: x.id)]
 
     @classmethod
     def __setup__(cls):
