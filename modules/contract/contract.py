@@ -10,6 +10,7 @@ from trytond.pyson import Eval, If, Bool
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pyson import PYSONEncoder
+from trytond.config import CONFIG
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
 from trytond.modules.cog_utils import MergedMixin
@@ -221,7 +222,15 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         [x.id for x in contracts])),
                 group_by=activation_history.contract))
 
-        return dict([(id, value) for id, value in cursor.fetchall()])
+        values = dict([(id, value) for id, value in cursor.fetchall()])
+        if CONFIG['db_type'] == 'sqlite':
+            def convert(value):
+                if value is None:
+                    return value
+                else:
+                    return datetime.date(*map(int, value.split('-')))
+            values = {i: convert(v) for i, v in values.iteritems()}
+        return values
 
     @fields.depends('product', 'options', 'start_date', 'extra_data',
         'appliable_conditions_date')
