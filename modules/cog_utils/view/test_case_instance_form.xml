@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Test Case Instance">
+    <label name="name"/>
+    <field name="name"/>
+    <newline/>
+    <label name="method_name"/>
+    <field name="method_name"/>
+    <label name="test_method_name"/>
+    <field name="test_method_name"/>
+    <label name="executed"/>
+    <field name="executed"/>
+    <label name="execution_date"/>
+    <field name="execution_date"/>
+    <field name="requirements" colspan="4"/>
+</form>

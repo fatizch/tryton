@@ -3,6 +3,7 @@ import csv
 import polib
 import logging
 import random
+import datetime
 
 from trytond.pool import Pool
 from trytond.pyson import Eval
@@ -18,86 +19,13 @@ import export
 
 __all__ = [
     'TestCaseModel',
+    'TestCaseInstance',
+    'TestCaseRequirementRelation',
     'TestCaseSelector',
     'SelectTestCase',
     'TestCaseFileSelector',
     'TestCaseWizard',
     ]
-
-
-def solve_graph(node_name, nodes, resolved=None, unresolved=None):
-    if node_name is None:
-        resolved = []
-        unresolved = []
-        for name in nodes.iterkeys():
-            solve_graph(name, nodes, resolved, unresolved)
-        return resolved
-    unresolved.append(node_name)
-    for node_dep in nodes[node_name]:
-        if node_dep not in resolved:
-            if node_dep in unresolved:
-                raise Exception('Circular reference : %s => %s' % (node_name,
-                        node_dep))
-            solve_graph(node_dep, nodes, resolved, unresolved)
-    if node_name not in resolved:
-        resolved.append(node_name)
-    unresolved.remove(node_name)
-
-
-def build_dependency_graph(cls, methods):
-    # This method will return an ordered list for execution for the selected
-    # test cases methods.
-    cls = Pool().get(cls.__name__)
-    dependency_data = cls._get_test_case_dependencies()
-    method_dict = dict([(method.__name__, method) for method in methods])
-    method_dependencies = {}
-    to_explore = methods[:]
-    while to_explore:
-        method = to_explore.pop()
-        method_dependencies[method.__name__] = dependency_data[
-            method.__name__]['dependencies'].copy()
-        for dep in method_dependencies[method.__name__]:
-            if dep not in method_dict:
-                method_dict[dep] = getattr(cls, dep)
-                to_explore.append(method_dict[dep])
-    cache_res = {}
-
-    def get_deps(method, res=None):
-        if method.__name__ in cache_res:
-            return cache_res[method.__name__]
-        add2cache = False
-        if not res:
-            res = set([])
-            add2cache = True
-        for elem in dependency_data[method.__name__]['dependencies']:
-            res.add(elem)
-            get_deps(method_dict[elem], res)
-        if add2cache:
-            cache_res[method.__name__] = list(res)
-            return cache_res[method.__name__]
-
-    dependencies = {}
-    final_dependencies = {}
-    for k, v in method_dependencies.iteritems():
-        final = dependencies.get(k, [[], []])[0]
-        found = dependencies.get(k, [[], []])[1]
-        for dep in v:
-            if dep in found:
-                continue
-            for new_dep in get_deps(method_dict[dep]):
-                if new_dep in final:
-                    final.pop(final.index(new_dep))
-                    continue
-                if new_dep in found:
-                    continue
-                found.append(new_dep)
-            final.append(dep)
-            found.append(dep)
-        dependencies[k] = [list(set(final)), list(set(found))]
-        final_dependencies[k] = dependencies[k][0]
-
-    result = solve_graph(None, final_dependencies)
-    return (getattr(cls, x) for x in result)
 
 
 class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
@@ -107,6 +35,8 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     language = fields.Many2One('ir.lang', 'Test Case Language',
         ondelete='RESTRICT')
+    test_cases = fields.One2Many('ir.test_case.instance', 'config',
+        'Test Cases', readonly=True)
 
     @classmethod
     def check_xml_record(cls, records, values):
@@ -162,9 +92,18 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
     def run_test_case(cls, test_case):
         cur_user = Transaction().user
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
+        must_be_executed = not test_case.executed
+        if test_case.test_method_name:
+            must_be_executed = getattr(cls, test_case.test_method_name)()
+        if not must_be_executed:
+            logging.getLogger('test_case').info('Not executing test_case "%s",'
+                ' already executed' % test_case.name)
+            return
         with Transaction().new_cursor(), Transaction().set_user(0):
             with Transaction().set_context(user=cur_user if cur_user else 1):
-                cls.run_test_case_method(test_case)
+                cls.run_test_case_method(getattr(cls, test_case.method_name))
+                test_case.execution_date = datetime.datetime.now()
+                test_case.save()
             try:
                 Transaction().cursor.commit()
             except DatabaseOperationalError:
@@ -183,7 +122,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         cls.clear_all_caches()
         try:
             cls._loaded_resources = {}
-            order = build_dependency_graph(TestCaseModel, test_cases)
+            order = cls.build_dependency_graph(test_cases)
             for elem in order:
                 try:
                     cls.run_test_case(elem)
@@ -201,15 +140,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_all_tests(cls):
-        result = []
-        for elem in cls._get_test_case_dependencies().keys():
-            result.append(getattr(cls, elem))
-        return result
-
-    @classmethod
-    def get_test_data(cls):
-        for k, v in cls._get_test_case_dependencies().iteritems():
-            yield getattr(cls, k), k, v
+        return cls.get_instance().test_cases
 
     @classmethod
     def global_search_list(cls):
@@ -394,14 +325,159 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
                     file_path, file_name)
         return result
 
+    @classmethod
+    def solve_graph(cls, node_name, nodes, resolved=None, unresolved=None):
+        if node_name is None:
+            resolved = []
+            unresolved = []
+            for name in nodes.iterkeys():
+                cls.solve_graph(name, nodes, resolved, unresolved)
+            return resolved
+        unresolved.append(node_name)
+        for node_dep in nodes[node_name]:
+            if node_dep not in resolved:
+                if node_dep in unresolved:
+                    raise Exception('Circular reference : %s => %s' % (
+                            node_name, node_dep))
+                cls.solve_graph(node_dep, nodes, resolved, unresolved)
+        if node_name not in resolved:
+            resolved.append(node_name)
+        unresolved.remove(node_name)
+
+    @classmethod
+    def build_dependency_graph(cls, test_cases):
+        # This method will return an ordered list for execution for the
+        # selected test cases methods.
+        cls = Pool().get(cls.__name__)
+        methods = list(test_cases)
+        method_dependencies = {}
+        to_explore = list(test_cases)
+        while to_explore:
+            test_case = to_explore.pop()
+            method_dependencies[test_case] = list(test_case.requirements)
+            for dep in method_dependencies[test_case]:
+                if dep not in methods:
+                    methods.append(dep)
+                    to_explore.append(dep)
+
+        cache_res = {}
+
+        def get_deps(test_case, res=None):
+            if test_case in cache_res:
+                return cache_res[test_case]
+            add2cache = False
+            if not res:
+                res = set([])
+                add2cache = True
+            for elem in test_case.requirements:
+                res.add(elem)
+                get_deps(elem, res)
+            if add2cache:
+                cache_res[test_case] = list(res)
+                return cache_res[test_case]
+
+        dependencies = {}
+        final_dependencies = {}
+        for k, v in method_dependencies.iteritems():
+            final = dependencies.get(k, [[], []])[0]
+            found = dependencies.get(k, [[], []])[1]
+            for dep in v:
+                if dep in found:
+                    continue
+                for new_dep in get_deps(dep):
+                    if new_dep in final:
+                        final.pop(final.index(new_dep))
+                        continue
+                    if new_dep in found:
+                        continue
+                    found.append(new_dep)
+                final.append(dep)
+                found.append(dep)
+            dependencies[k] = [list(set(final)), list(set(found))]
+            final_dependencies[k] = dependencies[k][0]
+
+        return cls.solve_graph(None, final_dependencies)
+
+
+class TestCaseInstance(model.CoopSQL, model.CoopView):
+    'Test Case Instance'
+
+    __name__ = 'ir.test_case.instance'
+
+    config = fields.Many2One('ir.test_case', 'Configuration',
+        ondelete='CASCADE', required=True)
+    execution_date = fields.DateTime('Execution Date')
+    method_name = fields.Char('Method Name', required=True)
+    test_method_name = fields.Char('Test Method Name', help='The name of the '
+        'method that will be used to decide whether the Test Case should be '
+        'run or not')
+    name = fields.Char('Name', required=True, translate=True)
+    requirements = fields.Many2Many(
+        'ir.test_case.instance-ir.test_case.instance', 'parent', 'child',
+        'Requirements')
+    executed = fields.Function(
+        fields.Boolean('Executed'),
+        'get_executed')
+
+    @classmethod
+    def __setup__(cls):
+        super(TestCaseInstance, cls).__setup__()
+        cls._error_messages.update({
+                'non_existing_test_case': 'Test Case %s uses the %s method, '
+                'which does not exist !',
+                })
+
+    @classmethod
+    def default_config(cls):
+        return 1
+
+    @classmethod
+    def validate(cls, test_cases):
+        TestCaseModel = Pool().get('ir.test_case')
+        for test in test_cases:
+            if getattr(TestCaseModel, test.method_name, None) is None:
+                cls.raise_user_error('non_existing_test_case', (test.name,
+                        test.method_name))
+            if not test.test_method_name:
+                continue
+            if getattr(TestCaseModel, test.test_method_name) is None:
+                cls.raise_user_error('non_existing_test_case', (test.name,
+                        test.test_method_name))
+
+    @classmethod
+    def check_xml_record(cls, records, values):
+        # Override to allow to modify the base configuration
+        return True
+
+    def get_executed(self, name):
+        return self.execution_date is not None
+
+    def get_rec_name(self, name):
+        return '%s%s' % ('[Executed] ' if self.executed else '', self.name)
+
+    @classmethod
+    def run_test_case(cls, test_cases):
+        Pool().get('ir.test_case').run_test_cases([test_cases])
+
+
+class TestCaseRequirementRelation(model.CoopSQL):
+    'Test Case Requirement Relation'
+
+    __name__ = 'ir.test_case.instance-ir.test_case.instance'
+
+    child = fields.Many2One('ir.test_case.instance', 'Child',
+        ondelete='CASCADE')
+    parent = fields.Many2One('ir.test_case.instance', 'Parent',
+        ondelete='RESTRICT')
+
 
 class TestCaseSelector(model.CoopView):
     'Test Case Selector'
 
     __name__ = 'ir.test_case.run.select.method'
 
-    method_name = fields.Char('Method Name')
-    name = fields.Char('Test Case Name')
+    test_case = fields.Many2One('ir.test_case.instance', 'Test Case')
+    test = fields.Char('Test')
     selected = fields.Boolean('Will be executed', states={'readonly':
             Eval('selection') == 'automatic'},)
     selection = fields.Selection([
@@ -437,11 +513,11 @@ class SelectTestCase(model.CoopView):
         TestCaseModel = Pool().get('ir.test_case')
         selected = [elem for elem in self.test_cases
             if elem.selection in ('manual', 'not_selected') and elem.selected]
-        order = [y.__name__ for y in build_dependency_graph(TestCaseModel, [
-                getattr(TestCaseModel, x.method_name) for x in selected])]
+        order = TestCaseModel.build_dependency_graph(
+            [x.test_case for x in selected])
         to_update = []
         for x in self.test_cases:
-            if x.method_name not in order:
+            if x.test_case not in order:
                 to_update.append({
                         'id': x.id,
                         'selected': False,
@@ -510,14 +586,14 @@ class TestCaseWizard(model.CoopWizard):
         # Look for test cases
         TestCaseModel = Pool().get('ir.test_case')
         test_cases = []
-        for _, name, info in TestCaseModel.get_test_data():
+        for test_case in TestCaseModel.get_all_tests():
             test_cases.append({
-                    'method_name': name,
-                    'name': info['name'],
+                    'test_case': test_case.id,
+                    'test': test_case.rec_name,
                     'selected': False,
                     'selection': 'not_selected',
                     })
-        test_cases.sort(key=lambda x: x['name'])
+        test_cases.sort(key=lambda x: x['test'])
         result['test_cases'] = test_cases
         return result
 
@@ -526,8 +602,7 @@ class TestCaseWizard(model.CoopWizard):
         to_execute = []
         for test_case in self.select_test_cases.test_cases:
             if test_case.selection == 'manual':
-                to_execute.append(
-                    getattr(TestCaseModel, test_case.method_name))
+                to_execute.append(test_case.test_case)
         if to_execute:
             TestCaseModel.run_test_cases(to_execute)
         return 'load_files'

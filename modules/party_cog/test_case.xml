@@ -22,5 +22,29 @@
       <field name="max_nb_of_children_per_couple">3</field>
       <field name="phone_prefix">+33</field>
     </record>
+    <!-- ###################### -->
+    <!-- # Test Case Instance # -->
+    <!-- ###################### -->
+    <!-- Data -->
+    <record model="ir.test_case.instance" id="relation_type_test_case">
+        <field name="name">Relation Type Test Case</field>
+        <field name="method_name">relation_type_test_case</field>
+        <field name="test_method_name">relation_type_test_case_test_method</field>
+    </record>
+    <record model="ir.test_case.instance" id="party_test_case">
+        <field name="name">Party Test Case</field>
+        <field name="method_name">party_test_case</field>
+    </record>
+    <record model="ir.test_case.instance" id="hierarchy_test_case">
+        <field name="name">Hierarchy Test Case</field>
+        <field name="method_name">hierarchy_test_case</field>
+    </record>
+    <!-- ######################### -->
+    <!-- # Test Case Requirement # -->
+    <!-- ######################### -->
+    <record model="ir.test_case.instance-ir.test_case.instance" id="party_relation_kind_requirement">
+        <field name="child" ref="relation_type_test_case"/>
+        <field name="parent" ref="party_test_case"/>
+    </record>
   </data>
 </tryton>

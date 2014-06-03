@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Test Case Instance # -->
+        <!-- ###################### -->
+        <record model="ir.test_case.instance" id="expense_kind_test_case">
+            <field name="name">Expense Kind Test Case</field>
+            <field name="method_name">expense_kind_test_case</field>
+        </record>
+        <record model="ir.test_case.instance" id="health_care_system_test_case">
+            <field name="name">HealthCare System Test Case</field>
+            <field name="method_name">health_care_system_test_case</field>
+        </record>
+        <record model="ir.test_case.instance" id="fund_test_case">
+            <field name="name">Fund Test Case</field>
+            <field name="method_name">fund_test_case</field>
+        </record>
+        <!-- ######################### -->
+        <!-- # Test Case Requirement # -->
+        <!-- ######################### -->
+        <!-- Data -->
+        <record model="ir.test_case.instance-ir.test_case.instance" id="fund_hc_system_requirement">
+            <field name="child" ref="health_care_system_test_case"/>
+            <field name="parent" ref="fund_test_case"/>
+        </record>
+    </data>
+</tryton>

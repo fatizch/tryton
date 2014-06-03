@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Test Cases">
+    <field name="executed"/>
+    <field name="name"/>
+    <field name="method_name"/>
+</tree>
