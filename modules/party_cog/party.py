@@ -840,12 +840,18 @@ class SynthesisMenuOpen(Wizard):
         return {'ids': [record.to.id]}
 
     def end(self):
-        return 'reload menu'
+        pool = Pool()
+        User = pool.get('res.user')
+        user = Transaction().user
+        user = User(user)
+        if not user.party_synthesis_previous:
+            return 'reload menu'
 
 
 class SynthesisMenuSet(Wizard):
     'Set Party Synthesis Menu'
     __name__ = 'party.synthesis.menu.set'
+
     start_state = 'set'
     set = StateTransition()
     open = StateAction('party_cog.act_menu_open')
