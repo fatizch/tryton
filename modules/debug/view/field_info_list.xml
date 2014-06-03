@@ -8,4 +8,5 @@
     <field name="is_readonly"/>
     <field name="is_invisible"/>
     <field name="has_domain"/>
+    <field name="calculated_value" expand="1"/>
 </tree>

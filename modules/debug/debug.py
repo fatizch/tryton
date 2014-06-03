@@ -2,6 +2,7 @@ from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.model import ModelView, fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool
+from trytond.pyson import Eval
 
 
 __all__ = [
@@ -31,6 +32,8 @@ class FieldInfo(ModelView):
     is_invisible = fields.Boolean('Is invisible')
     has_domain = fields.Boolean('Has domain')
     field_domain = fields.Text('Domain')
+    id_to_calculate = fields.Integer('Id To Calculate')
+    calculated_value = fields.Char('Calculated Value')
 
 
 class ModelInfo(ModelView):
@@ -46,6 +49,13 @@ class ModelInfo(ModelView):
             ('name', 'Name'),
             ('kind', 'Kind'),
             ('string', 'String')], 'Filter Value')
+    id_to_calculate = fields.Integer('Id To Calculate')
+    to_evaluate = fields.Char('To Evaluate', states={
+            'invisible': ~Eval('id_to_calculate', False)},
+        depends=['id_to_calculate'])
+    evaluation_result = fields.Char('Evaluation Result', states={
+            'invisible': ~Eval('id_to_calculate', False),
+            'readonly': True}, depends=['id_to_calculate'])
 
     @classmethod
     def get_possible_model_names(cls):
@@ -82,7 +92,7 @@ class ModelInfo(ModelView):
         return 'name'
 
     @fields.depends('model_name', 'field_infos', 'hide_functions',
-        'filter_value')
+        'filter_value', 'id_to_calculate')
     def on_change_with_field_infos(self):
         if self.field_infos:
             result = {'remove': [x.id for x in self.field_infos]}
@@ -97,7 +107,27 @@ class ModelInfo(ModelView):
                                 for field_name, field
                                 in TargetModel._fields.iteritems()])),
                     key=lambda x: x[self.filter_value])]
+        for k, v in result['add']:
+            if self.id_to_calculate:
+                try:
+                    v['calculated_value'] = str(getattr(
+                            TargetModel(self.id_to_calculate), v['name']))
+                except:
+                    v['calculated_value'] = 'Error calculating'
         return result
+
+    @fields.depends('model_name', 'id_to_calculate', 'to_evaluate')
+    def on_change_with_evaluation_result(self):
+        if (not self.id_to_calculate or not self.to_evaluate or not
+                self.model_name):
+            return ''
+        context = {
+            'contract': Pool().get(self.model_name)(self.id_to_calculate),
+            }
+        try:
+            return str(eval(self.to_evaluate, context))
+        except:
+            return 'Error'
 
 
 class DebugModel(Wizard):
