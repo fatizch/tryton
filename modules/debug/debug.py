@@ -121,10 +121,10 @@ class ModelInfo(ModelView):
         if (not self.id_to_calculate or not self.to_evaluate or not
                 self.model_name):
             return ''
-        context = {
-            'contract': Pool().get(self.model_name)(self.id_to_calculate),
-            }
         try:
+            context = {
+                'contract': Pool().get(self.model_name)(self.id_to_calculate),
+                }
             return str(eval(self.to_evaluate, context))
         except:
             return 'Error'
