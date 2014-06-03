@@ -1,9 +1,16 @@
 <?xml version="1.0"?>
-<tree string="Invoice Lines">
-  <field name="description"/>
-  <field name="contract_insurance_start"/>
-  <field name="contract_insurance_end"/>
-  <field name="amount">
-      <suffix name="currency_symbol"/>
-  </field>
-</tree>
+<data>
+    <xpath expr="/tree/field[@name='product']" position="replace"/>
+    <xpath expr="/tree/field[@name='quantity']" position="replace"/>
+    <xpath expr="/tree/field[@name='unit']" position="replace"/>
+    <xpath expr="/tree/field[@name='unit_prices']" position="replace"/>
+    <xpath expr="/tree/field[@name='taxes']" position="replace"/>
+    <xpath expr="/tree/field[@name='amount']" position="replace"/>
+    <xpath expr="/tree/field[@name='type']" position="after">
+        <field name="contract_insurance_start"/>
+        <field name="contract_insurance_end"/>
+        <field name="amount">
+            <suffix name="currency_symbol"/>
+        </field>
+    </xpath>
+</data>

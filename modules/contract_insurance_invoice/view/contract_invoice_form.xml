@@ -7,5 +7,5 @@
     <label name="contract"/>
     <field name="contract"/>
     <label name="invoice"/>
-    <field name="invoice" view_ids="contract_insurance_invoice.invoice_view_form,contract_insurance_invoice.invoice_view_list"/>
+    <field name="invoice"/>
 </form>
