@@ -36,8 +36,8 @@ class SynthesisMenuMoveLine(model.CoopSQL):
             Max(move_line.write_uid).as_('write_uid'),
             Max(move_line.write_date).as_('write_date'),
             Literal(coop_string.translate_label(Move_Line_Synthesis, 'name')).
-            as_('name'),
-            party.id.as_('party'), group_by=party.id)
+            as_('name'), party.id.as_('party'),
+            group_by=party.id)
 
     def get_icon(self, name=None):
         return 'payment'
@@ -86,11 +86,11 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 columns)
         account = pool.get('account.account').__table__()
         move = pool.get('account.move').__table__()
-        return table.join(account, condition=(
-                (account.id == table.account)
-                & (account.kind == 'receivable'))).join(move, condition=(
-                    (move.id == table.move))).select(*columns,
-            where=((table.credit > 0) & (table.reconciliation == None)))
+        return table.join(account, condition=((account.id == table.account)
+                & (account.kind == 'receivable'))).\
+            join(move, condition=((move.id == table.move))).\
+            select(*columns,
+                where=((table.credit > 0) & (table.reconciliation == None)))
 
 
 class SynthesisMenuOpen(Wizard):
@@ -116,7 +116,7 @@ class SynthesisMenuOpen(Wizard):
                     'account_cog.move_line_view_synthesis_form')])[0].id,
                     'form')]
             }
-        else:
+        elif Model.__name__ == 'account.move.line':
             actions = {
                 'res_model': 'account.move.line',
                 'views': [(Pool().get('ir.ui.view').search([('xml_id', '=',

@@ -100,8 +100,8 @@ class Party(export.ExportImportMixin):
     ####################################
     synthesis = fields.One2Many('party.synthesis.menu', 'party', 'Synthesis',
         readonly=True)
-    synthesis_rec_name = fields.Function(fields.Char('Name'),
-        'get_synthesis_rec_name')
+    synthesis_rec_name = fields.Function(
+        fields.Char('Name'), 'get_synthesis_rec_name')
     ####################################
     #contact information
     phone = fields.Function(fields.Char('Phone'), 'get_contact',
@@ -239,7 +239,6 @@ class Party(export.ExportImportMixin):
         return super(Party, self).get_rec_name(name)
 
     def get_synthesis_rec_name(self, name):
-        res = ''
         if self.is_person:
             res = "%s %s %s" % (coop_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
@@ -247,10 +246,9 @@ class Party(export.ExportImportMixin):
                 res += ' (%s)' % self.ssn
             if self.birth_date:
                 res += ' (%s)' % coop_string.date_as_string(self.birth_date)
-        if self.is_company:
-            res = super(Party, self).get_rec_name(name)
-        if res:
-            return res
+        else:
+            res = self.get_rec_name(name)
+        return res
 
     def get_icon(self, name=None):
         return 'coopengo-party'
@@ -707,12 +705,8 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         for idx, column in enumerate(columns):
             if getattr(column, 'output_name', None) == 'sequence':
                 columns.pop(idx)
-        if order:
-            columns.append(Cast(Literal(order), field.sql_type().base).
-                as_('sequence'))
-        else:
-            columns.append(Cast(Literal(0), field.sql_type().base).
-                as_('sequence'))
+        columns.append(Cast(Literal(order or 0), field.sql_type().base).
+            as_('sequence'))
         return table, columns
 
     @classmethod
@@ -825,9 +819,8 @@ class SynthesisMenuOpen(Wizard):
                 [('from_', '=', record.id)])
             actions['views'] = list(reversed(actions['views']))
         elif Model.__name__ == 'party.relation.all':
-            module = 'party_cog'
-            fs_id = 'wizard_set'
-            action_id = Action.get_action_id(ModelData.get_id(module, fs_id))
+            action_id = Action.get_action_id(
+                ModelData.get_id('party_cog', 'wizard_set'))
             action = Action(action_id)
             actions = Action.get_action_values(action.type, [action.id])[0]
         elif Model.__name__ == 'party.party':

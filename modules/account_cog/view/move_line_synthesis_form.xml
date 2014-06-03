@@ -9,9 +9,10 @@
     <label name="description"/>
     <field name="description"/>
     <label name="credit"/>
-    <field name="credit">
-        <suffix name="currency_symbol"/>
-    </field>
+    <group id="credit_amount">
+        <field name="credit" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
     <notebook colspan="4">
         <page string="Reconciliation Information" id="reconciliation">
             <field name="reconciliation_lines"/>

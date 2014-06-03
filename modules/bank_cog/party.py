@@ -106,6 +106,7 @@ class Party:
 class SynthesisMenuBankAccoount(model.CoopSQL):
     'Party Synthesis Menu Bank Account'
     __name__ = 'party.synthesis.menu.bank_account'
+
     name = fields.Char('Bank Account')
     owner = fields.Many2One('party.party', 'Party')
 

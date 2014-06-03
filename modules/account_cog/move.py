@@ -11,11 +11,13 @@ __all__ = [
 class Line:
     'Account Move Line'
     __name__ = 'account.move.line'
-    reconciliation_lines = fields.Function(fields.One2Many('account.move.line',
-        'reconciliation_lines', 'Reconciliation Lines'),
-    'get_reconciliation_lines')
-    currency_symbol = fields.Function(fields.Char('Currency Symbol'),
-            'get_currency_symbol')
+
+    reconciliation_lines = fields.Function(
+        fields.One2Many('account.move.line', 'reconciliation_lines',
+            'Reconciliation Lines'),
+        'get_reconciliation_lines')
+    currency_symbol = fields.Function(
+        fields.Char('Currency Symbol'), 'get_currency_symbol')
 
     def get_synthesis_rec_name(self, name):
         if self.origin:
