@@ -236,13 +236,8 @@ class Contract:
             until = next_frequency.date
         return frequency.value.get_rrule(start, until)
 
-    def get_invoice_periods(self, up_to_date=None):
-        'Return the list of invoice periods up to the date. If no date is '
-        'given, try the end_date. If none exists, return the first period'
-        if up_to_date:
-            up_to_date = min(up_to_date, self.end_date or datetime.date.max)
-        else:
-            up_to_date = self.end_date
+    def get_invoice_periods(self, up_to_date):
+        up_to_date = min(up_to_date, self.end_date or datetime.date.max)
         if self.last_invoice_end:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
@@ -275,10 +270,10 @@ class Contract:
     def first_invoice(self):
         ContractInvoice = Pool().get('contract.invoice')
         ContractInvoice.delete(self.invoices)
-        self.invoice([self])
+        self.invoice([self], self.start_date)
 
     @classmethod
-    def invoice(cls, contracts, up_to_date=None):
+    def invoice(cls, contracts, up_to_date):
         'Invoice contracts up to the date'
         periods = defaultdict(list)
         for contract in contracts:
@@ -319,6 +314,7 @@ class Contract:
                  for contract_invoices in invoices.itervalues()
                  for c, i in contract_invoices])
         # Set the new ids
+        Invoice.validate_invoice(new_invoices)
         old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
         for invoice, new_invoice in zip(old_invoices, new_invoices):
             invoice.id = new_invoice.id
@@ -346,7 +342,7 @@ class Contract:
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
             payment_term=self.payment_term,
-            state='validated',
+            state='draft',
             )
 
     def get_invoice_lines(self, start, end):
@@ -838,8 +834,8 @@ class Premium(ModelSQL, ModelView):
                 taxes=self.taxes,
                 invoice_type='out_invoice',
                 account=self.account,
-                start_date=start,
-                end_date=end,
+                coverage_start=start,
+                coverage_end=end,
                 )]
 
     def set_parent_from_line(self, line):

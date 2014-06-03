@@ -209,8 +209,8 @@ class Invoice:
 class InvoiceLine:
     __name__ = 'account.invoice.line'
     # XXX maybe change for the description
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
+    coverage_start = fields.Date('Start Date')
+    coverage_end = fields.Date('End Date')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')

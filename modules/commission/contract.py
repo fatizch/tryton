@@ -18,6 +18,7 @@ __all__ = [
     'ContractInvoice',
     'CommissionInvoice',
     'Invoice',
+    'InvoiceLine',
     'Premium',
     'PremiumCommission',
     ]
@@ -336,7 +337,6 @@ class Invoice:
         super(Invoice, cls).post(invoices)
 
         pool = Pool()
-        InvoiceLine = pool.get('account.invoice.line')
         Journal = pool.get('account.journal')
         CommissionInvoice = pool.get('contract.invoice.commission')
         journals = Journal.search([
@@ -345,45 +345,8 @@ class Invoice:
         journal = journals[0] if journals else None
         com_invoices = defaultdict(list)
         for invoice in invoices:
-            if not invoice.contract_invoice:
-                continue
-            lines = defaultdict(list)
-            for line in invoice.lines:
-                if not line.origin:
-                    continue
-                if not line.origin.__name__ == 'contract.premium':
-                    continue
-                if not line.origin.commissions:
-                    continue
-                for com_line in line.origin.commissions:
-                    lines[com_line.party].append(InvoiceLine(
-                            type='line',
-                            description=com_line.get_description(),
-                            origin=line.origin,
-                            quantity=1,
-                            unit=None,
-                            unit_price=invoice.currency.round(com_line.rate *
-                                line.unit_price),
-                            taxes=[],
-                            invoice_type='in_invoice',
-                            account=com_line.com_option.account_for_billing,
-                            start_date=line.start_date,
-                            end_date=line.end_date,
-                            ))
-            if not lines:
-                continue
-            for party, com_lines in lines.iteritems():
-                com_invoice = cls(
-                    company=invoice.company,
-                    type='in_invoice',
-                    journal=journal,
-                    party=party,
-                    invoice_address=party.addresses[0],
-                    currency=invoice.currency,
-                    account=party.account_payable,
-                    payment_term=invoice.payment_term,
-                    )
-                com_invoice.lines = com_lines
+            for com_invoice in invoice.calculate_com_invoices():
+                com_invoice.journal = journal
                 com_invoices[invoice.contract_invoice].append(com_invoice)
         if not com_invoices:
             return
@@ -402,6 +365,45 @@ class Invoice:
         if contract_com_invoices:
             CommissionInvoice.create([i._save_values
                     for i in contract_com_invoices])
+
+    def calculate_com_invoices(self):
+        Invoice = Pool().get('account.invoice')
+        if not self.contract_invoice:
+            return []
+        lines = defaultdict(list)
+        for line in self.lines:
+            lines.update(line.build_com_lines())
+        if not lines:
+            return []
+        com_invoices = []
+        for party, com_lines in lines.iteritems():
+            com_invoices.append(Invoice(
+                    company=self.company,
+                    type='in_invoice',
+                    party=party,
+                    invoice_address=party.addresses[0],
+                    currency=self.currency,
+                    account=party.account_payable,
+                    payment_term=self.payment_term,
+                    lines=com_lines,
+                    ))
+        return com_invoices
+
+
+class InvoiceLine:
+    __name__ = 'account.invoice.line'
+
+    def build_com_lines(self):
+        if not self.origin:
+            return {}
+        if not self.origin.__name__ == 'contract.premium':
+            return {}
+        if not self.origin.commissions:
+            return {}
+        lines = defaultdict(list)
+        for com_line in self.origin.commissions:
+            lines[com_line.party].append(com_line.new_com_line(self))
+        return lines
 
 
 class Premium:
@@ -450,3 +452,20 @@ class PremiumCommission(model.CoopSQL, model.CoopView):
             self.com_option.rec_name,
             self.party.name,
             self.rate * 100)
+
+    def new_com_line(self, invoice_line):
+        InvoiceLine = Pool().get('account.invoice.line')
+        InvoiceLine(
+            type='line',
+            description=self.get_description(),
+            origin=invoice_line.origin,
+            quantity=1,
+            unit=None,
+            unit_price=invoice_line.invoice.currency.round(self.rate *
+                invoice_line.unit_price),
+            taxes=[],
+            invoice_type='in_invoice',
+            account=self.com_option.account_for_billing,
+            coverage_start=invoice_line.coverage_start,
+            coverage_end=invoice_line.coverage_end,
+            )

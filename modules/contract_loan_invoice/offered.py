@@ -146,12 +146,15 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             if action == 'do_not_use':
                 continue
             fee_amount += v * ratios[action]
-        try:
+        denominator = (premium_aggregates('offered',
+                model_name='offered.product') + premium_aggregates(
+                'offered', model_name='offered.option.description'))
+        if denominator == 0:
+            fee_ratio = 0
+        else:
             fee_ratio = share_amount / (premium_aggregates('offered',
                     model_name='offered.product') + premium_aggregates(
                     'offered', model_name='offered.option.description'))
-        except ZeroDivisionError:
-            fee_ratio = 0
         return (share_amount + fee_amount * fee_ratio) * 100 / (loan.amount *
             coop_date.number_of_years_between(loan.funds_release_date,
                 loan.end_date) * share.share)
