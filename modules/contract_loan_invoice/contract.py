@@ -1,3 +1,4 @@
+import datetime
 from collections import defaultdict
 
 from sql import Cast
@@ -9,7 +10,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.cog_utils import fields, model, utils, coop_date
 
 
 __metaclass__ = PoolMeta
@@ -64,6 +65,8 @@ class Premium:
         if 'loan' not in line:
             return result
         result.loan = line['loan']
+        result.end = min(end_date or datetime.date.max,
+            coop_date.add_day(line['loan'].end_date, -1))
         return result
 
     def get_description(self):

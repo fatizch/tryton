@@ -427,7 +427,7 @@ class Contract:
         new_premium = Premium.new_line(price, start_date, end_date)
         if new_premium:
             parent = new_premium.get_parent()
-            if not end_date:
+            if not end_date and not getattr(new_premium, 'end', None):
                 new_premium.end = getattr(parent, 'end_date', None)
             if isinstance(parent.premiums, tuple):
                 parent.premiums = list(parent.premiums)
@@ -886,14 +886,19 @@ class Premium(ModelSQL, ModelView):
             return None
         new_instance = cls()
         new_instance.set_parent_from_line(line)
-        if not new_instance.get_parent():
+        parent = new_instance.get_parent()
+        if not parent:
             # TODO : Should raise an error
             return None
         new_instance.rated_entity = line['rated_entity']
         # TODO : use the line account once it is implemented
         new_instance.account = new_instance.rated_entity.account_for_billing
         new_instance.start = start_date
-        new_instance.end = end_date
+        if getattr(parent, 'end_date', None) and (not end_date
+                or parent.end_date < end_date):
+            new_instance.end = parent.end_date
+        else:
+            new_instance.end = end_date
         new_instance.amount = line['amount']
         if line['taxes']:
             new_instance.taxes = line['taxes']
