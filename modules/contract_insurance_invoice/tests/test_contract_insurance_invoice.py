@@ -102,7 +102,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         }])
             freq_month, freq_quart = InvoiceFrequency.create([
                     {'frequency': 'monthly'},
-                    {'frequency':'quarterly'},
+                    {'frequency': 'quarterly'},
                     ])
             sequence_code, = SequenceType.create([{
                         'name': 'Product sequence',
@@ -114,11 +114,11 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'company': company.id,
                         }])
             account_kind, = AccountKind.create([{
-                        'name':'Product',
+                        'name': 'Product',
                         'company': company.id,
                         }])
             account, = Account.create([{
-                        'name':'Account for Product',
+                        'name': 'Account for Product',
                         'code': 'Account for Product',
                         'kind': 'revenue',
                         'company': company.id,
@@ -202,7 +202,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         }])
             freq_month, freq_quart, freq_once = InvoiceFrequency.create([
                     {'frequency': 'monthly'},
-                    {'frequency':'quarterly'},
+                    {'frequency': 'quarterly'},
                     {'frequency': 'once_per_contract'},
                     ])
             sequence_code, = SequenceType.create([{
@@ -215,11 +215,11 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'company': company.id,
                         }])
             account_kind, = AccountKind.create([{
-                        'name':'Product',
+                        'name': 'Product',
                         'company': company.id,
                         }])
             account, = Account.create([{
-                        'name':'Account for Product',
+                        'name': 'Account for Product',
                         'code': 'Account for Product',
                         'kind': 'revenue',
                         'company': company.id,
@@ -250,6 +250,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                     ],
                 )
             contract.save()
+            self.assertEqual(contract.start_date, date(2014, 4, 15))
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
                 [])
             self.assertEqual(contract.get_invoice_periods(date(2014, 5, 1)),

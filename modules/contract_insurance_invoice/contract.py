@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from dateutil.rrule import rrule, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
+from sql import Column
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
 
@@ -504,6 +505,10 @@ class _ContractRevisionMixin(object):
         table, _ = tables[None]
         return [Coalesce(table.date, datetime.date.min)]
 
+    @staticmethod
+    def columns():
+        return ['value']
+
     @classmethod
     def get_value(cls, contracts, date, default=None):
         'Return dictionary contract id as key, value for the date'
@@ -511,6 +516,7 @@ class _ContractRevisionMixin(object):
         table = cls.__table__()
         values = dict.fromkeys((c.id for c in contracts), default)
         in_max = cursor.IN_MAX
+        columns = [table.contract] + [Column(table, c) for c in cls.columns()]
         for i in range(0, len(contracts), in_max):
             sub_ids = [c.id for c in contracts[i:i + in_max]]
             where_contract = reduce_ids(table.contract, sub_ids)
@@ -526,8 +532,9 @@ class _ContractRevisionMixin(object):
                     condition=(table.contract == subquery.contract)
                     & (Coalesce(table.date, datetime.date.min) ==
                         Coalesce(subquery.date, datetime.date.min))
-                    ).select(table.contract, table.value))
-            values.update(dict(cursor.fetchall()))
+                    ).select(*columns))
+            values.update(dict((r[0], r[1:] if len(r) > 2 else r[1])
+                    for r in cursor.fetchall()))
         return values
 
 
@@ -569,7 +576,10 @@ class ContractInvoice(ModelSQL, ModelView):
         cls._buttons.update({
                 'reinvoice': {
                     'invisible': Eval('invoice_state') == 'cancel',
-                    }
+                    },
+                'cancel': {
+                    'invisible': Eval('invoice_state') == 'cancel',
+                    },
                 })
 
     def get_invoice_state(self, name):
@@ -621,6 +631,23 @@ class ContractInvoice(ModelSQL, ModelView):
         Contract.invoice_periods(periods)
 
     @classmethod
+    @ModelView.button
+    def cancel(cls, contract_invoices):
+        pool = Pool()
+        Reconciliation = pool.get('account.move.reconciliation')
+        Invoice = pool.get('account.invoice')
+
+        invoices = [c.invoice for c in contract_invoices]
+        reconciliations = []
+        for invoice in invoices:
+            if invoice.move:
+                for line in invoice.move.lines:
+                    if line.reconciliation:
+                        reconciliations.append(line.reconciliation)
+        if reconciliations:
+            Reconciliation.delete(reconciliations)
+        Invoice.cancel(invoices)
+
     def delete(cls, contract_invoices):
         Invoice = Pool().get('account.invoice')
         Invoice.delete([x.invoice for x in contract_invoices])
