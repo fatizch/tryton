@@ -237,7 +237,6 @@ class Contract:
         return frequency.value.get_rrule(start, until)
 
     def get_invoice_periods(self, up_to_date):
-        up_to_date = min(up_to_date, self.end_date or datetime.date.max)
         if self.last_invoice_end:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
@@ -279,7 +278,8 @@ class Contract:
         for contract in contracts:
             if contract.status not in ('active', 'quote'):
                 continue
-            for period in contract.get_invoice_periods(up_to_date):
+            for period in contract.get_invoice_periods(min(up_to_date,
+                        contract.end_date or datetime.date.max)):
                 periods[period].append(contract)
         return cls.invoice_periods(periods)
 

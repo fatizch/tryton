@@ -335,44 +335,17 @@ class Invoice:
     @classmethod
     def post(cls, invoices):
         super(Invoice, cls).post(invoices)
+        cls.calculate_com_invoices(invoices)
 
+    def get_commission_invoices(self, journal):
         pool = Pool()
-        Journal = pool.get('account.journal')
-        CommissionInvoice = pool.get('contract.invoice.commission')
-        journals = Journal.search([
-                ('type', '=', 'expense'),
-                ], limit=1)
-        journal = journals[0] if journals else None
-        com_invoices = defaultdict(list)
-        for invoice in invoices:
-            for com_invoice in invoice.calculate_com_invoices():
-                com_invoice.journal = journal
-                com_invoices[invoice.contract_invoice].append(com_invoice)
-        if not com_invoices:
-            return
-        new_com_invoices = cls.create([i._save_values
-                for j in com_invoices.itervalues()
-                for i in j])
-        for com_invoice, old_invoice in zip(new_com_invoices,
-                [i for j in com_invoices.itervalues() for i in j]):
-            old_invoice.id = com_invoice.id
-        contract_com_invoices = []
-        for contract_invoice, new_invoices in com_invoices.iteritems():
-            for invoice in new_invoices:
-                contract_com_invoices.append(CommissionInvoice(
-                        contract_invoice=contract_invoice.id,
-                        com_invoice=invoice.id))
-        if contract_com_invoices:
-            CommissionInvoice.create([i._save_values
-                    for i in contract_com_invoices])
-
-    def calculate_com_invoices(self):
-        Invoice = Pool().get('account.invoice')
+        Invoice = pool.get('account.invoice')
         if not self.contract_invoice:
             return []
         lines = defaultdict(list)
         for line in self.lines:
-            lines.update(line.build_com_lines())
+            for k, v in line.calculate_com_lines().iteritems():
+                lines[k].extend(v)
         if not lines:
             return []
         com_invoices = []
@@ -386,14 +359,45 @@ class Invoice:
                     account=party.account_payable,
                     payment_term=self.payment_term,
                     lines=com_lines,
+                    journal=journal,
                     ))
         return com_invoices
+
+    @classmethod
+    def calculate_com_invoices(cls, invoices):
+        pool = Pool()
+        Journal = pool.get('account.journal')
+        CommissionInvoice = pool.get('contract.invoice.commission')
+        journals = Journal.search([
+                ('type', '=', 'expense'),
+                ], limit=1)
+        journal = journals[0] if journals else None
+        commission_invoices = defaultdict(list)
+        for invoice in invoices:
+            commission_invoices[invoice.contract_invoice] = \
+                invoice.get_commission_invoices(journal)
+        if not commission_invoices:
+            return
+        new_com_invoices = cls.create([i._save_values
+                for j in commission_invoices.itervalues()
+                for i in j])
+        for com_invoice, old_invoice in zip(new_com_invoices,
+                [i for j in commission_invoices.itervalues() for i in j]):
+            old_invoice.id = com_invoice.id
+        contract_com_invoices = []
+        for contract_invoice, new_invoices in commission_invoices.iteritems():
+            for invoice in new_invoices:
+                contract_com_invoices.append(CommissionInvoice(
+                        contract_invoice=contract_invoice.id,
+                        com_invoice=invoice.id))
+        CommissionInvoice.create([i._save_values
+                for i in contract_com_invoices])
 
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
 
-    def build_com_lines(self):
+    def calculate_com_lines(self):
         if not self.origin:
             return {}
         if not self.origin.__name__ == 'contract.premium':
@@ -455,14 +459,15 @@ class PremiumCommission(model.CoopSQL, model.CoopView):
 
     def new_com_line(self, invoice_line):
         InvoiceLine = Pool().get('account.invoice.line')
-        InvoiceLine(
+        unit_price = invoice_line.invoice.currency.round(self.rate *
+            invoice_line.unit_price)
+        return InvoiceLine(
             type='line',
             description=self.get_description(),
             origin=invoice_line.origin,
             quantity=1,
             unit=None,
-            unit_price=invoice_line.invoice.currency.round(self.rate *
-                invoice_line.unit_price),
+            unit_price=unit_price,
             taxes=[],
             invoice_type='in_invoice',
             account=self.com_option.account_for_billing,
