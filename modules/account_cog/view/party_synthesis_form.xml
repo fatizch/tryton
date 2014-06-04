@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='email']" position="after">
+        <separator string="Account" colspan="6" id="account"/>
+        <label name="receivable"/>
+        <field name="receivable"/>
+        <label name="payable"/>
+        <field name="payable"/>
+        <newline/>
+    </xpath>
+</data>

@@ -1,15 +1,36 @@
 <?xml version="1.0"?>
-<form string="Party" col="6">
-    <label name="gender"/>
-    <field name="gender" widget="selection" xexpand="0"/>
-    <label name="name"/>
-    <field name="name"/>
-    <label name="first_name"/>
-    <field name="first_name"/>
-    <label name="birth_date"/>
-    <field name="birth_date"/>
-    <label name="maiden_name"/>
-    <field name="maiden_name"/>
-    <label name="ssn"/>
-    <field name="ssn"/>
+<form string="Party Synthesis" col="6">
+     <group id="person" colspan="6" col="6"
+            states="{'invisible':Bool(~Eval('is_person'))}">
+        <label name="gender"/>
+        <field name="gender" widget="selection" xexpand="0"/>
+        <label name="name"/>
+        <field name="name"/>
+        <label name="first_name"/>
+        <field name="first_name"/>
+        <label name="birth_date"/>
+        <field name="birth_date"/>
+        <label name="maiden_name"/>
+        <field name="maiden_name"/>
+        <label name="ssn"/>
+        <field name="ssn"/>
+        <label name="lang"/>
+        <field name="lang"/>
+    </group>
+    <group id="company" colspan="6" col="6"
+        states="{'invisible':Bool(~Eval('is_company'))}">
+        <label name="short_name"/>
+        <field name="short_name"/>
+        <label name="name"/>
+        <field name="name"/>
+    </group>
+    <separator string="Contact" colspan="6" id="contact"/>
+    <label name="main_address_rec_name"/>
+    <field name="main_address_rec_name" colspan="5"/>
+    <label name="phone"/>
+    <field name="phone"/>
+    <label name="mobile"/>
+    <field name="mobile"/>
+    <label name="email"/>
+    <field name="email"/>
 </form>
