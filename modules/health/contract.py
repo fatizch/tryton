@@ -1,4 +1,3 @@
-import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or
 
@@ -54,7 +53,6 @@ class CoveredElement:
     @classmethod
     def __setup__(cls):
         super(CoveredElement, cls).__setup__()
-        cls.party = copy.copy(cls.party)
         if not cls.party.context:
             cls.party.context = {}
         cls.party.context['is_health'] = Eval('is_health')

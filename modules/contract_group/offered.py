@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -23,7 +21,6 @@ class Product:
     def __setup__(cls):
         utils.update_domain(
             cls, 'coverages', [('is_group', '=', Eval('is_group'))])
-        cls.coverages = copy.copy(cls.coverages)
         cls.coverages.depends.append('is_group')
         super(Product, cls).__setup__()
 

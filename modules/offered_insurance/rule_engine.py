@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 
 from trytond.pyson import Eval, Or
@@ -78,7 +76,6 @@ class RuleEngine:
     @classmethod
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
-        cls.extra_data_kind = copy.copy(cls.extra_data_kind)
         cls.extra_data_kind.selection.extend([('extra_data', 'Extra Data')])
         cls.extra_data_kind.selection = list(set(
                 cls.extra_data_kind.selection))

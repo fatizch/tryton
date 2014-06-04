@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, And, Bool
 from trytond.modules.cog_utils import fields, model
@@ -67,7 +65,6 @@ class OptionDescription:
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         cls.family.selection.append(('cash_value', 'Cash Value'))
-        cls.coverage_amount_rules = copy.copy(cls.coverage_amount_rules)
         cls.coverage_amount_rules.states['invisible'] = And(
             cls.coverage_amount_rules.states['invisible'],
             Or(Bool(Eval('is_package')), Eval('family') != 'cash_value'))

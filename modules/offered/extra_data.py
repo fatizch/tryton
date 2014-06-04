@@ -74,7 +74,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         cls.name.string = 'Code'
         cls.string.string = 'Name'
 
-        cls.type_ = copy.copy(cls.type_)
         if not cls.type_.on_change:
             cls.type_.on_change = set()
         cls.type_.on_change.add('type_')

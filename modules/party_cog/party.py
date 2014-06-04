@@ -47,7 +47,6 @@ STATES_COMPANY = Bool(Eval('is_company'))
 class Party(export.ExportImportMixin):
     __name__ = 'party.party'
 
-    name = fields.UnaccentChar('Name', required=True, select=True)
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
 
@@ -149,6 +148,7 @@ class Party(export.ExportImportMixin):
             if not getattr(cls, on_change_method, None):
                 setattr(cls, on_change_method, fields.depends(field_name,
                         is_actor_var_name)(get_on_change(is_actor_var_name)))
+        cls.name = fields.UnaccentChar('Name', required=True, select=True)
 
     @staticmethod
     def default_gender():

@@ -90,7 +90,6 @@ class PartyInteraction:
     @classmethod
     def __setup__(cls):
         super(PartyInteraction, cls).__setup__()
-        cls.for_object_ref = copy.copy(cls.for_object_ref)
         cls.for_object_ref.selection.append(('contract', 'Contract'))
 
 

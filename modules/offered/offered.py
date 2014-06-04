@@ -172,29 +172,25 @@ class Offered(model.CoopView, GetResult, Templated):
     @classmethod
     def __setup__(cls):
         super(Offered, cls).__setup__()
-        cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
 
         for field_name in (r for r in dir(cls) if r.endswith('_rules')):
             field = getattr(cls, field_name)
             if not hasattr(field, 'model_name'):
                 continue
-            cur_attr = copy.copy(field)
-            if not hasattr(cur_attr, 'context'):
+            if not hasattr(field, 'context'):
                 continue
-            if cur_attr.context is None:
-                cur_attr.context = {}
-            cur_attr.context['start_date'] = Eval('start_date')
-            cur_attr.context['currency_digits'] = Eval('currency_digits')
-            if cur_attr.depends is None:
-                cur_attr.depends = []
+            if field.context is None:
+                field.context = {}
+            field.context['start_date'] = Eval('start_date')
+            field.context['currency_digits'] = Eval('currency_digits')
+            if field.depends is None:
+                field.depends = []
             utils.extend_inexisting(
-                cur_attr.depends, ['start_date', 'currency_digits'])
-            if cur_attr.states is None:
-                cur_attr.states = {}
-            cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
-
-            setattr(cls, field_name, cur_attr)
+                field.depends, ['start_date', 'currency_digits'])
+            if field.states is None:
+                field.states = {}
+            field.states['readonly'] = ~Bool(Eval('start_date'))
 
     @staticmethod
     def default_start_date():
@@ -349,7 +345,6 @@ class Product(model.CoopSQL, Offered):
             ]
         cls.__rpc__.update({'get_product_def': RPC()})
 
-        cls.kind = copy.copy(cls.kind)
         cls.kind.selection = cls.get_possible_product_kind()
         cls.kind.selection = list(set(cls.kind.selection))
         cls._error_messages.update({
@@ -613,7 +608,6 @@ class OptionDescription(model.CoopSQL, Offered):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
-        cls.kind = copy.copy(cls.kind)
         cls.kind.selection = cls.get_possible_option_description_kind()
         cls.kind.selection = list(set(cls.kind.selection))
 

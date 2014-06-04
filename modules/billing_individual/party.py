@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.modules.cog_utils import fields, export
 
@@ -23,10 +21,8 @@ class Party:
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-        cls.account_payable = copy.copy(cls.account_payable)
         cls.account_payable.domain = export.clean_domain_for_import(
             cls.account_payable.domain, 'company')
-        cls.account_receivable = copy.copy(cls.account_receivable)
         cls.account_receivable.domain = export.clean_domain_for_import(
             cls.account_receivable.domain, 'company')
 

@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
@@ -107,7 +105,6 @@ class BankAccount(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(BankAccount, cls).__setup__()
-        cls.numbers = copy.copy(cls.numbers)
         cls.numbers.required = False
         cls.numbers.states['required'] = If(
             Bool(Eval('context', {}).get('__importing__', '')),

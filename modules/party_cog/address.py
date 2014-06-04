@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.cog_utils import utils
 from trytond.modules.cog_utils import coop_string, fields, export
@@ -24,7 +22,6 @@ class Address(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        cls.city = copy.copy(cls.city)
         if not cls.city.on_change_with:
             cls.city.on_change_with = []
         utils.extend_inexisting(cls.city.on_change_with,
@@ -34,7 +31,6 @@ class Address(export.ExportImportMixin):
         utils.extend_inexisting(cls.city.autocomplete,
             ['zip', 'country'])
 
-        cls.zip = copy.copy(cls.zip)
         if not cls.zip.on_change_with:
             cls.zip.on_change_with = []
         utils.extend_inexisting(cls.zip.on_change_with,
@@ -44,11 +40,9 @@ class Address(export.ExportImportMixin):
         utils.extend_inexisting(cls.zip.autocomplete,
             ['city', 'country'])
 
-        cls.city = copy.copy(cls.city)
         if not cls.city.states:
             cls.city.states = {}
         cls.city.states['invisible'] = True
-        cls.zip = copy.copy(cls.zip)
         if not cls.zip.states:
             cls.zip.states = {}
         cls.zip.states['invisible'] = True

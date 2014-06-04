@@ -1,4 +1,3 @@
-import copy
 import pydot
 import datetime
 
@@ -73,13 +72,10 @@ class ProcessTransition(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(ProcessTransition, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('calculated', 'Calculated'))
-        cls.from_step = copy.copy(cls.from_step)
         cls.from_step.domain.extend([
                 ('main_model', '=', Eval('_parent_on_process', {}).get(
                     'on_model'))])
-        cls.to_step = copy.copy(cls.to_step)
         cls.to_step.domain.extend([
                 ('main_model', '=', Eval('_parent_on_process', {}).get(
                     'on_model'))])
@@ -437,7 +433,6 @@ class Process(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
-        cls.transitions = copy.copy(cls.transitions)
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
         cls.transitions.depends.append('custom_transitions')
 
@@ -608,11 +603,9 @@ class ProcessStepRelation(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(ProcessStepRelation, cls).__setup__()
-        cls.step = copy.copy(cls.step)
         cls.step.domain.extend([
                 ('main_model', '=', Eval('_parent_process', {}).get(
                         'on_model', 0))])
-        cls.process = copy.copy(cls.process)
         cls.process.required = True
 
     @classmethod
@@ -889,7 +882,6 @@ class ProcessStart(model.CoopView):
     @classmethod
     def __setup__(cls):
         super(ProcessStart, cls).__setup__()
-        cls.good_process = copy.copy(cls.good_process)
         cls.good_process.domain = cls.build_process_domain()
         cls.good_process.depends = cls.build_process_depends()
         cls.good_process.on_change_with = set(cls.build_process_depends())
@@ -943,7 +935,6 @@ class ProcessFinder(Wizard):
     @classmethod
     def __setup__(cls):
         super(ProcessFinder, cls).__setup__()
-        cls.process_parameters = copy.copy(cls.process_parameters)
         cls.process_parameters.model_name = cls.get_parameters_model()
         cls.process_parameters.view = cls.get_parameters_view()
         cls._error_messages.update({

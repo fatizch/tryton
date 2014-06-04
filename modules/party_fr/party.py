@@ -1,5 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
 import re
 
 from trytond.pool import PoolMeta
@@ -25,7 +24,6 @@ class Party:
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-        cls.ssn = copy.copy(cls.ssn)
         if cls.ssn.on_change_with is None:
             cls.ssn.on_change_with = set()
         cls.ssn.on_change_with |= set(['ssn_no_key', 'ssn_key'])
@@ -37,7 +35,6 @@ class Party:
                 'invalid_ssn_gender': 'Incompatible gender and SSN',
                 })
         #Do not display SIREN for person
-        cls.siren = copy.copy(cls.siren)
         cls.siren.states = {'invisible': Bool(~Eval('is_company'))}
 
     @classmethod

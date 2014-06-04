@@ -1,7 +1,6 @@
 #-*- coding:utf-8 -*-
 import os
 import subprocess
-import copy
 import StringIO
 import functools
 import shutil
@@ -116,9 +115,7 @@ class DocumentTemplateVersion(Attachment):
     @classmethod
     def __setup__(cls):
         super(DocumentTemplateVersion, cls).__setup__()
-        cls.type = copy.copy(cls.type)
         cls.type.states = {'readonly': True}
-        cls.resource = copy.copy(cls.resource)
         cls.resource.selection = [('document.template', 'Document Template')]
 
     @classmethod
@@ -824,7 +821,6 @@ class DocumentReceiveRequest(model.CoopView):
     @classmethod
     def __setup__(cls):
         super(DocumentReceiveRequest, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
         idx = 0
         cls.kind.selection = [('', '')]
         for k, v in cls.allowed_values().iteritems():

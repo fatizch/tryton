@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Bool
 
@@ -243,7 +241,6 @@ class Process:
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('claim_declaration', 'Claim Declaration'))
         cls.kind.selection.append(('claim_reopening', 'Claim Reopening'))
         cls.kind.selection[:] = list(set(cls.kind.selection))
