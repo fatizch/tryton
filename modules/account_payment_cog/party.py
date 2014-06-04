@@ -81,6 +81,13 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             where=(((table.state == 'processing') | (table.state == 'failed'))
                 & (table.date >= filter_date)))
 
+    @classmethod
+    def menu_order(cls, model):
+        res = super(SynthesisMenu, cls).menu_order(model)
+        if model == 'party.synthesis.menu.payment':
+            res = 29
+        return res
+
 
 class SynthesisMenuOpen(Wizard):
     'Open Party Synthesis Menu'

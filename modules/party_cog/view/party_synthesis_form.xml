@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Party" col="6">
+    <label name="gender"/>
+    <field name="gender" widget="selection" xexpand="0"/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="first_name"/>
+    <field name="first_name"/>
+    <label name="birth_date"/>
+    <field name="birth_date"/>
+    <label name="maiden_name"/>
+    <field name="maiden_name"/>
+    <label name="ssn"/>
+    <field name="ssn"/>
+</form>

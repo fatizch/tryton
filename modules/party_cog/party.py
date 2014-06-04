@@ -8,7 +8,7 @@ except ImportError:
     import json
 
 from sql.aggregate import Max
-from sql import Literal
+from sql import Literal, Cast
 
 from trytond.pyson import Eval, Bool, Less
 from trytond.pool import PoolMeta, Pool
@@ -30,6 +30,8 @@ __all__ = [
     'SynthesisMenu',
     'SynthesisMenuOpen',
     'SynthesisMenuSet',
+    'SynthesisMenuActionCloseSynthesis',
+    'SynthesisMenuRelationship',
     ]
 
 GENDER = [
@@ -98,6 +100,8 @@ class Party(export.ExportImportMixin):
     ####################################
     synthesis = fields.One2Many('party.synthesis.menu', 'party', 'Synthesis',
         readonly=True)
+    synthesis_rec_name = fields.Function(
+        fields.Char('Name'), 'get_synthesis_rec_name')
     ####################################
     #contact information
     phone = fields.Function(fields.Char('Phone'), 'get_contact',
@@ -220,6 +224,21 @@ class Party(export.ExportImportMixin):
             return "%s %s %s" % (coop_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
         return super(Party, self).get_rec_name(name)
+
+    def get_synthesis_rec_name(self, name):
+        if self.is_person:
+            res = "%s %s %s" % (coop_string.translate_value(
+                self, 'gender'), self.name.upper(), self.first_name)
+            if self.ssn:
+                res += ' (%s)' % self.ssn
+            if self.birth_date:
+                res += ' (%s)' % coop_string.date_as_string(self.birth_date)
+        else:
+            res = self.get_rec_name(name)
+        return res
+
+    def get_icon(self, name=None):
+        return 'coopengo-party'
 
     def get_relation_with(self, target, at_date=None):
         if not at_date:
@@ -430,6 +449,30 @@ class Party(export.ExportImportMixin):
             }
 
 
+class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
+    'Party Synthesis Menu Action Close'
+    __name__ = 'party.synthesis.menu.action_close'
+    name = fields.Char('Close Synthesis')
+    party = fields.Many2One('party.party', 'Party')
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        Party = pool.get('party.party')
+        party_table = Party.__table__()
+        PartyActionClose = pool.get(
+            'party.synthesis.menu.action_close')
+        return party_table.select(
+            party_table.id,
+            Max(party_table.create_uid).as_('create_uid'),
+            Max(party_table.create_date).as_('create_date'),
+            Max(party_table.write_uid).as_('write_uid'),
+            Max(party_table.write_date).as_('write_date'),
+            Literal(coop_string.translate_label(PartyActionClose,
+                'name')).as_('name'), party_table.id.as_('party'),
+            group_by=party_table.id)
+
+
 class SynthesisMenuPartyInteraction(model.CoopSQL):
     'Party Synthesis Menu Interaction'
     __name__ = 'party.synthesis.menu.party_interaction'
@@ -450,7 +493,8 @@ class SynthesisMenuPartyInteraction(model.CoopSQL):
             Max(party_interaction.write_uid).as_('write_uid'),
             Max(party_interaction.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PartyInteractionSynthesis,
-                'name')).as_('name'), party_interaction.party,
+                'name')).as_('name'),
+            party_interaction.party,
             group_by=party_interaction.party)
 
 
@@ -512,6 +556,35 @@ class SynthesisMenuContact(model.CoopSQL):
         return 'contact'
 
 
+class SynthesisMenuRelationship(model.CoopSQL):
+    'Party Synthesis Menu Contact'
+    __name__ = 'party.synthesis.menu.relationship'
+    name = fields.Char('Party Relation')
+    party = fields.Many2One('party.party', 'Party')
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        Relation = pool.get('party.relation.all')
+        RelationSynthesis = pool.get('party.synthesis.menu.relationship')
+        party = pool.get('party.party').__table__()
+        relation = Relation.__table__()
+        query_table = party.join(relation, 'LEFT OUTER', condition=(
+            party.id == relation.from_))
+        return query_table.select(
+            party.id,
+            Max(relation.create_uid).as_('create_uid'),
+            Max(relation.create_date).as_('create_date'),
+            Max(relation.write_uid).as_('write_uid'),
+            Max(relation.write_date).as_('write_date'),
+            Literal(coop_string.translate_label(RelationSynthesis, 'name')).
+            as_('name'), party.id.as_('party'),
+            group_by=party.id)
+
+    def get_icon(self, name=None):
+        return 'contact'
+
+
 class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
@@ -526,18 +599,21 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(SynthesisMenu, cls).__setup__()
-        # cls._order.insert(0, ('sequence', 'DESC'))
+        cls._order.insert(0, ('sequence', 'ASC'))
 
     @staticmethod
     def merged_models():
         return [
+            'party.synthesis.menu.action_close',
             'party.party',
-            'party.synthesis.menu.address',
-            'party.address',
             'party.synthesis.menu.contact',
             'party.contact_mechanism',
+            'party.synthesis.menu.address',
+            'party.address',
             'party.synthesis.menu.party_interaction',
             'party.interaction',
+            'party.synthesis.menu.relationship',
+            'party.relation.all',
             ]
 
     @classmethod
@@ -577,9 +653,48 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return merged_field
             elif name == 'name':
                 return Model._fields['title']
+        elif Model.__name__ == 'party.synthesis.menu.relationship':
+            if name == 'parent':
+                return Model._fields['party']
+        elif Model.__name__ == 'party.relation.all':
+            if name == 'parent':
+                merged_field = copy.deepcopy(Model._fields['from_'])
+                merged_field.model_name = \
+                    'party.synthesis.menu.relationship'
+                return merged_field
+            elif name == 'name':
+                return Model._fields['type']
+        elif Model.__name__ == 'party.synthesis.menu.action_close':
+            if name == 'party':
+                return Model._fields['id']
         if name == 'party':
             return
         return merged_field
+
+    @classmethod
+    def menu_order(cls, model):
+        if model == 'party.synthesis.menu.address':
+            return 2
+        elif model == 'party.synthesis.menu.contact':
+            return 1
+        elif model == 'party.synthesis.menu.party_interaction':
+            return 3
+        elif model == 'party.synthesis.menu.relationship':
+            return 4
+        elif model == 'party.synthesis.menu.action_close':
+            return 0
+
+    @classmethod
+    def merged_columns(cls, model):
+        table, columns = super(SynthesisMenu, cls).merged_columns(model)
+        order = cls.menu_order(model)
+        field = cls._fields['sequence']
+        for idx, column in enumerate(columns):
+            if getattr(column, 'output_name', None) == 'sequence':
+                columns.pop(idx)
+        columns.append(Cast(Literal(order or 0), field.sql_type().base).
+            as_('sequence'))
+        return table, columns
 
     @classmethod
     def view_header_get(cls, value, view_type='form'):
@@ -610,8 +725,6 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         instance = self.merged_unshard(self.id)
         if getattr(instance, 'get_icon', None) is not None:
             return instance.get_icon()
-        else:
-            return 'coopengo-party'
 
     def get_rec_name(self, name):
         instance = self.merged_unshard(self.id)
@@ -621,7 +734,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             res = instance.get_rec_name(name)
         else:
             res = self.name
-        if self.childs:
+        if self.childs and self.parent:
             res += ' (%s)' % len(self.childs)
         return res
 
@@ -633,8 +746,26 @@ class SynthesisMenuOpen(Wizard):
     'Open Party Synthesis Menu'
     __name__ = 'party.synthesis.menu.open'
 
-    start_state = 'open'
+    start_state = 'check_reload'
+    check_reload = StateTransition()
     open = StateAction('party_cog.act_menu_open')
+
+    def transition_check_reload(self):
+        pool = Pool()
+        Menu = pool.get('party.synthesis.menu')
+        User = pool.get('res.user')
+        context = Transaction().context
+        record = Menu.merged_unshard(context['active_id'])
+        if record.__name__ == 'party.synthesis.menu.action_close':
+            user = Transaction().user
+            user = User(user)
+            if user.party_synthesis:
+                user.party_synthesis = None
+            elif user.party_synthesis_previous:
+                user.party_synthesis_previous = None
+            user.save()
+            return 'end'
+        return 'open'
 
     def do_open(self, action):
         pool = Pool()
@@ -642,10 +773,14 @@ class SynthesisMenuOpen(Wizard):
         context = Transaction().context
         record = Menu.merged_unshard(context['active_id'])
         action.update(self.get_action(record))
-        return action, {}
+        parameters = self.get_action_parameters(record)
+        return action, parameters
 
     def get_action(self, record):
         Model = record.__class__
+        pool = Pool()
+        ModelData = pool.get('ir.model.data')
+        Action = pool.get('ir.action')
         actions = {
             'res_model': Model.__name__,
             'views': [(None, 'form'), (None, 'tree')],
@@ -665,22 +800,48 @@ class SynthesisMenuOpen(Wizard):
             actions['pyson_domain'] = PYSONEncoder().encode(
                 [('party', '=', record.id)])
             actions['views'] = list(reversed(actions['views']))
+        elif Model.__name__ == 'party.synthesis.menu.relationship':
+            actions['res_model'] = 'party.relation.all'
+            actions['pyson_domain'] = PYSONEncoder().encode(
+                [('from_', '=', record.id)])
+            actions['views'] = list(reversed(actions['views']))
+        elif Model.__name__ == 'party.relation.all':
+            action_id = Action.get_action_id(
+                ModelData.get_id('party_cog', 'wizard_set'))
+            action = Action(action_id)
+            actions = Action.get_action_values(action.type, [action.id])[0]
         elif Model.__name__ == 'party.party':
             actions['views'] = [(Pool().get('ir.ui.view').search([
                     ('xml_id', '=',
-                        'party_cog.party_view_form')])[0].id,
+                        'party_cog.party_view_synthesis_form')])[0].id,
                             'form')]
             actions['res_id'] = record.id
         else:
             actions['res_id'] = record.id
         return actions
 
+    def get_action_parameters(self, record):
+        Model = record.__class__
+        if Model.__name__ != 'party.relation.all':
+            return {}
+        return {'ids': [record.to.id]}
+
+    def end(self):
+        pool = Pool()
+        User = pool.get('res.user')
+        user = Transaction().user
+        user = User(user)
+        if not user.party_synthesis_previous:
+            return 'reload menu'
+
 
 class SynthesisMenuSet(Wizard):
     'Set Party Synthesis Menu'
     __name__ = 'party.synthesis.menu.set'
+
     start_state = 'set'
     set = StateTransition()
+    open = StateAction('party_cog.act_menu_open')
 
     def transition_set(self):
         pool = Pool()
@@ -695,7 +856,18 @@ class SynthesisMenuSet(Wizard):
             user.party_synthesis = json.dumps(ids)
             user.party_synthesis_previous = user.party_synthesis
             user.save()
-        return 'end'
+        return 'open'
+
+    def do_open(self, action):
+        pool = Pool()
+        id = Transaction().context['active_ids'][0]
+        action.update({
+            'res_model': 'party.party',
+            'views': [(pool.get('ir.ui.view').search([('xml_id', '=',
+                    'party_cog.party_view_synthesis_form')])[0].id, 'form')],
+            'res_id': id
+            })
+        return action, {}
 
     def end(self):
         return 'reload menu'

@@ -15,6 +15,7 @@ __all__ = [
     'Bank',
     'BankAccount',
     'BankAccountNumber',
+    'BankAccountParty',
     ]
 
 
@@ -173,6 +174,10 @@ class BankAccount(export.ExportImportMixin):
         elif self.numbers:
             return self.numbers[-1].number
 
+    def get_synthesis_rec_name(self, name):
+        return '%s : %s' % (self.numbers[0].type,
+            self.numbers[0].number)
+
 
 class BankAccountNumber(export.ExportImportMixin):
     __name__ = 'bank.account.number'
@@ -200,3 +205,15 @@ class BankAccountNumber(export.ExportImportMixin):
     @classmethod
     def get_var_names_for_light_extract(cls):
         return ['number']
+
+
+class BankAccountParty:
+    'Bank Account - Party'
+    __name__ = 'bank.account-party.party'
+
+    def get_synthesis_rec_name(self, name):
+        if self.account:
+            return self.account.get_synthesis_rec_name(name)
+
+    def get_icon(self, name=None):
+        return 'coopengo-bank_account'

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="reconciliation_icon">
+            <field name="name">coopengo-reconciliation</field>
+            <field name="path">icons/coopengo-reconciliation.svg</field>
+        </record>
+    </data>
+</tryton>

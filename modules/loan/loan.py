@@ -1,16 +1,12 @@
-import copy
-
 from decimal import Decimal
 from sql.aggregate import Max
-from sql import Literal
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, And, Or, Bool, Len, If, PYSONEncoder
-from trytond.wizard import Wizard
+from trytond.pyson import Eval, And, Or, Bool, Len, If
 
 from trytond.modules.cog_utils import utils, coop_date, fields, model
-from trytond.modules.cog_utils import coop_string, MergedMixin
+from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 
 __all__ = [
@@ -18,9 +14,6 @@ __all__ = [
     'LoanIncrement',
     'LoanPayment',
     'LoanParty',
-    'SynthesisMenuLoan',
-    'SynthesisMenu',
-    'SynthesisMenuOpen',
     ]
 
 LOAN_KIND = [
@@ -649,85 +642,3 @@ class LoanParty(model.CoopSQL):
     def get_synthesis_rec_name(self, name):
         if self.loan:
             return self.loan.get_rec_name(name)
-
-
-class SynthesisMenuLoan(model.CoopSQL):
-    'Party Synthesis Menu Loan'
-    __name__ = 'party.synthesis.menu.loan'
-    name = fields.Char('Loans')
-    party = fields.Many2One('party.party', 'Party')
-
-    @staticmethod
-    def table_query():
-        pool = Pool()
-        LoanSynthesis = pool.get('party.synthesis.menu.loan')
-        party = pool.get('party.party').__table__()
-        loan_party = pool.get('loan-party').__table__()
-        query_table = party.join(loan_party, 'LEFT OUTER',
-            condition=(party.id == loan_party.party))
-        return query_table.select(
-            party.id,
-            Max(loan_party.create_uid).as_('create_uid'),
-            Max(loan_party.create_date).as_('create_date'),
-            Max(loan_party.write_uid).as_('write_uid'),
-            Max(loan_party.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(LoanSynthesis, 'name')).
-            as_('name'), party.id.as_('party'),
-            group_by=party.id)
-
-    def get_icon(self, name=None):
-        return 'loan-interest'
-
-
-class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
-    'Party Synthesis Menu'
-    __name__ = 'party.synthesis.menu'
-
-    @classmethod
-    def merged_models(cls):
-        res = super(SynthesisMenu, cls).merged_models()
-        res.extend([
-            'party.synthesis.menu.loan',
-            'loan-party',
-            ])
-        return res
-
-    @classmethod
-    def merged_field(cls, name, Model):
-        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
-        if Model.__name__ == 'party.synthesis.menu.loan':
-            if name == 'parent':
-                return Model._fields['party']
-        elif Model.__name__ == 'loan-party':
-            if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['party'])
-                merged_field.model_name = 'party.synthesis.menu.loan'
-                return merged_field
-            elif name == 'name':
-                return Model._fields['loan']
-        return merged_field
-
-
-class SynthesisMenuOpen(Wizard):
-    'Open Party Synthesis Menu'
-    __name__ = 'party.synthesis.menu.open'
-
-    def get_action(self, record):
-        Model = record.__class__
-        if (Model.__name__ != 'party.synthesis.menu.loan' and
-                Model.__name__ != 'loan-party'):
-            return super(SynthesisMenuOpen, self).get_action(record)
-        if Model.__name__ == 'party.synthesis.menu.loan':
-            domain = PYSONEncoder().encode([('parties', '=', record.id)])
-            actions = {
-                'res_model': 'loan',
-                'pyson_domain': domain,
-                'views': [(None, 'tree'), (None, 'form')]
-            }
-        elif Model.__name__ == 'loan-party':
-            actions = {
-                'res_model': 'loan',
-                'views': [(None, 'form')],
-                'res_id': record.loan.id
-            }
-        return actions
