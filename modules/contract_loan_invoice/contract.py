@@ -49,15 +49,14 @@ class Premium:
         cls._order.insert(0, ('loan', 'ASC'))
 
     def get_rec_name(self, name):
-        result = super(Premium, self).get_rec_name(name)
+        rec_name = super(Premium, self).get_rec_name(name)
         if not self.loan:
-            return result
-        return '[%s] %s' % (self.loan.number, result)
+            return rec_name
+        return '[%s] %s' % (self.loan.number, rec_name)
 
     def same_value(self, other):
-        if not super(Premium, self).same_value(other):
-            return False
-        return self.loan == other.loan
+        return super(Premium, self).same_value(other) and (
+            self.loan == other.loan)
 
     @classmethod
     def new_line(cls, line, start_date, end_date):
@@ -70,10 +69,10 @@ class Premium:
         return result
 
     def get_description(self):
-        result = super(Premium, self).get_description()
+        description = super(Premium, self).get_description()
         if not self.loan:
-            return result
-        return '[%s] %s' % (self.loan.number, result)
+            return description
+        return '[%s] %s' % (self.loan.number, description)
 
 
 class Contract:
@@ -149,12 +148,12 @@ class Contract:
             per_offered_entity[parent][elem['loan']] = elem['sum']
 
         def result_parser(kind, value=None, model_name='', loan_id=None):
-            # kind must be one of 'offered' or 'contract'
-            if kind not in ('offered', 'contract'):
-                raise KeyError('First parameter must be one of offered /'
-                    'contract')
+            # Returns a function that can be used to browse the queries results
+            # and aggregating them. It is possible to aggregate per model_name,
+            # per a specific parent (eg. per covered_element), or per offered
+            # entity (eg. offered coverage)
+            assert kind in ('offered', 'contract')
             values = {}
-            print kind, value, model_name, loan_id
             if kind == 'offered':
                 values = per_offered_entity
             elif kind == 'contract':
@@ -168,7 +167,6 @@ class Contract:
                 result = sum([result_parser(kind, value=k, loan_id=loan_id)
                         for k, v in values.iteritems()
                         if k.__name__ == model_name])
-                print result
                 return result
             return values
 

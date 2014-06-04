@@ -447,11 +447,9 @@ class DisplayContractPremium:
     __name__ = 'contract.premium.display'
 
     @classmethod
-    def get_default_line_model(cls, **kwargs):
-        result = super(DisplayContractPremium, cls).get_default_line_model(
-            **kwargs)
-        if not 'line' in kwargs or not kwargs['line'].loan:
-            return result
-        result['name'] = '[%s] %s' % (kwargs['line'].loan.number,
-            result['name'])
-        return result
+    def new_line(cls, line=None):
+        new_line = super(DisplayContractPremium, cls).new_line(line)
+        if not line or not line.loan:
+            return new_line
+        new_line['name'] = '[%s] %s' % (line.loan.number, new_line['name'])
+        return new_line

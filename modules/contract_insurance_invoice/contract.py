@@ -479,15 +479,13 @@ class Contract:
             elem.premiums = tuple(Premium.search([
                         (elem._fields['premiums'].field, '=', elem)]))
 
-    def get_premium_list(self, values=None):
-        if values is None:
-            values = []
-        values.extend(self.premiums)
+    def get_premium_list(self):
+        result = list(self.premiums)
         for option in self.options:
-            option.get_premium_list(values)
+            result.extend(option.get_premium_list())
         for covered_element in self.covered_elements:
-            covered_element.get_premium_list(values)
-        return values
+            result.extend(covered_element.get_premium_list())
+        return result
 
     def remove_premium_duplicates(self):
         Pool().get('contract.premium').remove_duplicates(
@@ -658,10 +656,11 @@ class CoveredElement:
             lines.extend(option.get_invoice_lines(start, end))
         return lines
 
-    def get_premium_list(self, values):
-        values.extend(self.premiums)
+    def get_premium_list(self):
+        result = list(self.premiums)
         for option in self.options:
-            option.get_premium_list(values)
+            result.extend(option.get_premium_list())
+        return result
 
 
 class ContractOption:
@@ -679,10 +678,11 @@ class ContractOption:
                 lines.extend(extra_premium.get_invoice_lines(start, end))
         return lines
 
-    def get_premium_list(self, values):
-        values.extend(self.premiums)
+    def get_premium_list(self):
+        result = list(self.premiums)
         for extra_premium in self.extra_premiums:
-            extra_premium.get_premium_list(values)
+            result.extend(extra_premium.get_premium_list())
+        return result
 
 
 class ExtraPremium:
@@ -698,8 +698,8 @@ class ExtraPremium:
                 lines.extend(premium.get_invoice_lines(start, end))
         return lines
 
-    def get_premium_list(self, values):
-        values.extend(self.premiums)
+    def get_premium_list(self):
+        return list(self.premiums)
 
 
 class Premium(ModelSQL, ModelView):
@@ -1007,19 +1007,13 @@ class DisplayContractPremium(Wizard):
             }
 
     @classmethod
-    def get_default_line_model(cls, name='', amount=0, childs=None,
-            premium=None, premiums=None, line=None):
-        if line:
-            name = '%s - %s' % (line.start, line.end or '')
-            premium = line.id
-            premiums = [line.id]
-            amount = line.amount
+    def new_line(cls, line=None):
         return {
-            'name': name,
-            'amount': amount,
-            'childs': childs or [],
-            'premium': premium,
-            'premiums': premiums or [],
+            'name': '%s - %s' % (line.start, line.end or '') if line else '',
+            'premium': line.id if line else 0,
+            'premiums': [line.id] if line else [],
+            'amount': line.amount if line else 0,
+            'childs': [],
             }
 
     def add_lines(self, source, parent):
@@ -1028,14 +1022,16 @@ class DisplayContractPremium(Wizard):
             if not values:
                 continue
             for elem in values:
-                base_line = self.get_default_line_model(name=elem.rec_name)
+                base_line = self.new_line()
+                base_line['name'] = elem.rec_name
                 self.add_lines(elem, base_line)
                 parent['childs'].append(base_line)
                 parent['amount'] += base_line['amount']
         if source.premiums:
-            premium_root = self.get_default_line_model(name='Premium')
+            premium_root = self.new_line()
+            premium_root['name'] = 'Premium'
             for elem in source.premiums:
-                premium_line = self.get_default_line_model(line=elem)
+                premium_line = self.new_line(line=elem)
                 if elem.start <= utils.today() <= (
                         elem.end or datetime.date.max):
                     premium_root['amount'] += elem.amount
@@ -1052,7 +1048,8 @@ class DisplayContractPremium(Wizard):
             self.raise_user_error('no_contract_found')
         lines = []
         for contract in contracts:
-            contract_line = self.get_default_line_model(name=contract.rec_name)
+            contract_line = self.new_line()
+            contract_line['name'] = contract.rec_name
             self.add_lines(contract, contract_line)
             lines.append(contract_line)
         return {'premiums': lines}

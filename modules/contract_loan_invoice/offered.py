@@ -92,6 +92,8 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
                 option = k.option
             for share in option.loan_shares:
                 if share.loan == loan:
+                    if share.share == 0:
+                        break
                     loan_amount += v[loan.id] / share.share
                     break
         biggest = max([x.amount for x in contract.used_loans]) == loan.amount
