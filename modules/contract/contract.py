@@ -69,7 +69,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     _history = True
 
     activation_history = fields.One2Many('contract.activation_history',
-        'contract', 'Activation History', order=[('start_date', 'ASC')])
+        'contract', 'Activation History', order=[('start_date', 'ASC')],
+        states=_STATES, depends=_DEPENDS)
     addresses = fields.One2Many('contract.address', 'contract',
         'Addresses', context={
             'policy_owner': Eval('current_policy_owner'),
