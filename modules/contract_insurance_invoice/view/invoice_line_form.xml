@@ -1,27 +1,13 @@
 <?xml version="1.0"?>
-<form string="Invoice Line">
-    <label name="invoice"/>
-    <field name="invoice" colspan="3"/>
-    <notebook>
-        <page string="General" id="general">
-            <label name="account"/>
-            <field name="account"/>
-            <label name="amount"/>
-            <group id="amount">
-                <field name="amount" xexpand="0"/>
-                <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
-            </group>
-            <newline/>
-            <label name="origin"/>
-            <field name="origin"/>
-            <field name="description" colspan="4"/>
-            <field name="taxes" colspan="4"/>
-        </page>
-        <page string="Notes" id="notes">
-            <separator name="note" colspan="4"/>
-            <field name="note" colspan="4" spell="If(Bool(Eval('_parent_invoice')), Get(Eval('_parent_invoice', {}), 'party_lang'), Eval('party_lang'))"/>
-        </page>
-    </notebook>
-    <newline/>
-    <field name="party_lang" invisible="1" colspan="4"/>
-</form>
+<data>
+    <xpath expr="/form/notebook/page[@id='general']/label[@name='product']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/field[@name='product']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/label[@name='sequence']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/field[@name='sequence']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/label[@name='quantity']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/field[@name='quantity']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/label[@name='unit']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/field[@name='unit']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/label[@name='unit_price']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='general']/field[@name='unit_price']" position="replace"/>
+</data>
