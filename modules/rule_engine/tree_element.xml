@@ -55,6 +55,17 @@
       <field name="long_description">Retourne la date du jour</field>
       <field name="parent" ref="dossier_outils"/>
     </record>
+      <record model="rule_engine.function" id="convertir_frequence">
+      <field name="translated_technical_name">convertir_frequence</field>
+      <field name="description">Convertir Fréquence</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_convert_frequency</field>
+      <field name="long_description">Retourne un coefficient pour convertir une fréquence en une autre</field>
+      <field name="fct_args">de_frequence, a_frequence</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
     <record model="rule_engine.function" id="ajouter_erreur">
       <field name="translated_technical_name">ajouter_erreur</field>
       <field name="description">Ajouter Erreur</field>
