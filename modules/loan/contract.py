@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import datetime
-
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields, model, coop_string
 
@@ -107,12 +105,8 @@ class ContractOption:
 
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
         states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
-            ('loan.parties', 'in', Eval('parties', [])),
-            ('start_date', '>=', Eval('start_date', datetime.date.min)),
-            If(Bool(Eval('end_date', None)),
-                [('end_date', '<=', Eval('end_date'))],
-                [])],
-        depends=['coverage_family', 'parties', 'start_date', 'end_date'])
+            ('loan.parties', 'in', Eval('parties', []))],
+        depends=['coverage_family', 'parties'])
     multi_mixed_view = loan_shares
 
     @fields.depends('coverage', 'loan_shares')
@@ -202,7 +196,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
     __name__ = 'loan.share'
 
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
-    start_date = fields.Date('Start Date', required=True)
+    start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True)
     share = fields.Numeric('Loan Share', digits=(16, 4))
@@ -219,10 +213,6 @@ class LoanShare(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_share():
         return 1
-
-    @classmethod
-    def default_start_date(cls):
-        return Transaction().context.get('start_date', utils.today())
 
     @fields.depends('loan')
     def on_change_loan(self):
