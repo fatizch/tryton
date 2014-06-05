@@ -225,9 +225,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         values = dict([(id, value) for id, value in cursor.fetchall()])
         if CONFIG['db_type'] == 'sqlite':
             def convert(value):
-                if value is None:
-                    return value
-                else:
+                if value is not None:
                     return datetime.date(*map(int, value.split('-')))
             values = {i: convert(v) for i, v in values.iteritems()}
         return values
