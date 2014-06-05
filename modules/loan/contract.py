@@ -6,6 +6,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool
 
 from trytond.modules.cog_utils import utils, fields, model, coop_string
+from trytond.modules.cog_utils import coop_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -98,7 +99,7 @@ class Contract:
                 for share in option.loan_shares])
         if not loans:
             return
-        end_date = max([x.end_date for x in loans])
+        end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
         self.set_end_date(end_date)
 
 
