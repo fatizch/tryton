@@ -344,7 +344,7 @@ class Invoice:
             return []
         lines = defaultdict(list)
         for line in self.lines:
-            for k, v in line.calculate_com_lines().iteritems():
+            for k, v in line.calculate_com_lines(self.currency).iteritems():
                 lines[k].extend(v)
         if not lines:
             return []
@@ -397,7 +397,7 @@ class Invoice:
 class InvoiceLine:
     __name__ = 'account.invoice.line'
 
-    def calculate_com_lines(self):
+    def calculate_com_lines(self, com_currency):
         if not self.origin:
             return {}
         if not self.origin.__name__ == 'contract.premium':
@@ -406,7 +406,8 @@ class InvoiceLine:
             return {}
         lines = defaultdict(list)
         for com_line in self.origin.commissions:
-            lines[com_line.party].append(com_line.new_com_line(self))
+            lines[com_line.party].append(com_line.new_com_line(self,
+                    com_currency))
         return lines
 
 
@@ -457,10 +458,9 @@ class PremiumCommission(model.CoopSQL, model.CoopView):
             self.party.name,
             self.rate * 100)
 
-    def new_com_line(self, invoice_line):
+    def new_com_line(self, invoice_line, com_currency):
         InvoiceLine = Pool().get('account.invoice.line')
-        unit_price = invoice_line.invoice.currency.round(self.rate *
-            invoice_line.unit_price)
+        unit_price = com_currency.round(self.rate * invoice_line.unit_price)
         return InvoiceLine(
             type='line',
             description=self.get_description(),
@@ -473,4 +473,5 @@ class PremiumCommission(model.CoopSQL, model.CoopView):
             account=self.com_option.account_for_billing,
             coverage_start=invoice_line.coverage_start,
             coverage_end=invoice_line.coverage_end,
+            currency=com_currency,
             )
