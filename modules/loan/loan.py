@@ -36,6 +36,7 @@ class Loan(model.CoopSQL, model.CoopView):
     'Loan'
 
     __name__ = 'loan'
+    _rec_name = 'number'
 
     number = fields.Char('Number', required=True, readonly=True, select=True)
     company = fields.Many2One('company.company', 'Company', required=True,
