@@ -317,15 +317,8 @@ class Loan(model.CoopSQL, model.CoopView):
     def calculate_amortization_table(self):
         Payment = Pool().get('loan.payment')
         if getattr(self, 'payments', None):
-            Payment.delete(
-                [x for x in self.payments
-                    if x.kind in['scheduled', 'releasing_funds'] and x.id])
-        else:
-            self.payments = []
-        self.payments = list(self.payments)
-        self.payments[:] = [x for x in self.payments
-            if x.kind != 'scheduled']
-        self.payments += self.calculate_payments()
+            Payment.delete([x for x in self.payments if x.id])
+        self.payments = self.calculate_payments()
 
     @classmethod
     @model.CoopView.button
