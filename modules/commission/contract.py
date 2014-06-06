@@ -70,7 +70,7 @@ class Contract:
             return base_instance
         elif base_instance.__name__ == 'loan.share':
             return base_instance.option
-        elif base_instance.__name__ == 'contract.extra_premium':
+        elif base_instance.__name__ == 'contract.option.extra_premium':
             return base_instance.option
         return None
 
