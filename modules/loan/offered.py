@@ -12,7 +12,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Product',
     'OptionDescription',
-    'PremiumRule',
     ]
 
 
@@ -87,15 +86,8 @@ class OptionDescription:
                 except offered.NonExistingRuleKindException:
                     sub_elem_lines = []
                     sub_elem_errs = []
+                for line in sub_elem_lines:
+                    line['loan'] = share.loan
                 errs += sub_elem_errs
                 lines += sub_elem_lines
         return lines
-
-
-class PremiumRule:
-    __name__ = 'billing.premium.rule'
-
-    def get_lowest_level_instance(self, args):
-        if 'share' not in args:
-            return super(PremiumRule, self).get_lowest_level_instance(args)
-        return args['share']

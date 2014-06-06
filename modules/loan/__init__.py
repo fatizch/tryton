@@ -16,7 +16,6 @@ def register():
     Pool.register(
         Product,
         OptionDescription,
-        PremiumRule,
         RuleEngineRuntime,
         Loan,
         LoanIncrement,

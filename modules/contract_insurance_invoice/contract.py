@@ -52,8 +52,7 @@ PREMIUM_FREQUENCIES = FREQUENCIES + [
 class Contract:
     __name__ = 'contract'
     invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices')
-    premiums = fields.One2Many('contract.premium', 'contract',
-        'Premiums', order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+    premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
     payment_terms = fields.One2Many('contract.payment_term', 'contract',
         'Payment Terms')
     direct_debit = fields.Boolean('Direct Debit Payment')
@@ -428,7 +427,7 @@ class Contract:
         new_premium = Premium.new_line(price, start_date, end_date)
         if new_premium:
             parent = new_premium.get_parent()
-            if not end_date:
+            if not end_date and not getattr(new_premium, 'end', None):
                 new_premium.end = getattr(parent, 'end_date', None)
             if isinstance(parent.premiums, tuple):
                 parent.premiums = list(parent.premiums)
@@ -480,15 +479,13 @@ class Contract:
             elem.premiums = tuple(Premium.search([
                         (elem._fields['premiums'].field, '=', elem)]))
 
-    def get_premium_list(self, values=None):
-        if values is None:
-            values = []
-        values.extend(self.premiums)
+    def get_premium_list(self):
+        result = list(self.premiums)
         for option in self.options:
-            option.get_premium_list(values)
+            result.extend(option.get_premium_list())
         for covered_element in self.covered_elements:
-            covered_element.get_premium_list(values)
-        return values
+            result.extend(covered_element.get_premium_list())
+        return result
 
     def remove_premium_duplicates(self):
         Pool().get('contract.premium').remove_duplicates(
@@ -649,7 +646,7 @@ class CoveredElement:
     __name__ = 'contract.covered_element'
 
     premiums = fields.One2Many('contract.premium', 'covered_element',
-        'Premiums', order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+        'Premiums')
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -659,17 +656,17 @@ class CoveredElement:
             lines.extend(option.get_invoice_lines(start, end))
         return lines
 
-    def get_premium_list(self, values):
-        values.extend(self.premiums)
+    def get_premium_list(self):
+        result = list(self.premiums)
         for option in self.options:
-            option.get_premium_list(values)
+            result.extend(option.get_premium_list())
+        return result
 
 
 class ContractOption:
     __name__ = 'contract.option'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
-        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -681,15 +678,17 @@ class ContractOption:
                 lines.extend(extra_premium.get_invoice_lines(start, end))
         return lines
 
-    def get_premium_list(self, values):
-        values.extend(self.premiums)
+    def get_premium_list(self):
+        result = list(self.premiums)
+        for extra_premium in self.extra_premiums:
+            result.extend(extra_premium.get_premium_list())
+        return result
 
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
-        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
+    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
 
     def get_invoice_lines(self, start, end):
         lines = []
@@ -698,6 +697,9 @@ class ExtraPremium:
             for premium in self.premiums:
                 lines.extend(premium.get_invoice_lines(start, end))
         return lines
+
+    def get_premium_list(self):
+        return list(self.premiums)
 
 
 class Premium(ModelSQL, ModelView):
@@ -740,7 +742,7 @@ class Premium(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(Premium, cls).__setup__()
-        cls._order = [('start', 'ASC')]
+        cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
 
     @classmethod
     def _get_rated_entities(cls):
@@ -884,22 +886,22 @@ class Premium(ModelSQL, ModelView):
             return None
         new_instance = cls()
         new_instance.set_parent_from_line(line)
-        if not new_instance.get_parent():
+        parent = new_instance.get_parent()
+        if not parent:
             # TODO : Should raise an error
             return None
         new_instance.rated_entity = line['rated_entity']
         # TODO : use the line account once it is implemented
         new_instance.account = new_instance.rated_entity.account_for_billing
         new_instance.start = start_date
-        new_instance.end = end_date
+        if getattr(parent, 'end_date', None) and (not end_date
+                or parent.end_date < end_date):
+            new_instance.end = parent.end_date
+        else:
+            new_instance.end = end_date
         new_instance.amount = line['amount']
         if line['taxes']:
             new_instance.taxes = line['taxes']
-        # TODO : get from line once properly set
-        # Fee = Pool().get('account.fee.description')
-        # if isinstance(new_instance.rated_entity, Fee):
-        #     new_instance.frequency = 'once_per_contract'
-        # else:
         new_instance.frequency = line['frequency']
         return new_instance
 
@@ -1005,39 +1007,37 @@ class DisplayContractPremium(Wizard):
             }
 
     @classmethod
-    def get_default_line_model(cls, **kwargs):
-        result = {
-            'amount': 0,
+    def new_line(cls, line=None):
+        return {
+            'name': '%s - %s' % (line.start, line.end or '') if line else '',
+            'premium': line.id if line else 0,
+            'premiums': [line.id] if line else [],
+            'amount': line.amount if line else 0,
             'childs': [],
-            'premium': None,
-            'premiums': [],
-            'name': '',
             }
-        result.update(kwargs)
-        return result
 
     def add_lines(self, source, parent):
+        for field_name in self.get_children_fields().get(source.__name__, ()):
+            values = getattr(source, field_name, None)
+            if not values:
+                continue
+            for elem in values:
+                base_line = self.new_line()
+                base_line['name'] = elem.rec_name
+                self.add_lines(elem, base_line)
+                parent['childs'].append(base_line)
+                parent['amount'] += base_line['amount']
         if source.premiums:
-            premium_root = self.get_default_line_model(name='Premium')
+            premium_root = self.new_line()
+            premium_root['name'] = 'Premium'
             for elem in source.premiums:
-                premium_line = self.get_default_line_model(amount=elem.amount,
-                    premium=elem.id, premiums=[elem.id], name='%s - %s' % (
-                        elem.start, elem.end or ''))
+                premium_line = self.new_line(line=elem)
                 if elem.start <= utils.today() <= (
                         elem.end or datetime.date.max):
                     premium_root['amount'] += elem.amount
                 premium_root['childs'].append(premium_line)
             parent['childs'].append(premium_root)
             parent['amount'] += premium_root['amount']
-        for field_name in self.get_children_fields().get(source.__name__, ()):
-            values = getattr(source, field_name, None)
-            if not values:
-                continue
-            for elem in values:
-                base_line = self.get_default_line_model(name=elem.rec_name)
-                self.add_lines(elem, base_line)
-                parent['childs'].append(base_line)
-                parent['amount'] += base_line['amount']
         return parent
 
     def default_display(self, name):
@@ -1048,7 +1048,8 @@ class DisplayContractPremium(Wizard):
             self.raise_user_error('no_contract_found')
         lines = []
         for contract in contracts:
-            contract_line = self.get_default_line_model(name=contract.rec_name)
+            contract_line = self.new_line()
+            contract_line['name'] = contract.rec_name
             self.add_lines(contract, contract_line)
             lines.append(contract_line)
         return {'premiums': lines}
