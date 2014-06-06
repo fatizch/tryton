@@ -1,5 +1,7 @@
 import datetime
 from dateutil.relativedelta import relativedelta
+from trytond.pool import Pool
+from trytond.transaction import Transaction
 
 
 __all__ = [
@@ -208,3 +210,9 @@ def get_next_date_in_sync_with(date, day):
     if res < date:
         res = add_month(res, 1)
     return res
+
+def format_date(date):
+    Language = Pool().get('ir.lang')
+    lang, = Language.search(
+        [('code', '=', Transaction().context.get('language'))])
+    return Language.strftime(date, lang.code, lang.date)

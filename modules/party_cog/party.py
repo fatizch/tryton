@@ -18,7 +18,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition
 from trytond.pyson import PYSONEncoder
 from trytond.modules.cog_utils import utils, fields, model, export
-from trytond.modules.cog_utils import coop_string, MergedMixin
+from trytond.modules.cog_utils import coop_string, MergedMixin, coop_date
 
 
 __metaclass__ = PoolMeta
@@ -113,6 +113,9 @@ class Party(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
+        cls._error_messages.update({
+                'duplicate_party': ('Duplicate(s) already exist(s) : \n%s'),
+                })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
         cls._buttons.update({
                 'open_addresses': {
@@ -149,6 +152,46 @@ class Party(export.ExportImportMixin):
                 setattr(cls, on_change_method, fields.depends(field_name,
                         is_actor_var_name)(get_on_change(is_actor_var_name)))
         cls.name = fields.UnaccentChar('Name', required=True, select=True)
+
+    @classmethod
+    def validate(cls, parties):
+        super(Party, cls).validate(parties)
+        domain = ['OR']
+        for party in parties:
+            if (getattr(party, 'first_name', None)
+                    and getattr(party, 'birth_date', None)):
+                domain.append([
+                        ('id', '!=', party.id),
+                        ('name', '=', party.name),
+                        ('first_name', '=', party.first_name),
+                        ('birth_date', '=', party.birth_date),
+                        ])
+            elif getattr(party, 'short_name', None):
+                domain.append([
+                        ('id', '!=', party.id),
+                        ('name', '=', party.name),
+                        ('short_name', '=', party.short_name),
+                        ])
+        parties = cls.search(domain)
+        message = ''
+        for party in parties:
+            if party.is_person:
+                message += '%s %s %s \n' % (party.name, party.first_name,
+                    coop_date.format_date(party.birth_date))
+            elif party.is_company:
+                message += '%s %s\n' % (party.name, party.short_name)
+        if message:
+            cls.raise_user_warning(message, 'duplicate_party', message)
+
+
+    @classmethod
+    def copy(cls, parties, default=None):
+        if default is None:
+            default = {}
+        else:
+            default = default.copy()
+        default.setdefault('synthesis', None)
+        return super(Party, cls).copy(parties, default=default)
 
     @staticmethod
     def default_gender():

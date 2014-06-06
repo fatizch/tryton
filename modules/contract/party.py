@@ -49,6 +49,16 @@ class Party:
                 })
 
     @classmethod
+    def copy(cls, parties, default=None):
+        if default is None:
+            default = {}
+        else:
+            default = default.copy()
+        default.setdefault('contracts', None)
+        default.setdefault('quotes', None)
+        return super(Party, cls).copy(parties, default=default)
+
+    @classmethod
     def _export_skips(cls):
         result = super(Party, cls)._export_skips()
         result.add('quotes')
