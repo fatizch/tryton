@@ -313,7 +313,7 @@ class Contract:
         new_invoices = Invoice.create([i._save_values
                  for contract_invoices in invoices.itervalues()
                  for c, i in contract_invoices])
-        Invoice.validate_invoice(new_invoices)
+        Invoice.update_taxes(new_invoices)
         # Set the new ids
         old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
         for invoice, new_invoice in zip(old_invoices, new_invoices):
@@ -342,6 +342,7 @@ class Contract:
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
             payment_term=self.payment_term,
+            state='validated',
             )
 
     def get_invoice_lines(self, start, end):
