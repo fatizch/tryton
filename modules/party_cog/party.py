@@ -177,7 +177,7 @@ class Party(export.ExportImportMixin):
         for party in parties:
             if party.is_person:
                 message += '%s %s %s \n' % (party.name, party.first_name,
-                    coop_date.format_date(party.birth_date))
+                    coop_string.date_as_string(party.birth_date))
             elif party.is_company:
                 message += '%s %s\n' % (party.name, party.short_name)
         if message:
