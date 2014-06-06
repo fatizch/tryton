@@ -88,12 +88,12 @@ class Contract:
         premium = Premium.__table__()
 
         if start:
-            date_clause = invoice_line.contract_insurance_start >= start
+            date_clause = invoice_line.coverage_start >= start
         else:
             date_clause = None
         if end:
             if date_clause:
-                date_clause &= (invoice_line.contract_insurance_start <= end)
+                date_clause &= (invoice_line.coverage_start <= end)
 
         query_table = invoice.join(invoice_contract, condition=(
                 (invoice_contract.invoice == invoice.id)
@@ -157,6 +157,13 @@ class Contract:
             return values
 
         return result_parser
+
+    def first_invoice(self):
+        if not self.is_loan:
+            return super(Contract, self).first_invoice()
+        ContractInvoice = Pool().get('contract.invoice')
+        ContractInvoice.delete(self.invoices)
+        self.invoice([self], self.end_date)
 
 
 class Loan:

@@ -50,11 +50,11 @@ msgctxt "field:account.invoice,start:"
 msgid "Start Date"
 msgstr "Date d'Effet"
 
-msgctxt "field:account.invoice.line,contract_insurance_end:"
+msgctxt "field:account.invoice.line,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:account.invoice.line,contract_insurance_start:"
+msgctxt "field:account.invoice.line,start_date:"
 msgid "Start Date"
 msgstr "Date d'Effet"
 

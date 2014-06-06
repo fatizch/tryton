@@ -24,6 +24,7 @@ def register():
         ContractInvoice,
         CommissionInvoice,
         Invoice,
+        InvoiceLine,
         Premium,
         PremiumCommission,
         #From Party

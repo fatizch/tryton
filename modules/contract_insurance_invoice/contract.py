@@ -90,7 +90,8 @@ class Contract:
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
     total_invoice_amount = fields.Function(
         fields.Numeric('Total Invoice Amount', digits=(16,
-                Eval('currency_digits', 2)), depends=['currency_digits']),
+                Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_total_invoice_amount')
 
     @classmethod
@@ -236,12 +237,6 @@ class Contract:
         return frequency.value.get_rrule(start, until)
 
     def get_invoice_periods(self, up_to_date):
-        'Return the list of invoice periods up to the date. If no date is '
-        'given, try the end_date. If none exists, return the first period'
-        if up_to_date:
-            up_to_date = min(up_to_date, self.end_date or datetime.date.max)
-        else:
-            up_to_date = self.end_date
         if self.last_invoice_end:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
@@ -271,34 +266,20 @@ class Contract:
                 start = until
         return periods
 
-    def clean_up_invoices(self):
-        pool = Pool()
-        # TODO : find out how to have valid values
-        prev_values = dict(self._values or {})
-        ContractInvoice = pool.get('contract.invoice')
-        AccountInvoice = pool.get('account.invoice')
-        AccountInvoice.delete(AccountInvoice.search([
-                    ('contract', '=', self.id)]))
-        ContractInvoice.delete(ContractInvoice.search([
-                    ('contract', '=', self.id)]))
-        self.invoices = []
-        self.account_invoices = []
-        self._values = prev_values
-
     def first_invoice(self):
-        # TODO : find out how to have valid values
-        prev_values = dict(self._values or {})
-        self.invoices = self.invoice([self])
-        self._values = prev_values
+        ContractInvoice = Pool().get('contract.invoice')
+        ContractInvoice.delete(self.invoices)
+        self.invoice([self], self.start_date)
 
     @classmethod
-    def invoice(cls, contracts, up_to_date=None):
+    def invoice(cls, contracts, up_to_date):
         'Invoice contracts up to the date'
         periods = defaultdict(list)
         for contract in contracts:
             if contract.status not in ('active', 'quote'):
                 continue
-            for period in contract.get_invoice_periods(up_to_date):
+            for period in contract.get_invoice_periods(min(up_to_date,
+                        contract.end_date or datetime.date.max)):
                 periods[period].append(contract)
         return cls.invoice_periods(periods)
 
@@ -319,8 +300,6 @@ class Contract:
 
         invoices = defaultdict(list)
         for period, contracts in periods.iteritems():
-            with Transaction().set_context(contract_revision_date=period[0]):
-                contracts = cls.browse(contracts)
             for contract in contracts:
                 invoice = contract.get_invoice(*period)
                 if not invoice.journal:
@@ -334,11 +313,11 @@ class Contract:
         new_invoices = Invoice.create([i._save_values
                  for contract_invoices in invoices.itervalues()
                  for c, i in contract_invoices])
+        Invoice.validate_invoice(new_invoices)
         # Set the new ids
         old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
         for invoice, new_invoice in zip(old_invoices, new_invoices):
             invoice.id = new_invoice.id
-        Invoice.validate_invoice(new_invoices)
         contract_invoices_to_create = []
         for period, contract_invoices in invoices.iteritems():
             start, end = period
@@ -387,13 +366,10 @@ class Contract:
         self.calculate_prices()
 
     def calculate_prices(self):
-        # TODO : find out how to have valid values
-        prev_values = dict(self._values or {})
         prices, errs = self.calculate_prices_between_dates()
         if errs:
             return False, errs
         self.store_prices(prices)
-        self._values = prev_values
         return True, ()
 
     def calculate_price_at_date(self, date):
@@ -641,6 +617,12 @@ class ContractInvoice(ModelSQL, ModelView):
             periods[period].append(contract_invoice.contract)
         Contract.invoice_periods(periods)
 
+    @classmethod
+    def delete(cls, contract_invoices):
+        Invoice = Pool().get('account.invoice')
+        Invoice.delete([x.invoice for x in contract_invoices])
+        super(ContractInvoice, cls).delete(contract_invoices)
+
 
 class CoveredElement:
     __name__ = 'contract.covered_element'
@@ -854,8 +836,8 @@ class Premium(ModelSQL, ModelView):
                 taxes=self.taxes,
                 invoice_type='out_invoice',
                 account=self.account,
-                contract_insurance_start=start,
-                contract_insurance_end=end,
+                coverage_start=start,
+                coverage_end=end,
                 )]
 
     def set_parent_from_line(self, line):
