@@ -2,7 +2,7 @@ import datetime
 from collections import defaultdict
 from decimal import Decimal
 
-from dateutil.rrule import rrule, YEARLY, MONTHLY
+from dateutil.rrule import rrule, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
@@ -45,6 +45,8 @@ FREQUENCIES = [
     ]
 
 PREMIUM_FREQUENCIES = FREQUENCIES + [
+    ('yearly_360', 'Yearly (360 days)'),
+    ('yearly_365', 'Yearly (365 days)'),
     ('once_per_invoice', 'Once per Invoice'),
     ]
 
@@ -779,6 +781,12 @@ class Premium(ModelSQL, ModelView):
         elif self.frequency == 'yearly':
             freq = YEARLY
             interval = 1
+        elif self.frequency == 'yearly_360':
+            freq = DAILY
+            interval = 360
+        elif self.frequency == 'yearly_365':
+            freq = DAILY
+            interval = 365
         elif self.frequency in ('once_per_contract'):
             return rrule(MONTHLY, dtstart=self.start, count=2)
         else:
