@@ -654,10 +654,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def init_default_address(self):
         if getattr(self, 'addresses', None):
             return True
+        Address = Pool().get('contract.address')
         addresses = self.subscriber.address_get(
             at_date=self.start_date)
         if addresses:
-            cur_address = utils.instanciate_relation(self, 'addresses')
+            cur_address = Address()
             cur_address.address = addresses
             cur_address.start_date = self.start_date
             self.addresses = [cur_address]

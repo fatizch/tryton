@@ -168,7 +168,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def init_loss(self):
         if hasattr(self, 'losses') and self.losses:
             return True
-        loss = utils.instanciate_relation(self, 'losses')
+        Loss = Pool().get('claim.loss')
+        loss = Loss()
         loss.init_from_claim(self)
         self.losses = [loss]
         return True
@@ -183,7 +184,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def init_relapse_loss(self):
         if self.get_pending_relapse_loss():
             return True
-        loss = utils.instanciate_relation(self, 'losses')
+        Loss = Pool().get('claim.loss')
+        loss = Loss()
         loss.init_from_claim(self)
         self.losses = list(self.losses)
         self.losses.append(loss)
@@ -381,8 +383,8 @@ class Loss(model.CoopSQL, model.CoopView):
                     del_service = other_del_service
             if del_service:
                 continue
-            del_service = utils.instanciate_relation(self.__class__,
-                'services')
+            Service = Pool().get('contract.service')
+            del_service = Service()
             del_service.option = option
             del_service.init_from_loss(self, benefit)
             self.services.append(del_service)
@@ -538,7 +540,8 @@ class DeliveredService:
             cur_dict)
         if errors:
             return None, errors
-        indemnification = utils.instanciate_relation(self, 'indemnifications')
+        Indemnification = Pool().get('claim.indemnification')
+        indemnification = Indemnification()
         self.indemnifications.append(indemnification)
         indemnification.init_from_service(self)
         self.regularize_indemnification(indemnification, details_dict,
@@ -747,17 +750,18 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         return res
 
     def create_details_from_dict(self, details_dict, del_service, currency):
+        Detail = Pool().get('claim.indemnification.detail')
         if not getattr(self, 'details', None):
             self.details = []
         else:
             self.details = list(self.details)
-            Pool().get('claim.indemnification.detail').delete(self.details)
+            Detail.delete(self.details)
             self.details[:] = []
         for key, fancy_name in benefit.INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
                 continue
             for detail_dict in details_dict[key]:
-                detail = utils.instanciate_relation(self, 'details')
+                detail = Detail()
                 detail.init_from_indemnification(self)
                 self.details.append(detail)
                 detail.kind = key
