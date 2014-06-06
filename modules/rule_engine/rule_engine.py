@@ -285,6 +285,10 @@ class RuleTools(ModelView):
         return utils.today()
 
     @classmethod
+    def _re_convert_frequency(cls, args, from_frequency, to_frequency):
+        return coop_date.convert_frequency(from_frequency, to_frequency)
+
+    @classmethod
     def add_error(cls, args, error_code, custom=False, lvl=None):
         RuleError = Pool().get('functional_error')
         if custom:
