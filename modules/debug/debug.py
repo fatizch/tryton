@@ -2,6 +2,7 @@ from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.model import ModelView, fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool
+from trytond.pyson import Eval, Bool
 
 
 __all__ = [
@@ -31,6 +32,8 @@ class FieldInfo(ModelView):
     is_invisible = fields.Boolean('Is invisible')
     has_domain = fields.Boolean('Has domain')
     field_domain = fields.Text('Domain')
+    id_to_calculate = fields.Integer('Id To Calculate')
+    calculated_value = fields.Char('Calculated Value')
 
 
 class ModelInfo(ModelView):
@@ -46,6 +49,14 @@ class ModelInfo(ModelView):
             ('name', 'Name'),
             ('kind', 'Kind'),
             ('string', 'String')], 'Filter Value')
+    id_to_calculate = fields.Integer('Id To Calculate')
+    to_evaluate = fields.Char('To Evaluate', states={
+            'invisible': ~Bool(Eval('id_to_calculate', False))},
+        help="Use the 'instance' keyword to get the instanciated model",
+        depends=['id_to_calculate'])
+    evaluation_result = fields.Char('Evaluation Result', states={
+            'invisible': ~Bool(Eval('id_to_calculate', False))},
+        readonly=True, depends=['id_to_calculate'])
 
     @classmethod
     def get_possible_model_names(cls):
@@ -66,6 +77,9 @@ class ModelInfo(ModelView):
         result['kind'] = real_field.__class__.__name__
         if isinstance(field, (fields.Many2One, fields.One2Many)):
             result['target_model'] = field.model_name
+        elif isinstance(field, fields.Many2Many):
+            result['target_model'] = Pool().get(field.relation_name)._fields[
+                field.target].model_name
         else:
             result['target_model'] = ''
         for elem in ('required', 'readonly', 'invisible'):
@@ -82,7 +96,7 @@ class ModelInfo(ModelView):
         return 'name'
 
     @fields.depends('model_name', 'field_infos', 'hide_functions',
-        'filter_value')
+        'filter_value', 'id_to_calculate')
     def on_change_with_field_infos(self):
         if self.field_infos:
             result = {'remove': [x.id for x in self.field_infos]}
@@ -92,12 +106,31 @@ class ModelInfo(ModelView):
             return result
         TargetModel = Pool().get(self.model_name)
         result['add'] = [(-1, x) for x in sorted(
-                    filter(None,
-                        list([self.get_field_info(field, field_name)
-                                for field_name, field
-                                in TargetModel._fields.iteritems()])),
+                    filter(None, list([self.get_field_info(field, field_name)
+                            for field_name, field
+                            in TargetModel._fields.iteritems()])),
                     key=lambda x: x[self.filter_value])]
+        for k, v in result['add']:
+            if self.id_to_calculate:
+                try:
+                    v['calculated_value'] = str(getattr(
+                            TargetModel(self.id_to_calculate), v['name']))
+                except Exception, exc:
+                    v['calculated_value'] = 'ERROR: %s' % str(exc)
         return result
+
+    @fields.depends('model_name', 'id_to_calculate', 'to_evaluate')
+    def on_change_with_evaluation_result(self):
+        if (not self.id_to_calculate or not self.to_evaluate or not
+                self.model_name):
+            return ''
+        try:
+            context = {
+                'instance': Pool().get(self.model_name)(self.id_to_calculate),
+                }
+            return str(eval(self.to_evaluate, context))
+        except Exception, exc:
+            return 'ERROR: %s' % str(exc)
 
 
 class DebugModel(Wizard):
