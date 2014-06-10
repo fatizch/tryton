@@ -15,6 +15,7 @@ from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
 from trytond.ir import Attachment
+from trytond.exceptions import UserError
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -602,15 +603,20 @@ class DocumentGenerateReport(Report):
             try:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 tmp = traceback.extract_tb(exc_traceback)
-                if (tmp[-4][0] != '<string>'
-                        and not tmp[-4][0].endswith('.odt')):
+                for frame in reversed(tmp):
+                    if (frame[0] != '<string>' and not
+                            frame[0].endswith('.odt')):
+                        continue
+                    DocumentCreate = pool.get('document.create', type='wizard')
+                    DocumentCreate.raise_user_error('parsing_error', (
+                            frame[2][14:-2], str(exc)))
+                else:
                     raise exc
-                DocumentCreate = pool.get('document.create', type='wizard')
-                DocumentCreate.raise_user_error('parsing_error', (
-                        tmp[-4][2][14:-2], str(exc)))
+            except UserError:
+                raise
             except:
                 pass
-            raise
+            raise exc
 
 
 class DocumentFromFilename(Report):
