@@ -600,6 +600,10 @@ class DocumentGenerateReport(Report):
             return super(DocumentGenerateReport, cls).parse(
                 report, records, data, localcontext)
         except Exception, exc:
+            # Try to extract the relevant information to display to the user.
+            # That would be the part of the genshi template being evaluated and
+            # the "final" error. In case anything goes wrong, raise the
+            # original error
             try:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 tmp = traceback.extract_tb(exc_traceback)
