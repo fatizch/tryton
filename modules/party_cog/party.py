@@ -57,9 +57,6 @@ class Party(export.ExportImportMixin):
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
         'get_main_address_id')
-    main_address_rec_name = fields.Function(
-        fields.Char('Main Address'),
-        'get_main_address_rec_name')
     number_of_addresses = fields.Function(
         fields.Integer('Number Of Addresses', states={'invisible': True}),
         'on_change_with_number_of_addresses')
@@ -307,14 +304,6 @@ class Party(export.ExportImportMixin):
     def get_main_address_id(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)
         return address.id if address else None
-
-    def get_main_address_rec_name(self, name):
-        pool = Pool()
-        Address = pool.get('party.address')
-        address = self.get_main_address_id()
-        if address:
-            address = Address(address)
-            return address.rec_name if address else None
 
     @classmethod
     def default_lang(cls):
