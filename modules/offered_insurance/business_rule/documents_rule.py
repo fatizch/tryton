@@ -1,4 +1,6 @@
 #-*- coding:utf-8 -*-
+import sys
+import traceback
 import os
 import subprocess
 import StringIO
@@ -12,6 +14,7 @@ from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
 from trytond.ir import Attachment
+from trytond.exceptions import UserError
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -552,29 +555,25 @@ class DocumentGenerateReport(Report):
         good_party = Pool().get('party.party')(data['party'])
         filename = good_letter.name + ' - ' + good_obj.get_rec_name('') + \
             ' - ' + coop_string.date_as_string(utils.today(), good_party.lang)
-        try:
-            type, data = cls.parse(action_report, records, data, {})
-        except:
-            import traceback
-            traceback.print_exc()
-            raise
+        type, data = cls.parse(action_report, records, data, {})
         return (type, buffer(data), action_report.direct_print, filename)
 
     @classmethod
     def parse(cls, report, records, data, localcontext):
-        localcontext['Party'] = Pool().get('party.party')(data['party'])
-        localcontext['Address'] = Pool().get('party.address')(data['address'])
+        pool = Pool()
+        localcontext['Party'] = pool.get('party.party')(data['party'])
+        localcontext['Address'] = pool.get('party.address')(data['address'])
         try:
             localcontext['Lang'] = localcontext['Party'].lang.code
         except AttributeError:
-            localcontext['Lang'] = Pool().get('ir.lang').search([
+            localcontext['Lang'] = pool.get('ir.lang').search([
                     ('code', '=', 'en_US')])[0]
         if data['sender']:
-            localcontext['Sender'] = Pool().get('party.party')(data['sender'])
+            localcontext['Sender'] = pool.get('party.party')(data['sender'])
         else:
             localcontext['Sender'] = None
         if data['sender_address']:
-            localcontext['SenderAddress'] = Pool().get(
+            localcontext['SenderAddress'] = pool.get(
                 'party.address')(data['sender_address'])
         else:
             localcontext['SenderAddress'] = None
@@ -582,20 +581,43 @@ class DocumentGenerateReport(Report):
         def format_date(value, lang=None):
             if lang is None:
                 lang = localcontext['Party'].lang
-            return Pool().get('ir.lang').strftime(value, lang.code, lang.date)
+            return pool.get('ir.lang').strftime(value, lang.code, lang.date)
 
-        localcontext['Date'] = Pool().get('ir.date').today()
+        localcontext['Date'] = pool.get('ir.date').today()
         localcontext['FDate'] = format_date
         # localcontext['Logo'] = data['logo']
-        GoodModel = Pool().get(data['model'])
+        GoodModel = pool.get(data['model'])
         good_obj = GoodModel(data['id'])
         localcontext.update(good_obj.get_publishing_context(localcontext))
-        DocumentTemplate = Pool().get('document.template')
+        DocumentTemplate = pool.get('document.template')
         good_letter = DocumentTemplate(data['doc_template'])
         report.report_content = good_letter.get_good_version(
             utils.today(), good_obj.get_lang()).data
-        return super(DocumentGenerateReport, cls).parse(
-            report, records, data, localcontext)
+        try:
+            return super(DocumentGenerateReport, cls).parse(
+                report, records, data, localcontext)
+        except Exception, exc:
+            # Try to extract the relevant information to display to the user.
+            # That would be the part of the genshi template being evaluated and
+            # the "final" error. In case anything goes wrong, raise the
+            # original error
+            try:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                tmp = traceback.extract_tb(exc_traceback)
+                for frame in reversed(tmp):
+                    if (frame[0] != '<string>' and not
+                            frame[0].endswith('.odt')):
+                        continue
+                    DocumentCreate = pool.get('document.create', type='wizard')
+                    DocumentCreate.raise_user_error('parsing_error', (
+                            frame[2][14:-2], str(exc)))
+                else:
+                    raise exc
+            except UserError:
+                raise
+            except:
+                pass
+            raise exc
 
 
 class DocumentFromFilename(Report):
@@ -680,6 +702,10 @@ class DocumentCreate(Wizard):
             shutil.rmtree(CONFIG['server_shared_folder'])
         except:
             pass
+        cls._error_messages.update({
+                'parsing_error': 'Error while generating the letter:\n\n'
+                    '  Expression:\n%s\n\n  Error:\n%s',
+                })
 
     def default_select_model(self, fields):
         result = utils.set_state_view_defaults(self, 'select_model')
