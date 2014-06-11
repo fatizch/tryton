@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <xpath expr="/form/field[@name='end_date']" position="after">
+  <xpath expr="//page[@id='admin']/group[@id='left']" position="inside">
     <label name="last_renewed"/>
     <field name="last_renewed"/>
     <label name="next_renewal_date"/>
     <field name="next_renewal_date"/>
   </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="before">
-    <page string="Covered Elements" id="cov_elements" states="{'invisible': Eval('product_kind') != 'insurance'}">
-        <field name="covered_elements"/>
-    </page>
+      <page string="Covered Elements" id="cov_elements" states="{'invisible': Eval('product_kind') != 'insurance'}">
+          <hpaned id="covered_element" position="200">
+              <child id="tree">
+                  <field name="multi_mixed_view" group="multi_mixed_view" mode="tree" view_ids="contract_insurance.covered_elements_clean_tree" expand_toolbar="0"/>
+              </child>
+              <child id="form">
+                  <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="contract.covered_element" relation_field="contract" view_ids="contract_insurance.covered_element_simple_view_form" expand_toolbar="0"/>
+                  <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="contract.option" relation_field="covered_element" view_ids="contract.option_view_form" expand_toolbar="0"/>
+              </child>
+          </hpaned>
+      </page>
   </xpath>
-  <xpath expr="/form/notebook/page[@id='options']" position="after">
-    <page string="Documents" id="documents">
-      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
-    </page>
-    <page string="Managing Entities" id="managing_entities">
+  <xpath expr="/form/notebook/page[@id='data']" position="inside">
       <field name="agreements" colspan="4"/>
-      <newline/>
       <field name="contracts" colspan="4"/>
-    </page>
-    <page string="Addresses" id="contract_adresses">
-      <field name="addresses"/>
-    </page>
   </xpath>
 </data>

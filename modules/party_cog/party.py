@@ -10,7 +10,7 @@ except ImportError:
 from sql.aggregate import Max
 from sql import Literal, Cast
 
-from trytond.pyson import Eval, Bool, Less
+from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 
 from trytond.rpc import RPC
@@ -56,17 +56,6 @@ class Party(export.ExportImportMixin):
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
         'get_main_address_id')
-    number_of_addresses = fields.Function(
-        fields.Integer('Number Of Addresses', states={'invisible': True}),
-        'on_change_with_number_of_addresses')
-    main_contact_mechanism = fields.Function(
-        fields.Many2One('party.contact_mechanism', 'Main Contact Mechanism',
-            states={'invisible': ~Eval('main_contact_mechanism')}),
-        'get_main_contact_mechanism_id')
-    number_of_contact_mechanisms = fields.Function(
-        fields.Integer('Number Of Contact Mechanisms', states={
-                'invisible': True}),
-        'on_change_with_number_of_contact_mechanisms')
     ####################################
     #Person information
     gender = fields.Selection(GENDER, 'Gender', states={
@@ -108,15 +97,6 @@ class Party(export.ExportImportMixin):
     def __setup__(cls):
         super(Party, cls).__setup__()
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
-        cls._buttons.update({
-                'open_addresses': {
-                    'invisible': Less(Eval('number_of_addresses', 0), 1, True),
-                    },
-                'open_contact_mechanisms': {
-                    'invisible': Less(Eval('number_of_contact_mechanisms', 0),
-                        1, True),
-                    },
-                })
         for contact_type in ('phone', 'mobile', 'fax', 'email', 'website'):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
@@ -326,10 +306,6 @@ class Party(export.ExportImportMixin):
             ('lang', 'light')])
         return res
 
-    def get_main_contact_mechanism_id(self, name):
-        return (self.contact_mechanisms[0].id
-            if self.contact_mechanisms else None)
-
     @classmethod
     def set_contact(cls, ids, name, value):
         pool = Pool()
@@ -351,32 +327,6 @@ class Party(export.ExportImportMixin):
                         'party': party.id,
                         'active': 'True',
                         }])
-
-    @classmethod
-    @model.CoopView.button_action('party_cog.act_addresses_button')
-    def open_addresses(cls, objs):
-        pass
-
-    @classmethod
-    @model.CoopView.button_action('party_cog.act_contact_mechanisms_button')
-    def open_contact_mechanisms(cls, objs):
-        pass
-
-    @staticmethod
-    def default_number_of_addresses():
-        return 0
-
-    @fields.depends('addresses')
-    def on_change_with_number_of_addresses(self, name=None):
-        return len(self.addresses)
-
-    @fields.depends('contact_mechanisms')
-    def on_change_with_number_of_contact_mechanisms(self, name=None):
-        return len(self.contact_mechanisms)
-
-    @staticmethod
-    def default_number_of_contact_mechanisms():
-        return 0
 
     def get_publishing_values(self):
         result = super(Party, self).get_publishing_values()

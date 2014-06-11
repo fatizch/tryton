@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -221,18 +221,6 @@ msgstr "Nom de Jeune Fille"
 msgctxt "field:party.party,main_address:"
 msgid "Main Address"
 msgstr "Adresse"
-
-msgctxt "field:party.party,main_contact_mechanism:"
-msgid "Main Contact Mechanism"
-msgstr "Moyen de contact principal"
-
-msgctxt "field:party.party,number_of_addresses:"
-msgid "Number Of Addresses"
-msgstr "Nombre d'adresses"
-
-msgctxt "field:party.party,number_of_contact_mechanisms:"
-msgid "Number Of Contact Mechanisms"
-msgstr "Nombres de moyens de contact"
 
 msgctxt "field:party.party,parent:"
 msgid "Parent"
@@ -478,10 +466,6 @@ msgctxt "model:ir.action,name:act_address_relate_form"
 msgid "Addresses"
 msgstr "Adresses"
 
-msgctxt "model:ir.action,name:act_addresses_button"
-msgid "Addresses"
-msgstr "Adresses"
-
 msgctxt "model:ir.action,name:act_company_form"
 msgid "Companies"
 msgstr "Sociétés"
@@ -489,10 +473,6 @@ msgstr "Sociétés"
 msgctxt "model:ir.action,name:act_contact_history_relate_form"
 msgid "Party Interaction"
 msgstr "Historique des Contacts"
-
-msgctxt "model:ir.action,name:act_contact_mechanisms_button"
-msgid "Contact Mechanisms"
-msgstr "Moyens de contact"
 
 msgctxt "model:ir.action,name:act_menu_form"
 msgid "Synthesis"

@@ -4,7 +4,7 @@
         <label name="com_product"/>
         <field name="com_product"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']" position="inside">
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <label name="dist_network"/>
         <field name="dist_network"/>
     </xpath>
