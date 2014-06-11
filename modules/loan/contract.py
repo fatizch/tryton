@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -123,7 +125,7 @@ class ContractOption:
         to_update = []
         for share in self.loan_shares:
             res = {'id': share.id}
-            if share.start_date < self.start_date:
+            if share.start_date or datetime.date.min < self.start_date:
                 res['start_date'] = self.start_date
             if self.end_date and (not share.end_date or
                     share.end_date > self.end_date):

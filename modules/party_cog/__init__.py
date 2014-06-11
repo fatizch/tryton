@@ -14,11 +14,13 @@ PartyMenuTreeExpansion = expand_tree('party.synthesis.menu')
 def register():
     Pool.register(
         SynthesisMenuActionCloseSynthesis,
+        SynthesisMenuActionReloadSynthesis,
         SynthesisMenuContact,
         SynthesisMenuAddress,
         SynthesisMenuPartyInteraction,
         SynthesisMenuRelationship,
         SynthesisMenu,
+        SynthesisMenuOpenState,
         PartyMenuTreeExpansion,
         Party,
         PartyCategory,

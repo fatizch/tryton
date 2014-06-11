@@ -249,8 +249,9 @@ class Loan(model.CoopSQL, model.CoopView):
         if hasattr(self, 'loan_shares') and self.loan_shares:
             return
         self.loan_shares = []
+        LoanShare = Pool().get('loan.share')
         for party in parties:
-            share = utils.instanciate_relation(self.__class__, 'loan_shares')
+            share = LoanShare()
             share.person = party
             self.loan_shares.append(share)
 

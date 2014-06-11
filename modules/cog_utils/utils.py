@@ -191,18 +191,6 @@ def get_relation_model_name(from_class_or_instance, field_name):
     return res
 
 
-def get_relation_model(from_class_or_instance, field_name):
-    model_name = get_relation_model_name(from_class_or_instance, field_name)
-    if model_name:
-        return Pool().get(model_name)
-
-
-def instanciate_relation(from_class_or_instance, field_name):
-    Model = get_relation_model(from_class_or_instance, field_name)
-    if Model:
-        return Model()
-
-
 def create_inst_with_default_val(from_class, field_name, action=None):
     res = {}
     model_name = get_relation_model_name(from_class, field_name)
