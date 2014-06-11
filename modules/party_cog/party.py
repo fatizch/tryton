@@ -730,6 +730,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
 
 
 class SynthesisMenuOpenState(model.CoopView):
+    'Syntesis Menu Open State'
     __name__ = 'party.synthesis.menu.open_state'
 
     need_reload = fields.Boolean('Need Reload')
