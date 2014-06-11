@@ -8,13 +8,11 @@
     <label name="billing_mode"/>
     <field name="billing_mode" widget="selection" colspan="3"/>
     <newline/>
-    <label name="direct_debit"/>
-    <field name="direct_debit"/>
     <label name="direct_debit_day_selector"/>
     <field name="direct_debit_day_selector"/>
     <label name="direct_debit_account"/>
     <field name="direct_debit_account"/>
     <newline/>
     <label name="payment_term"/>
-    <field name="payment_term" widget="selection"/>
+    <field name="payment_term" widget="selection" colspan="3"/>
 </form>

@@ -10,7 +10,7 @@ from sql.conditionals import Coalesce
 
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, And
+from trytond.pyson import Eval, And, Len
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import reduce_ids
@@ -475,7 +475,8 @@ class _ContractRevisionMixin(object):
         return values
 
 
-class ContractBillingInformation(_ContractRevisionMixin, ModelSQL, ModelView):
+class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
+        model.CoopView):
     'Contract Billing Information'
     __name__ = 'contract.billing_information'
 
@@ -490,7 +491,9 @@ class ContractBillingInformation(_ContractRevisionMixin, ModelSQL, ModelView):
         states={
                 'required': And(Eval('direct_debit', False),
                     (Eval('_parent_contract', {}).get('status', '') ==
-                        'active'))})
+                        'active')),
+                'invisible': Len(Eval('possible_payment_terms', [])) < 2},
+        depends=['possible_payment_terms'])
     direct_debit = fields.Function(fields.Boolean('Direct Debit Payment'),
         'on_change_with_direct_debit')
     direct_debit_day_selector = fields.Function(
@@ -501,9 +504,8 @@ class ContractBillingInformation(_ContractRevisionMixin, ModelSQL, ModelView):
                 'required': And(Eval('direct_debit', False),
                     (Eval('_parent_contract', {}).get('status', '') ==
                         'active'))}),
-            'get_direct_debit_day_selector', 'setter_void')
-    direct_debit_day = fields.Integer('Direct Debit Day',
-        states={'invisible': True})
+            'get_direct_debit_day_selector', 'set_direct_debit_day_seletor')
+    direct_debit_day = fields.Integer('Direct Debit Day')
     direct_debit_account = fields.Many2One('bank.account',
         'Direct Debit Account',
         states={'invisible': ~Eval('direct_debit'),
@@ -512,6 +514,9 @@ class ContractBillingInformation(_ContractRevisionMixin, ModelSQL, ModelView):
         domain=[('owners', '=',
             Eval('_parent_contract', {}).get('subscriber'))],
         depends=['direct_debit'])
+    possible_payment_terms = fields.Function(fields.One2Many(
+            'account.invoice.payment_term', None, 'Possible Payment Term'),
+            'on_change_with_possible_payment_terms')
 
     @classmethod
     def __setup__(cls):
@@ -557,10 +562,24 @@ class ContractBillingInformation(_ContractRevisionMixin, ModelSQL, ModelView):
             return ''
         return str(self.direct_debit_day)
 
-    @fields.depends('billing_mode')
+    @classmethod
+    def set_direct_debit_day_seletor(cls, ids, name, value):
+        if not value:
+            return
+        for billing_mode in ids:
+            cls.write([billing_mode],
+                {'direct_debit_day': int(value)})
+
+    @fields.depends('billing_mode', 'possible_payment_terms')
     def on_change_with_direct_debit(self, name=None):
         if self.billing_mode:
             return self.billing_mode.direct_debit
+
+    @fields.depends('billing_mode')
+    def on_change_with_possible_payment_terms(self, name=None):
+        if not self.billing_mode:
+            return []
+        return [x.id for x in self.billing_mode.allowed_payment_terms]
 
     @fields.depends('direct_debit_day_selector')
     def on_change_direct_debit_day_selector(self):
