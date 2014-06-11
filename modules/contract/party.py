@@ -50,10 +50,7 @@ class Party:
 
     @classmethod
     def copy(cls, parties, default=None):
-        if default is None:
-            default = {}
-        else:
-            default = default.copy()
+        default = {} if default is None else default.copy()
         default.setdefault('contracts', None)
         default.setdefault('quotes', None)
         return super(Party, cls).copy(parties, default=default)

@@ -60,8 +60,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(relation.id > 0)
         self.assert_(party1.relations[0].from_ == party2.relations[0].to)
         self.assert_(party1.relations[0].to == party2.relations[0].from_)
-        self.assert_(party1.relations[0].type.reverse == party2.relations[0].type)
+        self.assert_(
+            party1.relations[0].type.reverse == party2.relations[0].type)
         self.assert_(party1.relations[0].type.name == rel_kind.name)
+
+    def test0020SearchDuplicate(self):
+        party1 = self.Party(is_person=True, first_name='Mike',
+            last_name='Wazowski', birth_date=datetime.date(2001, 10, 28))
+        party1.save()
+        self.assert_(party1.id > 0)
+        party2 = self.Party(is_person=True, first_name='Mike',
+            last_name='Wazowski', birth_date=datetime.date(2001, 10, 28))
+        party2.save()
+        self.assert_(party2.id > 0)
 
 
 def suite():
