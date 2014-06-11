@@ -15,7 +15,7 @@ from trytond.pool import PoolMeta, Pool
 
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.wizard import Wizard, StateAction, StateTransition
+from trytond.wizard import Wizard, StateAction, StateTransition, StateView
 from trytond.pyson import PYSONEncoder
 from trytond.modules.cog_utils import utils, fields, model, export
 from trytond.modules.cog_utils import coop_string, MergedMixin
@@ -29,8 +29,10 @@ __all__ = [
     'SynthesisMenuContact',
     'SynthesisMenu',
     'SynthesisMenuOpen',
+    'SynthesisMenuOpenState',
     'SynthesisMenuSet',
     'SynthesisMenuActionCloseSynthesis',
+    'SynthesisMenuActionReloadSynthesis',
     'SynthesisMenuRelationship',
     ]
 
@@ -101,14 +103,6 @@ class Party(export.ExportImportMixin):
         readonly=True)
     synthesis_rec_name = fields.Function(
         fields.Char('Name'), 'get_synthesis_rec_name')
-    ####################################
-    #contact information
-    phone = fields.Function(fields.Char('Phone'), 'get_contact',
-        setter='set_contact')
-    mobile = fields.Function(fields.Char('Mobile'), 'get_contact',
-        setter='set_contact')
-    email = fields.Function(fields.Char('E-Mail'), 'get_contact',
-        setter='set_contact')
 
     @classmethod
     def __setup__(cls):
@@ -123,7 +117,10 @@ class Party(export.ExportImportMixin):
                         1, True),
                     },
                 })
-
+        for contact_type in ('phone', 'mobile', 'fax', 'email', 'website'):
+            contact_field = getattr(cls, contact_type)
+            contact_field.setter = 'set_contact'
+            contact_field.readonly = False
         #this loop will add for each One2Many role, a function field is_role
         for field_name in dir(cls):
             if not field_name.endswith('role'):
@@ -333,11 +330,6 @@ class Party(export.ExportImportMixin):
         return (self.contact_mechanisms[0].id
             if self.contact_mechanisms else None)
 
-    def get_contact(self, name):
-        for contact in self.contact_mechanisms:
-            if contact.type == name:
-                return contact.value
-
     @classmethod
     def set_contact(cls, ids, name, value):
         pool = Pool()
@@ -462,15 +454,57 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
         party_table = Party.__table__()
         PartyActionClose = pool.get(
             'party.synthesis.menu.action_close')
+        User = pool.get('res.user')
+        user = Transaction().user
+        user = User(user)
+        if user.party_synthesis:
+            party_id = json.loads(user.party_synthesis)[0]
+        else:
+            party_id = 0
         return party_table.select(
-            party_table.id,
+            Literal(party_id).as_('id'),
             Max(party_table.create_uid).as_('create_uid'),
             Max(party_table.create_date).as_('create_date'),
             Max(party_table.write_uid).as_('write_uid'),
             Max(party_table.write_date).as_('write_date'),
             Literal(coop_string.translate_label(PartyActionClose,
-                'name')).as_('name'), party_table.id.as_('party'),
-            group_by=party_table.id)
+                'name')).as_('name'), Literal(party_id).as_('party'))
+
+    def get_icon(self, name=None):
+        return 'tryton-close'
+
+
+class SynthesisMenuActionReloadSynthesis(model.CoopSQL):
+    'Party Synthesis Menu Action Reload'
+    __name__ = 'party.synthesis.menu.action_reload'
+    name = fields.Char('Reload Synthesis')
+    party = fields.Many2One('party.party', 'Party')
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        Party = pool.get('party.party')
+        party_table = Party.__table__()
+        PartyActionClose = pool.get(
+            'party.synthesis.menu.action_reload')
+        User = pool.get('res.user')
+        user = Transaction().user
+        user = User(user)
+        if user.party_synthesis:
+            party_id = json.loads(user.party_synthesis)[0]
+        else:
+            party_id = 0
+        return party_table.select(
+            Literal(party_id).as_('id'),
+            Max(party_table.create_uid).as_('create_uid'),
+            Max(party_table.create_date).as_('create_date'),
+            Max(party_table.write_uid).as_('write_uid'),
+            Max(party_table.write_date).as_('write_date'),
+            Literal(coop_string.translate_label(PartyActionClose,
+                'name')).as_('name'), Literal(party_id).as_('party'))
+
+    def get_icon(self, name=None):
+        return 'tryton-refresh'
 
 
 class SynthesisMenuPartyInteraction(model.CoopSQL):
@@ -605,6 +639,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     def merged_models():
         return [
             'party.synthesis.menu.action_close',
+            'party.synthesis.menu.action_reload',
             'party.party',
             'party.synthesis.menu.contact',
             'party.contact_mechanism',
@@ -664,7 +699,8 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return merged_field
             elif name == 'name':
                 return Model._fields['type']
-        elif Model.__name__ == 'party.synthesis.menu.action_close':
+        elif (Model.__name__ == 'party.synthesis.menu.action_close' or
+                Model.__name__ == 'party.synthesis.menu.action_reload'):
             if name == 'party':
                 return Model._fields['id']
         if name == 'party':
@@ -681,7 +717,8 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             return 3
         elif model == 'party.synthesis.menu.relationship':
             return 4
-        elif model == 'party.synthesis.menu.action_close':
+        elif (model == 'party.synthesis.menu.action_close' or
+                model == 'party.synthesis.menu.action_reload'):
             return 0
 
     @classmethod
@@ -742,11 +779,18 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         return not self.parent or self.parent and not self.parent.parent
 
 
+class SynthesisMenuOpenState(model.CoopView):
+    __name__ = 'party.synthesis.menu.open_state'
+
+    need_reload = fields.Boolean('Need Reload')
+
+
 class SynthesisMenuOpen(Wizard):
     'Open Party Synthesis Menu'
     __name__ = 'party.synthesis.menu.open'
 
     start_state = 'check_reload'
+    state = StateView('party.synthesis.menu.open_state', None, [])
     check_reload = StateTransition()
     open = StateAction('party_cog.act_menu_open')
 
@@ -759,13 +803,17 @@ class SynthesisMenuOpen(Wizard):
         if record.__name__ == 'party.synthesis.menu.action_close':
             user = Transaction().user
             user = User(user)
-            if user.party_synthesis:
-                user.party_synthesis = None
-            elif user.party_synthesis_previous:
-                user.party_synthesis_previous = None
+            user.party_synthesis = None
+            user.party_synthesis_previous = None
             user.save()
+            self.state.need_reload = True
             return 'end'
-        return 'open'
+        elif record.__name__ == 'party.synthesis.menu.action_reload':
+            self.state.need_reload = True
+            return 'end'
+        else:
+            self.state.need_reload = False
+            return 'open'
 
     def do_open(self, action):
         pool = Pool()
@@ -810,12 +858,6 @@ class SynthesisMenuOpen(Wizard):
                 ModelData.get_id('party_cog', 'wizard_set'))
             action = Action(action_id)
             actions = Action.get_action_values(action.type, [action.id])[0]
-        elif Model.__name__ == 'party.party':
-            actions['views'] = [(Pool().get('ir.ui.view').search([
-                    ('xml_id', '=',
-                        'party_cog.party_view_synthesis_form')])[0].id,
-                            'form')]
-            actions['res_id'] = record.id
         else:
             actions['res_id'] = record.id
         return actions
@@ -827,11 +869,7 @@ class SynthesisMenuOpen(Wizard):
         return {'ids': [record.to.id]}
 
     def end(self):
-        pool = Pool()
-        User = pool.get('res.user')
-        user = Transaction().user
-        user = User(user)
-        if not user.party_synthesis_previous:
+        if self.state.need_reload:
             return 'reload menu'
 
 
