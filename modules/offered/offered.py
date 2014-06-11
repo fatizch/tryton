@@ -319,6 +319,7 @@ class Product(model.CoopSQL, Offered):
             ('kind', '=', Eval('kind')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'kind', 'company'],
+            order=[('order', 'ASC')],
             states={'invisible': Bool(Eval('change_coverages_order'))})
     change_coverages_order = fields.Function(
         fields.Boolean('Change Order'),

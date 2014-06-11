@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<tree string="Payment Term" sequence="order">
+    <field name="payment_term"/>
+</tree>

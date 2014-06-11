@@ -326,11 +326,13 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         for elem in (lines + fee_lines):
             elem['taxes'] = list(taxes)
         if self.match_contract_frequency:
-            ContractInvoiceFrequency = Pool().get('contract.invoice_frequency')
-            contract_frequency = ContractInvoiceFrequency.get_value(
-                [args['contract']], args['date'])[args['contract'].id]
-            frequency = Pool().get('offered.invoice.frequency')(
-                contract_frequency).frequency
+            ContractBillingInformation = Pool().get(
+                'contract.billing_information')
+            contract_billing_mode = ContractBillingInformation.get_value(
+                [args['contract']], args['date'],
+                )['billing_mode'][args['contract'].id]
+            frequency = Pool().get('offered.billing_mode')(
+                contract_billing_mode).frequency
             for elem in (lines + fee_lines):
                 self.convert_premium_frequency(elem, frequency)
 

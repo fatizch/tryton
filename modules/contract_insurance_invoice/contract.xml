@@ -20,26 +20,15 @@
             <field name="name">premium_list</field>
         </record>
 
-        <record model="ir.ui.view" id="contract_payment_term_view_list">
-            <field name="model">contract.payment_term</field>
+        <record model="ir.ui.view" id="contract_billing_information_view_list">
+            <field name="model">contract.billing_information</field>
             <field name="type">tree</field>
-            <field name="name">contract_payment_term_list</field>
+            <field name="name">contract_billing_information_list</field>
         </record>
-        <record model="ir.ui.view" id="contract_payment_term_view_form">
-            <field name="model">contract.payment_term</field>
+        <record model="ir.ui.view" id="contract_billing_information_view_form">
+            <field name="model">contract.billing_information</field>
             <field name="type">form</field>
-            <field name="name">contract_payment_term_form</field>
-        </record>
-
-        <record model="ir.ui.view" id="contract_invoice_frequency_view_list">
-            <field name="model">contract.invoice_frequency</field>
-            <field name="type">tree</field>
-            <field name="name">contract_invoice_frequency_list</field>
-        </record>
-        <record model="ir.ui.view" id="contract_invoice_frequency_view_form">
-            <field name="model">contract.invoice_frequency</field>
-            <field name="type">form</field>
-            <field name="name">contract_invoice_frequency_form</field>
+            <field name="name">contract_billing_information_form</field>
         </record>
 
         <record model="ir.ui.view" id="contract_invoice_view_list">

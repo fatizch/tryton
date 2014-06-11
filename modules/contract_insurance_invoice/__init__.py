@@ -9,16 +9,15 @@ from .payment import *
 
 def register():
     Pool.register(
-        InvoiceFrequency,
+        BillingMode,
+        ProductBillingModeRelation,
         Product,
-        ProductInvoiceFrequencyRelation,
-        ProductPaymentTermRelation,
+        BillingModePaymentTermRelation,
         OptionDescription,
         Invoice,
         InvoiceLine,
         Contract,
-        ContractPaymentTerm,
-        ContractInvoiceFrequency,
+        ContractBillingInformation,
         ContractInvoice,
         ContractOption,
         CoveredElement,

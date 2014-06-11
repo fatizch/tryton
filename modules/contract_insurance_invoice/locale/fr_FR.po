@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -418,55 +418,55 @@ msgctxt "field:contract.premium.display.premiums.line,premiums:"
 msgid "Premium"
 msgstr "Prime"
 
-msgctxt "field:offered.invoice.frequency,create_date:"
+msgctxt "field:offered.billing_mode,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:offered.invoice.frequency,create_date_:"
+msgctxt "field:offered.billing_mode,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:offered.invoice.frequency,create_uid:"
+msgctxt "field:offered.billing_mode,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.invoice.frequency,frequency:"
+msgctxt "field:offered.billing_mode,frequency:"
 msgid "Invoice Frequency"
 msgstr "Fréquence de facturation"
 
-msgctxt "field:offered.invoice.frequency,id:"
+msgctxt "field:offered.billing_mode,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.invoice.frequency,must_expand_tree:"
+msgctxt "field:offered.billing_mode,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:offered.invoice.frequency,products:"
+msgctxt "field:offered.billing_mode,products:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "field:offered.invoice.frequency,rec_name:"
+msgctxt "field:offered.billing_mode,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.invoice.frequency,sync_day:"
+msgctxt "field:offered.billing_mode,sync_day:"
 msgid "Sync Day"
 msgstr "Jour de synchro"
 
-msgctxt "field:offered.invoice.frequency,sync_month:"
+msgctxt "field:offered.billing_mode,sync_month:"
 msgid "Sync Month"
 msgstr "Mois de synchro"
 
-msgctxt "field:offered.invoice.frequency,write_date:"
+msgctxt "field:offered.billing_mode,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.invoice.frequency,write_uid:"
+msgctxt "field:offered.billing_mode,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.invoice.frequency,xml_id:"
+msgctxt "field:offered.billing_mode,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -734,191 +734,191 @@ msgctxt "selection:contract.premium,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
-msgctxt "selection:offered.invoice.frequency,frequency:"
+msgctxt "selection:offered.billing_mode,frequency:"
 msgid "Biannual"
 msgstr "bisannuelle"
 
-msgctxt "selection:offered.invoice.frequency,frequency:"
+msgctxt "selection:offered.billing_mode,frequency:"
 msgid "Monthly"
 msgstr "Mensuel"
 
-msgctxt "selection:offered.invoice.frequency,frequency:"
+msgctxt "selection:offered.billing_mode,frequency:"
 msgid "Once Per Contract"
 msgstr "Une fois par contrat"
 
-msgctxt "selection:offered.invoice.frequency,frequency:"
+msgctxt "selection:offered.billing_mode,frequency:"
 msgid "Quarterly"
 msgstr "Trimestriel"
 
-msgctxt "selection:offered.invoice.frequency,frequency:"
+msgctxt "selection:offered.billing_mode,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "1"
 msgstr "1"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "10"
 msgstr "10"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "11"
 msgstr "11"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "12"
 msgstr "12"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "13"
 msgstr "13"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "14"
 msgstr "14"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "15"
 msgstr "15"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "16"
 msgstr "16"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "17"
 msgstr "17"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "18"
 msgstr "18"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "19"
 msgstr "19"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "2"
 msgstr "2"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "20"
 msgstr "20"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "21"
 msgstr "21"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "22"
 msgstr "22"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "23"
 msgstr "23"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "24"
 msgstr "24"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "25"
 msgstr "25"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "26"
 msgstr "26"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "27"
 msgstr "27"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "28"
 msgstr "28"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "3"
 msgstr "3"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "4"
 msgstr "4"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "5"
 msgstr "5"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "6"
 msgstr "6"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "7"
 msgstr "7"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "8"
 msgstr "8"
 
-msgctxt "selection:offered.invoice.frequency,sync_day:"
+msgctxt "selection:offered.billing_mode,sync_day:"
 msgid "9"
 msgstr "9"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid ""
 msgstr " "
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "April"
 msgstr "Avril"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "August"
 msgstr "Août"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "December"
 msgstr "Décembre"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "February"
 msgstr "Février"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "January"
 msgstr "Janvier"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "July"
 msgstr "Juillet"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "June"
 msgstr "Juin"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "March"
 msgstr "Mars"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "May"
 msgstr "Mai"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "November"
 msgstr "Novembre"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "October"
 msgstr "Octobre"
 
-msgctxt "selection:offered.invoice.frequency,sync_month:"
+msgctxt "selection:offered.billing_mode,sync_month:"
 msgid "September"
 msgstr "Septembre"
 
@@ -1069,14 +1069,6 @@ msgstr "Risques Couverts"
 msgctxt "view:contract:"
 msgid "Invoicing"
 msgstr "Quittancement"
-
-msgctxt "view:offered.invoice.frequency:"
-msgid "Invoice Frequencies"
-msgstr "Fréquences de quittancement"
-
-msgctxt "view:offered.invoice.frequency:"
-msgid "Invoice Frequency"
-msgstr "Fréquence de facturation"
 
 msgctxt "view:offered.product:"
 msgid "Invoice Parameters"

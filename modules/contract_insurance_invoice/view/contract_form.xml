@@ -2,19 +2,7 @@
 <data>
     <xpath expr="/form/notebook/page[@id='admin']" position="before">
         <page string="Invoicing" id="invoicing">
-            <label name="direct_debit"/>
-            <field name="direct_debit"/>
-            <label name="direct_debit_day"/>
-            <field name="direct_debit_day"/>
-            <label name="direct_debit_account"/>
-            <field name="direct_debit_account"/>
-            <newline/>
-            <label name="payment_term"/>
-            <field name="payment_term"/>
-            <field name="payment_terms" colspan="4"/>
-            <label name="invoice_frequency"/>
-            <field name="invoice_frequency"/>
-            <field name="invoice_frequencies" colspan="4"/>
+            <field name="billing_informations" colspan="4"/>
         </page>
     </xpath>
 </data>
