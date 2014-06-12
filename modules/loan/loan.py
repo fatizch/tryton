@@ -233,12 +233,14 @@ class Loan(model.CoopSQL, model.CoopView):
                     ('contract', '=', contract_id)])]
 
     def get_rec_name(self, name):
-        res = self.number if self.number is not None else ''
+        name = []
+        if self.number:
+            name.append(self.number)
         if self.kind:
-            res += ' ' + coop_string.translate_value(self, 'kind')
+            name.append(coop_string.translate_value(self, 'kind'))
         if self.amount:
-            res += ' ' + self.currency.amount_as_string(self.amount)
-        return res
+            name.append(self.currency.amount_as_string(self.amount))
+        return ' '.join(name)
 
     def get_order(self, name):
         contract_id = Transaction().context.get('contract', None)
@@ -349,7 +351,7 @@ class Loan(model.CoopSQL, model.CoopView):
             return self.increments[0].deferal
 
     def get_deferal_duration(self, name):
-        if self.increments:
+        if self.deferal:
             return self.increments[0].number_of_payments
 
     def update_increments(self):
@@ -412,11 +414,13 @@ class Loan(model.CoopSQL, model.CoopView):
     def get_payment(self, at_date=None):
         if not at_date:
             at_date = utils.today()
-        payment = self.payments[0] if self.payments else None
+        payment = None
         for cur_payment in self.payments:
-            if cur_payment.start_date > at_date:
-                return payment
-            payment = cur_payment
+            if cur_payment.start_date <= at_date:
+               payment = cur_payment
+               continue
+            else:
+                break
         return payment
 
     def get_outstanding_loan_balance(self, name=None, at_date=None):
