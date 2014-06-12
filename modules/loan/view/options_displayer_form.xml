@@ -13,7 +13,7 @@
                 <field name="default_share" factor="100" xexpand="0"/>
                 <label string="%" id="percent" xexpand="0" xalign="0"/>
             </group>
-            <field name="loans" colspan="2" widget="multiselection"/>
+            <field name="loans" colspan="2"/>
         </group>
     </xpath>
 </data>

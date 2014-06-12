@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.cog_utils import model, fields, export
 
@@ -37,7 +35,6 @@ class DistributionNetwork:
     @classmethod
     def __setup__(cls):
         super(DistributionNetwork, cls).__setup__()
-        cls.brokers = copy.copy(cls.brokers)
         cls.brokers.domain = export.clean_domain_for_import(
             cls.brokers.domain)
 

@@ -9,6 +9,7 @@ def register():
     Pool.register(
         # from payment
         Payment,
+        # from party
         SynthesisMenuPayment,
         SynthesisMenu,
         # from company

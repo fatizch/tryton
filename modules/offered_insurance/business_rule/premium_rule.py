@@ -29,7 +29,9 @@ PRICING_LINE_KINDS = [
     ]
 
 PRICING_FREQUENCY = [
-    ('yearly', 'Yearly'),
+    ('yearly', 'Yearly (Exact)'),
+    ('yearly_360', 'Yearly (360 days)'),
+    ('yearly_365', 'Yearly (365 days)'),
     ('biannual', 'Half Yearly'),
     ('quarterly', 'Quarterly'),
     ('monthly', 'Monthly'),
@@ -352,6 +354,8 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             return
         conversion_table = {
             'yearly': Decimal(12),
+            'yearly_360': Decimal(12),
+            'yearly_365': Decimal(12),
             'biannual': Decimal(6),
             'quarterly': Decimal(3),
             'monthly': Decimal(1),

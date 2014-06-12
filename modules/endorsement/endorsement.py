@@ -525,7 +525,6 @@ class EndorsementOption(relation_mixin('endorsement.option.field', 'option',
     @classmethod
     def __setup__(cls):
         super(EndorsementOption, cls).__setup__()
-        cls.values = copy.copy(cls.values)
         cls.values.domain = [('template', '=', Eval('template'))]
         cls.values.depends = ['template']
 

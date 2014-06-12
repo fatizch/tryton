@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -62,10 +60,8 @@ class Journal(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Journal, cls).__setup__()
-        cls.credit_account = copy.copy(cls.credit_account)
         cls.credit_account.domain = export.clean_domain_for_import(
             cls.credit_account.domain, 'company')
-        cls.debit_account = copy.copy(cls.debit_account)
         cls.debit_account.domain = export.clean_domain_for_import(
             cls.debit_account.domain, 'company')
 
@@ -84,7 +80,6 @@ class FiscalYear(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(FiscalYear, cls).__setup__()
-        cls.company = copy.copy(cls.company)
         cls.company.domain = export.clean_domain_for_import(
             cls.company.domain, 'company')
 

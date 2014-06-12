@@ -244,7 +244,7 @@ class Process(ModelSQL, ModelView):
         return good_action
 
     def get_xml_header(self, colspan="4"):
-        xml = '<group name="process_header" colspan="%s">' % colspan
+        xml = '<group id="process_header" colspan="%s">' % colspan
         if hasattr(self, 'xml_header') and self.xml_header:
             xml += self.xml_header
         xml += '</group>'
@@ -260,7 +260,7 @@ class Process(ModelSQL, ModelView):
             self, step_relation, group_name='group', col=4, yexp=True):
         step = step_relation.step
         step_pyson, auth_pyson = step.get_pyson_for_display(step_relation)
-        xml = '<group name="%s_%s" ' % (group_name, step.technical_name)
+        xml = '<group id="%s_%s" ' % (group_name, step.technical_name)
         xml += 'xfill="1" xexpand="1"'
         if yexp:
             xml += ' yfill="1" yexpand="1" '
@@ -281,7 +281,7 @@ class Process(ModelSQL, ModelView):
 
         xml = ''
         if auth_pyson:
-            xml += '<group name="group_%s_noauth" ' % step.technical_name
+            xml += '<group id="group_%s_noauth" ' % step.technical_name
             xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
             xml += 'states="{'
             xml += "'invisible': Not(And(%s, Not(%s)))" % (
@@ -328,7 +328,7 @@ class Process(ModelSQL, ModelView):
         return xml
 
     def get_finished_process_xml(self):
-        xml = '<group name="group_tech_complete" '
+        xml = '<group id="group_tech_complete" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
         xml += 'states="{'
         xml += "'invisible': ~~Eval('current_state')"
@@ -355,7 +355,7 @@ class Process(ModelSQL, ModelView):
         return xml
 
     def get_xml_footer(self, colspan=4):
-        xml = '<group name="process_footer" colspan="%s">' % colspan
+        xml = '<group id="process_footer" colspan="%s">' % colspan
         if hasattr(self, 'xml_footer') and self.xml_footer:
             xml += self.xml_footer
         xml += '</group>'
@@ -366,7 +366,7 @@ class Process(ModelSQL, ModelView):
         xml = '<?xml version="1.0"?>'
         xml += '<form string="%s" col="4">' % self.fancy_name
         xml += self.get_xml_header()
-        xml += '<group name="process_content" '
+        xml += '<group id="process_content" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
         xml += self.get_xml_for_steps()
         xml += '<newline/>'
@@ -375,7 +375,7 @@ class Process(ModelSQL, ModelView):
         if self.step_button_group_position:
             if self.step_button_group_position == 'bottom':
                 xml += '<newline/>'
-            xml += '<group name="process_buttons" colspan="1" col="1" '
+            xml += '<group id="process_buttons" colspan="1" col="1" '
             if self.step_button_group_position == 'right':
                 xml += 'xexpand="0" xfill="0" yexpand="1" yfill="1">'
             elif self.step_button_group_position == 'bottom':

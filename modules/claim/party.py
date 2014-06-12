@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Less
 
@@ -56,5 +54,4 @@ class PartyInteraction:
     @classmethod
     def __setup__(cls):
         super(PartyInteraction, cls).__setup__()
-        cls.for_object_ref = copy.copy(cls.for_object_ref)
         cls.for_object_ref.selection.append(['claim', 'Claim'])

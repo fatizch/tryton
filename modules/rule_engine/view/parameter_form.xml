@@ -9,8 +9,8 @@
   <field name="type_"/>
   <label name="digits"/>
   <field name="digits"/>
-  <label name="sort_selection"/>
-  <field name="sort_selection"/>
+  <label name="selection_sorted"/>
+  <field name="selection_sorted"/>
   <newline/>
   <label name="selection"/>
   <field name="selection" colspan="3"/>

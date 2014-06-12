@@ -1,4 +1,3 @@
-import copy
 import re
 from ibanlib import iban
 
@@ -34,7 +33,6 @@ class BankAccountNumber:
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
-        cls.type = copy.copy(cls.type)
         cls.type.selection.append(('rib', 'RIB'))
         cls.type.selection = list(set(cls.type.selection))
 

@@ -84,11 +84,18 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
         premium_aggregates = contract.calculate_premium_aggregates()
         loan_amount = 0
         for k, v in premium_aggregates('contract').iteritems():
-            if k.__name__ != 'loan.share':
+            if loan.id not in v:
                 continue
-            if k.loan != loan:
-                continue
-            loan_amount += v / k.share
+            if k.__name__ == 'contract.option':
+                option = k
+            elif k.__name__ == 'contract.option.extra_premium':
+                option = k.option
+            for share in option.loan_shares:
+                if share.loan == loan:
+                    if share.share == 0:
+                        break
+                    loan_amount += v[loan.id] / share.share
+                    break
         biggest = max([x.amount for x in contract.used_loans]) == loan.amount
         longest = max([coop_date.number_of_days_between(
                     x.funds_release_date,
@@ -111,7 +118,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             action = rule_fees.get(k, self.default_fee_action)
             if action == 'do_not_use':
                 continue
-            fee_amount += v * ratios[action]
+            fee_amount += sum(v.values()) * ratios[action]
         den = loan.amount * coop_date.number_of_years_between(
             loan.funds_release_date, loan.end_date)
         return (loan_amount + fee_amount) * 100 / den if den else None
@@ -122,7 +129,10 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             return 0
         loan = share.loan
         premium_aggregates = contract.calculate_premium_aggregates()
-        share_amount = premium_aggregates('contract', share) or 0
+        share_amount = 0
+        for entity in [share.option] + list(share.option.extra_premiums):
+            share_amount += premium_aggregates('contract', value=entity,
+                loan_id=share.loan.id)
         biggest = max([x.amount for x in contract.used_loans]) == loan.amount
         longest = max([coop_date.number_of_days_between(
                     x.funds_release_date,
@@ -145,10 +155,16 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             action = rule_fees.get(k, self.default_fee_action)
             if action == 'do_not_use':
                 continue
-            fee_amount += v * ratios[action]
-        fee_ratio = share_amount / (premium_aggregates('offered',
-                model_name='offered.product') + premium_aggregates('offered',
-                model_name='offered.option.description'))
+            fee_amount += sum(v.values()) * ratios[action]
+        denominator = (premium_aggregates('offered',
+                model_name='offered.product') + premium_aggregates(
+                'offered', model_name='offered.option.description'))
+        if denominator == 0:
+            fee_ratio = 0
+        else:
+            fee_ratio = share_amount / (premium_aggregates('offered',
+                    model_name='offered.product') + premium_aggregates(
+                    'offered', model_name='offered.option.description'))
         return (share_amount + fee_amount * fee_ratio) * 100 / (loan.amount *
             coop_date.number_of_years_between(loan.funds_release_date,
                 loan.end_date) * share.share)

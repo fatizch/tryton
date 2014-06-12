@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
@@ -77,7 +75,6 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     @classmethod
     def __setup__(cls):
         super(CommercialProduct, cls).__setup__()
-        cls.product = copy.copy(cls.product)
         cls.product.domain = export.clean_domain_for_import(
             cls.product.domain, 'company')
 

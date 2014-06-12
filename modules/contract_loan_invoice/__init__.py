@@ -5,7 +5,6 @@ from .offered import *
 
 def register():
     Pool.register(
-        ContractOption,
         LoanShare,
         Premium,
         Contract,

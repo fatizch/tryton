@@ -18,15 +18,6 @@ class TestCaseModel:
     main_zip = fields.Integer('Main Zip')
 
     @classmethod
-    def _get_test_case_dependencies(cls):
-        result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['zip_code_test_case'] = {
-            'name': 'Zip Code Test Case',
-            'dependencies': set([]),
-            }
-        return result
-
-    @classmethod
     def zip_code_test_case(cls):
         if Transaction().context.get('TESTING', False):
             return

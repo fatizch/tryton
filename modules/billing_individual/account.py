@@ -1,4 +1,3 @@
-import copy
 from decimal import Decimal
 from sql.aggregate import Sum
 from sql.conditionals import Coalesce
@@ -320,7 +319,6 @@ class TaxDesc:
     @classmethod
     def __setup__(cls):
         super(TaxDesc, cls).__setup__()
-        cls.account_for_billing = copy.copy(cls.account_for_billing)
         cls.account_for_billing.domain = export.clean_domain_for_import(
             cls.account_for_billing.domain)
 
@@ -353,7 +351,6 @@ class FeeDesc:
     @classmethod
     def __setup__(cls):
         super(FeeDesc, cls).__setup__()
-        cls.account_for_billing = copy.copy(cls.account_for_billing)
         cls.account_for_billing.domain = export.clean_domain_for_import(
             cls.account_for_billing.domain)
 

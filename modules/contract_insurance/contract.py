@@ -170,17 +170,18 @@ class Contract(Printable):
         return good_roles[0] if len(good_roles) == 1 else None
 
     def get_or_create_agreement(self, kind, party):
-        role = self.get_agreement(kind, party)
-        if not role:
-            role = utils.instanciate_relation(self, 'agreements')
-            role.party = party
-            role.kind = kind
+        Agreement = Pool().get('contract-agreement')
+        agreement = self.get_agreement(kind, party)
+        if not agreement:
+            agreement = Agreement()
+            agreement.party = party
+            agreement.kind = kind
             if not getattr(self, 'agreements', None):
                 self.agreements = []
             else:
                 self.agreements = list(self.agreements)
-            self.agreements.append(role)
-        return role
+            self.agreements.append(agreement)
+        return agreement
 
     def get_protocol_offered(self, kind):
         #what if several protocols exist?

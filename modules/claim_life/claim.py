@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
@@ -34,7 +32,6 @@ class Loss:
     @classmethod
     def super(cls):
         super(Loss, cls).super()
-        cls.main_loss = copy.copy(cls.main_loss)
         cls.main_loss.on_change.add('covered_person')
 
     def on_change_main_loss(self):

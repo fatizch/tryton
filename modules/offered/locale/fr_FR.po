@@ -92,7 +92,7 @@ msgctxt "field:extra_data,selection_json:"
 msgid "Selection JSON"
 msgstr "Sélection JSON"
 
-msgctxt "field:extra_data,sort_selection:"
+msgctxt "field:extra_data,selection_sorted:"
 msgid "Sort Selection"
 msgstr "Sélection Triée"
 

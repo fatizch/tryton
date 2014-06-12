@@ -27,6 +27,9 @@ class Invoice:
     contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_contract_invoice_field', searcher='search_contract_invoice')
+    contract_invoice = fields.Function(
+        fields.Many2One('contract.invoice', 'Contract Invoice'),
+        'get_contract_invoice_field')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
@@ -51,14 +54,17 @@ class Invoice:
 
     @classmethod
     def get_contract_invoice_field(cls, instances, name):
-        res = dict((m.id, None) for m in instances)
+        res = {}
         cursor = Transaction().cursor
 
         contract_invoice = Pool().get('contract.invoice').__table__()
         invoice = cls.__table__()
 
-        query_table = invoice.join(contract_invoice,
+        query_table = invoice.join(contract_invoice, 'LEFT OUTER',
             condition=(contract_invoice.invoice == invoice.id))
+
+        if name == 'contract_invoice':
+            name = 'id'
 
         cursor.execute(*query_table.select(invoice.id,
                 getattr(contract_invoice, name),
@@ -127,7 +133,7 @@ class Invoice:
     order_start = _order_contract_invoice_field('start')
     order_end = _order_contract_invoice_field('end')
 
-    def get_rec_name(self, name):
+    def get_synthesis_rec_name(self, name):
         if self.number:
             if self.start and self.end:
                 return '%s - %s - (%s - %s) [%s]' % (
@@ -153,7 +159,8 @@ class Invoice:
                     coop_string.translate_value(self, 'state'))
 
     def get_icon(self, name=None):
-        return 'invoice'
+        if self.reconciled:
+            return 'coopengo-reconciliation'
 
     def get_payment(self):
         pool = Pool()
@@ -203,8 +210,8 @@ class Invoice:
 class InvoiceLine:
     __name__ = 'account.invoice.line'
     # XXX maybe change for the description
-    contract_insurance_start = fields.Date('Start Date')
-    contract_insurance_end = fields.Date('End Date')
+    coverage_start = fields.Date('Start Date')
+    coverage_end = fields.Date('End Date')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')

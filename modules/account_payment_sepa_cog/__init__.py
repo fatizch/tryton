@@ -8,6 +8,6 @@ def register():
     Pool.register(
         # from payment
         Journal,
+        # from bank
         BankAccountNumber,
-        Mandate,
         module='account_payment_sepa_cog', type_='model')

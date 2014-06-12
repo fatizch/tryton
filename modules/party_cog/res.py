@@ -6,7 +6,6 @@ except ImportError:
 from trytond.pool import PoolMeta, Pool
 from trytond.model import fields
 from trytond.pyson import PYSONEncoder
-from trytond.transaction import Transaction
 
 __all__ = ['User']
 __metaclass__ = PoolMeta
@@ -43,18 +42,3 @@ class User:
                     })
             return encoder.encode(action)
         return menu
-
-    @classmethod
-    def get_preferences(cls, context_only=False):
-        preferences = super(User, cls).get_preferences(
-            context_only=context_only)
-        if not context_only:
-            user = Transaction().user
-            with Transaction().set_user(0, set_context=True):
-                user = cls(user)
-                if user.party_synthesis:
-                    user.party_synthesis = None
-                elif user.party_synthesis_previous:
-                    user.party_synthesis_previous = None
-                user.save()
-        return preferences

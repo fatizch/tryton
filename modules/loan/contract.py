@@ -3,9 +3,10 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields, model, coop_string
+from trytond.modules.cog_utils import coop_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -37,6 +38,18 @@ class Contract:
             depends=['is_loan', 'currency', 'status', 'subscriber', 'parties'],
             context={'currency': Eval('currency')}),
         'on_change_with_loans', 'setter_void')
+    used_loans = fields.Function(
+        fields.Many2Many('loan', None, None, 'Used Loans',
+            context={'contract': Eval('id')}, depends=['id']),
+        'get_used_loans')
+
+    def get_used_loans(self, name):
+        loans = set([share.loan
+            for covered_element in self.covered_elements
+            for option in covered_element.options
+            for share in option.loan_shares])
+
+        return [x.id for x in sorted(list(loans), key=lambda x: x.id)]
 
     @classmethod
     def __setup__(cls):
@@ -86,7 +99,7 @@ class Contract:
                 for share in option.loan_shares])
         if not loans:
             return
-        end_date = max([x.end_date for x in loans])
+        end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
         self.set_end_date(end_date)
 
 
@@ -95,12 +108,8 @@ class ContractOption:
 
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
         states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
-            ('loan.parties', 'in', Eval('parties', [])),
-            ('start_date', '>=', Eval('start_date', datetime.date.min)),
-            If(Bool(Eval('end_date', None)),
-                [('end_date', '<=', Eval('end_date'))],
-                [])],
-        depends=['coverage_family', 'parties', 'start_date', 'end_date'])
+            ('loan.parties', 'in', Eval('parties', []))],
+        depends=['coverage_family', 'parties'])
     multi_mixed_view = loan_shares
 
     @fields.depends('coverage', 'loan_shares')
@@ -116,7 +125,7 @@ class ContractOption:
         to_update = []
         for share in self.loan_shares:
             res = {'id': share.id}
-            if share.start_date < self.start_date:
+            if share.start_date or datetime.date.min < self.start_date:
                 res['start_date'] = self.start_date
             if self.end_date and (not share.end_date or
                     share.end_date > self.end_date):
@@ -130,7 +139,8 @@ class ContractOption:
         for share in self.loan_shares:
             if share.end_date and share.end_date <= end_date:
                 continue
-            share.end_date = end_date
+            #TEMP fix before removing start_date/end_date from share
+            share.end_date = min(end_date, share.loan.end_date)
         self.loan_shares = self.loan_shares
 
 
@@ -189,7 +199,7 @@ class LoanShare(model.CoopSQL, model.CoopView):
     __name__ = 'loan.share'
 
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
-    start_date = fields.Date('Start Date', required=True)
+    start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True)
     share = fields.Numeric('Loan Share', digits=(16, 4))
@@ -206,10 +216,6 @@ class LoanShare(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_share():
         return 1
-
-    @classmethod
-    def default_start_date(cls):
-        return Transaction().context.get('start_date', utils.today())
 
     @fields.depends('loan')
     def on_change_loan(self):
@@ -447,7 +453,9 @@ class DisplayContractPremium:
     __name__ = 'contract.premium.display'
 
     @classmethod
-    def get_children_fields(cls):
-        result = super(DisplayContractPremium, cls).get_children_fields()
-        result['contract.option'].append('loan_shares')
-        return result
+    def new_line(cls, line=None):
+        new_line = super(DisplayContractPremium, cls).new_line(line)
+        if not line or not line.loan:
+            return new_line
+        new_line['name'] = '[%s] %s' % (line.loan.number, new_line['name'])
+        return new_line

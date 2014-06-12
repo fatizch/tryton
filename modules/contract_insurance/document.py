@@ -1,4 +1,3 @@
-import copy
 from trytond.pool import PoolMeta
 
 __metaclass__ = PoolMeta
@@ -16,7 +15,6 @@ class DocumentRequest:
     @classmethod
     def __setup__(cls):
         super(DocumentRequest, cls).__setup__()
-        cls.needed_by = copy.copy(cls.needed_by)
         cls.needed_by.selection.append(
             ('contract', 'Contract'))
 
@@ -27,7 +25,6 @@ class DocumentRequestLine:
     @classmethod
     def __setup__(cls):
         super(DocumentRequestLine, cls).__setup__()
-        cls.for_object = copy.copy(cls.for_object)
         cls.for_object.selection.append(
             ('contract', 'Contract'))
         cls.for_object.selection.append(

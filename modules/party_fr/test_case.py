@@ -12,8 +12,8 @@ class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
-    def create_person(cls, sex='male'):
-        result = super(TestCaseModel, cls).create_person(sex)
+    def new_person(cls, sex='male', with_address=True):
+        result = super(TestCaseModel, cls).new_person(sex, with_address)
         if result.gender == 'male':
             ssn = '1'
         elif result.gender == 'female':

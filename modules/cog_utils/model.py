@@ -1,5 +1,4 @@
 import logging
-import copy
 import time
 import datetime
 import json
@@ -238,9 +237,7 @@ class VersionedObject(CoopView):
     @classmethod
     def __setup__(cls):
         super(VersionedObject, cls).__setup__()
-        versions = copy.copy(getattr(cls, 'versions'))
-        versions.model_name = cls.version_model()
-        setattr(cls, 'versions', versions)
+        cls.versions.model_name = cls.version_model()
 
     def get_previous_version(self, at_date):
         prev_version = None
@@ -290,9 +287,7 @@ class VersionObject(CoopView):
     @classmethod
     def __setup__(cls):
         super(VersionObject, cls).__setup__()
-        main_elem = copy.copy(getattr(cls, 'main_elem'))
-        main_elem.model_name = cls.main_model()
-        setattr(cls, 'main_elem', main_elem)
+        cls.main_elem.model_name = cls.main_model()
 
     @staticmethod
     def default_start_date():
@@ -310,7 +305,6 @@ class ObjectHistory(CoopSQL, CoopView):
 
     @classmethod
     def __setup__(cls):
-        cls.from_object = copy.copy(cls.from_object)
         cls.from_object.model_name = cls.get_object_model()
         object_name = cls.get_object_name()
         if object_name:

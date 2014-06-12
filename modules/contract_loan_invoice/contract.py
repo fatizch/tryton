@@ -1,3 +1,6 @@
+import datetime
+from collections import defaultdict
+
 from sql import Cast
 from sql.aggregate import Sum
 from sql.operators import Concat
@@ -7,12 +10,11 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.cog_utils import fields, model, utils, coop_date
 
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'ContractOption',
     'LoanShare',
     'Premium',
     'Contract',
@@ -22,26 +24,9 @@ __all__ = [
     ]
 
 
-class ContractOption:
-    __name__ = 'contract.option'
-
-    def get_invoice_lines(self, start, end):
-        lines = super(ContractOption, self).get_invoice_lines(start, end)
-        for loan_share in self.loan_shares:
-            lines.extend(loan_share.get_invoice_lines(start, end))
-        return lines
-
-    def get_premium_list(self, values):
-        super(ContractOption, self).get_premium_list(values)
-        for share in self.loan_shares:
-            share.get_premium_list(values)
-
-
 class LoanShare:
     __name__ = 'loan.share'
 
-    premiums = fields.One2Many('contract.premium', 'loan_share', 'Premiums',
-        order=[('rated_entity', 'ASC'), ('start', 'ASC')])
     average_premium_rate = fields.Function(
         fields.Numeric('Average Premium Rate', digits=(6, 4)),
         'get_average_premium_rate')
@@ -51,59 +36,47 @@ class LoanShare:
         rule = contract.product.average_loan_premium_rule
         return rule.calculate_average_premium_for_option(contract, self)
 
-    def get_invoice_lines(self, start, end):
-        lines = []
-        for premium in self.premiums:
-            lines.extend(premium.get_invoice_lines(start, end))
-        return lines
-
-    def get_premium_list(self, values):
-        values.extend(self.premiums)
-
 
 class Premium:
     __name__ = 'contract.premium'
 
-    loan_share = fields.Many2One('loan.share', 'Loan Share', select=True,
-        ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', select=True, ondelete='RESTRICT')
 
     @classmethod
-    def get_possible_parent_field(cls):
-        result = super(Premium, cls).get_possible_parent_field()
-        result.add('loan_share')
+    def __setup__(cls):
+        super(Premium, cls).__setup__()
+        # Make sure premiums are properly ordered per loan
+        cls._order.insert(0, ('loan', 'ASC'))
+
+    def get_rec_name(self, name):
+        rec_name = super(Premium, self).get_rec_name(name)
+        if not self.loan:
+            return rec_name
+        return '[%s] %s' % (self.loan.number, rec_name)
+
+    def same_value(self, other):
+        return super(Premium, self).same_value(other) and (
+            self.loan == other.loan)
+
+    @classmethod
+    def new_line(cls, line, start_date, end_date):
+        result = super(Premium, cls).new_line(line, start_date, end_date)
+        if 'loan' not in line:
+            return result
+        result.loan = line['loan']
+        result.end = min(end_date or datetime.date.max,
+            coop_date.add_day(line['loan'].end_date, -1))
         return result
 
-    def get_main_contract(self, name=None):
-        if self.loan_share:
-            return self.loan_share.option.parent_contract.id
-        return super(Premium, self).get_main_contract(name)
-
-    def calculate_rated_entity(self):
-        rated_entity = super(Premium, self).calculate_rated_entity()
-        if rated_entity:
-            return rated_entity
-        parent = self.get_parent()
-        if parent.__name__ == 'loan.share':
-            rated_entity = parent.option.coverage
-        return rated_entity
+    def get_description(self):
+        description = super(Premium, self).get_description()
+        if not self.loan:
+            return description
+        return '[%s] %s' % (self.loan.number, description)
 
 
 class Contract:
     __name__ = 'contract'
-
-    used_loans = fields.Function(
-        fields.Many2Many('loan', None, None, 'Used Loans',
-            context={'contract': Eval('id')}, depends=['id']),
-        'get_used_loans')
-
-    def get_used_loans(self, name):
-        loans = set([share.loan
-            for covered_element in self.covered_elements
-            for option in covered_element.options
-            for share in option.loan_shares])
-
-        # Use the loan creation date to ensure consistent ordering
-        return [x.id for x in sorted(list(loans), key=lambda x: x.create_date)]
 
     def calculate_premium_aggregates(self, start=None, end=None):
         cursor = Transaction().cursor
@@ -115,12 +88,12 @@ class Contract:
         premium = Premium.__table__()
 
         if start:
-            date_clause = invoice_line.contract_insurance_start >= start
+            date_clause = invoice_line.coverage_start >= start
         else:
             date_clause = None
         if end:
             if date_clause:
-                date_clause &= (invoice_line.contract_insurance_start <= end)
+                date_clause &= (invoice_line.coverage_start <= end)
 
         query_table = invoice.join(invoice_contract, condition=(
                 (invoice_contract.invoice == invoice.id)
@@ -139,8 +112,9 @@ class Contract:
                 for x in premium_fields])
 
         cursor.execute(*query_table.select(Sum(invoice_line.unit_price),
-                *premium_parents, where=date_clause, group_by=premium_parents))
-        per_contract_entity = {}
+                premium.loan, *premium_parents, where=date_clause,
+                group_by=[premium.loan] + premium_parents))
+        per_contract_entity = defaultdict(lambda: defaultdict(lambda: 0))
         for elem in cursor.dictfetchall():
             parent = None
             for x in premium_fields:
@@ -149,34 +123,47 @@ class Contract:
                 parent = premium_parents_models[x](elem[x])
                 break
             if parent:
-                per_contract_entity[parent] = elem['sum']
+                per_contract_entity[parent][elem['loan']] = elem['sum']
 
-        cursor.execute(*query_table.select(premium.rated_entity,
+        cursor.execute(*query_table.select(premium.rated_entity, premium.loan,
                 Sum(invoice_line.unit_price), where=date_clause,
-                group_by=premium.rated_entity))
-        per_offered_entity = {}
+                group_by=(premium.rated_entity, premium.loan)))
+        per_offered_entity = defaultdict(lambda: defaultdict(lambda: 0))
         for elem in cursor.dictfetchall():
             parent = utils.convert_ref_to_obj(elem['rated_entity'])
-            per_offered_entity[parent] = elem['sum']
+            per_offered_entity[parent][elem['loan']] = elem['sum']
 
-        def result_parser(kind, value=None, model_name=''):
-            # kind must be one of 'offered' or 'contract'
-            if kind not in ('offered', 'contract'):
-                raise KeyError('First parameter must be one of offered /'
-                    'contract')
+        def result_parser(kind, value=None, model_name='', loan_id=None):
+            # Returns a function that can be used to browse the queries results
+            # and aggregating them. It is possible to aggregate per model_name,
+            # per a specific parent (eg. per covered_element), or per offered
+            # entity (eg. offered coverage)
+            assert kind in ('offered', 'contract')
             values = {}
             if kind == 'offered':
                 values = per_offered_entity
             elif kind == 'contract':
                 values = per_contract_entity
             if value:
-                return values.get(value, None)
+                good_dict = values[value]
+                if loan_id:
+                    return good_dict[loan_id]
+                return sum(good_dict.values())
             if model_name:
-                return sum([v for k, v in values.iteritems()
+                result = sum([result_parser(kind, value=k, loan_id=loan_id)
+                        for k, v in values.iteritems()
                         if k.__name__ == model_name])
+                return result
             return values
 
         return result_parser
+
+    def first_invoice(self):
+        if not self.is_loan:
+            return super(Contract, self).first_invoice()
+        ContractInvoice = Pool().get('contract.invoice')
+        ContractInvoice.delete(self.invoices)
+        self.invoice([self], self.end_date)
 
 
 class Loan:

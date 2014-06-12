@@ -1,4 +1,3 @@
-import copy
 import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
@@ -26,7 +25,6 @@ class ContactMechanism(export.ExportImportMixin):
     def __setup__(cls):
         super(ContactMechanism, cls).__setup__()
         # TODO : Make it cleaner
-        cls.type = copy.copy(cls.type)
         if ('skype', 'Skype') in cls.type.selection:
             cls.type.selection.remove(('skype', 'Skype'))
         if ('sip', 'SIP') in cls.type.selection:

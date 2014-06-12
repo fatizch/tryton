@@ -603,7 +603,7 @@ msgctxt "field:rule_engine.rule_parameter,selection_json:"
 msgid "Selection JSON"
 msgstr "Sélection JSON"
 
-msgctxt "field:rule_engine.rule_parameter,sort_selection:"
+msgctxt "field:rule_engine.rule_parameter,selection_sorted:"
 msgid "Sort Selection"
 msgstr "Sélection Triée"
 

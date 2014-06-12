@@ -2,4 +2,6 @@
 <form string="Test Case Parameters">
   <label name="language"/>
   <field name="language"/>
+  <newline/>
+  <field name="test_cases" colspan="4"/>
 </form>

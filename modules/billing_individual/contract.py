@@ -98,9 +98,6 @@ class Contract:
     def get_name_for_billing(self):
         return self.offered.name + ' - Base Price'
 
-    def new_billing_data(self):
-        return utils.instanciate_relation(self, 'billing_datas')
-
     def init_from_offered(self, offered, start_date=None, end_date=None):
         res = super(Contract, self).init_from_offered(offered, start_date,
             end_date)
@@ -109,7 +106,8 @@ class Contract:
 
     def init_billing_data(self):
         if not getattr(self, 'billing_datas', None):
-            bm = self.new_billing_data()
+            BillingData = Pool().get('contract.billing.data')
+            bm = BillingData()
             bm.init_from_contract(self, self.start_date)
             self.billing_datas = [bm]
             bm.save()

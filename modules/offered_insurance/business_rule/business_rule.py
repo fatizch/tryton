@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
@@ -44,7 +42,6 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     @classmethod
     def __setup__(cls):
         super(BusinessRuleRoot, cls).__setup__()
-        cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
         if hasattr(cls, '_order'):
             cls._order.insert(0, ('start_date', 'ASC'))

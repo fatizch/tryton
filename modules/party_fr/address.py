@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.modules.party.address import STATES, DEPENDS
@@ -25,7 +23,6 @@ class Address:
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        cls.name = copy.copy(cls.name)
         cls.name.string = 'Line 2'
         cls.name.help = '''AFNOR - Line 2
         For individual : Delivery Point Access Data
@@ -33,7 +30,6 @@ class Address:
         For companies : Individual Identification Form of Address -
         Given Name, Surname, function, Department'''
 
-        cls.street = copy.copy(cls.street)
         if cls.street.on_change is None:
             cls.street.on_change = set()
         cls.street.on_change.add('street')
@@ -41,7 +37,6 @@ class Address:
             Street number or plot and thoroughfare -
             Street or Avenue or Village...'''
 
-        cls.streetbis = copy.copy(cls.streetbis)
         cls.streetbis.string = 'Post Office (Line 5)'
         cls.streetbis.help = '''AFNOR - Line 5
             Delivery Service
@@ -51,12 +46,10 @@ class Address:
             cls.streetbis.on_change = []
         cls.streetbis.on_change.add('streetbis')
 
-        cls.city = copy.copy(cls.city)
         if cls.city.on_change is None:
             cls.city.on_change = []
         cls.city.on_change.add('city')
         #Set Siret invisible for person
-        cls.siret = copy.copy(cls.siret)
         cls.siret.states = {
             'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
         cls.siret_nic.states = {

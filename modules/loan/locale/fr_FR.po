@@ -788,3 +788,7 @@ msgstr "Précédent"
 msgctxt "wizard_button:loan.create,loan_step_payments,save_loan:"
 msgid "End"
 msgstr "Terminer"
+
+msgctxt "field:contract,used_loans:"
+msgid "Used Loans"
+msgstr "Prêts rattachés au contrat"

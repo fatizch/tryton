@@ -12,7 +12,7 @@ except ImportError:
 from collections import defaultdict
 from sql.operators import Concat
 
-from trytond.protocols.jsonrpc import JSONEncoder, object_hook
+from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
 from trytond.model import ModelSingleton
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -740,7 +740,7 @@ class ExportImportMixin(Model):
         with Transaction().set_user(0), Transaction().set_context(
                 __importing__=True, language='en_US'):
             if isinstance(values, basestring):
-                values = json.loads(values, object_hook=object_hook)
+                values = json.loads(values, object_hook=JSONDecoder())
                 values = map(utils.recursive_list_tuple_convert, values)
             created = {}
             relink = defaultdict(
@@ -780,7 +780,7 @@ class FileSelector(ModelView):
         else:
             file_buffer = self.selected_file
             values = str(file_buffer)
-            values = json.loads(values, object_hook=object_hook)
+            values = json.loads(values, object_hook=JSONDecoder())
             instances = {}
             for value in values:
                 if not value['__name__'] in instances:
