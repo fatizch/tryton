@@ -6,7 +6,8 @@
     <field name="code"/>
     <newline/>
     <label name="frequency"/>
-    <field name="frequency" colspan="3"/>
+    <field name="frequency"/>
+    <newline/>
     <label name="sync_day"/>
     <field name="sync_day"/>
     <label name="sync_month"/>
@@ -17,7 +18,7 @@
     <label name="allowed_direct_debit_days"/>
     <field name="allowed_direct_debit_days"/>
     <newline/>
-    <field name="ordered_payment_terms" colspan="4" mode="tree"/>
+    <field name="ordered_payment_terms" colspan="4"/>
     <field name="allowed_payment_terms" colspan="4"/>
     <newline/>
     <label name="change_payment_terms_order"/>

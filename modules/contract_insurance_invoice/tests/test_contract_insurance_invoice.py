@@ -277,12 +277,17 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
                 [])
             self.assertEqual(contract.get_invoice_periods(date(2014, 5, 1)),
-                [(date(2014, 4, 15), date(2014, 5, 14))])
+                [(date(2014, 4, 15), date(2014, 5, 14),
+                    contract.billing_informations[0])])
             self.assertEqual(contract.get_invoice_periods(date(2014, 8, 1)),
-                [(date(2014, 4, 15), date(2014, 5, 14)),
-                    (date(2014, 5, 15), date(2014, 6, 14)),
-                    (date(2014, 6, 15), date(2014, 6, 30)),
-                    (date(2014, 7, 1), date(2014, 9, 30))])
+                [(date(2014, 4, 15), date(2014, 5, 14),
+                    contract.billing_informations[0]),
+                    (date(2014, 5, 15), date(2014, 6, 14),
+                        contract.billing_informations[0]),
+                    (date(2014, 6, 15), date(2014, 6, 30),
+                        contract.billing_informations[0]),
+                    (date(2014, 7, 1), date(2014, 9, 30),
+                        contract.billing_informations[1])])
 
             contract = Contract(company=company,
                 activation_history=[ActivationHistory(
@@ -296,7 +301,8 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
                 [])
             self.assertEqual(contract.get_invoice_periods(date(2014, 4, 16)),
-                [(date(2014, 4, 15), date.max + relativedelta(days=-1))])
+                [(date(2014, 4, 15), date.max + relativedelta(days=-1),
+                    contract.billing_informations[0])])
 
 
 def suite():

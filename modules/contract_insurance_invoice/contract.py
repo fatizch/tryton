@@ -42,7 +42,7 @@ FREQUENCIES = [
     ('once_per_contract', 'Once Per Contract'),
     ('monthly', 'Monthly'),
     ('quarterly', 'Quarterly'),
-    ('biannual', 'Biannual'),
+    ('half_yearly', 'Half-yearly'),
     ('yearly', 'Yearly'),
     ]
 
@@ -56,14 +56,12 @@ PREMIUM_FREQUENCIES = FREQUENCIES + [
 class Contract:
     __name__ = 'contract'
     invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices')
- premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
     payment_term = fields.Function(fields.Many2One(
-            'account.invoice.payment_term', 'Payment Term',
-            domain=[('value.products', '=', Eval('product'))],
-            depends=['product']),
+        'account.invoice.payment_term', 'Payment Term'),
         'get_billing_information')
     billing_mode = fields.Function(
-        fields.Many2One('offered.billing_mode', 'Billing Choice'),
+        fields.Many2One('offered.billing_mode', 'Billing Mode'),
         'get_billing_information')
     billing_informations = fields.One2Many('contract.billing_information',
         'contract', 'Billing Information', depends=['product'])
@@ -169,7 +167,8 @@ class Contract:
         until = None
         if next_billing_information:
             until = next_billing_information.date
-        return billing_information.billing_mode.get_rrule(start, until)
+        res = billing_information.billing_mode.get_rrule(start, until)
+        return (res[0], res[1], billing_information)
 
     def get_invoice_periods(self, up_to_date):
         if self.last_invoice_end:
@@ -180,7 +179,7 @@ class Contract:
             return []
         periods = []
         while (up_to_date and start < up_to_date) or len(periods) < 1:
-            rule, until = self._get_invoice_rrule(start)
+            rule, until, billing_information = self._get_invoice_rrule(start)
             for date in rule:
                 if hasattr(date, 'date'):
                     date = date.date()
@@ -188,7 +187,7 @@ class Contract:
                     continue
                 end = date + relativedelta(days=-1)
                 periods.append((start, min(end, self.end_date or
-                            datetime.date.max)))
+                            datetime.date.max), billing_information))
                 start = date
                 if (up_to_date and start >= up_to_date) or not up_to_date:
                     break
@@ -196,9 +195,10 @@ class Contract:
                 if self.end_date and self.end_date < up_to_date:
                     if until > self.end_date:
                         until = self.end_date
-                end = until + relativedelta(days=-1)
-                periods.append((start, end))
-                start = until
+                if start != until:
+                    end = until + relativedelta(days=-1)
+                    periods.append((start, end, billing_information))
+                    start = until
         return periods
 
     def first_invoice(self):
@@ -255,7 +255,7 @@ class Contract:
             invoice.id = new_invoice.id
         contract_invoices_to_create = []
         for period, contract_invoices in invoices.iteritems():
-            start, end = period
+            start, end, billing_information = period
             for contract, invoice in contract_invoices:
                 contract_invoices_to_create.append(ContractInvoice(
                         contract=contract,
@@ -265,7 +265,7 @@ class Contract:
         return ContractInvoice.create([c._save_values
                 for c in contract_invoices_to_create])
 
-    def get_invoice(self, start, end):
+    def get_invoice(self, start, end, billing_information):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         return Invoice(
@@ -276,11 +276,11 @@ class Contract:
             invoice_address=self.get_contract_address(),
             currency=self.get_currency(),
             account=self.subscriber.account_receivable,
-            payment_term=self.payment_term,
+            payment_term=billing_information.payment_term,
             state='validated',
             )
 
-    def get_invoice_lines(self, start, end):
+    def get_invoice_lines(self, start, end, billing_information):
         lines = []
         for premium in self.premiums:
             lines.extend(premium.get_invoice_lines(start, end))
@@ -481,7 +481,7 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
     __name__ = 'contract.billing_information'
 
     billing_mode = fields.Many2One('offered.billing_mode',
-        'Billing Choice', required=True, ondelete='CASCADE',
+        'Billing Mode', required=True, ondelete='CASCADE',
         domain=[('products', '=',
             Eval('_parent_contract', {}).get('product'))],
         depends=['contract']
@@ -493,6 +493,7 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
                     (Eval('_parent_contract', {}).get('status', '') ==
                         'active')),
                 'invisible': Len(Eval('possible_payment_terms', [])) < 2},
+        domain=[('id', 'in', Eval('possible_payment_terms'))],
         depends=['possible_payment_terms'])
     direct_debit = fields.Function(fields.Boolean('Direct Debit Payment'),
         'on_change_with_direct_debit')
@@ -503,7 +504,8 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
                 'invisible': ~Eval('direct_debit', False),
                 'required': And(Eval('direct_debit', False),
                     (Eval('_parent_contract', {}).get('status', '') ==
-                        'active'))}),
+                        'active'))},
+            sort=False),
             'get_direct_debit_day_selector', 'set_direct_debit_day_seletor')
     direct_debit_day = fields.Integer('Direct Debit Day')
     direct_debit_account = fields.Many2One('bank.account',
@@ -580,6 +582,12 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
         if not self.billing_mode:
             return []
         return [x.id for x in self.billing_mode.allowed_payment_terms]
+
+    @fields.depends('billing_mode')
+    def on_change_with_payment_term(self, name=None):
+        if not self.billing_mode:
+            return None
+        return self.billing_mode.allowed_payment_terms[0].id
 
     @fields.depends('direct_debit_day_selector')
     def on_change_direct_debit_day_selector(self):
@@ -689,6 +697,7 @@ class ContractInvoice(ModelSQL, ModelView):
             Reconciliation.delete(reconciliations)
         Invoice.cancel(invoices)
 
+    @classmethod
     def delete(cls, contract_invoices):
         Invoice = Pool().get('account.invoice')
         Invoice.delete([x.invoice for x in contract_invoices])
@@ -840,12 +849,12 @@ class Premium(ModelSQL, ModelView):
             self.rated_entity.rec_name)
 
     def _get_rrule(self, start):
-        if self.frequency in ('monthly', 'quarterly', 'biannual'):
+        if self.frequency in ('monthly', 'quarterly', 'half_yearly'):
             freq = MONTHLY
             interval = {
                 'monthly': 1,
                 'quarterly': 3,
-                'biannual': 6,
+                'half_yearly': 6,
                 }.get(self.frequency)
         elif self.frequency == 'yearly':
             freq = YEARLY

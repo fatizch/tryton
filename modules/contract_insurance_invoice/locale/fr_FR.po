@@ -711,8 +711,8 @@ msgid "Validated"
 msgstr "Validé"
 
 msgctxt "selection:contract.premium,frequency:"
-msgid "Biannual"
-msgstr "bisannuelle"
+msgid "Half-yearly"
+msgstr "Semestriel"
 
 msgctxt "selection:contract.premium,frequency:"
 msgid "Monthly"
@@ -735,8 +735,8 @@ msgid "Yearly"
 msgstr "Annuel"
 
 msgctxt "selection:offered.billing_mode,frequency:"
-msgid "Biannual"
-msgstr "bisannuelle"
+msgid "Half-yearly"
+msgstr "Semestriel"
 
 msgctxt "selection:offered.billing_mode,frequency:"
 msgid "Monthly"

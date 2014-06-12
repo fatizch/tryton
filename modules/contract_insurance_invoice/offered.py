@@ -44,10 +44,10 @@ MONTHS = [
 class BillingMode(model.CoopSQL, model.CoopView):
     'Billing Mode'
     __name__ = 'offered.billing_mode'
-    name = fields.Char('Name')
+    name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     frequency = fields.Selection(FREQUENCIES, 'Invoice Frequency',
-        required=True)
+        required=True, sort=False)
     direct_debit = fields.Boolean('Direct Debit Payment')
     allowed_direct_debit_days = fields.Char('Allowed Direct Debit Dates',
         states={'invisible': ~Eval('direct_debit')},
@@ -66,22 +66,24 @@ class BillingMode(model.CoopSQL, model.CoopView):
         'billing_mode', 'Ordered Payment Terms',
         order=[('order', 'ASC')],
         states={'invisible': ~Eval('change_payment_terms_order')})
-    sync_day = fields.Selection([(str(x), str(x))
-            for x in xrange(1, 29)] + [('', '')], 'Sync Day', states={
+    sync_day = fields.Selection([('', '')] + [(str(x), str(x))
+            for x in xrange(1, 29)], 'Sync Day', states={
             'required': Bool(Eval('sync_month', False))},
-        depends=['sync_month'], sort=False)
-    sync_month = fields.Selection(MONTHS, 'Sync Month', sort=False)
+        depends=['sync_month', 'frequency'], sort=False)
+    sync_month = fields.Selection(MONTHS, 'Sync Month', sort=False, states={
+            'invisible': Eval('frequency') == 'monthly'},
+            depends=['frequency'])
     products = fields.Many2Many(
         'offered.product-offered.billing_mode',
         'billing_mode', 'product', 'Products', readonly=True)
 
-    def get_allowed_direct_debit_days(self):
-        if not self.direct_debit:
-            return [('', '')]
-        if not self.allowed_direct_debit_days:
-            return [(str(x), '%02d' % x) for x in xrange(1, 28)]
-        return [(str(x), '%02d' % int(x)) for x in
-            self.allowed_direct_debit_days.split(',')]
+    @classmethod
+    def __setup__(cls):
+        super(BillingMode, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_unique', 'UNIQUE(code)',
+                'The code must be unique'),
+            ]
 
     @classmethod
     def __register__(cls, module_name):
@@ -102,6 +104,14 @@ class BillingMode(model.CoopSQL, model.CoopView):
                 'frequency, sync_day, sync_month, frequency, frequency from '
                 'offered_invoice_frequency')
 
+    def get_allowed_direct_debit_days(self):
+        if not self.direct_debit:
+            return [('', '')]
+        if not self.allowed_direct_debit_days:
+            return [(str(x), str(x)) for x in xrange(1, 28)]
+        return [(str(x), str(x)) for x in
+            self.allowed_direct_debit_days.split(',')]
+
     @classmethod
     def default_frequency(cls):
         return 'yearly'
@@ -121,29 +131,32 @@ class BillingMode(model.CoopSQL, model.CoopView):
         return result
 
     def get_rrule(self, start, until=None):
-        if self.frequency in ('monthly', 'quarterly', 'biannual'):
-            freq = MONTHLY
-            interval = {
-                'monthly': 1,
-                'quarterly': 3,
-                'biannual': 6,
-                }.get(self.frequency)
-        elif self.frequency == 'yearly':
+        bymonthday = int(self.sync_day) if self.sync_day else None
+        bymonth = int(self.sync_month) if self.sync_month else None
+        if self.frequency in ('yearly', 'quarterly', 'half_yearly'):
             freq = YEARLY
-            interval = 1
+            if self.frequency in ('quarterly', 'half_yearly'):
+                interval = {
+                    'monthly': 1,
+                    'quarterly': 3,
+                    'half_yearly': 6,
+                    }.get(self.frequency)
+                if not bymonth:
+                    bymonth = start.month
+                bymonth = [((bymonth - 1 + interval * x) % 12) + 1
+                    for x in range(0, 12 / interval)]
+        elif self.frequency == 'monthly':
+            freq = MONTHLY
         elif self.frequency == 'once_per_contract':
             return [start, datetime.date.max], until
         else:
             return [], until
-        sync_date = None
-        if self.sync_month:
-            sync_date = (int(self.sync_day), int(self.sync_month))
-        return (rrule(freq, interval=interval, dtstart=start, until=until,
-                bymonthday=sync_date), until)
+        return (rrule(freq, dtstart=start, until=until, bymonthday=bymonthday,
+                bymonth=bymonth), until)
 
     @classmethod
     def _export_keys(cls):
-        return set(['frequency', 'sync_day', 'sync_month'])
+        return set(['code'])
 
     def get_change_payment_term_order(self, name):
         return False

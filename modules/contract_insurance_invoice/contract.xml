@@ -30,6 +30,11 @@
             <field name="type">form</field>
             <field name="name">contract_billing_information_form</field>
         </record>
+        <record model="ir.ui.view" id="contract_billing_information_without_date_view_form">
+            <field name="model">contract.billing_information</field>
+            <field name="type">form</field>
+            <field name="name">contract_billing_information_without_date_form</field>
+        </record>
 
         <record model="ir.ui.view" id="contract_invoice_view_list">
             <field name="model">contract.invoice</field>

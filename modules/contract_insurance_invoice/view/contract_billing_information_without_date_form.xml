@@ -3,9 +3,6 @@
     <label name="contract"/>
     <field name="contract"/>
     <newline/>
-    <label name="date"/>
-    <field name="date"/>
-    <newline/>
     <label name="billing_mode"/>
     <field name="billing_mode" widget="selection" xexpand="0"/>
     <newline/>

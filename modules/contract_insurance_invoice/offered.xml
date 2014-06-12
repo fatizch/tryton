@@ -12,7 +12,7 @@
             <field name="name">offered_billing_mode_list</field>
         </record>
         <record model="ir.action.act_window" id="act_offered_billing_mode">
-            <field name="name">Billing Choices</field>
+            <field name="name">Billing Modes</field>
             <field name="res_model">offered.billing_mode</field>
         </record>
 

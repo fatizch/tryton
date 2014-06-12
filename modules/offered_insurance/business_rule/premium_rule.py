@@ -32,7 +32,7 @@ PRICING_FREQUENCY = [
     ('yearly', 'Yearly (Exact)'),
     ('yearly_360', 'Yearly (360 days)'),
     ('yearly_365', 'Yearly (365 days)'),
-    ('biannual', 'Half Yearly'),
+    ('half_yearly', 'Half-yearly'),
     ('quarterly', 'Quarterly'),
     ('monthly', 'Monthly'),
     ('once_per_contract', 'Once per Contract'),
@@ -358,7 +358,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             'yearly': Decimal(12),
             'yearly_360': Decimal(12),
             'yearly_365': Decimal(12),
-            'biannual': Decimal(6),
+            'half_yearly': Decimal(6),
             'quarterly': Decimal(3),
             'monthly': Decimal(1),
             }
