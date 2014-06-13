@@ -996,7 +996,9 @@ class Context(ModelView, ModelSQL):
             elements = list(context.allowed_elements)
             while elements:
                 element = elements.pop()
-                if element.translated_technical_name in names:
+                if element.type == 'folder':
+                    pass
+                elif element.translated_technical_name in names:
                     if element != names[element.translated_technical_name]:
                         cls.raise_user_error('duplicate_name', (
                             element.translated_technical_name,
