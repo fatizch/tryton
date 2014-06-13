@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+try:
+    import simplejson as json
+except ImportError:
+    import json
 import unittest
 import trytond.tests.test_tryton
 
+from trytond.protocols.jsonrpc import JSONEncoder
 from trytond.transaction import Transaction
 from trytond.error import UserError
 
@@ -503,6 +508,28 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'Fail Value ... SUCCESS\n\n'
                     'Remove Errors ... SUCCESS\n'
                     '\nOverride rule ... SUCCESS'})
+
+    @test_framework.prepare_test('rule_engine.test0030_TestCaseCreation')
+    def test0031_TestCaseExportImport(self):
+        rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
+        file_name, rule_as_jsondict, _ = rule.export_json()
+        rule_as_string = json.dumps(rule_as_jsondict, cls=JSONEncoder)
+        rule_as_string = rule_as_string.replace('test_rule_advanced',
+            'test_rule_advanced_1')
+        rule.import_json(rule_as_string)
+        rule_1, = self.RuleEngine.search([
+                ('short_name', '=', 'test_rule_advanced_1')])
+
+        with Transaction().set_context({'active_id': rule_1.id}):
+            wizard_id, _, _ = self.RunTests.create()
+            wizard = self.RunTests(wizard_id)
+            wizard._execute('report')
+            res = wizard.default_report(None)
+            self.assertEqual(res, {'report':
+                    'Fail Value ... SUCCESS\n\n'
+                    'Override rule ... SUCCESS\n'
+                    '\nRemove Errors ... SUCCESS'})
+
 
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):

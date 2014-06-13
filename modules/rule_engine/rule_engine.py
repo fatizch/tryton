@@ -1240,6 +1240,16 @@ class TestCaseValue(ModelView, ModelSQL):
     def default_override_value(cls):
         return True
 
+    @classmethod
+    def _validate(cls, records, field_names=None):
+        if Transaction().context.get('__importing__'):
+            return
+        super(TestCaseValue, cls)._validate(records, field_names)
+
+    @classmethod
+    def _post_import(cls, test_case_values):
+        cls._validate(test_case_values)
+
 
 class TestCase(ModelView, ModelSQL):
     'Test Case'
