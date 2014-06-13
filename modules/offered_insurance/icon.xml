@@ -5,5 +5,9 @@
             <field name="name">umbrella-black</field>
             <field name="path">icons/umbrella-black.svg</field>
         </record>
+        <record model="ir.ui.icon" id="insurer_icon">
+            <field name="name">insurer</field>
+            <field name="path">icons/insurer.svg</field>
+        </record>
     </data>
 </tryton>
