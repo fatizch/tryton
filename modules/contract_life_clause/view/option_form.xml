@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form/notebook" position="inside">
-        <page string="Beneficiary Clause" name="beneficiary_clause"
+        <page name="beneficiary_clause"
             states="{'invisible': ~Eval('with_beneficiary_clause')}">
             <label name="beneficiary_clause"/>
             <field name="beneficiary_clause"/>
