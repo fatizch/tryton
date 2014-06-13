@@ -37,6 +37,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'RuleEngineTable': 'rule_engine-table',
             'Table': 'table',
             'Log': 'rule_engine.log',
+            'InitTestCaseFromExecutionLog': 'rule_engine.test_case.init',
         }
 
     @classmethod
@@ -442,7 +443,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             tc.test_values = []
             self.maxDiff = None
             self.assertEqual(tc.on_change_test_values(), {
-                    'low_debug': u"Entering Test Rule Advanced\n\t"
+                    'low_debug': u"Entering table_test_code\n\t"
                     "args : ('test', 30)\n\t"
                     "result = None\n"
                     "Entering add_error\n\t"
@@ -454,10 +455,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     "Entering add_info\n\t"
                     "args : ('test info',)\n\t"
                     "result = None\n"
-                    "Entering Test Rule Advanced\n\t"
+                    "Entering table_test_code\n\t"
                     "args : ('foo', 1)\n\t"
                     "result = ham\n"
-                    "Entering Test Rule Advanced\n\t"
+                    "Entering rule_test_rule\n\t"
                     "kwargs : {'test_parameter': 20}\n\t"
                     'result = 20',
                     'debug': '',
@@ -470,9 +471,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     })
             tc.test_values = [tcv1]
             self.assertEqual(tc.on_change_test_values(), {
-                    'low_debug': '',
+                    'low_debug': u"Entering table_test_code\n\targs : "
+                    "('test', 30)\n\tresult = something",
                     'result_warning': '',
-                    'result_value': '10',
+                    'result_value': u'10',
                     'debug': '',
                     'result_errors': '',
                     'expected_result': '[10, [], [], []]',
@@ -530,7 +532,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'Override rule ... SUCCESS\n'
                     '\nRemove Errors ... SUCCESS'})
 
-
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):
         # This test must be run later as execute rule with debug enabled forces
@@ -560,6 +561,45 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule.debug_mode = False
         rule.save()
         self.assertEqual(rule.exec_logs, ())
+
+    def test_0061_testTestCaseCreationFromLog(self):
+        # test0060 forces a commit so no need for prepare_test
+        rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
+        rule.debug_mode = True
+        rule.algorithm = '\n'.join([
+                "if table_test_code('test', 30):",
+                "    return 10",
+                "add_error('test error')",
+                "add_warning('test warning')",
+                "add_info('test info')",
+                "if table_test_code('foo', 1) == 'ham':",
+                "   return rule_test_rule(test_parameter=20)",
+                ])
+        rule.save()
+
+        rule.execute({})
+        log = rule.exec_logs[-1]
+
+        with Transaction().set_context({'active_id': log.id,
+                    'active_model': 'rule_engine.log',
+                    'rule_id': log.rule.id}):
+            wizard_id, _, _ = self.InitTestCaseFromExecutionLog.create()
+            wizard = self.InitTestCaseFromExecutionLog(wizard_id)
+            test_case_dict = wizard.default_select_values(None)
+            test_case_dict['description'] = 'Test test case'
+            for call in test_case_dict['test_values']:
+                if call['name'] in ('add_error', 'add_warning', 'add_info'):
+                    call['override_value'] = False
+            wizard.execute(wizard_id, {'select_values': test_case_dict},
+                'create_test_case')
+
+        with Transaction().set_context({'active_id': rule.id}):
+            wizard_id, _, _ = self.RunTests.create()
+            wizard = self.RunTests(wizard_id)
+            wizard._execute('report')
+            res = wizard.default_report(None)
+            self.assertEqual(res, {'report':
+                    'Test test case ... SUCCESS'})
 
 
 def suite():
