@@ -181,12 +181,9 @@ class Product:
         'Account for billing', required=True, depends=['company'],
         domain=[('kind', '=', 'revenue'), ('company', '=', Eval('company'))],
         ondelete='RESTRICT')
-    billing_modes = fields.Many2Many(
-        'offered.product-offered.billing_mode',
-        'product', 'billing_mode', 'Billing Modes',
-        order=[('order', 'ASC')],
-        states={'invisible':
-            Bool(Eval('change_billing_modes_order'))})
+    billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
+        'product', 'billing_mode', 'Billing Modes', order=[('order', 'ASC')],
+        states={'invisible': Bool(Eval('change_billing_modes_order'))})
     change_billing_modes_order = fields.Function(
         fields.Boolean('Change Order'),
         'get_change_billing_modes_order', 'setter_void')

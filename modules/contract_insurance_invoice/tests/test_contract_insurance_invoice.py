@@ -99,22 +99,23 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': '3',
                         'lines': [('create', [{}])],
                         }])
-            freq_month, freq_quart = BillingMode.create([
-                    {'code': 'Monthly',
-                    'name': 'Monthly',
-                    'frequency': 'monthly',
-                    'allowed_payment_terms': [
-                            ('add', [payment_term1.id, payment_term2.id,
-                                payment_term3])]},
-                    {'code': 'quarterly',
-                    'name': 'quarterly',
-                    'frequency': 'quarterly',
-                    'allowed_payment_terms': [
-                            ('add', [payment_term1.id, payment_term2.id,
-                                payment_term3])],
-                    'direct_debit': True,
-                    'allowed_direct_debit_days': '5, 10, 15'}
-                    ])
+            freq_month, freq_quart = BillingMode.create([{
+                        'code': 'Monthly',
+                        'name': 'Monthly',
+                        'frequency': 'monthly',
+                        'allowed_payment_terms': [
+                                ('add', [payment_term1.id, payment_term2.id,
+                                    payment_term3])]
+                        }, {
+                        'code': 'quarterly',
+                        'name': 'quarterly',
+                        'frequency': 'quarterly',
+                        'allowed_payment_terms': [
+                                ('add', [payment_term1.id, payment_term2.id,
+                                    payment_term3])],
+                        'direct_debit': True,
+                        'allowed_direct_debit_days': '5, 10, 15'
+                        }])
             sequence_code, = SequenceType.create([{
                         'name': 'Product sequence',
                         'code': 'contract',
@@ -209,25 +210,27 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': 'direct',
                         'lines': [('create', [{}])],
                         }])
-            freq_month, freq_quart, freq_once = BillingMode.create([
-                    {'code': 'monthly',
+            freq_month, freq_quart, freq_once = BillingMode.create([{
+                    'code': 'monthly',
                     'name': 'monthly',
                     'frequency': 'monthly',
                     'allowed_payment_terms': [
-                            ('add', [payment_term.id])]},
-                    {'code': 'quarterly',
+                            ('add', [payment_term.id])]
+                    }, {
+                    'code': 'quarterly',
                     'name': 'quarterly',
                     'frequency': 'quarterly',
                     'allowed_payment_terms': [
                             ('add', [payment_term.id])],
                     'direct_debit': True,
-                    'allowed_direct_debit_days': '5, 10, 15'},
-                    {'code': 'once_per_contract',
+                    'allowed_direct_debit_days': '5, 10, 15'
+                    }, {
+                    'code': 'once_per_contract',
                     'name': 'once_per_contract',
                     'frequency': 'once_per_contract',
                     'allowed_payment_terms': [
-                            ('add', [payment_term.id])]},
-                    ])
+                            ('add', [payment_term.id])]
+                    }])
             sequence_code, = SequenceType.create([{
                         'name': 'Product sequence',
                         'code': 'contract',

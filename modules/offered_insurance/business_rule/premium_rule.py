@@ -328,7 +328,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         if self.match_contract_frequency:
             ContractBillingInformation = Pool().get(
                 'contract.billing_information')
-            contract_billing_mode = ContractBillingInformation.get_value(
+            contract_billing_mode = ContractBillingInformation.get_values(
                 [args['contract']], args['date'],
                 )['billing_mode'][args['contract'].id]
             frequency = Pool().get('offered.billing_mode')(

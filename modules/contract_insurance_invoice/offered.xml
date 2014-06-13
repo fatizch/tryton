@@ -38,7 +38,7 @@
             <field name="view" ref="offered_billing_mode_view_form"/>
             <field name="act_window" ref="act_offered_billing_mode"/>
         </record>
-        <menuitem parent="account.menu_account_configuration" sequence="20" action="act_offered_billing_mode" id="menu_offered_billing_mode"/>
+        <menuitem parent="account.menu_account_configuration" sequence="20" action="act_offered_billing_mode" icon="tryton-list" id="menu_offered_billing_mode"/>
 
         <record model="ir.ui.view" id="product_view_form">
             <field name="model">offered.product</field>

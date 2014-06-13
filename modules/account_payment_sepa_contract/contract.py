@@ -50,9 +50,10 @@ class ContractBillingInformation:
             'invisible': ~Eval('direct_debit'),
             'required': And(Eval('direct_debit', False),
                 (Eval('_parent_contract', {}).get('status', '') == 'active'))},
-        domain=[('account_number.account', '=', Eval('direct_debit_account')),
+        domain=[
+            ('account_number.account', '=', Eval('direct_debit_account')),
             ('party', '=',
-            Eval('_parent_contract', {}).get('subscriber'))],
+                Eval('_parent_contract', {}).get('subscriber'))],
         depends=['direct_debit', 'direct_debit_account']
         )
 
