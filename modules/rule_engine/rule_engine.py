@@ -11,6 +11,7 @@ from StringIO import StringIO
 from decimal import Decimal
 from pyflakes.checker import Checker
 import pyflakes.messages
+from sql.aggregate import Count
 
 from trytond.rpc import RPC
 from trytond import backend
@@ -24,7 +25,7 @@ from trytond.pyson import Eval, Or
 from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
-from trytond.modules.cog_utils import model, utils, coop_string
+from trytond.modules.cog_utils import model, utils, coop_string, batchs
 from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.table import table
@@ -51,6 +52,8 @@ __all__ = [
     'RuleEngineResult',
     'RuleEngineTagRelation',
     'InitTestCaseFromExecutionLog',
+    'ValidateRuleTestCases',
+    'ValidateRuleBatch',
     ]
 
 CODE_TEMPLATE = """
@@ -537,6 +540,9 @@ class RuleEngine(ModelView, ModelSQL):
     tags_name = fields.Function(
         fields.Char('Tags'),
         'on_change_with_tags_name', searcher='search_tags')
+    passing_test_cases = fields.Function(
+        fields.Boolean('Test Cases OK'),
+        'get_passing_test_cases', searcher='search_passing_test_cases')
 
     @classmethod
     def __setup__(cls):
@@ -632,6 +638,38 @@ class RuleEngine(ModelView, ModelSQL):
         if self.short_name:
             return self.short_name
         return coop_string.remove_blank_and_invalid_char(self.name)
+
+    @classmethod
+    def get_passing_test_cases(cls, instances, name):
+        cursor = Transaction().cursor
+
+        rule = cls.__table__()
+        test_case = Pool().get('rule_engine.test_case').__table__()
+
+        cursor.execute(*rule.join(test_case, 'LEFT OUTER', condition=(
+                    (test_case.rule == rule.id)
+                    & (test_case.last_passing_date == None))
+                ).select(rule.id, Count(test_case.id),
+                where=(rule.id.in_([x.id for x in instances])),
+                group_by=rule.id))
+
+        result = {}
+        for rule_id, failed_test_case in cursor.fetchall():
+            result[rule_id] = failed_test_case == 0
+        return result
+
+    @classmethod
+    def search_passing_test_cases(cls, name, clause):
+        test_case = Pool().get('rule_engine.test_case').__table__()
+        query = test_case.select(test_case.rule,
+            where=(test_case.last_passing_date == None),
+            group_by=test_case.rule)
+
+        if clause[2] is True:
+            return [('id', 'not in', query)]
+        elif clause[2] is False:
+            return [('id', 'in', query)]
+        return []
 
     @classmethod
     def _post_import(cls, rules):
@@ -1298,6 +1336,7 @@ class TestCase(ModelView, ModelSQL):
     result_info = fields.Text('Result Info')
     debug = fields.Text('Debug Info')
     low_debug = fields.Text('Low Level Debug Info')
+    last_passing_date = fields.DateTime('Last passing run date')
     rule_text = fields.Function(
         fields.Text('Rule Text', states={'readonly': True}),
         'get_rule_text')
@@ -1365,6 +1404,24 @@ class TestCase(ModelView, ModelSQL):
             for k, v in result.iteritems():
                 setattr(elem, k, v)
             elem.save()
+
+    @classmethod
+    @TrytonModelView.button
+    def check_pass(cls, instances):
+        passed, failed = [], []
+        for elem in instances:
+            result = elem.on_change_test_values()
+            if result['expected_result'] == elem.expected_result:
+                passed.append(elem)
+            else:
+                failed.append(elem)
+        write_args = []
+        for elems, date in [(passed, datetime.datetime.now()), (failed, None)]:
+            if not elems:
+                continue
+            write_args += [elems, {'last_passing_date': date}]
+        if write_args:
+            cls.write(*write_args)
 
     def do_test(self):
         try:
@@ -1581,3 +1638,41 @@ class InitTestCaseFromExecutionLog(Wizard):
     def transition_create_test_case(self):
         self.select_values.save()
         return 'end'
+
+
+class ValidateRuleTestCases(Wizard):
+    'Validate Rule Test Cases'
+
+    __name__ = 'rule_engine.validate_test_cases'
+
+    start_state = 'run_test_cases'
+    run_test_cases = StateTransition()
+
+    def transition_run_test_cases(self):
+        rule_ids = Transaction().context.get('active_ids')
+        TestCase = Pool().get('rule_engine.test_case')
+        TestCase.check_pass(TestCase.search([
+                    ('rule', 'in', rule_ids)]))
+        return 'end'
+
+
+class ValidateRuleBatch(batchs.BatchRoot):
+    'Rule Engine Test Case Validation Batch'
+
+    __name__ = 'rule_engine.validate'
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'rule_engine.test_case'
+
+    @classmethod
+    def get_batch_name(cls):
+        return 'Rule Engine Test Case Validation'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'rule_engine.test_case'
+
+    @classmethod
+    def execute(cls, objects, ids, logger):
+        Pool().get('rule_engine.test_case').check_pass(objects)

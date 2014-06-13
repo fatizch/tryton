@@ -532,6 +532,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'Override rule ... SUCCESS\n'
                     '\nRemove Errors ... SUCCESS'})
 
+    @test_framework.prepare_test('rule_engine.test0030_TestCaseCreation')
+    def test0032_TestCaseValidation(self):
+        rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
+        assert not rule.passing_test_cases
+        self.TestCase.check_pass(list(rule.test_cases))
+        assert  rule.passing_test_cases
+        self.assertEqual(1, len(self.RuleEngine.search([
+                        ('id', '=', rule.id),
+                        ('passing_test_cases', '=', True)])))
+        self.assertEqual(len(rule.test_cases), 3)
+        rule.test_cases[0].expected_result = 'monthy'
+        self.TestCase.check_pass(list(rule.test_cases))
+        assert rule.test_cases[0].last_passing_date is None
+        assert rule.test_cases[1].last_passing_date
+        assert not rule.passing_test_cases
+        self.assertEqual(1, len(self.RuleEngine.search([
+                        ('id', '=', rule.id),
+                        ('passing_test_cases', '=', False)])))
+
     @test_framework.prepare_test('rule_engine.test0020_testAdvancedRule')
     def test0060_testRuleEngineDebugging(self):
         # This test must be run later as execute rule with debug enabled forces

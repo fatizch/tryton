@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tree string="Test Case">
+<tree string="Test Case" colors="If(~Bool(Eval('last_passing_date', False)), 'red', 'green')">
   <field name="description"/>
   <field name="expected_result"/>
+  <field name="last_passing_date" tree_invisible="1"/>
 </tree>

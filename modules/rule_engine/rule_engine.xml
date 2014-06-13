@@ -224,6 +224,18 @@
       <field name="act_window" ref="error_window"/>
     </record>
     <menuitem parent="menu_rule_engine" action="error_window" id="menu_error"/>
+    <!-- ############################ -->
+    <!-- # Validate Rule Test Cases # -->
+    <!-- ############################ -->
+    <record model="ir.action.wizard" id="act_validate_test_cases">
+        <field name="name">Validate Rules</field>
+        <field name="wiz_name">rule_engine.validate_test_cases</field>
+    </record>
+    <record model="ir.action.keyword" id="act_validate_test_cases_keyword">
+        <field name="keyword">form_action</field>
+        <field name="model">rule_engine,-1</field>
+        <field name="action" ref="act_validate_test_cases"/>
+    </record>
   </data>
   <record model="rule_engine.context" id="default_context">
       <field name="name">Default Context</field>
