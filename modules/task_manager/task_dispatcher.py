@@ -357,58 +357,16 @@ class LaunchTask(Wizard):
     __name__ = 'task.launch'
 
     start_state = 'calculate_action'
-
-    class VoidStateAction(StateAction):
-        def __init__(self):
-            StateAction.__init__(self, None)
-
-        def get_action(self):
-            return None
-
-    calculate_action = VoidStateAction()
+    calculate_action = StateAction('process_cog.act_resume_process')
 
     def do_calculate_action(self, action):
-        current_id = Transaction().context.get('active_id')
-        current_model = Transaction().context.get('active_model')
-        try:
-            assert current_id
-            assert current_model == 'process.log'
-        except AssertionError:
-            self.raise_user_error('no_task_selected')
-        Log = Pool().get('process.log')
-        good_task = Log(current_id)
-        good_id = good_task.task.id
-        good_model = good_task.task.__name__
-        act = good_task.to_state.process.get_act_window()
+        active_id = Transaction().context.get('active_id')
+        active_model = Transaction().context.get('active_model')
+        log = Pool().get(active_model)(active_id)
 
-        Action = Pool().get('ir.action')
-        act = Action.get_action_values(act.__name__, [act.id])[0]
-
-        Session = Pool().get('ir.session')
-        good_session, = Session.search(
-            [('create_uid', '=', Transaction().user)])
-        GoodModel = Pool().get(good_model)
-        good_object = GoodModel(good_id)
-        new_log = Log()
-        new_log.user = Transaction().user
-        new_log.locked = True
-        new_log.task = good_object
-        new_log.from_state = good_object.current_state.id
-        new_log.to_state = good_object.current_state.id
-        new_log.start_time = datetime.datetime.now()
-        new_log.session = good_session.key
-        new_log.save()
-
-        views = act['views']
-        if len(views) > 1:
-            for view in views:
-                if view[1] == 'form':
-                    act['views'] = [view]
-                    break
-        res = (act, {
-                'id': good_id,
-                'model': good_model,
-                'res_id': good_id,
-                'res_model': good_model,
+        return (action, {
+                'id': log.task.id,
+                'model': log.task.__name__,
+                'res_id': log.task.id,
+                'res_model': log.task.__name__,
                 })
-        return res

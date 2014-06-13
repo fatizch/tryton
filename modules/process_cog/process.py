@@ -28,6 +28,7 @@ __all__ = [
     'ProcessStart',
     'ProcessFinder',
     'ProcessEnd',
+    'ProcessResume',
     ]
 
 
@@ -1032,6 +1033,71 @@ class ProcessEnd(Wizard):
 
     def end(self):
         return 'close'
+
+
+class ProcessResume(Wizard):
+    'Resume Process'
+
+    __name__ = 'process.resume'
+
+    start_state = 'resume'
+    resume = model.VoidStateAction()
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessResume, cls).__setup__()
+        cls._error_messages.update({
+                'no_process_found': 'No active process found',
+                'lock_by_user': 'Process Locked by user',
+                })
+
+    def do_resume(self, action):
+        pool = Pool()
+        active_id = Transaction().context.get('active_id')
+        active_model = Transaction().context.get('active_model')
+        instance = pool.get(active_model)(active_id)
+        if not instance.current_state:
+            self.raise_user_error('no_process_found')
+        Log = pool.get('process.log')
+        active_logs = Log.search([
+                ('latest', '=', True),
+                ('task', '=', '%s,%i' % (active_model, active_id))])
+        if not active_logs:
+            self.raise_user_error('no_process_found')
+        active_log, = active_logs
+        if (active_log.locked == True and
+                active_log.user.id != Transaction().user):
+            self.raise_user_error('lock_by_user', (active_log.user.name,))
+        process_action = instance.current_state.process.get_act_window()
+        Action = pool.get('ir.action')
+        process_action = Action.get_action_values(process_action.__name__,
+            [process_action.id])[0]
+        Session = Pool().get('ir.session')
+        good_session, = Session.search(
+            [('create_uid', '=', Transaction().user)])
+
+        new_log = Log()
+        new_log.user = Transaction().user
+        new_log.locked = True
+        new_log.task = instance
+        new_log.from_state = instance.current_state.id
+        new_log.to_state = instance.current_state.id
+        new_log.start_time = datetime.datetime.now()
+        new_log.session = good_session.key
+        new_log.save()
+
+        views = process_action['views']
+        if len(views) > 1:
+            for view in views:
+                if view[1] == 'form':
+                    process_action['views'] = [view]
+                    break
+        return (process_action, {
+                'id': active_id,
+                'model': active_model,
+                'res_id': active_id,
+                'res_model': active_model,
+                })
 
 
 class GenerateGraph:
