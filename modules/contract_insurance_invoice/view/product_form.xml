@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/form/notebook/page[@id='admin']" position="before">
-        <page string="Invoice Parameters" name="invoice_parameters">
+        <page string="Invoice Parameters" id="invoice_parameters">
             <group id="frequencies" yexpand="1" yfill="1">
                 <label name="default_frequency"/>
                 <field name="default_frequency" colspan="3" widget="selection"/>
