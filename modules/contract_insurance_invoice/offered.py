@@ -56,7 +56,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
         'An empty list means that all dates are allowed')
     allowed_payment_terms = fields.Many2Many(
         'offered.billing.mode-account.invoice.payment_term', 'billing_mode',
-        'payment_term', 'Allowed Payment Terms',
+        'payment_term', 'Allowed Payment Terms', required=True,
         states={'invisible': Bool(Eval('change_payment_terms_order'))})
     change_payment_terms_order = fields.Function(
         fields.Boolean('Change Payment Term Order'),
@@ -69,7 +69,8 @@ class BillingMode(model.CoopSQL, model.CoopView):
     sync_day = fields.Selection([('', '')] + [(str(x), str(x))
             for x in xrange(1, 29)], 'Sync Day', states={
             'required': Bool(Eval('sync_month', False))},
-        depends=['sync_month', 'frequency'], sort=False)
+        depends=['sync_month', 'frequency'], sort=False,
+        translate_selection=False)
     sync_month = fields.Selection(MONTHS, 'Sync Month', sort=False, states={
             'invisible': Eval('frequency') == 'monthly'},
             depends=['frequency'])

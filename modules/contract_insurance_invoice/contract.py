@@ -90,16 +90,16 @@ class Contract:
     def get_billing_information(cls, contracts, names):
         pool = Pool()
         ContractBillingInformation = pool.get('contract.billing_information')
-        return cls.get_revision_value(contracts,
+        return cls.get_revision_value(contracts, names,
             ContractBillingInformation)
 
     @classmethod
-    def get_revision_value(cls, contracts, ContractRevision):
+    def get_revision_value(cls, contracts, names, ContractRevision):
         pool = Pool()
         Date = pool.get('ir.date')
         date = Transaction().context.get('contract_revision_date',
             Date.today())
-        return ContractRevision.get_values(contracts, date=date)
+        return ContractRevision.get_values(contracts, names=names, date=date)
 
     def get_total_invoice_amount(self, name):
         return sum([x.invoice.total_amount
@@ -154,20 +154,22 @@ class Contract:
                         value))
         return [('id', 'in', query)]
 
-    def _get_invoice_rrule(self, start):
+    def _get_invoice_rrule_and_billing_information(self, start):
         billing_informations = iter(self.billing_informations)
         billing_information = billing_informations.next()
         for next_billing_information in billing_informations:
             if next_billing_information.date > start:
                 break
-            billing_information = next_billing_information
+            else:
+                billing_information = next_billing_information
         else:
             next_billing_information = None
         until = None
         if next_billing_information:
             until = next_billing_information.date
-        res = billing_information.billing_mode.get_rrule(start, until)
-        return (res[0], res[1], billing_information)
+        invoice_rrule = billing_information.billing_mode.get_rrule(start,
+            until)
+        return (invoice_rrule[0], invoice_rrule[1], billing_information)
 
     def get_invoice_periods(self, up_to_date):
         if self.last_invoice_end:
@@ -178,7 +180,8 @@ class Contract:
             return []
         periods = []
         while (up_to_date and start < up_to_date) or len(periods) < 1:
-            rule, until, billing_information = self._get_invoice_rrule(start)
+            rule, until, billing_information =\
+                self._get_invoice_rrule_and_billing_information(start)
             for date in rule:
                 if hasattr(date, 'date'):
                     date = date.date()
@@ -451,13 +454,17 @@ class _ContractRevisionMixin(object):
 
         cursor = Transaction().cursor
         table = cls.__table__()
+        if names:
+            columns_expected = list(set(cls.revision_columns()) & set(names))
+        else:
+            columns_expected = cls.revision_columns()
         values = dict(((x, dict(((y.id, None) for y in contracts)))
                 for x in ['contract', 'billing_mode'] +
-                cls.revision_columns()))
+                columns_expected))
         in_max = cursor.IN_MAX
         columns = [table.contract,
             table.id.as_('billing_mode')] + [
-            Column(table, c) for c in cls.revision_columns()]
+            Column(table, c) for c in columns_expected]
         for i in range(0, len(contracts), in_max):
             sub_ids = [c.id for c in contracts[i:i + in_max]]
             where_contract = reduce_ids(table.contract, sub_ids)
@@ -583,10 +590,8 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
 
     @fields.depends('billing_mode')
     def on_change_with_payment_term(self, name=None):
-        if not self.billing_mode:
-            return None
-        return self.billing_mode.allowed_payment_terms[0].id\
-            if self.billing_mode else None
+        if self.billing_mode:
+            return self.billing_mode.allowed_payment_terms[0]
 
     @fields.depends('direct_debit_day_selector')
     def on_change_direct_debit_day_selector(self):

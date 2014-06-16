@@ -329,7 +329,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             ContractBillingInformation = Pool().get(
                 'contract.billing_information')
             contract_billing_mode = ContractBillingInformation.get_values(
-                [args['contract']], args['date'],
+                [args['contract']], date=args['date'],
                 )['billing_mode'][args['contract'].id]
             frequency = Pool().get('offered.billing_mode')(
                 contract_billing_mode).frequency
