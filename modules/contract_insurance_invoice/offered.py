@@ -70,7 +70,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
             for x in xrange(1, 29)], 'Sync Day', states={
             'required': Bool(Eval('sync_month', False))},
         depends=['sync_month', 'frequency'], sort=False,
-        translate_selection=False)
+        translate=False)
     sync_month = fields.Selection(MONTHS, 'Sync Month', sort=False, states={
             'invisible': Eval('frequency') == 'monthly'},
             depends=['frequency'])
