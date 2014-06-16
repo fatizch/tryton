@@ -144,7 +144,8 @@ class RuleEngine:
                 evaluation_context)
         if debug:
             debug_wrapper = self.get_wrapper_func(context)
-            context[technical_name] = debug_wrapper(context[technical_name])
+            context[technical_name] = debug_wrapper(context[technical_name],
+                technical_name)
 
     def add_rule_parameters_to_context(self, evaluation_context,
             execution_kwargs, context):
