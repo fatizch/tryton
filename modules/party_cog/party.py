@@ -566,7 +566,7 @@ class SynthesisMenuRelationship(model.CoopSQL):
             group_by=party.id)
 
     def get_icon(self, name=None):
-        return 'contact'
+        return 'party_relation'
 
 
 class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):

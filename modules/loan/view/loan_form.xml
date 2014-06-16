@@ -8,10 +8,10 @@
       <field name="company"/>
       <label name="kind"/>
       <field name="kind"/>
-      <label name="rate" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon', 'graduated'])}"/>
+      <label name="rate"/>
       <group id="rate">
           <field name="rate" factor="100" xexpand="0"/>
-          <label string="%" id="rate" xexpand="0" xalign="0" states="{'invisible': ~Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon', 'graduated'])}"/>
+          <label string="%" name="rate" xexpand="0" xalign="0"/>
       </group>
       <newline/>
       <label name="amount"/>

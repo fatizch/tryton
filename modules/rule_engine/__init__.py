@@ -26,4 +26,5 @@ def register():
     Pool.register(
         # From rule_engine
         RunTests,
+        InitTestCaseFromExecutionLog,
         module='rule_engine', type_='wizard')
