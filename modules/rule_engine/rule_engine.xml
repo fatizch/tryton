@@ -4,7 +4,7 @@
     <!-- ############################################################ -->
     <!-- Menu -->
     <!-- ############################################################ -->
-    <menuitem name="Rule Engine" id="menu_rule_engine"/>
+    <menuitem name="Rule Engine" id="menu_rule_engine" icon="coding"/>
     <!-- ############################################################ -->
     <!-- Rule Execution Log -->
     <!-- ############################################################ -->
@@ -45,7 +45,7 @@
       <field name="view" ref="rule_view_form"/>
       <field name="act_window" ref="rule_window"/>
     </record>
-    <menuitem parent="menu_rule_engine" action="rule_window" id="menu_rule"/>
+    <menuitem parent="menu_rule_engine" action="rule_window" id="menu_rule" icon="coding"/>
     <!-- ############################################################ -->
     <!-- Rule Parameters -->
     <!-- ############################################################ -->
@@ -173,7 +173,7 @@
       <field name="view" ref="function_form"/>
       <field name="act_window" ref="tree_element_window"/>
     </record>
-    <menuitem parent="menu_rule_engine" action="tree_element_window" id="menu_tree_element"/>
+    <menuitem parent="menu_rule_engine" action="tree_element_window" id="menu_tree_element" icon="function"/>
     <!-- ############################################################ -->
     <!-- Run Tests Wizard -->
     <!-- ############################################################ -->
@@ -195,7 +195,7 @@
     <!-- ############################################################ -->
     <!-- Table Menu -->
     <!-- ############################################################ -->
-    <menuitem action="table.act_table_definition_form" sequence="50" id="table.menu_table_defintion_form" parent="menu_rule_engine"/>
+    <menuitem action="table.act_table_definition_form" sequence="50" id="table.menu_table_defintion_form" parent="menu_rule_engine" icon="table"/>
     <!-- ############################################################ -->
     <!-- Rule Errors -->
     <!-- ############################################################ -->

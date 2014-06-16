@@ -5,5 +5,9 @@
             <field name="name">coopengo-bank_account</field>
             <field name="path">icons/coopengo-bank_account.svg</field>
         </record>
+        <record model="ir.ui.icon" id="bank_icon">
+            <field name="name">bank</field>
+            <field name="path">icons/bank.svg</field>
+        </record>
     </data>
 </tryton>
