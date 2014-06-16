@@ -23,4 +23,5 @@ def register():
     Pool.register(
         ProcessFinder,
         ProcessEnd,
+        ProcessResume,
         module='process_cog', type_='wizard')

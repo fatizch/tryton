@@ -7,7 +7,7 @@ from sql import Union, Column, Literal, Cast
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
-from trytond.wizard import Wizard
+from trytond.wizard import Wizard, StateAction
 from trytond.rpc import RPC
 
 import utils
@@ -437,3 +437,11 @@ class MergedMixin:
             table, columns = cls.merged_columns(model)
             queries.append(cls.build_sub_query(model, table, columns))
         return Union(*queries)
+
+
+class VoidStateAction(StateAction):
+    def __init__(self):
+        StateAction.__init__(self, None)
+
+    def get_action(self):
+        return None
