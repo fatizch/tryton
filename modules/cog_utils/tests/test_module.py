@@ -5,6 +5,7 @@ from mock import Mock
 
 import trytond.tests.test_tryton
 from trytond.model import ModelSQL, fields
+from trytond.exceptions import UserError
 
 from trytond.modules.cog_utils import test_framework
 from trytond.modules.cog_utils import utils, coop_date, model
@@ -17,6 +18,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_module_name(cls):
         return 'cog_utils'
+
+    @classmethod
+    def get_models(cls):
+        return {
+            'View': 'ir.ui.view',
+            }
 
     def test0020get_module_path(self):
         self.assert_(utils.get_module_path('cog_utils'))
@@ -71,6 +78,40 @@ class ModuleTestCase(test_framework.CoopTestCase):
             end_date, 'month') == (12, False))
         self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
             end_date, 'year') == (1, False))
+
+    def test0035_functional_error(self):
+        class PatchedView(self.View, model.FunctionalErrorMixIn):
+            @classmethod
+            def test_functional_error(cls):
+                cls.append_functional_error('error_1')
+
+            @classmethod
+            def test_blocking_error(cls):
+                cls.raise_user_error('error_2')
+
+            @classmethod
+            def test_registered_error(cls):
+                cls.append_functional_error('invalid_xml', ('dummy_view',))
+
+        def test_method(method_names):
+            try:
+                with model.error_manager():
+                    for method_name in method_names:
+                        getattr(PatchedView, method_name)()
+            except UserError, exc:
+                return exc.message
+            return None
+
+        self.assertEqual(test_method(['test_functional_error']), 'error_1')
+        self.assertEqual(test_method(['test_functional_error',
+                    'test_functional_error']), 'error_1\nerror_1')
+        self.assertEqual(test_method(['test_blocking_error']), 'error_2')
+        self.assertEqual(test_method(['test_blocking_error',
+                    'test_functional_error']), 'error_2')
+        self.assertEqual(test_method(['test_functional_error',
+                    'test_blocking_error']), 'error_1\nerror_2')
+        self.assertEqual(test_method(['test_registered_error']),
+            'Invalid XML for view "dummy_view".')
 
     def test0040revision_mixin(self):
         'Test RevisionMixin'

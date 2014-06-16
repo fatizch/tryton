@@ -6,9 +6,11 @@ import json
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
 from sql import Union, Column, Literal
+from contextlib import contextmanager
 
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.model import UnionMixin as TrytonUnionMixin
+from trytond.exceptions import UserError
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction
@@ -21,6 +23,8 @@ import export
 
 
 __all__ = [
+    'error_manager',
+    'FunctionalErrorMixIn',
     'CoopSQL',
     'CoopView',
     'CoopWizard',
@@ -55,7 +59,57 @@ def serialize_this(the_data, from_field=None):
     return res
 
 
-class CoopSQL(export.ExportImportMixin, ModelSQL):
+class ErrorManager(object):
+    'Error Manager class, which stores non blocking errors to be able to raise'
+    'them together'
+    def __init__(self):
+        self._errors = []
+        self._error_messages = []
+        self._result = True
+
+    def add_error(self, error_message, error=None, error_args=None, fail=True):
+        'Add a new error to the current error list. If fail is set, the error'
+        'will trigger the error raising when exiting the manager.'
+        self._errors.append((error or error_message, error_args or ()))
+        self._error_messages.append(error_message)
+        self._result &= not fail
+
+    def format_errors(self):
+        return '\n'.join(self._error_messages)
+
+    def raise_errors(self):
+        if not self._result:
+            raise UserError(self.format_errors())
+
+
+@contextmanager
+def error_manager():
+    manager = ErrorManager()
+    with Transaction().set_context(error_manager=manager):
+        try:
+            yield
+        except UserError, exc:
+            manager.add_error(exc.message)
+        finally:
+            manager.raise_errors()
+
+
+class FunctionalErrorMixIn(object):
+    @classmethod
+    def append_functional_error(cls, error, error_args=None, fail=True):
+        error_manager = Transaction().context.get('error_manager', None)
+        if error_manager is None:
+            return cls.raise_user_error(error, error_args)
+        error_message = cls.raise_user_error(error, error_args,
+            raise_exception=False)
+        error_manager.add_error(error_message, error, error_args, fail)
+
+    @property
+    def _error_manager(self):
+        return Transaction().context.get('error_manager', None)
+
+
+class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
     create_date_ = fields.Function(
         fields.DateTime('Creation date'),
         '_get_creation_date')
@@ -172,7 +226,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
         return utils.extract_object(self, var_names)
 
 
-class CoopView(ModelView):
+class CoopView(ModelView, FunctionalErrorMixIn):
     @classmethod
     def setter_void(cls, objects, name, values):
         pass

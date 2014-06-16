@@ -49,6 +49,10 @@ class ProcessAction(model.CoopSQL):
     def _export_light(cls):
         return set(['on_model'])
 
+    def execute(self, target):
+        with model.error_manager():
+            super(ProcessAction, self).execute(target)
+
 
 class ProcessTransition(model.CoopSQL):
     __name__ = 'process.transition'
@@ -197,7 +201,7 @@ class ProcessLog(model.CoopSQL, model.CoopView):
         return datetime.datetime.now()
 
 
-class CogProcessFramework(ProcessFramework):
+class CogProcessFramework(ProcessFramework, model.CoopView):
     'Cog Process Framework'
 
     logs = fields.One2Many('process.log', 'task', 'Task')
