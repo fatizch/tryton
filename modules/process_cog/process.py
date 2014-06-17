@@ -1,4 +1,3 @@
-import copy
 import pydot
 import datetime
 
@@ -28,6 +27,8 @@ __all__ = [
     'ProcessStep',
     'ProcessStart',
     'ProcessFinder',
+    'ProcessEnd',
+    'ProcessResume',
     ]
 
 
@@ -61,30 +62,28 @@ class ProcessTransition(model.CoopSQL):
         domain=[
             ('kind', '=', 'calculated'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
-                'on_model'))])
+                'on_model'))], ondelete='RESTRICT')
     choice_if_false = fields.Many2One('process.transition',
         'Transition if False', states={
             'invisible': Eval('kind') != 'choice'}, domain=[
             ('kind', '=', 'calculated'),
             ('main_model', '=', Eval('_parent_on_process', {}).get(
-                'on_model'))])
+                'on_model'))], ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
         super(ProcessTransition, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
         cls.kind.selection.append(('calculated', 'Calculated'))
-        cls.from_step = copy.copy(cls.from_step)
         cls.from_step.domain.extend([
                 ('main_model', '=', Eval('_parent_on_process', {}).get(
                     'on_model'))])
-        cls.to_step = copy.copy(cls.to_step)
         cls.to_step.domain.extend([
                 ('main_model', '=', Eval('_parent_on_process', {}).get(
                     'on_model'))])
 
         cls._error_messages.update({
-                'missing_pyson': 'Pyson expression and description is mandatory',
+                'missing_pyson': 'Pyson expression and description is '
+                'mandatory',
                 'missing_choice': 'Both choices must be filled !',
                 })
 
@@ -100,13 +99,12 @@ class ProcessTransition(model.CoopSQL):
 
     def execute(self, target):
         if self.kind != 'choice':
-            super(ProcessTransition, self).execute(target)
-            return
+            return super(ProcessTransition, self).execute(target)
         result = utils.pyson_result(self.pyson_choice, target)
         if result:
-            self.choice_if_true.execute(target)
+            return self.choice_if_true.execute(target)
         else:
-            self.choice_if_false.execute(target)
+            return self.choice_if_false.execute(target)
 
     def get_rec_name(self, name):
         if self.kind != 'choice':
@@ -152,11 +150,11 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 
     __name__ = 'process.log'
 
-    user = fields.Many2One('res.user', 'User')
-    from_state = fields.Many2One(
-        'process-process.step', 'From State')
-    to_state = fields.Many2One(
-        'process-process.step', 'To State', select=True)
+    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
+    from_state = fields.Many2One('process-process.step', 'From State',
+        ondelete='SET NULL')
+    to_state = fields.Many2One('process-process.step', 'To State', select=True,
+        ondelete='SET NULL')
     start_time = fields.DateTime('Start Time')
     end_time = fields.DateTime('End Time')
     description = fields.Text('Description')
@@ -224,14 +222,14 @@ class CogProcessFramework(ProcessFramework):
         return current_log[0].id if current_log else None
 
     @classmethod
-    def write(cls, instances, values):
+    def write(cls, instances, values, *_args):
         for instance in instances:
             if instance.current_log and instance.current_log.locked:
                 if instance.current_log.user.id != Transaction().user:
                     cls.raise_user_error('lock_fault', (
                             instance.get_rec_name(None),
                             instance.current_log.user.get_rec_name(None)))
-        super(CogProcessFramework, cls).write(instances, values)
+        super(CogProcessFramework, cls).write(instances, values, *_args)
         Session = Pool().get('ir.session')
         Log = Pool().get('process.log')
         try:
@@ -310,14 +308,17 @@ class CogProcessFramework(ProcessFramework):
         def next(works):
             for work in works:
                 good_exec = work.get_next_execution()
-                if good_exec:
-                    with Transaction().set_context(after_executed=True):
-                        if good_exec == 'complete':
-                            cls.build_instruction_complete_method(process,
-                                None)([work])
-                        else:
-                            good_exec.execute(work)
-                            work.save()
+                if not good_exec:
+                    result = None
+                    break
+                with Transaction().set_context(after_executed=True):
+                    if good_exec == 'complete':
+                        result = cls.build_instruction_complete_method(
+                            process, None)([work])
+                    else:
+                        result = good_exec.execute(work)
+                        work.save()
+            return result
         return next
 
     @classmethod
@@ -336,9 +337,15 @@ class CogProcessFramework(ProcessFramework):
         def button_step_generic(works):
             ProcessStep = Pool().get('process.step')
             target = ProcessStep(data[0])
+            result = None
             for work in works:
-                target.execute(work)
+                result = target.execute(work)
+                if work.current_state.step.technical_name == 'quittance':
+                    work.write([work], {
+                            'current_state': work.current_state.id})
+                    continue
                 work.save()
+            return result
 
         return button_step_generic
 
@@ -380,11 +387,18 @@ class CogProcessFramework(ProcessFramework):
 
     @classmethod
     def build_instruction_complete_method(cls, process, data):
+        pool = Pool()
+        Action = pool.get('ir.action')
+        ModelData = pool.get('ir.model.data')
+        action_id = Action.get_action_id(ModelData.get_id('process_cog',
+                'act_end_process'))
+
         def button_complete_generic(works):
             for work in works:
                 work.current_state.step.execute_after(work)
                 work.current_state = None
                 work.save()
+            return action_id
 
         return button_complete_generic
 
@@ -420,7 +434,6 @@ class Process(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
-        cls.transitions = copy.copy(cls.transitions)
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
         cls.transitions.depends.append('custom_transitions')
 
@@ -517,11 +530,11 @@ class Process(model.CoopSQL):
     def get_xml_footer(self, colspan=4):
         xml = ''
         if self.with_prev_next:
-            xml += '<group name="group_prevnext" colspan="4" col="8">'
-            xml += '<button string="Previous"'
+            xml += '<group id="group_prevnext" colspan="4" col="8">'
+            xml += '<button string="Previous  (_j)"'
             xml += ' name="_button_previous_%s"/>' % self.id
-            xml += '<group name="void" colspan="6"/>'
-            xml += '<button string="Next" '
+            xml += '<group id="void" colspan="6"/>'
+            xml += '<button string="Next (_k)" '
             xml += 'name="_button_next_%s"/>' % self.id
             xml += '</group>'
             xml += '<newline/>'
@@ -559,21 +572,30 @@ class Process(model.CoopSQL):
                     'end_date': coop_date.add_day(process['start_date'], -1)})
         return super(Process, cls).create(values)
 
-    def step1_before_step2(self, step1, step2):
+    def intermediate_steps(self, step1, step2):
         # Returns True if step1 appears before step2 in self.all_steps
         step1_rank = -1
         step2_rank = -1
-        for elem in self.all_steps:
+        for idx, elem in enumerate(self.all_steps):
             if step1.id == elem.step.id:
                 step1_rank = elem.order
+                step1_idx = idx
             if step2.id == elem.step.id:
                 step2_rank = elem.order
-        return step1_rank < step2_rank
+                step2_idx = idx
+        if step1_rank > step2_rank:
+            return []
+        return map(lambda x: x.step, self.all_steps[step1_idx:step2_idx + 1])
 
     def create_update_menu_entry(self):
         if Transaction().context.get('__importing__'):
             return []
         return super(Process, self).create_update_menu_entry()
+
+    def set_menu_item_list(self, previous_ids, new_ids):
+        if Transaction().context.get('__importing__'):
+            return []
+        return super(Process, self).set_menu_item_list(previous_ids, new_ids)
 
 
 class ProcessStepRelation(model.CoopSQL):
@@ -582,11 +604,9 @@ class ProcessStepRelation(model.CoopSQL):
     @classmethod
     def __setup__(cls):
         super(ProcessStepRelation, cls).__setup__()
-        cls.step = copy.copy(cls.step)
         cls.step.domain.extend([
                 ('main_model', '=', Eval('_parent_process', {}).get(
                         'on_model', 0))])
-        cls.process = copy.copy(cls.process)
         cls.process.required = True
 
     @classmethod
@@ -599,14 +619,13 @@ class ViewDescription(model.CoopSQL, model.CoopView):
 
     __name__ = 'ir.ui.view.description'
 
-    the_view = fields.Many2One('ir.ui.view', 'View', states={'readonly': True})
+    the_view = fields.Many2One('ir.ui.view', 'View', states={'readonly': True},
+        ondelete='SET NULL')
     view_name = fields.Char('View Name', required=True,
         states={'readonly': Eval('id', 0) > 0},
-        on_change_with=['view_name', 'view_model'],
         depends=['view_name', 'view_model'])
     view_final_name = fields.Function(
         fields.Char('View Name', states={'readonly': True},
-            on_change_with=['view_name', 'view_kind', 'view_model'],
             depends=['view_name', 'view_kind', 'view_model']),
         'on_change_with_view_final_name')
     view_kind = fields.Selection([
@@ -617,13 +636,11 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             ('expert', 'Expert')], 'Input Mode')
     header_line = fields.Char('Header Line',
         states={'invisible': Eval('input_mode', '') != 'expert'},
-        on_change_with=[
-            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'],
-        depends=[
-            'view_string', 'nb_col', 'input_mode', 'header_line', 'view_kind'])
+        depends=['view_string', 'nb_col', 'input_mode', 'header_line',
+            'view_kind'])
     view_string = fields.Char('View String',
         states={'invisible': Eval('input_mode', '') != 'classic'},
-        on_change_with=['view_model'], depends=['input_mode', 'view_model'])
+        depends=['input_mode', 'view_model'])
     nb_col = fields.Integer('Number of columns', states={
             'invisible': Not(And(
                     Eval('input_mode', '') == 'classic',
@@ -631,12 +648,11 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             }, depends=['view_kind', 'input_mode'])
     view_content = fields.Text('View Content')
     view_model = fields.Many2One('ir.model', 'View Model', required=True,
-        states={'readonly': Eval('id', 0) > 0})
+        states={'readonly': Eval('id', 0) > 0}, ondelete='RESTRICT')
     for_step = fields.Many2One('process.step', 'For Step', ondelete='CASCADE')
     field_childs = fields.Selection('get_field_childs', 'Children field',
-        selection_change_with=['view_model'], depends=['view_model'],
-        states={'invisible': Eval('view_kind') != 'tree'},
-        on_change_with=['view_model'])
+        depends=['view_model'], states={
+            'invisible': Eval('view_kind') != 'tree'})
 
     @classmethod
     def __setup__(cls):
@@ -650,6 +666,12 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     def _export_skips(cls):
         result = super(ViewDescription, cls)._export_skips()
         result.add('the_view')
+        return result
+
+    @classmethod
+    def _export_light(cls):
+        result = super(ViewDescription, cls)._export_light()
+        result.add('view_model')
         return result
 
     @classmethod
@@ -670,10 +692,12 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     def default_input_mode(cls):
         return 'classic'
 
+    @fields.depends('view_model')
     def on_change_with_field_childs(self):
         if not (hasattr(self, 'view_model') and self.view_model):
             return ''
 
+    @fields.depends('view_model')
     def get_field_childs(self):
         if not (hasattr(self, 'view_model') and self.view_model):
             return [('', '')]
@@ -687,6 +711,8 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     def default_view_final_name(cls):
         return 'step_%s__form' % Transaction().context.get('for_step_name', '')
 
+    @fields.depends('view_string', 'nb_col', 'input_mode', 'header_line',
+        'view_kind')
     def on_change_with_header_line(self):
         if self.input_mode == 'expert':
             return self.header_line
@@ -695,17 +721,20 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             xml += 'col="%s" ' % self.nb_col
         return xml
 
+    @fields.depends('view_model')
     def on_change_with_view_string(self):
         if not (hasattr(self, 'view_model') and self.view_model):
             return ''
         # TODO : Get the good (translated) name
         return self.view_model.name
 
+    @fields.depends('view_name', 'view_model')
     def on_change_with_view_name(self):
         if (hasattr(self, 'view_model') and self.view_model):
             if not (hasattr(self, 'attribute') and self.attribute):
                 return self.view_model.model.split('.')[1].replace('.', '_')
 
+    @fields.depends('view_name', 'view_kind', 'view_model')
     def on_change_with_view_final_name(self, name=None):
         if (hasattr(self, 'for_step') and self.for_step):
             the_step = self.for_step.technical_name
@@ -795,7 +824,7 @@ class ProcessStep(model.CoopSQL):
     main_model = fields.Many2One('ir.model', 'Main Model', domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework'),
-            ], depends=['processes'], required=True)
+            ], depends=['processes'], required=True, ondelete='RESTRICT')
 
     @classmethod
     def _export_keys(cls):
@@ -817,12 +846,26 @@ class ProcessStep(model.CoopSQL):
         return self.pyson or ''
 
     def execute(self, target):
+        result = None
         origin = target.current_state.step
-        if target.current_state.process.step1_before_step2(
-                origin, self):
-            origin.execute_after(target)
-        self.execute_before(target)
+        intermediates = target.current_state.process.intermediate_steps(
+            origin, self)
+        for idx, origin in enumerate(intermediates):
+            if result:
+                origin.execute_before(target)
+                target.set_state(origin)
+                return result
+            if idx == len(intermediates) - 1:
+                continue
+            if idx != 0:
+                result = origin.execute_before(target)
+                if result:
+                    target.set_state(origin)
+                    return result
+            result = origin.execute_after(target)
+        result = self.execute_before(target) if not result else result
         target.set_state(self)
+        return result
 
 
 class ProcessStart(model.CoopView):
@@ -835,15 +878,14 @@ class ProcessStart(model.CoopView):
         domain=[('is_workflow', '=', 'True')],
         states={'readonly': True, 'invisible': True})
     good_process = fields.Many2One('process', 'Good Process',
-        on_change_with=['date, model'], depends=['date', 'model'])
+        depends=['date', 'model'])
 
     @classmethod
     def __setup__(cls):
         super(ProcessStart, cls).__setup__()
-        cls.good_process = copy.copy(cls.good_process)
         cls.good_process.domain = cls.build_process_domain()
         cls.good_process.depends = cls.build_process_depends()
-        cls.good_process.on_change_with = cls.build_process_depends()
+        cls.good_process.on_change_with = set(cls.build_process_depends())
 
     @classmethod
     def build_process_domain(cls):
@@ -862,6 +904,7 @@ class ProcessStart(model.CoopView):
     def default_model(cls):
         raise NotImplementedError
 
+    @fields.depends('date', 'model')
     def on_change_with_good_process(self):
         try:
             good_process = utils.get_domain_instances(self, 'good_process')
@@ -886,17 +929,18 @@ class ProcessFinder(Wizard):
     process_parameters = StateView('process.start',
         'process_cog.process_parameters_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Start Process', 'action', 'tryton-go-next')])
+            Button('Start Process (_k)', 'action', 'tryton-go-next',
+                default=True)])
     action = VoidStateAction()
 
     @classmethod
     def __setup__(cls):
         super(ProcessFinder, cls).__setup__()
-        cls.process_parameters = copy.copy(cls.process_parameters)
         cls.process_parameters.model_name = cls.get_parameters_model()
         cls.process_parameters.view = cls.get_parameters_view()
         cls._error_messages.update({
-                'no_process_selected': 'Please pick a process from the selection'})
+                'no_process_selected': 'Please pick a process from the '
+                'selection'})
 
     def do_action(self, action):
         Action = Pool().get('ir.action')
@@ -931,7 +975,7 @@ class ProcessFinder(Wizard):
         return res
 
     def init_state(self, obj):
-        if utils.is_none(obj, 'current_state'):
+        if not getattr(obj, 'current_state', None):
             obj.current_state = \
                 self.process_parameters.good_process.all_steps[0]
 
@@ -957,6 +1001,103 @@ class ProcessFinder(Wizard):
     @classmethod
     def get_parameters_view(cls):
         return 'process_cog.process_parameters_form'
+
+
+class ProcessEnd(Wizard):
+    'End process'
+
+    __name__ = 'process.end'
+
+    class VoidStateAction(StateAction):
+        def __init__(self):
+            StateAction.__init__(self, None)
+
+        def get_action(self):
+            return None
+
+    start = VoidStateAction()
+
+    def do_start(self, action):
+        pool = Pool()
+        ActWindow = pool.get('ir.action.act_window')
+        Action = pool.get('ir.action')
+        possible_actions = ActWindow.search([
+                ('res_model', '=', Transaction().context.get('active_model'))])
+        good_action = possible_actions[0]
+        good_values = Action.get_action_values(
+            'ir.action.act_window', [good_action.id])
+        good_values[0]['views'] = [
+            view for view in good_values[0]['views'] if view[1] == 'form']
+        return good_values[0], {
+            'res_id': Transaction().context.get('active_id')}
+
+    def end(self):
+        return 'close'
+
+
+class ProcessResume(Wizard):
+    'Resume Process'
+
+    __name__ = 'process.resume'
+
+    start_state = 'resume'
+    resume = model.VoidStateAction()
+
+    @classmethod
+    def __setup__(cls):
+        super(ProcessResume, cls).__setup__()
+        cls._error_messages.update({
+                'no_process_found': 'No active process found',
+                'lock_by_user': 'Process Locked by user',
+                })
+
+    def do_resume(self, action):
+        pool = Pool()
+        active_id = Transaction().context.get('active_id')
+        active_model = Transaction().context.get('active_model')
+        instance = pool.get(active_model)(active_id)
+        if not instance.current_state:
+            self.raise_user_error('no_process_found')
+        Log = pool.get('process.log')
+        active_logs = Log.search([
+                ('latest', '=', True),
+                ('task', '=', '%s,%i' % (active_model, active_id))])
+        if not active_logs:
+            self.raise_user_error('no_process_found')
+        active_log, = active_logs
+        if (active_log.locked == True and
+                active_log.user.id != Transaction().user):
+            self.raise_user_error('lock_by_user', (active_log.user.name,))
+        process_action = instance.current_state.process.get_act_window()
+        Action = pool.get('ir.action')
+        process_action = Action.get_action_values(process_action.__name__,
+            [process_action.id])[0]
+        Session = Pool().get('ir.session')
+        good_session, = Session.search(
+            [('create_uid', '=', Transaction().user)])
+
+        new_log = Log()
+        new_log.user = Transaction().user
+        new_log.locked = True
+        new_log.task = instance
+        new_log.from_state = instance.current_state.id
+        new_log.to_state = instance.current_state.id
+        new_log.start_time = datetime.datetime.now()
+        new_log.session = good_session.key
+        new_log.save()
+
+        views = process_action['views']
+        if len(views) > 1:
+            for view in views:
+                if view[1] == 'form':
+                    process_action['views'] = [view]
+                    break
+        return (process_action, {
+                'id': active_id,
+                'model': active_model,
+                'res_id': active_id,
+                'res_model': active_model,
+                })
 
 
 class GenerateGraph:

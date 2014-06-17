@@ -21,6 +21,8 @@ __all__ = [
     'OptionDescriptionExtraDataRelation',
     'ProductOptionDescriptionRelation',
     'ProductExtraDataRelation',
+    'OptionDescriptionRequired',
+    'OptionDescriptionExcluded',
     ]
 
 CONFIG_KIND = [
@@ -34,6 +36,12 @@ SUBSCRIBER_KIND = [
     ('company', 'Company'),
     ]
 
+SUBSCRIPTION_BEHAVIOUR = [
+    ('mandatory', 'Mandatory'),
+    ('defaulted', 'Defaulted'),
+    ('optional', 'Optional'),
+    ]
+
 
 class Templated(object):
     'Templated'
@@ -41,8 +49,7 @@ class Templated(object):
     __name__ = 'offered.template'
 
     template = fields.Many2One(None, 'Template',
-        domain=[('id', '!=', Eval('id'))], depends=['id'],
-        on_change=['template'])
+        domain=[('id', '!=', Eval('id'))], depends=['id'], ondelete='RESTRICT')
     template_behaviour = fields.Selection([
             ('', ''),
             ('pass', 'Add'),
@@ -51,6 +58,7 @@ class Templated(object):
         states={'invisible': ~Eval('template')},
         depends=['template'])
 
+    @fields.depends('template')
     def on_change_template(self):
         if hasattr(self, 'template') and self.template:
             if (not hasattr(self, 'template_behaviour')
@@ -143,10 +151,9 @@ class Offered(model.CoopView, GetResult, Templated):
     __name__ = 'offered'
     _export_name = 'code'
 
-    code = fields.Char('Code', required=True, select=1,
-        on_change_with=['code', 'name'])
-    name = fields.Char('Name', required=True, select=1, translate=True)
-    start_date = fields.Date('Start Date', required=True, select=1)
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, translate=True)
+    start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     description = fields.Text('Description', translate=True)
     summary = fields.Function(
@@ -158,37 +165,32 @@ class Offered(model.CoopView, GetResult, Templated):
         'get_currency_digits')
     extra_data = fields.Dict('extra_data', 'Offered Kind',
         context={'extra_data_kind': 'product'},
-        domain=[('kind', '=', 'product')],
-        on_change_with=['extra_data'])
+        domain=[('kind', '=', 'product')])
     company = fields.Many2One('company.company', 'Company', required=True,
-        ondelete="RESTRICT")
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
         super(Offered, cls).__setup__()
-        cls.template = copy.copy(cls.template)
         cls.template.model_name = cls.__name__
 
         for field_name in (r for r in dir(cls) if r.endswith('_rules')):
             field = getattr(cls, field_name)
             if not hasattr(field, 'model_name'):
                 continue
-            cur_attr = copy.copy(field)
-            if not hasattr(cur_attr, 'context'):
+            if not hasattr(field, 'context'):
                 continue
-            if cur_attr.context is None:
-                cur_attr.context = {}
-            cur_attr.context['start_date'] = Eval('start_date')
-            cur_attr.context['currency_digits'] = Eval('currency_digits')
-            if cur_attr.depends is None:
-                cur_attr.depends = []
+            if field.context is None:
+                field.context = {}
+            field.context['start_date'] = Eval('start_date')
+            field.context['currency_digits'] = Eval('currency_digits')
+            if field.depends is None:
+                field.depends = []
             utils.extend_inexisting(
-                cur_attr.depends, ['start_date', 'currency_digits'])
-            if cur_attr.states is None:
-                cur_attr.states = {}
-            cur_attr.states['readonly'] = ~Bool(Eval('start_date'))
-
-            setattr(cls, field_name, cur_attr)
+                field.depends, ['start_date', 'currency_digits'])
+            if field.states is None:
+                field.states = {}
+            field.states['readonly'] = ~Bool(Eval('start_date'))
 
     @staticmethod
     def default_start_date():
@@ -223,25 +225,7 @@ class Offered(model.CoopView, GetResult, Templated):
             res[se.name] = se.get_default_value(None)
         return res
 
-    def get_extra_data_def(self, kinds=None, at_date=None):
-        return [
-            x for x in self.extra_data_def
-            if x.valid_at_date(at_date) and (not kinds or x.kind in kinds)]
-
-    def get_cmpl_data_looking_for_what(self, args):
-        return 'contract' if not 'sub_elem' in args else 'sub_elem'
-
-    def get_extra_data_for_exec(self, args):
-        looking_for = self.get_cmpl_data_looking_for_what(args)
-        all_schemas = set(self.get_extra_data_def(
-            ('contract', looking_for), args['date']))
-        if looking_for:
-            possible_schemas = set(self.get_extra_data_def(
-                (looking_for), args['date']))
-        else:
-            possible_schemas = set([])
-        return all_schemas, possible_schemas
-
+    @fields.depends('extra_data')
     def on_change_with_extra_data(self):
         if not hasattr(self, 'extra_data_def'):
             return {}
@@ -273,6 +257,7 @@ class Offered(model.CoopView, GetResult, Templated):
         except ValueError:
             return None
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code
@@ -280,6 +265,46 @@ class Offered(model.CoopView, GetResult, Templated):
 
     def init_dict_for_rule_engine(self, args):
         pass
+
+    @classmethod
+    def get_dated_fields(cls):
+        return [x for x in cls._fields.keys() if x.endswith('rules')]
+
+    @classmethod
+    def validate(cls, instances):
+        # Builds a virtual list of all business versions of the offered to be
+        # able to validate possible rule dependencies in all possible
+        # combinations
+        versioned_fields = cls.get_dated_fields()
+        for instance in instances:
+            values = []
+            for field in versioned_fields:
+                values += getattr(instance, field)
+            dates = set(map(lambda x: x.start_date, values))
+            for date in dates:
+                data = dict([
+                        (x, utils.get_good_version_at_date(instance, x, date))
+                        for x in versioned_fields])
+                instance.validate_consistency(data)
+
+    def validate_consistency(self, data):
+        pass
+
+    def get_contract_dates(self, dates, contract):
+        dates.add(contract.start_date)
+
+    def get_option_dates(self, dates, option):
+        dates.add(option.start_date)
+
+    def get_dates(self, contract):
+        dates = set()
+        self.get_contract_dates(dates, contract)
+        for option in contract.options:
+            self.get_option_dates(dates, option)
+        return dates
+
+    def get_all_extra_data(self, at_date):
+        return getattr(self, 'extra_data', {})
 
 
 class Product(model.CoopSQL, Offered):
@@ -293,14 +318,24 @@ class Product(model.CoopSQL, Offered):
             ('currency', '=', Eval('currency')),
             ('kind', '=', Eval('kind')),
             ('company', '=', Eval('company')),
-            ], depends=['currency', 'kind', 'company'])
-    currency = fields.Many2One('currency.currency', 'Currency', required=True)
+            ], depends=['currency', 'kind', 'company'],
+            order=[('order', 'ASC')],
+            states={'invisible': Bool(Eval('change_coverages_order'))})
+    change_coverages_order = fields.Function(
+        fields.Boolean('Change Order'),
+        'get_change_coverages_order', 'setter_void')
+    ordered_coverages = fields.One2Many('offered.product-option.description',
+        'product', 'Ordered Coverages', order=[('order', 'ASC')],
+        states={'invisible': ~Eval('change_coverages_order')})
+    currency = fields.Many2One('currency.currency', 'Currency', required=True,
+        ondelete='RESTRICT')
     contract_generator = fields.Many2One('ir.sequence',
         'Contract Number Generator', context={'code': 'offered.product'},
-        ondelete='RESTRICT', required=True)
+        ondelete='RESTRICT', required=True,
+        domain=[('code', '=', 'contract')])
     extra_data_def = fields.Many2Many('offered.product-extra_data',
         'product', 'extra_data_def', 'Extra Data',
-        domain=[('kind', 'in', ['contract', 'sub_elem'])])
+        domain=[('kind', 'in', ['contract', 'option'])])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
 
     @classmethod
@@ -311,13 +346,47 @@ class Product(model.CoopSQL, Offered):
             ]
         cls.__rpc__.update({'get_product_def': RPC()})
 
-        cls.kind = copy.copy(cls.kind)
         cls.kind.selection = cls.get_possible_product_kind()
         cls.kind.selection = list(set(cls.kind.selection))
+        cls._error_messages.update({
+                'missing_contract_extra_data': 'The following contract extra'
+                'data should be set on the product: %s',
+                })
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Product, cls)._export_skips()
+        # ordered_coverages should be enough
+        result.add('coverages')
+        return result
+
+    @classmethod
+    def validate(cls, instances):
+        super(Product, cls).validate(instances)
+        cls.validate_contract_extra_data(instances)
+
+    @classmethod
+    def validate_contract_extra_data(cls, instances):
+        for instance in instances:
+            from_option = set(extra_data for coverage in instance.coverages
+                for extra_data in coverage.extra_data_def
+                if extra_data.kind == 'contract')
+            remaining = from_option - set(instance.extra_data_def)
+            if remaining:
+                instance.raise_user_error('missing_contract_extra_data',
+                    (', '.join((extra_data.string
+                                for extra_data in remaining))))
 
     @classmethod
     def get_possible_product_kind(cls):
         return [('', '')]
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
 
     def get_valid_coverages(self):
         for coverage in self.coverages:
@@ -328,6 +397,25 @@ class Product(model.CoopSQL, Offered):
         super(Product, self).init_dict_for_rule_engine(args)
         if not 'product' in args:
             args['product'] = self
+
+    def get_extra_data_def(self, type_, existing_data, condition_date,
+            item_desc=None, coverage=None):
+        ExtraData = Pool().get('extra_data')
+        all_schemas, possible_schemas = ExtraData.get_extra_data_definitions(
+            self, 'extra_data_def', type_, condition_date)
+        if item_desc:
+            tmp_all, tmp_possible = ExtraData.get_extra_data_definitions(
+                item_desc, 'extra_data_def', type_, condition_date)
+            all_schemas |= tmp_all
+            possible_schemas |= tmp_possible
+        if coverage:
+            tmp_all, tmp_possible = ExtraData.get_extra_data_definitions(
+                coverage, 'extra_data_def', type_, condition_date)
+            all_schemas |= tmp_all
+            possible_schemas |= tmp_possible
+        result = ExtraData.calculate_value_set(possible_schemas, all_schemas,
+            existing_data)
+        return result
 
     @classmethod
     def default_currency(cls):
@@ -375,10 +463,11 @@ class Product(model.CoopSQL, Offered):
                 str([k for k in args.iterkeys()])))
         all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
         if not 'sub_elem' in args:
-            for coverage in args['contract'].get_active_coverages_at_date(
-                    args['date']):
+            for option in args['contract'].options:
+                if not option.coverage:
+                    continue
                 coverage_all, coverage_possible = \
-                    coverage.get_extra_data_for_exec(args)
+                    option.coverage.get_extra_data_for_exec(args)
                 all_schemas |= coverage_all
                 possible_schemas |= coverage_possible
         else:
@@ -391,8 +480,8 @@ class Product(model.CoopSQL, Offered):
         if args['contract'].extra_data:
             existing_data.update(args['contract'].extra_data)
         key = None
-        if 'data' in args:
-            key = 'data'
+        if 'option' in args:
+            key = 'option'
         elif 'sub_elem' in args:
             key = 'sub_elem'
         elif 'contract' in args:
@@ -456,6 +545,15 @@ class Product(model.CoopSQL, Offered):
         if len(products) == 1:
             return products[0].extract_object('full')
 
+    def get_change_coverages_order(self, name):
+        return False
+
+    def get_publishing_values(self):
+        result = super(Product, self).get_publishing_values()
+        result['name'] = self.name
+        result['code'] = self.code
+        return result
+
 
 class OptionDescription(model.CoopSQL, Offered):
     'OptionDescription'
@@ -463,17 +561,10 @@ class OptionDescription(model.CoopSQL, Offered):
     __name__ = 'offered.option.description'
 
     kind = fields.Selection(None, 'Option Description Kind')
-    products = fields.Many2Many('offered.product-option.description',
-        'coverage', 'product', 'Products', domain=[
-            ('currency', '=', Eval('currency')),
-            ('company', '=', Eval('company'))],
-        depends=['currency', 'company'])
-    currency = fields.Many2One('currency.currency', 'Currency', required=True)
-    subscription_behaviour = fields.Selection([
-            ('mandatory', 'Mandatory'),
-            ('proposed', 'Proposed'),
-            ('optional', 'Optional'),
-            ], 'Subscription Behaviour', sort=False)
+    currency = fields.Many2One('currency.currency', 'Currency', required=True,
+        ondelete='RESTRICT')
+    subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
+        'Subscription Behaviour', sort=False)
     is_package = fields.Boolean('Package')
     coverages_in_package = fields.Many2Many(
         'offered.package-option.description',
@@ -484,7 +575,28 @@ class OptionDescription(model.CoopSQL, Offered):
     extra_data_def = fields.Many2Many(
         'offered.option.description-extra_data',
         'coverage', 'extra_data_def', 'Extra Data',
-        domain=[('kind', 'in', ['contract', 'sub_elem'])])
+        domain=[('kind', 'in', ['contract', 'option'])])
+    options_required = fields.Many2Many('offered.option.description.required',
+        'from_option_desc', 'to_option_desc', 'Options Required', domain=[
+            ('kind', '=', Eval('kind')),
+            ('id', '!=', Eval('id')),
+            ('id', 'not in', Eval('options_excluded')),
+            ], depends=['kind', 'id', 'options_excluded'])
+    options_excluded = fields.Many2Many('offered.option.description.excluded',
+        'from_option_desc', 'to_option_desc', 'Options Excluded', domain=[
+            ('kind', '=', Eval('kind')),
+            ('id', '!=', Eval('id')),
+            ('id', 'not in', Eval('options_required')),
+            ], depends=['kind', 'id', 'options_required'])
+    products = fields.Many2Many('offered.product-option.description',
+        'coverage', 'product', 'OptionDescriptions', domain=[
+            ('currency', '=', Eval('currency')),
+            ('kind', '=', Eval('kind')),
+            ('company', '=', Eval('company')),
+            ], depends=['currency', 'kind', 'company'])
+    is_service = fields.Function(
+        fields.Boolean('Is a Service'),
+        'on_change_with_is_service', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -497,7 +609,6 @@ class OptionDescription(model.CoopSQL, Offered):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
-        cls.kind = copy.copy(cls.kind)
         cls.kind.selection = cls.get_possible_option_description_kind()
         cls.kind.selection = list(set(cls.kind.selection))
 
@@ -508,6 +619,13 @@ class OptionDescription(model.CoopSQL, Offered):
     @classmethod
     def default_currency(cls):
         return ModelCurrency.default_currency()
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [(u'name',) + tuple(clause[1:])],
+            [(u'code',) + tuple(clause[1:])]
+            ]
 
     def is_valid(self):
         if self.template_behaviour == 'remove':
@@ -548,6 +666,19 @@ class OptionDescription(model.CoopSQL, Offered):
         super(OptionDescription, self).init_dict_for_rule_engine(args)
         args['coverage'] = self
 
+    def get_publishing_values(self):
+        result = super(OptionDescription, self).get_publishing_values()
+        result['name'] = self.name
+        result['code'] = self.code
+        return result
+
+    def on_change_with_is_service(self, name=None):
+        return True
+
+    @staticmethod
+    def default_is_service():
+        return True
+
 
 class PackageOptionDescription(model.CoopSQL):
     'Package to Option Description Relation'
@@ -571,7 +702,7 @@ class OptionDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class ProductOptionDescriptionRelation(model.CoopSQL):
+class ProductOptionDescriptionRelation(model.CoopSQL, model.CoopView):
     'Product to Option Description Relation'
 
     __name__ = 'offered.product-option.description'
@@ -579,6 +710,7 @@ class ProductOptionDescriptionRelation(model.CoopSQL):
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
     coverage = fields.Many2One('offered.option.description',
         'Option Description', ondelete='RESTRICT')
+    order = fields.Integer('Order')
 
 
 class ProductExtraDataRelation(model.CoopSQL):
@@ -589,3 +721,25 @@ class ProductExtraDataRelation(model.CoopSQL):
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
     extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT')
+
+
+class OptionDescriptionRequired(model.CoopSQL):
+    'Option Description Required'
+
+    __name__ = 'offered.option.description.required'
+
+    from_option_desc = fields.Many2One('offered.option.description',
+        'From Option Description', ondelete='CASCADE')
+    to_option_desc = fields.Many2One('offered.option.description',
+        'To Option Description', ondelete='RESTRICT')
+
+
+class OptionDescriptionExcluded(model.CoopSQL):
+    'Option Description Excluded'
+
+    __name__ = 'offered.option.description.excluded'
+
+    from_option_desc = fields.Many2One('offered.option.description',
+        'From Option Description', ondelete='CASCADE')
+    to_option_desc = fields.Many2One('offered.option.description',
+        'To Option Description', ondelete='RESTRICT')

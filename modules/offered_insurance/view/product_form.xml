@@ -6,14 +6,10 @@
             <field name="item_descriptors"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page/notebook" position="inside">
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page string="Deductible" id="deductible"
             states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="deductible_rules" colspan="4"/>
-        </page>
-        <page string="Clause" id="clause"
-            states="{'invisible': Eval('kind') != 'insurance'}">
-            <field name="clause_rules" colspan="4"/>
         </page>
         <page string="Documents" id="documents"
             states="{'invisible': Eval('kind') != 'insurance'}">

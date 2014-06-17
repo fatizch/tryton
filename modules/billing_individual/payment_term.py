@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import fields, model, coop_date
+from trytond.modules.cog_utils import fields, model, coop_date, coop_string
 from trytond.modules.offered_insurance.business_rule.premium_rule import \
     PRICING_FREQUENCY
 
@@ -14,6 +14,8 @@ __all__ = [
     'PaymentTermFeeRelation',
     'PaymentTerm',
     ]
+
+PAYMENT_FREQUENCY = PRICING_FREQUENCY[::1]
 
 REMAINING_POSITION = [
     ('', ''),
@@ -25,6 +27,11 @@ REMAINING_POSITION = [
 PAYMENT_DELAYS = [
     ('in_arrears', 'In Arrears'),
     ('in_advance', 'In Advance'),
+    ]
+
+SPLIT_METHODS = [
+    ('proportional', 'Proportional Periods'),
+    ('equal', 'Equal Periods'),
     ]
 
 
@@ -40,18 +47,17 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             ('fixed', 'Fixed'),
             ('percent_on_total', 'Percentage on Total'),
             ('prorata', 'Prorata'),
-            ], 'Type', required=True,
-        on_change=['type'])
+            ], 'Type', required=True)
     percentage = fields.Numeric('Percentage', digits=(16, 8),
         states={
             'invisible': Eval('type', '') != 'percent_on_total',
             'required': Eval('type', '') == 'percent_on_total'
-            }, on_change=['percentage'], depends=['type'])
+            }, depends=['type'])
     divisor = fields.Numeric('Divisor', digits=(16, 8),
         states={
             'invisible': Eval('type', '') != 'percent_on_total',
             'required': Eval('type', '') == 'percent_on_total',
-            }, on_change=['divisor'], depends=['type'])
+            }, depends=['type'])
     amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
         states={
             'invisible': Eval('type', '') != 'fixed',
@@ -62,8 +68,9 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             'invisible': Eval('type', '') != 'fixed',
             'required': Eval('type', '') == 'fixed',
             }, depends=['type'], ondelete='RESTRICT')
-    currency_digits = fields.Function(fields.Integer('Currency Digits',
-            on_change_with=['currency']), 'on_change_with_currency_digits')
+    currency_digits = fields.Function(
+        fields.Integer('Currency Digits'),
+        'on_change_with_currency_digits')
     day = fields.Integer('Day of Month')
     month = fields.Selection([
             (None, ''),
@@ -93,8 +100,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
     months = fields.Integer('Number of Months', required=True)
     weeks = fields.Integer('Number of Weeks', required=True)
     days = fields.Integer('Number of Days', required=True)
-    add_calculated_period = fields.Boolean('Add calculated period',
-        on_change=['add_calculated_period'])
+    add_calculated_period = fields.Boolean('Add calculated period')
     number_of_periods = fields.Numeric('Number of periods', digits=(16, 2),
         states={
             'invisible': ~Eval('add_calculated_period'),
@@ -141,6 +147,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
     def default_days():
         return 0
 
+    @fields.depends('add_calculated_period')
     def on_change_add_calculated_period(self):
         res = {}
         if (hasattr(self, 'add_calculated_period') and
@@ -148,6 +155,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             res['number_of_periods'] = 1
         return res
 
+    @fields.depends('type')
     def on_change_type(self):
         res = {}
         if self.type != 'fixed':
@@ -158,6 +166,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
             res['divisor'] = Decimal('0.0')
         return res
 
+    @fields.depends('percentage')
     def on_change_percentage(self):
         if not self.percentage:
             return {'divisor': 0.0}
@@ -166,6 +175,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
                 self.__class__.divisor.digits[1]),
             }
 
+    @fields.depends('divisor')
     def on_change_divisor(self):
         if not self.divisor:
             return {'percentage': 0.0}
@@ -174,6 +184,7 @@ class PaymentTermLine(model.CoopSQL, model.CoopView):
                 self.__class__.percentage.digits[1]),
             }
 
+    @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
         if self.currency:
             return self.currency.digits
@@ -259,24 +270,32 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
-    base_frequency = fields.Selection(PRICING_FREQUENCY, 'Base Frequency',
+    base_frequency = fields.Selection(PAYMENT_FREQUENCY, 'Base Frequency',
         required=True)
     remaining_position = fields.Selection(REMAINING_POSITION,
-        'Remaining position')
-    with_sync_date = fields.Boolean('With Sync Date')
+        'Remaining position', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
+    with_sync_date = fields.Boolean('With Sync Date', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
     force_line_at_start = fields.Boolean('Force start date line',
-        states={'invisible': ~Eval('with_sync_date') or ~~Eval('start_lines')})
+        states={'invisible': ~Eval('with_sync_date') or ~~Eval('start_lines')
+            or Eval('base_frequency', '') == 'one_shot'})
     sync_date = fields.Date('Sync Date', states={
-            'invisible': ~Eval('with_sync_date'),
+            'invisible': ~Eval('with_sync_date') or Eval('base_frequency', '')
+            == 'one_shot',
             'required': ~~Eval('with_sync_date')})
     start_lines = fields.One2Many('billing.payment.term.line', 'payment_term',
-        'Start Lines')
+        'Start Lines', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
     appliable_fees = fields.Many2Many('billing.payment.term-fee',
         'payment_term', 'fee', 'Appliable fees', depends=['company'],
         domain=[('company', '=', Eval('company'))])
-    payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode')
+    payment_mode = fields.Selection(PAYMENT_DELAYS, 'Payment Mode', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
+    split_method = fields.Selection(SPLIT_METHODS, 'Splitting method', states={
+            'invisible': Eval('base_frequency', '') == 'one_shot'})
 
     @classmethod
     def default_company(cls):
@@ -305,7 +324,26 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
     def default_force_line_at_start(cls):
         return True
 
+    @fields.depends('base_frequency', 'start_lines')
+    def on_change_base_frequency(self):
+        if self.base_frequency != 'one_shot':
+            return {}
+        return {
+            'payment_mode': 'in_advance',
+            'start_lines': {'remove': [x.id for x in self.start_lines]},
+            }
+
+    @classmethod
+    def default_split_method(cls):
+        return 'proportional'
+
     def get_line_dates(self, start_date, end_date):
+        if self.base_frequency == 'one_shot':
+            return [{
+                    'date': start_date,
+                    'remaining': True,
+                    'freq_amount': 0,
+                    'line': None}]
         dates = [line.get_line_info(start_date) for line in self.start_lines]
         if not dates and self.with_sync_date and self.force_line_at_start:
             dates.append({
@@ -405,28 +443,51 @@ class PaymentTerm(model.CoopSQL, model.CoopView):
                                     temp_date.month, payment_date), amount))
         return res
 
-    def compute(self, start_date, end_date, amount, currency, due_date):
-        lines_dates = self.get_line_dates(start_date, end_date)
+    def compute(self, work_set):
+        lines_dates = self.get_line_dates(work_set.period[0],
+            work_set.period[1])
         res = dict(((l['date'], 0) for l in lines_dates))
         freq_number = sum([k['freq_amount'] for k in lines_dates])
-        remainder = amount
+        remainder = work_set.total_amount
         flat_total = 0
         for line in (l for l in lines_dates if l['line']):
-            line_amount = line['line'].get_flat_value(start_date, end_date,
-                amount, currency)
+            line_amount = line['line'].get_flat_value(work_set.period[0],
+                work_set.period[1], work_set.total_amount, work_set.currency)
             flat_total += line_amount
             res[line['date']] += line_amount
             remainder -= line_amount
-
-        base_amount = remainder / freq_number
-        for elem in (l for l in lines_dates if l['freq_amount']):
-            line_amount = currency.round(base_amount * elem['freq_amount'])
-            res[elem['date']] += line_amount
+        base_amount = remainder / freq_number if freq_number else remainder
+        exact_day_price = remainder / coop_date.number_of_days_between(
+            work_set.period[0], work_set.period[1])
+        periods = []
+        for idx, elem in enumerate([l for l in lines_dates
+                    if l['freq_amount']] + [{'date': coop_date.add_day(
+                            work_set.period[1], 1)}]):
+            if idx != 0:
+                periods[idx - 1][1] = coop_date.add_day(elem['date'], -1)
+            if elem['date'] == coop_date.add_day(work_set.period[1], 1):
+                continue
+            periods.append([elem['date'], None, elem])
+        for start_date, end_date, elem in periods:
+            if (self.split_method == 'equal' or self.base_frequency ==
+                    'one_shot'):
+                line_amount = work_set.currency.round(base_amount *
+                    elem['freq_amount'])
+            elif self.split_method == 'proportional':
+                line_amount = work_set.currency.round(exact_day_price *
+                    coop_date.number_of_days_between(start_date, end_date))
+            res[start_date] += line_amount
             remainder -= line_amount
         if remainder:
             remaining_line = next(l for l in lines_dates if l['remaining'])
-            res[remaining_line['date']] += currency.round(remainder)
+            res[remaining_line['date']] += work_set.currency.round(remainder)
 
         result = sorted(list((x for x in res.iteritems() if x[1])),
             key=lambda x: x[0])
-        return self.apply_payment_date(result, due_date)
+        return self.apply_payment_date(result, work_set.payment_date)
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)

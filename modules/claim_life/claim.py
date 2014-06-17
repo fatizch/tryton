@@ -1,6 +1,4 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
@@ -19,8 +17,7 @@ class Loss:
 
     possible_covered_persons = fields.Function(
         fields.One2Many('party.party', None, 'Covered Persons',
-            states={'invisible': True},
-            on_change_with=['claim', 'start_date']),
+            states={'invisible': True}),
         'on_change_with_possible_covered_persons')
     covered_person = fields.Many2One('party.party', 'Covered Person',
         #TODO: Temporary hack, the function field is not calculated
@@ -30,15 +27,12 @@ class Loss:
                 ('id', 'in', Eval('possible_covered_persons')),
                 ()
                 )
-            ], depends=['possible_covered_persons'],
-        on_change=['covered_person', 'possible_loss_descs', 'claim',
-            'start_date', 'loss_desc', 'event_desc'])
+            ], ondelete='RESTRICT', depends=['possible_covered_persons'])
 
     @classmethod
     def super(cls):
         super(Loss, cls).super()
-        cls.main_loss = copy.copy(cls.main_loss)
-        cls.main_loss.on_change += ['covered_person']
+        cls.main_loss.on_change.add('covered_person')
 
     def on_change_main_loss(self):
         res = super(Loss, self).on_change_main_loss()
@@ -56,9 +50,12 @@ class Loss:
             res.extend(covered_element.get_covered_parties(self.start_date))
         return res
 
+    @fields.depends('claim', 'start_date')
     def on_change_with_possible_covered_persons(self, name=None):
         return [x.id for x in self.get_possible_covered_persons()]
 
+    @fields.depends('covered_person', 'possible_loss_descs', 'claim',
+        'start_date', 'loss_desc', 'event_desc')
     def on_change_covered_person(self):
         res = {}
         res['possible_loss_descs'] = self.on_change_with_possible_loss_descs()

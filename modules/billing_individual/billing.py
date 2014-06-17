@@ -34,7 +34,7 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
     __name__ = 'billing.payment.method'
 
     name = fields.Char('Name')
-    code = fields.Char('Code', required=True, on_change_with=['code', 'name'])
+    code = fields.Char('Code', required=True)
     payment_term = fields.Many2One('billing.payment.term', 'Payment Term',
         ondelete='RESTRICT', required=True)
     payment_mode = fields.Selection([
@@ -50,6 +50,7 @@ class PaymentMethod(model.CoopSQL, model.CoopView):
         'allowed days of the month eligible for direct debit.\n\n'
         'An empty list means that all dates are allowed')
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code
@@ -271,15 +272,20 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
             f('contract.option'),
             f('contract.covered_data'),
             f('account.tax.description'),
-            f('account.fee.description')]
+            f('account.fee.description'),
+            f('extra_premium.kind'),
+            ]
         return res
 
     def get_account_for_billing(self):
         return self.on_object.get_account_for_billing()
 
-    def get_number_of_days_at_date(self, at_date):
-        final_date = coop_date.add_frequency(self.frequency, at_date)
-        return coop_date.number_of_days_between(at_date, final_date) - 1
+    def get_number_of_days_at_date(self, start_date, end_date):
+        if self.frequency == 'one_shot':
+            final_date = end_date
+        else:
+            final_date = coop_date.add_frequency(self.frequency, start_date)
+        return coop_date.number_of_days_between(start_date, final_date) - 1
 
     def get_currency(self):
         if self.contract:
@@ -292,21 +298,29 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def calculate_bill_contribution(self, work_set, period):
         number_of_days = coop_date.number_of_days_between(*period)
-        price_line_days = self.get_number_of_days_at_date(period[0])
+        price_line_days = self.get_number_of_days_at_date(*period)
         convert_factor = number_of_days / Decimal(price_line_days)
         amount = self.get_base_amount_for_billing() * convert_factor
-        amount = work_set['currency'].round(amount)
+        amount = work_set.currency.round(amount)
         account = self.get_account_for_billing()
-        line = work_set['lines'][(self.on_object, account)]
+        work_set.contributions.append({
+                'from': self.on_object,
+                'start_date': period[0],
+                'end_date': period[1],
+                'base_amount': self.get_base_amount_for_billing(),
+                'final_amount': amount,
+                'ratio': convert_factor,
+                })
+        line = work_set.lines[(self.on_object, account)]
         line.second_origin = self.on_object
         line.credit += amount
-        work_set['total_amount'] += amount
+        work_set.total_amount += amount
         line.account = account
         line.party = self.contract.subscriber
         for type_, sub_lines, sub_line in chain(
-                izip(repeat('tax'), repeat(work_set['taxes']),
+                izip(repeat('tax'), repeat(work_set.taxes),
                     self.tax_lines),
-                izip(repeat('fee'), repeat(work_set['fees']),
+                izip(repeat('fee'), repeat(work_set.fees),
                     self.fee_lines)):
             desc = getattr(sub_line, '%s_desc' % type_)
             values = sub_lines[desc.id]
@@ -314,6 +328,14 @@ class Premium(model.CoopSQL, model.CoopView, ModelCurrency):
             values['to_recalculate'] |= sub_line.to_recalculate
             values['amount'] += sub_line.amount * convert_factor
             values['base'] += amount
+            work_set.contributions.append({
+                'from': desc,
+                'start_date': period[0],
+                'end_date': period[1],
+                'base_amount': sub_line.amount,
+                'final_amount': sub_line.amount * convert_factor,
+                'ratio': convert_factor,
+                })
         return line
 
 
@@ -327,17 +349,20 @@ class BillingData(model.CoopSQL, model.CoopView):
     __name__ = 'contract.billing.data'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    number_of_billing_data = fields.Function(
+        fields.Integer('Number of Billing Data', states={'invisible': True}),
+        'get_number_of_billing_data')
     policy_owner = fields.Function(
         fields.Many2One('party.party', 'Party', states={'invisible': True}),
         'get_policy_owner_id')
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
+    start_date = fields.Date('Start Date', required=True,
+        states={'invisible': Eval('number_of_billing_data', 0) == 1})
+    end_date = fields.Date('End Date',
+        states={'invisible': Eval('number_of_billing_data', 0) == 1})
     payment_method = fields.Many2One('billing.payment.method',
-        'Payment Method', on_change=['payment_method', 'payment_date'],
-        ondelete='RESTRICT')
+        'Payment Method', ondelete='RESTRICT')
     payment_mode = fields.Function(
-        fields.Char('Payment Mode', states={'invisible': True},
-            on_change_with=['payment_method']),
+        fields.Char('Payment Mode', states={'invisible': True}),
         'on_change_with_payment_mode')
     payment_bank_account = fields.Many2One('bank.account',
         'Payment Bank Account',
@@ -351,9 +376,8 @@ class BillingData(model.CoopSQL, model.CoopView):
         depends=['policy_owner'], ondelete='RESTRICT')
     payment_date_selector = fields.Function(
         fields.Selection('get_allowed_payment_dates',
-            'Payment Date', selection_change_with=['payment_method'],
-            states={'invisible': Eval('payment_mode', '') != 'direct_debit'},
-            on_change=['payment_date_selector']),
+            'Payment Date', states={
+                'invisible': Eval('payment_mode', '') != 'direct_debit'}),
         'get_payment_date_selector', 'setter_void')
     payment_date = fields.Integer('Payment Date', states={'invisible': True})
 
@@ -381,6 +405,7 @@ class BillingData(model.CoopSQL, model.CoopView):
         for manager in managers:
             manager.check_payment_bank_acount()
 
+    @fields.depends('payment_date_selector')
     def on_change_payment_date_selector(self):
         if not (hasattr(self, 'payment_date_selector') and
                 self.payment_date_selector):
@@ -402,14 +427,14 @@ class BillingData(model.CoopSQL, model.CoopView):
             self.payment_date = int(good_payment_date)
         if self.payment_method.payment_mode == 'direct_debit':
             BankAccount = Pool().get('bank.account')
-            try:
-                party = contract.get_policy_owner(self.start_date)
-                if party:
-                    self.payment_bank_account = BankAccount.search([
-                            ('party', '=', party.id)])[0]
-            except IndexError:
-                pass
+            party = contract.get_policy_owner(self.start_date)
+            if not party:
+                return
+            bank_accounts = BankAccount.search([('owners', '=', party.id)])
+            if bank_accounts:
+                self.payment_bank_account = bank_accounts[0]
 
+    @fields.depends('payment_method')
     def on_change_with_payment_mode(self, name=None):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return ''
@@ -420,11 +445,13 @@ class BillingData(model.CoopSQL, model.CoopView):
             if self.contract else None)
         return policy_owner.id if policy_owner else None
 
+    @fields.depends('payment_method')
     def get_allowed_payment_dates(self):
         if not (hasattr(self, 'payment_method') and self.payment_method):
             return [('', '')]
         return self.payment_method.get_allowed_date_values()
 
+    @fields.depends('payment_method', 'payment_date')
     def on_change_payment_method(self):
         allowed_vals = map(lambda x: x[0], self.get_allowed_payment_dates())
         if not (hasattr(self, 'payment_date') and self.payment_date):
@@ -443,6 +470,35 @@ class BillingData(model.CoopSQL, model.CoopView):
     def get_var_names_for_full_extract(cls):
         return [('payment_method', 'light'), ('payment_bank_account', 'light'),
             ('disbursment_bank_account', 'light'), 'payment_date']
+
+    def get_publishing_values(self):
+        result = super(BillingData, self).get_publishing_values()
+        result['payment_frequency'] = \
+            self.payment_method.payment_term.base_frequency
+        result['payment_date'] = self.payment_date
+        result['sync_date'] = self.payment_method.payment_term.sync_date
+        return result
+
+    @fields.depends('disbursment_bank_account', 'payment_bank_account')
+    def on_change_with_disbursment_bank_account(self):
+        if self.disbursment_bank_account:
+            return self.disbursment_bank_account.id
+        if self.payment_bank_account:
+            return self.payment_bank_account.id
+
+    def get_number_of_billing_data(self, name):
+        if getattr(self, 'contract', None):
+            return self.contract.number_of_billing_data
+
+    @classmethod
+    def default_number_of_billing_data(cls):
+        # We need to take into account the item we are creating
+        return Transaction().context.get('number_of_billing_data', 0) + 1
+
+    @classmethod
+    def default_start_date(cls):
+        if cls.default_number_of_billing_data() == 1:
+            return Transaction().context.get('start_date')
 
 
 class BillingPeriod(model.CoopSQL, model.CoopView):

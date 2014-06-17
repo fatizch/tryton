@@ -44,7 +44,7 @@
         <record model="ir.ui.view" id="option_view_tree">
             <field name="model">contract.option</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="contract.option_view_tree"/>
+            <field name="inherit" ref="contract.option_view_list"/>
             <field name="arch" type="xml"/>
         </record>
         <record model="ir.ui.view" id="option_view_form">
@@ -72,6 +72,40 @@
             <field name="model">contract.option-commission.option</field>
             <field name="type">form</field>
             <field name="name">option_commission_option_form</field>
+        </record>
+
+        <!-- ########### -->
+        <!-- # Premium # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="premium_view_form">
+            <field name="model">contract.premium</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract_insurance_invoice.premium_view_form"/>
+            <field name="name">premium_form</field>
+        </record>
+
+        <!-- ###################### -->
+        <!-- # Premium Commission # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="premium_commission_view_list">
+            <field name="model">contract.premium.commission</field>
+            <field name="type">tree</field>
+            <field name="name">premium_commission_list</field>
+        </record>
+
+        <!-- ########### -->
+        <!-- # Invoice # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="invoice_view_form">
+            <field name="model">account.invoice</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="account_invoice.invoice_view_form"/>
+            <field name="name">invoice_form</field>
+        </record>
+        <record model="ir.ui.view" id="com_invoice_view_list">
+            <field name="model">account.invoice</field>
+            <field name="type">tree</field>
+            <field name="name">com_invoice_list</field>
         </record>
     </data>
 </tryton>

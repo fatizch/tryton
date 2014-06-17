@@ -12,9 +12,4 @@
             <field name="bank_role" mode="form"/>
         </page>
     </xpath>
-  <xpath expr="//page[@id='summary']/group[@id='main_contact_mechanism']" position="after">
-        <newline/>
-        <label name="main_bank_account"/>
-        <field name="main_bank_account"/>
-    </xpath>
 </data>

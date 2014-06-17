@@ -6,33 +6,21 @@ msgctxt "error:table.2d:"
 msgid "The table is not 2D"
 msgstr "La table n'est pas 2D"
 
-msgctxt "error:table.manage_dimension.show.dimension:"
-msgid "Impossible to convert data %s with format %s"
-msgstr "Impossible de convertir la donnée %s avec le format %s"
+msgctxt "error:table.cell:"
+msgid "Too few dimension value \"%s\" for \"%s\""
+msgstr "Trop peu de valeur de dimension \"%s\" pour \"%s\""
 
-msgctxt "error:table.manage_dimension.show_dimension_1:"
-msgid "The requested change might delete data."
-msgstr ""
-
-msgctxt "error:table.manage_dimension.show_dimension_2:"
-msgid "The requested change might delete data."
-msgstr ""
-
-msgctxt "error:table.manage_dimension.show_dimension_3:"
-msgid "The requested change might delete data."
-msgstr ""
-
-msgctxt "error:table.manage_dimension.show_dimension_4:"
-msgid "The requested change might delete data."
-msgstr ""
+msgctxt "error:table.cell:"
+msgid "Too many dimension values \"%s\" for \"%s\""
+msgstr "Trop de valeur de dimension \"%s\" pour \"%s\\"
 
 msgctxt "error:table:"
 msgid "A clone record already exists : %s(%s)"
-msgstr ""
+msgstr "Une copie existe déjà : %s(%s)"
 
 msgctxt "error:table:"
 msgid "The code of \"Table Definition\" must be unique"
-msgstr ""
+msgstr "Le code de la table doit être unique"
 
 msgctxt "field:table,cells:"
 msgid "Cells"
@@ -156,7 +144,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:table,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:table.2d,create_date:"
 msgid "Create Date"
@@ -196,7 +184,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:table.2d,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:table.2d.open.ask_dimensions,definition:"
 msgid "Definition"
@@ -207,16 +195,16 @@ msgid "Dimension 3"
 msgstr "Dimension 3"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension3_required:"
-msgid "Dimension 3 Required"
-msgstr "Dimension 3 requise"
+msgid "Dimension %s Required"
+msgstr "Dimension %s requise"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension4:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
 
 msgctxt "field:table.2d.open.ask_dimensions,dimension4_required:"
-msgid "Dimension 4 Required"
-msgstr "Dimension 4 requise"
+msgid "Dimension %s Required"
+msgstr "Dimension %s requise"
 
 msgctxt "field:table.2d.open.ask_dimensions,id:"
 msgid "ID"
@@ -284,7 +272,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:table.cell,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:table.dimension.value,create_date:"
 msgid "Create Date"
@@ -306,6 +294,14 @@ msgctxt "field:table.dimension.value,definition:"
 msgid "Definition"
 msgstr "Définition"
 
+msgctxt "field:table.dimension.value,dimension_kind:"
+msgid "Dimension Kind"
+msgstr "Type de Dimension"
+
+msgctxt "field:table.dimension.value,dimension_order:"
+msgid "Dimension Order"
+msgstr "Ordre de la Dimension"
+
 msgctxt "field:table.dimension.value,end:"
 msgid "End"
 msgstr "Borne Supérieure"
@@ -321,6 +317,10 @@ msgstr "ID"
 msgctxt "field:table.dimension.value,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Etendre Arbre"
+
+msgctxt "field:table.dimension.value,name:"
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:table.dimension.value,rec_name:"
 msgid "Name"
@@ -356,55 +356,43 @@ msgstr "Mis à jour par"
 
 msgctxt "field:table.dimension.value,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
-msgctxt "field:table.manage_dimension.show.dimension,converted_text:"
-msgid "Converted Text"
-msgstr "Texte Convertit"
-
-msgctxt "field:table.manage_dimension.show.dimension,cur_dimension:"
-msgid "Current Dimension"
-msgstr "Dimension Courante"
-
-msgctxt "field:table.manage_dimension.show.dimension,date_format:"
-msgid "Date Format"
-msgstr "Format Date"
-
-msgctxt "field:table.manage_dimension.show.dimension,id:"
+msgctxt "field:table.dimension.value.open.ask_type,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:table.manage_dimension.show.dimension,input_mode:"
-msgid "Input Mode"
-msgstr "Mode de Saisie"
-
-msgctxt "field:table.manage_dimension.show.dimension,input_text:"
-msgid "Input Text"
-msgstr "Texte à saisir"
-
-msgctxt "field:table.manage_dimension.show.dimension,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:table.manage_dimension.show.dimension,must_expand_tree:"
+msgctxt "field:table.dimension.value.open.ask_type,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
 
-msgctxt "field:table.manage_dimension.show.dimension,name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:table.manage_dimension.show.dimension,order:"
-msgid "Order"
-msgstr "Ordre"
-
-msgctxt "field:table.manage_dimension.show.dimension,table:"
+msgctxt "field:table.dimension.value.open.ask_type,table:"
 msgid "Table"
 msgstr "Table"
 
-msgctxt "field:table.manage_dimension.show.dimension,values:"
-msgid "Dimension Values"
-msgstr "Valeurs"
+msgctxt "field:table.dimension.value.open.ask_type,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "help:table.dimension.value,end:"
+msgid "Value Excluded"
+msgstr "Valeur exclue"
+
+msgctxt "help:table.dimension.value,end_date:"
+msgid "Date Excluded"
+msgstr "Date exclue"
+
+msgctxt "help:table.dimension.value,start:"
+msgid "Value Included"
+msgstr "Valeur incluse"
+
+msgctxt "help:table.dimension.value,start_date:"
+msgid "Date Included"
+msgstr "Date incluse"
+
+msgctxt "model:ir.action,name:"
+msgid "Create Table"
+msgstr "Définition de la Dimension"
 
 msgctxt "model:ir.action,name:act_cell_form"
 msgid "Cells"
@@ -414,24 +402,12 @@ msgctxt "model:ir.action,name:act_cell_relate_form"
 msgid "Cells"
 msgstr "Cellules"
 
-msgctxt "model:ir.action,name:act_create_table"
-msgid "Create Table"
-msgstr "Créer Table"
-
-msgctxt "model:ir.action,name:act_manage_dimension_1"
-msgid "Manage Dimension 1"
+msgctxt "model:ir.action,name:act_definition_dimension_form"
+msgid "Definition Dimension"
 msgstr ""
 
-msgctxt "model:ir.action,name:act_manage_dimension_2"
-msgid "Manage Dimension 2"
-msgstr ""
-
-msgctxt "model:ir.action,name:act_manage_dimension_3"
-msgid "Manage Dimension 3"
-msgstr ""
-
-msgctxt "model:ir.action,name:act_manage_dimension_4"
-msgid "Manage Dimension 4"
+msgctxt "model:ir.action,name:act_dimension_value_open"
+msgid "Definition Dimension"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_table_2d_open"
@@ -446,7 +422,7 @@ msgctxt "model:ir.action,name:act_table_definition_form"
 msgid "Tables"
 msgstr "Tables"
 
-msgctxt "model:ir.ui.menu,name:menu_create_table"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Create Table"
 msgstr "Créer Table"
 
@@ -474,9 +450,9 @@ msgctxt "model:table.dimension.value,name:"
 msgid "Table Definition Dimension"
 msgstr "Dimension"
 
-msgctxt "model:table.manage_dimension.show.dimension,name:"
-msgid "Dimension Displayer"
-msgstr ""
+msgctxt "model:table.dimension.value.open.ask_type,name:"
+msgid "Open Table Value Dimension"
+msgstr "Ouvrir la table des valeurs d'une dimension"
 
 msgctxt "selection:table,dimension_kind1:"
 msgid ""
@@ -610,6 +586,34 @@ msgctxt "selection:table,type_:"
 msgid "Numeric"
 msgstr "Numérique"
 
+msgctxt "selection:table.dimension.value,dimension_kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:table.dimension.value,dimension_kind:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "selection:table.dimension.value,dimension_kind:"
+msgid "Range"
+msgstr "Intervalle"
+
+msgctxt "selection:table.dimension.value,dimension_kind:"
+msgid "Range-Date"
+msgstr "Plage de Date"
+
+msgctxt "selection:table.dimension.value,dimension_kind:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "selection:table.dimension.value,dimension_order:"
+msgid "Alphabetical"
+msgstr "Alphabétique"
+
+msgctxt "selection:table.dimension.value,dimension_order:"
+msgid "Sequence"
+msgstr "Séquence"
+
 msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 1"
 msgstr "Dimension 1"
@@ -626,42 +630,6 @@ msgctxt "selection:table.dimension.value,type:"
 msgid "Dimension 4"
 msgstr "Dimension 4"
 
-msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
-msgid "Boolean"
-msgstr "Booléen"
-
-msgctxt "selection:table.manage_dimension.show.dimension,input_mode:"
-msgid "Flat data"
-msgstr ""
-
-msgctxt "selection:table.manage_dimension.show.dimension,kind:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:table.manage_dimension.show.dimension,kind:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "selection:table.manage_dimension.show.dimension,kind:"
-msgid "Range"
-msgstr "Intervalle"
-
-msgctxt "selection:table.manage_dimension.show.dimension,kind:"
-msgid "Range-Date"
-msgstr "Plage de Date"
-
-msgctxt "selection:table.manage_dimension.show.dimension,kind:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "selection:table.manage_dimension.show.dimension,order:"
-msgid "Alphabetical"
-msgstr "Alphabétique"
-
-msgctxt "selection:table.manage_dimension.show.dimension,order:"
-msgid "Sequence"
-msgstr "Séquence"
-
 msgctxt "view:table.2d.open.ask_dimensions:"
 msgid "Dimensions"
 msgstr "Dimensions"
@@ -669,6 +637,10 @@ msgstr "Dimensions"
 msgctxt "view:table.cell:"
 msgid "Table"
 msgstr "Table"
+
+msgctxt "view:table.dimension.value.open.ask_type:"
+msgid "Definition Dimension"
+msgstr ""
 
 msgctxt "view:table.dimension.value:"
 msgid "Table Definition Dimension"
@@ -678,29 +650,9 @@ msgctxt "view:table.dimension.value:"
 msgid "Table Definition Dimensions"
 msgstr "Dimensions"
 
-msgctxt "view:table.manage_dimension.show.dimension:"
-msgid "Manage Dimensions"
-msgstr "Sélection Dimension"
-
 msgctxt "view:table:"
 msgid "Basic Table Definition"
-msgstr ""
-
-msgctxt "view:table:"
-msgid "Manage dimension 1"
-msgstr "Sélection Dimension 1"
-
-msgctxt "view:table:"
-msgid "Manage dimension 2"
-msgstr "Sélection Dimension 2"
-
-msgctxt "view:table:"
-msgid "Manage dimension 3"
-msgstr "Sélection Dimension 3"
-
-msgctxt "view:table:"
-msgid "Manage dimension 4"
-msgstr "Sélection Dimension 4"
+msgstr "Definition simple d'une table"
 
 msgctxt "view:table:"
 msgid "Table Definition"
@@ -714,85 +666,10 @@ msgctxt "wizard_button:table.2d.open,ask_dimensions,open_:"
 msgid "Open"
 msgstr "Ouvert"
 
-msgctxt "wizard_button:table.create,new_table,edit_dim_1:"
-msgid "Edit Dimension 1"
-msgstr "Modifier Dimension1"
+msgctxt "wizard_button:table.dimension.value.open,ask_type,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
-msgctxt "wizard_button:table.create,new_table,end:"
-msgid "Exit"
-msgstr "Fin"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,apply_:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,end:"
-msgid "Exit"
-msgstr "Fin"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,next_dim:"
-msgid "Dimension 2"
-msgstr "Dimension 2"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_1,dimension_management,view_data:"
-msgid "View Data"
-msgstr "Visualisation des données"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_2,dimension_management,apply_:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_2,dimension_management,end:"
-msgid "Exit"
-msgstr "Fin"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_2,dimension_management,next_dim:"
-msgid "Dimension 3"
-msgstr "Dimension 3"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_2,dimension_management,view_data:"
-msgid "View Data"
-msgstr "Visualisation des données"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_3,dimension_management,apply_:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_3,dimension_management,end:"
-msgid "Exit"
-msgstr "Fin"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_3,dimension_management,next_dim:"
-msgid "Dimension 4"
-msgstr "Dimension 4"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_3,dimension_management,view_data:"
-msgid "View Data"
-msgstr "Visualisation des données"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_4,dimension_management,apply_:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_4,dimension_management,end:"
-msgid "Exit"
-msgstr "Fin"
-
-msgctxt ""
-"wizard_button:table.manage_dimension.show_dimension_4,dimension_management,view_data:"
-msgid "View Data"
-msgstr "Visualisation des données"
+msgctxt "wizard_button:table.dimension.value.open,ask_type,open_:"
+msgid "Open"
+msgstr "Ouvrir"

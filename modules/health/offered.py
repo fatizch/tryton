@@ -1,7 +1,5 @@
-import copy
-
 from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -38,11 +36,7 @@ class OptionDescription:
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        cls.family = copy.copy(cls.family)
-        if not cls.family.selection:
-            cls.family.selection = []
-        utils.append_inexisting(cls.family.selection,
-            ('health', 'Health'))
+        cls.family.selection.append(('health', 'Health'))
 
     def get_is_health_coverage(self, name):
         return self.family == 'health'

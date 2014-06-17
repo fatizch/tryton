@@ -1,9 +1,8 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.cog_utils import utils
-from trytond.modules.cog_utils import coop_string, business, fields, export
+from trytond.modules.cog_utils import coop_string, fields, export
+from trytond.modules.country_cog import country
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -16,14 +15,13 @@ class Address(export.ExportImportMixin):
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    zip_and_city = fields.Function(fields.Many2One('country.zipcode', 'Zip',
-            on_change=['zip', 'country', 'city', 'zip_and_city']),
+    zip_and_city = fields.Function(
+        fields.Many2One('country.zipcode', 'Zip'),
         'get_zip_and_city', 'set_zip_and_city')
 
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        cls.city = copy.copy(cls.city)
         if not cls.city.on_change_with:
             cls.city.on_change_with = []
         utils.extend_inexisting(cls.city.on_change_with,
@@ -33,7 +31,6 @@ class Address(export.ExportImportMixin):
         utils.extend_inexisting(cls.city.autocomplete,
             ['zip', 'country'])
 
-        cls.zip = copy.copy(cls.zip)
         if not cls.zip.on_change_with:
             cls.zip.on_change_with = []
         utils.extend_inexisting(cls.zip.on_change_with,
@@ -43,11 +40,9 @@ class Address(export.ExportImportMixin):
         utils.extend_inexisting(cls.zip.autocomplete,
             ['city', 'country'])
 
-        cls.city = copy.copy(cls.city)
         if not cls.city.states:
             cls.city.states = {}
         cls.city.states['invisible'] = True
-        cls.zip = copy.copy(cls.zip)
         if not cls.zip.states:
             cls.zip.states = {}
         cls.zip.states['invisible'] = True
@@ -86,7 +81,7 @@ class Address(export.ExportImportMixin):
 
     @classmethod
     def _export_keys(cls):
-        return set(('party.name', 'name'))
+        return set(('party.name', 'street', 'zip', 'city', 'country.code'))
 
     def on_change_with_city(self):
         if self.zip and self.country:
@@ -123,13 +118,14 @@ class Address(export.ExportImportMixin):
         domain = [
             ('city', '=', self.city),
             ('zip', '=', self.zip),
-        ]
+            ]
         if self.country:
             domain.append(('country', '=', self.country.id))
         zips = Zip.search(domain, limit=1)
         if zips:
             return zips[0].id
 
+    @fields.depends('zip', 'country', 'city', 'zip_and_city')
     def on_change_zip_and_city(self):
         res = {'city': '', 'zip': ''}
         if self.zip_and_city:
@@ -179,3 +175,24 @@ class Address(export.ExportImportMixin):
 
     def get_rec_name(self, name):
         return self.get_address_as_char(name)
+
+    @staticmethod
+    def default_country():
+        return country.Country.default_country().id
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('street',) + tuple(clause[1:])],
+            [('city',) + tuple(clause[1:])],
+            [('zip',) + tuple(clause[1:])],
+            ]
+
+    def get_publishing_values(self):
+        result = super(Address, self).get_publishing_values()
+        result['multiline'] = self.full_address
+        result['oneline'] = self.full_address.replace('\n', ' ')
+        return result
+
+    def get_icon(self):
+        return 'coopengo-address'

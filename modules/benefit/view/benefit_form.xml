@@ -3,11 +3,6 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Benefit"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='summary']" position="after">
-        <page string="Complementary Data" id="extra_data">
-            <field name="extra_data_def" colspan="4"/>
-        </page>
-    </xpath>
     <xpath
         expr="/form/notebook/page[@id='managers']/notebook"
         position="inside">

@@ -30,8 +30,9 @@ class Collection(model.CoopSQL, model.CoopView):
     kind = fields.Selection(COLLECTION_KIND, 'Kind',
         states={'readonly': True})
     assignment_move = fields.Many2One('account.move', 'Assignment Move',
+        states={'readonly': True}, ondelete='RESTRICT')
+    party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         states={'readonly': True})
-    party = fields.Many2One('party.party', 'Party', states={'readonly': True})
     create_user = fields.Function(
         fields.Many2One('res.user', 'Created by', states={'readonly': True}),
         'get_create_user')
@@ -73,7 +74,7 @@ class CollectionCreateAssignLines(model.CoopView):
 
     __name__ = 'collection.create.assign.lines'
 
-    amount = fields.Numeric('Amount', on_change_with=['source_move_line'])
+    amount = fields.Numeric('Amount')
     source_move_line = fields.Many2One('account.move.line', 'Source Move Line',
         states={'invisible': Eval('kind') != 'move_line'}, domain=[
             ('party', '=', Eval('context', {}).get('from_party')),
@@ -81,12 +82,12 @@ class CollectionCreateAssignLines(model.CoopView):
             ('move.state', '=', 'posted'),
             ('payment_amount', '>', 0)])
     target_account = fields.Many2One('account.account', 'Target Account',
-        required=True, on_change_with=['source_move_line'],
-        domain=[('kind', '=', 'receivable'), ('move.state', '=', 'posted')])
+        required=True, domain=[
+            ('kind', '=', 'receivable'), ('move.state', '=', 'posted')])
     kind = fields.Selection([
             ('move_line', 'From Move Line'),
             ('select_account', 'Select Account')],
-        'Kind', on_change=['kind', 'source_move_line', 'target_account'])
+        'Kind')
 
     @classmethod
     def __setup__(cls):
@@ -96,17 +97,20 @@ class CollectionCreateAssignLines(model.CoopView):
             'be lower than %s',
         })
 
+    @fields.depends('source_move_line')
     def on_change_with_target_account(self):
         if not (hasattr(self, 'source_move_line') and self.source_move_line):
             return None
         return self.source_move_line.account.id
 
+    @fields.depends('kind', 'source_move_line', 'target_account')
     def on_change_kind(self):
         if self.kind == 'move_line':
             return {'source_move_line': None, 'target_account': None}
         elif self.kind == 'select_account':
             return {'source_move_line': None}
 
+    @fields.depends('source_move_line')
     def on_change_with_amount(self):
         if not (hasattr(self, 'source_move_line') and self.source_move_line):
             return 0
@@ -135,9 +139,9 @@ class CollectionCreateAssign(model.CoopView):
     create_suspense_line_with_rest = fields.Boolean(
         'Create Suspense Line from Remaining', states={
             'invisible': ~Eval('remaining')})
-    remaining = fields.Numeric('Remaining', on_change_with=['amount',
-            'assignments'])
+    remaining = fields.Numeric('Remaining')
 
+    @fields.depends('amount', 'assignments')
     def on_change_with_remaining(self):
         if not (hasattr(self, 'amount') and self.amount):
             return None

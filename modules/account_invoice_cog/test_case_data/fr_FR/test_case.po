@@ -1,0 +1,11 @@
+msgid "In Credit Note Sequence"
+msgstr "Séquence de note de crédit fournisseur"
+
+msgid "Out Credit Note Sequence"
+msgstr "Séquence de note de crédit client"
+
+msgid "In Invoice Sequence"
+msgstr "Séquence de facture fournisseur"
+
+msgid "Out Invoice Sequence"
+msgstr "Séquence de facture client"

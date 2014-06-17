@@ -23,12 +23,12 @@ msgid "Kind"
 msgstr "Type"
 
 msgctxt "field:offered.option.description,coverage_amount_rules:"
-msgid ""
+msgid "Coverage Amount Rules"
 msgstr " "
 
 msgctxt "field:offered.option.description,is_coverage_amount_needed:"
-msgid ""
-msgstr " "
+msgid "Coverage Amount Needed"
+msgstr "Montant de Couverture Nécessaire"
 
 msgctxt "field:salary_range,ceiling:"
 msgid "Current Ceiling"
@@ -88,7 +88,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:salary_range,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:salary_range.version,ceiling:"
 msgid "Ceiling"
@@ -144,7 +144,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:salary_range.version,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "help:salary_range.version,ceiling:"
 msgid "Included"
@@ -168,10 +168,10 @@ msgstr "Trancge"
 
 msgctxt "model:salary_range.version,name:"
 msgid "Salary Range Version"
-msgstr ""
+msgstr "Version de Tranche"
 
 msgctxt "model:tag,name:tag_life"
-msgid "Prévoyance"
+msgid "Life"
 msgstr "Prévoyance"
 
 msgctxt "selection:offered.option.description,family:"
@@ -184,7 +184,7 @@ msgstr "Montant de Couverture"
 
 msgctxt "view:salary_range.version:"
 msgid "Salary Range Version"
-msgstr ""
+msgstr "Version de Tranche"
 
 msgctxt "view:salary_range:"
 msgid "Salary Range"

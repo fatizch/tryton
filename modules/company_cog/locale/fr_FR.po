@@ -4,8 +4,12 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:company.company,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
+
+msgctxt "field:company.employee,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.test_case,main_company_name:"
-msgid ""
-msgstr ""
+msgid "Main Company Name"
+msgstr " "

@@ -1,14 +1,20 @@
 #-*- coding:utf-8 -*-
-import copy
+import sys
+import traceback
+import os
+import subprocess
 import StringIO
 import functools
+import shutil
 
+from trytond.config import CONFIG
 from trytond.model import Model
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
 from trytond.ir import Attachment
+from trytond.exceptions import UserError
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -18,8 +24,11 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 from trytond.modules.cog_utils import BatchRoot
 
+MAX_TMP_TRIES = 10
+
 __all__ = [
     'DocumentDescription',
+    'DocumentProductRelation',
     'DocumentRule',
     'RuleDocumentDescriptionRelation',
     'DocumentRequestLine',
@@ -29,7 +38,10 @@ __all__ = [
     'Printable',
     'DocumentCreateSelectTemplate',
     'DocumentCreateSelect',
+    'DocumentCreatePreview',
+    'DocumentCreateAttach',
     'DocumentGenerateReport',
+    'DocumentFromFilename',
     'DocumentCreate',
     'DocumentReceiveRequest',
     'DocumentReceiveAttach',
@@ -47,13 +59,15 @@ class DocumentTemplate(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name', required=True, translate=True)
     on_model = fields.Many2One('ir.model', 'Model',
-        domain=[('printable', '=', True)], required=True)
+        domain=[('printable', '=', True)], required=True, ondelete='RESTRICT')
     code = fields.Char('Code', required=True)
     versions = fields.One2Many('document.template.version', 'resource',
         'Versions')
-    kind = fields.Selection([
-            ('', ''),
-            ('doc_request', 'Document Request')], 'name')
+    kind = fields.Selection('get_possible_kinds', 'Kind')
+    products = fields.Many2Many('document.template-offered.product',
+        'document_template', 'product', 'Products')
+    mail_subject = fields.Char('eMail Subject')
+    mail_body = fields.Text('eMail Body')
 
     def get_good_version(self, date, language):
         for version in self.versions:
@@ -67,6 +81,28 @@ class DocumentTemplate(model.CoopSQL, model.CoopView):
             if version.end_date >= date:
                 return version
 
+    @fields.depends('on_model')
+    def get_possible_kinds(self):
+        if self.on_model and self.on_model.model == 'document.request':
+            return [('doc_request', 'Document Request')]
+        return []
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
+
+class DocumentProductRelation(model.CoopSQL):
+    'Document template to Product relation'
+
+    __name__ = 'document.template-offered.product'
+
+    document_template = fields.Many2One('document.template', 'Document',
+        ondelete='RESTRICT')
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
+
 
 class DocumentTemplateVersion(Attachment):
     'Document Template Version'
@@ -76,14 +112,13 @@ class DocumentTemplateVersion(Attachment):
 
     start_date = fields.Date('Start date', required=True)
     end_date = fields.Date('End date')
-    language = fields.Many2One('ir.lang', 'Language', required=True)
+    language = fields.Many2One('ir.lang', 'Language', required=True,
+        ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
         super(DocumentTemplateVersion, cls).__setup__()
-        cls.type = copy.copy(cls.type)
         cls.type.states = {'readonly': True}
-        cls.resource = copy.copy(cls.resource)
         cls.resource.selection = [('document.template', 'Document Template')]
 
     @classmethod
@@ -131,9 +166,11 @@ class Printable(Model):
         DocumentTemplate = Pool().get('document.template')
         domain = [
             ('on_model.model', '=', self.__name__),
+            ('products', '=', self.product.id),
             ['OR',
                 ('kind', '=', kind or self.get_doc_template_kind()),
-                ('kind', '=', '')]]
+                ('kind', '=', '')],
+            ]
         return DocumentTemplate.search(domain)
 
     def get_doc_template_kind(self):
@@ -166,6 +203,14 @@ class Printable(Model):
             return None
         return sender.addresses[0]
 
+    def get_product(self):
+        raise NotImplementedError
+
+    def get_publishing_context(self, cur_context):
+        return {
+            'Today': utils.today(),
+            }
+
 
 class DocumentDescription(model.CoopSQL, model.CoopView):
     'Document Description'
@@ -176,6 +221,12 @@ class DocumentDescription(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True, translate=True)
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 class DocumentRule(BusinessRuleRoot, model.CoopSQL):
@@ -230,25 +281,22 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     __name__ = 'document.request.line'
 
     document_desc = fields.Many2One('document.description',
-        'Document Definition', required=True)
+        'Document Definition', required=True, ondelete='RESTRICT')
     for_object = fields.Reference('Needed For', [('', '')],
         states={'readonly': ~~Eval('for_object')})
     send_date = fields.Date('Send Date')
-    reception_date = fields.Date('Reception Date',
-        on_change_with=['attachment', 'reception_date'])
+    reception_date = fields.Date('Reception Date')
     request_date = fields.Date('Request Date', states={'readonly': True})
     received = fields.Function(
-        fields.Boolean('Received', depends=['attachment', 'reception_date'],
-            on_change_with=['reception_date'],
-            on_change=['received', 'reception_date']),
-        'on_change_with_received', 'setter_void')
+        fields.Boolean('Received', depends=['attachment', 'reception_date']),
+        'on_change_with_received')
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE')
     attachment = fields.Many2One('ir.attachment', 'Attachment', domain=[
             ('resource', '=', Eval('_parent_request', {}).get(
-                'needed_by_str'))],
-        on_change=['attachment', 'reception_date', 'received'])
+                'needed_by_str'))], ondelete='SET NULL')
 
+    @fields.depends('attachment', 'reception_date', 'received')
     def on_change_attachment(self):
         if not (hasattr(self, 'attachment') and self.attachment):
             return {}
@@ -258,12 +306,14 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
                 hasattr(self, 'reception_date') and
                 self.reception_date) or utils.today()}
 
+    @fields.depends('reception_date')
     def on_change_with_received(self, name=None):
         if not (hasattr(self, 'reception_date') and self.reception_date):
             return False
         else:
             return True
 
+    @fields.depends('received', 'reception_date')
     def on_change_received(self):
         if (hasattr(self, 'received') and self.received):
             if (hasattr(self, 'reception_date') and self.reception_date):
@@ -273,6 +323,7 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         else:
             return {'reception_date': None}
 
+    @fields.depends('attachment', 'reception_date')
     def on_change_with_reception_date(self, name=None):
         if (hasattr(self, 'attachment') and self.attachment):
             if (hasattr(self, 'reception_date') and self.reception_date):
@@ -322,21 +373,16 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     needed_by = fields.Reference('Requested for', [('', '')])
     documents = fields.One2Many('document.request.line', 'request',
         'Documents', depends=['needed_by_str'],
-        on_change=['documents', 'is_complete'],
         context={'request_owner': Eval('needed_by_str')})
     is_complete = fields.Function(
         fields.Boolean('Is Complete', depends=['documents'],
-            on_change_with=['documents'],
-            on_change=['documents', 'is_complete'],
             states={'readonly': ~~Eval('is_complete')}),
         'on_change_with_is_complete', 'setter_void')
     needed_by_str = fields.Function(
-        fields.Char('Master as String', on_change_with=['needed_by'],
-            depends=['needed_by']),
+        fields.Char('Master as String', depends=['needed_by']),
         'on_change_with_needed_by_str')
     request_description = fields.Function(
-        fields.Char('Request Description', depends=['needed_by'],
-            on_change_with=['needed_by']),
+        fields.Char('Request Description', depends=['needed_by']),
         'on_change_with_request_description')
 
     @classmethod
@@ -347,6 +393,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     def get_request_date(self):
         return utils.today()
 
+    @fields.depends('needed_by')
     def on_change_with_request_description(self, name=None):
         return 'Document Request for %s' % self.needed_by.get_rec_name(name)
 
@@ -358,12 +405,14 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
         except AttributeError:
             return None
 
+    @fields.depends('needed_by')
     def on_change_with_needed_by_str(self, name=None):
         if not (hasattr(self, 'needed_by') and self.needed_by):
             return ''
 
         return utils.convert_to_reference(self.needed_by)
 
+    @fields.depends('documents')
     def on_change_with_is_complete(self, name=None):
         if not (hasattr(self, 'documents') and self.documents):
             return True
@@ -372,9 +421,11 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
                 return False
         return True
 
+    @fields.depends('documents', 'is_complete')
     def on_change_documents(self):
         return {'is_complete': self.on_change_with_is_complete()}
 
+    @fields.depends('documents', 'is_complete')
     def on_change_is_complete(self):
         if not (hasattr(self, 'is_complete') or not self.is_complete):
             return {}
@@ -448,6 +499,9 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
     def get_rec_name(self, name):
         return self.needed_by.get_rec_name(name)
 
+    def get_product(self):
+        return self.needed_by.get_product()
+
 
 class DocumentCreateSelectTemplate(model.CoopView):
     'Document Create Select Template'
@@ -501,41 +555,111 @@ class DocumentGenerateReport(Report):
         good_party = Pool().get('party.party')(data['party'])
         filename = good_letter.name + ' - ' + good_obj.get_rec_name('') + \
             ' - ' + coop_string.date_as_string(utils.today(), good_party.lang)
-        try:
-            type, data = cls.parse(action_report, records, data, {})
-        except:
-            import traceback
-            traceback.print_exc()
-            raise
+        type, data = cls.parse(action_report, records, data, {})
         return (type, buffer(data), action_report.direct_print, filename)
 
     @classmethod
     def parse(cls, report, records, data, localcontext):
-        localcontext['Party'] = Pool().get('party.party')(data['party'])
-        localcontext['Address'] = Pool().get('party.address')(data['address'])
+        pool = Pool()
+        localcontext['Party'] = pool.get('party.party')(data['party'])
+        localcontext['Address'] = pool.get('party.address')(data['address'])
         try:
             localcontext['Lang'] = localcontext['Party'].lang.code
         except AttributeError:
-            localcontext['Lang'] = 'en_US'
+            localcontext['Lang'] = pool.get('ir.lang').search([
+                    ('code', '=', 'en_US')])[0]
         if data['sender']:
-            localcontext['Sender'] = Pool().get('party.party')(data['sender'])
+            localcontext['Sender'] = pool.get('party.party')(data['sender'])
         else:
             localcontext['Sender'] = None
         if data['sender_address']:
-            localcontext['SenderAddress'] = Pool().get(
+            localcontext['SenderAddress'] = pool.get(
                 'party.address')(data['sender_address'])
         else:
             localcontext['SenderAddress'] = None
+
+        def format_date(value, lang=None):
+            if lang is None:
+                lang = localcontext['Party'].lang
+            return pool.get('ir.lang').strftime(value, lang.code, lang.date)
+
+        localcontext['Date'] = pool.get('ir.date').today()
+        localcontext['FDate'] = format_date
         # localcontext['Logo'] = data['logo']
-        localcontext['Today'] = utils.today()
-        GoodModel = Pool().get(data['model'])
+        GoodModel = pool.get(data['model'])
         good_obj = GoodModel(data['id'])
-        DocumentTemplate = Pool().get('document.template')
+        localcontext.update(good_obj.get_publishing_context(localcontext))
+        DocumentTemplate = pool.get('document.template')
         good_letter = DocumentTemplate(data['doc_template'])
         report.report_content = good_letter.get_good_version(
             utils.today(), good_obj.get_lang()).data
-        return super(DocumentGenerateReport, cls).parse(
-            report, records, data, localcontext)
+        try:
+            return super(DocumentGenerateReport, cls).parse(
+                report, records, data, localcontext)
+        except Exception, exc:
+            # Try to extract the relevant information to display to the user.
+            # That would be the part of the genshi template being evaluated and
+            # the "final" error. In case anything goes wrong, raise the
+            # original error
+            try:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                tmp = traceback.extract_tb(exc_traceback)
+                for frame in reversed(tmp):
+                    if (frame[0] != '<string>' and not
+                            frame[0].endswith('.odt')):
+                        continue
+                    DocumentCreate = pool.get('document.create', type='wizard')
+                    DocumentCreate.raise_user_error('parsing_error', (
+                            frame[2][14:-2], str(exc)))
+                else:
+                    raise exc
+            except UserError:
+                raise
+            except:
+                pass
+            raise exc
+
+
+class DocumentFromFilename(Report):
+    __name__ = 'document.generate.file_report'
+
+    @classmethod
+    def execute(cls, ids, data):
+        if not 'filepath' in data:
+            raise Exception('Error', 'Report %s needs to be provided with a '
+                'filepath' % cls.__name__)
+        if not os.path.isfile(data['filepath']):
+            raise Exception('%s is not a valid filename' % data['filepath'])
+        value = buffer(cls.unoconv(data['filepath'], 'odt', 'pdf'))
+        return ('.pdf', value, False, data['filename'])
+
+    @classmethod
+    def unoconv(cls, filepath, input_format, output_format):
+        from trytond.report import FORMAT2EXT
+        oext = FORMAT2EXT.get(output_format, output_format)
+        cmd = ['unoconv', '--connection=%s' % CONFIG['unoconv'],
+            '-f', oext, '--stdout', filepath]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        stdoutdata, stderrdata = proc.communicate()
+        if proc.wait() != 0:
+            raise Exception(stderrdata)
+        return stdoutdata
+
+
+class DocumentCreatePreview(model.CoopView):
+    'Document Create Preview'
+
+    __name__ = 'document.create.preview'
+
+    generated_report = fields.Char('Generated report', states={
+            'invisible': ~Eval('generated_report')})
+    party = fields.Many2One('party.party', 'Party',
+        states={'invisible': True})
+    email = fields.Many2One('party.contact_mechanism', 'eMail', domain=[
+            ('party', '=', Eval('party')),
+            ('type', '=', 'email')], depends=['party'])
+    filename = fields.Char('Filename', states={'invisible': True})
+    exact_name = fields.Char('Exact Name', states={'invisible': True})
 
 
 class DocumentCreateAttach(model.CoopView):
@@ -550,79 +674,138 @@ class DocumentCreateAttach(model.CoopView):
 class DocumentCreate(Wizard):
     __name__ = 'document.create'
 
-    class SpecialStateAction(StateAction):
-
-        def __init__(self):
-            StateAction.__init__(self, None)
-
-        def get_action(self):
-            Action = Pool().get('ir.action')
-            ActionReport = Pool().get('ir.action.report')
-            good_report, = ActionReport.search([
-                    ('report_name', '=', 'document.generate.report')
-                    ('model', '=', Transaction().context.get('active_model')),
-                    ], limit=1)
-            return Action.get_action_values('ir.action.report', good_report.id)
-
     start_state = 'select_model'
-    generate = StateAction('offered_insurance.letter_generation_report')
+    mail = StateAction('offered_insurance.generate_file_report')
     post_generation = StateTransition()
     select_model = StateView('document.create.select',
         'offered_insurance.document_create_select_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Generate', 'generate', 'tryton-ok'),
-            Button('Attach', 'attach', 'tryton-go-next')])
+            Button('Preview', 'preview_document', 'tryton-go-next'),
+            ])
+    preview_document = StateView('document.create.preview',
+        'offered_insurance.document_create_preview_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Previous', 'select_model', 'tryton-go-previous'),
+            Button('Mail', 'mail', 'tryton-go-next', states={
+                    'readonly': ~Eval('email')}),
+            ])
     attach = StateView('document.create.attach',
         'offered_insurance.document_create_attach_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Attach', 'post_generation', 'tryton-ok')])
+            Button('Complete', 'post_generation', 'tryton-ok')])
     attach_to_contact = StateTransition()
 
-    def transition_generate(self):
-        return 'select_model'
-
-    def do_generate(self, action):
-        ActiveModel = Pool().get(Transaction().context.get('active_model'))
-        good_model = ActiveModel(Transaction().context.get('active_id'))
-        sender = good_model.get_sender()
-        sender_address = good_model.get_sender_address()
-        # logo = good_model.format_logo()
-
-        return action, {
-            'id': Transaction().context.get('active_id'),
-            'ids': Transaction().context.get('active_ids'),
-            'model': Transaction().context.get('active_model'),
-            'doc_template': self.select_model.get_active_model(),
-            'party': self.select_model.party.id,
-            'address': self.select_model.good_address.id,
-            'sender': sender.id if sender else None,
-            'sender_address': sender_address.id if sender_address else None,
-            # 'logo': logo,
-            }
+    @classmethod
+    def __setup__(cls):
+        super(DocumentCreate, cls).__setup__()
+        try:
+            shutil.rmtree(CONFIG['server_shared_folder'])
+        except:
+            pass
+        cls._error_messages.update({
+                'parsing_error': 'Error while generating the letter:\n\n'
+                    '  Expression:\n%s\n\n  Error:\n%s',
+                })
 
     def default_select_model(self, fields):
+        result = utils.set_state_view_defaults(self, 'select_model')
+        if result['id']:
+            return result
         ActiveModel = Pool().get(Transaction().context.get('active_model'))
-        good_model = ActiveModel(Transaction().context.get('active_id'))
-        if not good_model:
+        instance = ActiveModel(Transaction().context.get('active_id'))
+        if not instance:
             return {}
-
         letters = []
         has_selection = True
-        for elem in good_model.get_available_doc_templates():
+        for elem in instance.get_available_doc_templates():
             letters.append({
                 'doc_template': elem.id,
                 'selected': has_selection})
             has_selection = False
-
         if letters:
-            result = {'models': letters}
-        else:
-            result = {}
+            result['models'] = letters
+        result['party'] = instance.get_contact().id
+        if instance.get_contact().addresses:
+            result['good_address'] = instance.get_contact().addresses[0].id
+        return result
 
-        result['party'] = good_model.get_contact().id
-        if good_model.get_contact().addresses:
-            result['good_address'] = good_model.get_contact().addresses[0].id
+    def default_preview_document(self, fields):
+        pool = Pool()
+        ReportModel = pool.get('document.generate.report', type='report')
+        ContactMechanism = pool.get('party.contact_mechanism')
+        ActiveModel = pool.get(Transaction().context.get('active_model'))
+        instance = ActiveModel(Transaction().context.get('active_id'))
+        sender = instance.get_sender()
+        sender_address = instance.get_sender_address()
+        _, result, _, exact_name = ReportModel.execute(
+            [Transaction().context.get('active_id')], {
+                'id': Transaction().context.get('active_id'),
+                'ids': Transaction().context.get('active_ids'),
+                'model': Transaction().context.get('active_model'),
+                'doc_template': self.select_model.get_active_model(),
+                'party': self.select_model.party.id,
+                'address': self.select_model.good_address.id,
+                'sender': sender.id if sender else None,
+                'sender_address': sender_address.id if sender_address
+                else None,
+                })
+        filename = coop_string.remove_invalid_char(exact_name)
+        max_tries = MAX_TMP_TRIES
+        while max_tries > 0:
+            # Loop until we find an unused folder id
+            tmp_directory = utils.id_generator()
+            server_tmp_directory = os.path.join(CONFIG['server_shared_folder'],
+                tmp_directory)
+            try:
+                os.makedirs(server_tmp_directory)
+                break
+            except:
+                pass
+            max_tries -= 1
+        if max_tries == 0:
+            raise Exception('Could not create tmp_directory in %s' %
+                CONFIG['server_shared_folder'])
+        server_filename = os.path.join(server_tmp_directory, '%s.odt' %
+            filename)
+        client_filename = os.path.join(CONFIG['client_shared_folder'],
+            tmp_directory, '%s.odt' % filename)
+        with open(server_filename, 'w') as f:
+            f.write(result)
+        result = {
+            'generated_report': client_filename,
+            'party': self.select_model.party.id,
+            'filename': server_filename,
+            'exact_name': exact_name,
+            }
+        email = ContactMechanism.search([
+                ('party', '=', self.select_model.party.id),
+                ('type', '=', 'email'),
+                ])
+        if not email:
+            return result
+        result['email'] = email[0].id
+        return result
 
+    def do_mail(self, action):
+        DocumentTemplate = Pool().get('document.template')
+        selected_model = DocumentTemplate(self.select_model.get_active_model())
+        action['email_print'] = True
+        action['email'] = {
+            'to': self.preview_document.email.value,
+            'subject': selected_model.mail_subject,
+            'body': selected_model.mail_body}
+        return action, {
+            'filename': self.preview_document.exact_name,
+            'filepath': self.preview_document.filename,
+            }
+
+    def transition_mail(self):
+        return 'attach'
+
+    def default_attach(self, fields):
+        result = {'name': self.preview_document.exact_name}
+        with open(self.preview_document.filename, 'r') as f:
+            result['attachment'] = buffer(f.read())
         return result
 
     def transition_post_generation(self):
@@ -638,11 +821,12 @@ class DocumentCreate(Wizard):
         contact.title = self.select_model.get_active_model(False).name
         contact.for_object_ref = good_obj.get_object_for_contact()
         if (hasattr(self, 'attach') and self.attach):
-            if (hasattr(self.attach, 'attachment') and self.attach.attachment):
+            if self.preview_document.generated_report:
                 Attachment = Pool().get('ir.attachment')
                 attachment = Attachment()
                 attachment.resource = contact.for_object_ref
-                attachment.data = self.attach.attachment
+                with open(self.preview_document.filename, 'r') as f:
+                    attachment.data = buffer(f.read())
                 attachment.name = self.attach.name
                 attachment.save()
                 contact.attachment = attachment
@@ -655,7 +839,7 @@ class DocumentReceiveRequest(model.CoopView):
 
     __name__ = 'document.receive.request'
 
-    kind = fields.Selection([('', '')], 'Kind', on_change=['kind'])
+    kind = fields.Selection([('', '')], 'Kind')
     value = fields.Char('Value')
     request = fields.Many2One('document.request', 'Request',
         states={'invisible': True})
@@ -663,7 +847,6 @@ class DocumentReceiveRequest(model.CoopView):
     @classmethod
     def __setup__(cls):
         super(DocumentReceiveRequest, cls).__setup__()
-        cls.kind = copy.copy(cls.kind)
         idx = 0
         cls.kind.selection = [('', '')]
         for k, v in cls.allowed_values().iteritems():
@@ -671,8 +854,7 @@ class DocumentReceiveRequest(model.CoopView):
             tmp = fields.Many2One(
                 k, v[0],
                 states={'invisible': Eval('kind') != k},
-                depends=['kind', 'value'],
-                on_change=['request', 'tmp_%s' % idx, 'kind'])
+                depends=['kind', 'value'])
             setattr(cls, 'tmp_%s' % idx, tmp)
 
             def on_change_tmp(self, name=''):
@@ -683,17 +865,21 @@ class DocumentReceiveRequest(model.CoopView):
                 if not (hasattr(relation, 'documents') and relation.documents):
                     return {'value': utils.convert_to_reference(
                         getattr(self, name))}
-
                 return {'request': relation.documents[0].id}
-
-            setattr(cls, 'on_change_tmp_%s' % idx, functools.partial(
-                on_change_tmp, name='tmp_%s' % idx))
+            # Hack to fix http://bugs.python.org/issue3445
+            tmp_function = functools.partial(on_change_tmp,
+                name='tmp_%s' % idx)
+            tmp_function.__module__ = on_change_tmp.__module__
+            tmp_function.__name__ = on_change_tmp.__name__
+            setattr(cls, 'on_change_tmp_%s' % idx, fields.depends(
+                    'request', 'tmp_%s' % idx, 'kind')(tmp_function))
             idx += 1
 
     @classmethod
     def allowed_values(cls):
         return {}
 
+    @fields.depends('kind')
     def on_change_kind(self):
         result = {}
         for k, v in self._fields.iteritems():
@@ -735,8 +921,7 @@ class DocumentReceiveAttach(model.CoopView):
     __name__ = 'document.receive.attach'
 
     attachments = fields.One2Many('ir.attachment', '', 'Attachments',
-        context={'resource': Eval('resource')},
-        on_change=['attachments', 'resource'])
+        context={'resource': Eval('resource')})
     resource = fields.Char('Resource', states={'invisible': True})
 
     @classmethod
@@ -745,6 +930,7 @@ class DocumentReceiveAttach(model.CoopView):
         cls._error_messages.update({
             'ident_name': 'Duplicate name on attachments : %s'})
 
+    @fields.depends('attachments', 'resource')
     def on_change_attachments(self):
         if not (hasattr(self, 'attachments') and self.attachments):
             return {}

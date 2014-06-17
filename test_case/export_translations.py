@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import sys
+import logging
 from proteus import Model, Wizard
 
 import proteus_tools
@@ -27,19 +29,20 @@ def generate_module_translation(cfg_dict, base_path, module_name):
         os.mkdir(locale_dir)
     po_path = os.path.join(locale_dir, '%s.po' % cfg_dict['language'])
     with open(po_path, 'w') as csv_file:
-        print 'Generating translation file ', po_path
+        logging.getLogger('export_translation').info('Generating translation '
+            'file ' + po_path)
         csv_file.write(result)
 
 
-def launch_proteus_test_case(test_config_file):
+def launch_proteus_test_case(test_config_file, modules):
     cfg_dict = proteus_tools.get_test_cfg(test_config_file)
     proteus_tools.get_config(cfg_dict)
-    modules = proteus_tools.get_modules_to_update(cfg_dict['modules'])
+    if not modules:
+        modules = [x for x in os.listdir(os.path.join(DIR, '..', 'modules'))]
     for cur_module in modules:
         if cur_module == 'cog_translation':
             #Manual translations to override tryton translations
             continue
-        print '=' * 80 + '\n'
         cur_path = os.path.abspath(
             os.path.join(DIR, '..', 'modules', cur_module))
         if cfg_dict['un_fuzzy_translation']:
@@ -66,5 +69,8 @@ def update_views(test_config_file):
 
 
 if __name__ == '__main__':
-    #update_views(os.path.join(DIR, 'test_case.cfg'))
-    launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'))
+    if len(sys.argv) > 1:
+        modules = [sys.argv[1:]]
+    else:
+        modules = []
+    launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'), modules)

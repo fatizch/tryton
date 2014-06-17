@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import os
 import polib
 from trytond.ir.translation import TrytonPOFile
@@ -52,6 +53,10 @@ if __name__ == '__main__':
     update_dict = {
         ('Party', 'Tiers'): 'Acteur',
         ('Parties', 'Tiers'): 'Acteurs',
+        ('Street', 'Rue'): 'Rue (Ligne 4)',
+        ('Street (bis)', 'Rue (bis)'): u'Boîte Postale (Ligne 5)',
+        ('Invoice', 'Facture'): 'Quittance',
+        ('Invoices', 'Factures'): 'Quittances',
         }
     replace_translations(os.path.join(DIR, 'test_case.cfg'), 'fr_FR',
         update_dict, os.path.abspath(os.path.join(DIR, '..',

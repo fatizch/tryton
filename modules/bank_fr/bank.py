@@ -1,4 +1,3 @@
-import copy
 import re
 from ibanlib import iban
 
@@ -19,26 +18,21 @@ class BankAccountNumber:
     __name__ = 'bank.account.number'
 
     bank_code = fields.Function(fields.Char('Bank Code', size=5,
-            states={'invisible': Eval('type') != 'rib'},
-            depends=['type'], on_change=['bank_code']),
+            states={'invisible': Eval('type') != 'rib'}, depends=['type']),
         'get_sub_rib')
     branch_code = fields.Function(fields.Char('Branch Code', size=5,
-            states={'invisible': Eval('type') != 'rib'},
-            depends=['type'], on_change=['branch_code', 'bank_code']),
+            states={'invisible': Eval('type') != 'rib'}, depends=['type']),
         'get_sub_rib')
     account_number = fields.Function(fields.Char('Account Number', size=11,
-            states={'invisible': Eval('type') != 'rib'}, depends=['type'],
-            on_change=['account_number', 'branch_code', 'bank_code']),
+            states={'invisible': Eval('type') != 'rib'}, depends=['type']),
         'get_sub_rib')
     key = fields.Function(fields.Char('Key', size=2,
-            states={'invisible': Eval('type') != 'rib'}, depends=['type'],
-            on_change=['key', 'bank_code', 'branch_code', 'account_number']),
+            states={'invisible': Eval('type') != 'rib'}, depends=['type']),
         'get_sub_rib')
 
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
-        cls.type = copy.copy(cls.type)
         cls.type.selection.append(('rib', 'RIB'))
         cls.type.selection = list(set(cls.type.selection))
 
@@ -138,18 +132,22 @@ class BankAccountNumber:
                 return the_dict[name]
         return ''
 
+    @fields.depends('bank_code')
     def on_change_bank_code(self):
         return {'number': self.bank_code, 'branch_code': '',
             'account_number': '', 'key': ''}
 
+    @fields.depends('branch_code', 'bank_code')
     def on_change_branch_code(self):
         return {'number': self.bank_code + self.branch_code,
             'account_number': '', 'key': ''}
 
+    @fields.depends('account_number', 'branch_code', 'bank_code')
     def on_change_account_number(self):
         return {'number': self.bank_code + self.branch_code +
             self.account_number, 'key': ''}
 
+    @fields.depends('key', 'bank_code', 'branch_code', 'account_number')
     def on_change_key(self):
         return {'number': self.bank_code + self.branch_code +
             self.account_number + self.key}

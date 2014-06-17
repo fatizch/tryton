@@ -1,7 +1,6 @@
 from trytond.pool import Pool
 from .rule_engine import *
 from .tag import *
-from .export import *
 
 
 def register():
@@ -11,8 +10,10 @@ def register():
         # From rule_engine
         RuleTools,
         Context,
-        Rule,
-        RuleEngineParameter,
+        RuleEngine,
+        RuleEngineTable,
+        RuleEngineRuleEngine,
+        RuleParameter,
         RuleExecutionLog,
         TestCase,
         TestCaseValue,
@@ -21,10 +22,11 @@ def register():
         RunTestsReport,
         RuleError,
         RuleEngineTagRelation,
-        # From export
-        ExportPackage,
+        ValidateRuleBatch,
         module='rule_engine', type_='model')
     Pool.register(
         # From rule_engine
         RunTests,
+        ValidateRuleTestCases,
+        InitTestCaseFromExecutionLog,
         module='rule_engine', type_='wizard')

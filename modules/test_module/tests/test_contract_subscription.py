@@ -8,7 +8,7 @@ from proteus import config, Model, Wizard
 # config = config.set_trytond(database_type='sqlite')
 # config.pool.test = True
 config = config.set_trytond(database_type='postgresql',
-    database_name='test_database',
+    database_name='test_1_database',
     user='admin',
     language='en_US',
     password='admin',
@@ -20,8 +20,13 @@ Module.install([test_module.id], config.context)
 wizard = Wizard('ir.module.module.install_upgrade')
 wizard.execute('upgrade')
 ##Comment##Import Exported DB
+TestCaseConfig = Model.get('ir.test_case')(1)
+TestCaseConfig.language = Model.get('ir.lang').find([
+        ('code', '=', 'fr_FR')])[0]
+TestCaseConfig.save()
 wizard = Wizard('ir.test_case.run')
 wizard.form.select_all_test_cases = True
+wizard.execute('execute_test_cases')
 wizard.form.select_all_files = True
 wizard.execute('execute_test_cases')
 wizard.execute('end')
@@ -41,10 +46,6 @@ config._context = User.get_preferences(True, config.context)
 wizard = Wizard('contract.subscribe')
 dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
 wizard.form.dist_network = dist_network
-wizard.form.delegated_manager.name
-##Res##u'CAPVIE'
-wizard.form.business_provider.name
-##Res##u'CAPVIE'
 product = Product.find([('code', '=', 'PREV')])[0]
 product.name
 ##Res##u'Pr\xe9voyance Indviduelle'
@@ -112,7 +113,7 @@ cd2 = covered_element.covered_data[1]
 cd2.option.offered.code
 ##Res##u'DC'
 cd2.__class__.get_possible_amounts([cd2.id], {})
-##Res##[[('', ''), (u'25000,00 \u20ac', u'25000,00 \u20ac'), (u'50000,00 \u20ac', u'50000,00 \u20ac'), (u'75000,00 \u20ac', u'75000,00 \u20ac'), (u'100000,00 \u20ac', u'100000,00 \u20ac')]]
+##Res##[[('', ''), (u'25 000,00 \u20ac', u'25 000,00 \u20ac'), (u'50 000,00 \u20ac', u'50 000,00 \u20ac'), (u'75 000,00 \u20ac', u'75 000,00 \u20ac'), (u'100 000,00 \u20ac', u'100 000,00 \u20ac')]]
 cd2.coverage_amount_selection = '75000.00'
 cd2.save()
 # import pdb;pdb.set_trace()

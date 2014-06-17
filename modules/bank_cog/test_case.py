@@ -1,5 +1,4 @@
 import random
-
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields, coop_string
 
@@ -16,22 +15,6 @@ class TestCaseModel:
     __name__ = 'ir.test_case'
 
     number_of_banks = fields.Integer('Number of Banks')
-
-    @classmethod
-    def _get_test_case_dependencies(cls):
-        result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['contact_mechanism_test_case']['dependencies'].add(
-            'bank_test_case')
-        result['bank_test_case'] = {
-            'name': 'Bank Test Case',
-            'dependencies': set([]),
-            }
-        result['bank_account_test_case'] = {
-            'name': 'Bank Account Test Case',
-            'dependencies': set(['bank_test_case', 'party_test_case',
-                    'main_company_test_case']),
-            }
-        return result
 
     @classmethod
     def add_address(cls, line, bank):
@@ -53,66 +36,109 @@ class TestCaseModel:
         bank.addresses = [address]
 
     @classmethod
+    def new_company(cls, name, short_name='', child_level=None,
+            cur_depth=None):
+        result = super(TestCaseModel, cls).new_company(name, short_name,
+            child_level, cur_depth)
+        result.currency = cls.get_instance().currency
+        return result
+
+    @classmethod
+    def create_bank(cls, **kwargs):
+        Bank = Pool().get('bank')
+        return Bank(**kwargs)
+
+    @classmethod
+    def new_bank(cls, line, existing_bics):
+        bic = line[236:247].rstrip().replace(' ', '')
+        if not bic or bic in existing_bics:
+            return
+        company = cls.new_company(line[11:51].strip(),
+            line[51:61].strip())
+        address = cls.create_address(
+            name=line[11:49].strip(),
+            line3=line[88:120].strip(),
+            street=line[120:152].strip().upper(),
+            streetbis=line[152:184].strip().upper(),
+            zip=line[184:189].strip().upper(),
+            city=line[190:216].strip().upper(),
+            country=cls.get_country_by_code(line[240:242]),
+            )
+        company.addresses = [address]
+        bank = cls.create_bank(party=company, bic=bic)
+        existing_bics[bank.bic] = bank
+        return bank
+
+    @classmethod
     def bank_test_case(cls):
         Bank = Pool().get('bank')
         Configuration = cls.get_instance()
         cls.load_resources(MODULE_NAME)
         bank_file = cls.read_list_file('bank.cfg', MODULE_NAME)
         existing = dict((x.bic, x) for x in Bank.search([]))
+        banks = []
         for line in bank_file:
-            if len(existing) >= Configuration.number_of_banks:
+            if (Configuration.number_of_banks > 0
+                    and len(existing) >= Configuration.number_of_banks):
                 break
-            try:
-                bic = line[236:247].rstrip().replace(' ', '')
-                if not bic or bic in existing:
-                    continue
-                bank = Bank()
-                company = cls.create_company(line[11:51].strip(),
-                    line[51:61].strip())
-                company.currency = Configuration.currency
-                cls.add_address(line, company)
-                bank.bic = coop_string.check_for_pattern(line[236:247],
-                    r'^[0-9A-Z]{8,11}')
-                existing[bank.bic] = bank
-                company.save()
-                bank.party = company
-                bank.save()
-            except:
-                cls.get_logger().warning('Impossible to create bank %s' %
-                    line[11:51].strip())
-                raise
+            bank = cls.new_bank(line, existing)
+            if bank:
+                banks.append(bank)
+
+        bank_file = cls.read_csv_file('bank.csv', MODULE_NAME,
+            reader='dict')
+        for bank_dict in bank_file:
+            if (Configuration.number_of_banks > 0
+                    and len(existing) >= Configuration.number_of_banks):
+                break
+            if bank_dict['bic'] in existing:
+                continue
+            company = cls.new_company(bank_dict['party'])
+            bank = cls.create_bank(party=company, bic=bank_dict['bic'])
+            existing[bank.bic] = bank
+            banks.append(bank)
+        Bank.create([x._save_values for x in banks])
+
+    @classmethod
+    def bank_test_case_test_method(cls):
+        Bank = Pool().get('bank')
+        Configuration = cls.get_instance()
+        return Configuration.number_of_banks > Bank.search_count([])
+
+    @classmethod
+    def create_bank_account(cls, **kwargs):
+        BankAccount = Pool().get('bank.account')
+        return BankAccount(**kwargs)
+
+    @classmethod
+    def create_bank_account_number(cls, **kwargs):
+        BankAccountNumber = Pool().get('bank.account.number')
+        return BankAccountNumber(**kwargs)
+
+    @classmethod
+    def new_bank_account(cls, party, banks):
+        bank_code = str(random.randint(0, 99999)).zfill(5)
+        bank = random.choice(banks)
+        branch_code = str(random.randint(0, 999)).zfill(5)
+        account_number = str(random.randint(0, 99999999)).zfill(11)
+        key = str(97 - (89 * int(bank_code) + 15 * int(branch_code)
+                + 3 * int(account_number)) % 97).zfill(2)
+        number = cls.create_bank_account_number(type='iban',
+            number='FR76%s%s%s%s' % (bank_code, branch_code, account_number,
+                key))
+        account = cls.create_bank_account(currency=cls.get_instance().currency,
+            owners=[party], numbers=[number], number=number.number, bank=bank)
+        return account
 
     @classmethod
     def bank_account_test_case(cls):
-        Party = Pool().get('party.party')
-        Bank = Pool().get('bank')
-        BankAccount = Pool().get('bank.account')
-        BankAccountNumber = Pool().get('bank.account.number')
-        Configuration = cls.get_instance()
+        pool = Pool()
+        Party = pool.get('party.party')
+        Bank = pool.get('bank')
+        BankAccount = pool.get('bank.account')
         parties = Party.search([('bank_accounts', '=', None)])
         banks = Bank.search([])
-        cls.get_logger().info('Creating %s bank accounts' % len(parties))
         accounts = []
         for party in parties:
-            try:
-                account = BankAccount()
-                account.currency = Configuration.currency
-                number = BankAccountNumber()
-                number.type = 'iban'
-                bank_code = str(random.randint(0, 99999)).zfill(5)
-                account.bank = random.choice(banks)
-                branch_code = str(random.randint(0, 999)).zfill(5)
-                account_number = str(random.randint(0, 99999999)).zfill(11)
-                key = str(97 - (89 * int(bank_code) + 15 * int(branch_code)
-                        + 3 * int(account_number)) % 97).zfill(2)
-                number.number = 'FR76%s%s%s%s' % (bank_code, branch_code,
-                    account_number, key)
-                account.numbers = [number]
-                account.owners = [party]
-                account.number = number.number
-                accounts.append(account)
-            except:
-                raise
-                cls.get_logger().warning('Unable to create bank account for %s'
-                    % party.name)
-        return accounts
+            accounts.append(cls.new_bank_account(party, banks))
+        BankAccount.create([x._save_values for x in accounts])

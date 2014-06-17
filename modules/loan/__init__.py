@@ -5,32 +5,40 @@ from .rule_engine import *
 from .loan import *
 from .loan_creation_wizard import *
 from .billing import *
+from .party import *
+from .wizard import *
+
+from trytond.modules.cog_utils import expand_tree
+LoanShareTreeExpansion = expand_tree('loan.share')
 
 
 def register():
     Pool.register(
-        # From offered
         Product,
         OptionDescription,
-        # From rule_engine
         RuleEngineRuntime,
-        # From Contract
-        Contract,
-        ContractOption,
-        # From Loan
         Loan,
-        LoanShare,
-        CoveredData,
-        CoveredDataLoanShareRelation,
         LoanIncrement,
         LoanPayment,
-        # From Loan Create Wizard
-        LoanCreateParameters,
-        LoanCreateIncrement,
-        LoanCreateAmortizationTable,
-        # From Billing
+        LoanParty,
+        Contract,
+        ContractOption,
+        ExtraPremium,
+        LoanShare,
+        OptionsDisplayer,
+        WizardOption,
         BillingPremium,
+        LoanShareTreeExpansion,
+        Party,
+        Insurer,
+        SynthesisMenuLoan,
+        SynthesisMenu,
         module='loan', type_='model')
     Pool.register(
         LoanCreate,
+        OptionSubscription,
+        OptionSubscriptionWizardLauncher,
+        DisplayContractPremium,
+        CreateExtraPremium,
+        SynthesisMenuOpen,
         module='loan', type_='wizard')

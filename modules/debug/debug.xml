@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
   <data>
+    <!-- ############## -->
+    <!-- # Field Info # -->
+    <!-- ############## -->
+    <record model="ir.ui.view" id="field_info_view_form">
+      <field name="model">ir.model.debug.model_info.field_info</field>
+      <field name="type">form</field>
+      <field name="name">field_info_form</field>
+    </record>
+    <record model="ir.ui.view" id="field_info_view_list">
+      <field name="model">ir.model.debug.model_info.field_info</field>
+      <field name="type">tree</field>
+      <field name="name">field_info_list</field>
+    </record>
+    <!-- ############## -->
+    <!-- # Model Info # -->
+    <!-- ############## -->
+    <record model="ir.ui.view" id="model_info_view_form">
+      <field name="model">ir.model.debug.model_info</field>
+      <field name="type">form</field>
+      <field name="name">model_info_form</field>
+    </record>
+    <!-- ############### -->
+    <!-- # Debug Model # -->
+    <!-- ############### -->
+    <record model="ir.action.wizard" id="act_model_debug">
+      <field name="name">Debug Model</field>
+      <field name="wiz_name">ir.model.debug</field>
+    </record>
+    <record model="ir.action.keyword" id="act_model_debug_keyword">
+      <field name="keyword">form_action</field>
+      <field name="model">ir.model,-1</field>
+      <field name="action" ref="act_model_debug"/>
+    </record>
+    <!-- Entry Point -->
+    <menuitem parent="ir.menu_administration" name="Model Debug" id="menu_model_debug" sequence="101" action="act_model_debug"/>
     <!-- ################### -->
     <!-- # Visualize Debug # -->
     <!-- ################### -->

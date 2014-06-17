@@ -18,7 +18,7 @@ class EndorsementTemplate(model.CoopSQL, model.CoopView):
     __name__ = 'endorsement.template'
 
     name = fields.Char('Name')
-    code = fields.Char('Code', on_change_with=['name', 'code'])
+    code = fields.Char('Code')
     contract_fields = fields.One2Many('endorsement.field', 'template',
         'Contract fields')
     option_fields = fields.One2Many('endorsement.option.field', 'template',
@@ -37,6 +37,7 @@ class EndorsementTemplate(model.CoopSQL, model.CoopView):
         result.add('products')
         return result
 
+    @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
             return self.code

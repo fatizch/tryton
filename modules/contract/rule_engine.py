@@ -30,6 +30,10 @@ class RuleEngineRuntime:
             data_name, args['date'])
 
     @classmethod
+    def _re_get_contract_effective_date(cls, args):
+        return args['contract'].start_date
+
+    @classmethod
     def _re_contract_conditions_date(cls, args):
         return args['appliable_conditions_date']
 
@@ -58,6 +62,6 @@ class RuleEngineRuntime:
     def get_person(cls, args):
         if 'person' in args:
             return args['person']
-        elif 'sub_elem' in args:
-            return args['sub_elem'].party
+        elif 'elem' in args:
+            return args['elem'].party
         cls.append_error(args, 'Cannot find a person to get')

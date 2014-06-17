@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tree string="Option" editable="bottom">
     <field name="is_selected"/>
-    <field name="coverage"/>
-    <field name="coverage_behaviour"/>
+    <field name="name"/>
+    <field name="selection" tree_invisible="1"/>
 </tree>

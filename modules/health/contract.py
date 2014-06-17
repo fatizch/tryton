@@ -1,4 +1,3 @@
-import copy
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or
 
@@ -20,16 +19,13 @@ class Contract:
         'get_is_health', searcher='search_is_health')
 
     def get_is_health(self, name):
-        if not self.options and self.offered:
-            return self.offered.is_health
-        for option in self.options:
-            if option.is_health:
-                return True
+        if not self.options and self.product:
+            return self.product.is_health
         return False
 
     @classmethod
     def search_is_health(cls, name, clause):
-        return [('offered.is_health',) + tuple(clause[1:])]
+        return [('product.is_health',) + tuple(clause[1:])]
 
 
 class Option:
@@ -40,7 +36,7 @@ class Option:
         'get_is_health')
 
     def get_is_health(self, name=None):
-        return self.offered and self.offered.is_health
+        return self.product and self.product.is_health
 
 
 class CoveredElement:
@@ -51,14 +47,12 @@ class CoveredElement:
         'get_is_health')
     health_complement = fields.Function(
         fields.One2Many('health.party_complement', None, 'Health Complement',
-            on_change_with=['party', 'is_health', 'is_person'],
             states={'invisible': Or(~Eval('is_health'), ~Eval('is_person'))}),
         'get_health_complement', 'set_health_complement')
 
     @classmethod
     def __setup__(cls):
         super(CoveredElement, cls).__setup__()
-        cls.party = copy.copy(cls.party)
         if not cls.party.context:
             cls.party.context = {}
         cls.party.context['is_health'] = Eval('is_health')
@@ -94,6 +88,7 @@ class CoveredElement:
         return ([x.id for x in self.party.health_complement]
             if self.party else [])
 
+    @fields.depends('party', 'is_health', 'is_person')
     def on_change_with_health_complement(self, name=None):
         if not self.party or not self.is_person:
             return []
@@ -101,9 +96,9 @@ class CoveredElement:
                 and not self.party.health_complement):
             address = self.party.address_get() if self.party else None
             department = address.get_department() if address else ''
-            return {'add': [{
+            return {'add': [(-1, {
                         'party': self.party.id,
-                        'department': department}]}
+                        'department': department})]}
         else:
             return [x.id for x in self.party.health_complement]
 

@@ -1,8 +1,6 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, And, Bool
-from trytond.modules.cog_utils import fields, utils, model
+from trytond.modules.cog_utils import fields, model
 from trytond.modules.offered_insurance import BusinessRuleRoot
 
 __metaclass__ = PoolMeta
@@ -19,7 +17,8 @@ class CashValueRule(BusinessRuleRoot, model.CoopSQL):
 
     __name__ = 'cash_value.cash_value_rule'
 
-    saving_account = fields.Many2One('account.account', 'saving_account')
+    saving_account = fields.Many2One('account.account', 'saving_account',
+        ondelete='RESTRICT')
 
     def give_me_computed_cash_values(self, args):
         return self.computation_rule.execute(args)
@@ -65,12 +64,7 @@ class OptionDescription:
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        cls.family = copy.copy(cls.family)
-        if not cls.family.selection:
-            cls.family.selection = []
-        utils.append_inexisting(cls.family.selection,
-            ('cash_value', 'Cash Value'))
-        cls.coverage_amount_rules = copy.copy(cls.coverage_amount_rules)
+        cls.family.selection.append(('cash_value', 'Cash Value'))
         cls.coverage_amount_rules.states['invisible'] = And(
             cls.coverage_amount_rules.states['invisible'],
             Or(Bool(Eval('is_package')), Eval('family') != 'cash_value'))

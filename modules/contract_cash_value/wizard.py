@@ -239,12 +239,11 @@ class CashSurrenderParameters(model.CoopView):
 
     __name__ = 'contract.wizard.cash_surrender.parameters'
 
-    contract = fields.Many2One('contract', 'Contract', required=True,
-        on_change=['contract', 'surrender_date'])
-    surrender_date = fields.Date('Surrender Date', required=True,
-        on_change=['contract', 'surrender_date'])
+    contract = fields.Many2One('contract', 'Contract', required=True)
+    surrender_date = fields.Date('Surrender Date', required=True)
     surrender_amount = fields.Numeric('Surrender Amount')
 
+    @fields.depends('contract', 'surrender_date')
     def on_change_contract(self):
         if not (hasattr(self, 'surrender_date') and self.surrender_date):
             return {}
@@ -257,6 +256,7 @@ class CashSurrenderParameters(model.CoopView):
             self.surrender_date, True, False)
         return {'surrender_amount': total_amount}
 
+    @fields.depends('contract', 'surrender_date')
     def on_change_surrender_date(self):
         return self.on_change_contract()
 

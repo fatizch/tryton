@@ -1,10 +1,11 @@
 #-*- coding:utf-8 -*-
 import copy
+from decimal import Decimal
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.cog_utils import utils, coop_date, model, fields
+from trytond.modules.cog_utils import utils, model, fields
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 from trytond.modules.offered.offered import CONFIG_KIND
 from trytond.modules.offered import PricingResultLine
@@ -23,14 +24,19 @@ __all__ = [
 PRICING_LINE_KINDS = [
     ('base', 'Base Price'),
     ('tax', 'Tax'),
-    ('fee', 'Fee')
+    ('fee', 'Fee'),
+    ('extra', 'Extra'),
     ]
 
 PRICING_FREQUENCY = [
-    ('yearly', 'Yearly'),
-    ('half_yearly', 'Half Yearly'),
+    ('yearly', 'Yearly (Exact)'),
+    ('yearly_360', 'Yearly (360 days)'),
+    ('yearly_365', 'Yearly (365 days)'),
+    ('half_yearly', 'Half-yearly'),
     ('quarterly', 'Quarterly'),
-    ('monthly', 'Monthly')
+    ('monthly', 'Monthly'),
+    ('once_per_contract', 'Once per Contract'),
+    ('once_per_invoice', 'Once per Invoice'),
     ]
 
 
@@ -47,12 +53,15 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         'billing.premium.rule.component',
         'premium_rule', 'Covered Item Components',
         domain=[('rated_object_kind', '=', 'sub_item')])
+    match_contract_frequency = fields.Boolean('Match Contract Frequency',
+        help='Should the premium be stored at the contract\'s frequency ?')
     frequency = fields.Selection(PRICING_FREQUENCY, 'Rate Frequency',
         required=True)
     specific_combination_rule = fields.Many2One('rule_engine',
-        'Combination Rule', states={'invisible': STATE_SIMPLE})
+        'Combination Rule', states={'invisible': STATE_SIMPLE},
+        ondelete='RESTRICT')
     sub_item_specific_combination_rule = fields.Many2One('rule_engine',
-        'Sub Item Combination Rule')
+        'Sub Item Combination Rule', ondelete='RESTRICT')
     basic_price = fields.Function(
         fields.Numeric('Amount', states={'invisible': STATE_ADVANCED}, digits=(
                 16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG))),
@@ -116,6 +125,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
                                 'kind': 'tax',
                                 'code': tax.code,
                                 'rated_object_kind': 'global',
+                                'value': tax.id,
                                 }])]})
 
     @classmethod
@@ -182,14 +192,6 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             return self.frequency
         return None
 
-    def give_me_frequency_days(self, args):
-        if not 'date' in args:
-            return (None, ['A base date must be provided !'])
-        the_date = args['date']
-        return coop_date.number_of_days_between(
-            the_date,
-            coop_date.add_frequency(self.frequency, the_date))
-
     @staticmethod
     def default_frequency():
         return 'yearly'
@@ -227,18 +229,36 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         from_detail.to_recalculate = fee_vers.apply_at_pricing_time
         from_detail.amount = amount
 
+    def calculate_extra_detail(self, from_detail, args, base):
+        extra = from_detail.on_object
+        extra_amount = extra.calculate_premium_amount(args, base)
+        if not extra_amount:
+            return
+        from_detail.amount = extra_amount
+        from_detail.on_object = extra.motive
+
     def calculate_components_contribution(self, args, result, errors,
             rated_object_kind):
         for component in self.get_components(rated_object_kind):
             res, errs = component.calculate_value(args)
-            result.add_detail(res)
+            try:
+                result.add_detail(res)
+            except TypeError:
+                errors.append('Calculated amount %s is not a valid result for '
+                    '%s' % (res.amount, component))
             errors += errs
+        if 'extra_premiums' not in args:
+            return
+        for extra in args['extra_premiums']:
+            result.add_detail(PricingResultDetail(0, extra, kind='extra'))
 
     def calculate_price(self, args, rated_object_kind='global'):
         result = PricingResultLine()
         errors = []
         self.calculate_components_contribution(args, result, errors,
             rated_object_kind)
+        if errors:
+            return [], errors
         combination_rule = self.get_combination_rule(rated_object_kind)
         if not errors and combination_rule:
             new_args = copy.copy(args)
@@ -255,9 +275,15 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             result.amount = 0
             group_details = dict([(key, []) for key, _ in PRICING_LINE_KINDS])
             for detail in result.details:
-                group_details[detail.on_object.kind].append(detail)
+                group_details[detail.kind].append(detail)
             result.details = []
             for detail in group_details['base']:
+                result.add_detail(detail)
+            extra_details = []
+            for detail in group_details['extra']:
+                self.calculate_extra_detail(detail, args, result.amount)
+                extra_details.append(detail)
+            for detail in extra_details:
                 result.add_detail(detail)
             # By default, taxes and fees are appliend on the total base amount
             fee_details = []
@@ -273,7 +299,72 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             for detail in tax_details:
                 result.add_detail(detail)
         result.frequency = self.frequency
-        return result, errors
+        lines = []
+        fee_lines = []
+        template = {
+            'frequency': self.frequency,
+            'target': self.get_lowest_level_instance(args),
+            'product': args['product'],
+            }
+        taxes = []
+        for detail in result.details:
+            if detail.kind in ('base', 'extra'):
+                new_line = dict(template)
+                new_line['amount'] = detail.amount
+                new_line['rated_entity'] = args.get('coverage',
+                    args.get('product'))
+                if detail.amount:
+                    lines.append(new_line)
+            elif detail.kind == 'fee':
+                new_line = dict(template)
+                new_line['amount'] = detail.amount
+                new_line['rated_entity'] = detail.on_object.fee
+                if detail.amount:
+                    fee_lines.append(new_line)
+            elif detail.kind == 'tax':
+                taxes.append(detail.on_object.tax.tax)
+        for elem in (lines + fee_lines):
+            elem['taxes'] = list(taxes)
+        if self.match_contract_frequency:
+            ContractBillingInformation = Pool().get(
+                'contract.billing_information')
+            contract_billing_mode = ContractBillingInformation.get_values(
+                [args['contract']], date=args['date'],
+                )['billing_mode'][args['contract'].id]
+            frequency = Pool().get('offered.billing_mode')(
+                contract_billing_mode).frequency
+            for elem in (lines + fee_lines):
+                self.convert_premium_frequency(elem, frequency)
+
+        return lines + fee_lines, errors
+
+    def get_lowest_level_instance(self, args):
+        if 'covered_element' in args:
+            if 'option' in args:
+                return args['option']
+            return args['covered_element']
+        elif 'option' in args:
+            return args['option']
+        elif 'contract' in args:
+            return args['contract']
+        return None
+
+    def convert_premium_frequency(self, line, frequency):
+        if line['frequency'] in ('once_per_invoice', 'once_per_contract'):
+            return
+        if frequency in ('once_per_invoice', 'once_per_contract'):
+            return
+        conversion_table = {
+            'yearly': Decimal(12),
+            'yearly_360': Decimal(12),
+            'yearly_365': Decimal(12),
+            'half_yearly': Decimal(6),
+            'quarterly': Decimal(3),
+            'monthly': Decimal(1),
+            }
+        line['amount'] = line['amount'] / (conversion_table[line['frequency']]
+            / conversion_table[frequency])
+        line['frequency'] = frequency
 
 
 class PremiumRuleComponent(model.CoopSQL, model.CoopView):
@@ -295,26 +386,24 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             ('global', 'Global'),
             ('sub_item', 'Covered Item'),
             ], 'Rated Object Level', required=True)
-    rule = fields.Many2One('rule_engine', 'Rule Engine',
+    rule = fields.Many2One('rule_engine', 'Rule Engine', ondelete='CASCADE',
         depends=['config_kind', 'kind'], states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
-    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
-        on_change_with=['rule', 'rule_extra_data'], states={
+    rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Rule Extra Data', states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
     kind = fields.Selection(PRICING_LINE_KINDS, 'Line kind', required=True)
-    code = fields.Char('Code', required=True,
-        on_change_with=['code', 'tax', 'fee'])
+    code = fields.Char('Code', required=True)
     tax = fields.Many2One('account.tax.description', 'Tax',
         states={'invisible': Eval('kind') != 'tax'}, ondelete='RESTRICT')
     fee = fields.Many2One('account.fee.description', 'Fee',
         states={'invisible': Eval('kind') != 'fee'}, ondelete='RESTRICT')
     summary = fields.Function(
-        fields.Char('Value', on_change_with=['fixed_amount', 'config_kind',
-                'rule', 'kind', 'tax', 'fee', 'code']),
+        fields.Char('Value'),
         'get_summary')
 
     @classmethod
@@ -350,6 +439,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             amount, errors = rule_result.result, rule_result.print_errors()
         return amount, errors
 
+    @fields.depends('rule', 'rule_extra_data')
     def on_change_with_rule_extra_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}
@@ -364,7 +454,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
 
     def calculate_value(self, args):
         amount, errors = self.get_amount(args)
-        detail_line = PricingResultDetail(amount, self)
+        detail_line = PricingResultDetail(amount, self, kind=self.kind)
         return detail_line, errors
 
     @classmethod
@@ -387,9 +477,12 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
     def get_rec_name(self, name=None):
         return self.get_summary([self])[self.id]
 
+    @fields.depends('fixed_amount', 'config_kind', 'rule', 'kind', 'tax',
+        'fee', 'code')
     def on_change_with_summary(self, name=None):
         return self.get_summary([self])[self.id]
 
+    @fields.depends('code', 'tax', 'fee')
     def on_change_with_code(self, name=None):
         if self.tax:
             return self.tax.code

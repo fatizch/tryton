@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="workflow_icon">
+            <field name="name">workflow</field>
+            <field name="path">icons/workflow.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="diamond_icon">
+            <field name="name">diamond</field>
+            <field name="path">icons/diamond.svg</field>
+        </record>
+    </data>
+</tryton>

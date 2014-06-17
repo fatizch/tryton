@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<form string="Options">
-    <label name="contract"/>
-    <field name="contract"/>
-    <newline/>
-    <field name="options" colspan="4" mode="tree"/>
-    <newline/>
-</form>

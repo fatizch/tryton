@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 MODULE_NAME = 'claim_life'
 
@@ -13,34 +13,53 @@ class TestCaseModel:
 
     @classmethod
     def document_desc_test_case(cls):
-        documents = super(TestCaseModel, cls).document_desc_test_case()
+        Document = Pool().get('document.description')
+        super(TestCaseModel, cls).document_desc_test_case()
         translater = cls.get_translater(MODULE_NAME)
-        documents.append(cls.create_document('WI', translater(
+        documents = []
+        documents.append(cls.create_document(code='WI', name=translater(
                     'Work Incapacity')))
-        documents.append(cls.create_document('DH', translater(
+        documents.append(cls.create_document(code='DH', name=translater(
                     'Death Certificate')))
-        documents.append(cls.create_document('AT', translater(
+        documents.append(cls.create_document(code='AT', name=translater(
                     'Amortization Table')))
-        documents.append(cls.create_document('DY', translater(
+        documents.append(cls.create_document(code='DY', name=translater(
                     'Disability Justification')))
-        return documents
+        Document.create([x._save_values for x in documents])
 
     @classmethod
     def event_desc_test_case(cls):
-        event_descs = super(TestCaseModel, cls).event_desc_test_case()
+        EventDesc = Pool().get('benefit.event.description')
+        super(TestCaseModel, cls).event_desc_test_case()
+        event_descs = []
         translater = cls.get_translater(MODULE_NAME)
-        event_descs.append(cls.create_event_desc('DI', translater('Disease')))
-        event_descs.append(cls.create_event_desc('AC', translater('Accident')))
-        return event_descs
+        event_descs.append(cls.create_event_desc(code='DI',
+                name=translater('Disease')))
+        event_descs.append(cls.create_event_desc(code='AC',
+                name=translater('Accident')))
+        EventDesc.create([x._save_values for x in event_descs])
 
     @classmethod
     def loss_desc_test_case(cls):
-        loss_descs = super(TestCaseModel, cls).loss_desc_test_case()
+        LossDesc = Pool().get('benefit.loss.description')
+        super(TestCaseModel, cls).loss_desc_test_case()
         translater = cls.get_translater(MODULE_NAME)
-        loss_descs.append(cls.create_loss_desc('WI', translater(
-                    'Work Incapacity'), 'person', True, ['AC'], ['WI']))
-        loss_descs.append(cls.create_loss_desc('DH', translater('Death'),
-                'person', False, ['AC', 'DI'], ['DH']))
-        loss_descs.append(cls.create_loss_desc('DY', translater('Disability'),
-                'person', False, ['AC', 'DI'], ['WI']))
-        return loss_descs
+        loss_descs = []
+        loss_descs.append(cls.create_loss_desc(code='WI',
+                name=translater('Work Incapacity'),
+                item_kind='person', with_end_date=True,
+                event_descs=[cls.get_event_desc('AC')],
+                documents=[cls.get_document_desc('WI')]))
+        loss_descs.append(cls.create_loss_desc(code='DH',
+                name=translater('Death'),
+                item_kind='person', with_end_date=False,
+                event_descs=[cls.get_event_desc('AC'),
+                    cls.get_event_desc('DI')],
+                documents=[cls.get_document_desc('DH')]))
+        loss_descs.append(cls.create_loss_desc(code='DY',
+                name=translater('Disability'),
+                item_kind='person', with_end_date=False,
+                event_descs=[cls.get_event_desc('AC'),
+                    cls.get_event_desc('DI')],
+                documents=[cls.get_document_desc('WI')]))
+        LossDesc.create([x._save_values for x in loss_descs])

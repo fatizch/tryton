@@ -127,9 +127,11 @@ class ProcessFramework(ModelView):
         def button_transition_generic(works):
             ProcessTransition = Pool().get('process.transition')
             good_trans = ProcessTransition(int(transition[0]))
+            result = None
             for work in works:
-                good_trans.execute(work)
+                result = good_trans.execute(work)
                 work.save()
+            return result
         return button_transition_generic
 
     @classmethod

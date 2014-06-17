@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, If
 
@@ -19,7 +17,6 @@ class Sequence:
     @classmethod
     def __setup__(cls):
         super(Sequence, cls).__setup__()
-        cls.company = copy.copy(cls.company)
         cls.company.domain = export.clean_domain_for_import(
             cls.company.domain, 'company')
 
@@ -30,7 +27,6 @@ class Property:
     @classmethod
     def __setup__(cls):
         super(Property, cls).__setup__()
-        cls.company = copy.copy(cls.company)
         cls.company.domain = [
             If(Eval('context', {}).contains('__importing__'),
                 ('id', '>', 0),

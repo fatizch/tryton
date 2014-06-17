@@ -1,6 +1,3 @@
-import copy
-from ibanlib import iban
-
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
@@ -16,11 +13,16 @@ __all__ = [
     'Bank',
     'BankAccount',
     'BankAccountNumber',
+    'BankAccountParty',
     ]
 
 
 class Bank(export.ExportImportMixin):
     __name__ = 'bank'
+
+    main_address = fields.Function(
+        fields.Many2One('party.address', 'Main Address'),
+        'get_main_address_id')
 
     @classmethod
     def __setup__(cls):
@@ -44,7 +46,7 @@ class Bank(export.ExportImportMixin):
         self.check_bic()
 
     def check_bic(self):
-        if self.bic and not iban.valid_BIC(self.bic):
+        if self.bic and not self.valid_BIC(self.bic):
             self.raise_user_error('invalid_bic', (self.bic))
 
     @classmethod
@@ -60,6 +62,35 @@ class Bank(export.ExportImportMixin):
     def get_var_names_for_light_extract(cls):
         return ['bic']
 
+    def get_rec_name(self, name):
+        res = super(Bank, self).get_rec_name(name)
+        res = '[%s] %s' % (self.bic, res)
+        return res
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('bic',) + tuple(clause[1:])],
+            [('party.name',) + tuple(clause[1:])],
+            [('party.short_name',) + tuple(clause[1:])],
+            ]
+
+    def get_main_address_id(self, name):
+        return (self.party.main_address.id
+            if self.party and self.party.main_address else None)
+
+    @classmethod
+    def valid_BIC(cls, bic):
+        """Check validity of BIC"""
+        bic = bic.strip()
+        if len(bic) != 8 and len(bic) != 11:
+            return False
+        if not bic[:6].isalpha():
+            return False
+        if not bic[6:8].isalnum():
+            return False
+        return True
+
 
 class BankAccount(export.ExportImportMixin):
     __name__ = 'bank.account'
@@ -74,7 +105,6 @@ class BankAccount(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(BankAccount, cls).__setup__()
-        cls.numbers = copy.copy(cls.numbers)
         cls.numbers.required = False
         cls.numbers.states['required'] = If(
             Bool(Eval('context', {}).get('__importing__', '')),
@@ -141,6 +171,10 @@ class BankAccount(export.ExportImportMixin):
         elif self.numbers:
             return self.numbers[-1].number
 
+    def get_synthesis_rec_name(self, name):
+        return '%s : %s' % (self.numbers[0].type,
+            self.numbers[0].number)
+
 
 class BankAccountNumber(export.ExportImportMixin):
     __name__ = 'bank.account.number'
@@ -148,37 +182,13 @@ class BankAccountNumber(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(BankAccountNumber, cls).__setup__()
-        cls._error_messages.update({
-                'invalid_number': ('Invalid %s number : %s')})
         cls._sql_constraints += [
             ('number_uniq', 'UNIQUE(number)', 'The number must be unique!'),
             ]
 
-    @classmethod
-    def validate(cls, numbers):
-        super(BankAccountNumber, cls).validate(numbers)
-        for number in numbers:
-            cls.check_number(number)
-
-    def check_number(self):
-        res = True
-        if not hasattr(self, 'type'):
-            return
-        if self.type == 'iban':
-            res = self.check_iban()
-        if not res:
-            self.raise_user_error('invalid_number', (self.type, self.number))
-
-    def check_iban(self):
-        return self.number != '' and iban.valid(self.number)
-
     @staticmethod
     def default_type():
         return 'iban'
-
-    def pre_validate(self):
-        super(BankAccountNumber, self).pre_validate()
-        self.check_number()
 
     @classmethod
     def get_summary(cls, numbers, name=None, at_date=None, lang=None):
@@ -192,3 +202,15 @@ class BankAccountNumber(export.ExportImportMixin):
     @classmethod
     def get_var_names_for_light_extract(cls):
         return ['number']
+
+
+class BankAccountParty:
+    'Bank Account - Party'
+    __name__ = 'bank.account-party.party'
+
+    def get_synthesis_rec_name(self, name):
+        if self.account:
+            return self.account.get_synthesis_rec_name(name)
+
+    def get_icon(self, name=None):
+        return 'coopengo-bank_account'

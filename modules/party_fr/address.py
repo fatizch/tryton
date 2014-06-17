@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Bool
 from trytond.modules.party.address import STATES, DEPENDS
@@ -16,14 +14,7 @@ class Address:
 
     __name__ = 'party.address'
 
-    line2 = fields.Char('Add. complement', help=
-        '''AFNOR - Line 2
-        For individual : Delivery Point Access Data
-        Door or Letterbox number, floor, staircase
-        For companies : Individual Identification Form of Address -
-        Given Name, Surname, function, Department''',
-        states=STATES, depends=DEPENDS)
-    line3 = fields.Char('Building', help=
+    line3 = fields.Char('Building (Line 3)', help=
         '''AFNOR - Line 3
         Delivery point location
         Wing or Building or Construction or Industrial zone''',
@@ -32,38 +23,33 @@ class Address:
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        cls.name = copy.copy(cls.name)
-        cls.name.string = 'Recipient'
-        cls.name.help = '''AFNOR - Line 1
-        For individual : Identity of the addressee -
-        Form of address or given name or surname...
-        For companies : Organization identification -
-        Organization name, Legal Status'''
+        cls.name.string = 'Line 2'
+        cls.name.help = '''AFNOR - Line 2
+        For individual : Delivery Point Access Data
+        Door or Letterbox number, floor, staircase
+        For companies : Individual Identification Form of Address -
+        Given Name, Surname, function, Department'''
 
-        cls.street = copy.copy(cls.street)
         if cls.street.on_change is None:
-            cls.street.on_change = []
-        cls.street.on_change.append('street')
+            cls.street.on_change = set()
+        cls.street.on_change.add('street')
         cls.street.help = '''AFNOR - Line 4
             Street number or plot and thoroughfare -
             Street or Avenue or Village...'''
 
-        cls.streetbis = copy.copy(cls.streetbis)
-        cls.streetbis.string = 'Post Office'
+        cls.streetbis.string = 'Post Office (Line 5)'
         cls.streetbis.help = '''AFNOR - Line 5
             Delivery Service
             Identification Thoroughfare Complement BP (P.O box)
             and Locality (if different from the distribution area indicator'''
         if cls.streetbis.on_change is None:
             cls.streetbis.on_change = []
-        cls.streetbis.on_change.append('streetbis')
+        cls.streetbis.on_change.add('streetbis')
 
-        cls.city = copy.copy(cls.city)
         if cls.city.on_change is None:
             cls.city.on_change = []
-        cls.city.on_change.append('city')
+        cls.city.on_change.add('city')
         #Set Siret invisible for person
-        cls.siret = copy.copy(cls.siret)
         cls.siret.states = {
             'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
         cls.siret_nic.states = {
@@ -85,8 +71,6 @@ class Address:
         res = ''
         if self.name:
             res = self.name + '\n'
-        if self.line2:
-            res += self.line2 + '\n'
         if self.line3:
             res += self.line3 + '\n'
         if self.street:
@@ -110,5 +94,5 @@ class Address:
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(Address, cls).get_var_names_for_full_extract()
-        res.extend(['line2', 'line3'])
+        res.extend(['name', 'line3'])
         return res

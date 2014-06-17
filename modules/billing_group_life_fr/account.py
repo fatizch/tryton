@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import coop_string
@@ -18,7 +16,6 @@ class Move:
     @classmethod
     def __setup__(cls):
         super(Move, cls).__setup__()
-        cls.coverage_details = copy.copy(cls.coverage_details)
         cls.coverage_details.domain[1].append(
             ('second_origin', 'like', 'billing.premium_rate.form,%'))
 

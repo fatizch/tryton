@@ -4,10 +4,15 @@
   <field name="start_date"/>
   <label name="end_date"/>
   <field name="end_date"/>
+  <newline/>
   <label name="kind"/>
   <field name="kind"/>
   <label name="party"/>
   <field name="party"/>
+  <label name="agency"/>
+  <field name="agency"/>
+  <label name="contact_info"/>
+  <field name="contact_info"/>
   <label name="protocol"/>
   <field name="protocol"/>
   <newline/>

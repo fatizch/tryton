@@ -7,11 +7,9 @@
       <field name="inherit" ref="account_payment.payment_journal_view_form"/>
       <field name="name">journal_form</field>
     </record>
-    <record model="ir.ui.view" id="group_form">
-      <field name="model">account.payment.group</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="account_payment.payment_group_view_form"/>
-      <field name="name">group_form</field>
-    </record>
+      <record model="ir.sequence.type" id="sequence_type_sepa_umr">
+        <field name="name">Sepa Umr</field>
+        <field name="code">account.payment.sepa.umr</field>
+      </record>
   </data>
 </tryton>

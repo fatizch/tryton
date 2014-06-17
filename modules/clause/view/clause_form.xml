@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form string="Clauses">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="customizable"/>
+    <field name="customizable"/>
+    <newline/>
+    <field name="content" colspan="4"/>
+</form>

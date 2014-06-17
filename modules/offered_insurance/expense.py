@@ -1,4 +1,4 @@
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, coop_string
 
 __all__ = [
     'ExpenseKind',
@@ -19,3 +19,9 @@ class ExpenseKind(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name')
     short_name = fields.Char('Short Name')
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)

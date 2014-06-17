@@ -13,8 +13,7 @@ class CoveredDataRuleSet:
 
     @classmethod
     def _re_get_cash_value_payment_mode(cls, args):
-        data = args['data']
-        return data.cash_value_payment_mode
+        return args['option'].cash_value_payment_mode
 
     @classmethod
     def _re_get_cash_value_update_date(cls, args):

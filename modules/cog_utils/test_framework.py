@@ -44,7 +44,9 @@ def prepare_test(*_args):
             if not (Transaction() and Transaction().context and
                     'master' in Transaction().context):
                 with Transaction().start(DB_NAME, USER, context=CONTEXT):
-                    with Transaction().new_cursor():
+                    # Run all tests as root. Access management tests should
+                    # manually set the user in the transaction
+                    with Transaction().new_cursor(), Transaction().set_user(0):
                         with Transaction().set_context(master=args[0]):
                             args[0]._executed = []
                             for arg in _args:
@@ -78,6 +80,10 @@ class CoopTestCase(unittest.TestCase):
 
     @classmethod
     def depending_modules(cls):
+        return []
+
+    @classmethod
+    def get_test_cases_to_run(cls):
         return []
 
     @classmethod
@@ -115,9 +121,12 @@ class CoopTestCase(unittest.TestCase):
         for module in modules.itervalues():
             module.ModuleTestCase.install_module()
 
-        models = {'TestCaseModel': 'ir.test_case'}
-        for modules in modules.itervalues():
-            models.update(modules.ModuleTestCase.get_models())
+        models = {
+            'TestCaseModel': 'ir.test_case',
+            'Lang': 'ir.lang',
+            }
+        for module in modules.itervalues():
+            models.update(module.ModuleTestCase.get_models())
 
         self._models = {}
         for k, v in models.iteritems():
@@ -127,6 +136,14 @@ class CoopTestCase(unittest.TestCase):
                 good_model = trytond.tests.test_tryton.POOL.get(
                     v, type='wizard')
             self._models.update({k: good_model})
+
+        from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+                with Transaction().new_cursor(), Transaction().set_user(0):
+                    self.TestCaseModel.run_test_cases([
+                            getattr(self.TestCaseModel, x)
+                            for x in self.get_test_cases_to_run()])
+                    Transaction().cursor.commit()
 
     def test0005views(self):
         '''
@@ -151,7 +168,15 @@ class CoopTestCase(unittest.TestCase):
     def test9999_launch_test_cases(self):
         if os.environ.get('DO_NOT_TEST_CASES'):
             return
-        self.TestCaseModel.run_all_test_cases()
+        with Transaction().new_cursor():
+            test_case_instance = self.TestCaseModel.get_instance()
+            test_case_instance.language, = self.Lang.search([
+                    ('code', '=', 'fr_FR')])
+            test_case_instance.save()
+            Transaction().cursor.commit()
+        with Transaction().new_cursor(), Transaction().set_context(
+                TESTING=True):
+            self.TestCaseModel.run_all_test_cases()
 
     def __getattr__(self, name):
         if name == '_models':

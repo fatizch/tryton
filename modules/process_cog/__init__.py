@@ -1,6 +1,5 @@
 from trytond.pool import Pool
 from .process import *
-from .export import *
 
 
 def register():
@@ -15,8 +14,6 @@ def register():
         ViewDescription,
         ProcessStep,
         ProcessStart,
-        # From export
-        ExportPackage,
         module='process_cog', type_='model')
 
     Pool.register(
@@ -25,4 +22,6 @@ def register():
 
     Pool.register(
         ProcessFinder,
+        ProcessEnd,
+        ProcessResume,
         module='process_cog', type_='wizard')

@@ -7,7 +7,7 @@ msgid "Manual Billing"
 msgstr "Tarification Manuelle"
 
 msgctxt "model:tag,name:tag_billing"
-msgid "Cotisation"
+msgid "Billing"
 msgstr "Cotisation"
 
 msgctxt "view:contract:"

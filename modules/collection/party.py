@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -27,6 +25,5 @@ class Party:
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
-        cls.suspense_account = copy.copy(cls.suspense_account)
         cls.suspense_account.domain = export.clean_domain_for_import(
             cls.suspense_account.domain, 'company')

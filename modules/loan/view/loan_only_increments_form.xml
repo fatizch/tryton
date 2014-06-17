@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Increments">
+    <field name="increments" colspan="4" pre_validate="1" mode="tree"/>
+    <newline/>
+    <field name="increments_end_date"/>
+</form>

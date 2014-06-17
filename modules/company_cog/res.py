@@ -1,8 +1,10 @@
 from trytond.pool import PoolMeta
+from trytond.modules.cog_utils import export
 
 __metaclass__ = PoolMeta
 __all__ = [
     'User',
+    'Employee',
     ]
 
 
@@ -21,3 +23,11 @@ class User:
         result.add('main_company')
         result.add('company')
         return result
+
+
+class Employee(export.ExportImportMixin):
+    __name__ = 'company.employee'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['party.name', 'company.party.name'])

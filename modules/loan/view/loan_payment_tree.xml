@@ -4,9 +4,8 @@
     <field name="number"/>
     <field name="start_date"/>
     <field name="begin_balance"/>
-    <field name="amount"/>
-    <field name="principal"/>
+    <field name="amount" sum="Total Amount"/>
+    <field name="principal" sum="Total Principal"/>
     <field name="interest" sum="Total Interest"/>
-    <field name="insurance"/>
-    <field name="end_balance"/>
+    <field name="outstanding_balance"/>
 </tree>

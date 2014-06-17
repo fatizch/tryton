@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Less
 
@@ -18,8 +16,7 @@ class Party:
 
     claims = fields.One2Many('claim', 'claimant', 'Claims')
     number_of_claims = fields.Function(
-        fields.Integer('Number Of Claims', on_change_with=['claims'],
-            states={'invisible': True}),
+        fields.Integer('Number Of Claims', states={'invisible': True}),
         'on_change_with_number_of_claims')
     last_claim = fields.Function(
         fields.Many2One('claim', 'Last Claim'),
@@ -34,6 +31,7 @@ class Party:
                     },
                 })
 
+    @fields.depends('claims')
     def on_change_with_number_of_claims(self, name=None):
         return len(self.claims)
 
@@ -56,5 +54,4 @@ class PartyInteraction:
     @classmethod
     def __setup__(cls):
         super(PartyInteraction, cls).__setup__()
-        cls.for_object_ref = copy.copy(cls.for_object_ref)
         cls.for_object_ref.selection.append(['claim', 'Claim'])

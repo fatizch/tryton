@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Covered Element">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="main_contract"/>
+    <field name="main_contract"/>
+    <newline/>
+    <label name="item_desc"/>
+    <field name="item_desc" widget="selection"/>
+    <label name="name"/>
+    <field name="name"/>
+    <newline/>
+    <label name="party"/>
+    <field name="party"/>
+    <newline/>
+    <field name="extra_data" colspan="2" no_command="1"/>
+    <field name="party_extra_data" colspan="2" no_command="1"/>
+    <newline/>
+    <field name="item_kind"/>
+    <newline/>
+    <field name="is_person"/>
+    <newline/>
+</form>

@@ -1,4 +1,5 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
+from trytond.config import CONFIG
 
 from trytond.modules.cog_utils import export
 
@@ -21,6 +22,13 @@ class Country(export.ExportImportMixin):
         result = super(Country, cls)._export_force_recreate()
         result.remove('subdivisions')
         return result
+
+    @staticmethod
+    def default_country():
+        Country = Pool().get('country.country')
+        code = CONFIG.get('default_country', 'FR')
+        country, = Country.search([('code', '=', code)])
+        return country
 
 
 class CountrySubdivision(export.ExportImportMixin):

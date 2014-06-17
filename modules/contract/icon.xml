@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="contract_icon">
+            <field name="name">contract</field>
+            <field name="path">icons/contract.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="quote_icon">
+            <field name="name">quote</field>
+            <field name="path">icons/quote.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="contract_green_icon">
+            <field name="name">contract_green</field>
+            <field name="path">icons/contract_green.svg</field>
+        </record>
+    </data>
+</tryton>

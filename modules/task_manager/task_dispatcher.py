@@ -23,7 +23,7 @@ class ProcessLog:
 
     priority = fields.Function(fields.Integer('Priority'), 'get_priority')
     task_start = fields.Function(
-        fields.DateTime('Task Start', on_change_with=['task']),
+        fields.DateTime('Task Start'),
         'on_change_with_task_start')
     task_selected = fields.Function(
         fields.Boolean('Selected'),
@@ -53,6 +53,7 @@ class ProcessLog:
     def get_task_selected(self, name):
         return False
 
+    @fields.depends('task')
     def on_change_with_task_start(self, name=None):
         if not (hasattr(self, 'task') and self.task):
             return None
@@ -115,20 +116,21 @@ class TaskDisplayer(model.CoopView):
     __name__ = 'task.select.available_tasks.task'
 
     task = fields.Many2One('process-process.step', 'Task')
-    nb_tasks = fields.Integer('Number', on_change_with=['task'],
-        depends=['task', 'kind'])
+    nb_tasks = fields.Integer('Number', depends=['task', 'kind'])
     kind = fields.Selection([('team', 'Team'), ('process', 'Process')], 'Kind',
         states={'invisible': True})
     task_name = fields.Function(
-        fields.Char('Task Name', on_change_with=['task'], depends=['task']),
+        fields.Char('Task Name', depends=['task']),
         'on_change_with_task_name')
 
+    @fields.depends('task')
     def on_change_with_task_name(self, name=None):
         if not (hasattr(self, 'task') and self.task):
             return ''
         return '%s - %s' % (self.task.process.fancy_name,
             self.task.step.fancy_name)
 
+    @fields.depends('task')
     def on_change_with_nb_tasks(self):
         if not (hasattr(self, 'task') and self.task):
             return None
@@ -144,10 +146,8 @@ class TaskSelector(model.CoopView):
 
     __name__ = 'task.select.available_tasks'
 
-    team = fields.Many2One('res.team', 'Team', on_change=['team',
-            'nb_tasks_team', 'nb_users_team', 'tasks_team', 'tasks'])
-    process = fields.Many2One('process', 'Process', on_change=['process',
-            'nb_tasks_process', 'tasks_process'])
+    team = fields.Many2One('res.team', 'Team')
+    process = fields.Many2One('process', 'Process')
     nb_tasks_team = fields.Integer('Team Tasks', states={'readonly': True})
     nb_users_team = fields.Integer('Team Users', states={'readonly': True})
     nb_tasks_process = fields.Integer('Process Tasks',
@@ -160,10 +160,12 @@ class TaskSelector(model.CoopView):
         states={'readonly': True})
     tasks = fields.One2Many('process.log', '', 'Tasks',
         domain=[('latest', '=', True), ('locked', '=', False)],
-        order=[('priority', 'ASC')], on_change=['selected_task', 'tasks'])
+        order=[('priority', 'ASC')])
     selected_task = fields.Many2One('process.log', 'Selected Task',
         states={'readonly': True})
 
+    @fields.depends('team', 'nb_tasks_team', 'nb_users_team', 'tasks_team',
+        'tasks')
     def on_change_team(self):
         if not (hasattr(self, 'team') and self.team):
             return {
@@ -203,6 +205,7 @@ class TaskSelector(model.CoopView):
                 result['tasks'][0] if result['tasks'] else None
         return result
 
+    @fields.depends('process', 'nb_tasks_process', 'tasks_process')
     def on_change_process(self):
         if not (hasattr(self, 'process') and self.process):
             return {
@@ -225,6 +228,7 @@ class TaskSelector(model.CoopView):
         result['nb_tasks_process'] = nb_tasks
         return result
 
+    @fields.depends('selected_task', 'tasks')
     def on_change_tasks(self):
         if not (hasattr(self, 'tasks') and self.tasks):
             return None
@@ -325,7 +329,7 @@ class TaskDispatcher(Wizard):
         new_log = Log()
         new_log.user = Transaction().user
         new_log.locked = True
-        new_log.task = utils.convert_ref_to_obj(good_object)
+        new_log.task = good_object
         new_log.from_state = good_object.current_state.id
         new_log.to_state = good_object.current_state.id
         new_log.start_time = datetime.datetime.now()
@@ -353,58 +357,16 @@ class LaunchTask(Wizard):
     __name__ = 'task.launch'
 
     start_state = 'calculate_action'
-
-    class VoidStateAction(StateAction):
-        def __init__(self):
-            StateAction.__init__(self, None)
-
-        def get_action(self):
-            return None
-
-    calculate_action = VoidStateAction()
+    calculate_action = StateAction('process_cog.act_resume_process')
 
     def do_calculate_action(self, action):
-        current_id = Transaction().context.get('active_id')
-        current_model = Transaction().context.get('active_model')
-        try:
-            assert current_id
-            assert current_model == 'process.log'
-        except AssertionError:
-            self.raise_user_error('no_task_selected')
-        Log = Pool().get('process.log')
-        good_task = Log(current_id)
-        good_id = good_task.task.id
-        good_model = good_task.task.__name__
-        act = good_task.to_state.process.get_act_window()
+        active_id = Transaction().context.get('active_id')
+        active_model = Transaction().context.get('active_model')
+        log = Pool().get(active_model)(active_id)
 
-        Action = Pool().get('ir.action')
-        act = Action.get_action_values(act.__name__, [act.id])[0]
-
-        Session = Pool().get('ir.session')
-        good_session, = Session.search(
-            [('create_uid', '=', Transaction().user)])
-        GoodModel = Pool().get(good_model)
-        good_object = GoodModel(good_id)
-        new_log = Log()
-        new_log.user = Transaction().user
-        new_log.locked = True
-        new_log.task = utils.convert_ref_to_obj(good_object)
-        new_log.from_state = good_object.current_state.id
-        new_log.to_state = good_object.current_state.id
-        new_log.start_time = datetime.datetime.now()
-        new_log.session = good_session.key
-        new_log.save()
-
-        views = act['views']
-        if len(views) > 1:
-            for view in views:
-                if view[1] == 'form':
-                    act['views'] = [view]
-                    break
-        res = (act, {
-                'id': good_id,
-                'model': good_model,
-                'res_id': good_id,
-                'res_model': good_model,
+        return (action, {
+                'id': log.task.id,
+                'model': log.task.__name__,
+                'res_id': log.task.id,
+                'res_model': log.task.__name__,
                 })
-        return res

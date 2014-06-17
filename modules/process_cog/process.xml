@@ -62,5 +62,19 @@
       <field name="type">tree</field>
       <field name="name">process_log_tree</field>
     </record>
+    <!-- ############### -->
+    <!-- # Process End # -->
+    <!-- ############### -->
+    <record model="ir.action.wizard" id="act_end_process">
+      <field name="name">End Process</field>
+      <field name="wiz_name">process.end</field>
+    </record>j
+    <!-- ################## -->
+    <!-- # Process Resume # -->
+    <!-- ################## -->
+    <record model="ir.action.wizard" id="act_resume_process">
+        <field name="name">Resume Current Process</field>
+        <field name="wiz_name">process.resume</field>
+    </record>
   </data>
 </tryton>

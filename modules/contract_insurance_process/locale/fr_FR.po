@@ -55,14 +55,14 @@ msgstr ""
 
 msgctxt "error:contract:"
 msgid "There must be at least one covered element"
-msgstr "Saisir un élement couvert"
+msgstr "Saisir un risque couvert"
 
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
-msgstr ""
+msgstr "Trace Courante"
 
 msgctxt "field:contract,current_state:"
-msgid ""
+msgid "Current State"
 msgstr " "
 
 msgctxt "field:contract,doc_received:"
@@ -85,14 +85,6 @@ msgctxt "field:contract,subscriber_kind:"
 msgid "Subscriber Kind"
 msgstr "Type"
 
-msgctxt "field:contract.covered_data,status_selection:"
-msgid "Status"
-msgstr "Statut"
-
-msgctxt "field:contract.option,is_health:"
-msgid "Is Health"
-msgstr "Santé"
-
 msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
@@ -102,16 +94,12 @@ msgid "Business Provider"
 msgstr "Apporteur d'affaires"
 
 msgctxt "field:contract.subscribe.find_process,com_product:"
-msgid "Product Commercial"
+msgid "Commercial Product"
 msgstr "Produit Commercial"
 
 msgctxt "field:contract.subscribe.find_process,date:"
 msgid "Date"
 msgstr "Date"
-
-msgctxt "field:contract.subscribe.find_process,delegated_manager:"
-msgid "Delegated Manager"
-msgstr "Délégataire de gestion"
 
 msgctxt "field:contract.subscribe.find_process,dist_network:"
 msgid "Distribution Network"
@@ -159,7 +147,7 @@ msgstr "Paramètres du Processus de Souscription"
 
 msgctxt "model:ir.action,name:act_contract_logs"
 msgid "Logs"
-msgstr ""
+msgstr "Traces"
 
 msgctxt "model:ir.action,name:subscription_process_launcher"
 msgid "Start Subscription"
@@ -173,10 +161,6 @@ msgctxt "selection:process,kind:"
 msgid "Contract Subscription"
 msgstr "Souscription Contrat"
 
-msgctxt "view:contract.covered_data:"
-msgid "Covered Data"
-msgstr "Données de Couverture"
-
 msgctxt "view:contract.option:"
 msgid "Options"
 msgstr "Garanties"
@@ -184,6 +168,10 @@ msgstr "Garanties"
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
+
+msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr ""
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,end:"
 msgid "Cancel"

@@ -1,18 +1,18 @@
+import datetime
 import unittest
+
+from decimal import Decimal
 
 import trytond.tests.test_tryton
 
 from trytond.modules.cog_utils import test_framework
 
 
-class ModuleTestCase(test_framework.CoopTestCase):
+class ModuleTestCase(unittest.TestCase):
     '''
     Test Billing module.
     '''
-
-    @classmethod
-    def get_module_name(cls):
-        return 'billing_individual'
+    pass
 
 
 def suite():

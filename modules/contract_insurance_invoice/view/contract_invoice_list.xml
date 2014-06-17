@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Contract Invoices">
+    <field name="contract"/>
+    <field name="start"/>
+    <field name="end"/>
+    <field name="invoice"/>
+    <field name="invoice_state"/>
+    <button name="reinvoice" string="Reinvoice"/>
+    <button name="cancel" string="Cancel"/>
+</tree>

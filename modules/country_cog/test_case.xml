@@ -15,5 +15,12 @@
       <field name="load_all_zipcodes">True</field>
       <field name="main_zip">75</field>
     </record>
+    <!-- ###################### -->
+    <!-- # Test Case Instance # -->
+    <!-- ###################### -->
+    <record model="ir.test_case.instance" id="zip_code_test_case">
+        <field name="name">Zip Code Test Case</field>
+        <field name="method_name">zip_code_test_case</field>
+    </record>
   </data>
 </tryton>

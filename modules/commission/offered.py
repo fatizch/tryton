@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.offered_insurance.business_rule import business_rule
@@ -32,6 +32,17 @@ class Product:
             })
 
     @classmethod
+    def __setup__(cls):
+        super(Product, cls).__setup__()
+        cls.account_for_billing.domain = [
+            cls.account_for_billing.domain[1],
+            If(Eval('kind', '') == 'commission',
+                ('kind', '=', 'expense'),
+                ('kind', '=', 'revenue')
+                )]
+        cls.account_for_billing.depends.append('kind')
+
+    @classmethod
     def get_possible_product_kind(cls):
         res = super(Product, cls).get_possible_product_kind()
         res.append(('commission', 'Commission'))
@@ -52,6 +63,17 @@ class OptionDescription:
     coverages = fields.Many2Many(
         'commission.option.description-option.description', 'component',
         'coverage', 'Coverages', domain=[('kind', '=', 'insurance')])
+
+    @classmethod
+    def __setup__(cls):
+        super(OptionDescription, cls).__setup__()
+        cls.account_for_billing.domain = [
+            cls.account_for_billing.domain[1],
+            If(Eval('kind', '') == 'commission',
+                ('kind', '=', 'expense'),
+                ('kind', '=', 'revenue')
+                )]
+        cls.account_for_billing.depends.append('kind')
 
     @classmethod
     def get_possible_option_description_kind(cls):

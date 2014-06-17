@@ -1,8 +1,9 @@
-import ConfigParser
 import os
 import datetime
 import time
 import copy
+import string
+import random
 
 from trytond.pool import Pool
 from trytond.model import Model
@@ -19,66 +20,13 @@ from trytond.model.modelstorage import EvalEnvironment
 __all__ = []
 
 
-def get_child_models(from_class):
-    if isinstance(from_class, str):
-        try:
-            the_class = Pool().get(from_class)
-        except KeyError:
-            raise
-        cur_models = [model_name
-            for model_name, model in Pool().iterobject()
-            if issubclass(model, the_class)]
-        models = map(lambda x: Pool().get(x), cur_models)
-        return models
-    elif isinstance(from_class, type):
-        res = []
-        names = [elem for elem, _ in Pool().iterobject()]
-        for elem in from_class.__subclasses__():
-            if isinstance(elem, type) and elem.__name__ in names:
-                res.append(elem)
-        return res
-
-
-def get_descendents(from_class, names_only=False):
-    # Used to compute the possible models from a given top level
-    # name
-    if names_only:
-        format_ = lambda x: x
-    else:
-        format_ = lambda x: (x, x)
-    models = get_child_models(from_class)
-    return map(lambda x: format_(x.__name__), models)
+def print_log(some_text, print_time=True):
+    print '\033[95m' + str(datetime.datetime.now()) + ' : ' \
+        + str(some_text) + '\033[0m'
 
 
 def get_module_name(cls):
     return cls.__name__.split('.')[0]
-
-
-def change_relation_links(
-        cls, from_module=None, to_module=None, convert_dict=None):
-    for field_name in cls._fields.iterkeys():
-        field = copy.copy(getattr(cls, field_name))
-        attr_name = ''
-        if hasattr(field, 'model_name'):
-            attr_name = 'model_name'
-        if hasattr(field, 'relation_name'):
-            attr_name = 'relation_name'
-        if hasattr(field, 'schema_model'):
-            attr_name = 'schema_model'
-        if attr_name == '':
-            continue
-        model_name = getattr(field, attr_name)
-        if (convert_dict and not model_name in convert_dict or
-                from_module and to_module and
-                not (model_name.startswith(from_module)
-                    and model_name.split('.', 1)[0] == from_module)):
-            continue
-        if convert_dict:
-            converted_name = convert_dict[model_name]
-        elif from_module and to_module:
-            converted_name = to_module + model_name.split(from_module)[1]
-        setattr(field, attr_name, converted_name)
-        setattr(cls, field_name, field)
 
 
 def to_list(data):
@@ -123,35 +71,16 @@ def get_data_from_dict(data, the_dict):
 
 
 def convert_ref_to_obj(ref):
-    # Currently (version 2.4), tryton does not convert automatically Reference
-    # fields from string concatenation to browse objects.
-    # That might evolve in the future, meanwhile this litlle method should make
-    # it easier to do.
-    #
-    # Warning : it is not failsafe
-    if isinstance(ref, Model):
-        return ref
-    try:
-        model, id = ref.split(',')
-    except Exception:
-        raise
-    model_obj = Pool().get(model)
-    return model_obj(id)
+    model, id = ref.split(',')
+    return Pool().get(model)(int(id))
 
 
 def limit_dates(dates, start=None, end=None):
-    res = list(dates)
-    res.sort()
-    filter_func = lambda x: (x >= start if start else True) and (
-        x < end if end else True)
-    res = filter(filter_func, res)
-    res = set(res)
+    res = set([x for x in dates
+            if (not start or x >= start) and (not end or x < end)])
     if end:
         res.add(end)
-    # The list was sorted before filtering so the resulting set should be
-    # properly sorted as well. 'end' should be the greatest elem of the set
-    # so adding it later should not change the iteration order
-    return res
+    return sorted(res)
 
 
 def to_date(string, format='ymd'):
@@ -179,14 +108,6 @@ def get_module_path(module_name):
         return module_path
 
 
-def get_coop_config(section, option):
-    cog_utils = get_module_path('cog_utils')
-    if cog_utils:
-        config = ConfigParser.ConfigParser()
-        config.read(os.path.join(cog_utils, 'coop.cfg'))
-        return config.get(section, option)
-
-
 def today():
     return Pool().get('ir.date').today()
 
@@ -195,15 +116,9 @@ def is_effective_at_date(instance, at_date=None, start_var_name='start_date',
         end_var_name='end_date'):
     if not at_date:
         at_date = today()
-    start_date = None
-    if hasattr(instance, start_var_name):
-        start_date = getattr(instance, start_var_name)
-    end_date = None
-    if hasattr(instance, end_var_name):
-        end_date = getattr(instance, end_var_name)
-    return (
-        (not start_date or at_date >= start_date)
-        and (not end_date or at_date <= end_date))
+    start_date = getattr(instance, start_var_name, None) or datetime.date.min
+    end_date = getattr(instance, end_var_name, None) or datetime.date.max
+    return start_date <= at_date <= end_date
 
 
 def get_good_versions_at_date(instance, var_name, at_date=None,
@@ -215,13 +130,14 @@ def get_good_versions_at_date(instance, var_name, at_date=None,
 
     if not at_date:
         at_date = today()
-    if hasattr(instance, 'get_good_versions_at_date'):
-        return getattr(instance, 'get_good_versions_at_date')(
-            var_name, at_date)
-    res = []
+    get_good_versions_at_date = getattr(instance,
+        'get_good_versions_at_date', None)
+    if get_good_versions_at_date:
+        return get_good_versions_at_date(var_name, at_date)
+    res = set()
     for elem in reversed(getattr(instance, var_name)):
         if is_effective_at_date(elem, at_date, start_var_name, end_var_name):
-            res.insert(0, elem)
+            res.add(elem)
     return list(set(res))
 
 
@@ -229,6 +145,14 @@ def get_good_version_at_date(instance, var_name, at_date=None):
     res = get_good_versions_at_date(instance, var_name, at_date)
     if len(res) == 1:
         return res[0]
+
+
+def find_date(list_to_filter, date):
+    for elem in list_to_filter:
+        if (elem.start_date or datetime.date.min) < date < (elem.end_date or
+                datetime.date.max):
+            return elem
+    return None
 
 
 def get_those_objects(model_name, domain, limit=None):
@@ -267,18 +191,6 @@ def get_relation_model_name(from_class_or_instance, field_name):
     return res
 
 
-def get_relation_model(from_class_or_instance, field_name):
-    model_name = get_relation_model_name(from_class_or_instance, field_name)
-    if model_name:
-        return Pool().get(model_name)
-
-
-def instanciate_relation(from_class_or_instance, field_name):
-    Model = get_relation_model(from_class_or_instance, field_name)
-    if Model:
-        return Model()
-
-
 def create_inst_with_default_val(from_class, field_name, action=None):
     res = {}
     model_name = get_relation_model_name(from_class, field_name)
@@ -290,7 +202,7 @@ def create_inst_with_default_val(from_class, field_name, action=None):
     field = getattr(from_class, field_name)
     if not isinstance(field, fields.Many2One):
         if action:
-            res = {action: [CurModel.default_get(fields_names)]}
+            res = {action: [[0, CurModel.default_get(fields_names)]]}
         else:
             res = [CurModel.default_get(fields_names)]
     else:
@@ -507,8 +419,16 @@ def update_depends(cls, var_name, new_depends):
 def update_on_change(cls, var_name, new_on_change):
     field_name = copy.copy(getattr(cls, var_name))
     if not field_name.on_change:
-        field_name.on_change = []
-    field_name.on_change.extend(new_on_change)
+        field_name.on_change = set()
+    field_name.on_change |= set(new_on_change)
+    setattr(cls, var_name, field_name)
+
+
+def update_on_change_with(cls, var_name, new_on_change_with):
+    field_name = copy.copy(getattr(cls, var_name))
+    if not field_name.on_change_with:
+        field_name.on_change_with = set()
+    field_name.on_change_with |= set(new_on_change_with)
     setattr(cls, var_name, field_name)
 
 
@@ -558,12 +478,6 @@ def recursive_list_tuple_convert(the_list):
         return the_list
 
 
-def is_none(instance, field_name):
-    return (
-        not hasattr(instance, field_name)
-        or not getattr(instance, field_name))
-
-
 def concat_res(res1, res2):
     res = list(res1)
     res[0] = res[0] and res2[0]
@@ -580,6 +494,9 @@ def extract_object(instance, vars_name=None):
         if not getattr(instance, var_name):
             continue
         if isinstance(instance._fields[var_name],
+                fields.Function):
+            continue
+        if isinstance(instance._fields[var_name],
                 (fields.Many2Many, fields.One2Many)):
             res[var_name] = []
             for sub_inst in getattr(instance, var_name):
@@ -593,3 +510,20 @@ def extract_object(instance, vars_name=None):
         else:
             res[var_name] = getattr(instance, var_name)
     return res
+
+
+def set_state_view_defaults(wizard, state_name):
+    if not hasattr(wizard, state_name) or not getattr(wizard, state_name):
+        return {}
+    state = getattr(wizard, state_name)
+    result = {}
+    for field_name, _ in state._fields.iteritems():
+        try:
+            result[field_name] = getattr(state, field_name)
+        except:
+            pass
+    return result
+
+
+def id_generator(size=20, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))

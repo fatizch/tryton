@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="payment_term">
+<form string="Payment Term">
   <group id="data" col="4" yexpand="1" yfill="1">
     <label name="name"/>
     <field name="name" colspan="3"/>
@@ -9,6 +9,8 @@
     <field name="payment_mode"/>
     <label name="base_frequency"/>
     <field name="base_frequency" colspan="3"/>
+    <label name="split_method"/>
+    <field name="split_method" colspan="3"/>
     <label name="remaining_position"/>
     <field name="remaining_position" colspan="3"/>
     <label name="with_sync_date"/>

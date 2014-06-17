@@ -4,7 +4,7 @@
     <!-- ############################################################ -->
     <!-- Menu Entries -->
     <!-- ############################################################ -->
-    <menuitem name="Task Manager" id="menu_task" sequence="-1"/>
+    <menuitem name="Task Manager" id="menu_task" sequence="-1" icon="task_menu"/>
     <!-- ############################################################ -->
     <!-- User -->
     <!-- ############################################################ -->
@@ -55,7 +55,7 @@
       <field name="view" ref="team_view_form"/>
       <field name="act_window" ref="act_team"/>
     </record>
-    <menuitem parent="menu_task" sequence="100" action="act_team" id="menu_team"/>
+    <menuitem parent="menu_task" sequence="100" action="act_team" id="menu_team" icon="task"/>
     <!-- ############################################################ -->
     <!-- Select User -->
     <!-- ############################################################ -->
@@ -118,7 +118,9 @@
     <record model="ir.action.act_window" id="act_process_log">
       <field name="name">Waiting Tasks</field>
       <field name="res_model">process.log</field>
-      <field name="auto_refresh">100</field>
+      <!-- Temporary disable autoreload to investigate -->
+      <!-- issue https://bugs.b2ck.com/issue1490 -->
+      <!-- <field name="auto_refresh">100</field> -->
       <field name="domain">[('latest', '=', True), ['OR', ('locked', '=', False), ('user', '=', Eval('context', {}).get('_user'))], ('to_state', '!=', None)]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_process_log_view1">

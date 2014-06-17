@@ -4,6 +4,7 @@ from sql.operators import Concat
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
+from trytond.config import CONFIG
 
 import fields
 from export import ExportImportMixin
@@ -13,6 +14,7 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'Sequence',
+    'SequenceStrict',
     'DateClass',
     'View',
     'UIMenu',
@@ -26,7 +28,9 @@ __all__ = [
     'ModelAccess',
     'Property',
     'Lang',
+    'Icon',
     ]
+SEPARATOR = ' / '
 
 
 class Sequence(ExportImportMixin):
@@ -39,6 +43,20 @@ class Sequence(ExportImportMixin):
     @classmethod
     def _export_skips(cls):
         result = super(Sequence, cls)._export_skips()
+        result.add('number_next_internal')
+        return result
+
+
+class SequenceStrict(ExportImportMixin):
+    __name__ = 'ir.sequence.strict'
+
+    @classmethod
+    def _export_keys(cls):
+        return set(['code', 'name'])
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(SequenceStrict, cls)._export_skips()
         result.add('number_next_internal')
         return result
 
@@ -72,12 +90,43 @@ class View(ExportImportMixin):
 class UIMenu(ExportImportMixin):
     __name__ = 'ir.ui.menu'
 
+    @classmethod
+    def __register__(cls, module_name):
+        super(UIMenu, cls).__register__(module_name)
+
+        if CONFIG['db_type'] != 'postgresql':
+            return
+
+        with Transaction().new_cursor() as transaction:
+            cursor = transaction.cursor
+            cursor.execute('CREATE EXTENSION IF NOT EXISTS unaccent', ())
+            cursor.commit()
+
+    @classmethod
+    def __setup__(cls):
+        super(UIMenu, cls).__setup__()
+        cls.complete_name.getter = 'get_full_name'
+        cls.name = fields.UnaccentChar('Menu', required=True, translate=True)
+
     def get_rec_name(self, name):
         return self.name
 
     @classmethod
     def _export_keys(cls):
         return set(['xml_id'])
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        #Bypass Tryton default search on parent
+        return [('name',) + tuple(clause[1:])]
+
+    def get_full_name(self, name):
+        parent = self.parent
+        name = self.name
+        while parent:
+            name = parent.name + SEPARATOR + name
+            parent = parent.parent
+        return name
 
 
 class Rule(ExportImportMixin):
@@ -101,6 +150,12 @@ class RuleGroup(ExportImportMixin):
         result = super(RuleGroup, cls)._export_skips()
         result.add('groups')
         result.add('users')
+        return result
+
+    @classmethod
+    def _export_light(cls):
+        result = super(RuleGroup, cls)._export_light()
+        result.add('model')
         return result
 
 
@@ -192,6 +247,18 @@ class Action(ExportImportMixin):
     def _export_keys(cls):
         return set(['xml_id'])
 
+    @classmethod
+    def _export_skips(cls):
+        res = super(Action, cls)._export_skips()
+        res.add('keywords')
+        return res
+
+    @classmethod
+    def _export_light(cls):
+        result = super(Action, cls)._export_light()
+        result.add('icon')
+        return result
+
 
 class ActionKeyword(ExportImportMixin):
     __name__ = 'ir.action.keyword'
@@ -228,7 +295,14 @@ class IrModelFieldAccess(ExportImportMixin):
 
     @classmethod
     def _export_keys(cls):
-        return set(['field.name', 'field.model.model'])
+        return set(['field.name', 'field.model.model', 'group.name',
+                'perm_read', 'perm_write', 'perm_create', 'perm_delete'])
+
+    @classmethod
+    def _export_light(cls):
+        result = super(IrModelFieldAccess, cls)._export_light()
+        result.add('field')
+        return result
 
 
 class ModelAccess(ExportImportMixin):
@@ -238,6 +312,12 @@ class ModelAccess(ExportImportMixin):
     def _export_keys(cls):
         return set(['model.model', 'group.name', 'perm_read', 'perm_write',
                 'perm_create', 'perm_delete'])
+
+    @classmethod
+    def _export_light(cls):
+        result = super(ModelAccess, cls)._export_light()
+        result.add('model')
+        return result
 
 
 class Property(ExportImportMixin):
@@ -254,6 +334,12 @@ class Property(ExportImportMixin):
     def _export_light(cls):
         return set(['field'])
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Property, cls)._export_skips()
+        result.add('res')
+        return result
+
 
 class Lang(ExportImportMixin):
     __name__ = 'ir.lang'
@@ -261,3 +347,7 @@ class Lang(ExportImportMixin):
     @classmethod
     def _export_keys(cls):
         return set(['code'])
+
+
+class Icon(ExportImportMixin):
+    __name__ = 'ir.ui.icon'

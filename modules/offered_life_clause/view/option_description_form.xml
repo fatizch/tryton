@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='admin']" position="before">
+        <page id="beneficiaries_clauses" string="Beneficiaries Clauses">
+            <field name="beneficiaries_clauses" colspan="4"/>
+            <label name="default_beneficiary_clause"/>
+            <field name="default_beneficiary_clause"/>
+        </page>
+    </xpath>
+</data>

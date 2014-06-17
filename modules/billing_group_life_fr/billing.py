@@ -37,7 +37,6 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
 
     manual_billing = fields.Function(
         fields.Boolean('Manual Billing',
-            on_change=['manual_billing', 'childs'],
             states={'invisible': True}),
         'get_manual_billing')
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
@@ -51,15 +50,14 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
     salary_range = fields.Many2One('salary_range', 'Salary Range',
         ondelete='RESTRICT', states={'invisible': ~Eval('salary_range')})
     fare_class = fields.Many2One('fare_class', 'Fare Class',
-        states={'invisible': ~Eval('fare_class_group')})
+        ondelete='RESTRICT', states={'invisible': ~Eval('fare_class_group')})
     index = fields.Many2One('table', 'Index',
         states={'invisible': ~Eval('index')}, ondelete='RESTRICT')
     index_value = fields.Function(
         fields.Numeric('Index Value'),
         'get_index_value')
     indexed_value = fields.Function(
-        fields.Numeric('Indexed Value',
-            on_change_with=['rate', 'index', 'start_date_', 'index_value']),
+        fields.Numeric('Indexed Value'),
         'on_change_with_indexed_value')
     parent = fields.Many2One('contract.premium_rate.line', 'Parent',
         ondelete='CASCADE')
@@ -74,7 +72,7 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
         states={'readonly': Or(~Eval('manual_billing'), ~~Eval('childs'))})
 
     def add_child(self):
-        if utils.is_none(self, 'childs'):
+        if not getattr(self, 'childs', None):
             self.childs = []
         child_line = self.__class__()
         self.childs.append(child_line)
@@ -131,6 +129,7 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
             return self.parent.manual_billing
         return False
 
+    @fields.depends('manual_billing', 'childs')
     def on_change_manual_billing(self, value=None):
         if value is None:
             value = self.manual_billing
@@ -154,6 +153,7 @@ class PremiumRateLine(model.CoopSQL, model.CoopView):
         elif self.parent:
             return self.parent.option_.id
 
+    @fields.depends('rate', 'index', 'start_date_', 'index_value')
     def on_change_with_indexed_value(self, name=None):
         return self.index_value * self.rate if self.index_value else None
 
@@ -196,7 +196,7 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
     currency = fields.Function(
         fields.Many2One('currency.currency', 'Currency'),
         'get_currency_id')
-    move = fields.Many2One('account.move', 'Move',
+    move = fields.Many2One('account.move', 'Move', ondelete='RESTRICT',
         states={'invisible': ~Eval('move')})
     amount_paid = fields.Function(fields.Numeric('Amount Paid'),
         'get_amount_paid')
@@ -274,35 +274,26 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_contract_id')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    base = fields.Numeric('Base',
-        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
-            'client_amount'],
-        states={'readonly': ~~Eval('childs')})
+    base = fields.Numeric('Base', states={'readonly': ~~Eval('childs')})
     rate_line = fields.Many2One('contract.premium_rate.line',
-        'Premium Rate Line')
-    amount = fields.Numeric('Amount',
-        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line'],
-        states={'readonly': ~~Eval('childs')})
-    client_amount = fields.Numeric('Client Amount',
-        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
-            'client_amount'],
-        states={'readonly': ~~Eval('childs')})
+        'Premium Rate Line', ondelete='CASCADE')
+    amount = fields.Numeric('Amount', states={'readonly': ~~Eval('childs')})
+    client_amount = fields.Numeric('Client Amount', states={
+            'readonly': ~~Eval('childs')})
     parent = fields.Many2One('billing.premium_rate.form.line', 'Parent',
         ondelete='CASCADE')
     childs = fields.One2Many('billing.premium_rate.form.line', 'parent',
         'Childs')
-    rate = fields.Numeric('Rate', digits=(16, 4),
-        on_change=['base', 'rate', 'indexed_rate', 'amount', 'rate_line',
-            'client_amount'], states={'readonly': ~~Eval('childs')})
+    rate = fields.Numeric('Rate', digits=(16, 4), states={
+            'readonly': ~~Eval('childs')})
     indexed_rate = fields.Function(
         fields.Numeric('Indexed Rate'),
         'get_indexed_rate')
     sum_amount = fields.Function(
-        fields.Numeric('Sum Amount', on_change_with=['childs', 'amount']),
+        fields.Numeric('Sum Amount'),
         'on_change_with_sum_amount')
     client_sum_amount = fields.Function(
-        fields.Numeric('Client Sum Amount',
-            on_change_with=['childs', 'client_amount']),
+        fields.Numeric('Client Sum Amount'),
         'on_change_with_client_sum_amount')
 
     def get_rec_name(self, name):
@@ -330,15 +321,22 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
             res['client_sum_amount'] = amount
         return res
 
+    @fields.depends('base', 'rate', 'indexed_rate', 'amount', 'rate_line',
+        'client_amount')
     def on_change_base(self):
         return self._on_change('base')
 
+    @fields.depends('base', 'rate', 'indexed_rate', 'amount', 'rate_line',
+        'client_amount')
     def on_change_rate(self):
         return self._on_change('rate')
 
+    @fields.depends('base', 'rate', 'indexed_rate', 'amount', 'rate_line')
     def on_change_amount(self):
         return self._on_change('amount')
 
+    @fields.depends('base', 'rate', 'indexed_rate', 'amount', 'rate_line',
+        'client_amount')
     def on_change_client_amount(self):
         return self._on_change('client_amount')
 
@@ -367,16 +365,17 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
             for sub_line in self.childs:
                 sub_line.calculate_bill_line(work_set)
             return
-        bill_line = work_set['lines'][(self.rate_line.covered_element,
+        bill_line = work_set.lines[(self.rate_line.covered_element,
                 self.rate_line.option_.offered.account_for_billing)]
         bill_line.second_origin = self.rate_line.option_.offered
-        bill_line.credit += work_set['currency'].round(self.amount)
-        work_set['_remaining'] += work_set['currency'].round(
-            self.amount) - work_set['currency'].round(self.client_amount)
+        bill_line.credit += work_set.currency.round(self.amount)
+        work_set._remaining += work_set.currency.round(
+            self.amount) - work_set.currency.round(self.client_amount)
         bill_line.account = self.rate_line.option_.offered.account_for_billing
         bill_line.party = self.contract.subscriber
-        work_set['total_amount'] += work_set['currency'].round(self.amount)
+        work_set.total_amount += work_set.currency.round(self.amount)
 
+    @fields.depends('childs', 'amount')
     def on_change_with_sum_amount(self, name=None):
         if (hasattr(self, 'childs') and self.childs):
             return sum(map(lambda x: x.sum_amount or 0, self.childs)) or None
@@ -384,6 +383,7 @@ class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
             return None
         return self.amount
 
+    @fields.depends('childs', 'client_amount')
     def on_change_with_client_sum_amount(self, name=None):
         if (hasattr(self, 'childs') and self.childs):
             return (sum(map(lambda x: x.client_sum_amount or 0, self.childs))
@@ -401,14 +401,10 @@ class BillingPremiumRateFormCreateParam(model.CoopView):
     until_date = fields.Date('Until Date', required=True)
     products = fields.Many2Many(
         'billing.premium_rate.form.create.param-product', 'parameters_view',
-        'product', 'Products', on_change=['products', 'contracts',
-        'group_clients', 'clients', 'until_date'],
-        domain=[('is_group', '=', True)])
+        'product', 'Products', domain=[('is_group', '=', True)])
     contracts = fields.Many2Many(
         'billing.premium_rate.form.create.param-contract',
-        'parameters_view', 'contract', 'Contracts',
-        on_change=['products', 'contracts', 'group_clients', 'clients',
-            'until_date'], domain=[
+        'parameters_view', 'contract', 'Contracts', domain=[
             ('is_group', '=', True),
             ('status', '=', 'active'),
             ['OR', [('next_assessment_date', '=', None)],
@@ -416,13 +412,9 @@ class BillingPremiumRateFormCreateParam(model.CoopView):
             ], depends=['until_date'])
     group_clients = fields.Many2Many(
         'billing.premium_rate.form.create.param-group_client',
-        'parameters_view', 'group', 'Group Clients',
-        on_change=['products', 'contracts', 'group_clients', 'clients',
-            'until_date'])
+        'parameters_view', 'group', 'Group Clients')
     clients = fields.Many2Many('billing.premium_rate.form.create.param-client',
-        'parameters_view', 'client', 'Clients',
-        on_change=['products', 'contracts', 'group_clients', 'clients',
-            'until_date'])
+        'parameters_view', 'client', 'Clients')
 
     def _on_change(self, name):
         Contract = Pool().get('contract')
@@ -449,15 +441,23 @@ class BillingPremiumRateFormCreateParam(model.CoopView):
             res['contracts'] = [x.id for x in contracts]
         return res
 
+    @fields.depends('products', 'contracts', 'group_clients', 'clients',
+        'until_date')
     def on_change_products(self):
         return self._on_change('products')
 
+    @fields.depends('products', 'contracts', 'group_clients', 'clients',
+        'until_date')
     def on_change_contracts(self):
         return self._on_change('contracts')
 
+    @fields.depends('products', 'contracts', 'group_clients', 'clients',
+        'until_date')
     def on_change_group_clients(self):
         return self._on_change('group_clients')
 
+    @fields.depends('products', 'contracts', 'group_clients', 'clients',
+        'until_date')
     def on_change_clients(self):
         return self._on_change('clients')
 
@@ -664,9 +664,10 @@ class FareClass(model.CoopSQL, model.CoopView):
 
     __name__ = 'fare_class'
 
-    code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
+    code = fields.Char('Code', required=True)
     name = fields.Char('Name')
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code
@@ -678,11 +679,12 @@ class FareClassGroup(model.CoopSQL, model.CoopView):
 
     __name__ = 'fare_class.group'
 
-    code = fields.Char('Code', on_change_with=['code', 'name'], required=True)
+    code = fields.Char('Code', required=True)
     name = fields.Char('Name')
     fare_classes = fields.Many2Many('fare_class.group-fare_class',
         'group', 'fare_class', 'Fare Classes')
 
+    @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
             return self.code

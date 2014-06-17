@@ -36,6 +36,12 @@ class Status(ModelSQL, ModelView):
     relations = fields.One2Many('process-process.step', 'status', 'Relations',
         states={'readonly': True})
 
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
 
 class ProcessStepRelation(ModelSQL, ModelView):
     'Process to Step relation'
@@ -74,14 +80,13 @@ class Process(ModelSQL, ModelView):
 
     __name__ = 'process'
 
-    technical_name = fields.Char('Technical Name', required=True,
-        on_change_with=['fancy_name', 'technical_name'])
+    technical_name = fields.Char('Technical Name', required=True)
     fancy_name = fields.Char('Name', translate=True)
     on_model = fields.Many2One('ir.model', 'On Model',
         # This model must be workflow compatible
         domain=[('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework')],
-        required=True)
+        required=True, ondelete='RESTRICT')
     all_steps = fields.One2Many('process-process.step', 'process', 'All Steps',
         order=[('order', 'ASC')], states={
             'invisible': Bool(Eval('display_steps_without_status'))})
@@ -101,8 +106,7 @@ class Process(ModelSQL, ModelView):
         'Process Overview Positioning')
     menu_items = fields.Many2Many('process-menu', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
-    menu_name = fields.Char('Menu name', on_change_with=[
-            'fancy_name', 'menu_name'])
+    menu_name = fields.Char('Menu name')
 
     @classmethod
     def __setup__(cls):
@@ -142,6 +146,7 @@ class Process(ModelSQL, ModelView):
         Menu = Pool().get('ir.ui.menu')
         return Menu.list_icons()
 
+    @fields.depends('fancy_name', 'menu_name')
     def on_change_with_menu_name(self):
         if not (hasattr(self, 'fancy_name') and self.fancy_name):
             if (hasattr(self, 'menu_name') and self.menu_name):
@@ -239,7 +244,7 @@ class Process(ModelSQL, ModelView):
         return good_action
 
     def get_xml_header(self, colspan="4"):
-        xml = '<group name="process_header" colspan="%s">' % colspan
+        xml = '<group id="process_header" colspan="%s">' % colspan
         if hasattr(self, 'xml_header') and self.xml_header:
             xml += self.xml_header
         xml += '</group>'
@@ -255,7 +260,7 @@ class Process(ModelSQL, ModelView):
             self, step_relation, group_name='group', col=4, yexp=True):
         step = step_relation.step
         step_pyson, auth_pyson = step.get_pyson_for_display(step_relation)
-        xml = '<group name="%s_%s" ' % (group_name, step.technical_name)
+        xml = '<group id="%s_%s" ' % (group_name, step.technical_name)
         xml += 'xfill="1" xexpand="1"'
         if yexp:
             xml += ' yfill="1" yexpand="1" '
@@ -276,7 +281,7 @@ class Process(ModelSQL, ModelView):
 
         xml = ''
         if auth_pyson:
-            xml += '<group name="group_%s_noauth" ' % step.technical_name
+            xml += '<group id="group_%s_noauth" ' % step.technical_name
             xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
             xml += 'states="{'
             xml += "'invisible': Not(And(%s, Not(%s)))" % (
@@ -323,7 +328,7 @@ class Process(ModelSQL, ModelView):
         return xml
 
     def get_finished_process_xml(self):
-        xml = '<group name="group_tech_complete" '
+        xml = '<group id="group_tech_complete" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
         xml += 'states="{'
         xml += "'invisible': ~~Eval('current_state')"
@@ -350,7 +355,7 @@ class Process(ModelSQL, ModelView):
         return xml
 
     def get_xml_footer(self, colspan=4):
-        xml = '<group name="process_footer" colspan="%s">' % colspan
+        xml = '<group id="process_footer" colspan="%s">' % colspan
         if hasattr(self, 'xml_footer') and self.xml_footer:
             xml += self.xml_footer
         xml += '</group>'
@@ -361,7 +366,7 @@ class Process(ModelSQL, ModelView):
         xml = '<?xml version="1.0"?>'
         xml += '<form string="%s" col="4">' % self.fancy_name
         xml += self.get_xml_header()
-        xml += '<group name="process_content" '
+        xml += '<group id="process_content" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
         xml += self.get_xml_for_steps()
         xml += '<newline/>'
@@ -370,7 +375,7 @@ class Process(ModelSQL, ModelView):
         if self.step_button_group_position:
             if self.step_button_group_position == 'bottom':
                 xml += '<newline/>'
-            xml += '<group name="process_buttons" colspan="1" col="1" '
+            xml += '<group id="process_buttons" colspan="1" col="1" '
             if self.step_button_group_position == 'right':
                 xml += 'xexpand="0" xfill="0" yexpand="1" yfill="1">'
             elif self.step_button_group_position == 'bottom':
@@ -513,6 +518,7 @@ class Process(ModelSQL, ModelView):
             if menu.name == '%s_%s' % (self.technical_name, lang):
                 return menu.action
 
+    @fields.depends('fancy_name', 'technical_name')
     def on_change_with_technical_name(self):
         if self.technical_name:
             return self.technical_name
@@ -547,7 +553,7 @@ class Code(ModelSQL, ModelView):
             ('transition', 'Transition')],
         'Kind', states={'invisible': True})
     source_code = fields.Function(
-        fields.Text('Source Code', on_change_with=['method_name', 'on_model']),
+        fields.Text('Source Code'),
         'on_change_with_source_code')
     on_model = fields.Function(
         fields.Many2One('ir.model', 'On Model'),
@@ -580,7 +586,12 @@ class Code(ModelSQL, ModelView):
         if not target.__name__ == self.on_model.model:
             raise Exception('Bad models ! Expected %s got %s' % (
                     self.on_model.model, target.__name__))
-        result = getattr(target, self.method_name)()
+        # Test if classmethod or not
+        method = getattr(target.__class__, self.method_name)
+        if not hasattr(method, 'im_self') or method.im_self:
+            result = method([target])
+        else:
+            result = method(target)
         if (not result or
                 not isinstance(result, (list, tuple)) and result is True):
             return
@@ -588,6 +599,7 @@ class Code(ModelSQL, ModelView):
         if not res or errs:
             target.raise_user_error(errs)
 
+    @fields.depends('method_name', 'on_model')
     def on_change_with_source_code(self, name=None):
         if not (hasattr(self, 'method_name') and self.method_name):
             return ''
@@ -640,19 +652,23 @@ class ProcessTransition(ModelSQL, ModelView):
     priority = fields.Integer('Priority')
 
     def execute(self, target):
+        result = None
         if (self.kind == 'standard' and self.is_forward() or
                 self.kind == 'complete') and self.method_kind == 'add':
-            self.from_step.execute_after(target)
+            result = self.from_step.execute_after(target)
         if self.methods:
             for method in self.methods:
                 method.execute(target)
         if self.kind == 'standard' and self.is_forward and \
                 self.method_kind == 'add':
-            self.to_step.execute_before(target)
+            result = (self.to_step.execute_before(target)
+                if not result else result)
         if not self.kind == 'complete':
             target.set_state(self.to_step)
         else:
             target.set_state(None)
+            result = 'close'
+        return result
 
     @classmethod
     def default_method_kind(cls):
@@ -723,8 +739,7 @@ class ProcessStep(ModelSQL, ModelView):
     __name__ = 'process.step'
     _rec_name = 'fancy_name'
 
-    technical_name = fields.Char('Technical Name', on_change_with=[
-            'technical_name', 'fancy_name'])
+    technical_name = fields.Char('Technical Name')
     fancy_name = fields.Char('Name', required=True, translate=True)
     step_xml = fields.Text('XML')
     authorizations = fields.Many2Many('process.step-group', 'step_desc',
@@ -738,6 +753,10 @@ class ProcessStep(ModelSQL, ModelView):
         order=[('sequence', 'ASC')])
     colspan = fields.Integer('View columns', required=True)
     processes = fields.One2Many('process-process.step', 'step', 'Transitions')
+    entering_wizard = fields.Many2One('ir.action', 'Entering Wizard', domain=[
+            ('type', '=', 'ir.action.wizard')], ondelete='RESTRICT')
+    exiting_wizard = fields.Many2One('ir.action', 'Exiting Wizard', domain=[
+            ('type', '=', 'ir.action.wizard')], ondelete='RESTRICT')
 
     @classmethod
     def __setup__(cls):
@@ -763,12 +782,15 @@ class ProcessStep(ModelSQL, ModelView):
     def execute_before(self, target):
         for code in self.code_before:
             code.execute(target)
+        if self.entering_wizard:
+            return self.entering_wizard.id
 
     def execute_after(self, target):
-        if 'after_executed' in Transaction().context:
-            return
-        for code in self.code_after:
-            code.execute(target)
+        if not 'after_executed' in Transaction().context:
+            for code in self.code_after:
+                code.execute(target)
+        if self.exiting_wizard:
+            return self.exiting_wizard.id
 
     def build_step_main_view(self, process):
         xml = ''.join(self.step_xml.split('\n'))
@@ -790,6 +812,7 @@ class ProcessStep(ModelSQL, ModelView):
         xml = self.build_step_main_view(process)
         return xml
 
+    @fields.depends('technical_name', 'fancy_name')
     def on_change_with_technical_name(self, name=None):
         if self.technical_name:
             return self.technical_name
@@ -905,4 +928,4 @@ class GenerateGraphWizard(Wizard):
         return 'end'
 
     def do_print_(self, action):
-        return action, {'id': Transaction().context.get('active_id') }
+        return action, {'id': Transaction().context.get('active_id')}

@@ -3,10 +3,6 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:bank.account.number:"
-msgid "Invalid %s number : %s"
-msgstr ""
-
-msgctxt "error:bank.account.number:"
 msgid "The number must be unique!"
 msgstr "Le numéro de compte doit être unique"
 
@@ -14,9 +10,13 @@ msgctxt "error:bank:"
 msgid "Invalid BIC : %s"
 msgstr ""
 
+msgctxt "field:bank,main_address:"
+msgid "Main Address"
+msgstr "Adresse Principale"
+
 msgctxt "field:bank,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:bank.account,end_date:"
 msgid "End Date"
@@ -32,11 +32,11 @@ msgstr "Date de Début"
 
 msgctxt "field:bank.account,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:bank.account.number,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:ir.test_case,currency:"
 msgid "Main Currency"

@@ -1,12 +1,13 @@
-import copy
+import logging
 import time
 import datetime
 import json
 
+from sql import Union, Column, Literal, Cast
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
-from trytond.wizard import Wizard
+from trytond.wizard import Wizard, StateAction
 from trytond.rpc import RPC
 
 import utils
@@ -22,6 +23,7 @@ __all__ = [
     'VersionObject',
     'ObjectHistory',
     'expand_tree',
+    'MergedMixin',
     ]
 
 
@@ -58,6 +60,16 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
         cls.__rpc__.update({'extract_object': RPC(instantiate=0)})
 
     @classmethod
+    def __post_setup__(cls):
+        super(CoopSQL, cls).__post_setup__()
+        for field_name, field in cls._fields.iteritems():
+            if not isinstance(field, fields.Many2One):
+                continue
+            if getattr(field, '_on_delete_not_set', None):
+                logging.getLogger('modules').warning('Ondelete not set for '
+                    'field %s on model %s' % (field_name, cls.__name__))
+
+    @classmethod
     def delete(cls, instances):
         # Do not remove, needed to avoid infinite recursion in case a model
         # has a O2Ref which can lead to itself.
@@ -82,20 +94,18 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
                 [(field_name, 'in', instance_list)]))
 
     @classmethod
-    def search_rec_name(cls, name, clause):
-        if (hasattr(cls, 'code') and cls.search([
-                        ('code',) + tuple(clause[1:])], limit=1)):
-            return [('code',) + tuple(clause[1:])]
-        return [(cls._rec_name,) + tuple(clause[1:])]
-
-    @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query=False):
         #Set your class here to see the domain on the search
-        # if cls.__name__ == 'ins_contract.loan_share':
+        # if cls.__name__ == 'rule_engine':
         #     print domain
-        return super(CoopSQL, cls).search(domain=domain, offset=offset,
-            limit=limit, order=order, count=count, query=query)
+        try:
+            return super(CoopSQL, cls).search(domain=domain, offset=offset,
+                limit=limit, order=order, count=count, query=query)
+        except:
+            logging.getLogger('root').debug('Bad domain on model %s : %r' % (
+                    cls.__name__, domain))
+            raise
 
     def _get_creation_date(self, name):
         if not (hasattr(self, 'create_date') and self.create_date):
@@ -227,9 +237,7 @@ class VersionedObject(CoopView):
     @classmethod
     def __setup__(cls):
         super(VersionedObject, cls).__setup__()
-        versions = copy.copy(getattr(cls, 'versions'))
-        versions.model_name = cls.version_model()
-        setattr(cls, 'versions', versions)
+        cls.versions.model_name = cls.version_model()
 
     def get_previous_version(self, at_date):
         prev_version = None
@@ -257,6 +265,11 @@ class VersionedObject(CoopView):
             return vers.rec_name
         return ''
 
+    @classmethod
+    def default_versions(cls):
+        return [{'start_date': Transaction().context.get('start_date',
+                    Pool().get('ir.date').today())}]
+
 
 class VersionObject(CoopView):
     'Version Object'
@@ -274,9 +287,7 @@ class VersionObject(CoopView):
     @classmethod
     def __setup__(cls):
         super(VersionObject, cls).__setup__()
-        main_elem = copy.copy(getattr(cls, 'main_elem'))
-        main_elem.model_name = cls.main_model()
-        setattr(cls, 'main_elem', main_elem)
+        cls.main_elem.model_name = cls.main_model()
 
     @staticmethod
     def default_start_date():
@@ -294,7 +305,6 @@ class ObjectHistory(CoopSQL, CoopView):
 
     @classmethod
     def __setup__(cls):
-        cls.from_object = copy.copy(cls.from_object)
         cls.from_object.model_name = cls.get_object_model()
         object_name = cls.get_object_name()
         if object_name:
@@ -361,3 +371,77 @@ class ObjectHistory(CoopSQL, CoopView):
                             values['date'], '%Y-%m-%d %H:%M:%S.%f')[:6])
                 values['date'] = values['date'].replace(microsecond=0)
         return res
+
+
+class MergedMixin:
+
+    @staticmethod
+    def merged_models():
+        return []
+
+    @classmethod
+    def merged_shard(cls, column, model):
+        models = cls.merged_models()
+        length = len(models)
+        i = models.index(model)
+        return ((column * length) + i)
+
+    @classmethod
+    def merged_unshard(cls, record_id):
+        pool = Pool()
+        models = cls.merged_models()
+        length = len(models)
+        record_id, i = divmod(record_id, length)
+        Model = pool.get(models[i])
+        return Model(record_id)
+
+    @classmethod
+    def merged_field(cls, name, Model):
+        return Model._fields.get(name)
+
+    @classmethod
+    def merged_columns(cls, model):
+        pool = Pool()
+        Model = pool.get(model)
+        table = Model.__table__()
+        models = cls.merged_models()
+        columns = [
+            cls.merged_shard(table.id, model).as_('id'),
+            ]
+        for name in sorted(cls._fields.keys()):
+            field = cls._fields[name]
+            if name == 'id' or hasattr(field, 'set'):
+                continue
+            column = Literal(None)
+            merged_field = cls.merged_field(name, Model)
+            if merged_field:
+                column = Column(table, merged_field.name)
+                if (isinstance(field, fields.Many2One)
+                        and field.model_name == cls.__name__):
+                    target_model = merged_field.model_name
+                    if target_model in models:
+                        column = cls.merged_shard(column, target_model)
+                    else:
+                        column = Literal(None)
+            columns.append(Cast(column, field.sql_type().base).as_(name))
+        return table, columns
+
+    @classmethod
+    def build_sub_query(cls, model, table, columns):
+        return table.select(*columns)
+
+    @classmethod
+    def table_query(cls):
+        queries = []
+        for model in cls.merged_models():
+            table, columns = cls.merged_columns(model)
+            queries.append(cls.build_sub_query(model, table, columns))
+        return Union(*queries)
+
+
+class VoidStateAction(StateAction):
+    def __init__(self):
+        StateAction.__init__(self, None)
+
+    def get_action(self):
+        return None

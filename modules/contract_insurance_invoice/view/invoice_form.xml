@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/label[@name='journal']" position="replace"/>
+    <xpath expr="/form/field[@name='journal']" position="replace"/>
+    <xpath expr="/form/label[@name='invoice_address']" position="replace"/>
+    <xpath expr="/form/field[@name='invoice_address']" position="replace"/>
+    <xpath expr="/form/field[@name='number']" position="after">
+        <label name="start"/>
+        <field name="start"/>
+        <label name="end"/>
+        <field name="end"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='invoice']/label[@name='payment_term']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='invoice']/field[@name='payment_term']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='invoice']/label[@name='currency']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='invoice']/field[@name='currency']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='invoice']/group[@id='taxes_amount_state_buttons']/group[@id='amount_state_buttons']/group[@id='amount']/label[@name='untaxed_amount']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='invoice']/group[@id='taxes_amount_state_buttons']/group[@id='amount_state_buttons']/group[@id='amount']/field[@name='untaxed_amount']" position="replace"/>
+    <xpath expr="/form/notebook/page[@id='invoice']/group[@id='taxes_amount_state_buttons']/group[@id='amount_state_buttons']/group[@id='amount']/label[@name='tax_amount']" position="before">
+        <label name="base_amount" xalign="1.0" xexpand="1"/>
+        <group id="base_amount">
+            <field name="base_amount" xalign="1.0" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
+        <label name="fees" xalign="1.0" xexpand="1"/>
+        <group id="fees">
+            <field name="fees" xalign="1.0" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='invoice']/group[@id='taxes_amount_state_buttons']/group[@id='amount_state_buttons']/group[@id='amount']/field[@name='tax_amount']" position="replace">
+        <group id="tax_amount">
+            <field name="tax_amount" xalign="1.0" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='invoice']/group[@id='taxes_amount_state_buttons']/group[@id='amount_state_buttons']/group[@id='amount']/field[@name='total_amount']" position="replace">
+        <group id="total_amount">
+            <field name="total_amount" xalign="1.0" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='info']/field[@name='company']" position="after">
+        <label name="payment_term"/>
+        <field name="payment_term"/>
+        <label name="currency"/>
+        <field name="currency"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='payment']/field[@name='payment_lines']" position="after">
+        <field name="reconciliation_lines" colspan="4"/>
+    </xpath>
+</data>

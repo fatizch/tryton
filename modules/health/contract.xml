@@ -4,7 +4,7 @@
         <record model="ir.action.act_window" id="act_contract_form">
             <field name="name">Health Contracts</field>
             <field name="res_model">contract</field>
-            <field name="domain">[('is_health', '=', True)]</field>
+            <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('is_health', '=', True)]</field>
         </record>
         <menuitem name="Contracts" sequence="20" parent="menu_health" action="act_contract_form" id="menu_contract_form"/>
         <record model="ir.action.act_window.view" id="act_contract_form_view1">

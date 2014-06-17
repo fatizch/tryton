@@ -13,6 +13,16 @@
     </record>
   </data>
   <data>
+    <record model="rule_engine.function" id="objet_pret">
+      <field name="translated_technical_name">pret</field>
+      <field name="description">Prêt</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_get_loan</field>
+      <field name="parent" ref="pret"/>
+      <field name="long_description">Retourne l'instance du prêt. Pour utilisateurs avancés seulement.</field>
+    </record>
     <record model="rule_engine.function" id="type_de_pret">
       <field name="translated_technical_name">type_de_pret</field>
       <field name="description">Type de Prêt</field>
@@ -30,6 +40,16 @@
       <field name="namespace">rule_engine.runtime</field>
       <field name="name">_re_get_loan_number_of_payments</field>
       <field name="parent" ref="pret"/>
+    </record>
+    <record model="rule_engine.function" id="frequence_mensualite">
+      <field name="translated_technical_name">frequence_mensualite</field>
+      <field name="description">Fréquence Mensualité</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_get_loan_payment_frequency</field>
+      <field name="parent" ref="pret"/>
+      <field name="long_description">Retourne la fréquence du remboursement des mensualités du prêt</field>
     </record>
     <record model="rule_engine.function" id="montant_de_la_mensualite">
       <field name="translated_technical_name">montant_de_la_mensualite</field>
@@ -73,7 +93,7 @@
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_get_loan_remaining_capital</field>
+      <field name="name">_re_get_outstanding_loan_balance</field>
       <field name="parent" ref="pret"/>
     </record>
     <record model="rule_engine.function" id="quotite">

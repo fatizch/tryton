@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <!-- ############################################################ -->
+    <!-- Test Case Model -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="test_case_form">
+      <field name="model">ir.test_case</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="cog_utils.test_case_form"/>
+      <field name="name">test_case_form</field>
+    </record>
+    <!-- Data -->
+    <record model="ir.test_case" id="cog_utils.test_case_configuration">
+      <field name="fiscal_year_sync_date">2000-1-1</field>
+      <field name="fiscal_year_periods_frequency">12</field>
+      <field name="fiscal_year_number">30</field>
+    </record>
+    <!-- ###################### -->
+    <!-- # Test Case Instance # -->
+    <!-- ###################### -->
+    <record model="ir.test_case.instance" id="account_kind_test_case">
+        <field name="name">Account Kind Test Case</field>
+        <field name="method_name">account_kind_test_case</field>
+    </record>
+    <record model="ir.test_case.instance" id="account_test_case">
+        <field name="name">Account Test Case</field>
+        <field name="method_name">account_test_case</field>
+    </record>
+    <record model="ir.test_case.instance" id="tax_test_case">
+        <field name="name">Tax Test Case</field>
+        <field name="method_name">tax_test_case</field>
+    </record>
+    <record model="ir.test_case.instance" id="fiscal_year_test_case">
+        <field name="name">Fiscal Year Test Case</field>
+        <field name="method_name">fiscal_year_test_case</field>
+    </record>
+    <record model="ir.test_case.instance" id="configure_accounting_test_case">
+        <field name="name">Configure Accounting Test Case</field>
+        <field name="method_name">configure_accounting_test_case</field>
+    </record>
+    <!-- ########################## -->
+    <!-- # Test Case Dependencies # -->
+    <!-- ########################## -->
+    <record model="ir.test_case.instance-ir.test_case.instance" id="account_kind_main_company_requirement">
+        <field name="child" ref="company_cog.main_company_test_case"/>
+        <field name="parent" ref="account_kind_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="account_account_kind_requirement">
+        <field name="child" ref="account_kind_test_case"/>
+        <field name="parent" ref="account_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="tax_account_kind_requirement">
+        <field name="child" ref="account_kind_test_case"/>
+        <field name="parent" ref="tax_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="configuration_account_requirement">
+        <field name="child" ref="account_test_case"/>
+        <field name="parent" ref="configure_accounting_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="fiscal_year_main_company_requirement">
+        <field name="child" ref="company_cog.main_company_test_case"/>
+        <field name="parent" ref="fiscal_year_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="party_account_configuration_requirement">
+        <field name="child" ref="configure_accounting_test_case"/>
+        <field name="parent" ref="party_cog.party_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="hierarchy_account_configuration_requirement">
+        <field name="child" ref="configure_accounting_test_case"/>
+        <field name="parent" ref="party_cog.hierarchy_test_case"/>
+    </record>
+  </data>
+</tryton>

@@ -107,8 +107,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
                 'invisible': Bool(~Eval('with_revaluation')),
                 'required': Bool(Eval('with_revaluation')),
                 }, domain=[('definition', '=', Eval('revaluation_index'))],
-            depends=['revaluation_index'],
-            on_change_with=['revaluation_index', 'index_initial_date']),
+            depends=['revaluation_index']),
         'on_change_with_index_initial_value')
     validation_delay = fields.Integer('Validation Delay',
         states={'invisible': Bool(~Eval('with_revaluation'))})
@@ -166,6 +165,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         Cell = Pool().get('table.cell')
         return Cell.get_cell(self.revaluation_index, (at_date))
 
+    @fields.depends('revaluation_index', 'index_initial_date')
     def on_change_with_index_initial_value(self, name=None):
         cell = self.get_index_at_date(self.index_initial_date)
         if cell:
@@ -232,9 +232,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
                 and self.with_revaluation):
             res = datetime.date(from_date.year,
                 self.revaluation_date.month, self.revaluation_date.day)
-            res = coop_date.add_duration(res, -1, 'day')
+            res = coop_date.add_duration(res, 'day', -1)
             if res < from_date:
-                    res = coop_date.add_duration(res, 1, 'year')
+                    res = coop_date.add_duration(res, 'year')
         else:
             return to_date
 
@@ -319,11 +319,10 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
         ondelete='CASCADE')
     config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
-    rule = fields.Many2One('rule_engine', 'Amount',
+    rule = fields.Many2One('rule_engine', 'Amount', ondelete='RESTRICT',
         states={'invisible': STATE_SIMPLE})
-    rule_extra_data = fields.Dict('extra_data', 'Rule Extra Data',
-        on_change_with=['rule', 'rule_extra_data'],
-        states={'invisible': STATE_SIMPLE})
+    rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Rule Parameters', states={'invisible': STATE_SIMPLE})
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={'invisible': STATE_ADVANCED})
@@ -335,6 +334,7 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         sort=False, states={'invisible': Bool(~Eval('limited_duration'))})
 
+    @fields.depends('rule', 'rule_extra_data')
     def on_change_with_rule_extra_data(self):
         if not (hasattr(self, 'rule') and self.rule):
             return {}

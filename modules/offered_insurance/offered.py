@@ -2,11 +2,10 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, utils, fields
+from trytond.modules.cog_utils import model, utils, fields, coop_date
 from trytond.modules.cog_utils import coop_string
 
 from trytond.modules.offered import NonExistingRuleKindException
-from trytond.modules.offered import PricingResultLine
 from trytond.modules.offered import EligibilityResultLine
 
 
@@ -18,7 +17,6 @@ __all__ = [
     'ItemDescription',
     'ItemDescSubItemDescRelation',
     'ItemDescriptionExtraDataRelation',
-    'ProductItemDescriptionRelation',
     ]
 
 IS_INSURANCE = Eval('kind') == 'insurance'
@@ -31,7 +29,6 @@ class Offered:
         'Premium Rules')
     eligibility_rules = fields.One2Many('offered.eligibility.rule', 'offered',
         'Eligibility Rules')
-    clause_rules = fields.One2Many('clause.rule', 'offered', 'Clause Rules')
     deductible_rules = fields.One2Many('offered.deductible.rule', 'offered',
         'Deductible Rules')
     document_rules = fields.One2ManyDomain('document.rule', 'offered',
@@ -67,36 +64,44 @@ class Offered:
         except NonExistingRuleKindException:
             return [], ()
 
-    def give_me_all_clauses(self, args):
-        try:
-            return self.get_result('all_clauses', args, kind='clause')
-        except NonExistingRuleKindException:
-            return [], ()
-
 
 class Product:
     __name__ = 'offered.product'
 
     term_renewal_rules = fields.One2Many('offered.term.rule', 'offered',
         'Term - Renewal')
-    item_descriptors = fields.Many2Many('offered.product-item.description',
-        'product', 'item_desc', 'Item Descriptions',
-        domain=[('id', 'in', Eval('possible_item_descs'))],
-        depends=['possible_item_descs'], states={
-            'required': IS_INSURANCE,
-            'invisible': ~IS_INSURANCE,
-            })
-    possible_item_descs = fields.Function(
+    item_descriptors = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
-            'Possible Item Descriptions', on_change_with=['coverages']),
-        'on_change_with_possible_item_descs')
+            'Item Descriptions'),
+        'on_change_with_item_descriptors')
 
     @classmethod
     def __setup__(cls):
         super(Product, cls).__setup__()
+        cls.extra_data_def.domain = [
+            ('kind', 'in', ['contract', 'covered_element', 'option'])]
         cls._error_messages.update({
                 'no_renewal_rule_configured': 'No renewal rule configured',
+                'missing_covered_element_extra_data': 'The following covered '
+                'element extra data should be set on the product: %s',
                 })
+
+    @classmethod
+    def validate(cls, instances):
+        super(Product, cls).validate(instances)
+        cls.validate_covered_element_extra_data(instances)
+
+    @classmethod
+    def validate_covered_element_extra_data(cls, instances):
+        for instance in instances:
+            from_option = set(extra_data for coverage in instance.coverages
+                for extra_data in coverage.extra_data_def
+                if extra_data.kind == 'covered_element')
+            remaining = from_option - set(instance.extra_data_def)
+            if remaining:
+                instance.raise_user_error('missing_covered_element_extra_data',
+                    (', '.join((extra_data.string
+                                for extra_data in remaining))))
 
     @classmethod
     def delete(cls, entities):
@@ -126,49 +131,35 @@ class Product:
         for coverage in self.get_valid_coverages():
             _res, _errs = coverage.get_result('price', args)
             if _res:
-                res.extend(_res)
+                res += _res
             errs += _errs
-        return (res, errs)
+        return res, errs
 
     def give_me_product_price(self, args):
         # There is a pricing manager on the products so we can just forward the
         # request.
         self.init_dict_for_rule_engine(args)
-        result_line = PricingResultLine(on_object=self)
-        result_line.init_from_args(args)
         try:
-            product_line, product_errs = self.get_result('price', args,
+            product_lines, product_errs = self.get_result('price', args,
                 kind='premium')
         except NonExistingRuleKindException:
-            product_line = None
+            product_lines = []
             product_errs = []
-        if product_line and product_line.amount:
-            product_line.on_object = args['contract']
-            result_line.add_detail_from_line(product_line)
-        return [result_line] if result_line.amount else [], product_errs
+        return product_lines, product_errs
 
     def give_me_total_price(self, args):
         # Total price is the sum of coverages price and Product price
-        (p_price, errs_product) = self.give_me_product_price(args)
-        (o_price, errs_coverages) = self.give_me_coverages_price(args)
+        p_price, errs_product = self.give_me_product_price(args)
+        o_price, errs_coverages = self.give_me_coverages_price(args)
 
-        lines = p_price + o_price
-        # lines = []
-        # for line in p_price + o_price:
-            # if line.value == 0:
-                # continue
-            # lines.append(line)
-
-        return (lines, errs_product + errs_coverages)
+        return (p_price + o_price, errs_product + errs_coverages)
 
     def give_me_families(self, args):
         self.update_args(args)
         result = []
         errors = []
         for coverage in self.get_valid_coverages():
-            res, errs = coverage.get_result('family', args)
-            result.append(res)
-            errors += errs
+            result.append(coverage.family)
         return (result, errors)
 
     def give_me_frequency(self, args):
@@ -199,15 +190,16 @@ class Product:
                 return [], ()
         return [], ()
 
-    def on_change_with_possible_item_descs(self, name=None):
-        res = []
+    @fields.depends('coverages')
+    def on_change_with_item_descriptors(self, name=None):
+        res = set()
         for coverage in self.coverages:
-            if not utils.is_none(coverage, 'item_desc'):
-                res.append(coverage.item_desc.id)
-        return res
+            if getattr(coverage, 'item_desc', None):
+                res.add(coverage.item_desc.id)
+        return list(res)
 
     def get_cmpl_data_looking_for_what(self, args):
-        if 'sub_elem' in args and args['level'] == 'covered_data':
+        if 'elem' in args and args['level'] == 'option':
             return ''
         return super(Product, self).get_cmpl_data_looking_for_what(args)
 
@@ -224,6 +216,39 @@ class Product:
         res.extend(['item_descriptors'])
         return res
 
+    def get_contract_dates(self, dates, contract):
+        super(Product, self).get_contract_dates(dates, contract)
+        if contract.next_renewal_date:
+            dates.add(contract.next_renewal_date)
+            if not contract.end_date:
+                return
+            # Calculate every anniversary date until contrat termination
+            cur_date = contract.next_renewal_date
+            while cur_date <= contract.end_date:
+                dates.add(cur_date)
+                cur_date = coop_date.add_year(cur_date, 1)
+        return dates
+
+    def get_option_dates(self, dates, option):
+        super(Product, self).get_option_dates(dates, option)
+        if (hasattr(option, 'extra_premiums') and
+                option.extra_premiums):
+            for elem in option.extra_premiums:
+                dates.add(elem.start_date)
+
+    def get_covered_element_dates(self, dates, covered_element):
+        for data in covered_element.options:
+            self.get_option_dates(dates, data)
+        if hasattr(covered_element, 'sub_covered_elements'):
+            for sub_elem in covered_element.sub_covered_elements:
+                self.get_covered_element_dates(dates, sub_elem)
+
+    def get_dates(self, contract):
+        dates = super(Product, self).get_dates(contract)
+        for covered in contract.covered_elements:
+            self.get_covered_element_dates(dates, covered)
+        return dates
+
 
 class OfferedProduct(Offered):
     'Offered Product'
@@ -238,12 +263,12 @@ class ItemDescription(model.CoopSQL, model.CoopView):
 
     __name__ = 'offered.item.description'
 
-    code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
+    code = fields.Char('Code', required=True)
     name = fields.Char('Name')
     extra_data_def = fields.Many2Many(
         'offered.item.description-extra_data',
         'item_desc', 'extra_data_def', 'Extra Data',
-        domain=[('kind', '=', 'sub_elem')], )
+        domain=[('kind', '=', 'covered_element')], )
     kind = fields.Selection([
             ('', ''),
             ('party', 'Party'),
@@ -254,24 +279,27 @@ class ItemDescription(model.CoopSQL, model.CoopView):
         'offered.item.description-sub_item.description',
         'item_desc', 'sub_item_desc', 'Sub Item Descriptions',
         states={'invisible': Eval('kind') == 'person'})
+    coverages = fields.One2Many('offered.option.description', 'item_desc',
+        'Coverages')
 
+    @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
             return self.code
         elif self.name:
             return coop_string.remove_blank_and_invalid_char(self.name)
 
-    # @classmethod
-    # def _export_force_recreate(cls):
-    #     result = super(ItemDescription, cls)._export_force_recreate()
-    #     result.remove('sub_item_descs')
-    #     return result
-
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(ItemDescription, cls).get_var_names_for_full_extract()
         res.extend(['extra_data_def', 'kind', 'sub_item_descs'])
         return res
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(ItemDescription, cls)._export_skips()
+        result.add('coverages')
+        return result
 
 
 class ItemDescSubItemDescRelation(model.CoopSQL):
@@ -294,13 +322,3 @@ class ItemDescriptionExtraDataRelation(model.CoopSQL):
         ondelete='CASCADE')
     extra_data_def = fields.Many2One('extra_data', 'Extra Data',
         ondelete='RESTRICT', )
-
-
-class ProductItemDescriptionRelation(model.CoopSQL):
-    'Relation between Product and Item Description'
-
-    __name__ = 'offered.product-item.description'
-
-    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
-    item_desc = fields.Many2One('offered.item.description', 'Item Description',
-        ondelete='RESTRICT')

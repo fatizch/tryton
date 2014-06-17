@@ -16,12 +16,13 @@ __all__ = [
 class CollectionCreateParameters:
     __name__ = 'collection.create.parameters'
 
-    contract = fields.Many2One('contract', 'Contract', on_change=[
-            'contract', 'party'], depends=['party'], domain=[
-                If(~Eval('party'),
-                    ('id', '!=', 0),
-                    ('subscriber', '=', Eval('party')))])
+    contract = fields.Many2One('contract', 'Contract', depends=['party'],
+        domain=[
+            If(~Eval('party'),
+                ('id', '!=', 0),
+                ('subscriber', '=', Eval('party')))])
 
+    @fields.depends('contract', 'party')
     def on_change_contract(self):
         if not (hasattr(self, 'contract') and self.contract):
             return {}

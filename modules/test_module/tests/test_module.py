@@ -34,12 +34,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
 def suite():
     import doctest
     suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ModuleTestCase))
-    suite.addTests(doctest.DocFileSuite('test_contract_subscription.rst',
-            setUp=doctest_dropdb, tearDown=doctest_dropdb,
-            encoding='utf-8',
-            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+        # ModuleTestCase))
+    # suite.addTests(doctest.DocFileSuite('test_contract_subscription.rst',
+            # setUp=doctest_dropdb, tearDown=doctest_dropdb,
+            # encoding='utf-8',
+            # optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite
 
 if __name__ == '__main__':

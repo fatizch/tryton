@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
@@ -8,13 +6,20 @@ from trytond.modules.cog_utils import export
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'Move',
     'Account',
+    'AccountTemplate',
     'AccountKind',
+    'AccountTypeTemplate',
     'Journal',
     'FiscalYear',
     'Period',
     'Configuration',
     ]
+
+
+class Move(export.ExportImportMixin):
+    __name__ = 'account.move'
 
 
 class AccountKind(export.ExportImportMixin):
@@ -23,6 +28,10 @@ class AccountKind(export.ExportImportMixin):
     @classmethod
     def _export_keys(cls):
         return set(['name', 'company.party.name'])
+
+
+class AccountTypeTemplate(export.ExportImportMixin):
+    __name__ = 'account.account.type.template'
 
 
 class Account(export.ExportImportMixin):
@@ -37,7 +46,12 @@ class Account(export.ExportImportMixin):
         res = super(Account, cls)._export_skips()
         res.add('left')
         res.add('right')
+        res.add('taxes')
         return res
+
+
+class AccountTemplate(export.ExportImportMixin):
+    __name__ = 'account.account.template'
 
 
 class Journal(export.ExportImportMixin):
@@ -46,16 +60,16 @@ class Journal(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Journal, cls).__setup__()
-        cls.credit_account = copy.copy(cls.credit_account)
         cls.credit_account.domain = export.clean_domain_for_import(
             cls.credit_account.domain, 'company')
-        cls.debit_account = copy.copy(cls.debit_account)
         cls.debit_account.domain = export.clean_domain_for_import(
             cls.debit_account.domain, 'company')
 
     @classmethod
-    def _export_keys(cls):
-        return set(['name'])
+    def _export_skips(cls):
+        result = super(Journal, cls)._export_skips()
+        result.add('view')
+        return result
 
 
 class FiscalYear(export.ExportImportMixin):
@@ -66,7 +80,6 @@ class FiscalYear(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(FiscalYear, cls).__setup__()
-        cls.company = copy.copy(cls.company)
         cls.company.domain = export.clean_domain_for_import(
             cls.company.domain, 'company')
 

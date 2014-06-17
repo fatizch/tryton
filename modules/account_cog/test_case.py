@@ -3,6 +3,7 @@ from decimal import Decimal
 
 from trytond.cache import Cache
 from trytond.pool import PoolMeta, Pool
+from trytond.modules.cog_utils import coop_date, fields
 
 MODULE_NAME = 'account_cog'
 
@@ -15,31 +16,17 @@ __all__ = [
 class TestCaseModel:
     __name__ = 'ir.test_case'
 
+    fiscal_year_sync_date = fields.Date('Fiscal Year Sync Date')
+    fiscal_year_periods_frequency = fields.Selection([
+            ('1', 'Monthly'),
+            ('3', 'Quarterly'),
+            ('6', 'Half yearly'),
+            ('12', 'Yearly'),
+            ], 'Fiscal Year periods frequency')
+    fiscal_year_number = fields.Integer('Number of Fiscal Years to create')
+
     _get_account_kind_cache = Cache('get_account_kind')
     _get_account_cache = Cache('get_account')
-
-    @classmethod
-    def _get_test_case_dependencies(cls):
-        result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['party_test_case']['dependencies'].add(
-            'configure_accounting_test_case')
-        result['account_kind_test_case'] = {
-            'name': 'Account Kind Test Case',
-            'dependencies': set(['main_company_test_case']),
-        }
-        result['account_test_case'] = {
-            'name': 'Account Test Case',
-            'dependencies': set(['account_kind_test_case']),
-        }
-        result['configure_accounting_test_case'] = {
-            'name': 'Accounting Configuration Test Case',
-            'dependencies': set(['account_test_case']),
-        }
-        result['tax_test_case'] = {
-            'name': 'Tax Test Case',
-            'dependencies': set(['account_kind_test_case']),
-        }
-        return result
 
     @classmethod
     def create_account_kind(cls, name):
@@ -152,3 +139,49 @@ class TestCaseModel:
         for tax_data in tax_file:
             taxes.append(cls.create_tax_from_line(tax_data))
         return taxes
+
+    @classmethod
+    def create_fiscal_year(cls, **kwargs):
+        FiscalYear = Pool().get('account.fiscalyear')
+        return FiscalYear(**kwargs)
+
+    @classmethod
+    def new_fiscal_year(cls, start_date):
+        translater = cls.get_translater(MODULE_NAME)
+        return cls.create_fiscal_year(
+            start_date=start_date,
+            end_date=coop_date.add_day(coop_date.add_year(
+                    start_date, 1), -1),
+            name='%s %s' % (translater('Fiscal Year'),
+                start_date.year),
+            code='%s_%s' % (translater('fiscal_year'),
+                start_date.year),
+            company=cls.get_company(),
+            post_move_sequence={
+                'company': cls.get_company(),
+                'name': '%s - %s %s' % (translater(
+                        'Post Move Sequence'), translater('Fiscal Year'),
+                    start_date.year),
+                'code': 'account.move',
+                },
+            )
+
+    @classmethod
+    def fiscal_year_test_case(cls):
+        FiscalYear = Pool().get('account.fiscalyear')
+        fiscal_years = []
+        for x in range(0, cls.get_instance().fiscal_year_number):
+            date = datetime.date(datetime.date.today().year + x,
+                cls.get_instance().fiscal_year_sync_date.month,
+                cls.get_instance().fiscal_year_sync_date.day)
+            if FiscalYear.search([('start_date', '=', date)]):
+                continue
+            fiscal_years.append(cls.new_fiscal_year(date))
+        years = FiscalYear.create([x._save_values for x in fiscal_years])
+        FiscalYear.create_period(years, int(
+                cls.get_instance().fiscal_year_periods_frequency))
+
+    @classmethod
+    def fiscal_year_test_case_test_method(cls):
+        FY = Pool().get('account.fiscal_year')
+        return FY.search_count([]) >= cls.get_instance().fiscal_year_number

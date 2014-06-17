@@ -41,7 +41,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             ('reopened', 'Reopened'),
             ], 'Status', sort=False, states={'readonly': True})
     sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
-        selection_change_with=['status'], states={'readonly': True})
+        states={'readonly': True})
     reopened_reason = fields.Selection([
             ('', ''),
             ('relapse', 'Relapse'),
@@ -58,25 +58,28 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     losses = fields.One2Many('claim.loss', 'claim', 'Losses',
         states={'readonly': Eval('status') == 'closed'})
     documents = fields.One2Many('document.request', 'needed_by', 'Documents')
-    company = fields.Many2One('company.company', 'Company')
+    company = fields.Many2One('company.company', 'Company',
+        ondelete='RESTRICT')
     #The Main contract is only used to ease the declaration process for 80%
     #of the claims where there is only one contract involved. This link should
     #not be used for other reason than initiating sub elements on claim.
     #Otherwise use claim.get_contract()
     main_contract = fields.Many2One('contract', 'Main Contract',
-        domain=[('id', 'in', Eval('possible_contracts')),
+        ondelete='RESTRICT', domain=[('id', 'in', Eval('possible_contracts')),
             ('company', '=', Eval('company'))],
         depends=['possible_contracts', 'company'])
     possible_contracts = fields.Function(
-        fields.One2Many(
-            'contract', None, 'Contracts',
-            on_change_with=['claimant', 'declaration_date']),
+        fields.One2Many('contract', None, 'Contracts'),
         'on_change_with_possible_contracts')
 
     @classmethod
     def __setup__(cls):
         super(Claim, cls).__setup__()
         cls.__rpc__.update({'get_possible_sub_status': RPC(instantiate=0)})
+        cls._error_messages.update({
+                'no_main_contract': 'Impossible to find a main contract, '
+                'please try again once it has been set',
+                })
 
     @classmethod
     def write(cls, claims, values):
@@ -98,6 +101,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def is_open(self):
         return self.status in ['open', 'reopened']
 
+    @fields.depends('status')
     def get_possible_sub_status(self):
         if self.status == 'closed':
             return [
@@ -117,7 +121,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return [('', '')]
 
     def is_waiting_for_documents(self):
-        if not utils.is_none(self, 'documents'):
+        if getattr(self, 'documents', None):
             for doc in self.documents:
                 if not doc.is_complete:
                     return True
@@ -164,7 +168,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def init_loss(self):
         if hasattr(self, 'losses') and self.losses:
             return True
-        loss = utils.instanciate_relation(self, 'losses')
+        Loss = Pool().get('claim.loss')
+        loss = Loss()
         loss.init_from_claim(self)
         self.losses = [loss]
         return True
@@ -179,7 +184,8 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def init_relapse_loss(self):
         if self.get_pending_relapse_loss():
             return True
-        loss = utils.instanciate_relation(self, 'losses')
+        Loss = Pool().get('claim.loss')
+        loss = Loss()
         loss.init_from_claim(self)
         self.losses = list(self.losses)
         self.losses.append(loss)
@@ -267,6 +273,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return Contract.get_possible_contracts_from_party(self.claimant,
             at_date)
 
+    @fields.depends('claimant', 'declaration_date')
     def on_change_with_possible_contracts(self, name=None):
         return [x.id for x in self.get_possible_contracts()]
 
@@ -284,6 +291,11 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             return contracts[0]
         elif len(contracts) > 1 and self.main_contract in contracts:
             return self.main_contract
+        else:
+            self.raise_user_error('no_main_contract')
+
+    def get_product(self):
+        return self.get_contract().offered
 
 
 class Loss(model.CoopSQL, model.CoopView):
@@ -298,16 +310,14 @@ class Loss(model.CoopSQL, model.CoopView):
             'required': Bool(Eval('with_end_date')),
             }, depends=['with_end_date'],)
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
-        ondelete='RESTRICT',
-        on_change=['event_desc', 'loss_desc', 'with_end_date', 'end_date'],
-        domain=[
+        ondelete='RESTRICT', domain=[
             If(~~Eval('_parent_claim', {}).get('main_contract'),
                 ('id', 'in', Eval('possible_loss_descs')), ())
             ],
         depends=['possible_loss_descs'])
     possible_loss_descs = fields.Function(
         fields.One2Many('benefit.loss.description', None,
-            'Possible Loss Descs', on_change_with=['claim']),
+            'Possible Loss Descs'),
         'on_change_with_possible_loss_descs')
     event_desc = fields.Many2One('benefit.event.description', 'Event',
         domain=[('loss_descs', '=', Eval('loss_desc'))],
@@ -324,16 +334,14 @@ class Loss(model.CoopSQL, model.CoopView):
     main_loss = fields.Many2One('claim.loss', 'Main Loss',
         domain=[('claim', '=', Eval('claim')), ('id', '!=', Eval('id'))],
         depends=['claim', 'id'], ondelete='CASCADE',
-        on_change=['main_loss', 'loss_desc'], states={
+        states={
             'invisible': Eval('_parent_claim', {}).get('reopened_reason')
                 != 'relapse'})
     sub_losses = fields.One2Many('claim.loss', 'main_loss', 'Sub Losses')
     with_end_date = fields.Function(
         fields.Boolean('With End Date'),
         'get_with_end_date')
-    extra_data = fields.Dict(
-        'extra_data', 'Complementary Data',
-        on_change_with=['loss_desc', 'extra_data'],
+    extra_data = fields.Dict('extra_data', 'Complementary Data',
         states={'invisible': ~Eval('extra_data')})
 
     @classmethod
@@ -350,6 +358,7 @@ class Loss(model.CoopSQL, model.CoopView):
             res = self.loss_desc.with_end_date
         return res
 
+    @fields.depends('loss_desc', 'extra_data')
     def on_change_with_extra_data(self):
         res = {}
         if self.loss_desc:
@@ -374,8 +383,8 @@ class Loss(model.CoopSQL, model.CoopView):
                     del_service = other_del_service
             if del_service:
                 continue
-            del_service = utils.instanciate_relation(self.__class__,
-                'services')
+            Service = Pool().get('contract.service')
+            del_service = Service()
             del_service.option = option
             del_service.init_from_loss(self, benefit)
             self.services.append(del_service)
@@ -402,6 +411,7 @@ class Loss(model.CoopSQL, model.CoopView):
         else:
             return ['instruction']
 
+    @fields.depends('main_loss', 'loss_desc')
     def on_change_main_loss(self):
         res = {}
         #TODO : Add possibility to have compatible loss example a disability
@@ -414,6 +424,7 @@ class Loss(model.CoopSQL, model.CoopView):
             res['with_end_date'] = False
         return res
 
+    @fields.depends('event_desc', 'loss_desc', 'with_end_date', 'end_date')
     def on_change_loss_desc(self):
         res = {}
         res['with_end_date'] = self.get_with_end_date('')
@@ -441,6 +452,7 @@ class Loss(model.CoopSQL, model.CoopView):
                 res.append(del_serv.contract)
         return list(set(res))
 
+    @fields.depends('claim')
     def on_change_with_possible_loss_descs(self, name=None):
         res = []
         if not self.claim or not self.claim.main_contract:
@@ -451,7 +463,7 @@ class Loss(model.CoopSQL, model.CoopView):
 
     def get_all_extra_data(self, at_date):
         res = {}
-        if not utils.is_none(self, 'extra_data'):
+        if getattr(self, 'extra_data', None):
             res = self.extra_data
         return res
 
@@ -481,8 +493,6 @@ class DeliveredService:
     multi_level_view = fields.One2Many('claim.indemnification',
         'service', 'Indemnifications')
     extra_data = fields.Dict('extra_data', 'Complementary Data',
-        on_change=['benefit', 'extra_data', 'loss',
-            'option', 'is_loan', 'contract'],
         states={'invisible': ~Eval('extra_data')})
 
     @classmethod
@@ -530,7 +540,8 @@ class DeliveredService:
             cur_dict)
         if errors:
             return None, errors
-        indemnification = utils.instanciate_relation(self, 'indemnifications')
+        Indemnification = Pool().get('claim.indemnification')
+        indemnification = Indemnification()
         self.indemnifications.append(indemnification)
         indemnification.init_from_service(self)
         self.regularize_indemnification(indemnification, details_dict,
@@ -610,6 +621,8 @@ class DeliveredService:
             return res
         return super(DeliveredService, self).get_rec_name(name)
 
+    @fields.depends('benefit', 'extra_data', 'loss', 'option', 'is_loan',
+        'contract')
     def on_change_extra_data(self):
         args = {'date': self.loss.start_date, 'level': 'service'}
         self.init_dict_for_rule_engine(args)
@@ -625,7 +638,7 @@ class DeliveredService:
             return None
         for indemn in self.indemnifications:
             if (indemn.status == 'calculated'
-                    and (utils.is_none(indemn, 'local_currency')
+                    and (not getattr(indemn, 'local_currency', None)
                         or indemn.local_currency == cur_dict['currency'])):
                 return indemn
 
@@ -643,7 +656,7 @@ class DeliveredService:
 
     def get_all_extra_data(self, at_date):
         res = {}
-        if not utils.is_none(self, 'extra_data'):
+        if getattr(self, 'extra_data', None):
             res = self.extra_data
         res.update(self.get_covered_data().get_all_extra_data(at_date))
         res.update(self.loss.get_all_extra_data(at_date))
@@ -692,13 +705,11 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             'readonly': Or(~Eval('manual'), Eval('status') == 'paid')},
         depends=['local_currency_digits'])
     local_currency = fields.Many2One('currency.currency', 'Local Currency',
-        states={
+        ondelete='RESTRICT', states={
             'invisible': ~Eval('local_currency'),
             'readonly': Or(~Eval('manual'), Eval('status') == 'paid')})
     local_currency_digits = fields.Function(
-        fields.Integer('Local Currency Digits',
-            states={'invisible': True},
-            on_change_with=['local_currency']),
+        fields.Integer('Local Currency Digits', states={'invisible': True}),
         'on_change_with_local_currency_digits')
     details = fields.One2Many('claim.indemnification.detail',
         'indemnification', 'Details',
@@ -739,30 +750,31 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         return res
 
     def create_details_from_dict(self, details_dict, del_service, currency):
-        if utils.is_none(self, 'details'):
+        Detail = Pool().get('claim.indemnification.detail')
+        if not getattr(self, 'details', None):
             self.details = []
         else:
             self.details = list(self.details)
-            Pool().get('claim.indemnification.detail').delete(self.details)
+            Detail.delete(self.details)
             self.details[:] = []
         for key, fancy_name in benefit.INDEMNIFICATION_DETAIL_KIND:
             if not key in details_dict:
                 continue
             for detail_dict in details_dict[key]:
-                detail = utils.instanciate_relation(self, 'details')
+                detail = Detail()
                 detail.init_from_indemnification(self)
                 self.details.append(detail)
                 detail.kind = key
                 for field_name, value in detail_dict.iteritems():
                     #TODO: Temporary Hack
                     if (field_name == 'beneficiary_kind'
-                            and utils.is_none(self, 'beneficiary')):
+                            and not getattr(self, 'beneficiary', None)):
                         self.beneficiary = self.get_beneficiary(value,
                             del_service)
                     else:
                         setattr(detail, field_name, value)
                 if ('start_date' in detail_dict
-                        and (utils.is_none(self, 'start_date')
+                        and (not getattr(self, 'start_date', None)
                             or detail.start_date < self.start_date)):
                     self.start_date = detail.start_date
         self.calculate_amount_and_end_date_from_details(del_service, currency)
@@ -793,6 +805,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         if self.service:
             return self.service.get_currency()
 
+    @fields.depends('local_currency')
     def on_change_with_local_currency_digits(self, name=None):
         if self.local_currency:
             return self.local_currency.digits
@@ -885,9 +898,8 @@ class ClaimIndemnificationValidateDisplay(model.CoopView):
     indemnification_displayer = fields.One2Many(
         'claim.indemnification', '', 'Indemnification',
         states={'readonly': True})
-    indemnification = fields.Many2One(
-        'claim.indemnification', 'Indemnification',
-        states={'invisible': True, 'readonly': True})
+    indemnification = fields.Many2One('claim.indemnification',
+        'Indemnification', states={'invisible': True, 'readonly': True})
     amount = fields.Numeric(
         'Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
@@ -913,16 +925,13 @@ class ClaimIndemnificationValidateSelect(model.CoopView):
     indemnifications = fields.One2Many(
         'claim.indemnification.validate.display', '', 'Indemnifications')
     domain_string = fields.Char('Domain',
-        states={'invisible': ~Eval('display_domain')},
-        on_change=['domain_string', 'indemnifications', 'search_size'])
-    modified = fields.Boolean('Modified', states={'invisible': True},
-        on_change_with=['indemnifications'])
+        states={'invisible': ~Eval('display_domain')})
+    modified = fields.Boolean('Modified', states={'invisible': True})
     global_value = fields.Selection([
             ('nothing', 'Nothing'),
             ('validate', 'Validate'),
             ('refuse', 'Refuse'),
-            ], 'Force Value', on_change=[
-            'indemnifications', 'modified', 'apply', 'global_value'])
+            ], 'Force Value')
     display_domain = fields.Boolean('Display Search')
     search_size = fields.Integer('Search Size',
         states={'invisible': ~Eval('display_domain')})
@@ -972,6 +981,7 @@ class ClaimIndemnificationValidateSelect(model.CoopView):
                     [(field_name, operator, operand)]])
         return domain
 
+    @fields.depends('indemnifications', 'modified', 'apply', 'global_value')
     def on_change_global_value(self):
         result = []
         for elem in self.indemnifications:
@@ -1008,10 +1018,12 @@ class ClaimIndemnificationValidateSelect(model.CoopView):
                     })
         return {'indemnifications': result, 'modified': False}
 
+    @fields.depends('domain_string', 'indemnifications', 'search_size')
     def on_change_domain_string(self):
         return self.find_indemnifications(
             self.build_domain(self.domain_string, self.search_size))
 
+    @fields.depends('indemnifications')
     def on_change_with_modified(self):
         if not (hasattr(self, 'indemnifications') and self.indemnifications):
             return

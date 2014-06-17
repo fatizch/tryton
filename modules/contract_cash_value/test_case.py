@@ -18,35 +18,23 @@ class TestCaseModel:
     _get_journal_cache = Cache('get_journal')
 
     @classmethod
-    def _get_test_case_dependencies(cls):
-        result = super(TestCaseModel, cls)._get_test_case_dependencies()
-        result['configure_accounting_test_case']['dependencies'].add(
-            'journal_test_case')
-        result['journal_test_case'] = {
-            'name': 'Journal Test Case',
-            'dependencies': set(['main_company_test_case']),
-        }
-        return result
-
-    @classmethod
-    def create_journal(cls, name, journal_type, code):
+    def create_journal(cls, **kwargs):
         pool = Pool()
         Sequence = pool.get('ir.sequence')
         Journal = pool.get('account.journal')
-        journal = Journal()
-        journal.name = name
-        journal.type = journal_type
-        journal.code = code
-        journal.sequence = Sequence.search([
-                ('code', '=', 'account.journal')])[0].id
-        return journal
+        if 'sequence' not in kwargs:
+            kwargs['sequence'] = Sequence.search([
+                    ('code', '=', 'account.journal')])[0].id
+        return Journal(**kwargs)
 
     @classmethod
     def journal_test_case(cls):
         translater = cls.get_translater(MODULE_NAME)
         journals = []
-        journals.append(cls.create_journal(translater(
-                    'Cash Value Journal'), 'general', 'cash_value'))
+        journals.append(cls.create_journal(
+                name=translater('Cash Value Journal'),
+                type='general',
+                code='cash_value'))
         return journals
 
     @classmethod

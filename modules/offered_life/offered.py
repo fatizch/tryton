@@ -1,10 +1,8 @@
 #-*- coding:utf-8 -*-
-import copy
-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or, Bool
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.offered import EligibilityResultLine
@@ -12,8 +10,7 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
     STATE_ADVANCED, STATE_SUB_SIMPLE
 
 STATE_LIFE = (
-    Eval('_parent_offered', {}).get('family') != 'offered_life.definition')
-FAMILY_LIFE = 'offered_life.definition'
+    Eval('_parent_offered', {}).get('family') != 'life')
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -29,7 +26,7 @@ class OptionDescription:
         'offered', 'Coverage Amount Rules', states={
             'invisible': Or(
                 Bool(Eval('is_package')),
-                Eval('family') != FAMILY_LIFE,
+                Eval('family') != 'life',
                 )
             })
     is_coverage_amount_needed = fields.Function(
@@ -39,14 +36,10 @@ class OptionDescription:
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        cls.family = copy.copy(cls.family)
-        if not cls.family.selection:
-            cls.family.selection = []
-        utils.append_inexisting(cls.family.selection,
-            (FAMILY_LIFE, 'Life'))
+        cls.family.selection.append(('life', 'Life'))
 
     def get_is_coverage_amount_needed(self, name=None):
-        return not self.is_package and self.family == FAMILY_LIFE
+        return not self.is_package and self.family == 'life'
 
 
 class EligibilityRule:
@@ -74,19 +67,20 @@ class EligibilityRule:
                 hasattr(self, 'min_age') or hasattr(self, 'max_age')):
             return res, errs
         details = []
-        if 'subscriber_person' in args:
-            subscriber = args['subscriber_person']
-            age = coop_date.number_of_years_between(subscriber.birth_date,
-                args['date'])
-            res = True
-            if not utils.is_none(self, 'min_age') and age < self.min_age:
-                res = False
-                details.append(
-                    'Subscriber must be older than %s' % self.min_age)
-            if not utils.is_none(self, 'max_age') and age > self.max_age:
-                res = False
-                details.append(
-                    'Subscriber must be younger than %s' % self.max_age)
+        if 'subscriber' in args:
+            subscriber = args['subscriber']
+            if hasattr(subscriber, 'is_person') and subscriber.is_person:
+                age = coop_date.number_of_years_between(subscriber.birth_date,
+                    args['date'])
+                res = True
+                if getattr(self, 'min_age', None) and age < self.min_age:
+                    res = False
+                    details.append(
+                        'Subscriber must be older than %s' % self.min_age)
+                if getattr(self, 'max_age', None) and age > self.max_age:
+                    res = False
+                    details.append(
+                        'Subscriber must be younger than %s' % self.max_age)
         return (EligibilityResultLine(eligible=res, details=details), errs)
 
     def give_me_sub_elem_eligibility(self, args):

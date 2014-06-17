@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="payment_icon">
+            <field name="name">payment</field>
+            <field name="path">icons/payment.svg</field>
+        </record>
+    </data>
+</tryton>

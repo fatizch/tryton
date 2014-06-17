@@ -1,8 +1,44 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:account.invoice,party:account_invoice."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:account.invoice-account.move.line,invoice:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "field:account.invoice.line,invoice:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "field:account.invoice.line,party:account_invoice."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:account.invoice.pay.ask,invoice:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "field:account.invoice.tax,invoice:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "field:account.move.line,party:account."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:account.payment,party:account_payment."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:account.payment.sepa.mandate,party:account_payment_sepa."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:bank,party:bank."
 msgid "Party"
 msgstr "Acteur"
 
@@ -14,9 +50,21 @@ msgctxt "field:company.employee,party:company."
 msgid "Party"
 msgstr "Acteur"
 
+msgctxt "field:party.address,invoice:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "field:party.address,party:party."
 msgid "Party"
 msgstr "Acteur"
+
+msgctxt "field:party.address,street:party."
+msgid "Street"
+msgstr "Rue (Ligne 4)"
+
+msgctxt "field:party.address,streetbis:party."
+msgid "Street (bis)"
+msgstr "Boîte Postale (Ligne 5)"
 
 msgctxt "field:party.contact_mechanism,party:party."
 msgid "Party"
@@ -26,6 +74,30 @@ msgctxt "field:party.party-party.category,party:party."
 msgid "Party"
 msgstr "Acteur"
 
+msgctxt "model:account.invoice,name:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "model:ir.action,name:account_invoice.act_invoice_form"
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "model:ir.action,name:account_invoice.act_invoice_form2"
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "model:ir.action,name:account_invoice.act_invoice_out_invoice_form"
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "model:ir.action,name:account_invoice.print"
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "model:ir.action,name:account_invoice.report_invoice"
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "model:ir.action,name:party.act_party_form"
 msgid "Parties"
 msgstr "Acteurs"
@@ -34,9 +106,22 @@ msgctxt "model:ir.sequence,name:party.sequence_party"
 msgid "Party"
 msgstr "Acteur"
 
+msgctxt ""
+"model:ir.sequence.type,name:account_invoice.sequence_type_account_invoice"
+msgid "Invoice"
+msgstr "Quittance"
+
 msgctxt "model:ir.sequence.type,name:party.sequence_type_party"
 msgid "Party"
 msgstr "Acteur"
+
+msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoice_out_invoice_form"
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "model:ir.ui.menu,name:account_invoice.menu_invoices"
+msgid "Invoices"
+msgstr "Quittances"
 
 msgctxt "model:ir.ui.menu,name:party.menu_party"
 msgid "Party"
@@ -47,5 +132,45 @@ msgid "Parties"
 msgstr "Acteurs"
 
 msgctxt "model:party.party,name:party."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "odt:account.aged_balance:account."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "odt:account.third_party_balance:account."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "selection:account.invoice,type:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "selection:account.invoice.line,invoice_type:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "view:account.invoice:account_invoice."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "view:account.invoice:account_invoice."
+msgid "Invoices"
+msgstr "Quittances"
+
+msgctxt "view:account.tax.template:account."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "view:account.tax:account."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "view:party.party:party."
+msgid "Parties"
+msgstr "Acteurs"
+
+msgctxt "view:party.party:party."
 msgid "Party"
 msgstr "Acteur"

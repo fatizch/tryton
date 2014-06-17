@@ -7,7 +7,6 @@ from .distribution import *
 from .contract import *
 from .rule_engine import *
 from .account import *
-from .billing import *
 
 
 def register():
@@ -22,6 +21,12 @@ def register():
         OptionCommissionOptionRelation,
         Option,
         ContractAgreementRelation,
+        ContractInvoice,
+        CommissionInvoice,
+        Invoice,
+        InvoiceLine,
+        Premium,
+        PremiumCommission,
         #From Party
         Party,
         Broker,
@@ -29,11 +34,9 @@ def register():
         DistributionNetwork,
         DistributionNetworkComPlanRelation,
         DistributionNetworkBrokerRelation,
-        # From billing
-        BillingPremiumCommissionOptionRelation,
-        Premium,
         #Rule Engine
         RuleEngineRuntime,
         # Account
+        MoveBreakdown,
         Move,
         module='commission', type_='model')

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tree string="Payment Informations">
+    <field name="date"/>
+    <field name="credit" sum="Credit" >
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="journal"/>
+    <field name="description"/>
+    <field name="party"/>
+    <field name="reconciliation"/>
+</tree>

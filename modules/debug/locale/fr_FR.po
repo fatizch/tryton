@@ -1,0 +1,155 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:debug.visualize,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:debug.visualize,result:"
+msgid "Result"
+msgstr "Résultat"
+
+msgctxt "field:ir.model.debug.model_info,field_infos:"
+msgid "Fields Infos"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info,filter_value:"
+msgid "Filter Value"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info,hide_functions:"
+msgid "Hide Functions"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.model.debug.model_info,model_name:"
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+msgctxt "field:ir.model.debug.model_info.field_info,field_domain:"
+msgid "Domain"
+msgstr "Domaine"
+
+msgctxt "field:ir.model.debug.model_info.field_info,has_domain:"
+msgid "Has domain"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.model.debug.model_info.field_info,is_function:"
+msgid "Is Function"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,is_invisible:"
+msgid "Is invisible"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,is_readonly:"
+msgid "Is readonly"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,is_required:"
+msgid "Is required"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,kind:"
+msgid "Field type"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,name:"
+msgid "Field name"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,state_invisible:"
+msgid "State Invisible"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,state_readonly:"
+msgid "State Readonly"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,state_required:"
+msgid "State Required"
+msgstr ""
+
+msgctxt "field:ir.model.debug.model_info.field_info,string:"
+msgid "String"
+msgstr "Nom"
+
+msgctxt "field:ir.model.debug.model_info.field_info,target_model:"
+msgid "Target Model"
+msgstr ""
+
+msgctxt "model:debug.visualize,name:"
+msgid "Debug Visualize"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_debug"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "model:ir.action,name:act_model_debug"
+msgid "Debug Model"
+msgstr ""
+
+msgctxt "model:ir.model.debug.model_info,name:"
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+msgctxt "model:ir.model.debug.model_info.field_info,name:"
+msgid "Field Info"
+msgstr ""
+
+msgctxt "model:ir.ui.menu,name:menu_debug"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "model:ir.ui.menu,name:menu_model_debug"
+msgid "Model Debug"
+msgstr ""
+
+msgctxt "selection:ir.model.debug.model_info,filter_value:"
+msgid "Kind"
+msgstr "Type"
+
+msgctxt "selection:ir.model.debug.model_info,filter_value:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "selection:ir.model.debug.model_info,filter_value:"
+msgid "String"
+msgstr "Nom"
+
+msgctxt "view:debug.visualize:"
+msgid "Debug Result"
+msgstr ""
+
+msgctxt "view:ir.model.debug.model_info.field_info:"
+msgid "Field Info"
+msgstr ""
+
+msgctxt "view:ir.model.debug.model_info.field_info:"
+msgid "Fields"
+msgstr "Champs"
+
+msgctxt "view:ir.model.debug.model_info:"
+msgid "Model Debug"
+msgstr ""
+
+msgctxt "wizard_button:debug,display,end:"
+msgid "Quit"
+msgstr "Quitter"
+
+msgctxt "wizard_button:debug,display,run:"
+msgid "Re-Run"
+msgstr ""
+
+msgctxt "wizard_button:ir.model.debug,model_info,end:"
+msgid "Quit"
+msgstr "Quitter"

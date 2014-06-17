@@ -16,10 +16,8 @@ class RenewalStart(model.CoopView):
 
     __name__ = 'contract.renew.parameters'
 
-    renewal_date = fields.Date('Renewal Date', on_change=['renewal_date',
-        'renew_what'])
-    renew_what = fields.Boolean('All contracts', on_change=['renewal_date',
-        'renew_what'])
+    renewal_date = fields.Date('Renewal Date')
+    renew_what = fields.Boolean('All contracts')
     will_be_renewed = fields.One2Many('contract', None,
         'Will be renewed', states={'readonly': True,
             'invisible': ~Eval('renew_what')})
@@ -30,6 +28,7 @@ class RenewalStart(model.CoopView):
         depends=['renew_what', 'renewal_date'],
         states={'invisible': ~~Eval('renew_what')})
 
+    @fields.depends('renewal_date', 'renew_what')
     def on_change_renewal_date(self):
         if not (hasattr(self, 'renew_what') and self.renew_what):
             return {'will_be_renewed': []}

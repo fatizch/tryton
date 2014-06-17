@@ -47,8 +47,8 @@ msgid "Create User"
 msgstr "Créé par"
 
 msgctxt "field:process,display_steps_without_status:"
-msgid ""
-msgstr " "
+msgid "Display Steps Without Status"
+msgstr "Afficher les Etapes sans Statut"
 
 msgctxt "field:process,fancy_name:"
 msgid "Name"
@@ -83,8 +83,8 @@ msgid "Process Overview Positioning"
 msgstr "Position des Boutons"
 
 msgctxt "field:process,steps_to_display:"
-msgid ""
-msgstr " "
+msgid "Steps"
+msgstr "Etapes"
 
 msgctxt "field:process,technical_name:"
 msgid "Technical Name"
@@ -305,6 +305,14 @@ msgstr "Date de création"
 msgctxt "field:process.step,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:process.step,entering_wizard:"
+msgid "Entering Wizard"
+msgstr "Assistant d'entrée"
+
+msgctxt "field:process.step,exiting_wizard:"
+msgid "Exiting Wizard"
+msgstr "Assistant de sortie"
 
 msgctxt "field:process.step,fancy_name:"
 msgid "Name"
@@ -602,121 +610,9 @@ msgctxt "selection:process.transition,method_kind:"
 msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
-msgctxt "view:claim:"
-msgid "==> Clôture"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Documents"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Décl. du Préjudice"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Déclarant"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Prestations"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Rechute"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Remboursement"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Réouverture"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "==> Validation"
-msgstr ""
-
-msgctxt "view:claim:"
-msgid "Clôture"
-msgstr "Clôture"
-
-msgctxt "view:claim:"
-msgid "Complete"
-msgstr "Terminer"
-
-msgctxt "view:claim:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "view:claim:"
-msgid "Décl. du Préjudice"
-msgstr "Décl. du Préjudice"
-
-msgctxt "view:claim:"
-msgid "Déclarant"
-msgstr "Déclarant"
-
-msgctxt "view:claim:"
-msgid "Déclaration de Sinistre"
-msgstr "Déclaration de Sinistre"
-
-msgctxt "view:claim:"
-msgid "Losses"
-msgstr "Préjudices"
-
-msgctxt "view:claim:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt "view:claim:"
-msgid "Prestations"
-msgstr "Prestations"
-
-msgctxt "view:claim:"
-msgid "Previous"
-msgstr "Précédent"
-
-msgctxt "view:claim:"
-msgid "Rechute"
-msgstr "Rechute"
-
-msgctxt "view:claim:"
-msgid "Remboursement"
-msgstr "Remboursement"
-
-msgctxt "view:claim:"
-msgid "Réouverture"
-msgstr "Réouverture"
-
-msgctxt "view:claim:"
-msgid "Réouverture De Sinistre"
-msgstr "Réouverture De Sinistre"
-
-msgctxt "view:claim:"
-msgid "The current record completed the current process, please go ahead"
-msgstr "Processus Terminé. Commencez une nouvelle tâche"
-
-msgctxt "view:claim:"
-msgid "Validation"
-msgstr "Validation"
-
-msgctxt "view:contract:"
-msgid "==> Adhérent"
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "==> Affiliations"
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "==> Cotisations"
-msgstr ""
-
 msgctxt "view:contract:"
 msgid "==> Documents"
-msgstr ""
+msgstr "==> Documents"
 
 msgctxt "view:contract:"
 msgid "==> Garanties"
@@ -727,7 +623,7 @@ msgid "==> Personnes Couvertes"
 msgstr ""
 
 msgctxt "view:contract:"
-msgid "==> Populations"
+msgid "==> Prelevement"
 msgstr ""
 
 msgctxt "view:contract:"
@@ -735,27 +631,11 @@ msgid "==> Produit"
 msgstr ""
 
 msgctxt "view:contract:"
-msgid "==> Prêt"
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "==> Tarif"
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "==> Taux"
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "==> Validation de l'avenant"
+msgid "==> Quittance"
 msgstr ""
 
 msgctxt "view:contract:"
 msgid "==> Validation du contrat"
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "==> Validation du contrat Collectif"
 msgstr ""
 
 msgctxt "view:contract:"
@@ -767,28 +647,12 @@ msgid "Accounting"
 msgstr "Comptabilité"
 
 msgctxt "view:contract:"
-msgid "Adhérent"
-msgstr "Adhérent"
-
-msgctxt "view:contract:"
-msgid "Affiliations"
-msgstr "Affiliations"
-
-msgctxt "view:contract:"
-msgid "Avenant"
-msgstr "Avenant"
-
-msgctxt "view:contract:"
 msgid "Billing"
 msgstr "Cotisation"
 
 msgctxt "view:contract:"
 msgid "Calculate Prices"
 msgstr "Calculer les Primes"
-
-msgctxt "view:contract:"
-msgid "Calculer les Taux"
-msgstr ""
 
 msgctxt "view:contract:"
 msgid "Complementary Data"
@@ -799,20 +663,8 @@ msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:contract:"
-msgid "Cotisations"
-msgstr "Cotisations"
-
-msgctxt "view:contract:"
 msgid "Covered Elements"
-msgstr "Eléments Couverts"
-
-msgctxt "view:contract:"
-msgid "Covered Elements/Options"
-msgstr "Eléments Couverts/Garanties"
-
-msgctxt "view:contract:"
-msgid "Create Loan"
-msgstr "Créer un prêt"
+msgstr "Risques Couverts"
 
 msgctxt "view:contract:"
 msgid "Documents"
@@ -823,8 +675,8 @@ msgid "Garanties"
 msgstr "Garanties"
 
 msgctxt "view:contract:"
-msgid "Next"
-msgstr "Suivant"
+msgid "Next (_k)"
+msgstr "Suivant (_k)"
 
 msgctxt "view:contract:"
 msgid "Options"
@@ -835,12 +687,12 @@ msgid "Personnes Couvertes"
 msgstr "Personnes Couvertes"
 
 msgctxt "view:contract:"
-msgid "Populations"
-msgstr "Populations"
+msgid "Prelevement"
+msgstr ""
 
 msgctxt "view:contract:"
-msgid "Previous"
-msgstr "Précédent"
+msgid "Previous  (_j)"
+msgstr "Précédent (_j)"
 
 msgctxt "view:contract:"
 msgid "Processus de souscription individuel"
@@ -848,49 +700,19 @@ msgstr "Processus de souscription individuel"
 
 msgctxt "view:contract:"
 msgid "Produit"
-msgstr "Produit"
+msgstr ""
 
 msgctxt "view:contract:"
-msgid "Prêt"
-msgstr "Prêt"
-
-msgctxt "view:contract:"
-msgid "Souscription Contrat Collectif"
-msgstr "Souscription Contrat Collectif"
-
-msgctxt "view:contract:"
-msgid "Souscription Emprunteur"
-msgstr "Souscription Emprunteur"
-
-msgctxt "view:contract:"
-msgid "Tarif"
-msgstr "Tarif"
-
-msgctxt "view:contract:"
-msgid "Taux"
-msgstr "Taux"
+msgid "Quittance"
+msgstr "Quittance"
 
 msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
 msgctxt "view:contract:"
-msgid ""
-"The current record is in a state (Validation de l'avenant) that you are not "
-"allowed to view."
-msgstr ""
-
-msgctxt "view:contract:"
-msgid "Validation de l'avenant"
-msgstr "Validation de l'avenant"
-
-msgctxt "view:contract:"
 msgid "Validation du contrat"
 msgstr "Validation du contrat"
-
-msgctxt "view:contract:"
-msgid "Validation du contrat Collectif"
-msgstr "Validation du contrat Collectif"
 
 msgctxt "view:process-process.step:"
 msgid "Process Relation"

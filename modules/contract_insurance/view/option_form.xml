@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='main_data']" position="inside">
+        <newline/>
+        <field name="extra_data" colspan="2" no_command="1"/>
+    </xpath>
+    <xpath expr="/form/notebook/page[@id='main_data']" position="after">
+        <page string="Extra Premiums" id="extra_premium">
+            <field name="extra_premiums" colspan="4"/>
+            <button string="Propagate" name="propagate_extra_premiums" colspan="4"/>
+        </page>
+        <page string="Exclusions" id="exclusions">
+            <field name="exclusions" colspan="4"/>
+            <button string="Propagate" name="propagate_exclusions" colspan="4"/>
+        </page>
+    </xpath>
+</data>

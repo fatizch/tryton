@@ -16,11 +16,11 @@ from .test_case_framework import *
 
 def register():
     Pool.register(
-        # From export
         ExportPackage,
         ExportInstance,
-        # From ir
+        Add2ExportPackageWizardStart,
         Sequence,
+        SequenceStrict,
         DateClass,
         View,
         UIMenu,
@@ -34,25 +34,23 @@ def register():
         ModelAccess,
         Property,
         Lang,
-        # From res
+        Icon,
         Group,
         User,
         ResUserWarning,
-        # From model
         FileSelector,
         VersionedObject,
         VersionObject,
-        # From view_validation_batch
         ViewValidationBatch,
-        # From test_case_framework
         TestCaseModel,
+        TestCaseInstance,
+        TestCaseRequirementRelation,
         TestCaseSelector,
         SelectTestCase,
         TestCaseFileSelector,
         module='cog_utils', type_='model')
     Pool.register(
-        # From export
         ImportWizard,
-        # From test_case_framework
+        Add2ExportPackageWizard,
         TestCaseWizard,
         module='cog_utils', type_='wizard')

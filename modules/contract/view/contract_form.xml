@@ -8,27 +8,41 @@
     <field name="start_date"/>
     <label name="end_date"/>
     <field name="end_date"/>
+    <newline/>
     <label name="subscriber"/>
-    <field name="subscriber"/>
-  <notebook colspan="4">
-    <page string="Options" id="options">
-      <field name="options" colspan="4"/>
-    </page>
-    <page string="Complementary Data" id="extra_data">
-      <field name="extra_data" no_command="1"/>
-    </page>
-    <page string="Documents" id="documents">
-      <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
-    </page>
-    <page string="Administration" id="admin">
-      <label name="product_kind"/>
-      <field name="product_kind"/>
-      <label name="offered"/>
-      <field name="offered"/>
-      <label name="appliable_conditions_date"/>
-      <field name="appliable_conditions_date"/>
-    </page>
-  </notebook>
-  <newline/>
-  <field name="subscriber_kind"/>
+    <group id="subscriber" col="99">
+        <field name="subscriber_kind"/>
+        <group id="person" states="{'invisible': Eval('subscriber_kind') != 'person'}">
+            <field name="subscriber" view_ids="party_cog.person_view_tree"/>
+        </group>
+        <group id="company" states="{'invisible': Eval('subscriber_kind')== 'person'}">
+            <field name="subscriber"/>
+        </group>
+    </group>
+    <notebook colspan="4">
+        <page string="Options" id="options" states="{'invisible': ~Eval('options')}">
+            <field name="options" colspan="4"/>
+        </page>
+        <page string="Data" id="data">
+            <field name="extra_data" no_command="1"/>
+        </page>
+        <page string="Contacts" id="contacts">
+            <field name="contacts" colspan="4"/>
+            <field name="addresses" colspan="4"/>
+        </page>
+        <page string="Administration" id="admin" col="2">
+            <group id="left" col="2" yfill="0">
+                <label name="product_kind"/>
+                <field name="product_kind"/>
+                <label name="product"/>
+                <field name="product"/>
+                <label name="appliable_conditions_date"/>
+                <field name="appliable_conditions_date"/>
+            </group>
+            <group id="right" yfill="0">
+                <field name="activation_history" colspan="2" yfill="0" yexpand="0"/>
+            </group>
+        </page>
+    </notebook>
+    <newline/>
 </form>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='direct_debit_account']" position="after">
+        <label name="sepa_mandate"/>
+        <field name="sepa_mandate"/>
+    </xpath>
+</data>

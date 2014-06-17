@@ -11,7 +11,7 @@ Imports::
 Create Database::
 
     >>> config = config.set_trytond(database_type='postgresql',
-    ...     database_name='test_database',
+    ...     database_name='test_1_database',
     ...     user='admin',
     ...     language='en_US',
     ...     password='admin',
@@ -25,8 +25,13 @@ Create Database::
 
 Import Exported DB::
 
+    >>> TestCaseConfig = Model.get('ir.test_case')(1)
+    >>> TestCaseConfig.language = Model.get('ir.lang').find([
+    ...         ('code', '=', 'fr_FR')])[0]
+    >>> TestCaseConfig.save()
     >>> wizard = Wizard('ir.test_case.run')
     >>> wizard.form.select_all_test_cases = True
+    >>> wizard.execute('execute_test_cases')
     >>> wizard.form.select_all_files = True
     >>> wizard.execute('execute_test_cases')
     >>> wizard.execute('end')
@@ -51,10 +56,6 @@ Start subscription::
     >>> wizard = Wizard('contract.subscribe')
     >>> dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
     >>> wizard.form.dist_network = dist_network
-    >>> wizard.form.delegated_manager.name
-    u'CAPVIE'
-    >>> wizard.form.business_provider.name
-    u'CAPVIE'
     >>> product = Product.find([('code', '=', 'PREV')])[0]
     >>> product.name
     u'Pr\xe9voyance Indviduelle'
@@ -124,6 +125,6 @@ Get contract::
     >>> cd2.option.offered.code
     u'DC'
     >>> cd2.__class__.get_possible_amounts([cd2.id], {})
-    [[('', ''), (u'25000,00 \u20ac', u'25000,00 \u20ac'), (u'50000,00 \u20ac', u'50000,00 \u20ac'), (u'75000,00 \u20ac', u'75000,00 \u20ac'), (u'100000,00 \u20ac', u'100000,00 \u20ac')]]
+    [[('', ''), (u'25 000,00 \u20ac', u'25 000,00 \u20ac'), (u'50 000,00 \u20ac', u'50 000,00 \u20ac'), (u'75 000,00 \u20ac', u'75 000,00 \u20ac'), (u'100 000,00 \u20ac', u'100 000,00 \u20ac')]]
     >>> cd2.coverage_amount_selection = '75000.00'
     >>> cd2.save()

@@ -3,7 +3,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, coop_string
 
 
 __all__ = [
@@ -103,6 +103,12 @@ class Team(model.CoopSQL, model.CoopView):
                 break
         return res
 
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
 
 class SelectUser(model.CoopView):
     'Select User'
@@ -111,9 +117,10 @@ class SelectUser(model.CoopView):
 
     user = fields.Many2One('res.user', 'User')
     user_ok = fields.Function(
-        fields.Char('User Ok', on_change_with=['user']),
+        fields.Char('User Ok'),
         'on_change_with_user_ok')
 
+    @fields.depends('user')
     def on_change_with_user_ok(self):
         if not (hasattr(self, 'user') and self.user):
             return ''
@@ -130,7 +137,7 @@ class AddTeamUser(Wizard):
 
     start_state = 'select_user'
     select_user = StateView('res.team.add_user.select',
-        'task_manager.task_team_add_user_select_form', [
+        'task_manager.select_user_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Add User', 'add_user', 'tryton-go-next')])
     add_user = StateTransition()

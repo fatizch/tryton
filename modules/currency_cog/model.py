@@ -15,15 +15,15 @@ class ModelCurrency(object):
     """
 
     currency = fields.Function(
-        fields.Many2One('currency.currency', 'Currency',
-            on_change=['currency'], states={'invisible': True}),
+        fields.Many2One('currency.currency', 'Currency', states={
+                'invisible': True}),
         'get_currency_id')
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
-        'get_currency_digits')
+        'on_change_with_currency_digits')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
-        'get_currency_symbol')
+        'on_change_with_currency_symbol')
 
     @classmethod
     def default_currency(cls):
@@ -43,16 +43,20 @@ class ModelCurrency(object):
     def get_currency(self):
         raise NotImplementedError
 
+    @fields.depends('currency')
     def on_change_currency(self):
         digits = self.currency.digits if self.currency else 2
         symbol = self.currency.symbol if self.currency else ''
         return {'currency_digits': digits, 'currency_symbol': symbol}
 
     def get_currency_id(self, name):
-        return self.get_currency().id
+        currency = self.get_currency()
+        return currency.id if currency else None
 
-    def get_currency_digits(self, name):
+    @fields.depends('currency')
+    def on_change_with_currency_digits(self, name=None):
         return self.on_change_currency()['currency_digits']
 
-    def get_currency_symbol(self, name):
+    @fields.depends('currency')
+    def on_change_with_currency_symbol(self, name=None):
         return self.on_change_currency()['currency_symbol']

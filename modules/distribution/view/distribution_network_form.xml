@@ -2,6 +2,8 @@
 <form string="Distribution Network">
     <label name="name"/>
     <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
     <notebook>
         <page id="hierarchy" string="Hierarchy">
             <label name="parent"/>

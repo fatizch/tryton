@@ -5,24 +5,20 @@ from .rule_engine import *
 from .party import *
 from .test_case import *
 from .wizard import *
-from .clause import *
 from .service import *
-from .document import *
+from .contact_type import *
 
 
 def register():
     Pool.register(
         # from contract
-        StatusHistory,
         Contract,
+        ActivationHistory,
         ContractOption,
         ContractAddress,
+        ContractSelectEndDate,
         # From Service
         ContractService,
-        # From Clause
-        ContractClause,
-        # From Document
-        DocumentTemplate,
         #From Rule Engine
         RuleEngineRuntime,
         # from party
@@ -33,7 +29,14 @@ def register():
         #From Wizard
         OptionsDisplayer,
         WizardOption,
+        SynthesisMenu,
+        SynthesisMenuContrat,
+        ContactType,
+        ContractContact,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
+        OptionSubscriptionWizardLauncher,
+        SynthesisMenuOpen,
+        ContractEnd,
         module='contract', type_='wizard')

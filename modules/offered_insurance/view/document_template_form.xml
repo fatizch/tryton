@@ -5,9 +5,21 @@
   <label name="code" xalign="0"/>
   <field name="code"/>
   <label name="on_model" xalign="0"/>
-  <field name="on_model" colspan="3"/>
+  <field name="on_model" colspan="3" widget="selection"/>
   <label name="kind" xalign="0"/>
   <field name="kind" colspan="3"/>
-  <field name="versions" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>
+  <notebook>
+    <page string="Versions" id="versions">
+      <field name="versions"/>
+    </page>
+    <page string="Products" id="products">
+      <field name="products"/>
+    </page>
+    <page string="Mail" id="Mail" col="2">
+      <label name="mail_subject"/>
+      <field name="mail_subject"/>
+      <newline/>
+      <field name="mail_body" colspan="2"/>
+    </page>
+  </notebook>
 </form>
-

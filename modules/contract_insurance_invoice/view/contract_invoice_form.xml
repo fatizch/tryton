@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Contract Invoice">
+    <label name="start"/>
+    <field name="start"/>
+    <label name="end"/>
+    <field name="end"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="invoice"/>
+    <field name="invoice"/>
+</form>

@@ -4,7 +4,6 @@ from .offered import *
 from .expense import *
 from .business_rule import *
 from .coverage import *
-from .clause import *
 from .process import *
 from .party import *
 from .test_case import *
@@ -25,19 +24,19 @@ def register():
         OfferedProduct,
         ItemDescSubItemDescRelation,
         ItemDescriptionExtraDataRelation,
-        ProductItemDescriptionRelation,
         # From Batch
         ProductValidationBatch,
-        # From business_rule
-        RuleEngineParameter,
+        # From rule engine
+        RuleEngineExtraData,
         RuleEngine,
-        TableManageDimensionShowDimension,
+        # From business_rule
         BusinessRuleRoot,
         # From business_rule.ir
         Model,
         Attachment,
         # From business_rule.documents_rule
         DocumentTemplate,
+        DocumentProductRelation,
         DocumentTemplateVersion,
         DocumentDescription,
         DocumentRule,
@@ -46,6 +45,7 @@ def register():
         DocumentRequestLine,
         DocumentCreateSelectTemplate,
         DocumentCreateSelect,
+        DocumentCreatePreview,
         DocumentCreateAttach,
         DocumentReceiveRequest,
         DocumentReceiveAttach,
@@ -58,18 +58,16 @@ def register():
         FeeVersion,
         # From business_rule.eligibility_rule
         EligibilityRule,
-        EligibilityRelationKind,
         CoverageAmountRule,
         DeductibleRule,
         DeductibleDuration,
         TermRule,
+        # From business_rule.exclusion
+        ExclusionKind,
+        # From business_rule.extra_premium
+        ExtraPremiumKind,
         # From rule_engine
         RuleEngineRuntime,
-        #From Clause
-        ClauseRule,
-        Clause,
-        RuleClauseRelation,
-        ClauseVersion,
         # From process
         ProcessProductRelation,
         Process,
@@ -81,6 +79,7 @@ def register():
     Pool.register(
         # From business_rule.documents_rule
         DocumentGenerateReport,
+        DocumentFromFilename,
         module='offered_insurance', type_='report')
     Pool.register(
         # From business_rule.documents_rule

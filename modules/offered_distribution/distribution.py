@@ -1,7 +1,5 @@
-import copy
-
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields, utils, coop_string
@@ -31,7 +29,7 @@ class DistributionNetwork:
             'All Comercial Products'),
         'get_all_commercial_products_id')
     company = fields.Many2One('company.company', 'Company',
-            depends=['commercial_products'])
+        ondelete='RESTRICT', depends=['commercial_products'])
 
     def get_parent_com_products_id(self, name):
         ComProduct = Pool().get('distribution.commercial_product')
@@ -62,27 +60,38 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
 
     product = fields.Many2One('offered.product', 'Technical Product', domain=[
             ('start_date', '<=', Eval('start_date')),
-            ('company', '=', Eval('context', {}).get('company'))],
-        depends=['start_date'], required=True)
+            If(Eval('context', {}).contains('company'),
+                ('company', '=', Eval('context', {}).get('company')),
+                ('id', '>', 0))],
+        depends=['start_date'], required=True, ondelete='RESTRICT')
     dist_networks = fields.Many2Many('distribution.network-commercial_product',
         'com_product', 'dist_network', 'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     name = fields.Char('Name', required=True)
-    code = fields.Char('Code', required=True, on_change_with=['name', 'code'])
+    code = fields.Char('Code', required=True)
     description = fields.Text('Description')
 
     @classmethod
     def __setup__(cls):
         super(CommercialProduct, cls).__setup__()
-        cls.product = copy.copy(cls.product)
         cls.product.domain = export.clean_domain_for_import(
             cls.product.domain, 'company')
+
+    @classmethod
+    def copy(cls, products, default=None):
+        if default is None:
+            default = {}
+        else:
+            default = default.copy()
+        default.setdefault('dist_networks', None)
+        return super(CommercialProduct, cls).copy(products, default=default)
 
     @staticmethod
     def default_start_date():
         return utils.today()
 
+    @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
             return self.code

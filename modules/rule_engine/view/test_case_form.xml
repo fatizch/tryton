@@ -28,6 +28,7 @@
       </page>
     </notebook>
   </group>
+  <button string="Recalculate" name="recalculate"/>
   <label name="expected_result"/>
-  <field name="expected_result" colspan="3"/>
+  <field name="expected_result" colspan="2"/>
 </form>

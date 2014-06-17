@@ -24,3 +24,12 @@ msgstr "Compte à recevoir par défaut"
 
 msgid "Account for %s"
 msgstr "Compte pour %s"
+
+msgid "Fiscal Year"
+msgstr "Année Fiscale"
+
+msgid "fiscal_year"
+msgstr "annee_fiscale"
+
+msgid "Post Move Sequence"
+msgstr "Séquence de mouvements postés"

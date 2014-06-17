@@ -1,4 +1,6 @@
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
+
 from trytond.modules.cog_utils import model, fields
 
 
@@ -23,7 +25,7 @@ class CashValueCollection(model.CoopView, model.CoopSQL):
     contract = fields.Many2One('contract', 'Contract',
         ondelete='CASCADE')
     collection = fields.Many2One('collection', 'Collection',
-        states={'required': True})
+        ondelete='CASCADE', states={'required': True})
 
     def init_dict_for_rule_engine(self, the_dict):
         the_dict['cash_value_collection'] = self
@@ -70,13 +72,19 @@ class CashValueCollection(model.CoopView, model.CoopSQL):
         return result
 
 
+_STATES = {
+    'readonly': Eval('status') != 'quote',
+    }
+_DEPENDS = ['status']
+
+
 class Contract:
     'Contract'
 
     __name__ = 'contract'
 
     cash_value_collections = fields.One2Many('contract.cash_value.collection',
-        'contract', 'Collections')
+        'contract', 'Collections', states=_STATES, depends=_DEPENDS)
     is_cash_value = fields.Function(fields.Boolean('Is Cash Value'),
         'get_is_cash_value')
 

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Billing Mode">
+    <field name="code"/>
+    <field name="name"/>
+    <field name="frequency"/>
+    <field name="direct_debit"/>
+    <field name="allowed_direct_debit_days"/>
+    <field name="sync_day"/>
+    <field name="sync_month"/>
+</tree>

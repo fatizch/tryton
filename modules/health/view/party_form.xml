@@ -3,10 +3,6 @@
     <xpath expr="/form/notebook/page[@id='extra_data']" position="inside">
         <field name="health_complement" colspan="4" mode="form,tree"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='summary']/field[@name='summary']" position="after">
-        <label name="health_contract"/>
-        <field name="health_contract"/>
-    </xpath>
     <xpath expr="/form" position="inside">
         <field name="is_health"/>
     </xpath>

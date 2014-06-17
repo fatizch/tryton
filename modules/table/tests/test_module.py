@@ -3,7 +3,6 @@ import datetime
 from decimal import Decimal
 
 import trytond.tests.test_tryton
-from trytond.transaction import Transaction
 from trytond.modules.cog_utils import test_framework
 
 
@@ -21,7 +20,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Definition': 'table',
             'Dimension': 'table.dimension.value',
             'Cell': 'table.cell',
-            'ManageDimension1': 'table.manage_dimension.show_dimension_1',
         }
 
     def test0010definition_get(self):
@@ -40,26 +38,26 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Test TableCell.get with 1 dimension of value.
         '''
         definition, = self.Definition.create([{
-            'name': 'Test',
-            'code': 'test1',
-            'dimension_kind1': 'value',
-        }])
+                    'name': 'Test',
+                    'code': 'test1',
+                    'dimension_kind1': 'value',
+                    }])
         dim1_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'value': 'foo',
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'value': 'foo',
+                    }])
         dim1_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'value': 'bar',
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'value': 'bar',
+                    }])
         for values in (
                 {'dimension1': dim1_foo.id, 'value': 'ham'},
                 {'dimension1': dim1_bar.id, 'value': 'spam'}):
             values.update({
-                'definition': definition.id,
-            })
+                    'definition': definition.id,
+                    })
             self.Cell.create([values])
         for query, result in (
                 (('foo',), 'ham'),
@@ -74,26 +72,26 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Test TableCell.get with 1 dimension of date.
         '''
         definition, = self.Definition.create([{
-            'name': 'Test',
-            'code': 'test2',
-            'dimension_kind1': 'date',
-        }])
+                    'name': 'Test',
+                    'code': 'test2',
+                    'dimension_kind1': 'date',
+                    }])
         dim1_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'date': datetime.date(2012, 12, 21),
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'date': datetime.date(2012, 12, 21),
+                    }])
         dim1_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'date': datetime.date(2012, 9, 21),
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'date': datetime.date(2012, 9, 21),
+                    }])
         for values in (
                 {'dimension1': dim1_foo.id, 'value': 'ham'},
                 {'dimension1': dim1_bar.id, 'value': 'spam'}):
             values.update({
-                'definition': definition.id,
-            })
+                    'definition': definition.id,
+                    })
             self.Cell.create([values])
         for query, result in (
                 ((datetime.date(2012, 12, 21),), 'ham'),
@@ -108,28 +106,28 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Test TableCell.get with 1 dimension of range.
         '''
         definition, = self.Definition.create([{
-            'name': 'Test',
-            'code': 'test3',
-            'dimension_kind1': 'range',
-        }])
+                    'name': 'Test',
+                    'code': 'test3',
+                    'dimension_kind1': 'range',
+                    }])
         dim1_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start': 1,
-            'end': 10,
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start': 1,
+                    'end': 10,
+                    }])
         dim1_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start': 20,
-            'end': 42,
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start': 20,
+                    'end': 42,
+                    }])
         for values in (
                 {'dimension1': dim1_foo.id, 'value': 'ham'},
                 {'dimension1': dim1_bar.id, 'value': 'spam'}):
             values.update({
-                'definition': definition.id,
-            })
+                    'definition': definition.id,
+                    })
             self.Cell.create([values])
         for query, result in (
                 ((0,), None),
@@ -147,28 +145,28 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Test TableCell.get with 1 dimension of range.
         '''
         definition, = self.Definition.create([{
-            'name': 'Test',
-            'code': 'test',
-            'dimension_kind1': 'range',
-        }])
+                    'name': 'Test',
+                    'code': 'test',
+                    'dimension_kind1': 'range',
+                    }])
         dim1_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start': None,
-            'end': 10,
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start': None,
+                    'end': 10,
+                    }])
         dim1_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start': 20,
-            'end': None,
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start': 20,
+                    'end': None,
+                    }])
         for values in (
                 {'dimension1': dim1_foo.id, 'value': 'ham'},
                 {'dimension1': dim1_bar.id, 'value': 'spam'}):
             values.update({
-                'definition': definition.id,
-            })
+                    'definition': definition.id,
+                    })
             self.Cell.create([values])
         for query, result in (
                 ((0,), 'ham'),
@@ -185,28 +183,28 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Test TableCell.get with 1 dimension of range-date.
         '''
         definition, = self.Definition.create([{
-            'name': 'Test',
-            'code': 'test4',
-            'dimension_kind1': 'range-date',
-        }])
+                    'name': 'Test',
+                    'code': 'test4',
+                    'dimension_kind1': 'range-date',
+                    }])
         dim1_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start_date': datetime.date(2012, 1, 1),
-            'end_date': datetime.date(2012, 12, 31),
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start_date': datetime.date(2012, 1, 1),
+                    'end_date': datetime.date(2012, 12, 31),
+                    }])
         dim1_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start_date': datetime.date(2013, 6, 1),
-            'end_date': datetime.date(2013, 8, 1),
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start_date': datetime.date(2013, 6, 1),
+                    'end_date': datetime.date(2013, 8, 1),
+                    }])
         for values in (
                 {'dimension1': dim1_foo.id, 'value': 'ham'},
                 {'dimension1': dim1_bar.id, 'value': 'spam'}):
             values.update({
-                'definition': definition.id,
-            })
+                    'definition': definition.id,
+                    })
             self.Cell.create([values])
         for query, result in (
                 ((datetime.date(2011, 1, 1),), None),
@@ -224,28 +222,28 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Test TableCell.get with 1 dimension of range-date.
         '''
         definition, = self.Definition.create([{
-            'name': 'Test',
-            'code': 'test',
-            'dimension_kind1': 'range-date',
-        }])
+                    'name': 'Test',
+                    'code': 'test',
+                    'dimension_kind1': 'range-date',
+                    }])
         dim1_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start_date': None,
-            'end_date': datetime.date(2012, 12, 31),
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start_date': None,
+                    'end_date': datetime.date(2012, 12, 31),
+                    }])
         dim1_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'start_date': datetime.date(2013, 6, 1),
-            'end_date': None,
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'start_date': datetime.date(2013, 6, 1),
+                    'end_date': None,
+                    }])
         for values in (
                 {'dimension1': dim1_foo.id, 'value': 'ham'},
                 {'dimension1': dim1_bar.id, 'value': 'spam'}):
             values.update({
-                'definition': definition.id,
-            })
+                    'definition': definition.id,
+                    })
             self.Cell.create([values])
         for query, result in (
                 ((datetime.date(2011, 1, 1),), 'ham'),
@@ -262,35 +260,35 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Test TableCell.get with 2 dimensions of value.
         '''
         definition, = self.Definition.create([{
-            'name': 'Test',
-            'code': 'test_code',
-            'dimension_kind1': 'value',
-            'dimension_kind2': 'range',
-            'dimension_name1': 'Value',
-            'dimension_name2': 'Range',
-        }])
+                    'name': 'Test',
+                    'code': 'test_code',
+                    'dimension_kind1': 'value',
+                    'dimension_kind2': 'range',
+                    'dimension_name1': 'Value',
+                    'dimension_name2': 'Range',
+                    }])
         dim1_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'value': 'foo',
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'value': 'foo',
+                    }])
         dim1_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension1',
-            'value': 'bar',
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension1',
+                    'value': 'bar',
+                    }])
         dim2_foo, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension2',
-            'start': 1,
-            'end': 10,
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension2',
+                    'start': 1,
+                    'end': 10,
+                    }])
         dim2_bar, = self.Dimension.create([{
-            'definition': definition.id,
-            'type': 'dimension2',
-            'start': 20,
-            'end': 42,
-        }])
+                    'definition': definition.id,
+                    'type': 'dimension2',
+                    'start': 20,
+                    'end': 42,
+                    }])
         for values in (
                 {'dimension1': dim1_foo.id, 'dimension2': dim2_foo.id,
                     'value': 'ham'},
@@ -301,8 +299,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 {'dimension1': dim1_bar.id, 'dimension2': dim2_bar.id,
                     'value': 'chicken'}):
             values.update({
-                'definition': definition.id,
-            })
+                    'definition': definition.id,
+                    })
             self.Cell.create([values])
 
         for query, result in (
@@ -337,78 +335,92 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     type_), value)
 
     @test_framework.prepare_test('table.test0060table_2dim')
-    def test0080test_manage_dimension1_wizard(self):
-        table = self.Definition.search([('code', '=', 'test_code')])[0]
-        with Transaction().set_context({'active_id': table.id}):
-            wizard_id, _, _ = self.ManageDimension1.create()
-            wizard = self.ManageDimension1(wizard_id)
-            wizard._execute('dimension_management')
-            res = wizard.default_dimension_management(None)
-            self.assertEqual(res, {
-                    'date_format': "%d%m%y",
-                    'kind': "value",
-                    'name': "Value",
-                    'cur_dimension': 1,
-                    'converted_text': "bar\nfoo",
-                    'values': [2, 1],
-                    'table': 1,
-                    'order': "alpha",
-                })
-            self.assertEqual(self.ManageDimension1.next_dim_action.action_id,
-                'table.act_manage_dimension_2')
-
-    @test_framework.prepare_test('table.test0060table_2dim')
     def test0090test_export(self):
         test_table = self.Definition.search([('code', '=', 'test_code')])[0]
         file_name, result, _ = test_table.export_json()
         self.assertEqual(file_name, '[%s][table]test_code.json' %
             datetime.date.today().strftime('%Y-%m-%d'))
-        self.assertEqual(result, [{
+        self.assertEqual(result, [
+                {'__name__': 'table',
                     '_export_key': (('code', u'test_code'),),
+                    'cells': [(u'bar', u'[1.0 - 10.0[', u'spam'),
+                        (u'foo', u'[1.0 - 10.0[', u'ham'),
+                        (u'bar', u'[20.0 - 42.0[', u'chicken'),
+                        (u'foo', u'[20.0 - 42.0[', u'egg')],
                     'code': u'test_code',
-                    'dimension2': [
-                        {'definition':
-                            (('code', u'test_code'),),
-                            '_export_key':
-                            ((('code', u'test_code'),), 'dimension2', 1),
+                    'dimension1': [{'__name__': 'table.dimension.value',
+                            '_export_key': (('definition.code', u'test_code'),
+                                ('type', u'dimension1'),
+                                ('name', u'bar')),
+                            'date': None,
+                            'definition': (('code', u'test_code'),),
+                            'end': None,
+                            'end_date': None,
+                            'name': u'bar',
+                            'sequence': None,
+                            'start': None,
+                            'start_date': None,
+                            'type': u'dimension1',
+                            'value': u'bar'},
+                        {'__name__': 'table.dimension.value',
+                            '_export_key': (('definition.code', u'test_code'),
+                                ('type', u'dimension1'),
+                                ('name', u'foo')),
+                            'date': None,
+                            'definition': (('code', u'test_code'),),
+                            'end': None,
+                            'end_date': None,
+                            'name': u'foo',
+                            'sequence': None,
+                            'start': None,
+                            'start_date': None,
+                            'type': u'dimension1',
+                            'value': u'foo'}],
+                    'dimension2': [{'__name__': 'table.dimension.value',
+                            '_export_key': (('definition.code', u'test_code'),
+                                ('type', u'dimension2'),
+                                ('name', u'[1.0 - 10.0[')),
+                            'date': None,
+                            'definition': (('code', u'test_code'),),
                             'end': 10.0,
+                            'end_date': None,
+                            'name': u'[1.0 - 10.0[',
+                            'sequence': None,
                             'start': 1.0,
-                            '__name__': 'table.dimension.value',
-                            'type': u'dimension2'},
-                        {'definition': (('code', u'test_code'),),
-                            '_export_key':
-                            ((('code', u'test_code'),), 'dimension2', 2),
+                            'start_date': None,
+                            'type': u'dimension2',
+                            'value': None},
+                        {'__name__': 'table.dimension.value',
+                            '_export_key': (('definition.code', u'test_code'),
+                                ('type', u'dimension2'),
+                                ('name', u'[20.0 - 42.0[')),
+                            'date': None,
+                            'definition': (('code', u'test_code'),),
                             'end': 42.0,
+                            'end_date': None,
+                            'name': u'[20.0 - 42.0[',
+                            'sequence': None,
                             'start': 20.0,
-                            '__name__': 'table.dimension.value',
-                            'type': u'dimension2'}],
-                    'name': u'Test',
-                    'dimension1': [
-                        {'__name__': 'table.dimension.value',
-                            '_export_key':
-                            ((('code', u'test_code'),), 'dimension1', 1),
-                            'type': u'dimension1',
-                            'value': u'bar',
-                            'definition': (('code', u'test_code'),)},
-                        {'__name__': 'table.dimension.value',
-                            '_export_key':
-                            ((('code', u'test_code'),), 'dimension1', 2),
-                            'type': u'dimension1',
-                            'value': u'foo',
-                            'definition': (('code', u'test_code'),)}],
-                    'cells':
-                        [[2, 2], [u'spam', u'chicken', u'ham', u'egg']],
-                    'type_': u'char',
-                    'number_of_digits': 2,
-                    'dimension_order4': u'alpha',
-                    'dimension_kind1': u'value',
-                    'dimension_order3': u'alpha',
-                    '__name__': 'table',
-                    'dimension_kind2': u'range',
-                    'dimension_order2': u'alpha',
-                    'dimension_name1': u'Value',
-                    'dimension_order1': u'alpha',
-                    'dimension_name2': u'Range'}])
+                            'start_date': None,
+                            'type': u'dimension2',
+                            'value': None}],
+                   'dimension3': [],
+                   'dimension4': [],
+                   'dimension_kind1': u'value',
+                   'dimension_kind2': u'range',
+                   'dimension_kind3': None,
+                   'dimension_kind4': None,
+                   'dimension_name1': u'Value',
+                   'dimension_name2': u'Range',
+                   'dimension_name3': None,
+                   'dimension_name4': None,
+                   'dimension_order1': u'alpha',
+                   'dimension_order2': u'alpha',
+                   'dimension_order3': u'alpha',
+                   'dimension_order4': u'alpha',
+                   'name': u'Test',
+                   'number_of_digits': 2,
+               'type_': u'char'}])
 
     @test_framework.prepare_test('table.test0060table_2dim')
     def test0091test_copy(self):
@@ -416,7 +428,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         new_table = test_table.copy([test_table])[0]
         self.assertEqual(new_table.code, 'test_code_clone')
         self.assertEqual(self.Cell.get(new_table, 'bar', 30), 'chicken')
-
 
 
 def suite():

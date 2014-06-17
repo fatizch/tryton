@@ -1,0 +1,115 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.option:"
+msgid "Either all share must be completed or none"
+msgstr ""
+
+msgctxt "error:contract.option:"
+msgid "Total share for clause %s is invalid"
+msgstr ""
+
+msgctxt "field:contract.option,beneficiaries:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "field:contract.option,beneficiary_clause:"
+msgid "Beneficiary Clause"
+msgstr "Clause bénéficiaire"
+
+msgctxt "field:contract.option,customized_beneficiary_clause:"
+msgid "Customized Beneficiary Clause"
+msgstr "Clause bénéficiare personnalisée"
+
+msgctxt "field:contract.option,with_beneficiary_clause:"
+msgid "With Beneficiary Clause"
+msgstr "Avec clause bénéficiaire"
+
+msgctxt "field:contract.option.beneficiary,accepting:"
+msgid "Accepting"
+msgstr "Acceptant"
+
+msgctxt "field:contract.option.beneficiary,address:"
+msgid "Address"
+msgstr "Adresse"
+
+msgctxt "field:contract.option.beneficiary,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.beneficiary,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.option.beneficiary,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.option.beneficiary,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:contract.option.beneficiary,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.option.beneficiary,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.option.beneficiary,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.option.beneficiary,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:contract.option.beneficiary,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.option.beneficiary,reference:"
+msgid "Reference"
+msgstr "Référence"
+
+msgctxt "field:contract.option.beneficiary,share:"
+msgid "Share"
+msgstr "Quote-Part"
+
+msgctxt "field:contract.option.beneficiary,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.option.beneficiary,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.option.beneficiary,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:contract.contact.type,name:accepting_benef"
+msgid "Accepting Beneficiary"
+msgstr "Bénéficiaire acceptant"
+
+msgctxt "model:contract.option.beneficiary,name:"
+msgid "Contract Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "view:contract.option.beneficiary:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:contract.option.beneficiary:"
+msgid "Beneficiaries"
+msgstr "Bénéficiaires"
+
+msgctxt "view:contract.option.beneficiary:"
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
+msgctxt "view:contract.option:"
+msgid "Beneficiary Clause"
+msgstr "Clause bénéficiaire"

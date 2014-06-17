@@ -1,4 +1,3 @@
-import copy
 import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
@@ -26,7 +25,6 @@ class ContactMechanism(export.ExportImportMixin):
     def __setup__(cls):
         super(ContactMechanism, cls).__setup__()
         # TODO : Make it cleaner
-        cls.type = copy.copy(cls.type)
         if ('skype', 'Skype') in cls.type.selection:
             cls.type.selection.remove(('skype', 'Skype'))
         if ('sip', 'SIP') in cls.type.selection:
@@ -60,6 +58,12 @@ class ContactMechanism(export.ExportImportMixin):
     def _export_keys(cls):
         return ('party.name', 'type', 'value')
 
+    def get_icon(self):
+        if self.type == 'phone' or self.type == 'mobile':
+            return 'coopengo-phone'
+        elif self.type == 'email':
+            return 'coopengo-email'
+
 
 class PartyInteraction(model.CoopSQL, model.CoopView):
     'Party Interaction'
@@ -79,21 +83,20 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
     address = fields.Many2One('party.address', 'Address',
         domain=[('party', '=', Eval('party'))], depends=['party'],
-        states={'invisible': Eval('media') != 'mail'})
-    user = fields.Many2One('res.user', 'User')
+        states={'invisible': Eval('media') != 'mail'}, ondelete='RESTRICT')
+    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
     #in case the user is deleted, we also keep tracks of his name
     user_name = fields.Char('User Name')
     contact_datetime = fields.DateTime('Date and Time')
     comment = fields.Text('Comment')
     attachment = fields.Many2One('ir.attachment', 'Attachment',
         domain=[('resource', '=', Eval('for_object'))], depends=['for_object'],
-        context={'resource': Eval('for_object')})
+        context={'resource': Eval('for_object')}, ondelete='RESTRICT')
     for_object = fields.Function(
-        fields.Char('For Object', states={'invisible': True},
-            on_change_with=['for_object_ref']),
+        fields.Char('For Object', states={'invisible': True}),
         'on_change_with_for_object')
     for_object_ref = fields.Reference('For Object', [('party.party', 'Party')],
-        states={'readonly': True}, on_change_with=['party', 'for_object_ref'])
+        states={'readonly': True})
 
     @staticmethod
     def default_user():
@@ -124,12 +127,14 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
     def default_for_object(cls):
         return cls.default_for_object_ref()
 
+    @fields.depends('party', 'for_object_ref')
     def on_change_with_for_object_ref(self):
         if (hasattr(self, 'for_object_ref') and self.for_object_ref):
             return self.for_object_ref
         if (hasattr(self, 'party') and self.party):
             return self.party
 
+    @fields.depends('for_object_ref')
     def on_change_with_for_object(self, name=None):
         if not (hasattr(self, 'for_object_ref') and self.for_object_ref):
             return ''
