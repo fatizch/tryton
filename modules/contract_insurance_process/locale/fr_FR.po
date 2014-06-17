@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -116,10 +116,6 @@ msgstr "ID"
 msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
-
-msgctxt "field:contract.subscribe.find_process,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:contract.subscribe.find_process,possible_brokers:"
 msgid "Possible Brokers"

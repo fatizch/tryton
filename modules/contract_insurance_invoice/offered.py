@@ -51,8 +51,8 @@ class BillingMode(model.CoopSQL, model.CoopView):
     direct_debit = fields.Boolean('Direct Debit Payment')
     allowed_direct_debit_days = fields.Char('Allowed Direct Debit Dates',
         states={'invisible': ~Eval('direct_debit')},
-        help='A list of comma-separated numbers that resolves to the list of '
-        'allowed days of the month eligible for direct debit.\n\n'
+        help='Days of the month allowed for direct debit payment separated '
+        'by comma.\n\n'
         'An empty list means that all dates are allowed')
     allowed_payment_terms = fields.Many2Many(
         'offered.billing.mode-account.invoice.payment_term', 'billing_mode',

@@ -30,17 +30,13 @@ msgctxt "field:cash_value.cash_value_rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:cash_value.cash_value_rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:cash_value.cash_value_rule,offered:"
 msgid "Offered"
 msgstr "Offre"
 
 msgctxt "field:cash_value.cash_value_rule,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:cash_value.cash_value_rule,rule:"
 msgid "Rule Engine"
@@ -68,7 +64,7 @@ msgstr "Comportement du Modèle"
 
 msgctxt "field:cash_value.cash_value_rule,view_rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:cash_value.cash_value_rule,write_date:"
 msgid "Write Date"

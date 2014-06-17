@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -64,10 +64,6 @@ msgstr "Préjudices"
 msgctxt "field:claim,main_contract:"
 msgid "Main Contract"
 msgstr "Contrat Principal"
-
-msgctxt "field:claim,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:claim,name:"
 msgid "Number"
@@ -173,10 +169,6 @@ msgctxt "field:claim.indemnification,manual:"
 msgid "Manual Calculation"
 msgstr "Calcul Manuel"
 
-msgctxt "field:claim.indemnification,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:claim.indemnification,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -253,10 +245,6 @@ msgctxt "field:claim.indemnification.detail,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:claim.indemnification.detail,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:claim.indemnification.detail,nb_of_unit:"
 msgid "Nb of Unit"
 msgstr "Nombre d'Unité"
@@ -326,10 +314,6 @@ msgctxt ""
 msgid "Indemnification"
 msgstr "Indemnisation"
 
-msgctxt "field:claim.indemnification.validate.display,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:claim.indemnification.validate.display,selection:"
 msgid "Selection"
 msgstr "Sélection"
@@ -361,10 +345,6 @@ msgstr "Indemnisations"
 msgctxt "field:claim.indemnification.validate.select,modified:"
 msgid "Modified"
 msgstr "Modifié"
-
-msgctxt "field:claim.indemnification.validate.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:claim.indemnification.validate.select,search_size:"
 msgid "Search Size"
@@ -413,10 +393,6 @@ msgstr "Préjudice Initial"
 msgctxt "field:claim.loss,multi_level_view:"
 msgid "Delivered Services"
 msgstr "Prestations Fournies"
-
-msgctxt "field:claim.loss,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
 
 msgctxt "field:claim.loss,possible_loss_descs:"
 msgid "Possible Loss Descs"
@@ -580,15 +556,15 @@ msgstr "Type de séquence"
 
 msgctxt "model:ir.test_case.instance,name:document_desc_test_case"
 msgid "Document Desc Test Case"
-msgstr "Jeux d'essai Descripteur de document"
+msgstr "Jeux d'essai : descripteurs de document"
 
 msgctxt "model:ir.test_case.instance,name:event_desc_test_case"
 msgid "Event Desc Test Case"
-msgstr "Jeux d'essai Descripteur d'évenement"
+msgstr "Jeux d'essai : descripteurs d'évenement"
 
 msgctxt "model:ir.test_case.instance,name:loss_desc_test_case"
 msgid "Loss Desc Test Case"
-msgstr "Jeux d'essai de descripteur de préjudice"
+msgstr "Jeux d'essai : descripteurs de préjudice"
 
 msgctxt "model:ir.ui.menu,name:menu_claim"
 msgid "Claim"

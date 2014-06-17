@@ -165,10 +165,6 @@ msgctxt "field:loan,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"
 
-msgctxt "field:loan,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:loan,number:"
 msgid "Number"
 msgstr "Numéro"
@@ -187,7 +183,7 @@ msgstr "Capital restant dû"
 
 msgctxt "field:loan,parties:"
 msgid "Parties"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:loan,payment_amount:"
 msgid "Payment Amount"
@@ -243,11 +239,11 @@ msgstr "Prêt"
 
 msgctxt "field:loan-party,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:loan-party,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:loan-party,write_date:"
 msgid "Write Date"
@@ -304,10 +300,6 @@ msgstr "ID"
 msgctxt "field:loan.increment,loan:"
 msgid "Loan"
 msgstr "Prêt"
-
-msgctxt "field:loan.increment,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
 
 msgctxt "field:loan.increment,number:"
 msgid "Number"
@@ -393,10 +385,6 @@ msgctxt "field:loan.payment,loan:"
 msgid "Loan"
 msgstr "Prêt"
 
-msgctxt "field:loan.payment,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:loan.payment,number:"
 msgid "Number"
 msgstr "Numéro"
@@ -460,10 +448,6 @@ msgstr "ID"
 msgctxt "field:loan.share,loan:"
 msgid "Loan"
 msgstr "Prêt"
-
-msgctxt "field:loan.share,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:loan.share,option:"
 msgid "Option"
@@ -539,7 +523,7 @@ msgstr "Acteur"
 
 msgctxt "field:party.synthesis.menu.loan,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.loan,write_date:"
 msgid "Write Date"

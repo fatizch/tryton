@@ -40,7 +40,7 @@ msgstr "ID"
 
 msgctxt "field:offered.option.description-beneficiary_clause,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:offered.option.description-beneficiary_clause,write_date:"
 msgid "Write Date"
@@ -66,7 +66,7 @@ msgstr "Clauses standards"
 
 msgctxt "model:ir.test_case.instance,name:beneficiary_clause_test_case"
 msgid "Beneficiary Clause Test Case"
-msgstr "Jeux d'essai Clauses bénéficiaires"
+msgstr "Jeux d'essai : clauses bénéficiaires"
 
 msgctxt "model:offered.option.description-beneficiary_clause,name:"
 msgid "Relation Option Description To Beneficiary Clause"

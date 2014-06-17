@@ -22,10 +22,6 @@ msgctxt "field:loan.average_premium_rate.display.values,loans:"
 msgid "Loans"
 msgstr "Prêts"
 
-msgctxt "field:loan.average_premium_rate.display.values,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:loan.average_premium_rule,code:"
 msgid "Code"
 msgstr "Code"
@@ -57,10 +53,6 @@ msgstr "Règles de frais"
 msgctxt "field:loan.average_premium_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:loan.average_premium_rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:loan.average_premium_rule,name:"
 msgid "Name"
@@ -113,10 +105,6 @@ msgstr "Frais"
 msgctxt "field:loan.average_premium_rule.fee_rule,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:loan.average_premium_rule.fee_rule,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:loan.average_premium_rule.fee_rule,rec_name:"
 msgid "Name"

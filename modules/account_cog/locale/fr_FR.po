@@ -58,10 +58,6 @@ msgctxt "field:account.fee.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:account.fee.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:account.fee.description,name:"
 msgid "Fee Name"
 msgstr "Nom du Frais"
@@ -113,10 +109,6 @@ msgstr "Type"
 msgctxt "field:account.fee.description.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
-
-msgctxt "field:account.fee.description.version,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:account.fee.description.version,rec_name:"
 msgid "Name"
@@ -194,10 +186,6 @@ msgctxt "field:account.tax.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:account.tax.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:account.tax.description,name:"
 msgid "Name"
 msgstr "Nom"
@@ -249,10 +237,6 @@ msgstr "Type"
 msgctxt "field:account.tax.description.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
-
-msgctxt "field:account.tax.description.version,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:account.tax.description.version,rec_name:"
 msgid "Name"
@@ -316,11 +300,11 @@ msgstr "Paiements"
 
 msgctxt "field:party.synthesis.menu.move.line,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteurs"
 
 msgctxt "field:party.synthesis.menu.move.line,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.move.line,write_date:"
 msgid "Write Date"
@@ -360,23 +344,23 @@ msgstr "Taxes"
 
 msgctxt "model:ir.test_case.instance,name:account_kind_test_case"
 msgid "Account Kind Test Case"
-msgstr "Jeux d'essai Type de Compte"
+msgstr "Jeux d'essai : type de compte"
 
 msgctxt "model:ir.test_case.instance,name:account_test_case"
 msgid "Account Test Case"
-msgstr "Jeux d'essai Compte"
+msgstr "Jeux d'essai : comptes"
 
 msgctxt "model:ir.test_case.instance,name:configure_accounting_test_case"
 msgid "Configure Accounting Test Case"
-msgstr "Jeux d'essai de configuration de la comptabilité"
+msgstr "Jeux d'essai : configuration de la comptabilité"
 
 msgctxt "model:ir.test_case.instance,name:fiscal_year_test_case"
 msgid "Fiscal Year Test Case"
-msgstr "Jeux d'essai Années Fiscales"
+msgstr "Jeux d'essai : années fiscales"
 
 msgctxt "model:ir.test_case.instance,name:tax_test_case"
 msgid "Tax Test Case"
-msgstr "Jeux d'essai Taxes"
+msgstr "Jeux d'essai : taxes"
 
 msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
@@ -392,7 +376,7 @@ msgstr "Taxes"
 
 msgctxt "model:party.synthesis.menu.move.line,name:"
 msgid "Party Synthesis Menu Move line"
-msgstr "Menu Mouvement Synthèse Tiers "
+msgstr "Menu Paiement Synthèse Acteur "
 
 msgctxt "selection:account.fee.description.version,kind:"
 msgid "Flat"
@@ -444,18 +428,14 @@ msgstr "Créditer"
 
 msgctxt "view:account.move.line:"
 msgid "Other Info"
-msgstr "Autre information"
+msgstr "Autres informations"
 
 msgctxt "view:account.move.line:"
-msgid "Payment Information"
-msgstr "Paiement"
-
-msgctxt "view:account.move.line:"
-msgid "Payment Informations"
+msgid "Payments"
 msgstr "Paiements"
 
 msgctxt "view:account.move.line:"
-msgid "Reconciliation Information"
+msgid "Reconciliation"
 msgstr "Réconciliation"
 
 msgctxt "view:account.tax.description.version:"

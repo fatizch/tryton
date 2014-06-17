@@ -16,4 +16,4 @@ msgstr " "
 
 msgctxt "model:ir.test_case.instance,name:main_company_test_case"
 msgid "Main Company Test Case"
-msgstr "Jeux d'essai Compagnie"
+msgstr "Jeux d'essai : compagnie"

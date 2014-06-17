@@ -34,10 +34,6 @@ msgctxt "field:clause,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:clause,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:clause,name:"
 msgid "Name"
 msgstr "Nom"
@@ -68,7 +64,7 @@ msgstr "Clauses"
 
 msgctxt "model:ir.test_case.instance,name:clause_test_case"
 msgid "Clause Test Case"
-msgstr "Jeux d'essai Clauses"
+msgstr "Jeux d'essai : clauses"
 
 msgctxt "model:ir.ui.menu,name:menu_model_clause"
 msgid "Clauses"

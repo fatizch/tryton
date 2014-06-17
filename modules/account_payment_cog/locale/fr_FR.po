@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -40,11 +40,11 @@ msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.payment,name:"
 msgid "Outstanding/Failed Payments"
-msgstr "Paiements"
+msgstr "Prélèvements en cours / Rejet"
 
 msgctxt "field:party.synthesis.menu.payment,party:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.synthesis.menu.payment,rec_name:"
 msgid "Name"

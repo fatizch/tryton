@@ -70,10 +70,6 @@ msgctxt "field:claim.declare.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:claim.declare.find_process,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:claim.declare.find_process,party:"
 msgid "Party"
 msgstr "Acteur"

@@ -4,7 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:ir.test_case.instance:"
 msgid "Test Case %s uses the %s method, which does not exist !"
-msgstr "Le jeux d'essai%s utilise la méthode %s qui n'existe pas!"
+msgstr "Le jeux d'essai %s utilise la méthode %s qui n'existe pas!"
 
 msgctxt "error:ir.test_case.run:"
 msgid "Cannot load test case file %s"
@@ -202,10 +202,6 @@ msgctxt "field:ir.test_case,language:"
 msgid "Test Case Language"
 msgstr "Langue des jeux d'essai"
 
-msgctxt "field:ir.test_case,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:ir.test_case,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -257,10 +253,6 @@ msgstr "ID"
 msgctxt "field:ir.test_case.instance,method_name:"
 msgid "Method Name"
 msgstr "Nom de la Méthode"
-
-msgctxt "field:ir.test_case.instance,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
 
 msgctxt "field:ir.test_case.instance,name:"
 msgid "Name"
@@ -334,10 +326,6 @@ msgctxt "field:ir.test_case.run.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ir.test_case.run.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:ir.test_case.run.select,select_all_files:"
 msgid "Select All"
 msgstr "Tout sélectionner"
@@ -366,10 +354,6 @@ msgctxt "field:ir.test_case.run.select.file,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:ir.test_case.run.select.file,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:ir.test_case.run.select.file,selected:"
 msgid "Will be loaded"
 msgstr "Seront chargés"
@@ -377,10 +361,6 @@ msgstr "Seront chargés"
 msgctxt "field:ir.test_case.run.select.method,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:ir.test_case.run.select.method,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
 
 msgctxt "field:ir.test_case.run.select.method,selected:"
 msgid "Will be executed"
@@ -396,7 +376,7 @@ msgstr "Test"
 
 msgctxt "field:ir.test_case.run.select.method,test_case:"
 msgid "Test Case"
-msgstr "Jeu de Test"
+msgstr "Jeu d'essai"
 
 msgctxt "field:ir.ui.icon,xml_id:"
 msgid "XML Id"
@@ -442,10 +422,6 @@ msgctxt "field:utils.version_object,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:utils.version_object,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:utils.version_object,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -457,10 +433,6 @@ msgstr "Valeur Courante"
 msgctxt "field:utils.versionned_object,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:utils.versionned_object,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:utils.versionned_object,versions:"
 msgid "Versions"
@@ -575,7 +547,7 @@ msgstr "Importer un fichier"
 
 msgctxt "model:ir.ui.menu,name:menu_test_case"
 msgid "Test Case"
-msgstr "Jeu de Test"
+msgstr "Jeu d'essai"
 
 msgctxt "model:ir.ui.menu,name:menu_test_case_model"
 msgid "Test Case Parameters"

@@ -80,7 +80,7 @@ msgstr "Compte Bancaire"
 
 msgctxt "field:party.synthesis.menu.bank_account,owner:"
 msgid "Party"
-msgstr "Tiers"
+msgstr "Acteur"
 
 msgctxt "field:party.synthesis.menu.bank_account,rec_name:"
 msgid "Name"
@@ -100,15 +100,15 @@ msgstr "Identifiant XML"
 
 msgctxt "model:ir.test_case.instance,name:bank_account_test_case"
 msgid "Bank Account Test Case"
-msgstr "Jeux d'essai Compte Bancaire"
+msgstr "Jeux d'essai : compte Bancaire"
 
 msgctxt "model:ir.test_case.instance,name:bank_test_case"
 msgid "Bank Test Case"
-msgstr "Jeux d'essai Banque"
+msgstr "Jeux d'essai : banques"
 
 msgctxt "model:party.synthesis.menu.bank_account,name:"
 msgid "Party Synthesis Menu Bank Account"
-msgstr "Menu Compte Bancaire Synthèse Tiers "
+msgstr "Menu Compte Bancaire Synthèse Acteurs "
 
 msgctxt "view:party.party:"
 msgid "Bank"

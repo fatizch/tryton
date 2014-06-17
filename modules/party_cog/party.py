@@ -32,7 +32,7 @@ __all__ = [
     'SynthesisMenuOpenState',
     'SynthesisMenuSet',
     'SynthesisMenuActionCloseSynthesis',
-    'SynthesisMenuActionReloadSynthesis',
+    'SynthesisMenuActionRefreshSynthesis',
     'SynthesisMenuRelationship',
     ]
 
@@ -424,10 +424,10 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
         return 'tryton-close'
 
 
-class SynthesisMenuActionReloadSynthesis(model.CoopSQL):
-    'Party Synthesis Menu Action Reload'
-    __name__ = 'party.synthesis.menu.action_reload'
-    name = fields.Char('Reload Synthesis')
+class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
+    'Party Synthesis Menu Action Refresh'
+    __name__ = 'party.synthesis.menu.action_refresh'
+    name = fields.Char('Refresh Synthesis')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod
@@ -436,7 +436,7 @@ class SynthesisMenuActionReloadSynthesis(model.CoopSQL):
         Party = pool.get('party.party')
         party_table = Party.__table__()
         PartyActionClose = pool.get(
-            'party.synthesis.menu.action_reload')
+            'party.synthesis.menu.action_refresh')
         User = pool.get('res.user')
         user = Transaction().user
         user = User(user)
@@ -589,7 +589,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     def merged_models():
         return [
             'party.synthesis.menu.action_close',
-            'party.synthesis.menu.action_reload',
+            'party.synthesis.menu.action_refresh',
             'party.party',
             'party.synthesis.menu.contact',
             'party.contact_mechanism',
@@ -733,7 +733,7 @@ class SynthesisMenuOpenState(model.CoopView):
     'Syntesis Menu Open State'
     __name__ = 'party.synthesis.menu.open_state'
 
-    need_reload = fields.Boolean('Need Reload')
+    need_refresh = fields.Boolean('Need Refresh')
 
 
 class SynthesisMenuOpen(Wizard):
@@ -757,13 +757,13 @@ class SynthesisMenuOpen(Wizard):
             user.party_synthesis = None
             user.party_synthesis_previous = None
             user.save()
-            self.state.need_reload = True
+            self.state.need_refresh = True
             return 'end'
         elif record.__name__ == 'party.synthesis.menu.action_reload':
-            self.state.need_reload = True
+            self.state.need_refresh = True
             return 'end'
         else:
-            self.state.need_reload = False
+            self.state.need_refresh = False
             return 'open'
 
     def do_open(self, action):
@@ -820,7 +820,7 @@ class SynthesisMenuOpen(Wizard):
         return {'ids': [record.to.id]}
 
     def end(self):
-        if self.state.need_reload:
+        if self.state.need_refresh:
             return 'reload menu'
 
 

@@ -62,10 +62,6 @@ msgctxt "field:salary_range,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:salary_range,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:salary_range,name:"
 msgid "Name"
 msgstr "Nom"
@@ -122,10 +118,6 @@ msgctxt "field:salary_range.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:salary_range.version,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:salary_range.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -160,15 +152,15 @@ msgstr "Tranche"
 
 msgctxt "model:ir.test_case.instance,name:ceiling_rule_test_case"
 msgid "Ceiling Rule Test Case"
-msgstr "Jeux d'essai "
+msgstr "Jeux d'essai : plafond"
 
 msgctxt "model:ir.test_case.instance,name:extra_data_test_case"
 msgid "Extra Data Test Case"
-msgstr "Jeux d'essai Données complémentaires"
+msgstr "Jeux d'essai : données complémentaires"
 
 msgctxt "model:ir.test_case.instance,name:salary_range_test_case"
 msgid "Salary Range Test Case"
-msgstr "Jeux d'essai "
+msgstr "Jeux d'essai : tranches de salaire"
 
 msgctxt "model:ir.ui.menu,name:menu_model_salary_range"
 msgid "Salary Range"
