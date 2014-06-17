@@ -22,9 +22,11 @@ def register():
         RunTestsReport,
         RuleError,
         RuleEngineTagRelation,
+        ValidateRuleBatch,
         module='rule_engine', type_='model')
     Pool.register(
         # From rule_engine
         RunTests,
+        ValidateRuleTestCases,
         InitTestCaseFromExecutionLog,
         module='rule_engine', type_='wizard')
