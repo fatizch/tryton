@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -242,6 +242,10 @@ msgctxt "field:party.party,synthesis:"
 msgid "Synthesis"
 msgstr "Synthèse"
 
+msgctxt "field:party.party,synthesis_rec_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:party.party,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -330,6 +334,86 @@ msgctxt "field:party.synthesis.menu,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:party.synthesis.menu.action_close,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.action_close,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.action_close,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.synthesis.menu.action_close,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.action_close,name:"
+msgid "Close Synthesis"
+msgstr "Fermer la synthèse"
+
+msgctxt "field:party.synthesis.menu.action_close,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.synthesis.menu.action_close,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.synthesis.menu.action_close,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.action_close,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.action_close,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.synthesis.menu.action_reload,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.action_reload,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.action_reload,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.synthesis.menu.action_reload,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.action_reload,name:"
+msgid "Reload Synthesis"
+msgstr "Rafraichir la synthèse"
+
+msgctxt "field:party.synthesis.menu.action_reload,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.synthesis.menu.action_reload,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.synthesis.menu.action_reload,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.action_reload,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.action_reload,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:party.synthesis.menu.address,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -410,6 +494,18 @@ msgctxt "field:party.synthesis.menu.contact,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:party.synthesis.menu.open_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.open_state,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:party.synthesis.menu.open_state,need_reload:"
+msgid "Need Reload"
+msgstr "Besoin de rafraichir"
+
 msgctxt "field:party.synthesis.menu.party_interaction,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -447,6 +543,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:party.synthesis.menu.party_interaction,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.synthesis.menu.relationship,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.relationship,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.relationship,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.synthesis.menu.relationship,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.relationship,name:"
+msgid "Party Relation"
+msgstr "Relation tiers"
+
+msgctxt "field:party.synthesis.menu.relationship,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.synthesis.menu.relationship,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:party.synthesis.menu.relationship,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.relationship,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.relationship,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -498,6 +634,18 @@ msgctxt "model:ir.action,name:wizard_set"
 msgid "Synthesis Menu"
 msgstr "Menu synthèse"
 
+msgctxt "model:ir.test_case.instance,name:hierarchy_test_case"
+msgid "Hierarchy Test Case"
+msgstr "Jeux d'essai Hierarchie"
+
+msgctxt "model:ir.test_case.instance,name:party_test_case"
+msgid "Party Test Case"
+msgstr "Jeux d'essai Tiers"
+
+msgctxt "model:ir.test_case.instance,name:relation_type_test_case"
+msgid "Relation Type Test Case"
+msgstr "Jeux d'essai Type de relation"
+
 msgctxt "model:ir.ui.menu,name:menu_company_form"
 msgid "Companies"
 msgstr "Sociétés"
@@ -518,6 +666,14 @@ msgctxt "model:party.synthesis.menu,name:"
 msgid "Party Synthesis Menu"
 msgstr "Synthèse acteur"
 
+msgctxt "model:party.synthesis.menu.action_close,name:"
+msgid "Party Synthesis Menu Action Close"
+msgstr "Fermer Menu synthèse Tiers"
+
+msgctxt "model:party.synthesis.menu.action_reload,name:"
+msgid "Party Synthesis Menu Action Reload"
+msgstr "Rafraichir Menu synthèse Tiers"
+
 msgctxt "model:party.synthesis.menu.address,name:"
 msgid "Party Synthesis Menu Address"
 msgstr "Synthèse acteur - Adresse"
@@ -526,9 +682,17 @@ msgctxt "model:party.synthesis.menu.contact,name:"
 msgid "Party Synthesis Menu Contact"
 msgstr "Synthèse acteur - Moyens de contact"
 
+msgctxt "model:party.synthesis.menu.open_state,name:"
+msgid "Syntesis Menu Open State"
+msgstr "Etat ouvert menu synthèse tiers"
+
 msgctxt "model:party.synthesis.menu.party_interaction,name:"
 msgid "Party Synthesis Menu Interaction"
 msgstr "Synthèse acteur - Contact"
+
+msgctxt "model:party.synthesis.menu.relationship,name:"
+msgid "Party Synthesis Menu Contact"
+msgstr "Synthèse acteur - Moyens de contact"
 
 msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Party"
@@ -601,6 +765,14 @@ msgstr "Société"
 msgctxt "view:party.party:"
 msgid "Complementary Data"
 msgstr "Données Complémentaires"
+
+msgctxt "view:party.party:"
+msgid "Contact"
+msgstr "Contact"
+
+msgctxt "view:party.party:"
+msgid "Party Synthesis"
+msgstr "Synthèse tiers"
 
 msgctxt "view:party.party:"
 msgid "Roles"

@@ -26,6 +26,14 @@ msgctxt "field:account.move,wo_com_amount:"
 msgid "Amount w/o com"
 msgstr "Montant hors Commissions"
 
+msgctxt "field:account.move.breakdown,base_total:"
+msgid "Base Total"
+msgstr "Base"
+
+msgctxt "field:account.move.breakdown,commissions:"
+msgid "Commissions"
+msgstr "Commissions"
+
 msgctxt "field:broker,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -661,10 +669,6 @@ msgstr "Commission"
 msgctxt "view:account.invoice:"
 msgid "Commission Invoices"
 msgstr "Relevés de commissions"
-
-msgctxt "view:account.invoice:"
-msgid "Commissions"
-msgstr "Commissions"
 
 msgctxt "view:account.invoice:"
 msgid "Total Amount"

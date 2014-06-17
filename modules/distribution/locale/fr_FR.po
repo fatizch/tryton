@@ -78,6 +78,10 @@ msgctxt "model:ir.action,name:act_dist_network_form"
 msgid "Distribution Networks"
 msgstr "Réseaux de Distribution"
 
+msgctxt "model:ir.test_case.instance,name:distribution_network_test_case"
+msgid "Distribution Network Test Case"
+msgstr "Jeux d'essai Réseaux de Distribution"
+
 msgctxt "model:ir.ui.menu,name:menu_dist_network_form"
 msgid "Distribution Networks"
 msgstr "Réseaux de Distribution"

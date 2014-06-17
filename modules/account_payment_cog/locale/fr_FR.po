@@ -10,14 +10,6 @@ msgctxt "error:account.payment.treatment:"
 msgid "No Batch Path Specified"
 msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
-msgctxt "field:account.payment.create.parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:account.payment.create.parameters,until:"
-msgid "Until"
-msgstr "Jusqu'à"
-
 msgctxt "field:account.payment.creation,id:"
 msgid "ID"
 msgstr "ID"
@@ -47,7 +39,7 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.payment,name:"
-msgid "Payments"
+msgid "Outstanding/Failed Payments"
 msgstr "Paiements"
 
 msgctxt "field:party.synthesis.menu.payment,party:"
@@ -70,10 +62,6 @@ msgctxt "field:party.synthesis.menu.payment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "model:account.payment.create.parameters,name:"
-msgid "Create Receivable Payment"
-msgstr "Créer Paiement"
-
 msgctxt "model:account.payment.creation,name:"
 msgid "Payment Creation Batch"
 msgstr "Batch de création des paiements"
@@ -82,15 +70,11 @@ msgctxt "model:account.payment.treatment,name:"
 msgid "Payment Treatment Batch"
 msgstr "Batch de traitement des paiements"
 
-msgctxt "model:ir.action,name:act_payment_receivable_form"
+msgctxt "model:ir.action,name:"
 msgid "Receivable Payments"
 msgstr ""
 
-msgctxt "model:ir.action,name:wizard_create_receivable"
-msgid "Create Receivable Payment"
-msgstr "Créer Paiement"
-
-msgctxt "model:ir.ui.menu,name:menu_create_receivable"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"
 
@@ -102,22 +86,6 @@ msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
 
-msgctxt "view:account.payment.create.parameters:"
-msgid "Create Receivable Payment"
-msgstr "Créer Paiement"
-
-msgctxt "view:account.payment.create.parameters:"
-msgid "Create Receivable Payment?"
-msgstr "Créer Paiement?"
-
 msgctxt "view:contract:"
 msgid "As of today"
 msgstr ""
-
-msgctxt "wizard_button:account.payment.create,start,create_:"
-msgid "Create"
-msgstr "Créer"
-
-msgctxt "wizard_button:account.payment.create,start,end:"
-msgid "Cancel"
-msgstr "Annuler"

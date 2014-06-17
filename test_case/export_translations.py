@@ -70,7 +70,10 @@ def update_views(test_config_file):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        modules = [sys.argv[1:]]
+        if type(sys.argv) is list:
+            modules = sys.argv[1:]
+        elif type(sys.argv) is str:
+            modules = [sys.argv[1:]]
     else:
         modules = []
     launch_proteus_test_case(os.path.join(DIR, 'test_case.cfg'), modules)

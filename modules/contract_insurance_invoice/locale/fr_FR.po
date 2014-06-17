@@ -1,6 +1,14 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.payment.creation:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
+
+msgctxt "error:account.payment.treatment:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
 msgctxt "error:contract.invoice.create:"
 msgid "No Batch Path Specified"
@@ -14,6 +22,10 @@ msgctxt "error:contract.premium.display:"
 msgid "No contract found in context"
 msgstr "Pas de contrat trouver dans le contexte"
 
+msgctxt "error:offered.billing_mode:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
 msgctxt "field:account.fee.description,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte pour le quittancement"
@@ -25,6 +37,10 @@ msgstr "Montant de base"
 msgctxt "field:account.invoice,contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "field:account.invoice,contract_invoice:"
+msgid "Contract Invoice"
+msgstr "Quittance"
 
 msgctxt "field:account.invoice,currency_symbol:"
 msgid "Currency Symbol"
@@ -50,11 +66,11 @@ msgctxt "field:account.invoice,start:"
 msgid "Start Date"
 msgstr "Date d'Effet"
 
-msgctxt "field:account.invoice.line,end_date:"
+msgctxt "field:account.invoice.line,coverage_end:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:account.invoice.line,start_date:"
+msgctxt "field:account.invoice.line,coverage_start:"
 msgid "Start Date"
 msgstr "Date d'Effet"
 
@@ -70,6 +86,14 @@ msgctxt "field:account.invoice.payment_term.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment.creation,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.treatment,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:account.tax.description,tax:"
 msgid "Tax"
 msgstr "Taxe"
@@ -78,25 +102,13 @@ msgctxt "field:contract,account_invoices:"
 msgid "Invoices"
 msgstr "Factures"
 
-msgctxt "field:contract,direct_debit:"
-msgid "Direct Debit Payment"
-msgstr "Prélevement"
+msgctxt "field:contract,billing_informations:"
+msgid "Billing Information"
+msgstr "Quittancement"
 
-msgctxt "field:contract,direct_debit_account:"
-msgid "Direct Debit Account"
-msgstr "Compte bancaire de prélevement"
-
-msgctxt "field:contract,direct_debit_day:"
-msgid "Direct Debit Payment Day"
-msgstr "Jour du prélevement"
-
-msgctxt "field:contract,invoice_frequencies:"
-msgid "Invoice Frequencies"
-msgstr "Fréquences de quittancement"
-
-msgctxt "field:contract,invoice_frequency:"
-msgid "Invoice Frequency"
-msgstr "Fréquence de facturation"
+msgctxt "field:contract,billing_mode:"
+msgid "Billing Mode"
+msgstr "Mode de quittancement"
 
 msgctxt "field:contract,invoices:"
 msgid "Invoices"
@@ -114,10 +126,6 @@ msgctxt "field:contract,payment_term:"
 msgid "Payment Term"
 msgstr "Conditions de paiement"
 
-msgctxt "field:contract,payment_terms:"
-msgid "Payment Terms"
-msgstr "Conditions de paiement"
-
 msgctxt "field:contract,premiums:"
 msgid "Premiums"
 msgstr "Primes"
@@ -125,6 +133,78 @@ msgstr "Primes"
 msgctxt "field:contract,total_invoice_amount:"
 msgid "Total Invoice Amount"
 msgstr "Montant total des primes"
+
+msgctxt "field:contract.billing_information,billing_mode:"
+msgid "Billing Mode"
+msgstr "Mode de quittancement"
+
+msgctxt "field:contract.billing_information,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.billing_information,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.billing_information,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.billing_information,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.billing_information,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:contract.billing_information,direct_debit:"
+msgid "Direct Debit Payment"
+msgstr "Prélèvement"
+
+msgctxt "field:contract.billing_information,direct_debit_account:"
+msgid "Direct Debit Account"
+msgstr "Compte bancaire "
+
+msgctxt "field:contract.billing_information,direct_debit_day:"
+msgid "Direct Debit Day"
+msgstr "Jour de prélèvement"
+
+msgctxt "field:contract.billing_information,direct_debit_day_selector:"
+msgid "Direct Debit Day"
+msgstr "Jour de prélèvement"
+
+msgctxt "field:contract.billing_information,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.billing_information,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:contract.billing_information,payment_term:"
+msgid "Payment Term"
+msgstr "Condition de paiement"
+
+msgctxt "field:contract.billing_information,possible_payment_terms:"
+msgid "Possible Payment Term"
+msgstr "Conditions de paiement offerts"
+
+msgctxt "field:contract.billing_information,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.billing_information,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.billing_information,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.billing_information,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.covered_element,premiums:"
 msgid "Premiums"
@@ -190,42 +270,6 @@ msgctxt "field:contract.invoice.start,up_to_date:"
 msgid "Up To Date"
 msgstr "Jusqu'au"
 
-msgctxt "field:contract.invoice_frequency,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.invoice_frequency,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.invoice_frequency,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.invoice_frequency,date:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "field:contract.invoice_frequency,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.invoice_frequency,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.invoice_frequency,value:"
-msgid "Invoice Frequency"
-msgstr "Fréquence de facturation"
-
-msgctxt "field:contract.invoice_frequency,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.invoice_frequency,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
 msgctxt "field:contract.option,premiums:"
 msgid "Premiums"
 msgstr "Primes"
@@ -233,42 +277,6 @@ msgstr "Primes"
 msgctxt "field:contract.option.extra_premium,premiums:"
 msgid "Premiums"
 msgstr "Primes"
-
-msgctxt "field:contract.payment_term,contract:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "field:contract.payment_term,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:contract.payment_term,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:contract.payment_term,date:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "field:contract.payment_term,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.payment_term,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:contract.payment_term,value:"
-msgid "Payment Term"
-msgstr "Conditions de paiement"
-
-msgctxt "field:contract.payment_term,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:contract.payment_term,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
 
 msgctxt "field:contract.premium,account:"
 msgid "Account"
@@ -418,6 +426,74 @@ msgctxt "field:contract.premium.display.premiums.line,premiums:"
 msgid "Premium"
 msgstr "Prime"
 
+msgctxt ""
+"field:offered.billing.mode-account.invoice.payment_term,billing_mode:"
+msgid "Billing Mode"
+msgstr "Mode de quirttancement"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:offered.billing.mode-account.invoice.payment_term,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:offered.billing.mode-account.invoice.payment_term,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt ""
+"field:offered.billing.mode-account.invoice.payment_term,payment_term:"
+msgid "Payment Term"
+msgstr "Règle de paiement"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.billing.mode-account.invoice.payment_term,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.billing_mode,allowed_direct_debit_days:"
+msgid "Allowed Direct Debit Dates"
+msgstr "Jour de prélèvement autorisé"
+
+msgctxt "field:offered.billing_mode,allowed_payment_terms:"
+msgid "Allowed Payment Terms"
+msgstr "Conditions de paiement disponibles"
+
+msgctxt "field:offered.billing_mode,change_payment_terms_order:"
+msgid "Change Payment Term Order"
+msgstr "Modifier l'ordre des conditions de paiement"
+
+msgctxt "field:offered.billing_mode,code:"
+msgid "Code"
+msgstr "Code"
+
 msgctxt "field:offered.billing_mode,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -430,6 +506,10 @@ msgctxt "field:offered.billing_mode,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:offered.billing_mode,direct_debit:"
+msgid "Direct Debit Payment"
+msgstr "Prélèvement"
+
 msgctxt "field:offered.billing_mode,frequency:"
 msgid "Invoice Frequency"
 msgstr "Fréquence de facturation"
@@ -441,6 +521,14 @@ msgstr "ID"
 msgctxt "field:offered.billing_mode,must_expand_tree:"
 msgid "Must Expand Tree"
 msgstr "Must Expand Tree"
+
+msgctxt "field:offered.billing_mode,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.billing_mode,ordered_payment_terms:"
+msgid "Ordered Payment Terms"
+msgstr "Ordonné les conditions de paiements"
 
 msgctxt "field:offered.billing_mode,products:"
 msgid "Products"
@@ -478,99 +566,63 @@ msgctxt "field:offered.product,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte pour le quittancement"
 
-msgctxt "field:offered.product,default_frequency:"
-msgid "Default Frequency"
-msgstr "Fréquence par défaut"
+msgctxt "field:offered.product,billing_modes:"
+msgid "Billing Modes"
+msgstr "Modes de quittancement"
 
-msgctxt "field:offered.product,default_payment_term:"
-msgid "Default Payment Term"
-msgstr "Condition de paiement par défaut"
+msgctxt "field:offered.product,change_billing_modes_order:"
+msgid "Change Order"
+msgstr "Modifier l'Ordre"
 
-msgctxt "field:offered.product,frequencies:"
-msgid "Frequencies"
-msgstr "Fréquences"
+msgctxt "field:offered.product,ordered_billing_modes:"
+msgid "Ordered Billing Mode"
+msgstr "Ordonné les modes de quittancement"
 
-msgctxt "field:offered.product,payment_terms:"
-msgid "Payment Terms"
-msgstr "Conditions de paiement"
+msgctxt "field:offered.product-offered.billing_mode,billing_mode:"
+msgid "Billing Mode"
+msgstr "Mode de quittancement"
 
-msgctxt "field:offered.product-account.invoice.payment_term,create_date:"
+msgctxt "field:offered.product-offered.billing_mode,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:offered.product-account.invoice.payment_term,create_date_:"
+msgctxt "field:offered.product-offered.billing_mode,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:offered.product-account.invoice.payment_term,create_uid:"
+msgctxt "field:offered.product-offered.billing_mode,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:offered.product-account.invoice.payment_term,id:"
+msgctxt "field:offered.product-offered.billing_mode,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.product-account.invoice.payment_term,payment_term:"
-msgid "Payment Term"
-msgstr "Conditions de paiement"
+msgctxt "field:offered.product-offered.billing_mode,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Must Expand Tree"
 
-msgctxt "field:offered.product-account.invoice.payment_term,product:"
+msgctxt "field:offered.product-offered.billing_mode,order:"
+msgid "Order"
+msgstr "Ordre"
+
+msgctxt "field:offered.product-offered.billing_mode,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:offered.product-account.invoice.payment_term,rec_name:"
+msgctxt "field:offered.product-offered.billing_mode,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.product-account.invoice.payment_term,write_date:"
+msgctxt "field:offered.product-offered.billing_mode,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:offered.product-account.invoice.payment_term,write_uid:"
+msgctxt "field:offered.product-offered.billing_mode,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:offered.product-account.invoice.payment_term,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered.product-offered.invoice.frequency,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:offered.product-offered.invoice.frequency,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:offered.product-offered.invoice.frequency,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.product-offered.invoice.frequency,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.product-offered.invoice.frequency,invoice_frequency:"
-msgid "Invoice Frequency"
-msgstr "Fréquence de facturation"
-
-msgctxt "field:offered.product-offered.invoice.frequency,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:offered.product-offered.invoice.frequency,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.product-offered.invoice.frequency,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.product-offered.invoice.frequency,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.product-offered.invoice.frequency,xml_id:"
+msgctxt "field:offered.product-offered.billing_mode,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -614,6 +666,27 @@ msgctxt "field:party.synthesis.menu.invoice,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:offered.billing_mode,allowed_direct_debit_days:"
+msgid ""
+"A list of comma-separated numbers that resolves to the list of allowed days of the month eligible for direct debit.\n"
+"\n"
+"An empty list means that all dates are allowed"
+msgstr ""
+"Une liste de nombres séparés par des virgules correspondant aux jours disponible pour le prélèvement.\n"
+"Une liste vide signifie que tous les jours sont autorisés."
+
+msgctxt "model:account.payment.creation,name:"
+msgid "Payment Creation Batch"
+msgstr "Batch de création des paiements"
+
+msgctxt "model:account.payment.treatment,name:"
+msgid "Payment Treatment Batch"
+msgstr "Batch de traitement des paiements"
+
+msgctxt "model:contract.billing_information,name:"
+msgid "Contract Billing Information"
+msgstr "Quittancement"
+
 msgctxt "model:contract.invoice,name:"
 msgid "Contract Invoice"
 msgstr "Quittance"
@@ -629,14 +702,6 @@ msgstr "Batch d'émission des quittances"
 msgctxt "model:contract.invoice.start,name:"
 msgid "Invoice Contract"
 msgstr "Génération des quittances"
-
-msgctxt "model:contract.invoice_frequency,name:"
-msgid "Contract Invoice Frequency"
-msgstr "Fréquence de quittancement"
-
-msgctxt "model:contract.payment_term,name:"
-msgid "Contract Payment Term"
-msgstr "Condition de paiement"
 
 msgctxt "model:contract.premium,name:"
 msgid "Premium"
@@ -654,6 +719,10 @@ msgctxt "model:contract.premium.display.premiums.line,name:"
 msgid "Display Contract Premium Displayer Prmeium Line"
 msgstr "Ecran d'affichage des primes du contrat par ligne"
 
+msgctxt "model:ir.action,name:"
+msgid "Invoice Frequencies"
+msgstr "Fréquences de quittancement"
+
 msgctxt "model:ir.action,name:act_invoice"
 msgid "Invoice Contracts"
 msgstr "Génération des quittances"
@@ -662,29 +731,33 @@ msgctxt "model:ir.action,name:act_invoice_form"
 msgid "Contract Invoices"
 msgstr "Quittances"
 
-msgctxt "model:ir.action,name:act_offered_invoice_frequency"
-msgid "Invoice Frequencies"
-msgstr "Fréquences de quittancement"
+msgctxt "model:ir.action,name:act_offered_billing_mode"
+msgid "Billing Modes"
+msgstr "Modes de quittancement"
 
 msgctxt "model:ir.action,name:act_premium_display"
 msgid "Display Contract Premium"
 msgstr "Afficher la prime du contrat"
 
-msgctxt "model:ir.ui.menu,name:menu_offered_invoice_frequency"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Invoice Frequencies"
 msgstr "Fréquences de quittancement"
 
-msgctxt "model:offered.invoice.frequency,name:"
-msgid "Invoice Frequency"
-msgstr "Fréquence de facturation"
+msgctxt "model:ir.ui.menu,name:menu_offered_billing_mode"
+msgid "Billing Modes"
+msgstr "Modes de quittancement"
 
-msgctxt "model:offered.product-account.invoice.payment_term,name:"
-msgid "Product Payment Term Relation"
-msgstr ""
+msgctxt "model:offered.billing.mode-account.invoice.payment_term,name:"
+msgid "Billing Mode Payment Term Relation"
+msgstr "Mode de quittancement et condition de paiement"
 
-msgctxt "model:offered.product-offered.invoice.frequency,name:"
-msgid "Product Invoice Frequency Relation"
-msgstr ""
+msgctxt "model:offered.billing_mode,name:"
+msgid "Billing Mode"
+msgstr "Mode de quittancement"
+
+msgctxt "model:offered.product-offered.billing_mode,name:"
+msgid "Product Billing Mode Relation"
+msgstr "Produit et mode de quittancement"
 
 msgctxt "model:party.synthesis.menu.invoice,name:"
 msgid "Party Synthesis Menu Invoice"
@@ -733,6 +806,14 @@ msgstr "Trimestriel"
 msgctxt "selection:contract.premium,frequency:"
 msgid "Yearly"
 msgstr "Annuel"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Yearly (360 days)"
+msgstr "Annuel (360 jours)"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Yearly (365 days)"
+msgstr "Annuel (365 jours)"
 
 msgctxt "selection:offered.billing_mode,frequency:"
 msgid "Half-yearly"
@@ -823,14 +904,6 @@ msgid "Notes"
 msgstr "Notes"
 
 msgctxt "view:account.invoice:"
-msgid "Also known as Pro Forma"
-msgstr "Alias Pro Forma"
-
-msgctxt "view:account.invoice:"
-msgid "Are you sure to cancel the invoice?"
-msgstr "Êtes-vous sûr d'annuler la facture ?"
-
-msgctxt "view:account.invoice:"
 msgid "Base Amount"
 msgstr "Montant de base"
 
@@ -839,20 +912,8 @@ msgid "Fees"
 msgstr "Frais"
 
 msgctxt "view:account.invoice:"
-msgid "Invoice"
-msgstr "Facture"
-
-msgctxt "view:account.invoice:"
 msgid "Invoices"
 msgstr "Factures"
-
-msgctxt "view:account.invoice:"
-msgid "Other Info"
-msgstr "Autre information"
-
-msgctxt "view:account.invoice:"
-msgid "Payment"
-msgstr "Paiement"
 
 msgctxt "view:account.invoice:"
 msgid "Tax Amount"
@@ -866,25 +927,9 @@ msgctxt "view:account.invoice:"
 msgid "Total Amount"
 msgstr "Montant total"
 
-msgctxt "view:account.invoice:"
-msgid "Validate"
-msgstr "Valider"
-
-msgctxt "view:account.invoice:"
-msgid "_Cancel"
-msgstr "_Annuler"
-
-msgctxt "view:account.invoice:"
-msgid "_Draft"
-msgstr "_Brouillon"
-
-msgctxt "view:account.invoice:"
-msgid "_Pay"
-msgstr "_Payer"
-
-msgctxt "view:account.invoice:"
-msgid "_Post"
-msgstr "_Poster"
+msgctxt "view:contract.billing_information:"
+msgid "Contract Billing Information"
+msgstr "Quittancement"
 
 msgctxt "view:contract.covered_element:"
 msgid "Premiums"
@@ -893,6 +938,10 @@ msgstr "Prime"
 msgctxt "view:contract.invoice.start:"
 msgid "Invoice Contract"
 msgstr "Génération des quittances"
+
+msgctxt "view:contract.invoice:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "view:contract.invoice:"
 msgid "Contract Invoice"
@@ -906,25 +955,9 @@ msgctxt "view:contract.invoice:"
 msgid "Reinvoice"
 msgstr "Regénérer les quittances"
 
-msgctxt "view:contract.invoice_frequency:"
-msgid "Contract Invoice Frequencies"
-msgstr "Fréquences de quittancement"
-
-msgctxt "view:contract.invoice_frequency:"
-msgid "Contract Invoice Frequency"
-msgstr "Fréquence de quittancement"
-
 msgctxt "view:contract.option:"
 msgid "Premium"
 msgstr "Prime"
-
-msgctxt "view:contract.payment_term:"
-msgid "Contract Payment Term"
-msgstr "Condition de paiement"
-
-msgctxt "view:contract.payment_term:"
-msgid "Contract Payment Terms"
-msgstr "Conditions de paiement"
 
 msgctxt "view:contract.premium.display.premiums.line:"
 msgid "Premium"
@@ -947,12 +980,20 @@ msgid "Premiums"
 msgstr "Primes"
 
 msgctxt "view:contract:"
-msgid "Covered Elements"
-msgstr "Risques Couverts"
-
-msgctxt "view:contract:"
 msgid "Invoicing"
 msgstr "Quittancement"
+
+msgctxt "view:offered.billing.mode-account.invoice.payment_term:"
+msgid "Payment Term"
+msgstr "Condition de paiement"
+
+msgctxt "view:offered.billing_mode:"
+msgid "Billing Mode"
+msgstr "Mode de quittancement"
+
+msgctxt "view:offered.product-offered.billing_mode:"
+msgid "Product Billing Mode"
+msgstr "Mode de quittancement"
 
 msgctxt "view:offered.product:"
 msgid "Invoice Parameters"

@@ -54,6 +54,20 @@ msgctxt "field:offered.option.description-beneficiary_clause,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_model_clause_domain_beneficiary"
+msgid "Beneficiary Clauses"
+msgstr "Clauses bénéficiaires"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_model_clause_domain_default"
+msgid "Standard Clauses"
+msgstr "Clauses standards"
+
+msgctxt "model:ir.test_case.instance,name:beneficiary_clause_test_case"
+msgid "Beneficiary Clause Test Case"
+msgstr "Jeux d'essai Clauses bénéficiaires"
+
 msgctxt "model:offered.option.description-beneficiary_clause,name:"
 msgid "Relation Option Description To Beneficiary Clause"
 msgstr "Relation Option - Clause Bénéficiaire"

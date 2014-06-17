@@ -22,6 +22,11 @@ msgctxt "error:rule_engine.function:"
 msgid "Technical name must only use ascii"
 msgstr "Le nom technique doit utiliser seulement de l'ASCII"
 
+msgctxt "error:rule_engine.test_case.init:"
+msgid "This wizard should be run froma rule engine execution log selected"
+msgstr ""
+"L'assistant doit être lancé depuis une trace d'exécution du moteur de règle"
+
 msgctxt "error:rule_engine:"
 msgid ""
 "An error occured in rule %s.For more information, activate debug mode and see the logs\n"
@@ -491,6 +496,10 @@ msgctxt "field:rule_engine.function,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:rule_engine.log,calls:"
+msgid "Calls"
+msgstr "Appels"
+
 msgctxt "field:rule_engine.log,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -604,7 +613,7 @@ msgid "Selection JSON"
 msgstr "Sélection JSON"
 
 msgctxt "field:rule_engine.rule_parameter,selection_sorted:"
-msgid "Sort Selection"
+msgid "Selection Sorted"
 msgstr "Sélection Triée"
 
 msgctxt "field:rule_engine.rule_parameter,string:"
@@ -843,6 +852,10 @@ msgctxt "help:rule_engine.rule_parameter,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
+msgctxt "help:rule_engine.rule_parameter,selection_sorted:"
+msgid "If the selection must be sorted on label"
+msgstr "Si la sélection doit être ordonné selon le nom du champ"
+
 msgctxt "model:functional_error,name:"
 msgid "Rule Error"
 msgstr "Erreur"
@@ -850,6 +863,10 @@ msgstr "Erreur"
 msgctxt "model:ir.action,name:act_tag_form"
 msgid "Tags"
 msgstr "Labels"
+
+msgctxt "model:ir.action,name:act_test_case_init"
+msgid "Create Test Case"
+msgstr "Créer les jeux d'essai"
 
 msgctxt "model:ir.action,name:context_window"
 msgid "Contexts"
@@ -1092,24 +1109,12 @@ msgid "Test Case"
 msgstr "Jeu de Test"
 
 msgctxt "view:rule_engine:"
-msgid "Algorithm"
-msgstr "Algorithme"
-
-msgctxt "view:rule_engine:"
-msgid "Debug"
-msgstr "Debug"
-
-msgctxt "view:rule_engine:"
 msgid "Rule"
 msgstr "Règle"
 
 msgctxt "view:rule_engine:"
 msgid "Rules"
 msgstr "Règles"
-
-msgctxt "view:rule_engine:"
-msgid "Tags"
-msgstr "Labels"
 
 msgctxt "view:tag:"
 msgid "Rules"
@@ -1126,3 +1131,12 @@ msgstr "Arbre"
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"
 msgstr "OK"
+
+msgctxt ""
+"wizard_button:rule_engine.test_case.init,select_values,create_test_case:"
+msgid "Accept"
+msgstr "Accepter"
+
+msgctxt "wizard_button:rule_engine.test_case.init,select_values,end:"
+msgid "Cancel"
+msgstr "Annuler"

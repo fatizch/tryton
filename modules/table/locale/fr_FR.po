@@ -126,6 +126,10 @@ msgctxt "field:table,number_of_digits:"
 msgid "Number of Digits"
 msgstr "Nombre de Décimales"
 
+msgctxt "field:table,number_of_dimensions:"
+msgid "Number of dimension"
+msgstr "Nombre de dimension"
+
 msgctxt "field:table,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -403,11 +407,11 @@ msgid "Cells"
 msgstr "Cellules"
 
 msgctxt "model:ir.action,name:act_definition_dimension_form"
-msgid "Definition Dimension"
+msgid "Dimension Value"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_dimension_value_open"
-msgid "Definition Dimension"
+msgid "Define Dimension Value"
 msgstr ""
 
 msgctxt "model:ir.action,name:act_table_2d_open"
@@ -421,6 +425,10 @@ msgstr "Table 2D"
 msgctxt "model:ir.action,name:act_table_definition_form"
 msgid "Tables"
 msgstr "Tables"
+
+msgctxt "model:ir.test_case.instance,name:table_test_case"
+msgid "Table Test Case"
+msgstr "Jeux d'essai Table"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Create Table"

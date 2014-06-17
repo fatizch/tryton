@@ -80,7 +80,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:cash_value.cash_value_rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,cash_value_rules:"
 msgid "Cash Value Rules"

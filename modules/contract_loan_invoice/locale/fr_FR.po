@@ -1,10 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract.premium,loan_share:"
-msgid "Loan Share"
-msgstr "Quotité"
+msgctxt "field:contract.premium,loan:"
+msgid "Loan"
+msgstr "Prêt"
 
 msgctxt "field:loan,average_premium_rate:"
 msgid "Average Premium Rate"
@@ -141,10 +141,6 @@ msgstr "Identifiant XML"
 msgctxt "field:loan.share,average_premium_rate:"
 msgid "Average Premium Rate"
 msgstr "taux moyen prêt"
-
-msgctxt "field:loan.share,premiums:"
-msgid "Premiums"
-msgstr "Primes"
 
 msgctxt "field:offered.product,average_loan_premium_rule:"
 msgid "Average Loan Premium Rule"

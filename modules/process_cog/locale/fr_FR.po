@@ -10,6 +10,14 @@ msgctxt "error:ir.ui.view.description:"
 msgid "The functional id must be unique !"
 msgstr "L'identifiant fonctionnel doit être unique"
 
+msgctxt "error:process.resume:"
+msgid "No active process found"
+msgstr "Pas de processus actif trouvé"
+
+msgctxt "error:process.resume:"
+msgid "Process Locked by user"
+msgstr "Processus verrouillé par un utilisateur"
+
 msgctxt "error:process.transition:"
 msgid "Both choices must be filled !"
 msgstr "Saisir les deux choix"
@@ -301,6 +309,10 @@ msgstr "Identifiant XML"
 msgctxt "model:ir.action,name:act_end_process"
 msgid "End Process"
 msgstr ""
+
+msgctxt "model:ir.action,name:act_resume_process"
+msgid "Resume Current Process"
+msgstr "Relancer le processus courant"
 
 msgctxt "model:ir.ui.view.description,name:"
 msgid "View Description"

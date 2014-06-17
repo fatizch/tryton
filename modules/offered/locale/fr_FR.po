@@ -93,7 +93,7 @@ msgid "Selection JSON"
 msgstr "Sélection JSON"
 
 msgctxt "field:extra_data,selection_sorted:"
-msgid "Sort Selection"
+msgid "Selection Sorted"
 msgstr "Sélection Triée"
 
 msgctxt "field:extra_data,start_date:"
@@ -339,6 +339,10 @@ msgstr "ID"
 msgctxt "field:offered.option.description,is_package:"
 msgid "Package"
 msgstr "Formule"
+
+msgctxt "field:offered.option.description,is_service:"
+msgid "Is a Service"
+msgstr "Est un service"
 
 msgctxt "field:offered.option.description,kind:"
 msgid "Option Description Kind"
@@ -767,6 +771,10 @@ msgstr "Données Complémentaires"
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
+
+msgctxt "help:extra_data,selection_sorted:"
+msgid "If the selection must be sorted on label"
+msgstr "Si la sélection doit être triée par le libéllé"
 
 msgctxt "model:extra_data,name:"
 msgid "Extra Data"

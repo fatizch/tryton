@@ -267,7 +267,7 @@ msgid "Waiting Tasks"
 msgstr "Tâches en attente"
 
 msgctxt "model:ir.action,name:act_task_dispatcher"
-msgid "Nouvelle Tâche"
+msgid "New Task"
 msgstr "Nouvelle Tâche"
 
 msgctxt "model:ir.action,name:act_team"

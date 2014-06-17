@@ -816,7 +816,7 @@ msgid "Covered Elements"
 msgstr "Risques Couverts"
 
 msgctxt "field:document.receive.request,tmp_0:"
-msgid "Contract"
+msgid "Claim"
 msgstr "Contrat"
 
 msgctxt "field:expense,amount:"
@@ -962,10 +962,6 @@ msgstr "Dépense"
 msgctxt "model:ir.action,name:"
 msgid "Status History"
 msgstr "Historique des Statuts"
-
-msgctxt "model:ir.action,name:None"
-msgid "Manage Options"
-msgstr "Gérer les Options"
 
 msgctxt "model:ir.action,name:act_contract_activation_history_relate_form"
 msgid "Activation History"
@@ -1180,8 +1176,8 @@ msgid "Exclusions"
 msgstr "Exclusions"
 
 msgctxt "view:contract.option:"
-msgid "Extra Premium"
-msgstr "Surprime"
+msgid "Extra Premiums"
+msgstr "Surprimes"
 
 msgctxt "view:contract.option:"
 msgid "Option"
@@ -1204,20 +1200,8 @@ msgid "Contract Service"
 msgstr "Prestation Fournie"
 
 msgctxt "view:contract:"
-msgid "Addresses"
-msgstr "Adresses"
-
-msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
-
-msgctxt "view:contract:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "view:contract:"
-msgid "Managing Entities"
-msgstr "Délégataires"
 
 msgctxt "view:expense:"
 msgid "Expense"

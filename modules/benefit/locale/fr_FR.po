@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -21,10 +21,6 @@ msgstr "Type de Bénéficiaire"
 msgctxt "field:benefit,benefit_rules:"
 msgid "Benefit Rules"
 msgstr "Règles de Prestation"
-
-msgctxt "field:benefit,clause_rules:"
-msgid "Clause Rules"
-msgstr "Clauses"
 
 msgctxt "field:benefit,code:"
 msgid "Code"
@@ -144,7 +140,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit-extra_data,benefit:"
 msgid "Benefit"
@@ -184,7 +180,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit-extra_data,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit-loss.description,benefit:"
 msgid "Benefit"
@@ -224,7 +220,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit-loss.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.event.description,code:"
 msgid "Code"
@@ -276,7 +272,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.event.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.event.description-loss.description,create_date:"
 msgid "Create Date"
@@ -316,7 +312,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.event.description-loss.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.loss.description,code:"
 msgid "Code"
@@ -384,7 +380,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.loss.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.loss.description-document.description,create_date:"
 msgid "Create Date"
@@ -424,7 +420,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.loss.description-document.description,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.loss.description-extra_data,create_date:"
 msgid "Create Date"
@@ -464,7 +460,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.loss.description-extra_data,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.reserve.rule,amount:"
 msgid "Amount"
@@ -540,7 +536,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.reserve.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.rule,amount:"
 msgid "Amount"
@@ -688,7 +684,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.rule,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:benefit.rule.stage,amount:"
 msgid "Amount"
@@ -759,7 +755,7 @@ msgid "Amount"
 msgstr "Montant"
 
 msgctxt "field:benefit.rule.stage,rule_extra_data:"
-msgid "Rule Extra Data"
+msgid "Rule Parameters"
 msgstr "Paramètres de Rêgle"
 
 msgctxt "field:benefit.rule.stage,write_date:"
@@ -772,7 +768,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:benefit.rule.stage,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:offered.option.description,benefits:"
 msgid "Benefits"
@@ -816,7 +812,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:option.description-benefit,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "help:benefit.rule,coef_coverage_amount:"
 msgid "Add a multiplier to apply to the coverage amount"
@@ -924,7 +920,7 @@ msgstr "Remplacer"
 
 msgctxt "selection:benefit.loss.description,item_kind:"
 msgid ""
-msgstr ""
+msgstr " "
 
 msgctxt "selection:benefit.reserve.rule,config_kind:"
 msgid "Advanced"
@@ -1193,10 +1189,6 @@ msgstr "Règle de Prestation"
 msgctxt "view:benefit:"
 msgid "Benefit"
 msgstr "Prestation"
-
-msgctxt "view:benefit:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "view:benefit:"
 msgid "Deductible"

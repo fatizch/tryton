@@ -138,6 +138,18 @@ msgctxt "model:ir.action,name:act_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"
 
+msgctxt "model:ir.test_case.instance,name:expense_kind_test_case"
+msgid "Expense Kind Test Case"
+msgstr "Jeux d'essai Type de Frais"
+
+msgctxt "model:ir.test_case.instance,name:fund_test_case"
+msgid "Fund Test Case"
+msgstr "Jeux d'essai des Fonds Santé"
+
+msgctxt "model:ir.test_case.instance,name:health_care_system_test_case"
+msgid "HealthCare System Test Case"
+msgstr "Jeux d'essai du système santé"
+
 msgctxt "model:ir.ui.menu,name:menu_hc_system_form"
 msgid "Health Care Systems"
 msgstr "Régimes"

@@ -76,7 +76,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.cash_value.collection,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.wizard.cash_surrender.parameters,contract:"
 msgid "Contract"
@@ -134,6 +134,10 @@ msgstr "Mise à jour des versements"
 msgctxt "model:ir.action,name:act_collection_to_cash_value"
 msgid "Collection To Cash Value"
 msgstr "Action"
+
+msgctxt "model:ir.test_case.instance,name:journal_test_case"
+msgid "Journal Test Case"
+msgstr "Jeux d'essai Journaux"
 
 msgctxt "selection:contract.cash_value.collection,kind:"
 msgid "Payment"

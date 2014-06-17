@@ -154,6 +154,14 @@ msgctxt "field:account.move,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move.line,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.move.line,reconciliation_lines:"
+msgid "Reconciliation Lines"
+msgstr "Lignes de réconciliation"
+
 msgctxt "field:account.period,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -274,6 +282,10 @@ msgctxt "field:company.company,fiscal_years:"
 msgid "Fiscal Years"
 msgstr "Années fiscales"
 
+msgctxt "field:ir.test_case,fiscal_year_number:"
+msgid "Number of Fiscal Years to create"
+msgstr "Nombre d'année ficale à créer"
+
 msgctxt "field:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Fiscal Year periods frequency"
 msgstr "Périodes de l'Année Fiscale"
@@ -281,6 +293,46 @@ msgstr "Périodes de l'Année Fiscale"
 msgctxt "field:ir.test_case,fiscal_year_sync_date:"
 msgid "Fiscal Year Sync Date"
 msgstr "Date de Synchro Année Fiscale"
+
+msgctxt "field:party.synthesis.menu.move.line,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.move.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:party.synthesis.menu.move.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:party.synthesis.menu.move.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.synthesis.menu.move.line,name:"
+msgid "Payments"
+msgstr "Paiements"
+
+msgctxt "field:party.synthesis.menu.move.line,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:party.synthesis.menu.move.line,rec_name:"
+msgid "Name"
+msgstr "Valeur"
+
+msgctxt "field:party.synthesis.menu.move.line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:party.synthesis.menu.move.line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:party.synthesis.menu.move.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "model:account.fee.description,name:"
 msgid "Fee Description"
@@ -306,6 +358,26 @@ msgctxt "model:ir.action,name:act_tax_form"
 msgid "Taxes"
 msgstr "Taxes"
 
+msgctxt "model:ir.test_case.instance,name:account_kind_test_case"
+msgid "Account Kind Test Case"
+msgstr "Jeux d'essai Type de Compte"
+
+msgctxt "model:ir.test_case.instance,name:account_test_case"
+msgid "Account Test Case"
+msgstr "Jeux d'essai Compte"
+
+msgctxt "model:ir.test_case.instance,name:configure_accounting_test_case"
+msgid "Configure Accounting Test Case"
+msgstr "Jeux d'essai de configuration de la comptabilité"
+
+msgctxt "model:ir.test_case.instance,name:fiscal_year_test_case"
+msgid "Fiscal Year Test Case"
+msgstr "Jeux d'essai Années Fiscales"
+
+msgctxt "model:ir.test_case.instance,name:tax_test_case"
+msgid "Tax Test Case"
+msgstr "Jeux d'essai Taxes"
+
 msgctxt "model:ir.ui.menu,name:menu_account"
 msgid "Accounting"
 msgstr "Comptabilité"
@@ -317,6 +389,10 @@ msgstr "Frais"
 msgctxt "model:ir.ui.menu,name:menu_product_taxes"
 msgid "Taxes"
 msgstr "Taxes"
+
+msgctxt "model:party.synthesis.menu.move.line,name:"
+msgid "Party Synthesis Menu Move line"
+msgstr "Menu Mouvement Synthèse Tiers "
 
 msgctxt "selection:account.fee.description.version,kind:"
 msgid "Flat"
@@ -362,6 +438,26 @@ msgctxt "view:account.fee.description:"
 msgid "Fee Description"
 msgstr "Descripteur de Frais"
 
+msgctxt "view:account.move.line:"
+msgid "Credit"
+msgstr "Créditer"
+
+msgctxt "view:account.move.line:"
+msgid "Other Info"
+msgstr "Autre information"
+
+msgctxt "view:account.move.line:"
+msgid "Payment Information"
+msgstr "Paiement"
+
+msgctxt "view:account.move.line:"
+msgid "Payment Informations"
+msgstr "Paiements"
+
+msgctxt "view:account.move.line:"
+msgid "Reconciliation Information"
+msgstr "Réconciliation"
+
 msgctxt "view:account.tax.description.version:"
 msgid "Tax Description Version"
 msgstr "Version de Taxe"
@@ -369,3 +465,7 @@ msgstr "Version de Taxe"
 msgctxt "view:account.tax.description:"
 msgid "Tax Description"
 msgstr "Taxe"
+
+msgctxt "view:party.party:"
+msgid "Account"
+msgstr "Compte"

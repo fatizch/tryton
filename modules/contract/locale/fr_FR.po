@@ -887,16 +887,8 @@ msgid "Options"
 msgstr "Options"
 
 msgctxt "view:contract:"
-msgid "Activation History"
-msgstr "Historique d'activation"
-
-msgctxt "view:contract:"
 msgid "Administration"
 msgstr "Administration"
-
-msgctxt "view:contract:"
-msgid "Complementary Data"
-msgstr "Données Complémentaires"
 
 msgctxt "view:contract:"
 msgid "Contacts"
@@ -905,6 +897,10 @@ msgstr "Contacts"
 msgctxt "view:contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "view:contract:"
+msgid "Data"
+msgstr "Données"
 
 msgctxt "view:contract:"
 msgid "Options"
