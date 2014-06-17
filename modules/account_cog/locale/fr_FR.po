@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -268,7 +268,7 @@ msgstr "Années fiscales"
 
 msgctxt "field:ir.test_case,fiscal_year_number:"
 msgid "Number of Fiscal Years to create"
-msgstr "Nombre d'année ficale à créer"
+msgstr "Nombre d'années fiscales à créer"
 
 msgctxt "field:ir.test_case,fiscal_year_periods_frequency:"
 msgid "Fiscal Year periods frequency"
@@ -300,7 +300,7 @@ msgstr "Paiements"
 
 msgctxt "field:party.synthesis.menu.move.line,party:"
 msgid "Party"
-msgstr "Acteurs"
+msgstr "Acteur"
 
 msgctxt "field:party.synthesis.menu.move.line,rec_name:"
 msgid "Name"
