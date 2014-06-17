@@ -423,10 +423,15 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
     def get_icon(self, name=None):
         return 'tryton-close'
 
+    def get_rec_name(self, name):
+        PartyActionClose = Pool().get('party.synthesis.menu.action_close')
+        return coop_string.translate_label(PartyActionClose, 'name')
+
 
 class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
     'Party Synthesis Menu Action Refresh'
     __name__ = 'party.synthesis.menu.action_refresh'
+
     name = fields.Char('Refresh Synthesis')
     party = fields.Many2One('party.party', 'Party')
 
@@ -435,8 +440,7 @@ class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
         pool = Pool()
         Party = pool.get('party.party')
         party_table = Party.__table__()
-        PartyActionClose = pool.get(
-            'party.synthesis.menu.action_refresh')
+        PartyActionRefresh = pool.get('party.synthesis.menu.action_refresh')
         User = pool.get('res.user')
         user = Transaction().user
         user = User(user)
@@ -450,11 +454,15 @@ class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
             Max(party_table.create_date).as_('create_date'),
             Max(party_table.write_uid).as_('write_uid'),
             Max(party_table.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(PartyActionClose,
+            Literal(coop_string.translate_label(PartyActionRefresh,
                 'name')).as_('name'), Literal(party_id).as_('party'))
 
     def get_icon(self, name=None):
         return 'tryton-refresh'
+
+    def get_rec_name(self, name):
+        PartyActionRefresh = Pool().get('party.synthesis.menu.action_refresh')
+        return coop_string.translate_label(PartyActionRefresh, 'name')
 
 
 class SynthesisMenuPartyInteraction(model.CoopSQL):
@@ -650,7 +658,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             elif name == 'name':
                 return Model._fields['type']
         elif (Model.__name__ == 'party.synthesis.menu.action_close' or
-                Model.__name__ == 'party.synthesis.menu.action_reload'):
+                Model.__name__ == 'party.synthesis.menu.action_refresh'):
             if name == 'party':
                 return Model._fields['id']
         if name == 'party':
@@ -719,8 +727,6 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             res = instance.get_synthesis_rec_name(name)
         elif getattr(instance, 'get_rec_name', None) is not None:
             res = instance.get_rec_name(name)
-        else:
-            res = self.name
         if self.childs and self.parent:
             res += ' (%s)' % len(self.childs)
         return res
