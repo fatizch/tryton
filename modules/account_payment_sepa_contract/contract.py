@@ -59,11 +59,16 @@ class ContractBillingInformation:
 
     @classmethod
     def __register__(cls, module_name):
+        pool = Pool()
         migrate = False
         TableHandler = backend.get('TableHandler')
         cursor = Transaction().cursor
+
         the_table = TableHandler(cursor, cls, module_name)
-        if not the_table.column_exist('sepa_mandate'):
+        Contract = pool.get('contract')
+        contract_table = TableHandler(cursor, Contract, module_name)
+        if (not the_table.column_exist('sepa_mandate') and
+                contract_table.column_exist('sepa_mandate')):
             migrate = True
 
         super(ContractBillingInformation, cls).__register__(module_name)
