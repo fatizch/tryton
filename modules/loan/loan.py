@@ -1,5 +1,4 @@
 from decimal import Decimal
-from sql.aggregate import Max
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -139,7 +138,7 @@ class Loan(model.CoopSQL, model.CoopView):
         'on_change_with_increments_end_date')
     end_date = fields.Function(
         fields.Date('End Date'),
-        'get_loan_end_date')
+        'on_change_with_end_date')
     current_loan_shares = fields.Function(
         fields.One2Many('loan.share', None, 'Current Loan Share'),
         'get_current_loan_shares')
@@ -257,11 +256,14 @@ class Loan(model.CoopSQL, model.CoopView):
             share.person = party
             self.loan_shares.append(share)
 
-    @fields.depends('funds_release_date', 'payment_frequency')
+    @fields.depends('funds_release_date', 'payment_frequency',
+        'first_payment_date')
     def on_change_with_first_payment_date(self):
         if self.funds_release_date and self.payment_frequency:
             return coop_date.add_duration(self.funds_release_date,
                 self.payment_frequency)
+        else:
+            return self.first_payment_date
 
     def get_rate(self, annual_rate=None):
         if not annual_rate:
@@ -319,17 +321,24 @@ class Loan(model.CoopSQL, model.CoopView):
         return res
 
     def calculate_amortization_table(self):
-        Payment = Pool().get('loan.payment')
-        if getattr(self, 'payments', None):
-            Payment.delete([x for x in self.payments if x.id])
-        self.payments = self.calculate_payments()
+            Payment = Pool().get('loan.payment')
+            if getattr(self, 'payments', None):
+                with Transaction().set_user(0):
+                    Payment.delete([x for x in self.payments if x.id])
+            self.payments = self.calculate_payments()
 
     @classmethod
     @model.CoopView.button
     def button_calculate_amortization_table(cls, loans):
-        for loan in loans:
-            loan.calculate_amortization_table()
-            loan.save()
+        LoanPayment = Pool().get('loan.payment')
+        with Transaction().set_user(0):
+            vals = []
+            for loan in loans:
+                loan.calculate_amortization_table()
+                vals += [x._save_values for x in loan.payments]
+                for payment in vals:
+                    payment['loan'] = loan.id
+            LoanPayment.create(vals)
 
     @staticmethod
     def default_payment_frequency():
@@ -424,17 +433,12 @@ class Loan(model.CoopSQL, model.CoopView):
             if share.person == party:
                 return share
 
-    @classmethod
-    def get_loan_end_date(cls, loans, name):
-        pool = Pool()
-        cursor = Transaction().cursor
-        loan = pool.get('loan').__table__()
-        increment = pool.get('loan.increment').__table__()
-        query_table = loan.join(increment, type_='LEFT',
-            condition=(loan.id == increment.loan))
-        cursor.execute(*query_table.select(loan.id, Max(increment.end_date),
-                group_by=loan.id))
-        return dict(cursor.fetchall())
+    @fields.depends('increments')
+    def on_change_with_end_date(self, name=None):
+        if getattr(self, 'increments', None):
+            return self.increments[-1].end_date
+        else:
+            return self.end_date
 
     def get_publishing_values(self):
         result = super(Loan, self).get_publishing_values()
@@ -505,7 +509,9 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     begin_balance = fields.Numeric('Begin Balance',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date', required=True)
+    end_date = fields.Function(
+        fields.Date('End Date'),
+        'on_change_with_end_date')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments', required=True)
     rate = fields.Numeric('Annual Rate', digits=(16, 4))
@@ -524,14 +530,14 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_currency(self):
         return self.loan.currency
 
-    @fields.depends('loan', 'start_date', 'number_of_payments')
-    def on_change_with_end_date(self):
-        if not self.number_of_payments:
-            return
+    @fields.depends('loan', 'start_date', 'number_of_payments', 'end_date')
+    def on_change_with_end_date(self, name=None):
         if getattr(self, 'loan', None):
             frequency = self.loan.payment_frequency
         else:
             frequency = Transaction().context.get('payment_frequency')
+        if not frequency or not self.number_of_payments:
+            return self.end_date
         return coop_date.add_duration(self.start_date, frequency,
             self.number_of_payments - 1)
 
