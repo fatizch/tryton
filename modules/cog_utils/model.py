@@ -3,12 +3,16 @@ import time
 import datetime
 import json
 
+from sql.aggregate import Max
+from sql.conditionals import Coalesce
 from sql import Union, Column, Literal, Cast
+
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction
 from trytond.rpc import RPC
+from trytond.tools import reduce_ids
 
 import utils
 import fields
@@ -445,3 +449,83 @@ class VoidStateAction(StateAction):
 
     def get_action(self):
         return None
+
+
+class _RevisionMixin(object):
+    parent = None
+    date = fields.Date('Date')
+
+    @classmethod
+    def __setup__(cls):
+        field_name, field_model, field_description = cls.get_parent_field()
+        setattr(cls, field_name, fields.Many2One(field_model,
+                field_description, ondelete='CASCADE'))
+        super(_RevisionMixin, cls).__setup__()
+        # TODO unique constraint on (parent, date) ?
+        cls._order.insert(0, ('date', 'ASC'))
+
+    @staticmethod
+    def order_date(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.date, datetime.date.min)]
+
+    @classmethod
+    def get_reverse_field_name(cls):
+        return ''
+
+    @classmethod
+    def revision_columns(cls):
+        return []
+
+    @classmethod
+    def get_parent_field(cls):
+        'returns (field_name, field_model, field_description) : the'
+        'definition of the parent field'
+        raise NotImplementedError
+
+    @classmethod
+    def get_values(cls, instances, names=None, date=None, default=None):
+        'Return a dictionary with the variable name as key,'
+        'and a dictionnary as value. The dictionnary value contains'
+        'main instance id as key and variable value as value'
+
+        cursor = Transaction().cursor
+        table = cls.__table__()
+        if names:
+            columns_expected = list(set(cls.revision_columns()) & set(names))
+        else:
+            columns_expected = cls.revision_columns()
+
+        parent_field = cls.get_parent_field()[0]
+        columns_expected.append(parent_field)
+        columns = [getattr(table, parent_field)]
+
+        target_field = cls.get_reverse_field_name()
+        if target_field:
+            columns_expected.append(target_field)
+            columns.append(table.id.as_(target_field))
+
+        values = dict(((x, dict(((y.id, None) for y in instances)))
+                for x in columns_expected))
+        columns += [Column(table, c) for c in columns_expected]
+
+        in_max = cursor.IN_MAX
+        for i in range(0, len(instances), in_max):
+            sub_ids = [c.id for c in instances[i:i + in_max]]
+            where_parent = reduce_ids(getattr(table, parent_field), sub_ids)
+            subquery = table.select(
+                getattr(table, parent_field),
+                Max(Coalesce(table.date, datetime.date.min)).as_('date'),
+                where=((table.date <= date) | (table.date == None))
+                & where_parent,
+                group_by=getattr(table, parent_field))
+            cursor.execute(*table.join(subquery,
+                    condition=(getattr(table, parent_field)
+                        == getattr(subquery, parent_field))
+                    & (Coalesce(table.date, datetime.date.min) ==
+                        Coalesce(subquery.date, datetime.date.min))
+                    ).select(*columns))
+            for elem in cursor.dictfetchall():
+                for field_name, value in elem.iteritems():
+                    values[field_name][elem[parent_field]] = value
+        return values
