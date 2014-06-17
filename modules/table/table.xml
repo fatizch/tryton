@@ -34,7 +34,7 @@
       <field name="view" ref="table_definition_view_form"/>
       <field name="act_window" ref="act_table_definition_form"/>
     </record>
-    <menuitem action="act_table_definition_form" sequence="10" id="menu_table_defintion_form"/>
+    <menuitem action="act_table_definition_form" sequence="10" id="menu_table_defintion_form" icon="table"/>
     <!-- ############################################################ -->
     <!-- Table Definition Dimension -->
     <!-- ############################################################ -->

@@ -5,5 +5,13 @@
             <field name="name">tag</field>
             <field name="path">icons/tag.svg</field>
         </record>
+        <record model="ir.ui.icon" id="function_icon">
+            <field name="name">function</field>
+            <field name="path">icons/function.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="coding_icon">
+            <field name="name">coding</field>
+            <field name="path">icons/coding.svg</field>
+        </record>
     </data>
 </tryton>

@@ -4,8 +4,8 @@
     <!-- ############# -->
     <!-- # Main Menu # -->
     <!-- ############# -->
-    <menuitem name="Process Main Menu" id="process_menu_id" sequence="11"/>
-    <menuitem parent="process_menu_id" sequence="100" id="menu_process_lang" name="Processes"/>
+    <menuitem name="Process Main Menu" id="process_menu_id" sequence="11" icon="workflow"/>
+    <menuitem parent="process_menu_id" sequence="100" id="menu_process_lang" name="Processes" icon="workflow"/>
     <!-- ######### -->
     <!-- # Model # -->
     <!-- ######### -->
@@ -49,7 +49,7 @@
       <field name="view" ref="process_status_form"/>
       <field name="act_window" ref="act_process_status"/>
     </record>
-    <menuitem parent="process_menu_id" sequence="16" action="act_process_status" id="menu_process_status"/>
+    <menuitem parent="process_menu_id" sequence="16" action="act_process_status" id="menu_process_status" icon="tryton-list"/>
     <!-- ######################### -->
     <!-- # Process Step Relation # -->
     <!-- ######################### -->
@@ -91,7 +91,7 @@
       <field name="view" ref="process_form"/>
       <field name="act_window" ref="act_process_desc"/>
     </record>
-    <menuitem parent="process_menu_id" sequence="10" action="act_process_desc" id="menu_process_desc"/>
+    <menuitem parent="process_menu_id" sequence="10" action="act_process_desc" id="menu_process_desc" icon="workflow"/>
     <!-- ################ -->
     <!-- # Process Step # -->
     <!-- ################ -->
@@ -120,7 +120,7 @@
       <field name="view" ref="step_form"/>
       <field name="act_window" ref="act_step_desc"/>
     </record>
-    <menuitem parent="process_menu_id" sequence="11" action="act_step_desc" id="menu_step_desc"/>
+    <menuitem parent="process_menu_id" sequence="11" action="act_step_desc" id="menu_step_desc" icon="diamond"/>
     <!-- ###################### -->
     <!-- # Process Transition # -->
     <!-- ###################### -->
