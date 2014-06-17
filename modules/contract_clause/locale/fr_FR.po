@@ -34,10 +34,6 @@ msgctxt "field:contract.clause,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.clause,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:contract.clause,rec_name:"
 msgid "Name"
 msgstr "Nom"

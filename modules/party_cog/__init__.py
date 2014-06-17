@@ -15,7 +15,7 @@ def register():
     Pool.register(
         User,
         SynthesisMenuActionCloseSynthesis,
-        SynthesisMenuActionReloadSynthesis,
+        SynthesisMenuActionRefreshSynthesis,
         SynthesisMenuContact,
         SynthesisMenuAddress,
         SynthesisMenuPartyInteraction,

@@ -34,10 +34,6 @@ msgctxt "field:country.zipcode,id:"
 msgid "ID"
 msgstr " "
 
-msgctxt "field:country.zipcode,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:country.zipcode,rec_name:"
 msgid "Name"
 msgstr " "
@@ -73,6 +69,10 @@ msgstr " "
 msgctxt "model:ir.action,name:act_zipcode_form"
 msgid "ZipCode"
 msgstr "Code Postal"
+
+msgctxt "model:ir.test_case.instance,name:zip_code_test_case"
+msgid "Zip Code Test Case"
+msgstr "Jeux d'essai : codes postaux"
 
 msgctxt "model:ir.ui.menu,name:menu_zipcode_form"
 msgid "ZipCode"

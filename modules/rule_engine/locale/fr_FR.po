@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -21,6 +21,15 @@ msgstr "Paramètres de la Fonction ne doit pas utiliser de caracères spéciaux"
 msgctxt "error:rule_engine.function:"
 msgid "Technical name must only use ascii"
 msgstr "Le nom technique doit utiliser seulement de l'ASCII"
+
+msgctxt "error:rule_engine.test_case.init:"
+msgid "This wizard should be run froma rule engine execution log selected"
+msgstr ""
+"L'assistant doit être lancé depuis une trace d'exécution du moteur de règle"
+
+msgctxt "error:rule_engine.validate:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
 msgctxt "error:rule_engine:"
 msgid ""
@@ -78,10 +87,6 @@ msgstr "ID"
 msgctxt "field:functional_error,kind:"
 msgid "Kind"
 msgstr "Portée de la donnée"
-
-msgctxt "field:functional_error,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:functional_error,name:"
 msgid "Name"
@@ -147,10 +152,6 @@ msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:rule_engine,name:"
 msgid "Name"
 msgstr "Nom"
@@ -158,6 +159,10 @@ msgstr "Nom"
 msgctxt "field:rule_engine,parameters:"
 msgid "Parameters"
 msgstr "Paramètres"
+
+msgctxt "field:rule_engine,passing_test_cases:"
+msgid "Test Cases OK"
+msgstr ""
 
 msgctxt "field:rule_engine,rec_name:"
 msgid "Name"
@@ -343,10 +348,6 @@ msgctxt "field:rule_engine.context,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.context,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:rule_engine.context,name:"
 msgid "Name"
 msgstr "Nom"
@@ -447,10 +448,6 @@ msgctxt "field:rule_engine.function,long_description:"
 msgid "Long Description"
 msgstr "Description"
 
-msgctxt "field:rule_engine.function,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:rule_engine.function,name:"
 msgid "Name"
 msgstr "Nom"
@@ -491,6 +488,10 @@ msgctxt "field:rule_engine.function,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:rule_engine.log,calls:"
+msgid "Calls"
+msgstr "Appels"
+
 msgctxt "field:rule_engine.log,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -522,10 +523,6 @@ msgstr "Info"
 msgctxt "field:rule_engine.log,low_level_debug:"
 msgid "Execution Trace"
 msgstr "Trace d'exécution"
-
-msgctxt "field:rule_engine.log,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:rule_engine.log,rec_name:"
 msgid "Name"
@@ -579,10 +576,6 @@ msgctxt "field:rule_engine.rule_parameter,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.rule_parameter,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Développer l'arbre"
-
 msgctxt "field:rule_engine.rule_parameter,name:"
 msgid "Code"
 msgstr "Code"
@@ -604,7 +597,7 @@ msgid "Selection JSON"
 msgstr "Sélection JSON"
 
 msgctxt "field:rule_engine.rule_parameter,selection_sorted:"
-msgid "Sort Selection"
+msgid "Selection Sorted"
 msgstr "Sélection Triée"
 
 msgctxt "field:rule_engine.rule_parameter,string:"
@@ -631,10 +624,6 @@ msgctxt "field:rule_engine.run_tests.results,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.run_tests.results,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:rule_engine.run_tests.results,report:"
 msgid "Report"
 msgstr "Rapport"
@@ -642,10 +631,6 @@ msgstr "Rapport"
 msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:rule_engine.test_case,create_date:"
 msgid "Create Date"
@@ -675,13 +660,13 @@ msgctxt "field:rule_engine.test_case,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:rule_engine.test_case,last_passing_date:"
+msgid "Last passing run date"
+msgstr ""
+
 msgctxt "field:rule_engine.test_case,low_debug:"
 msgid "Low Level Debug Info"
 msgstr "Niveau bas de debug"
-
-msgctxt "field:rule_engine.test_case,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:rule_engine.test_case,rec_name:"
 msgid "Name"
@@ -743,10 +728,6 @@ msgctxt "field:rule_engine.test_case.value,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.test_case.value,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:rule_engine.test_case.value,name:"
 msgid "Name"
 msgstr "Nom"
@@ -765,7 +746,7 @@ msgstr "Règle"
 
 msgctxt "field:rule_engine.test_case.value,test_case:"
 msgid "Test Case"
-msgstr "Jeu de Test"
+msgstr "Jeu d'essai"
 
 msgctxt "field:rule_engine.test_case.value,value:"
 msgid "Value"
@@ -782,6 +763,10 @@ msgstr "Mis à jour par"
 msgctxt "field:rule_engine.test_case.value,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:rule_engine.validate,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:tag,childs:"
 msgid "Childs"
@@ -806,10 +791,6 @@ msgstr "Créé par"
 msgctxt "field:tag,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:tag,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
 
 msgctxt "field:tag,name:"
 msgid "Name"
@@ -843,6 +824,10 @@ msgctxt "help:rule_engine.rule_parameter,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 
+msgctxt "help:rule_engine.rule_parameter,selection_sorted:"
+msgid "If the selection must be sorted on label"
+msgstr "Si la sélection doit être triée par le libéllé"
+
 msgctxt "model:functional_error,name:"
 msgid "Rule Error"
 msgstr "Erreur"
@@ -850,6 +835,14 @@ msgstr "Erreur"
 msgctxt "model:ir.action,name:act_tag_form"
 msgid "Tags"
 msgstr "Labels"
+
+msgctxt "model:ir.action,name:act_test_case_init"
+msgid "Create Test Case"
+msgstr "Créer les jeux d'essai"
+
+msgctxt "model:ir.action,name:act_validate_test_cases"
+msgid "Validate Rules"
+msgstr "Règles de validation"
 
 msgctxt "model:ir.action,name:context_window"
 msgid "Contexts"
@@ -945,11 +938,15 @@ msgstr "Outils"
 
 msgctxt "model:rule_engine.test_case,name:"
 msgid "Test Case"
-msgstr "Jeu de Test"
+msgstr "Jeu d'essai"
 
 msgctxt "model:rule_engine.test_case.value,name:"
 msgid "Test Case Value"
 msgstr "Valeur du Test"
+
+msgctxt "model:rule_engine.validate,name:"
+msgid "Rule Engine Test Case Validation Batch"
+msgstr "Batch de validation des jeux d'essai des règles"
 
 msgctxt "model:tag,name:"
 msgid "Tag"
@@ -1089,15 +1086,7 @@ msgstr "Résultat"
 
 msgctxt "view:rule_engine.test_case:"
 msgid "Test Case"
-msgstr "Jeu de Test"
-
-msgctxt "view:rule_engine:"
-msgid "Algorithm"
-msgstr "Algorithme"
-
-msgctxt "view:rule_engine:"
-msgid "Debug"
-msgstr "Debug"
+msgstr "Jeu d'essai"
 
 msgctxt "view:rule_engine:"
 msgid "Rule"
@@ -1106,10 +1095,6 @@ msgstr "Règle"
 msgctxt "view:rule_engine:"
 msgid "Rules"
 msgstr "Règles"
-
-msgctxt "view:rule_engine:"
-msgid "Tags"
-msgstr "Labels"
 
 msgctxt "view:tag:"
 msgid "Rules"
@@ -1126,3 +1111,12 @@ msgstr "Arbre"
 msgctxt "wizard_button:rule_engine.run_tests,report,end:"
 msgid "OK"
 msgstr "OK"
+
+msgctxt ""
+"wizard_button:rule_engine.test_case.init,select_values,create_test_case:"
+msgid "Accept"
+msgstr "Accepter"
+
+msgctxt "wizard_button:rule_engine.test_case.init,select_values,end:"
+msgid "Cancel"
+msgstr "Annuler"
