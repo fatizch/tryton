@@ -20,7 +20,7 @@ msgstr "Historique"
 
 msgctxt "field:claim,current_log:"
 msgid "Current Log"
-msgstr ""
+msgstr "Trace Courante"
 
 msgctxt "field:claim,current_state:"
 msgid "Current State"
@@ -70,10 +70,6 @@ msgctxt "field:claim.declare.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:claim.declare.find_process,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:claim.declare.find_process,party:"
 msgid "Party"
 msgstr "Acteur"
@@ -96,7 +92,7 @@ msgstr "Paramètres du Processus de Déclaration Sinistre"
 
 msgctxt "model:ir.action,name:act_claim_logs"
 msgid "Logs"
-msgstr ""
+msgstr "Traces"
 
 msgctxt "model:ir.action,name:declaration_process_launcher"
 msgid "Start Declaration"
@@ -121,6 +117,10 @@ msgstr "Préjudice"
 msgctxt "wizard_button:claim.declare,process_parameters,action:"
 msgid "Start Process"
 msgstr "Démarrer le processus"
+
+msgctxt "wizard_button:claim.declare,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr "Démarrer le processus (k)"
 
 msgctxt "wizard_button:claim.declare,process_parameters,end:"
 msgid "Cancel"

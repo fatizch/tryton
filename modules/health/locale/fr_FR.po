@@ -34,10 +34,6 @@ msgctxt "field:health.party_complement,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:health.party_complement,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:health.party_complement,party:"
 msgid "Party"
 msgstr "Acteur"

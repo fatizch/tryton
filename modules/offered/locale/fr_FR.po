@@ -68,10 +68,6 @@ msgctxt "field:extra_data,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:extra_data,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:extra_data,name:"
 msgid "Code"
 msgstr "Code"
@@ -93,7 +89,7 @@ msgid "Selection JSON"
 msgstr "Sélection JSON"
 
 msgctxt "field:extra_data,selection_sorted:"
-msgid "Sort Selection"
+msgid "Selection Sorted"
 msgstr "Sélection Triée"
 
 msgctxt "field:extra_data,start_date:"
@@ -163,10 +159,6 @@ msgstr "ID"
 msgctxt "field:extra_data-sub_extra_data,master:"
 msgid "Master"
 msgstr "Maître"
-
-msgctxt "field:extra_data-sub_extra_data,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:extra_data-sub_extra_data,rec_name:"
 msgid "Name"
@@ -260,10 +252,6 @@ msgctxt "field:offered,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:offered,name:"
 msgid "Name"
 msgstr "Nom"
@@ -340,13 +328,13 @@ msgctxt "field:offered.option.description,is_package:"
 msgid "Package"
 msgstr "Formule"
 
+msgctxt "field:offered.option.description,is_service:"
+msgid "Is a Service"
+msgstr "Est un service"
+
 msgctxt "field:offered.option.description,kind:"
 msgid "Option Description Kind"
 msgstr "Type de Garantie"
-
-msgctxt "field:offered.option.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:offered.option.description,name:"
 msgid "Name"
@@ -624,10 +612,6 @@ msgctxt "field:offered.product,kind:"
 msgid "Product Kind"
 msgstr "Type de Produit"
 
-msgctxt "field:offered.product,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:offered.product,name:"
 msgid "Name"
 msgstr "Nom"
@@ -732,10 +716,6 @@ msgctxt "field:offered.product-option.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:offered.product-option.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:offered.product-option.description,order:"
 msgid "Order"
 msgstr "Ordre"
@@ -767,6 +747,10 @@ msgstr "Données Complémentaires"
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
+
+msgctxt "help:extra_data,selection_sorted:"
+msgid "If the selection must be sorted on label"
+msgstr "Si la sélection doit être triée par le libéllé"
 
 msgctxt "model:extra_data,name:"
 msgid "Extra Data"

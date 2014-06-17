@@ -46,17 +46,9 @@ msgctxt "field:contract.option.beneficiary,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:contract.option.beneficiary,description:"
-msgid "Description"
-msgstr "Description"
-
 msgctxt "field:contract.option.beneficiary,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.option.beneficiary,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
 
 msgctxt "field:contract.option.beneficiary,option:"
 msgid "Option"

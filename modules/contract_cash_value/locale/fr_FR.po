@@ -50,13 +50,9 @@ msgctxt "field:contract.cash_value.collection,last_update:"
 msgid "Last update"
 msgstr "Dernière actualisation"
 
-msgctxt "field:contract.cash_value.collection,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:contract.cash_value.collection,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:contract.cash_value.collection,reception_date:"
 msgid "Reception Date"
@@ -76,7 +72,7 @@ msgstr "Mis à jour par"
 
 msgctxt "field:contract.cash_value.collection,xml_id:"
 msgid "XML Id"
-msgstr ""
+msgstr "Identifiant XML"
 
 msgctxt "field:contract.wizard.cash_surrender.parameters,contract:"
 msgid "Contract"
@@ -85,10 +81,6 @@ msgstr "Contrat"
 msgctxt "field:contract.wizard.cash_surrender.parameters,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.wizard.cash_surrender.parameters,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
 
 msgctxt "field:contract.wizard.cash_surrender.parameters,surrender_amount:"
 msgid "Surrender Amount"
@@ -134,6 +126,10 @@ msgstr "Mise à jour des versements"
 msgctxt "model:ir.action,name:act_collection_to_cash_value"
 msgid "Collection To Cash Value"
 msgstr "Action"
+
+msgctxt "model:ir.test_case.instance,name:journal_test_case"
+msgid "Journal Test Case"
+msgstr "Jeux d'essai : journaux"
 
 msgctxt "selection:contract.cash_value.collection,kind:"
 msgid "Payment"
