@@ -421,7 +421,7 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
                 'name')).as_('name'), Literal(party_id).as_('party'))
 
     def get_icon(self, name=None):
-        return 'tryton-close'
+        return 'coopengo-close'
 
     def get_rec_name(self, name):
         PartyActionClose = Pool().get('party.synthesis.menu.action_close')
@@ -676,7 +676,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         elif model == 'party.synthesis.menu.relationship':
             return 4
         elif (model == 'party.synthesis.menu.action_close' or
-                model == 'party.synthesis.menu.action_reload'):
+                model == 'party.synthesis.menu.action_refresh'):
             return 0
 
     @classmethod
@@ -765,7 +765,7 @@ class SynthesisMenuOpen(Wizard):
             user.save()
             self.state.need_refresh = True
             return 'end'
-        elif record.__name__ == 'party.synthesis.menu.action_reload':
+        elif record.__name__ == 'party.synthesis.menu.action_refresh':
             self.state.need_refresh = True
             return 'end'
         else:

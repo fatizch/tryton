@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/field[@name='email']" position="after">
-        <separator string="Account" colspan="6" id="account"/>
-        <label name="receivable"/>
-        <field name="receivable"/>
-        <label name="payable"/>
-        <field name="payable"/>
-        <newline/>
+        <group id="account_synthesis" col="4" colspan="6">
+            <separator string="Account" colspan="4" id="account"/>
+            <label name="receivable_today"/>
+            <field name="receivable_today"/>
+            <label name="payable_today"/>
+            <field name="payable_today"/>
+            <label name="receivable"/>
+            <field name="receivable"/>
+            <label name="payable"/>
+            <field name="payable"/>
+        </group>
     </xpath>
 </data>
