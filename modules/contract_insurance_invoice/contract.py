@@ -591,7 +591,7 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
     @fields.depends('billing_mode')
     def on_change_with_payment_term(self, name=None):
         if self.billing_mode:
-            return self.billing_mode.allowed_payment_terms[0]
+            return self.billing_mode.allowed_payment_terms[0].id
 
     @fields.depends('direct_debit_day_selector')
     def on_change_direct_debit_day_selector(self):
