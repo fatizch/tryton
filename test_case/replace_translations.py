@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 import os
+import sys
 import polib
 from trytond.ir.translation import TrytonPOFile
 import proteus_tools
@@ -17,18 +18,20 @@ def get_modules(from_modules):
     return [x.name for x in graph if not proteus_tools.is_coop_module(x.name)]
 
 
-def replace_translations(test_config_file, language, update_dict,
-        path_to_store_file=None):
-    cfg_dict = proteus_tools.get_test_cfg(test_config_file)
-    proteus_tools.get_config(cfg_dict)
-    modules = get_modules(cfg_dict['modules'])
+def replace_translations(language, update_dict, modules=None):
+    if not modules:
+        modules = [x for x in os.listdir(os.path.join(DIR, '..', 'modules'))]
 
-    po_file = TrytonPOFile(wrapwidth=78)
-    po_file.metadata = {'Content-Type': 'text/plain; charset=utf-8'}
+    tryton_modules = get_modules(modules)
 
-    for cur_module in modules:
-        translation_file = os.path.abspath(os.path.join(DIR, '..', '..',
-            'trytond', 'trytond', 'modules', cur_module, 'locale',
+    for cur_module in tryton_modules:
+        po_file = None
+        path = os.path.join(DIR, '..', '..', 'trytond', 'trytond')
+        if cur_module in ['ir', 'res']:
+            path = os.path.join(path, cur_module)
+        else:
+            path = os.path.join(path, 'modules', cur_module)
+        translation_file = os.path.abspath(os.path.join(path, 'locale',
             '%s.po' % language))
         if not os.path.isfile(translation_file):
             continue
@@ -39,17 +42,42 @@ def replace_translations(test_config_file, language, update_dict,
             ttype, name, res_id = entry.msgctxt.split(':')
             entry.msgctxt = '%s:%s:%s.%s' % (ttype, name, cur_module, res_id)
             entry.msgstr = update_dict[(entry.msgid, entry.msgstr)]
+            if not po_file:
+                po_file = TrytonPOFile(wrapwidth=78)
+                po_file.metadata = {
+                    'Content-Type': 'text/plain; charset=utf-8',
+                    }
             po_file.append(entry)
 
-    po_file.sort()
-    if not path_to_store_file:
-        path_to_store_file = DIR
-    the_file = open(os.path.join(path_to_store_file, '%s.po' % language), 'w')
-    the_file.write(unicode(po_file).encode('utf-8'))
-    the_file.close
+        if not po_file:
+            continue
+        po_file.sort()
+        translation_module = '%s_cog_translation' % cur_module
+        path = os.path.abspath(os.path.join(DIR, '..', 'modules',
+                translation_module))
+        if not os.path.exists(path):
+            os.makedirs(path)
+            f = open(os.path.join(path, '__init__.py'), 'w')
+            f.write('from trytond.pool import Pool\n\n\ndef register():\n')
+            f.write("    Pool.register(module='%s', type_='model')\n"
+                % translation_module)
+            f.close
+            f = open(os.path.join(path, 'tryton.cfg'), 'w')
+            f.write('[tryton]\ndepends:\n    ir\n    res\n    %s\nxml:\n'
+                % cur_module)
+            f.close
+        if not os.path.exists(os.path.join(path, 'locale')):
+            os.makedirs(os.path.join(path, 'locale'))
+        the_file = open(os.path.join(path, 'locale', '%s.po' % language),
+            'w')
+        the_file.write(unicode(po_file).encode('utf-8'))
+        the_file.close
 
 
 if __name__ == '__main__':
+    modules = None
+    if len(sys.argv) == 2:
+        modules = [sys.argv[2]]
     update_dict = {
         ('Party', 'Tiers'): 'Acteur',
         ('Parties', 'Tiers'): 'Acteurs',
@@ -57,7 +85,7 @@ if __name__ == '__main__':
         ('Street (bis)', 'Rue (bis)'): u'Boîte Postale (Ligne 5)',
         ('Invoice', 'Facture'): 'Quittance',
         ('Invoices', 'Factures'): 'Quittances',
+        ('Invoice Lines', 'Lignes de facture'): 'Lignes de quittance',
+        ('Invoice Line', 'Ligne de Facture'): 'Ligne de quittance',
         }
-    replace_translations(os.path.join(DIR, 'test_case.cfg'), 'fr_FR',
-        update_dict, os.path.abspath(os.path.join(DIR, '..',
-                'modules', 'cog_translation', 'locale')))
+    replace_translations('fr_FR', update_dict, modules)
