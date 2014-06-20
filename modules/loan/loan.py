@@ -321,11 +321,10 @@ class Loan(model.CoopSQL, model.CoopView):
         return res
 
     def calculate_amortization_table(self):
-            Payment = Pool().get('loan.payment')
-            if getattr(self, 'payments', None):
-                with Transaction().set_user(0):
-                    Payment.delete([x for x in self.payments if x.id])
-            self.payments = self.calculate_payments()
+        Payment = Pool().get('loan.payment')
+        if getattr(self, 'payments', None):
+            Payment.delete([x for x in self.payments if x.id])
+        self.payments = self.calculate_payments()
 
     @classmethod
     @model.CoopView.button
@@ -412,14 +411,9 @@ class Loan(model.CoopSQL, model.CoopView):
     def get_payment(self, at_date=None):
         if not at_date:
             at_date = utils.today()
-        payment = None
-        for cur_payment in self.payments:
-            if cur_payment.start_date <= at_date:
-               payment = cur_payment
-               continue
-            else:
-                break
-        return payment
+        for payment in reversed(self.payments):
+            if payment.start_date <= at_date:
+                return payment
 
     def get_outstanding_loan_balance(self, name=None, at_date=None):
         payment = self.get_payment(at_date)
@@ -433,7 +427,7 @@ class Loan(model.CoopSQL, model.CoopView):
             if share.person == party:
                 return share
 
-    @fields.depends('increments')
+    @fields.depends('increments', 'end_date')
     def on_change_with_end_date(self, name=None):
         if getattr(self, 'increments', None):
             return self.increments[-1].end_date
