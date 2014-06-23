@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Loan Increments" editable="bottom">
-    <field name="number"/>
+    <field name="number" readonly="1"/>
     <field name="number_of_payments"/>
     <field name="payment_amount">
         <suffix name="currency_symbol"/>

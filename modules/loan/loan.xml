@@ -116,12 +116,38 @@
             <field name="type">tree</field>
             <field name="name">loan_increment_tree</field>
         </record>
+        <record model="ir.model.access" id="access_loan_payment">
+            <field name="model" search="[('model', '=', 'loan.payment')]"/>
+            <field name="group" ref="contract.group_contract"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_loan_payment_admin">
+            <field name="model" search="[('model', '=', 'loan.payment')]"/>
+            <field name="group" ref="contract.group_contract_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <!-- ############################################################ -->
         <!-- ########### Loan Create Wizard ########### -->
         <!-- ############################################################ -->
         <record model="ir.action.wizard" id="launch_loan_creation_wizard">
           <field name="name">Loan Create</field>
           <field name="wiz_name">loan.create</field>
+        </record>
+        <record model="ir.action.act_window" id="act_loan_payment_relate_form">
+          <field name="name">Loan Payments</field>
+          <field name="res_model">loan.payment</field>
+          <field name="domain">[('loan', '=', Eval('active_id'))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_loan_payment_relate_keyword">
+          <field name="keyword">form_relate</field>
+          <field name="model">loan,-1</field>
+          <field name="action" ref="act_loan_payment_relate_form"/>
         </record>
     </data>
 </tryton>
