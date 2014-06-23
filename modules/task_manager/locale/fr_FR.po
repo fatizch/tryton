@@ -50,10 +50,6 @@ msgctxt "field:res.team,members:"
 msgid "Members"
 msgstr "Membres"
 
-msgctxt "field:res.team,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:res.team,name:"
 msgid "Name"
 msgstr "Nom"
@@ -122,10 +118,6 @@ msgctxt "field:res.team.add_user.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:res.team.add_user.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:res.team.add_user.select,user:"
 msgid "User"
 msgstr "Utilisateur"
@@ -153,10 +145,6 @@ msgstr "ID"
 msgctxt "field:res.team.priority,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:res.team.priority,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:res.team.priority,priority:"
 msgid "Priority"
@@ -193,10 +181,6 @@ msgstr "Equipe"
 msgctxt "field:task.select.available_tasks,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:task.select.available_tasks,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
 
 msgctxt "field:task.select.available_tasks,nb_tasks_process:"
 msgid "Process Tasks"
@@ -242,10 +226,6 @@ msgctxt "field:task.select.available_tasks.task,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:task.select.available_tasks.task,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:task.select.available_tasks.task,nb_tasks:"
 msgid "Number"
 msgstr "Numéro"
@@ -267,7 +247,7 @@ msgid "Waiting Tasks"
 msgstr "Tâches en attente"
 
 msgctxt "model:ir.action,name:act_task_dispatcher"
-msgid "Nouvelle Tâche"
+msgid "New Task"
 msgstr "Nouvelle Tâche"
 
 msgctxt "model:ir.action,name:act_team"

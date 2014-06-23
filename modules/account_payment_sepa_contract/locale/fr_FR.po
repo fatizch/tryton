@@ -2,6 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:contract,sepa_mandate:"
+msgctxt "field:contract.billing_information,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"

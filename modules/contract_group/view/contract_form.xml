@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/notebook/page[@id='admin']" position="inside">
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <label name="is_group"/>
         <field name="is_group"/>
     </xpath>

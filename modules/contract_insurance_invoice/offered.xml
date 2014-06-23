@@ -1,31 +1,45 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="offered_invoice_frequency_view_form">
-            <field name="model">offered.invoice.frequency</field>
+        <record model="ir.ui.view" id="offered_billing_mode_view_form">
+            <field name="model">offered.billing_mode</field>
             <field name="type">form</field>
-            <field name="name">offered_invoice_frequency_form</field>
+            <field name="name">offered_billing_mode_form</field>
         </record>
-        <record model="ir.ui.view" id="offered_invoice_frequency_view_list">
-            <field name="model">offered.invoice.frequency</field>
+        <record model="ir.ui.view" id="offered_billing_mode_view_list">
+            <field name="model">offered.billing_mode</field>
             <field name="type">tree</field>
-            <field name="name">offered_invoice_frequency_list</field>
+            <field name="name">offered_billing_mode_list</field>
         </record>
-        <record model="ir.action.act_window" id="act_offered_invoice_frequency">
-            <field name="name">Invoice Frequencies</field>
-            <field name="res_model">offered.invoice.frequency</field>
+        <record model="ir.action.act_window" id="act_offered_billing_mode">
+            <field name="name">Billing Modes</field>
+            <field name="res_model">offered.billing_mode</field>
         </record>
-        <record model="ir.action.act_window.view" id="act_offered_invoice_frequency_view1">
+
+        <record model="ir.ui.view" id="product-billing_mode_view_list">
+            <field name="model">offered.product-offered.billing_mode</field>
+            <field name="type">tree</field>
+            <field name="name">product-billing_mode_list</field>
+        </record>
+
+        <record model="ir.ui.view" id="billing_mode-payment_term_view_list">
+            <field name="model">offered.billing.mode-account.invoice.payment_term</field>
+            <field name="type">tree</field>
+            <field name="name">billing_mode-payment_term_list</field>
+        </record>
+
+        <record model="ir.action.act_window.view" id="act_offered_billing_mode_view1">
             <field name="sequence" eval="16"/>
-            <field name="view" ref="offered_invoice_frequency_view_list"/>
-            <field name="act_window" ref="act_offered_invoice_frequency"/>
+            <field name="view" ref="offered_billing_mode_view_list"/>
+            <field name="act_window" ref="act_offered_billing_mode"/>
         </record>
-        <record model="ir.action.act_window.view" id="act_offered_invoice_frequency_view2">
+        <record model="ir.action.act_window.view" id="act_offered_billing_mode_view2">
             <field name="sequence" eval="16"/>
-            <field name="view" ref="offered_invoice_frequency_view_form"/>
-            <field name="act_window" ref="act_offered_invoice_frequency"/>
+            <field name="view" ref="offered_billing_mode_view_form"/>
+            <field name="act_window" ref="act_offered_billing_mode"/>
         </record>
-        <menuitem parent="offered.menu_product_configuration" sequence="20" action="act_offered_invoice_frequency" id="menu_offered_invoice_frequency"/>
+        <menuitem parent="account.menu_account_configuration" sequence="20" action="act_offered_billing_mode" icon="tryton-list" id="menu_offered_billing_mode"/>
+
         <record model="ir.ui.view" id="product_view_form">
             <field name="model">offered.product</field>
             <field name="inherit" ref="offered.product_view_form"/>

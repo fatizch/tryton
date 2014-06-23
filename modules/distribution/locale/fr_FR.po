@@ -34,10 +34,6 @@ msgctxt "field:distribution.network,left:"
 msgid "Left"
 msgstr "Gauche"
 
-msgctxt "field:distribution.network,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre Arbre"
-
 msgctxt "field:distribution.network,name:"
 msgid "Name"
 msgstr "Nom"
@@ -77,6 +73,10 @@ msgstr "Réseau de Distribution"
 msgctxt "model:ir.action,name:act_dist_network_form"
 msgid "Distribution Networks"
 msgstr "Réseaux de Distribution"
+
+msgctxt "model:ir.test_case.instance,name:distribution_network_test_case"
+msgid "Distribution Network Test Case"
+msgstr "Jeux d'essai : réseaux de distribution"
 
 msgctxt "model:ir.ui.menu,name:menu_dist_network_form"
 msgid "Distribution Networks"

@@ -2,6 +2,58 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:contract,is_group:"
+msgid "Group Contract"
+msgstr "Contrat Groupe"
+
+msgctxt "field:offered.option.description,is_group:"
+msgid "Group Coverage"
+msgstr "Garanties Groupe"
+
+msgctxt "field:offered.product,is_group:"
+msgid "Group Product"
+msgstr "Produits Groupe"
+
+msgctxt "model:ir.action,name:act_contract_form"
+msgid "Group Contract"
+msgstr "Contrat Groupe"
+
+msgctxt "model:ir.action,name:act_coverage_form"
+msgid "Group Coverages"
+msgstr "Garanties Groupe"
+
+msgctxt "model:ir.action,name:act_package_form"
+msgid "Group Packages"
+msgstr "Formules Groupe"
+
+msgctxt "model:ir.action,name:act_product_form"
+msgid "Group Products"
+msgstr "Produits Groupe"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_form"
+msgid "Group Contract"
+msgstr "Contrat Groupe"
+
+msgctxt "model:ir.ui.menu,name:menu_coverage_form"
+msgid "Group Coverages"
+msgstr "Garanties Groupe"
+
+msgctxt "model:ir.ui.menu,name:menu_group"
+msgid "Group"
+msgstr "Groupe"
+
+msgctxt "model:ir.ui.menu,name:menu_package_form"
+msgid "Group Packages"
+msgstr "Formules Groupe"
+
+msgctxt "model:ir.ui.menu,name:menu_product_form"
+msgid "Group Products"
+msgstr "Produits Groupe"
+
+msgctxt "model:tag,name:tag_group"
+msgid "Group"
+msgstr "Groupe"
+
 msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"

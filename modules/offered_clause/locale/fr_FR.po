@@ -36,7 +36,7 @@ msgstr "Produit"
 
 msgctxt "field:offered.product-clause,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:offered.product-clause,write_date:"
 msgid "Write Date"

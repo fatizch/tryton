@@ -1,11 +1,23 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="contract_view_form">
-            <field name="model">contract</field>
-            <field name="inherit" ref="contract.contract_view_form"/>
+        <record model="ir.ui.view" id="contract_billing_information_view_list">
+            <field name="model">contract.billing_information</field>
+            <field name="inherit" ref="contract_insurance_invoice.contract_billing_information_view_list"/>
+            <field name="type">tree</field>
+            <field name="name">contract_billing_information_list</field>
+        </record>
+        <record model="ir.ui.view" id="contract_billing_information_view_form">
+            <field name="model">contract.billing_information</field>
+            <field name="inherit" ref="contract_insurance_invoice.contract_billing_information_view_form"/>
             <field name="type">form</field>
-            <field name="name">contract_form</field>
+            <field name="name">contract_billing_information_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_billing_information_without_date_view_form">
+            <field name="model">contract.billing_information</field>
+            <field name="inherit" ref="contract_insurance_invoice.contract_billing_information_without_date_view_form"/>
+            <field name="type">form</field>
+            <field name="name">contract_billing_information_without_date_form</field>
         </record>
     </data>
 </tryton>

@@ -25,6 +25,11 @@
             <field name="inherit" ref="bank.bank_account_number_view_list_sequence"/>
             <field name="name">bank_account_number_list_sequence</field>
         </record>
+        <menuitem name="Banking" sequence="3" id="bank.menu_banking" icon="bank"/>
+        <menuitem parent="bank.menu_banking" action="bank.act_bank_form"
+            sequence="10" id="bank.menu_bank_form" icon="bank"/>
+        <menuitem parent="bank.menu_banking" action="bank.act_bank_account_form"
+            sequence="20" id="bank.menu_bank_account_form" icon="coopengo-bank_account"/>
     </data>
 </tryton>
 

@@ -34,5 +34,9 @@
             <field name="name">contact</field>
             <field name="path">icons/contact.svg</field>
         </record>
+        <record model="ir.ui.icon" id="party_relation_icon">
+            <field name="name">party_relation</field>
+            <field name="path">icons/party_relation.svg</field>
+        </record>
     </data>
 </tryton>

@@ -85,21 +85,6 @@ class OptionsDisplayer:
         return (self.covered_element.party.id
             if self.covered_element and self.covered_element.party else None)
 
-    @fields.depends('covered_element', 'options')
-    def on_change_covered_element(self):
-        Wizard = Pool().get('contract.wizard.option_subscription',
-            type='wizard')
-        if self.covered_element:
-            res = Wizard.init_default_options(self.covered_element.contract,
-                self.covered_element.options)
-            res['options'] = {'add': [(-1, x) for x in res['options']]}
-        else:
-            res = {}
-        if self.options:
-            res.setdefault('options', {})
-            res['options']['remove'] = [x.id for x in self.options]
-        return res
-
 
 class WizardOption:
     __name__ = 'contract.wizard.option_subscription.options_displayer.option'
@@ -348,7 +333,7 @@ class CreateExtraPremium(Wizard):
         contract_id = Transaction().context.get('active_id')
         self.select_options.contract = contract_id
         Contract = Pool().get('contract')
-	contract = Contract(contract_id)
+        contract = Contract(contract_id)
         if len(contract.covered_elements) == 1:
             self.select_options.covered_element = contract.covered_elements[0].id
         else:

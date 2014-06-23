@@ -20,25 +20,28 @@
         </group>
     </group>
     <notebook colspan="4">
-        <page string="Options" id="options">
+        <page string="Options" id="options" states="{'invisible': ~Eval('options')}">
             <field name="options" colspan="4"/>
         </page>
-        <page string="Complementary Data" name="extra_data">
+        <page string="Data" id="data">
             <field name="extra_data" no_command="1"/>
         </page>
-        <page string="Contacts" name="Contacts">
+        <page string="Contacts" id="contacts">
             <field name="contacts" colspan="4"/>
+            <field name="addresses" colspan="4"/>
         </page>
-        <page string="Administration" id="admin">
-            <label name="product_kind"/>
-            <field name="product_kind"/>
-            <label name="product"/>
-            <field name="product"/>
-            <label name="appliable_conditions_date"/>
-            <field name="appliable_conditions_date"/>
-        </page>
-        <page string="Activation History" name="activation_history">
-            <field name="activation_history"/>
+        <page string="Administration" id="admin" col="2">
+            <group id="left" col="2" yfill="0">
+                <label name="product_kind"/>
+                <field name="product_kind"/>
+                <label name="product"/>
+                <field name="product"/>
+                <label name="appliable_conditions_date"/>
+                <field name="appliable_conditions_date"/>
+            </group>
+            <group id="right" yfill="0">
+                <field name="activation_history" colspan="2" yfill="0" yexpand="0"/>
+            </group>
         </page>
     </notebook>
     <newline/>

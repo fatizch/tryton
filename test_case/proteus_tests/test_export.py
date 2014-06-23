@@ -4,7 +4,6 @@ from proteus import config, Model, Wizard
 IMPORT_FILE = '/path/to/export_file.json'
 
 NEEDED_MODULES = [
-    'cog_translation',
     'bank_cog',
     'table',
     'contract_insurance_health_fr',

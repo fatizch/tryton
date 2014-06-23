@@ -16,6 +16,8 @@
             <label name="type_"/>
             <field name="type_"/>
             <field name="selection" colspan="4"/>
+            <label name="selection_sorted"/>
+            <field name="selection_sorted"/>
             <label name="digits"/>
             <field name="digits"/>
             <newline/>

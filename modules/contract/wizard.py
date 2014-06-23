@@ -182,10 +182,10 @@ class WizardOption(model.CoopView):
         'parent', 'Childs')
     option = fields.Many2One('contract.option', 'Option')
 
-    @fields.depends('coverage')
+    @fields.depends('coverage', 'coverage_behaviour')
     def on_change_with_name(self, name=None):
         if self.coverage:
-            return '%s [%s]' % (self.coverage,
+            return '%s [%s]' % (self.coverage.rec_name,
                 coop_string.translate_value(self, 'coverage_behaviour'))
 
     def init_subscribed_option(self, displayer, option):

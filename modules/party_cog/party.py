@@ -10,7 +10,7 @@ except ImportError:
 from sql.aggregate import Max
 from sql import Literal, Cast
 
-from trytond.pyson import Eval, Bool, Less
+from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
 
 from trytond.rpc import RPC
@@ -32,7 +32,7 @@ __all__ = [
     'SynthesisMenuOpenState',
     'SynthesisMenuSet',
     'SynthesisMenuActionCloseSynthesis',
-    'SynthesisMenuActionReloadSynthesis',
+    'SynthesisMenuActionRefreshSynthesis',
     'SynthesisMenuRelationship',
     ]
 
@@ -56,17 +56,6 @@ class Party(export.ExportImportMixin):
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
         'get_main_address_id')
-    number_of_addresses = fields.Function(
-        fields.Integer('Number Of Addresses', states={'invisible': True}),
-        'on_change_with_number_of_addresses')
-    main_contact_mechanism = fields.Function(
-        fields.Many2One('party.contact_mechanism', 'Main Contact Mechanism',
-            states={'invisible': ~Eval('main_contact_mechanism')}),
-        'get_main_contact_mechanism_id')
-    number_of_contact_mechanisms = fields.Function(
-        fields.Integer('Number Of Contact Mechanisms', states={
-                'invisible': True}),
-        'on_change_with_number_of_contact_mechanisms')
     ####################################
     #Person information
     gender = fields.Selection(GENDER, 'Gender', states={
@@ -111,15 +100,6 @@ class Party(export.ExportImportMixin):
                 'duplicate_party': ('Duplicate(s) already exist(s) : \n%s'),
                 })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
-        cls._buttons.update({
-                'open_addresses': {
-                    'invisible': Less(Eval('number_of_addresses', 0), 1, True),
-                    },
-                'open_contact_mechanisms': {
-                    'invisible': Less(Eval('number_of_contact_mechanisms', 0),
-                        1, True),
-                    },
-                })
         for contact_type in ('phone', 'mobile', 'fax', 'email', 'website'):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
@@ -374,10 +354,6 @@ class Party(export.ExportImportMixin):
             ('lang', 'light')])
         return res
 
-    def get_main_contact_mechanism_id(self, name):
-        return (self.contact_mechanisms[0].id
-            if self.contact_mechanisms else None)
-
     @classmethod
     def set_contact(cls, ids, name, value):
         pool = Pool()
@@ -399,32 +375,6 @@ class Party(export.ExportImportMixin):
                         'party': party.id,
                         'active': 'True',
                         }])
-
-    @classmethod
-    @model.CoopView.button_action('party_cog.act_addresses_button')
-    def open_addresses(cls, objs):
-        pass
-
-    @classmethod
-    @model.CoopView.button_action('party_cog.act_contact_mechanisms_button')
-    def open_contact_mechanisms(cls, objs):
-        pass
-
-    @staticmethod
-    def default_number_of_addresses():
-        return 0
-
-    @fields.depends('addresses')
-    def on_change_with_number_of_addresses(self, name=None):
-        return len(self.addresses)
-
-    @fields.depends('contact_mechanisms')
-    def on_change_with_number_of_contact_mechanisms(self, name=None):
-        return len(self.contact_mechanisms)
-
-    @staticmethod
-    def default_number_of_contact_mechanisms():
-        return 0
 
     def get_publishing_values(self):
         result = super(Party, self).get_publishing_values()
@@ -519,13 +469,18 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
                 'name')).as_('name'), Literal(party_id).as_('party'))
 
     def get_icon(self, name=None):
-        return 'tryton-close'
+        return 'coopengo-close'
+
+    def get_rec_name(self, name):
+        PartyActionClose = Pool().get('party.synthesis.menu.action_close')
+        return coop_string.translate_label(PartyActionClose, 'name')
 
 
-class SynthesisMenuActionReloadSynthesis(model.CoopSQL):
-    'Party Synthesis Menu Action Reload'
-    __name__ = 'party.synthesis.menu.action_reload'
-    name = fields.Char('Reload Synthesis')
+class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
+    'Party Synthesis Menu Action Refresh'
+    __name__ = 'party.synthesis.menu.action_refresh'
+
+    name = fields.Char('Refresh Synthesis')
     party = fields.Many2One('party.party', 'Party')
 
     @staticmethod
@@ -533,8 +488,7 @@ class SynthesisMenuActionReloadSynthesis(model.CoopSQL):
         pool = Pool()
         Party = pool.get('party.party')
         party_table = Party.__table__()
-        PartyActionClose = pool.get(
-            'party.synthesis.menu.action_reload')
+        PartyActionRefresh = pool.get('party.synthesis.menu.action_refresh')
         User = pool.get('res.user')
         user = Transaction().user
         user = User(user)
@@ -548,11 +502,15 @@ class SynthesisMenuActionReloadSynthesis(model.CoopSQL):
             Max(party_table.create_date).as_('create_date'),
             Max(party_table.write_uid).as_('write_uid'),
             Max(party_table.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(PartyActionClose,
+            Literal(coop_string.translate_label(PartyActionRefresh,
                 'name')).as_('name'), Literal(party_id).as_('party'))
 
     def get_icon(self, name=None):
         return 'tryton-refresh'
+
+    def get_rec_name(self, name):
+        PartyActionRefresh = Pool().get('party.synthesis.menu.action_refresh')
+        return coop_string.translate_label(PartyActionRefresh, 'name')
 
 
 class SynthesisMenuPartyInteraction(model.CoopSQL):
@@ -664,7 +622,7 @@ class SynthesisMenuRelationship(model.CoopSQL):
             group_by=party.id)
 
     def get_icon(self, name=None):
-        return 'contact'
+        return 'party_relation'
 
 
 class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
@@ -687,7 +645,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
     def merged_models():
         return [
             'party.synthesis.menu.action_close',
-            'party.synthesis.menu.action_reload',
+            'party.synthesis.menu.action_refresh',
             'party.party',
             'party.synthesis.menu.contact',
             'party.contact_mechanism',
@@ -748,7 +706,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             elif name == 'name':
                 return Model._fields['type']
         elif (Model.__name__ == 'party.synthesis.menu.action_close' or
-                Model.__name__ == 'party.synthesis.menu.action_reload'):
+                Model.__name__ == 'party.synthesis.menu.action_refresh'):
             if name == 'party':
                 return Model._fields['id']
         if name == 'party':
@@ -766,7 +724,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         elif model == 'party.synthesis.menu.relationship':
             return 4
         elif (model == 'party.synthesis.menu.action_close' or
-                model == 'party.synthesis.menu.action_reload'):
+                model == 'party.synthesis.menu.action_refresh'):
             return 0
 
     @classmethod
@@ -817,8 +775,6 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             res = instance.get_synthesis_rec_name(name)
         elif getattr(instance, 'get_rec_name', None) is not None:
             res = instance.get_rec_name(name)
-        else:
-            res = self.name
         if self.childs and self.parent:
             res += ' (%s)' % len(self.childs)
         return res
@@ -828,9 +784,10 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
 
 
 class SynthesisMenuOpenState(model.CoopView):
+    'Syntesis Menu Open State'
     __name__ = 'party.synthesis.menu.open_state'
 
-    need_reload = fields.Boolean('Need Reload')
+    need_refresh = fields.Boolean('Need Refresh')
 
 
 class SynthesisMenuOpen(Wizard):
@@ -854,13 +811,13 @@ class SynthesisMenuOpen(Wizard):
             user.party_synthesis = None
             user.party_synthesis_previous = None
             user.save()
-            self.state.need_reload = True
+            self.state.need_refresh = True
             return 'end'
-        elif record.__name__ == 'party.synthesis.menu.action_reload':
-            self.state.need_reload = True
+        elif record.__name__ == 'party.synthesis.menu.action_refresh':
+            self.state.need_refresh = True
             return 'end'
         else:
-            self.state.need_reload = False
+            self.state.need_refresh = False
             return 'open'
 
     def do_open(self, action):
@@ -917,7 +874,7 @@ class SynthesisMenuOpen(Wizard):
         return {'ids': [record.to.id]}
 
     def end(self):
-        if self.state.need_reload:
+        if self.state.need_refresh:
             return 'reload menu'
 
 

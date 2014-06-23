@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Contract Billing Information">
+    <field name="contract"/>
+    <field name="date"/>
+    <field name="billing_mode"/>
+    <field name="direct_debit"/>
+    <field name="direct_debit_day"/>
+    <field name="direct_debit_account"/>
+</tree>

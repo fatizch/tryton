@@ -74,10 +74,9 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
         AccountKind = POOL.get('account.account.type')
         Product = POOL.get('offered.product')
         Contract = POOL.get('contract')
-        ContractPaymentTerm = POOL.get('contract.payment_term')
         PaymentTerm = POOL.get('account.invoice.payment_term')
-        ContractInvoiceFrequency = POOL.get('contract.invoice_frequency')
-        InvoiceFrequency = POOL.get('offered.invoice.frequency')
+        ContractBillingInformation = POOL.get('contract.billing_information')
+        BillingMode = POOL.get('offered.billing_mode')
         Company = POOL.get('company.company')
         User = POOL.get('res.user')
         ActivationHistory = POOL.get('contract.activation_history')
@@ -100,10 +99,23 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': '3',
                         'lines': [('create', [{}])],
                         }])
-            freq_month, freq_quart = InvoiceFrequency.create([
-                    {'frequency': 'monthly'},
-                    {'frequency':'quarterly'},
-                    ])
+            freq_month, freq_quart = BillingMode.create([{
+                        'code': 'Monthly',
+                        'name': 'Monthly',
+                        'frequency': 'monthly',
+                        'allowed_payment_terms': [
+                                ('add', [payment_term1.id, payment_term2.id,
+                                    payment_term3])]
+                        }, {
+                        'code': 'quarterly',
+                        'name': 'quarterly',
+                        'frequency': 'quarterly',
+                        'allowed_payment_terms': [
+                                ('add', [payment_term1.id, payment_term2.id,
+                                    payment_term3])],
+                        'direct_debit': True,
+                        'allowed_direct_debit_days': '5, 10, 15'
+                        }])
             sequence_code, = SequenceType.create([{
                         'name': 'Product sequence',
                         'code': 'contract',
@@ -114,11 +126,11 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'company': company.id,
                         }])
             account_kind, = AccountKind.create([{
-                        'name':'Product',
+                        'name': 'Product',
                         'company': company.id,
                         }])
             account, = Account.create([{
-                        'name':'Account for Product',
+                        'name': 'Account for Product',
                         'code': 'Account for Product',
                         'kind': 'revenue',
                         'company': company.id,
@@ -128,12 +140,8 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': 'Test Product',
                         'code': 'test_product',
                         'start_date': date(2014, 4, 1),
-                        'frequencies': [
+                        'billing_modes': [
                             ('add', [freq_month.id, freq_quart.id])],
-                        'default_frequency': freq_month.id,
-                        'payment_terms': [('add', [payment_term1.id,
-                                    payment_term2.id, payment_term3.id])],
-                        'default_payment_term': payment_term1.id,
                         'account_for_billing': account.id,
                         'contract_generator': sequence.id,
                         }])
@@ -141,15 +149,18 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                 product=product,
                 activation_history=[ActivationHistory(
                         start_date=date(2014, 4, 1))],
-                invoice_frequencies=[ContractInvoiceFrequency(
-                        value=freq_month)])
-            contract.payment_terms = [
-                ContractPaymentTerm(date=None, value=payment_term1),
-                ContractPaymentTerm(date=date(2014, 4, 1),
-                    value=payment_term2),
-                ContractPaymentTerm(date=date(2014, 6, 1),
-                    value=payment_term3),
-                ]
+                billing_informations=[ContractBillingInformation(
+                        date=None,
+                        billing_mode=freq_month,
+                        payment_term=payment_term1),
+                    ContractBillingInformation(
+                        date=date(2014, 4, 1),
+                        billing_mode=freq_month,
+                        payment_term=payment_term2),
+                    ContractBillingInformation(
+                        date=date(2014, 6, 1),
+                        billing_mode=freq_month,
+                        payment_term=payment_term3)])
             contract.save()
 
             with Transaction().set_context(
@@ -180,10 +191,9 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
         AccountKind = POOL.get('account.account.type')
         Product = POOL.get('offered.product')
         Contract = POOL.get('contract')
-        ContractPaymentTerm = POOL.get('contract.payment_term')
         PaymentTerm = POOL.get('account.invoice.payment_term')
-        ContractInvoiceFrequency = POOL.get('contract.invoice_frequency')
-        InvoiceFrequency = POOL.get('offered.invoice.frequency')
+        BillingInformation = POOL.get('contract.billing_information')
+        BillingMode = POOL.get('offered.billing_mode')
         Company = POOL.get('company.company')
         User = POOL.get('res.user')
         ActivationHistory = POOL.get('contract.activation_history')
@@ -200,11 +210,27 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': 'direct',
                         'lines': [('create', [{}])],
                         }])
-            freq_month, freq_quart, freq_once = InvoiceFrequency.create([
-                    {'frequency': 'monthly'},
-                    {'frequency':'quarterly'},
-                    {'frequency': 'once_per_contract'},
-                    ])
+            freq_month, freq_quart, freq_once = BillingMode.create([{
+                    'code': 'monthly',
+                    'name': 'monthly',
+                    'frequency': 'monthly',
+                    'allowed_payment_terms': [
+                            ('add', [payment_term.id])]
+                    }, {
+                    'code': 'quarterly',
+                    'name': 'quarterly',
+                    'frequency': 'quarterly',
+                    'allowed_payment_terms': [
+                            ('add', [payment_term.id])],
+                    'direct_debit': True,
+                    'allowed_direct_debit_days': '5, 10, 15'
+                    }, {
+                    'code': 'once_per_contract',
+                    'name': 'once_per_contract',
+                    'frequency': 'once_per_contract',
+                    'allowed_payment_terms': [
+                            ('add', [payment_term.id])]
+                    }])
             sequence_code, = SequenceType.create([{
                         'name': 'Product sequence',
                         'code': 'contract',
@@ -215,11 +241,11 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'company': company.id,
                         }])
             account_kind, = AccountKind.create([{
-                        'name':'Product',
+                        'name': 'Product',
                         'company': company.id,
                         }])
             account, = Account.create([{
-                        'name':'Account for Product',
+                        'name': 'Account for Product',
                         'code': 'Account for Product',
                         'kind': 'revenue',
                         'company': company.id,
@@ -229,51 +255,57 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': 'Test Product',
                         'code': 'test_product',
                         'start_date': date(2014, 4, 1),
-                        'frequencies': [
+                        'billing_modes': [
                             ('add', [freq_month.id, freq_quart.id,
                                     freq_once.id])],
-                        'default_frequency': freq_month.id,
-                        'payment_terms': [('add', [payment_term.id])],
-                        'default_payment_term': payment_term.id,
                         'account_for_billing': account.id,
                         'contract_generator': sequence.id,
                         }])
             contract = Contract(company=company,
-                payment_terms=[ContractPaymentTerm(value=payment_term)],
                 activation_history=[ActivationHistory(
                         start_date=date(2014, 4, 15))],
                 product=product,
-                invoice_frequencies=[
-                    ContractInvoiceFrequency(date=None, value=freq_month),
-                    ContractInvoiceFrequency(date=date(2014, 7, 1),
-                        value=freq_quart),
+                billing_informations=[
+                    BillingInformation(date=None,
+                        billing_mode=freq_month,
+                        payment_term=payment_term),
+                    BillingInformation(date=date(2014, 7, 1),
+                        billing_mode=freq_quart,
+                        direct_debit_day=5,
+                        payment_term=payment_term),
                     ],
                 )
             contract.save()
+            self.assertEqual(contract.start_date, date(2014, 4, 15))
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
                 [])
             self.assertEqual(contract.get_invoice_periods(date(2014, 5, 1)),
-                [(date(2014, 4, 15), date(2014, 5, 14))])
+                [(date(2014, 4, 15), date(2014, 5, 14),
+                    contract.billing_informations[0])])
             self.assertEqual(contract.get_invoice_periods(date(2014, 8, 1)),
-                [(date(2014, 4, 15), date(2014, 5, 14)),
-                    (date(2014, 5, 15), date(2014, 6, 14)),
-                    (date(2014, 6, 15), date(2014, 6, 30)),
-                    (date(2014, 7, 1), date(2014, 9, 30))])
+                [(date(2014, 4, 15), date(2014, 5, 14),
+                    contract.billing_informations[0]),
+                    (date(2014, 5, 15), date(2014, 6, 14),
+                        contract.billing_informations[0]),
+                    (date(2014, 6, 15), date(2014, 6, 30),
+                        contract.billing_informations[0]),
+                    (date(2014, 7, 1), date(2014, 9, 30),
+                        contract.billing_informations[1])])
 
             contract = Contract(company=company,
-                payment_terms=[ContractPaymentTerm(value=payment_term)],
                 activation_history=[ActivationHistory(
                         start_date=date(2014, 4, 15))],
                 product=product,
-                invoice_frequencies=[
-                    ContractInvoiceFrequency(date=None,
-                        value=freq_once),
+                billing_informations=[
+                    BillingInformation(date=None,
+                        billing_mode=freq_once),
                     ])
             contract.save()
             self.assertEqual(contract.get_invoice_periods(date(2014, 1, 1)),
                 [])
             self.assertEqual(contract.get_invoice_periods(date(2014, 4, 16)),
-                [(date(2014, 4, 15), date.max + relativedelta(days=-1))])
+                [(date(2014, 4, 15), date.max + relativedelta(days=-1),
+                    contract.billing_informations[0])])
 
 
 def suite():

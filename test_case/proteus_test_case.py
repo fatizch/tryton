@@ -66,7 +66,7 @@ def execute_test_cases(cfg_dict, files=False):
     # TODO: Use database language rather than hardcoding.
     config = Model.get('ir.test_case')(1)
     Lang = Model.get('ir.lang')
-    lang, = Lang.find([('code','=','fr_FR')])
+    lang, = Lang.find([('code', '=', 'fr_FR')])
     config.language = lang
     config.save()
     wizard = Wizard('ir.test_case.run')
@@ -88,10 +88,7 @@ def launch_proteus_test_case(test_config_file=None, module=None, database=''):
         cfg_dict['database_name'] = database
 
     delete_db_if_necessary(cfg_dict)
-    if not module:
-        modules = cfg_dict['modules']
-    else:
-        modules = [module]
+    modules = [module]
     logging.getLogger('test_case').info('Installing requested Modules')
     install_modules(proteus_tools.get_config(cfg_dict),
         modules, cfg_dict, module is not None)

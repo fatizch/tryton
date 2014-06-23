@@ -30,10 +30,6 @@ msgctxt "field:health.care_system,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:health.care_system,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:health.care_system,name:"
 msgid "Name"
 msgstr "Nom"
@@ -86,10 +82,6 @@ msgctxt "field:health.insurance_fund,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:health.insurance_fund,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:health.insurance_fund,name:"
 msgid "Name"
 msgstr "Nom"
@@ -137,6 +129,18 @@ msgstr "Régimes"
 msgctxt "model:ir.action,name:act_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"
+
+msgctxt "model:ir.test_case.instance,name:expense_kind_test_case"
+msgid "Expense Kind Test Case"
+msgstr "Jeux d'essai : type de Frais"
+
+msgctxt "model:ir.test_case.instance,name:fund_test_case"
+msgid "Fund Test Case"
+msgstr "Jeux d'essai : fonds santé"
+
+msgctxt "model:ir.test_case.instance,name:health_care_system_test_case"
+msgid "HealthCare System Test Case"
+msgstr "Jeux d'essai : système santé"
 
 msgctxt "model:ir.ui.menu,name:menu_hc_system_form"
 msgid "Health Care Systems"

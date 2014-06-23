@@ -156,12 +156,12 @@ class Beneficiary(model.CoopSQL, model.CoopView):
             'required': ~Eval('accepting'),
             })
     share = fields.Numeric('Share', digits=(4, 4))
-    description = fields.Function(
-        fields.Char('Description'),
-        'on_change_with_description')
 
     @fields.depends('party', 'reference')
-    def on_change_with_description(self, name=None):
+    def on_change_with_rec_name(self, name=None):
+        return self.get_rec_name(name)
+
+    def get_rec_name(self, name=None):
         if self.party:
             return self.party.rec_name
         else:

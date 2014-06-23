@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<form string="Contract Invoice Frequency">
-    <label name="contract"/>
-    <field name="contract" colspan="3"/>
-    <label name="date"/>
-    <field name="date"/>
-    <label name="value"/>
-    <field name="value"/>
-</form>

@@ -17,5 +17,8 @@
             <field name="inherit" ref="party_relationship.relation_view_form"/>
             <field name="name">relation_form</field>
         </record>
+        <menuitem id="party_relationship.menu_relation_all" icon="party_relation" action="party_relationship.act_relation_all"/>
+        <menuitem action="party_relationship.act_relation_type"
+            id="party_relationship.menu_relation_type" icon="party_relation"/>
     </data>
 </tryton>

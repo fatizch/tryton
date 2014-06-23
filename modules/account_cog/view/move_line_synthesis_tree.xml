@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Payment Informations">
+<tree string="Payments">
     <field name="date"/>
     <field name="credit" sum="Credit" >
         <suffix name="currency_symbol"/>

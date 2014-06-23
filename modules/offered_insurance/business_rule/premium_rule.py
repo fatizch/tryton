@@ -32,7 +32,7 @@ PRICING_FREQUENCY = [
     ('yearly', 'Yearly (Exact)'),
     ('yearly_360', 'Yearly (360 days)'),
     ('yearly_365', 'Yearly (365 days)'),
-    ('biannual', 'Half Yearly'),
+    ('half_yearly', 'Half-yearly'),
     ('quarterly', 'Quarterly'),
     ('monthly', 'Monthly'),
     ('once_per_contract', 'Once per Contract'),
@@ -326,11 +326,13 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         for elem in (lines + fee_lines):
             elem['taxes'] = list(taxes)
         if self.match_contract_frequency:
-            ContractInvoiceFrequency = Pool().get('contract.invoice_frequency')
-            contract_frequency = ContractInvoiceFrequency.get_value(
-                [args['contract']], args['date'])[args['contract'].id]
-            frequency = Pool().get('offered.invoice.frequency')(
-                contract_frequency).frequency
+            ContractBillingInformation = Pool().get(
+                'contract.billing_information')
+            contract_billing_mode = ContractBillingInformation.get_values(
+                [args['contract']], date=args['date'],
+                )['billing_mode'][args['contract'].id]
+            frequency = Pool().get('offered.billing_mode')(
+                contract_billing_mode).frequency
             for elem in (lines + fee_lines):
                 self.convert_premium_frequency(elem, frequency)
 
@@ -356,7 +358,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
             'yearly': Decimal(12),
             'yearly_360': Decimal(12),
             'yearly_365': Decimal(12),
-            'biannual': Decimal(6),
+            'half_yearly': Decimal(6),
             'quarterly': Decimal(3),
             'monthly': Decimal(1),
             }

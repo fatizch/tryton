@@ -40,7 +40,7 @@ msgstr "ID"
 
 msgctxt "field:offered.option.description-beneficiary_clause,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:offered.option.description-beneficiary_clause,write_date:"
 msgid "Write Date"
@@ -53,6 +53,20 @@ msgstr "Mis à jour par"
 msgctxt "field:offered.option.description-beneficiary_clause,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_model_clause_domain_beneficiary"
+msgid "Beneficiary Clauses"
+msgstr "Clauses bénéficiaires"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_model_clause_domain_default"
+msgid "Standard Clauses"
+msgstr "Clauses standards"
+
+msgctxt "model:ir.test_case.instance,name:beneficiary_clause_test_case"
+msgid "Beneficiary Clause Test Case"
+msgstr "Jeux d'essai : clauses bénéficiaires"
 
 msgctxt "model:offered.option.description-beneficiary_clause,name:"
 msgid "Relation Option Description To Beneficiary Clause"

@@ -11,11 +11,12 @@ from StringIO import StringIO
 from decimal import Decimal
 from pyflakes.checker import Checker
 import pyflakes.messages
+from sql.aggregate import Count
 
 from trytond.rpc import RPC
 from trytond import backend
 from trytond.model import ModelView as TrytonModelView
-from trytond.wizard import Wizard, StateView, Button
+from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source, memoize
@@ -24,7 +25,7 @@ from trytond.pyson import Eval, Or
 from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
-from trytond.modules.cog_utils import model, utils, coop_string
+from trytond.modules.cog_utils import model, utils, coop_string, batchs
 from trytond.modules.cog_utils import coop_date
 
 from trytond.modules.table import table
@@ -50,6 +51,9 @@ __all__ = [
     'RuleError',
     'RuleEngineResult',
     'RuleEngineTagRelation',
+    'InitTestCaseFromExecutionLog',
+    'ValidateRuleTestCases',
+    'ValidateRuleBatch',
     ]
 
 CODE_TEMPLATE = """
@@ -186,6 +190,7 @@ class RuleEngineResult(object):
         self.low_level_debug = []
         self.result = result
         self.result_set = False
+        self.calls = []
 
     @property
     def has_errors(self):
@@ -234,6 +239,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
     debug = fields.Text('Debug', states={'readonly': True})
     low_level_debug = fields.Text('Execution Trace', states={'readonly': True})
     result = fields.Char('Result', states={'readonly': True})
+    calls = fields.Text('Calls', states={'readonly': True})
 
     def init_from_rule_result(self, result):
         self.errors = '\n'.join(result.print_errors())
@@ -242,6 +248,12 @@ class RuleExecutionLog(ModelSQL, ModelView):
         self.debug = '\n'.join(result.print_debug())
         self.low_level_debug = '\n'.join(result.low_level_debug)
         self.result = result.print_result()
+        self.calls = '\n'.join(['|&|'.join(x) for x in result.calls])
+
+    @classmethod
+    @ModelView.button_action('rule_engine.act_test_case_init')
+    def create_test_case(cls, logs):
+        pass
 
 
 class RuleTools(ModelView):
@@ -528,6 +540,9 @@ class RuleEngine(ModelView, ModelSQL):
     tags_name = fields.Function(
         fields.Char('Tags'),
         'on_change_with_tags_name', searcher='search_tags')
+    passing_test_cases = fields.Function(
+        fields.Boolean('Test Cases OK'),
+        'get_passing_test_cases', searcher='search_passing_test_cases')
 
     @classmethod
     def __setup__(cls):
@@ -625,6 +640,38 @@ class RuleEngine(ModelView, ModelSQL):
         return coop_string.remove_blank_and_invalid_char(self.name)
 
     @classmethod
+    def get_passing_test_cases(cls, instances, name):
+        cursor = Transaction().cursor
+
+        rule = cls.__table__()
+        test_case = Pool().get('rule_engine.test_case').__table__()
+
+        cursor.execute(*rule.join(test_case, 'LEFT OUTER', condition=(
+                    (test_case.rule == rule.id)
+                    & (test_case.last_passing_date == None))
+                ).select(rule.id, Count(test_case.id),
+                where=(rule.id.in_([x.id for x in instances])),
+                group_by=rule.id))
+
+        result = {}
+        for rule_id, failed_test_case in cursor.fetchall():
+            result[rule_id] = failed_test_case == 0
+        return result
+
+    @classmethod
+    def search_passing_test_cases(cls, name, clause):
+        test_case = Pool().get('rule_engine.test_case').__table__()
+        query = test_case.select(test_case.rule,
+            where=(test_case.last_passing_date == None),
+            group_by=test_case.rule)
+
+        if clause[2] is True:
+            return [('id', 'not in', query)]
+        elif clause[2] is False:
+            return [('id', 'in', query)]
+        return []
+
+    @classmethod
     def _post_import(cls, rules):
         cls.validate(rules)
 
@@ -678,24 +725,25 @@ class RuleEngine(ModelView, ModelSQL):
 
     def as_context(self, elem, kind, evaluation_context, context, forced_value,
             debug=False):
-        if not forced_value:
-            if kind == 'param':
-                self.raise_user_error('kwarg_expected', (elem.name,
-                        self.name))
         technical_name = self.get_translated_name(elem, kind)
+        if technical_name in evaluation_context:
+            forced_value = evaluation_context.pop(technical_name)
         if forced_value:
-            context[technical_name] = lambda: forced_value
+            context[technical_name] = forced_value
         elif kind == 'rule':
             context[technical_name] = \
                 functools.partial(self.execute_rule, elem, evaluation_context)
         elif kind == 'table':
             context[technical_name] = \
                 functools.partial(table.TableCell.get, elem)
+        elif kind == 'param':
+            self.raise_user_error('kwarg_expected', (elem.name, self.name))
         else:
             return
         if debug:
             debug_wrapper = self.get_wrapper_func(context)
-            context[technical_name] = debug_wrapper(context[technical_name])
+            context[technical_name] = debug_wrapper(context[technical_name],
+                technical_name)
 
     def add_rule_parameters_to_context(self, evaluation_context,
             execution_kwargs, context):
@@ -725,23 +773,30 @@ class RuleEngine(ModelView, ModelSQL):
         return context
 
     def get_wrapper_func(self, context):
-        def debug_wrapper(func):
+        def debug_wrapper(func, name):
             def wrapper_func(*args, **kwargs):
+                call = [name, '', '', '']
                 context['__result__'].low_level_debug.append(
-                    'Entering %s' % self.get_rec_name(None))
+                    'Entering %s' % name)
                 if args:
+                    call[1] = str(args)
                     context['__result__'].low_level_debug.append(
                         '\targs : %s' % str(args))
                 if kwargs:
+                    call[2] = str(kwargs)
                     context['__result__'].low_level_debug.append(
                         '\tkwargs : %s' % str(kwargs))
                 try:
                     result = func(*args, **kwargs)
                 except Exception, exc:
+                    call[3] = str(exc)
+                    context['__result__'].calls.append(call)
                     context['__result__'].errors.append(
                         'ERROR in %s : %s' % (
-                            self.get_rec_name(None), str(exc)))
+                            name, str(exc)))
                     raise
+                call[3] = repr(result)
+                context['__result__'].calls.append(call)
                 context['__result__'].low_level_debug.append(
                     '\tresult = %s' % str(result))
                 return result
@@ -929,8 +984,10 @@ class RuleEngine(ModelView, ModelSQL):
         return [('tags.name',) + tuple(clause[1:])]
 
     def execute(self, arguments, parameters=None):
-        result = self.compute(arguments,
-            {} if parameters is None else parameters)
+        parameters_as_func = {}
+        for k, v in (parameters or {}).iteritems():
+            parameters_as_func[k] = v if callable(v) else lambda: v
+        result = self.compute(arguments, parameters_as_func)
         if not self.id or not getattr(self, 'debug_mode', None):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
@@ -977,7 +1034,9 @@ class Context(ModelView, ModelSQL):
             elements = list(context.allowed_elements)
             while elements:
                 element = elements.pop()
-                if element.translated_technical_name in names:
+                if element.type == 'folder':
+                    pass
+                elif element.translated_technical_name in names:
                     if element != names[element.translated_technical_name]:
                         cls.raise_user_error('duplicate_name', (
                             element.translated_technical_name,
@@ -1116,25 +1175,35 @@ class RuleFunction(ModelView, ModelSQL):
     def as_context(self, context, debug=False):
         def debug_wrapper(func):
             def wrapper_func(*args, **kwargs):
+                call = [self.translated_technical_name, '', '', '']
                 context['__result__'].low_level_debug.append(
                     'Entering %s' % self.translated_technical_name)
                 if args:
+                    call[1] = str(args)
                     context['__result__'].low_level_debug.append(
                         '\targs : %s' % str(args))
                 if kwargs:
+                    call[2] = str(kwargs)
                     context['__result__'].low_level_debug.append(
                         '\tkwargs : %s' % str(kwargs))
                 try:
                     result = func(*args, **kwargs)
                 except Exception, exc:
+                    call[3] = str(exc)
+                    context['__result__'].calls.append(call)
                     context['__result__'].errors.append(
                         'ERROR in %s : %s' % (
                             self.translated_technical_name, str(exc)))
                     raise
+                call[3] = repr(result)
+                context['__result__'].calls.append(call)
                 context['__result__'].low_level_debug.append(
                     '\tresult = %s' % str(result))
                 return result
             return wrapper_func
+
+        if self.translated_technical_name in context:
+            return context
 
         pool = Pool()
         if self.type == 'function':
@@ -1240,6 +1309,16 @@ class TestCaseValue(ModelView, ModelSQL):
     def default_override_value(cls):
         return True
 
+    @classmethod
+    def _validate(cls, records, field_names=None):
+        if Transaction().context.get('__importing__'):
+            return
+        super(TestCaseValue, cls)._validate(records, field_names)
+
+    @classmethod
+    def _post_import(cls, test_case_values):
+        cls._validate(test_case_values)
+
 
 class TestCase(ModelView, ModelSQL):
     'Test Case'
@@ -1259,6 +1338,7 @@ class TestCase(ModelView, ModelSQL):
     result_info = fields.Text('Result Info')
     debug = fields.Text('Debug Info')
     low_debug = fields.Text('Low Level Debug Info')
+    last_passing_date = fields.DateTime('Last passing run date')
     rule_text = fields.Function(
         fields.Text('Rule Text', states={'readonly': True}),
         'get_rule_text')
@@ -1326,6 +1406,24 @@ class TestCase(ModelView, ModelSQL):
             for k, v in result.iteritems():
                 setattr(elem, k, v)
             elem.save()
+
+    @classmethod
+    @TrytonModelView.button
+    def check_pass(cls, instances):
+        passed, failed = [], []
+        for elem in instances:
+            result = elem.on_change_test_values()
+            if result['expected_result'] == elem.expected_result:
+                passed.append(elem)
+            else:
+                failed.append(elem)
+        write_args = []
+        for elems, date in [(passed, datetime.datetime.now()), (failed, None)]:
+            if not elems:
+                continue
+            write_args += [elems, {'last_passing_date': date}]
+        if write_args:
+            cls.write(*write_args)
 
     def do_test(self):
         try:
@@ -1475,3 +1573,108 @@ class RuleEngineTagRelation(model.CoopSQL):
     rule_engine = fields.Many2One('rule_engine', 'Rule Engine',
         ondelete='CASCADE')
     tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')
+
+
+class InitTestCaseFromExecutionLog(Wizard):
+    'Init Test Case From Execution Log'
+
+    __name__ = 'rule_engine.test_case.init'
+
+    start_state = 'select_values'
+    select_values = StateView('rule_engine.test_case',
+        'rule_engine.test_case_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Accept', 'create_test_case', 'tryton-go-next')])
+    create_test_case = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(InitTestCaseFromExecutionLog, cls).__setup__()
+        cls._error_messages.update({
+                'rule_engine_log_expected': 'This wizard should be run from'
+                    'a rule engine execution log selected',
+                })
+
+    def filter_override(self, method_name):
+        if method_name.startswith('table_'):
+            return False
+        elif method_name.startswith('rule_'):
+            return False
+        elif method_name in ('add_info', 'add_error', 'add_warning',
+                'add_debug'):
+            return False
+        return True
+
+    def default_select_values(self, name):
+        active_id = Transaction().context.get('active_id')
+        active_model = Transaction().context.get('active_model')
+        if active_model != 'rule_engine.log':
+            self.raise_user_error('rule_engine_log_expected')
+        pool = Pool()
+        log = pool.get(active_model)(active_id)
+        calls = [x.split('|&|') for x in log.calls.splitlines()]
+        test_values = [{
+                'rule': log.rule.id,
+                'name': x[0],
+                'value': x[3],
+                'override_value': self.filter_override(x[0]),
+                } for x in calls]
+        description = ', '.join(['result: %s' % log.result] + ['%s: %s' % (
+                    x['name'], x['value'])
+                for x in test_values if x['override_value']])
+        return {
+            'expected_result': '[%s, [%s], [%s], [%s]]' % (
+                log.result, log.errors, log.warnings, log.info),
+            'result_value': log.result,
+            'result_warnings': log.warnings,
+            'result_errors': log.errors,
+            'result_infos': log.info,
+            'debug': log.debug,
+            'rule': log.rule.id,
+            'low_debug': log.low_level_debug,
+            'rule_text': log.rule.algorithm,
+            'test_values': test_values,
+            'description': description,
+            }
+
+    def transition_create_test_case(self):
+        self.select_values.save()
+        return 'end'
+
+
+class ValidateRuleTestCases(Wizard):
+    'Validate Rule Test Cases'
+
+    __name__ = 'rule_engine.validate_test_cases'
+
+    start_state = 'run_test_cases'
+    run_test_cases = StateTransition()
+
+    def transition_run_test_cases(self):
+        rule_ids = Transaction().context.get('active_ids')
+        TestCase = Pool().get('rule_engine.test_case')
+        TestCase.check_pass(TestCase.search([
+                    ('rule', 'in', rule_ids)]))
+        return 'end'
+
+
+class ValidateRuleBatch(batchs.BatchRoot):
+    'Rule Engine Test Case Validation Batch'
+
+    __name__ = 'rule_engine.validate'
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        return 'rule_engine.test_case'
+
+    @classmethod
+    def get_batch_name(cls):
+        return 'Rule Engine Test Case Validation'
+
+    @classmethod
+    def get_batch_search_model(cls):
+        return 'rule_engine.test_case'
+
+    @classmethod
+    def execute(cls, objects, ids, logger):
+        Pool().get('rule_engine.test_case').check_pass(objects)

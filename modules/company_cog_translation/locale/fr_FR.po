@@ -1,0 +1,11 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:company.company,party:company."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:company.employee,party:company."
+msgid "Party"
+msgstr "Acteur"
