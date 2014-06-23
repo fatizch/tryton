@@ -1,0 +1,23 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.move.line,party:account."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "odt:account.aged_balance:account."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "odt:account.third_party_balance:account."
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "view:account.tax.template:account."
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "view:account.tax:account."
+msgid "Invoice"
+msgstr "Quittance"

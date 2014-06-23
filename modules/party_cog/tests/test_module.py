@@ -2,7 +2,8 @@ import datetime
 import unittest
 
 import trytond.tests.test_tryton
-
+from trytond.transaction import Transaction
+from trytond.exceptions import UserWarning
 from trytond.modules.cog_utils import test_framework
 
 
@@ -60,8 +61,36 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(relation.id > 0)
         self.assert_(party1.relations[0].from_ == party2.relations[0].to)
         self.assert_(party1.relations[0].to == party2.relations[0].from_)
-        self.assert_(party1.relations[0].type.reverse == party2.relations[0].type)
+        self.assert_(
+            party1.relations[0].type.reverse == party2.relations[0].type)
         self.assert_(party1.relations[0].type.name == rel_kind.name)
+
+    def test0020SearchDuplicate(self):
+        with Transaction().set_user(1):
+            party1 = self.Party(is_person=True, first_name='Mike',
+                name='Wazowski', birth_date=datetime.date(2001, 10, 28),
+                gender='male')
+            party1.save()
+            self.assert_(party1.id > 0)
+            party2 = self.Party(is_person=True, first_name='Mike',
+                name='Wazowski', birth_date=datetime.date(2001, 10, 28),
+                gender='male')
+            self.assertRaises(UserWarning, party2.save)
+            party3 = self.Party(is_person=True, first_name='MIKE',
+                name='wazowski', birth_date=datetime.date(2001, 10, 28),
+                gender='male')
+            self.assertRaises(UserWarning, party3.save)
+            party4 = self.Party(is_person=True, first_name='Mikel',
+                name='Wazowski', birth_date=datetime.date(2001, 10, 28),
+                gender='male')
+            party4.save()
+            self.assert_(party4.id > 0)
+            party5 = self.Party(is_company=True, name='Monsters Incorporated',
+                short_name='Monsters, Inc.')
+            party5.save()
+            party6 = self.Party(is_company=True, name='MONSTERS Incorporated',
+                short_name='Monsters, Inc.')
+            self.assertRaises(UserWarning, party6.save)
 
 
 def suite():

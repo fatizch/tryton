@@ -40,7 +40,7 @@ def launch_proteus_test_case(test_config_file, modules):
     if not modules:
         modules = [x for x in os.listdir(os.path.join(DIR, '..', 'modules'))]
     for cur_module in modules:
-        if cur_module == 'cog_translation':
+        if cur_module.endswith('_cog_translation'):
             #Manual translations to override tryton translations
             continue
         cur_path = os.path.abspath(
