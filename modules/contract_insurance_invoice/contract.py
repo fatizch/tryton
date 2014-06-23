@@ -4,9 +4,7 @@ from decimal import Decimal
 
 from dateutil.rrule import rrule, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
-from sql import Column
 from sql.aggregate import Max
-from sql.conditionals import Coalesce
 
 from trytond.model import ModelSQL, ModelView, fields
 from trytond.pool import Pool, PoolMeta
@@ -425,67 +423,7 @@ class Contract:
         return res, errs
 
 
-class _ContractRevisionMixin(object):
-    contract = fields.Many2One('contract', 'Contract', required=True,
-        select=True, ondelete='CASCADE')
-    date = fields.Date('Date')
-    value = None
-
-    @classmethod
-    def __setup__(cls):
-        super(_ContractRevisionMixin, cls).__setup__()
-        cls._order.insert(0, ('date', 'ASC'))
-        # TODO unique constraint on (contract, date) ?
-
-    @staticmethod
-    def order_date(tables):
-        table, _ = tables[None]
-        return [Coalesce(table.date, datetime.date.min)]
-
-    @staticmethod
-    def revision_columns():
-        return ['value']
-
-    @classmethod
-    def get_values(cls, contracts, names=None, date=None, default=None):
-        'Return a dictionary with the variable name as key,'
-        'and a dictionnary as value. The dictionnary value contains'
-        'contract id as key and variable value as value'
-
-        cursor = Transaction().cursor
-        table = cls.__table__()
-        if names:
-            columns_expected = list(set(cls.revision_columns()) & set(names))
-        else:
-            columns_expected = cls.revision_columns()
-        values = dict(((x, dict(((y.id, None) for y in contracts)))
-                for x in ['contract', 'billing_mode'] +
-                columns_expected))
-        in_max = cursor.IN_MAX
-        columns = [table.contract,
-            table.id.as_('billing_mode')] + [
-            Column(table, c) for c in columns_expected]
-        for i in range(0, len(contracts), in_max):
-            sub_ids = [c.id for c in contracts[i:i + in_max]]
-            where_contract = reduce_ids(table.contract, sub_ids)
-            subquery = table.select(
-                table.contract,
-                Max(Coalesce(table.date, datetime.date.min)).as_('date'),
-                where=((table.date <= date) | (table.date == None))
-                & where_contract,
-                group_by=table.contract)
-            cursor.execute(*table.join(subquery,
-                    condition=(table.contract == subquery.contract)
-                    & (Coalesce(table.date, datetime.date.min) ==
-                        Coalesce(subquery.date, datetime.date.min))
-                    ).select(*columns))
-            for elem in cursor.dictfetchall():
-                for field_name, value in elem.iteritems():
-                    values[field_name][elem['contract']] = value
-        return values
-
-
-class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
+class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         model.CoopView):
     'Contract Billing Information'
     __name__ = 'contract.billing_information'
@@ -560,6 +498,15 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
                 'contract_invoice_frequency as f, '
                 'contract as c where f.contract = c.id')
 
+    @classmethod
+    def revision_columns(cls):
+        return ['billing_mode', 'payment_term', 'direct_debit_day',
+            'direct_debit_account']
+
+    @classmethod
+    def get_parent_field(cls):
+        return 'contract', 'contract', 'Contract'
+
     @fields.depends('billing_mode')
     def get_allowed_direct_debit_days(self):
         if not self.billing_mode:
@@ -598,11 +545,6 @@ class ContractBillingInformation(_ContractRevisionMixin, model.CoopSQL,
         if not self.direct_debit_day_selector:
             return {'direct_debit_day': None}
         return {'direct_debit_day': int(self.direct_debit_day_selector)}
-
-    @staticmethod
-    def revision_columns():
-        return ['billing_mode', 'payment_term', 'direct_debit_day',
-            'direct_debit_account']
 
 
 class ContractInvoice(ModelSQL, ModelView):
