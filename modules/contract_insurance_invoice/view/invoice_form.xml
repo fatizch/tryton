@@ -5,6 +5,8 @@
     <xpath expr="/form/label[@name='invoice_address']" position="replace"/>
     <xpath expr="/form/field[@name='invoice_address']" position="replace"/>
     <xpath expr="/form/field[@name='number']" position="after">
+        <label name="contract"/>
+        <field name="contract"/>
         <label name="start"/>
         <field name="start"/>
         <label name="end"/>
