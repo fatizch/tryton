@@ -55,7 +55,7 @@ class Party(export.ExportImportMixin):
     summary = fields.Function(fields.Text('Summary'), 'get_summary')
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
-        'get_main_address_id')
+        'get_main_address_id', searcher='search_main_address')
     ####################################
     #Person information
     gender = fields.Selection(GENDER, 'Gender', states={
@@ -332,6 +332,11 @@ class Party(export.ExportImportMixin):
     def get_main_address_id(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)
         return address.id if address else None
+    
+    @classmethod
+    def search_main_address(cls, name, clause):
+        return [('addresses.rec_name', ) + tuple(clause[1:])]
+
 
     @classmethod
     def default_lang(cls):
