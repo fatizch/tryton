@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form string="Table Definition" col="4">
-  <group id="name" colspan="4">
-    <label name="name"/>
-    <field name="name" colspan="3" xfill="1"/>
-    <label name="code"/>
-    <field name="code" colspan="3" xfill="1"/>
-    <label name="type_"/>
-    <field name="type_" xfill="1"/>
-    <label name="number_of_digits"/>
-    <field name="number_of_digits"/>
-  </group>
-  <field name="dimensions"/>
-  <newline/>
+    <notebook>
+        <page id="main" string="Main">
+            <group id="name" colspan="4">
+                <label name="name"/>
+                <field name="name" colspan="3" xfill="1"/>
+                <label name="code"/>
+                <field name="code" colspan="3" xfill="1"/>
+                <label name="type_"/>
+                <field name="type_" xfill="1"/>
+                <label name="number_of_digits"/>
+                <field name="number_of_digits"/>
+            </group>
+            <field name="dimensions"/>
+            <newline/>
+        </page>
+        <page string="tags">
+            <field name="tags" colspan="4"/>
+        </page>
+    </notebook>
 </form>

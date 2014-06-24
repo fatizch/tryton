@@ -27,7 +27,6 @@ from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
 from trytond.modules.cog_utils import model, utils, coop_string, batchs
 from trytond.modules.cog_utils import coop_date
-
 from trytond.modules.table import table
 from trytond.model import DictSchemaMixin
 
@@ -50,7 +49,6 @@ __all__ = [
     'check_args',
     'RuleError',
     'RuleEngineResult',
-    'RuleEngineTagRelation',
     'InitTestCaseFromExecutionLog',
     'ValidateRuleTestCases',
     'ValidateRuleBatch',
@@ -483,7 +481,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
         cls.string.string = 'Name'
 
 
-class RuleEngine(ModelView, ModelSQL):
+class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     "Rule"
     __name__ = 'rule_engine'
 
@@ -536,10 +534,6 @@ class RuleEngine(ModelView, ModelSQL):
                 ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
         'get_extra_data_kind', 'setter_void')
-    tags = fields.Many2Many('rule_engine-tag', 'rule_engine', 'tag', 'Tags')
-    tags_name = fields.Function(
-        fields.Char('Tags'),
-        'on_change_with_tags_name', searcher='search_tags')
     passing_test_cases = fields.Function(
         fields.Boolean('Test Cases OK'),
         'get_passing_test_cases', searcher='search_passing_test_cases')
@@ -975,14 +969,6 @@ class RuleEngine(ModelView, ModelSQL):
     def default_algorithm(cls):
         return 'return'
 
-    @fields.depends('tags')
-    def on_change_with_tags_name(self, name=None):
-        return ', '.join([x.name for x in self.tags])
-
-    @classmethod
-    def search_tags(cls, name, clause):
-        return [('tags.name',) + tuple(clause[1:])]
-
     def execute(self, arguments, parameters=None):
         parameters_as_func = {}
         for k, v in (parameters or {}).iteritems():
@@ -1006,7 +992,7 @@ class RuleEngine(ModelView, ModelSQL):
         return result
 
 
-class Context(ModelView, ModelSQL):
+class Context(ModelView, ModelSQL, model.TaggedMixin):
     "Context"
     __name__ = 'rule_engine.context'
 
@@ -1563,16 +1549,6 @@ class RuleError(model.CoopSQL, model.CoopView):
             else:
                 other.append(error)
         return func_err, other
-
-
-class RuleEngineTagRelation(model.CoopSQL):
-    'Relation between rule engine and tag'
-
-    __name__ = 'rule_engine-tag'
-
-    rule_engine = fields.Many2One('rule_engine', 'Rule Engine',
-        ondelete='CASCADE')
-    tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')
 
 
 class InitTestCaseFromExecutionLog(Wizard):

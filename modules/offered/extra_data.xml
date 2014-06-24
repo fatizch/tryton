@@ -42,14 +42,5 @@
       <field name="type">tree</field>
       <field name="name">extra_data-sub_extra_data_tree</field>
     </record>
-    <!-- ############################################################ -->
-    <!-- ########### Tag ########### -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="tag_view_form">
-        <field name="model">tag</field>
-        <field name="type">form</field>
-        <field name="inherit" ref="rule_engine.tag_view_form"/>
-        <field name="name">tag_form</field>
-    </record>
   </data>
 </tryton>
