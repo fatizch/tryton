@@ -1,11 +1,10 @@
 from trytond.pool import Pool
-from .statement import *
+
 from .test_case import *
 
 
 def register():
     Pool.register(
-        Line,
-        # Test Case
+        # From test_case
         TestCaseModel,
-        module='account_statement_cog', type_='model')
+        module='account_insurance_fr', type_='model')

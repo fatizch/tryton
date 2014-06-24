@@ -1,0 +1,2 @@
+msgid "SEPA Direct Debit"
+msgstr "Prélèvement SEPA"

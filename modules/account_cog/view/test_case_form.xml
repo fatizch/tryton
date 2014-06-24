@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
   <xpath expr="/form" position="inside">
+    <newline/>
     <label name="fiscal_year_sync_date"/>
     <field name="fiscal_year_sync_date"/>
     <label name="fiscal_year_periods_frequency"/>
     <field name="fiscal_year_periods_frequency"/>
+    <label name="account_template"/>
+    <field name="account_template"/>
+    <newline/>
   </xpath>
 </data>

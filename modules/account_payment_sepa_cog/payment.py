@@ -4,12 +4,11 @@ import genshi
 import genshi.template
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
-
-from trytond.modules.cog_utils import fields, export
 
 __metaclass__ = PoolMeta
-__all__ = ['Journal', 'Mandate']
+__all__ = [
+    'Mandate'
+    ]
 
 
 loader = genshi.template.TemplateLoader(
@@ -22,24 +21,6 @@ def remove_comment(stream):
         if kind is genshi.core.COMMENT:
             continue
         yield kind, data, pos
-
-
-class Journal(export.ExportImportMixin):
-    __name__ = 'account.payment.journal'
-    umr_sequence = fields.Many2One('ir.sequence', 'Sepa Umr Sequence',
-        states={'required': Eval('process_method') == 'sepa',
-            'invisible': Eval('process_method') != 'sepa'},
-        domain=[
-            ('code', '=', 'account.payment.sepa.umr'),
-            ['OR',
-                ('company', '=', Eval('company')),
-                ('company', '=', None),
-                ],
-            ],
-        context={
-            'code': 'account.payment.sepa.umr',
-            'company': Eval('company'),
-            }, depends=['company'])
 
 
 class Mandate:

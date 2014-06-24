@@ -24,6 +24,9 @@ class TestCaseModel:
             ('12', 'Yearly'),
             ], 'Fiscal Year periods frequency')
     fiscal_year_number = fields.Integer('Number of Fiscal Years to create')
+    account_template = fields.Many2One('account.account.template',
+        'Account Template', domain=[('parent', '=', None)],
+        ondelete='RESTRICT')
 
     _get_account_kind_cache = Cache('get_account_kind')
     _get_account_cache = Cache('get_account')
@@ -38,21 +41,23 @@ class TestCaseModel:
 
     @classmethod
     def account_kind_test_case(cls):
-        translater = cls.get_translater(MODULE_NAME)
-        account_kinds = []
-        account_kinds.append(cls.create_account_kind(translater(
-                    'Tax Account')))
-        account_kinds.append(cls.create_account_kind(translater(
-                    'Fee Account')))
-        account_kinds.append(cls.create_account_kind(translater(
-                    'Product Account')))
-        account_kinds.append(cls.create_account_kind(translater(
-                    'Coverage Account')))
-        account_kinds.append(cls.create_account_kind(translater(
-                    'Client Receivable')))
-        account_kinds.append(cls.create_account_kind(translater(
-                    'Client Payable')))
-        return account_kinds
+        configuration = cls.get_instance()
+        if configuration.account_template is None:
+            translater = cls.get_translater(MODULE_NAME)
+            account_kinds = []
+            account_kinds.append(cls.create_account_kind(translater(
+                        'Tax Account')))
+            account_kinds.append(cls.create_account_kind(translater(
+                        'Fee Account')))
+            account_kinds.append(cls.create_account_kind(translater(
+                        'Product Account')))
+            account_kinds.append(cls.create_account_kind(translater(
+                        'Coverage Account')))
+            account_kinds.append(cls.create_account_kind(translater(
+                        'Client Receivable')))
+            account_kinds.append(cls.create_account_kind(translater(
+                        'Client Payable')))
+            return account_kinds
 
     @classmethod
     def get_account_kind(cls, name):
@@ -78,26 +83,44 @@ class TestCaseModel:
 
     @classmethod
     def account_test_case(cls):
-        accounts = []
-        translater = cls.get_translater(MODULE_NAME)
-        accounts.append(cls.create_account(translater(
-                    'Default Payable Account'),
-                'payable', translater('Client Payable')))
-        accounts.append(cls.create_account(translater(
-                    'Default Receivable Account'),
-                'receivable', translater('Client Receivable')))
-        return accounts
+        configuration = cls.get_instance()
+        if (configuration.account_template is None or
+                not configuration.account_template.code):
+            accounts = []
+            translater = cls.get_translater(MODULE_NAME)
+            accounts.append(cls.create_account(translater(
+                        'Default Payable Account'),
+                    'payable', translater('Client Payable')))
+            accounts.append(cls.create_account(translater(
+                        'Default Receivable Account'),
+                    'receivable', translater('Client Receivable')))
+            return accounts
+        company = cls.get_company()
+        # Create account types
+        template2type = {}
+        configuration.account_template.type.create_type(company.id,
+            template2type=template2type)
+        # Create accounts
+        template2account = {}
+        configuration.account_template.create_account(company.id,
+            template2account=template2account, template2type=template2type)
 
     @classmethod
     def get_account(cls, name):
         result = cls._get_account_cache.get(name)
         if result:
             return result
-        result = Pool().get('account.account').search([
+        accounts = Pool().get('account.account').search([
                 ('name', '=', name),
-                ('company', '=', cls.get_company())], limit=1)[0]
-        cls._get_account_cache.set(name, result)
-        return result
+                ('company', '=', cls.get_company())], limit=1)
+        if accounts:
+            result = accounts[0]
+            cls._get_account_cache.set(name, result)
+            return result
+
+    @classmethod
+    def journal_test_case(cls):
+        return
 
     @classmethod
     def configure_accounting_test_case(cls):

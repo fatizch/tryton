@@ -35,6 +35,10 @@
         <field name="name">Fiscal Year Test Case</field>
         <field name="method_name">fiscal_year_test_case</field>
     </record>
+    <record model="ir.test_case.instance" id="journal_test_case">
+        <field name="name">Journal Creation</field>
+        <field name="method_name">journal_test_case</field>
+    </record>
     <record model="ir.test_case.instance" id="configure_accounting_test_case">
         <field name="name">Configure Accounting Test Case</field>
         <field name="method_name">configure_accounting_test_case</field>
@@ -61,6 +65,14 @@
     <record model="ir.test_case.instance-ir.test_case.instance" id="fiscal_year_main_company_requirement">
         <field name="child" ref="company_cog.main_company_test_case"/>
         <field name="parent" ref="fiscal_year_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="journal_requirement">
+        <field name="child" ref="account_test_case"/>
+        <field name="parent" ref="journal_test_case"/>
+    </record>
+    <record model="ir.test_case.instance-ir.test_case.instance" id="journal_account_configuration_requirement">
+        <field name="child" ref="journal_test_case"/>
+        <field name="parent" ref="configure_accounting_test_case"/>
     </record>
     <record model="ir.test_case.instance-ir.test_case.instance" id="party_account_configuration_requirement">
         <field name="child" ref="configure_accounting_test_case"/>
