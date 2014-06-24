@@ -110,6 +110,8 @@ class Insurer:
         target_currency = company.currency
         result = defaultdict(lambda: Decimal(0))
         for insurer, _, currency, outstanding_amount in cursor.fetchall():
+            if not outstanding_amount:
+                continue
             result[insurer] += Currency.compute(Currency(currency),
                 outstanding_amount, target_currency)
 
