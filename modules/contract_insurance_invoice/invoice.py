@@ -36,8 +36,6 @@ class Invoice:
     fees = fields.Function(
         fields.Numeric('Fees'),
         'get_fees')
-    products = fields.Many2Many('offered.product-account.invoice.payment_term',
-        'payment_term', 'product', 'Products', readonly=True)
     reconciliation_lines = fields.Function(
         fields.One2Many('account.move.line', None, 'Reconciliation Lines',
             states={'invisible': ~Bool(Eval('move', False))},
