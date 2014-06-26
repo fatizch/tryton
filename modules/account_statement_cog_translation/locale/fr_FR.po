@@ -9,3 +9,12 @@ msgstr "Quittance"
 msgctxt "field:account.statement.line,party:account_statement."
 msgid "Party"
 msgstr "Acteur"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:account_statement.act_statement_form_domain_posted"
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "selection:account.statement,state:account_statement."
+msgid "Posted"
+msgstr "Emis"

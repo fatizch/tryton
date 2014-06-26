@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:party.address,name:party."
+msgid "Name"
+msgstr "Ligne 2"
+
 msgctxt "field:party.address,party:party."
 msgid "Party"
 msgstr "Acteur"
