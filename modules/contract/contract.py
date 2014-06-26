@@ -85,9 +85,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states={
             'required': Eval('status') == 'active',
             }, depends=_DEPENDS, readonly=True)
-    reference = fields.Function(
-        fields.Char('Reference'),
-        'on_change_with_reference')
     extra_data = fields.Dict('extra_data', 'Complementary Data', states={
             'invisible': ~Eval('extra_data'),
             'readonly': Eval('status') != 'quote',
@@ -737,13 +734,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return {'subscriber': None}
         else:
             return {}
-
-    @fields.depends('status', 'contract_number', 'quote_number')
-    def on_change_with_reference(self, name=None):
-        if self.status == 'quote':
-            return self.quote_number
-        else:
-            return self.contract_number
 
 
 class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency):

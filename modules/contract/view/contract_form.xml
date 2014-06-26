@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form string="Contract">
-    <label name="reference"/>
-    <field name="reference"/>
+    <label name="rec_name"/>
+    <field name="rec_name"/>
     <label name="status"/>
     <field name="status"/>
     <label name="start_date"/>

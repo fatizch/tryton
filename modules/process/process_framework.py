@@ -183,12 +183,6 @@ class ProcessFramework(ModelView):
         # current process
         return process_desc.get_first_state_relation().id
 
-    def get_rec_name(self, name):
-        res = super(ProcessFramework, self).get_rec_name(name)
-        if res and self.current_state:
-            return res + ' - ' + self.current_state.get_rec_name(name)
-        return res
-
     @classmethod
     def raise_user_error(cls, errors, error_args=None, error_description='',
             error_description_args=None, raise_exception=True):
