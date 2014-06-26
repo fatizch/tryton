@@ -22,7 +22,7 @@
       <field name="domain">[('is_group', '=', True)]</field>
     </record>
     <record model="ir.action.act_window" id="contract.act_contract_form">
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False), ('product_kind', '=', 'insurance'), ('status', '!=', 'quote')]</field>
+      <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False), ('product_kind', '=', 'insurance')]</field>
     </record>
     <!-- View that connect the form in the tree with the specification -->
     <record model="ir.action.act_window.view" id="act_contract_form_view1">

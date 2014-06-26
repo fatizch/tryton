@@ -42,7 +42,7 @@
     <record model="ir.action.act_window" id="act_contract_form">
       <field name="name">Contracts</field>
       <field name="res_model">contract</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', -1)), ('status', '!=', 'quote')]</field>
+      <field name="domain">[('company', '=', Eval('context', {}).get('company', -1))]</field>
     </record>
     <record model="ir.action.act_window.view" id="act_contract_form_view1">
       <field name="sequence" eval="10"/>
@@ -54,28 +54,17 @@
       <field name="view" ref="contract_view_form"/>
       <field name="act_window" ref="act_contract_form"/>
     </record>
-    <!-- ############################################################ -->
-    <!-- ########### Quote ########### -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="quote_view_tree">
-      <field name="model">contract</field>
-      <field name="type">tree</field>
-      <field name="name">quote_tree</field>
+    <record model="ir.action.act_window.domain" id="act_contract_domain_quote">
+        <field name="name">Quote</field>
+        <field name="sequence" eval="10"/>
+        <field name="domain">[('status', '=', 'quote')]</field>
+        <field name="act_window" ref="act_contract_form"/>
     </record>
-    <record model="ir.action.act_window" id="act_quote_form">
-      <field name="name">Quotes</field>
-      <field name="res_model">contract</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('status', '=', 'quote')]</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_quote_form_view1">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="quote_view_tree"/>
-      <field name="act_window" ref="act_quote_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_quote_form_view2">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="contract_view_form"/>
-      <field name="act_window" ref="act_quote_form"/>
+    <record model="ir.action.act_window.domain" id="act_contract_domain_active">
+        <field name="name">Active</field>
+        <field name="sequence" eval="20"/>
+        <field name="domain">[('status', '=', 'active')]</field>
+        <field name="act_window" ref="act_contract_form"/>
     </record>
     <!-- ############################ -->
     <!-- # Contract Select End Date # -->
@@ -101,7 +90,6 @@
     <!-- ########### Menu ########### -->
     <!-- ############################################################ -->
     <menuitem name="Contract" id="menu_contract" sequence="10" icon="contract"/>
-    <menuitem parent="menu_contract" sequence="10" id="menu_quote_form" icon="quote" action="act_quote_form"/>
     <menuitem parent="menu_contract" sequence="20" id="menu_contract_form" icon="contract" action="act_contract_form"/>
     <menuitem name="Batch" parent="menu_contract" sequence="99" id="menu_contract_batch" icon="batch"/>
     <!--################################################################ -->
@@ -154,6 +142,14 @@
     <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract">
        <field name="group" ref="group_contract_admin"/>
        <field name="menu" ref="menu_contract"/>
+    </record>
+    <record model="ir.sequence.type" id="sequence_type_quote">
+        <field name="name">Quote</field>
+        <field name="code">quote</field>
+    </record>
+    <record model="ir.sequence.type-res.group" id="sequence_type_quote_group_admin">
+        <field name="sequence_type" ref="sequence_type_quote"/>
+        <field name="group" ref="res.group_admin"/>
     </record>
   </data>
 </tryton>
