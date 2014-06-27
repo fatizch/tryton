@@ -46,7 +46,8 @@ class Loan(model.CoopSQL, model.CoopView):
             ],
         )
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False)
-    currency = fields.Many2One('currency.currency', 'Currency')
+    currency = fields.Many2One('currency.currency', 'Currency',
+        ondelete='RESTRICT')
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
         'on_change_with_currency_digits')
@@ -168,7 +169,8 @@ class Loan(model.CoopSQL, model.CoopView):
     @classmethod
     def create(cls, vlist):
         Sequence = Pool().get('ir.sequence')
-        loan_sequences = Sequence.search([('code', '=', 'loan')])
+        with Transaction().set_user(0):
+            loan_sequences = Sequence.search([('code', '=', 'loan')])
         sequences_dict = dict([(x.company.id, x) for x in loan_sequences])
         vlist = [x.copy() for x in vlist]
         for vals in vlist:
