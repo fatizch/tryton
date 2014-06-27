@@ -167,15 +167,18 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def create(cls, vlist):
-        Sequence = Pool().get('ir.sequence')
-        with Transaction().set_user(0):
-            contract_sequences = Sequence.search([('code', '=', 'quote')])
-        sequences_dict = dict([(x.company.id, x) for x in contract_sequences])
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        Product = pool.get('offered.product')
+        product_ids = [x.get('product') for x in vlist]
+        products = Product.search([('id', 'in', product_ids)])
+        product_dict = dict([(x.id, x) for x in products])
         vlist = [x.copy() for x in vlist]
         for vals in vlist:
             if (vals.get('status', '') == 'quote'
                     and not vals.get('quote_number')):
-                sequence = sequences_dict.get(vals.get('company'), None)
+                sequence = product_dict[
+                    vals.get('product')].quote_number_sequence
                 if not sequence:
                     cls.raise_user_error('no_quote_sequence')
                 vals['quote_number'] = Sequence.get_id(sequence.id)
