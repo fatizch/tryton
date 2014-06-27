@@ -552,7 +552,7 @@ msgstr "ID"
 
 msgctxt "field:party.synthesis.menu.relationship,name:"
 msgid "Party Relation"
-msgstr "Relation acteur"
+msgstr "Relation acteurs"
 
 msgctxt "field:party.synthesis.menu.relationship,party:"
 msgid "Party"

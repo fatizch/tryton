@@ -39,7 +39,7 @@ class Loan(model.CoopSQL, model.CoopView):
 
     number = fields.Char('Number', required=True, readonly=True, select=True)
     company = fields.Many2One('company.company', 'Company', required=True,
-        select=True,
+        select=True, ondelete='RESTRICT',
         domain=[
             ('id', If(Eval('context', {}).contains('company'), '=', '!='),
                 Eval('context', {}).get('company', -1)),
