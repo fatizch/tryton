@@ -258,7 +258,7 @@ class OfferedProduct(Offered):
     #in the override of offered
 
 
-class ItemDescription(model.CoopSQL, model.CoopView):
+class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'Item Description'
 
     __name__ = 'offered.item.description'

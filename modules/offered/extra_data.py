@@ -15,12 +15,11 @@ __metaclass__ = PoolMeta
 __all__ = [
     'ExtraData',
     'ExtraDataSubExtraDataRelation',
-    'Tag',
-    'ExtraDataTagRelation',
     ]
 
 
-class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
+class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
+        model.TaggedMixin):
     'Extra Data'
 
     __name__ = 'extra_data'
@@ -51,10 +50,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView):
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
-    tags = fields.Many2Many('extra_data-tag', 'extra_data_def', 'tag', 'Tags')
-    tags_name = fields.Function(
-        fields.Char('Tags'),
-        'on_change_with_tags_name', searcher='search_tags')
 
     @classmethod
     def __setup__(cls):
@@ -353,26 +348,3 @@ class ExtraDataSubExtraDataRelation(model.CoopSQL, model.CoopView):
         if not self.does_match(value):
             return
         self.child.update_field_value(new_values, value_dict, valid_schemas)
-
-
-class Tag:
-    __name__ = 'tag'
-
-    extra_data_defs = fields.Many2Many('extra_data-tag', 'tag',
-        'extra_data_def', 'Extra Data')
-
-    @classmethod
-    def _export_skips(cls):
-        result = super(Tag, cls)._export_skips()
-        result.add('extra_data_defs')
-        return result
-
-
-class ExtraDataTagRelation(model.CoopSQL):
-    'Relation between extra data def and tag'
-
-    __name__ = 'extra_data-tag'
-
-    extra_data_def = fields.Many2One('extra_data',
-        'Extra Data Def', ondelete='CASCADE')
-    tag = fields.Many2One('tag', 'Tag', ondelete='RESTRICT')

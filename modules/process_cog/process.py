@@ -420,7 +420,7 @@ class CogProcessFramework(ProcessFramework):
         self.current_log.save()
 
 
-class Process(model.CoopSQL):
+class Process(model.CoopSQL, model.TaggedMixin):
     __name__ = 'process'
 
     with_prev_next = fields.Boolean('With Previous / Next button')
@@ -814,7 +814,7 @@ class ViewDescription(model.CoopSQL, model.CoopView):
         View.delete(to_delete)
 
 
-class ProcessStep(model.CoopSQL):
+class ProcessStep(model.CoopSQL, model.TaggedMixin):
     __name__ = 'process.step'
 
     pyson = fields.Char('Pyson Constraint')

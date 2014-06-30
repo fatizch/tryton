@@ -145,7 +145,7 @@ class GetResult(object):
         return None
 
 
-class Offered(model.CoopView, GetResult, Templated):
+class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
     'Offered'
 
     __name__ = 'offered'

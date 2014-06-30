@@ -4,4 +4,5 @@
   <field name="code"/>
   <field name="on_model"/>
   <field name="kind"/>
+  <field name="tags_name"/>
 </tree>

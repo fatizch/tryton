@@ -1,12 +1,9 @@
 from trytond.pool import Pool
 from .rule_engine import *
-from .tag import *
 
 
 def register():
     Pool.register(
-        # From tag
-        Tag,
         # From rule_engine
         RuleTools,
         Context,
@@ -21,7 +18,6 @@ def register():
         ContextRuleFunction,
         RunTestsReport,
         RuleError,
-        RuleEngineTagRelation,
         ValidateRuleBatch,
         module='rule_engine', type_='model')
     Pool.register(
