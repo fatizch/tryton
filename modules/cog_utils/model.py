@@ -28,6 +28,7 @@ __all__ = [
     'ObjectHistory',
     'expand_tree',
     'MergedMixin',
+    'TaggedMixin',
     ]
 
 
@@ -529,3 +530,20 @@ class _RevisionMixin(object):
                 for field_name, value in elem.iteritems():
                     values[field_name][elem[parent_field]] = value
         return values
+
+
+class TaggedMixin(object):
+    'Define a model with tags'
+
+    tags = fields.Many2Many('tag-object', 'object_', 'tag', 'Tags')
+    tags_name = fields.Function(
+        fields.Char('Tags'),
+        'on_change_with_tags_name', searcher='search_tags')
+
+    @fields.depends('tags')
+    def on_change_with_tags_name(self, name=None):
+        return ', '.join([x.name for x in self.tags])
+
+    @classmethod
+    def search_tags(cls, name, clause):
+        return [('tags.name',) + tuple(clause[1:])]

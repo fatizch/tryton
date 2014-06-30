@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form/notebook" position="inside">
-        <page id='extra_data' string='Extra Data'>
-            <field name="extra_data_defs" colspan="4"/>
-        </page>
-    </xpath>
-</data>

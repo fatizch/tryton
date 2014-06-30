@@ -21,5 +21,8 @@
       <newline/>
       <field name="mail_body" colspan="2"/>
     </page>
+    <page name="tags">
+      <field name="tags" colspan="4"/>
+    </page>
   </notebook>
 </form>
