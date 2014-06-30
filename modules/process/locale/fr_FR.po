@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -655,7 +655,7 @@ msgid "Calculate Prices"
 msgstr "Calculer les Primes"
 
 msgctxt "view:contract:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:contract:"

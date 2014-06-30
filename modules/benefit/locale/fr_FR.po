@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -71,7 +71,7 @@ msgid "Offered Kind"
 msgstr "Typage"
 
 msgctxt "field:benefit,extra_data_def:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:benefit,id:"
@@ -335,7 +335,7 @@ msgid "Events Descriptions"
 msgstr "Descripteurs d'Evénement"
 
 msgctxt "field:benefit.loss.description,extra_data_def:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:benefit.loss.description,id:"
@@ -827,7 +827,7 @@ msgid "Loss Description to Document Description Relation"
 msgstr "Relation Descripteur de Préjudice Document"
 
 msgctxt "model:benefit.loss.description-extra_data,name:"
-msgid "Relation between Loss Description and Complementary Data"
+msgid "Relation between Loss Description and Extra Data"
 msgstr "Relation Type de Préjudice et Données Complémentaires"
 
 msgctxt "model:benefit.reserve.rule,name:"
@@ -1131,7 +1131,7 @@ msgid "Event Descriptionriptor"
 msgstr "Descripteur d'Evénement"
 
 msgctxt "view:benefit.loss.description:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:benefit.loss.description:"

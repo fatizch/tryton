@@ -16,7 +16,7 @@ class TestCaseModel:
     def _get_test_case_dependencies(cls):
         result = super(TestCaseModel, cls)._get_test_case_dependencies()
         result['shared_extra_data_test_case'] = {
-            'name': 'Shared Complementary Data Test Case',
+            'name': 'Shared Extra Data Test Case',
             'dependencies': set([]),
             }
         result['ceiling_rule_test_case'] = {
@@ -31,12 +31,12 @@ class TestCaseModel:
 
     @classmethod
     def create_extra_data(cls, **kwargs):
-        ComplementaryData = Pool().get('extra_data')
-        return ComplementaryData(**kwargs)
+        ExtraData = Pool().get('extra_data')
+        return ExtraData(**kwargs)
 
     @classmethod
     def extra_data_test_case(cls):
-        ComplementaryData = Pool().get('extra_data')
+        ExtraData = Pool().get('extra_data')
         translater = cls.get_translater(MODULE_NAME)
         schemas = []
         schemas.append(cls.create_extra_data(
@@ -57,7 +57,7 @@ class TestCaseModel:
                 selection='\n'.join([
                                 'CSP1: CSP1', 'CSP2: CSP2', 'CSP3: CSP3',
                                 'CSP4: CSP4'])))
-        ComplementaryData.create([x._save_values for x in schemas])
+        ExtraData.create([x._save_values for x in schemas])
 
     @classmethod
     def create_rule(cls, **kwargs):
