@@ -23,7 +23,7 @@
       <field name="exiting_wizard"/>
     </page>
     <page name="tags">
-      <field name="tags" colspan="4"/>
+      <field name="tags" colspan="4" widget="multiselection"/>
     </page>
     <page string="Authorizations" id="authorizations">
       <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1"/>

@@ -3,5 +3,5 @@
   <label name="name"/>
   <field name="name"/>
   <field name="allowed_elements" colspan="4"/>
-  <field name="tags" colspan="4"/>
+  <field name="tags" colspan="4" widget="multiselection"/>
 </form>

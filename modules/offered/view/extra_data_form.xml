@@ -37,7 +37,7 @@
             <field name="sub_datas" yexpand="1" yfill="1" colspan="4"/>
         </page>
         <page name="tags">
-            <field name="tags" colspan="4"/>
+            <field name="tags" colspan="4" widget="multiselection"/>
         </page>
     </notebook>
 </form>
