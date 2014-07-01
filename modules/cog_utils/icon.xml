@@ -9,5 +9,9 @@
             <field name="name">coopengo-close</field>
             <field name="path">icons/coopengo-close.svg</field>
         </record>
+        <record model="ir.ui.icon" id="tag_icon">
+            <field name="name">tag</field>
+            <field name="path">icons/tag.svg</field>
+        </record>
     </data>
 </tryton>
