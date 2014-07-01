@@ -15,7 +15,7 @@
             <field name="dimensions"/>
             <newline/>
         </page>
-        <page string="tags">
+        <page name="tags">
             <field name="tags" colspan="4"/>
         </page>
     </notebook>
