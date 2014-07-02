@@ -8,6 +8,7 @@ from sql.conditionals import Coalesce
 from sql import Union, Column, Literal, Cast
 
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
+from trytond.model import UnionMixin as TrytonUnionMixin
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction
@@ -27,7 +28,7 @@ __all__ = [
     'VersionObject',
     'ObjectHistory',
     'expand_tree',
-    'MergedMixin',
+    'UnionMixin',
     'TaggedMixin',
     ]
 
@@ -378,58 +379,26 @@ class ObjectHistory(CoopSQL, CoopView):
         return res
 
 
-class MergedMixin:
-
-    @staticmethod
-    def merged_models():
-        return []
+class UnionMixin(TrytonUnionMixin):
 
     @classmethod
-    def merged_shard(cls, column, model):
-        models = cls.merged_models()
-        length = len(models)
-        i = models.index(model)
-        return ((column * length) + i)
-
-    @classmethod
-    def merged_unshard(cls, record_id):
-        pool = Pool()
-        models = cls.merged_models()
-        length = len(models)
-        record_id, i = divmod(record_id, length)
-        Model = pool.get(models[i])
-        return Model(record_id)
-
-    @classmethod
-    def merged_field(cls, name, Model):
+    def union_field(cls, name, Model):
         return Model._fields.get(name)
 
     @classmethod
-    def merged_columns(cls, model):
-        pool = Pool()
-        Model = pool.get(model)
-        table = Model.__table__()
-        models = cls.merged_models()
-        columns = [
-            cls.merged_shard(table.id, model).as_('id'),
-            ]
-        for name in sorted(cls._fields.keys()):
-            field = cls._fields[name]
-            if name == 'id' or hasattr(field, 'set'):
-                continue
-            column = Literal(None)
-            merged_field = cls.merged_field(name, Model)
-            if merged_field:
-                column = Column(table, merged_field.name)
-                if (isinstance(field, fields.Many2One)
-                        and field.model_name == cls.__name__):
-                    target_model = merged_field.model_name
-                    if target_model in models:
-                        column = cls.merged_shard(column, target_model)
-                    else:
-                        column = Literal(None)
-            columns.append(Cast(column, field.sql_type().base).as_(name))
-        return table, columns
+    def union_column(cls, name, field, table, Model):
+        column = Literal(None)
+        union_field = cls.union_field(field.name, Model)
+        if union_field:
+            column = Column(table, union_field.name)
+            if (isinstance(field, fields.Many2One)
+                    and field.model_name == cls.__name__):
+                target_model = union_field.model_name
+                if target_model in cls.union_models():
+                    column = cls.union_shard(column, target_model)
+                else:
+                    column = Literal(None)
+        return column
 
     @classmethod
     def build_sub_query(cls, model, table, columns):
@@ -438,8 +407,8 @@ class MergedMixin:
     @classmethod
     def table_query(cls):
         queries = []
-        for model in cls.merged_models():
-            table, columns = cls.merged_columns(model)
+        for model in cls.union_models():
+            table, columns = cls.union_columns(model)
             queries.append(cls.build_sub_query(model, table, columns))
         return Union(*queries)
 

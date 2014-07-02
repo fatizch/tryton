@@ -8,7 +8,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Len, PYSONEncoder
 
 from trytond.modules.cog_utils import fields, utils, coop_string, model
-from trytond.modules.cog_utils import MergedMixin
+from trytond.modules.cog_utils import UnionMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -105,7 +105,8 @@ class SynthesisMenuContrat(model.CoopSQL):
     __name__ = 'party.synthesis.menu.contract'
 
     name = fields.Char('Contracts')
-    subscriber = fields.Many2One('party.party', 'Subscriber')
+    subscriber = fields.Many2One('party.party', 'Subscriber',
+        ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -130,14 +131,18 @@ class SynthesisMenuContrat(model.CoopSQL):
     def get_icon(self, name=None):
         return 'contract'
 
+    def get_rec_name(self, name):
+        ContractSynthesis = Pool().get('party.synthesis.menu.contract')
+        return coop_string.translate_label(ContractSynthesis, 'name')
 
-class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
+
+class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 
     @classmethod
-    def merged_models(cls):
-        res = super(SynthesisMenu, cls).merged_models()
+    def union_models(cls):
+        res = super(SynthesisMenu, cls).union_models()
         res.extend([
             'party.synthesis.menu.contract',
             'contract',
@@ -145,19 +150,19 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def merged_field(cls, name, Model):
-        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
+    def union_field(cls, name, Model):
+        union_field = super(SynthesisMenu, cls).union_field(name, Model)
         if (Model.__name__ == 'party.synthesis.menu.contract'):
             if name == 'parent':
                 return Model._fields['subscriber']
         elif Model.__name__ == 'contract':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['subscriber'])
-                merged_field.model_name = 'party.synthesis.menu.contract'
-                return merged_field
+                union_field = copy.deepcopy(Model._fields['subscriber'])
+                union_field.model_name = 'party.synthesis.menu.contract'
+                return union_field
             elif name == 'name':
                 return Model._fields['contract_number']
-        return merged_field
+        return union_field
 
     @classmethod
     def menu_order(cls, model):

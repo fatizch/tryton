@@ -10,7 +10,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.wizard import Wizard
 
-from trytond.modules.cog_utils import fields, model, coop_string, MergedMixin
+from trytond.modules.cog_utils import fields, model, coop_string, UnionMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -122,7 +122,7 @@ class SynthesisMenuLoan(model.CoopSQL):
     'Party Synthesis Menu Loan'
     __name__ = 'party.synthesis.menu.loan'
     name = fields.Char('Loans')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -145,14 +145,18 @@ class SynthesisMenuLoan(model.CoopSQL):
     def get_icon(self, name=None):
         return 'loan-interest'
 
+    def get_rec_name(self, name):
+        LoanSynthesis = Pool().get('party.synthesis.menu.loan')
+        return coop_string.translate_label(LoanSynthesis, 'name')
 
-class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
+
+class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 
     @classmethod
-    def merged_models(cls):
-        res = super(SynthesisMenu, cls).merged_models()
+    def union_models(cls):
+        res = super(SynthesisMenu, cls).union_models()
         res.extend([
             'party.synthesis.menu.loan',
             'loan-party',
@@ -160,19 +164,19 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def merged_field(cls, name, Model):
-        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
+    def union_field(cls, name, Model):
+        union_field = super(SynthesisMenu, cls).union_field(name, Model)
         if Model.__name__ == 'party.synthesis.menu.loan':
             if name == 'parent':
                 return Model._fields['party']
         elif Model.__name__ == 'loan-party':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['party'])
-                merged_field.model_name = 'party.synthesis.menu.loan'
-                return merged_field
+                union_field = copy.deepcopy(Model._fields['party'])
+                union_field.model_name = 'party.synthesis.menu.loan'
+                return union_field
             elif name == 'name':
                 return Model._fields['loan']
-        return merged_field
+        return union_field
 
     @classmethod
     def menu_order(cls, model):

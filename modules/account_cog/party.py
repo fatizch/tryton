@@ -2,7 +2,7 @@ import copy
 from sql.aggregate import Max
 from sql import Literal
 
-from trytond.modules.cog_utils import MergedMixin
+from trytond.modules.cog_utils import UnionMixin
 from trytond.pool import Pool
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
@@ -19,14 +19,14 @@ class SynthesisMenuMoveLine(model.CoopSQL):
     'Party Synthesis Menu Move line'
     __name__ = 'party.synthesis.menu.move.line'
     name = fields.Char('Payments')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
         pool = Pool()
         move_line = pool.get('account.move.line').__table__()
         party = pool.get('party.party').__table__()
-        Move_Line_Synthesis = pool.get('party.synthesis.menu.move.line')
+        MoveLineSynthesis = pool.get('party.synthesis.menu.move.line')
         query_table = party.join(move_line, condition=(
             party.id == move_line.party))
         return query_table.select(
@@ -35,21 +35,25 @@ class SynthesisMenuMoveLine(model.CoopSQL):
             Max(move_line.create_date).as_('create_date'),
             Max(move_line.write_uid).as_('write_uid'),
             Max(move_line.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(Move_Line_Synthesis, 'name')).
+            Literal(coop_string.translate_label(MoveLineSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
 
     def get_icon(self, name=None):
         return 'payment'
 
+    def get_rec_name(self, name):
+        Move_Line_Synthesis = Pool().get('party.synthesis.menu.move.line')
+        return coop_string.translate_label(Move_Line_Synthesis, 'name')
 
-class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
+
+class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 
     @classmethod
-    def merged_models(cls):
-        res = super(SynthesisMenu, cls).merged_models()
+    def union_models(cls):
+        res = super(SynthesisMenu, cls).union_models()
         res.extend([
             'party.synthesis.menu.move.line',
             'account.move.line',
@@ -57,19 +61,19 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def merged_field(cls, name, Model):
-        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
+    def union_field(cls, name, Model):
+        union_field = super(SynthesisMenu, cls).union_field(name, Model)
         if Model.__name__ == 'party.synthesis.menu.move.line':
             if name == 'parent':
                 return Model._fields['party']
         elif Model.__name__ == 'account.move.line':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['party'])
-                merged_field.model_name = 'party.synthesis.menu.move.line'
-                return merged_field
+                union_field = copy.deepcopy(Model._fields['party'])
+                union_field.model_name = 'party.synthesis.menu.move.line'
+                return union_field
             elif name == 'name':
                 return Model._fields['state']
-        return merged_field
+        return union_field
 
     @classmethod
     def menu_order(cls, model):

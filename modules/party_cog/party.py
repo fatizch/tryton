@@ -18,7 +18,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateTransition, StateView
 from trytond.pyson import PYSONEncoder
 from trytond.modules.cog_utils import utils, fields, model, export
-from trytond.modules.cog_utils import coop_string, MergedMixin, coop_date
+from trytond.modules.cog_utils import coop_string, UnionMixin
 
 
 __metaclass__ = PoolMeta
@@ -332,11 +332,10 @@ class Party(export.ExportImportMixin):
     def get_main_address_id(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)
         return address.id if address else None
-    
+
     @classmethod
     def search_main_address(cls, name, clause):
         return [('addresses.rec_name', ) + tuple(clause[1:])]
-
 
     @classmethod
     def default_lang(cls):
@@ -448,7 +447,7 @@ class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
     'Party Synthesis Menu Action Close'
     __name__ = 'party.synthesis.menu.action_close'
     name = fields.Char('Close Synthesis')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -522,7 +521,7 @@ class SynthesisMenuPartyInteraction(model.CoopSQL):
     'Party Synthesis Menu Interaction'
     __name__ = 'party.synthesis.menu.party_interaction'
     name = fields.Char('Interactions')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -542,12 +541,16 @@ class SynthesisMenuPartyInteraction(model.CoopSQL):
             party_interaction.party,
             group_by=party_interaction.party)
 
+    def get_rec_name(self, name):
+        PartyInteraction = Pool().get('party.synthesis.menu.party_interaction')
+        return coop_string.translate_label(PartyInteraction, 'name')
+
 
 class SynthesisMenuAddress(model.CoopSQL):
     'Party Synthesis Menu Address'
     __name__ = 'party.synthesis.menu.address'
     name = fields.Char('Addresses')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -571,12 +574,16 @@ class SynthesisMenuAddress(model.CoopSQL):
     def get_icon(self, name=None):
         return 'coopengo-address'
 
+    def get_rec_name(self, name):
+        AddressSynthesis = Pool().get('party.synthesis.menu.address')
+        return coop_string.translate_label(AddressSynthesis, 'name')
+
 
 class SynthesisMenuContact(model.CoopSQL):
     'Party Synthesis Menu Contact'
     __name__ = 'party.synthesis.menu.contact'
     name = fields.Char('Contacts')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -600,12 +607,16 @@ class SynthesisMenuContact(model.CoopSQL):
     def get_icon(self, name=None):
         return 'contact'
 
+    def get_rec_name(self, name):
+        ContactSynthesis = Pool().get('party.synthesis.menu.contact')
+        return coop_string.translate_label(ContactSynthesis, 'name')
+
 
 class SynthesisMenuRelationship(model.CoopSQL):
     'Party Synthesis Menu Contact'
     __name__ = 'party.synthesis.menu.relationship'
     name = fields.Char('Party Relation')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -629,16 +640,21 @@ class SynthesisMenuRelationship(model.CoopSQL):
     def get_icon(self, name=None):
         return 'party_relation'
 
+    def get_rec_name(self, name):
+        RelationSynthesis = Pool().get('party.synthesis.menu.relationship')
+        return coop_string.translate_label(RelationSynthesis, 'name')
 
-class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
+
+class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 
     name = fields.Char('Name')
     icon = fields.Function(fields.Char('Icon'), 'get_icon')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
     sequence = fields.Integer('Sequence')
-    parent = fields.Many2One('party.synthesis.menu', 'Parent')
+    parent = fields.Many2One('party.synthesis.menu', 'Parent',
+        ondelete='CASCADE')
     childs = fields.One2Many('party.synthesis.menu', 'parent', 'Childs')
 
     @classmethod
@@ -647,7 +663,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         cls._order.insert(0, ('sequence', 'ASC'))
 
     @staticmethod
-    def merged_models():
+    def union_models():
         return [
             'party.synthesis.menu.action_close',
             'party.synthesis.menu.action_refresh',
@@ -663,8 +679,8 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             ]
 
     @classmethod
-    def merged_field(cls, name, Model):
-        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
+    def union_field(cls, name, Model):
+        union_field = super(SynthesisMenu, cls).union_field(name, Model)
         if Model.__name__ == 'party.party':
             if name == 'party':
                 return Model._fields['id']
@@ -673,9 +689,9 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return Model._fields['party']
         elif Model.__name__ == 'party.address':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['party'])
-                merged_field.model_name = 'party.synthesis.menu.address'
-                return merged_field
+                union_field = copy.deepcopy(Model._fields['party'])
+                union_field.model_name = 'party.synthesis.menu.address'
+                return union_field
             elif name == 'name':
                 return Model._fields['street']
         elif Model.__name__ == 'party.synthesis.menu.contact':
@@ -683,9 +699,9 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return Model._fields['party']
         elif Model.__name__ == 'party.contact_mechanism':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['party'])
-                merged_field.model_name = 'party.synthesis.menu.contact'
-                return merged_field
+                union_field = copy.deepcopy(Model._fields['party'])
+                union_field.model_name = 'party.synthesis.menu.contact'
+                return union_field
             elif name == 'name':
                 return Model._fields['value']
         elif Model.__name__ == 'party.synthesis.menu.party_interaction':
@@ -693,10 +709,10 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return Model._fields['party']
         elif Model.__name__ == 'party.interaction':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['party'])
-                merged_field.model_name = \
+                union_field = copy.deepcopy(Model._fields['party'])
+                union_field.model_name = \
                     'party.synthesis.menu.party_interaction'
-                return merged_field
+                return union_field
             elif name == 'name':
                 return Model._fields['title']
         elif Model.__name__ == 'party.synthesis.menu.relationship':
@@ -704,10 +720,10 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return Model._fields['party']
         elif Model.__name__ == 'party.relation.all':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['from_'])
-                merged_field.model_name = \
+                union_field = copy.deepcopy(Model._fields['from_'])
+                union_field.model_name = \
                     'party.synthesis.menu.relationship'
-                return merged_field
+                return union_field
             elif name == 'name':
                 return Model._fields['type']
         elif (Model.__name__ == 'party.synthesis.menu.action_close' or
@@ -716,7 +732,7 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 return Model._fields['id']
         if name == 'party':
             return
-        return merged_field
+        return union_field
 
     @classmethod
     def menu_order(cls, model):
@@ -733,8 +749,8 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
             return 0
 
     @classmethod
-    def merged_columns(cls, model):
-        table, columns = super(SynthesisMenu, cls).merged_columns(model)
+    def union_columns(cls, model):
+        table, columns = super(SynthesisMenu, cls).union_columns(model)
         order = cls.menu_order(model)
         field = cls._fields['sequence']
         for idx, column in enumerate(columns):
@@ -770,16 +786,18 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
                 yield i
 
     def get_icon(self, name):
-        instance = self.merged_unshard(self.id)
+        instance = self.union_unshard(self.id)
         if getattr(instance, 'get_icon', None) is not None:
             return instance.get_icon()
 
     def get_rec_name(self, name):
-        instance = self.merged_unshard(self.id)
+        instance = self.union_unshard(self.id)
         if getattr(instance, 'get_synthesis_rec_name', None) is not None:
             res = instance.get_synthesis_rec_name(name)
         elif getattr(instance, 'get_rec_name', None) is not None:
             res = instance.get_rec_name(name)
+        else:
+            res = self.name
         if self.childs and self.parent:
             res += ' (%s)' % len(self.childs)
         return res
@@ -809,7 +827,7 @@ class SynthesisMenuOpen(Wizard):
         Menu = pool.get('party.synthesis.menu')
         User = pool.get('res.user')
         context = Transaction().context
-        record = Menu.merged_unshard(context['active_id'])
+        record = Menu.union_unshard(context['active_id'])
         if record.__name__ == 'party.synthesis.menu.action_close':
             user = Transaction().user
             user = User(user)
@@ -829,7 +847,7 @@ class SynthesisMenuOpen(Wizard):
         pool = Pool()
         Menu = pool.get('party.synthesis.menu')
         context = Transaction().context
-        record = Menu.merged_unshard(context['active_id'])
+        record = Menu.union_unshard(context['active_id'])
         action.update(self.get_action(record))
         parameters = self.get_action_parameters(record)
         return action, parameters
