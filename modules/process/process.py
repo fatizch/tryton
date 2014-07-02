@@ -9,7 +9,7 @@ from trytond.pyson import Eval, Bool
 from trytond.pool import Pool
 
 from trytond.modules.cog_utils import coop_string
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 
 __all__ = [
     'Status',
@@ -75,7 +75,7 @@ class ProcessMenuRelation(ModelSQL):
     menu = fields.Many2One('ir.ui.menu', 'Menu', ondelete='RESTRICT')
 
 
-class Process(ModelSQL, ModelView):
+class Process(ModelSQL, ModelView, model.TaggedMixin):
     'Process'
 
     __name__ = 'process'
@@ -740,7 +740,7 @@ class StepGroupRelation(ModelSQL):
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
-class ProcessStep(ModelSQL, ModelView):
+class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
     'Process Step'
 
     __name__ = 'process.step'
