@@ -139,7 +139,7 @@ class Loan(model.CoopSQL, model.CoopView):
         'on_change_with_increments_end_date')
     end_date = fields.Function(
         fields.Date('End Date'),
-        'on_change_with_end_date')
+        'get_end_date')
     current_loan_shares = fields.Function(
         fields.One2Many('loan.share', None, 'Current Loan Share'),
         'get_current_loan_shares')
@@ -200,6 +200,13 @@ class Loan(model.CoopSQL, model.CoopView):
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
+
+    @staticmethod
+    def default_currency():
+        if Transaction().context.get('company'):
+            Company = Pool().get('company.company')
+            company = Company(Transaction().context['company'])
+            return company.currency.id
 
     @classmethod
     def default_kind(cls):
@@ -433,8 +440,7 @@ class Loan(model.CoopSQL, model.CoopView):
     def on_change_with_end_date(self, name=None):
         if getattr(self, 'increments', None):
             return self.increments[-1].end_date
-        else:
-            return self.end_date
+        return self.end_date
 
     def get_publishing_values(self):
         result = super(Loan, self).get_publishing_values()
@@ -480,13 +486,6 @@ class Loan(model.CoopSQL, model.CoopView):
         if self.increments:
             return self.increments[-1].end_date
 
-    @staticmethod
-    def default_currency():
-        if Transaction().context.get('company'):
-            Company = Pool().get('company.company')
-            company = Company(Transaction().context['company'])
-            return company.currency.id
-
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
@@ -494,6 +493,9 @@ class Loan(model.CoopSQL, model.CoopView):
     @fields.depends('currency')
     def on_change_with_currency_symbol(self, name=None):
         return self.currency.symbol if self.currency else ''
+
+    def get_end_date(self, name):
+        return self.increments[-1].end_date if self.increments else None
 
 
 class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
@@ -507,7 +509,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Function(
         fields.Date('End Date'),
-        'on_change_with_end_date')
+        'get_end_date')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
     number_of_payments = fields.Integer('Number of Payments', required=True)
     rate = fields.Numeric('Annual Rate', digits=(16, 4))
@@ -557,6 +559,10 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     @staticmethod
     def default_number():
         return Transaction().context.get('number', 0) + 1
+
+    def get_end_date(self, name):
+        return coop_date.add_duration(self.start_date,
+            self.loan.payment_frequency, self.number_of_payments - 1)
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
