@@ -802,7 +802,7 @@ class TableCell(ModelSQL, ModelView):
 for i in range(1, DIMENSION_MAX + 1):
     setattr(TableCell, 'dimension%s' % i,
         fields.Many2One('table.dimension.value', 'Dimension %s' % i,
-            ondelete='CASCADE',
+            ondelete='RESTRICT',
             domain=[
                 ('definition', '=', Eval('definition')),
                 ('type', '=', 'dimension%s' % i),
