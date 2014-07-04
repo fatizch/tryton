@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form string="Contract">
-    <label name="contract_number"/>
-    <field name="contract_number"/>
+    <label name="rec_name"/>
+    <field name="rec_name"/>
     <label name="status"/>
     <field name="status"/>
     <label name="start_date"/>
@@ -38,6 +38,8 @@
                 <field name="product"/>
                 <label name="appliable_conditions_date"/>
                 <field name="appliable_conditions_date"/>
+                <label name="quote_number"/>
+                <field name="quote_number"/>
             </group>
             <group id="right" yfill="0">
                 <field name="activation_history" colspan="2" yfill="0" yexpand="0"/>

@@ -7,10 +7,14 @@ from .test_case import *
 from .wizard import *
 from .service import *
 from .contact_type import *
+from .configuration import *
+from .offered import *
 
 
 def register():
     Pool.register(
+        Configuration,
+        Product,
         # from contract
         Contract,
         ActivationHistory,
