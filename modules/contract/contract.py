@@ -85,7 +85,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states={
             'required': Eval('status') == 'active',
             }, depends=_DEPENDS, readonly=True)
-    extra_data = fields.Dict('extra_data', 'Complementary Data', states={
+    extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data'),
             'readonly': Eval('status') != 'quote',
             }, depends=['extra_data', 'status'])
