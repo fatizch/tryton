@@ -1,3 +1,7 @@
+from sql import Cast
+from sql.aggregate import Sum
+from sql.operators import Concat
+
 from trytond.model import fields
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
@@ -75,15 +79,25 @@ class Invoice:
     def get_currency_symbol(self, name):
         return self.currency.symbol if self.currency else ''
 
-    def get_fees(self, name):
-        result = 0
-        for elem in self.lines:
-            if not elem.origin:
-                continue
-            if elem.origin.__name__ != 'contract.premium':
-                continue
-            if elem.origin.rated_entity.__name__ == 'account.fee.description':
-                result += elem.amount
+    @classmethod
+    def get_fees(cls, invoices, name):
+        pool = Pool()
+        cursor = Transaction().cursor
+        premium = pool.get('contract.premium').__table__()
+        invoice_line = pool.get('account.invoice.line').__table__()
+
+        query_table = invoice_line.join(premium, condition=(
+                invoice_line.invoice.in_([x.id for x in invoices]))
+            & (Concat('contract.premium,', Cast(premium.id, 'VARCHAR'))
+                == invoice_line.origin)
+            & (premium.rated_entity.like('account.fee.description,%')))
+
+        cursor.execute(*query_table.select(invoice_line.invoice,
+                Sum(invoice_line.unit_price), group_by=[invoice_line.invoice]))
+
+        result = dict((x.id, 0) for x in invoices)
+        for invoice_id, total in cursor.fetchall():
+            result[invoice_id] = total
         return result
 
     def get_reconciliation_lines(self, name):
