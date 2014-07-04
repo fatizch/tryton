@@ -2,4 +2,5 @@
 <tree string="Extra Premium Kinds">
   <field name="name"/>
   <field name="code"/>
+  <field name="is_discount"/>
 </tree>

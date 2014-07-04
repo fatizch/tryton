@@ -6,7 +6,12 @@
     </xpath>
     <xpath expr="/form/notebook/page[@id='main_data']" position="after">
         <page string="Extra Premiums" id="extra_premium">
-            <field name="extra_premiums" colspan="4"/>
+        <page string="Discounts" id="extra_premium_discount">
+            <field name="extra_premium_discounts" colspan="4"/>
+            <button string="Propagate" name="propagate_extra_premiums" colspan="4"/>
+        </page>
+        <page string="Increases" id="extra_premium_increase">
+            <field name="extra_premium_increases" colspan="4"/>
             <button string="Propagate" name="propagate_extra_premiums" colspan="4"/>
         </page>
         <page string="Exclusions" id="exclusions">

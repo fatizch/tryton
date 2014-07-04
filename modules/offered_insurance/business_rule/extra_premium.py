@@ -1,6 +1,5 @@
 from trytond.modules.cog_utils import model, fields, coop_string
 
-
 __all__ = [
     'ExtraPremiumKind',
     ]
@@ -13,6 +12,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView):
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
+    is_discount = fields.Boolean('Is Discount')
 
     @classmethod
     def __setup__(cls):
