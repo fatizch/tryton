@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import utils, fields, model, coop_string
+from trytond.modules.cog_utils import fields, model, coop_string
 from trytond.modules.cog_utils import coop_date
 
 __metaclass__ = PoolMeta
@@ -156,13 +156,6 @@ class ExtraPremium:
         'on_change_with_is_loan')
 
     @classmethod
-    def __setup__(cls):
-        super(ExtraPremium, cls).__setup__()
-        cls.calculation_kind.selection_change_with.add('is_loan')
-        cls.calculation_kind.depends.append('is_loan')
-        utils.update_on_change_with(cls, 'rec_name', ['capital_per_mil_rate'])
-
-    @classmethod
     def default_is_loan(cls):
         if 'is_loan' in Transaction().context:
             return Transaction().context.get('is_loan')
@@ -173,6 +166,7 @@ class ExtraPremium:
         return (self.option.coverage.family == 'loan' if self.option else
             Transaction().context.get('is_loan', False))
 
+    @fields.depends('is_loan')
     def get_possible_extra_premiums_kind(self):
         result = super(ExtraPremium, self).get_possible_extra_premiums_kind()
         if self.is_loan:
@@ -191,6 +185,10 @@ class ExtraPremium:
             return u'%s ‰' % coop_string.format_number('%.2f',
                 self.capital_per_mil_rate * 1000)
         return super(ExtraPremium, self).get_rec_name(name)
+
+    @fields.depends('capital_per_mil_rate')
+    def on_change_with_rec_name(self, name=None):
+        return super(ExtraPremium, self).on_change_with_rec_name(name)
 
 
 class LoanShare(model.CoopSQL, model.CoopView):
