@@ -81,7 +81,7 @@ class LossDescription(model.CoopSQL, model.CoopView):
     with_end_date = fields.Boolean('With End Date')
     extra_data_def = fields.Many2Many(
         'benefit.loss.description-extra_data',
-        'loss_desc', 'extra_data_def', 'Complementary Data',
+        'loss_desc', 'extra_data_def', 'Extra Data',
         domain=[('kind', '=', 'loss')], )
     documents = fields.Many2Many(
         'benefit.loss.description-document.description', 'loss', 'document',
@@ -112,7 +112,7 @@ class LossDescriptionDocumentDescriptionRelation(model.CoopSQL):
 
 
 class LossDescriptionExtraDataRelation(model.CoopSQL):
-    'Relation between Loss Description and Complementary Data'
+    'Relation between Loss Description and Extra Data'
 
     __name__ = 'benefit.loss.description-extra_data'
 
@@ -148,7 +148,7 @@ class Benefit(model.CoopSQL, offered.Offered):
         domain=[('company', '=', Eval('company'))], depends=['company'],
         required=True)
     extra_data_def = fields.Many2Many('benefit-extra_data',
-        'benefit', 'extra_data_def', 'Complementary Data',
+        'benefit', 'extra_data_def', 'Extra Data',
         domain=[('kind', '=', 'benefit')])
     use_local_currency = fields.Boolean('Use Local Currency')
     beneficiary_kind = fields.Selection('get_beneficiary_kind',
@@ -241,8 +241,8 @@ class Benefit(model.CoopSQL, offered.Offered):
         all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
         existing_data = args['loss'].extra_data
         existing_data.update(args['service'].extra_data)
-        ComplementaryData = Pool().get('extra_data')
-        result = ComplementaryData.calculate_value_set(
+        ExtraData = Pool().get('extra_data')
+        result = ExtraData.calculate_value_set(
             possible_schemas, all_schemas, existing_data, args)
         return result, ()
 

@@ -95,9 +95,44 @@ class ModelInfo(ModelView):
     def default_filter_value(cls):
         return 'name'
 
-    @fields.depends('model_name', 'field_infos', 'hide_functions',
-        'filter_value', 'id_to_calculate')
-    def on_change_with_field_infos(self):
+    @fields.depends('model_name', 'hide_functions', 'filter_value',
+        'field_infos', 'id_to_calculate')
+    def on_change_filter_value(self):
+        return {
+            'field_infos': self.recalculate_field_infos(),
+            }
+
+    @fields.depends('model_name', 'hide_functions', 'filter_value',
+        'field_infos', 'id_to_calculate')
+    def on_change_hide_functions(self):
+        return {
+            'field_infos': self.recalculate_field_infos(),
+            }
+
+    @fields.depends('model_name', 'hide_functions', 'filter_value',
+        'field_infos', 'id_to_calculate')
+    def on_change_model_name(self):
+        return {
+            'id_to_calculate': None,
+            'to_evaluate': '',
+            'evaluation_result': '',
+            'field_infos': self.recalculate_field_infos(),
+            }
+
+    @fields.depends('model_name', 'id_to_calculate', 'to_evaluate')
+    def on_change_with_evaluation_result(self):
+        if (not self.id_to_calculate or not self.to_evaluate or not
+                self.model_name):
+            return ''
+        try:
+            context = {
+                'instance': Pool().get(self.model_name)(self.id_to_calculate),
+                }
+            return str(eval(self.to_evaluate, context))
+        except Exception, exc:
+            return 'ERROR: %s' % str(exc)
+
+    def recalculate_field_infos(self):
         if self.field_infos:
             result = {'remove': [x.id for x in self.field_infos]}
         else:
@@ -118,19 +153,6 @@ class ModelInfo(ModelView):
                 except Exception, exc:
                     v['calculated_value'] = 'ERROR: %s' % str(exc)
         return result
-
-    @fields.depends('model_name', 'id_to_calculate', 'to_evaluate')
-    def on_change_with_evaluation_result(self):
-        if (not self.id_to_calculate or not self.to_evaluate or not
-                self.model_name):
-            return ''
-        try:
-            context = {
-                'instance': Pool().get(self.model_name)(self.id_to_calculate),
-                }
-            return str(eval(self.to_evaluate, context))
-        except Exception, exc:
-            return 'ERROR: %s' % str(exc)
 
 
 class DebugModel(Wizard):

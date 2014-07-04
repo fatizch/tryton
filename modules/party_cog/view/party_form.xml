@@ -61,7 +61,7 @@
     </xpath>
     <!-- Add Extra Data pages-->
     <xpath expr="/form/notebook/page[@id='general']" position="after">
-        <page string="Complementary Data" id="extra_data">
+        <page string="Extra Data" id="extra_data">
             <group col="2" colspan="2" id="lang">
                 <label name="lang"/>
                 <field name="lang" widget="selection"/>

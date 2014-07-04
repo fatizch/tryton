@@ -36,8 +36,8 @@
             <newline/>
             <field name="sub_datas" yexpand="1" yfill="1" colspan="4"/>
         </page>
-        <page id='tags' string='Tags'>
-            <field name="tags" colspan="4"/>
+        <page name="tags">
+            <field name="tags" colspan="4" widget="multiselection"/>
         </page>
     </notebook>
 </form>

@@ -48,8 +48,6 @@
       <field name="funds_release_date"/>
       <label name="first_payment_date"/>
       <field name="first_payment_date"/>
-      <label name="end_date"/>
-      <field name="end_date"/>
       <newline/>
       <label name="deferal"/>
       <field name="deferal"/>

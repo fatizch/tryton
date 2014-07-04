@@ -3,4 +3,5 @@
   <field name="fancy_name"/>
   <field name="on_model"/>
   <field name="technical_name"/>
+  <field name="tags_name"/>
 </tree>

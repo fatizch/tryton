@@ -18,7 +18,7 @@ def get_modules(from_modules):
     return [x.name for x in graph if not proteus_tools.is_coop_module(x.name)]
 
 
-def replace_translations(language, update_dict, modules=None):
+def replace_translations(language, update_dict, exact_dict, modules=None):
     if not modules:
         modules = [x for x in os.listdir(os.path.join(DIR, '..', 'modules'))]
 
@@ -37,11 +37,18 @@ def replace_translations(language, update_dict, modules=None):
             continue
         po = polib.pofile(translation_file)
         for entry in po.translated_entries():
-            if not (entry.msgid, entry.msgstr) in update_dict:
+            if entry.msgid == 'Posted':
+                print entry, (entry.msgid, entry.msgstr) in update_dict
+            if (entry.msgctxt, entry.msgid, entry.msgstr) in exact_dict:
+                translation = exact_dict[
+                    (entry.msgctxt, entry.msgid, entry.msgstr)]
+            elif (entry.msgid, entry.msgstr) in update_dict:
+                translation = update_dict[(entry.msgid, entry.msgstr)]
+            else:
                 continue
             ttype, name, res_id = entry.msgctxt.split(':')
             entry.msgctxt = '%s:%s:%s.%s' % (ttype, name, cur_module, res_id)
-            entry.msgstr = update_dict[(entry.msgid, entry.msgstr)]
+            entry.msgstr = translation
             if not po_file:
                 po_file = TrytonPOFile(wrapwidth=78)
                 po_file.metadata = {
@@ -87,5 +94,10 @@ if __name__ == '__main__':
         ('Invoices', 'Factures'): 'Quittances',
         ('Invoice Lines', 'Lignes de facture'): 'Lignes de quittance',
         ('Invoice Line', 'Ligne de Facture'): 'Ligne de quittance',
+        ('Posted', u'Posté'): 'Emis',
         }
-    replace_translations('fr_FR', update_dict, modules)
+    update_exact_dict = {
+        ('selection:account.invoice,state:', 'Posted', u'Posté'): 'Emise',
+        ('field:party.address,name:', 'Name', 'Nom'): 'Ligne 2',
+        }
+    replace_translations('fr_FR', update_dict, update_exact_dict, modules)

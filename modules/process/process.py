@@ -9,7 +9,7 @@ from trytond.pyson import Eval, Bool
 from trytond.pool import Pool
 
 from trytond.modules.cog_utils import coop_string
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 
 __all__ = [
     'Status',
@@ -75,7 +75,7 @@ class ProcessMenuRelation(ModelSQL):
     menu = fields.Many2One('ir.ui.menu', 'Menu', ondelete='RESTRICT')
 
 
-class Process(ModelSQL, ModelView):
+class Process(ModelSQL, ModelView, model.TaggedMixin):
     'Process'
 
     __name__ = 'process'
@@ -244,11 +244,13 @@ class Process(ModelSQL, ModelView):
         return good_action
 
     def get_xml_header(self, colspan="4"):
-        xml = '<group id="process_header" colspan="%s">' % colspan
+        xml = ''
         if hasattr(self, 'xml_header') and self.xml_header:
+            xml += ('<group id="process_header" colspan="%s" string=" ">'
+                % colspan)
             xml += self.xml_header
-        xml += '</group>'
-        xml += '<newline/>'
+            xml += '</group>'
+            xml += '<newline/>'
         # We need to have cur_state in the view so our Pyson Eval can work
         # properly
         xml += '<field name="current_state" invisible="1" '
@@ -256,8 +258,8 @@ class Process(ModelSQL, ModelView):
         xml += '<newline/>'
         return xml
 
-    def build_step_group_header(
-            self, step_relation, group_name='group', col=4, yexp=True):
+    def build_step_group_header(self, step_relation, group_name='group',
+            col=4, yexp=True, string=None):
         step = step_relation.step
         step_pyson, auth_pyson = step.get_pyson_for_display(step_relation)
         xml = '<group id="%s_%s" ' % (group_name, step.technical_name)
@@ -272,7 +274,10 @@ class Process(ModelSQL, ModelView):
             xml += 'Not(And(%s, %s))' % (step_pyson, auth_pyson)
         else:
             xml += 'Not(%s)' % step_pyson
-        xml += '}" col="%s">' % col
+        xml += '}" col="%s"' % col
+        if string:
+            xml += ' string="%s"' % string
+        xml += '>'
         return xml
 
     def build_step_auth_group_if_needed(self, step_relation):
@@ -320,7 +325,7 @@ class Process(ModelSQL, ModelView):
         for step_relation in self.all_steps:
             xml += '<newline/>'
             xml += self.build_step_group_header(
-                step_relation, col=step_relation.step.colspan)
+                step_relation, col=step_relation.step.colspan, string=" ")
             xml += step_relation.step.calculate_form_view(self)
             xml += '</group>'
             xml += self.build_step_auth_group_if_needed(step_relation)
@@ -355,19 +360,21 @@ class Process(ModelSQL, ModelView):
         return xml
 
     def get_xml_footer(self, colspan=4):
-        xml = '<group id="process_footer" colspan="%s">' % colspan
+        xml = ''
         if hasattr(self, 'xml_footer') and self.xml_footer:
+            xml = ('<group id="process_footer" colspan="%s" string=" ">'
+                % colspan)
             xml += self.xml_footer
-        xml += '</group>'
+            xml += '</group>'
 
         return xml
 
     def build_xml_form_view(self):
         xml = '<?xml version="1.0"?>'
         xml += '<form string="%s" col="4">' % self.fancy_name
-        xml += self.get_xml_header()
         xml += '<group id="process_content" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1">'
+        xml += self.get_xml_header()
         xml += self.get_xml_for_steps()
         xml += '<newline/>'
         xml += self.get_finished_process_xml()
@@ -733,7 +740,7 @@ class StepGroupRelation(ModelSQL):
     group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
 
 
-class ProcessStep(ModelSQL, ModelView):
+class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
     'Process Step'
 
     __name__ = 'process.step'

@@ -52,7 +52,7 @@ __all__ = [
     ]
 
 
-class DocumentTemplate(model.CoopSQL, model.CoopView):
+class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'Document Template'
 
     __name__ = 'document.template'

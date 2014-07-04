@@ -757,7 +757,7 @@ msgstr "Payée"
 
 msgctxt "selection:contract.invoice,invoice_state:"
 msgid "Posted"
-msgstr "Posté"
+msgstr "Emise"
 
 msgctxt "selection:contract.invoice,invoice_state:"
 msgid "Validated"

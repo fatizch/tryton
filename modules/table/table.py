@@ -24,7 +24,7 @@ from trytond.tools import memoize
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
 from trytond.modules.cog_utils import fields
-from trytond.modules.cog_utils import utils, coop_string
+from trytond.modules.cog_utils import utils, coop_string, model
 
 __all__ = [
     'TableCell',
@@ -61,7 +61,7 @@ ORDER = [
 DIMENSION_MAX = int(CONFIG.get('table_dimension', 4))
 
 
-class TableDefinition(ModelSQL, ModelView):
+class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     "Table Definition"
 
     __name__ = 'table'
@@ -802,7 +802,7 @@ class TableCell(ModelSQL, ModelView):
 for i in range(1, DIMENSION_MAX + 1):
     setattr(TableCell, 'dimension%s' % i,
         fields.Many2One('table.dimension.value', 'Dimension %s' % i,
-            ondelete='CASCADE',
+            ondelete='RESTRICT',
             domain=[
                 ('definition', '=', Eval('definition')),
                 ('type', '=', 'dimension%s' % i),

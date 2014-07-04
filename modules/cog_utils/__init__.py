@@ -12,6 +12,7 @@ from .test_framework import *
 from .batchs import *
 from .view_validation_batch import *
 from .test_case_framework import *
+from .tag import *
 
 
 def register():
@@ -48,6 +49,8 @@ def register():
         TestCaseSelector,
         SelectTestCase,
         TestCaseFileSelector,
+        Tag,
+        TagObjectRelation,
         module='cog_utils', type_='model')
     Pool.register(
         ImportWizard,

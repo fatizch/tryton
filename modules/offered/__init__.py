@@ -23,8 +23,6 @@ def register():
         ExtraDataSubExtraDataRelation,
         ProductExtraDataRelation,
         OptionDescriptionExtraDataRelation,
-        Tag,
-        ExtraDataTagRelation,
         # from test_case
         TestCaseModel,
         module='offered', type_='model')

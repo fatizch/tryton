@@ -22,7 +22,7 @@ msgctxt "field:contract.option,customized_beneficiary_clause:"
 msgid "Customized Beneficiary Clause"
 msgstr "Clause bénéficiare personnalisée"
 
-msgctxt "field:contract.option,with_beneficiary_clause:"
+msgctxt "field:contract.option,has_beneficiary_clause:"
 msgid "With Beneficiary Clause"
 msgstr "Avec clause bénéficiaire"
 
