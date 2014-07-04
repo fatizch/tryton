@@ -148,6 +148,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
                     for x in range(0, 12 / interval)]
         elif self.frequency == 'monthly':
             freq = MONTHLY
+            bymonth = None
         elif self.frequency == 'once_per_contract':
             return [start, datetime.date.max], until
         else:
@@ -158,6 +159,12 @@ class BillingMode(model.CoopSQL, model.CoopView):
     @classmethod
     def _export_keys(cls):
         return set(['code'])
+
+    @fields.depends('frequency')
+    def on_change_frequency(self):
+        if self.frequency == 'monthly':
+            return {'sync_month': None}
+        return {}
 
     def get_change_payment_term_order(self, name):
         return False
