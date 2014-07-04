@@ -5,7 +5,6 @@
         <field name="extra_data" colspan="2" no_command="1"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='main_data']" position="after">
-        <page string="Extra Premiums" id="extra_premium">
         <page string="Discounts" id="extra_premium_discount">
             <field name="extra_premium_discounts" colspan="4"/>
             <button string="Propagate" name="propagate_extra_premiums" colspan="4"/>

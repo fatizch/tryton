@@ -1155,6 +1155,17 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             return Transaction().context.get('start_date')
         return utils.today()
 
+    @fields.depends('calculation_kind')
+    def on_change_calculation_kind(self):
+        changes = {}
+        if self.calculation_kind == 'flat' :
+            changes['rate'] = None
+        elif self.calculation_kind == 'rate' :
+            changes['flat_amount'] = None
+        else:
+            pass
+        return changes
+         
     @fields.depends('start_date', 'end_date')
     def on_change_with_duration_unit(self, name=None):
         res = (coop_date.duration_between_and_is_it_exact(
@@ -1181,7 +1192,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('calculation_kind', 'flat_amount', 'rate', 'currency')
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
-
+   
     def get_currency(self):
         return self.option.currency if self.option else None
 
