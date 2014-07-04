@@ -6,4 +6,9 @@
   <field name="code"/>
   <label name="is_discount"/>
   <field name="is_discount"/>
+  <newline/>
+  <label name="max_value"/>
+  <field name="max_value"/>
+  <label name="max_rate"/>
+  <field name="max_rate" factor="100"/>
 </form>

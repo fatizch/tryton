@@ -1092,24 +1092,31 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             'invisible': Eval('calculation_kind', '') != 'flat',
             'required': Eval('calculation_kind', '') == 'flat',
             }, digits=(16, Eval('currency_digits', 2)),
-        depends=['currency_digits', 'calculation_kind', 'is_discount'],
+        depends=['currency_digits', 'calculation_kind', 'is_discount', 'max_value'],
         domain= [If(Eval('calculation_kind', '') != 'flat', 
-                    [], 
-                    If(Bool(Eval('is_discount')),
-                       [('flat_amount', '<', 0)], 
-                       [('flat_amount', '>', 0)]))])
+            [], 
+            If(Bool(Eval('is_discount')),
+                [('flat_amount', '<', 0), ('flat_amount', '>', Eval('max_value'))], 
+                [('flat_amount', '>', 0), ('flat_amount', '<', Eval('max_value'))]))])
     motive = fields.Many2One('extra_premium.kind', 'Motive',
         ondelete='RESTRICT', states={'required': True})
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
     rate = fields.Numeric('Rate on Premium', states={
             'invisible': Eval('calculation_kind', '') != 'rate',
             'required': Eval('calculation_kind', '') == 'rate'},
-        digits=(16, 4), depends=['calculation_kind', 'is_discount'],
+        digits=(16, 4), depends=['calculation_kind', 'is_discount', 'max_rate'],
         domain= [If(Bool(Eval('is_discount')),
-                    [('rate', '<', 0)], [('rate', '>', 0)])])
+                    [('rate', '<', 0), ('rate', '>', Eval('max_rate'))], 
+                    [('rate', '>', 0), ('rate', '<', Eval('max_rate'))])])
     is_discount = fields.Function(
         fields.Boolean('Is Discount'),
         'on_change_with_is_discount', 'setter_void')
+    max_value = fields.Function(
+        fields.Numeric('Max Value'),
+        'on_change_with_max_value', 'setter_void')
+    max_rate = fields.Function(
+        fields.Numeric('Max Rate'),
+        'on_change_with_max_rate', 'setter_void')
     start_date = fields.Date('Start date', states={
         'required': True,
         'invisible': ~Eval('time_limited'),
@@ -1188,6 +1195,20 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('motive')
     def on_change_with_is_discount(self, name=None):
         return self.motive.is_discount if self.motive else False
+
+    @fields.depends('motive', 'calculation_kind','is_discount')
+    def on_change_with_max_value(self, name=None):
+        coef_discount = 1
+        if self.is_discount :
+            coef_discount = -1
+        return self.motive.max_value * coef_discount if self.motive and self.motive.max_value else None
+    
+    @fields.depends('motive', 'calculation_kind','is_discount')
+    def on_change_with_max_rate(self, name=None):
+        coef_discount = 1
+        if self.is_discount :
+            coef_discount = -1
+        return self.motive.max_rate * coef_discount if self.motive and self.motive.max_rate else None
 
     @fields.depends('calculation_kind', 'flat_amount', 'rate', 'currency')
     def on_change_with_rec_name(self, name=None):

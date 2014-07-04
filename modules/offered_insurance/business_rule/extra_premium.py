@@ -13,6 +13,8 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     is_discount = fields.Boolean('Is Discount')
+    max_value = fields.Numeric('Max Value')
+    max_rate = fields.Numeric('Max Rate')
 
     @classmethod
     def __setup__(cls):

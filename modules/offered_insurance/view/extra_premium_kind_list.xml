@@ -3,4 +3,6 @@
   <field name="name"/>
   <field name="code"/>
   <field name="is_discount"/>
+  <field name="max_value"/>
+  <field name="max_rate"  factor="100"/>
 </tree>
