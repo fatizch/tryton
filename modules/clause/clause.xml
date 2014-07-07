@@ -30,5 +30,21 @@
     </record>
     <menuitem name="Clause" parent="offered.menu_contract_configuration" id="menu_root_clause" icon="clause"/>
     <menuitem parent="menu_root_clause" action="act_model_clause" id="menu_model_clause" icon="clause"/>
+
+    <record model="ir.model.access" id="access_clause">
+        <field name="model" search="[('model', '=', 'clause')]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_delete" eval="False"/>
+    </record>
+    <record model="ir.model.access" id="access_clause_admin">
+        <field name="model" search="[('model', '=', 'clause')]"/>
+        <field name="group" ref="offered.group_offered_admin"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_delete" eval="True"/>
+    </record>
   </data>
 </tryton>

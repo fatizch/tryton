@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
+    <data>
+        <record model="res.group" id="group_offered">
+            <field name="name">offered</field>
+        </record>
+        <record model="res.group" id="group_offered_admin">
+            <field name="name">Offered Administration</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_offered">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_offered"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_offered_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_offered_admin"/>
+        </record>
     <!-- ############################################################ -->
     <!-- Menus -->
     <!-- ############################################################ -->
