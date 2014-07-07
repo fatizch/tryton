@@ -138,6 +138,8 @@ class ExtraPremiumDisplay(model.CoopView):
     option = fields.Many2One('contract.option', 'Option')
     options = fields.One2Many('contract.manage_extra_premium.select.option',
         None, 'Options')
+    extra_premium = fields.Many2One('contract.option.extra_premium',
+        'Extra Premium')
 
     @classmethod
     def get_extra_premium_name(cls, extra_premium):
@@ -149,7 +151,8 @@ class ExtraPremiumDisplay(model.CoopView):
     def get_option_name(cls, option):
         return '%s' % option.coverage.name
 
-    @fields.depends('covered_element', 'extra_premiums', 'coverages')
+    @fields.depends('covered_element', 'extra_premiums', 'coverages',
+            'options', 'option', 'extra_premium')
     def on_change_covered_element(self):
         extra_to_delete = [x.id for x in self.extra_premiums]
         options_to_delete = [x.id for x in self.options]
@@ -162,20 +165,28 @@ class ExtraPremiumDisplay(model.CoopView):
         existing_extras = []
         existing_options = []
         for option in self.covered_element.options:
+            if self.option and self.option != option:
+                continue
             for extra_premium in option.extra_premiums:
+                if self.extra_premium and self.extra_premium != extra_premium:
+                    continue
                 existing_extras.append((-1, {
-                            'selected': False,
+                            'selected': (self.extra_premium
+                                and self.extra_premium == extra_premium),
                             'extra_premium': extra_premium.id,
                             'extra_premium_name': self.get_extra_premium_name(
                                 extra_premium),
                             }))
+        for option in self.covered_element.options:
+            if not self.option or self.option == option:
+                continue
             existing_options.append((-1, {
                         'selected': False,
                         'option': option.id,
                         'option_name': self.get_option_name(option),
                         }))
         result['extra_premiums']['add'] = existing_extras
-        result['coverages']['add'] = existing_options
+        result['options']['add'] = existing_options
         return result
 
 
@@ -211,73 +222,31 @@ class ManageExtraPremium(Wizard):
         Contract = pool.get('contract')
         Option = pool.get('contract.option')
         ExtraPremium = pool.get('contract.option.extra_premium')
-        Selector = pool.get('contract.manage_extra_premium.select')
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
+        extra_premium = None
         if active_model == 'contract':
             kind = 'contract'
+            selected_option = None
             contract = Contract(active_id)
             covered_element = contract.covered_elements[0]
-            selected_option = None
-            existing_extras = []
-            existing_options = []
-            for option in covered_element.options:
-                for extra_premium in option.extra_premiums:
-                    existing_extras.append({
-                            'selected': False,
-                            'extra_premium': extra_premium.id,
-                            'extra_premium_name':
-                            Selector.get_extra_premium_name(extra_premium)})
-                existing_options.append({
-                        'selected': False,
-                        'option': option.id,
-                        'option_name': Selector.get_option_name(option)})
         elif active_model == 'contract.option':
             kind = 'option'
             selected_option = Option(active_id)
             covered_element = selected_option.covered_element
             contract = selected_option.parent_contract
-            existing_extras = []
-            existing_options = []
-            for extra_premium in selected_option.extra_premiums:
-                existing_extras.append({
-                        'selected': True,
-                        'extra_premium': extra_premium.id,
-                        'extra_premium_name':
-                        Selector.get_extra_premium_name(extra_premium)})
-            for option in covered_element.options:
-                if option == selected_option:
-                    continue
-                existing_options.append({
-                        'selected': True,
-                        'option': option.id,
-                        'option_name': Selector.get_option_name(option)})
         elif active_model == 'contract.option.extra_premium':
             kind = 'extra_premium'
-            source_extra = ExtraPremium(active_id)
-            selected_option = source_extra.option
+            extra_premium = ExtraPremium(active_id)
+            selected_option = extra_premium.option
             covered_element = selected_option.covered_element
             contract = selected_option.parent_contract
-            existing_extras = [{
-                    'selected': True,
-                    'extra_premium': source_extra.id,
-                    'extra_premium_name': Selector.get_extra_premium_name(
-                        source_extra)}]
-            existing_options = []
-            for option in covered_element.options:
-                if option == selected_option:
-                    continue
-                existing_options.append({
-                        'selected': True,
-                        'option': option.id,
-                        'option_name': Selector.get_option_name(option)})
         return {
             'contract': contract.id,
             'covered_element': covered_element.id,
             'kind': kind,
             'option': selected_option.id if selected_option else None,
-            'extra_premiums': existing_extras,
-            'options': existing_options,
+            'extra_premium': extra_premium.id if extra_premium else None,
             }
 
     def transition_propagate_selected(self):
@@ -331,19 +300,16 @@ class CreateExtraPremium(Wizard):
         if self.select_options._default_values:
             return self.select_options._default_values
         contract_id = Transaction().context.get('active_id')
-        self.select_options.contract = contract_id
         Contract = Pool().get('contract')
         contract = Contract(contract_id)
-        if len(contract.covered_elements) == 1:
-            self.select_options.covered_element = contract.covered_elements[0].id
-        else:
-            self.select_options.covered_element = None
-        self.select_options.options = []
+        covered_element = None
+        hide_covered_element = len(contract.covered_elements) == 1
+        if hide_covered_element:
+            covered_element = contract.covered_elements[0].id
         return {
-            'options': [x[1] for x in
-                self.select_options.on_change_with_options()['add']],
             'contract': contract.id,
-            'hide_covered_element': len(contract.covered_elements) == 1,
+            'covered_element': covered_element,
+            'hide_covered_element': hide_covered_element,
             }
 
     def transition_apply(self):

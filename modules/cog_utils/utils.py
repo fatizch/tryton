@@ -424,14 +424,6 @@ def update_on_change(cls, var_name, new_on_change):
     setattr(cls, var_name, field_name)
 
 
-def update_on_change_with(cls, var_name, new_on_change_with):
-    field_name = copy.copy(getattr(cls, var_name))
-    if not field_name.on_change_with:
-        field_name.on_change_with = set()
-    field_name.on_change_with |= set(new_on_change_with)
-    setattr(cls, var_name, field_name)
-
-
 def update_selection(cls, var_name, tuple_to_add=None, keys_to_remove=None):
     field_name = copy.copy(getattr(cls, var_name))
     if keys_to_remove:
