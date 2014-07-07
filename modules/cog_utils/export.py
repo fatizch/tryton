@@ -462,8 +462,14 @@ class ExportImportMixin(Model):
         RelationModel = Pool().get(field.relation_name)
         if (hasattr(instance, 'id') and instance.id):
             # For now, just recreate the links
-            RelationModel.delete(RelationModel.search([
-                (field.origin, '=', instance.id)]))
+            origin_field = RelationModel._fields[field.origin]
+            if isinstance(origin_field, fields.Many2One):
+                RelationModel.delete(RelationModel.search([
+                            (field.origin, '=', instance.id)]))
+            else:
+                RelationModel.delete(RelationModel.search([
+                            (field.origin, '=', '%s,%i' % (
+                                    instance.__name__, instance.id))]))
         TargetModel = Pool().get(Pool().get(
             field.relation_name)._fields[field.target].model_name)
         good_values = []
