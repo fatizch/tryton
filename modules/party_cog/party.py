@@ -100,6 +100,9 @@ class Party(export.ExportImportMixin):
                 'duplicate_party': ('Duplicate(s) already exist(s) : \n%s'),
                 })
         cls.__rpc__.update({'ws_create_person': RPC(readonly=False)})
+        cls._buttons.update({
+                'button_start_synthesis_menu': {},
+                })
         for contact_type in ('phone', 'mobile', 'fax', 'email', 'website'):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
@@ -441,6 +444,11 @@ class Party(export.ExportImportMixin):
             'party_id': party.id,
             'party_code': party.code,
             }
+
+    @classmethod
+    @model.CoopView.button_action('party_cog.start_synthesis_menu')
+    def button_start_synthesis_menu(cls, parties):
+        pass
 
 
 class SynthesisMenuActionCloseSynthesis(model.CoopSQL):
@@ -883,7 +891,7 @@ class SynthesisMenuOpen(Wizard):
             actions['views'] = list(reversed(actions['views']))
         elif Model.__name__ == 'party.relation.all':
             action_id = Action.get_action_id(
-                ModelData.get_id('party_cog', 'wizard_set'))
+                ModelData.get_id('party_cog', 'start_synthesis_menu'))
             action = Action(action_id)
             actions = Action.get_action_values(action.type, [action.id])[0]
         else:

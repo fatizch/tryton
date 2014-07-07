@@ -96,31 +96,39 @@
     <!-- Options Screens -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="option_view_list">
-      <field name="model">contract.option</field>
-      <field name="type">tree</field>
-      <field name="name">option_list</field>
+        <field name="model">contract.option</field>
+        <field name="type">tree</field>
+        <field name="name">option_list</field>
     </record>
     <record model="ir.ui.view" id="option_view_form">
-      <field name="model">contract.option</field>
-      <field name="type">form</field>
-      <field name="name">option_form</field>
+        <field name="model">contract.option</field>
+        <field name="type">form</field>
+        <field name="name">option_form</field>
     </record>
     <!--################################################################ -->
     <!-- Contract Address -->
     <!--################################################################ -->
     <record model="ir.ui.view" id="contract_address_view_tree">
-      <field name="model">contract.address</field>
-      <field name="type">tree</field>
-      <field name="name">contract_address_tree</field>
+        <field name="model">contract.address</field>
+        <field name="type">tree</field>
+        <field name="name">contract_address_tree</field>
     </record>
     <record model="ir.ui.view" id="contract_address_view_form">
-      <field name="model">contract.address</field>
-      <field name="type">form</field>
-      <field name="name">contract_address_form</field>
+        <field name="model">contract.address</field>
+        <field name="type">form</field>
+        <field name="name">contract_address_form</field>
     </record>
     <!-- ############################################################ -->
     <!-- ########### Rights ########### -->
     <!-- ############################################################ -->
+    <record model="ir.model.access" id="access_party_synthesis">
+        <field name="model" search="[('model', '=', 'res.user')]"/>
+        <field name="group" ref="contract.group_contract"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_delete" eval="False"/>
+    </record>
     <record model="res.group" id="group_contract">
         <field name="name">Contract</field>
     </record>

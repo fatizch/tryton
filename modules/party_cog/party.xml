@@ -132,20 +132,20 @@
             <field name="act_window" ref="act_menu_form"/>
         </record>
 
-        <record model="ir.action.wizard" id="wizard_set">
-            <field name="name">Synthesis Menu</field>
+        <record model="ir.action.wizard" id="start_synthesis_menu">
+            <field name="name">Synthesis</field>
             <field name="wiz_name">party.synthesis.menu.set</field>
             <field name="model">party.party</field>
         </record>
-        <record model="ir.action.keyword" id="wizard_set_keyword1">
+        <record model="ir.action.keyword" id="start_synthesis_menu_keyword1">
             <field name="keyword">form_relate</field>
             <field name="model">party.party,-1</field>
-            <field name="action" ref="wizard_set"/>
+            <field name="action" ref="start_synthesis_menu"/>
         </record>
-        <record model="ir.action.keyword" id="wizard_set_keyword2">
+        <record model="ir.action.keyword" id="start_synthesis_menu_keyword2">
             <field name="keyword">tree_open</field>
             <field name="model">party.party,-1</field>
-            <field name="action" ref="wizard_set"/>
+            <field name="action" ref="start_synthesis_menu"/>
         </record>
 
         <record model="ir.action.wizard" id="wizard_open">
