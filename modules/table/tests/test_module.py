@@ -420,6 +420,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                    'dimension_order4': u'alpha',
                    'name': u'Test',
                    'number_of_digits': 2,
+                   'tags': [],
                'type_': u'char'}])
 
     @test_framework.prepare_test('table.test0060table_2dim')

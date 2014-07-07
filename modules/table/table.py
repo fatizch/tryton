@@ -154,7 +154,11 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     @classmethod
     def _import_override_cells(cls, instance_key, good_instance,
             field_value, values, created, relink, to_relink):
-        return
+        if not good_instance.id:
+            return
+        cell_table = Pool().get('table.cell').__table__()
+        Transaction().cursor.execute(*cell_table.delete(where=(
+                    cell_table.definition == good_instance.id)))
 
     @classmethod
     def _import_json(cls, values, created, relink, force_recreate=False):
