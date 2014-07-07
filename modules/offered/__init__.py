@@ -4,10 +4,12 @@ from .rule_engine import *
 from .offered import *
 from .extra_data import *
 from .test_case import *
+from .configuration import *
 
 
 def register():
     Pool.register(
+        Configuration,
         # From offered
         Offered,
         OptionDescription,
@@ -21,8 +23,6 @@ def register():
         ExtraDataSubExtraDataRelation,
         ProductExtraDataRelation,
         OptionDescriptionExtraDataRelation,
-        Tag,
-        ExtraDataTagRelation,
         # from test_case
         TestCaseModel,
         module='offered', type_='model')

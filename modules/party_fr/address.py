@@ -30,9 +30,6 @@ class Address:
         For companies : Individual Identification Form of Address -
         Given Name, Surname, function, Department'''
 
-        if cls.street.on_change is None:
-            cls.street.on_change = set()
-        cls.street.on_change.add('street')
         cls.street.help = '''AFNOR - Line 4
             Street number or plot and thoroughfare -
             Street or Avenue or Village...'''
@@ -42,27 +39,24 @@ class Address:
             Delivery Service
             Identification Thoroughfare Complement BP (P.O box)
             and Locality (if different from the distribution area indicator'''
-        if cls.streetbis.on_change is None:
-            cls.streetbis.on_change = []
-        cls.streetbis.on_change.add('streetbis')
 
-        if cls.city.on_change is None:
-            cls.city.on_change = []
-        cls.city.on_change.add('city')
         #Set Siret invisible for person
         cls.siret.states = {
             'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
         cls.siret_nic.states = {
             'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
 
+    @fields.depends('street')
     def on_change_street(self):
         #AFNOR rule, no comma after street number and line 4 should be upper
         return {'street': self.street.replace(',', '').upper()}
 
+    @fields.depends('streetbis')
     def on_change_streetbis(self):
         #AFNOR rule, line 5 should be in uppercase
         return {'streetbis': self.streetbis.upper()}
 
+    @fields.depends('city')
     def on_change_city(self):
         #AFNOR rule, line 6 must be in uppercase
         return {'city': self.city.upper()}

@@ -9,4 +9,5 @@
     <field name="kind"/>
     <field name="extra_data_def" colspan="4"/>
     <field name="sub_item_descs" colspan="4"/>
+    <field name="tags" colspan="4" widget="multiselection"/>
 </form>

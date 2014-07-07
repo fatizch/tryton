@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -74,7 +74,7 @@ msgid "End Date"
 msgstr "Date de Fin"
 
 msgctxt "field:contract,extra_data:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract,id:"
@@ -278,11 +278,11 @@ msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
 
 msgctxt "field:contract.covered_element,extra_data:"
-msgid "Contract Complementary Data"
+msgid "Contract Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.covered_element,extra_data_summary:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.covered_element,icon:"
@@ -334,7 +334,7 @@ msgid "Actor"
 msgstr "Acteur"
 
 msgctxt "field:contract.covered_element,party_extra_data:"
-msgid "Party Complementary Data"
+msgid "Party Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.covered_element,product:"
@@ -522,7 +522,7 @@ msgid "Exclusions"
 msgstr "Exclusions"
 
 msgctxt "field:contract.option,extra_data:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.option,extra_premiums:"
@@ -1064,7 +1064,7 @@ msgid "Contract Address"
 msgstr "Adresse"
 
 msgctxt "view:contract.covered_element:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "view:contract.covered_element:"
@@ -1164,7 +1164,7 @@ msgid "Expenses"
 msgstr "Frais"
 
 msgctxt "view:party.party:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "wizard_button:contract.manage_exclusion,existing,end:"

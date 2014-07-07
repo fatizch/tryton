@@ -341,7 +341,7 @@ class Loss(model.CoopSQL, model.CoopView):
     with_end_date = fields.Function(
         fields.Boolean('With End Date'),
         'get_with_end_date')
-    extra_data = fields.Dict('extra_data', 'Complementary Data',
+    extra_data = fields.Dict('extra_data', 'Extra Data',
         states={'invisible': ~Eval('extra_data')})
 
     @classmethod
@@ -492,7 +492,7 @@ class DeliveredService:
         states={'invisible': ~Eval('indemnifications')})
     multi_level_view = fields.One2Many('claim.indemnification',
         'service', 'Indemnifications')
-    extra_data = fields.Dict('extra_data', 'Complementary Data',
+    extra_data = fields.Dict('extra_data', 'Extra Data',
         states={'invisible': ~Eval('extra_data')})
 
     @classmethod

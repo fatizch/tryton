@@ -65,7 +65,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     'Contract'
 
     __name__ = 'contract'
-    _rec_name = 'contract_number'
     _history = True
 
     activation_history = fields.One2Many('contract.activation_history',
@@ -81,12 +80,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states=_STATES, depends=_DEPENDS)
     company = fields.Many2One('company.company', 'Company', required=True,
         select=True, ondelete='RESTRICT', states=_STATES, depends=_DEPENDS)
+    quote_number = fields.Char('Quote Number', readonly=True)
     contract_number = fields.Char('Contract Number', select=1,
         states={
             'required': Eval('status') == 'active',
-            'readonly': Eval('status') != 'quote',
-            }, depends=_DEPENDS)
-    extra_data = fields.Dict('extra_data', 'Complementary Data', states={
+            }, depends=_DEPENDS, readonly=True)
+    extra_data = fields.Dict('extra_data', 'Extra Data', states={
             'invisible': ~Eval('extra_data'),
             'readonly': Eval('status') != 'quote',
             }, depends=['extra_data', 'status'])
@@ -163,7 +162,27 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'Product %s is inactive at date %s',
                 'activation_period_overlaps': 'Activation Periods "%(first)s"'
                 ' and "%(second)s" overlap.',
+                'no_quote_sequence': 'No quote sequence defined',
                 })
+
+    @classmethod
+    def create(cls, vlist):
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        Product = pool.get('offered.product')
+        product_ids = [x.get('product') for x in vlist]
+        products = Product.search([('id', 'in', product_ids)])
+        product_dict = dict([(x.id, x) for x in products])
+        vlist = [x.copy() for x in vlist]
+        for vals in vlist:
+            if (vals.get('status', '') == 'quote'
+                    and not vals.get('quote_number')):
+                sequence = product_dict[
+                    vals.get('product')].quote_number_sequence
+                if not sequence:
+                    cls.raise_user_error('no_quote_sequence')
+                vals['quote_number'] = Sequence.get_id(sequence.id)
+        return super(Contract, cls).create(vlist)
 
     def get_icon(self, name=None):
         if self.status == 'active':
@@ -386,17 +405,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             for elem in to_delete])
 
     def get_rec_name(self, name):
-        if self.product and self.current_policy_owner:
-            if self.contract_number:
-                return '%s (%s) - %s' % (self.contract_number,
-                    self.product.get_rec_name(name),
-                    self.current_policy_owner.get_rec_name(name))
-            else:
-                return 'Contract %s - %s' % (
-                    self.product.get_rec_name(name),
-                    self.current_policy_owner.get_rec_name(name))
+        if self.status == 'quote':
+            return self.quote_number
         else:
-            return super(Contract, self).get_rec_name(name)
+            return self.contract_number
 
     def get_synthesis_rec_name(self, name):
         if self.status == 'quote':
@@ -532,6 +544,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     end_date, -1)
             self.start_date, self.end_date = start_date, end_date
             self.status = 'quote'
+            self.company = product.company
         else:
             self.raise_user_error('inactive_product_at_date',
                 (product.name, start_date))

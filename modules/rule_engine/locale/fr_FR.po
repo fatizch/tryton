@@ -146,7 +146,7 @@ msgstr "Afficher Plus de Données"
 
 msgctxt "field:rule_engine,extra_data_kind:"
 msgid "Kind"
-msgstr "Portée de la donnée"
+msgstr "Type de donnée"
 
 msgctxt "field:rule_engine,id:"
 msgid "ID"

@@ -12,7 +12,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:ir.test_case,main_company_name:"
 msgid "Main Company Name"
-msgstr " "
+msgstr "Nom de la société principale"
 
 msgctxt "model:ir.test_case.instance,name:main_company_test_case"
 msgid "Main Company Test Case"

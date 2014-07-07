@@ -1,0 +1,2 @@
+msgid "Check"
+msgstr "Chèque"

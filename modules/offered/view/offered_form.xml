@@ -32,6 +32,7 @@
                 <newline/>
                 <field name="extra_data" colspan="2"/>
             </group>
+            <field name="tags" colspan="4" widget="multiselection"/>
         </page>
     </notebook>
 </form>

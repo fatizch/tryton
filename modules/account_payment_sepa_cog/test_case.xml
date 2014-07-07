@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.test_case.instance-ir.test_case.instance" id="journal_requirement">
+            <field name="child" ref="bank_cog.bank_account_test_case"/>
+            <field name="parent" ref="account_cog.journal_test_case"/>
+        </record>
+    </data>
+</tryton>

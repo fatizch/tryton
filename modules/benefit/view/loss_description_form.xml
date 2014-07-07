@@ -13,7 +13,7 @@
     <page string="Events" id="events">
       <field name="event_descs"/>
     </page>
-    <page string="Complementary Data" id="extra_data">
+    <page string="Extra Data" id="extra_data">
       <field name="extra_data_def"/>
     </page>
     <page string="Documents" id="documents">

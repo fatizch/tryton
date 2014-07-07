@@ -28,6 +28,7 @@
     <record model="ir.action.wizard" id="act_model_debug">
       <field name="name">Debug Model</field>
       <field name="wiz_name">ir.model.debug</field>
+      <field name="window">True</field>
     </record>
     <record model="ir.action.keyword" id="act_model_debug_keyword">
       <field name="keyword">form_action</field>

@@ -54,23 +54,23 @@ class Contract:
 class ContractOption:
     __name__ = 'contract.option'
 
-    with_beneficiary_clause = fields.Function(
-        fields.Boolean('With Beneficiary Clause'),
-        'on_change_with_with_beneficiary_clause')
+    has_beneficiary_clause = fields.Function(
+        fields.Boolean('Has Beneficiary Clause'),
+        'on_change_with_has_beneficiary_clause')
     beneficiary_clause = fields.Many2One('clause', 'Beneficiary Clause',
         domain=[('coverages', '=', Eval('coverage'))], states={
-            'invisible': ~Eval('with_beneficiary_clause'),
-            'required': Bool(Eval('with_beneficiary_clause')),
-            }, depends=['coverage', 'with_beneficiary_clause'],
+            'invisible': ~Eval('has_beneficiary_clause'),
+            'required': Bool(Eval('has_beneficiary_clause')),
+            }, depends=['coverage', 'has_beneficiary_clause'],
             ondelete='RESTRICT')
     customized_beneficiary_clause = fields.Text(
         'Customized Beneficiary Clause',
-        states={'invisible': ~Eval('with_beneficiary_clause')},
-        depends=['with_beneficiary_clause'])
+        states={'invisible': ~Eval('has_beneficiary_clause')},
+        depends=['has_beneficiary_clause'])
     beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
         'Beneficiaries',
-        states={'invisible': ~Eval('with_beneficiary_clause')},
-        depends=['with_beneficiary_clause'])
+        states={'invisible': ~Eval('has_beneficiary_clause')},
+        depends=['has_beneficiary_clause'])
 
     @classmethod
     def __setup__(cls):
@@ -87,7 +87,7 @@ class ContractOption:
             start_date=None, end_date=None, item_desc=None):
         res = super(ContractOption, cls).init_default_values_from_coverage(
             coverage, product, start_date, end_date, item_desc)
-        res['with_beneficiary_clause'] = len(coverage.beneficiaries_clauses)
+        res['has_beneficiary_clause'] = len(coverage.beneficiaries_clauses)
         if coverage.default_beneficiary_clause:
             res['beneficiary_clause'] = coverage.default_beneficiary_clause.id
             res['customized_beneficiary_clause'] = \
@@ -97,12 +97,12 @@ class ContractOption:
     @fields.depends('coverage')
     def on_change_with_beneficiary_clause(self, name=None):
         if (not self.coverage
-                or not self.self.coverage.default_beneficiary_clause):
+                or not self.coverage.default_beneficiary_clause):
             return
         return self.coverage.default_beneficiary_clause.id
 
     @fields.depends('coverage')
-    def on_change_with_with_beneficiary_clause(self, name=None):
+    def on_change_with_has_beneficiary_clause(self, name=None):
         if not self.coverage:
             return False
         return bool(self.coverage.beneficiaries_clauses)

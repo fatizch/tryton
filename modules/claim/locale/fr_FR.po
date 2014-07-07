@@ -375,7 +375,7 @@ msgid "Event"
 msgstr "Fait Générateur"
 
 msgctxt "field:claim.loss,extra_data:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:claim.loss,id:"
@@ -439,7 +439,7 @@ msgid "Benefit"
 msgstr "Prestation"
 
 msgctxt "field:contract.service,extra_data:"
-msgid "Complementary Data"
+msgid "Extra Data"
 msgstr "Données Complémentaires"
 
 msgctxt "field:contract.service,indemnifications:"

@@ -355,7 +355,7 @@ class ContractOption:
         'Covered Element', ondelete='CASCADE')
     exclusions = fields.Many2Many('contract.option-exclusion.kind',
         'option', 'exclusion', 'Exclusions')
-    extra_data = fields.Dict('extra_data', 'Complementary Data',
+    extra_data = fields.Dict('extra_data', 'Extra Data',
         states={'invisible': ~Eval('extra_data')}, depends=['extra_data'])
     extra_premiums = fields.One2Many('contract.option.extra_premium',
         'option', 'Extra Premiums')
@@ -593,7 +593,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             [('to_party', '=', Eval('party'))],
             ], depends=['party'],
         states={'invisible': ~IS_PARTY})
-    extra_data = fields.Dict('extra_data', 'Contract Complementary Data',
+    extra_data = fields.Dict('extra_data', 'Contract Extra Data',
         states={'invisible': ~Eval('extra_data')})
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         depends=['product', 'options', 'extra_data'], ondelete='RESTRICT')
@@ -636,7 +636,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Char('Name'),
         'on_change_with_covered_name')
     extra_data_summary = fields.Function(
-        fields.Char('Complementary Data'),
+        fields.Char('Extra Data'),
         'on_change_with_extra_data_summary')
     icon = fields.Function(
         fields.Char('Icon'),
@@ -647,7 +647,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
     item_kind = fields.Function(
         fields.Char('Item Kind', states={'invisible': True}),
         'on_change_with_item_kind')
-    # The link to use either for direct covered element or sub covered element
     all_extra_datas = fields.Function(
         fields.Dict('extra_data', 'All Extra Datas'),
         'on_change_with_all_extra_data')
@@ -660,7 +659,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Many2Many('party.party', None, None, 'Parties'),
         'on_change_with_parties')
     party_extra_data = fields.Function(
-        fields.Dict('extra_data', 'Party Complementary Data',
+        fields.Dict('extra_data', 'Party Extra Data',
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))},
             depends=['party_extra_data', 'item_kind']),
         'on_change_with_party_extra_data', 'set_party_extra_data')
@@ -847,7 +846,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def set_party_extra_data(cls, instances, name, vals):
-        #We'll update the party complementary data with existing key or add new
+        #We'll update the party Extra Data with existing key or add new
         #keys, but if others keys already exist we won't modify them
         Party = Pool().get('party.party')
         for covered in instances:

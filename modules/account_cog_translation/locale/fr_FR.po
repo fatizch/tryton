@@ -10,9 +10,21 @@ msgctxt "odt:account.aged_balance:account."
 msgid "Party"
 msgstr "Acteur"
 
+msgctxt "odt:account.move.general_journal:account."
+msgid "Posted"
+msgstr "Emis"
+
 msgctxt "odt:account.third_party_balance:account."
 msgid "Party"
 msgstr "Acteur"
+
+msgctxt "selection:account.move,state:account."
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "selection:account.move.line,move_state:account."
+msgid "Posted"
+msgstr "Emis"
 
 msgctxt "view:account.tax.template:account."
 msgid "Invoice"

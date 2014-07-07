@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form string="Tagged Object">
+    <label name="object_"/>
+    <field name="object_"/>
+</form>

@@ -5,7 +5,7 @@ from sql import Literal
 from trytond.pool import Pool
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
-from trytond.modules.cog_utils import model, fields, coop_string, MergedMixin
+from trytond.modules.cog_utils import model, fields, coop_string, UnionMixin
 
 __all__ = [
     'SynthesisMenuInvoice',
@@ -18,7 +18,7 @@ class SynthesisMenuInvoice(model.CoopSQL):
     'Party Synthesis Menu Invoice'
     __name__ = 'party.synthesis.menu.invoice'
     name = fields.Char('Invoices')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
 
     @staticmethod
     def table_query():
@@ -42,14 +42,18 @@ class SynthesisMenuInvoice(model.CoopSQL):
     def get_icon(self, name=None):
         return 'invoice'
 
+    def get_rec_name(self, name):
+        InvoiceSynthesis = Pool().get('party.synthesis.menu.invoice')
+        return coop_string.translate_label(InvoiceSynthesis, 'name')
 
-class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
+
+class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 
     @classmethod
-    def merged_models(cls):
-        res = super(SynthesisMenu, cls).merged_models()
+    def union_models(cls):
+        res = super(SynthesisMenu, cls).union_models()
         res.extend([
             'party.synthesis.menu.invoice',
             'account.invoice',
@@ -57,19 +61,19 @@ class SynthesisMenu(MergedMixin, model.CoopSQL, model.CoopView):
         return res
 
     @classmethod
-    def merged_field(cls, name, Model):
-        merged_field = super(SynthesisMenu, cls).merged_field(name, Model)
+    def union_field(cls, name, Model):
+        union_field = super(SynthesisMenu, cls).union_field(name, Model)
         if Model.__name__ == 'party.synthesis.menu.invoice':
             if name == 'parent':
                 return Model._fields['party']
         elif Model.__name__ == 'account.invoice':
             if name == 'parent':
-                merged_field = copy.deepcopy(Model._fields['party'])
-                merged_field.model_name = 'party.synthesis.menu.invoice'
-                return merged_field
+                union_field = copy.deepcopy(Model._fields['party'])
+                union_field.model_name = 'party.synthesis.menu.invoice'
+                return union_field
             elif name == 'name':
                 return Model._fields['number']
-        return merged_field
+        return union_field
 
     @classmethod
     def build_sub_query(cls, model, table, columns):

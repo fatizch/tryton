@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -512,7 +512,7 @@ msgstr "Intervalle"
 
 msgctxt "selection:table,dimension_kind4:"
 msgid "Range-Date"
-msgstr "Plage de Date"
+msgstr "Intervalle de Date"
 
 msgctxt "selection:table,dimension_kind4:"
 msgid "Value"
@@ -584,7 +584,7 @@ msgstr "Intervalle"
 
 msgctxt "selection:table.dimension.value,dimension_kind:"
 msgid "Range-Date"
-msgstr "Plage de Date"
+msgstr "Intervalle de Date"
 
 msgctxt "selection:table.dimension.value,dimension_kind:"
 msgid "Value"
