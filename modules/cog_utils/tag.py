@@ -18,6 +18,12 @@ class Tag(model.CoopSQL, model.CoopView):
     childs = fields.One2Many('tag', 'parent', 'Childs')
     tagged_objects = fields.One2Many('tag-object', 'tag', 'Tagged Objects')
 
+    @classmethod
+    def _export_skips(cls):
+        result = super(Tag, cls)._export_skips()
+        result.add('tagged_objects')
+        return result
+
     @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:
