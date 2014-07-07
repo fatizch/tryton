@@ -1198,17 +1198,11 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('motive', 'calculation_kind','is_discount')
     def on_change_with_max_value(self, name=None):
-        coef_discount = 1
-        if self.is_discount :
-            coef_discount = -1
-        return self.motive.max_value * coef_discount if self.motive and self.motive.max_value else None
+        return self.motive.max_value if self.motive else None
     
     @fields.depends('motive', 'calculation_kind','is_discount')
     def on_change_with_max_rate(self, name=None):
-        coef_discount = 1
-        if self.is_discount :
-            coef_discount = -1
-        return self.motive.max_rate * coef_discount if self.motive and self.motive.max_rate else None
+        return self.motive.max_rate if self.motive else None
 
     @fields.depends('calculation_kind', 'flat_amount', 'rate', 'currency')
     def on_change_with_rec_name(self, name=None):
