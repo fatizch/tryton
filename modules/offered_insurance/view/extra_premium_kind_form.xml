@@ -30,5 +30,7 @@
           <label string="%" id="rate" xexpand="0" xalign="0"/>
       </group>
     </group>
-
+  <group id="invisible" states="{'invisible': True}">
+ 		<field name="currency"/>    
+    </group>
 </form>
