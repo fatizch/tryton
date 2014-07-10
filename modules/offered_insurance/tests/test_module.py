@@ -418,7 +418,6 @@ return True'''
 
         extra_premium_kind2 = createExtraPremiumKind('reduc_max_10_prct',
                                                      True, '-0.10')
-        print utils.format_data(extra_premium_kind2._save_values)
         extra_premium_kind2.save()
 
         extra_premium_kind3 = createExtraPremiumKind('majo_max_10_prct',

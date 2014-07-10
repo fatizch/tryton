@@ -3,6 +3,5 @@
   <field name="name"/>
   <field name="code"/>
   <field name="is_discount"/>
-  <field name="max_value_abs"/>
-  <field name="max_rate_abs"  factor="100"/>
+  <field name="ceiling"/>
 </tree>

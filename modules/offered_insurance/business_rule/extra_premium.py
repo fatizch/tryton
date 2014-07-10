@@ -17,10 +17,8 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
     is_discount = fields.Boolean('Is Discount')
     max_value = fields.Numeric('Max Value')
     max_rate = fields.Numeric('Max Rate')
-    max_value_abs = fields.Function(fields.Numeric('Max Value'),
-                        'on_change_with_max_value_abs')
-    max_rate_abs = fields.Function(fields.Numeric('Max Rate'),
-                        'on_change_with_max_rate_abs')
+    ceiling = fields.Function(fields.Char('Ceiling'),
+                        'on_change_with_ceiling')
 
     @classmethod
     def __setup__(cls):
@@ -48,13 +46,16 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
         changes['max_rate'] = None
         return changes
 
-    @fields.depends('max_value')
-    def on_change_with_max_value_abs(self, name=None):
-        return abs(self.max_value) if self.max_value else None
-
-    @fields.depends('max_rate')
-    def on_change_with_max_rate_abs(self, name=None):
-        return abs(self.max_rate) if self.max_rate else None
+    @fields.depends('max_value', 'max_rate')
+    def on_change_with_ceiling(self, name=None):
+        ceiling_value = ''
+        ceiling_rate = ''
+        if self.max_value:
+            ceiling_value = str(abs(self.max_value)) + ' ' + \
+                self.currency_symbol
+        if self.max_rate:
+            ceiling_rate = str(abs(self.max_rate * 100)) + ' %'
+        return ceiling_value + ' ' + ceiling_rate
 
     def get_name_for_billing(self):
         return self.name
