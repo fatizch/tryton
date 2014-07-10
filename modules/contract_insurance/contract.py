@@ -721,6 +721,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
         res = self.on_change_extra_data()
         res['item_kind'] = self.on_change_with_item_kind()
         res['party_extra_data'] = self.on_change_with_party_extra_data()
+        #update extra_data dict with common extradata key from party_extra_data
+        res['extra_data'].update(
+            (k, res['party_extra_data'][k])
+            for k in res['extra_data'].viewkeys()
+            & res['party_extra_data'].viewkeys())
         if self.item_desc is None:
             res['options'] = []
             return res
@@ -840,8 +845,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def set_party_extra_data(cls, instances, name, vals):
-        #We'll update the party Extra Data with existing key or add new
-        #keys, but if others keys already exist we won't modify them
         Party = Pool().get('party.party')
         for covered in instances:
             if not covered.party:
@@ -850,6 +853,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
                 Party.write([covered.party], {'extra_data': vals})
             else:
                 covered.party.extra_data.update(vals)
+                covered.party.extra_data = covered.party.extra_data
                 covered.party.save()
 
     @classmethod

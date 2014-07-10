@@ -335,7 +335,7 @@ msgstr "Acteur"
 
 msgctxt "field:contract.covered_element,party_extra_data:"
 msgid "Party Extra Data"
-msgstr "Données Complémentaires"
+msgstr "Données complémentaires de l'acteur"
 
 msgctxt "field:contract.covered_element,product:"
 msgid "Product"
@@ -675,7 +675,7 @@ msgstr "Date de Début"
 
 msgctxt "field:contract.option.extra_premium,time_limited:"
 msgid "Time Limited"
-msgstr "Limité dans le temps"
+msgstr "Limitée dans le temps"
 
 msgctxt "field:contract.option.extra_premium,write_date:"
 msgid "Write Date"
