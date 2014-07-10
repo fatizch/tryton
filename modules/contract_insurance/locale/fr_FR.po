@@ -133,10 +133,6 @@ msgctxt "field:contract-agreement,agency:"
 msgid "Agency"
 msgstr "Agence"
 
-msgctxt "field:contract-agreement,contact_info:"
-msgid "Contact Information"
-msgstr "Contact"
-
 msgctxt "field:contract-agreement,contract:"
 msgid "Contract"
 msgstr "Contrat"

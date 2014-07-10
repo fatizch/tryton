@@ -1227,7 +1227,6 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
 
     agency = fields.Many2One('party.address', 'Agency', ondelete='RESTRICT',
         domain=[('party', '=', Eval('party'))], depends=['party'])
-    contact_info = fields.Char('Contact Information')
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     end_date = fields.Date('End Date', states={
             'invisible': Eval('_parent_contract', {}).get('status') == 'quote',
