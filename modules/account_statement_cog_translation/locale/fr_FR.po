@@ -18,3 +18,7 @@ msgstr "Emis"
 msgctxt "selection:account.statement,state:account_statement."
 msgid "Posted"
 msgstr "Emis"
+
+msgctxt "view:account.statement:account_statement."
+msgid "Post"
+msgstr "Emettre"

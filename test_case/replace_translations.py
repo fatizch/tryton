@@ -37,8 +37,6 @@ def replace_translations(language, update_dict, exact_dict, modules=None):
             continue
         po = polib.pofile(translation_file)
         for entry in po.translated_entries():
-            if entry.msgid == 'Posted':
-                print entry, (entry.msgid, entry.msgstr) in update_dict
             if (entry.msgctxt, entry.msgid, entry.msgstr) in exact_dict:
                 translation = exact_dict[
                     (entry.msgctxt, entry.msgid, entry.msgstr)]
@@ -95,6 +93,8 @@ if __name__ == '__main__':
         ('Invoice Lines', 'Lignes de facture'): 'Lignes de quittance',
         ('Invoice Line', 'Ligne de Facture'): 'Ligne de quittance',
         ('Posted', u'Posté'): 'Emis',
+        ('Post', 'Poster'): 'Emettre',
+        ('_Post', '_Poster'): 'Emettre',
         }
     update_exact_dict = {
         ('selection:account.invoice,state:', 'Posted', u'Posté'): 'Emise',

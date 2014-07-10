@@ -26,6 +26,10 @@ msgctxt "selection:account.move.line,move_state:account."
 msgid "Posted"
 msgstr "Emis"
 
+msgctxt "view:account.move:account."
+msgid "Post"
+msgstr "Emettre"
+
 msgctxt "view:account.tax.template:account."
 msgid "Invoice"
 msgstr "Quittance"
