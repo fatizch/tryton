@@ -139,6 +139,13 @@ class Printable(Model):
         good_model.save()
 
     @classmethod
+    def __setup__(cls):
+        super(Printable, cls).__setup__()
+        cls._buttons.update({
+                'generic_send_letter': {},
+                })
+
+    @classmethod
     @model.CoopView.button_action('offered_insurance.letter_generation_wizard')
     def generic_send_letter(cls, objs):
         pass
