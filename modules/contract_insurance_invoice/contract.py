@@ -6,7 +6,7 @@ from dateutil.rrule import rrule, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max
 
-from trytond.model import ModelSQL, ModelView, fields
+from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, And, Len
 from trytond import backend
@@ -15,7 +15,7 @@ from trytond.tools import reduce_ids
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.rpc import RPC
 
-from trytond.modules.cog_utils import coop_date, utils, batchs, model
+from trytond.modules.cog_utils import coop_date, utils, batchs, model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -76,6 +76,9 @@ class Contract:
                 Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_total_invoice_amount')
+    first_year_invoices = fields.Function(
+        fields.One2Many('account.invoice', None, 'First Year Invoices'),
+        'get_first_year_invoices')
 
     @classmethod
     def __setup__(cls):
@@ -421,6 +424,14 @@ class Contract:
             payment_term=default_billing_mode.allowed_payment_terms[0],
             direct_debit_day=direct_debit_day)]
         return res, errs
+
+    def get_first_year_invoices(self, name):
+        AccountInvoice = Pool().get('account.invoice')
+        to_date = coop_date.add_duration(self.start_date, 'year')
+        return [x.id for x in AccountInvoice.search([
+                    ('contract', '=', self.id),
+                    ('start', '<', to_date),
+                    ])]
 
 
 class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,

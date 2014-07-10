@@ -11,8 +11,6 @@
   <field name="party"/>
   <label name="agency"/>
   <field name="agency"/>
-  <label name="contact_info"/>
-  <field name="contact_info"/>
   <label name="protocol"/>
   <field name="protocol"/>
   <newline/>
