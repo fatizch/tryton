@@ -83,6 +83,7 @@ class Contract(Printable):
         cls._buttons.update({
                 'manage_extra_premium': {},
                 'create_extra_premium': {},
+                'generic_send_letter': {},
                 })
 
     @fields.depends('product')
