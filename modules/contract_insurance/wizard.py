@@ -294,7 +294,10 @@ class CreateExtraPremium(Wizard):
     def default_extra_premium_data(self, name):
         if self.extra_premium_data._default_values:
             return self.extra_premium_data._default_values
-        return {}
+        contract_id = Transaction().context.get('active_id')
+        Contract = Pool().get('contract')
+        contract = Contract(contract_id)
+        return {'start_date': contract.start_date}
 
     def default_select_options(self, name):
         if self.select_options._default_values:
