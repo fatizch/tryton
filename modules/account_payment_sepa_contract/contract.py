@@ -14,6 +14,15 @@ __all__ = [
 class Contract:
     __name__ = 'contract'
 
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls.billing_informations.domain.append(
+            ['OR',
+                ('sepa_mandate', '=', None),
+                ('sepa_mandate.party', '=', Eval('subscriber'))])
+        cls.billing_informations.depends.append('subscriber')
+
     def before_activate(self, contract_dict=None):
         super(Contract, self).before_activate()
         #TODO search mandate only if necessary
@@ -51,9 +60,7 @@ class ContractBillingInformation:
             'required': And(Eval('direct_debit', False),
                 (Eval('_parent_contract', {}).get('status', '') == 'active'))},
         domain=[
-            ('account_number.account', '=', Eval('direct_debit_account')),
-            ('party', '=',
-                Eval('_parent_contract', {}).get('subscriber'))],
+            ('account_number.account', '=', Eval('direct_debit_account'))],
         depends=['direct_debit', 'direct_debit_account']
         )
 
