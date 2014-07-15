@@ -51,6 +51,10 @@ class DateTime(tryton_fields.DateTime):
     pass
 
 
+class Timestamp(tryton_fields.Timestamp):
+    pass
+
+
 class Binary(tryton_fields.Binary):
     pass
 
