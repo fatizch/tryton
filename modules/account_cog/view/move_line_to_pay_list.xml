@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Lines To Pay">
+    <field name="date"/>
+    <field name="maturity_date"/>
+    <field name="party"/>
+    <field name="debit"/>
+    <field name="reconciliation"/>
+    <field name="state"/>
+</tree>

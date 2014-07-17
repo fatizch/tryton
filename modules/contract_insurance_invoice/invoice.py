@@ -3,7 +3,6 @@ from sql.aggregate import Sum
 from sql.operators import Concat
 
 from trytond.model import fields
-from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
@@ -40,11 +39,6 @@ class Invoice:
     fees = fields.Function(
         fields.Numeric('Fees'),
         'get_fees')
-    reconciliation_lines = fields.Function(
-        fields.One2Many('account.move.line', None, 'Reconciliation Lines',
-            states={'invisible': ~Bool(Eval('move', False))},
-            depends=['move']),
-        'get_reconciliation_lines')
 
     @classmethod
     def __setup__(cls):
@@ -99,13 +93,6 @@ class Invoice:
         for invoice_id, total in cursor.fetchall():
             result[invoice_id] = total
         return result
-
-    def get_reconciliation_lines(self, name):
-        if not self.move:
-            return []
-        Line = Pool().get('account.move.line')
-        return [x.id for x in Line.search([
-                    ('reconciliation.lines.move', '=', self.move)])]
 
     @classmethod
     def search_contract_invoice(cls, name, clause):
