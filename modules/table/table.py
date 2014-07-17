@@ -13,6 +13,7 @@ from sql.functions import Function, Now
 
 from trytond.config import CONFIG
 from trytond import backend
+from trytond.cache import Cache
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.transaction import Transaction
@@ -364,6 +365,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         'End Date',
         states=dimension_state('range-date'), depends=DIMENSION_DEPENDS,
         help='Date Excluded')
+    _get_dimension_cache = Cache('get_dimension_id')
 
     @classmethod
     def __setup__(cls):
@@ -405,6 +407,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
     @classmethod
     def create(cls, vlist):
+        cls._get_dimension_cache.clear()
         records = super(TableDefinitionDimension, cls).create(vlist)
         cls.clean_sequence(records)
         cls.set_name(records)
@@ -412,6 +415,7 @@ class TableDefinitionDimension(ModelSQL, ModelView):
 
     @classmethod
     def write(cls, records, values):
+        cls._get_dimension_cache.clear()
         super(TableDefinitionDimension, cls).write(records, values)
         cls.clean_sequence(records)
         cls.set_name(records)
@@ -501,6 +505,54 @@ class TableDefinitionDimension(ModelSQL, ModelView):
     @classmethod
     def _export_keys(cls):
         return set(['definition.code', 'type', 'name'])
+
+    @classmethod
+    def get_dimension_id(cls, definition, dimension_idx, value):
+        key = (definition.id, dimension_idx, value)
+        dimension_id = cls._get_dimension_cache.get(key, default=-1)
+        if dimension_id != -1:
+            return dimension_id
+
+        kind = getattr(definition, 'dimension_kind%d' % (dimension_idx + 1))
+        dimension = None
+        clause = [
+            ('definition', '=', definition.id),
+            ('type', '=', 'dimension%d' % (dimension_idx + 1)),
+        ]
+        if kind == 'value':
+            clause.append(('value', '=', str(value)))
+        elif kind == 'date':
+            clause.append(('date', '=', value))
+        elif kind == 'range':
+            clause.extend([
+                ['OR',
+                    ('start', '=', None),
+                    ('start', '<=', float(value)),
+                ],
+                ['OR',
+                    ('end', '=', None),
+                    ('end', '>', float(value)),
+                ],
+            ])
+        elif kind == 'range-date':
+            clause.extend([
+                    ['OR',
+                        ('start_date', '=', None),
+                        ('start_date', '<=', value),
+                        ],
+                    ['OR',
+                        ('end_date', '=', None),
+                        ('end_date', '>', value),
+                        ],
+                    ])
+        dimensions = cls.search(clause)
+        if dimensions:
+            dimension, = dimensions
+            dimension_id = dimension.id
+        else:
+            dimension_id = None
+        cls._get_dimension_cache.set(key, dimension_id)
+        return dimension_id
 
 
 class TableDefinitionDimensionOpenAskType(ModelView):
@@ -746,43 +798,8 @@ class TableCell(ModelSQL, ModelView):
         domain = [('definition', '=', definition.id)]
         for i in range(DIMENSION_MAX):
             value = values[i]
-            kind = getattr(definition, 'dimension_kind%d' % (i + 1))
-            dimension = None
-            clause = [
-                ('definition', '=', definition.id),
-                ('type', '=', 'dimension%d' % (i + 1)),
-            ]
-            if kind == 'value':
-                clause.append(('value', '=', str(value)))
-            elif kind == 'date':
-                clause.append(('date', '=', value))
-            elif kind == 'range':
-                clause.extend([
-                    ['OR',
-                        ('start', '=', None),
-                        ('start', '<=', float(value)),
-                    ],
-                    ['OR',
-                        ('end', '=', None),
-                        ('end', '>', float(value)),
-                    ],
-                ])
-            elif kind == 'range-date':
-                clause.extend([
-                        ['OR',
-                            ('start_date', '=', None),
-                            ('start_date', '<=', value),
-                            ],
-                        ['OR',
-                            ('end_date', '=', None),
-                            ('end_date', '>', value),
-                            ],
-                        ])
-            dimensions = Dimension.search(clause)
-            if dimensions:
-                dimension, = dimensions
-            domain.append(('dimension%d' % (i + 1), '=',
-                    dimension.id if dimension else None))
+            dimension_id = Dimension.get_dimension_id(definition, i, value)
+            domain.append(('dimension%d' % (i + 1), '=', dimension_id))
         try:
             cells = cls.search(domain)
         except ValueError:
