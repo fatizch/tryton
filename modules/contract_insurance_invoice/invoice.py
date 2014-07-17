@@ -218,6 +218,12 @@ class Invoice:
             payments.append(payment)
         return Payment.create([c._save_values for c in payments])
 
+    def check_cancel_move(self):
+        # account_invoice.check_cancel_move makes it impossible to cancel moves
+        # of out_invoices.
+        if not self.contract:
+            super(Invoice, self).check_cancel_move()
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
