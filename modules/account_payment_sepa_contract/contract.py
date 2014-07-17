@@ -39,17 +39,6 @@ class Contract:
         mandate.state = 'validated'
         mandate.save()
 
-    @fields.depends('direct_debit_account')
-    def on_change_direct_debit_account(self):
-        if (self.direct_debit_account
-                and len(self.direct_debit_account.numbers) > 0
-                and self.direct_debit_account.numbers[0].mandates
-                and len(self.direct_debit_account.numbers[0].mandates) > 0):
-            return {'sepa_mandate':
-                self.direct_debit_account.numbers[0].mandates[0].id}
-        else:
-            return {}
-
 
 class ContractBillingInformation:
     __name__ = 'contract.billing_information'
