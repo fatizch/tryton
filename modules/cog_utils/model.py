@@ -5,7 +5,7 @@ import json
 
 from sql.aggregate import Max
 from sql.conditionals import Coalesce
-from sql import Union, Column, Literal, Cast
+from sql import Union, Column, Literal
 
 from trytond.model import Model, ModelView, ModelSQL, fields as tryton_fields
 from trytond.model import UnionMixin as TrytonUnionMixin
@@ -468,7 +468,7 @@ class _RevisionMixin(object):
 
         parent_field = cls.get_parent_field()[0]
         columns_expected.append(parent_field)
-        columns = [getattr(table, parent_field)]
+        columns = [Column(table, c) for c in columns_expected]
 
         target_field = cls.get_reverse_field_name()
         if target_field:
@@ -477,7 +477,6 @@ class _RevisionMixin(object):
 
         values = dict(((x, dict(((y.id, None) for y in instances)))
                 for x in columns_expected))
-        columns += [Column(table, c) for c in columns_expected]
 
         in_max = cursor.IN_MAX
         for i in range(0, len(instances), in_max):
