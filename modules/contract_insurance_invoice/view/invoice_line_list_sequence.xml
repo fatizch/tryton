@@ -8,7 +8,7 @@
         </field>
     </xpath>
     <xpath expr="/tree/field[@name='description']" position="replace_attributes">
-        <field expand="1"/>
+        <field name="description" expand="1"/>
     </xpath>
     <xpath expr="/tree/field[@name='type']" position="replace"/>
     <xpath expr="/tree/field[@name='product']" position="replace"/>
