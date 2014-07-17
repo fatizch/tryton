@@ -41,7 +41,9 @@ class Contract(CogProcessFramework):
                 'need_option': 'At least one option must be selected for %s',
                 'need_covered': 'There must be at least one covered element',
                 'payment_bank_account_required': 'The payment bank account is '
-                    'required as the payment mode is Direct Debit'
+                    'required as the payment mode is Direct Debit',
+                'no_subscriber_address': 'The selected subscriber does not '
+                    'have an address',
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
@@ -75,6 +77,13 @@ class Contract(CogProcessFramework):
     def check_subscriber_not_null(self):
         if not self.subscriber:
             return False, (('no_subscriber', ()),)
+        return True, ()
+
+    def check_subscriber_address(self):
+        if not self.subscriber:
+            return False, (('no_subscriber', ()),)
+        if not self.subscriber.addresses:
+            return False, (('no_subscriber_address', ()),)
         return True, ()
 
     def check_start_date_valid(self):
