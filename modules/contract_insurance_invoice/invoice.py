@@ -224,6 +224,11 @@ class Invoice:
         if not self.contract:
             super(Invoice, self).check_cancel_move()
 
+def print_invoice(self):
+        # Don't print invoice report if it's a contract invoice
+        if not self.contract:
+            super(Invoice, self).print_invoice()
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'
