@@ -1125,16 +1125,16 @@ class DocumentRequestBatch(BatchRoot):
         return 'Document Request Batch'
 
     @classmethod
-    def get_batch_domain(cls):
+    def get_batch_domain(cls, treatment_date):
         return [
             ('reception_date', '=', None),
             [
                 'OR',
                 ('send_date', '=', None),
-                ('send_date', '<=', coop_date.add_month(utils.today(), -3))]]
+                ('send_date', '<=', coop_date.add_month(treatment_date, -3))]]
 
     @classmethod
-    def execute(cls, objects, ids, logger):
+    def execute(cls, objects, ids, logger, treatment_date):
         DocumentCreate = Pool().get(
             'document.create', type='wizard')
         for cur_object in objects:

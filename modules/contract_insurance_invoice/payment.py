@@ -6,7 +6,7 @@ from sql.operators import Equal
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import utils, batchs
+from trytond.modules.cog_utils import batchs
 
 __all__ = [
     'PaymentTreatmentBatch',
@@ -38,17 +38,17 @@ class PaymentTreatmentBatch(batchs.BatchRoot):
         return 1
 
     @classmethod
-    def get_batch_domain(cls):
+    def get_batch_domain(cls, treatment_date):
         return [
             ('state', '=', 'approved'),
-            ('date', '<=', utils.today())]
+            ('date', '<=', treatment_date)]
 
     @classmethod
     def _group_payment_key(cls, payment):
         return (('journal', payment.journal.id), ('kind', payment.kind))
 
     @classmethod
-    def execute(cls, objects, ids, logger):
+    def execute(cls, objects, ids, logger, treatment_date):
         groups = []
         Payment = Pool().get('account.payment')
         payments = sorted(objects, key=cls._group_payment_key)
@@ -90,7 +90,7 @@ class PaymentCreationBatch(batchs.BatchRoot):
         return 1
 
     @classmethod
-    def select_ids(cls):
+    def select_ids(cls, treatment_date):
         cursor = Transaction().cursor
         pool = Pool()
 
@@ -111,7 +111,7 @@ class PaymentCreationBatch(batchs.BatchRoot):
             ).join(move_line, condition=(
                 (invoice.move == move_line.move)
                 & (move_line.reconciliation == None)
-                & (move_line.maturity_date <= utils.today()))
+                & (move_line.maturity_date <= treatment_date))
             ).join(account, condition=(
                 (move_line.account == account.id)
                 & (account.kind == 'receivable')))
@@ -125,7 +125,7 @@ class PaymentCreationBatch(batchs.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, logger):
+    def execute(cls, objects, ids, logger, treatment_date):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         Invoice.create_payments(objects)

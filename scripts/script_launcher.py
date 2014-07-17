@@ -356,7 +356,8 @@ def batch(arguments, config, work_data):
         time.sleep(2)
         _execution = subprocess.Popen('celery call '
             'trytond.modules.cog_utils.batch_launcher.generate_all '
-            '--args=\'["%s", "%s"]\'' % (arguments.name, arguments.date),
+            '--args=\'["%s", "%s", "%s"]\'' % (arguments.name,
+                arguments.connexion_date, arguments.treatment_date),
             shell=True, stdout=subprocess.PIPE)
         _execution.communicate()
         print 'See log at %s' % log_path
@@ -623,7 +624,11 @@ if __name__ == '__main__':
     parser_batch.add_argument('action', choices=['kill', 'execute'])
     parser_batch.add_argument('--name', type=str, help='Name of the batch'
         'to launch')
-    parser_batch.add_argument('--date', type=str, help='Launch Date',
+    parser_batch.add_argument('--connexion-date', '-c', type=str,
+        help='Date used to log in',
+        default=datetime.date.today().isoformat())
+    parser_batch.add_argument('--treatment-date', '-t', type=str,
+        help='Batch treatment date',
         default=datetime.date.today().isoformat())
 
     # Database parser

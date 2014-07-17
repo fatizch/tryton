@@ -1137,7 +1137,7 @@ class CreateInvoiceContractBatch(batchs.BatchRoot):
         return 4
 
     @classmethod
-    def select_ids(cls):
+    def select_ids(cls, treatment_date):
         cursor = Transaction().cursor
         pool = Pool()
 
@@ -1150,14 +1150,14 @@ class CreateInvoiceContractBatch(batchs.BatchRoot):
         cursor.execute(*query_table.select(contract.id, group_by=contract.id,
                 where=(contract.status == 'active'),
                 having=(
-                    (Max(contract_invoice.end) < utils.today())
+                    (Max(contract_invoice.end) < treatment_date)
                     | (Max(contract_invoice.end) == None))))
 
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, logger):
-        Pool().get('contract').invoice(objects, utils.today())
+    def execute(cls, objects, ids, logger, treatment_date):
+        Pool().get('contract').invoice(objects, treatment_date)
 
 
 class PostInvoiceContractBatch(batchs.BatchRoot):
@@ -1182,7 +1182,7 @@ class PostInvoiceContractBatch(batchs.BatchRoot):
         return 4
 
     @classmethod
-    def select_ids(cls):
+    def select_ids(cls, treatment_date):
         cursor = Transaction().cursor
         pool = Pool()
 
@@ -1193,11 +1193,11 @@ class PostInvoiceContractBatch(batchs.BatchRoot):
             condition=(account_invoice.id == contract_invoice.invoice))
 
         cursor.execute(*query_table.select(account_invoice.id,
-                where=((contract_invoice.start <= utils.today())
+                where=((contract_invoice.start <= treatment_date)
                     & (account_invoice.state == 'validated'))))
 
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, logger):
+    def execute(cls, objects, ids, logger, treatment_date):
         Pool().get('account.invoice').post(objects)

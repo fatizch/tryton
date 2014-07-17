@@ -39,7 +39,7 @@ class BatchRoot(ModelView):
         raise NotImplementedError
 
     @classmethod
-    def get_batch_domain(cls):
+    def get_batch_domain(cls, treatment_date):
         return []
 
     @classmethod
@@ -51,11 +51,11 @@ class BatchRoot(ModelView):
         return 'id'
 
     @classmethod
-    def select_ids(cls):
+    def select_ids(cls, treatment_date):
         cursor = Transaction().cursor
         SearchModel = Pool().get(cls.get_batch_search_model())
         tables, expression = SearchModel.search_domain(
-            cls.get_batch_domain())
+            cls.get_batch_domain(treatment_date))
         main_table, _ = tables[None]
 
         def convert_from(table, tables):

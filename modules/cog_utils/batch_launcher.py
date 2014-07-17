@@ -56,36 +56,42 @@ def chunks_size(l, n):
 
 
 @celery.task(base=TrytonTask)
-def generate_all(batch_name, date=None):
-    if not date:
-        date = datetime.date.today()
+def generate_all(batch_name, connexion_date=None, treatment_date=None):
+    if not connexion_date:
+        connexion_date = datetime.date.today()
     else:
-        date = datetime.date(*map(int, date.split('-')))
+        connexion_date = datetime.datetime.strptime(connexion_date,
+            '%Y-%m-%d').date()
+    if not treatment_date:
+        treatment_date = datetime.date.today()
+    else:
+        treatment_date = datetime.datetime.strptime(treatment_date,
+            '%Y-%m-%d').date()
     User = Pool().get('res.user')
     admin, = User.search([('login', '=', 'admin')])
     BatchModel = Pool().get(batch_name)
-    with Transaction().set_user(admin.id), \
-        Transaction().set_context(
+    with Transaction().set_user(admin.id), Transaction().set_context(
             User.get_preferences(context_only=True),
-            client_defined_date=date):
-        ids = map(lambda x: x[0], BatchModel.select_ids())
+            client_defined_date=connexion_date):
+        ids = [x[0] for x in BatchModel.select_ids(treatment_date)]
         if BatchModel.get_batch_stepping_mode() == 'number':
             chunking = chunks_number
         else:
             chunking = chunks_size
-        group(generate.s(BatchModel.__name__, tmp_list, date)
+        group(generate.s(BatchModel.__name__, tmp_list, connexion_date,
+                treatment_date)
             for tmp_list in chunking(ids, BatchModel.get_batch_step()))()
 
 
 @celery.task(base=TrytonTask)
-def generate(batch_name, ids, date):
+def generate(batch_name, ids, connexion_date, treatment_date):
     User = Pool().get('res.user')
     admin, = User.search([('login', '=', 'admin')])
     BatchModel = Pool().get(batch_name)
     logger = get_task_logger(BatchModel.get_batch_name())
-    with Transaction().set_user(admin.id), \
-        Transaction().set_context(User.get_preferences(context_only=True),
-            client_defined_date=date):
+    with Transaction().set_user(admin.id), Transaction().set_context(
+            User.get_preferences(context_only=True),
+            client_defined_date=connexion_date):
         to_treat = BatchModel.convert_to_instances(ids)
-        BatchModel.execute(to_treat, ids, logger)
+        BatchModel.execute(to_treat, ids, logger, treatment_date)
     return

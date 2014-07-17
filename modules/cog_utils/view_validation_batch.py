@@ -33,7 +33,7 @@ class ViewValidationBatch(batchs.BatchRoot):
         return 4
 
     @classmethod
-    def get_batch_domain(cls):
+    def get_batch_domain(cls, treatment_date):
         Module = Pool().get('ir.module.module')
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'cog_utils')])[0]
@@ -42,7 +42,7 @@ class ViewValidationBatch(batchs.BatchRoot):
         return [('module', 'in', coop_modules)]
 
     @classmethod
-    def execute(cls, objects, ids, logger):
+    def execute(cls, objects, ids, logger, treatment_date):
         for view in objects:
             try:
                 full_xml_id = view.xml_id
