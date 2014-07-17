@@ -61,6 +61,9 @@ class Contract:
     billing_mode = fields.Function(
         fields.Many2One('offered.billing_mode', 'Billing Mode'),
         'get_billing_information')
+    billing_information = fields.Function(
+        fields.Many2One('contract.billing_information',
+            'Current Billing Information'), 'get_billing_information')
     billing_informations = fields.One2Many('contract.billing_information',
         'contract', 'Billing Information')
     last_invoice_start = fields.Function(
@@ -513,6 +516,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     def revision_columns(cls):
         return ['billing_mode', 'payment_term', 'direct_debit_day',
             'direct_debit_account']
+
+    @classmethod
+    def get_reverse_field_name(cls):
+        return 'billing_information'
 
     @classmethod
     def get_parent_field(cls):
