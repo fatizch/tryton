@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Payment Date Modification">
+    <label name="new_date"/>
+    <field name="new_date"/>
+    <field name="move_line" invisible="1"/>
+</form>

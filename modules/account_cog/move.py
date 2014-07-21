@@ -12,6 +12,8 @@ class Line:
     'Account Move Line'
     __name__ = 'account.move.line'
 
+    account_kind = fields.Function(
+        fields.Char('Account Kind'), 'get_account_kind')
     reconciliation_lines = fields.Function(
         fields.One2Many('account.move.line', 'reconciliation_lines',
             'Reconciliation Lines'),
@@ -38,3 +40,6 @@ class Line:
     def get_icon(self, name=None):
         if self.reconciliation:
             return 'coopengo-reconciliation'
+
+    def get_account_kind(self, name):
+        return self.account.kind if self.account else ''

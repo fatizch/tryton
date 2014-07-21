@@ -3,18 +3,19 @@ from trytond.pool import Pool
 from .party import *
 from .payment import *
 from .company import *
+from .move import *
 
 
 def register():
     Pool.register(
-        # from payment
         Payment,
-        # from party
         SynthesisMenuPayment,
         SynthesisMenu,
-        # from company
         Company,
+        MoveLine,
+        PaymentDateSelection,
         module='account_payment_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,
+        PaymentDateModification,
         module='account_payment_cog', type_='wizard')

@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from trytond.model import ModelView, ModelSQL
+from trytond.model import ModelView, ModelSQL, fields
 
 from trytond.modules.cog_utils import coop_string
 
@@ -29,3 +29,10 @@ class Payment(ModelSQL, ModelView):
                 coop_string.date_as_string(self.date),
                 self.currency.amount_as_string(self.amount),
                 coop_string.translate_value(self, 'state'))
+
+    @fields.depends('line')
+    def on_change_line(self):
+        change = super(Payment, self).on_change_line()
+        if change and self.line:
+            change['date'] = self.line.payment_date
+        return change

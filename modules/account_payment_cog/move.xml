@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="move_line_to_pay_view_list">
+            <field name="model">account.move.line</field>
+            <field name="inherit" ref="account_cog.move_line_to_pay_view_list"/>
+            <field name="name">move_line_to_pay_list</field>
+        </record>
+        <record model="ir.ui.view" id="move_line_view_form_move">
+            <field name="model">account.move.line</field>
+            <field name="inherit" ref="account.move_line_view_form_move"/>
+            <field name="name">move_line_form_move</field>
+        </record>
+        <record model="ir.ui.view" id="move_line_view_form">
+            <field name="model">account.move.line</field>
+            <field name="inherit" ref="account.move_line_view_form"/>
+            <field name="name">move_line_form</field>
+        </record>
+
+        <!-- Wizard for bank transfer date modification -->
+        <record model="ir.ui.view" id="payment_date_modification_view_form">
+            <field name="model">account.payment.payment_date_selection</field>
+            <field name="type">form</field>
+            <field name="name">payment_date_modification_form</field>
+        </record>
+        <record model="ir.action.wizard" id="modify_payment_date_wizard">
+          <field name="name">Modify Payment Date</field>
+          <field name="wiz_name">account.payment.payment_date_modification</field>
+        </record>
+        <record model="ir.action.keyword" id="act_modify_payment_date_keyword">
+          <field name="keyword">form_action</field>
+          <field name="model">account.move.line,-1</field>
+          <field name="action" ref="modify_payment_date_wizard"/>
+        </record>
+    </data>
+</tryton>
