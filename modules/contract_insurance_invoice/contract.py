@@ -308,11 +308,15 @@ class Contract:
         self.save()
         self.calculate_prices()
 
-    def calculate_prices(self):
-        prices, errs = self.calculate_prices_between_dates()
-        if errs:
-            return False, errs
-        self.store_prices(prices)
+    @classmethod
+    def calculate_prices(cls, contracts, start=None, end=None):
+        final_prices = []
+        for contract in contracts:
+            prices, errs = contract.calculate_prices_between_dates(start, end)
+            if errs:
+                return False, errs
+            final_prices += prices
+        cls.store_prices(prices)
         return True, ()
 
     def calculate_price_at_date(self, date):
@@ -339,31 +343,22 @@ class Contract:
                 return {}, errs
         return prices, errs
 
-    def store_price(self, price, start_date, end_date):
-        to_check_for_deletion = set()
-        to_save = []
+    @classmethod
+    def store_price(cls, price, start_date, end_date):
         Premium = Pool().get('contract.premium')
         new_premium = Premium.new_line(price, start_date, end_date)
-        if new_premium:
-            if not end_date and not getattr(new_premium, 'end', None):
-                new_premium.end = getattr(new_premium.parent, 'end_date',
-                    None)
-            if isinstance(new_premium.parent.premiums, tuple):
-                new_premium.parent.premiums = list(
-                    new_premium.parent.premiums)
-            new_premium.parent.premiums.append(new_premium)
-            to_check_for_deletion.add(new_premium.parent)
-            to_save.append(new_premium)
-        return to_save, to_check_for_deletion
+        return [new_premium] if new_premium else []
 
-    def store_prices(self, prices):
+    @classmethod
+    def store_prices(cls, prices):
         if not prices:
             return
-        Premium = Pool().get('contract.premium')
+        pool = Pool()
+        Premium = pool.get('contract.premium')
         dates = list(prices.iterkeys())
         dates.sort()
-        to_check_for_deletion = set()
         to_save = []
+        parents_to_update = {}
         for date, price_list in prices.iteritems():
             date_pos = dates.index(date)
             if date_pos < len(dates) - 1:
@@ -371,33 +366,36 @@ class Contract:
             else:
                 end_date = None
             for price in price_list:
-                price_save, price_delete = self.store_price(price,
-                    start_date=date, end_date=end_date)
-                to_save += price_save
-                to_check_for_deletion.update(price_delete)
-        to_delete = set()
-        for elem in to_check_for_deletion:
+                prices = cls.store_price(price, start_date=date,
+                    end_date=end_date)
+                to_save += prices
+        for premium in to_save:
+            if premium.parent in parents_to_update:
+                parents_to_update[premium.parent]['save'].append(premium)
+            else:
+                parents_to_update[premium.parent] = {
+                    'save': [premium],
+                    'delete': [],
+                    'keep': [],
+                    'write': [],
+                    }
+        for elem in parents_to_update.iterkeys():
             existing = [x for x in getattr(elem, 'premiums', []) if x.id > 0]
-            if not existing:
-                continue
-            to_delete.update(set(
-                    x for x in existing if x.start >= dates[0]))
-            for elem in existing:
-                if (datetime.date.min or elem.start) < dates[0] <= (
+            for premium in existing:
+                if premium.start >= dates[0]:
+                    parents_to_update[elem]['delete'].append(premium)
+                elif datetime.date.min or elem.start < dates[0] <= (
                         elem.end or datetime.date.max):
                     elem.end = coop_date.add_day(dates[0], -1)
-                    elem.save()
-                    break
-        if to_delete:
-            Premium.delete(list(to_delete))
-        if to_save:
-            Premium.create([x._save_values for x in to_save])
-        self.browse([self.id])[0].remove_premium_duplicates()
-        # TODO : Remove this once premium changes are stored in the instances
-        # and saved once globally
-        for elem in to_check_for_deletion:
-            elem.premiums = tuple(Premium.search([
-                        (elem._fields['premiums'].field, '=', elem)]))
+                    parents_to_update[elem]['write'].append(premium)
+                else:
+                    parents_to_update[elem]['keep'].append(premium)
+            Premium.remove_duplicates(elem, parents_to_update[elem])
+
+        for elem in parents_to_update.iterkeys():
+            if not elem._values:
+                continue
+            elem.save()
 
     def get_premium_list(self):
         result = list(self.premiums)
@@ -406,10 +404,6 @@ class Contract:
         for covered_element in self.covered_elements:
             result.extend(covered_element.get_premium_list())
         return result
-
-    def remove_premium_duplicates(self):
-        Pool().get('contract.premium').remove_duplicates(
-            self.get_premium_list())
 
     def init_from_product(self, product, start_date=None, end_date=None):
         pool = Pool()
@@ -959,37 +953,37 @@ class Premium(ModelSQL, ModelView):
             new_instance.end = new_instance.parent.end_date
         else:
             new_instance.end = end_date
+        new_instance.taxes = line.get('taxes', [])
         new_instance.amount = line['amount']
-        if line['taxes']:
-            new_instance.taxes = line['taxes']
         new_instance.frequency = line['frequency']
         return new_instance
 
     @classmethod
-    def remove_duplicates(cls, elems):
-        to_del = []
-        to_write = set()
-        prev = None
-        for elem in elems:
-            if not prev:
-                prev = elem
-                continue
-            if prev.rated_entity != elem.rated_entity:
-                prev = elem
-                continue
-            if prev.same_value(elem):
-                prev.end = elem.end
-                to_del.append(elem)
-                to_write.add(prev)
-                continue
-            prev = elem
-        if to_del:
-            cls.delete(to_del)
-        if to_write:
-            values = []
-            for elem in to_write:
-                values.extend([[elem], elem._save_values])
-            cls.write(*values)
+    def remove_duplicates(cls, parent, actions):
+        new_list = []
+        for act_name in ['keep', 'write', 'save']:
+            new_list += [(act_name, elem) for elem in actions[act_name]]
+
+        def sort_key(action):
+            _, premium = action
+            return tuple((getattr(premium, fname) for fname, _ in cls._order))
+
+        new_list.sort(key=sort_key)
+        final_list = []
+        prev_action, prev_premium = None, None
+        for elem in new_list:
+            action, premium = elem
+            if not prev_action:
+                prev_action, prev_premium = action, premium
+            elif prev_premium.same_value(premium):
+                prev_premium.end = premium.end
+            else:
+                final_list.append(prev_premium)
+                prev_action, prev_premium = action, premium
+
+        # Do not forget the final element :)
+        final_list.append(prev_premium)
+        setattr(parent, 'premiums', final_list)
 
     def same_value(self, other):
         ident_fields = ('parent', 'amount', 'frequency', 'rated_entity',
