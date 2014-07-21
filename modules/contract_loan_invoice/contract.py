@@ -162,8 +162,7 @@ class Contract:
     def first_invoice(self):
         if not (self.is_loan and self.end_date):
             return super(Contract, self).first_invoice()
-        ContractInvoice = Pool().get('contract.invoice')
-        ContractInvoice.delete(self.invoices)
+        self.delete_safe_invoices([self])
         self.invoice([self], self.end_date)
 
 

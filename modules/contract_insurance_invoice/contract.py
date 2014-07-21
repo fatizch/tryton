@@ -5,7 +5,8 @@ from decimal import Decimal
 from dateutil.rrule import rrule, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max
-from sql import Column
+from sql import Column, Union
+from sql.conditionals import Coalesce
 
 from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
@@ -208,9 +209,59 @@ class Contract:
                     start = until
         return periods
 
+    @classmethod
+    def delete_safe_invoices(cls, contracts, from_date=None, to_date=None):
+        # Delete invoices which are either draft or validated (for which no
+        # accounting has been done yet)
+        # This includes contract_invoices and account_invoices
+        pool = Pool()
+        cursor = Transaction().cursor
+        ContractInvoice = pool.get('contract.invoice')
+        AccountInvoice = pool.get('account.invoice')
+
+        contract_invoice = ContractInvoice.__table__()
+        account_invoice = AccountInvoice.__table__()
+
+        contract_invoices_to_delete, account_invoices_to_delete = [], []
+        in_max = cursor.IN_MAX
+
+        for i in range(0, len(contracts), in_max):
+            # Find all account_invoices which are draft
+            query_table = contract_invoice.join(account_invoice,
+                condition=contract_invoice.contract.in_([
+                        x.id for x in contracts[i:i+in_max]])
+                & (contract_invoice.invoice == account_invoice.id)
+                & (contract_invoice.start >= (from_date or datetime.date.min))
+                & (contract_invoice.end <= (to_date or datetime.date.max))
+                & account_invoice.state.in_(['draft', 'validated'])
+                & (account_invoice.move == None))
+
+            cursor.execute(*query_table.select(contract_invoice.id,
+                    account_invoice.id))
+
+            for contract_invoice_id, account_invoice_id in cursor.fetchall():
+                contract_invoices_to_delete.append(contract_invoice_id)
+                account_invoices_to_delete.append(account_invoice_id)
+
+        for i in range(0, len(contract_invoices_to_delete), in_max):
+            if contract_invoices_to_delete:
+                cursor.execute(*contract_invoice.delete(
+                        where=(account_invoice.id.in_([x.id for x in
+                                    contract_invoices_to_delete[i:i + in_max]]
+                                ))))
+
+        for i in range(0, len(account_invoices_to_delete), in_max):
+            if account_invoices_to_delete:
+                cursor.execute(*account_invoice.delete(
+                        where=(account_invoice.id.in_([x.id for x in
+                                    account_invoices_to_delete[i:i + in_max]]
+                                ))))
+
     def first_invoice(self):
-        ContractInvoice = Pool().get('contract.invoice')
-        ContractInvoice.delete(self.invoices)
+        # Used to generate the first invoice(s) of the contract. It starts
+        # with deleting all existing invoices,  and should not be called if
+        # there are paid / posted invoices
+        self.delete_safe_invoices([self])
         self.invoice([self], self.start_date)
 
     @classmethod
@@ -250,7 +301,7 @@ class Contract:
                         and contract.subscriber.addresses):
                     #TODO : To enhance
                     invoice.invoice_address = contract.subscriber.addresses[0]
-                invoice.lines = contract.get_invoice_lines(*period[0:2])
+                invoice.lines = contract.get_all_invoice_lines(*period[0:2])
                 invoices[period].append((contract, invoice))
         new_invoices = Invoice.create([i._save_values
                  for contract_invoices in invoices.itervalues()
@@ -287,15 +338,91 @@ class Contract:
             state='validated',
             )
 
-    def get_invoice_lines(self, start, end):
-        lines = []
-        for premium in self.premiums:
-            lines.extend(premium.get_invoice_lines(start, end))
-        for option in self.options:
-            lines.extend(option.get_invoice_lines(start, end))
-        for covered_element in self.covered_elements:
-            lines.extend(covered_element.get_invoice_lines(start, end))
-        return lines
+    def get_invoice_line_queries(self, start, end):
+        pool = Pool()
+        covered_element = pool.get('contract.covered_element').__table__()
+        option = pool.get('contract.option').__table__()
+        extra_premium = pool.get('contract.option.extra_premium').__table__()
+
+        def table_premium():
+            premium = pool.get('contract.premium').__table__()
+            date_condition = (
+                (Coalesce(premium.start, datetime.date.min) <= end)
+                & (Coalesce(premium.end, datetime.date.max) >= start))
+            return premium, date_condition
+
+        premium, date_condition = table_premium()
+        contract_query = premium.select(premium.id, where=(
+                premium.contract == self.id) & date_condition)
+
+        premium, date_condition = table_premium()
+        covered_element_query = premium.join(covered_element, condition=(
+                covered_element.id == premium.covered_element)
+            & (covered_element.contract == self.id)).select(premium.id,
+            where=date_condition)
+
+        premium, date_condition = table_premium()
+        option_query = premium.join(option, condition=(
+                option.id == premium.option)
+            & (option.contract == self.id)).select(premium.id,
+            where=date_condition)
+
+        premium, date_condition = table_premium()
+        option = pool.get('contract.option').__table__()
+        covered_element = pool.get('contract.covered_element').__table__()
+        covered_option_query = premium.join(option, condition=(
+                option.id == premium.option)
+            ).join(covered_element, condition=(
+                option.covered_element == covered_element.id)
+            & (covered_element.contract == self.id)).select(premium.id,
+            where=date_condition)
+
+        premium, date_condition = table_premium()
+        option = pool.get('contract.option').__table__()
+        extra_premium_query = premium.join(extra_premium, condition=(
+                extra_premium.id == premium.extra_premium)
+            ).join(option, condition=(
+                    option.id == extra_premium.option)
+            & (option.contract == self.id)).select(premium.id,
+            where=date_condition)
+
+        premium, date_condition = table_premium()
+        option = pool.get('contract.option').__table__()
+        covered_element = pool.get('contract.covered_element').__table__()
+        extra_premium = pool.get('contract.option.extra_premium').__table__()
+        covered_extra_premium_query = premium.join(extra_premium, condition=(
+                extra_premium.id == premium.extra_premium)
+            ).join(option, condition=(
+                option.id == extra_premium.option)
+            ).join(covered_element, condition=(
+                option.covered_element == covered_element.id)
+            & (covered_element.contract == self.id)).select(premium.id,
+            where=date_condition)
+
+        return {
+            'contract': contract_query,
+            'covered_element': covered_element_query,
+            'option': option_query,
+            'covered_option': covered_option_query,
+            'extra_premium': extra_premium_query,
+            'covered_extra_premium': covered_extra_premium_query,
+            }
+
+    def get_all_invoice_lines(self, start, end):
+        Premium = Pool().get('contract.premium')
+        # Returns all contract related invoice lines mathing start / end date
+        queries = self.get_invoice_line_queries(start, end)
+
+        cursor = Transaction().cursor
+        cursor.execute(*Union(*queries.itervalues()))
+
+        ids = [y for x in cursor.fetchall() for y in x]
+        lines = Premium.browse(ids)
+        invoice_lines = []
+        currency  =  self.get_currency()
+        for line in lines:
+            invoice_lines += line.generate_invoice_lines(currency, start, end)
+        return invoice_lines
 
     @classmethod
     @ModelView.button
@@ -567,14 +694,9 @@ class ContractInvoice(ModelSQL, ModelView):
     contract = fields.Many2One('contract', 'Contract', required=True)
     invoice = fields.Many2One('account.invoice', 'Invoice', required=True,
         ondelete='CASCADE')
-    invoice_state = fields.Function(fields.Selection([
-                ('draft', 'Draft'),
-                ('validated', 'Validated'),
-                ('posted', 'Posted'),
-                ('paid', 'Paid'),
-                ('cancel', 'Canceled'),
-                ], 'Invoice State'), 'get_invoice_state',
-        searcher='search_invoice_state')
+    invoice_state = fields.Function(
+        fields.Char('Invoice State'),
+        'get_invoice_state', searcher='search_invoice_state')
     start = fields.Date('Start Date', required=True)
     end = fields.Date('End Date', required=True)
 
@@ -659,9 +781,16 @@ class ContractInvoice(ModelSQL, ModelView):
 
     @classmethod
     def delete(cls, contract_invoices):
-        Invoice = Pool().get('account.invoice')
-        Invoice.delete([x.invoice for x in contract_invoices])
-        super(ContractInvoice, cls).delete(contract_invoices)
+        invoices_to_cancel, invoices_to_delete = [], []
+        for invoice in contract_invoices:
+            if invoice.invoice_state in ('posted', 'paid'):
+                invoices_to_cancel.append(invoice)
+            elif invoice.invoice_state in ('validated', 'draft'):
+                invoices_to_delete.append(invoice)
+        if invoices_to_cancel:
+            cls.cancel(invoices_to_cancel)
+        if invoices_to_delete:
+            super(ContractInvoice, cls).delete(invoices_to_delete)
 
 
 class CoveredElement:
@@ -669,14 +798,6 @@ class CoveredElement:
 
     premiums = fields.One2Many('contract.premium', 'covered_element',
         'Premiums')
-
-    def get_invoice_lines(self, start, end):
-        lines = []
-        for premium in self.premiums:
-            lines.extend(premium.get_invoice_lines(start, end))
-        for option in self.options:
-            lines.extend(option.get_invoice_lines(start, end))
-        return lines
 
     def get_premium_list(self):
         result = list(self.premiums)
@@ -690,16 +811,6 @@ class ContractOption:
 
     premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
 
-    def get_invoice_lines(self, start, end):
-        lines = []
-        if ((self.start_date or datetime.date.min) <= end
-                and start <= (self.end_date or datetime.date.max)):
-            for premium in self.premiums:
-                lines.extend(premium.get_invoice_lines(start, end))
-            for extra_premium in self.extra_premiums:
-                lines.extend(extra_premium.get_invoice_lines(start, end))
-        return lines
-
     def get_premium_list(self):
         result = list(self.premiums)
         for extra_premium in self.extra_premiums:
@@ -712,14 +823,6 @@ class ExtraPremium:
 
     premiums = fields.One2Many('contract.premium', 'extra_premium',
         'Premiums')
-
-    def get_invoice_lines(self, start, end):
-        lines = []
-        if ((self.start_date or datetime.date.min) <= end
-                and start <= (self.end_date or datetime.date.max)):
-            for premium in self.premiums:
-                lines.extend(premium.get_invoice_lines(start, end))
-        return lines
 
     def get_premium_list(self):
         return list(self.premiums)
@@ -887,12 +990,9 @@ class Premium(ModelSQL, ModelView):
                 amount += self.amount * Decimal(ratio)
         return amount
 
-    def get_invoice_lines(self, start, end):
+    def generate_invoice_lines(self, currency, start, end):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
-        if ((self.start or datetime.date.min) > end
-                or (self.end or datetime.date.max) < start):
-            return []
         start = (start if start > (self.start or datetime.date.min)
             else self.start)
         end = end if end < (self.end or datetime.date.max) else self.end
@@ -905,7 +1005,7 @@ class Premium(ModelSQL, ModelView):
                 origin=self,
                 quantity=1,
                 unit=None,
-                unit_price=self.main_contract.company.currency.round(amount),
+                unit_price=currency.round(amount),
                 taxes=self.taxes,
                 invoice_type='out_invoice',
                 account=self.account,
@@ -953,8 +1053,8 @@ class Premium(ModelSQL, ModelView):
             new_instance.end = new_instance.parent.end_date
         else:
             new_instance.end = end_date
-        new_instance.taxes = line.get('taxes', [])
         new_instance.amount = line['amount']
+        new_instance.taxes = line.get('taxes', [])
         new_instance.frequency = line['frequency']
         return new_instance
 
