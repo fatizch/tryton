@@ -6,7 +6,7 @@ from decimal import Decimal
 import trytond.tests.test_tryton
 
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import test_framework, utils
+from trytond.modules.cog_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -203,12 +203,12 @@ return True'''
         self.assert_(item_desc.id)
 
     @test_framework.prepare_test(
-         'offered_insurance.test0001_testFunctionalRuleCreation',
-         'offered_insurance.test0002_testTaxCreation',
-         'offered_insurance.test0003_testFeeCreation',
-         'offered_insurance.test0004_testNumberGeneratorCreation',
-         'offered_insurance.test0005_testItemDescCreation',
-         'company_cog.test0001_testCompanyCreation',
+        'offered_insurance.test0001_testFunctionalRuleCreation',
+        'offered_insurance.test0002_testTaxCreation',
+        'offered_insurance.test0003_testFeeCreation',
+        'offered_insurance.test0004_testNumberGeneratorCreation',
+        'offered_insurance.test0005_testItemDescCreation',
+        'company_cog.test0001_testCompanyCreation',
         )
     def test0010Coverage_creation(self):
         '''

@@ -40,7 +40,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(party.id)
 
     @test_framework.prepare_test(
-         'offered_insurance.test0100_testExtraPremiumKindCreation',
+        'offered_insurance.test0100_testExtraPremiumKindCreation',
     )
     def test0010_testExtraPremiumRateCalculate(self):
         extra_premium = self.ExtraPremium()
@@ -54,7 +54,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(result, Decimal('-5.0'))
 
     @test_framework.prepare_test(
-         'offered_insurance.test0100_testExtraPremiumKindCreation',
+        'offered_insurance.test0100_testExtraPremiumKindCreation',
     )
     def test0011_testExtraPremiumAmountCalculate(self):
         extra_premium = self.ExtraPremium()
