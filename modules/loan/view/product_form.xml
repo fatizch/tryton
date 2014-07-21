@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='pricing']/field[@name='premium_rules']" position="before">
-        <label name="calculate_each_payment"/>
-        <field name="calculate_each_payment"/>
-    </xpath>
-</data>

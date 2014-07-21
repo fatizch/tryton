@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form" position="inside">
+        <label name="every_loan_payment"/>
+        <field name="every_loan_payment"/>
+    </xpath>
+</data>
