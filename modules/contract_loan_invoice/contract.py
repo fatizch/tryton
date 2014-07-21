@@ -62,6 +62,7 @@ class Premium:
     def new_line(cls, line, start_date, end_date):
         result = super(Premium, cls).new_line(line, start_date, end_date)
         if 'loan' not in line:
+            result.loan = None
             return result
         result.loan = line['loan']
         result.end = min(end_date or datetime.date.max,
