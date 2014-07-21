@@ -2,7 +2,7 @@
 <data>
     <!-- form header -->
     <xpath expr="/form/group[@id='checkboxes']" position="replace_attributes">
-        <group colspan="5"/>
+        <group id='checkboxes' colspan="5"/>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']/label[@name='active']"
         position="before">
@@ -40,7 +40,7 @@
         </group>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <button name="button_start_synthesis_menu" string="Synthesis" xexpand="0"/>
+        <button name="button_start_synthesis_menu" string="Synthesis"/>
     </xpath>
     <xpath expr="/form/field[@name='name']" position="replace"/>
     <xpath expr="/form/label[@name='name']" position="replace"/>
