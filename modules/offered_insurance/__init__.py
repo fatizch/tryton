@@ -52,6 +52,7 @@ def register():
         DocumentReceiveSetRequests,
         DocumentRequestBatch,
         # From business_rule.premium_rule
+        PremiumDateConfiguration,
         PremiumRule,
         PremiumRuleComponent,
         TaxVersion,

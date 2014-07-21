@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 import copy
 from decimal import Decimal
+from dateutil import rrule
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Or, Bool
@@ -15,6 +16,7 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'PremiumDateConfiguration',
     'PremiumRule',
     'PremiumRuleComponent',
     'TaxVersion',
@@ -38,6 +40,52 @@ PRICING_FREQUENCY = [
     ('once_per_contract', 'Once per Contract'),
     ('once_per_invoice', 'Once per Invoice'),
     ]
+
+
+class PremiumDateConfiguration(model.CoopSQL, model.CoopView):
+    '''Premium Date Configuration
+
+    This model is used to store the dates at which the premiums should be
+    calculated for a given contract. It has different toggles whose activation
+    will add dome dates at which the premium should be calculated.
+
+    Those toggles must be activated depending on the different premium rules
+    that are activated on the product'''
+
+    __name__ = 'billing.premium.date_configuration'
+
+    product = fields.Many2One('offered.product', 'Product',
+        ondelete='CASCADE')
+    yearly_custom_date = fields.Date('Yearly, this day')
+    yearly_on_new_eve = fields.Boolean('Every first day of the year')
+    yearly_on_start_date = fields.Boolean('Yearly from the contract start')
+
+    @classmethod
+    def default_yearly_on_new_eve(cls):
+        return True
+
+    @classmethod
+    def default_yearly_on_start_date(cls):
+        return True
+
+    def get_dates_for_contract(self, contract):
+        max_date = contract.end_date or contract.next_renewal_date
+        if not max_date:
+            return []
+        ruleset = rrule.rruleset()
+        if self.yearly_custom_date:
+            ruleset.rrule(rrule.rrule(rrule.YEARLY,
+                    dtstart=contract.start_date, until=max_date,
+                    bymonthday=self.yearly_custom_date.day,
+                    bymonth=self.yearly_custom_date.month))
+        if self.yearly_on_new_eve:
+            ruleset.rrule(rrule.rrule(rrule.YEARLY,
+                    dtstart=contract.start_date, until=max_date,
+                    bymonthday=1, bymonth=1))
+        if self.yearly_on_start_date:
+            ruleset.rrule(rrule.rrule(rrule.YEARLY,
+                    dtstart=contract.start_date, until=max_date))
+        return [x.date() for x in ruleset]
 
 
 class PremiumRule(BusinessRuleRoot, model.CoopSQL):

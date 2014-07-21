@@ -70,6 +70,8 @@ class Product:
 
     term_renewal_rules = fields.One2Many('offered.term.rule', 'offered',
         'Term - Renewal')
+    premium_dates = fields.One2Many('billing.premium.date_configuration',
+        'product', 'Premium Dates', size=1)
     item_descriptors = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Item Descriptions'),
@@ -85,6 +87,10 @@ class Product:
                 'missing_covered_element_extra_data': 'The following covered '
                 'element extra data should be set on the product: %s',
                 })
+
+    @classmethod
+    def default_premium_dates(cls):
+        return [{}]
 
     @classmethod
     def validate(cls, instances):
@@ -247,6 +253,10 @@ class Product:
         dates = super(Product, self).get_dates(contract)
         for covered in contract.covered_elements:
             self.get_covered_element_dates(dates, covered)
+        if self.premium_dates:
+            premium_date_configuration = self.premium_dates[0]
+            dates.update(premium_date_configuration.get_dates_for_contract(
+                    contract))
         return dates
 
 
