@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -54,10 +54,6 @@ msgctxt "field:account.invoice,fees:"
 msgid "Fees"
 msgstr "Frais"
 
-msgctxt "field:account.invoice,products:"
-msgid "Products"
-msgstr "Produits"
-
 msgctxt "field:account.invoice,reconciliation_lines:"
 msgid "Reconciliation Lines"
 msgstr "Lignes de réconciliation"
@@ -102,6 +98,10 @@ msgctxt "field:contract,account_invoices:"
 msgid "Invoices"
 msgstr "Factures"
 
+msgctxt "field:contract,billing_information:"
+msgid "Current Billing Information"
+msgstr "Données de quittancement courant"
+
 msgctxt "field:contract,billing_informations:"
 msgid "Billing Information"
 msgstr "Quittancement"
@@ -109,6 +109,10 @@ msgstr "Quittancement"
 msgctxt "field:contract,billing_mode:"
 msgid "Billing Mode"
 msgstr "Mode de quittancement"
+
+msgctxt "field:contract,first_year_invoices:"
+msgid "First Year Invoices"
+msgstr "Quittances de la première année"
 
 msgctxt "field:contract,invoices:"
 msgid "Invoices"
@@ -177,6 +181,10 @@ msgstr "Jour de prélèvement"
 msgctxt "field:contract.billing_information,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.billing_information,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.billing_information,payment_term:"
 msgid "Payment Term"
@@ -386,6 +394,10 @@ msgctxt "field:contract.premium.display.premiums,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.premium.display.premiums,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.premium.display.premiums,premiums:"
 msgid "Premiums"
 msgstr "Primes"
@@ -401,6 +413,10 @@ msgstr "Enfants"
 msgctxt "field:contract.premium.display.premiums.line,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.premium.display.premiums.line,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.premium.display.premiums.line,name:"
 msgid "Name"
@@ -506,6 +522,10 @@ msgctxt "field:offered.billing_mode,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:offered.billing_mode,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:offered.billing_mode,name:"
 msgid "Name"
 msgstr "Nom"
@@ -581,6 +601,10 @@ msgstr "Créé par"
 msgctxt "field:offered.product-offered.billing_mode,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:offered.product-offered.billing_mode,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:offered.product-offered.billing_mode,order:"
 msgid "Order"
@@ -718,6 +742,19 @@ msgstr "Modes de quittancement"
 msgctxt "model:ir.action,name:act_premium_display"
 msgid "Display Contract Premium"
 msgstr "Afficher la prime du contrat"
+
+msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_all"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_canceled"
+msgid "Canceled"
+msgstr "Annulé"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_invoice_domain_posted_paid"
+msgid "Posted - Paid"
+msgstr "Emises - Payées"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Invoice Frequencies"
@@ -976,8 +1013,8 @@ msgid "Product Billing Mode"
 msgstr "Mode de quittancement"
 
 msgctxt "view:offered.product:"
-msgid "Invoice Parameters"
-msgstr "Paramètres de quittancement"
+msgid "Billing Modes"
+msgstr "Modes de quittancement"
 
 msgctxt "wizard_button:contract.invoice,start,end:"
 msgid "Cancel"

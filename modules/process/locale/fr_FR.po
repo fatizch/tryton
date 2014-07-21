@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -85,6 +85,14 @@ msgstr "Position des Boutons"
 msgctxt "field:process,steps_to_display:"
 msgid "Steps"
 msgstr "Etapes"
+
+msgctxt "field:process,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:process,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:process,technical_name:"
 msgid "Technical Name"
@@ -333,6 +341,14 @@ msgstr "Nom"
 msgctxt "field:process.step,step_xml:"
 msgid "XML"
 msgstr "Description de la Vue"
+
+msgctxt "field:process.step,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:process.step,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:process.step,technical_name:"
 msgid "Technical Name"
@@ -655,10 +671,6 @@ msgid "Calculate Prices"
 msgstr "Calculer les Primes"
 
 msgctxt "view:contract:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:contract:"
 msgid "Complete"
 msgstr "Terminer"
 
@@ -669,6 +681,10 @@ msgstr "Risques Couverts"
 msgctxt "view:contract:"
 msgid "Documents"
 msgstr "Documents"
+
+msgctxt "view:contract:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "view:contract:"
 msgid "Garanties"

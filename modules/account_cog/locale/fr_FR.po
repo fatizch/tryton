@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -58,6 +58,10 @@ msgctxt "field:account.fee.description,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.fee.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:account.fee.description,name:"
 msgid "Fee Name"
 msgstr "Nom du Frais"
@@ -109,6 +113,10 @@ msgstr "Type"
 msgctxt "field:account.fee.description.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
+
+msgctxt "field:account.fee.description.version,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:account.fee.description.version,rec_name:"
 msgid "Name"
@@ -186,6 +194,10 @@ msgctxt "field:account.tax.description,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.tax.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:account.tax.description,name:"
 msgid "Name"
 msgstr "Nom"
@@ -238,6 +250,10 @@ msgctxt "field:account.tax.description.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
+msgctxt "field:account.tax.description.version,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:account.tax.description.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -265,6 +281,10 @@ msgstr "Identifiant XML"
 msgctxt "field:company.company,fiscal_years:"
 msgid "Fiscal Years"
 msgstr "Années fiscales"
+
+msgctxt "field:ir.test_case,account_template:"
+msgid "Account Template"
+msgstr "Modèles de compte"
 
 msgctxt "field:ir.test_case,fiscal_year_number:"
 msgid "Number of Fiscal Years to create"
@@ -357,6 +377,10 @@ msgstr "Jeux d'essai : configuration de la comptabilité"
 msgctxt "model:ir.test_case.instance,name:fiscal_year_test_case"
 msgid "Fiscal Year Test Case"
 msgstr "Jeux d'essai : années fiscales"
+
+msgctxt "model:ir.test_case.instance,name:journal_test_case"
+msgid "Journal Creation"
+msgstr "Jeux d'essai: Création des journaux"
 
 msgctxt "model:ir.test_case.instance,name:tax_test_case"
 msgid "Tax Test Case"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -52,6 +52,10 @@ msgid ""
 msgstr ""
 "Le compte bancaire de paiement doit être renseigné, le mode de paiement "
 "choisit étant le prélèvement"
+
+msgctxt "error:contract:"
+msgid "The selected subscriber does not have an address"
+msgstr "Le souscripteur sélectionné n'a pas d'adresse."
 
 msgctxt "error:contract:"
 msgid "There must be at least one covered element"
@@ -116,6 +120,10 @@ msgstr "ID"
 msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
+
+msgctxt "field:contract.subscribe.find_process,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.subscribe.find_process,possible_brokers:"
 msgid "Possible Brokers"

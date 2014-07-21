@@ -1,0 +1,2553 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:account.account.template,name:PCA"
+msgid "Plan comptable des assurances"
+msgstr "Plan comptable des assurances"
+
+msgctxt "model:account.account.template,name:PCA_1"
+msgid "Capitaux permanents et emprunts"
+msgstr "Capitaux permanents et emprunts"
+
+msgctxt "model:account.account.template,name:PCA_10"
+msgid "Capital et réserves"
+msgstr "Capital et réserves"
+
+msgctxt "model:account.account.template,name:PCA_101"
+msgid "Capital"
+msgstr "Capital"
+
+msgctxt "model:account.account.template,name:PCA_102"
+msgid "Fonds d'établissement constitué"
+msgstr "Fonds d'établissement constitué"
+
+msgctxt "model:account.account.template,name:PCA_103"
+msgid "Fonds social complémentaire"
+msgstr "Fonds social complémentaire"
+
+msgctxt "model:account.account.template,name:PCA_104"
+msgid "Primes liées au capital social"
+msgstr "Primes liées au capital social"
+
+msgctxt "model:account.account.template,name:PCA_105"
+msgid "Écarts de réévaluation"
+msgstr "Écarts de réévaluation"
+
+msgctxt "model:account.account.template,name:PCA_106"
+msgid "Réserves"
+msgstr "Réserves"
+
+msgctxt "model:account.account.template,name:PCA_1062"
+msgid "Réserves indisponibles"
+msgstr "Réserves indisponibles"
+
+msgctxt "model:account.account.template,name:PCA_1063"
+msgid "Réserves statutaires ou contractuelles"
+msgstr "Réserves statutaires ou contractuelles"
+
+msgctxt "model:account.account.template,name:PCA_1064"
+msgid "Réserves réglementées "
+msgstr "Réserves réglementées "
+
+msgctxt "model:account.account.template,name:PCA_10641"
+msgid "Plus-values nettes à long terme"
+msgstr "Plus-values nettes à long terme"
+
+msgctxt "model:account.account.template,name:PCA_10642"
+msgid "Réserve pour remboursement d'emprunt pour fonds d'établissement"
+msgstr "Réserve pour remboursement d'emprunt pour fonds d'établissement"
+
+msgctxt "model:account.account.template,name:PCA_10645"
+msgid "Réserve de capitalisation"
+msgstr "Réserve de capitalisation"
+
+msgctxt "model:account.account.template,name:PCA_1068"
+msgid "Autres réserves"
+msgstr "Autres réserves"
+
+msgctxt "model:account.account.template,name:PCA_109"
+msgid "Capital souscrit non appelé"
+msgstr "Capital souscrit non appelé"
+
+msgctxt "model:account.account.template,name:PCA_11"
+msgid "Report à nouveau"
+msgstr "Report à nouveau"
+
+msgctxt "model:account.account.template,name:PCA_12"
+msgid "Résultat de l'exercice (bénéfice ou perte)"
+msgstr "Résultat de l'exercice (bénéfice ou perte)"
+
+msgctxt "model:account.account.template,name:PCA_14"
+msgid "Provisions réglementées (autres que les provisions techniques)"
+msgstr "Provisions réglementées (autres que les provisions techniques)"
+
+msgctxt "model:account.account.template,name:PCA_15"
+msgid "Provisions"
+msgstr "Provisions"
+
+msgctxt "model:account.account.template,name:PCA_16"
+msgid "Emprunts et dettes assimilées"
+msgstr "Emprunts et dettes assimilées"
+
+msgctxt "model:account.account.template,name:PCA_160"
+msgid "Passifs subordonnés "
+msgstr "Passifs subordonnés "
+
+msgctxt "model:account.account.template,name:PCA_1600"
+msgid "Titres participatifs admis en constitution de la marge de solvabilité"
+msgstr "Titres participatifs admis en constitution de la marge de solvabilité"
+
+msgctxt "model:account.account.template,name:PCA_1601"
+msgid ""
+"Autres emprunts et titres subordonnés admis en constitution de la marge de "
+"solvabilité"
+msgstr ""
+"Autres emprunts et titres subordonnés admis en constitution de la marge de "
+"solvabilité"
+
+msgctxt "model:account.account.template,name:PCA_1602"
+msgid ""
+"Emprunts et titres subordonnés non admis en constitution de la marge de "
+"solvabilité"
+msgstr ""
+"Emprunts et titres subordonnés non admis en constitution de la marge de "
+"solvabilité"
+
+msgctxt "model:account.account.template,name:PCA_161"
+msgid "Emprunts obligataires "
+msgstr "Emprunts obligataires "
+
+msgctxt "model:account.account.template,name:PCA_1610"
+msgid "Emprunts obligataires convertibles"
+msgstr "Emprunts obligataires convertibles"
+
+msgctxt "model:account.account.template,name:PCA_1611"
+msgid "Autres emprunts obligataires"
+msgstr "Autres emprunts obligataires"
+
+msgctxt "model:account.account.template,name:PCA_162"
+msgid "Emprunt pour fonds d'établissement"
+msgstr "Emprunt pour fonds d'établissement"
+
+msgctxt "model:account.account.template,name:PCA_163"
+msgid ""
+"Billets de trésorerie et autres titres de créance négociables émis par "
+"l'entreprise"
+msgstr ""
+"Billets de trésorerie et autres titres de créance négociables émis par "
+"l'entreprise"
+
+msgctxt "model:account.account.template,name:PCA_164"
+msgid "Dettes envers des établissements de crédit "
+msgstr "Dettes envers des établissements de crédit "
+
+msgctxt "model:account.account.template,name:PCA_1640"
+msgid "Entreprises liées"
+msgstr "Entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_1641"
+msgid "Participations"
+msgstr "Participations"
+
+msgctxt "model:account.account.template,name:PCA_1642"
+msgid "Autres établissements de crédit"
+msgstr "Autres établissements de crédit"
+
+msgctxt "model:account.account.template,name:PCA_165"
+msgid "Dépôts et cautionnements reçus "
+msgstr "Dépôts et cautionnements reçus "
+
+msgctxt "model:account.account.template,name:PCA_1650"
+msgid "Entreprises liées"
+msgstr "Entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_1651"
+msgid "Participations"
+msgstr "Participations"
+
+msgctxt "model:account.account.template,name:PCA_1652"
+msgid ""
+"Dépôts de garantie- liés à des instruments financiers à terme- reçus en "
+"espèces "
+msgstr ""
+"Dépôts de garantie- liés à des instruments financiers à terme- reçus en "
+"espèces "
+
+msgctxt "model:account.account.template,name:PCA_1653"
+msgid ""
+"Dépôts de garantie- liés à des instruments financiers à terme- reçus titres "
+msgstr ""
+"Dépôts de garantie- liés à des instruments financiers à terme- reçus titres "
+
+msgctxt "model:account.account.template,name:PCA_1654"
+msgid "Autres"
+msgstr "Autres"
+
+msgctxt "model:account.account.template,name:PCA_168"
+msgid "Autres emprunts et dettes assimilées "
+msgstr "Autres emprunts et dettes assimilées "
+
+msgctxt "model:account.account.template,name:PCA_1680"
+msgid "Entreprises liées"
+msgstr "Entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_1681"
+msgid "Participations"
+msgstr "Participations"
+
+msgctxt "model:account.account.template,name:PCA_1682"
+msgid "Autres"
+msgstr "Autres"
+
+msgctxt "model:account.account.template,name:PCA_17"
+msgid ""
+"Dettes pour dépôts espèces reçus des cessionnaires et rétrocessionnaires en "
+"représentation d'engagements techniques"
+msgstr ""
+"Dettes pour dépôts espèces reçus des cessionnaires et rétrocessionnaires en "
+"représentation d'engagements techniques"
+
+msgctxt "model:account.account.template,name:PCA_170"
+msgid "Entreprises liées"
+msgstr "Entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_171"
+msgid "Participations"
+msgstr "Participations"
+
+msgctxt "model:account.account.template,name:PCA_172"
+msgid "Autres entreprises"
+msgstr "Autres entreprises"
+
+msgctxt "model:account.account.template,name:PCA_18"
+msgid "Comptes de liaison"
+msgstr "Comptes de liaison"
+
+msgctxt "model:account.account.template,name:PCA_183"
+msgid "Liaisons internes "
+msgstr "Liaisons internes "
+
+msgctxt "model:account.account.template,name:PCA_1831"
+msgid "Position de change"
+msgstr "Position de change"
+
+msgctxt "model:account.account.template,name:PCA_1832"
+msgid "Contre-valeur de position de change"
+msgstr "Contre-valeur de position de change"
+
+msgctxt "model:account.account.template,name:PCA_184"
+msgid "Liaisons de succursales"
+msgstr "Liaisons de succursales"
+
+msgctxt "model:account.account.template,name:PCA_185"
+msgid ""
+"Opérations légalement cantonnées dans une comptabilité auxiliaire "
+"d'affectation"
+msgstr ""
+"Opérations légalement cantonnées dans une comptabilité auxiliaire "
+"d'affectation"
+
+msgctxt "model:account.account.template,name:PCA_1851"
+msgid ""
+"Changement d'affectation d'actifs de placement sous condition résolutoire "
+msgstr ""
+"Changement d'affectation d'actifs de placement sous condition résolutoire "
+
+msgctxt "model:account.account.template,name:PCA_1852"
+msgid ""
+"Changement d'affectation d'actifs de placement ayant un caractère ferme et "
+"définitif "
+msgstr ""
+"Changement d'affectation d'actifs de placement ayant un caractère ferme et "
+"définitif "
+
+msgctxt "model:account.account.template,name:PCA_1853"
+msgid ""
+"Transfert de produits ou de charges à destination d'une association de "
+"souscription "
+msgstr ""
+"Transfert de produits ou de charges à destination d'une association de "
+"souscription "
+
+msgctxt "model:account.account.template,name:PCA_1858"
+msgid ""
+"Prise en charge par l'organisme d'assurance gestionnaire d'une insuffisance "
+"de couverture des engagements au titre de chaque comptabilité auxiliaire "
+"d'affectation d'opérations d'assurance légalement cantonnées "
+msgstr ""
+"Prise en charge par l'organisme d'assurance gestionnaire d'une insuffisance "
+"de couverture des engagements au titre de chaque comptabilité auxiliaire "
+"d'affectation d'opérations d'assurance légalement cantonnées "
+
+msgctxt "model:account.account.template,name:PCA_1859"
+msgid "Autres transferts de produits ou de charges"
+msgstr "Autres transferts de produits ou de charges"
+
+msgctxt "model:account.account.template,name:PCA_2"
+msgid "Placements"
+msgstr "Placements"
+
+msgctxt "model:account.account.template,name:PCA_21"
+msgid "Placements immobiliers"
+msgstr "Placements immobiliers"
+
+msgctxt "model:account.account.template,name:PCA_210"
+msgid "Terrains non construits"
+msgstr "Terrains non construits"
+
+msgctxt "model:account.account.template,name:PCA_211"
+msgid "Parts de sociétés non cotées à objet foncier"
+msgstr "Parts de sociétés non cotées à objet foncier"
+
+msgctxt "model:account.account.template,name:PCA_212"
+msgid "Immeubles bâtis hors immeubles d'exploitation"
+msgstr "Immeubles bâtis hors immeubles d'exploitation"
+
+msgctxt "model:account.account.template,name:PCA_213"
+msgid ""
+"Parts et actions de sociétés immobilières non cotées hors immeubles "
+"d'exploitation"
+msgstr ""
+"Parts et actions de sociétés immobilières non cotées hors immeubles "
+"d'exploitation"
+
+msgctxt "model:account.account.template,name:PCA_219"
+msgid "Immeubles d'exploitation "
+msgstr "Immeubles d'exploitation "
+
+msgctxt "model:account.account.template,name:PCA_2192"
+msgid "Immeubles bâtis"
+msgstr "Immeubles bâtis"
+
+msgctxt "model:account.account.template,name:PCA_2193"
+msgid "Parts de sociétés immobilières non cotées"
+msgstr "Parts de sociétés immobilières non cotées"
+
+msgctxt "model:account.account.template,name:PCA_22"
+msgid "Placements immobiliers en cours"
+msgstr "Placements immobiliers en cours"
+
+msgctxt "model:account.account.template,name:PCA_220"
+msgid "Terrains affectés à une construction en cours"
+msgstr "Terrains affectés à une construction en cours"
+
+msgctxt "model:account.account.template,name:PCA_222"
+msgid "Immeubles en cours"
+msgstr "Immeubles en cours"
+
+msgctxt "model:account.account.template,name:PCA_223"
+msgid ""
+"Parts et actions de sociétés immobilières non cotées (immeubles en cours)"
+msgstr ""
+"Parts et actions de sociétés immobilières non cotées (immeubles en cours)"
+
+msgctxt "model:account.account.template,name:PCA_229"
+msgid "Immeubles d'exploitation en cours"
+msgstr "Immeubles d'exploitation en cours"
+
+msgctxt "model:account.account.template,name:PCA_23"
+msgid "Placements financiers"
+msgstr "Placements financiers"
+
+msgctxt "model:account.account.template,name:PCA_230"
+msgid "Actions et autres titres à revenu variable "
+msgstr "Actions et autres titres à revenu variable "
+
+msgctxt "model:account.account.template,name:PCA_2300"
+msgid "Actions et titres cotés"
+msgstr "Actions et titres cotés"
+
+msgctxt "model:account.account.template,name:PCA_2301"
+msgid ""
+"Actions et parts d'OPCVM détenant exclusivement des titres à revenu fixe"
+msgstr ""
+"Actions et parts d'OPCVM détenant exclusivement des titres à revenu fixe"
+
+msgctxt "model:account.account.template,name:PCA_2302"
+msgid "Actions et parts d'autres OPCVM"
+msgstr "Actions et parts d'autres OPCVM"
+
+msgctxt "model:account.account.template,name:PCA_2305"
+msgid "Actions et titres non cotés"
+msgstr "Actions et titres non cotés"
+
+msgctxt "model:account.account.template,name:PCA_231"
+msgid ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe "
+msgstr ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe "
+
+msgctxt "model:account.account.template,name:PCA_2310"
+msgid "Obligations cotées"
+msgstr "Obligations cotées"
+
+msgctxt "model:account.account.template,name:PCA_2315"
+msgid "Obligations non cotées"
+msgstr "Obligations non cotées"
+
+msgctxt "model:account.account.template,name:PCA_2316"
+msgid "Titres de créance négociables et bons du Trésor"
+msgstr "Titres de créance négociables et bons du Trésor"
+
+msgctxt "model:account.account.template,name:PCA_2317"
+msgid "Autres"
+msgstr "Autres"
+
+msgctxt "model:account.account.template,name:PCA_232"
+msgid "Prêts "
+msgstr "Prêts"
+
+msgctxt "model:account.account.template,name:PCA_2320"
+msgid "Prêts obtenus ou garantis par un État membre de l'OCDE"
+msgstr "Prêts obtenus ou garantis par un État membre de l'OCDE"
+
+msgctxt "model:account.account.template,name:PCA_2321"
+msgid "Prêts hypothécaires"
+msgstr "Prêts hypothécaires"
+
+msgctxt "model:account.account.template,name:PCA_2322"
+msgid "Autres prêts"
+msgstr "Autres prêts"
+
+msgctxt "model:account.account.template,name:PCA_2323"
+msgid "Avances sur polices"
+msgstr "Avances sur polices"
+
+msgctxt "model:account.account.template,name:PCA_233"
+msgid "Dépôts auprès des établissements de crédit "
+msgstr "Dépôts auprès des établissements de crédit "
+
+msgctxt "model:account.account.template,name:PCA_2331"
+msgid "Autres dépôts de garantie auprès d'établissements de crédit"
+msgstr "Autres dépôts de garantie auprès d'établissements de crédit"
+
+msgctxt "model:account.account.template,name:PCA_2332"
+msgid "Autres dépôts auprès d'établissements de crédit"
+msgstr "Autres dépôts auprès d'établissements de crédit"
+
+msgctxt "model:account.account.template,name:PCA_234"
+msgid "Autres placements "
+msgstr "Autres placements"
+
+msgctxt "model:account.account.template,name:PCA_2340"
+msgid "Dépôts et cautionnements"
+msgstr "Dépôts et cautionnements"
+
+msgctxt "model:account.account.template,name:PCA_2341"
+msgid "Créances représentatives de titres prêtés"
+msgstr "Créances représentatives de titres prêtés"
+
+msgctxt "model:account.account.template,name:PCA_2342"
+msgid ""
+"Dépôts de garantie- liés à des instruments financiers à terme- effectués en "
+"espèces"
+msgstr ""
+"Dépôts de garantie- liés à des instruments financiers à terme- effectués en "
+"espèces"
+
+msgctxt "model:account.account.template,name:PCA_2343"
+msgid ""
+"Titres déposés en garantie avec transfert de propriété au titre d'opérations"
+" sur instruments financiers à terme "
+msgstr ""
+"Titres déposés en garantie avec transfert de propriété au titre d'opérations"
+" sur instruments financiers à terme "
+
+msgctxt "model:account.account.template,name:PCA_2344"
+msgid "Autres"
+msgstr "Autres"
+
+msgctxt "model:account.account.template,name:PCA_235"
+msgid "Créances pour espèces déposées chez les cédantes"
+msgstr "Créances pour espèces déposées chez les cédantes"
+
+msgctxt "model:account.account.template,name:PCA_24"
+msgid ""
+"Placements représentant les provisions techniques afférentes aux contrats en"
+" unités de compte"
+msgstr ""
+"Placements représentant les provisions techniques afférentes aux contrats en"
+" unités de compte"
+
+msgctxt "model:account.account.template,name:PCA_240"
+msgid "Placements immobiliers"
+msgstr "Placements immobiliers"
+
+msgctxt "model:account.account.template,name:PCA_241"
+msgid "Titres à revenu variable autres que les OPCVM"
+msgstr "Titres à revenu variable autres que les OPCVM"
+
+msgctxt "model:account.account.template,name:PCA_242"
+msgid ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe"
+msgstr ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe"
+
+msgctxt "model:account.account.template,name:PCA_243"
+msgid "Parts d'OPCVM détenant exclusivement des titres à revenu fixe"
+msgstr "Parts d'OPCVM détenant exclusivement des titres à revenu fixe"
+
+msgctxt "model:account.account.template,name:PCA_244"
+msgid "Parts d'autres OPCVM"
+msgstr "Parts d'autres OPCVM"
+
+msgctxt "model:account.account.template,name:PCA_25"
+msgid "Placements dans des entreprises liées"
+msgstr "Placements dans des entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_250"
+msgid "Actions et autres titres à revenu variable "
+msgstr "Actions et autres titres à revenu variable "
+
+msgctxt "model:account.account.template,name:PCA_2500"
+msgid "Actions et titres cotés"
+msgstr "Actions et titres cotés"
+
+msgctxt "model:account.account.template,name:PCA_2505"
+msgid "Actions et titres non cotés"
+msgstr "Actions et titres non cotés"
+
+msgctxt "model:account.account.template,name:PCA_251"
+msgid ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe"
+msgstr ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe"
+
+msgctxt "model:account.account.template,name:PCA_252"
+msgid "Prêts"
+msgstr "Prêts"
+
+msgctxt "model:account.account.template,name:PCA_253"
+msgid "Dépôts auprès des établissements de crédit"
+msgstr "Dépôts auprès des établissements de crédit"
+
+msgctxt "model:account.account.template,name:PCA_254"
+msgid "Autres placements"
+msgstr "Autres placements"
+
+msgctxt "model:account.account.template,name:PCA_255"
+msgid "Créances pour espèces déposées chez les cédantes"
+msgstr "Créances pour espèces déposées chez les cédantes"
+
+msgctxt "model:account.account.template,name:PCA_26"
+msgid ""
+"Placements dans des entreprises avec lesquelles existe un lien de "
+"participation"
+msgstr ""
+"Placements dans des entreprises avec lesquelles existe un lien de "
+"participation"
+
+msgctxt "model:account.account.template,name:PCA_260"
+msgid "Actions et autres titres à revenu variable "
+msgstr "Actions et autres titres à revenu variable "
+
+msgctxt "model:account.account.template,name:PCA_2600"
+msgid "Actions et titres cotés"
+msgstr "Actions et titres cotés"
+
+msgctxt "model:account.account.template,name:PCA_2605"
+msgid "Actions et titres non cotés"
+msgstr "Actions et titres non cotés"
+
+msgctxt "model:account.account.template,name:PCA_261"
+msgid ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe"
+msgstr ""
+"Obligations- titres de créance négociables et autres titres à revenu fixe"
+
+msgctxt "model:account.account.template,name:PCA_262"
+msgid "Prêts"
+msgstr "Prêts"
+
+msgctxt "model:account.account.template,name:PCA_263"
+msgid "Dépôts auprès des établissements de crédit"
+msgstr "Dépôts auprès des établissements de crédit"
+
+msgctxt "model:account.account.template,name:PCA_264"
+msgid "Autres placements"
+msgstr "Autres placements"
+
+msgctxt "model:account.account.template,name:PCA_265"
+msgid "Créances pour espèces déposées chez les cédantes"
+msgstr "Créances pour espèces déposées chez les cédantes"
+
+msgctxt "model:account.account.template,name:PCA_28"
+msgid "Amortissements"
+msgstr "Amortissements"
+
+msgctxt "model:account.account.template,name:PCA_29"
+msgid "Provisions"
+msgstr "Provisions"
+
+msgctxt "model:account.account.template,name:PCA_3"
+msgid "Provisions techniques"
+msgstr "Provisions techniques"
+
+msgctxt "model:account.account.template,name:PCA_30"
+msgid "Provisions d'assurance vie"
+msgstr "Provisions d'assurance vie"
+
+msgctxt "model:account.account.template,name:PCA_300"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_304"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_31"
+msgid "Provisions pour primes non acquises et risques en cours (Non-vie)"
+msgstr "Provisions pour primes non acquises et risques en cours (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_312"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_315"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_32"
+msgid "Provisions pour sinistres à payer (Vie)"
+msgstr "Provisions pour sinistres à payer (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_320"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_324"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_33"
+msgid "Provisions pour sinistres à payer (Non-vie)"
+msgstr "Provisions pour sinistres à payer (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_332"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_333"
+msgid "Prévisions de recours à encaisser"
+msgstr "Prévisions de recours à encaisser"
+
+msgctxt "model:account.account.template,name:PCA_335"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_34"
+msgid "Provisions pour participation aux bénéfices et ristournes (Vie)"
+msgstr "Provisions pour participation aux bénéfices et ristournes (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_340"
+msgid "Affaires directes "
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_3400"
+msgid "Provision pour participation aux bénéfices"
+msgstr "Provision pour participation aux bénéfices"
+
+msgctxt "model:account.account.template,name:PCA_3401"
+msgid "Provision pour ristournes"
+msgstr "Provision pour ristournes"
+
+msgctxt "model:account.account.template,name:PCA_344"
+msgid "Acceptations "
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_3440"
+msgid "Provision pour participation aux bénéfices"
+msgstr "Provision pour participation aux bénéfices"
+
+msgctxt "model:account.account.template,name:PCA_3441"
+msgid "Provision pour ristournes"
+msgstr "Provision pour ristournes"
+
+msgctxt "model:account.account.template,name:PCA_35"
+msgid "Provisions pour participation aux bénéfices et ristournes (Non-vie)"
+msgstr "Provisions pour participation aux bénéfices et ristournes (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_352"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_355"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_36"
+msgid "Provisions pour égalisation"
+msgstr "Provisions pour égalisation"
+
+msgctxt "model:account.account.template,name:PCA_37"
+msgid "Autres provisions techniques"
+msgstr "Autres provisions techniques"
+
+msgctxt "model:account.account.template,name:PCA_370"
+msgid "Affaires directes Vie "
+msgstr "Affaires directes Vie "
+
+msgctxt "model:account.account.template,name:PCA_3700"
+msgid "Provision pour aléas financiers"
+msgstr "Provision pour aléas financiers"
+
+msgctxt "model:account.account.template,name:PCA_3703"
+msgid "Provision pour risque d'exigibilité des engagements techniques (Vie)"
+msgstr "Provision pour risque d'exigibilité des engagements techniques (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_3705"
+msgid "Autres provisions techniques vie relatives aux contrats PERP"
+msgstr "Autres provisions techniques vie relatives aux contrats PERP"
+
+msgctxt "model:account.account.template,name:PCA_372"
+msgid "Affaires directes Non-vie "
+msgstr "Affaires directes Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_3720"
+msgid "Provision pour risques croissants"
+msgstr "Provision pour risques croissants"
+
+msgctxt "model:account.account.template,name:PCA_3721"
+msgid "Provisions mathématiques des rentes"
+msgstr "Provisions mathématiques des rentes"
+
+msgctxt "model:account.account.template,name:PCA_3723"
+msgid ""
+"Provision pour risque d'exigibilité des engagements techniques (Non-vie)"
+msgstr ""
+"Provision pour risque d'exigibilité des engagements techniques (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_374"
+msgid "Acceptations Vie"
+msgstr "Acceptations Vie"
+
+msgctxt "model:account.account.template,name:PCA_375"
+msgid "Acceptations Non-vie"
+msgstr "Acceptations Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_377"
+msgid ""
+"Engagements envers les institutions de prévoyance ou relatifs aux fonds de "
+"placement gérés par l'entreprise"
+msgstr ""
+"Engagements envers les institutions de prévoyance ou relatifs aux fonds de "
+"placement gérés par l'entreprise"
+
+msgctxt "model:account.account.template,name:PCA_38"
+msgid "Provisions des contrats en unités de compte"
+msgstr "Provisions des contrats en unités de compte"
+
+msgctxt "model:account.account.template,name:PCA_380"
+msgid "Provisions mathématiques"
+msgstr "Provisions mathématiques"
+
+msgctxt "model:account.account.template,name:PCA_385"
+msgid "Provisions pour participation aux bénéfices"
+msgstr "Provisions pour participation aux bénéfices"
+
+msgctxt "model:account.account.template,name:PCA_39"
+msgid ""
+"Part des cessionnaires et rétrocessionnaires dans les provisions techniques"
+msgstr ""
+"Part des cessionnaires et rétrocessionnaires dans les provisions techniques"
+
+msgctxt "model:account.account.template,name:PCA_390"
+msgid "Provisions d'assurance vie (Vie)"
+msgstr "Provisions d'assurance vie (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_391"
+msgid "Provisions pour primes non acquises et risques en cours (Non-vie)"
+msgstr "Provisions pour primes non acquises et risques en cours (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_392"
+msgid "Provisions pour sinistres (Vie)"
+msgstr "Provisions pour sinistres (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_393"
+msgid "Provisions pour sinistres (Non-vie)"
+msgstr "Provisions pour sinistres (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_394"
+msgid "Provisions pour participation aux bénéfices et ristournes (Vie)"
+msgstr "Provisions pour participation aux bénéfices et ristournes (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_395"
+msgid "Provisions pour participation aux bénéfices et ristournes (Non-vie)"
+msgstr "Provisions pour participation aux bénéfices et ristournes (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_396"
+msgid "Provisions pour égalisation"
+msgstr "Provisions pour égalisation"
+
+msgctxt "model:account.account.template,name:PCA_397"
+msgid "Autres provisions techniques "
+msgstr "Autres provisions techniques"
+
+msgctxt "model:account.account.template,name:PCA_3970"
+msgid "Vie"
+msgstr "Vie"
+
+msgctxt "model:account.account.template,name:PCA_3972"
+msgid "Non-vie"
+msgstr "Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_398"
+msgid "Provisions techniques sur contrats en unités de compte"
+msgstr "Provisions techniques sur contrats en unités de compte"
+
+msgctxt "model:account.account.template,name:PCA_4"
+msgid "Comptes de tiers et de régularisation"
+msgstr "Comptes de tiers et de régularisation"
+
+msgctxt "model:account.account.template,name:PCA_40"
+msgid "Créances et dettes nées d'opérations d'assurance directe"
+msgstr "Créances et dettes nées d'opérations d'assurance directe"
+
+msgctxt "model:account.account.template,name:PCA_400"
+msgid "Primes acquises non émises brutes"
+msgstr "Primes acquises non émises brutes"
+
+msgctxt "model:account.account.template,name:PCA_401"
+msgid "Primes à annuler"
+msgstr "Primes à annuler"
+
+msgctxt "model:account.account.template,name:PCA_402"
+msgid "Assurés"
+msgstr "Assurés"
+
+msgctxt "model:account.account.template,name:PCA_403"
+msgid "Intermédiaires d'assurance"
+msgstr "Intermédiaires d'assurance"
+
+msgctxt "model:account.account.template,name:PCA_404"
+msgid "Comptes courants des coassureurs"
+msgstr "Comptes courants des coassureurs"
+
+msgctxt "model:account.account.template,name:PCA_408"
+msgid "Autres tiers"
+msgstr "Autres tiers"
+
+msgctxt "model:account.account.template,name:PCA_41"
+msgid "Créances et dettes nées d'opérations de réassurance"
+msgstr "Créances et dettes nées d'opérations de réassurance"
+
+msgctxt "model:account.account.template,name:PCA_410"
+msgid "Comptes courants des cessionnaires et rétrocessionnaires "
+msgstr "Comptes courants des cessionnaires et rétrocessionnaires "
+
+msgctxt "model:account.account.template,name:PCA_4100"
+msgid "Entreprises liées"
+msgstr "Entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_4101"
+msgid "Entreprises avec lesquelles existe un lien de participation"
+msgstr "Entreprises avec lesquelles existe un lien de participation"
+
+msgctxt "model:account.account.template,name:PCA_4102"
+msgid "Autres"
+msgstr "Autres"
+
+msgctxt "model:account.account.template,name:PCA_411"
+msgid "Comptes courants des cédantes et rétrocédantes "
+msgstr "Comptes courants des cédantes et rétrocédantes "
+
+msgctxt "model:account.account.template,name:PCA_4110"
+msgid "Entreprises liées"
+msgstr "Entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_4111"
+msgid "Entreprises avec lesquelles existe un lien de participation"
+msgstr "Entreprises avec lesquelles existe un lien de participation"
+
+msgctxt "model:account.account.template,name:PCA_4112"
+msgid "Autres entreprises"
+msgstr "Autres entreprises"
+
+msgctxt "model:account.account.template,name:PCA_4117"
+msgid "Clients"
+msgstr "Clients"
+
+msgctxt "model:account.account.template,name:PCA_412"
+msgid "Courtiers de réassurance et autres intermédiaires"
+msgstr "Courtiers de réassurance et autres intermédiaires"
+
+msgctxt "model:account.account.template,name:PCA_42"
+msgid "Personnel et comptes rattachés"
+msgstr "Personnel et comptes rattachés"
+
+msgctxt "model:account.account.template,name:PCA_43"
+msgid "Sécurité sociale et autres organismes sociaux"
+msgstr "Sécurité sociale et autres organismes sociaux"
+
+msgctxt "model:account.account.template,name:PCA_44"
+msgid "État et autres collectivités publiques"
+msgstr "État et autres collectivités publiques"
+
+msgctxt "model:account.account.template,name:PCA_45"
+msgid "Associés"
+msgstr "Associés"
+
+msgctxt "model:account.account.template,name:PCA_46"
+msgid "Débiteurs et créditeurs divers"
+msgstr "Débiteurs et créditeurs divers"
+
+msgctxt "model:account.account.template,name:PCA_460"
+msgid "Entreprises liées"
+msgstr "Entreprises liées"
+
+msgctxt "model:account.account.template,name:PCA_461"
+msgid "Entreprises avec lesquelles existe un lien de participation"
+msgstr "Entreprises avec lesquelles existe un lien de participation"
+
+msgctxt "model:account.account.template,name:PCA_462"
+msgid "Autres"
+msgstr "Autres"
+
+msgctxt "model:account.account.template,name:PCA_48"
+msgid "Comptes de régularisation"
+msgstr "Comptes de régularisation"
+
+msgctxt "model:account.account.template,name:PCA_480"
+msgid "Intérêts et loyers acquis et non échus "
+msgstr "Intérêts et loyers acquis et non échus "
+
+msgctxt "model:account.account.template,name:PCA_4800"
+msgid "Intérêts courus"
+msgstr "Intérêts courus"
+
+msgctxt "model:account.account.template,name:PCA_4801"
+msgid "Loyers courus"
+msgstr "Loyers courus"
+
+msgctxt "model:account.account.template,name:PCA_481"
+msgid "Frais d'acquisition reportés "
+msgstr "Frais d'acquisition reportés "
+
+msgctxt "model:account.account.template,name:PCA_4810"
+msgid "Assurance vie"
+msgstr "Assurance vie"
+
+msgctxt "model:account.account.template,name:PCA_4812"
+msgid "Assurance non-vie"
+msgstr "Assurance non-vie"
+
+msgctxt "model:account.account.template,name:PCA_482"
+msgid "Charges à répartir sur plusieurs exercices "
+msgstr "Charges à répartir sur plusieurs exercices "
+
+msgctxt "model:account.account.template,name:PCA_4820"
+msgid "Frais d'acquisition des immeubles à répartir"
+msgstr "Frais d'acquisition des immeubles à répartir"
+
+msgctxt "model:account.account.template,name:PCA_483"
+msgid "Autres comptes de régularisation - actif "
+msgstr "Autres comptes de régularisation - actif "
+
+msgctxt "model:account.account.template,name:PCA_4830"
+msgid "Différences sur les prix de remboursement à percevoir"
+msgstr "Différences sur les prix de remboursement à percevoir"
+
+msgctxt "model:account.account.template,name:PCA_484"
+msgid "Produits à répartir sur plusieurs exercices"
+msgstr "Produits à répartir sur plusieurs exercices"
+
+msgctxt "model:account.account.template,name:PCA_485"
+msgid "Autres comptes de régularisation - passif "
+msgstr "Autres comptes de régularisation - passif "
+
+msgctxt "model:account.account.template,name:PCA_4850"
+msgid "Amortissement des différences sur les prix de remboursement"
+msgstr "Amortissement des différences sur les prix de remboursement"
+
+msgctxt "model:account.account.template,name:PCA_4855"
+msgid "Report de commissions reçues des réassureurs"
+msgstr "Report de commissions reçues des réassureurs"
+
+msgctxt "model:account.account.template,name:PCA_486"
+msgid ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation liés aux instruments "
+"financiers à terme "
+msgstr ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation liés aux instruments "
+"financiers à terme "
+
+msgctxt "model:account.account.template,name:PCA_4861"
+msgid ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation liés à des stratégies "
+"d'investissement ou de désinvestissement "
+msgstr ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation liés à des stratégies "
+"d'investissement ou de désinvestissement "
+
+msgctxt "model:account.account.template,name:PCA_4862"
+msgid ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation liés à des stratégies "
+"de rendement "
+msgstr ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation liés à des stratégies "
+"de rendement "
+
+msgctxt "model:account.account.template,name:PCA_4863"
+msgid ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation sur autres opérations"
+msgstr ""
+"(Arr 15 déc 2005- art 1er) Comptes de régularisation sur autres opérations"
+
+msgctxt "model:account.account.template,name:PCA_487"
+msgid "Évaluations techniques de réassurance"
+msgstr "Évaluations techniques de réassurance"
+
+msgctxt "model:account.account.template,name:PCA_489"
+msgid "Ecarts de conversion "
+msgstr "Ecarts de conversion "
+
+msgctxt "model:account.account.template,name:PCA_4896"
+msgid "Ecarts de conversion-actif"
+msgstr "Ecarts de conversion-actif"
+
+msgctxt "model:account.account.template,name:PCA_4897"
+msgid "Ecarts de conversion-passif"
+msgstr "Ecarts de conversion-passif"
+
+msgctxt "model:account.account.template,name:PCA_49"
+msgid "Dépréciations"
+msgstr "Dépréciations"
+
+msgctxt "model:account.account.template,name:PCA_5"
+msgid "Autres actifs"
+msgstr "Autres actifs"
+
+msgctxt "model:account.account.template,name:PCA_50"
+msgid "Actifs incorporels"
+msgstr "Actifs incorporels"
+
+msgctxt "model:account.account.template,name:PCA_500"
+msgid "Frais d'établissement"
+msgstr "Frais d'établissement"
+
+msgctxt "model:account.account.template,name:PCA_508"
+msgid "Autres immobilisations incorporelles"
+msgstr "Autres immobilisations incorporelles"
+
+msgctxt "model:account.account.template,name:PCA_51"
+msgid "Actifs corporels d'exploitation"
+msgstr "Actifs corporels d'exploitation"
+
+msgctxt "model:account.account.template,name:PCA_510"
+msgid "Dépôts et cautionnements"
+msgstr "Dépôts et cautionnements"
+
+msgctxt "model:account.account.template,name:PCA_511"
+msgid "Autres immobilisations corporelles"
+msgstr "Autres immobilisations corporelles"
+
+msgctxt "model:account.account.template,name:PCA_512"
+msgid "Banque"
+msgstr "Banque"
+
+msgctxt "model:account.account.template,name:PCA_52"
+msgid "Avoirs en banque- CCP et caisse"
+msgstr "Avoirs en banque- CCP et caisse"
+
+msgctxt "model:account.account.template,name:PCA_53"
+msgid "Actions propres"
+msgstr "Actions propres"
+
+msgctxt "model:account.account.template,name:PCA_59"
+msgid "Dépréciations et amortissements"
+msgstr "Dépréciations et amortissements"
+
+msgctxt "model:account.account.template,name:PCA_6"
+msgid "Charges"
+msgstr "Charges"
+
+msgctxt "model:account.account.template,name:PCA_60"
+msgid "Prestations et frais payés"
+msgstr "Prestations et frais payés"
+
+msgctxt "model:account.account.template,name:PCA_600"
+msgid "Prestations et frais payés (affaires directes Vie) "
+msgstr "Prestations et frais payés (affaires directes Vie) "
+
+msgctxt "model:account.account.template,name:PCA_6001"
+msgid "Sinistres et capitaux échus"
+msgstr "Sinistres et capitaux échus"
+
+msgctxt "model:account.account.template,name:PCA_6002"
+msgid "Versements périodiques de rentes"
+msgstr "Versements périodiques de rentes"
+
+msgctxt "model:account.account.template,name:PCA_6003"
+msgid "Rachats"
+msgstr "Rachats"
+
+msgctxt "model:account.account.template,name:PCA_6004"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6005"
+msgid "Commissions de gestion"
+msgstr "Commissions de gestion"
+
+msgctxt "model:account.account.template,name:PCA_6008"
+msgid "Autres frais de gestion des sinistres et de règlement des prestations"
+msgstr "Autres frais de gestion des sinistres et de règlement des prestations"
+
+msgctxt "model:account.account.template,name:PCA_602"
+msgid "Prestations et frais payés (affaires directes Non-vie) "
+msgstr "Prestations et frais payés (affaires directes Non-vie) "
+
+msgctxt "model:account.account.template,name:PCA_6020"
+msgid "Sinistres en principal"
+msgstr "Sinistres en principal"
+
+msgctxt "model:account.account.template,name:PCA_6021"
+msgid "Versements périodiques de rentes"
+msgstr "Versements périodiques de rentes"
+
+msgctxt "model:account.account.template,name:PCA_6023"
+msgid "Recours et sauvetages encaissés"
+msgstr "Recours et sauvetages encaissés"
+
+msgctxt "model:account.account.template,name:PCA_6024"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6025"
+msgid "Commissions de gestion"
+msgstr "Commissions de gestion"
+
+msgctxt "model:account.account.template,name:PCA_6028"
+msgid "Autres frais de gestion des sinistres et de règlement des prestations"
+msgstr "Autres frais de gestion des sinistres et de règlement des prestations"
+
+msgctxt "model:account.account.template,name:PCA_604"
+msgid "Prestations et frais payés (acceptations Vie) "
+msgstr "Prestations et frais payés (acceptations Vie) "
+
+msgctxt "model:account.account.template,name:PCA_6041"
+msgid "Sinistres et capitaux échus"
+msgstr "Sinistres et capitaux échus"
+
+msgctxt "model:account.account.template,name:PCA_6042"
+msgid "Versements périodiques de rentes"
+msgstr "Versements périodiques de rentes"
+
+msgctxt "model:account.account.template,name:PCA_6043"
+msgid "Rachats"
+msgstr "Rachats"
+
+msgctxt "model:account.account.template,name:PCA_6044"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6045"
+msgid "Commissions de gestion"
+msgstr "Commissions de gestion"
+
+msgctxt "model:account.account.template,name:PCA_6048"
+msgid "Autres frais de gestion des sinistres et de règlement des prestations"
+msgstr "Autres frais de gestion des sinistres et de règlement des prestations"
+
+msgctxt "model:account.account.template,name:PCA_605"
+msgid "Prestations et frais payés (acceptations Non-vie) "
+msgstr "Prestations et frais payés (acceptations Non-vie) "
+
+msgctxt "model:account.account.template,name:PCA_6050"
+msgid "Sinistres en principal"
+msgstr "Sinistres en principal"
+
+msgctxt "model:account.account.template,name:PCA_6051"
+msgid "Versements périodiques de rentes"
+msgstr "Versements périodiques de rentes"
+
+msgctxt "model:account.account.template,name:PCA_6054"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans les prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6055"
+msgid "Commissions de gestion"
+msgstr "Commissions de gestion"
+
+msgctxt "model:account.account.template,name:PCA_6058"
+msgid "Autres frais de gestion des sinistres et de règlement des prestations"
+msgstr "Autres frais de gestion des sinistres et de règlement des prestations"
+
+msgctxt "model:account.account.template,name:PCA_609"
+msgid "Part des réassureurs "
+msgstr "Part des réassureurs "
+
+msgctxt "model:account.account.template,name:PCA_6090"
+msgid "Affaires directes (Vie)"
+msgstr "Affaires directes (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_6092"
+msgid "Affaires directes (Non-vie)"
+msgstr "Affaires directes (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_6094"
+msgid "Acceptations Vie"
+msgstr "Acceptations Vie"
+
+msgctxt "model:account.account.template,name:PCA_6095"
+msgid "Acceptations (Non-vie)"
+msgstr "Acceptations (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_61"
+msgid "Variations des provisions pour sinistres à payer (PSP)"
+msgstr "Variations des provisions pour sinistres à payer (PSP)"
+
+msgctxt "model:account.account.template,name:PCA_610"
+msgid "Affaires directes (Vie) "
+msgstr "Affaires directes (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_6100"
+msgid "Variation des provisions"
+msgstr "Variation des provisions"
+
+msgctxt "model:account.account.template,name:PCA_6104"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+
+msgctxt "model:account.account.template,name:PCA_612"
+msgid "Affaires directes (Non-vie) "
+msgstr "Affaires directes (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_6120"
+msgid "Variation des provisions"
+msgstr "Variation des provisions"
+
+msgctxt "model:account.account.template,name:PCA_6123"
+msgid "Variation des prévisions de recours"
+msgstr "Variation des prévisions de recours"
+
+msgctxt "model:account.account.template,name:PCA_6124"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+
+msgctxt "model:account.account.template,name:PCA_614"
+msgid "Acceptations (vie) "
+msgstr "Acceptations (vie) "
+
+msgctxt "model:account.account.template,name:PCA_6140"
+msgid "Variation des provisions"
+msgstr "Variation des provisions"
+
+msgctxt "model:account.account.template,name:PCA_6144"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+
+msgctxt "model:account.account.template,name:PCA_615"
+msgid "Acceptations (Non-vie) "
+msgstr "Acceptations (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_6150"
+msgid "Variation des provisions"
+msgstr "Variation des provisions"
+
+msgctxt "model:account.account.template,name:PCA_6154"
+msgid ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+msgstr ""
+"Participations aux bénéfices directement incorporées et intérêts techniques "
+"inclus dans la PSP"
+
+msgctxt "model:account.account.template,name:PCA_619"
+msgid "Part des réassureurs "
+msgstr "Part des réassureurs "
+
+msgctxt "model:account.account.template,name:PCA_6190"
+msgid "Affaires directes (Vie)"
+msgstr "Affaires directes (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_6192"
+msgid "Affaires directes (Non-vie)"
+msgstr "Affaires directes (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_6194"
+msgid "Acceptations (Vie)"
+msgstr "Acceptations (Vie)"
+
+msgctxt "model:account.account.template,name:PCA_6195"
+msgid "Acceptations (Non-vie)"
+msgstr "Acceptations (Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_62"
+msgid "Variations des autres provisions techniques"
+msgstr "Variations des autres provisions techniques"
+
+msgctxt "model:account.account.template,name:PCA_620"
+msgid "Variations des provisions d'assurance vie "
+msgstr "Variations des provisions d'assurance vie "
+
+msgctxt "model:account.account.template,name:PCA_6200"
+msgid "Affaires directes Vie "
+msgstr "Affaires directes Vie "
+
+msgctxt "model:account.account.template,name:PCA_62000"
+msgid "Variation des provisions"
+msgstr "Variation des provisions"
+
+msgctxt "model:account.account.template,name:PCA_62004"
+msgid ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+msgstr ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+
+msgctxt "model:account.account.template,name:PCA_6204"
+msgid "Acceptations Vie "
+msgstr "Acceptations Vie "
+
+msgctxt "model:account.account.template,name:PCA_62040"
+msgid "Variation des provisions"
+msgstr "Variation des provisions"
+
+msgctxt "model:account.account.template,name:PCA_62044"
+msgid ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+msgstr ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+
+msgctxt "model:account.account.template,name:PCA_621"
+msgid "Variations des autres provisions techniques "
+msgstr "Variations des autres provisions techniques"
+
+msgctxt "model:account.account.template,name:PCA_6210"
+msgid "Autres provisions techniques (Vie) "
+msgstr "Autres provisions techniques (Vie) "
+
+msgctxt "model:account.account.template,name:PCA_62100"
+msgid "Variation des provisions pour aléas financiers"
+msgstr "Variation des provisions pour aléas financiers"
+
+msgctxt "model:account.account.template,name:PCA_62105"
+msgid ""
+"(Arr 15 déc 2005- art 1er) Variation des autres provisions techniques vie "
+"relatives aux contrats PERP"
+msgstr ""
+"(Arr 15 déc 2005- art 1er) Variation des autres provisions techniques vie "
+"relatives aux contrats PERP"
+
+msgctxt "model:account.account.template,name:PCA_62108"
+msgid ""
+"Variation des provisions pour risque d'exigibilité des engagements "
+"techniques"
+msgstr ""
+"Variation des provisions pour risque d'exigibilité des engagements "
+"techniques"
+
+msgctxt "model:account.account.template,name:PCA_6212"
+msgid "Autres provisions techniques (Non-vie) "
+msgstr "Autres provisions techniques (Non-vie) "
+
+msgctxt "model:account.account.template,name:PCA_62120"
+msgid "Variation des provisions pour risques croissants"
+msgstr "Variation des provisions pour risques croissants"
+
+msgctxt "model:account.account.template,name:PCA_62121"
+msgid "Variation des provisions mathématiques des rentes"
+msgstr "Variation des provisions mathématiques des rentes"
+
+msgctxt "model:account.account.template,name:PCA_62124"
+msgid ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+msgstr ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+
+msgctxt "model:account.account.template,name:PCA_62128"
+msgid ""
+"Variation des provisions pour risque d'exigibilité des engagements "
+"techniques"
+msgstr ""
+"Variation des provisions pour risque d'exigibilité des engagements "
+"techniques"
+
+msgctxt "model:account.account.template,name:PCA_6217"
+msgid ""
+"Variation des engagements envers les institutions de prévoyance ou relatifs "
+"aux fonds de placement gérés par l'entreprise"
+msgstr ""
+"Variation des engagements envers les institutions de prévoyance ou relatifs "
+"aux fonds de placement gérés par l'entreprise"
+
+msgctxt "model:account.account.template,name:PCA_623"
+msgid "Variation des provisions techniques des contrats en unités de compte "
+msgstr "Variation des provisions techniques des contrats en unités de compte "
+
+msgctxt "model:account.account.template,name:PCA_6230"
+msgid "Variation des provisions mathématiques"
+msgstr "Variation des provisions mathématiques"
+
+msgctxt "model:account.account.template,name:PCA_6234"
+msgid ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+msgstr ""
+"Intérêts techniques et participations aux bénéfices directement incorporées"
+
+msgctxt "model:account.account.template,name:PCA_624"
+msgid "Variation de la provision pour égalisation "
+msgstr "Variation de la provision pour égalisation "
+
+msgctxt "model:account.account.template,name:PCA_6242"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_6245"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_629"
+msgid "Part des réassureurs "
+msgstr "Part des réassureurs "
+
+msgctxt "model:account.account.template,name:PCA_6290"
+msgid "Provisions d'assurance vie"
+msgstr "Provisions d'assurance vie"
+
+msgctxt "model:account.account.template,name:PCA_6291"
+msgid "Autres provisions techniques "
+msgstr "Autres provisions techniques"
+
+msgctxt "model:account.account.template,name:PCA_62910"
+msgid "Vie"
+msgstr "Vie"
+
+msgctxt "model:account.account.template,name:PCA_62912"
+msgid "Non-vie"
+msgstr "Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_6293"
+msgid "Provisions des contrats en unités de compte"
+msgstr "Provisions des contrats en unités de compte"
+
+msgctxt "model:account.account.template,name:PCA_6294"
+msgid "Provision pour égalisation"
+msgstr "Provision pour égalisation"
+
+msgctxt "model:account.account.template,name:PCA_63"
+msgid "Participations aux résultats"
+msgstr "Participations aux résultats"
+
+msgctxt "model:account.account.template,name:PCA_630"
+msgid "Affaires directes Vie "
+msgstr "Affaires directes Vie "
+
+msgctxt "model:account.account.template,name:PCA_6300"
+msgid "Intérêts techniques inclus dans les prestations versées"
+msgstr "Intérêts techniques inclus dans les prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6301"
+msgid "Intérêts techniques inclus dans les provisions pour sinistres à payer"
+msgstr "Intérêts techniques inclus dans les provisions pour sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_6302"
+msgid ""
+"Intérêts techniques incorporés aux provisions d'assurance vie et aux "
+"provisions techniques des contrats en unités de compte"
+msgstr ""
+"Intérêts techniques incorporés aux provisions d'assurance vie et aux "
+"provisions techniques des contrats en unités de compte"
+
+msgctxt "model:account.account.template,name:PCA_6303"
+msgid ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6304"
+msgid ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_6305"
+msgid ""
+"Participations aux bénéfices directement incorporées aux provisions "
+"d'assurance vie et aux provisions techniques des contrats en unités de "
+"compte"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux provisions "
+"d'assurance vie et aux provisions techniques des contrats en unités de "
+"compte"
+
+msgctxt "model:account.account.template,name:PCA_6306"
+msgid ""
+"Dotation aux provisions pour participation aux bénéfices et ristournes (y "
+"compris contrats en unités de compte)"
+msgstr ""
+"Dotation aux provisions pour participation aux bénéfices et ristournes (y "
+"compris contrats en unités de compte)"
+
+msgctxt "model:account.account.template,name:PCA_6309"
+msgid ""
+"Utilisations des provisions pour participation aux bénéfices et ristournes "
+msgstr ""
+"Utilisations des provisions pour participation aux bénéfices et ristournes "
+
+msgctxt "model:account.account.template,name:PCA_63093"
+msgid "Participation versée"
+msgstr "Participation versée"
+
+msgctxt "model:account.account.template,name:PCA_63094"
+msgid "Participation incorporée aux provisions pour sinistres à payer"
+msgstr "Participation incorporée aux provisions pour sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_63095"
+msgid ""
+"Participation incorporée aux provisions d'assurance vie et aux provisions "
+"techniques des contrats en unités de compte"
+msgstr ""
+"Participation incorporée aux provisions d'assurance vie et aux provisions "
+"techniques des contrats en unités de compte"
+
+msgctxt "model:account.account.template,name:PCA_632"
+msgid "Affaires directes Non-vie "
+msgstr "Affaires directes Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_6320"
+msgid "Intérêts techniques inclus dans les versements périodiques de rentes"
+msgstr "Intérêts techniques inclus dans les versements périodiques de rentes"
+
+msgctxt "model:account.account.template,name:PCA_6321"
+msgid "Intérêts techniques incorporés aux provisions mathématiques des rentes"
+msgstr ""
+"Intérêts techniques incorporés aux provisions mathématiques des rentes"
+
+msgctxt "model:account.account.template,name:PCA_6323"
+msgid ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6324"
+msgid ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_6326"
+msgid "Dotation aux provisions pour participation aux bénéfices et ristournes"
+msgstr ""
+"Dotation aux provisions pour participation aux bénéfices et ristournes"
+
+msgctxt "model:account.account.template,name:PCA_6329"
+msgid ""
+"Utilisations de provision pour participation aux bénéfices et ristournes "
+msgstr ""
+"Utilisations de provision pour participation aux bénéfices et ristournes "
+
+msgctxt "model:account.account.template,name:PCA_63293"
+msgid "Participation versée"
+msgstr "Participation versée"
+
+msgctxt "model:account.account.template,name:PCA_63294"
+msgid "Participation incorporée aux provisions pour sinistres à payer"
+msgstr "Participation incorporée aux provisions pour sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_63297"
+msgid "Ristournes sur primes"
+msgstr "Ristournes sur primes"
+
+msgctxt "model:account.account.template,name:PCA_634"
+msgid "Acceptations Vie "
+msgstr "Acceptations Vie "
+
+msgctxt "model:account.account.template,name:PCA_6340"
+msgid "Intérêts techniques inclus dans les prestations versées"
+msgstr "Intérêts techniques inclus dans les prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6341"
+msgid "Intérêts techniques inclus dans les provisions pour sinistres à payer"
+msgstr "Intérêts techniques inclus dans les provisions pour sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_6342"
+msgid "Intérêts techniques incorporés aux provisions d'assurance vie"
+msgstr "Intérêts techniques incorporés aux provisions d'assurance vie"
+
+msgctxt "model:account.account.template,name:PCA_6343"
+msgid ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6344"
+msgid ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_6345"
+msgid ""
+"Participations aux bénéfices directement incorporées aux provisions "
+"d'assurance vie"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux provisions "
+"d'assurance vie"
+
+msgctxt "model:account.account.template,name:PCA_6346"
+msgid ""
+"Dotation aux provisions pour participation aux bénéfices et ristournes (y "
+"compris contrats en unités de compte)"
+msgstr ""
+"Dotation aux provisions pour participation aux bénéfices et ristournes (y "
+"compris contrats en unités de compte)"
+
+msgctxt "model:account.account.template,name:PCA_6349"
+msgid ""
+"Utilisations des provisions pour participation aux bénéfices et ristournes "
+msgstr ""
+"Utilisations des provisions pour participation aux bénéfices et ristournes "
+
+msgctxt "model:account.account.template,name:PCA_63493"
+msgid "Participation versée"
+msgstr "Participation versée"
+
+msgctxt "model:account.account.template,name:PCA_63494"
+msgid "Participation incorporée aux provisions pour sinistres à payer"
+msgstr "Participation incorporée aux provisions pour sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_63495"
+msgid ""
+"Participation incorporée aux provisions d'assurance vie et aux provisions "
+"techniques des contrats en unités de compte"
+msgstr ""
+"Participation incorporée aux provisions d'assurance vie et aux provisions "
+"techniques des contrats en unités de compte"
+
+msgctxt "model:account.account.template,name:PCA_635"
+msgid "Acceptations Non-vie "
+msgstr "Acceptations Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_6350"
+msgid "Intérêts techniques inclus dans les versements périodiques de rentes"
+msgstr "Intérêts techniques inclus dans les versements périodiques de rentes"
+
+msgctxt "model:account.account.template,name:PCA_6351"
+msgid "Intérêts techniques incorporés aux provisions mathématiques des rentes"
+msgstr ""
+"Intérêts techniques incorporés aux provisions mathématiques des rentes"
+
+msgctxt "model:account.account.template,name:PCA_6353"
+msgid ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux prestations versées"
+
+msgctxt "model:account.account.template,name:PCA_6354"
+msgid ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+msgstr ""
+"Participations aux bénéfices directement incorporées aux provisions pour "
+"sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_6356"
+msgid "Dotation aux provisions pour participation aux bénéfices et ristournes"
+msgstr ""
+"Dotation aux provisions pour participation aux bénéfices et ristournes"
+
+msgctxt "model:account.account.template,name:PCA_6359"
+msgid ""
+"Utilisations de provisions pour participation aux bénéfices et ristournes "
+msgstr ""
+"Utilisations de provisions pour participation aux bénéfices et ristournes "
+
+msgctxt "model:account.account.template,name:PCA_63593"
+msgid "Participation versée"
+msgstr "Participation versée"
+
+msgctxt "model:account.account.template,name:PCA_63594"
+msgid "Participation incorporée aux provisions pour sinistres à payer"
+msgstr "Participation incorporée aux provisions pour sinistres à payer"
+
+msgctxt "model:account.account.template,name:PCA_63597"
+msgid "Ristournes sur primes"
+msgstr "Ristournes sur primes"
+
+msgctxt "model:account.account.template,name:PCA_639"
+msgid "Part des réassureurs "
+msgstr "Part des réassureurs "
+
+msgctxt "model:account.account.template,name:PCA_6390"
+msgid "Affaires directes Vie"
+msgstr "Affaires directes Vie"
+
+msgctxt "model:account.account.template,name:PCA_6392"
+msgid "Affaires directes Non-vie"
+msgstr "Affaires directes Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_6394"
+msgid "Acceptations Vie"
+msgstr "Acceptations Vie"
+
+msgctxt "model:account.account.template,name:PCA_6395"
+msgid "Acceptation Non-vie"
+msgstr "Acceptation Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_64"
+msgid "Frais d'exploitation"
+msgstr "Frais d'exploitation"
+
+msgctxt "model:account.account.template,name:PCA_640"
+msgid "Frais d'exploitation Vie "
+msgstr "Frais d'exploitation Vie "
+
+msgctxt "model:account.account.template,name:PCA_6400"
+msgid "Frais d'acquisition "
+msgstr "Frais d'acquisition "
+
+msgctxt "model:account.account.template,name:PCA_64005"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "model:account.account.template,name:PCA_64008"
+msgid "Autres charges"
+msgstr "Autres charges"
+
+msgctxt "model:account.account.template,name:PCA_64009"
+msgid "Variation des frais d'acquisition reportés"
+msgstr "Variation des frais d'acquisition reportés"
+
+msgctxt "model:account.account.template,name:PCA_6402"
+msgid "Frais d'administration "
+msgstr "Frais d'administration "
+
+msgctxt "model:account.account.template,name:PCA_64025"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "model:account.account.template,name:PCA_64028"
+msgid "Autres charges"
+msgstr "Autres charges"
+
+msgctxt "model:account.account.template,name:PCA_642"
+msgid "Frais d'exploitation Non-vie "
+msgstr "Frais d'exploitation Non-vie "
+
+msgctxt "model:account.account.template,name:PCA_6420"
+msgid "Frais d'acquisition "
+msgstr "Frais d'acquisition "
+
+msgctxt "model:account.account.template,name:PCA_64205"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "model:account.account.template,name:PCA_64208"
+msgid "Autres charges"
+msgstr "Autres charges"
+
+msgctxt "model:account.account.template,name:PCA_64209"
+msgid "Variation des frais d'acquisition reportés"
+msgstr "Variation des frais d'acquisition reportés"
+
+msgctxt "model:account.account.template,name:PCA_6422"
+msgid "Frais d'administration "
+msgstr "Frais d'administration "
+
+msgctxt "model:account.account.template,name:PCA_64225"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "model:account.account.template,name:PCA_64228"
+msgid "Autres charges"
+msgstr "Autres charges"
+
+msgctxt "model:account.account.template,name:PCA_644"
+msgid "Autres charges techniques Vie "
+msgstr "Autres charges techniques Vie "
+
+msgctxt "model:account.account.template,name:PCA_6445"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "model:account.account.template,name:PCA_6448"
+msgid "Autres charges"
+msgstr "Autres charges"
+
+msgctxt "model:account.account.template,name:PCA_645"
+msgid "Autres charges techniques Non-vie "
+msgstr "Autres charges techniques Non-vie "
+
+msgctxt "model:account.account.template,name:PCA_6455"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "model:account.account.template,name:PCA_6458"
+msgid "Autres charges"
+msgstr "Autres charges"
+
+msgctxt "model:account.account.template,name:PCA_649"
+msgid "Commissions reçues des réassureurs "
+msgstr "Commissions reçues des réassureurs "
+
+msgctxt "model:account.account.template,name:PCA_6490"
+msgid "Affaires directes Vie"
+msgstr "Affaires directes Vie"
+
+msgctxt "model:account.account.template,name:PCA_6492"
+msgid "Affaires directes Non-vie"
+msgstr "Affaires directes Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_6494"
+msgid "Acceptations Vie"
+msgstr "Acceptations Vie"
+
+msgctxt "model:account.account.template,name:PCA_6495"
+msgid "Acceptations Non-vie"
+msgstr "Acceptations Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_65"
+msgid "Charges non techniques"
+msgstr "Charges non techniques"
+
+msgctxt "model:account.account.template,name:PCA_655"
+msgid "Commissions"
+msgstr "Commissions"
+
+msgctxt "model:account.account.template,name:PCA_658"
+msgid "Autres charges"
+msgstr "Autres charges"
+
+msgctxt "model:account.account.template,name:PCA_66"
+msgid "Charges des placements"
+msgstr "Charges des placements"
+
+msgctxt "model:account.account.template,name:PCA_660"
+msgid "Intérêts "
+msgstr "Intérêts "
+
+msgctxt "model:account.account.template,name:PCA_6600"
+msgid "Sur dépôts reçus des réassureurs"
+msgstr "Sur dépôts reçus des réassureurs"
+
+msgctxt "model:account.account.template,name:PCA_6601"
+msgid "Sur emprunts"
+msgstr "Sur emprunts"
+
+msgctxt "model:account.account.template,name:PCA_6602"
+msgid "Sur dettes à l'égard d'établissements de crédit"
+msgstr "Sur dettes à l'égard d'établissements de crédit"
+
+msgctxt "model:account.account.template,name:PCA_6603"
+msgid "Autres"
+msgstr "Autres"
+
+msgctxt "model:account.account.template,name:PCA_662"
+msgid "Frais externes de gestion"
+msgstr "Frais externes de gestion"
+
+msgctxt "model:account.account.template,name:PCA_663"
+msgid "Frais internes de gestion"
+msgstr "Frais internes de gestion"
+
+msgctxt "model:account.account.template,name:PCA_664"
+msgid "Pertes sur réalisation et réévaluation de placements "
+msgstr "Pertes sur réalisation et réévaluation de placements "
+
+msgctxt "model:account.account.template,name:PCA_6640"
+msgid "Réalisation de placements"
+msgstr "Réalisation de placements"
+
+msgctxt "model:account.account.template,name:PCA_6642"
+msgid "Réévaluations"
+msgstr "Réévaluations"
+
+msgctxt "model:account.account.template,name:PCA_6645"
+msgid "Dotation à la réserve de capitalisation"
+msgstr "Dotation à la réserve de capitalisation"
+
+msgctxt "model:account.account.template,name:PCA_665"
+msgid "Pertes de change "
+msgstr "Pertes de change "
+
+msgctxt "model:account.account.template,name:PCA_6652"
+msgid "Dotation à la provision pour pertes de change"
+msgstr "Dotation à la provision pour pertes de change"
+
+msgctxt "model:account.account.template,name:PCA_666"
+msgid ""
+"Ajustement de valeur des actifs représentatifs des contrats en unités de "
+"compte (moins-values non réalisées)"
+msgstr ""
+"Ajustement de valeur des actifs représentatifs des contrats en unités de "
+"compte (moins-values non réalisées)"
+
+msgctxt "model:account.account.template,name:PCA_667"
+msgid ""
+"Variation de valeur des actifs représentatifs des contrats PERP diversifiées"
+" »"
+msgstr ""
+"Variation de valeur des actifs représentatifs des contrats PERP diversifiées"
+" »"
+
+msgctxt "model:account.account.template,name:PCA_668"
+msgid "Amortissements financiers "
+msgstr "Amortissements financiers "
+
+msgctxt "model:account.account.template,name:PCA_6681"
+msgid "Amortissement des primes de remboursement des emprunts"
+msgstr "Amortissement des primes de remboursement des emprunts"
+
+msgctxt "model:account.account.template,name:PCA_6683"
+msgid "Amortissement des différences de prix de remboursement"
+msgstr "Amortissement des différences de prix de remboursement"
+
+msgctxt "model:account.account.template,name:PCA_6685"
+msgid "Amortissement des frais d'acquisition à répartir des immeubles"
+msgstr "Amortissement des frais d'acquisition à répartir des immeubles"
+
+msgctxt "model:account.account.template,name:PCA_669"
+msgid "Dotations aux amortissements et aux provisions des placements "
+msgstr "Dotations aux amortissements et aux provisions des placements "
+
+msgctxt "model:account.account.template,name:PCA_6693"
+msgid "Amortissement des immeubles"
+msgstr "Amortissement des immeubles"
+
+msgctxt "model:account.account.template,name:PCA_6696"
+msgid "Dépréciations des placements"
+msgstr "Dépréciations des placements"
+
+msgctxt "model:account.account.template,name:PCA_67"
+msgid "Charges exceptionnelles"
+msgstr "Charges exceptionnelles"
+
+msgctxt "model:account.account.template,name:PCA_670"
+msgid ""
+"Dotation de l'exercice à l'amortissement de l'emprunt pour fonds "
+"d'établissement"
+msgstr ""
+"Dotation de l'exercice à l'amortissement de l'emprunt pour fonds "
+"d'établissement"
+
+msgctxt "model:account.account.template,name:PCA_672"
+msgid "Dotation de l'exercice à la provision pour investissement"
+msgstr "Dotation de l'exercice à la provision pour investissement"
+
+msgctxt "model:account.account.template,name:PCA_673"
+msgid "Dotation de l'exercice aux autres provisions réglementées"
+msgstr "Dotation de l'exercice aux autres provisions réglementées"
+
+msgctxt "model:account.account.template,name:PCA_674"
+msgid "Autres charges exceptionnelles"
+msgstr "Autres charges exceptionnelles"
+
+msgctxt "model:account.account.template,name:PCA_675"
+msgid "Dotation de l'exercice à provision pour charges exceptionnelles"
+msgstr "Dotation de l'exercice à provision pour charges exceptionnelles"
+
+msgctxt "model:account.account.template,name:PCA_676"
+msgid "Dotation de l'exercice pour dépréciations exceptionnelles"
+msgstr "Dotation de l'exercice pour dépréciations exceptionnelles"
+
+msgctxt "model:account.account.template,name:PCA_69"
+msgid "Autres opérations du compte non technique"
+msgstr "Autres opérations du compte non technique"
+
+msgctxt "model:account.account.template,name:PCA_690"
+msgid "Participation des salariés aux fruits de l'expansion"
+msgstr "Participation des salariés aux fruits de l'expansion"
+
+msgctxt "model:account.account.template,name:PCA_695"
+msgid "Impôts sur les bénéfices"
+msgstr "Impôts sur les bénéfices"
+
+msgctxt "model:account.account.template,name:PCA_7"
+msgid "Produits"
+msgstr "Produits"
+
+msgctxt "model:account.account.template,name:PCA_70"
+msgid "Primes"
+msgstr "Primes"
+
+msgctxt "model:account.account.template,name:PCA_700"
+msgid "Primes Vie (affaires directes) "
+msgstr "Primes Vie (affaires directes) "
+
+msgctxt "model:account.account.template,name:PCA_7000"
+msgid "Primes périodiques émises"
+msgstr "Primes périodiques émises"
+
+msgctxt "model:account.account.template,name:PCA_7001"
+msgid "Primes uniques émises"
+msgstr "Primes uniques émises"
+
+msgctxt "model:account.account.template,name:PCA_7002"
+msgid "Annulations"
+msgstr "Annulations"
+
+msgctxt "model:account.account.template,name:PCA_7004"
+msgid "Variation des primes acquises non émises"
+msgstr "Variation des primes acquises non émises"
+
+msgctxt "model:account.account.template,name:PCA_702"
+msgid "Primes Non-vie (affaires directes) "
+msgstr "Primes Non-vie (affaires directes) "
+
+msgctxt "model:account.account.template,name:PCA_7020"
+msgid "Primes émises"
+msgstr "Primes émises"
+
+msgctxt "model:account.account.template,name:PCA_7022"
+msgid "Annulations"
+msgstr "Annulations"
+
+msgctxt "model:account.account.template,name:PCA_7023"
+msgid "Ristournes sur primes"
+msgstr "Ristournes sur primes"
+
+msgctxt "model:account.account.template,name:PCA_7024"
+msgid "Variation des primes acquises non émises"
+msgstr "Variation des primes acquises non émises"
+
+msgctxt "model:account.account.template,name:PCA_7025"
+msgid "Variation des primes à annuler"
+msgstr "Variation des primes à annuler"
+
+msgctxt "model:account.account.template,name:PCA_704"
+msgid "Primes Vie (acceptations)"
+msgstr "Primes Vie (acceptations)"
+
+msgctxt "model:account.account.template,name:PCA_705"
+msgid "Primes Non-vie (acceptations)"
+msgstr "Primes Non-vie (acceptations)"
+
+msgctxt "model:account.account.template,name:PCA_706"
+msgid "Commissions + Frais"
+msgstr "Commissions + Frais"
+
+msgctxt "model:account.account.template,name:PCA_708"
+msgid "Primes cédées "
+msgstr "Primes cédées "
+
+msgctxt "model:account.account.template,name:PCA_7080"
+msgid "Affaires directes Vie"
+msgstr "Affaires directes Vie"
+
+msgctxt "model:account.account.template,name:PCA_7082"
+msgid "Affaires directes Non-vie"
+msgstr "Affaires directes Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_7084"
+msgid "Acceptations Vie"
+msgstr "Acceptations Vie"
+
+msgctxt "model:account.account.template,name:PCA_7085"
+msgid "Acceptations Non-vie"
+msgstr "Acceptations Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_709"
+msgid ""
+"Variations de la provision pour primes non acquises et risques en cours "
+"(PRC) (Non-vie) "
+msgstr ""
+"Variations de la provision pour primes non acquises et risques en cours "
+"(PRC) (Non-vie) "
+
+msgctxt "model:account.account.template,name:PCA_7092"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_7095"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_7099"
+msgid "Part des réassureurs "
+msgstr "Part des réassureurs "
+
+msgctxt "model:account.account.template,name:PCA_70992"
+msgid "Affaires directes"
+msgstr "Affaires directes"
+
+msgctxt "model:account.account.template,name:PCA_70995"
+msgid "Acceptations"
+msgstr "Acceptations"
+
+msgctxt "model:account.account.template,name:PCA_72"
+msgid "Production immobilisée"
+msgstr "Production immobilisée"
+
+msgctxt "model:account.account.template,name:PCA_720"
+msgid "Vie"
+msgstr "Vie"
+
+msgctxt "model:account.account.template,name:PCA_722"
+msgid "Non-vie"
+msgstr "Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_73"
+msgid "Subventions d'exploitation"
+msgstr "Subventions d'exploitation"
+
+msgctxt "model:account.account.template,name:PCA_730"
+msgid "Vie"
+msgstr "Vie"
+
+msgctxt "model:account.account.template,name:PCA_732"
+msgid "Non-vie"
+msgstr "Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_74"
+msgid "Autres produits techniques"
+msgstr "Autres produits techniques"
+
+msgctxt "model:account.account.template,name:PCA_740"
+msgid "Vie"
+msgstr "Vie"
+
+msgctxt "model:account.account.template,name:PCA_742"
+msgid "Non-vie"
+msgstr "Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_75"
+msgid "Produits non techniques"
+msgstr "Produits non techniques"
+
+msgctxt "model:account.account.template,name:PCA_750"
+msgid "Honoraires et commissions"
+msgstr "Honoraires et commissions"
+
+msgctxt "model:account.account.template,name:PCA_751"
+msgid "Récupérations"
+msgstr "Récupérations"
+
+msgctxt "model:account.account.template,name:PCA_752"
+msgid "Utilisation ou reprises de provisions"
+msgstr "Utilisation ou reprises de provisions"
+
+msgctxt "model:account.account.template,name:PCA_76"
+msgid "Produits des placements"
+msgstr "Produits des placements"
+
+msgctxt "model:account.account.template,name:PCA_760"
+msgid "Revenus des placements"
+msgstr "Revenus des placements"
+
+msgctxt "model:account.account.template,name:PCA_762"
+msgid "Honoraires et commissions sur activité de gestion d'actifs"
+msgstr "Honoraires et commissions sur activité de gestion d'actifs"
+
+msgctxt "model:account.account.template,name:PCA_764"
+msgid ""
+"Profits provenant de la réalisation ou de la réévaluation des placements "
+msgstr ""
+"Profits provenant de la réalisation ou de la réévaluation des placements "
+
+msgctxt "model:account.account.template,name:PCA_7641"
+msgid "Réalisation de placements"
+msgstr "Réalisation de placements"
+
+msgctxt "model:account.account.template,name:PCA_7642"
+msgid "Réévaluations"
+msgstr "Réévaluations"
+
+msgctxt "model:account.account.template,name:PCA_7645"
+msgid "Reprises sur réserve de capitalisation"
+msgstr "Reprises sur réserve de capitalisation"
+
+msgctxt "model:account.account.template,name:PCA_765"
+msgid "Profits de change "
+msgstr "Profits de change "
+
+msgctxt "model:account.account.template,name:PCA_7650"
+msgid ""
+"(Supprimé à compter du 1er janvier 2008 par Arr 28 déc 2007- Ann 1- 5o)"
+msgstr ""
+"(Supprimé à compter du 1er janvier 2008 par Arr 28 déc 2007- Ann 1- 5o)"
+
+msgctxt "model:account.account.template,name:PCA_7652"
+msgid "Reprise de la provision pour pertes de change"
+msgstr "Reprise de la provision pour pertes de change"
+
+msgctxt "model:account.account.template,name:PCA_766"
+msgid ""
+"Ajustement des actifs représentatifs de contrats en unités de compte (plus-"
+"values non réalisées)"
+msgstr ""
+"Ajustement des actifs représentatifs de contrats en unités de compte (plus-"
+"values non réalisées)"
+
+msgctxt "model:account.account.template,name:PCA_767"
+msgid ""
+"Variation de valeur des actifs représentatifs des contrats PERP diversifiées"
+" »"
+msgstr ""
+"Variation de valeur des actifs représentatifs des contrats PERP diversifiées"
+" »"
+
+msgctxt "model:account.account.template,name:PCA_768"
+msgid "Produits des différences sur les prix de remboursement à percevoir"
+msgstr "Produits des différences sur les prix de remboursement à percevoir"
+
+msgctxt "model:account.account.template,name:PCA_769"
+msgid "Reprises des dépréciations de placements"
+msgstr "Reprises des dépréciations de placements"
+
+msgctxt "model:account.account.template,name:PCA_77"
+msgid "Produits exceptionnels"
+msgstr "Produits exceptionnels"
+
+msgctxt "model:account.account.template,name:PCA_772"
+msgid "Reprise de la provision pour investissement"
+msgstr "Reprise de la provision pour investissement"
+
+msgctxt "model:account.account.template,name:PCA_773"
+msgid "Reprises sur autres provisions réglementées"
+msgstr "Reprises sur autres provisions réglementées"
+
+msgctxt "model:account.account.template,name:PCA_774"
+msgid "Autres produits exceptionnels"
+msgstr "Autres produits exceptionnels"
+
+msgctxt "model:account.account.template,name:PCA_775"
+msgid "Utilisation ou reprise de provisions pour charges exceptionnelles"
+msgstr "Utilisation ou reprise de provisions pour charges exceptionnelles"
+
+msgctxt "model:account.account.template,name:PCA_776"
+msgid "Utilisation ou reprises des dépréciations exceptionnelles"
+msgstr "Utilisation ou reprises des dépréciations exceptionnelles"
+
+msgctxt "model:account.account.template,name:PCA_79"
+msgid "Transferts"
+msgstr "Transferts"
+
+msgctxt "model:account.account.template,name:PCA_792"
+msgid "Produits des placements"
+msgstr "Produits des placements"
+
+msgctxt "model:account.account.template,name:PCA_7920"
+msgid "Produits des placements alloués (compte technique Non-vie)"
+msgstr "Produits des placements alloués (compte technique Non-vie)"
+
+msgctxt "model:account.account.template,name:PCA_7929"
+msgid "Produits des placements transférés au compte technique Non-vie"
+msgstr "Produits des placements transférés au compte technique Non-vie"
+
+msgctxt "model:account.account.template,name:PCA_793"
+msgid "Produits des placements"
+msgstr "Produits des placements"
+
+msgctxt "model:account.account.template,name:PCA_7930"
+msgid "Produits des placements alloués (compte non technique)"
+msgstr "Produits des placements alloués (compte non technique)"
+
+msgctxt "model:account.account.template,name:PCA_7939"
+msgid "Produits des placements transférés au compte non technique"
+msgstr "Produits des placements transférés au compte non technique"
+
+msgctxt "model:account.account.template,name:PCA_797"
+msgid "Transferts"
+msgstr "Transferts"
+
+msgctxt "model:account.account.template,name:PCA_7971"
+msgid ""
+"Prélèvement sur la comptabilité auxiliaire d'affectation » au profit du "
+"patrimoine général "
+msgstr ""
+"Prélèvement sur la comptabilité auxiliaire d'affectation » au profit du "
+"patrimoine général "
+
+msgctxt "model:account.account.template,name:PCA_79711"
+msgid "Acquisition "
+msgstr "Acquisition "
+
+msgctxt "model:account.account.template,name:PCA_79712"
+msgid "Administration "
+msgstr "Administration "
+
+msgctxt "model:account.account.template,name:PCA_79713"
+msgid "Gestion des sinistres/transfert "
+msgstr "Gestion des sinistres/transfert "
+
+msgctxt "model:account.account.template,name:PCA_79714"
+msgid "Gestion des placements "
+msgstr "Gestion des placements "
+
+msgctxt "model:account.account.template,name:PCA_79715"
+msgid "Autres produits/charges techniques"
+msgstr "Autres produits/charges techniques"
+
+msgctxt "model:account.account.template,name:PCA_7973"
+msgid ""
+"Autres transferts de produits/charges au titre de chaque comptabilité "
+"auxiliaire d'affectation d'opérations d'assurance légalement cantonnées »"
+msgstr ""
+"Autres transferts de produits/charges au titre de chaque comptabilité "
+"auxiliaire d'affectation d'opérations d'assurance légalement cantonnées »"
+
+msgctxt "model:account.account.template,name:PCA_8"
+msgid "Comptes spéciaux"
+msgstr "Comptes spéciaux"
+
+msgctxt "model:account.account.template,name:PCA_80"
+msgid "Engagements reçus et donnés"
+msgstr "Engagements reçus et donnés"
+
+msgctxt "model:account.account.template,name:PCA_81"
+msgid "Engagements sur instruments financiers"
+msgstr "Engagements sur instruments financiers"
+
+msgctxt "model:account.account.template,name:PCA_810"
+msgid ""
+"Engagements sur instruments financiers à terme négociés dans le cadre de "
+"stratégies d'investissement futur ou de désinvestissement "
+msgstr ""
+"Engagements sur instruments financiers à terme négociés dans le cadre de "
+"stratégies d'investissement futur ou de désinvestissement "
+
+msgctxt "model:account.account.template,name:PCA_811"
+msgid ""
+"Engagements sur instruments financiers à terme négociés dans le cadre de "
+"stratégies de rendement "
+msgstr ""
+"Engagements sur instruments financiers à terme négociés dans le cadre de "
+"stratégies de rendement "
+
+msgctxt "model:account.account.template,name:PCA_812"
+msgid ""
+"Engagements sur instruments financiers à terme négociés dans le cadre "
+"d'autres opérations "
+msgstr ""
+"Engagements sur instruments financiers à terme négociés dans le cadre "
+"d'autres opérations "
+
+msgctxt "model:account.account.template,name:PCA_819"
+msgid "Comptes techniques de contrepartie "
+msgstr "Comptes techniques de contrepartie"
+
+msgctxt "model:account.account.template,name:PCA_82"
+msgid "Titres"
+msgstr "Titres"
+
+msgctxt "model:account.account.template,name:PCA_820"
+msgid ""
+"Titres donnés en garantie sur instruments financiers à terme sans transfert "
+"de propriété "
+msgstr ""
+"Titres donnés en garantie sur instruments financiers à terme sans transfert "
+"de propriété "
+
+msgctxt "model:account.account.template,name:PCA_825"
+msgid ""
+"Titres reçus en garantie sur instruments financiers à terme sans transfert "
+"de propriété "
+msgstr ""
+"Titres reçus en garantie sur instruments financiers à terme sans transfert "
+"de propriété "
+
+msgctxt "model:account.account.template,name:PCA_829"
+msgid "Comptes techniques de contrepartie"
+msgstr "Comptes techniques de contrepartie"
+
+msgctxt "model:account.account.template,name:PCA_84"
+msgid "Position de change"
+msgstr "Position de change"
+
+msgctxt "model:account.account.template,name:PCA_841"
+msgid "Position de change hors bilan"
+msgstr "Position de change hors bilan"
+
+msgctxt "model:account.account.template,name:PCA_842"
+msgid "Contre-valeur de position de change hors bilan"
+msgstr "Contre-valeur de position de change hors bilan"
+
+msgctxt "model:account.account.template,name:PCA_88"
+msgid "Résultat en instance d'affectation"
+msgstr "Résultat en instance d'affectation"
+
+msgctxt "model:account.account.template,name:PCS"
+msgid "Plan comptable simple"
+msgstr "Plan comptable simple"
+
+msgctxt "model:account.account.template,name:PCS_4"
+msgid "Comptes de tiers"
+msgstr "Comptes de tiers"
+
+msgctxt "model:account.account.template,name:PCS_40"
+msgid "Revenus"
+msgstr "Revenus"
+
+msgctxt "model:account.account.template,name:PCS_401"
+msgid "Primes"
+msgstr "Primes"
+
+msgctxt "model:account.account.template,name:PCS_4010"
+msgid "Primes acquises"
+msgstr "Primes acquises"
+
+msgctxt "model:account.account.template,name:PCS_4011"
+msgid "Primes emises"
+msgstr "Primes emises"
+
+msgctxt "model:account.account.template,name:PCS_4012"
+msgid "Variation des Provisions"
+msgstr "Variation des Provisions"
+
+msgctxt "model:account.account.template,name:PCS_41"
+msgid "Clients et comptes rattachés"
+msgstr "Clients et comptes rattachés"
+
+msgctxt "model:account.account.template,name:PCS_411"
+msgid "Clients"
+msgstr "Clients"
+
+msgctxt "model:account.account.template,name:PCS_4117"
+msgid "Clients – Ventes"
+msgstr "Clients – Ventes"
+
+msgctxt "model:account.account.template,name:PCS_46"
+msgid "Débiteurs divers et créditeurs divers"
+msgstr "Débiteurs divers et créditeurs divers"
+
+msgctxt "model:account.account.template,name:PCS_466"
+msgid "Compte de tiers – Commissions apporteur"
+msgstr "Compte de tiers – Commissions apporteur"
+
+msgctxt "model:account.account.template,name:PCS_467"
+msgid "Autres comptes débiteurs ou créditeurs"
+msgstr "Autres comptes débiteurs ou créditeurs"
+
+msgctxt "model:account.account.template,name:PCS_5"
+msgid "Comptes financiers"
+msgstr "Comptes financiers"
+
+msgctxt "model:account.account.template,name:PCS_51"
+msgid "Banques, établissements financiers et assimilés"
+msgstr "Banques, établissements financiers et assimilés"
+
+msgctxt "model:account.account.template,name:PCS_512"
+msgid "Banques"
+msgstr "Banques"
+
+msgctxt "model:account.account.template,name:PCS_6"
+msgid "Comptes de charges"
+msgstr "Comptes de charges"
+
+msgctxt "model:account.account.template,name:PCS_62"
+msgid "Autres services extérieurs"
+msgstr "Autres services extérieurs"
+
+msgctxt "model:account.account.template,name:PCS_622"
+msgid "Rémunérations d'intermédiaires et honoraires"
+msgstr "Rémunérations d'intermédiaires et honoraires"
+
+msgctxt "model:account.account.template,name:PCS_7"
+msgid "Comptes de produits"
+msgstr "Comptes de produits"
+
+msgctxt "model:account.account.template,name:PCS_70"
+msgid "Ventes de produits fabriqués, prestations de services, marchandises"
+msgstr "Ventes de produits fabriqués, prestations de services, marchandises"
+
+msgctxt "model:account.account.template,name:PCS_706"
+msgid "Prestations de services"
+msgstr "Prestations de services"
+
+msgctxt "model:account.account.template,name:PCS_77"
+msgid "Produits exceptionnels"
+msgstr "Produits exceptionnels"
+
+msgctxt "model:account.account.template,name:PCS_771"
+msgid "Produits exceptionnels sur opérations de gestion"
+msgstr "Produits exceptionnels sur opérations de gestion"
+
+msgctxt "model:account.account.template,name:PCS_7718"
+msgid "Autres produits exceptionnels sur opérations de gestion"
+msgstr "Autres produits exceptionnels sur opérations de gestion"
+
+msgctxt "model:account.account.type.template,name:Autres_actifs"
+msgid "Autres actifs"
+msgstr "Autres actifs"
+
+msgctxt ""
+"model:account.account.type.template,name:Capitaux_permanents_et_emprunts"
+msgid "Capitaux permanents et emprunts"
+msgstr "Capitaux permanents et emprunts"
+
+msgctxt "model:account.account.type.template,name:Charge"
+msgid "Charge"
+msgstr "Charge"
+
+msgctxt "model:account.account.type.template,name:Comptes_de_charge"
+msgid "Comptes de charge"
+msgstr "Comptes de charge"
+
+msgctxt "model:account.account.type.template,name:Comptes_de_produits"
+msgid "Comptes de produits"
+msgstr "Comptes de produits"
+
+msgctxt "model:account.account.type.template,name:Comptes_de_tiers"
+msgid "Comptes de tiers"
+msgstr "Comptes de tiers"
+
+msgctxt ""
+"model:account.account.type.template,name:Comptes_de_tiers_et_de_regularisation"
+msgid "Comptes de tiers et de régularisation"
+msgstr "Comptes de tiers et de régularisation"
+
+msgctxt "model:account.account.type.template,name:Comptes_financiers"
+msgid "Comptes financiers"
+msgstr "Comptes financiers"
+
+msgctxt "model:account.account.type.template,name:Comptes_speciaux"
+msgid "Comptes spéciaux"
+msgstr "Comptes spéciaux"
+
+msgctxt "model:account.account.type.template,name:Placements"
+msgid "Placements"
+msgstr "Placements"
+
+msgctxt ""
+"model:account.account.type.template,name:Plan_de_types_de_compte_assurance"
+msgid "Plan de types de compte assurance"
+msgstr "Plan de types de compte assurance"
+
+msgctxt ""
+"model:account.account.type.template,name:Plan_simple_de_types_de_compte_assurance"
+msgid "Plan simple de types de compte assurance"
+msgstr "Plan simple de types de compte assurance"
+
+msgctxt "model:account.account.type.template,name:Produit"
+msgid "Produit"
+msgstr "Produit"
+
+msgctxt "model:account.account.type.template,name:Provisions_techniques"
+msgid "Provisions techniques"
+msgstr "Provisions techniques"

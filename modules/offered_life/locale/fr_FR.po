@@ -62,6 +62,10 @@ msgctxt "field:salary_range,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:salary_range,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:salary_range,name:"
 msgid "Name"
 msgstr "Nom"
@@ -117,6 +121,10 @@ msgstr "ID"
 msgctxt "field:salary_range.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
+
+msgctxt "field:salary_range.version,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:salary_range.version,rec_name:"
 msgid "Name"

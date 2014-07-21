@@ -1,14 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:account.payment.journal,sepa_bank_account_number:"
 msgid ""
 msgstr " "
-
-msgctxt "field:account.payment.journal,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
 
 msgctxt "field:bank.account.number,mandates:"
 msgid "Sepa Mandates"

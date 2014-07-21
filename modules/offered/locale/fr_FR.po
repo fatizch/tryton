@@ -68,6 +68,10 @@ msgctxt "field:extra_data,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:extra_data,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:extra_data,name:"
 msgid "Code"
 msgstr "Code"
@@ -160,6 +164,10 @@ msgctxt "field:extra_data-sub_extra_data,master:"
 msgid "Master"
 msgstr "Maître"
 
+msgctxt "field:extra_data-sub_extra_data,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:extra_data-sub_extra_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -177,46 +185,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:extra_data-sub_extra_data,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:extra_data-tag,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:extra_data-tag,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:extra_data-tag,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:extra_data-tag,extra_data_def:"
-msgid "Extra Data Def"
-msgstr "Définition de Données Complémentaires"
-
-msgctxt "field:extra_data-tag,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:extra_data-tag,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:extra_data-tag,tag:"
-msgid "Tag"
-msgstr "Label"
-
-msgctxt "field:extra_data-tag,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:extra_data-tag,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:extra_data-tag,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -252,6 +220,10 @@ msgctxt "field:offered,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:offered,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:offered,name:"
 msgid "Name"
 msgstr "Nom"
@@ -264,6 +236,14 @@ msgctxt "field:offered,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
+msgctxt "field:offered,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:offered,tags_name:"
+msgid "Tags"
+msgstr "Labels"
+
 msgctxt "field:offered,template:"
 msgid "Template"
 msgstr "Modèle"
@@ -271,6 +251,30 @@ msgstr "Modèle"
 msgctxt "field:offered,template_behaviour:"
 msgid "Template Behaviour"
 msgstr "Comportement du Modèle"
+
+msgctxt "field:offered.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.configuration,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.configuration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.configuration,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.configuration,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:offered.option.description,code:"
 msgid "Code"
@@ -336,6 +340,10 @@ msgctxt "field:offered.option.description,kind:"
 msgid "Option Description Kind"
 msgstr "Type de Garantie"
 
+msgctxt "field:offered.option.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:offered.option.description,name:"
 msgid "Name"
 msgstr "Nom"
@@ -367,6 +375,14 @@ msgstr "Comportement à la Souscription"
 msgctxt "field:offered.option.description,summary:"
 msgid "Summary"
 msgstr "Synthèse"
+
+msgctxt "field:offered.option.description,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:offered.option.description,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:offered.option.description,template:"
 msgid "Template"
@@ -612,6 +628,10 @@ msgctxt "field:offered.product,kind:"
 msgid "Product Kind"
 msgstr "Type de Produit"
 
+msgctxt "field:offered.product,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:offered.product,name:"
 msgid "Name"
 msgstr "Nom"
@@ -635,6 +655,14 @@ msgstr "Type"
 msgctxt "field:offered.product,summary:"
 msgid "Summary"
 msgstr "Synthèse"
+
+msgctxt "field:offered.product,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:offered.product,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:offered.product,template:"
 msgid "Template"
@@ -716,6 +744,10 @@ msgctxt "field:offered.product-option.description,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:offered.product-option.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:offered.product-option.description,order:"
 msgid "Order"
 msgstr "Ordre"
@@ -740,10 +772,6 @@ msgctxt "field:offered.product-option.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:tag,extra_data_defs:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
@@ -760,9 +788,9 @@ msgctxt "model:extra_data-sub_extra_data,name:"
 msgid "Extra Data to Sub Extra Data Relation"
 msgstr "Données Complémentaires Récursives"
 
-msgctxt "model:extra_data-tag,name:"
-msgid "Relation between extra data def and tag"
-msgstr "Relation Donnée Complémentaire - Label"
+msgctxt "model:ir.action,name:act_configuration_form"
+msgid "Offered Configuration"
+msgstr "Administration produit"
 
 msgctxt "model:ir.action,name:act_coverage_form"
 msgid "OptionDescriptions"
@@ -783,6 +811,10 @@ msgstr "Produits"
 msgctxt "model:ir.sequence.type,name:sequence_type_contract_number"
 msgid "Contract Number"
 msgstr "Numéro de Contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration_form"
+msgid "Offered Configuration"
+msgstr "Administration produit"
 
 msgctxt "model:ir.ui.menu,name:menu_contract_configuration"
 msgid "Contract Configuration"
@@ -816,6 +848,10 @@ msgctxt "model:offered,name:"
 msgid "Offered"
 msgstr "Offre"
 
+msgctxt "model:offered.configuration,name:"
+msgid "Offered Configuration"
+msgstr "Administration produit"
+
 msgctxt "model:offered.option.description,name:"
 msgid "OptionDescription"
 msgstr "Description d'Option"
@@ -847,6 +883,14 @@ msgstr "Relation Produit-Données Complémantaires"
 msgctxt "model:offered.product-option.description,name:"
 msgid "Product to Option Description Relation"
 msgstr "Relation Produit - Description d'Option"
+
+msgctxt "model:res.group,name:group_offered"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "model:res.group,name:group_offered_admin"
+msgid "Offered Administration"
+msgstr "Administration produit"
 
 msgctxt "selection:extra_data,kind:"
 msgid "Benefit"
@@ -1004,9 +1048,9 @@ msgctxt "view:extra_data:"
 msgid "Sub Data"
 msgstr "Sous Donnée"
 
-msgctxt "view:extra_data:"
-msgid "Tags"
-msgstr "Labels"
+msgctxt "view:offered.configuration:"
+msgid "Offered Configuration"
+msgstr "Administration produit"
 
 msgctxt "view:offered.option.description:"
 msgid "Extra Data"

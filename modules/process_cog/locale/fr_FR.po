@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -57,6 +57,10 @@ msgstr "ID"
 msgctxt "field:ir.ui.view.description,input_mode:"
 msgid "Input Mode"
 msgstr "Mode de Saisie"
+
+msgctxt "field:ir.ui.view.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:ir.ui.view.description,nb_col:"
 msgid "Number of columns"
@@ -190,6 +194,10 @@ msgctxt "field:process.log,locked:"
 msgid "Lock"
 msgstr "Verrrouillé"
 
+msgctxt "field:process.log,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:process.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -241,6 +249,10 @@ msgstr "ID"
 msgctxt "field:process.start,model:"
 msgid "Model"
 msgstr "Modèle"
+
+msgctxt "field:process.start,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:process.status,create_date_:"
 msgid "Creation date"

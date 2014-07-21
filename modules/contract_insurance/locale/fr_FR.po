@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -161,6 +161,10 @@ msgctxt "field:contract-agreement,kind:"
 msgid "Kind"
 msgstr "Type"
 
+msgctxt "field:contract-agreement,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract-agreement,party:"
 msgid "Party"
 msgstr "Acteur"
@@ -309,6 +313,10 @@ msgctxt "field:contract.covered_element,multi_mixed_view:"
 msgid "Options"
 msgstr "Données de Couverture"
 
+msgctxt "field:contract.covered_element,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.covered_element,name:"
 msgid "Name"
 msgstr "Nom"
@@ -405,6 +413,10 @@ msgctxt "field:contract.manage_exclusion.select,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.manage_exclusion.select,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.manage_exclusion.select,options:"
 msgid "Options"
 msgstr "Options"
@@ -416,6 +428,10 @@ msgstr "Exclusion"
 msgctxt "field:contract.manage_exclusion.select.exclusion,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.manage_exclusion.select.exclusion,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.manage_exclusion.select.exclusion,selected:"
 msgid "Selected"
@@ -429,6 +445,10 @@ msgctxt "field:contract.manage_extra_premium.select,covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
 
+msgctxt "field:contract.manage_extra_premium.select,extra_premium:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
 msgctxt "field:contract.manage_extra_premium.select,extra_premiums:"
 msgid "Extra Premiums"
 msgstr "Surprimes"
@@ -440,6 +460,10 @@ msgstr "ID"
 msgctxt "field:contract.manage_extra_premium.select,kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:contract.manage_extra_premium.select,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.manage_extra_premium.select,option:"
 msgid "Option"
@@ -461,6 +485,10 @@ msgctxt "field:contract.manage_extra_premium.select.extra,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.manage_extra_premium.select.extra,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.manage_extra_premium.select.extra,selected:"
 msgid "Selected"
 msgstr "Coché"
@@ -468,6 +496,10 @@ msgstr "Coché"
 msgctxt "field:contract.manage_extra_premium.select.option,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.manage_extra_premium.select.option,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.manage_extra_premium.select.option,option:"
 msgid "Option"
@@ -653,6 +685,10 @@ msgctxt "field:contract.option.extra_premium,motive:"
 msgid "Motive"
 msgstr "Motif"
 
+msgctxt "field:contract.option.extra_premium,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.option.extra_premium,option:"
 msgid "Option"
 msgstr "Option"
@@ -716,6 +752,10 @@ msgctxt "field:contract.renew.parameters,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.renew.parameters,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.renew.parameters,renew_what:"
 msgid "All contracts"
 msgstr "Tous les contrats"
@@ -735,6 +775,10 @@ msgstr "A renouveler"
 msgctxt "field:contract.renew.report,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.renew.report,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.renew.report,renewal_log_failure:"
 msgid "Failed"
@@ -768,7 +812,7 @@ msgid "Covered Elements"
 msgstr "Risques Couverts"
 
 msgctxt "field:document.receive.request,tmp_0:"
-msgid "Claim"
+msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "field:expense,amount:"
@@ -806,6 +850,10 @@ msgstr "ID"
 msgctxt "field:expense,kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:expense,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:expense,rec_name:"
 msgid "Name"
@@ -1060,10 +1108,6 @@ msgid "Contract Address"
 msgstr "Adresse"
 
 msgctxt "view:contract.covered_element:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:contract.covered_element:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
 
@@ -1074,6 +1118,10 @@ msgstr "Risques Couverts"
 msgctxt "view:contract.covered_element:"
 msgid "Covered Relations"
 msgstr "Relations Couvertes"
+
+msgctxt "view:contract.covered_element:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "view:contract.covered_element:"
 msgid "Options"

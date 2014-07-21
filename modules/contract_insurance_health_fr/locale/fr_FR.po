@@ -30,6 +30,10 @@ msgctxt "field:health.care_system,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:health.care_system,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:health.care_system,name:"
 msgid "Name"
 msgstr "Nom"
@@ -81,6 +85,10 @@ msgstr "Régime"
 msgctxt "field:health.insurance_fund,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:health.insurance_fund,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:health.insurance_fund,name:"
 msgid "Name"

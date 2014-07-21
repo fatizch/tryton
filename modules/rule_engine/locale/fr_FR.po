@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -88,6 +88,10 @@ msgctxt "field:functional_error,kind:"
 msgid "Kind"
 msgstr "Portée de la donnée"
 
+msgctxt "field:functional_error,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:functional_error,name:"
 msgid "Name"
 msgstr "Nom"
@@ -151,6 +155,10 @@ msgstr "Type de donnée"
 msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:rule_engine,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine,name:"
 msgid "Name"
@@ -288,46 +296,6 @@ msgctxt "field:rule_engine-table,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:rule_engine-tag,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:rule_engine-tag,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:rule_engine-tag,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:rule_engine-tag,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:rule_engine-tag,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:rule_engine-tag,rule_engine:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:rule_engine-tag,tag:"
-msgid "Tag"
-msgstr "Label"
-
-msgctxt "field:rule_engine-tag,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:rule_engine-tag,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:rule_engine-tag,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:rule_engine.context,allowed_elements:"
 msgid "Allowed tree elements"
 msgstr "Eléments Compatibles"
@@ -348,6 +316,10 @@ msgctxt "field:rule_engine.context,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:rule_engine.context,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:rule_engine.context,name:"
 msgid "Name"
 msgstr "Nom"
@@ -355,6 +327,14 @@ msgstr "Nom"
 msgctxt "field:rule_engine.context,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:rule_engine.context,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:rule_engine.context,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:rule_engine.context,write_date:"
 msgid "Write Date"
@@ -448,6 +428,10 @@ msgctxt "field:rule_engine.function,long_description:"
 msgid "Long Description"
 msgstr "Description"
 
+msgctxt "field:rule_engine.function,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:rule_engine.function,name:"
 msgid "Name"
 msgstr "Nom"
@@ -524,6 +508,10 @@ msgctxt "field:rule_engine.log,low_level_debug:"
 msgid "Execution Trace"
 msgstr "Trace d'exécution"
 
+msgctxt "field:rule_engine.log,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:rule_engine.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -576,6 +564,10 @@ msgctxt "field:rule_engine.rule_parameter,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:rule_engine.rule_parameter,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:rule_engine.rule_parameter,name:"
 msgid "Code"
 msgstr "Code"
@@ -624,6 +616,10 @@ msgctxt "field:rule_engine.run_tests.results,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:rule_engine.run_tests.results,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:rule_engine.run_tests.results,report:"
 msgid "Report"
 msgstr "Rapport"
@@ -631,6 +627,10 @@ msgstr "Rapport"
 msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:rule_engine.runtime,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine.test_case,create_date:"
 msgid "Create Date"
@@ -667,6 +667,10 @@ msgstr ""
 msgctxt "field:rule_engine.test_case,low_debug:"
 msgid "Low Level Debug Info"
 msgstr "Niveau bas de debug"
+
+msgctxt "field:rule_engine.test_case,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine.test_case,rec_name:"
 msgid "Name"
@@ -727,6 +731,10 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.test_case.value,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:rule_engine.test_case.value,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine.test_case.value,name:"
 msgid "Name"
@@ -804,10 +812,6 @@ msgctxt "field:tag,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:tag,rules:"
-msgid "Rules"
-msgstr "Règles"
-
 msgctxt "field:tag,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -832,7 +836,7 @@ msgctxt "model:functional_error,name:"
 msgid "Rule Error"
 msgstr "Erreur"
 
-msgctxt "model:ir.action,name:act_tag_form"
+msgctxt "model:ir.action,name:"
 msgid "Tags"
 msgstr "Labels"
 
@@ -868,6 +872,10 @@ msgctxt "model:ir.action,name:tree_element_window"
 msgid "Rule Functions"
 msgstr "Fonctions du Moteur de règle"
 
+msgctxt "model:ir.ui.menu,name:"
+msgid "Tags"
+msgstr "Labels"
+
 msgctxt "model:ir.ui.menu,name:menu_context"
 msgid "Contexts"
 msgstr "Contextes"
@@ -884,10 +892,6 @@ msgctxt "model:ir.ui.menu,name:menu_rule_engine"
 msgid "Rule Engine"
 msgstr "Moteur de Règle"
 
-msgctxt "model:ir.ui.menu,name:menu_tag_form"
-msgid "Tags"
-msgstr "Labels"
-
 msgctxt "model:ir.ui.menu,name:menu_tree_element"
 msgid "Rule Functions"
 msgstr "Fonctions du Moteur de règle"
@@ -903,10 +907,6 @@ msgstr "Règle - Règle"
 msgctxt "model:rule_engine-table,name:"
 msgid "Rule_Engine - Table"
 msgstr "Règle - Table"
-
-msgctxt "model:rule_engine-tag,name:"
-msgid "Relation between rule engine and tag"
-msgstr "Ralation entre Moteur de règle et Label"
 
 msgctxt "model:rule_engine.context,name:"
 msgid "Context"

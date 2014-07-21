@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,6 +9,10 @@ msgstr "La garantie %s est inactive le %s"
 msgctxt "error:contract:"
 msgid "Activation Periods \"%(first)s\" and \"%(second)s\" overlap."
 msgstr "Les périodes \"%(première)s\" et \"%(seconde)s\" se chevauchent"
+
+msgctxt "error:contract:"
+msgid "No quote sequence defined"
+msgstr "Pas de séqunce de dévis définie"
 
 msgctxt "error:contract:"
 msgid "Product %s is inactive at date %s"
@@ -78,6 +82,10 @@ msgctxt "field:contract,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract,options:"
 msgid "Options"
 msgstr "Garanties"
@@ -97,6 +105,10 @@ msgstr "Type de Produit"
 msgctxt "field:contract,product_subscriber_kind:"
 msgid "Product Subscriber Kind"
 msgstr "Type de souscripteur"
+
+msgctxt "field:contract,quote_number:"
+msgid "Quote Number"
+msgstr "Numéro de devis"
 
 msgctxt "field:contract,rec_name:"
 msgid "Name"
@@ -158,6 +170,10 @@ msgctxt "field:contract.activation_history,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.activation_history,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.activation_history,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -205,6 +221,10 @@ msgstr "Date de fin"
 msgctxt "field:contract.address,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.address,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.address,policy_owner:"
 msgid "Policy Owner"
@@ -254,6 +274,10 @@ msgctxt "field:contract.contact,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.contact,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.contact,party:"
 msgid "Party"
 msgstr "Acteur"
@@ -298,6 +322,10 @@ msgctxt "field:contract.contact.type,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.contact.type,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.contact.type,name:"
 msgid "Name"
 msgstr "Nom"
@@ -325,6 +353,10 @@ msgstr "Date de Fin"
 msgctxt "field:contract.end.select_date,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.end.select_date,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.option,appliable_conditions_date:"
 msgid "Appliable Conditions Date"
@@ -386,6 +418,10 @@ msgctxt "field:contract.option,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.option,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:contract.option,parties:"
 msgid "Parties"
 msgstr "Acteurs"
@@ -441,6 +477,10 @@ msgstr "Erreur"
 msgctxt "field:contract.service,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.service,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.service,option:"
 msgid "Coverage"
@@ -539,6 +579,14 @@ msgctxt ""
 msgid "Selection"
 msgstr "Sélection"
 
+msgctxt "field:offered.configuration,default_quote_number_sequence:"
+msgid "Default quote number sequence"
+msgstr "Sequence de numéro de devis par défaut"
+
+msgctxt "field:offered.product,quote_number_sequence:"
+msgid "Quote number sequence"
+msgstr "Séquence de numéro de devis"
+
 msgctxt "field:party.party,contracts:"
 msgid "Contracts"
 msgstr "Contrats"
@@ -636,6 +684,10 @@ msgctxt ""
 msgid "Option"
 msgstr "Option"
 
+msgctxt "model:ir.action,name:"
+msgid "Devis"
+msgstr "Devis"
+
 msgctxt "model:ir.action,name:act_contact_type_form"
 msgid "Contact Type"
 msgstr "Type de contact"
@@ -656,10 +708,6 @@ msgctxt "model:ir.action,name:act_quote_button"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt "model:ir.action,name:act_quote_form"
-msgid "Devis"
-msgstr "Devis"
-
 msgctxt "model:ir.action,name:option_subscription_wizard"
 msgid "Option Subscription"
 msgstr "Souscription d'Option"
@@ -667,6 +715,22 @@ msgstr "Souscription d'Option"
 msgctxt "model:ir.action,name:option_subscription_wizard_launcher"
 msgid "Option Subscription Launcher"
 msgstr "Souscription des options"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_active"
+msgid "Active"
+msgstr "Actif"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_quote"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_quote"
+msgid "Quote"
+msgstr "Devis"
+
+msgctxt "model:ir.ui.menu,name:"
+msgid "Quotes"
+msgstr "Devis"
 
 msgctxt "model:ir.ui.menu,name:menu_contact_type_form"
 msgid "Contact Type"
@@ -683,10 +747,6 @@ msgstr "Traitement"
 msgctxt "model:ir.ui.menu,name:menu_contract_form"
 msgid "Contracts"
 msgstr "Contrats"
-
-msgctxt "model:ir.ui.menu,name:menu_quote_form"
-msgid "Quotes"
-msgstr "Devis"
 
 msgctxt "model:party.synthesis.menu.contract,name:"
 msgid "Party Synthesis Menu Contract"

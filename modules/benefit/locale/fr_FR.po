@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -86,6 +86,10 @@ msgctxt "field:benefit,loss_descs:"
 msgid "Loss Descriptions"
 msgstr "Types de Préjudice Couverts"
 
+msgctxt "field:benefit,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:benefit,name:"
 msgid "Name"
 msgstr "Nom"
@@ -113,6 +117,14 @@ msgstr "Documents Risques Couverts"
 msgctxt "field:benefit,summary:"
 msgid "Summary"
 msgstr "Synthèse"
+
+msgctxt "field:benefit,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:benefit,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:benefit,template:"
 msgid "Template"
@@ -246,6 +258,10 @@ msgctxt "field:benefit.event.description,loss_descs:"
 msgid "Loss Descriptions"
 msgstr "Types de Préjudice Couverts"
 
+msgctxt "field:benefit.event.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:benefit.event.description,name:"
 msgid "Name"
 msgstr "Nom"
@@ -345,6 +361,10 @@ msgstr "ID"
 msgctxt "field:benefit.loss.description,item_kind:"
 msgid "Kind"
 msgstr "Type"
+
+msgctxt "field:benefit.loss.description,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:benefit.loss.description,name:"
 msgid "Name"
@@ -478,6 +498,10 @@ msgctxt "field:benefit.reserve.rule,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:benefit.reserve.rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:benefit.reserve.rule,offered:"
 msgid "Offered"
 msgstr "Offre"
@@ -593,6 +617,10 @@ msgstr "Durée max par Indemnisation"
 msgctxt "field:benefit.rule,max_duration_per_indemnification_unit:"
 msgid "Unit"
 msgstr "Unité"
+
+msgctxt "field:benefit.rule,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:benefit.rule,offered:"
 msgid "Offered"
@@ -721,6 +749,10 @@ msgstr "Unité de Calcul"
 msgctxt "field:benefit.rule.stage,limited_duration:"
 msgid "Limited Duration"
 msgstr "Durée Limitée"
+
+msgctxt "field:benefit.rule.stage,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:benefit.rule.stage,rec_name:"
 msgid "Name"
@@ -1131,16 +1163,16 @@ msgid "Event Descriptionriptor"
 msgstr "Descripteur d'Evénement"
 
 msgctxt "view:benefit.loss.description:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:benefit.loss.description:"
 msgid "Documents"
 msgstr "Documents"
 
 msgctxt "view:benefit.loss.description:"
 msgid "Events"
 msgstr "Evénements"
+
+msgctxt "view:benefit.loss.description:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "view:benefit.loss.description:"
 msgid "Loss Descriptor"

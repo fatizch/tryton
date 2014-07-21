@@ -1,0 +1,496 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement:"
+msgid "Endorsement \"%s\" is not the latest applied."
+msgstr "L'avenant \"%s\" n'est pas le dernier appliqué."
+
+msgctxt "field:endorsement,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué sur"
+
+msgctxt "field:endorsement,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:endorsement,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:endorsement,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:endorsement,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.field,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:endorsement.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.option,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.option,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué sur"
+
+msgctxt "field:endorsement.option,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.option,endorsement:"
+msgid "Endorsement"
+msgstr "Avenant"
+
+msgctxt "field:endorsement.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.option,option:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:endorsement.option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.option,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.option,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:endorsement.option,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.option.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.option.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.option.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.option.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.option.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.option.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.option.field,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:endorsement.option.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.option.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.template,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:endorsement.template,contract_fields:"
+msgid "Contract fields"
+msgstr "Champs du contrat"
+
+msgctxt "field:endorsement.template,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.template,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.template,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.template,description:"
+msgid "Endorsement Description"
+msgstr "Description d'un avenant"
+
+msgctxt "field:endorsement.template,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.template,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
+msgctxt "field:endorsement.template,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.template,option_fields:"
+msgid "Option fields"
+msgstr "Champs des options"
+
+msgctxt "field:endorsement.template,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:endorsement.template,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.template,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.template,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.template-product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.template-product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.template-product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.template-product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.template-product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:endorsement.template-product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.template-product,template:"
+msgid "Template"
+msgstr "Modèle"
+
+msgctxt "field:endorsement.template-product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.template-product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.template-product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.wizard.selection,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.wizard.selection,endorsement:"
+msgid "Endorsement"
+msgstr "Avenant"
+
+msgctxt "field:endorsement.wizard.selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.wizard.selection,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
+msgctxt "field:endorsement.wizard.selection,selected_product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:endorsement.wizard.selection,template:"
+msgid "Endorsement Template"
+msgstr "Modèle d'avenant"
+
+msgctxt "field:endorsement.wizard.selection,template_description:"
+msgid "Template Description"
+msgstr ""
+
+msgctxt "field:endorsement.wizard.selection,to_select:"
+msgid "Select Contract"
+msgstr "Selectionner le contrat"
+
+msgctxt "field:offered.product,endorsement_templates:"
+msgid "Endorsement Templates"
+msgstr "Modèles d'avenant"
+
+msgctxt "model:endorsement,name:"
+msgid "Endorsement"
+msgstr "Avenant"
+
+msgctxt "model:endorsement.field,name:"
+msgid "Endorsement Field"
+msgstr "Champ d'un avenant"
+
+msgctxt "model:endorsement.option,name:"
+msgid "Endorsement Option"
+msgstr "Option d'avenant"
+
+msgctxt "model:endorsement.option.field,name:"
+msgid "Endorsement Option Field"
+msgstr "Champ d'une option d'avenant"
+
+msgctxt "model:endorsement.template,name:"
+msgid "Endorsement Template"
+msgstr ""
+
+msgctxt "model:endorsement.template-product,name:"
+msgid "Endorsement Template to Product Relation"
+msgstr "Relation Modèle d'avenant produit"
+
+msgctxt "model:endorsement.wizard.selection,name:"
+msgid "Endorsement Selection"
+msgstr "Selection d'un avenant"
+
+msgctxt "model:ir.action,name:act_endorsement_field_form"
+msgid "Endorsement Fields"
+msgstr "Champs d'un avenant"
+
+msgctxt "model:ir.action,name:act_endorsement_form"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "model:ir.action,name:act_endorsement_option_field_form"
+msgid "Endorsement Option Fields"
+msgstr "Champs d'une option d'avenant"
+
+msgctxt "model:ir.action,name:act_launcher"
+msgid "Endorsement Launcher"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_template"
+msgid "Endorsement Template"
+msgstr "Modèle d'avenant"
+
+msgctxt "model:ir.ui.menu,name:menu_configuration"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "model:ir.ui.menu,name:menu_endorsement"
+msgid "Endorsement"
+msgstr "Avenant"
+
+msgctxt "model:ir.ui.menu,name:menu_endorsement_field_form"
+msgid "Endorsement Fields"
+msgstr "Champs d'un avenant"
+
+msgctxt "model:ir.ui.menu,name:menu_endorsement_form"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "model:ir.ui.menu,name:menu_endorsement_option_field_form"
+msgid "Endorsement Option Fields"
+msgstr "Champs d'une option d'avenant"
+
+msgctxt "model:ir.ui.menu,name:menu_endorsement_template"
+msgid "Endorsement Template"
+msgstr "Modèle d'avenant"
+
+msgctxt "model:ir.ui.menu,name:menu_launch_endorsement"
+msgid "Start Endorsement"
+msgstr "Démarrer un avenant"
+
+msgctxt "selection:endorsement,state:"
+msgid "Applied"
+msgstr "Appliqué"
+
+msgctxt "selection:endorsement,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:endorsement.option,action:"
+msgid "Add"
+msgstr "Ajouter"
+
+msgctxt "selection:endorsement.option,action:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:endorsement.option,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "view:endorsement.field:"
+msgid "Endorsement Field"
+msgstr "Champ d'un avenant"
+
+msgctxt "view:endorsement.field:"
+msgid "Endorsement Fields"
+msgstr "Champs d'un avenant"
+
+msgctxt "view:endorsement.option.field:"
+msgid "Endorsement Field"
+msgstr "Champ d'un avenant"
+
+msgctxt "view:endorsement.option.field:"
+msgid "Endorsement Fields"
+msgstr "Champs d'un avenant"
+
+msgctxt "view:endorsement.option:"
+msgid "Endorsement Option"
+msgstr "Option d'avenant"
+
+msgctxt "view:endorsement.option:"
+msgid "Endorsement Options"
+msgstr "Options d'avenant"
+
+msgctxt "view:endorsement.template:"
+msgid "Contract fields"
+msgstr "Champs du contrat"
+
+msgctxt "view:endorsement.template:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "view:endorsement.template:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "view:endorsement.template:"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "view:endorsement.template:"
+msgid "Option fields"
+msgstr "Champs des options"
+
+msgctxt "view:endorsement.template:"
+msgid "Templates"
+msgstr "Modèles"
+
+msgctxt "view:endorsement.template:"
+msgid "Usage"
+msgstr "Utilisation"
+
+msgctxt "view:endorsement.wizard.selection:"
+msgid "Endorsement Selection"
+msgstr "Selection d'un avenant"
+
+msgctxt "view:endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "view:endorsement:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "view:endorsement:"
+msgid "Endorsement"
+msgstr "Avenant"
+
+msgctxt "view:endorsement:"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "view:offered.product:"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "wizard_button:endorsement.wizard.launcher,select_endorsement,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.wizard.launcher,select_endorsement,prepare_endorsement:"
+msgid "Continue"
+msgstr "Continuer"

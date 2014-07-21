@@ -10,6 +10,10 @@ msgctxt "field:debug.visualize,result:"
 msgid "Result"
 msgstr "Résultat"
 
+msgctxt "field:ir.model.debug.model_info,evaluation_result:"
+msgid "Evaluation Result"
+msgstr "Résultats du calcul"
+
 msgctxt "field:ir.model.debug.model_info,field_infos:"
 msgid "Fields Infos"
 msgstr ""
@@ -26,9 +30,21 @@ msgctxt "field:ir.model.debug.model_info,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ir.model.debug.model_info,id_to_calculate:"
+msgid "Id To Calculate"
+msgstr "id à calculer"
+
 msgctxt "field:ir.model.debug.model_info,model_name:"
 msgid "Model Name"
 msgstr "Nom du modèle"
+
+msgctxt "field:ir.model.debug.model_info,to_evaluate:"
+msgid "To Evaluate"
+msgstr "A évaluer"
+
+msgctxt "field:ir.model.debug.model_info.field_info,calculated_value:"
+msgid "Calculated Value"
+msgstr "Valeur calculée"
 
 msgctxt "field:ir.model.debug.model_info.field_info,field_domain:"
 msgid "Domain"
@@ -41,6 +57,10 @@ msgstr ""
 msgctxt "field:ir.model.debug.model_info.field_info,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ir.model.debug.model_info.field_info,id_to_calculate:"
+msgid "Id To Calculate"
+msgstr "id à calculer"
 
 msgctxt "field:ir.model.debug.model_info.field_info,is_function:"
 msgid "Is Function"
@@ -85,6 +105,10 @@ msgstr "Nom"
 msgctxt "field:ir.model.debug.model_info.field_info,target_model:"
 msgid "Target Model"
 msgstr ""
+
+msgctxt "help:ir.model.debug.model_info,to_evaluate:"
+msgid "Use the 'instance' keyword to get the instanciated model"
+msgstr "Utiliser l'instance keyword pour avoir le modèle instancié"
 
 msgctxt "model:debug.visualize,name:"
 msgid "Debug Visualize"

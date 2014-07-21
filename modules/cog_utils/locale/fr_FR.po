@@ -202,6 +202,10 @@ msgctxt "field:ir.test_case,language:"
 msgid "Test Case Language"
 msgstr "Langue des jeux d'essai"
 
+msgctxt "field:ir.test_case,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:ir.test_case,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -253,6 +257,10 @@ msgstr "ID"
 msgctxt "field:ir.test_case.instance,method_name:"
 msgid "Method Name"
 msgstr "Nom de la Méthode"
+
+msgctxt "field:ir.test_case.instance,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:ir.test_case.instance,name:"
 msgid "Name"
@@ -326,6 +334,10 @@ msgctxt "field:ir.test_case.run.select,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ir.test_case.run.select,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:ir.test_case.run.select,select_all_files:"
 msgid "Select All"
 msgstr "Tout sélectionner"
@@ -354,6 +366,10 @@ msgctxt "field:ir.test_case.run.select.file,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:ir.test_case.run.select.file,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:ir.test_case.run.select.file,selected:"
 msgid "Will be loaded"
 msgstr "Seront chargés"
@@ -361,6 +377,10 @@ msgstr "Seront chargés"
 msgctxt "field:ir.test_case.run.select.method,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:ir.test_case.run.select.method,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:ir.test_case.run.select.method,selected:"
 msgid "Will be executed"
@@ -410,6 +430,106 @@ msgctxt "field:res.user.warning,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:tag,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:tag,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:tag,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:tag,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:tag,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:tag,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:tag,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
+msgctxt "field:tag,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:tag,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:tag,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:tag,tagged_objects:"
+msgid "Tagged Objects"
+msgstr "Objets avec label"
+
+msgctxt "field:tag,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:tag,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:tag,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:tag-object,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:tag-object,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:tag-object,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:tag-object,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:tag-object,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
+msgctxt "field:tag-object,object_:"
+msgid "Object"
+msgstr "Objet"
+
+msgctxt "field:tag-object,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:tag-object,tag:"
+msgid "Tag"
+msgstr "Label"
+
+msgctxt "field:tag-object,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:tag-object,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:tag-object,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:utils.version_object,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -422,6 +542,10 @@ msgctxt "field:utils.version_object,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
+msgctxt "field:utils.version_object,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:utils.version_object,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -433,6 +557,10 @@ msgstr "Valeur Courante"
 msgctxt "field:utils.versionned_object,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:utils.versionned_object,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
 
 msgctxt "field:utils.versionned_object,versions:"
 msgid "Versions"
@@ -468,6 +596,10 @@ msgstr " "
 msgctxt "model:ir.action,name:act_export_package"
 msgid "Export Package"
 msgstr "Exports groupés"
+
+msgctxt "model:ir.action,name:act_tag_form"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "model:ir.action,name:act_test_case_model"
 msgid "Test Case Parameters"
@@ -545,6 +677,10 @@ msgctxt "model:ir.ui.menu,name:menu_import_wizard"
 msgid "Import Wizard"
 msgstr "Importer un fichier"
 
+msgctxt "model:ir.ui.menu,name:menu_tag_form"
+msgid "Tags"
+msgstr "Labels"
+
 msgctxt "model:ir.ui.menu,name:menu_test_case"
 msgid "Test Case"
 msgstr "Jeu d'essai"
@@ -564,6 +700,14 @@ msgstr ""
 msgctxt "model:party.category,name:"
 msgid "Category"
 msgstr "Catégorie"
+
+msgctxt "model:tag,name:"
+msgid "Tag"
+msgstr "Label"
+
+msgctxt "model:tag-object,name:"
+msgid "Relation tag to object"
+msgstr "Relation objet label"
 
 msgctxt "model:utils.version_object,name:"
 msgid "Version Object"
@@ -632,6 +776,18 @@ msgstr "Sélection des jeux d'essai"
 msgctxt "view:ir.test_case:"
 msgid "Test Case Parameters"
 msgstr "Paramètres des jeu d'essais"
+
+msgctxt "view:tag-object:"
+msgid "Tagged Object"
+msgstr "Objet avec label"
+
+msgctxt "view:tag:"
+msgid "Tag"
+msgstr "Label"
+
+msgctxt "view:tag:"
+msgid "Tree"
+msgstr "Arbre"
 
 msgctxt "view:utils.version_object:"
 msgid "Version Object"
