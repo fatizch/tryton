@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Extra Premium">
-    <label name="motive" />
-    <field name="motive" widget="selection" />
-    <label name="calculation_kind" />
-    <field name="calculation_kind" />
-    <label name="flat_amount" />
+    <label name="motive"/>
+    <field name="motive" widget="selection"/>
+    <label name="calculation_kind"/>
+    <field name="calculation_kind"/>
+    <label name="flat_amount"/>
     <group id="flat_amounts" col="99" xexpand="0" xfill="0">
         <group id="flat_amount_discount"
             states="{'invisible': Or(Eval('calculation_kind') != 'flat', ~Eval('is_discount'))}">
-            <field name="flat_amount" xexpand="0" factor="-1" />
+            <field name="flat_amount" xexpand="0" factor="-1"/>
             <label name="currency_symbol" string="" xexpand="0"
-                xalign="0" />
+                xalign="0"/>
         </group>
         <group id="flat_amount"
             states="{'invisible': Or(Eval('calculation_kind') != 'flat', Bool(Eval('is_discount')))}">
-            <field name="flat_amount" xexpand="0" />
+            <field name="flat_amount" xexpand="0"/>
             <label name="currency_symbol" string="" xexpand="0"
-                xalign="0" />
+                xalign="0"/>
         </group>
     </group>
-    <newline />
-    <label name="rate" />
+    <newline/>
+    <label name="rate"/>
     <group id="rates" col="99" xexpand="0" xfill="0">
         <group id="rate_discount"
             states="{'invisible': Or(Eval('calculation_kind') != 'rate', ~Eval('is_discount')) }">
-            <field name="rate" xexpand="0" factor="-100" />
-            <label string="%" id="rate" xexpand="0" xalign="0" />
+            <field name="rate" xexpand="0" factor="-100"/>
+            <label string="%" id="rate" xexpand="0" xalign="0"/>
         </group>
         <group id="rate"
-            states="{'invisible': Or(Eval('calculation_kind') != 'rate',Bool(Eval('is_discount')))}">
-            <field name="rate" xexpand="0" factor="100" />
-            <label string="%" id="rate" xexpand="0" xalign="0" />
+            states="{'invisible': Or(Eval('calculation_kind') != 'rate', Bool(Eval('is_discount')))}">
+            <field name="rate" xexpand="0" factor="100"/>
+            <label string="%" id="rate" xexpand="0" xalign="0"/>
         </group>
     </group>
-    <newline />
-    <label name="time_limited" />
-    <field name="time_limited" />
-    <label name="duration" />
+    <newline/>
+    <label name="time_limited"/>
+    <field name="time_limited"/>
+    <label name="duration"/>
     <group id="duration">
-        <field name="duration" xexpand="0" />
-        <field name="duration_unit" xexpand="0" xalign="0" />
+        <field name="duration" xexpand="0"/>
+        <field name="duration_unit" xexpand="0" xalign="0"/>
     </group>
-    <label name="start_date" />
-    <field name="start_date" />
-    <label name="end_date" />
-    <field name="end_date" />
-    <newline />
+    <label name="start_date"/>
+    <field name="start_date"/>
+    <label name="end_date"/>
+    <field name="end_date"/>
+    <newline/>
     <group id="invisible" states="{'invisible': True}">
-        <field name="currency" />
-        <field name="is_discount" />
+        <field name="currency"/>
+        <field name="is_discount"/>
     </group>
 </form>

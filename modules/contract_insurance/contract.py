@@ -1190,8 +1190,6 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             changes['rate'] = None
         elif self.calculation_kind == 'rate':
             changes['flat_amount'] = None
-        else:
-            pass
         return changes
 
     @fields.depends('start_date', 'end_date')
@@ -1217,11 +1215,11 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_with_is_discount(self, name=None):
         return self.motive.is_discount if self.motive else False
 
-    @fields.depends('motive', 'calculation_kind', 'is_discount')
+    @fields.depends('motive')
     def on_change_with_max_value(self, name=None):
         return self.motive.max_value if self.motive else None
 
-    @fields.depends('motive', 'calculation_kind', 'is_discount')
+    @fields.depends('motive')
     def on_change_with_max_rate(self, name=None):
         return self.motive.max_rate if self.motive else None
 

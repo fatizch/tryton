@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Extra Premium Kind">
-  <label name="name"/>
-  <field name="name"/>
-  <label name="code"/>
-  <field name="code"/>
-  <label name="is_discount"/>
-  <field name="is_discount"/>
-  <newline/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="is_discount"/>
+    <field name="is_discount"/>
+    <newline/>
     <label name="max_value"/>
-    <group id="flat_amounts" col="99" xexpand="0" xfill="0" >
-	  <group id="flat_amount_discount" states="{'invisible': ~Eval('is_discount')}">
-	    <field name="max_value" xexpand="0" factor="-1"/>
-	    <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
-	  </group>
-	  <group id="flat_amount" states="{'invisible': Bool(Eval('is_discount'))}">
-	    <field name="max_value" xexpand="0"/>
-	    <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
-	  </group>
-  </group>
-  <newline/>
-  <label name="max_rate"/>
-  <group id="rates" col="99" xexpand="0" xfill="0" >
-      <group id="rate_discount" states="{'invisible':  ~Eval('is_discount') }">
-          <field name="max_rate" xexpand="0" factor="-100" />
-          <label string="%" id="rate" xexpand="0" xalign="0"/>
-      </group>
-      <group id="rate" states="{'invisible': Bool(Eval('is_discount'))}" >
-          <field name="max_rate" xexpand="0" factor="100"/>
-          <label string="%" id="rate" xexpand="0" xalign="0"/>
-      </group>
+    <group id="flat_amounts" col="99" xexpand="0" xfill="0">
+        <group id="flat_amount_discount" states="{'invisible': ~Eval('is_discount')}">
+            <field name="max_value" xexpand="0" factor="-1"/>
+            <label name="currency_symbol" string="" xexpand="0"
+                xalign="0"/>
+        </group>
+        <group id="flat_amount" states="{'invisible': Bool(Eval('is_discount'))}">
+            <field name="max_value" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0"
+                xalign="0"/>
+        </group>
     </group>
-  <group id="invisible" states="{'invisible': True}">
- 		<field name="currency"/>    
+    <newline/>
+    <label name="max_rate"/>
+    <group id="rates" col="99" xexpand="0" xfill="0">
+        <group id="rate_discount" states="{'invisible':  ~Eval('is_discount') }">
+            <field name="max_rate" xexpand="0" factor="-100"/>
+            <label string="%" id="rate" xexpand="0" xalign="0"/>
+        </group>
+        <group id="rate" states="{'invisible': Bool(Eval('is_discount'))}">
+            <field name="max_rate" xexpand="0" factor="100"/>
+            <label string="%" id="rate" xexpand="0" xalign="0"/>
+        </group>
+    </group>
+    <group id="invisible" states="{'invisible': True}">
+        <field name="currency"/>
     </group>
 </form>

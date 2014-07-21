@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Extra Premium Kinds">
-  <field name="name"/>
-  <field name="code"/>
-  <field name="is_discount"/>
-  <field name="ceiling"/>
+    <field name="name"/>
+    <field name="code"/>
+    <field name="is_discount"/>
+    <field name="ceiling"/>
 </tree>

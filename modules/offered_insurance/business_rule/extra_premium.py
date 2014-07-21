@@ -41,15 +41,14 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('is_discount')
     def on_change_is_discount(self):
-        changes = {}
-        changes['max_value'] = None
-        changes['max_rate'] = None
-        return changes
+        return {
+            'max_values': None,
+            'max_rate': None,
+        }
 
     @fields.depends('max_value', 'max_rate')
     def on_change_with_ceiling(self, name=None):
-        ceiling_value = ''
-        ceiling_rate = ''
+        ceiling_value, ceiling_rate = '', ''
         if self.max_value:
             ceiling_value = str(abs(self.max_value)) + ' ' + \
                 self.currency_symbol
