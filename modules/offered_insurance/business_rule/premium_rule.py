@@ -235,7 +235,7 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
         if not extra_amount:
             return
         from_detail.amount = extra_amount
-        from_detail.on_object = extra.motive
+        from_detail.on_object = extra
 
     def calculate_components_contribution(self, args, result, errors,
             rated_object_kind):
@@ -313,6 +313,8 @@ class PremiumRule(BusinessRuleRoot, model.CoopSQL):
                 new_line['amount'] = detail.amount
                 new_line['rated_entity'] = args.get('coverage',
                     args.get('product'))
+                if detail.kind == 'extra':
+                    new_line['target'] = detail.on_object
                 if detail.amount:
                     lines.append(new_line)
             elif detail.kind == 'fee':

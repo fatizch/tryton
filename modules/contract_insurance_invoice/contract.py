@@ -714,7 +714,8 @@ class ContractOption:
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'extra_premium',
+        'Premiums')
 
     def get_invoice_lines(self, start, end):
         lines = []
