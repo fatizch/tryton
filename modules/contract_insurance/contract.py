@@ -315,11 +315,11 @@ class Contract(Printable):
     def get_doc_template_kind(self):
         return 'contract'
 
-    def set_end_date(self, end_date):
-        super(Contract, self).set_end_date(end_date)
+    def set_end_date(self, end_date, force=False):
+        super(Contract, self).set_end_date(end_date, force)
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                option.set_end_date(end_date)
+                option.set_end_date(end_date, force)
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 

@@ -100,7 +100,7 @@ class Contract:
         if not loans:
             return
         end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
-        self.set_end_date(end_date)
+        self.set_end_date(end_date, force=True)
 
 
 class ContractOption:
@@ -135,9 +135,10 @@ class ContractOption:
         if to_update:
             return {'update': to_update}
 
-    def set_end_date(self, end_date):
+    def set_end_date(self, end_date, force=False):
+        super(ContractOption, self).set_end_date(end_date, force)
         for share in self.loan_shares:
-            if share.end_date and share.end_date <= end_date:
+            if not force and share.end_date and share.end_date <= end_date:
                 continue
             #TEMP fix before removing start_date/end_date from share
             share.end_date = min(end_date, share.loan.end_date)

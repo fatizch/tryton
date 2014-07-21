@@ -379,25 +379,26 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         })
             previous_period = period
 
-    def set_end_date(self, end_date):
+    def set_end_date(self, end_date, force=False):
         # Allows to set the contract's end_date and cascading the change in the
         # contract's one2manys (options, history, etc...)
         self.end_date = end_date
         ActivationHistory = Pool().get('contract.activation_history')
-        to_delete = []
-        for idx, elem in enumerate(self.activation_history):
-            if elem.start_date >= end_date:
-                to_delete.append(idx)
-                continue
-            if elem.end_date and elem.end_date <= end_date:
-                continue
-            elem.end_date = end_date
         if isinstance(self.activation_history, tuple):
             self.activation_history = list(self.activation_history)
-        for option in self.options:
-            if option.end_date and option.end_date <= end_date:
+        to_delete = []
+        for idx, elem in enumerate(reversed(self.activation_history)):
+            if elem.start_date >= end_date:
+                to_delete.append(len(self.activation_history) - 1 - idx)
                 continue
-            option.end_date = end_date
+            elem.end_date = end_date
+            break
+        for option in self.options:
+            if not force and option.end_date and option.end_date <= end_date:
+                continue
+            option.set_end_date(end_date, force)
+        if isinstance(self.options, tuple):
+            self.options = list(self.options)
         if not to_delete:
             return
         ActivationHistory.delete([
@@ -903,6 +904,9 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency):
             start_date, end_date)
         for key, val in cur_dict.iteritems():
             setattr(self, key, val)
+
+    def set_end_date(self, end_date, force=False):
+        self.end_date = end_date
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):
