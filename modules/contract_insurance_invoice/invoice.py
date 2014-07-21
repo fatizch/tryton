@@ -232,7 +232,7 @@ class InvoiceLine:
         Premium = pool.get('contract.premium')
         name = super(InvoiceLine, self).origin_name
         if isinstance(self.origin, Premium):
-            name = self.origin.get_parent().rec_name
+            name = self.origin.parent.rec_name
         return name
 
     @classmethod

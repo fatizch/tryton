@@ -5,6 +5,7 @@ from decimal import Decimal
 from dateutil.rrule import rrule, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max
+from sql import Column
 
 from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
@@ -344,13 +345,14 @@ class Contract:
         Premium = Pool().get('contract.premium')
         new_premium = Premium.new_line(price, start_date, end_date)
         if new_premium:
-            parent = new_premium.get_parent()
             if not end_date and not getattr(new_premium, 'end', None):
-                new_premium.end = getattr(parent, 'end_date', None)
-            if isinstance(parent.premiums, tuple):
-                parent.premiums = list(parent.premiums)
-            parent.premiums.append(new_premium)
-            to_check_for_deletion.add(parent)
+                new_premium.end = getattr(new_premium.parent, 'end_date',
+                    None)
+            if isinstance(new_premium.parent.premiums, tuple):
+                new_premium.parent.premiums = list(
+                    new_premium.parent.premiums)
+            new_premium.parent.premiums.append(new_premium)
+            to_check_for_deletion.add(new_premium.parent)
             to_save.append(new_premium)
         return to_save, to_check_for_deletion
 
@@ -765,6 +767,9 @@ class Premium(ModelSQL, ModelView):
     main_contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
         'get_main_contract')
+    parent = fields.Function(
+        fields.Reference('Parent', 'get_parent_models'),
+        'get_parent')
 
     @classmethod
     def __setup__(cls):
@@ -793,11 +798,34 @@ class Premium(ModelSQL, ModelView):
     def get_possible_parent_field(cls):
         return set(['contract', 'covered_element', 'option', 'extra_premium'])
 
-    def get_parent(self):
-        for elem in self.get_possible_parent_field():
-            value = getattr(self, elem, None)
-            if value:
-                return value
+    @classmethod
+    def get_parent_models(cls):
+        result = []
+        for field_name in cls.get_possible_parent_field():
+            field = cls._fields[field_name]
+            result.append((field.model_name, field.string))
+        return result
+
+    @classmethod
+    def get_parent(cls, premiums, name):
+        cursor = Transaction().cursor
+        premium_table = cls.__table__()
+        models, columns = [], []
+        for field_name in cls.get_possible_parent_field():
+            field = cls._fields[field_name]
+            models.append(field.model_name)
+            columns.append(Column(premium_table, field_name))
+
+        cursor.execute(*premium_table.select(premium_table.id, *columns,
+                where=premium_table.id.in_([x.id for x in premiums])))
+
+        result = {}
+        for elem in cursor.fetchall():
+            for model_name, value in zip(models, elem[1:]):
+                if value:
+                    result[elem[0]] = '%s,%i' % (model_name, value)
+                    break
+        return result
 
     def get_main_contract(self, name=None):
         if self.contract:
@@ -810,7 +838,7 @@ class Premium(ModelSQL, ModelView):
             return self.extra_premium.option.parent_contract.id
 
     def get_description(self):
-        return '%s - %s' % (self.get_parent().rec_name,
+        return '%s - %s' % (self.parent.rec_name,
             self.rated_entity.rec_name)
 
     def _get_rrule(self, start):
@@ -896,19 +924,19 @@ class Premium(ModelSQL, ModelView):
             field = self._fields[elem]
             if field.model_name == line['target'].__name__:
                 setattr(self, elem, line['target'])
+                self.parent = line['target']
                 break
 
     def calculate_rated_entity(self):
         # TODO : use the line rated_entity once it is implemented
-        parent = self.get_parent()
-        if parent.__name__ == 'contract':
-            rated_entity = parent.product
-        elif parent.__name__ == 'contract.option':
-            rated_entity = parent.coverage
-        elif parent.__name__ == 'contract.covered_element':
-            rated_entity = parent.contract
-        elif parent.__name__ == 'extra_premium':
-            rated_entity = parent.option
+        if self.parent.__name__ == 'contract':
+            rated_entity = self.parent.product
+        elif self.parent.__name__ == 'contract.option':
+            rated_entity = self.parent.coverage
+        elif self.parent.__name__ == 'contract.covered_element':
+            rated_entity = self.parent.contract
+        elif self.parent.__name__ == 'extra_premium':
+            rated_entity = self.parent.option
         else:
             rated_entity = None
         return rated_entity
@@ -919,17 +947,16 @@ class Premium(ModelSQL, ModelView):
             return None
         new_instance = cls()
         new_instance.set_parent_from_line(line)
-        parent = new_instance.get_parent()
-        if not parent:
+        if not new_instance.parent:
             # TODO : Should raise an error
             return None
         new_instance.rated_entity = line['rated_entity']
         # TODO : use the line account once it is implemented
         new_instance.account = new_instance.rated_entity.account_for_billing
         new_instance.start = start_date
-        if getattr(parent, 'end_date', None) and (not end_date
-                or parent.end_date < end_date):
-            new_instance.end = parent.end_date
+        if getattr(new_instance.parent, 'end_date', None) and (not end_date
+                or new_instance.parent.end_date < end_date):
+            new_instance.end = new_instance.parent.end_date
         else:
             new_instance.end = end_date
         new_instance.amount = line['amount']
@@ -965,12 +992,11 @@ class Premium(ModelSQL, ModelView):
             cls.write(*values)
 
     def same_value(self, other):
-        ident_fields = ('amount', 'frequency', 'rated_entity', 'account')
+        ident_fields = ('parent', 'amount', 'frequency', 'rated_entity',
+            'account')
         for elem in ident_fields:
             if getattr(self, elem) != getattr(other, elem):
                 return False
-        if self.get_parent() != other.get_parent():
-            return False
         if set(self.taxes) != set(other.taxes):
             return False
         return True
