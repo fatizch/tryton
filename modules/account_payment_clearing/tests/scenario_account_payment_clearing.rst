@@ -285,6 +285,7 @@ Create statement::
     >>> statement_journal.save()
 
     >>> statement = Statement(journal=statement_journal,
+    ...     name='statement1',
     ...     start_balance=Decimal('0.00'),
     ...     end_balance=Decimal('-50.00'),
     ... )
