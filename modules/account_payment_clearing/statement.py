@@ -17,6 +17,7 @@ class StatementLine:
             ('state', 'in', ['processing', 'succeeded']),
             ],
         depends=['party'])
+    # TODO post payment move
 
     @classmethod
     def copy(cls, lines, default=None):

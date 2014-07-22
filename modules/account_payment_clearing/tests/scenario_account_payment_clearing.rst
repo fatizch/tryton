@@ -143,7 +143,7 @@ Create payable move::
     >>> payable.balance
     Decimal('-50.00')
 
-Pay line::
+Partially pay the line::
 
     >>> Payment = Model.get('account.payment')
     >>> line, = [l for l in move.lines if l.account == payable]
@@ -151,6 +151,54 @@ Pay line::
     >>> pay_line.form.journal = payment_journal
     >>> pay_line.execute('pay')
     >>> payment, = Payment.find()
+    >>> payment.amount = Decimal('30.0')
+    >>> payment.click('approve')
+    >>> payment.state
+    u'approved'
+    >>> process_payment = Wizard('account.payment.process', [payment])
+    >>> process_payment.execute('process')
+    >>> payment.reload()
+    >>> payment.state
+    u'processing'
+
+Succeed payment::
+
+    >>> payment.click('succeed')
+    >>> payment.state
+    u'succeeded'
+    >>> payment.clearing_move.state
+    u'draft'
+    >>> payable.reload()
+    >>> payable.balance
+    Decimal('-20.00')
+    >>> bank_clearing.reload()
+    >>> bank_clearing.balance
+    Decimal('-30.00')
+    >>> payment.line.reconciliation
+
+Fail payment::
+
+    >>> payment.click('fail')
+    >>> payment.state
+    u'failed'
+    >>> payment.clearing_move
+    >>> payment.line.reconciliation
+    >>> payable.reload()
+    >>> payable.balance
+    Decimal('-50.00')
+    >>> bank_clearing.reload()
+    >>> bank_clearing.balance
+    Decimal('0.00')
+
+Pay the line::
+
+    >>> line, = [l for l in move.lines if l.account == payable]
+    >>> pay_line = Wizard('account.move.line.pay', [line])
+    >>> pay_line.form.journal = payment_journal
+    >>> pay_line.execute('pay')
+    >>> payment, = Payment.find([('state', '=', 'draft')])
+    >>> payment.amount
+    Decimal('50.00')
     >>> payment.click('approve')
     >>> payment.state
     u'approved'

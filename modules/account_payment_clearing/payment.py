@@ -1,6 +1,7 @@
 #This file is part of Tryton.  The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
 from collections import defaultdict
+from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelView, Workflow, fields
@@ -52,9 +53,10 @@ class Payment:
         to_reconcile = defaultdict(list)
         for payment in payments:
             if not payment.line.reconciliation and payment.clearing_move:
-                to_reconcile[payment.party].extend(
-                    [l for l in payment.clearing_move.lines
-                    if l.account == payment.line.account] + [payment.line])
+                lines = [l for l in payment.clearing_move.lines
+                    if l.account == payment.line.account] + [payment.line]
+                if not sum(l.debit - l.credit for l in lines):
+                    to_reconcile[payment.party].extend(lines)
         for lines in to_reconcile.itervalues():
             Line.reconcile(lines)
 
@@ -74,16 +76,16 @@ class Payment:
         move = Move(journal=self.journal.clearing_journal, origin=self,
             date=self.date)
         line = Line()
-        line.debit = self.line.credit
-        line.credit = self.line.debit
+        line.debit = self.amount if self.line.credit else Decimal(0)
+        line.credit = self.amount if self.line.debit else Decimal(0)
         line.account = self.line.account
         line.amount_second_currency = (-self.line.amount_second_currency
             if self.line.amount_second_currency else None)
         line.second_currency = self.line.second_currency
         line.party = self.line.party
         counterpart = Line()
-        counterpart.debit = self.line.debit
-        counterpart.credit = self.line.credit
+        counterpart.debit = self.amount if self.line.debit else Decimal(0)
+        counterpart.credit = self.amount if self.line.credit else Decimal(0)
         counterpart.account = self.journal.clearing_account
         counterpart.amount_second_currency = self.line.amount_second_currency
         counterpart.second_currency = self.line.second_currency
