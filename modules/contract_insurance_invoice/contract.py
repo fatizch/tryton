@@ -246,15 +246,15 @@ class Contract:
         for i in range(0, len(contract_invoices_to_delete), in_max):
             if contract_invoices_to_delete:
                 cursor.execute(*contract_invoice.delete(
-                        where=(account_invoice.id.in_([x.id for x in
-                                    contract_invoices_to_delete[i:i + in_max]]
+                        where=(account_invoice.id.in_(
+                                    contract_invoices_to_delete[i:i + in_max]
                                 ))))
 
         for i in range(0, len(account_invoices_to_delete), in_max):
             if account_invoices_to_delete:
                 cursor.execute(*account_invoice.delete(
-                        where=(account_invoice.id.in_([x.id for x in
-                                    account_invoices_to_delete[i:i + in_max]]
+                        where=(account_invoice.id.in_(
+                                    account_invoices_to_delete[i:i + in_max]
                                 ))))
 
     def first_invoice(self):
@@ -419,7 +419,7 @@ class Contract:
         ids = [y for x in cursor.fetchall() for y in x]
         lines = Premium.browse(ids)
         invoice_lines = []
-        currency  =  self.get_currency()
+        currency = self.get_currency()
         for line in lines:
             invoice_lines += line.generate_invoice_lines(currency, start, end)
         return invoice_lines
