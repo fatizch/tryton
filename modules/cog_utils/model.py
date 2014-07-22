@@ -422,14 +422,11 @@ class VoidStateAction(StateAction):
 
 
 class _RevisionMixin(object):
-    parent = None
+    _parent_name = None
     date = fields.Date('Date')
 
     @classmethod
     def __setup__(cls):
-        field_name, field_model, field_description = cls.get_parent_field()
-        setattr(cls, field_name, fields.Many2One(field_model,
-                field_description, ondelete='CASCADE'))
         super(_RevisionMixin, cls).__setup__()
         # TODO unique constraint on (parent, date) ?
         cls._order.insert(0, ('date', 'ASC'))
@@ -443,18 +440,12 @@ class _RevisionMixin(object):
     def get_reverse_field_name(cls):
         return ''
 
-    @classmethod
-    def revision_columns(cls):
+    @staticmethod
+    def revision_columns():
         return []
 
     @classmethod
-    def get_parent_field(cls):
-        'returns (field_name, field_model, field_description) : the'
-        'definition of the parent field'
-        raise NotImplementedError
-
-    @classmethod
-    def get_values(cls, instances, names=None, date=None, default=None):
+    def get_values(cls, instances, names=None, date=None):
         'Return a dictionary with the variable name as key,'
         'and a dictionnary as value. The dictionnary value contains'
         'main instance id as key and variable value as value'
@@ -466,37 +457,40 @@ class _RevisionMixin(object):
         else:
             columns_expected = cls.revision_columns()
 
-        parent_field = cls.get_parent_field()[0]
-        columns_expected.append(parent_field)
-        columns = [Column(table, c) for c in columns_expected]
-
+        parent_column = Column(table, cls._parent_name)
         target_field = cls.get_reverse_field_name()
         if target_field:
-            columns_expected.append(target_field)
-            columns.append(table.id.as_(target_field))
+            to_add_in_values = [target_field]
+            columns = [parent_column, table.id.as_(target_field)]
+        else:
+            to_add_in_values = ['id']
+            columns = [parent_column, table.id]
 
         values = dict(((x, dict(((y.id, None) for y in instances)))
-                for x in columns_expected))
+                for x in columns_expected + to_add_in_values))
+
+        columns += [Column(table, c) for c in columns_expected]
 
         in_max = cursor.IN_MAX
         for i in range(0, len(instances), in_max):
             sub_ids = [c.id for c in instances[i:i + in_max]]
-            where_parent = reduce_ids(getattr(table, parent_field), sub_ids)
-            subquery = table.select(
-                getattr(table, parent_field),
+            where_parent = reduce_ids(parent_column, sub_ids)
+            subquery = table.select(parent_column,
                 Max(Coalesce(table.date, datetime.date.min)).as_('date'),
                 where=((table.date <= date) | (table.date == None))
                 & where_parent,
-                group_by=getattr(table, parent_field))
+                group_by=parent_column)
             cursor.execute(*table.join(subquery,
-                    condition=(getattr(table, parent_field)
-                        == getattr(subquery, parent_field))
+                    condition=
+                    (parent_column == Column(subquery, cls._parent_name))
                     & (Coalesce(table.date, datetime.date.min) ==
                         Coalesce(subquery.date, datetime.date.min))
                     ).select(*columns))
             for elem in cursor.dictfetchall():
                 for field_name, value in elem.iteritems():
-                    values[field_name][elem[parent_field]] = value
+                    if field_name == cls._parent_name:
+                        continue
+                    values[field_name][elem[cls._parent_name]] = value
         return values
 
 

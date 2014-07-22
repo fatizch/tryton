@@ -565,6 +565,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     'Contract Billing Information'
     __name__ = 'contract.billing_information'
 
+    _parent_name = 'contract'
+    contract = fields.Many2One('contract', 'Contract', required=True,
+        select=True, ondelete='CASCADE')
     billing_mode = fields.Many2One('offered.billing_mode',
         'Billing Mode', required=True, ondelete='CASCADE',
         domain=[('products', '=',
@@ -635,18 +638,14 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
                 'contract_invoice_frequency as f, '
                 'contract as c where f.contract = c.id')
 
-    @classmethod
-    def revision_columns(cls):
+    @staticmethod
+    def revision_columns():
         return ['billing_mode', 'payment_term', 'direct_debit_day',
             'direct_debit_account']
 
     @classmethod
     def get_reverse_field_name(cls):
         return 'billing_information'
-
-    @classmethod
-    def get_parent_field(cls):
-        return 'contract', 'contract', 'Contract'
 
     @fields.depends('billing_mode')
     def get_allowed_direct_debit_days(self):
