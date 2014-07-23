@@ -728,7 +728,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             for k in res['extra_data'].viewkeys()
             & res['party_extra_data'].viewkeys())
         if self.item_desc is None:
-            res['options'] = []
+            res['options'] = {}
             return res
         available_coverages = self.get_coverages(self.product, self.item_desc)
         to_remove = []
@@ -746,17 +746,15 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             new_opt = Option.init_default_values_from_coverage(elem,
                 self.product, item_desc=self.item_desc,
                 start_date=self.start_date)
-            to_add.append(new_opt)
+            to_add.append([-1, new_opt])
         if not to_add and not to_remove:
             return res
-        res['options'] = to_add
+        res['options'] = {}
+        if to_add:
+            res['options']['add'] = to_add
+        if to_remove:
+            res['options']['remove'] = to_remove
         return res
-        # TODO : Find how to make it both work in defaults and on_changes
-        # if to_add:
-        #     res['options']['add'] = to_add
-        # if to_remove:
-        #     res['options']['remove'] = to_remove
-        # return res
 
     @fields.depends('contract', 'extra_data')
     def on_change_with_all_extra_data(self, name=None):
@@ -1061,6 +1059,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
             self.name = cov_dict['name']
         cov_as_dict = self.on_change_item_desc()
         for key, val in cov_as_dict.iteritems():
+            if key == 'options':
+                the_list = [x[1] for x in val.get('add', [])]
+                self.options = the_list
+                continue
             setattr(self, key, val)
         if 'extra_data' in cov_dict:
             self.extra_data.update(cov_dict['extra_data'])
