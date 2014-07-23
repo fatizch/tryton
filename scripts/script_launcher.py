@@ -398,7 +398,7 @@ def create_symlinks(modules_path, lang, root, remove=True):
         print "module name %s" % module_name
         symlink = os.path.join(root, module_name)
         if not os.path.exists(symlink):
-            os.symlink(module_name_dir, symlink)
+            os.symlink(module_doc_dir, symlink)
 
     rootIndex = os.path.join(root, 'index.rst')
     if os.path.exists(rootIndex):
