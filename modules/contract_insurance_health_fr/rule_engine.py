@@ -16,3 +16,10 @@ class RuleEngineRuntime:
             hc_system = person.health_complement[0].hc_system
             return hc_system.code if hc_system else ''
         cls.append_error(args, 'Cannot find the hc_system')
+
+    @classmethod
+    def _re_health_department(cls, args):
+        person = cls.get_person(args)
+        if person.health_complement:
+            return person.health_complement[0].department
+        cls.append_error(args, 'Cannot find the department')

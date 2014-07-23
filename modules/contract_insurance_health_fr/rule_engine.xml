@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data noupdate="1">
-    <record model="rule_engine.function" id="te_health">
-      <field name="description">Santé</field>
-      <field name="type">folder</field>
-      <field name="language" ref="ir.lang_fr"/>
-      <field name="translated_technical_name">sante</field>
-    </record>
-    <record model="rule_engine.context-function" id="cte_default_health">
-      <field name="context" ref="rule_engine.default_context"/>
-      <field name="tree_element" ref="te_health"/>
-    </record>
-  </data>
-  <data>
-    <record model="rule_engine.function" id="te_health_hc_system">
-      <field name="description">Code Régime</field>
-      <field name="name">_re_health_hc_system</field>
-      <field name="namespace">rule_engine.runtime</field>
-      <field name="type">function</field>
-      <field name="parent" ref="te_health"/>
-      <field name="translated_technical_name">code_hc_system</field>
-      <field name="language" ref="ir.lang_fr"/>
-    </record>
-  </data>
+    <data noupdate="1">
+        <record model="rule_engine.function" id="te_health">
+            <field name="description">Santé</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="translated_technical_name">sante</field>
+        </record>
+        <record model="rule_engine.context-function" id="cte_default_health">
+            <field name="context" ref="rule_engine.default_context"/>
+            <field name="tree_element" ref="te_health"/>
+        </record>
+    </data>
+    <data>
+        <record model="rule_engine.function" id="te_health_hc_system">
+            <field name="description">Code Régime</field>
+            <field name="name">_re_health_hc_system</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="te_health"/>
+            <field name="translated_technical_name">code_hc_system</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+        <record model="rule_engine.function" id="te_health_department">
+            <field name="description">Département</field>
+            <field name="name">_re_health_department</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="te_health"/>
+            <field name="translated_technical_name">code_departement</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+    </data>
 </tryton>
