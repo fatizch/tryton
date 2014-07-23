@@ -1141,7 +1141,9 @@ class DisplayContractPremium(Wizard):
     start_state = 'display'
     display = StateView('contract.premium.display.premiums',
         'contract_insurance_invoice.display_premiums_view_form', [
-            Button('Calculate Prices', 'calculate_prices', 'tryton-refresh'),
+            # TODO: calculate price should be done in a separate transaction
+            # in order to see the difference
+            # Button('Calculate Prices', 'calculate_prices', 'tryton-refresh'),
             Button('Exit', 'end', 'tryton-cancel', default=True)])
     calculate_prices = StateTransition()
 
