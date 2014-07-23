@@ -8,8 +8,7 @@ from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 
-from trytond.modules.rule_engine import check_args
-from trytond.modules.rule_engine import RuleTools
+from trytond.modules.rule_engine import check_args, debug_wrapper, RuleTools
 
 ###############################################################################
 # We write here sets of functions that will be available in the rule engine.  #
@@ -143,9 +142,8 @@ class RuleEngine:
             lambda: self.get_external_extra_data_def(elem,
                 evaluation_context)
         if debug:
-            debug_wrapper = self.get_wrapper_func(context)
-            context[technical_name] = debug_wrapper(context[technical_name],
-                technical_name)
+            context[technical_name] = debug_wrapper(context,
+                context[technical_name], technical_name)
 
     def add_rule_parameters_to_context(self, evaluation_context,
             execution_kwargs, context):

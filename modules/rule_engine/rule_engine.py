@@ -125,6 +125,36 @@ def _compile_source_exec(source):
     return compile(source, '', 'exec')
 
 
+def debug_wrapper(base_context, func, name):
+    def wrapper_func(*args, **kwargs):
+        call = [name, '', '', '']
+        base_context['__result__'].low_level_debug.append(
+            'Entering %s' % name)
+        if args:
+            call[1] = str(args)
+            base_context['__result__'].low_level_debug.append(
+                '\targs : %s' % str(args))
+        if kwargs:
+            call[2] = str(kwargs)
+            base_context['__result__'].low_level_debug.append(
+                '\tkwargs : %s' % str(kwargs))
+        try:
+            result = func(*args, **kwargs)
+        except Exception, exc:
+            call[3] = str(exc)
+            base_context['__result__'].calls.append(call)
+            base_context['__result__'].errors.append(
+                'ERROR in %s : %s' % (
+                    name, str(exc)))
+            raise
+        call[3] = repr(result)
+        base_context['__result__'].calls.append(call)
+        base_context['__result__'].low_level_debug.append(
+            '\tresult = %s' % str(result))
+        return result
+    return wrapper_func
+
+
 def safe_eval(source, data=None):
     if '__subclasses__' in source:
         raise ValueError('__subclasses__ not allowed')
@@ -735,9 +765,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         else:
             return
         if debug:
-            debug_wrapper = self.get_wrapper_func(context)
-            context[technical_name] = debug_wrapper(context[technical_name],
-                technical_name)
+            context[technical_name] = debug_wrapper(context,
+                context[technical_name], technical_name)
 
     def add_rule_parameters_to_context(self, evaluation_context,
             execution_kwargs, context):
@@ -765,37 +794,6 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         context.update(evaluation_context)
         context['context'] = context
         return context
-
-    def get_wrapper_func(self, context):
-        def debug_wrapper(func, name):
-            def wrapper_func(*args, **kwargs):
-                call = [name, '', '', '']
-                context['__result__'].low_level_debug.append(
-                    'Entering %s' % name)
-                if args:
-                    call[1] = str(args)
-                    context['__result__'].low_level_debug.append(
-                        '\targs : %s' % str(args))
-                if kwargs:
-                    call[2] = str(kwargs)
-                    context['__result__'].low_level_debug.append(
-                        '\tkwargs : %s' % str(kwargs))
-                try:
-                    result = func(*args, **kwargs)
-                except Exception, exc:
-                    call[3] = str(exc)
-                    context['__result__'].calls.append(call)
-                    context['__result__'].errors.append(
-                        'ERROR in %s : %s' % (
-                            name, str(exc)))
-                    raise
-                call[3] = repr(result)
-                context['__result__'].calls.append(call)
-                context['__result__'].low_level_debug.append(
-                    '\tresult = %s' % str(result))
-                return result
-            return wrapper_func
-        return debug_wrapper
 
     def compute(self, evaluation_context, execution_kwargs):
         with Transaction().set_context(debug=self.debug_mode or
@@ -1159,35 +1157,6 @@ class RuleFunction(ModelView, ModelSQL):
                 child.as_functions_list() for child in self.children], [])
 
     def as_context(self, context, debug=False):
-        def debug_wrapper(func):
-            def wrapper_func(*args, **kwargs):
-                call = [self.translated_technical_name, '', '', '']
-                context['__result__'].low_level_debug.append(
-                    'Entering %s' % self.translated_technical_name)
-                if args:
-                    call[1] = str(args)
-                    context['__result__'].low_level_debug.append(
-                        '\targs : %s' % str(args))
-                if kwargs:
-                    call[2] = str(kwargs)
-                    context['__result__'].low_level_debug.append(
-                        '\tkwargs : %s' % str(kwargs))
-                try:
-                    result = func(*args, **kwargs)
-                except Exception, exc:
-                    call[3] = str(exc)
-                    context['__result__'].calls.append(call)
-                    context['__result__'].errors.append(
-                        'ERROR in %s : %s' % (
-                            self.translated_technical_name, str(exc)))
-                    raise
-                call[3] = repr(result)
-                context['__result__'].calls.append(call)
-                context['__result__'].low_level_debug.append(
-                    '\tresult = %s' % str(result))
-                return result
-            return wrapper_func
-
         if self.translated_technical_name in context:
             return context
 
@@ -1198,7 +1167,8 @@ class RuleFunction(ModelView, ModelSQL):
                 functools.partial(getattr(namespace_obj, self.name), context)
             if debug:
                 context[self.translated_technical_name] = debug_wrapper(
-                    context[self.translated_technical_name])
+                    context, context[self.translated_technical_name],
+                    self.translated_technical_name)
         for element in self.children:
             element.as_context(context, debug)
         return context
