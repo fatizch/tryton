@@ -371,6 +371,38 @@ class ModuleTestCase(test_framework.CoopTestCase):
             Decimal('251695.95'), loan.amount, Decimal('8240.95'),
             Decimal('0'))
 
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
+        'loan.test0010loan_basic_data',
+        )
+    def test0038loan_payment_dates(self):
+        '''
+        Test basic loan
+        '''
+        currency, = self.Currency.search([], limit=1)
+        company, = self.Company().search([], limit=1)
+        loan = self.Loan(
+            kind='fixed_rate',
+            rate=Decimal('0.04'),
+            funds_release_date=date(2013, 12, 31),
+            first_payment_date=date(2014, 1, 31),
+            payment_frequency='month',
+            amount=Decimal(100000),
+            number_of_payments=12,
+            currency=currency,
+            company=company)
+        loan.payment_amount = loan.on_change_with_payment_amount()
+        loan.parties = self.Party.search([('name', '=', 'DOE')])
+        loan.calculate_increments()
+        loan.payments = loan.calculate_payments()
+        loan.save()
+
+        self.assertEqual(loan.payments[1].start_date, date(2014, 1, 31))
+        self.assertEqual(loan.payments[2].start_date, date(2014, 2, 28))
+        self.assertEqual(loan.payments[3].start_date, date(2014, 3, 31))
+        self.assertEqual(loan.payments[4].start_date, date(2014, 4, 30))
+        self.assertEqual(loan.payments[11].start_date, date(2014, 11, 30))
+
     # @test_framework.prepare_test('loan.test0037loan_creation',
     #     'loan.test0032_LoanCommercialProduct')
     # def test0040_LoanContractSubscription(self):

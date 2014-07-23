@@ -322,10 +322,11 @@ class Loan(model.CoopSQL, model.CoopView):
                 i += 1
                 payment = Payment()
                 payment.kind = 'scheduled'
-                payment.calculate(self, from_date, i, begin_balance, increment)
+                from_date = coop_date.add_duration(increment.start_date,
+                    self.payment_frequency, j)
+                payment.calculate(self, from_date, i, begin_balance,
+                    increment)
                 res.append(payment)
-                from_date = coop_date.add_duration(from_date,
-                    self.payment_frequency)
                 begin_balance = payment.outstanding_balance
         return res
 
