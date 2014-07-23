@@ -1164,7 +1164,7 @@ class DisplayContractPremium(Wizard):
     def new_line(cls, line=None):
         return {
             'name': '%s - %s' % (line.start, line.end or '') if line else '',
-            'premium': line.id if line else 0,
+            'premium': line.id if line else None,
             'premiums': [line.id] if line else [],
             'amount': line.amount if line else 0,
             'childs': [],
