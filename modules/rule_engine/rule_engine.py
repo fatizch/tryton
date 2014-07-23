@@ -31,6 +31,7 @@ from trytond.modules.table import table
 from trytond.model import DictSchemaMixin
 
 __all__ = [
+    'debug_wrapper',
     'RuleEngine',
     'RuleEngineTable',
     'RuleEngineRuleEngine',
