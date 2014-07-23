@@ -969,9 +969,14 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         return 'return'
 
     def execute(self, arguments, parameters=None):
+
+        # We cannot use lambda in a loop
+        def kwarg_function(value):
+            return lambda: value
+
         parameters_as_func = {}
         for k, v in (parameters or {}).iteritems():
-            parameters_as_func[k] = v if callable(v) else lambda: v
+            parameters_as_func[k] = v if callable(v) else kwarg_function(v)
         result = self.compute(arguments, parameters_as_func)
         if not self.id or not getattr(self, 'debug_mode', None):
             return result
