@@ -118,9 +118,13 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'name': 'Product sequence',
                         'code': 'contract',
                         }])
-            sequence, = Sequence.create([{
+            sequence, quote_sequence = Sequence.create([{
                         'name': 'Contract sequence',
                         'code': sequence_code.code,
+                        'company': company.id,
+                        }, {
+                        'name': 'Quote Sequence',
+                        'code': 'quote',
                         'company': company.id,
                         }])
             account_kind, = AccountKind.create([{
@@ -143,6 +147,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                                     freq_once.id])],
                         'account_for_billing': account.id,
                         'contract_generator': sequence.id,
+                        'quote_number_sequence': quote_sequence.id,
                         }])
             contract = Contract(company=company,
                 activation_history=[ActivationHistory(
