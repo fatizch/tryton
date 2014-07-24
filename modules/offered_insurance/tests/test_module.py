@@ -184,15 +184,6 @@ return True'''
         fee = create_fee('FEE', 20)
         self.assert_(fee.id)
 
-    def test0004_testNumberGeneratorCreation(self):
-        ng = self.Sequence()
-        ng.name = 'Contract Sequence'
-        ng.code = 'contract'
-        ng.prefix = 'Ctr'
-        ng.suffix = 'Y${year}'
-        ng.save()
-        self.assert_(ng.id)
-
     def test0005_testItemDescCreation(self):
         item_desc = self.ItemDesc()
         item_desc.kind = 'person'
@@ -205,7 +196,7 @@ return True'''
         'offered_insurance.test0001_testFunctionalRuleCreation',
         'offered_insurance.test0002_testTaxCreation',
         'offered_insurance.test0003_testFeeCreation',
-        'offered_insurance.test0004_testNumberGeneratorCreation',
+        'offered.test0001_testNumberGeneratorCreation',
         'offered_insurance.test0005_testItemDescCreation',
         'company_cog.test0001_testCompanyCreation',
         )
