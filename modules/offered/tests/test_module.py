@@ -50,6 +50,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         product_a.start_date = datetime.date.today()
         product_a.contract_generator = ng
         product_a.company = company
+        product_a.start_date = datetime.date(2010, 1, 1)
         product_a.save()
 
         self.assert_(product_a.id)
@@ -64,6 +65,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         coverage_a.name = 'Alpha Coverage'
         coverage_a.start_date = datetime.date.today()
         coverage_a.company = company
+        coverage_a.start_date = datetime.date(2010, 1, 1)
         coverage_a.save()
 
         self.assert_(coverage_a.id)
