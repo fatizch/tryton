@@ -168,7 +168,8 @@ class Printable(Model):
             ('on_model.model', '=', self.__name__),
             ('products', '=', self.product.id),
             ['OR',
-                ('kind', '=', kind or self.get_doc_template_kind()),
+                ('kind', '=', kind ),
+                ('kind', 'in', self.get_doc_template_kind()),
                 ('kind', '=', '')],
             ]
         return DocumentTemplate.search(domain)
