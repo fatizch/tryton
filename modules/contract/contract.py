@@ -821,7 +821,10 @@ class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency):
         start_date = Transaction().context.get('start_date', None)
         if start_date:
             return start_date
-        return self.contract.appliable_conditions_date
+        if self.contract:
+            return self.contract.appliable_conditions_date
+        if self.start_date:
+            return self.start_date
 
     @fields.depends('contract')
     def on_change_with_contract_number(self, name=None):
