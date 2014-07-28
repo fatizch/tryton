@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 import datetime
 import unittest
+from decimal import Decimal
 
 import trytond.tests.test_tryton
 
@@ -16,9 +17,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return 'contract_insurance'
 
     @classmethod
+    def depending_modules(cls):
+        return ['offered_insurance']
+
+    @classmethod
     def get_models(cls):
         return {
             'Party': 'party.party',
+            'ExtraPremium': 'contract.option.extra_premium',
             }
 
     def test0001_testPersonCreation(self):
@@ -32,6 +38,34 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         party, = self.Party.search([('name', '=', 'DOE')])
         self.assert_(party.id)
+
+    @test_framework.prepare_test(
+        'offered_insurance.test0100_testExtraPremiumKindCreation',
+    )
+    def test0010_testExtraPremiumRateCalculate(self):
+        extra_premium = self.ExtraPremium()
+        extra_premium.calculation_kind = 'rate'
+        extra_premium.rate = Decimal('-0.05')
+        extra_premium_kind, = self.ExtraPremiumKind.search([
+            ('code', '=', 'reduc_no_limit'), ])
+        extra_premium.motive = extra_premium_kind
+
+        result = extra_premium.calculate_premium_amount(None, base=100)
+        self.assertEqual(result, Decimal('-5.0'))
+
+    @test_framework.prepare_test(
+        'offered_insurance.test0100_testExtraPremiumKindCreation',
+    )
+    def test0011_testExtraPremiumAmountCalculate(self):
+        extra_premium = self.ExtraPremium()
+        extra_premium.calculation_kind = 'flat'
+        extra_premium.flat_amount = Decimal('100')
+        extra_premium_kind, = self.ExtraPremiumKind.search([
+            ('code', '=', 'reduc_no_limit'), ])
+        extra_premium.motive = extra_premium_kind
+
+        result = extra_premium.calculate_premium_amount(None, base=100)
+        self.assertEqual(result, Decimal('100'))
 
 
 def suite():

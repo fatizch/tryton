@@ -36,6 +36,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Sequence': 'ir.sequence',
             'Lang': 'ir.lang',
             'ItemDesc': 'offered.item.description',
+            'ExtraPremiumKind': 'extra_premium.kind'
             }
 
     def test0001_testFunctionalRuleCreation(self):
@@ -384,6 +385,36 @@ return True'''
         product_a.save()
 
         self.assert_(product_a.id)
+
+    def test0100_testExtraPremiumKindCreation(self):
+        def createExtraPremiumKind(code, is_discount=False, max_rate=None,
+                                   max_value=None):
+            extra_premium_kind = self.ExtraPremiumKind()
+            extra_premium_kind.code = code
+            extra_premium_kind.name = code
+            extra_premium_kind.is_discount = is_discount
+            if max_rate:
+                extra_premium_kind.max_rate = Decimal(max_rate)
+            if max_value:
+                extra_premium_kind.max_value = Decimal(max_value)
+            return extra_premium_kind
+
+        extra_premium_kind1 = createExtraPremiumKind('reduc_no_limit', True)
+
+        extra_premium_kind1.save()
+        extra_premium_kind1, = self.ExtraPremiumKind.search([
+            ('code', '=', 'reduc_no_limit'), ])
+        self.assert_(extra_premium_kind1.id)
+        self.assert_(extra_premium_kind1.is_discount)
+
+        extra_premium_kind2 = createExtraPremiumKind('reduc_max_10_prct',
+                                                     True, '-0.10')
+        extra_premium_kind2.save()
+
+        extra_premium_kind3 = createExtraPremiumKind('majo_max_10_prct',
+                                                     max_rate='0.10')
+        extra_premium_kind3.save()
+        self.assertFalse(extra_premium_kind3.is_discount)
 
 
 def suite():

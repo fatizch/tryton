@@ -5,11 +5,15 @@
         <field name="extra_data" colspan="2" no_command="1"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='main_data']" position="after">
-        <page string="Extra Premiums" id="extra_premium">
-            <field name="extra_premiums" colspan="4"/>
+        <page name="extra_premium_discounts">
+            <field name="extra_premium_discounts" colspan="4"/>
             <button string="Propagate" name="propagate_extra_premiums" colspan="4"/>
         </page>
-        <page string="Exclusions" id="exclusions">
+        <page name="extra_premium_increases">
+            <field name="extra_premium_increases" colspan="4"/>
+            <button string="Propagate" name="propagate_extra_premiums" colspan="4"/>
+        </page>
+        <page name="exclusions">
             <field name="exclusions" colspan="4"/>
             <button string="Propagate" name="propagate_exclusions" colspan="4"/>
         </page>
