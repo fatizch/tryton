@@ -164,12 +164,16 @@ class Printable(Model):
 
     def get_available_doc_templates(self, kind=None):
         DocumentTemplate = Pool().get('document.template')
+        
+        if kind:
+            domain_kind = ('kind', '=', kind)
+        else:
+            domain_kind = ('kind', 'in', self.get_doc_template_kind())
         domain = [
             ('on_model.model', '=', self.__name__),
             ('products', '=', self.product.id),
             ['OR',
-                ('kind', '=', kind ),
-                ('kind', 'in', self.get_doc_template_kind()),
+                domain_kind,
                 ('kind', '=', '')],
             ]
         return DocumentTemplate.search(domain)
