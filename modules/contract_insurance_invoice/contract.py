@@ -10,7 +10,7 @@ from sql.conditionals import Coalesce
 
 from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, And, Len
+from trytond.pyson import Eval, And, Len, If, Bool
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import reduce_ids
@@ -67,7 +67,14 @@ class Contract:
         fields.Many2One('contract.billing_information',
             'Current Billing Information'), 'get_billing_information')
     billing_informations = fields.One2Many('contract.billing_information',
-        'contract', 'Billing Information')
+        'contract', 'Billing Information', domain=[
+            ('billing_mode.products', '=', Eval('product')),
+            If(Bool(Eval('subscriber', False)),
+                ['OR',
+                    ('direct_debit_account.owners', '=', Eval('subscriber')),
+                    ('direct_debit_account', '=', None)],
+                [('direct_debit_account', '=', None)])],
+        depends=['product'])
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
         searcher='search_last_invoice')
@@ -568,11 +575,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     _parent_name = 'contract'
     contract = fields.Many2One('contract', 'Contract', required=True,
         select=True, ondelete='CASCADE')
-    billing_mode = fields.Many2One('offered.billing_mode',
-        'Billing Mode', required=True, ondelete='CASCADE',
-        domain=[('products', '=',
-            Eval('_parent_contract', {}).get('product'))],
-        depends=['contract'])
+    billing_mode = fields.Many2One('offered.billing_mode', 'Billing Mode',
+        required=True, ondelete='CASCADE')
     payment_term = fields.Many2One('account.invoice.payment_term',
         'Payment Term', ondelete='CASCADE', states={
             'required': And(Eval('direct_debit', False),
@@ -597,8 +601,6 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         states={'invisible': ~Eval('direct_debit'),
             'required': And(Eval('direct_debit', False),
                 (Eval('_parent_contract', {}).get('status', '') == 'active'))},
-        domain=[('owners', '=',
-            Eval('_parent_contract', {}).get('subscriber'))],
         depends=['direct_debit'])
     possible_payment_terms = fields.Function(fields.One2Many(
             'account.invoice.payment_term', None, 'Possible Payment Term'),
