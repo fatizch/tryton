@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='yearly_custom_date']" position="after">
+            <label name="yearly_each_birth_date"/>
+            <field name="yearly_each_birth_date"/>
+    </xpath>
+</data>
