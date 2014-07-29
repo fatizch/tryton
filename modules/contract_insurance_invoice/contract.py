@@ -74,7 +74,7 @@ class Contract:
                     ('direct_debit_account.owners', '=', Eval('subscriber')),
                     ('direct_debit_account', '=', None)],
                 [('direct_debit_account', '=', None)])],
-        depends=['product'])
+        depends=['product', 'subscriber'])
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
         searcher='search_last_invoice')
