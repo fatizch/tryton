@@ -313,7 +313,12 @@ class Contract(Printable):
         return self.company.party
 
     def get_doc_template_kind(self):
-        return 'contract'
+        kinds = ['contract']
+        if self.status == 'quote':
+            kinds.append('quote_contract')
+        elif self.status == 'active':
+            kinds.append('active_contract')
+        return kinds
 
     def set_end_date(self, end_date, force=False):
         super(Contract, self).set_end_date(end_date, force)

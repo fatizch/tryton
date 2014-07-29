@@ -51,7 +51,9 @@ class DocumentTemplate:
         result = super(DocumentTemplate, self).get_possible_kinds()
         if not self.on_model:
             return result
-        if not self.on_model.model == 'contract':
-            return result
-        result.append(('contract', 'Contract Documents'))
+        if self.on_model.model == 'contract':
+            result.append(('contract', 'Quote and Contract Documents'))
+            result.append(('active_contract', 'Active Contract Documents'))
+            result.append(('quote_contract', 'Quote Documents'))
+        
         return result
