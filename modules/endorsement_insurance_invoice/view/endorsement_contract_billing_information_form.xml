@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Billing Informations">
+    <label name="action"/>
+    <field name="action"/>
+    <label name="relation"/>
+    <field name="relation"/>
+    <field name="values" colspan="4"/>
+</form>

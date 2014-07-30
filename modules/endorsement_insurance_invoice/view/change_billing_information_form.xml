@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<form string="Change Billing Information" col="4">
+    <group id="header" colspan="4">
+        <label name="effective_date"/>
+        <field name="effective_date"/>
+        <label name="endorsement_definition"/>
+        <field name="endorsement_definition"/>
+        <label name="contract"/>
+        <field name="contract"/>
+    </group>
+    <group id="existing" colspan="4" yexpand="1" yfill="1">
+        <field name="current_value" mode="form" expand_toolbar="0" view_ids="contract_insurance_invoice.contract_billing_information_view_form"/>
+    </group>
+    <group id="new" colspan="4" yexpand="1" yfill="1">
+        <field name="new_value" mode="form" expand_toolbar="0" view_ids="contract_insurance_invoice.contract_billing_information_view_form"/>
+    </group>
+    <group id="future" colspan="4" yexpand="1" yfill="1">
+        <field name="future_value" mode="form" expand_toolbar="0" view_ids="contract_insurance_invoice.contract_billing_information_view_form"/>
+    </group>
+    <label name="delete_future"/>
+    <field name="delete_future"/>
+    <field name="product"/>
+    <field name="endorsement_part"/>
+    <field name="subscriber"/>
+</form>
