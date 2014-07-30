@@ -248,3 +248,148 @@ class StartEndorsement(Wizard):
             result[state_name] = coop_string.translate_model_name(
                 pool.get(state.model_name))
         return result
+
+    def get_endorsement_part_for_state(self, state_name):
+        definition = self.select_endorsement.endorsement_definition
+        for part in definition.endorsement_parts:
+            if part.view == state_name:
+                return part
+
+    def get_endorsements_for_state(self, state_name):
+        endorsement_part = self.get_endorsement_part_for_state(state_name)
+        return self.endorsement.find_parts(endorsement_part)
+
+    def set_main_object(self, endorsement):
+        # TODO : update once endorsement parts are applied on different models
+        endorsement.contract = self.select_endorsement.contract
+
+    def get_clean_endorsement(self, state):
+        current_part = state.endorsement_part
+        endorsements = self.endorsement.find_parts(current_part)
+        if not endorsements:
+            endorsements = [self.endorsement.new_endorsement(
+                    current_part)]
+            self.set_main_object(endorsements[0])
+        else:
+            [current_part.clean_up(endorsement)
+                for endorsement in endorsements]
+        return endorsements[0]
+
+    def end_current_part(self, state_name):
+        state = getattr(self, state_name)
+        endorsement = self.get_clean_endorsement(state)
+        state.update_endorsement(endorsement, self)
+        endorsement.save()
+
+    def get_endorsed_object(self, endorsement_part):
+        # TODO : Update once multiple objects may be changed
+        return self.select_endorsement.contract
+
+    @classmethod
+    def get_fields_to_get(cls, model, view_id):
+        fields_def = Pool().get(model).fields_view_get(view_id)
+        return fields_def['fields'].iterkeys()
+
+    @classmethod
+    def get_new_instance_fields(cls, base_instance, fields):
+        result = {}
+        for field_name in fields:
+            value = getattr(base_instance, field_name)
+            if isinstance(value, (list, tuple)):
+                result[field_name] = [x.id for x in value]
+            else:
+                result[field_name] = getattr(value, 'id', value)
+        return result
+
+    @classmethod
+    def update_defaults_from_endorsement(cls, result, endorsement,
+            endorsed_field_name):
+        new_value = result['new_value'][0]
+        for elem in getattr(endorsement, endorsed_field_name):
+            if elem.action in ('add', 'update'):
+                new_value.update(elem.values)
+            elif elem.action == 'remove':
+                result['delete_future'] = True
+
+    def update_revision_endorsement(self, state, endorsement,
+            endorsed_field_name):
+        EndorsementModel = Pool().get(
+            endorsement._fields[endorsed_field_name].model_name)
+        endorsed_object = self.get_endorsed_object(state.endorsement_part)
+        EndorsementModel.delete(
+            list(getattr(endorsement, endorsed_field_name, [])))
+        result = []
+        if state.delete_future:
+            to_delete = [EndorsementModel(action='remove', relation=x.id)
+                for x in getattr(endorsed_object, endorsed_field_name)
+                if x.date and x.date > self.select_endorsement.effective_date]
+            result += to_delete
+        result.append(EndorsementModel(action='add',
+                values=dict(state.new_value[0]._save_values)))
+        setattr(endorsement, endorsed_field_name, result)
+
+    def update_add_to_list_endorsement(self, state, endorsement,
+            endorsed_field_name):
+        EndorsementModel = Pool().get(
+            endorsement._fields[endorsed_field_name].model_name)
+        EndorsementModel.delete([x for x in getattr(endorsement,
+                    endorsed_field_name, []) if x.action == 'add'])
+
+        def filter_values(values):
+            keys = [x.name for x in getattr(state.endorsement_part,
+                    endorsed_field_name + '_fields')]
+            to_del = [k for k in values.iterkeys() if k not in keys]
+            for k in to_del:
+                values.pop(k)
+            return values
+
+        setattr(endorsement, endorsed_field_name, [
+                EndorsementModel(action='add', values=filter_values(
+                        value._save_values))
+                for value in getattr(state, endorsed_field_name, [])])
+
+    def get_revision_state_defaults(self, state_name, endorsed_model,
+            endorsed_field_name, endorsed_field_view):
+        pool = Pool()
+        View = pool.get('ir.ui.view')
+        good_view, = View.search([('xml_id', '=', endorsed_field_view)])
+        endorsed_fields = self.get_fields_to_get(endorsed_model, good_view.id)
+        endorsement_part = self.get_endorsement_part_for_state(state_name)
+        endorsed_object = self.get_endorsed_object(endorsement_part)
+        endorsement_date = self.select_endorsement.effective_date
+        current, future = None, None
+        for value in getattr(endorsed_object, endorsed_field_name):
+            if not value.date:
+                current = value
+                continue
+            if (not current.date or value.date >= current.date) and (
+                    value.date <= endorsement_date):
+                current = value
+                continue
+            if value.date > endorsement_date:
+                future = value
+                break
+        result = {
+            'new_value': [{}],
+            'current_value': [],
+            'future_value': [],
+            'endorsement_part': endorsement_part.id,
+            'delete_future': False,
+            'effective_date': endorsement_date,
+            'endorsement_definition':
+            self.select_endorsement.endorsement_definition.id,
+            }
+        if current:
+            result['current_value'].append(current.id)
+            result['new_value'] = [self.get_new_instance_fields(current,
+                    endorsed_fields)]
+        if future:
+            result['future_value'].append(future.id)
+        endorsements = self.get_endorsements_for_state(state_name)
+        if endorsements:
+            # TODO : multi contracts ?
+            endorsement = endorsements[0]
+            self.update_defaults_from_endorsement(result,
+                endorsement, endorsed_field_name)
+        result['new_value'][0]['date'] = endorsement_date
+        return result
