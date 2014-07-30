@@ -6,4 +6,6 @@
     <field name="contract" readonly="1"/>
     <label name="endorsement_definition"/>
     <field name="endorsement_definition" readonly="1"/>
+    <newline/>
+    <field name="endorsement_summary" colspan="4" readonly="1"/>
 </form>

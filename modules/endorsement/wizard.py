@@ -84,6 +84,7 @@ class SelectEndorsement(model.CoopView):
                 [('products', '=', Eval('product'))],
                 [('products', '=', None)])],
         depends=['product'])
+    endorsement_summary = fields.Text('Endorsement Summary')
     product = fields.Many2One('offered.product', 'Product', readonly=True)
 
     @fields.depends('contract')
@@ -200,6 +201,8 @@ class StartEndorsement(Wizard):
 
     def default_summary(self, name):
         result = self.select_endorsement._default_values
+        result['endorsement_summary'] = \
+            self.endorsement.endorsement_summary
         return result
 
     def default_preview_changes(self, name):

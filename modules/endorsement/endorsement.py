@@ -4,12 +4,12 @@ import datetime
 
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
-from trytond.model import Workflow, Model
+from trytond.model import Workflow, Model, fields as tryton_fields
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, coop_string
 
 
 __all__ = [
@@ -324,6 +324,31 @@ def values_mixin(value_model):
         def get_endorsed_record(self):
             raise NotImplementedError
 
+        def get_summary(self, model, base_object=None, indent=0, increment=2):
+            pool = Pool()
+            ValueModel = pool.get(model)
+            vals = []
+            if not self.values:
+                return ''
+            for k, v in self.values.iteritems():
+                prev_value = getattr(base_object, k, '') if base_object else ''
+                field = ValueModel._fields[k]
+                if isinstance(field, tryton_fields.Many2One):
+                    if v:
+                        vals.append((k, field,
+                                prev_value.rec_name if prev_value else '',
+                                pool.get(field.model_name)(v).rec_name))
+                    else:
+                        vals.append((k, field,
+                                prev_value.rec_name if prev_value else '', ''))
+                else:
+                    vals.append((k, field, prev_value, v))
+            return '\n'.join([' ' * indent + u'%s : %s → %s' % (
+                        coop_string.translate(
+                            ValueModel, fname, field.string, 'field'),
+                        old, new) for fname, field, old, new in vals
+                    if old != new])
+
     return Mixin
 
 
@@ -377,6 +402,27 @@ def relation_mixin(value_model, field, model, name):
             elif self.action == 'remove':
                 return ('delete', [getattr(self, field).id])
 
+        @property
+        def base_instance(self):
+            if not self.relation:
+                return None
+            BaseModel = Pool().get(model)
+            return HistoryBrowser(BaseModel, self.relation, self.applied_on)
+
+        def get_summary(self, model, base_object=None, indent=0, increment=2):
+            if self.action == 'remove':
+                return ' ' * indent + '%s %s' % (self.raise_user_error(
+                        'mes_remove_version', raise_exception=False),
+                    self.base_instance.date)
+            elif self.action == 'add':
+                result = ' ' * indent + '%s:\n' % self.raise_user_error(
+                    'mes_new_version', raise_exception=False)
+                result += super(Mixin, self).get_summary(model, base_object,
+                    indent + increment, increment)
+                return result
+            return super(Mixin, self).get_summary(model, base_object, indent,
+                increment)
+
     setattr(Mixin, field, fields.Function(fields.Many2One(model, name,
                 datetime_field='applied_on',
                 states={
@@ -421,6 +467,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     contracts = fields.Function(
         fields.Many2Many('contract', '', '', 'Contracts'),
         'get_contracts', searcher='search_contracts')
+    endorsement_summary = fields.Function(
+        fields.Text('Endorsement Summary'),
+        'get_endorsement_summary')
 
     @classmethod
     def __setup__(cls):
@@ -444,6 +493,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
 
     def get_contracts(self, name):
         return [x.contract.id for x in self.contract_endorsements]
+
+    def get_endorsement_summary(self, name):
+        result = '\n\n'.join([x.get_endorsement_summary(name)
+                for x in self.all_endorsements()])
+        return result
 
     @classmethod
     def search_contracts(cls, name, clause):
@@ -553,6 +607,9 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
+    endorsement_summary = fields.Function(
+        fields.Text('Endorsement Summary'),
+        'get_endorsement_summary')
     state = fields.Function(
         fields.Selection([
                 ('draft', 'Draft'),
@@ -588,6 +645,21 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 
     def get_definition(self, name):
         return self.endorsement.definition.id if self.endorsement else None
+
+    def get_endorsement_summary(self, name):
+        result = self.definition.name + ':\n'
+        contract_summary = self.get_summary('contract', self.base_instance, 2)
+        if contract_summary:
+            result += contract_summary
+            result += '\n\n'
+        option_summary = '\n'.join([option.get_summary('contract.option',
+                    indent=4)
+                for option in self.options])
+        if option_summary:
+            result += '  Option modifications :\n'
+            result += option_summary
+            result += '\n\n'
+        return result
 
     def get_state(self, name):
         return self.endorsement.state if self.endorsement else 'draft'

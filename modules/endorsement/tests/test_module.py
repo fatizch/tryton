@@ -1,3 +1,4 @@
+# encoding: utf-8
 import unittest
 import datetime
 
@@ -145,7 +146,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test(
         'endorsement.test0030_create_endorsement',
         )
-    def test0031_apply_endorsement(self):
+    def test0031_endorsement_summary(self):
+        contract, = self.Contract.search([
+                ('product.code', '=', 'AAA'),
+                ('start_date', '=', datetime.date(2014, 2, 15)),
+                ])
+        endorsement, = self.Endorsement.search([
+                ('contracts', '=', contract.id),
+                ])
+        self.assertEqual(endorsement.endorsement_summary,
+            'Change Contract Number:\n'
+            u'  Contract Number : %s → 1234\n\n' % contract.contract_number)
+
+    @test_framework.prepare_test(
+        'endorsement.test0030_create_endorsement',
+        )
+    def test0035_revert_endorsement(self):
         # WARNING: No dependency, commit required for the history / write dates
         # to kick in properly
         Transaction().cursor.commit()
