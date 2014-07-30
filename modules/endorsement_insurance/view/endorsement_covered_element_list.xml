@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Endorsement Covered Elements">
+    <field name="contract_endorsement"/>
+    <field name="action"/>
+    <field name="covered_element"/>
+</tree>

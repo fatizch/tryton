@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ####################### -->
+        <!-- # New Covered Element # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="new_covered_element_view_form">
+            <field name="model">contract.covered_element.new</field>
+            <field name="type">form</field>
+            <field name="name">new_covered_element_form</field>
+        </record>
+    </data>
+</tryton>
