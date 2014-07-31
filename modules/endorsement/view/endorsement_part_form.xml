@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Templates">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="kind"/>
+    <field name="kind"/>
+    <label name="view"/>
+    <field name="view"/>
+    <notebook>
+        <page string="Description" id="description">
+            <field name="description"/>
+        </page>
+        <page string="Definition" id="definition" states="{'invisible': ~Eval('kind')}">
+            <notebook>
+                <page name="contract_fields">
+                    <field name="contract_fields"/>
+                </page>
+                <page name="option_fields">
+                    <field name="option_fields"/>
+                </page>
+            </notebook>
+        </page>
+    </notebook>
+</form>

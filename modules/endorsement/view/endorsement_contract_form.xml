@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<form string="Endorsement">
+  <label name="contract"/>
+  <field name="contract"/>
+  <field name="values" colspan="4"/>
+  <notebook>
+    <page string="Options" id="options">
+      <field name="options"/>
+    </page>
+  </notebook>
+  <label name="state"/>
+  <field name="state"/>
+  <group col="2" colspan="2" id="buttons">
+    <button name="draft" string="Draft"/>
+    <button name="apply" string="Apply"/>
+  </group>
+</form>

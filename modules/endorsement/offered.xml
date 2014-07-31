@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ########################## -->
+        <!-- # Endorsement Definition # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="endorsement_definition_view_form">
+            <field name="model">endorsement.definition</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_definition_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_definition_view_list">
+            <field name="model">endorsement.definition</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_definition_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_endorsement_definition">
+            <field name="name">Endorsement Definition</field>
+            <field name="res_model">endorsement.definition</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_definition_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_definition_view_list"/>
+            <field name="act_window" ref="act_endorsement_definition"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_definition_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_definition_view_form"/>
+            <field name="act_window" ref="act_endorsement_definition"/>
+        </record>
+        <menuitem parent="endorsement.menu_configuration" sequence="30" action="act_endorsement_definition" id="menu_endorsement_definition"/>
+        <!-- ############################################################ -->
+        <!-- Endorsement Part -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="endorsement_part_view_form">
+            <field name="model">endorsement.part</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_part_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_part_view_list">
+            <field name="model">endorsement.part</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_part_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_endorsement_part">
+            <field name="name">Endorsement Part</field>
+            <field name="res_model">endorsement.part</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_part_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_part_view_list"/>
+            <field name="act_window" ref="act_endorsement_part"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_part_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_part_view_form"/>
+            <field name="act_window" ref="act_endorsement_part"/>
+        </record>
+        <menuitem parent="endorsement.menu_configuration" sequence="10" action="act_endorsement_part" id="menu_endorsement_part"/>
+        <!-- #################################################### -->
+        <!-- # Endorsement Definition Part Relation # -->
+        <!-- #################################################### -->
+        <record model="ir.ui.view" id="endorsement_definition_part_relation_view_list">
+            <field name="model">endorsement.definition-endorsement.part</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_definition_part_relation_list</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- Endorsement Contract Fields -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="endorsement_contract_field_view_form">
+            <field name="model">endorsement.contract.field</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_field_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_contract_field_view_list">
+            <field name="model">endorsement.contract.field</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_field_list</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- Endorsement Option Field -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="endorsement_contract_option_field_view_list">
+            <field name="model">endorsement.contract.option.field</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_field_list</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_contract_option_field_view_form">
+            <field name="model">endorsement.contract.option.field</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_field_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- Product -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+    </data>
+</tryton>

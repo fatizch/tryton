@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Select Endorsement # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="select_endorsement_view_form">
+            <field name="model">endorsement.start.select_endorsement</field>
+            <field name="type">form</field>
+            <field name="name">select_endorsement_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_summary_view_form">
+            <field name="model">endorsement.start.select_endorsement</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_summary_form</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Preview Changes # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="preview_changes_view_form">
+            <field name="model">endorsement.start.preview_changes</field>
+            <field name="type">form</field>
+            <field name="name">preview_changes_form</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Start Endorsement # -->
+        <!-- ##################### -->
+        <record model="ir.action.wizard" id="act_start_endorsement">
+            <field name="name">Start Endorsement</field>
+            <field name="wiz_name">endorsement.start</field>
+            <!-- <field name="window">True</field> -->
+        </record>
+        <record model="ir.action.keyword" id="act_start_endorsement_keyword_contract">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_start_endorsement"/>
+        </record>
+        <!-- We need different actions because the name must be different -->
+        <record model="ir.action.wizard" id="act_resume_endorsement">
+            <field name="name">Resume Endorsement</field>
+            <field name="wiz_name">endorsement.start</field>
+            <!-- <field name="window">True</field> -->
+        </record>
+        <record model="ir.action.keyword" id="act_resume_endorsement_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">endorsement,-1</field>
+            <field name="action" ref="act_resume_endorsement"/>
+        </record>
+    </data>
+</tryton>

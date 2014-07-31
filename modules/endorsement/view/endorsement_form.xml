@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<form string="Endorsement Group">
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <label name="definition"/>
+    <field name="definition"/>
+    <label name="state"/>
+    <field name="state"/>
+    <label name="applicant"/>
+    <field name="applicant"/>
+    <newline/>
+    <group id="endorsements" colspan="2" yexpand="1" yfill="1">
+        <field name="contract_endorsements"/>
+    </group>
+    <newline/>
+    <group id="workflow" colspan="4">
+        <button string="Draft" name="draft"/>
+        <button string="Apply" name="apply"/>
+        <label name="application_date"/>
+        <field name="application_date"/>
+    </group>
+</form>

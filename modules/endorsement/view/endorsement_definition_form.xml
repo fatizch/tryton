@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<form string="Endorsement Definition">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <notebook>
+        <page name="ordered_endorsement_parts">
+            <field name="ordered_endorsement_parts" colspan="4" mode="tree" view_ids="endorsement.endorsement_definition_part_relation_view_list"/>
+        </page>
+        <page name="products">
+            <field name="products"/>
+        </page>
+    </notebook>
+</form>
