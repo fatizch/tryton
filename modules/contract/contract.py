@@ -436,9 +436,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def search_rec_name(cls, name, clause):
         contracts = cls.search([
-            'OR',
             ('contract_number',) + tuple(clause[1:]),
-            ('subscriber.name',) + tuple(clause[1:]),
         ])
         return [('id', 'in', [c.id for c in contracts])]
 
