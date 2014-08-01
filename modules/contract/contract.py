@@ -738,7 +738,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return {}
 
 
-class ContractOption(model.CoopSQL, model.CoopView, ModelCurrency):
+class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
+            ModelCurrency):
     'Contract Option'
 
     __name__ = 'contract.option'

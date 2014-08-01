@@ -30,7 +30,7 @@ __all__ = [
     ]
 
 
-class PremiumRateLine(model.CoopSQL, model.CoopView):
+class PremiumRateLine(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     'Premium Rate Line'
 
     __name__ = 'contract.premium_rate.line'
@@ -262,7 +262,8 @@ class RateNote(model.CoopSQL, model.CoopView, ModelCurrency):
         return res
 
 
-class RateNoteLine(model.CoopSQL, model.CoopView, ModelCurrency):
+class RateNoteLine(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
+        ModelCurrency):
     'Rate Note Line'
 
     __name__ = 'billing.premium_rate.form.line'

@@ -578,7 +578,8 @@ class ContractOption:
         return result
 
 
-class CoveredElement(model.CoopSQL, model.CoopView, ModelCurrency):
+class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
+        ModelCurrency):
     'Covered Element'
     '''
         Covered elements represents anything which is covered by at least one

@@ -653,7 +653,8 @@ class SynthesisMenuRelationship(model.CoopSQL):
         return coop_string.translate_label(RelationSynthesis, 'name')
 
 
-class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
+class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView,
+        model.ExpandTreeMixin):
     'Party Synthesis Menu'
     __name__ = 'party.synthesis.menu'
 

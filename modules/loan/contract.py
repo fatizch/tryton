@@ -192,7 +192,7 @@ class ExtraPremium:
         return super(ExtraPremium, self).on_change_with_rec_name(name)
 
 
-class LoanShare(model.CoopSQL, model.CoopView):
+class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     'Loan Share'
 
     __name__ = 'loan.share'

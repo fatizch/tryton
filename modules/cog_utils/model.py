@@ -173,16 +173,18 @@ class CoopSQL(export.ExportImportMixin, ModelSQL):
 
 
 class CoopView(ModelView):
-    must_expand_tree = fields.Function(
-        fields.Boolean('Must Expand Tree', states={'invisible': True}),
-        '_expand_tree')
-
     @classmethod
     def setter_void(cls, objects, name, values):
         pass
 
     def getter_void(self, name):
         pass
+
+
+class ExpandTreeMixin(object):
+    must_expand_tree = fields.Function(
+        fields.Boolean('Must Expand Tree', states={'invisible': True}),
+        '_expand_tree')
 
     def _expand_tree(self, name):
         return False
