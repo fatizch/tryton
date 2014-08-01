@@ -249,7 +249,7 @@ class Party(export.ExportImportMixin):
 
     def get_rec_name(self, name):
         if self.is_person:
-            return "%s %s %s" % (coop_string.translate_value(
+            return "[%s] %s %s %s " % (self.code, coop_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
         return super(Party, self).get_rec_name(name)
 
@@ -308,14 +308,12 @@ class Party(export.ExportImportMixin):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        parties = cls.search(['OR',
-                [('first_name',) + tuple(clause[1:])],
-                [('name',) + tuple(clause[1:])],
-                [('ssn',) + tuple(clause[1:])]
-                ], order=[])
-        if parties:
-            return [('id', 'in', [party.id for party in parties])]
-        return super(Party, cls).search_rec_name(name, clause)
+        return [
+            'OR',
+            ('first_name',) + tuple(clause[1:]),
+            ('name',) + tuple(clause[1:]),
+            ('code',) + tuple(clause[1:]),
+        ]
 
     def get_person(self):
         if self.is_person:
