@@ -149,5 +149,17 @@
           <field name="model">loan,-1</field>
           <field name="action" ref="act_loan_payment_relate_form"/>
         </record>
+        <!-- ############################################################ -->
+        <!-- ########### Loan Delete Wizard ############################# -->
+        <!-- ############################################################ -->
+        <record model="ir.action.wizard" id="act_delete_loan">
+            <field name="name">Delete Loan</field>
+            <field name="wiz_name">loan.delete</field>
+        </record>
+        <record model="ir.action.keyword" id="act_delete_loan_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">loan,-1</field>
+            <field name="action" ref="act_delete_loan"/>
+        </record>
     </data>
 </tryton>
