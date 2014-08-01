@@ -20,6 +20,7 @@ class CoveredElement(object):
 
 
 class Endorsement:
+    __metaclass__ = PoolMeta
     __name__ = 'endorsement'
 
     def new_endorsement(self, endorsement_part):
