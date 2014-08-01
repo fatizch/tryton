@@ -34,3 +34,16 @@ class RuleEngineRuntime:
                 x += 1
                 if party == person:
                     return x
+
+    @classmethod
+    def _re_number_of_covered_with_relation(cls, args, relation_name=None):
+        contract = args['contract']
+        subscriber = args['contract'].subscriber
+        parties = [x.party for x in utils.get_good_versions_at_date(
+                contract, 'covered_elements', args['date']) if x.party]
+        res = 0
+        for party in parties:
+            if (not relation_name or party.get_relation_with(subscriber,
+                    args['date']) == relation_name):
+                res += 1
+        return res

@@ -11,5 +11,15 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="fct_args">nom_relation[optionnel]</field>
         </record>
+        <record model="rule_engine.function" id="te_number_of_covered_with_relation">
+            <field name="description">Nombre de personnes couvertes avec la relation</field>
+            <field name="name">_re_number_of_covered_with_relation</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
+            <field name="translated_technical_name">nombre_relation</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="fct_args">Nom de la relation (optionnel)</field>
+        </record>
     </data>
 </tryton>
