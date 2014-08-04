@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.action.act_window" id="act_statement_bank_deposit_form">
+            <field name="name">Bank Deposit Ticket</field>
+            <field name="res_model">account.statement</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_statement_bank_deposit_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_statement.statement_view_tree"/>
+            <field name="act_window" ref="act_statement_bank_deposit_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_statement_bank_deposit_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_statement.statement_view_form"/>
+            <field name="act_window" ref="act_statement_bank_deposit_form"/>
+        </record>
+        <record model="ir.action.act_window.domain"
+            id="act_statement_bank_deposit_form_domain_draft">
+            <field name="name">Draft</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain">[('state', '=', 'draft'), ('in_bank_deposit_ticket', '=', 'True')]</field>
+            <field name="act_window" ref="act_statement_bank_deposit_form"/>
+        </record>
+        <record model="ir.action.act_window.domain"
+            id="act_statement_bank_deposit_form_domain_validated">
+            <field name="name">Validated</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">[('state', '=', 'validated'), ('in_bank_deposit_ticket', '=', 'True')]</field>
+            <field name="act_window" ref="act_statement_bank_deposit_form"/>
+        </record>
+        <record model="ir.action.act_window.domain"
+            id="act_statement_bank_deposit_form_domain_posted">
+            <field name="name">Posted</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain">[('state', '=', 'posted'), ('in_bank_deposit_ticket', '=', 'True')]</field>
+            <field name="act_window" ref="act_statement_bank_deposit_form"/>
+        </record>
+        <record model="ir.action.act_window.domain"
+            id="act_statement_bank_deposit_form_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain"></field>
+            <field name="act_window" ref="act_statement_bank_deposit_form"/>
+        </record>
+        <menuitem parent="account_statement.menu_statements" sequence="10"
+            action="act_statement_bank_deposit_form" id="menu_statement_bank_deposit_form"/>
+    </data>
+</tryton>
