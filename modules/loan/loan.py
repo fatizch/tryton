@@ -48,7 +48,7 @@ class Loan(model.CoopSQL, model.CoopView):
             ],
         )
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False)
-    currency = fields.Many2One('currency.currency', 'Currency',
+    currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
     currency_digits = fields.Function(
         fields.Integer('Currency Digits'),
@@ -224,7 +224,7 @@ class Loan(model.CoopSQL, model.CoopView):
         'increments', 'deferal', 'deferal_duration')
     def on_change_with_payment_amount(self):
         if (self.amount and self.number_of_payments and self.payment_frequency
-                and not self.deferal):
+                and self.currency and not self.deferal):
             return self.calculate_payment_amount()
         else:
             return None
