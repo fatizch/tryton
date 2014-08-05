@@ -191,6 +191,7 @@ class Party(export.ExportImportMixin):
         res = super(Party, cls)._export_skips()
         res.add('code')
         res.add('code_length')
+        res.add('synthesis')
         return res
 
     @classmethod
