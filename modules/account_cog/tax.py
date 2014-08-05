@@ -1,9 +1,14 @@
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields, coop_string, export
 
 
 __all__ = [
     'TaxDescription',
     'TaxDescriptionVersion',
+    'Tax',
+    'TaxTemplate',
+    'TaxCodeTemplate',
+    'TaxCode',
+    'TaxGroup',
     ]
 
 
@@ -93,3 +98,23 @@ class TaxDescriptionVersion(model.CoopSQL, model.VersionObject):
             return self.value / 100
         elif self.kind == 'flat':
             return self.value
+
+
+class Tax(export.ExportImportMixin):
+    __name__ = 'account.tax'
+
+
+class TaxTemplate(export.ExportImportMixin):
+    __name__ = 'account.tax.template'
+
+
+class TaxCodeTemplate(export.ExportImportMixin):
+    __name__ = 'account.tax.code.template'
+
+
+class TaxCode(export.ExportImportMixin):
+    __name__ = 'account.tax.code'
+
+
+class TaxGroup(export.ExportImportMixin):
+    __name__ = 'account.tax.group'

@@ -27,6 +27,11 @@ def register():
         # From tax
         TaxDescription,
         TaxDescriptionVersion,
+        Tax,
+        TaxTemplate,
+        TaxCodeTemplate,
+        TaxCode,
+        TaxGroup,
         # From fee
         FeeDescription,
         FeeDescriptionVersion,
