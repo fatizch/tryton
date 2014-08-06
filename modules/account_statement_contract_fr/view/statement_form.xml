@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='statement_lines']/field[@name='lines']" position="replace">
+        <group id="lines_without_bank" states="{'invisible': Eval('in_bank_deposit_ticket', False)}" yexpand="1" yfill="1" colspan="4">
+            <field name="lines" colspan="4" view_ids="account_statement.statement_line_view_tree_editable"/>
+        </group>
+        <group id="lines_with_bank" states="{'invisible': ~Eval('in_bank_deposit_ticket', True)}" yexpand="1" yfill="1" colspan="4">
+            <field name="lines" colspan="4" view_ids="account_statement_contract_fr.statement_line_view_tree_editable_with_bank"/>
+        </group>
+        <field name="in_bank_deposit_ticket" invisible="1"/>
+    </xpath>
+</data>
