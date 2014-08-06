@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Snapshot Moves">
+    <image name="tryton-dialog-information" xexpand="0" xfill="0"/>
+    <label string="Take a snapshot of moves" id="snapshot"
+        yalign="0.0" xalign="0.0" xexpand="1"/>
+</form>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<form string="Account Move Line Aggregated">
+    <label name="account"/>
+    <field name="account"/>
+    <label name="journal"/>
+    <field name="journal"/>
+    <label name="post_date"/>
+    <field name="post_date"/>
+    <newline/>
+    <label name="debit"/>
+    <field name="debit"/>
+    <label name="credit"/>
+    <field name="credit"/>
+</form>

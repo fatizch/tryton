@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Account Move Lines Aggregated">
+    <field name="account"/>
+    <field name="journal"/>
+    <field name="post_date"/>
+    <field name="debit"/>
+    <field name="credit"/>
+</tree>
