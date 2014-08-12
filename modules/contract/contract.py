@@ -435,9 +435,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        return ['OR',
-            ('contract_number',) + tuple(clause[1:]),
-            ('quote_number',) + tuple(clause[1:]),
+        return ['OR', [
+                ('contract_number',) + tuple(clause[1:]),
+                ('status', '!=', 'quote'),
+                ], [
+                ('quote_number',) + tuple(clause[1:]),
+                ('status', '=', 'quote'),
+                ],
             ]
 
     def init_contract(self, product, party, contract_dict=None):
