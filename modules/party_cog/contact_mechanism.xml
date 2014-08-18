@@ -22,7 +22,6 @@
             <field name="name">Party Interaction</field>
             <field name="res_model">party.interaction</field>
             <field name="domain">[('party', '=', Eval('active_id'))]</field>
-            <field name="context">{'from_party': Eval('active_id'), 'from_model': Eval('active_model')}</field>
         </record>
         <record model="ir.action.keyword" id="act_contact_history_relate_keyword">
             <field name="keyword">form_relate</field>
