@@ -113,6 +113,7 @@ class OptionSelector(model.CoopView):
     option = fields.Many2One('contract.option', 'Option', readonly=True)
     option_name = fields.Char('Option', readonly=True)
     selected = fields.Boolean('Selected')
+    extra_premiums = fields.Char('Existing Extra Premiums')
 
 
 class ExtraPremiumDisplay(model.CoopView):
@@ -151,6 +152,10 @@ class ExtraPremiumDisplay(model.CoopView):
     def get_option_name(cls, option):
         return '%s' % option.coverage.name
 
+    @classmethod
+    def get_extra_premiums(cls, option):
+        return ", ".join([x.rec_name for x in option.extra_premiums])
+
     @fields.depends('covered_element', 'extra_premiums', 'coverages',
             'options', 'option', 'extra_premium')
     def on_change_covered_element(self):
@@ -184,6 +189,7 @@ class ExtraPremiumDisplay(model.CoopView):
                         'selected': False,
                         'option': option.id,
                         'option_name': self.get_option_name(option),
+                        'extra_premiums': self.get_extra_premiums(option),
                         }))
         result['extra_premiums']['add'] = existing_extras
         result['options']['add'] = existing_options
@@ -261,7 +267,7 @@ class ManageExtraPremium(Wizard):
                 new_extra = selected_extra.copy([selected_extra])[0]
                 new_extra.option = option.option
                 new_extra.save()
-        return 'existing'
+        return 'end'
 
     def transition_delete_selected(self):
         selected = [x for x in self.existing.extra_premiums if x.selected]
