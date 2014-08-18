@@ -471,7 +471,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
                     name = str(dimension.id)
             elif getattr(dimension.definition, kind) == 'range':
                 name = '%s - %s' % (
-                    dimension.start, dimension.end)
+                    dimension.start if dimension.start else '',
+                    dimension.end if dimension.end else '')
             elif getattr(dimension.definition, kind) == 'range-date':
                 if dimension.start_date:
                     name = '%s -' % (
