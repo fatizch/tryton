@@ -328,6 +328,13 @@ class Contract(Printable):
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 
+    def update_from_start_date(self):
+        super(Contract, self).update_from_start_date()
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                option.set_start_date(self.start_date)
+                option.save()
+
     def activate_contract(self):
         super(Contract, self).activate_contract()
         for covered_element in getattr(self, 'covered_elements', []):
@@ -576,6 +583,12 @@ class ContractOption:
         result = super(ContractOption, self).get_publishing_values()
         result['offered'] = self.coverage
         return result
+
+    def set_start_date(self, start_date):
+        super(ContractOption, self).set_start_date(start_date)
+        for extra_premium in self.extra_premiums:
+            extra_premium.set_start_date(start_date)
+            extra_premium.save()
 
 
 class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
@@ -1242,7 +1255,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_is_discount(self):
         return self.motive.is_discount if self.motive else False
 
-    def get_possible_extra_premiums_kind(self):
+    @staticmethod
+    def get_possible_extra_premiums_kind():
         return list(POSSIBLE_EXTRA_PREMIUM_RULES)
 
     def get_rec_name(self, name):
@@ -1290,6 +1304,10 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         if res[0] is None or not res[1]:
             return None
         return res[0]
+
+    def set_start_date(self, new_start_date):
+        if self.start_date and self.start_date < new_start_date:
+            self.start_date = new_start_date
 
 
 class OptionExclusionKindRelation(model.CoopSQL):

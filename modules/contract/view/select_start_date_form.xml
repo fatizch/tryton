@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<form string="Select Start Date">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="former_start_date"/>
+    <field name="former_start_date"/>
+    <label name="new_start_date"/>
+    <field name="new_start_date"/>
+    <newline/>
+    <label name="former_appliable_conditions_date"/>
+    <field name="former_appliable_conditions_date"/>
+    <label name="new_appliable_conditions_date"/>
+    <field name="new_appliable_conditions_date"/>
+</form>
+

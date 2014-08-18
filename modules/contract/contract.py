@@ -34,6 +34,8 @@ __all__ = [
     'ContractAddress',
     'ContractSelectEndDate',
     'ContractEnd',
+    'ContractSelectStartDate',
+    'ContractChangeStartDate',
     ]
 
 
@@ -156,7 +158,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls.__rpc__.update({'ws_subscribe_contract': RPC(readonly=False)})
-        cls._buttons.update({'option_subscription': {}})
+        cls._buttons.update({
+                'option_subscription': {},
+                'button_change_start_date': {
+                    'invisible': Eval('status') != 'quote'},
+                    })
         cls._error_messages.update({
                 'inactive_product_at_date':
                 'Product %s is inactive at date %s',
@@ -404,6 +410,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         ActivationHistory.delete([
             self.activation_history.pop(elem)
             for elem in to_delete])
+
+    def set_start_date(self, start_date):
+        self.start_date = start_date
+        first_version = self.activation_history[0]
+        first_version.start_date = start_date
+        first_version.save()
+        self.update_from_start_date()
+
+    def update_from_start_date(self):
+        for option in self.options:
+            option.set_start_date(self.start_date)
+            option.save()
+
+    def set_appliable_conditions_date(self, new_date):
+        self.appliable_conditions_date = new_date
 
     def get_rec_name(self, name):
         if self.status == 'quote':
@@ -720,6 +741,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def option_subscription(cls, contracts):
         pass
 
+    @classmethod
+    @model.CoopView.button_action('contract.act_change_start_date')
+    def button_change_start_date(cls, contracts):
+        pass
+
     def get_all_extra_data(self, at_date):
         res = self.product.get_all_extra_data(at_date)
         res.update(getattr(self, 'extra_data', {}))
@@ -914,6 +940,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def set_end_date(self, end_date, force=False):
         self.end_date = end_date
 
+    def set_start_date(self, new_start_date):
+        if self.start_date and self.start_date < new_start_date:
+            self.start_date = new_start_date
+
 
 class ContractAddress(model.CoopSQL, model.CoopView):
     'Contract Address'
@@ -981,4 +1011,64 @@ class ContractEnd(Wizard):
             contracts.append([contract])
             contracts.append(contract._save_values)
         Contract.write(*contracts)
+        return 'end'
+
+
+class ContractSelectStartDate(model.CoopSQL, model.CoopView):
+    'Start date selector for contract'
+
+    __name__ = 'contract.select_start_date'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    former_start_date = fields.Date('Former Start Date', readonly=True)
+    new_start_date = fields.Date('New start date', required=True)
+    former_appliable_conditions_date = fields.Date('Former appliable conditions date',
+            readonly=True)
+    new_appliable_conditions_date = fields.Date('New appliable conditions date',
+            required=True)
+
+    @fields.depends('new_start_date')
+    def on_change_new_start_date(self):
+        return {
+            'new_appliable_conditions_date': self.new_start_date
+            }
+
+
+class ContractChangeStartDate(Wizard):
+    'Change Start Date Wizard'
+
+    __name__ = 'contract.change_start_date'
+
+    start_state = 'change_date'
+    change_date = StateView(
+        'contract.select_start_date',
+        'contract.select_start_date_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next', default=True),
+            ])
+    apply = StateTransition()
+
+    def default_change_date(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        active_id = Transaction().context.get('active_id')
+        selected_contract = Contract(active_id)
+        return {
+            'contract': selected_contract.id,
+            'former_start_date': selected_contract.start_date,
+            'former_appliable_conditions_date':
+            selected_contract.appliable_conditions_date,
+            }
+
+    def transition_apply(self):
+        new_date = self.change_date.new_start_date
+        pool = Pool()
+        Contract = pool.get('contract')
+        active_id = Transaction().context.get('active_id')
+        selected_contract = Contract(active_id)
+        selected_contract.set_appliable_conditions_date(
+                self.change_date.new_appliable_conditions_date
+                )
+        selected_contract.set_start_date(new_date)
+        selected_contract.save()
         return 'end'

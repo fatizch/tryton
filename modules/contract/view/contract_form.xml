@@ -47,4 +47,7 @@
         </page>
     </notebook>
     <newline/>
+    <group id="button_change_start_date" states="{'invisible': True}">
+        <button name="button_change_start_date" string="Change start date"/>
+    </group>
 </form>

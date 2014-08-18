@@ -86,6 +86,21 @@
         <field name="model">contract,-1</field>
         <field name="action" ref="act_end"/>
     </record>
+    <!-- ############################# -->
+    <!-- # Contrat Select Start Date # -->
+    <!-- ############################# -->
+    <record model="ir.ui.view" id="select_start_date_view_form">
+        <field name="model">contract.select_start_date</field>
+        <field name="type">form</field>
+        <field name="name">select_start_date_form</field>
+    </record>
+    <!-- ##################################### -->
+    <!-- # Contract Change Start Date Wizard # -->
+    <!-- ##################################### -->
+    <record model="ir.action.wizard" id="act_change_start_date">
+        <field name="name">Change Start Date</field>
+        <field name="wiz_name">contract.change_start_date</field>
+    </record>
     <!-- ############################################################ -->
     <!-- ########### Menu ########### -->
     <!-- ############################################################ -->

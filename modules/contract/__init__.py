@@ -21,6 +21,7 @@ def register():
         ContractOption,
         ContractAddress,
         ContractSelectEndDate,
+        ContractSelectStartDate,
         # From Service
         ContractService,
         #From Rule Engine
@@ -43,4 +44,5 @@ def register():
         OptionSubscriptionWizardLauncher,
         SynthesisMenuOpen,
         ContractEnd,
+        ContractChangeStartDate,
         module='contract', type_='wizard')
