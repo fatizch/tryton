@@ -1039,8 +1039,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 return sub_element
 
     def get_all_extra_data(self, at_date):
-        res = getattr(self, 'extra_data', {})
-        res.update(getattr(self, 'party_extra_data', {}))
+        res = getattr(self, 'party_extra_data', {})
+        res.update(getattr(self, 'extra_data', {}))
         res.update(self.contract.get_all_extra_data(at_date))
         return res
 
