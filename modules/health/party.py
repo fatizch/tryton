@@ -41,18 +41,16 @@ class Party:
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        return [
-            'OR',
-            [('first_name',) + tuple(clause[1:])],
-            [('name',) + tuple(clause[1:])],
-            [('ssn',) + tuple(clause[1:])]
-        ]
+        domain = super(Party, cls).search_rec_name(name, clause)
+        if domain[0] == 'OR':
+            domain.append([('ssn',) + tuple(clause[1:])])
+        return domain
 
     def get_rec_name(self, name):
-        if self.is_person:
-            return "[%s] %s %s %s " % (self.ssn, coop_string.translate_value(
-                self, 'gender'), self.name.upper(), self.first_name)
-        return super(Party, self).get_rec_name(name)
+        name = super(Party, self).get_rec_name(name)
+        if self.is_person and self.ssn:
+            name += " - %s" % self.ssn
+        return name
 
 
 class HealthPartyComplement(model.CoopSQL, model.CoopView):
