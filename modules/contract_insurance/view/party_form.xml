@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/notebook/page/group[@id='lang']" position="before">
+    <xpath expr="/form/notebook/page/field[@name='addresses']" position="before">
         <field name="extra_data" no_command="1"/>
     </xpath>
 </data>

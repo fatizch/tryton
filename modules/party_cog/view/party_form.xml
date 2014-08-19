@@ -55,30 +55,22 @@
         position="replace"/>
     <xpath expr="/form/notebook/page/field[@name='addresses']"
         position="after">
-        <group col="6" colspan="4" id="contact_shortcut">
+        <group col="4" colspan="1" string="Contact" id="contact_shortcut" yfill="1">
             <label name="phone"/>
             <field name="phone"/>
+            <newline/>
             <label name="mobile"/>
             <field name="mobile"/>
+            <newline/>
             <label name="email"/>
             <field name="email"/>
-        </group>
-        <newline/>
-    </xpath>
-    <!-- Add Extra Data pages-->
-    <xpath expr="/form/notebook/page[@id='general']" position="after">
-        <page string="Extra Data" id="extra_data">
-            <group col="2" colspan="2" id="lang">
-                <label name="lang"/>
-                <field name="lang" widget="selection"/>
-            </group>
             <newline/>
-            <field name="contact_mechanisms" colspan="2"
-                view_ids="party.contact_mechanism_view_tree_sequence"/>
-            <field name="relations" colspan="2"/>
-        </page>
+            <label name="lang"/>
+            <field name="lang" widget="selection"/>
+        </group>
+        <field name="relations" colspan="2"/>
     </xpath>
-        <!-- Add Company and Role pages-->
+    <!-- Add Company and Role pages-->
     <xpath expr="/form/notebook" position="inside">
         <page string="Company" id="tree" states="{'invisible': ~Eval('is_company')}">
             <label name="parent"/>
