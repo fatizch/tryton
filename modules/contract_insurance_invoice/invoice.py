@@ -205,6 +205,38 @@ class Invoice:
             payments.append(payment)
         return Payment.create([c._save_values for c in payments])
 
+    def udpate_move_line_from_billing_information(self, line,
+            billing_information):
+        return {'payment_date':
+            billing_information.get_direct_debit_planned_date(line)}
+
+    def _get_move_line(self, date, amount):
+        line = super(Invoice, self)._get_move_line(date, amount)
+        if not self.contract or not self.contract_invoice or not line:
+            return line
+        contract_revision_date = max(line['maturity_date'],
+            utils.today())
+        with Transaction().set_context(contract_revision_date=
+                contract_revision_date):
+            res = self.udpate_move_line_from_billing_information(
+                line, self.contract.billing_information)
+            line.update(res)
+            return line
+
+    @classmethod
+    def post(cls, invoices):
+        res = []
+        for invoice in invoices:
+            if (invoice.state not in ('validated', 'draft') or
+                    not invoice.contract_invoice):
+                continue
+            res += [[invoice],
+                {'invoice_date': invoice.contract_invoice.start}]
+            invoice.invoice_date = invoice.contract_invoice.start
+        if res:
+            cls.write(*res)
+        super(Invoice, cls).post(invoices)
+
     def check_cancel_move(self):
         # account_invoice.check_cancel_move makes it impossible to cancel moves
         # of out_invoices.

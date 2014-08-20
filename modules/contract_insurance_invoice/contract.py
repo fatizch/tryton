@@ -688,6 +688,13 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
             return {'direct_debit_day': None}
         return {'direct_debit_day': int(self.direct_debit_day_selector)}
 
+    def get_direct_debit_planned_date(self, line):
+        if not (self.direct_debit and self.direct_debit_day):
+            return None
+        return coop_date.get_next_date_in_sync_with(
+            max(line['maturity_date'], utils.today()),
+            self.direct_debit_day)
+
 
 class ContractInvoice(ModelSQL, ModelView):
     'Contract Invoice'

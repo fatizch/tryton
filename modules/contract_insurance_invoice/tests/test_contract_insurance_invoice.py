@@ -195,6 +195,31 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                 [(date(2014, 4, 15), date.max + relativedelta(days=-1),
                     contract.billing_informations[0])])
 
+    def test_get_direct_debit_day(self):
+        BillingInformation = POOL.get('contract.billing_information')
+        current_date = date(2014, 9, 1)
+        CONTEXT['client_defined_date'] = current_date
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            billing_information = BillingInformation(
+                direct_debit_day=5,
+                direct_debit=True)
+            line = {'maturity_date': date(2014, 9, 1)}
+            self.assertEqual(
+                billing_information.get_direct_debit_planned_date(line),
+                date(2014, 9, 5))
+            line = {'maturity_date': date(2014, 9, 5)}
+            self.assertEqual(
+                billing_information.get_direct_debit_planned_date(line),
+                date(2014, 9, 5))
+            line = {'maturity_date': date(2014, 8, 5)}
+            self.assertEqual(
+                billing_information.get_direct_debit_planned_date(line),
+                date(2014, 9, 5))
+            line = {'maturity_date': date(2014, 9, 30)}
+            self.assertEqual(
+                billing_information.get_direct_debit_planned_date(line),
+                date(2014, 10, 5))
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
