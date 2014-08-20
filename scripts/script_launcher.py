@@ -312,6 +312,7 @@ def test(arguments, config, work_data):
             t.start()
             threads.append(t)
         else:
+            time.sleep(1)
             for thread in threads:
                 if not thread.isAlive():
                     threads.remove(thread)
