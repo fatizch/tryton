@@ -985,7 +985,7 @@ class Premium(ModelSQL, ModelView):
             else:
                 return 0
         if next_date and (next_date - end).days > 1:
-            if (end - last_date).days != 0:
+            if (next_date - last_date).days != 0:
                 ratio = (((end - last_date).days + 1.)
                     / ((next_date - last_date).days))
                 amount += self.amount * Decimal(ratio)
