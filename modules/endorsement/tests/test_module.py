@@ -119,9 +119,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ])
         contract, = self.Contract.search([
                 ('product.code', '=', 'AAA'),
-                ('start_date', '=', datetime.date(2014, 2, 15)),
                 ])
-        effective_date = datetime.date(2014, 8, 10)
+        effective_date = contract.start_date + datetime.timedelta(weeks=24)
         previous_contract_number = contract.contract_number
         endorsement = self.Endorsement(
             definition=definition,
@@ -149,7 +148,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0031_endorsement_summary(self):
         contract, = self.Contract.search([
                 ('product.code', '=', 'AAA'),
-                ('start_date', '=', datetime.date(2014, 2, 15)),
                 ])
         endorsement, = self.Endorsement.search([
                 ('contracts', '=', contract.id),
@@ -168,7 +166,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         contract, = self.Contract.search([
                 ('product.code', '=', 'AAA'),
-                ('start_date', '=', datetime.date(2014, 2, 15)),
                 ])
         endorsement, = self.Endorsement.search([
                 ('contracts', '=', contract.id),
