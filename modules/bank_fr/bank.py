@@ -34,7 +34,7 @@ class Bank:
     def validate(cls, banks):
         super(Bank, cls).validate(banks)
         for bank in banks:
-            if not re.match('[0-9]{5}', bank.code_fr):
+            if bank.code_fr and not re.match('[0-9]{5}', bank.code_fr):
                 cls.raise_user_error('wrong_bank_code', bank.code_fr)
 
     @classmethod
