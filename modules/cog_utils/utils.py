@@ -514,3 +514,13 @@ def set_state_view_defaults(wizard, state_name):
 
 def id_generator(size=20, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
+
+
+def get_value_at_date(the_list, at_date, date_field='date'):
+    assert at_date
+    assert date_field
+    for elem in sorted(the_list, key=lambda x: getattr(x, date_field,
+                None) or datetime.date.min, reverse=True):
+        if (getattr(elem, date_field, None) or datetime.date.min) <= at_date:
+            return elem
+    return None

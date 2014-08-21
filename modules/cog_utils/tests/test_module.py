@@ -210,6 +210,34 @@ class ModuleTestCase(test_framework.CoopTestCase):
             {'value': {parent_id: 1},
                 'revisions': {parent_id: records_reverse_field[0].id}})
 
+    def test0041get_value_at_date(self):
+
+        class TestClass(object):
+            def __init__(self, date=None, value=None):
+                self.date = date
+                self.value = value
+
+        from datetime import date
+
+        value1 = TestClass(None, 10)
+        self.assertEqual(utils.get_value_at_date(
+                [value1], date(2000, 10, 1)), value1)
+
+        value2 = TestClass(date(2014, 1, 1), 20)
+        self.assertEqual(utils.get_value_at_date(
+                [value2], date(2013, 12, 31)), None)
+        self.assertEqual(utils.get_value_at_date(
+                [value2], date(2014, 1, 1)), value2)
+
+        self.assertEqual(utils.get_value_at_date(
+                [value1, value2], date(2013, 12, 31)), value1)
+        self.assertEqual(utils.get_value_at_date(
+                [value1, value2], date(2014, 1, 1)), value2)
+
+        # Check that the order does not matter
+        self.assertEqual(utils.get_value_at_date(
+                [value2, value1], date(2014, 1, 1)), value2)
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
