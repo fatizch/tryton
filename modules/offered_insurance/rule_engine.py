@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
-from trytond.pool import PoolMeta
+import functools
 
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or
 from trytond.modules.cog_utils import model, coop_string
 from trytond.modules.cog_utils import fields
@@ -8,7 +9,7 @@ from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import Pool
 
-from trytond.modules.rule_engine import check_args, debug_wrapper, RuleTools
+from trytond.modules.rule_engine import check_args, RuleTools
 
 ###############################################################################
 # We write here sets of functions that will be available in the rule engine.  #
@@ -122,36 +123,28 @@ class RuleEngine:
             'compl', self.extra_data_used)
         return res
 
-    def get_external_extra_data_def(self, elem, args):
-        OfferedSet = Pool().get('rule_engine.runtime')
+    @staticmethod
+    def get_external_extra_data_def(elem_id, args):
+        pool = Pool()
+        OfferedSet = pool.get('rule_engine.runtime')
+        ExtraData = pool.get('extra_data')
         from_object = OfferedSet.get_lowest_level_object(args)
-        res = elem.get_extra_data_value(from_object, elem.name, args['date'])
+        res = ExtraData.get_extra_data_value(from_object,
+            ExtraData(elem_id).name, args['date'])
         return res
 
-    def as_context(self, elem, kind, evaluation_context, context, forced_value,
-            debug=False):
-        super(RuleEngine, self).as_context(elem, kind, evaluation_context,
-            context, forced_value, debug)
+    def as_context(self, elem, kind, base_context):
+        super(RuleEngine, self).as_context(elem, kind, base_context)
         if kind != 'compl':
             return
         technical_name = self.get_translated_name(elem, kind)
-        if technical_name in context:
-            # Looks like the value was forced
-            return
-        context[technical_name] = \
-            lambda: self.get_external_extra_data_def(elem,
-                evaluation_context)
-        if debug:
-            context[technical_name] = debug_wrapper(context,
-                context[technical_name], technical_name)
+        base_context[technical_name] = functools.partial(
+            self.get_external_extra_data_def, elem.id)
 
-    def add_rule_parameters_to_context(self, evaluation_context,
-            execution_kwargs, context):
-        super(RuleEngine, self).add_rule_parameters_to_context(
-            evaluation_context, execution_kwargs, context)
+    def add_rule_parameters_to_context(self, base_context):
+        super(RuleEngine, self).add_rule_parameters_to_context(base_context)
         for elem in self.extra_data_used:
-            self.as_context(elem, 'compl', evaluation_context, context, None,
-                Transaction().context.get('debug'))
+            self.as_context(elem, 'compl', base_context)
 
 
 class RuleEngineRuntime:

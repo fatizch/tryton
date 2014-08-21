@@ -579,7 +579,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                 '\n\nError info :\n%s',
                 'execute_draft_rule': 'The rule %s is a draft.'
                 'Update the rule status to "Validated"',
-                'kwarg_expected': 'Expected %s as a parameter for rule %s',
+                'kwarg_expected': 'Expected %s as a parameter',
                 })
         cls._sql_constraints += [
             ('code_unique', 'UNIQUE(short_name)',
@@ -737,71 +737,84 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                         elem.name, None))
                 for elem in self.parameters])
 
-    def get_context_for_execution(self):
-        return self.context.get_context(self)
+    def get_full_context_for_execution(self):
+        base_context = self.context.get_context(self)
+        self.add_rule_parameters_to_context(base_context)
+        return base_context
 
-    def execute_rule(self, the_rule, evaluation_context, **execution_kwargs):
+    @staticmethod
+    def execute_rule(rule_id, evaluation_context, **execution_kwargs):
+        the_rule = Pool().get('rule_engine')(rule_id)
         result = the_rule.execute(evaluation_context, execution_kwargs)
         if result.has_errors:
             raise InternalRuleEngineError(
-                'Impossible to evaluate parameter %s when computing rule %s' %
-                (the_rule.short_name, self.name))
+                'Impossible to evaluate parameter %s' % the_rule.short_name)
         return result.result
 
-    def as_context(self, elem, kind, evaluation_context, context, forced_value,
-            debug=False):
+    @staticmethod
+    def execute_table(table_id, evaluation_context, *dim_values):
+        # evaluation_context is unused, but we need it so that all context
+        # functions share the same prototype
+        pool = Pool()
+        TableCell = pool.get('table.cell')
+        Table = pool.get('table')
+        return TableCell.get(Table(table_id), *dim_values)
+
+    @staticmethod
+    def execute_param(param_id, evaluation_context):
+        # evaluation_context is unused, but we need it so that all context
+        # functions share the same prototype
+        RuleParameter = Pool().get('rule_engine.rule_parameter')
+        RuleEngine.raise_user_error('kwarg_expected',
+            RuleParameter(param_id).name)
+
+    def as_context(self, elem, kind, base_context):
         technical_name = self.get_translated_name(elem, kind)
-        if technical_name in evaluation_context:
-            forced_value = evaluation_context.pop(technical_name)
-        if forced_value:
-            context[technical_name] = forced_value
-        elif kind == 'rule':
-            context[technical_name] = \
-                functools.partial(self.execute_rule, elem, evaluation_context)
+        if kind == 'rule':
+            base_context[technical_name] = functools.partial(
+                self.execute_rule, elem.id)
         elif kind == 'table':
-            context[technical_name] = \
-                functools.partial(table.TableCell.get, elem)
+            base_context[technical_name] = functools.partial(
+                self.execute_table, elem.id)
         elif kind == 'param':
-            self.raise_user_error('kwarg_expected', (elem.name, self.name))
-        else:
-            return
-        if debug:
-            context[technical_name] = debug_wrapper(context,
-                context[technical_name], technical_name)
+            base_context[technical_name] = functools.partial(
+                self.execute_param, elem.id)
 
-    def add_rule_parameters_to_context(self, evaluation_context,
-            execution_kwargs, context):
-
+    def add_rule_parameters_to_context(self, base_context):
         for elem in self.parameters:
-            if elem.name in execution_kwargs:
-                forced_value = execution_kwargs[elem.name]
-            else:
-                forced_value = None
-            self.as_context(elem, 'param', evaluation_context, context,
-                forced_value, Transaction().context.get('debug'))
+            self.as_context(elem, 'param', base_context)
         for elem in self.tables_used:
-            self.as_context(elem, 'table', evaluation_context, context, None,
-                Transaction().context.get('debug'))
+            self.as_context(elem, 'table', base_context)
         for elem in self.rules_used:
-            self.as_context(elem, 'rule', evaluation_context, context, None,
-                Transaction().context.get('debug'))
+            self.as_context(elem, 'rule', base_context)
 
     def prepare_context(self, evaluation_context, execution_kwargs):
-        context = self.get_context_for_execution()
-        the_result = RuleEngineResult()
-        context['__result__'] = the_result
-        self.add_rule_parameters_to_context(evaluation_context,
-            execution_kwargs, context)
-        context.update(evaluation_context)
-        context['context'] = context
-        return context
+        debug = Transaction().context.get('debug', True)
+        exec_context = self.get_full_context_for_execution()
+        for k, v in exec_context.iteritems():
+            if k in execution_kwargs:
+                exec_context[k] = execution_kwargs.pop(k)
+            else:
+                exec_context[k] = functools.partial(v, evaluation_context)
+        for k, v in execution_kwargs.iteritems():
+            if 'param_%s' % k in exec_context:
+                exec_context['param_%s' % k] = v
+        exec_context['evaluation_context'] = evaluation_context
+        evaluation_context['__result__'] = RuleEngineResult()
+        if not debug:
+            return exec_context
+        for k, v in exec_context.iteritems():
+            if k == 'evaluation_context':
+                continue
+            exec_context[k] = debug_wrapper(evaluation_context, v, k)
+        return exec_context
 
     def compute(self, evaluation_context, execution_kwargs):
         with Transaction().set_context(debug=self.debug_mode or
                 'force_debug_mode' in Transaction().context):
             context = self.prepare_context(evaluation_context,
                 execution_kwargs)
-            the_result = context['__result__']
+            the_result = context['evaluation_context']['__result__']
             localcontext = {}
             try:
                 comp = _compile_source_exec(self.as_function)
@@ -1038,10 +1051,10 @@ class Context(ModelView, ModelSQL, model.TaggedMixin):
                 elements.extend(element.children)
 
     def get_context(self, rule):
-        context = {}
+        base_context = {}
         for element in self.allowed_elements:
-            element.as_context(context, Transaction().context.get('debug'))
-        return context
+            element.as_context(base_context)
+        return base_context
 
     @classmethod
     def _export_light(cls):
@@ -1162,22 +1175,17 @@ class RuleFunction(ModelView, ModelSQL):
             return sum([
                 child.as_functions_list() for child in self.children], [])
 
-    def as_context(self, context, debug=False):
-        if self.translated_technical_name in context:
-            return context
-
+    def as_context(self, base_context):
+        if self.translated_technical_name in base_context:
+            return base_context
         pool = Pool()
         if self.type == 'function':
             namespace_obj = pool.get(self.namespace)
-            context[self.translated_technical_name] = \
-                functools.partial(getattr(namespace_obj, self.name), context)
-            if debug:
-                context[self.translated_technical_name] = debug_wrapper(
-                    context, context[self.translated_technical_name],
-                    self.translated_technical_name)
+            base_context[self.translated_technical_name] = getattr(
+                namespace_obj, self.name)
         for element in self.children:
-            element.as_context(context, debug)
-        return context
+            element.as_context(base_context)
+        return base_context
 
     @fields.depends('rule')
     def on_change_with_translated_technical_name(self):
@@ -1331,7 +1339,7 @@ class TestCase(ModelView, ModelSQL):
             key: noargs_func(key, value)
             for key, value in test_context.items()}
         with Transaction().set_context(force_debug_mode=True):
-            return self.rule.execute(test_context)
+            return self.rule.execute({}, test_context)
 
     @fields.depends('test_values', 'rule')
     def on_change_test_values(self):

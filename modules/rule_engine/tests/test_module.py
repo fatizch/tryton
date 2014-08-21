@@ -459,8 +459,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     "args : ('foo', 1)\n\t"
                     "result = ham\n"
                     "Entering rule_test_rule\n\t"
-                    "kwargs : {'test_parameter': 20}\n\t"
-                    'result = 20',
+                    "kwargs : {'test_parameter': 20}",
                     'debug': '',
                     'result_errors': u'test error',
                     'expected_result': '[20, [test error], [test warning],'
