@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Extra Data" col="2">
+    <label name="date"/>
+    <field name="date"/>
+    <field name="extra_data_values" no_command="1" colspan="2"/>
+</form>

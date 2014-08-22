@@ -55,7 +55,7 @@ class Contract(Printable):
             'contract': Eval('id'),
             'product': Eval('product'),
             'start_date': Eval('start_date'),
-            'all_extra_datas': Eval('extra_data')},
+            'all_extra_datas': Eval('extra_data_values')},
         domain=[
             ('item_desc', 'in', Eval('possible_item_desc', [])),
             ('parent', '=', None)],
@@ -63,7 +63,7 @@ class Contract(Printable):
             'readonly': Eval('status') != 'quote',
             'invisible': Len(Eval('possible_item_desc', [])) <= 0,
             },
-        depends=['status', 'id', 'product', 'start_date', 'extra_data',
+        depends=['status', 'id', 'product', 'start_date', 'extra_data_values',
             'possible_item_desc'])
     documents = fields.One2Many('document.request', 'needed_by', 'Documents',
         states=_STATES, depends=_DEPENDS, size=1)
@@ -249,7 +249,13 @@ class Contract(Printable):
         return True
 
     def check_contract_extra_data(self):
-        return Pool().get('extra_data').check_extra_data(self, 'extra_data')
+        final_res, final_errs = True, []
+        for extra_data in self.extra_datas:
+            res, errs = Pool().get('extra_data').check_extra_data(extra_data,
+                'extra_data_values')
+            final_res = final_res and res
+            final_errs.extend(errs)
+        return final_res, final_errs
 
     def check_contract_option_extra_data(self):
         ExtraData = Pool().get('extra_data')

@@ -301,6 +301,9 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
         self.get_contract_dates(dates, contract)
         for option in contract.options:
             self.get_option_dates(dates, option)
+        for extra_data in contract.extra_datas:
+            if extra_data.date:
+                dates.add(extra_data.date)
         return dates
 
     def get_all_extra_data(self, at_date):

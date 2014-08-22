@@ -1,10 +1,15 @@
 import datetime
+try:
+    import simplejson as json
+except ImportError:
+    import json
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
 
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool
+from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.config import CONFIG
@@ -32,6 +37,7 @@ __all__ = [
     'Contract',
     'ContractOption',
     'ContractAddress',
+    'ContractExtraDataRevision',
     'ContractSelectEndDate',
     'ContractEnd',
     'ContractSelectStartDate',
@@ -87,10 +93,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states={
             'required': Eval('status') == 'active',
             }, depends=_DEPENDS, readonly=True)
-    extra_data = fields.Dict('extra_data', 'Extra Data', states={
-            'invisible': ~Eval('extra_data'),
+    extra_datas = fields.One2Many('contract.extra_data', 'contract',
+        'Extra Data', states={
+            'invisible': ~Eval('extra_datas'),
             'readonly': Eval('status') != 'quote',
-            }, depends=['extra_data', 'status'])
+            }, depends=['extra_datas', 'status'])
     product = fields.Many2One('offered.product', 'Product',
         ondelete='RESTRICT', required=True, domain=[['OR',
                 [('end_date', '>=', Eval('start_date'))],
@@ -106,10 +113,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             'start_date': Eval('start_date'),
             'product': Eval('product'),
             'parties': Eval('parties'),
-            'all_extra_datas': Eval('extra_data')},
+            'all_extra_datas': Eval('extra_data_values')},
         domain=[('coverage.products', '=', Eval('product'))],
         states=_STATES, depends=['parties', 'status', 'start_date', 'product',
-            'extra_data'])
+            'extra_data_values'])
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
     status = fields.Selection(CONTRACTSTATUSES, 'Status')
@@ -130,6 +137,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     end_date = fields.Function(
         fields.Date('End Date'),
         'getter_contract_date', searcher='search_contract_date')
+    extra_data_values = fields.Function(
+        fields.Dict('extra_data', 'Extra Data'),
+        'get_extra_data')
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'on_change_with_parties')
@@ -249,7 +259,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             values = {i: convert(v) for i, v in values.iteritems()}
         return values
 
-    @fields.depends('product', 'options', 'start_date', 'extra_data',
+    @fields.depends('product', 'options', 'start_date', 'extra_datas',
         'appliable_conditions_date')
     def on_change_product(self):
         if self.product is None:
@@ -257,7 +267,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'product_kind': '',
                 'subscriber_kind': 'person',
                 'options': {'remove': [x.id for x in self.options]},
-                'extra_data': {},
+                'extra_datas': {'remove': [x.id for x in self.extra_datas]},
+                'extra_data_values': {},
                 }
         available_coverages = self.get_coverages(self.product)
         to_remove = []
@@ -275,12 +286,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             new_opt = Option.init_default_values_from_coverage(elem,
                 self.product)
             to_add.append([-1, new_opt])
+        extra_data_value = self.product.get_extra_data_def(
+                'contract', self.extra_datas[0].extra_data_values,
+                self.appliable_conditions_date)
         result = {
             'product_kind': self.product.kind,
             'subscriber_kind': ('person' if self.product.subscriber_kind in
                 ['all', 'person'] else 'company'),
-            'extra_data': self.product.get_extra_data_def('contract',
-                self.extra_data, self.appliable_conditions_date),
+            'extra_datas': {
+                'remove': [x.id for x in self.extra_datas],
+                'add': [(-1, {
+                            'date': None,
+                            'extra_data_values': extra_data_value})]},
+            'extra_data_values': extra_data_value,
             'product_subscriber_kind': self.product.subscriber_kind,
             }
         if not to_add and not to_remove:
@@ -292,18 +310,24 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             result['options']['remove'] = to_remove
         return result
 
-    @fields.depends('extra_data', 'start_date', 'options', 'product',
+    @fields.depends('extra_datas', 'start_date', 'options', 'product',
         'appliable_conditions_date')
-    def on_change_extra_data(self):
+    def on_change_extra_datas(self):
+        result = {'extra_datas': {'remove': [x.id for x in self.extra_datas]}}
         if not self.product:
-            return {'extra_data': {}}
-        if not self.extra_data:
-            self.extra_data = {}
-        return {
-            'extra_data': self.product.get_extra_data_def('contract',
-                self.extra_data,
-                self.appliable_conditions_date),
-            }
+            return result
+        if not self.extra_datas:
+            self.extra_datas = [
+                Pool().get('contract.extra_data')(extra_data_values={})]
+        values = self.product.get_extra_data_def(
+            'contract', self.extra_datas[0].extra_data_values,
+            self.appliable_conditions_date)
+        result['extra_datas']['add'] = [(-1, {
+                    'date': None,
+                    'extra_data_values': values,
+                    })]
+        result['extra_data_values'] = values
+        return result
 
     @fields.depends('start_date')
     def on_change_start_date(self):
@@ -449,6 +473,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 coop_string.date_as_string(self.start_date))
 
     @classmethod
+    def get_extra_data(cls, contracts, names):
+        ContractExtraData = Pool().get('contract.extra_data')
+        result = cls.get_revision_value(contracts, names,
+            ContractExtraData)
+        # Dict fields must be cast
+        for k, v in result.get('extra_data_values', {}).iteritems():
+            result['extra_data_values'][k] = json.loads(v,
+                object_hook=JSONDecoder())
+        return result
+
+    @classmethod
     def search_global(cls, text):
         for id_, rec_name, icon in super(Contract, cls).search_global(text):
             icon = icon or 'contract'
@@ -550,7 +585,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             }
 
     def init_from_product(self, product, start_date=None, end_date=None):
-        ActivationHistory = Pool().get('contract.activation_history')
+        pool  =  Pool()
+        ActivationHistory = pool.get('contract.activation_history')
+        ExtraData = pool.get('contract.extra_data')
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(product, start_date):
@@ -569,16 +606,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             self.start_date, self.end_date = start_date, end_date
             self.status = 'quote'
             self.company = product.company
+            self.extra_datas = [ExtraData(date=None, extra_data_values={})]
         else:
             self.raise_user_error('inactive_product_at_date',
                 (product.name, start_date))
         self.appliable_conditions_date = self.start_date
 
     def init_extra_data(self):
-        if not (hasattr(self, 'extra_data') and
-                self.extra_data):
-            self.extra_data = {}
-        self.extra_data = self.on_change_extra_data()['extra_data']
+        ExtraData = Pool().get('contract.extra_data')
+        if not (hasattr(self, 'extra_datas') and
+                self.extra_datas):
+            self.extra_data = []
+        on_change_values = self.on_change_extra_datas()
+        self.extra_datas = [ExtraData(**x[1])
+            for x in on_change_values['extra_datas']['add']]
+        self.extra_data_values = on_change_values['extra_data_values']
 
     def get_extra_data_def(self):
         extra_data_defs = []
@@ -709,7 +751,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def get_var_names_for_full_extract(cls):
-        return ['subscriber', ('product', 'light'), 'extra_data',
+        return ['subscriber', ('product', 'light'), 'extra_data_values',
             'options', 'covered_elements', 'start_date', 'end_date']
 
     def get_publishing_context(self, cur_context):
@@ -748,7 +790,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_all_extra_data(self, at_date):
         res = self.product.get_all_extra_data(at_date)
-        res.update(getattr(self, 'extra_data', {}))
+        extra_data = utils.get_value_at_date(self.extra_datas, at_date)
+        good_extra_data = extra_data.extra_data_values if extra_data else None
+        res.update(good_extra_data)
         return res
 
     def update_contacts(self):
@@ -943,6 +987,34 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def set_start_date(self, new_start_date):
         if self.start_date and self.start_date < new_start_date:
             self.start_date = new_start_date
+
+
+class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
+        model.CoopView):
+    'Contract Extra Data'
+
+    __name__ = 'contract.extra_data'
+    _parent_name = 'contract'
+
+    contract = fields.Many2One('contract', 'Contract', required=True,
+        select=True, ondelete='CASCADE')
+    extra_data_values = fields.Dict('extra_data', 'Extra Data')
+    extra_data_summary = fields.Function(
+        fields.Char('Extra Data Summary'),
+        'get_extra_data_summary')
+
+    @staticmethod
+    def revision_columns():
+        return ['extra_data_values']
+
+    @classmethod
+    def get_reverse_field_name(cls):
+        return 'extra_data'
+
+    @classmethod
+    def get_extra_data_summary(cls, extra_datas, name):
+        return Pool().get('extra_data').get_extra_data_summary(extra_datas,
+            'extra_data_values')
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):

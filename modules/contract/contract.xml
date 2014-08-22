@@ -133,6 +133,19 @@
         <field name="type">form</field>
         <field name="name">contract_address_form</field>
     </record>
+    <!--#################### -->
+    <!-- Contract Extra Data -->
+    <!--#################### -->
+    <record model="ir.ui.view" id="contract_extra_data_view_list">
+        <field name="model">contract.extra_data</field>
+        <field name="type">tree</field>
+        <field name="name">contract_extra_data_list</field>
+    </record>
+    <record model="ir.ui.view" id="contract_extra_data_view_form">
+        <field name="model">contract.extra_data</field>
+        <field name="type">form</field>
+        <field name="name">contract_extra_data_form</field>
+    </record>
     <!-- ############################################################ -->
     <!-- ########### Rights ########### -->
     <!-- ############################################################ -->
