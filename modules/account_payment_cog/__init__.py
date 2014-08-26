@@ -13,12 +13,12 @@ def register():
         SynthesisMenu,
         Company,
         MoveLine,
-        PaymentDateSelection,
+        PaymentInformationSelection,
         PaymentTreatmentBatch,
         PaymentCreationBatch,
         Configuration,
         module='account_payment_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,
-        PaymentDateModification,
+        PaymentInformationModification,
         module='account_payment_cog', type_='wizard')

@@ -10,8 +10,8 @@ __metaclass__ = PoolMeta
 
 __all__ = [
     'MoveLine',
-    'PaymentDateSelection',
-    'PaymentDateModification',
+    'PaymentInformationSelection',
+    'PaymentInformationModification',
     ]
 
 
@@ -69,31 +69,32 @@ class MoveLine:
         Payment.create(payments)
 
 
-class PaymentDateSelection(model.CoopView):
-    'Bank transfer Planned Date Selection'
+class PaymentInformationSelection(model.CoopView):
+    'Payment Information Selection'
 
-    __name__ = 'account.payment.payment_date_selection'
+    __name__ = 'account.payment.payment_information_selection'
 
     new_date = fields.Date('New Payment Date')
     move_line = fields.Many2One('account.move.line', 'Move Line')
 
 
-class PaymentDateModification(model.CoopWizard):
-    'Bank transfer Planned Date Modification'
-    __name__ = 'account.payment.payment_date_modification'
+class PaymentInformationModification(model.CoopWizard):
+    'Payment Information Modification'
 
-    start_state = 'payment_date_selection'
-    payment_date_selection = StateView(
-        'account.payment.payment_date_selection',
+    __name__ = 'account.payment.payment_information_modification'
+
+    start_state = 'payment_information_selection'
+    payment_information_selection = StateView(
+        'account.payment.payment_information_selection',
         'account_payment_cog.'
-        'payment_date_modification_view_form',
+        'payment_information_modification_view_form',
         [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Next', 'finalize', 'tryton-go-next', default=True),
         ])
     finalize = StateTransition()
 
-    def default_payment_date_selection(self, values):
+    def default_payment_information_selection(self, values):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         cur_model = Transaction().context.get('active_model')
@@ -106,10 +107,11 @@ class PaymentDateModification(model.CoopWizard):
             }
 
     def transition_finalize(self):
-        move_line = self.payment_date_selection.move_line
-        if (self.payment_date_selection.new_date and
-                (self.payment_date_selection.new_date !=
+        move_line = self.payment_information_selection.move_line
+        if (self.payment_information_selection.new_date and
+                (self.payment_information_selection.new_date !=
                     move_line.payment_date)):
-            move_line.payment_date = self.payment_date_selection.new_date
+            move_line.payment_date =\
+                self.payment_information_selection.new_date
             move_line.save()
         return 'end'
