@@ -14,6 +14,9 @@ def register():
         Company,
         MoveLine,
         PaymentDateSelection,
+        PaymentTreatmentBatch,
+        PaymentCreationBatch,
+        Configuration,
         module='account_payment_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,
