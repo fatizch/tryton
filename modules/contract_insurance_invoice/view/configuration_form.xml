@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='default_account_payable']"
+        position="after">
+        <label name="direct_debit_journal"/>
+        <field name="direct_debit_journal"/>
+    </xpath>
+</data>

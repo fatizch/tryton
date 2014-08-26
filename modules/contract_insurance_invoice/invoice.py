@@ -6,7 +6,7 @@ from trytond.model import fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.cog_utils import coop_string, coop_date, utils
+from trytond.modules.cog_utils import coop_string, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -160,50 +160,6 @@ class Invoice:
     def get_icon(self, name=None):
         if self.reconciled:
             return 'coopengo-reconciliation'
-
-    def get_payment(self):
-        pool = Pool()
-        Payment = pool.get('account.payment')
-        if not self.contract.direct_debit:
-            return None
-        if self.move is None or self.state != 'posted':
-            return None
-        for line in self.move.lines:
-            if line.account == self.party.account_receivable:
-                break
-        else:
-            line = None
-        if line is None:
-            return None
-        journal = self.company.get_payment_journal(self.currency, 'sepa')
-        if journal is None:
-            return None
-        date = self.invoice_date
-        date = coop_date.get_next_date_in_sync_with(date,
-            int(self.contract.direct_debit_day))
-        date = max(utils.today(), date)
-        return Payment(
-            company=self.company,
-            kind='receivable',
-            journal=journal,
-            party=self.party,
-            amount=line.debit,
-            line=line,
-            date=date,
-            state='approved',
-            )
-
-    @classmethod
-    def create_payments(cls, invoices):
-        pool = Pool()
-        Payment = pool.get('account.payment')
-        payments = []
-        for invoice in invoices:
-            payment = invoice.get_payment()
-            if payment is None:
-                continue
-            payments.append(payment)
-        return Payment.create([c._save_values for c in payments])
 
     def udpate_move_line_from_billing_information(self, line,
             billing_information):
