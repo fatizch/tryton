@@ -42,5 +42,4 @@ def register():
         DisplayContractPremium,
         CreateExtraPremium,
         SynthesisMenuOpen,
-        LoanDelete,
         module='loan', type_='wizard')

@@ -3,7 +3,6 @@ from decimal import Decimal
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, And, Or, Bool, Len, If
-from trytond.wizard import Wizard, StateTransition
 
 from trytond.modules.cog_utils import utils, coop_date, fields, model
 from trytond.modules.cog_utils import coop_string
@@ -14,7 +13,6 @@ __all__ = [
     'LoanIncrement',
     'LoanPayment',
     'LoanParty',
-    'LoanDelete',
     ]
 
 LOAN_KIND = [
@@ -652,19 +650,3 @@ class LoanParty(model.CoopSQL):
     def get_synthesis_rec_name(self, name):
         if self.loan:
             return self.loan.get_rec_name(name)
-
-
-class LoanDelete(Wizard):
-    'Loan Delete Wizard'
-
-    __name__ = 'loan.delete'
-
-    start_state = 'delete_loan'
-    delete_loan = StateTransition()
-
-    def transition_delete_loan(self):
-        Loan = Pool().get('loan')
-        active_ids = Transaction().context.get('active_ids')
-        if active_ids:
-            Loan.delete(Loan.browse(active_ids))
-        return 'end'
