@@ -585,9 +585,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             }
 
     def init_from_product(self, product, start_date=None, end_date=None):
-        pool  =  Pool()
+        pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
-        ExtraData = pool.get('contract.extra_data')
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(product, start_date):
@@ -606,7 +605,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             self.start_date, self.end_date = start_date, end_date
             self.status = 'quote'
             self.company = product.company
-            self.extra_datas = [ExtraData(date=None, extra_data_values={})]
+            self.init_extra_data()
         else:
             self.raise_user_error('inactive_product_at_date',
                 (product.name, start_date))
