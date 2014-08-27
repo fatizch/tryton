@@ -28,4 +28,9 @@
             <field name="sub_document_rules"/>
         </page>
     </xpath>
+    <xpath expr="/form/field[@name='family']" position="after">
+        <label name="insurance_kind"/>
+        <field name="insurance_kind"/>
+        <newline/>
+    </xpath>
 </data>

@@ -37,6 +37,14 @@ class OptionDescription:
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
         cls.family.selection.append(('life', 'Life'))
+        cls.insurance_kind.selection.extend([
+                ('temporary_disability', 'Temporary Disability'),
+                ('partial_disability', 'Partial Disability'),
+                ('total_disability', 'Total Disability'),
+                ('total_autonomy_loss',
+                    'Total And Irreversible Autonomy Loss'),
+                ('death', 'Death'),
+                ])
 
     def get_is_coverage_amount_needed(self, name=None):
         return not self.is_package and self.family == 'life'

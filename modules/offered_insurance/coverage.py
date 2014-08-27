@@ -22,6 +22,9 @@ COULD_NOT_FIND_A_MATCHING_RULE = 'Could not find a matching rule'
 class OptionDescription:
     __name__ = 'offered.option.description'
 
+    insurance_kind = fields.Selection([('', '')], 'Insurance Kind',
+        states={'invisible': Eval('kind') != 'insurance'}, sort=False,
+        depends=['kind'])
     insurer = fields.Many2One('insurer', 'Insurer', states={
             'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
             }, depends=['is_package'], ondelete='RESTRICT')
