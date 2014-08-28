@@ -15,6 +15,7 @@ from sql.aggregate import Count
 
 from trytond.rpc import RPC
 from trytond import backend
+from trytond.cache import Cache
 from trytond.model import ModelView as TrytonModelView
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
@@ -571,6 +572,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         fields.Boolean('Test Cases OK'),
         'get_passing_test_cases', searcher='search_passing_test_cases')
 
+    _prepare_context_cache = Cache('prepare_context')
+
     @classmethod
     def __setup__(cls):
         super(RuleEngine, cls).__setup__()
@@ -621,6 +624,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             RuleExecutionLog = Pool().get('rule_engine.log')
             RuleExecutionLog.delete(RuleExecutionLog.search([
                 ('rule', 'in', [x.id for x in rules])]))
+        cls._prepare_context_cache.clear()
         super(RuleEngine, cls).write(rules, values)
 
     @classmethod
@@ -796,8 +800,15 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
 
     def prepare_context(self, evaluation_context, execution_kwargs):
         debug = Transaction().context.get('debug', True)
-        exec_context = self.get_full_context_for_execution()
-        for k, v in exec_context.iteritems():
+        pre_context = None
+        if self.id >= 0 and not debug:
+            pre_context = self._prepare_context_cache.get(self.id)
+        if pre_context is None:
+            pre_context = self.get_full_context_for_execution()
+            if self.id >= 0 and not debug:
+                self._prepare_context_cache.set(self.id, pre_context)
+        exec_context = {'evaluation_context': evaluation_context}
+        for k, v in pre_context.iteritems():
             if k in execution_kwargs:
                 exec_context[k] = execution_kwargs.pop(k)
             else:
@@ -805,7 +816,6 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         for k, v in execution_kwargs.iteritems():
             if 'param_%s' % k in exec_context:
                 exec_context['param_%s' % k] = v
-        exec_context['evaluation_context'] = evaluation_context
         evaluation_context['__result__'] = RuleEngineResult()
         if not debug:
             return exec_context
