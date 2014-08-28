@@ -535,6 +535,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
         depends=['debug_mode'], order=[('create_date', 'DESC')])
+    execution_code = fields.Function(fields.Text('Execution Code'),
+        'on_change_with_execution_code')
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
         'Parameters', states={'invisible': Or(
                 Eval('extra_data_kind') != 'parameter',
@@ -658,6 +660,10 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     def on_change_with_data_tree(self, name=None):
         return json.dumps(self.data_tree_structure())
 
+    @fields.depends('name', 'algorithm')
+    def on_change_with_execution_code(self, name=None):
+        return self.as_function(self.name, self.algorithm)
+
     @fields.depends('short_name', 'name')
     def on_change_with_short_name(self):
         if self.short_name:
@@ -725,7 +731,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             return True
         result = not bool(filter(
             lambda m: self.filter_errors(m),
-            check_code(self.as_function)))
+            check_code(self.execution_code)))
         if result:
             return True
         self.raise_user_error('invalid_code')
@@ -817,7 +823,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             the_result = context['evaluation_context']['__result__']
             localcontext = {}
             try:
-                comp = _compile_source_exec(self.as_function)
+                comp = _compile_source_exec(self.execution_code)
                 exec comp in context, localcontext
                 if (not Transaction().context.get('debug') and
                         self.status == 'draft'):
@@ -879,10 +885,10 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                         str(exc.args)))
         return the_result
 
-    @property
-    def as_function(self):
-        code = '\n'.join(' ' + l for l in self.algorithm.splitlines())
-        name = ('%s' % hash(self.name)).replace('-', '_')
+    @staticmethod
+    def as_function(rule_name, rule_algorithm):
+        code = '\n'.join(' ' + l for l in rule_algorithm.splitlines())
+        name = ('%s' % hash(rule_name)).replace('-', '_')
         code_template = CODE_TEMPLATE % (name, name, name)
         return decistmt(code_template % code)
 
@@ -1268,7 +1274,7 @@ class TestCaseValue(ModelView, ModelSQL):
         rule_name = ('fct_%s' % hash(rule.name)).replace('-', '_')
         func_finder = FunctionFinder(
             ['Decimal', rule_name] + rule.allowed_functions())
-        ast_node = ast.parse(rule.as_function)
+        ast_node = ast.parse(rule.execution_code)
         func_finder.visit(ast_node)
         test_values = list(set([
             (n, n) for n in func_finder.functions
@@ -1415,7 +1421,7 @@ class TestCase(ModelView, ModelSQL):
             return []
         Rule = Pool().get('rule_engine')
         the_rule = Rule(Transaction().context.get('rule_id'))
-        errors = check_code(the_rule.as_function)
+        errors = check_code(the_rule.execution_code)
         result = []
         allowed_functions = the_rule.allowed_functions()
         for error in errors:
