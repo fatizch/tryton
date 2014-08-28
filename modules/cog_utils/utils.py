@@ -524,3 +524,8 @@ def get_value_at_date(the_list, at_date, date_field='date'):
         if (getattr(elem, date_field, None) or datetime.date.min) <= at_date:
             return elem
     return None
+
+
+def get_history_instance(model_name, instance_id, at_date):
+    with Transaction().set_context(_datetime=at_date):
+        return Pool().get(model_name)(instance_id)

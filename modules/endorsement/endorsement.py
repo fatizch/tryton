@@ -9,7 +9,7 @@ from trytond.pyson import Eval, PYSONEncoder
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields, coop_string, utils
 
 
 __all__ = [
@@ -22,47 +22,6 @@ __all__ = [
     'EndorsementContract',
     'EndorsementOption',
     ]
-
-
-class HistoryBrowser(object):
-    def __init__(self, base_model, base_id, evaluation_date):
-        self._evaluation_date = evaluation_date
-        try:
-            if not self._evaluation_date:
-                self._base_instance = base_model(base_id)
-            else:
-                with Transaction().set_context(
-                        _datetime=self._evaluation_date):
-                    self._base_instance = base_model(
-                        **base_model.read([base_id])[0])
-        except:
-            # Instance did not exist at that time:
-            self._base_instance = None
-
-    def __getattr__(self, name):
-        if name in ('_evaluation_date', '_base_model', '_base_id'):
-            return self.__dict__[name]
-        try:
-            if not self._evaluation_date:
-                return getattr(self._base_instance, name)
-            with Transaction().set_context(_datetime=self._evaluation_date):
-                result = getattr(self._base_instance, name)
-                if isinstance(result, Model):
-                    return HistoryBrowser(result.__class__, result.id,
-                        self._evaluation_date)
-                elif isinstance(result, (list, tuple)):
-                    return [HistoryBrowser(
-                            x.__class__, x.id, self._evaluation_date)
-                        for x in result]
-                else:
-                    return result
-        except:
-            return None
-
-    def __str__(self):
-        return 'History @ %s for %s' % (
-            self._evaluation_date,
-            self._base_instance)
 
 
 def field_mixin(model):
@@ -406,8 +365,8 @@ def relation_mixin(value_model, field, model, name):
         def base_instance(self):
             if not self.relation:
                 return None
-            BaseModel = Pool().get(model)
-            return HistoryBrowser(BaseModel, self.relation, self.applied_on)
+            return utils.get_history_instance(model, self.relation,
+                self.applied_on)
 
         def get_summary(self, model, base_object=None, indent=0, increment=2):
             if self.action == 'remove':
@@ -558,7 +517,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 endorsed_record = unitary_endorsement.get_endorsed_record()
                 endorsed_model, endorsed_id = (endorsed_record.__name__,
                     endorsed_record.id)
-                old_record = HistoryBrowser(pool.get(endorsed_model),
+                old_record = utils.get_history_instance(endorsed_model,
                     endorsed_id, self.application_date)
                 old_values['%s,%i' % (endorsed_model, endorsed_id)] = \
                     self.definition.extract_contract_values(old_record)
@@ -640,8 +599,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             return None
         if not self.applied_on:
             return self.contract
-        Contract = Pool().get('contract')
-        return HistoryBrowser(Contract, self.contract.id, self.applied_on)
+        return utils.get_history_instance('contract', self.contract.id,
+            self.applied_on)
 
     def get_definition(self, name):
         return self.endorsement.definition.id if self.endorsement else None
