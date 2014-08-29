@@ -4,6 +4,7 @@ from .account import *
 
 def register():
     Pool.register(
+        Journal,
         Move,
         SnapshotStart,
         SnapshotDone,

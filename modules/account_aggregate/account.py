@@ -1,7 +1,7 @@
 from sql import Literal
 Null = None  # TODO remove when python-sql >=0.3
 from sql.aggregate import Max, Sum
-from sql.conditionals import Coalesce
+from sql.conditionals import Coalesce, Case
 from sql.functions import Now
 
 from trytond.pool import PoolMeta, Pool
@@ -11,11 +11,20 @@ from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
 from trytond.transaction import Transaction
 
-__all__ = ['Move',
+__all__ = ['Journal', 'Move',
     'Snapshot', 'SnapshotStart', 'SnapshotDone',
     'LineAggregated',
     'OpenLineAggregated', 'OpenLine']
 __metaclass__ = PoolMeta
+
+
+class Journal:
+    __name__ = 'account.journal'
+    aggregate = fields.Boolean('Aggregate')
+
+    @staticmethod
+    def default_aggregate():
+        return True
 
 
 class Move:
@@ -84,8 +93,11 @@ class LineAggregated(ModelSQL, ModelView):
         line = Line.__table__()
         Move = pool.get('account.move')
         move = Move.__table__()
+        Journal = pool.get('account.journal')
+        journal = Journal.__table__()
 
         return line.join(move, condition=line.move == move.id
+            ).join(journal, condition=move.journal == journal.id
             ).select(
                 Max(line.id).as_('id'),
                 Literal(0).as_('create_uid'),
@@ -100,6 +112,7 @@ class LineAggregated(ModelSQL, ModelView):
                 Sum(Coalesce(line.credit, 0)).as_('credit'),
                 group_by=[
                     line.account,
+                    Case((journal.aggregate, move.journal), else_=line.id),
                     move.journal,
                     move.post_date,
                     move.snapshot])
@@ -146,11 +159,17 @@ class OpenLine(Wizard):
 
         lines = LineAggregated.browse(Transaction().context['active_ids'])
 
-        action['pyson_domain'] = ['OR'] + [[
-                ('account', '=', l.account.id),
-                ('move.journal', '=', l.journal.id),
-                ('move.post_date', '=', l.post_date),
-                ('move.snapshot', '=', l.snapshot),
-                ] for l in lines]
+        def domain(line):
+            if line.journal.aggregate:
+                return [
+                    ('account', '=', l.account.id),
+                    ('move.journal', '=', l.journal.id),
+                    ('move.post_date', '=', l.post_date),
+                    ('move.snapshot', '=', l.snapshot),
+                    ]
+            else:
+                return [('id', '=', l.id)]
+
+        action['pyson_domain'] = ['OR'] + [domain(l) for l in lines]
         action['pyson_domain'] = PYSONEncoder().encode(action['pyson_domain'])
         return action, {}
