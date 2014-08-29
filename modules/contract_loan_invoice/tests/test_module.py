@@ -18,4 +18,5 @@ def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
         ModuleTestCase))
+    # TODO add scenario to test invoicing
     return suite

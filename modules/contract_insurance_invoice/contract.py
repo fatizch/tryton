@@ -415,7 +415,11 @@ class Contract:
             'covered_extra_premium': covered_extra_premium_query,
             }
 
+
     def get_all_invoice_lines(self, start, end):
+        return self.compute_invoice_lines(start, end)
+
+    def compute_invoice_lines(self, start, end):
         Premium = Pool().get('contract.premium')
         # Returns all contract related invoice lines mathing start / end date
         queries = self.get_invoice_line_queries(start, end)

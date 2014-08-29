@@ -7,6 +7,7 @@ def register():
     Pool.register(
         LoanShare,
         Premium,
+        PremiumAmount,
         Contract,
         Loan,
         DisplayLoanAveragePremiumValues,

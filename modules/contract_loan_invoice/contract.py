@@ -9,6 +9,7 @@ from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
+from trytond.model import ModelSQL, ModelView
 
 from trytond.modules.cog_utils import fields, model, utils, coop_date
 
@@ -17,6 +18,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'LoanShare',
     'Premium',
+    'PremiumAmount',
     'Contract',
     'Loan',
     'DisplayLoanAveragePremiumValues',
@@ -164,6 +166,77 @@ class Contract:
             return super(Contract, self).first_invoice()
         self.delete_safe_invoices([self])
         self.invoice([self], self.end_date)
+
+    def get_all_invoice_lines(self, start, end):
+        pool = Pool()
+        Amount = pool.get('contract.premium.amount')
+        InvoiceLine = pool.get('account.invoice.line')
+        if not self.is_loan:
+            return super(Contract, self).get_invoice_lines(start, end)
+        lines = []
+        amounts = Amount.search([
+                ('period_start', '=', start),
+                ('period_end', '=', end),
+                ('contract', '=', self.id),
+                ])
+        for amount in amounts:
+            line = InvoiceLine(
+                type='line',
+                description=amount.premium.get_description(),
+                origin=amount.premium,
+                quantity=1,
+                unit=None,
+                unit_price=amount.amount,
+                taxes=amount.premium.taxes,
+                invoice_type='out_invoice',
+                account=amount.premium.account,
+                coverage_start=amount.start,
+                coverage_end=amount.end,
+                )
+            lines.append(line)
+        return lines
+
+    @classmethod
+    def generate_premium_amount(cls, contracts, up_to_date):
+        'Generate premium amount up to the date'
+        pool = Pool()
+        Amount = pool.get('contract.premium.amount')
+        amounts = []
+        for contract in contracts:
+            if not contract.is_loan:
+                continue
+            for period in contract.get_invoice_periods(
+                    min(up_to_date, contract.end_date or datetime.date.max)):
+                period = period[:2]  # XXX there is billing information
+                invoice_lines = contract.compute_invoice_lines(*period)
+                for invoice_line in invoice_lines:
+                    amount = Amount(
+                        premium=invoice_line.origin,
+                        period_start=period[0],
+                        period_end=period[1],
+                        start=invoice_line.coverage_start,
+                        end=invoice_line.coverage_end,
+                        amount=invoice_line.unit_price,
+                        contract=contract,
+                        )
+                    amounts.append(amount)
+        Amount.create([a._save_values for a in amounts])
+
+
+class PremiumAmount(ModelSQL, ModelView):
+    'Premium Amount'
+    __name__ = 'contract.premium.amount'
+    premium = fields.Many2One('contract.premium', 'Premium', select=True,
+        ondelete='CASCADE')
+    # XXX duplicate with premium but it is not possible with current design to
+    # search via premium
+    contract = fields.Many2One('contract', 'Contract', select=True,
+        ondelete='CASCADE')
+    period_start = fields.Date('Period Start')
+    period_end = fields.Date('Period End')
+    start = fields.Date('Start')
+    end = fields.Date('End')
+    amount = fields.Numeric('Amount')
 
 
 class Loan:
