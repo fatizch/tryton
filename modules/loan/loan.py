@@ -1,3 +1,4 @@
+import bisect
 from decimal import Decimal
 
 from trytond.pool import Pool
@@ -89,8 +90,9 @@ class Loan(model.CoopSQL, model.CoopView):
                 [],
                 )],
         depends=['kind'])
-    payments = fields.One2Many('loan.payment', 'loan',
-        'Payments')
+    payments = fields.One2Many('loan.payment', 'loan', 'Payments',
+        # We force the order to make sure bisect will work properly
+        order=[('start_date', 'ASC')])
     increments = fields.One2Many('loan.increment', 'loan', 'Increments',
         context={
             'payment_frequency': Eval('payment_frequency'),
@@ -421,9 +423,10 @@ class Loan(model.CoopSQL, model.CoopView):
     def get_payment(self, at_date=None):
         if not at_date:
             at_date = utils.today()
-        for payment in reversed(self.payments):
-            if payment.start_date <= at_date:
-                return payment
+        bisect_list = utils.ProxyListWithGetter(self.payments,
+            lambda x: x.start_date)
+        insert_idx = bisect.bisect_right(bisect_list, at_date)
+        return self.payments[insert_idx - 1] if insert_idx else None
 
     def get_outstanding_loan_balance(self, name=None, at_date=None):
         payment = self.get_payment(at_date)
