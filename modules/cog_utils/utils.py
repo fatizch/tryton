@@ -526,6 +526,36 @@ def get_value_at_date(the_list, at_date, date_field='date'):
     return None
 
 
+class ProxyListWithGetter(object):
+    """
+       A proxy class for lists which allows to use a custom method to get
+       items from the list.
+
+       This allows for instance to easily iterate on an attribute value of a
+       list of objects :
+           ProxyListWithGetter(parties, lambda x: x.name)
+
+       will behave the same way that the list of names would.
+   """
+
+    def __init__(self, the_list, getter_function=None):
+        if getter_function is None:
+            getter_function = lambda x: x
+        self._the_list = the_list
+        self._getter_function = getter_function
+
+    def __getattr__(self, attrname):
+        return getattr(self._the_list, attrname)
+
+    def __getitem__(self, idx):
+        return self._getter_function(self._the_list[idx])
+
+    def __len__(self):
+        # We must manually override __len__ because the len builtin does not
+        # use getattr(__len__) for new style classes
+        return len(self._the_list)
+
+
 def get_history_instance(model_name, instance_id, at_date):
     with Transaction().set_context(_datetime=at_date):
         return Pool().get(model_name)(instance_id)

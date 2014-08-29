@@ -238,6 +238,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(utils.get_value_at_date(
                 [value2, value1], date(2014, 1, 1)), value2)
 
+    def test0042_test_list_proxy(self):
+        test_list = [
+            (1, 10),
+            (4, 20),
+            (10, 14),
+            ]
+        proxied_list = utils.ProxyListWithGetter(test_list,
+            lambda x: x[0])
+        self.assertEqual([x for x in proxied_list], [1, 4, 10])
+        self.assertEqual(len(proxied_list), 3)
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
