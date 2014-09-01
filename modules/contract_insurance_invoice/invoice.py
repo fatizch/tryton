@@ -179,18 +179,21 @@ class Invoice:
             line.update(res)
             return line
 
+    def update_invoice_before_post(self):
+        self.invoice_date = self.contract_invoice.start
+        return {'invoice_date': self.contract_invoice.start}
+
     @classmethod
     def post(cls, invoices):
-        res = []
+        updated_invoices = []
         for invoice in invoices:
             if (invoice.state not in ('validated', 'draft') or
                     not invoice.contract_invoice):
                 continue
-            res += [[invoice],
-                {'invoice_date': invoice.contract_invoice.start}]
-            invoice.invoice_date = invoice.contract_invoice.start
-        if res:
-            cls.write(*res)
+            updated_invoices += [[invoice],
+                invoice.update_invoice_before_post()]
+        if updated_invoices:
+            cls.write(*updated_invoices)
         super(Invoice, cls).post(invoices)
 
     def check_cancel_move(self):
