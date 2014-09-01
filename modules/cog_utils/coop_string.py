@@ -86,7 +86,7 @@ def translate_value(instance, var_name, lang=None):
 
     ttype = None
     if _type == 'selection':
-        res = selection_as_string(instance, var_name)
+        res = selection_as_string(instance.__class__, var_name, getattr(instance, var_name))
         ttype = field.__class__._type
     elif _type == 'date':
         res = date_as_string(getattr(instance, var_name), lang)
@@ -141,16 +141,16 @@ def get_descendents_name(from_class):
     return result
 
 
-def selection_as_string(instance, var_name):
-    field = getattr(instance.__class__, var_name)
+def selection_as_string(cls, var_name, value):
+    field = getattr(cls, var_name)
     if hasattr(field, '_field'):
         selection = field._field.selection
     else:
         selection = field.selection
     if type(selection) is str:
-        selection = getattr(instance.__class__, selection)()
+        selection = getattr(cls, selection)()
     for cur_tuple in selection:
-        if cur_tuple[0] == getattr(instance, var_name):
+        if cur_tuple[0] == value:
             return cur_tuple[1]
 
 
