@@ -96,7 +96,7 @@ class Contract:
         PremiumAmount.delete(premiums_to_delete)
         # Delete invoices, as generate_premium_amount filters existing
         # periods
-        cls.delete_contract_invoices(loan_contracts, start, end)
+        cls.clean_up_contract_invoices(loan_contracts, start, end)
         cls.generate_premium_amount(loan_contracts)
         return result
 
@@ -179,13 +179,6 @@ class Contract:
             return values
 
         return result_parser
-
-    def first_invoice(self):
-        if not (self.is_loan and self.end_date):
-            return super(Contract, self).first_invoice()
-        ContractInvoice = Pool().get('contract.invoice')
-        ContractInvoice.delete(self.invoices)
-        self.invoice([self], self.end_date)
 
     def get_invoice_lines(self, start, end):
         pool = Pool()

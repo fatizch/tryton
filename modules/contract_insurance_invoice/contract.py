@@ -12,7 +12,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, And, Len, If, Bool
 from trytond import backend
 from trytond.transaction import Transaction
-from trytond.tools import reduce_ids
+from trytond.tools import reduce_ids, grouped_slice
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.rpc import RPC
 
@@ -215,9 +215,33 @@ class Contract:
                     start = until
         return periods
 
+    @classmethod
+    def clean_up_contract_invoices(cls, contracts, from_date=None,
+            to_date=None):
+        pool = Pool()
+        ContractInvoice = pool.get('contract.invoice')
+        contract_invoices = []
+        for contract_slice in grouped_slice(contracts):
+            contract_invoices += ContractInvoice.search([
+                    ('contract', 'in', [x.id for x in contract_slice]),
+                    ('start', '>=', from_date or datetime.date.min),
+                    ('end', '<=', to_date or datetime.date.max),
+                    ])
+
+        actions = {
+            'cancel': [],
+            'delete': [],
+            }
+        for contract_invoice in contract_invoices:
+            actions[contract_invoice.cancel_or_delete()].append(
+                contract_invoice)
+        if actions['delete']:
+            ContractInvoice.delete(actions['delete'])
+        if actions['cancel']:
+            ContractInvoice.cancel(actions['cancel'])
+
     def first_invoice(self):
-        ContractInvoice = Pool().get('contract.invoice')
-        ContractInvoice.delete(self.invoices)
+        self.clean_up_contract_invoices([self])
         self.invoice([self], self.start_date)
 
     @classmethod
@@ -673,6 +697,11 @@ class ContractInvoice(ModelSQL, ModelView):
         Invoice = Pool().get('account.invoice')
         Invoice.delete([x.invoice for x in contract_invoices])
         super(ContractInvoice, cls).delete(contract_invoices)
+
+    def cancel_or_delete(self):
+        if self.invoice_state in ('validated', 'draft'):
+            return 'delete'
+        return 'cancel'
 
 
 class CoveredElement:
