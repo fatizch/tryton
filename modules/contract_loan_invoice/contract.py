@@ -7,6 +7,7 @@ from sql.operators import Concat
 
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
+from trytond.tools import grouped_slice
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.model import ModelSQL, ModelView
@@ -80,6 +81,24 @@ class Premium:
 
 class Contract:
     __name__ = 'contract'
+
+    @classmethod
+    def calculate_prices(cls, contracts, start=None, end=None):
+        result = super(Contract, cls).calculate_prices(contracts, start, end)
+        loan_contracts = [x for x in contracts if x.is_loan]
+        if not loan_contracts:
+            return result
+        PremiumAmount = Pool().get('contract.premium.amount')
+        premiums_to_delete = []
+        for sub_contracts in grouped_slice(loan_contracts):
+            premiums_to_delete.extend(PremiumAmount.search([
+                        ('contract', 'in', sub_contracts)]))
+        PremiumAmount.delete(premiums_to_delete)
+        # Delete invoices, as generate_premium_amount filters existing
+        # periods
+        cls.delete_contract_invoices(loan_contracts, start, end)
+        cls.generate_premium_amount(loan_contracts)
+        return result
 
     def calculate_premium_aggregates(self, start=None, end=None):
         cursor = Transaction().cursor
@@ -168,7 +187,7 @@ class Contract:
         ContractInvoice.delete(self.invoices)
         self.invoice([self], self.end_date)
 
-    def get_all_invoice_lines(self, start, end):
+    def get_invoice_lines(self, start, end):
         pool = Pool()
         Amount = pool.get('contract.premium.amount')
         InvoiceLine = pool.get('account.invoice.line')
@@ -198,16 +217,16 @@ class Contract:
         return lines
 
     @classmethod
-    def generate_premium_amount(cls, contracts, up_to_date):
-        'Generate premium amount up to the date'
+    def generate_premium_amount(cls, contracts):
+        'Generate premium amount up to the contract end_date'
         pool = Pool()
         Amount = pool.get('contract.premium.amount')
         amounts = []
         for contract in contracts:
             if not contract.is_loan:
                 continue
-            for period in contract.get_invoice_periods(
-                    min(up_to_date, contract.end_date or datetime.date.max)):
+            assert contract.end_date
+            for period in contract.get_invoice_periods(contract.end_date):
                 period = period[:2]  # XXX there is billing information
                 invoice_lines = contract.compute_invoice_lines(*period)
                 for invoice_line in invoice_lines:

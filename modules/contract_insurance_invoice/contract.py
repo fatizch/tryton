@@ -295,6 +295,9 @@ class Contract:
             )
 
     def get_invoice_lines(self, start, end):
+        return self.compute_invoice_lines(start, end)
+
+    def compute_invoice_lines(self, start, end):
         lines = []
         for premium in self.premiums:
             lines.extend(premium.get_invoice_lines(start, end))
