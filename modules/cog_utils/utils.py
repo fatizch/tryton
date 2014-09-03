@@ -130,7 +130,7 @@ def get_good_versions_at_date(instance, var_name, at_date=None,
     if get_good_versions_at_date:
         return get_good_versions_at_date(var_name, at_date)
     res = set()
-    for elem in reversed(getattr(instance, var_name)):
+    for elem in reversed(getattr(instance, var_name, [])):
         if is_effective_at_date(elem, at_date, start_var_name, end_var_name):
             res.add(elem)
     return list(set(res))
