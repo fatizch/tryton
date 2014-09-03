@@ -128,15 +128,6 @@
       <field name="name">_re_get_subscription_end_date</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
-    <record model="rule_engine.function" id="montant_de_couverture">
-      <field name="translated_technical_name">montant_de_couverture</field>
-      <field name="description">Montant de couverture</field>
-      <field name="type">function</field>
-      <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_get_coverage_amount</field>
-      <field name="parent" ref="dossier_donnees_couverture"/>
-    </record>
     <record model="rule_engine.function" id="donnee_compl_element_couvert">
       <field name="translated_technical_name">donnee_compl_element_couvert</field>
       <field name="description">Donnée complémentaire Elément Couvert</field>
