@@ -59,3 +59,7 @@ class Statement:
     @classmethod
     def search_in_bank_deposit_ticket(cls, name, clause):
         return [('journal.bank_deposit_ticket_statement',) + tuple(clause[1:])]
+
+    @classmethod
+    def validate_manual(self):
+        pass
