@@ -123,12 +123,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[If(
                 Eval('subscriber_kind') == 'person',
-                ('is_person', '=', True),
-                ('id', '>', 0)),
+                [('is_person', '=', True)],
+                []),
             If(
                 Eval('subscriber_kind') == 'company',
-                ('is_company', '=', True),
-                ('id', '>', 0))],
+                [('is_company', '=', True)],
+                [])],
         states=_STATES, depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
     current_policy_owner = fields.Function(
