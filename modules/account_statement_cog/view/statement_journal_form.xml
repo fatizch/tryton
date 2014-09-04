@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form" position="inside">
+        <label name="sequence"/>
+        <field name="sequence"/>
         <label name="bank_deposit_ticket_statement"/>
         <field name="bank_deposit_ticket_statement"/>
     </xpath>

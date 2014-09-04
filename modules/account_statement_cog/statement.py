@@ -1,6 +1,6 @@
-from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import fields
-from trytond.modules.cog_utils import coop_string
+from trytond.pool import PoolMeta, Pool
+
+from trytond.modules.cog_utils import fields, coop_string
 
 __metaclass__ = PoolMeta
 
@@ -48,6 +48,20 @@ class Statement:
     def __setup__(cls):
         super(Statement, cls).__setup__()
         cls.lines.depends.append('in_bank_deposit_ticket')
+        cls.name.readonly = True
+
+    @classmethod
+    def create(cls, vlist):
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        Journal = pool.get('account.statement.journal')
+        vlist = [x.copy() for x in vlist]
+        for vals in vlist:
+            if not vals.get('name'):
+                journal_id = vals.get('journal')
+                journal = Journal(journal_id)
+                vals['name'] = Sequence.get_id(journal.sequence.id)
+        return super(Statement, cls).create(vlist)
 
     @fields.depends('journal')
     def on_change_with_in_bank_deposit_ticket(self, name=None):

@@ -45,5 +45,20 @@
         </record>
         <menuitem parent="account_statement.menu_statements" sequence="10"
             action="act_statement_bank_deposit_form" id="menu_statement_bank_deposit_form"/>
+
+        <record model="ir.sequence.type" id="sequence_type_statement">
+            <field name="name">Statement</field>
+            <field name="code">statement</field>
+        </record>
+        <record model="ir.sequence.type-res.group"
+            id="sequence_type_statement_group_admin">
+            <field name="sequence_type" ref="sequence_type_statement"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.sequence.type-res.group"
+            id="sequence_type_statement_group_statement">
+            <field name="sequence_type" ref="sequence_type_statement"/>
+            <field name="group" ref="account_statement.group_statement"/>
+        </record>
     </data>
 </tryton>

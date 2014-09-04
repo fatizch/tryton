@@ -13,6 +13,8 @@ class Journal:
 
     bank_deposit_ticket_statement = fields.Boolean(
         'Bank Deposit Ticket Statement')
+    sequence = fields.Many2One('ir.sequence', 'Statement Sequence',
+        required=True, domain=[('code', '=', 'statement')])
 
     @classmethod
     def __setup__(cls):
