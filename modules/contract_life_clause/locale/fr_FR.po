@@ -50,10 +50,6 @@ msgctxt "field:contract.option.beneficiary,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.option.beneficiary,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:contract.option.beneficiary,option:"
 msgid "Option"
 msgstr "Option"

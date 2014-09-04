@@ -14,6 +14,10 @@ msgstr ""
 "La somme des échéances des paliers (%s) ne correspond pas au nombre "
 "d'échéances du prêt (%s)"
 
+msgctxt "field:billing.premium.date_configuration,every_loan_payment:"
+msgid "Calculate each payment"
+msgstr "Calculer chaque paiement"
+
 msgctxt "field:contract,doc_received:"
 msgid "All Document Received"
 msgstr "Documents Reçus"
@@ -72,14 +76,6 @@ msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer.option,share:"
 msgid "Loan Share"
 msgstr "Quotité"
-
-msgctxt "field:insurer,currency_symbol:"
-msgid "Currency Symbol"
-msgstr "Symbole de la Devise"
-
-msgctxt "field:insurer,total_outstanding_loan_balance:"
-msgid "Total Loan Outstanding Capital"
-msgstr "Encours total"
 
 msgctxt "field:loan,amount:"
 msgid "Amount"
@@ -449,6 +445,10 @@ msgctxt "field:loan.share,loan:"
 msgid "Loan"
 msgstr "Prêt"
 
+msgctxt "field:loan.share,must_expand_tree:"
+msgid "Must Expand Tree"
+msgstr "Etendre l'arbre"
+
 msgctxt "field:loan.share,option:"
 msgid "Option"
 msgstr "Garantie Souscrite"
@@ -485,13 +485,113 @@ msgctxt "field:offered.option.description,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
 
-msgctxt "field:offered.product,calculate_each_payment:"
-msgid "Calculate each payment"
-msgstr "Calculer à Chaque Echéance"
-
 msgctxt "field:offered.product,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.line_view,amount:"
+msgid "Insured Outstanding Loan Balance"
+msgstr "Encours"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.line_view,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.line_view,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.line_view,currency_symbol:"
+msgid "Symbol"
+msgstr "Symbole"
+
+msgctxt "field:party.display_insured_outstanding_loan_balance.line_view,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.line_view,insurers:"
+msgid "Loan Insurers"
+msgstr "Assureurs"
+
+msgctxt "field:party.display_insured_outstanding_loan_balance.line_view,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:party.display_insured_outstanding_loan_balance.select_date,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,possible_currencies:"
+msgid "Possible Currencies"
+msgstr "Devises disponibles"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt ""
+"field:party.display_insured_outstanding_loan_balance.select_date,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.display_insured_outstanding_loan_balance.view,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt "field:party.display_insured_outstanding_loan_balance.view,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:party.display_insured_outstanding_loan_balance.view,insurers:"
+msgid "Loan Insurers"
+msgstr "Assureurs"
 
 msgctxt "field:party.party,loan_insurers:"
 msgid "Loan Insurers"
@@ -545,9 +645,17 @@ msgctxt "model:ir.action,name:act_create_loan"
 msgid "Create Loan"
 msgstr "Créer un prêt"
 
+msgctxt "model:ir.action,name:act_display_insured_outstanding_loan_balance"
+msgid "Insured Outstanding Loan Balances"
+msgstr "Encours"
+
 msgctxt "model:ir.action,name:act_loan_form"
 msgid "Loans"
 msgstr "Prêts"
+
+msgctxt "model:ir.action,name:act_loan_payment_relate_form"
+msgid "Loan Payments"
+msgstr "Echéances"
 
 msgctxt "model:ir.action,name:launch_loan_creation_wizard"
 msgid "Loan Create"
@@ -580,6 +688,19 @@ msgstr "Echéance"
 msgctxt "model:loan.share,name:"
 msgid "Loan Share"
 msgstr "Quotité"
+
+msgctxt "model:party.display_insured_outstanding_loan_balance.line_view,name:"
+msgid "Insured Outstanding Loan Balance Line View"
+msgstr "Vue d'un encours"
+
+msgctxt ""
+"model:party.display_insured_outstanding_loan_balance.select_date,name:"
+msgid "Date selector for insured outstanding loan balance display"
+msgstr "Selection de la date"
+
+msgctxt "model:party.display_insured_outstanding_loan_balance.view,name:"
+msgid "Insured Outstanding Loan Balance View"
+msgstr "Vue des encours"
 
 msgctxt "model:party.synthesis.menu.loan,name:"
 msgid "Party Synthesis Menu Loan"
@@ -770,8 +891,28 @@ msgid "Loan Parameters"
 msgstr "Paramètres du prêt"
 
 msgctxt "view:loan:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "view:loan:"
 msgid "Quota share"
 msgstr "Quotité"
+
+msgctxt "view:party.display_insured_outstanding_loan_balance.line_view:"
+msgid "Insurer"
+msgstr "Assureur"
+
+msgctxt "view:party.display_insured_outstanding_loan_balance.line_view:"
+msgid "Insurers"
+msgstr "Assureurs"
+
+msgctxt "view:party.display_insured_outstanding_loan_balance.select_date:"
+msgid "Select Date"
+msgstr "Sélectionner la date"
+
+msgctxt "view:party.display_insured_outstanding_loan_balance.view:"
+msgid "Insured Outstanding Loan Balances"
+msgstr "Encours assurés"
 
 msgctxt "view:party.party:"
 msgid "Loan Information"
@@ -808,3 +949,23 @@ msgstr "Précédent"
 msgctxt "wizard_button:loan.create,loan_step_payments,save_loan:"
 msgid "End"
 msgstr "Terminer"
+
+msgctxt ""
+"wizard_button:party.display_insured_outstanding_loan_balance,insured_outstanding_loan_balance_view,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt ""
+"wizard_button:party.display_insured_outstanding_loan_balance,insured_outstanding_loan_balance_view,select_date:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:party.display_insured_outstanding_loan_balance,select_date,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:party.display_insured_outstanding_loan_balance,select_date,insured_outstanding_loan_balance_view:"
+msgid "Next"
+msgstr "Suivant"

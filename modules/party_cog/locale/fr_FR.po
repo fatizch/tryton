@@ -156,10 +156,6 @@ msgctxt "field:party.interaction,media:"
 msgid "Media"
 msgstr ""
 
-msgctxt "field:party.interaction,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:party.interaction,party:"
 msgid "Party"
 msgstr "Acteur"
@@ -504,10 +500,6 @@ msgctxt "field:party.synthesis.menu.open_state,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:party.synthesis.menu.open_state,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:party.synthesis.menu.open_state,need_refresh:"
 msgid "Need Refresh"
 msgstr "Besoin de rafraichir la synthèse"
@@ -619,6 +611,10 @@ msgstr "Sociétés"
 msgctxt "model:ir.action,name:act_contact_history_relate_form"
 msgid "Party Interaction"
 msgstr "Historique des Contacts"
+
+msgctxt "model:ir.action,name:act_contact_mechanisms_relate_form"
+msgid "Contact Mechanisms"
+msgstr "Moyens de contact"
 
 msgctxt "model:ir.action,name:act_menu_form"
 msgid "Synthesis"
@@ -771,10 +767,6 @@ msgstr "Société"
 msgctxt "view:party.party:"
 msgid "Contact"
 msgstr "Contact"
-
-msgctxt "view:party.party:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
 
 msgctxt "view:party.party:"
 msgid "Party Synthesis"

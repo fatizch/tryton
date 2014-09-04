@@ -6,6 +6,14 @@ msgctxt "error:bank.account.number:"
 msgid "Invalid RIB number : %s"
 msgstr ""
 
+msgctxt "error:bank:"
+msgid "The bank code %s must contain 5 numeric chars."
+msgstr "Le code banque %s doit contenir 5 caractères numériques"
+
+msgctxt "field:bank,code_fr:"
+msgid "Bank Code"
+msgstr "Code Banque"
+
 msgctxt "field:bank.account.number,account_number:"
 msgid "Account Number"
 msgstr "Numéro de Compte"

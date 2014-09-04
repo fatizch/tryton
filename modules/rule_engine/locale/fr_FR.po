@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -43,8 +43,8 @@ msgstr ""
 "consulter les logs.\\n\\nInformations sur l'erreur :\\n%s"
 
 msgctxt "error:rule_engine:"
-msgid "Expected %s as a parameter for rule %s"
-msgstr "Le paramètre %s est requis pour exécuter la règle %s"
+msgid "Expected %s as a parameter"
+msgstr "%s doit être un paramètre"
 
 msgctxt "error:rule_engine:"
 msgid "The code must be unique"
@@ -87,10 +87,6 @@ msgstr "ID"
 msgctxt "field:functional_error,kind:"
 msgid "Kind"
 msgstr "Portée de la donnée"
-
-msgctxt "field:functional_error,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:functional_error,name:"
 msgid "Name"
@@ -144,6 +140,10 @@ msgctxt "field:rule_engine,exec_logs:"
 msgid "Execution Logs"
 msgstr "Logs d'exécution"
 
+msgctxt "field:rule_engine,execution_code:"
+msgid "Execution Code"
+msgstr "Code à exécuter"
+
 msgctxt "field:rule_engine,extra_data:"
 msgid "Display Extra Data"
 msgstr "Afficher Plus de Données"
@@ -155,10 +155,6 @@ msgstr "Type de donnée"
 msgctxt "field:rule_engine,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine,name:"
 msgid "Name"
@@ -316,10 +312,6 @@ msgctxt "field:rule_engine.context,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.context,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:rule_engine.context,name:"
 msgid "Name"
 msgstr "Nom"
@@ -428,10 +420,6 @@ msgctxt "field:rule_engine.function,long_description:"
 msgid "Long Description"
 msgstr "Description"
 
-msgctxt "field:rule_engine.function,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:rule_engine.function,name:"
 msgid "Name"
 msgstr "Nom"
@@ -508,10 +496,6 @@ msgctxt "field:rule_engine.log,low_level_debug:"
 msgid "Execution Trace"
 msgstr "Trace d'exécution"
 
-msgctxt "field:rule_engine.log,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:rule_engine.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -564,10 +548,6 @@ msgctxt "field:rule_engine.rule_parameter,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.rule_parameter,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:rule_engine.rule_parameter,name:"
 msgid "Code"
 msgstr "Code"
@@ -616,10 +596,6 @@ msgctxt "field:rule_engine.run_tests.results,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:rule_engine.run_tests.results,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:rule_engine.run_tests.results,report:"
 msgid "Report"
 msgstr "Rapport"
@@ -627,10 +603,6 @@ msgstr "Rapport"
 msgctxt "field:rule_engine.runtime,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine.runtime,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine.test_case,create_date:"
 msgid "Create Date"
@@ -667,10 +639,6 @@ msgstr ""
 msgctxt "field:rule_engine.test_case,low_debug:"
 msgid "Low Level Debug Info"
 msgstr "Niveau bas de debug"
-
-msgctxt "field:rule_engine.test_case,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine.test_case,rec_name:"
 msgid "Name"
@@ -731,10 +699,6 @@ msgstr "Créé par"
 msgctxt "field:rule_engine.test_case.value,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:rule_engine.test_case.value,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:rule_engine.test_case.value,name:"
 msgid "Name"

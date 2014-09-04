@@ -2,6 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt ""
+"field:billing.premium.date_configuration,yearly_each_covered_anniversary_date:"
+msgid "Yearly Each Covered Anniversary Date"
+msgstr "Annuellement, à la date anniversaire des personnes couvertes"
+
 msgctxt "field:offered.eligibility.rule,max_age:"
 msgid "Maximum Age"
 msgstr "Age Maximum"
@@ -24,7 +29,7 @@ msgstr "Type"
 
 msgctxt "field:offered.option.description,coverage_amount_rules:"
 msgid "Coverage Amount Rules"
-msgstr " "
+msgstr "Règles de montant de couverture"
 
 msgctxt "field:offered.option.description,is_coverage_amount_needed:"
 msgid "Coverage Amount Needed"
@@ -61,10 +66,6 @@ msgstr "Plancher Courant"
 msgctxt "field:salary_range,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:salary_range,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:salary_range,name:"
 msgid "Name"
@@ -122,10 +123,6 @@ msgctxt "field:salary_range.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:salary_range.version,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:salary_range.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -176,7 +173,7 @@ msgstr "Tranche"
 
 msgctxt "model:salary_range,name:"
 msgid "Salary Range"
-msgstr "Trancge"
+msgstr "Tranche"
 
 msgctxt "model:salary_range.version,name:"
 msgid "Salary Range Version"
@@ -189,6 +186,26 @@ msgstr "Prévoyance"
 msgctxt "selection:offered.option.description,family:"
 msgid "Life"
 msgstr "Prévoyance"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Death"
+msgstr "Décès"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Partial Disability"
+msgstr "Invalidité partielle"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Temporary Disability"
+msgstr "Incapacité de travail"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Total And Irreversible Autonomy Loss"
+msgstr "Perte Totale et Irréversible d'Autonomie"
+
+msgctxt "selection:offered.option.description,insurance_kind:"
+msgid "Total Disability"
+msgstr "Invalidité totale"
 
 msgctxt "view:offered.option.description:"
 msgid "Coverage Amount"

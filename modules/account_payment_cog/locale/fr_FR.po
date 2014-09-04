@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -10,6 +10,14 @@ msgctxt "error:account.payment.treatment:"
 msgid "No Batch Path Specified"
 msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
+msgctxt "field:account.configuration,direct_debit_journal:"
+msgid "Direct Debit Journal"
+msgstr "Journal de prélèvement"
+
+msgctxt "field:account.move.line,payment_date:"
+msgid "Payment Date"
+msgstr "Date de prélèvement"
+
 msgctxt "field:account.payment.creation,id:"
 msgid "ID"
 msgstr "ID"
@@ -17,6 +25,18 @@ msgstr "ID"
 msgctxt "field:account.payment.journal,sepa_bank_account_number:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
+
+msgctxt "field:account.payment.payment_information_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.payment_information_selection,move_line:"
+msgid "Move Line"
+msgstr "Ligne de mouvement"
+
+msgctxt "field:account.payment.payment_information_selection,new_date:"
+msgid "New Payment Date"
+msgstr "Nouvelle date de prélèvement"
 
 msgctxt "field:account.payment.treatment,id:"
 msgid "ID"
@@ -66,6 +86,10 @@ msgctxt "model:account.payment.creation,name:"
 msgid "Payment Creation Batch"
 msgstr "Batch de création des paiements"
 
+msgctxt "model:account.payment.payment_information_selection,name:"
+msgid "Payment Information Selection"
+msgstr "Sélection des informations de prélèvement"
+
 msgctxt "model:account.payment.treatment,name:"
 msgid "Payment Treatment Batch"
 msgstr "Batch de traitement des paiements"
@@ -73,6 +97,10 @@ msgstr "Batch de traitement des paiements"
 msgctxt "model:ir.action,name:"
 msgid "Receivable Payments"
 msgstr ""
+
+msgctxt "model:ir.action,name:modify_payment_information_wizard"
+msgid "Modify Payment Information"
+msgstr "Modifier les informations de prélèvement"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Create Receivable Payment"
@@ -86,6 +114,20 @@ msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
 
+msgctxt "view:account.payment.payment_information_selection:"
+msgid "Payment Date Modification"
+msgstr "Modification de la date de prélèvement"
+
 msgctxt "view:contract:"
 msgid "As of today"
 msgstr ""
+
+msgctxt ""
+"wizard_button:account.payment.payment_information_modification,payment_information_selection,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:account.payment.payment_information_modification,payment_information_selection,finalize:"
+msgid "Next"
+msgstr "Suivant"

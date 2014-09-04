@@ -1,0 +1,59 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.statement,in_bank_deposit_ticket:"
+msgid "In Bank Deposit Ticket"
+msgstr "Bordereau de chèque"
+
+msgctxt "field:account.statement,total_statement_amount:"
+msgid "Total Amount"
+msgstr "Montant Total"
+
+msgctxt "field:account.statement.journal,bank_deposit_ticket_statement:"
+msgid "Bank Deposit Ticket Statement"
+msgstr "Bordereaux de chèques"
+
+msgctxt "field:account.statement.journal,sequence:"
+msgid "Statement Sequence"
+msgstr "Sequence des relevés"
+
+msgctxt "field:account.statement.line,in_bank_deposit_ticket:"
+msgid "In Bank Deposit Ticket"
+msgstr "Bordereau de chèque"
+
+msgctxt "model:ir.action,name:act_statement_bank_deposit_form"
+msgid "Bank Deposit Ticket"
+msgstr "Bordereaux de chèques"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_all"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_draft"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_posted"
+msgid "Posted"
+msgstr "Emise"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_validated"
+msgid "Validated"
+msgstr "Validé"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_statement"
+msgid "Statement"
+msgstr "Relevé"
+
+msgctxt "model:ir.ui.menu,name:menu_statement_bank_deposit_form"
+msgid "Bank Deposit Ticket"
+msgstr "Bordereaux de chèques"
+
+msgctxt "selection:account.statement.journal,validation:"
+msgid "Manual"
+msgstr "Manuelle"

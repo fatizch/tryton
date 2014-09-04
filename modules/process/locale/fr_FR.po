@@ -627,8 +627,20 @@ msgid "Replace Step Methods"
 msgstr "Remplacer les Méthodes de l'Etape"
 
 msgctxt "view:contract:"
-msgid "==> Documents"
-msgstr "==> Documents"
+msgid " "
+msgstr ""
+
+msgctxt "view:contract:"
+msgid "==> Brouillard"
+msgstr "==> Brouillard"
+
+msgctxt "view:contract:"
+msgid "==> Clauses"
+msgstr "==> Clauses"
+
+msgctxt "view:contract:"
+msgid "==> Courtier"
+msgstr "==> Courtier"
 
 msgctxt "view:contract:"
 msgid "==> Garanties"
@@ -639,88 +651,112 @@ msgid "==> Personnes Couvertes"
 msgstr ""
 
 msgctxt "view:contract:"
-msgid "==> Prelevement"
-msgstr ""
+msgid "==> Prélèvement"
+msgstr "==> Prélèvement"
 
 msgctxt "view:contract:"
-msgid "==> Produit"
-msgstr ""
+msgid "==> Prêt"
+msgstr "==> Prêt"
 
 msgctxt "view:contract:"
 msgid "==> Quittance"
 msgstr ""
 
 msgctxt "view:contract:"
+msgid "==> Souscripteur"
+msgstr "==> Souscripteur"
+
+msgctxt "view:contract:"
 msgid "==> Validation du contrat"
 msgstr ""
 
 msgctxt "view:contract:"
-msgid "A aujourd'hui"
-msgstr ""
+msgid "Brouillard"
+msgstr "Brouillard"
 
 msgctxt "view:contract:"
-msgid "Accounting"
-msgstr "Comptabilité"
+msgid "Clauses"
+msgstr "Clauses"
 
 msgctxt "view:contract:"
-msgid "Billing"
-msgstr "Cotisation"
-
-msgctxt "view:contract:"
-msgid "Calculate Prices"
-msgstr "Calculer les Primes"
+msgid "Complementary Data"
+msgstr "Données complémentaires"
 
 msgctxt "view:contract:"
 msgid "Complete"
 msgstr "Terminer"
 
 msgctxt "view:contract:"
+msgid "Courtier"
+msgstr "Courtier"
+
+msgctxt "view:contract:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
 
 msgctxt "view:contract:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "view:contract:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
+msgid "Create Loan"
+msgstr "Créer un prêt"
 
 msgctxt "view:contract:"
 msgid "Garanties"
 msgstr "Garanties"
 
 msgctxt "view:contract:"
+msgid "Gérer les options"
+msgstr "Gérer les options"
+
+msgctxt "view:contract:"
+msgid "Impression"
+msgstr "Impression"
+
+msgctxt "view:contract:"
+msgid "Invoicing"
+msgstr "Quittancement"
+
+msgctxt "view:contract:"
 msgid "Next (_k)"
 msgstr "Suivant (_k)"
 
 msgctxt "view:contract:"
-msgid "Options"
-msgstr "Garanties"
+msgid "Nouvelle Surprime"
+msgstr "Nouvelle surprime"
 
 msgctxt "view:contract:"
 msgid "Personnes Couvertes"
 msgstr "Personnes Couvertes"
 
 msgctxt "view:contract:"
-msgid "Prelevement"
-msgstr ""
-
-msgctxt "view:contract:"
 msgid "Previous  (_j)"
 msgstr "Précédent (_j)"
 
 msgctxt "view:contract:"
-msgid "Processus de souscription individuel"
-msgstr "Processus de souscription individuel"
+msgid "Prélèvement"
+msgstr "Prélèvement"
 
 msgctxt "view:contract:"
-msgid "Produit"
-msgstr ""
+msgid "Prêt"
+msgstr "Prêt"
 
 msgctxt "view:contract:"
 msgid "Quittance"
 msgstr "Quittance"
+
+msgctxt "view:contract:"
+msgid "Quittances"
+msgstr "Quittances"
+
+msgctxt "view:contract:"
+msgid "Souscripteur"
+msgstr "Souscripteur"
+
+msgctxt "view:contract:"
+msgid "Souscription Emprunteur"
+msgstr "Souscription Emprunteur"
+
+msgctxt "view:contract:"
+msgid "Taux moyen prêt"
+msgstr "Taux moyen prêt"
 
 msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"

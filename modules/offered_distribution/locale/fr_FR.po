@@ -42,10 +42,6 @@ msgctxt "field:distribution.commercial_product,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:distribution.commercial_product,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:distribution.commercial_product,name:"
 msgid "Name"
 msgstr "Nom"

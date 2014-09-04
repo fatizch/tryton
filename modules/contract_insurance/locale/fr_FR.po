@@ -73,10 +73,6 @@ msgctxt "field:contract,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
-msgctxt "field:contract,extra_data:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
 msgctxt "field:contract,id:"
 msgid "ID"
 msgstr "ID"
@@ -160,10 +156,6 @@ msgstr "ID"
 msgctxt "field:contract-agreement,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:contract-agreement,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:contract-agreement,party:"
 msgid "Party"
@@ -413,10 +405,6 @@ msgctxt "field:contract.manage_exclusion.select,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.manage_exclusion.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:contract.manage_exclusion.select,options:"
 msgid "Options"
 msgstr "Options"
@@ -428,10 +416,6 @@ msgstr "Exclusion"
 msgctxt "field:contract.manage_exclusion.select.exclusion,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.manage_exclusion.select.exclusion,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.manage_exclusion.select.exclusion,selected:"
 msgid "Selected"
@@ -461,10 +445,6 @@ msgctxt "field:contract.manage_extra_premium.select,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:contract.manage_extra_premium.select,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:contract.manage_extra_premium.select,option:"
 msgid "Option"
 msgstr "Option"
@@ -485,21 +465,17 @@ msgctxt "field:contract.manage_extra_premium.select.extra,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.manage_extra_premium.select.extra,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:contract.manage_extra_premium.select.extra,selected:"
 msgid "Selected"
 msgstr "Coché"
 
+msgctxt "field:contract.manage_extra_premium.select.option,extra_premiums:"
+msgid "Existing Extra Premiums"
+msgstr "Surprimes existantes"
+
 msgctxt "field:contract.manage_extra_premium.select.option,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.manage_extra_premium.select.option,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.manage_extra_premium.select.option,option:"
 msgid "Option"
@@ -552,6 +528,14 @@ msgstr "Exclusions"
 msgctxt "field:contract.option,extra_data:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
+
+msgctxt "field:contract.option,extra_premium_discounts:"
+msgid "Discounts"
+msgstr "Réductions"
+
+msgctxt "field:contract.option,extra_premium_increases:"
+msgid "Increases"
+msgstr "Augmentations"
 
 msgctxt "field:contract.option,extra_premiums:"
 msgid "Extra Premiums"
@@ -681,13 +665,21 @@ msgctxt "field:contract.option.extra_premium,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.option.extra_premium,is_discount:"
+msgid "Is Discount"
+msgstr "Est une réduction"
+
+msgctxt "field:contract.option.extra_premium,max_rate:"
+msgid "Max Rate"
+msgstr "Taux maximum"
+
+msgctxt "field:contract.option.extra_premium,max_value:"
+msgid "Max Value"
+msgstr "Valeur maximum"
+
 msgctxt "field:contract.option.extra_premium,motive:"
 msgid "Motive"
 msgstr "Motif"
-
-msgctxt "field:contract.option.extra_premium,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.option.extra_premium,option:"
 msgid "Option"
@@ -739,11 +731,6 @@ msgctxt "field:contract.option.extra_premium.create.option_selector,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt ""
-"field:contract.option.extra_premium.create.option_selector,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Must Expand Tree"
-
 msgctxt "field:contract.option.extra_premium.create.option_selector,options:"
 msgid "Options"
 msgstr "Options"
@@ -751,10 +738,6 @@ msgstr "Options"
 msgctxt "field:contract.renew.parameters,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.renew.parameters,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.renew.parameters,renew_what:"
 msgid "All contracts"
@@ -775,10 +758,6 @@ msgstr "A renouveler"
 msgctxt "field:contract.renew.report,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.renew.report,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:contract.renew.report,renewal_log_failure:"
 msgid "Failed"
@@ -850,10 +829,6 @@ msgstr "ID"
 msgctxt "field:expense,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:expense,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:expense,rec_name:"
 msgid "Name"
@@ -957,7 +932,11 @@ msgstr "Dépense"
 
 msgctxt "model:ir.action,name:"
 msgid "Status History"
-msgstr "Historique des Statuts"
+msgstr "Gérer les Options"
+
+msgctxt "model:ir.action,name:None"
+msgid "Manage Options"
+msgstr "Gérer les Options"
 
 msgctxt "model:ir.action,name:act_contract_activation_history_relate_form"
 msgid "Activation History"
@@ -1153,7 +1132,7 @@ msgstr "Gérer les surprimes"
 
 msgctxt "view:contract.option.extra_premium.create.option_selector:"
 msgid "Extra Premium Creation"
-msgstr ""
+msgstr "Création des suprimes"
 
 msgctxt "view:contract.option.extra_premium:"
 msgid "%"
@@ -1166,14 +1145,6 @@ msgstr "Surprime"
 msgctxt "view:contract.option.extra_premium:"
 msgid "Propagate"
 msgstr "Propager"
-
-msgctxt "view:contract.option:"
-msgid "Exclusions"
-msgstr "Exclusions"
-
-msgctxt "view:contract.option:"
-msgid "Extra Premiums"
-msgstr "Surprimes"
 
 msgctxt "view:contract.option:"
 msgid "Option"

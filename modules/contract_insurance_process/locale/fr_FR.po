@@ -121,10 +121,6 @@ msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:contract.subscribe.find_process,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:contract.subscribe.find_process,possible_brokers:"
 msgid "Possible Brokers"
 msgstr "Courtiers Possibles"

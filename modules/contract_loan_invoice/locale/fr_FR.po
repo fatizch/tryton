@@ -1,10 +1,130 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract,used_loans:"
+msgid "Used Loans"
+msgstr "Prêts rattachés au contrat"
 
 msgctxt "field:contract.premium,loan:"
 msgid "Loan"
 msgstr "Prêt"
+
+msgctxt "field:contract.premium.amount,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:contract.premium.amount,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.premium.amount,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.premium.amount,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.premium.amount,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "field:contract.premium.amount,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium.amount,period_end:"
+msgid "Period End"
+msgstr "Fin de la période"
+
+msgctxt "field:contract.premium.amount,period_start:"
+msgid "Period Start"
+msgstr "Début de la période"
+
+msgctxt "field:contract.premium.amount,premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "field:contract.premium.amount,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.premium.amount,start:"
+msgid "Start"
+msgstr "Commencer"
+
+msgctxt "field:contract.premium.amount,tax_amount:"
+msgid "Tax Amount"
+msgstr "Montant de la taxe"
+
+msgctxt "field:contract.premium.amount,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.premium.amount,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.premium.amount.per_period,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:contract.premium.amount.per_period,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.premium.amount.per_period,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.premium.amount.per_period,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.premium.amount.per_period,fees:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:contract.premium.amount.per_period,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium.amount.per_period,period_end:"
+msgid "Period End"
+msgstr "Fin de la période"
+
+msgctxt "field:contract.premium.amount.per_period,period_start:"
+msgid "Period Start"
+msgstr "Début de la période"
+
+msgctxt "field:contract.premium.amount.per_period,premium_amounts:"
+msgid "Premium Amounts"
+msgstr "Lignes d'échéancier de quittance"
+
+msgctxt "field:contract.premium.amount.per_period,rec_name:"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "field:contract.premium.amount.per_period,tax_amount:"
+msgid "Tax Amount"
+msgstr "Montant de la taxe"
+
+msgctxt "field:contract.premium.amount.per_period,total:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "field:contract.premium.amount.per_period,untaxed_amount:"
+msgid "Total"
+msgstr "Total"
+
+msgctxt "field:contract.premium.amount.per_period,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.premium.amount.per_period,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:loan,average_premium_rate:"
 msgid "Average Premium Rate"
@@ -134,6 +254,14 @@ msgctxt "field:offered.product,average_loan_premium_rule:"
 msgid "Average Loan Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
+msgctxt "model:contract.premium.amount,name:"
+msgid "Premium Amount"
+msgstr "Montant de la prime"
+
+msgctxt "model:contract.premium.amount.per_period,name:"
+msgid "Premium Amount per Period"
+msgstr "Echéancier des quittances"
+
 msgctxt "model:ir.action,name:act_average_premium_rule"
 msgid "Loan Average Premium Rule"
 msgstr "Règle de taux moyen prêt"
@@ -141,6 +269,10 @@ msgstr "Règle de taux moyen prêt"
 msgctxt "model:ir.action,name:act_loan_average_premium_display"
 msgid "Show Loan Average Premium"
 msgstr "Afficher taux moyen prêt"
+
+msgctxt "model:ir.action,name:act_premium_amount_per_period_form"
+msgid "Premium Amounts per Period"
+msgstr "Echéancier des quittances"
 
 msgctxt "model:ir.ui.menu,name:menu_average_premium_rule"
 msgid "Loan Average Premium Rule"
@@ -189,6 +321,18 @@ msgstr "Appliquer au prêt le plus long"
 msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
 msgid "Do not use fee"
 msgstr "Ne pas prendre en compte les frais"
+
+msgctxt "view:contract.premium.amount.per_period:"
+msgid "Premium Amounts per Period"
+msgstr "Echéancier des quittances"
+
+msgctxt "view:contract.premium.amount:"
+msgid "Premium Amount"
+msgstr "Montant de la prime"
+
+msgctxt "view:contract.premium.amount:"
+msgid "Premium Amounts"
+msgstr "Lignes d'échéancier de quittance"
 
 msgctxt "view:loan.average_premium_rate.display.values:"
 msgid "Contract Loans"

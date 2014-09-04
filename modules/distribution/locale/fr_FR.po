@@ -34,10 +34,6 @@ msgctxt "field:distribution.network,left:"
 msgid "Left"
 msgstr "Gauche"
 
-msgctxt "field:distribution.network,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:distribution.network,name:"
 msgid "Name"
 msgstr "Nom"

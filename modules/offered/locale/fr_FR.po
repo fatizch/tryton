@@ -68,10 +68,6 @@ msgctxt "field:extra_data,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:extra_data,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:extra_data,name:"
 msgid "Code"
 msgstr "Code"
@@ -164,10 +160,6 @@ msgctxt "field:extra_data-sub_extra_data,master:"
 msgid "Master"
 msgstr "Maître"
 
-msgctxt "field:extra_data-sub_extra_data,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:extra_data-sub_extra_data,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -219,10 +211,6 @@ msgstr "Typage"
 msgctxt "field:offered,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:offered,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:offered,name:"
 msgid "Name"
@@ -339,10 +327,6 @@ msgstr "Est un service"
 msgctxt "field:offered.option.description,kind:"
 msgid "Option Description Kind"
 msgstr "Type de Garantie"
-
-msgctxt "field:offered.option.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:offered.option.description,name:"
 msgid "Name"
@@ -524,6 +508,54 @@ msgctxt "field:offered.option.description.required,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:offered.option.description.rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description.rule,kind:"
+msgid "Rule Kind"
+msgstr "Type de règle"
+
+msgctxt "field:offered.option.description.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.option.description.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.option.description.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:offered.package-option.description,coverage:"
 msgid "OptionDescription"
 msgstr "Description d'Option"
@@ -627,10 +659,6 @@ msgstr "ID"
 msgctxt "field:offered.product,kind:"
 msgid "Product Kind"
 msgstr "Type de Produit"
-
-msgctxt "field:offered.product,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:offered.product,name:"
 msgid "Name"
@@ -743,10 +771,6 @@ msgstr "Créé par"
 msgctxt "field:offered.product-option.description,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:offered.product-option.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:offered.product-option.description,order:"
 msgid "Order"
@@ -867,6 +891,10 @@ msgstr "Option Exclue"
 msgctxt "model:offered.option.description.required,name:"
 msgid "Option Description Required"
 msgstr "Option Requise"
+
+msgctxt "model:offered.option.description.rule,name:"
+msgid "Option Description Rule"
+msgstr "Règles d'une garantie"
 
 msgctxt "model:offered.package-option.description,name:"
 msgid "Package to Option Description Relation"
@@ -996,6 +1024,14 @@ msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:offered.option.description.rule,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:offered.option.description.rule,kind:"
+msgid "Ending"
+msgstr "Résiliation"
+
 msgctxt "selection:offered.product,kind:"
 msgid ""
 msgstr " "
@@ -1051,6 +1087,10 @@ msgstr "Sous Donnée"
 msgctxt "view:offered.configuration:"
 msgid "Offered Configuration"
 msgstr "Administration produit"
+
+msgctxt "view:offered.option.description.rule:"
+msgid "Rule"
+msgstr "Règle"
 
 msgctxt "view:offered.option.description:"
 msgid "Extra Data"

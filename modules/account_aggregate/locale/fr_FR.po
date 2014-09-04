@@ -1,0 +1,187 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.configuration,snapshot_sequence:"
+msgid "Snapshot Sequence"
+msgstr "Sequence des instantanés"
+
+msgctxt "field:account.journal,aggregate:"
+msgid "Aggregate"
+msgstr "Agrégat"
+
+msgctxt "field:account.move,snapshot:"
+msgid "Snapshot"
+msgstr "Instantané"
+
+msgctxt "field:account.move.line,snapshot:"
+msgid "Snapshot"
+msgstr "Instantané"
+
+msgctxt "field:account.move.line.aggregated,account:"
+msgid "Account"
+msgstr "Compte"
+
+msgctxt "field:account.move.line.aggregated,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.line.aggregated,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.move.line.aggregated,credit:"
+msgid "Credit"
+msgstr "Crédit"
+
+msgctxt "field:account.move.line.aggregated,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.move.line.aggregated,debit:"
+msgid "Debit"
+msgstr "Débit"
+
+msgctxt "field:account.move.line.aggregated,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:account.move.line.aggregated,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move.line.aggregated,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.move.line.aggregated,post_date:"
+msgid "Post Date"
+msgstr "Date de lettrage"
+
+msgctxt "field:account.move.line.aggregated,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.move.line.aggregated,snapshot:"
+msgid "Snapshot"
+msgstr "Instantané"
+
+msgctxt "field:account.move.line.aggregated,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.move.line.aggregated,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.move.snapshot,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.move.snapshot,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.move.snapshot,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move.snapshot,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.move.snapshot,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.move.snapshot,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.move.snapshot,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.move.snapshot.done,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.move.snapshot.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "model:account.move.line.aggregated,name:"
+msgid "Account Move Line Aggregated"
+msgstr "Agrégat comptable"
+
+msgctxt "model:account.move.snapshot,name:"
+msgid "Snapshot Move"
+msgstr "Instantané des mouvements"
+
+msgctxt "model:account.move.snapshot.done,name:"
+msgid "Snapshot Moves"
+msgstr "Instantanés"
+
+msgctxt "model:account.move.snapshot.start,name:"
+msgid "Snapshot Moves"
+msgstr "Instantanés"
+
+msgctxt "model:ir.action,name:act_move_line_aggregated_form"
+msgid "Account Move Lines Aggregated"
+msgstr "Agrégat comptable"
+
+msgctxt "model:ir.action,name:act_open_line"
+msgid "Open Aggregate"
+msgstr "Ouvrir un agrégat"
+
+msgctxt "model:ir.action,name:act_open_line_aggregated"
+msgid "Open Move Aggregated Account"
+msgstr "Ouvrir les mouvements agrégés"
+
+msgctxt "model:ir.action,name:act_snapshot"
+msgid "Take a Snapshot of Moves"
+msgstr "Prendre un instantané des mouvements"
+
+msgctxt "model:ir.ui.menu,name:menu_account_move_line_aggregates_form"
+msgid "Account Move Line Aggregates"
+msgstr "Agrégat comptable"
+
+msgctxt "model:ir.ui.menu,name:menu_snapshot"
+msgid "Take a Snapshot of Moves"
+msgstr "Prendre un instantané des mouvements"
+
+msgctxt "view:account.move.line.aggregated:"
+msgid "Account Move Line Aggregated"
+msgstr "Agrégat comptable"
+
+msgctxt "view:account.move.line.aggregated:"
+msgid "Account Move Lines Aggregated"
+msgstr "Agrégat comptable"
+
+msgctxt "view:account.move.snapshot.done:"
+msgid "Moves Snapshots"
+msgstr "Instantanés"
+
+msgctxt "view:account.move.snapshot.done:"
+msgid "The snapshot has been taken!"
+msgstr "L'instantané a été pris!"
+
+msgctxt "view:account.move.snapshot.start:"
+msgid "Moves Snapshots"
+msgstr "Instantanés"
+
+msgctxt "view:account.move.snapshot.start:"
+msgid "Take a snapshot of moves"
+msgstr "Prendre un instantané des mouvements"
+
+msgctxt "wizard_button:account.move.snapshot,done,end:"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "wizard_button:account.move.snapshot,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:account.move.snapshot,start,snap:"
+msgid "OK"
+msgstr "OK"

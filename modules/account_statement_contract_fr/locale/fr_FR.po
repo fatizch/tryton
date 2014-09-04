@@ -1,0 +1,15 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.statement.line,bank:"
+msgid "Bank"
+msgstr "Banque"
+
+msgctxt "view:account.statement.line:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "view:account.statement.line:"
+msgid "Statement Lines"
+msgstr "Lignes de relevé"

@@ -58,10 +58,6 @@ msgctxt "field:account.fee.description,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:account.fee.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:account.fee.description,name:"
 msgid "Fee Name"
 msgstr "Nom du Frais"
@@ -114,10 +110,6 @@ msgctxt "field:account.fee.description.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:account.fee.description.version,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:account.fee.description.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -154,6 +146,10 @@ msgctxt "field:account.move,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move.line,account_kind:"
+msgid "Account Kind"
+msgstr "Type de compte"
+
 msgctxt "field:account.move.line,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
@@ -163,6 +159,18 @@ msgid "Reconciliation Lines"
 msgstr "Lignes de réconciliation"
 
 msgctxt "field:account.period,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.tax,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.tax.code,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.tax.code.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -193,10 +201,6 @@ msgstr "Description"
 msgctxt "field:account.tax.description,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:account.tax.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:account.tax.description,name:"
 msgid "Name"
@@ -250,10 +254,6 @@ msgctxt "field:account.tax.description.version,main_elem:"
 msgid "Descriptor"
 msgstr "Descripteur"
 
-msgctxt "field:account.tax.description.version,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:account.tax.description.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -275,6 +275,14 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:account.tax.description.version,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.tax.group,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.tax.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -449,6 +457,10 @@ msgstr "Descripteur de Frais"
 msgctxt "view:account.move.line:"
 msgid "Credit"
 msgstr "Créditer"
+
+msgctxt "view:account.move.line:"
+msgid "Lines To Pay"
+msgstr "Lignes à payer"
 
 msgctxt "view:account.move.line:"
 msgid "Other Info"

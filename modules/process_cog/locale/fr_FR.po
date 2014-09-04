@@ -58,10 +58,6 @@ msgctxt "field:ir.ui.view.description,input_mode:"
 msgid "Input Mode"
 msgstr "Mode de Saisie"
 
-msgctxt "field:ir.ui.view.description,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:ir.ui.view.description,nb_col:"
 msgid "Number of columns"
 msgstr "Nombre de Colonnes"
@@ -134,6 +130,14 @@ msgctxt "field:process,steps_implicitly_available:"
 msgid "Steps Implicitly Available"
 msgstr "Etapes Implicites"
 
+msgctxt "field:process,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:process,tags_name:"
+msgid "Tags"
+msgstr "Labels"
+
 msgctxt "field:process,with_prev_next:"
 msgid "With Previous / Next button"
 msgstr "Avec Préc/Suiv."
@@ -194,10 +198,6 @@ msgctxt "field:process.log,locked:"
 msgid "Lock"
 msgstr "Verrrouillé"
 
-msgctxt "field:process.log,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:process.log,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -250,10 +250,6 @@ msgctxt "field:process.start,model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:process.start,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:process.status,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
@@ -277,6 +273,14 @@ msgstr "Modèle Principal"
 msgctxt "field:process.step,pyson:"
 msgid "Pyson Constraint"
 msgstr "Contraintes Pyson"
+
+msgctxt "field:process.step,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:process.step,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:process.step,xml_id:"
 msgid "XML Id"

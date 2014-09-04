@@ -34,10 +34,6 @@ msgctxt "field:clause,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:clause,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:clause,name:"
 msgid "Name"
 msgstr "Nom"

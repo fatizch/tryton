@@ -1,0 +1,11 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:ir.test_case,fiscal_year_number:"
+msgid "Number of Fiscal Years to create"
+msgstr "Nombre d'années fiscales à créer"
+
+msgctxt "field:ir.test_case,test_cases:"
+msgid "Test Cases"
+msgstr "Jeux de Test"
