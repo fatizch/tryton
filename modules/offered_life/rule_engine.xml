@@ -8,7 +8,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_coverage_amount</field>
-            <field name="parent" ref="dossier_donnees_couverture"/>
+            <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
         </record>
     </data>
 </tryton>
