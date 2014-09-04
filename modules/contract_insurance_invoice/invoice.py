@@ -40,11 +40,6 @@ class Invoice:
         fields.Numeric('Fees'),
         'get_fees')
 
-    @classmethod
-    def __setup__(cls):
-        super(Invoice, cls).__setup__()
-        cls._order.insert(0, ('start', 'ASC'))
-
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
 
