@@ -8,5 +8,5 @@
     <field name="bank"/>
     <field name="description"/>
     <field name="invoice"/>
-    <field name="statement" invisible="1"/>
+    <field name="statement" tree_invisible="1"/>
 </tree>
