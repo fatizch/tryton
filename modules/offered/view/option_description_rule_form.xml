@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Rule">
+    <label name="rule"/>
+    <field name="rule" xexpand="0"/>
+    <newline/>
+    <label name="kind"/>
+    <field name="kind" xexpand="0"/>
+    <newline/>
+    <label name="rule_extra_data"/>
+    <field name="rule_extra_data" xexpand="0"/>
+</form>
+

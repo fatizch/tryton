@@ -1,3 +1,8 @@
+# -*- coding:utf-8 -*-
+from trytond.modules.cog_utils import fields, model
+from trytond.modules.rule_engine import RuleMixin
+
+
 class RuleEngineResultLine(object):
     '''
         This class is the root of all rule engine result classes
@@ -81,3 +86,17 @@ class PricingResultLine(RuleEngineResultLine):
         new_detail = PricingResultDetail(other_line.amount,
             other_line.on_object, details=other_line.details)
         self.details.append(new_detail)
+
+
+class OptionDescriptionRule(RuleMixin, model.CoopSQL, model.CoopView):
+    'Option Description Rule'
+
+    __name__ = 'offered.option.description.rule'
+
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
+        required=True, ondelete='CASCADE')
+
+    @classmethod
+    def __setup__(cls):
+        super(OptionDescriptionRule, cls).__setup__()
+        cls.kind.selection.append(('ending', 'Ending'))

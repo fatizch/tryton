@@ -10,7 +10,6 @@ from .configuration import *
 def register():
     Pool.register(
         Configuration,
-        # From offered
         Offered,
         OptionDescription,
         PackageOptionDescription,
@@ -18,11 +17,10 @@ def register():
         ProductOptionDescriptionRelation,
         OptionDescriptionRequired,
         OptionDescriptionExcluded,
-        # from extra_data
         ExtraData,
         ExtraDataSubExtraDataRelation,
         ProductExtraDataRelation,
         OptionDescriptionExtraDataRelation,
-        # from test_case
+        OptionDescriptionRule,
         TestCaseModel,
         module='offered', type_='model')

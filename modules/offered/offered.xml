@@ -200,5 +200,13 @@
       <field name="sequence_type" ref="sequence_type_contract_number"/>
       <field name="group" ref="res.group_admin"/>
     </record>
+    <!-- ############################################################ -->
+    <!-- Option Description Rule -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="option_description_rule_view_form">
+      <field name="model">offered.option.description.rule</field>
+      <field name="type">form</field>
+      <field name="name">option_description_rule_form</field>
+    </record>
   </data>
 </tryton>
