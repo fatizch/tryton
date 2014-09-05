@@ -21,7 +21,7 @@ from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source, memoize
-from trytond.pyson import Eval, Or
+from trytond.pyson import Eval, Or, Bool, Not
 
 from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
@@ -54,6 +54,7 @@ __all__ = [
     'InitTestCaseFromExecutionLog',
     'ValidateRuleTestCases',
     'ValidateRuleBatch',
+    'RuleMixin',
     ]
 
 CODE_TEMPLATE = """
@@ -206,6 +207,29 @@ class TooManyFunctionCall(StopIteration):
 
 class TooFewFunctionCall(Exception):
     pass
+
+
+class RuleMixin(object):
+    'Rule Mixin'
+
+    __name__ = 'rule_engine.rule_mixin'
+
+    rule = fields.Many2One('rule_engine', 'Rule Engine', required=True,
+        ondelete='RESTRICT')
+    kind = fields.Selection([('', '')], 'Rule Kind')
+    rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Rule Extra Data', states={
+            'invisible': Not(Bool(Eval('rule_extra_data', False)))})
+
+    def calculate(self, args):
+        return self.rule.execute(args, self.rule_extra_data).result
+
+    @fields.depends('rule', 'rule_extra_data')
+    def on_change_with_rule_extra_data(self):
+        if not self.rule:
+            return {}
+        return self.rule.get_extra_data_for_on_change(
+            self.rule_extra_data)
 
 
 class RuleEngineResult(object):
