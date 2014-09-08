@@ -480,27 +480,39 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     def group_per_model(cls, endorsements):
         return {
-            Pool().get('endorsement.contract'): [contract_endorsement
+            'endorsement.contract': [contract_endorsement
                 for endorsement in endorsements
                 for contract_endorsement in endorsement.contract_endorsements]
             }
 
     @classmethod
+    def apply_order(cls):
+        return ['endorsement.contract']
+
+    @classmethod
     @model.CoopView.button
     @Workflow.transition('draft')
     def draft(cls, endorsements):
+        pool = Pool()
         endorsements_per_model = cls.group_per_model(endorsements)
-        for ModelClass, to_draft in endorsements_per_model.iteritems():
-            ModelClass.draft(to_draft)
+        for model_name in cls.apply_order():
+            if model_name not in endorsements_per_model:
+                continue
+            ModelClass = pool.get(model_name)
+            ModelClass.draft(endorsements_per_model[model_name])
         cls.write(endorsements, {'application_date': None})
 
     @classmethod
     @model.CoopView.button
     @Workflow.transition('applied')
     def apply(cls, endorsements):
+        pool = Pool()
         endorsements_per_model = cls.group_per_model(endorsements)
-        for ModelClass, to_apply in endorsements_per_model.iteritems():
-            ModelClass.apply(to_apply)
+        for model_name in cls.apply_order():
+            if model_name not in endorsements_per_model:
+                continue
+            ModelClass = pool.get(model_name)
+            ModelClass.apply(endorsements_per_model[model_name])
         cls.write(endorsements, {'application_date': datetime.datetime.now()})
 
     def extract_preview_values(self, extraction_method):

@@ -70,9 +70,15 @@ class Endorsement:
     @classmethod
     def group_per_model(cls, endorsements):
         result = super(Endorsement, cls).group_per_model(endorsements)
-        result[Pool().get('endorsement.loan')] = [
+        result['endorsement.loan'] = [
             loan_endorsement for endorsement in endorsements
             for loan_endorsement in endorsement.loan_endorsements]
+        return result
+
+    @classmethod
+    def apply_order(cls):
+        result = super(Endorsement, cls).apply_order()
+        result.insert(0, 'endorsement.loan')
         return result
 
 
