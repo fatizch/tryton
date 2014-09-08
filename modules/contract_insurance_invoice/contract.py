@@ -316,6 +316,7 @@ class Contract:
             account=self.subscriber.account_receivable,
             payment_term=billing_information.payment_term,
             state='validated',
+            description=self.rec_name,
             )
 
     def get_invoice_lines(self, start, end):
