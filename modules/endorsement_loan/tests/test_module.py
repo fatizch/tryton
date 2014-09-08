@@ -1,0 +1,194 @@
+# encoding: utf-8
+from decimal import Decimal
+import unittest
+import datetime
+
+import trytond.tests.test_tryton
+from trytond.transaction import Transaction
+
+from trytond.modules.cog_utils import test_framework
+
+
+class ModuleTestCase(test_framework.CoopTestCase):
+    '''
+    Test Coop module.
+    '''
+    @classmethod
+    def get_module_name(cls):
+        return 'endorsement_loan'
+
+    @classmethod
+    def get_models(cls):
+        return {
+            'EndorsementLoan': 'endorsement.loan',
+            'EndorsementLoanField': 'endorsement.loan.field',
+            'LoanIncrement': 'loan.increment',
+            'LoanPayment': 'loan.payment',
+            }
+
+    @classmethod
+    def depending_modules(cls):
+        return ['loan', 'endorsement']
+
+    def get_loan(self, clean_up=True):
+        loan, = self.Loan.search([
+                ('kind', '=', 'fixed_rate'),
+                ('rate', '=', Decimal('0.0752')),
+                ('funds_release_date', '=', datetime.date(2014, 3, 5)),
+                ('payment_frequency', '=', 'quarter'),
+                ('number_of_payments', '=', 56),
+                ('amount', '=', Decimal('134566')),
+                ])
+        if clean_up and loan.payments:
+            previous_payment = loan.payments[20].outstanding_balance
+            self.assertEqual(previous_payment, Decimal('129115.62'))
+            self.LoanIncrement.delete(loan.increments)
+            self.LoanPayment.delete(loan.payments)
+            loan.increments = []
+            loan.payments = []
+        return loan
+
+    @test_framework.prepare_test('endorsement.test0001_check_possible_views')
+    def test0010_create_loan_endorsement_part(self):
+        endorsement_part = self.EndorsementPart()
+        endorsement_part.name = 'Change Loan Amount'
+        endorsement_part.code = endorsement_part.on_change_with_code()
+        endorsement_part.view = 'simple_contract_modification'
+        endorsement_part.kind = 'loan'
+        endorsement_part.loan_fields = [
+            {
+                'field': self.Field.search([
+                        ('model.model', '=', 'loan'),
+                        ('name', '=', 'amount')])[0],
+            },
+            {
+                'field': self.Field.search([
+                        ('model.model', '=', 'loan'),
+                        ('name', '=', 'payment_amount')])[0],
+            }]
+
+        self.assertEqual(endorsement_part.code,
+            'change_loan_amount')
+        endorsement_part.save()
+
+    @test_framework.prepare_test(
+        'endorsement_loan.test0010_create_loan_endorsement_part',
+        )
+    def test0020_create_endorsement_definition(self):
+        endorsement_part, = self.EndorsementPart.search([
+                ('code', '=', 'change_loan_amount'),
+                ])
+        definition = self.EndorsementDefinition()
+        definition.name = 'Change Loan Amount'
+        definition.code = definition.on_change_with_code()
+        definition.ordered_endorsement_parts = [{
+                'endorsement_part': endorsement_part.id,
+                'order': 1,
+                }]
+        self.assertEqual(definition.code, 'change_loan_amount')
+        definition.save()
+        self.assertEqual(list(definition.endorsement_parts),
+            [endorsement_part])
+
+    @test_framework.prepare_test(
+        'endorsement_loan.test0020_create_endorsement_definition',
+        'loan.test0037loan_creation',
+        )
+    def test0030_create_endorsement(self):
+        definition, = self.EndorsementDefinition.search([
+                ('code', '=', 'change_loan_amount'),
+                ])
+        loan = self.get_loan()
+        effective_date = loan.funds_release_date + datetime.timedelta(
+            days=200)
+        previous_amount = loan.amount
+        loan.amount = Decimal('150000')
+        endorsement = self.Endorsement(
+            definition=definition,
+            effective_date=effective_date,
+            loan_endorsements=[{
+                    'loan': loan.id,
+                    'values': {
+                        'amount': Decimal('150000'),
+                        'payment_amount': loan.calculate_payment_amount(),
+                        },
+                    }])
+        loan.amount = previous_amount
+        endorsement.save()
+        loan_endorsement, = endorsement.loan_endorsements
+        self.assertEqual(endorsement.state, 'draft')
+        self.assertEqual(loan_endorsement.state, 'draft')
+        self.assertEqual(loan_endorsement.definition, definition)
+        self.assertEqual(list(endorsement.loans), [loan])
+        self.assertEqual(loan.amount, previous_amount)
+        self.assertEqual(loan_endorsement.apply_values, {
+                'amount': Decimal('150000'),
+                'payment_amount': Decimal('4354.45'),
+                })
+
+    @test_framework.prepare_test(
+        'endorsement_loan.test0030_create_endorsement',
+        )
+    def test0031_endorsement_summary(self):
+        loan = self.get_loan()
+        endorsement, = self.Endorsement.search([
+                ('loans', '=', loan.id),
+                ])
+        self.assertEqual(endorsement.endorsement_summary,
+            'Change Loan Amount:\n'
+            u'  Amount : %s → 150000\n'
+            u'  Payment Amount : None → 4354.45\n\n' % loan.amount)
+
+    @test_framework.prepare_test(
+        'endorsement_loan.test0030_create_endorsement',
+        )
+    def test0040_endorsement_application(self):
+        loan = self.get_loan()
+        endorsement, = self.Endorsement.search([
+                ('loans', '=', loan.id),
+                ])
+        endorsement.apply([endorsement])
+        loan = endorsement.loans[0]
+        new_payment = loan.payments[20].outstanding_balance
+        self.assertEqual(new_payment, Decimal('113159.16'))
+        self.assertEqual(loan.amount, Decimal('150000'))
+        self.assertEqual(loan.payment_amount, Decimal('4354.45'))
+
+    @test_framework.prepare_test(
+        'endorsement_loan.test0030_create_endorsement',
+        )
+    def test0099_revert_endorsement(self):
+        # WARNING: No dependency, commit required for the history / write dates
+        # to kick in properly
+        Transaction().cursor.commit()
+
+        loan = self.get_loan()
+        endorsement, = self.Endorsement.search([
+                ('loans', '=', loan.id),
+                ])
+        previous_loan_amount = loan.amount
+
+        endorsement.apply([endorsement])
+        Transaction().cursor.commit()
+        loan = endorsement.loans[0]
+        loan_endorsement, = endorsement.loan_endorsements
+        self.assert_(endorsement.application_date)
+        self.assertEqual(endorsement.state, 'applied')
+        self.assertEqual(loan_endorsement.state, 'applied')
+        self.assertEqual(loan.amount, Decimal('150000'))
+        self.assertEqual(loan_endorsement.base_instance.amount,
+            previous_loan_amount)
+
+        endorsement.draft([endorsement])
+        Transaction().cursor.commit()
+        loan = endorsement.loans[0]
+        self.assertEqual(loan_endorsement.applied_on, None)
+        self.assertEqual(loan_endorsement.state, 'draft')
+        self.assertEqual(loan.amount, previous_loan_amount)
+
+
+def suite():
+    suite = trytond.tests.test_tryton.suite()
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+        ModuleTestCase))
+    return suite

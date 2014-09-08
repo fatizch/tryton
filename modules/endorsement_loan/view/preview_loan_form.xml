@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<form string="Loan Preview Changes">
+    <label name="loan"/>
+    <field name="loan" colspan="3"/>
+    <label name="old_amount"/>
+    <group id="old_amount_value">
+        <field name="old_amount" xalign="1" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <label name="new_amount"/>
+    <group id="new_amount_value">
+        <field name="new_amount" xalign="1" xexpand="0"/>
+        <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+    </group>
+    <notebook colspan="4">
+        <page name="new_payments">
+            <field name="new_payments" mode="tree"/>
+        </page>
+        <page name="old_payments">
+            <field name="old_payments" mode="tree"/>
+        </page>
+    </notebook>
+</form>

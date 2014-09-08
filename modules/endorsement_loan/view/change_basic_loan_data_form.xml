@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<form string="Change Loan Basic Data">
+    <group id="header" colspan="4">
+        <label name="effective_date"/>
+        <field name="effective_date"/>
+        <label name="endorsement_definition"/>
+        <field name="endorsement_definition"/>
+        <label name="loan"/>
+        <field name="loan"/>
+    </group>
+    <notebook>
+        <page name="new_value">
+            <field name="new_value" mode="form" view_ids="loan.loan_simple_view_form"/>
+        </page>
+        <page name="current_value">
+            <field name="current_value" mode="form" view_ids="loan.loan_simple_view_form"/>
+        </page>
+    </notebook>
+    <field name="endorsement_part"/>
+</form>

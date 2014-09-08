@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<form string="Updated Payments">
+    <label name="loan"/>
+    <field name="loan" colspan="3"/>
+    <notebook colspan="4">
+        <page name="new_payments">
+            <field name="new_payments"/>
+        </page>
+        <page name="current_payments">
+            <field name="current_payments"/>
+        </page>
+    </notebook>
+</form>

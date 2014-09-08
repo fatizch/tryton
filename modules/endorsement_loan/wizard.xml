@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ###################### -->
+        <!-- # Select Endorsement # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="select_endorsement_view_form">
+            <field name="model">endorsement.start.select_endorsement</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement.select_endorsement_view_form"/>
+            <field name="name">select_endorsement_form</field>
+        </record>
+        <!-- ########################## -->
+        <!-- # Loan Change Basic Data # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="change_basic_loan_data_view_form">
+            <field name="model">endorsement.loan.change_basic_data</field>
+            <field name="type">form</field>
+            <field name="name">change_basic_loan_data_form</field>
+        </record>
+        <!-- ################################ -->
+        <!-- # Loan Dispay Updated Payments # -->
+        <!-- ################################ -->
+        <record model="ir.ui.view" id="display_updated_payments_view_form">
+            <field name="model">endorsement.loan.display_updated_payments</field>
+            <field name="type">form</field>
+            <field name="name">display_updated_payments_form</field>
+        </record>
+        <!-- ################ -->
+        <!-- # Preview Loan # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="preview_loan_view_form">
+            <field name="model">endorsement.start.preview_loan</field>
+            <field name="type">form</field>
+            <field name="name">preview_loan_form</field>
+        </record>
+    </data>
+</tryton>
