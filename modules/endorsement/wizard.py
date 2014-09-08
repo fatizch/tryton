@@ -164,10 +164,11 @@ class SelectEndorsement(model.CoopView):
     endorsement = fields.Many2One('endorsement', 'Endorsement',
         states={'invisible': True})
     endorsement_definition = fields.Many2One('endorsement.definition',
-        'Endorsement', domain=[
+        'Endorsement', domain=['OR',
             If(Bool(Eval('product', False)),
                 [('products', '=', Eval('product'))],
-                [('products', '=', None)])],
+                []),
+            [('products', '=', None)]],
         depends=['product'])
     endorsement_summary = fields.Text('Endorsement Summary')
     product = fields.Many2One('offered.product', 'Product', readonly=True)
