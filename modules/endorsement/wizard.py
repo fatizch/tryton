@@ -185,7 +185,6 @@ class StartEndorsement(Wizard):
             Button('Start Endorsement', 'start_endorsement',
                 'tryton-go-next', default=True, states={
                     'readonly': Not(And(
-                            Bool(Eval('contract', False)),
                             Bool(Eval('effective_date', False)),
                             Bool(Eval('endorsement_definition', False))))})])
     cancel = StateTransition()
@@ -227,9 +226,11 @@ class StartEndorsement(Wizard):
         endorsement = Pool().get('endorsement')(
             Transaction().context.get('active_id'))
         self.select_endorsement.endorsement = endorsement.id
-        self.select_endorsement.contract = endorsement.contracts[0].id
+        if endorsement.contracts:
+            self.select_endorsement.contract = endorsement.contracts[0].id
+            self.select_endorsement.product = \
+                endorsement.contracts[0].product.id
         self.select_endorsement.effective_date = endorsement.effective_date
-        self.select_endorsement.product = endorsement.contracts[0].product.id
         self.select_endorsement.endorsement_definition = \
             endorsement.definition.id
         return 'start_endorsement'
