@@ -16,8 +16,8 @@ def register():
         EndorsementBillingInformationField,
         EndorsementDefinition,
         EndorsementPart,
-        PreviewChanges,
         ChangeBillingInformation,
+        BasicPreview,
         module='endorsement_insurance_invoice', type_='model')
 
     Pool.register(

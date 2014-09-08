@@ -8,13 +8,13 @@ from trytond.modules.endorsement import \
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'PreviewChanges',
+    'BasicPreview',
     'ChangeBillingInformation',
     'StartEndorsement',
     ]
 
 
-class PreviewChanges:
+class BasicPreview:
     __name__ = 'endorsement.start.preview_changes'
 
     previous_total_invoice_amount = fields.Numeric(
@@ -26,12 +26,21 @@ class PreviewChanges:
     currency_digits = fields.Integer('Currency Digits')
 
     @classmethod
-    def get_default_values_from_changes(cls, changes):
-        result = super(PreviewChanges, cls).get_default_values_from_changes(
-            changes)
+    def get_fields_to_get(cls):
+        result = super(BasicPreview, cls).get_fields_to_get()
+        result['contract'].add('total_invoice_amount')
+        result['contract'].add('currency_digits')
+        result['contract'].add('currency_symbol')
+        return result
+
+    @classmethod
+    def init_from_preview_values(cls, preview_values):
+        result = super(BasicPreview, cls).init_from_preview_values(
+            preview_values)
+
         # TODO : manage multi_contract
-        changes_old = changes['old'].values()[0]
-        changes_new = changes['new'].values()[0]
+        changes_old = preview_values['old'].values()[0]
+        changes_new = preview_values['new'].values()[0]
         result['previous_total_invoice_amount'] = changes_old[
             'total_invoice_amount']
         result['new_total_invoice_amount'] = changes_new[

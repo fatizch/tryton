@@ -24,14 +24,6 @@ class EndorsementDefinition:
         return any((endorsement_part.requires_contract_rebill
                 for endorsement_part in self.endorsement_parts))
 
-    def get_contract_modified_fields(self):
-        result = \
-            super(EndorsementDefinition, self).get_contract_modified_fields()
-        result.add('total_invoice_amount')
-        result.add('currency_digits')
-        result.add('currency_symbol')
-        return result
-
 
 class EndorsementPart:
     __name__ = 'endorsement.part'
