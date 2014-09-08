@@ -19,7 +19,7 @@ def register():
         EndorsementOption,
         EndorsementOptionField,
         SelectEndorsement,
-        PreviewChanges,
+        BasicPreview,
         module='endorsement', type_='model')
 
     Pool.register(

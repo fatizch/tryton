@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from trytond.pool import Pool
 from trytond.model import Model
 from trytond.transaction import Transaction
@@ -8,11 +10,12 @@ from trytond.modules.cog_utils import model, coop_string, fields
 
 __all__ = [
     'SelectEndorsement',
-    'PreviewChanges',
+    'BasicPreview',
     'StartEndorsement',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
+    'EndorsementWizardPreviewMixin',
     ]
 
 
@@ -138,6 +141,18 @@ class EndorsementWizardStepVersionedObjectMixin(EndorsementWizardStepMixin):
         super(EndorsementWizardStepVersionedObjectMixin, cls).__setup__()
 
 
+class EndorsementWizardPreviewMixin(object):
+    '''
+        This mixin class is used to create Preview typed State Views.
+        It requires to override a method which will be used to calculate
+        the before / after values
+    '''
+
+    @classmethod
+    def extract_endorsement_preview(cls, instance):
+        raise NotImplementedError
+
+
 class SelectEndorsement(model.CoopView):
     'Select Endorsement'
 
@@ -156,19 +171,31 @@ class SelectEndorsement(model.CoopView):
         depends=['product'])
     endorsement_summary = fields.Text('Endorsement Summary')
     product = fields.Many2One('offered.product', 'Product', readonly=True)
+    has_preview = fields.Boolean('Has Preview', readonly=True)
 
     @fields.depends('contract')
     def on_change_contract(self):
         return {'product': self.contract.product.id if self.contract else None}
 
 
-class PreviewChanges(model.CoopView):
-    'Preview changes'
+class BasicPreview(EndorsementWizardPreviewMixin, model.CoopView):
+    'Basic Preview State View'
 
     __name__ = 'endorsement.start.preview_changes'
 
     @classmethod
-    def get_default_values_from_changes(cls, changes):
+    def get_fields_to_get(cls):
+        # Returns a list of fields grouped per model name which will be
+        # used to calculate before / after values
+        return defaultdict(set)
+
+    @classmethod
+    def extract_endorsement_preview(cls, instance):
+        return dict([(field_name, getattr(instance, field_name, None))
+                for field_name in cls.get_fields_to_get()[instance.__name__]])
+
+    @classmethod
+    def init_from_preview_values(cls, preview_values):
         return {}
 
 
@@ -195,12 +222,14 @@ class StartEndorsement(Wizard):
             Button('Previous', 'summary_previous', 'tryton-go-previous'),
             Button('Save', 'suspend', 'tryton-save'),
             Button('Cancel', 'cancel', 'tryton-cancel'),
-            Button('Preview', 'preview_changes', 'tryton-text-markup'),
+            Button('Preview', 'preview_changes', 'tryton-text-markup',
+                states={'invisible': ~Eval('has_preview')}),
             Button('Apply', 'apply_endorsement', 'tryton-go-next',
                 default=True)])
     apply_endorsement = StateTransition()
     summary_previous = StateTransition()
-    preview_changes = StateView('endorsement.start.preview_changes',
+    preview_changes = StateTransition()
+    basic_preview = StateView('endorsement.start.preview_changes',
         'endorsement.preview_changes_view_form', [
             Button('Summary', 'summary', 'tryton-go-previous'),
             Button('Cancel', 'cancel', 'tryton-cancel'),
@@ -225,7 +254,7 @@ class StartEndorsement(Wizard):
             return 'select_endorsement'
         endorsement = Pool().get('endorsement')(
             Transaction().context.get('active_id'))
-        self.select_endorsement.endorsement = endorsement.id
+        self.select_endorsement.endorsement = endorsement
         if endorsement.contracts:
             self.select_endorsement.contract = endorsement.contracts[0].id
             self.select_endorsement.product = \
@@ -274,15 +303,20 @@ class StartEndorsement(Wizard):
         result = self.select_endorsement._default_values
         result['endorsement_summary'] = \
             self.endorsement.endorsement_summary
+        result['has_preview'] = self.endorsement.definition.preview_state != ''
         return result
-
-    def default_preview_changes(self, name):
-        PreviewChanges = Pool().get('endorsement.start.preview_changes')
-        changes = self.endorsement.extract_preview_values()
-        return PreviewChanges.get_default_values_from_changes(changes)
 
     def transition_summary_previous(self):
         return self.get_state_before('')
+
+    def transition_preview_changes(self):
+        return self.endorsement.definition.preview_state
+
+    def default_basic_preview(self, name):
+        BasicPreview = Pool().get('endorsement.start.preview_changes')
+        preview_values = self.endorsement.extract_preview_values(
+            BasicPreview.extract_endorsement_preview)
+        return BasicPreview.init_from_preview_values(preview_values)
 
     def transition_apply_endorsement(self):
         Pool().get('endorsement').apply([self.endorsement])

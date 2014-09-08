@@ -4,6 +4,9 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
+    <label name="preview_state"/>
+    <field name="preview_state"/>
+    <newline/>
     <notebook>
         <page name="ordered_endorsement_parts">
             <field name="ordered_endorsement_parts" colspan="4" mode="tree" view_ids="endorsement.endorsement_definition_part_relation_view_list"/>

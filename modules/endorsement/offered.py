@@ -1,10 +1,12 @@
 from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
+from trytond.wizard import StateView
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import model, fields, coop_string
 from .endorsement import field_mixin
+from .wizard import EndorsementWizardPreviewMixin
 
 
 __metaclass__ = PoolMeta
@@ -29,6 +31,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     ordered_endorsement_parts = fields.One2Many(
         'endorsement.definition-endorsement.part', 'definition',
         'Endorsement Parts')
+    preview_state = fields.Selection('get_preview_states', 'Preview States')
     products = fields.Many2Many('endorsement.definition-product',
         'endorsement_definition', 'product', 'Products')
     endorsement_parts = fields.Function(
@@ -60,14 +63,24 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
             result[definition_id].append(part_id)
         return result
 
-    def get_contract_modified_fields(self):
-        return set([])
-
-    def extract_contract_values(self, contract):
+    @classmethod
+    def get_preview_states(cls):
+        # Returns the endorsement wizard preview state views
+        pool = Pool()
+        StartEndorsement = pool.get('endorsement.start', type='wizard')
         result = {}
-        for field_name in self.get_contract_modified_fields():
-            result[field_name] = getattr(contract, field_name)
-        return result
+        for state_name, state in StartEndorsement.states.iteritems():
+            if not issubclass(state.__class__, StateView):
+                continue
+            state_class = pool.get(state.model_name)
+            if not issubclass(state_class, EndorsementWizardPreviewMixin):
+                continue
+            result[state_name] = state_class.__name__
+            # TODO : Fix this. Fails on BasicPreview with
+            # endorsement_insurance_invoice override
+            # result[state_name] = \
+            #     coop_string.translate_model_name(state_class)
+        return [(k, v) for k, v in result.iteritems()]  +  [('', '')]
 
 
 class EndorsementPart(model.CoopSQL, model.CoopView):
