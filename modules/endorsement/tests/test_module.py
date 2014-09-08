@@ -172,6 +172,23 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ])
         previous_contract_number = contract.contract_number
 
+        # Test preview data. Requires save to function properly
+        contract_id = contract.id
+
+        def extract_method(instance):
+            return {'contract_number': instance.contract_number}
+
+        self.assertEqual(endorsement.extract_preview_values(extract_method),
+            {
+                'old': {
+                    'contract,%i' % contract_id: {
+                        'contract_number': u'Ctr1Y2014',
+                        }},
+                'new': {
+                    'contract,%i' % contract_id: {
+                        'contract_number': u'1234',
+                        }}})
+
         endorsement.apply([endorsement])
         Transaction().cursor.commit()
         contract = endorsement.contracts[0]

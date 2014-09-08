@@ -503,7 +503,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             ModelClass.apply(to_apply)
         cls.write(endorsements, {'application_date': datetime.datetime.now()})
 
-    def extract_preview_values(self):
+    def extract_preview_values(self, extraction_method):
         pool  =  Pool()
         current_values, old_values, new_values = {}, {}, {}
         for unitary_endorsement in self.all_endorsements():
@@ -511,7 +511,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             endorsed_model, endorsed_id = (endorsed_record.__name__,
                 endorsed_record.id)
             current_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                self.definition.extract_contract_values(endorsed_record)
+                extraction_method(endorsed_record)
         if self.application_date:
             for unitary_endorsement in self.all_endorsements():
                 endorsed_record = unitary_endorsement.get_endorsed_record()
@@ -520,7 +520,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 old_record = utils.get_history_instance(endorsed_model,
                     endorsed_id, self.application_date)
                 old_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                    self.definition.extract_contract_values(old_record)
+                    extraction_method(old_record)
             new_values = current_values
         else:
             # Make sure all changes are saved
@@ -536,8 +536,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                         endorsed_record.id)
                     record = pool.get(endorsed_model)(endorsed_id)
                     new_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                        applied_self.definition.extract_contract_values(
-                            record)
+                        extraction_method(record)
                 old_values = current_values
                 Transaction().cursor.rollback()
             return {'old': old_values, 'new': new_values}
