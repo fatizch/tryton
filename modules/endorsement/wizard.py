@@ -1,4 +1,5 @@
 from trytond.pool import Pool
+from trytond.model import Model
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.pyson import Eval, Bool, And, Not, Len, If
@@ -10,6 +11,7 @@ __all__ = [
     'PreviewChanges',
     'StartEndorsement',
     'EndorsementWizardStepMixin',
+    'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
     ]
 
@@ -35,6 +37,74 @@ class EndorsementWizardStepMixin(object):
         # Updates the current endorsement using the data provided in the
         # current instance of the wizard
         raise NotImplementedError
+
+
+class EndorsementWizardStepBasicObjectMixin(EndorsementWizardStepMixin):
+    '''
+        Mixin used for modifying an object. It displays the current instance
+        (before endorsement) next to the modified version.
+
+        It includes basic methods for default values and instance update
+    '''
+    _target_model = None
+
+    current_value = fields.One2Many(None, None, 'Current Value', readonly=True)
+    new_value = fields.One2Many(None, None, 'New Value')
+
+    @classmethod
+    def __setup__(cls):
+        cls.current_value.model_name = cls._target_model
+        cls.new_value.model_name = cls._target_model
+        super(EndorsementWizardStepBasicObjectMixin, cls).__setup__()
+
+    def _update_endorsement(self, endorsement, values_field):
+        if getattr(endorsement, 'values', None) is None:
+            endorsement.values = {}
+        for endorsed_field in getattr(self.endorsement_part, values_field):
+            new_value = getattr(self.new_value[0], endorsed_field.name, None)
+            if isinstance(new_value, Model):
+                new_value = new_value.id
+            endorsement.values[endorsed_field.name] = new_value
+
+        # Make sure "save" will be triggered
+        endorsement.values = endorsement.values
+
+    @classmethod
+    def update_new_value_from_endorsement(cls, endorsement, value,
+            endorsement_part, value_field):
+        for endorsed_field in getattr(endorsement_part, value_field):
+            if not endorsed_field.name in endorsement.values:
+                continue
+            value[endorsed_field.name] = endorsement.values[
+                endorsed_field.name]
+
+    @classmethod
+    def get_state_view_default_values(cls, wizard, endorsed_field_view,
+            endorsed_model, state_name, endorsement_part_field):
+        pool = Pool()
+        View = pool.get('ir.ui.view')
+        good_view, = View.search([('xml_id', '=', endorsed_field_view)])
+        endorsed_fields = wizard.get_fields_to_get(endorsed_model, good_view.id)
+        endorsement_part = wizard.get_endorsement_part_for_state(state_name)
+        endorsed_object = wizard.get_endorsed_object(endorsement_part)
+        endorsement_date = wizard.select_endorsement.effective_date
+        result = {
+            'endorsement_part': endorsement_part.id,
+            'effective_date': endorsement_date,
+            'endorsement_definition':
+            wizard.select_endorsement.endorsement_definition.id,
+            }
+        result['current_value'] = [endorsed_object.id]
+        result['new_value'] = [wizard.get_new_instance_fields(endorsed_object,
+                endorsed_fields)]
+        endorsements = wizard.get_endorsements_for_state(state_name)
+        if endorsements:
+            # TODO : multi targets ?
+            endorsement = endorsements[0]
+            cls.update_new_value_from_endorsement(endorsement,
+                result['new_value'][0], endorsement_part,
+                endorsement_part_field)
+        return result
 
 
 class EndorsementWizardStepVersionedObjectMixin(EndorsementWizardStepMixin):
