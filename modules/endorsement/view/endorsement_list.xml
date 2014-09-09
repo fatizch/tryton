@@ -4,4 +4,6 @@
   <field name="definition"/>
   <field name="state"/>
   <field name="application_date"/>
+  <button string="Draft" name="draft"/>
+  <button string="Apply" name="apply"/>
 </tree>
