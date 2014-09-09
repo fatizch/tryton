@@ -413,7 +413,12 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     __name__ = 'endorsement'
 
     applicant = fields.Many2One('party.party', 'Applicant')
-    application_date = fields.DateTime('Application Date', readonly=True)
+    application_date = fields.DateTime('Application Date', readonly=True,
+        states={'invisible': Eval('state', '') == 'draft'},
+        depends=['state'])
+    applied_by = fields.Many2One('res.user', 'Applied by', readonly=True,
+        states={'invisible': Eval('state', '') == 'draft'},
+        depends=['state'])
     contract_endorsements = fields.One2Many('endorsement.contract',
         'endorsement', 'Contract Endorsement')
     definition = fields.Many2One('endorsement.definition', 'Definition',
@@ -500,7 +505,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 continue
             ModelClass = pool.get(model_name)
             ModelClass.draft(endorsements_per_model[model_name])
-        cls.write(endorsements, {'application_date': None})
+        cls.write(endorsements, {'applied_by': None,
+                'application_date': None})
 
     @classmethod
     @model.CoopView.button
@@ -513,7 +519,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 continue
             ModelClass = pool.get(model_name)
             ModelClass.apply(endorsements_per_model[model_name])
-        cls.write(endorsements, {'application_date': datetime.datetime.now()})
+        cls.write(endorsements, {'applied_by': Transaction().user,
+                'application_date': datetime.datetime.now()})
 
     def extract_preview_values(self, extraction_method):
         pool  =  Pool()

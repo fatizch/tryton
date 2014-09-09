@@ -14,10 +14,17 @@
     </group>
     <field name="endorsement_summary" colspan="2"/>
     <newline/>
-    <group id="workflow" colspan="4">
-        <button string="Draft" name="draft"/>
-        <button string="Apply" name="apply"/>
-        <label name="application_date"/>
-        <field name="application_date"/>
+    <group id="application" colspan="4">
+        <group id="application_buttons" yfill="1">
+            <button string="Apply" name="apply"/>
+            <button string="Draft" name="draft"/>
+        </group>
+        <group id="application_info" xfill="0">
+            <label name="application_date"/>
+            <field name="application_date"/>
+            <newline/>
+            <label name="applied_by"/>
+            <field name="applied_by"/>
+        </group>
     </group>
 </form>
