@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<form string="Premium Amount">
+    <label name="premium"/>
+    <field name="premium"/>
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="period_start"/>
+    <field name="period_start"/>
+    <label name="period_end"/>
+    <field name="period_end"/>
+    <label name="start"/>
+    <field name="start"/>
+    <label name="end"/>
+    <field name="end"/>
+    <label name="amount"/>
+    <field name="amount"/>
+    <label name="tax_amount"/>
+    <field name="tax_amount"/>
+</form>

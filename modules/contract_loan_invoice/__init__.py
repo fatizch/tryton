@@ -8,6 +8,7 @@ def register():
         LoanShare,
         Premium,
         PremiumAmount,
+        PremiumAmountPerPeriod,
         Contract,
         Loan,
         DisplayLoanAveragePremiumValues,

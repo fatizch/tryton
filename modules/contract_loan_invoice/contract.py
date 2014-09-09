@@ -1,9 +1,10 @@
 import datetime
 from collections import defaultdict
 
-from sql import Cast
-from sql.aggregate import Sum
+from sql import Cast, Literal
+from sql.aggregate import Sum, Max
 from sql.operators import Concat
+from sql.conditionals import Case
 
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
@@ -20,6 +21,7 @@ __all__ = [
     'LoanShare',
     'Premium',
     'PremiumAmount',
+    'PremiumAmountPerPeriod',
     'Contract',
     'Loan',
     'DisplayLoanAveragePremiumValues',
@@ -214,6 +216,7 @@ class Contract:
         'Generate premium amount up to the contract end_date'
         pool = Pool()
         Amount = pool.get('contract.premium.amount')
+        Tax = pool.get('account.tax')
         amounts = []
         for contract in contracts:
             if not contract.is_loan:
@@ -223,6 +226,10 @@ class Contract:
                 period = period[:2]  # XXX there is billing information
                 invoice_lines = contract.compute_invoice_lines(*period)
                 for invoice_line in invoice_lines:
+                    taxes = Tax.compute(invoice_line.taxes,
+                        invoice_line.unit_price, invoice_line.quantity,
+                        date=period[0])
+                    tax_amount = sum(t['amount'] for t in taxes)
                     amount = Amount(
                         premium=invoice_line.origin,
                         period_start=period[0],
@@ -230,6 +237,7 @@ class Contract:
                         start=invoice_line.coverage_start,
                         end=invoice_line.coverage_end,
                         amount=invoice_line.unit_price,
+                        tax_amount=tax_amount,
                         contract=contract,
                         )
                     amounts.append(amount)
@@ -250,6 +258,69 @@ class PremiumAmount(ModelSQL, ModelView):
     start = fields.Date('Start')
     end = fields.Date('End')
     amount = fields.Numeric('Amount')
+    tax_amount = fields.Numeric('Tax Amount')
+
+
+class PremiumAmountPerPeriod(ModelSQL, ModelView):
+    'Premium Amount per Period'
+    __name__ = 'contract.premium.amount.per_period'
+    contract = fields.Many2One('contract', 'Contract')
+    amount = fields.Numeric('Amount')
+    fees = fields.Numeric('Fees')
+    untaxed_amount = fields.Numeric('Total')
+    tax_amount = fields.Numeric('Tax Amount')
+    total = fields.Numeric('Total')
+    period_start = fields.Date('Period Start')
+    period_end = fields.Date('Period End')
+    premium_amounts = fields.Function(
+        fields.One2Many('contract.premium.amount', None, 'Premium Amounts'),
+        'get_premium_amounts')
+
+    @staticmethod
+    def table_query():
+        pool = Pool()
+        PremiumAmount = pool.get('contract.premium.amount')
+        premium_amount = PremiumAmount.__table__()
+        Premium = pool.get('contract.premium')
+        premium = Premium.__table__()
+
+        return premium_amount.join(premium, 'LEFT',
+            condition=premium_amount.premium == premium.id
+            ).select(
+                Max(premium_amount.id).as_('id'),
+                Literal(0).as_('create_uid'),
+                Literal(0).as_('create_date'),
+                Literal(0).as_('write_uid'),
+                Literal(0).as_('write_date'),
+                premium_amount.contract.as_('contract'),
+                Sum(Case((~premium.rated_entity.ilike(
+                                'account.fee.description,%'),
+                            premium_amount.amount),
+                        else_=0)).as_('amount'),
+                Sum(Case((premium.rated_entity.ilike(
+                                'account.fee.description,%'),
+                            premium_amount.amount),
+                        else_=0)).as_('fees'),
+                Sum(premium_amount.amount).as_('untaxed_amount'),
+                Sum(premium_amount.tax_amount).as_('tax_amount'),
+                Sum(premium_amount.amount
+                    + premium_amount.tax_amount).as_('total'),
+                premium_amount.period_start.as_('period_start'),
+                premium_amount.period_end.as_('period_end'),
+                group_by=[
+                    premium_amount.contract,
+                    premium_amount.period_start,
+                    premium_amount.period_end,
+                    ])
+
+    def get_premium_amounts(self, name):
+        pool = Pool()
+        PremiumAmount = pool.get('contract.premium.amount')
+        premium_amounts = PremiumAmount.search([
+                ('period_start', '=', self.period_start),
+                ('period_end', '=', self.period_end),
+                ])
+        return [p.id for p in premium_amounts]
 
 
 class Loan:

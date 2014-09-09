@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tree string="Premium Amounts">
+    <field name="premium"/>
+    <field name="contract"/>
+    <field name="period_start"/>
+    <field name="period_end"/>
+    <field name="start"/>
+    <field name="end"/>
+    <field name="amount"/>
+    <field name="tax_amount"/>
+</tree>
