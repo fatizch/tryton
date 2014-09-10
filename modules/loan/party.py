@@ -1,24 +1,29 @@
 import copy
+import datetime
 
 from decimal import Decimal
 from sql.aggregate import Max
 from sql import Literal
+from sql.conditionals import Coalesce
 from collections import defaultdict
 
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, PYSONEncoder
-from trytond.wizard import Wizard
+from trytond.wizard import Wizard, StateView, Button
 
 from trytond.modules.cog_utils import fields, model, coop_string, UnionMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Party',
-    'Insurer',
     'SynthesisMenuLoan',
     'SynthesisMenu',
     'SynthesisMenuOpen',
+    'DisplayInsuredOutstandingLoanBalance',
+    'InsuredOutstandingLoanBalanceView',
+    'InsuredOutstandingLoanBalanceLineView',
+    'InsuredOutstandingLoanBalanceSelectDate',
     ]
 
 
@@ -51,69 +56,6 @@ class Party:
         result = defaultdict(list)
         for party_id, insurer in cursor.fetchall():
             result[party_id].append(insurer)
-
-        return result
-
-
-class Insurer:
-    __name__ = 'insurer'
-
-    total_outstanding_loan_balance = fields.Function(
-        fields.Numeric('Total Loan Outstanding Capital'),
-        'get_total_outstanding_loan_balance')
-    currency_symbol = fields.Function(
-        fields.Char('Currency Symbol'),
-        'getter_currency_symbol')
-
-    def getter_currency_symbol(self, name):
-        Company = Pool().get('company.company')
-        return Company(Transaction().context.get('company')).currency.symbol
-
-    @classmethod
-    def get_total_outstanding_loan_balance(cls, insurers, name):
-        party_id = Transaction().context.get('party', None)
-        if party_id is None:
-            return 0
-        cursor = Transaction().cursor
-        pool = Pool()
-        today = pool.get('ir.date').today()
-        Currency = pool.get('currency.currency')
-        Company = pool.get('company.company')
-
-        party = pool.get('party.party').__table__()
-        covered_element = pool.get('contract.covered_element').__table__()
-        option = pool.get('contract.option').__table__()
-        coverage = pool.get('offered.option.description').__table__()
-        loan_share = pool.get('loan.share').__table__()
-        payment = pool.get('loan.payment').__table__()
-        loan = pool.get('loan').__table__()
-
-        query_table = covered_element.join(party, condition=(
-                covered_element.party == party_id)
-            ).join(option, condition=(
-                    option.covered_element == covered_element.id)
-            ).join(coverage, condition=(
-                (option.coverage == coverage.id)
-                & (coverage.insurer.in_([x.id for x in insurers])))
-            ).join(loan_share, condition=(loan_share.option == option.id)
-            ).join(payment, condition=(
-                (payment.loan == loan_share.loan)
-                & (payment.start_date <= today))
-            ).join(loan, condition=(loan.id == payment.loan))
-
-        cursor.execute(*query_table.select(coverage.insurer, loan.id,
-                Max(loan.currency),
-                Max(payment.begin_balance) * Max(loan_share.share),
-                group_by=[coverage.insurer, loan.id]))
-
-        company = Company(Transaction().context.get('company'))
-        target_currency = company.currency
-        result = defaultdict(lambda: Decimal(0))
-        for insurer, _, currency, outstanding_amount in cursor.fetchall():
-            if not outstanding_amount:
-                continue
-            result[insurer] += Currency.compute(Currency(currency),
-                outstanding_amount, target_currency)
 
         return result
 
@@ -209,3 +151,175 @@ class SynthesisMenuOpen(Wizard):
                 'res_id': record.loan.id
             }
         return actions
+
+
+class DisplayInsuredOutstandingLoanBalance(Wizard):
+    'Display Insured Outstanding Loan Balance Wizard'
+
+    __name__ = 'party.display_insured_outstanding_loan_balance'
+
+    start_state = 'select_date'
+    select_date = StateView(
+        'party.display_insured_outstanding_loan_balance.select_date',
+        'loan.display_insured_outstanding_loan_balance_select_date_view_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Next', 'insured_outstanding_loan_balance_view',
+                'tryton-go-next', default=True),
+        ])
+    insured_outstanding_loan_balance_view = StateView(
+        'party.display_insured_outstanding_loan_balance.view',
+        'loan.display_insured_outstanding_loan_balance_view_form', [
+            Button('Previous', 'select_date', 'tryton-go-previous'),
+            Button('Ok', 'end', 'tryton-go-next', default=True),
+            ])
+
+    def default_select_date(self, name):
+        if self.select_date._default_values:
+            return self.select_date._default_values
+        pool = Pool()
+        Party = pool.get('party.party')
+        selected_party = Party(Transaction().context.get('active_id'))
+        Company = pool.get('company.company')
+        company = Company(Transaction().context.get('company'))
+        currencies = []
+        default_currency = None
+        for contract in selected_party.contracts:
+            for loan in contract.loans:
+                currencies.append(loan.currency.id)
+                if loan.currency == company.currency:
+                    default_currency = loan.currency.id
+        if not default_currency and currencies:
+            default_currency = currencies[0].id
+        return {
+            'date': datetime.date.today(),
+            'party': selected_party.id,
+            'possible_currencies': currencies,
+            'currency': default_currency,
+            }
+
+    def get_insured_outstanding_loan_balances(self, party, date, currency):
+        cursor = Transaction().cursor
+        pool = Pool()
+        Loan = pool.get('loan')
+        Insurer = pool.get('insurer')
+        Coverage = pool.get('offered.option.description')
+
+        contract = pool.get('contract').__table__()
+        history = pool.get('contract.activation_history').__table__()
+        covered_element = pool.get('contract.covered_element').__table__()
+        option = pool.get('contract.option').__table__()
+        coverage = pool.get('offered.option.description').__table__()
+        loan_share = pool.get('loan.share').__table__()
+        loan = Loan.__table__()
+        insurer = Insurer.__table__()
+
+        query_table = covered_element.join(option, condition=(
+                    (option.covered_element == covered_element.id)
+                    & (option.status == 'active')
+                    & (covered_element.party == party.id)
+                    & (Coalesce(option.start_date, datetime.date.min) <= date)
+                    & (Coalesce(option.end_date, datetime.date.max) >= date))
+            ).join(coverage, condition=(
+                    option.coverage == coverage.id)
+            ).join(loan_share, condition=(loan_share.option == option.id)
+            ).join(loan, condition=(
+                    (loan_share.loan == loan.id)
+                    & (loan.currency == currency.id))
+            ).join(contract, condition=(
+                    covered_element.contract == contract.id)
+            ).join(history, condition=(
+                    (history.contract == contract.id)
+                    & (history.start_date <= date)
+                    & (history.end_date >= date)))
+
+        cursor.execute(*query_table.select(coverage.insurer, loan.id,
+                loan_share.share, coverage.insurance_kind, coverage.id,
+                order_by=(coverage.insurer, coverage.insurance_kind)))
+
+        aggregate_amounts = defaultdict(
+            lambda: defaultdict(lambda: Decimal(0)))
+        for insurer, loan_id, share, insurance_kind, coverage_id in (
+                cursor.fetchall()):
+            loan = Loan(loan_id)
+            aggregate_amounts[insurer][insurance_kind] += currency.round(
+                share * (loan.get_outstanding_loan_balance(
+                        at_date=date) or 0))
+
+        translated, res = {}, []
+        for insurer_id, values in aggregate_amounts.iteritems():
+            insurer = Insurer(insurer_id)
+            max_amount, childs = 0, []
+            for insurance_kind, amount in values.iteritems():
+                if insurance_kind not in translated:
+                    translated[insurance_kind] = (
+                        coop_string.selection_as_string(Coverage,
+                            'insurance_kind', insurance_kind))
+                childs.append({
+                        'name': translated[insurance_kind],
+                        'currency_symbol': currency.symbol,
+                        'currency_digits': currency.digits,
+                        'childs': None,
+                        'amount': amount,
+                        })
+                max_amount = max(amount, max_amount)
+            res.append({
+                    'name': insurer.rec_name,
+                    'currency_symbol': currency.symbol,
+                    'currency_digits': currency.digits,
+                    'childs': childs,
+                    'amount': max_amount,
+                    })
+
+        return res
+
+    def default_insured_outstanding_loan_balance_view(self, name):
+        party = self.select_date.party
+        date = self.select_date.date
+        currency = self.select_date.currency
+        return {
+            'insurers': self.get_insured_outstanding_loan_balances(
+                party, date, currency),
+            'date': self.select_date.date,
+            }
+
+
+class InsuredOutstandingLoanBalanceView(model.CoopView):
+    'Insured Outstanding Loan Balance View'
+
+    __name__ = 'party.display_insured_outstanding_loan_balance.view'
+
+    insurers = fields.One2Many(
+        'party.display_insured_outstanding_loan_balance.line_view',
+        None, 'Loan Insurers', readonly=True)
+    date = fields.Date('Date')
+
+
+class InsuredOutstandingLoanBalanceLineView(model.CoopView):
+    'Insured Outstanding Loan Balance Line View'
+
+    __name__ = 'party.display_insured_outstanding_loan_balance.line_view'
+
+    name = fields.Char('Name')
+    amount = fields.Numeric('Insured Outstanding Loan Balance',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
+    currency_symbol = fields.Char('Symbol')
+    currency_digits = fields.Integer('Currency Digits')
+    childs = fields.One2Many(
+            'party.display_insured_outstanding_loan_balance.line_view',
+            None, 'Childs')
+    insurers = fields.Char('Loan Insurers', states={'invisible': True})
+
+
+class InsuredOutstandingLoanBalanceSelectDate(model.CoopSQL, model.CoopView):
+    'Date selector for insured outstanding loan balance display'
+
+    __name__ = 'party.display_insured_outstanding_loan_balance.select_date'
+
+    date = fields.Date('Date', required=True)
+    party = fields.Many2One('party.party', 'Party', readonly=True)
+    currency = fields.Many2One('currency.currency', 'Currency',
+            required=True, depends=['possible_currencies'],
+            domain=[('id', 'in', Eval('possible_currencies'))])
+    possible_currencies = fields.Many2Many('currency.currency',
+             None, None, 'Possible Currencies')

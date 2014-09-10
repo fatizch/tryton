@@ -31,9 +31,11 @@ def register():
         BillingPremium,
         LoanShareTreeExpansion,
         Party,
-        Insurer,
         SynthesisMenuLoan,
         SynthesisMenu,
+        InsuredOutstandingLoanBalanceView,
+        InsuredOutstandingLoanBalanceLineView,
+        InsuredOutstandingLoanBalanceSelectDate,
         module='loan', type_='model')
     Pool.register(
         LoanCreate,
@@ -42,4 +44,5 @@ def register():
         DisplayContractPremium,
         CreateExtraPremium,
         SynthesisMenuOpen,
+        DisplayInsuredOutstandingLoanBalance,
         module='loan', type_='wizard')

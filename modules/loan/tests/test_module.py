@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 import unittest
 
@@ -46,6 +46,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'ExtraPremiumKind': 'extra_premium.kind',
             'ExtraPremium': 'contract.option.extra_premium',
             'ExtraData': 'extra_data',
+            'Contract': 'contract',
+            'Coverage': 'offered.option.description',
+            'LoanShare': 'loan.share',
+            'CoveredElement': 'contract.covered_element',
+            'Option': 'contract.option',
+            'Party': 'party.party',
+            'Insurer': 'insurer',
+            'ActivationHistory': 'contract.activation_history',
+            'InsuredOutstandingLoanBalance':
+                'party.display_insured_outstanding_loan_balance',
+            'InsuredOutstandingLoanBalanceView':
+                'party.display_insured_outstanding_loan_balance.view',
+            'InsuredOutstandingLoanBalanceLineView':
+                'party.display_insured_outstanding_loan_balance.line_view',
+            'InsuredOutstandingLoanBalanceSelectDate':
+                'party.display_insured_outstanding_loan_balance.select_date',
             }
 
     @test_framework.prepare_test(
@@ -544,6 +560,252 @@ class ModuleTestCase(test_framework.CoopTestCase):
     #     covered_element.extra_data['test_extra_data'] = 'test_key'
     #     covered_element.save()
     #     contract.check_covered_element_extra_data()
+
+    @test_framework.prepare_test(
+        'loan.test0010loan_basic_data',
+        'loan.test0037loan_creation',
+        'contract_insurance.test0001_testPersonCreation',
+        )
+    def test0048_insured_outstanding_loan_balance_wizard(self):
+        'Test outstanding amount wizard'
+
+        company, = self.Company().search([], limit=1)
+        currency, = self.Currency.search([], limit=1)
+
+        def create_insurer(name):
+            party = self.Party(name=name)
+            party.save()
+            insurer = self.Insurer(party=party)
+            insurer.save()
+            return insurer
+
+        def create_account():
+            product_account_kind = self.AccountKind(
+                    name='Product Account Kind',
+                    company=company)
+            product_account_kind.save()
+            account = self.Account(
+                name='Loan Product Account',
+                code='Loan Product Account',
+                kind='revenue',
+                type=product_account_kind,
+                company=company)
+            account.save()
+            return account
+
+        def create_coverage(name, code, family, insurance_kind,
+                account, insurer, start_date):
+            coverage = self.Coverage(
+                code=code,
+                name=name,
+                company=company,
+                start_date=start_date,
+                account_for_billing=account,
+                insurer=insurer,
+                insurance_kind=insurance_kind)
+            coverage.save()
+            return coverage
+
+        def create_loan(amount, base_date):
+            loan = self.Loan(
+                kind='fixed_rate',
+                rate=Decimal('0.04'),
+                funds_release_date=base_date + timedelta(weeks=20),
+                first_payment_date=base_date + timedelta(weeks=30),
+                payment_frequency='month',
+                amount=Decimal(amount),
+                number_of_payments=120,
+                currency=currency,
+                company=company)
+            loan.payment_amount = loan.on_change_with_payment_amount()
+            loan.parties = self.Party.search([('name', '=', 'DOE')])
+            loan.calculate_increments()
+            loan.payments = loan.calculate_payments()
+            loan.save()
+            return loan
+
+        def create_product(base_date, account):
+            self.Sequence(name='Contract',
+                    code='contract', company=company).save()
+            ng = self.Sequence.search([
+                    ('code', '=', 'contract')])[0]
+            product = self.Product(
+                code='AAA',
+                name='Awesome Alternative Allowance',
+                contract_generator=ng,
+                company=company,
+                start_date=base_date,
+                account_for_billing=account)
+            product.save()
+            return product
+
+        def create_contract(account, product, subscriber):
+            start_date = product.start_date + timedelta(weeks=10)
+            contract = self.Contract(
+                product=product.id,
+                company=product.company.id,
+                appliable_conditions_date=start_date,
+                activation_history=[self.ActivationHistory(
+                    start_date=start_date,
+                    end_date=start_date + timedelta(weeks=3000))])
+            contract.save()
+            contract.account_for_billing = account
+            contract.subscriber = subscriber
+            contract.finalize_contract()
+            contract.activate_contract()
+            contract.save()
+            self.assertEqual(contract.status, 'active')
+            return contract
+
+        def create_option(coverage, covered_element, base_date):
+            option = self.Option(
+                start_date=base_date + timedelta(weeks=10),
+                coverage=coverage.id,
+                covered_element=covered_element.id,
+                status='active')
+            option.save()
+            return option
+
+        def create_loan_share(share, option, loan):
+            loan_share = self.LoanShare(
+                option=option,
+                loan=loan,
+                share=Decimal(share))
+            loan_share.save()
+
+        base_date = date(2014, 01, 15)
+        john = self.Party.search([('name', '=', 'DOE')])[0]
+
+        account_product = create_account()
+        product = create_product(base_date, account_product)
+
+        insurer1 = create_insurer("INSURER1")
+        insurer2 = create_insurer("INSURER2")
+
+        account_ins1 = create_account()
+        account_ins2 = create_account()
+        death_ins1 = create_coverage("DeathInsurer1", "death_ins1",
+                "insurance", "death", account_ins1, insurer1,
+                base_date)
+        dis_ins1 = create_coverage("DisInsurer1", "dis_ins1",
+                "insurance", "partial_disability", account_ins1, insurer1,
+                base_date)
+        temp_dis_ins2 = create_coverage("TempInsurer2", "tem_ins2",
+                "insurance", "temporary_disability",
+                account_ins2, insurer2,
+                base_date)
+        loan1 = create_loan(100000, base_date)
+        loan2 = create_loan(200000, base_date)
+
+        account_contract = create_account()
+        contract1 = create_contract(account_contract, product, john)
+        contract2 = create_contract(account_contract, product, john)
+        covered_element1 = self.CoveredElement()
+        covered_element1.contract = contract1
+        covered_element1.party = john
+        covered_element1.save()
+        covered_element2 = self.CoveredElement()
+        covered_element2.contract = contract2
+        covered_element2.party = john
+        covered_element2.save()
+
+        # on contract 1
+        option_death_ins1 = create_option(death_ins1,
+                covered_element1, base_date)
+        option_dis_ins1 = create_option(dis_ins1,
+                covered_element1, base_date)
+        option_temp_dis_ins2 = create_option(temp_dis_ins2,
+                covered_element1, base_date)
+
+        create_loan_share('0.8', option_death_ins1, loan1)
+        create_loan_share('0.8', option_death_ins1, loan2)
+        create_loan_share('0.3333', option_dis_ins1, loan1)
+        create_loan_share('0.3333', option_temp_dis_ins2, loan1)
+
+        # on contract 2
+        option_temp_dis_ins2_2 = create_option(temp_dis_ins2,
+                covered_element2, base_date)
+        create_loan_share('0.8', option_temp_dis_ins2_2, loan2)
+
+        john.loan_insurers = [insurer1, insurer2]
+
+        def run_wizard(at_date, currency):
+            with Transaction().set_context(active_id=john.id,
+                    company=company.id):
+                wizard_id, _, _ = self.InsuredOutstandingLoanBalance.create()
+                wizard = self.InsuredOutstandingLoanBalance(wizard_id)
+                wizard._execute('select_date')
+                wizard.select_date.date = at_date
+                wizard.select_date.party = john
+                wizard.select_date.currency = currency
+                wizard._execute('insured_outstanding_loan_balance_view')
+                lines = wizard.get_insured_outstanding_loan_balances(
+                    john, at_date, currency)
+                return lines
+
+        test_date = base_date - timedelta(weeks=20)
+        res = run_wizard(test_date, currency)
+        insurers = set([x['name'] for x in res])
+        self.assertEqual(insurers, set([]))
+
+        test_date = base_date + timedelta(days=227)
+        res = run_wizard(test_date, currency)
+        insurers = set([x['name'] for x in res])
+        self.assertTrue(insurers == set(['INSURER1', 'INSURER2']))
+        for line in res:
+            if line['name'] == 'INSURER1':
+                self.assertEqual(line['amount'], Decimal('238370.12'))
+                coverages = set(x['name'] for x in line['childs'])
+                self.assertTrue(
+                        coverages == set(['Death', 'Partial Disability']))
+                for child in line['childs']:
+                    if child['name'] == 'Death':
+                        self.assertEqual(child['amount'], Decimal('238370.12'))
+                    if child['name'] == 'Partial Disability':
+                        self.assertEqual(child['amount'], Decimal('33103.65'))
+            elif line['name'] == 'INSURER2':
+                self.assertEqual(line['amount'], Decimal('192017.07'))
+                coverages = set(x['name'] for x in line['childs'])
+                self.assertTrue(coverages == set(['Temporary Disability']))
+                self.assertEqual(line['childs'][0]['amount'],
+                    Decimal('192017.07'))
+
+        test_date = base_date + timedelta(days=2662)
+        res = run_wizard(test_date, currency)
+        insurers = set([x['name'] for x in res])
+        self.assertTrue(insurers == set(['INSURER1', 'INSURER2']))
+        for line in res:
+            if line['name'] == 'INSURER1':
+                self.assertEqual(line['amount'], Decimal('88726.16'))
+                coverages = set(x['name'] for x in line['childs'])
+                self.assertTrue(
+                        coverages == set(['Death', 'Partial Disability']))
+                for child in line['childs']:
+                    if child['name'] == 'Death':
+                        self.assertEqual(child['amount'], Decimal('88726.16'))
+                    if child['name'] == 'Partial Disability':
+                        self.assertEqual(child['amount'], Decimal('12321.84'))
+            elif line['name'] == 'INSURER2':
+                self.assertEqual(line['amount'], Decimal('71472.62'))
+                coverages = set(x['name'] for x in line['childs'])
+                self.assertTrue(coverages == set(['Temporary Disability']))
+                for child in line['childs']:
+                    if child['name'] == 'Temporary Disability':
+                        self.assertEqual(child['amount'], Decimal('71472.62'))
+
+        test_date = base_date + timedelta(weeks=2000)
+        res = run_wizard(test_date, currency)
+        insurers = set([x['name'] for x in res])
+        self.assertTrue(insurers == set(['INSURER1', 'INSURER2']))
+        for line in res:
+            self.assertEqual(line['amount'], 0)
+            for child in line['childs']:
+                self.assertEqual(child['amount'], 0)
+
+        test_date = base_date + timedelta(weeks=3200)
+        res = run_wizard(test_date, currency)
+        insurers = set([x['name'] for x in res])
+        self.assertTrue(insurers == set([]))
 
 
 def suite():

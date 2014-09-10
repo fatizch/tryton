@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Insurers">
+  <field name="name"/>
+  <field name="amount" expand="1">
+      <suffix name="currency_symbol"/>
+  </field>
+  <field name="insurers" tree_invisible="1"/>
+</tree>
+

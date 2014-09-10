@@ -1,19 +1,44 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="party_view_form">
-            <field name="model">party.party</field>
+        <!-- ################################## -->
+        <!-- # Outstanding Amount Select Date # -->
+        <!-- ################################## -->
+        <record model="ir.ui.view" id="display_insured_outstanding_loan_balance_select_date_view_form">
+            <field name="model">party.display_insured_outstanding_loan_balance.select_date</field>
             <field name="type">form</field>
-            <field name="inherit" ref="party.party_view_form"/>
-            <field name="name">party_form</field>
+            <field name="name">display_insured_outstanding_loan_balance_select_date_form</field>
         </record>
-        <!-- ########### -->
-        <!-- # Insurer # -->
-        <!-- ########### -->
-        <record model="ir.ui.view" id="insurer_view_list">
-            <field name="model">insurer</field>
+        <!-- ########################### -->
+        <!-- # Outstanding Amount View # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="display_insured_outstanding_loan_balance_view_form">
+            <field name="model">party.display_insured_outstanding_loan_balance.view</field>
+            <field name="type">form</field>
+            <field name="name">display_insured_outstanding_loan_balance_form</field>
+        </record>
+        <record model="ir.ui.view" id="display_insured_outstanding_loan_balance_line_view_form">
+            <field name="model">party.display_insured_outstanding_loan_balance.line_view</field>
+            <field name="type">form</field>
+            <field name="name">display_insured_outstanding_loan_balance_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="display_insured_outstanding_loan_balance_line_view_list">
+            <field name="model">party.display_insured_outstanding_loan_balance.line_view</field>
             <field name="type">tree</field>
-            <field name="name">insurer_list</field>
+            <field name="name">display_insured_outstanding_loan_balance_line_list</field>
+            <field name="field_childs">childs</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Outstanding Amount Wizard # -->
+        <!-- ############################# -->
+        <record model="ir.action.wizard" id="act_display_insured_outstanding_loan_balance">
+            <field name="name">Insured Outstanding Loan Balances</field>
+            <field name="wiz_name">party.display_insured_outstanding_loan_balance</field>
+        </record>
+        <record model="ir.action.keyword" id="act_display_insured_outstanding_loan_balance_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="act_display_insured_outstanding_loan_balance"/>
         </record>
     </data>
 </tryton>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Insured Outstanding Loan Balances">
+    <field name="date" readonly="1"/>
+    <newline/>
+    <field name="insurers" expand_toolbar="0" mode="tree"/>
+</form>

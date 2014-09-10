@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Select Date">
+    <label name="date"/>
+    <field name="date"/>
+    <newline/>
+    <label name="currency"/>
+    <field name="currency" widget="selection" xexpand="0"/>
+    <field name="possible_currencies" invisible="1"/>
+    <field name="party" invisible="1"/>
+</form>
