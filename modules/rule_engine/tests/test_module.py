@@ -246,6 +246,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 u'',
                 u'def fct_%s ():' % func_id,
                 u' from decimal import Decimal ',
+                u' import datetime ',
+                u' from dateutil .relativedelta import relativedelta ',
                 u' return Decimal (u\'10.0\')',
                 u'',
                 u'result_%s =fct_%s ()' % (func_id, func_id),

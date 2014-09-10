@@ -60,6 +60,8 @@ __all__ = [
 CODE_TEMPLATE = """
 def fct_%s():
  from decimal import Decimal
+ import datetime
+ from dateutil.relativedelta import relativedelta
 %%s
 
 result_%s = fct_%s()
