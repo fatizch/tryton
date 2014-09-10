@@ -313,21 +313,23 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('extra_datas', 'start_date', 'options', 'product',
         'appliable_conditions_date')
     def on_change_extra_datas(self):
-        result = {'extra_datas': {'remove': [x.id for x in self.extra_datas]}}
         if not self.product:
-            return result
+            return {'extra_datas': {'remove':
+                    [x.id for x in self.extra_datas]}}
+        values = {'extra_data_values': {}}
         if not self.extra_datas:
             self.extra_datas = [
                 Pool().get('contract.extra_data')(extra_data_values={})]
-        values = self.product.get_extra_data_def(
-            'contract', self.extra_datas[0].extra_data_values,
+            values['date'] = None
+        else:
+            values['id'] = self.extra_datas[-1].id
+        values['extra_data_values'] = self.product.get_extra_data_def(
+            'contract', self.extra_datas[-1].extra_data_values,
             self.appliable_conditions_date)
-        result['extra_datas']['add'] = [(-1, {
-                    'date': None,
-                    'extra_data_values': values,
-                    })]
-        result['extra_data_values'] = values
-        return result
+        return {
+            'extra_datas': {'update':
+                [values]} if 'id' in values else {'add': [(-1, values)]},
+            'extra_data_values': values}
 
     @fields.depends('start_date')
     def on_change_start_date(self):
