@@ -32,6 +32,13 @@ class Line:
             else None)
         return changes
 
+    @fields.depends('statement')
+    def on_change_statement(self):
+        changes = super(Line, self).on_change_statement()
+        if self.statement and not changes.get('date', None):
+            changes['date'] = self.statement.date
+        return changes
+
     @fields.depends('party', 'contract')
     def on_change_party(self):
         changes = super(Line, self).on_change_party()
