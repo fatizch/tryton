@@ -13,7 +13,8 @@ __all__ = [
 class PremiumDateConfiguration:
     __name__ = 'billing.premium.date_configuration'
 
-    yearly_each_birth_date = fields.Boolean('Yearly Each Birth Date')
+    yearly_each_covered_anniversary_date = fields.Boolean('Yearly Each '
+        'Covered Anniversary Date')
 
     def get_dates_for_contract(self, contract):
         res = super(PremiumDateConfiguration, self).get_dates_for_contract(
@@ -22,7 +23,7 @@ class PremiumDateConfiguration:
         if not max_date:
             return res
         ruleset = rrule.rruleset()
-        if self.yearly_each_birth_date:
+        if self.yearly_each_covered_anniversary_date:
             for covered_element in contract.covered_elements:
                 if not covered_element.party or not covered_element.is_person:
                     continue
