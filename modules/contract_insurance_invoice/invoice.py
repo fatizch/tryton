@@ -128,16 +128,16 @@ class Invoice:
     order_end = _order_contract_invoice_field('end')
 
     def get_synthesis_rec_name(self, name):
-        if self.number:
+        if self.contract:
             if self.start and self.end:
                 return '%s - %s - (%s - %s) [%s]' % (
-                    self.number,
+                    self.contract.rec_name,
                     self.currency.amount_as_string(self.total_amount),
                     coop_string.date_as_string(self.start),
                     coop_string.date_as_string(self.end),
                     coop_string.translate_value(self, 'state'))
             else:
-                return '%s - %s [%s]' % (self.number,
+                return '%s - %s [%s]' % (self.contract.rec_name,
                     self.currency.amount_as_string(self.total_amount),
                     coop_string.translate_value(self, 'state'))
         else:
@@ -148,7 +148,7 @@ class Invoice:
                     coop_string.date_as_string(self.end),
                     coop_string.translate_value(self, 'state'))
             else:
-                return '%s - %s [%s]' % (self.number,
+                return '%s - %s [%s]' % (
                     self.currency.amount_as_string(self.total_amount),
                     coop_string.translate_value(self, 'state'))
 
