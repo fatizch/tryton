@@ -1,10 +1,9 @@
-from itertools import groupby
-
-from sql import Literal
+from sql import Literal, Cast
 Null = None  # TODO remove when python-sql >=0.3
 from sql.aggregate import Max, Sum
 from sql.conditionals import Coalesce, Case
-from sql.functions import Now
+from sql.functions import Now, ToChar
+from sql.operators import Concat
 
 from trytond.pool import PoolMeta, Pool
 from trytond.model import ModelSQL, ModelView, fields
@@ -142,6 +141,8 @@ class Snapshot(ModelSQL, ModelView):
 class LineAggregated(ModelSQL, ModelView):
     'Account Move Line Aggregated'
     __name__ = 'account.move.line.aggregated'
+
+    aggregated_move_id = fields.Char('Aggregated Move Id')
     account = fields.Many2One('account.account', 'Account')
     journal = fields.Many2One('account.journal', 'Journal')
     post_date = fields.Date('Post Date')
@@ -152,6 +153,7 @@ class LineAggregated(ModelSQL, ModelView):
         depends=['currency_digits'])
     currency_digits = fields.Function(fields.Integer('Currency Digits'),
         'get_currency_digits')
+    description = fields.Char('Description')
 
     def get_currency_digits(self, name):
         return self.account.currency_digits
@@ -174,6 +176,12 @@ class LineAggregated(ModelSQL, ModelView):
                 Literal(0).as_('create_date'),
                 Literal(0).as_('write_uid'),
                 Literal(0).as_('write_date'),
+                Case((journal.aggregate, Literal('')),
+                    else_=Max(move.description)).as_('description'),
+                Case((journal.aggregate,
+                    Concat(ToChar(move.post_date, 'YYYYMMDD'),
+                    Cast(move.snapshot, 'VARCHAR'))),
+                    else_=Max(move.number)).as_('aggregated_move_id'),
                 line.account.as_('account'),
                 move.journal.as_('journal'),
                 move.post_date.as_('post_date'),
@@ -183,6 +191,7 @@ class LineAggregated(ModelSQL, ModelView):
                 group_by=[
                     line.account,
                     Case((journal.aggregate, move.journal), else_=line.id),
+                    journal.aggregate,
                     move.journal,
                     move.post_date,
                     move.snapshot])
