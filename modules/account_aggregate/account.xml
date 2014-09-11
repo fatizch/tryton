@@ -7,6 +7,30 @@
             <field name="name">journal_form</field>
         </record>
 
+        <record model="ir.ui.view" id="move_view_form">
+            <field name="model">account.move</field>
+            <field name="inherit" ref="account.move_view_form"/>
+            <field name="name">move_form</field>
+        </record>
+
+        <record model="ir.ui.view" id="move_view_tree">
+            <field name="model">account.move</field>
+            <field name="inherit" ref="account.move_view_tree"/>
+            <field name="name">move_tree</field>
+        </record>
+
+        <record model="ir.ui.view" id="move_line_view_tree">
+            <field name="model">account.move.line</field>
+            <field name="inherit" ref="account.move_line_view_tree"/>
+            <field name="name">move_line_tree</field>
+        </record>
+
+        <record model="ir.ui.view" id="configuration_view_form">
+            <field name="model">account.configuration</field>
+            <field name="inherit" ref="account.configuration_view_form"/>
+            <field name="name">configuration_form</field>
+        </record>
+
         <record model="ir.ui.view" id="move_snapshot_start_view_form">
             <field name="model">account.move.snapshot.start</field>
             <field name="type">form</field>

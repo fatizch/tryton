@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree/field[@name='move_state']" position="after">
+        <field name="snapshot"/>
+    </xpath>
+</data>

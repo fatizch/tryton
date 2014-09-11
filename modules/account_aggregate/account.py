@@ -11,8 +11,8 @@ from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
 from trytond.transaction import Transaction
 
-__all__ = ['Journal', 'Move',
-    'Snapshot', 'SnapshotStart', 'SnapshotDone',
+__all__ = ['Journal', 'Move', 'Line', 'Configuration', 'Snapshot',
+    'TakeSnapshot', 'SnapshotStart', 'SnapshotDone',
     'LineAggregated',
     'OpenLineAggregated', 'OpenLine']
 __metaclass__ = PoolMeta
@@ -29,10 +29,26 @@ class Journal:
 
 class Move:
     __name__ = 'account.move'
-    snapshot = fields.Timestamp('Snapshot', readonly=True, select=True)
+    snapshot = fields.Many2One('account.move.snapshot', 'Snapshot',
+        select=True, readonly=True)
 
 
-class Snapshot(Wizard):
+class Line:
+    __name__ = 'account.move.line'
+    snapshot = fields.Function(fields.Many2One('account.move.snapshot',
+            'Snapshot'), 'get_move_field', searcher='search_move_field')
+
+
+class Configuration:
+    __name__ = 'account.configuration'
+
+    snapshot_sequence = fields.Property(fields.Many2One('ir.sequence',
+            'Snapshot Sequence', required=True, domain=[
+                ('code', '=', 'account.move'),
+                ]))
+
+
+class TakeSnapshot(Wizard):
     'Snapshot Moves'
     __name__ = 'account.move.snapshot'
     start = StateView('account.move.snapshot.start',
@@ -49,11 +65,15 @@ class Snapshot(Wizard):
     def transition_snap(self):
         pool = Pool()
         Move = pool.get('account.move')
+        Snapshot = pool.get('account.move.snapshot')
+
+        snapshot, = Snapshot.create([{}])
+
         move = Move.__table__()
         cursor = Transaction().cursor
         cursor.execute(*move.update(
                 [move.snapshot, move.write_date, move.write_uid],
-                [Now(), Now(), Transaction().user],
+                [snapshot.id, Now(), Transaction().user],
                 where=(move.snapshot == Null)
                 & (move.post_date != Null)))
         return 'done'
@@ -69,13 +89,32 @@ class SnapshotDone(ModelView):
     __name__ = 'account.move.snapshot.done'
 
 
+class Snapshot(ModelSQL, ModelView):
+    'Snapshot Move'
+    __name__ = 'account.move.snapshot'
+    name = fields.Char('Name', required=True)
+
+    @classmethod
+    def create(cls, vlist):
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        Configuration = pool.get('account.configuration')
+
+        config = Configuration(1)
+        vlist = [v.copy() for v in vlist]
+        for values in vlist:
+            if not values.get('name'):
+                values['name'] = Sequence.get_id(config.snapshot_sequence.id)
+        return super(Snapshot, cls).create(vlist)
+
+
 class LineAggregated(ModelSQL, ModelView):
     'Account Move Line Aggregated'
     __name__ = 'account.move.line.aggregated'
     account = fields.Many2One('account.account', 'Account')
     journal = fields.Many2One('account.journal', 'Journal')
     post_date = fields.Date('Post Date')
-    snapshot = fields.Timestamp('Snapshot', readonly=True, select=True)
+    snapshot = fields.Many2One('account.move.snapshot', 'Snapshot')
     debit = fields.Numeric('Debit', digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
     credit = fields.Numeric('Credit', digits=(16, Eval('currency_digits', 2)),
@@ -160,12 +199,12 @@ class OpenLine(Wizard):
         lines = LineAggregated.browse(Transaction().context['active_ids'])
 
         def domain(line):
-            if line.journal.aggregate:
+            if line.journal.aggregate and l.snapshot:
                 return [
                     ('account', '=', l.account.id),
                     ('move.journal', '=', l.journal.id),
                     ('move.post_date', '=', l.post_date),
-                    ('move.snapshot', '=', l.snapshot),
+                    ('move.snapshot', '=', l.snapshot.id),
                     ]
             else:
                 return [('id', '=', l.id)]

@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <form string="Account Move Line Aggregated">
+    <label name="snapshot"/>
+    <field name="snapshot"/>
     <label name="account"/>
     <field name="account"/>
     <label name="journal"/>
