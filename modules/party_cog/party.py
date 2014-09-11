@@ -220,6 +220,7 @@ class Party(export.ExportImportMixin):
 
     @classmethod
     def search_is_actor(cls, name, clause):
+        clause = list(clause)
         if clause[2] is True:
             clause[1], clause[2] = ('!=', None)
         elif clause[2] is False:
