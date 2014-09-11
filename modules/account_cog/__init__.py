@@ -39,7 +39,12 @@ def register():
         TestCaseModel,
         SynthesisMenuMoveLine,
         SynthesisMenu,
+        OpenThirdPartyBalanceStart,
         module='account_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,
+        OpenThirdPartyBalance,
         module='account_cog', type_='wizard')
+    Pool.register(
+        ThirdPartyBalance,
+        module='account', type_='report')

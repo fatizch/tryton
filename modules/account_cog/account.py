@@ -1,7 +1,11 @@
+from sql import Literal
+from sql.aggregate import Sum
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.report import Report
 
-from trytond.modules.cog_utils import export
+from trytond.modules.cog_utils import export, fields
 
 
 __metaclass__ = PoolMeta
@@ -15,6 +19,9 @@ __all__ = [
     'FiscalYear',
     'Period',
     'Configuration',
+    'ThirdPartyBalance',
+    'OpenThirdPartyBalance',
+    'OpenThirdPartyBalanceStart',
     ]
 
 
@@ -188,3 +195,82 @@ class Configuration(export.ExportImportMixin):
         if not field_value:
             return
         _account_field, _company, _value = field_value
+
+
+class OpenThirdPartyBalanceStart():
+    __name__ = 'account.open_third_party_balance.start'
+    third_party_balance_option = fields.Selection([
+            ('all', 'All'),
+            ('only_unbalanced', 'Only Unbalanced Party')], 'Balance Option',
+        required=True)
+
+
+class OpenThirdPartyBalance():
+    __name__ = 'account.open_third_party_balance'
+
+    def do_print_(self, action):
+        action, data = super(OpenThirdPartyBalance, self).do_print_(action)
+        data['third_party_balance_option'] = \
+            self.start.third_party_balance_option
+        return action, data
+
+
+class ThirdPartyBalance():
+    __name__ = 'account.third_party_balance'
+
+    @classmethod
+    def parse(cls, report, objects, data, localcontext):
+        if data['third_party_balance_option'] == 'all':
+            return super(ThirdPartyBalance, cls).parse(report, objects, data,
+                localcontext)
+        pool = Pool()
+        Party = pool.get('party.party')
+        MoveLine = pool.get('account.move.line')
+        Move = pool.get('account.move')
+        Account = pool.get('account.account')
+        Company = pool.get('company.company')
+        cursor = Transaction().cursor
+
+        line = MoveLine.__table__()
+        move = Move.__table__()
+        account = Account.__table__()
+
+        company = Company(data['company'])
+        localcontext['company'] = company
+        localcontext['digits'] = company.currency.digits
+        localcontext['fiscalyear'] = data['fiscalyear']
+        with Transaction().set_context(context=localcontext):
+            line_query, _ = MoveLine.query_get(line)
+        if data['posted']:
+            posted_clause = move.state == 'posted'
+        else:
+            posted_clause = Literal(True)
+
+        cursor.execute(*line.join(move, condition=line.move == move.id
+                ).join(account, condition=line.account == account.id
+                ).select(line.party, Sum(line.debit), Sum(line.credit),
+                where=(line.party != None)
+                & account.active
+                & account.kind.in_(('payable', 'receivable'))
+                & (account.company == data['company'])
+                & (line.reconciliation == None)
+                & line_query & posted_clause,
+                group_by=line.party,
+                having=(((Sum(line.debit) != 0) | (Sum(line.credit) != 0)))))
+
+        res = cursor.fetchall()
+        id2party = {}
+        for party in Party.browse([x[0] for x in res]):
+            id2party[party.id] = party
+        objects = [{
+            'name': id2party[x[0]].rec_name,
+            'debit': x[1],
+            'credit': x[2],
+            'solde': x[1] - x[2],
+            } for x in res]
+        objects.sort(lambda x, y: cmp(x['name'], y['name']))
+        localcontext['total_debit'] = sum((x['debit'] for x in objects))
+        localcontext['total_credit'] = sum((x['credit'] for x in objects))
+        localcontext['total_solde'] = sum((x['solde'] for x in objects))
+
+        return Report.parse(report, objects, data, localcontext)
