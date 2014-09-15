@@ -603,14 +603,9 @@ class ContractInvoice(ModelSQL, ModelView):
     contract = fields.Many2One('contract', 'Contract', required=True)
     invoice = fields.Many2One('account.invoice', 'Invoice', required=True,
         ondelete='CASCADE')
-    invoice_state = fields.Function(fields.Selection([
-                ('draft', 'Draft'),
-                ('validated', 'Validated'),
-                ('posted', 'Posted'),
-                ('paid', 'Paid'),
-                ('cancel', 'Canceled'),
-                ], 'Invoice State'), 'get_invoice_state',
-        searcher='search_invoice_state')
+    invoice_state = fields.Function(
+        fields.Char('Invoice State'),
+        'get_invoice_state', searcher='search_invoice_state')
     start = fields.Date('Start Date', required=True)
     end = fields.Date('End Date', required=True)
 
