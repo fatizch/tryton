@@ -37,7 +37,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             yearly_on_new_eve=False,
             yearly_on_start_date=False,
             yearly_custom_date=None,
-            yearly_each_birth_date=True)
+            yearly_each_covered_anniversary_date=True)
         contract = Mock()
         contract.start_date = datetime.date(2014, 03, 01)
         contract.end_date = datetime.date(2016, 12, 31)
