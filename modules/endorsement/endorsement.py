@@ -720,6 +720,27 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             values['options'] = options
         return values
 
+    @property
+    def new_options(self):
+        elems = set([x for x in self.contract.options])
+        for elem in getattr(self, 'options', []):
+            if elem.action == 'add':
+                elems.add(elem)
+            elif elem.action == 'remove':
+                elems.remove(elem.option)
+            else:
+                elems.remove(elem.option)
+                elems.add(elem)
+        return elems
+
+    @property
+    def updated_struct(self):
+        EndorsementOption = Pool().get('endorsement.contract.option')
+        options = {}
+        for option in self.new_options:
+            options[option] = EndorsementOption.updated_struct(option)
+        return {'options': options}
+
     def get_endorsed_record(self):
         return self.contract
 
@@ -750,3 +771,6 @@ class EndorsementOption(relation_mixin(
 
     def get_definition(self, name):
         return self.contract_endorsement.definition.id
+
+    def updated_struct(cls, option):
+        return {}
