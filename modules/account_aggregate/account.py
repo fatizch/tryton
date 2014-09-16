@@ -1,3 +1,5 @@
+from itertools import groupby
+
 from sql import Literal
 Null = None  # TODO remove when python-sql >=0.3
 from sql.aggregate import Max, Sum
@@ -21,6 +23,11 @@ __metaclass__ = PoolMeta
 class Journal:
     __name__ = 'account.journal'
     aggregate = fields.Boolean('Aggregate')
+    aggregate_posting = fields.Boolean('Aggregate Posting',
+        states={
+            'invisible': ~Eval('aggregate'),
+            },
+        depends=['aggregate'])
 
     @staticmethod
     def default_aggregate():
@@ -31,6 +38,30 @@ class Move:
     __name__ = 'account.move'
     snapshot = fields.Many2One('account.move.snapshot', 'Snapshot',
         select=True, readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(Move, cls).__setup__()
+        cls._check_modify_exclude.append('snapshot')
+
+    @classmethod
+    @ModelView.button
+    def post(cls, moves):
+        pool = Pool()
+        Snapshot = pool.get('account.move.snapshot')
+
+        super(Move, cls).post(moves)
+
+        keyfunc = lambda m: m.journal
+        moves = cls.browse(sorted(moves, key=keyfunc))
+
+        for journal, moves in groupby(moves, keyfunc):
+            moves = list(moves)
+            if journal.aggregate and journal.aggregate_posting:
+                snapshot, = Snapshot.create([{}])
+                cls.write(moves, {
+                        'snapshot': snapshot.id,
+                        })
 
 
 class Line:
