@@ -5,7 +5,7 @@ import datetime
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
 from trytond.model import Workflow, Model, fields as tryton_fields
-from trytond.pyson import Eval, PYSONEncoder
+from trytond.pyson import Eval, PYSONEncoder, PYSON
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -76,11 +76,26 @@ def field_mixin(model):
                     'type_': field.field.ttype,
                     }
                 if field.field.ttype == 'selection':
-                    # TODO
-                    pass
+                    real_field = FieldModel._fields[field.rec_name]
+                    if isinstance(real_field.selection, list):
+                        key['selection'] = list(real_field.selection)
+                    else:
+                        field_method = getattr(FieldModel,
+                            real_field.selection)
+                        if field_method.__self__ is None:
+                            # Classmethod, we can call it
+                            key['selection'] = field_method()
+                        else:
+                            # Instance method, fallback to string
+                            key['type_'] = 'string'
                 elif field.field.ttype in ('float', 'numeric'):
-                    # XXX what about PySON?
                     key['digits'] = FieldModel._fields[field.rec_name].digits
+                    # In case of PYSON, we assume the worst
+                    if isinstance(key['digits'][0], PYSON) or isinstance(
+                            key['digits'][1], PYSON):
+                        key['digits'] = (16, 4)
+                elif field.field.ttype == 'many2one':
+                    key['type_'] = 'integer'
                 keys.append(key)
             return keys
 
