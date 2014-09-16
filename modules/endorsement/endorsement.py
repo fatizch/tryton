@@ -351,6 +351,7 @@ def relation_mixin(value_model, field, model, name):
             cls._error_messages.update({
                     'mes_remove_version': 'Remove version of',
                     'mes_new_version': 'New version',
+                    'mes_update_version': 'Update %s',
                     })
 
         @staticmethod
@@ -391,6 +392,13 @@ def relation_mixin(value_model, field, model, name):
             elif self.action == 'add':
                 result = ' ' * indent + '%s:\n' % self.raise_user_error(
                     'mes_new_version', raise_exception=False)
+                result += super(Mixin, self).get_summary(model, base_object,
+                    indent + increment, increment)
+                return result
+            elif self.action == 'update':
+                result = ' ' * indent + '%s:\n' % self.raise_user_error(
+                    'mes_update_version', (base_object.rec_name),
+                    raise_exception=False)
                 result += super(Mixin, self).get_summary(model, base_object,
                     indent + increment, increment)
                 return result
