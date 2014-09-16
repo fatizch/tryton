@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.pyson import Eval
 
@@ -13,6 +14,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'LoanChangeBasicData',
     'LoanDisplayUpdatedPayments',
+    'LoanSelectContracts',
     'SelectEndorsement',
     'PreviewLoanEndorsement',
     'StartEndorsement',
@@ -42,6 +44,18 @@ class LoanDisplayUpdatedPayments(model.CoopView):
     loan = fields.Many2One('loan', 'Loan', readonly=True)
     new_payments = fields.One2Many('loan.payment', None, 'New Payments',
         readonly=True)
+
+
+class LoanSelectContracts(model.CoopView):
+    'Select contracts related to the loan for update'
+
+    __name__ = 'endorsement.loan.select_contracts'
+
+    possible_contracts = fields.Many2Many('contract', None, None,
+        'Possible Contracts', readonly=True)
+    selected_contracts = fields.Many2Many('contract', None, None,
+        'Contracts to update', depends=['possible_contracts'],
+        domain=[('id', 'in', Eval('possible_contracts'))])
 
 
 class SelectEndorsement:
@@ -116,12 +130,21 @@ class StartEndorsement:
     calculate_updated_payments = StateTransition()
     display_updated_payments = StateView(
         'endorsement.loan.display_updated_payments',
-        'endorsement_loan.display_updated_payments_view_form',
-        [Button('Previous', 'change_basic_loan_data', 'tryton-go-previous'),
+        'endorsement_loan.display_updated_payments_view_form', [
+            Button('Previous', 'change_basic_loan_data', 'tryton-go-previous'),
             Button('Suspend', 'suspend', 'tryton-save'),
-            Button('Next', 'change_basic_loan_data_next', 'tryton-go-next',
+            Button('Next', 'loan_select_contracts', 'tryton-go-next',
                 default=True)])
     change_basic_loan_data_next = StateTransition()
+    loan_select_contracts = StateView('endorsement.loan.select_contracts',
+        'endorsement_loan.select_contracts_view_form', [
+            Button('Previous', 'display_updated_payments',
+                'tryton-go-previous'),
+            Button('Suspend', 'suspend', 'tryton-save'),
+            Button('Next', 'loan_endorse_selected_contracts', 'tryton-go-next',
+                default=True)])
+    loan_endorse_selected_contracts = StateTransition()
+
     preview_loan = StateView('endorsement.start.preview_loan',
         'endorsement_loan.preview_loan_view_form', [
             Button('Summary', 'summary', 'tryton-go-previous'),
@@ -147,6 +170,20 @@ class StartEndorsement:
         endorsement = getattr(self.select_endorsement, 'endorsement', None)
         if endorsement and endorsement.loans:
             self.select_endorsement.loan = endorsement.loans[0].id
+        return result
+
+    def default_select_endorsement(self, name):
+        result = super(StartEndorsement, self).default_select_endorsement(name)
+        pool = Pool()
+        Contract = pool.get('contract')
+        active_model = Transaction().context.get('active_model')
+        if active_model == 'contract':
+            contract = Contract(Transaction().context.get('active_id'))
+            if contract.is_loan:
+                if len(contract.used_loans) == 1:
+                    result['loan'] = contract.used_loans[0].id
+        elif active_model == 'loan':
+            result['loan'] == Transaction().context.get('active_id')
         return result
 
     def default_change_basic_loan_data(self, name):
@@ -179,6 +216,53 @@ class StartEndorsement:
                         for x in PAYMENT_FIELDS])
                 for payment in new_loan.calculate_payments()]
             }
+
+    def default_loan_select_contracts(self, name):
+        Contract = Pool().get('contract')
+        current_loan = self.change_basic_loan_data.current_value[0]
+        possible_contracts = Contract.search([
+                ('covered_elements.options.loan_shares.loan', '=',
+                    current_loan)])
+        selected_contracts = [x.id for x in self.endorsement.contracts]
+        if not selected_contracts and self.select_endorsement.contract:
+            selected_contracts = [self.select_endorsement.contract.id]
+        return {
+            'possible_contracts': [x.id for x in possible_contracts],
+            'selected_contracts': selected_contracts,
+            }
+
+    def transition_loan_endorse_selected_contracts(self):
+        ContractEndorsement = Pool().get('endorsement.contract')
+        new_loan = self.change_basic_loan_data.new_value[0]
+        current_loan = self.change_basic_loan_data.current_value[0]
+        to_delete, to_create = [], []
+        for contract_endorsement in self.endorsement.contract_endorsements:
+            if (contract_endorsement.contract
+                    not in self.loan_select_contracts.selected_contracts):
+                if not contract_endorsement.apply_values:
+                    to_delete.append(contract_endorsement)
+        for contract in self.loan_select_contracts.selected_contracts:
+            if contract in self.endorsement.contracts:
+                continue
+            to_create.append({
+                    'endorsement': self.endorsement.id,
+                    'contract': contract.id,
+                    })
+            if new_loan.funds_release_date != current_loan.funds_release_date:
+                if current_loan.funds_release_date == contract.start_date:
+                    oldest_loan = min([x.funds_release_date
+                            for x in contract.used_loans
+                            if x.id != current_loan.id] +
+                        new_loan.funds_release_date)
+                    if oldest_loan != contract.start_date:
+                        to_create[-1]['values'] = {
+                            'start_date': oldest_loan,
+                            }
+        if to_delete:
+            ContractEndorsement.delete(to_delete)
+        if to_create:
+            ContractEndorsement.create(to_create)
+        return 'change_basic_loan_data_next'
 
     def transition_change_basic_loan_data_next(self):
         return self.get_next_state('change_basic_loan_data')

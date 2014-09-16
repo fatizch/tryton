@@ -15,6 +15,7 @@ def register():
         EndorsementLoan,
         LoanChangeBasicData,
         LoanDisplayUpdatedPayments,
+        LoanSelectContracts,
         SelectEndorsement,
         PreviewLoanEndorsement,
         module='endorsement_loan', type_='model')

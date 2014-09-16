@@ -23,8 +23,7 @@ class EndorsementPart:
     @classmethod
     def __setup__(cls):
         super(EndorsementPart, cls).__setup__()
-        cls.kind.selection.append(
-            ('loan', 'Loan'))
+        cls.kind.selection.append(('loan', 'Loan'))
 
     def clean_up(self, endorsement):
         super(EndorsementPart, self).clean_up(endorsement)

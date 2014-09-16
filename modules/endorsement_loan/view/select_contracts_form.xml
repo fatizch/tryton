@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<form string="Select Contracts to Update">
+    <field name="selected_contracts" widget="multiselection"/>
+</form>
