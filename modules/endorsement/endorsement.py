@@ -755,6 +755,9 @@ class EndorsementOption(relation_mixin(
 
     contract_endorsement = fields.Many2One('endorsement.contract',
         'Endorsement', required=True, select=True, ondelete='CASCADE')
+    coverage = fields.Function(
+        fields.Many2One('offered.option.description', 'Coverage'),
+        'on_change_with_coverage')
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
@@ -771,6 +774,14 @@ class EndorsementOption(relation_mixin(
     @classmethod
     def default_definition(cls):
         return Transaction().context.get('definition', None)
+
+    @fields.depends('values', 'option')
+    def on_change_with_coverage(self, name=None):
+        result = self.values.get('coverage', None)
+        if result:
+            return result
+        if self.option:
+            return self.option.coverage.id
 
     def get_definition(self, name):
         return self.contract_endorsement.definition.id
