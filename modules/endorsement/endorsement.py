@@ -764,6 +764,9 @@ class EndorsementOption(relation_mixin(
         super(EndorsementOption, cls).__setup__()
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['definition']
+        cls._error_messages.update({
+                'new_coverage': 'New Coverage: %s',
+                })
 
     @classmethod
     def default_definition(cls):
@@ -771,6 +774,12 @@ class EndorsementOption(relation_mixin(
 
     def get_definition(self, name):
         return self.contract_endorsement.definition.id
+
+    def get_rec_name(self, name):
+        if self.option:
+            return self.option.rec_name
+        return '%s : %s' % (self.raise_user_error('new_coverage',
+                raise_exception=False), self.coverage.rec_name)
 
     def updated_struct(cls, option):
         return {}
