@@ -480,10 +480,9 @@ class Loan(model.CoopSQL, model.CoopView):
         else:
             return self.deferal_duration
 
-    @fields.depends('kind')
+    @fields.depends('kind', 'rate')
     def on_change_with_rate(self):
-        if self.kind == 'interest_free':
-            return Decimal(0)
+        return Decimal(0) if self.kind == 'interest_free' else self.rate
 
     @fields.depends('increments')
     def on_change_with_increments_end_date(self, name=None):
