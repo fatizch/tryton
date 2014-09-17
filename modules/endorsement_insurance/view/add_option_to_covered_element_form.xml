@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<form string="Add Option">
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition"/>
+    <label name="covered_element"/>
+    <field name="covered_element" colspan="3"/>
+    <notebook>
+        <page name="new_options">
+            <field name="new_options" mode="form,tree"/>
+        </page>
+        <page name="existing_options">
+            <field name="existing_options" widget="one2many"/>
+        </page>
+    </notebook>
+    <group id="hidden" states="{'invisible': True}">
+        <field name="possible_coverages"/>
+        <field name="possible_covered_elements"/>
+        <field name="endorsement_part"/>
+    </group>
+</form>

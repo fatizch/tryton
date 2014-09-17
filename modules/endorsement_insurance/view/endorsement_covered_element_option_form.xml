@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<form string="Endorsement Covered Element Option">
+    <label name="covered_element_endorsement"/>
+    <field name="covered_element_endorsement"/>
+    <newline/>
+    <label name="action"/>
+    <field name="action"/>
+    <label name="option"/>
+    <field name="option"/>
+    <newline/>
+    <field name="values" colspan="4"/>
+</form>

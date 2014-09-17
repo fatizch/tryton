@@ -8,4 +8,6 @@
     <label name="covered_element"/>
     <field name="covered_element"/>
     <field name="values" colspan="4"/>
+    <newline/>
+    <field name="options" colspan="4" view_ids="endorsement_insurance.endorsement_covered_element_option_view_list,endorsement_insurance.endorsement_covered_element_option_view_form"/>
 </form>

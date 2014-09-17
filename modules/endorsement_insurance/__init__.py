@@ -10,9 +10,11 @@ def register():
         Endorsement,
         EndorsementContract,
         EndorsementCoveredElement,
+        EndorsementCoveredElementOption,
         EndorsementCoveredElementField,
         EndorsementPart,
         NewCoveredElement,
+        NewOptionOnCoveredElement,
         module='endorsement_insurance', type_='model')
 
     Pool.register(

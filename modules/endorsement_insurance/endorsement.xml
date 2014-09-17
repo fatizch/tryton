@@ -23,5 +23,18 @@
             <field name="type">tree</field>
             <field name="name">endorsement_covered_element_list</field>
         </record>
+        <!-- ###################################### -->
+        <!-- # Endorsement Covered Element Option # -->
+        <!-- ###################################### -->
+        <record model="ir.ui.view" id="endorsement_covered_element_option_view_form">
+            <field name="model">endorsement.contract.covered_element.option</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_covered_element_option_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_covered_element_option_view_list">
+            <field name="model">endorsement.contract.covered_element.option</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_covered_element_option_list</field>
+        </record>
     </data>
 </tryton>
