@@ -87,7 +87,7 @@ class OptionDescription:
             tmp_args = args.copy()
             option.init_dict_for_rule_engine(tmp_args)
             for share in option.loan_shares:
-                if not (share.start_date or datetime.date.min <= args['date']
+                if not ((share.start_date or datetime.date.min) <= args['date']
                         <= (share.end_date or datetime.date.max)):
                     continue
                 share.init_dict_for_rule_engine(tmp_args)
