@@ -374,9 +374,6 @@ class EndorsementLoanShare(relation_mixin(
     start_date = fields.Function(
         fields.Date('Start Date'),
         'on_change_with_start_date')
-    option = fields.Function(
-        fields.Many2One('contract.option', 'Option'),
-        'on_change_with_option')
 
     @classmethod
     def __setup__(cls):
@@ -391,10 +388,6 @@ class EndorsementLoanShare(relation_mixin(
     @fields.depends('values')
     def on_change_with_loan(self, name=None):
         return self.values.get('loan', self.loan_share.loan.id)
-
-    @fields.depends('option_endorsement')
-    def on_change_with_option(self, name=None):
-        return self.option_endorsement.option.id
 
     @fields.depends('values')
     def on_change_with_share(self, name=None):
@@ -412,6 +405,12 @@ class EndorsementLoanShare(relation_mixin(
 
     def get_definition(self, name):
         return self.option_endorsement.definition.id
+
+    @property
+    def option(self):
+        if self.option_endorsement.option:
+            return self.option_endorsement.option
+        return self.option_endorsement
 
     @classmethod
     def updated_struct(cls, loan_share):
