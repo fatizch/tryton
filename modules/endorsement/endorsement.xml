@@ -34,6 +34,18 @@
         <field name="view" ref="endorsement_view_form"/>
         <field name="act_window" ref="act_endorsement"/>
     </record>
+    <record model="ir.action.act_window.domain" id="act_endorsement_domain_applied">
+        <field name="name">Applied</field>
+        <field name="sequence" eval="20"/>
+        <field name="domain">[('state', '=', 'applied')]</field>
+        <field name="act_window" ref="act_endorsement"/>
+    </record>
+    <record model="ir.action.act_window.domain" id="act_endorsement_domain_draft">
+        <field name="name">Draft</field>
+        <field name="sequence" eval="10"/>
+        <field name="domain">[('state', '=', 'draft')]</field>
+        <field name="act_window" ref="act_endorsement"/>
+    </record>
     <record model="ir.action.keyword" id="act_show_endorsements_keyword">
         <field name="keyword">form_relate</field>
         <field name="model">contract,-1</field>
