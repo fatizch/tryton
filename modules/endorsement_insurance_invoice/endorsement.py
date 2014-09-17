@@ -79,7 +79,8 @@ class Contract:
         ContractInvoice.delete(invoices_to_delete)
 
         # Rebill
-        self.invoice([self], rebill_end)
+        if rebill_end:
+            self.invoice([self], rebill_end)
 
         # Post
         if post_date < at_date:
