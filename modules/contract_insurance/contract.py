@@ -451,7 +451,7 @@ class ContractOption:
         if all_extra_datas:
             parent_extra_data = all_extra_datas
         elif self.contract and self.contract.id > 0:
-            parent_extra_data = dict(self.contract.extra_data)
+            parent_extra_data = dict(self.contract.extra_data_values)
         elif self.covered_element and self.covered_element.id > 0:
             parent_extra_data = dict(self.covered_element.all_extra_datas)
         else:
