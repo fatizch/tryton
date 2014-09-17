@@ -574,7 +574,7 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'loan.payment'
 
-    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', select=True)
     kind = fields.Selection([
             ('releasing_funds', 'Releasing Funds'),
             ('scheduled', 'Scheduled'),
