@@ -235,6 +235,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
             # TODO: Make it better
             for k, v in values.iteritems():
                 setattr(loan, k, v)
+            Pool().get('loan.payment').delete(loan.payments)
             loan.increments, loan.payments = [], []
             loan.calculate_increments()
             loan.payments = loan.calculate_payments()
