@@ -56,6 +56,10 @@ class OptionDescription:
     def default_family(cls):
         return 'generic'
 
+    @staticmethod
+    def default_insurance_kind():
+        return ''
+
     @fields.depends('item_desc')
     def on_change_with_is_service(self, name=None):
         return not self.item_desc
