@@ -473,6 +473,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     'invisible': ~Eval('state').in_(['draft']),
                     },
                 })
+        cls._order = [('application_date', 'DESC'), ('create_date', 'DESC')]
 
     @classmethod
     def default_state(cls):
