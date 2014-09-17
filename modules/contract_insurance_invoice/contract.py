@@ -369,7 +369,7 @@ class Contract:
         prices = {}
         errs = []
         dates = self.get_dates()
-        dates = utils.limit_dates(dates, self.start_date)
+        dates = utils.limit_dates(dates, start)
         for cur_date in dates:
             price, err = self.calculate_price_at_date(cur_date)
             if price:
