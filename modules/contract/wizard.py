@@ -193,6 +193,7 @@ class WizardOption(model.CoopView):
         option.product = displayer.contract.product
         option.init_from_coverage(self.coverage, option.product,
             displayer.contract.start_date)
+        option.calculate()
 
     def update_option_if_needed(self, option, parent=None):
         for child in self.childs:

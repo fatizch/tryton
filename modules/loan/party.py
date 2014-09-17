@@ -219,7 +219,11 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
                     & (option.status == 'active')
                     & (covered_element.party == party.id)
                     & (Coalesce(option.start_date, datetime.date.min) <= date)
-                    & (Coalesce(option.end_date, datetime.date.max) >= date))
+                    & (((option.manual_end_date != None) &
+                            (option.manual_end_date >= date)) |
+                        ((option.manual_end_date == None) &
+                            (Coalesce(option.automatic_end_date,
+                                datetime.date.max) >= date))))
             ).join(coverage, condition=(
                     option.coverage == coverage.id)
             ).join(loan_share, condition=(loan_share.option == option.id)

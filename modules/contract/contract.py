@@ -428,7 +428,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         for option in self.options:
             if not force and option.end_date and option.end_date <= end_date:
                 continue
-            option.set_end_date(end_date, force)
+            if not option.end_date:
+                option.end_date = end_date
         if isinstance(self.options, tuple):
             self.options = list(self.options)
         if not to_delete:
@@ -827,7 +828,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             'readonly': Eval('status') != 'quote',
             },
         depends=['status', 'start_date', 'end_date', 'product'])
-    end_date = fields.Date('End Date')
+    end_date = fields.Function(
+        fields.Date('End Date'), 'get_end_date', setter='set_end_date')
+    automatic_end_date = fields.Date('Automatic End Date', readonly=True)
+    manual_end_date = fields.Date('Manual End Date', readonly=True)
     start_date = fields.Date('Start Date', required=True)
     status = fields.Selection(OPTIONSTATUS, 'Status')
     appliable_conditions_date = fields.Function(
@@ -858,6 +862,11 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         cls._error_messages.update({
                 'inactive_coverage_at_date':
                 'Coverage %s is inactive at date %s',
+                'end_date_none': 'No end date defined',
+                'end_date_anterior_to_start_date': 'End date should be '
+                'posterior to start date: %s',
+                'end_date_posterior_to_contract': 'End date should be '
+                'anterior to end date of contract: %s',
                 })
 
     @classmethod
@@ -982,12 +991,56 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         for key, val in cur_dict.iteritems():
             setattr(self, key, val)
 
-    def set_end_date(self, end_date, force=False):
-        self.end_date = end_date
+    @classmethod
+    def set_end_date(cls, options, name, end_date):
+        to_write = []
+        if not end_date:
+            cls.raise_user_error('end_date_none')
+        else:
+            for option in options:
+                if end_date > option.start_date:
+                    if not option.contract:
+                        continue
+                    if end_date <= (option.contract.end_date
+                            or datetime.date.max):
+                        to_write.append(option)
+                    else:
+                        cls.raise_user_error('end_date_posterior_to_contract',
+                            coop_string.date_as_string(
+                                option.contract.end_date))
+                else:
+                    cls.raise_user_error('end_date_anterior_to_start_date',
+                            coop_string.date_as_string(option.start_date))
+        if to_write:
+            cls.write(to_write, {'manual_end_date': end_date})
+
+    def get_end_date(self, name):
+        if self.manual_end_date:
+            return self.manual_end_date
+        if (self.automatic_end_date and
+                self.automatic_end_date > self.start_date):
+            if self.contract:
+                return min(self.contract.end_date or datetime.date.max,
+                    self.automatic_end_date)
+            else:
+                return self.automatic_end_date
+        if self.contract and self.contract.end_date:
+            return self.contract.end_date
+
+    def set_automatic_end_date(self):
+        self.automatic_end_date = self.calculate_automatic_end_date()
+
+    def calculate_automatic_end_date(self):
+        exec_context = {}
+        self.init_dict_for_rule_engine(exec_context)
+        return self.coverage.calculate_end_date(exec_context)
 
     def set_start_date(self, new_start_date):
         if self.start_date and self.start_date < new_start_date:
             self.start_date = new_start_date
+
+    def calculate(self):
+        self.set_automatic_end_date()
 
 
 class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,

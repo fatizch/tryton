@@ -135,14 +135,18 @@ class ContractOption:
         if to_update:
             return {'update': to_update}
 
-    def set_end_date(self, end_date, force=False):
-        super(ContractOption, self).set_end_date(end_date, force)
-        for share in self.loan_shares:
-            if not force and share.end_date and share.end_date <= end_date:
-                continue
-            #TEMP fix before removing start_date/end_date from share
-            share.end_date = min(end_date, share.loan.end_date)
-        self.loan_shares = self.loan_shares
+    @classmethod
+    def set_end_date(cls, options, name, end_date):
+        super(ContractOption, cls).set_end_date(options, name, end_date)
+        for option in options:
+            if end_date:
+                for share in option.loan_shares:
+                    if share.end_date and share.end_date <= end_date:
+                        continue
+                    #TEMP fix before removing start_date/end_date from share
+                    share.end_date = min(end_date, share.loan.end_date)
+            option.loan_shares = option.loan_shares
+            option.save()
 
 
 class ExtraPremium:

@@ -11,6 +11,11 @@
             <field name="coverages_in_package"/>
         </page>
     </xpath>
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
+        <page name="ending_rule">
+            <field name="ending_rule" mode="form"/>
+        </page>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='admin']" position="before">
         <page string="Subscription" id="subscription">
             <label name="subscription_behaviour"/>

@@ -4,9 +4,11 @@ import unittest
 from decimal import Decimal
 
 import trytond.tests.test_tryton
+import mock
 
 from trytond.modules.cog_utils import test_framework
 from trytond.transaction import Transaction
+from trytond.exceptions import UserError
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -123,7 +125,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     contract.covered_elements[0].options):
                 for option in contract.covered_elements[0].options:
                     self.Option.delete([option])
-
             option_cov_ant = self.Option()
             option_cov_ant.coverage = coverage.id
             option_cov_ant.start_date = ant_date
@@ -326,6 +327,62 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 contract.options[0].extra_premiums[0].start_date, new_date)
         self.assertEqual(
                 contract.options[0].extra_premiums[1].start_date, post_date)
+
+    def test0015_testOptionEndDate(self):
+        start_date = datetime.date(2012, 2, 15)
+        auto_date = start_date + datetime.timedelta(weeks=50)
+        manual_date = start_date + datetime.timedelta(weeks=60)
+        test_date = start_date + datetime.timedelta(weeks=30)
+        contract_end_date = start_date + datetime.timedelta(weeks=70)
+        early_date = start_date - datetime.timedelta(weeks=1)
+        late_date = contract_end_date + datetime.timedelta(weeks=1)
+
+        def test_option(automatic_end_date=None, manual_end_date=None,
+                        start_date=start_date, expected=None,
+                        should_raise=False,
+                        to_set=None, should_set=True):
+            option = self.Option(
+                start_date=start_date,
+                automatic_end_date=automatic_end_date,
+                manual_end_date=manual_end_date,
+                parent_contract=self.Contract(end_date=contract_end_date),
+                covered_element=self.CoveredElement(),
+                )
+            self.assertEqual(option.get_end_date('end_date'), expected)
+
+            # test setter
+            with mock.patch.object(self.Option, 'write') as write:
+                if should_raise:
+                    self.assertRaises(UserError, self.Option.set_end_date,
+                        [option], 'end_date', to_set)
+                else:
+                    self.Option.set_end_date([option], 'end_date', to_set)
+                    if should_set:
+                        write.assert_called_with([option],
+                            {'manual_end_date': to_set})
+                    else:
+                        write.assert_called_with([],
+                            {'manual_end_date': to_set})
+
+        # option with auto date
+        test_option(automatic_end_date=auto_date, expected=auto_date,
+            to_set=test_date, should_set=True)
+
+        # option with manual date
+        test_option(automatic_end_date=auto_date, manual_end_date=manual_date,
+            expected=manual_date, to_set=test_date, should_set=True)
+
+        # option with no end date at all
+        test_option(expected=contract_end_date, to_set=test_date,
+            should_set=True)
+
+        # try setting setting end date anterior to start date
+        test_option(expected=contract_end_date, to_set=early_date,
+            should_raise=True)
+
+        # try setting setting end date posterior to contract end date
+        test_option(expected=contract_end_date, to_set=late_date,
+            should_raise=True)
 
 
 def suite():

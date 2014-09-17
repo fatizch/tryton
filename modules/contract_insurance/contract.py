@@ -330,7 +330,8 @@ class Contract(Printable):
         super(Contract, self).set_end_date(end_date, force)
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                option.set_end_date(end_date, force)
+                if not option.end_date:
+                    option.end_date = end_date
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 
@@ -595,6 +596,46 @@ class ContractOption:
         for extra_premium in self.extra_premiums:
             extra_premium.set_start_date(start_date)
             extra_premium.save()
+
+    @classmethod
+    def set_end_date(cls, options, name, end_date):
+        to_write, to_super = [], []
+        if not end_date:
+            cls.raise_user_error('end_date_none')
+        for option in options:
+            if end_date > option.start_date:
+                if not option.parent_contract:
+                    to_super.append(option)
+                    continue
+                if end_date <= (option.parent_contract.end_date
+                        or datetime.date.max):
+                    to_write.append(option)
+                else:
+                    cls.raise_user_error('end_date_posterior_to_contract',
+                        coop_string.date_as_string(
+                            option.parent_contract.end_date))
+            else:
+                cls.raise_user_error('end_date_anterior_to_start_date',
+                        coop_string.date_as_string(option.start_date))
+        if to_write:
+            cls.write(to_write, {'manual_end_date': end_date})
+        if to_super:
+            super(ContractOption, cls).set_end_date(to_super, name, end_date)
+
+    def get_end_date(self, name):
+        if not self.covered_element:
+            return super(ContractOption, self).get_end_date(name)
+        if self.manual_end_date:
+            return self.manual_end_date
+        elif (self.automatic_end_date and
+                self.automatic_end_date > self.start_date):
+            if self.parent_contract:
+                return min(self.parent_contract.end_date or datetime.date.max,
+                    self.automatic_end_date)
+            else:
+                return self.automatic_end_date
+        elif self.parent_contract and self.parent_contract.end_date:
+            return self.parent_contract.end_date
 
 
 class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,

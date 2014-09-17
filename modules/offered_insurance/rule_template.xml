@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine" id="option_end_date_rule">
+            <field name="name">Option End Date Rule</field>
+            <field name="short_name">Option End Date Rule</field>
+            <field name="algorithm">birth_year = date_de_naissance().timetuple()[0]
+if param_age_kind() == "real":
+    return date_de_naissance() + relativedelta(
+        years=param_max_age_for_option() + 1, days=-1)
+elif param_age_kind() == "at_given_day_of_year":
+    given_date_in_birth_year = datetime.date(birth_year,
+        int(param_given_month()), int(param_given_day()))
+    if date_de_naissance() >= given_date_in_birth_year:
+        return given_date_in_birth_year + relativedelta(
+            years=param_max_age_for_option() + 1, days=-1)
+    else:
+        return given_date_in_birth_year + relativedelta(
+            years=param_max_age_for_option(), days=-1)</field>
+            <field name="debug_mode">True</field>
+            <field name="status">draft</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="option_max_age">
+            <field name="name">max_age_for_option</field>
+            <field name="type_">integer</field>
+            <field name="string">Maximum age for option (age included)</field>
+            <field name="parent_rule" ref="option_end_date_rule"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="option_age_kind">
+            <field name="name">age_kind</field>
+            <field name="type_">selection</field>
+            <field name="selection">real : Real
+at_given_day_of_year : At Given Day of Year</field>
+            <field name="string">Age kind for ending rule</field>
+            <field name="parent_rule" ref="option_end_date_rule"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="given_day">
+            <field name="name">given_day</field>
+            <field name="type_">selection</field>
+            <field name="selection">1 : 1
+2 : 2
+3 : 3
+4 : 4
+5 : 5
+6 : 6
+7 : 7
+8 : 8
+9 : 9
+10 : 10
+11 : 11
+12 : 12
+13 : 13
+14 : 14
+15 : 15
+16 : 16
+17 : 17
+18 : 18
+19 : 19
+20 : 20
+21 : 21
+22 : 22
+23 : 23
+24 : 24
+25 : 25
+26 : 26
+27 : 27
+28 : 28
+29 : 29
+30 : 30
+31 : 31</field>
+            <field name="selection_sorted">False</field>
+            <field name="string">Given Day</field>
+            <field name="parent_rule" ref="option_end_date_rule"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="given_month">
+            <field name="name">given_month</field>
+            <field name="type_">selection</field>
+            <field name="selection">1 : 1
+2 : 2
+3 : 3
+4 : 4
+5 : 5
+6 : 6
+7 : 7
+8 : 8
+9 : 9
+10 : 10
+11 : 11
+12 : 12</field>
+            <field name="selection_sorted">False</field>
+            <field name="string">Given Month</field>
+            <field name="parent_rule" ref="option_end_date_rule"/>
+        </record>
+        <record model="rule_engine" id="option_end_date_rule" update="1">
+            <field name="status">validated</field>
+        </record>
+    </data>
+</tryton>
+
+
+

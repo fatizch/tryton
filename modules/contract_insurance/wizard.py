@@ -91,6 +91,7 @@ class WizardOption:
 
     def init_subscribed_option(self, displayer, option):
         option.item_desc = displayer.covered_element.item_desc
+        option.covered_element = displayer.covered_element
         super(WizardOption, self).init_subscribed_option(displayer, option)
 
 
