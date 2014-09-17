@@ -94,7 +94,8 @@ class Contract:
         premiums_to_delete = []
         for sub_contracts in grouped_slice(loan_contracts):
             premiums_to_delete.extend(PremiumAmount.search([
-                        ('contract', 'in', sub_contracts)]))
+                        ('contract', 'in', sub_contracts),
+                        ('end', '>=', start or datetime.date.max)]))
         PremiumAmount.delete(premiums_to_delete)
         # Delete invoices, as generate_premium_amount filters existing
         # periods
