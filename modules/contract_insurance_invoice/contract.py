@@ -420,9 +420,9 @@ class Contract:
             for premium in existing:
                 if premium.start >= dates[0]:
                     parents_to_update[elem]['delete'].append(premium)
-                elif datetime.date.min or elem.start < dates[0] <= (
-                        elem.end or datetime.date.max):
-                    elem.end = coop_date.add_day(dates[0], -1)
+                elif (premium.start or datetime.date.min) < dates[0] <= (
+                        premium.end or datetime.date.max):
+                    premium.end = coop_date.add_day(dates[0], -1)
                     parents_to_update[elem]['write'].append(premium)
                 else:
                     parents_to_update[elem]['keep'].append(premium)
