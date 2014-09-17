@@ -368,6 +368,7 @@ class StartEndorsement(Wizard):
     def set_main_object(self, endorsement):
         # TODO : update once endorsement parts are applied on different models
         endorsement.contract = self.select_endorsement.contract
+        endorsement.options = []
 
     def get_clean_endorsement(self, state):
         current_part = state.endorsement_part
