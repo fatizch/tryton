@@ -46,6 +46,18 @@ class LoanShare:
     __name__ = 'loan.share'
 
 
+class Premium:
+    _history = True
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.premium'
+
+
+class PremiumAmount:
+    _history = True
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.premium.amount'
+
+
 class Endorsement:
     __metaclass__ = PoolMeta
     __name__ = 'endorsement'

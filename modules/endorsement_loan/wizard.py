@@ -320,11 +320,13 @@ class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoopView):
     currency_digits = fields.Integer('Currency Digits')
     currency_symbol = fields.Char('Currency Symbol')
     new_amount = fields.Numeric('New Amount', digits=(16,
-            Eval('currency_digits', 2)), depends=['currency_digits'])
+            Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
     new_payments = fields.One2Many('loan.payment', None, 'New Payments',
         readonly=True)
     old_amount = fields.Numeric('Current Amount', digits=(16,
-            Eval('currency_digits', 2)), depends=['currency_digits'])
+            Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
     old_payments = fields.One2Many('loan.payment', None,
         'Current Payments', readonly=True)
 
