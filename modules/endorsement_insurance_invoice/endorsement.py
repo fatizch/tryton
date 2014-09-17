@@ -40,19 +40,11 @@ class CommissionInvoice:
 class Contract:
     __name__ = 'contract'
 
-    def get_rebill_end_date(self, start_date=None):
-        Date = Pool().get('ir.date')
-        if not start_date:
-            start_date = Date.today()
-        if not self.last_invoice_end or start_date > self.last_invoice_end:
-            # Nothing to rebill, the contract was not billed at the required
-            # start_date
-            return None
-        # It is possible that the end_date changed since the last billing so
-        # the last_invoice_end may be too far in the future
-        return min(self.end_date or datetime.date.max, self.last_invoice_end)
+    def get_rebill_end_date(self, start_date):
+        return min(self.end_date or datetime.date.max,
+            self.last_invoice_end or start_date)
 
-    def rebill(self, at_date=None):
+    def rebill(self, at_date):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
         Invoice = pool.get('account.invoice')
