@@ -367,6 +367,7 @@ class StartEndorsement:
         'endorsement_loan.change_basic_loan_data_view_form',
         [Button('Previous', 'change_basic_loan_data_previous',
                 'tryton-go-previous'),
+            Button('Cancel', 'end', 'tryton-cancel'),
             Button('Suspend', 'suspend', 'tryton-save'),
             Button('Next', 'calculate_updated_payments', 'tryton-go-next',
                 default=True)])
@@ -376,6 +377,7 @@ class StartEndorsement:
         'endorsement.loan.display_updated_payments',
         'endorsement_loan.display_updated_payments_view_form', [
             Button('Previous', 'change_basic_loan_data', 'tryton-go-previous'),
+            Button('Cancel', 'end', 'tryton-cancel'),
             Button('Suspend', 'suspend', 'tryton-save'),
             Button('Next', 'loan_select_contracts', 'tryton-go-next',
                 default=True)])
@@ -384,6 +386,7 @@ class StartEndorsement:
         'endorsement_loan.select_contracts_view_form', [
             Button('Previous', 'display_updated_payments',
                 'tryton-go-previous'),
+            Button('Cancel', 'end', 'tryton-cancel'),
             Button('Suspend', 'suspend', 'tryton-save'),
             Button('Next', 'loan_endorse_selected_contracts', 'tryton-go-next',
                 default=True)])
