@@ -77,6 +77,16 @@ class OptionDescription:
         res.append(('insurance', 'Insurance'))
         return res
 
+    @classmethod
+    def get_possible_coverages_clause(cls, instance, at_date):
+        clause = super(OptionDescription, cls).get_possible_coverages_clause(
+            instance, at_date)
+        if instance and instance.__name__ == 'contract.covered_element':
+            return clause + [
+                ('products', '=', instance.product.id),
+                ('item_desc', '=', instance.item_desc.id)]
+        return clause
+
     def calculate_main_price(self, args, errs, date, contract):
         try:
             coverage_lines, coverage_errs = self.get_result(
