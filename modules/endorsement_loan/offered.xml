@@ -23,5 +23,18 @@
             <field name="type">tree</field>
             <field name="name">endorsement_field_list</field>
         </record>
+        <!-- ################################ -->
+        <!-- # Endorsement Loan Share Field # -->
+        <!-- ################################ -->
+        <record model="ir.ui.view" id="endorsement_loan_share_field_view_form">
+            <field name="model">endorsement.loan.share.field</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_field_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_loan_share_field_view_list">
+            <field name="model">endorsement.loan.share.field</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_field_list</field>
+        </record>
     </data>
 </tryton>

@@ -4,5 +4,8 @@
         <page name="loan_fields">
             <field name="loan_fields"/>
         </page>
+        <page name="loan_share_fields">
+            <field name="loan_share_fields"/>
+        </page>
     </xpath>
 </data>

@@ -34,6 +34,30 @@
             <field name="type">form</field>
             <field name="name">select_contracts_form</field>
         </record>
+        <!-- ###################### -->
+        <!-- # Select Loan Shares # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="update_loan_shares_view_form">
+            <field name="model">contract.covered_element.add_option.loan_shares</field>
+            <field name="type">form</field>
+            <field name="name">update_loan_shares_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Loan Share Selector # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="loan_share_selector_view_list">
+            <field name="model">contract.covered_element.add_option.loan_share_selector</field>
+            <field name="type">tree</field>
+            <field name="name">loan_share_selector_list</field>
+        </record>
+        <!-- ################## -->
+        <!-- # Share per Loan # -->
+        <!-- ################## -->
+        <record model="ir.ui.view" id="share_per_loan_view_list">
+            <field name="model">contract.covered_element.add_option.share_per_loan</field>
+            <field name="type">tree</field>
+            <field name="name">share_per_loan_list</field>
+        </record>
         <!-- ################ -->
         <!-- # Preview Loan # -->
         <!-- ################ -->

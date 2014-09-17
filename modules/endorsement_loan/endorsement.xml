@@ -44,5 +44,27 @@
             <field name="model">loan,-1</field>
             <field name="action" ref="act_endorsement"/>
         </record>
+        <!-- ###################################### -->
+        <!-- # Endorsement Covered Element Option # -->
+        <!-- ###################################### -->
+        <record model="ir.ui.view" id="endorsement_covered_element_option_view_form">
+            <field name="model">endorsement.contract.covered_element.option</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement_insurance.endorsement_covered_element_option_view_form"/>
+            <field name="name">endorsement_covered_element_option_form</field>
+        </record>
+        <!-- ########################## -->
+        <!-- # Endorsement Loan Share # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="endorsement_loan_share_view_form">
+            <field name="model">endorsement.loan.share</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_loan_share_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_loan_share_view_list">
+            <field name="model">endorsement.loan.share</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_loan_share_list</field>
+        </record>
     </data>
 </tryton>

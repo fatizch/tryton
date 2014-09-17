@@ -1,11 +1,14 @@
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import EndorsementWizardStepBasicObjectMixin
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
+from trytond.modules.endorsement import EndorsementWizardStepMixin
 
 PAYMENT_FIELDS = ['kind', 'number', 'start_date', 'begin_balance',
     'amount', 'principal', 'interest', 'outstanding_balance']
@@ -15,6 +18,9 @@ __all__ = [
     'LoanChangeBasicData',
     'LoanDisplayUpdatedPayments',
     'LoanSelectContracts',
+    'SelectLoanShares',
+    'LoanShareSelector',
+    'SharePerLoan',
     'SelectEndorsement',
     'PreviewLoanEndorsement',
     'StartEndorsement',
@@ -56,6 +62,242 @@ class LoanSelectContracts(model.CoopView):
     selected_contracts = fields.Many2Many('contract', None, None,
         'Contracts to update', depends=['possible_contracts'],
         domain=[('id', 'in', Eval('possible_contracts'))])
+
+
+class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
+    'Select Loan Shares'
+
+    __name__ = 'contract.covered_element.add_option.loan_shares'
+
+    loan_share_selectors = fields.One2Many(
+        'contract.covered_element.add_option.loan_share_selector', None,
+        'New Loan Shares')
+    shares_per_loan = fields.One2Many(
+        'contract.covered_element.add_option.share_per_loan', None,
+        'Shares per loan')
+
+    @fields.depends('shares_per_loan', 'loan_share_selectors')
+    def on_change_shares_per_loan(self):
+        selector_values, share_values = [], []
+        for share_per_loan in self.shares_per_loan:
+            if share_per_loan.share is None:
+                continue
+            for selector in self.loan_share_selectors:
+                if selector.loan != share_per_loan.loan:
+                    continue
+                if selector.new_share != share_per_loan.share:
+                    selector_values.append({
+                            'new_share': share_per_loan.share,
+                            'id': selector.id,
+                            })
+            share_values.append({'share': None, 'id': share_per_loan.id})
+        result = {'shares_per_loan': {'update': share_values}}
+        if selector_values:
+            result['loan_share_selectors'] = {
+                'update': selector_values}
+        return result
+
+    @staticmethod
+    def update_dict(to_update, key, value):
+        # TODO : find a cleaner endorsement class detection
+        to_update[key] = to_update[key + '_endorsement'] = None
+        if hasattr(value, 'get_endorsed_record'):
+            to_update[key + '_endorsement'] = value.id
+        else:
+            to_update[key] = value.id
+        to_update[key + '_name'] = value.rec_name
+
+    @classmethod
+    def update_default_values(cls, wizard, base_endorsement, default_values):
+        # Base_endorsement may be the current new endorsement. But we also have
+        # to look in wizard.endorsement.contract_endorsements to detect other
+        # contracts that may be modified
+        if not base_endorsement.id:
+            # New endorsement, no need to look somewhere else.
+            all_endorsements = [base_endorsement]
+        else:
+            all_endorsements = list(wizard.endorsement.contract_endorsements)
+        pool = Pool()
+        LoanShareEndorsement = pool.get('endorsement.loan.share')
+        effective_date = wizard.select_endorsement.effective_date
+        selectors, template, all_loans = [], {}, set()
+        for endorsement in all_endorsements:
+            updated_struct = endorsement.updated_struct
+            loans = set(list(endorsement.contract.used_loans) + [
+                    x.loan for x in wizard.endorsement.loan_endorsements])
+            if getattr(wizard.select_endorsement, 'loan', None):
+                loans.add(wizard.select_endorsement.loan)
+            all_loans |= loans
+            template['contract'] = endorsement.contract.id
+            for covered_element, values in (
+                    updated_struct['covered_elements'].iteritems()):
+                cls.update_dict(template, 'covered_element', covered_element)
+                for option, o_values in values['options'].iteritems():
+                    cls.update_dict(template, 'option', option)
+                    for loan in [x for x in loans
+                            if x not in o_values['loan_shares']]:
+                        o_values['loan_shares'][loan] = {}
+                    for loan, shares in o_values['loan_shares'].iteritems():
+                        template['loan'] = loan.id
+                        template['previous_share'] = None
+                        sorted_list = sorted([x['instance'] for x in shares],
+                            key=lambda x: x.start_date or
+                            datetime.date.min)
+                        selector = template.copy()
+                        if not shares:
+                            selectors.append(selector)
+                            continue
+                        for idx, loan_share in enumerate(sorted_list):
+                            if ((loan_share.start_date or datetime.date.min) <
+                                    effective_date):
+                                template['previous_share'] = loan_share.share
+                                continue
+                            selector = template.copy()
+                            if (loan_share.start_date == effective_date and
+                                    isinstance(loan_share, LoanShareEndorsement)):
+                                selector['new_share'] = loan_share.share
+                                selector['loan_share_endorsement'] = loan_share.id
+                                if idx != len(sorted_list) - 1:
+                                    future = sorted_list[idx + 1]
+                                    selector['future_share'] = future.share
+                                    if (isinstance(future, LoanShareEndorsement)
+                                            and future.action == 'remove'):
+                                        selector['override_future'] = True
+                            else:
+                                selector['previous_share'] = loan_share.share
+                            selectors.append(selector)
+                            break
+                        else:
+                            selector['previous_share'] = loan_share.share
+                            selectors.append(selector)
+        return {'loan_share_selectors': sorted(selectors, key=lambda x:
+                (x['covered_element'], x['loan'], x['option_name'])),
+            'shares_per_loan': [{'loan': x.id} for x in all_loans]}
+
+    def update_endorsement(self, base_endorsement, wizard):
+        # Base_endorsement may be the current new endorsement. But we also have
+        # to look in wizard.endorsement.contract_endorsements to detect other
+        # contracts that may be modified
+        if not base_endorsement.id:
+            endorsements = {base_endorsement.contract.id: base_endorsement}
+        else:
+            endorsements = {x.contract.id: x
+                for x in wizard.endorsement.contract_endorsements}
+        pool = Pool()
+        Endorsement = pool.get('endorsement.contract')
+        CoveredElementEndorsement = pool.get(
+            'endorsement.contract.covered_element')
+        OptionEndorsement = pool.get(
+            'endorsement.contract.covered_element.option')
+        LoanShareEndorsement = pool.get('endorsement.loan.share')
+        new_covered_elements, new_options, new_shares = {}, {}, []
+        for elem in self.loan_share_selectors:
+            if elem.new_share is None:
+                continue
+            endorsement = endorsements[elem.contract.id]
+            if elem.option_endorsement:
+                option_endorsement = elem.option_endorsement
+            elif elem.option in new_options:
+                option_endorsement = new_options[elem.option]
+            else:
+                option_endorsement = OptionEndorsement(action='update',
+                    relation=elem.option.id, loan_shares=[])
+                new_options[elem.option] = option_endorsement
+                if elem.covered_element_endorsement:
+                    ce_endorsement = elem.covered_element_endorsement
+                elif elem.covered_element in new_covered_elements:
+                    ce_endorsement = new_covered_elements[elem.covered_element]
+                else:
+                    ce_endorsement = CoveredElementEndorsement(
+                        action='update', relation=elem.covered_element.id,
+                        options=[])
+                    new_covered_elements[elem.covered_element] = ce_endorsement
+                    if endorsement.id:
+                        ce_endorsement.contract_endorsement = endorsement
+                    else:
+                        endorsement.covered_elements.append(ce_endorsement)
+                if ce_endorsement.id:
+                    option_endorsement.covered_element_endorsement = \
+                        ce_endorsement.id
+                else:
+                    ce_endorsement.options.append(option_endorsement)
+            for loan_share in option_endorsement.loan_shares:
+                if loan_share.loan == elem.loan:
+                    loan_share.values['share'] = elem.new_share
+                    break
+            else:
+                loan_share = LoanShareEndorsement(action='add', values={
+                        'loan': elem.loan.id, 'share': elem.new_share,
+                        'start_date': self.effective_date},
+                    loan=elem.loan)
+                new_shares.append(loan_share)
+            if option_endorsement.id:
+                loan_share.option_endorsement = option_endorsement.id
+            else:
+                option_endorsement.loan_shares.append(loan_share)
+        if new_shares:
+            LoanShareEndorsement.create([x._save_values for x in new_shares
+                    if getattr(x, 'option_endorsement', None)])
+        if new_options:
+            OptionEndorsement.create([x._save_values
+                    for x in new_options.itervalues()
+                    if getattr(x, 'covered_element_endorsement', None)])
+        if new_covered_elements:
+            to_create = [x._save_values
+                for x in new_covered_elements.itervalues()
+                if getattr(x, 'contract_endorsement', None)]
+            if to_create and len(to_create) == len(new_covered_elements):
+                CoveredElementEndorsement.create(to_create)
+            else:
+                to_write, to_create = [], []
+                for elem in endorsements:
+                    if elem.id:
+                        to_write += [[elem.id], elem._save_values]
+                    else:
+                        to_create.append(elem._save_values)
+                if to_write:
+                    Endorsement.write(*to_write)
+                if to_create:
+                    Endorsement.create(to_create)
+
+
+class LoanShareSelector(model.CoopView):
+    'Loan Share Selector'
+
+    __name__ = 'contract.covered_element.add_option.loan_share_selector'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    covered_element = fields.Many2One('contract.covered_element',
+        'Covered Element', readonly=True)
+    covered_element_endorsement = fields.Many2One(
+        'endorsement.contract.covered_element', 'Covered Element',
+        readonly=True)
+    covered_element_name = fields.Char('Covered Element', readonly=True)
+    future_share = fields.Numeric('Future Share', digits=(5, 4),
+        readonly=True)
+    loan = fields.Many2One('loan', 'Loan', readonly=True)
+    loan_share_endorsement = fields.Many2One('endorsement.loan.share',
+        'Loan Share Endorsement', readonly=True)
+    new_share = fields.Numeric('New Share', digits=(5, 4))
+    option = fields.Many2One('contract.option', 'Option', readonly=True)
+    option_endorsement = fields.Many2One(
+        'endorsement.contract.covered_element.option', 'Option Endorsement',
+        readonly=True)
+    option_name = fields.Char('Option', readonly=True)
+    override_future = fields.Boolean('Override Future', states={
+            'readonly': ~Bool(Eval('future_share', False))})
+    previous_share = fields.Numeric('Previous Share', digits=(5, 4),
+        readonly=True)
+    terminate_loan = fields.Boolean('Terminate Loan')
+
+
+class SharePerLoan(model.CoopView):
+    'Share per Loan'
+
+    __name__ = 'contract.covered_element.add_option.share_per_loan'
+
+    loan = fields.Many2One('loan', 'Loan', readonly=True)
+    share = fields.Numeric('Share', digits=(5, 4))
 
 
 class SelectEndorsement:
@@ -144,7 +386,17 @@ class StartEndorsement:
             Button('Next', 'loan_endorse_selected_contracts', 'tryton-go-next',
                 default=True)])
     loan_endorse_selected_contracts = StateTransition()
-
+    loan_share_update = StateView(
+        'contract.covered_element.add_option.loan_shares',
+        'endorsement_loan.update_loan_shares_view_form', [
+            Button('Previous', 'loan_share_update_previous',
+                'tryton-go-previous'),
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Suspend', 'suspend', 'tryton-save'),
+            Button('Next', 'loan_share_update_next', 'tryton-go-next',
+                default=True)])
+    loan_share_update_previous = StateTransition()
+    loan_share_update_next = StateTransition()
     preview_loan = StateView('endorsement.start.preview_loan',
         'endorsement_loan.preview_loan_view_form', [
             Button('Summary', 'summary', 'tryton-go-previous'),
@@ -152,6 +404,14 @@ class StartEndorsement:
             Button('Apply', 'apply_endorsement', 'tryton-go-next',
                 default=True),
             ])
+
+    @classmethod
+    def __setup__(cls):
+        super(StartEndorsement, cls).__setup__()
+        cls._error_messages.update({
+                'no_loan_share_on_new_coverage':
+                'The following coverages have no loan share :\n  %s',
+                })
 
     def get_endorsed_object(self, endorsement_part):
         if endorsement_part.kind == 'loan':
@@ -266,6 +526,52 @@ class StartEndorsement:
 
     def transition_change_basic_loan_data_next(self):
         return self.get_next_state('change_basic_loan_data')
+
+    def default_loan_share_update(self, name):
+        ContractEndorsement = Pool().get('endorsement.contract')
+        endorsement_part = self.get_endorsement_part_for_state(
+            'loan_share_update')
+        endorsement_date = self.select_endorsement.effective_date
+        result = {
+            'endorsement_part': endorsement_part.id,
+            'effective_date': endorsement_date,
+            }
+        endorsements = self.get_endorsements_for_state('loan_share_update')
+        if not endorsements:
+            if self.select_endorsement.contract:
+                endorsements = [ContractEndorsement(definition=self.definition,
+                        endorsement=self.endorsement,
+                        contract=self.select_endorsement.contract)]
+            else:
+                return result
+        SelectLoanShares = Pool().get(
+            'contract.covered_element.add_option.loan_shares')
+        result.update(SelectLoanShares.update_default_values(self,
+                endorsements[0], result))
+        return result
+
+    def transition_loan_share_update_previous(self):
+        self.end_current_part('loan_share_update')
+        return self.get_state_before('loan_share_update')
+
+    def transition_loan_share_update_next(self):
+        shares_per_new_coverage = set()
+        all_new_coverages = set()
+        for elem in self.loan_share_update.loan_share_selectors:
+            if not (elem.option_endorsement and
+                    elem.option_endorsement.action == 'add'):
+                continue
+            if elem.option_endorsement in shares_per_new_coverage:
+                continue
+            if elem.new_share:
+                shares_per_new_coverage.add(elem.option_endorsement)
+            all_new_coverages.add(elem.option_endorsement)
+        bad_options = all_new_coverages - shares_per_new_coverage
+        if bad_options:
+            self.raise_user_error('no_loan_share_on_new_coverage', (
+                    '  \n'.join([x.rec_name for x in bad_options])))
+        self.end_current_part('loan_share_update')
+        return self.get_next_state('loan_share_update')
 
     def default_preview_loan(self, name):
         LoanPreview = Pool().get('endorsement.start.preview_loan')
