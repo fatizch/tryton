@@ -1,4 +1,6 @@
 from sql import Literal, Cast
+from itertools import groupby
+
 Null = None  # TODO remove when python-sql >=0.3
 from sql.aggregate import Max, Sum
 from sql.conditionals import Coalesce, Case
