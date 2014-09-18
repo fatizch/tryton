@@ -493,23 +493,25 @@ def configure(target_env):
     if not os.path.exists(os.path.join(workspace, 'conf', 'trytond.conf')):
         with open(os.path.join(workspace, 'conf', 'trytond.conf'), 'w') as f:
             f.write('\n'.join([
-                        '[options]',
-                        'jsonrpc = localhost:8000',
-                        'db_type = postgresql',
-                        'db_user = tryton',
-                        'db_password = tryton',
-                        'data_path = %s' % os.path.join(workspace, 'data'),
-                        'logfile = %s' % os.path.join(workspace, 'logs',
-                            'server_logs.log')]))
+                        '[jsonrpc]',
+                        'listen = localhost:8000\n',
+                        '[database]',
+                        'uri = postgresql://tryton:tryton@localhost:5432/',
+                        'path = %s\n' % os.path.join(workspace, 'data'),
+                        '[session]',
+                        'super_pwd = zqpVUjCebLpr6',
+                        '# default password is admin',
+                        ]))
     if not os.path.exists(os.path.join(workspace, 'conf', 'tests.conf')):
         with open(os.path.join(workspace, 'conf', 'tests.conf'), 'w') as f:
             f.write('\n'.join([
-                        '[options]',
-                        'jsonrpc = localhost:8000',
+                        '[jsonrpc]',
+                        'listen = localhost:8000\n',
+                        '[database]',
                         'db_type = sqlite',
-                        'data_path = %s' % os.path.join(workspace, 'data'),
-                        'logfile = %s' % os.path.join(workspace, 'logs',
-                            'server_logs.log')]))
+                        'uri = sqlite://',
+                        'path = %s' % os.path.join(workspace, 'data'),
+                        ]))
     if not os.path.exists(os.path.join(workspace, 'conf', 'celeryconfig.py')):
         with open(os.path.join(workspace, 'conf', 'celeryconfig.py'),
                 'w') as f:
@@ -559,9 +561,6 @@ def configure(target_env):
     if not os.path.islink(proteusdir):
         shutil.rmtree(proteusdir)
         os.symlink(os.path.join(workspace, 'proteus', 'proteus'), proteusdir)
-    os.remove(os.path.join(workspace, 'trytond', 'etc', 'trytond.conf'))
-    os.symlink(os.path.join(workspace, 'conf', 'trytond.conf'),
-        os.path.join(workspace, 'trytond', 'etc', 'trytond.conf'))
 
     def path_inserter(target, filename):
         target_file = os.path.join(root, 'lib', 'python2.7', 'site-packages',
@@ -604,7 +603,7 @@ if __name__ == '__main__':
                 config.readfp(fconf)
 
     work_data = init_work_data(config)
-    possible_modules = os.listdir(work_data['modules']) + ['all']
+    possible_modules = os.listdir(work_data['modules']) + ['ir']
     possible_coop_modules = os.listdir(work_data['coop_modules']) + ['all']
 
     # Main parser
@@ -640,7 +639,7 @@ if __name__ == '__main__':
     parser_database.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
     parser_database.add_argument('--module', '-m', help='Module name',
-        default='all', type=str, choices=possible_modules)
+        default='ir', type=str, choices=possible_modules)
     parser_database.add_argument('--test-case', '-t', help='Test case to run',
         default='all')
 

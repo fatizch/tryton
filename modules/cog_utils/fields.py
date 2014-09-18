@@ -4,11 +4,11 @@ from sql import Column, Literal, operators, functions
 from sql.conditionals import Coalesce, NullIf
 from sql.operators import Concat
 
+from trytond import backend
 from trytond.model import fields as tryton_fields
 from trytond.pyson import PYSON
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.config import CONFIG
 from trytond.model.fields import SQL_OPERATORS
 
 
@@ -187,7 +187,7 @@ class UnaccentChar(tryton_fields.Char):
     @classmethod
     def sql_format(cls, value):
         value = super(UnaccentChar, cls).sql_format(value)
-        if isinstance(value, basestring) and CONFIG['db_type'] == 'postgresql':
+        if isinstance(value, basestring) and backend.name() == 'postgresql':
             return Unaccent(value)
         return value
 
@@ -230,7 +230,7 @@ class UnaccentChar(tryton_fields.Char):
         name, operator, value = domain
         Operator = tryton_fields.SQL_OPERATORS[operator]
         column = Column(table, name)
-        if CONFIG['db_type'] == 'postgresql':
+        if backend.name() == 'postgresql':
             column = Unaccent(column)
         expression = Operator(column, self._domain_value(operator, value))
         if isinstance(expression, operators.In) and not expression.right:
@@ -254,7 +254,7 @@ class UnaccentChar(tryton_fields.Char):
         Operator = SQL_OPERATORS[operator]
         column = Coalesce(NullIf(translation.value, ''),
             Column(table, name))
-        if CONFIG['db_type'] == 'postgresql':
+        if backend.name() == 'postgresql':
             column = Unaccent(column)
         where = Operator(column, self._domain_value(operator, value))
         if isinstance(where, operators.In) and not where.right:

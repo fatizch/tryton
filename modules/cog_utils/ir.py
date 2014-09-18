@@ -1,10 +1,10 @@
 import datetime
 from sql.operators import Concat
 
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
-from trytond.config import CONFIG
 
 import fields
 from export import ExportImportMixin
@@ -94,7 +94,7 @@ class UIMenu(ExportImportMixin):
     def __register__(cls, module_name):
         super(UIMenu, cls).__register__(module_name)
 
-        if CONFIG['db_type'] != 'postgresql':
+        if backend.name() != 'postgresql':
             return
 
         with Transaction().new_cursor() as transaction:

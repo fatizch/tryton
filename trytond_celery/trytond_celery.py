@@ -35,19 +35,20 @@ class TrytonTask(Task):
         database = self.app.conf.TRYTON_DATABASE
         config_file = self.app.conf.get('TRYTON_CONFIG')
 
-        from trytond.config import CONFIG
-        if CONFIG.configfile != config_file:
-            CONFIG.update_etc(config_file)
+        from trytond.config import config
+        config.update_etc(config_file)
+
         from trytond.pool import Pool
         from trytond.transaction import Transaction
         from trytond.cache import Cache
         from trytond import backend
 
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
-        Cache.clean(database)
         if database not in Pool.database_list():
             with Transaction().start(database, 0, readonly=True):
                 Pool(database).init()
+        with Transaction().start(database, 0):
+            Cache.clean(database)
         with Transaction().start(database, 0) as transaction:
             try:
                 result = super(TrytonTask, self).__call__(*args, **kwargs)
@@ -55,6 +56,7 @@ class TrytonTask(Task):
             except DatabaseOperationalError, exc:
                 transaction.cursor.rollback()
                 raise self.retry(args=args, kwargs=kwargs, exc=exc,
-                    countdown=0, max_retries=int(CONFIG['retry']))
-        Cache.resets(database)
+                    countdown=0,
+                    max_retries=int(config.get('database', 'retry')))
+            Cache.resets(database)
         return result

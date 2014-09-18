@@ -11,7 +11,7 @@ Contenu:
    trytond_doc/fonctionalites
    trytond_doc/tutoriels
    trytond_doc/modules
-
+   trytond_doc/administration_configuration
 
 * :ref:`Search`
 

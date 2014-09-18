@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.config import CONFIG
+from trytond.config import config
 
 from trytond.modules.cog_utils import export
 
@@ -26,7 +26,7 @@ class Country(export.ExportImportMixin):
     @staticmethod
     def default_country():
         Country = Pool().get('country.country')
-        code = CONFIG.get('default_country', 'FR')
+        code = config.get('options', 'default_country', 'FR')
         country, = Country.search([('code', '=', code)])
         return country
 

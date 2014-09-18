@@ -6,13 +6,13 @@ except ImportError:
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
 
+from trytond import backend
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.config import CONFIG
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
 from trytond.modules.currency_cog import ModelCurrency
@@ -252,7 +252,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 group_by=activation_history.contract))
 
         values = dict([(id, value) for id, value in cursor.fetchall()])
-        if CONFIG['db_type'] == 'sqlite':
+        if backend.name() == 'sqlite':
             def convert(value):
                 if value is not None:
                     return datetime.date(*map(int, value.split('-')))

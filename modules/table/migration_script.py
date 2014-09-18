@@ -1,7 +1,7 @@
 import sys
 import os
 
-from trytond.config import CONFIG
+from trytond.config import config
 from trytond.pool import Pool
 from trytond.cache import Cache
 from trytond.transaction import Transaction
@@ -12,12 +12,12 @@ if len(sys.argv) != 2:
 else:
     dbname = sys.argv[1]
 
-CONFIG.update_etc(os.path.abspath(os.path.join(os.path.normpath(__file__),
+config.update_etc(os.path.abspath(os.path.join(os.path.normpath(__file__),
         '..', '..', '..', '..', 'conf', 'trytond.conf')))
 
 CONTEXT = {}
 
-DIMENSION_MAX = int(CONFIG.get('table_dimension', 4))
+DIMENSION_MAX = int(config.get('table', 'table_dimension', 4))
 
 
 def migrate_age_from_value_to_range():

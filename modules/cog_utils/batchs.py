@@ -3,7 +3,7 @@ import os
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import ModelView
-from trytond.config import CONFIG
+from trytond.config import config
 
 __all__ = [
     'BatchRoot',
@@ -93,7 +93,7 @@ class BatchRoot(ModelView):
 
     @classmethod
     def write_batch_output(cls, format, buffer, name):
-        BATCH_PATH = CONFIG.get('batch_dir', None)
+        BATCH_PATH = config.get('batch', 'output_dir', None)
         if not BATCH_PATH:
             cls.raise_user_error('no_batch_path')
         if not os.path.exists(BATCH_PATH):

@@ -7,7 +7,7 @@ import StringIO
 import functools
 import shutil
 
-from trytond.config import CONFIG
+from trytond.config import config
 from trytond.model import Model
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateAction, StateView, Button
@@ -164,7 +164,7 @@ class Printable(Model):
 
     def get_available_doc_templates(self, kind=None):
         DocumentTemplate = Pool().get('document.template')
-        
+
         if kind:
             domain_kind = ('kind', '=', kind)
         else:
@@ -642,7 +642,8 @@ class DocumentFromFilename(Report):
     def unoconv(cls, filepath, input_format, output_format):
         from trytond.report import FORMAT2EXT
         oext = FORMAT2EXT.get(output_format, output_format)
-        cmd = ['unoconv', '--connection=%s' % CONFIG['unoconv'],
+        cmd = ['unoconv',
+            '--connection=%s' % config.get('report', 'unoconv'),
             '-f', oext, '--stdout', filepath]
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
         stdoutdata, stderrdata = proc.communicate()
@@ -704,7 +705,7 @@ class DocumentCreate(Wizard):
     def __setup__(cls):
         super(DocumentCreate, cls).__setup__()
         try:
-            shutil.rmtree(CONFIG['server_shared_folder'])
+            shutil.rmtree(config.get('EDM', 'server_shared_folder'))
         except:
             pass
         cls._error_messages.update({
@@ -759,8 +760,8 @@ class DocumentCreate(Wizard):
         while max_tries > 0:
             # Loop until we find an unused folder id
             tmp_directory = utils.id_generator()
-            server_tmp_directory = os.path.join(CONFIG['server_shared_folder'],
-                tmp_directory)
+            server_tmp_directory = os.path.join(
+                config.get('EDM', 'server_shared_folder'), tmp_directory)
             try:
                 os.makedirs(server_tmp_directory)
                 break
@@ -769,10 +770,11 @@ class DocumentCreate(Wizard):
             max_tries -= 1
         if max_tries == 0:
             raise Exception('Could not create tmp_directory in %s' %
-                CONFIG['server_shared_folder'])
+                config.get('EDM', 'server_shared_folder'))
         server_filename = os.path.join(server_tmp_directory, '%s.odt' %
             filename)
-        client_filename = os.path.join(CONFIG['client_shared_folder'],
+        client_filename = os.path.join(
+            config.get('EDM', 'client_shared_folder'),
             tmp_directory, '%s.odt' % filename)
         with open(server_filename, 'w') as f:
             f.write(result)

@@ -11,7 +11,7 @@ from lxml import etree
 from sql import Column, Literal
 from sql.functions import Function, Now
 
-from trytond.config import CONFIG
+from trytond.config import config
 from trytond import backend
 from trytond.cache import Cache
 from trytond.pool import Pool
@@ -59,7 +59,7 @@ ORDER = [
     ('sequence', 'Sequence'),
     ]
 
-DIMENSION_MAX = int(CONFIG.get('table_dimension', 4))
+DIMENSION_MAX = int(config.get('options', 'table_dimension', 4))
 
 
 class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
@@ -93,7 +93,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     def __register__(cls, module_name):
         super(TableDefinition, cls).__register__(module_name)
 
-        if CONFIG['db_type'] != 'postgresql':
+        if backend.name() != 'postgresql':
             return
 
         with Transaction().new_cursor() as transaction:
@@ -457,7 +457,8 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         pool = Pool()
         Lang = pool.get('ir.lang')
 
-        lang, = Lang.search([('code', '=', CONFIG['language'])])
+        lang, = Lang.search([('code', '=',
+            config.get('database', 'language'))])
         for dimension in dimensions:
             kind = 'dimension_kind%s' % dimension.type[9:]
             name = ''
@@ -994,7 +995,7 @@ class Table2D(ModelSQL, ModelView):
 
     @classmethod
     def table_query(cls):
-        if not CONFIG['db_type'] == 'postgresql':
+        if not backend.name() == 'postgresql':
             return True
         pool = Pool()
         TableCell = pool.get('table.cell')
