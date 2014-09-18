@@ -4,10 +4,10 @@
     <field name="loan" colspan="3"/>
     <notebook colspan="4">
         <page name="new_payments">
-            <field name="new_payments"/>
+            <field name="new_payments" mode="tree" expand_toolbar="1"/>
         </page>
         <page name="current_payments">
-            <field name="current_payments"/>
+            <field name="current_payments" mode="tree" expand_toolbar="1"/>
         </page>
     </notebook>
 </form>
