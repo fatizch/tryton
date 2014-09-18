@@ -326,7 +326,8 @@ class EndorsementCoveredElementOption:
                             previous.action in ('add', 'update')):
                         loan_share_values[-2][-1]['end_date'] = previous_end
                     else:
-                        if previous.start_date < loan_share.start_date:
+                        if ((previous.start_date or datetime.date.min) <
+                                loan_share.start_date):
                             loan_share_values.append(('write', [previous.id],
                                     {'end_date': previous_end}))
                         else:
