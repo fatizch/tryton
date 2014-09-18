@@ -5,4 +5,7 @@
   <field name="state"/>
   <field name="application_date"/>
   <field name="applied_by"/>
+  <button string="Draft" name="draft"/>
+  <button string="Apply" name="apply"/>
+  <button string="Open Contract" name="open_contract"/>
 </tree>

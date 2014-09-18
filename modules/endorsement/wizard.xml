@@ -46,5 +46,20 @@
             <field name="model">endorsement,-1</field>
             <field name="action" ref="act_resume_endorsement"/>
         </record>
+        <!-- ##################################### -->
+        <!-- # Open Contract at Application Date # -->
+        <!-- ##################################### -->
+        <record model="ir.action.wizard" id="act_contract_open">
+            <field name="name">Open Contract</field>
+            <field name="wiz_name">endorsement.contract.open</field>
+        </record>
+        <!-- Relate to open contract at application date -->
+        <record model="ir.action.act_window" id="act_open_contract_at_date">
+            <field name="name">Contract</field>
+            <field name="res_model">contract</field>
+            <field name="window_name" eval="False"/>
+            <field name="domain">[('id', 'in', Eval('contracts'))]</field>
+            <field name="context">{'_datetime': Eval('application_date'), 'contract': Eval('contract')}</field>
+        </record>
     </data>
 </tryton>

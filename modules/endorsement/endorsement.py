@@ -472,6 +472,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 'apply': {
                     'invisible': ~Eval('state').in_(['draft']),
                     },
+                'open_contract': {
+                    'invisible': ~Eval('state').in_(['applied']),
+                    },
                 })
         cls._order = [('application_date', 'DESC'), ('create_date', 'DESC')]
 
@@ -545,6 +548,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             ModelClass.apply(endorsements_per_model[model_name])
         cls.write(endorsements, {'applied_by': Transaction().user,
                 'application_date': datetime.datetime.now()})
+
+    @classmethod
+    @model.CoopView.button_action('endorsement.act_contract_open')
+    def open_contract(cls, endorsements):
+        pass
 
     def extract_preview_values(self, extraction_method):
         pool  =  Pool()

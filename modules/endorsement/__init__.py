@@ -24,4 +24,5 @@ def register():
 
     Pool.register(
         StartEndorsement,
+        OpenContractAtApplicationDate,
         module='endorsement', type_='wizard')

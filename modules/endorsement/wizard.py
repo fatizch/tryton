@@ -4,7 +4,8 @@ from trytond.pool import Pool
 from trytond.model import Model
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
-from trytond.pyson import Eval, Bool, And, Not, Len, If
+from trytond.wizard import StateAction
+from trytond.pyson import Eval, Bool, And, Not, Len, If, PYSONEncoder
 
 from trytond.modules.cog_utils import model, coop_string, fields
 
@@ -12,6 +13,7 @@ __all__ = [
     'SelectEndorsement',
     'BasicPreview',
     'StartEndorsement',
+    'OpenContractAtApplicationDate',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
@@ -501,3 +503,31 @@ class StartEndorsement(Wizard):
                 endorsement, endorsed_field_name)
         result['new_value'][0]['date'] = endorsement_date
         return result
+
+
+class OpenContractAtApplicationDate(Wizard):
+    'Open Contract at Application Date'
+
+    __name__ = 'endorsement.contract.open'
+
+    start_state = 'open_'
+    open_ = StateAction('endorsement.act_open_contract_at_date')
+
+    @classmethod
+    def __setup__(cls):
+        super(OpenContractAtApplicationDate, cls).__setup__()
+        cls._error_messages.update({
+                'endorsement_not_applied': 'Endorsement is not yet applied',
+                })
+
+    def do_open_(self, action):
+        Endorsement = Pool().get('endorsement')
+        endorsement = Endorsement(Transaction().context.get('active_id'))
+        if endorsement.state != 'applied':
+            self.raise_user_error('endorsement_not_applied')
+        action['pyson_context'] = PYSONEncoder().encode({
+                'contracts': [x.contract.id
+                    for x in endorsement.contract_endorsements],
+                '_datetime': endorsement.contract_endorsements[0].applied_on,
+                })
+        return action, {}
