@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <form string="Select Endorsement">
-    <label name="effective_date"/>
-    <field name="effective_date"/>
     <label name="applicant"/>
     <field name="applicant"/>
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition" view_ids="endorsement.endorsement_definition_light_view_list"/>
+    <newline/>
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <newline/>
     <label name="contract"/>
     <field name="contract"/>
     <label name="product"/>
     <field name="product"/>
-    <label name="endorsement_definition"/>
-    <field name="endorsement_definition" view_ids="endorsement.endorsement_definition_light_view_list"/>
+    <newline/>
     <field name="endorsement"/>
 </form>

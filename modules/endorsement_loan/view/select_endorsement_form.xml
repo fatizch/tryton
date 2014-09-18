@@ -4,4 +4,7 @@
         <label name="loan"/>
         <field name="loan"/>
     </xpath>
+    <xpath expr="/form/field[@name='endorsement']" position="after">
+        <field name="possible_loans"/>
+    </xpath>
 </data>

@@ -303,12 +303,58 @@ class SharePerLoan(model.CoopView):
 class SelectEndorsement:
     __name__ = 'endorsement.start.select_endorsement'
 
-    loan = fields.Many2One('loan', 'Loan')
+    loan = fields.Many2One('loan', 'Loan', states={
+            'invisible': ~Eval('is_loan')}, domain=[
+            ('id', 'in', Eval('possible_loans'))],
+        depends=['is_loan', 'possible_loans'])
+    is_loan = fields.Boolean('Is Loan', states={'invisible': True})
+    possible_loans = fields.Many2Many('loan', None, None, 'Possible Loans',
+        states={'invisible': True})
 
-    @fields.depends('loan')
-    def on_change_loan(self):
-        return {'effective_date':
-            self.loan.funds_release_date if self.loan else None}
+    @fields.depends('endorsement_definition', 'loan', 'effective_date',
+        'contract')
+    def on_change_endorsement_definition(self):
+        if not self.endorsement_definition:
+            return {'is_loan': False}
+        if self.endorsement_definition.is_loan:
+            if self.loan:
+                return {
+                    'is_loan': True,
+                    'effective_date': self.loan.funds_release_date,
+                    }
+            elif self.contract and len(self.contract.used_loans) == 1:
+                return {
+                    'is_loan': True,
+                    'loan': self.contract.used_loans[0].id,
+                    'effective_date':
+                    self.contract.used_loans[0].funds_release_date,
+                    }
+            else:
+                return  {
+                    'is_loan': True,
+                    'effective_date': None,
+                    }
+        else:
+            return {
+                'is_loan': False,
+                'loan': None,
+                'effective_date': None,
+                }
+
+    @fields.depends('is_loan', 'contract')
+    def on_change_with_loan(self):
+        if self.is_loan:
+            if not self.contract:
+                return None
+            if len(self.contract.used_loans) == 1:
+                return self.contract.used_loans[0].id
+        return None
+
+    @fields.depends('contract')
+    def on_change_with_possible_loans(self):
+        if not self.contract:
+            return []
+        return [x.id for x in self.contract.used_loans]
 
 
 class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoopView):

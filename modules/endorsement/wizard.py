@@ -160,7 +160,8 @@ class SelectEndorsement(model.CoopView):
 
     applicant = fields.Many2One('party.party', 'Applicant')
     contract = fields.Many2One('contract', 'Contract')
-    effective_date = fields.Date('Effective Date')
+    effective_date = fields.Date('Effective Date', states={
+            'invisible': ~Bool(Eval('endorsement_definition', False))})
     endorsement = fields.Many2One('endorsement', 'Endorsement',
         states={'invisible': True})
     endorsement_definition = fields.Many2One('endorsement.definition',

@@ -7,10 +7,23 @@ from trytond.modules.endorsement import field_mixin
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'EndorsementDefinition',
     'EndorsementPart',
     'EndorsementLoanField',
     'EndorsementLoanShareField',
     ]
+
+
+class EndorsementDefinition:
+    __name__ = 'endorsement.definition'
+
+    is_loan = fields.Function(
+        fields.Boolean('Is Loan'),
+        'on_change_with_is_loan')
+
+    @fields.depends('endorsement_parts')
+    def on_change_with_is_loan(self, name=None):
+        return any([x.kind == 'loan' for x in self.endorsement_parts])
 
 
 class EndorsementPart:
