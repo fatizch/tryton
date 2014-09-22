@@ -336,13 +336,12 @@ class Contract:
     @classmethod
     @ModelView.button
     def button_calculate_prices(cls, contracts):
-        for contract in contracts:
-            contract.calculate_prices()
+        cls.calculate_prices(contracts)
 
     def before_activate(self, contract_dict=None):
         super(Contract, self).before_activate(contract_dict)
         self.save()
-        self.calculate_prices()
+        self.calculate_prices([self])
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
