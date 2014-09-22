@@ -729,7 +729,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         fields.Dict('extra_data', 'Party Extra Data',
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))},
             depends=['party_extra_data', 'item_kind']),
-        'on_change_with_party_extra_data', 'set_party_extra_data')
+        'get_party_extra_data', 'set_party_extra_data')
     product = fields.Function(
         fields.Many2One('offered.product', 'Product'),
         'on_change_with_product')
@@ -772,7 +772,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             return Contract(contract_id).product.id
 
     @fields.depends('extra_data', 'start_date', 'item_desc', 'contract',
-        'appliable_conditions_date', 'product')
+        'appliable_conditions_date', 'product', 'party_extra_data')
     def on_change_extra_data(self):
         if not self.item_desc or not self.product:
             self.extra_data = {}
@@ -783,17 +783,25 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.extra_data = self.product.get_extra_data_def('covered_element',
             self.on_change_with_all_extra_data(),
             self.appliable_conditions_date, item_desc=self.item_desc)
-        return {
+        res = {
             'extra_data': self.extra_data,
             'all_extra_datas': self.on_change_with_all_extra_data(),
             }
+
+        if self.party_extra_data:
+            self.party_extra_data.update(dict([
+                        (key, value) for (key, value)
+                        in self.extra_data.iteritems()
+                        if key in self.party_extra_data]))
+            res['party_extra_data'] = self.party_extra_data
+        return res
 
     @fields.depends('item_desc', 'all_extra_datas', 'party', 'product',
         'start_date', 'options')
     def on_change_item_desc(self):
         res = self.on_change_extra_data()
         res['item_kind'] = self.on_change_with_item_kind()
-        res['party_extra_data'] = self.on_change_with_party_extra_data()
+        res['party_extra_data'] = self.get_party_extra_data()
         #update extra_data dict with common extradata key from party_extra_data
         res['extra_data'].update(
             (k, res['party_extra_data'][k])
@@ -877,8 +885,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             result = [x.id for x in self.contract.parties]
         return result + ([self.party.id] if self.party else [])
 
-    @fields.depends('item_desc', 'extra_data', 'party')
-    def on_change_with_party_extra_data(self, name=None):
+    def get_party_extra_data(self, name=None):
         res = {}
         if not getattr(self, 'party', None) or not (self.item_desc
                 and self.item_desc.kind in ['party', 'person', 'company']):
