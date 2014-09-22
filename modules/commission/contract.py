@@ -100,9 +100,9 @@ class Contract:
 
     def before_activate(self, contract_dict=None):
         if not contract_dict:
-            return
+            return super(Contract, self).before_activate(contract_dict)
         if not 'agreements' in contract_dict:
-            return
+            return super(Contract, self).before_activate(contract_dict)
         pool = Pool()
         Agreement = pool.get('contract-agreement')
         Party = pool.get('party.party')
