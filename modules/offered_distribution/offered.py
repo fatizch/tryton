@@ -17,6 +17,12 @@ class Product:
         states={'invisible': Eval('product_kind') != 'insurance'})
 
     @classmethod
+    def copy(cls, products, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('com_products', None)
+        return super(Product, cls).copy(products, default=default)
+
+    @classmethod
     def _export_force_recreate(cls):
         res = super(Product, cls)._export_force_recreate()
         res.remove('com_products')

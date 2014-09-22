@@ -357,6 +357,12 @@ class Product(model.CoopSQL, Offered):
                 })
 
     @classmethod
+    def copy(cls, products, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('coverages', None)
+        return super(Product, cls).copy(products, default=default)
+
+    @classmethod
     def _export_skips(cls):
         result = super(Product, cls)._export_skips()
         # ordered_coverages should be enough
@@ -622,6 +628,12 @@ class OptionDescription(model.CoopSQL, Offered):
 
         cls.kind.selection = cls.get_possible_option_description_kind()
         cls.kind.selection = list(set(cls.kind.selection))
+
+    @classmethod
+    def copy(cls, options, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('products', None)
+        return super(OptionDescription, cls).copy(options, default=default)
 
     @classmethod
     def get_possible_option_description_kind(cls):
