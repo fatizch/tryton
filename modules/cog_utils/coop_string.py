@@ -179,17 +179,6 @@ def remove_blank_and_invalid_char(from_string, lower_case=True):
     return res.lower() if lower_case else res
 
 
-def concat_strings(this, that):
-    res = ''
-    if this and that:
-        res = '%s %s' % (this, that)
-    elif this:
-        res = this
-    elif that:
-        res = that
-    return res
-
-
 def is_ascii(s):
     try:
         s.encode('ascii')

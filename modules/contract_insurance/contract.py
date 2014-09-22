@@ -956,15 +956,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def get_rec_name(self, value):
         if self.party:
             return self.party.rec_name
-        res = super(CoveredElement, self).get_rec_name(value)
-        if self.item_desc:
-            res = coop_string.concat_strings(
-                self.item_desc.get_rec_name(value), res)
-            if self.name:
-                res = '%s : %s' % (res, self.name)
-        elif self.name:
-            res = coop_string.concat_strings(res, self.name)
-        return res
+        names = [super(CoveredElement, self).get_rec_name(value)]
+        names.append(self.item_desc.rec_name if self.item_desc else None)
+        names.append(self.name)
+        return ' '.join([x for x in names if x])
 
     @classmethod
     def get_coverages(cls, product, item_desc):
