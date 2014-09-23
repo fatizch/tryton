@@ -69,7 +69,7 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
     possible_covered_elements = fields.Many2Many('contract.covered_element',
         None, None, 'Possible Covered Elements', states={'invisible': True})
 
-    @fields.depends('covered_element', 'new_options')
+    @fields.depends('covered_element', 'new_options', 'effective_date')
     def on_change_covered_element(self):
         if not self.covered_element:
             return {
