@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <tree string="Premium Amounts per Period">
-    <field name="contract"/>
-    <field name="amount"/>
-    <field name="fees"/>
-    <field name="untaxed_amount"/>
-    <field name="tax_amount"/>
-    <field name="total"/>
     <field name="period_start"/>
     <field name="period_end"/>
+    <field name="amount" sum="Amount"/>
+    <field name="fees" sum="Fees"/>
+    <field name="untaxed_amount" sum="Untaxed Amount"/>
+    <field name="tax_amount" sum="Tax Amount"/>
+    <field name="total" sum="Total"/>
 </tree>
