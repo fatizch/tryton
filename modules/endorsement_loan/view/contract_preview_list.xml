@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Contracts">
+    <field name="contract" expand="1"/>
+    <field name="old_contract_amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="new_contract_amount">
+        <suffix name="currency_symbol"/>
+    </field>
+</tree>

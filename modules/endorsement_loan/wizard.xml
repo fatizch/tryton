@@ -66,5 +66,34 @@
             <field name="type">form</field>
             <field name="name">preview_loan_form</field>
         </record>
+        <!-- ############################# -->
+        <!-- # Preview Contract Payments # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="preview_contract_payments_view_form">
+            <field name="model">endorsement.start.preview_contract_payments</field>
+            <field name="type">form</field>
+            <field name="name">preview_contract_payments_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Contract Preview # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="contract_preview_view_form">
+            <field name="model">endorsement.start.preview_contract_payments.contract</field>
+            <field name="type">form</field>
+            <field name="name">contract_preview_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_preview_view_list">
+            <field name="model">endorsement.start.preview_contract_payments.contract</field>
+            <field name="type">tree</field>
+            <field name="name">contract_preview_list</field>
+        </record>
+        <!-- ############################ -->
+        <!-- # Contract Preview Payment # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="contract_preview_payment_view_list">
+            <field name="model">endorsement.start.preview_contract_payments.payment</field>
+            <field name="type">tree</field>
+            <field name="name">contract_preview_payment_list</field>
+        </record>
     </data>
 </tryton>

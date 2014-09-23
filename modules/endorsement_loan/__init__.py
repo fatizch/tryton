@@ -27,6 +27,9 @@ def register():
         SharePerLoan,
         SelectEndorsement,
         PreviewLoanEndorsement,
+        PreviewContractPayments,
+        ContractPreview,
+        ContractPreviewPayment,
         module='endorsement_loan', type_='model')
 
     Pool.register(

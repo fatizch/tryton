@@ -1,3 +1,4 @@
+from  collections import defaultdict
 import datetime
 
 from trytond.pool import PoolMeta, Pool
@@ -23,6 +24,9 @@ __all__ = [
     'SharePerLoan',
     'SelectEndorsement',
     'PreviewLoanEndorsement',
+    'PreviewContractPayments',
+    'ContractPreview',
+    'ContractPreviewPayment',
     'StartEndorsement',
     ]
 
@@ -406,6 +410,124 @@ class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoopView):
         return result
 
 
+class PreviewContractPayments(EndorsementWizardPreviewMixin,
+        model.CoopView):
+    'Preview Contract Payments'
+
+    __name__ = 'endorsement.start.preview_contract_payments'
+
+    contract_previews = fields.One2Many(
+        'endorsement.start.preview_contract_payments.contract', None,
+        'Contracts', readonly=True)
+
+    @classmethod
+    def extract_endorsement_preview(cls, instance):
+        pool = Pool()
+        Loan = pool.get('loan')
+        Contract = pool.get('contract')
+        PremiumAmountPerPeriod = pool.get('contract.premium.amount.per_period')
+        ContractPreviewPayment = pool.get(
+            'endorsement.start.preview_contract_payments.payment')
+        if isinstance(instance, Loan):
+            return {}
+        if isinstance(instance, Contract):
+            payments = []
+            for payment in PremiumAmountPerPeriod.search([
+                        ('contract', '=', instance.id)]):
+                new_payment = {x: getattr(payment, x)
+                    for x in ContractPreviewPayment.fields_to_extract()}
+                new_payment['contract'] = instance.id
+                payments.append(new_payment)
+            return {
+                'id': instance.id,
+                'currency_digits': instance.currency_digits,
+                'currency_symbol': instance.currency_symbol,
+                'payments': payments,
+                }
+
+    @classmethod
+    def init_from_preview_values(cls, preview_values):
+        contracts = defaultdict(lambda: {
+                'currency_digits': 2,
+                'currency_symbol': '',
+                'old_contract_payments': [],
+                'new_contract_payments': [],
+                'old_contract_amount': 0,
+                'new_contract_amount': 0,
+                'contract': None,
+                })
+        for kind in ('old', 'new'):
+            for key, value in preview_values[kind].iteritems():
+                if not key.startswith('contract,'):
+                    continue
+                contract_preview = contracts[value['id']]
+                contract_preview['currency_digits'] = \
+                    value['currency_digits']
+                contract_preview['currency_symbol'] = \
+                    value['currency_symbol']
+                contract_preview['contract'] = value['id']
+                for elem in value['payments']:
+                    elem['currency_digits'] = value['currency_digits']
+                    elem['currency_symbol'] = value['currency_symbol']
+                    contract_preview['%s_contract_payments' % kind].append(
+                        elem)
+                    contract_preview['%s_contract_amount' % kind] += \
+                        elem['total']
+        return {'contract_previews': contracts.values()}
+
+
+class ContractPreview(model.CoopView):
+    'Contract Preview'
+
+    __name__ = 'endorsement.start.preview_contract_payments.contract'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    currency_digits = fields.Integer('Currency Digits')
+    currency_symbol = fields.Char('Currency Symbol')
+    new_contract_amount = fields.Numeric('New Contract Amount', digits=(16,
+            Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
+    old_contract_amount = fields.Numeric('Current Contract Amount',
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'],
+        readonly=True)
+    new_contract_payments = fields.One2Many(
+        'endorsement.start.preview_contract_payments.payment', None,
+        'New Contract Payments', readonly=True)
+    old_contract_payments = fields.One2Many(
+        'endorsement.start.preview_contract_payments.payment', None,
+        'Current Contract Payments', readonly=True)
+    all_new_payments = fields.One2Many(
+        'endorsement.start.preview_contract_payments.payment', None,
+        'All New Payments', readonly=True, states={'invisible': True})
+    all_old_payments = fields.One2Many(
+        'endorsement.start.preview_contract_payments.payment', None,
+        'All Old Payments', readonly=True, states={'invisible': True})
+
+
+class ContractPreviewPayment(model.CoopView):
+    'Contract Preview Payment'
+
+    __name__ = 'endorsement.start.preview_contract_payments.payment'
+
+    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)))
+    contract = fields.Integer('Contract')
+    fees = fields.Numeric('Fees', digits=(16, Eval('currency_digits', 2)))
+    untaxed_amount = fields.Numeric('Total', digits=(16,
+            Eval('currency_digits', 2)))
+    tax_amount = fields.Numeric('Tax Amount', digits=(16,
+            Eval('currency_digits', 2)))
+    total = fields.Numeric('Total', digits=(16, Eval('currency_digits', 2)))
+    period_start = fields.Date('Period Start')
+    period_end = fields.Date('Period End')
+    currency_digits = fields.Integer('Currency Digits')
+    currency_symbol = fields.Char('Currency Symbol')
+
+    @classmethod
+    def fields_to_extract(cls):
+        return ['amount', 'fees', 'untaxed_amount', 'tax_amount', 'total',
+            'period_start', 'period_end', 'contract']
+
+
 class StartEndorsement:
     __name__ = 'endorsement.start'
 
@@ -450,6 +572,14 @@ class StartEndorsement:
     loan_share_update_next = StateTransition()
     preview_loan = StateView('endorsement.start.preview_loan',
         'endorsement_loan.preview_loan_view_form', [
+            Button('Summary', 'summary', 'tryton-go-previous'),
+            Button('Cancel', 'cancel', 'tryton-cancel'),
+            Button('Apply', 'apply_endorsement', 'tryton-go-next',
+                default=True),
+            ])
+    preview_contract_payments = StateView(
+        'endorsement.start.preview_contract_payments',
+        'endorsement_loan.preview_contract_payments_view_form', [
             Button('Summary', 'summary', 'tryton-go-previous'),
             Button('Cancel', 'cancel', 'tryton-cancel'),
             Button('Apply', 'apply_endorsement', 'tryton-go-next',
@@ -629,3 +759,10 @@ class StartEndorsement:
         preview_values = self.endorsement.extract_preview_values(
             LoanPreview.extract_endorsement_preview)
         return LoanPreview.init_from_preview_values(preview_values)
+
+    def default_preview_contract_payments(self, name):
+        ContractPaymentPreview = Pool().get(
+            'endorsement.start.preview_contract_payments')
+        preview_values = self.endorsement.extract_preview_values(
+            ContractPaymentPreview.extract_endorsement_preview)
+        return ContractPaymentPreview.init_from_preview_values(preview_values)
