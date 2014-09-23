@@ -12,8 +12,6 @@ def register():
         InsuranceFund,
         HealthPartyComplement,
         CoveredElement,
-        #Rule Engine Context
         RuleEngineRuntime,
-        # from test_case
         TestCaseModel,
         module='contract_insurance_health_fr', type_='model')

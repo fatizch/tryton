@@ -87,6 +87,8 @@ class Party:
     @classmethod
     def set_ssn(cls, persons, name, value):
         for person in persons:
+            if not person.ssn:
+                continue
             size = utils.get_field_size(person, name)
             if name == 'ssn_no_key':
                 person.ssn = value + person.ssn[size:SSN_LENGTH]

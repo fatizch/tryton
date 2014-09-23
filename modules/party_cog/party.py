@@ -74,7 +74,7 @@ class Party(export.ExportImportMixin):
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             }, depends=['is_person'])
-    ssn = fields.Char('SSN', states={'invisible': ~STATES_PERSON},
+    ssn = fields.EmptyNullChar('SSN', states={'invisible': ~STATES_PERSON},
         depends=['is_person'])
     ####################################
     #Company information
@@ -96,6 +96,10 @@ class Party(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Party, cls).__setup__()
+        cls._sql_constraints = [
+            ('SSN_uniq', 'UNIQUE(ssn)',
+             'The SSN of the party must be unique.')
+        ]
         cls._error_messages.update({
                 'duplicate_party': ('Duplicate(s) already exist(s) : \n%s'),
                 })

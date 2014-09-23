@@ -263,3 +263,16 @@ class UnaccentChar(tryton_fields.Char):
             where = Literal(True)
         where = self._domain_add_null(column, operator, value, where)
         return tables[None][0].id.in_(join.select(table.id, where=where))
+
+
+class EmptyNullChar(tryton_fields.Char):
+    '''
+    Char with '' value is store as Null value in the database
+    For example used to add a unicity constraint on field that can be
+    presented and store with empty value
+    '''
+    @staticmethod
+    def sql_format(value):
+        if value == '':
+            return None
+        return tryton_fields.Char.sql_format(value)
