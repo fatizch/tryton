@@ -43,8 +43,6 @@ class Party:
         for party in parties:
             party.check_ssn()
             party.check_ssn_key()
-            party.check_ssn_birth_date()
-            party.check_ssn_gender()
 
     @staticmethod
     def calculate_ssn_key(ssn_no_key):
@@ -98,19 +96,3 @@ class Party:
 
     def on_change_with_ssn(self, name=None):
         return self.ssn_no_key + self.ssn_key
-
-    def check_ssn_birth_date(self):
-        if not self.ssn:
-            res = True
-        else:
-            res = self.birth_date.strftime('%y%m') == self.ssn[1:5]
-        if not res:
-            self.raise_user_error('invalid_ssn_birth_date')
-
-    def check_ssn_gender(self):
-        if not self.ssn or (self.ssn[0] != '1' and self.ssn[0] != '2'):
-            res = True
-        else:
-            res = self.ssn[0] == str(self.get_gender_as_int())
-        if not res:
-            self.raise_user_error('invalid_ssn_gender')

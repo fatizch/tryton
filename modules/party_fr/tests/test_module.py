@@ -59,29 +59,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 gender = 'female'
             self.createPerson(birth_date, value, test, gender, i)
 
-    def test0020ssnbirthdate(self):
-        '''
-        Test SSN and birthdate compatibility
-        '''
-        ssn = '145062B12312341'
-        birth_date = date(int('19' + ssn[1:3]), int(ssn[3:5]), 1)
-        self.createPerson(birth_date, ssn, True)
-        birth_date = date(int('1946'), int(ssn[3:5]), 1)
-        self.createPerson(birth_date, ssn, False)
-        birth_date = date(int('19' + ssn[1:3]), 07, 1)
-        self.createPerson(birth_date, ssn, False)
-
-    def test0030ssngender(self):
-        '''
-        Test SSN and gender compatibility
-        '''
-        ssn = '245062B12312388'
-        birth_date = date(int('19' + ssn[1:3]), int(ssn[3:5]), 1)
-        self.createPerson(birth_date, ssn, True, gender='female')
-        self.createPerson(birth_date, ssn, False, gender='male')
-        ssn = '145062B12312341'
-        self.createPerson(birth_date, ssn, False, gender='female')
-
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
