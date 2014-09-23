@@ -84,6 +84,29 @@ class Premium:
 class Contract:
     __name__ = 'contract'
 
+    total_premium_amount = fields.Function(
+        fields.Numeric('Total Premium Amount',
+            digits=(16, Eval('currency_digits', 2))),
+        'get_total_premium_amount')
+
+    @classmethod
+    def get_total_premium_amount(cls, contracts, name):
+        cursor = Transaction().cursor
+        pool = Pool()
+        values = dict.fromkeys((c.id for c in contracts))
+
+        PremiumAggregate = pool.get('contract.premium.amount.per_period')
+        premium_aggregate = PremiumAggregate.__table__()
+        contract = cls.__table__()
+
+        for contract_slice in grouped_slice(contracts):
+            cursor.execute(*contract.join(premium_aggregate, condition=(
+                        premium_aggregate.contract == contract.id)
+                    ).select(contract.id, Sum(premium_aggregate.total),
+                    group_by=contract.id))
+            values.update(dict(cursor.fetchall()))
+        return values
+
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
         result = super(Contract, cls).calculate_prices(contracts, start, end)
