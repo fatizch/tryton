@@ -288,7 +288,8 @@ class RuleExecutionLog(ModelSQL, ModelView):
     __name__ = 'rule_engine.log'
 
     user = fields.Many2One('res.user', 'User', ondelete='SET NULL')
-    rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE')
+    rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE',
+        select=True)
     errors = fields.Text('Errors', states={'readonly': True})
     warnings = fields.Text('Warnings', states={'readonly': True})
     info = fields.Text('Info', states={'readonly': True})
