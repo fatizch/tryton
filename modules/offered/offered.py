@@ -643,10 +643,10 @@ class OptionDescription(model.CoopSQL, Offered):
     def get_possible_coverages_clause(cls, instance, at_date):
         date_clause = [['OR',
                 ('start_date', '=', None),
-                ('start_date', '>=', at_date)],
+                ('start_date', '<=', at_date)],
             ['OR',
                 ('end_date', '=', None),
-                ('end_date', '<=', at_date)]]
+                ('end_date', '>=', at_date)]]
         if instance and instance.__name__ == 'contract':
             return [('products', '=', instance.product.id)] + date_clause
         return date_clause
