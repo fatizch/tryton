@@ -82,14 +82,6 @@ class Contract:
         searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
-    total_invoice_amount = fields.Function(
-        fields.Numeric('Total Invoice Amount', digits=(16,
-                Eval('currency_digits', 2)),
-            depends=['currency_digits']),
-        'get_total_invoice_amount')
-    first_year_invoices = fields.Function(
-        fields.One2Many('account.invoice', None, 'First Year Invoices'),
-        'get_first_year_invoices')
 
     @classmethod
     def __setup__(cls):
@@ -112,11 +104,6 @@ class Contract:
         date = Transaction().context.get('contract_revision_date',
             Date.today())
         return ContractRevision.get_values(contracts, names=names, date=date)
-
-    def get_total_invoice_amount(self, name):
-        return sum([x.invoice.total_amount
-                for x in self.invoices
-                if x.invoice.state in ('paid', 'validated', 'posted')])
 
     @classmethod
     def get_last_invoice(cls, contracts, name):
@@ -458,14 +445,6 @@ class Contract:
             payment_term=default_billing_mode.allowed_payment_terms[0],
             direct_debit_day=direct_debit_day)]
         return res, errs
-
-    def get_first_year_invoices(self, name):
-        AccountInvoice = Pool().get('account.invoice')
-        to_date = coop_date.add_duration(self.start_date, 'year')
-        return [x.id for x in AccountInvoice.search([
-                    ('contract', '=', self.id),
-                    ('start', '<', to_date),
-                    ])]
 
 
 class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
