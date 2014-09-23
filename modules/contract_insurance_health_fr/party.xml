@@ -13,5 +13,17 @@
             <field name="inherit" ref="health.party_complement_view_tree"/>
             <field name="name">party_complement_tree</field>
         </record>
+        <record model="party.relation.type" id="social_security_insured_relation_type">
+            <field name="code">social_security_insured</field>
+            <field name="name">Social Security Insured</field>
+        </record>
+        <record model="party.relation.type" id="social_security_dependent_relation_type">
+            <field name="code">social_security_dependent</field>
+            <field name="name">Social Security Dependent</field>
+            <field name="reverse" ref="contract_insurance_health_fr.social_security_insured_relation_type"/>
+        </record>
+        <record model="party.relation.type" id="social_security_insured_relation_type" update="1">
+            <field name="reverse" ref="contract_insurance_health_fr.social_security_dependent_relation_type"/>
+        </record>
     </data>
 </tryton>

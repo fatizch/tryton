@@ -30,10 +30,6 @@ msgctxt "field:health.care_system,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:health.care_system,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
-
 msgctxt "field:health.care_system,name:"
 msgid "Name"
 msgstr "Nom"
@@ -85,10 +81,6 @@ msgstr "Régime"
 msgctxt "field:health.insurance_fund,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:health.insurance_fund,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:health.insurance_fund,name:"
 msgid "Name"
@@ -157,6 +149,15 @@ msgstr "Régimes"
 msgctxt "model:ir.ui.menu,name:menu_insurance_fund_form"
 msgid "Insurance Funds"
 msgstr "Caisses d'Affiliation"
+
+msgctxt ""
+"model:party.relation.type,name:social_security_dependent_relation_type"
+msgid "Social Security Dependent"
+msgstr "Ayant droit"
+
+msgctxt "model:party.relation.type,name:social_security_insured_relation_type"
+msgid "Social Security Insured"
+msgstr "Assuré social"
 
 msgctxt "selection:offered.option.description,family:"
 msgid "Health"
