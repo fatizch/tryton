@@ -203,6 +203,13 @@ class BankAccountNumber(export.ExportImportMixin):
     def get_var_names_for_light_extract(cls):
         return ['number']
 
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('number',) + tuple(clause[1:])],
+            [('number_compact',) + tuple(clause[1:])],
+            ]
+
 
 class BankAccountParty:
     'Bank Account - Party'
