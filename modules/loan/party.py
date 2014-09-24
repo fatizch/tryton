@@ -241,6 +241,7 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
                 loan_share.share, coverage.insurance_kind, coverage.id,
                 order_by=(coverage.insurer, coverage.insurance_kind)))
 
+        translated = {}
         aggregate_amounts = defaultdict(
             lambda: defaultdict(lambda: Decimal(0)))
         for insurer, loan_id, share, insurance_kind, coverage_id in (
@@ -249,16 +250,16 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
             aggregate_amounts[insurer][insurance_kind] += currency.round(
                 share * (loan.get_outstanding_loan_balance(
                         at_date=date) or 0))
+            if insurance_kind not in translated:
+                translated[insurance_kind] = (
+                    coop_string.translate_value(Coverage(coverage_id),
+                        'insurance_kind'))
 
-        translated, res = {}, []
+        res = []
         for insurer_id, values in aggregate_amounts.iteritems():
             insurer = Insurer(insurer_id)
             max_amount, childs = 0, []
             for insurance_kind, amount in values.iteritems():
-                if insurance_kind not in translated:
-                    translated[insurance_kind] = (
-                        coop_string.selection_as_string(Coverage,
-                            'insurance_kind', insurance_kind))
                 childs.append({
                         'name': translated[insurance_kind],
                         'currency_symbol': currency.symbol,
