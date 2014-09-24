@@ -746,12 +746,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
         test_date = base_date - timedelta(weeks=20)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertEqual(insurers, set([]))
+        self.assertEqual(insurers, set(['Total']))
+        self.assertEqual(res[0]['amount'], Decimal('0'))
 
         test_date = base_date + timedelta(days=227)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertTrue(insurers == set(['INSURER1', 'INSURER2']))
+        self.assertEqual(insurers, set(['Total', 'INSURER1', 'INSURER2']))
         for line in res:
             if line['name'] == 'INSURER1':
                 self.assertEqual(line['amount'], Decimal('238370.12'))
@@ -769,11 +770,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 self.assertTrue(coverages == set(['Temporary Disability']))
                 self.assertEqual(line['childs'][0]['amount'],
                     Decimal('192017.07'))
+            elif line['name'] == 'Total':
+                self.assertEqual(line['amount'], Decimal('192017.07') +
+                    Decimal('238370.12'))
 
         test_date = base_date + timedelta(days=2662)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertTrue(insurers == set(['INSURER1', 'INSURER2']))
+        self.assertEqual(insurers, set(['Total', 'INSURER1', 'INSURER2']))
         for line in res:
             if line['name'] == 'INSURER1':
                 self.assertEqual(line['amount'], Decimal('88726.16'))
@@ -792,20 +796,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 for child in line['childs']:
                     if child['name'] == 'Temporary Disability':
                         self.assertEqual(child['amount'], Decimal('71472.62'))
+            elif line['name'] == 'Total':
+                self.assertEqual(line['amount'], Decimal('88726.16') +
+                    Decimal('71472.62'))
 
         test_date = base_date + timedelta(weeks=2000)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertTrue(insurers == set(['INSURER1', 'INSURER2']))
+        self.assertEqual(insurers, set(['Total', 'INSURER1', 'INSURER2']))
         for line in res:
             self.assertEqual(line['amount'], 0)
-            for child in line['childs']:
-                self.assertEqual(child['amount'], 0)
 
         test_date = base_date + timedelta(weeks=3200)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertTrue(insurers == set([]))
+        self.assertEqual(insurers, set(['Total']))
+        self.assertEqual(res[0]['amount'], Decimal('0'))
 
 
 def suite():

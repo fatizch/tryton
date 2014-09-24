@@ -275,7 +275,15 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
                     'amount': max_amount,
                     })
 
-        return res
+        total = [{
+                'name': 'Total',
+                'currency_symbol': currency.symbol,
+                'currency_digits': currency.digits,
+                'childs': None,
+                'amount': sum([x['amount'] for x in res]),
+                }]
+
+        return total + res
 
     def default_insured_outstanding_loan_balance_view(self, name):
         party = self.select_date.party
