@@ -39,9 +39,7 @@ def get_config(cfg_dict):
             logging.getLogger().setLevel(logging.WARNING)
 
     return pconfig.set_trytond(
-        database_name=get_database_name(cfg_dict),
         user=cfg_dict['user'],
-        database_type=cfg_dict['db_type'],
         language=cfg_dict['language'],
         password=cfg_dict['password'],
         config_file=cfg_dict['config_file'],
@@ -120,16 +118,3 @@ def get_modules_to_update(from_modules):
         modules_set |= set(get_module_depends(cur_module))
     graph = create_graph(list(modules_set))[0]
     return [x.name for x in graph if is_coop_module(x.name)]
-
-
-def get_database_name(cfg_dict):
-    if 'DB_NAME' in os.environ:
-        return os.environ['DB_NAME']
-    if 'database_name' in cfg_dict:
-        return cfg_dict['database_name']
-    config_file = os.path.join(cfg_dict['config_path'], 'scripts.conf')
-    if os.path.isfile(config_file):
-        with open(config_file, 'r') as f:
-            for line in f.readlines():
-                if line.startswith('DATABASE_NAME'):
-                    return line.split('=')[1].strip()

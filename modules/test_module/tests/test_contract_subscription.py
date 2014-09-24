@@ -7,8 +7,8 @@ from proteus import config, Model, Wizard
 ##Comment##Create Database
 # config = config.set_trytond(database_type='sqlite')
 # config.pool.test = True
-config = config.set_trytond(database_type='postgresql',
-    database_name='test_1_database',
+config = config.set_trytond(
+    database='postgresql://tryton:tryton@localhost:5432/test_1_database',
     user='admin',
     language='en_US',
     password='admin',

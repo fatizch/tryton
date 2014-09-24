@@ -22,7 +22,7 @@ NEEDED_MODULES = [
     ]
 
 
-config = config.set_trytond(database_type='sqlite')
+config = config.set_trytond(database='sqlite://')
 config.pool.test = True
 
 Module = Model.get('ir.module.module')
