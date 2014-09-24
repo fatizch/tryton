@@ -57,17 +57,17 @@ def start(arguments, config, work_data):
         if servers:
             print 'Server is already up and running !'
         else:
+            base_line = [work_data['python_exec'], work_data['trytond_exec'],
+                '-c', work_data['trytond_conf']]
+            if arguments.mode == 'dev':
+                base_line += ['--dev']
+            elif arguments.mode == 'debug':
+                base_line += ['--dev', '--verbose']
             try:
-                server_process = subprocess.Popen([
-                        work_data['python_exec'],
-                        work_data['trytond_exec'], '-c',
-                        work_data['trytond_conf'], '-s', config.get(
-                            'parameters', 'sentry_dsn')])
+                server_process = subprocess.Popen(base_line + ['-s',
+                        config.get('parameters', 'sentry_dsn')])
             except ConfigParser.NoOptionError:
-                server_process = subprocess.Popen([
-                        work_data['python_exec'],
-                        work_data['trytond_exec'], '-c',
-                            work_data['trytond_conf']])
+                server_process = subprocess.Popen(base_line)
             print 'Server started, pid %s' % server_process.pid
     if arguments.target in ('client', 'all'):
         if arguments.mode == 'demo':
