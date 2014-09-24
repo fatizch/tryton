@@ -1,0 +1,263 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.contract.billing_information:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.billing_information:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.billing_information:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract:"
+msgid "Billing Modifications"
+msgstr "Modifications du quittancement"
+
+msgctxt "field:contract.billing_information.change,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.billing_information.change,current_value:"
+msgid "Current Value"
+msgstr "Valeur Courante"
+
+msgctxt "field:contract.billing_information.change,delete_future:"
+msgid "Delete Future Modifications"
+msgstr "Annuler les modifications futures"
+
+msgctxt "field:contract.billing_information.change,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.billing_information.change,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.billing_information.change,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.billing_information.change,future_value:"
+msgid "Future Value"
+msgstr "Valeur future"
+
+msgctxt "field:contract.billing_information.change,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.billing_information.change,new_value:"
+msgid "New Value"
+msgstr "Nouvelle valeur"
+
+msgctxt "field:contract.billing_information.change,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:contract.billing_information.change,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
+
+msgctxt "field:endorsement.contract,billing_informations:"
+msgid "Billing Informations"
+msgstr "Paramètres de quittancement"
+
+msgctxt "field:endorsement.contract.billing_information,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.billing_information,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.billing_information,billing_information:"
+msgid "Billing Informations"
+msgstr "Paramètres de quittancement"
+
+msgctxt "field:endorsement.contract.billing_information,contract_endorsement:"
+msgid "Endorsement"
+msgstr "Avenant"
+
+msgctxt "field:endorsement.contract.billing_information,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.billing_information,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.billing_information,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.billing_information,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.billing_information,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.billing_information,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.billing_information,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.billing_information,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.billing_information,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.billing_information,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.billing_information,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.billing_information.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.billing_information.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.billing_information.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.billing_information.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt ""
+"field:endorsement.contract.billing_information.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.billing_information.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.billing_information.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.billing_information.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.billing_information.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.billing_information.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.billing_information.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.billing_information.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.definition,requires_contract_rebill:"
+msgid "Requires Contract Rebill"
+msgstr "Nécessite de requittancer"
+
+msgctxt "field:endorsement.part,billing_information_fields:"
+msgid "Billing Information Fields"
+msgstr "Champs des paramètres de quittancement"
+
+msgctxt "field:endorsement.part,requires_contract_rebill:"
+msgid "Requires Contract Rebill"
+msgstr "Nécessite de requittancer"
+
+msgctxt "field:endorsement.start.preview_changes,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:endorsement.start.preview_changes,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:endorsement.start.preview_changes,new_total_invoice_amount:"
+msgid "New total invoice amount"
+msgstr "Nouveau total de prime"
+
+msgctxt ""
+"field:endorsement.start.preview_changes,previous_total_invoice_amount:"
+msgid "Previous total invoice amount"
+msgstr "Total de prime précédent"
+
+msgctxt "model:contract.billing_information.change,name:"
+msgid "Change Billing Information"
+msgstr "Modification des paramètres de quittancement"
+
+msgctxt "model:endorsement.contract.billing_information,name:"
+msgid "Endorsement Billing Information"
+msgstr "Modification des paramètres de quittancement"
+
+msgctxt "model:endorsement.contract.billing_information.field,name:"
+msgid "Endorsement Billing Information Field"
+msgstr "Champs des paramètres de quittancement"
+
+msgctxt "selection:endorsement.contract.billing_information,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.billing_information,action:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:endorsement.contract.billing_information,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "selection:endorsement.part,kind:"
+msgid "Billing Information"
+msgstr "Quittancement"
+
+msgctxt "view:contract.billing_information.change:"
+msgid "Change Billing Information"
+msgstr "Modification des paramètres de quittancement"
+
+msgctxt "view:endorsement.contract.billing_information.field:"
+msgid "Endorsement Field"
+msgstr "Champs des paramètres de quittancement"
+
+msgctxt "view:endorsement.contract.billing_information.field:"
+msgid "Endorsement Fields"
+msgstr "Modèle d'avenant"
+
+msgctxt "view:endorsement.contract.billing_information:"
+msgid "Billing Informations"
+msgstr "Paramètres de quittancement"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_billing_information,billing_information_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_billing_information,billing_information_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,change_billing_information,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

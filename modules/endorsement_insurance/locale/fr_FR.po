@@ -1,0 +1,420 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.contract.covered_element.option:"
+msgid "New Coverage: %s"
+msgstr "Nouvelle garantie : %s"
+
+msgctxt "error:endorsement.contract.covered_element.option:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.covered_element.option:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.covered_element.option:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.covered_element:"
+msgid "New Covered Element"
+msgstr "Nouvel élément couvert"
+
+msgctxt "error:endorsement.contract.covered_element:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.covered_element:"
+msgid "Option Modification"
+msgstr "Modifications des options"
+
+msgctxt "error:endorsement.contract.covered_element:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.covered_element:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract:"
+msgid "Covered Elements Modification"
+msgstr "Modification des éléments couverts"
+
+msgctxt "field:contract.covered_element.add_option,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "field:contract.covered_element.add_option,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.covered_element.add_option,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.covered_element.add_option,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.covered_element.add_option,existing_options:"
+msgid "Existing Options"
+msgstr "Garanties déjà souscrites"
+
+msgctxt "field:contract.covered_element.add_option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.covered_element.add_option,new_options:"
+msgid "New Options"
+msgstr "Nouvelles garanties"
+
+msgctxt "field:contract.covered_element.add_option,possible_coverages:"
+msgid "Possible Coverages"
+msgstr "Garanties disponibles"
+
+msgctxt "field:contract.covered_element.add_option,possible_covered_elements:"
+msgid "Possible Covered Elements"
+msgstr "Eléments couverts disponibles"
+
+msgctxt "field:contract.covered_element.new,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.covered_element.new,covered_elements:"
+msgid "New Covered Elements"
+msgstr "Nouveaux éléments couverts"
+
+msgctxt "field:contract.covered_element.new,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.covered_element.new,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.covered_element.new,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.covered_element.new,extra_data:"
+msgid "Contract Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:contract.covered_element.new,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.covered_element.new,possible_item_desc:"
+msgid "Possible item desc"
+msgstr "Descripteurs de risque possibles"
+
+msgctxt "field:contract.covered_element.new,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:contract.covered_element.new,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt "field:endorsement.contract,covered_elements:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
+msgctxt "field:endorsement.contract.covered_element,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.covered_element,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.covered_element,contract_endorsement:"
+msgid "Endorsement"
+msgstr "Avenant"
+
+msgctxt "field:endorsement.contract.covered_element,covered_element:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
+msgctxt "field:endorsement.contract.covered_element,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.covered_element,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.covered_element,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.covered_element,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:endorsement.contract.covered_element,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.covered_element,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.covered_element,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.covered_element,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.covered_element,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.covered_element.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.covered_element.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.covered_element.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.covered_element.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.covered_element.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.covered_element.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.covered_element.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.covered_element.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.covered_element.option,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.covered_element.option,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.covered_element.option,coverage:"
+msgid "Coverage"
+msgstr "Offre"
+
+msgctxt ""
+"field:endorsement.contract.covered_element.option,covered_element_endorsement:"
+msgid "Covered Element Endorsement"
+msgstr "Modification d'élément couvert"
+
+msgctxt "field:endorsement.contract.covered_element.option,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element.option,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.covered_element.option,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.covered_element.option,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.covered_element.option,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.covered_element.option,option:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:endorsement.contract.covered_element.option,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.covered_element.option,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.covered_element.option,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.covered_element.option,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.covered_element.option,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.covered_element.option,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.part,covered_elements_fields:"
+msgid "Covered Element Fields"
+msgstr "Champs des éléments couverts"
+
+msgctxt "model:contract.covered_element.add_option,name:"
+msgid "New Covered Element Option"
+msgstr "Nouvelle garantie souscrite"
+
+msgctxt "model:contract.covered_element.new,name:"
+msgid "New Covered Element"
+msgstr "Nouvel élément couvert"
+
+msgctxt "model:endorsement.contract.covered_element,name:"
+msgid "Endorsement Covered Element"
+msgstr "Modification des éléments couverts"
+
+msgctxt "model:endorsement.contract.covered_element.field,name:"
+msgid "Endorsement Covered Element Field"
+msgstr "Champs des éléments couverts"
+
+msgctxt "model:endorsement.contract.covered_element.option,name:"
+msgid "Endorsement Option"
+msgstr "Champs de la garantie souscrite"
+
+msgctxt "selection:endorsement.contract.covered_element,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.covered_element,action:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:endorsement.contract.covered_element,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "selection:endorsement.contract.covered_element.option,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.covered_element.option,action:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:endorsement.contract.covered_element.option,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "selection:endorsement.part,kind:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "view:contract.covered_element.add_option:"
+msgid "Add Option"
+msgstr "Souscrire une garantie"
+
+msgctxt "view:contract.covered_element.new:"
+msgid "New Covered Element"
+msgstr "Nouvel élément couvert"
+
+msgctxt "view:endorsement.contract.covered_element.field:"
+msgid "Endorsement Field"
+msgstr "Champs des éléments couverts"
+
+msgctxt "view:endorsement.contract.covered_element.field:"
+msgid "Endorsement Fields"
+msgstr "Modèle d'avenant"
+
+msgctxt "view:endorsement.contract.covered_element.option:"
+msgid "Endorsement Covered Element Option"
+msgstr "Modification des garanties souscrites par un élément couvert"
+
+msgctxt "view:endorsement.contract.covered_element.option:"
+msgid "Endorsement Covered Elements Options"
+msgstr "Modification des garanties souscrites par un élément couvert"
+
+msgctxt "view:endorsement.contract.covered_element:"
+msgid "Endorsement Covered Element"
+msgstr "Modification des éléments couverts"
+
+msgctxt "view:endorsement.contract.covered_element:"
+msgid "Endorsement Covered Elements"
+msgstr "Modifications des éléments couverts"
+
+msgctxt "view:endorsement.contract:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
+msgctxt ""
+"wizard_button:endorsement.start,new_covered_element,new_covered_element_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,new_covered_element,new_covered_element_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,new_covered_element,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,new_option_covered_element,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,new_option_covered_element,new_option_covered_element_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,new_option_covered_element,new_option_covered_element_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,new_option_covered_element,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
