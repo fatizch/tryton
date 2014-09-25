@@ -280,7 +280,10 @@ def test(arguments, config, work_data):
             'with %s failures' % (final['number'], final['time'],
                 final['errors']))
 
-    base_command_line = ['env', 'DB_NAME=%s' % arguments.database]
+    if arguments.database:
+        base_command_line = ['env', 'DB_NAME=%s' % arguments.database]
+    else:
+        base_command_line = ['env']
     if not arguments.with_test_cases:
         base_command_line.append('DO_NOT_TEST_CASES=True')
     base_command_line.extend([work_data['trytond_test_runner'], '-c',
@@ -661,7 +664,7 @@ if __name__ == '__main__':
     parser_unittests.add_argument('--module', '-m', default='all',
         help='Module to unittest', nargs='+', choices=possible_coop_modules)
     parser_unittests.add_argument('--database', '-d', help='Database name',
-        default=config.get('parameters', 'db_name'), type=str)
+        default='', type=str)
     parser_unittests.add_argument('--with-test-cases', '-t', help='Allow test '
         'cases execution as unittests', action='store_true')
     parser_unittests.add_argument('--delete-test-databases', '-k',
