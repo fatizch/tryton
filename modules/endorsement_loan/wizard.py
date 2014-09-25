@@ -509,14 +509,17 @@ class ContractPreviewPayment(model.CoopView):
 
     __name__ = 'endorsement.start.preview_contract_payments.payment'
 
-    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)))
+    amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
     contract = fields.Integer('Contract')
-    fees = fields.Numeric('Fees', digits=(16, Eval('currency_digits', 2)))
+    fees = fields.Numeric('Fees', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
     untaxed_amount = fields.Numeric('Total', digits=(16,
-            Eval('currency_digits', 2)))
+            Eval('currency_digits', 2)), depends=['currency_digits'])
     tax_amount = fields.Numeric('Tax Amount', digits=(16,
-            Eval('currency_digits', 2)))
-    total = fields.Numeric('Total', digits=(16, Eval('currency_digits', 2)))
+            Eval('currency_digits', 2)), depends=['currency_digits'])
+    total = fields.Numeric('Total', digits=(16, Eval('currency_digits', 2)),
+        depends=['currency_digits'])
     period_start = fields.Date('Period Start')
     period_end = fields.Date('Period End')
     currency_digits = fields.Integer('Currency Digits')
