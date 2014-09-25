@@ -86,7 +86,8 @@ class Contract:
 
     total_premium_amount = fields.Function(
         fields.Numeric('Total Premium Amount',
-            digits=(16, Eval('currency_digits', 2))),
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
         'get_total_premium_amount')
 
     @classmethod
