@@ -19,5 +19,18 @@
             <field name="inherit" ref="account_statement.statement_line_view_tree_editable"/>
             <field name="name">statement_line_tree_editable</field>
         </record>
+
+        <record model="ir.action.report" id="report_bank_deposit_ticket">
+            <field name="name">Bank Deposit Ticket</field>
+            <field name="model">account.statement</field>
+            <field name="report_name">account.statement.bank_deposit_ticket_report</field>
+            <field name="report">account_statement_contract/bank_deposit_ticket.odt</field>
+            <field name="style">company/header_A4.odt</field>
+        </record>
+        <record model="ir.action.keyword" id="report_bank_deposit_ticket_keyword">
+            <field name="keyword">form_print</field>
+            <field name="model">account.statement,-1</field>
+            <field name="action" ref="report_bank_deposit_ticket"/>
+        </record>
     </data>
 </tryton>

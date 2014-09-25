@@ -25,5 +25,13 @@
             <field name="inherit" ref="account_statement.statement_view_form"/>
             <field name="name">statement_form</field>
         </record>
+
+        <record model="ir.action.report" id="account_statement_contract.report_bank_deposit_ticket">
+            <field name="name">Bank Deposit Ticket</field>
+            <field name="model">account.statement</field>
+            <field name="report_name">account.statement.bank_deposit_ticket_report</field>
+            <field name="report">account_statement_contract_fr/bank_deposit_ticket_fr.odt</field>
+            <field name="style">company/header_A4.odt</field>
+        </record>
     </data>
 </tryton>

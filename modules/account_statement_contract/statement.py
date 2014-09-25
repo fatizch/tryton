@@ -1,11 +1,13 @@
 from trytond.pool import PoolMeta
 from trytond.model import fields
 from trytond.pyson import Eval, If, Bool
+from trytond.modules.company import CompanyReport
 
 __metaclass__ = PoolMeta
 
 __all__ = [
     'Line',
+    'BankDepositTicketReport',
     ]
 
 
@@ -60,3 +62,7 @@ class Line:
             else:
                 changes['party'] = self.contract.subscriber.id
         return changes
+
+
+class BankDepositTicketReport(CompanyReport):
+    __name__ = 'account.statement.bank_deposit_ticket_report'
