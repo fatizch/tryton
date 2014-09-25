@@ -96,15 +96,12 @@ class Loan(model.CoopSQL, model.CoopView):
     increments = fields.One2Many('loan.increment', 'loan', 'Increments',
         context={
             'payment_frequency': Eval('payment_frequency'),
-            'increments_end_date': Eval('increments_end_date'),
             'start_date': Eval('first_payment_date'),
-            'end_date': Eval('end_date'),
             'rate': Eval('rate'),
             'number': Len(Eval('increments', [])),
             },
-        depends=['payment_frequency', 'increments_end_date', 'rate',
-            'first_payment_date', 'end_date', 'increments',
-            'number_of_payments'])
+        depends=['payment_frequency', 'rate', 'first_payment_date',
+            'increments', 'number_of_payments'])
     deferal = fields.Function(
         fields.Selection(DEFERALS, 'Deferal', states={
                 'invisible': Eval('kind').in_(
@@ -136,9 +133,6 @@ class Loan(model.CoopSQL, model.CoopView):
                 'invisible': Eval('kind') != 'leasing'
                 }),
         'get_last_payment_amount', 'setter_void')
-    increments_end_date = fields.Function(
-        fields.Date('Increments End Date', states={'invisible': True}),
-        'on_change_with_increments_end_date')
     end_date = fields.Function(
         fields.Date('End Date'),
         'get_end_date')
@@ -484,11 +478,6 @@ class Loan(model.CoopSQL, model.CoopView):
     def on_change_with_rate(self):
         return Decimal(0) if self.kind == 'interest_free' else self.rate
 
-    @fields.depends('increments')
-    def on_change_with_increments_end_date(self, name=None):
-        if self.increments:
-            return self.increments[-1].end_date
-
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
@@ -544,12 +533,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @staticmethod
     def default_start_date():
-        increments_end_date = Transaction().context.get('increments_end_date')
-        if increments_end_date:
-            return coop_date.add_duration(increments_end_date,
-                Transaction().context.get('payment_frequency'), 1)
-        else:
-            return Transaction().context.get('start_date')
+        return Transaction().context.get('start_date')
 
     @staticmethod
     def default_rate():

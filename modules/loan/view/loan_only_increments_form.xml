@@ -2,5 +2,4 @@
 <form string="Increments">
     <field name="increments" colspan="4" pre_validate="1" mode="tree"/>
     <newline/>
-    <field name="increments_end_date"/>
 </form>
