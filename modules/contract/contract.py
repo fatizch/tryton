@@ -397,6 +397,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         for contract in contract:
             contract.check_activation_dates()
 
+    @classmethod
+    def get_revision_value(cls, contracts, names, ContractRevision):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        date = Transaction().context.get('contract_revision_date',
+            Date.today())
+        return ContractRevision.get_values(contracts, names=names, date=date)
+
     def check_activation_dates(self):
         previous_period = None
         for period in self.activation_history:

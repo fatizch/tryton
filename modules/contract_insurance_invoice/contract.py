@@ -98,14 +98,6 @@ class Contract:
             ContractBillingInformation)
 
     @classmethod
-    def get_revision_value(cls, contracts, names, ContractRevision):
-        pool = Pool()
-        Date = pool.get('ir.date')
-        date = Transaction().context.get('contract_revision_date',
-            Date.today())
-        return ContractRevision.get_values(contracts, names=names, date=date)
-
-    @classmethod
     def get_last_invoice(cls, contracts, name):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
