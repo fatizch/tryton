@@ -482,7 +482,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             ContractExtraData)
         # Dict fields must be cast
         for k, v in result.get('extra_data_values', {}).iteritems():
-            result['extra_data_values'][k] = json.loads(v,
+            result['extra_data_values'][k] = json.loads(v or '{}',
                 object_hook=JSONDecoder())
         return result
 
