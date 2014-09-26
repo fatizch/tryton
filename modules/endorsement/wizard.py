@@ -175,7 +175,8 @@ class SelectEndorsement(model.CoopView):
         depends=['product'])
     endorsement_summary = fields.Text('Endorsement Summary')
     product = fields.Many2One('offered.product', 'Product', readonly=True)
-    has_preview = fields.Boolean('Has Preview', readonly=True)
+    has_preview = fields.Boolean('Has Preview', readonly=True,
+        states={'invisible': True})
 
     @fields.depends('contract')
     def on_change_contract(self):
