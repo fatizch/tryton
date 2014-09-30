@@ -269,13 +269,15 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                     new_vals, cur_value, init_dict, valid_schemas)
 
     def get_value_as_string(self, value, lang=None):
-        if self.type_ == 'selection':
+        if self.type_ == 'selection' and value:
             cur_dict = dict(self.__class__.get_keys([self])[0]['selection'])
             return cur_dict[value]
         elif self.type_ in ['integer', 'float', 'numeric'] and not value:
             return '0'
         elif self.type_ == 'boolean':
             return coop_string.translate_bool(value, lang)
+        if not value:
+            return ''
         return str(value)
 
     @classmethod
