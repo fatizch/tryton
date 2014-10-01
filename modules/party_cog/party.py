@@ -66,7 +66,7 @@ class Party(export.ExportImportMixin):
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             }, depends=['is_person'])
-    maiden_name = fields.UnaccentChar('Maiden Name', states={
+    birth_name = fields.UnaccentChar('Birth Name', states={
             'readonly': Eval('gender') != 'female',
             'invisible': ~STATES_PERSON
             }, depends=['is_person'])
@@ -303,7 +303,7 @@ class Party(export.ExportImportMixin):
                 res[party.id] += coop_string.get_field_as_summary(
                     party, 'birth_date')
                 res[party.id] += coop_string.get_field_as_summary(
-                    party, 'maiden_name')
+                    party, 'birth_name')
             if party.is_company:
                 pass
             #res[party.id] += coop_string.get_field_as_summary(
@@ -353,14 +353,14 @@ class Party(export.ExportImportMixin):
         res = {}
         if self.gender == 'female':
             return res
-        res['maiden_name'] = ''
+        res['birth_name'] = ''
         return res
 
     @classmethod
     def get_var_names_for_full_extract(cls):
         res = super(Party, cls).get_var_names_for_full_extract()
         res.extend(['is_person', 'is_company', 'gender', 'first_name',
-            'maiden_name', 'birth_date', 'ssn', 'short_name', 'addresses',
+            'birth_name', 'birth_date', 'ssn', 'short_name', 'addresses',
             'contact_mechanisms',
             ('lang', 'light')])
         return res

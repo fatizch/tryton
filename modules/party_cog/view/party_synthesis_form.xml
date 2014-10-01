@@ -10,8 +10,8 @@
         <field name="first_name"/>
         <label name="birth_date"/>
         <field name="birth_date"/>
-        <label name="maiden_name"/>
-        <field name="maiden_name"/>
+        <label name="birth_name"/>
+        <field name="birth_name"/>
         <label name="ssn"/>
         <field name="ssn"/>
         <label name="lang"/>
