@@ -28,13 +28,7 @@ class FeeDescription(model.CoopSQL, model.VersionedObject):
         return 'account.fee.description.version'
 
     def get_rec_name(self, name):
-        res = ''
-        if self.code:
-            res = self.code
-        elif self.name:
-            res = self.name
-        res += ' (%s)' % self.get_current_rec_name(name)
-        return res
+        return '%s (%s)' % (self.name, self.code)
 
     def get_name_for_billing(self):
         return self.name
