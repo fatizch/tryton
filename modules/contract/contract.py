@@ -286,9 +286,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             new_opt = Option.init_default_values_from_coverage(elem,
                 self.product)
             to_add.append([-1, new_opt])
+        extra_vals = {}
+        if self.extra_datas:
+            extra_vals = self.extra_datas[0].extra_data_values
         extra_data_value = self.product.get_extra_data_def(
-                'contract', self.extra_datas[0].extra_data_values,
-                self.appliable_conditions_date)
+                'contract', extra_vals, self.appliable_conditions_date)
         result = {
             'product_kind': self.product.kind,
             'subscriber_kind': ('person' if self.product.subscriber_kind in
