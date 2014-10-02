@@ -329,13 +329,14 @@ class Contract:
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
-        final_prices = []
+        final_prices = defaultdict(list)
         for contract in contracts:
             prices, errs = contract.calculate_prices_between_dates(start, end)
             if errs:
                 return False, errs
-            final_prices += prices
-        cls.store_prices(prices)
+            for date, price in prices.iteritems():
+                final_prices[date].extend(price)
+        cls.store_prices(final_prices)
         return True, ()
 
     @classmethod
