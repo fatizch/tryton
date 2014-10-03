@@ -107,7 +107,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 [('start_date', '=', None)],
                 ],
             ('company', '=', Eval('company')),
-            ], depends=['start_date', 'status', 'company'])
+            ], states=_STATES, depends=['start_date', 'status', 'company'])
     options = fields.One2Many('contract.option', 'contract', 'Options',
         context={
             'start_date': Eval('start_date'),
