@@ -94,6 +94,8 @@ class OptionSubscription(model.CoopWizard):
                 continue
             if fake_option.coverage in subscribed:
                 fake_option.update_option_if_needed(fake_option.option)
+                fake_option.init_subscribed_option(self.options_displayer,
+                    fake_option.option)
                 fake_option.option.save()
                 continue
             option = Option()
