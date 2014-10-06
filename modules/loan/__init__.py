@@ -3,7 +3,6 @@ from .offered import *
 from .contract import *
 from .rule_engine import *
 from .loan import *
-from .loan_creation_wizard import *
 from .billing import *
 from .party import *
 from .wizard import *
@@ -38,7 +37,6 @@ def register():
         InsuredOutstandingLoanBalanceSelectDate,
         module='loan', type_='model')
     Pool.register(
-        LoanCreate,
         OptionSubscription,
         OptionSubscriptionWizardLauncher,
         DisplayContractPremium,

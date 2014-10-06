@@ -30,22 +30,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def depending_modules(cls):
         return ['loan', 'endorsement']
 
-    def get_loan(self, clean_up=True):
+    def get_loan(self):
         loan, = self.Loan.search([
                 ('kind', '=', 'fixed_rate'),
                 ('rate', '=', Decimal('0.0752')),
                 ('funds_release_date', '=', datetime.date(2014, 3, 5)),
                 ('payment_frequency', '=', 'quarter'),
-                ('number_of_payments', '=', 56),
                 ('amount', '=', Decimal('134566')),
                 ])
-        if clean_up and loan.payments:
-            previous_payment = loan.payments[20].outstanding_balance
-            self.assertEqual(previous_payment, Decimal('129115.62'))
-            self.LoanIncrement.delete(loan.increments)
-            self.LoanPayment.delete(loan.payments)
-            loan.increments = []
-            loan.payments = []
         return loan
 
     @test_framework.prepare_test('endorsement.test0001_check_possible_views')
@@ -64,8 +56,19 @@ class ModuleTestCase(test_framework.CoopTestCase):
             {
                 'field': self.Field.search([
                         ('model.model', '=', 'loan'),
-                        ('name', '=', 'payment_amount')])[0],
-            }]
+                        ('name', '=', 'kind')])[0],
+            },
+            {
+                'field': self.Field.search([
+                        ('model.model', '=', 'loan'),
+                        ('name', '=', 'payment_frequency')])[0],
+            },
+            {
+                'field': self.Field.search([
+                        ('model.model', '=', 'loan'),
+                        ('name', '=', 'rate')])[0],
+            },
+            ]
 
         self.assertEqual(endorsement_part.code,
             'change_loan_amount')
@@ -110,7 +113,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'loan': loan.id,
                     'values': {
                         'amount': Decimal('150000'),
-                        'payment_amount': loan.calculate_payment_amount(),
                         },
                     }])
         loan.amount = previous_amount
@@ -123,7 +125,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan.amount, previous_amount)
         self.assertEqual(loan_endorsement.apply_values, {
                 'amount': Decimal('150000'),
-                'payment_amount': Decimal('4354.45'),
                 })
 
     @test_framework.prepare_test(
@@ -136,8 +137,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ])
         self.assertEqual(endorsement.endorsement_summary,
             'Change Loan Amount:\n'
-            u'  Amount : %s → 150000\n'
-            u'  Payment Amount : None → 4354.45\n\n' % loan.amount)
+            u'  Amount : %s → 150000\n\n' % loan.amount
+            )
 
     @test_framework.prepare_test(
         'endorsement_loan.test0030_create_endorsement',
@@ -150,9 +151,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         endorsement.apply([endorsement])
         loan = endorsement.loans[0]
         new_payment = loan.payments[20].outstanding_balance
-        self.assertEqual(new_payment, Decimal('113159.16'))
+        self.assertEqual(new_payment, Decimal('143924.46'))
         self.assertEqual(loan.amount, Decimal('150000'))
-        self.assertEqual(loan.payment_amount, Decimal('4354.45'))
+        self.assertEqual(loan.payments[20].amount, Decimal('5538.33'))
 
     @test_framework.prepare_test(
         'endorsement_loan.test0030_create_endorsement',

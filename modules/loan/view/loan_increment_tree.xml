@@ -12,4 +12,5 @@
     <field name="end_date"/>
     <field name="deferal"/>
     <field name="begin_balance"/>
+    <field name="loan" tree_invisible="1"/>
 </tree>

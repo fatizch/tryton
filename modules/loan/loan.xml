@@ -10,24 +10,6 @@
             <field name="type">form</field>
             <field name="name">loan_form</field>
         </record>
-        <record model="ir.ui.view" id="loan_simple_view_form">
-            <field name="model">loan</field>
-            <field name="type">form</field>
-            <field name="priority">20</field>
-            <field name="name">loan_simple_form</field>
-        </record>
-        <record model="ir.ui.view" id="loan_only_increments_view_form">
-            <field name="model">loan</field>
-            <field name="type">form</field>
-            <field name="priority">25</field>
-            <field name="name">loan_only_increments_form</field>
-        </record>
-        <record model="ir.ui.view" id="loan_only_payments_view_form">
-            <field name="model">loan</field>
-            <field name="type">form</field>
-            <field name="priority">30</field>
-            <field name="name">loan_only_payments_form</field>
-        </record>
         <record model="ir.ui.view" id="loan_view_tree">
             <field name="model">loan</field>
             <field name="type">tree</field>
@@ -131,13 +113,6 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
-        </record>
-        <!-- ############################################################ -->
-        <!-- ########### Loan Create Wizard ########### -->
-        <!-- ############################################################ -->
-        <record model="ir.action.wizard" id="launch_loan_creation_wizard">
-          <field name="name">Loan Create</field>
-          <field name="wiz_name">loan.create</field>
         </record>
         <record model="ir.action.act_window" id="act_loan_payment_relate_form">
           <field name="name">Loan Payments</field>

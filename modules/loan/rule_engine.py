@@ -1,6 +1,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.rule_engine import check_args
+from .loan import Loan
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -29,8 +30,7 @@ class RuleEngineRuntime:
     @check_args('loan')
     def _re_get_loan_payment_amount(cls, args):
         loan = args['loan']
-        if hasattr(loan, 'payment_amount'):
-            return loan.payment_amount
+        return loan.get_payment_amount(args['date'])
 
     @classmethod
     @check_args('loan')
@@ -67,7 +67,7 @@ class RuleEngineRuntime:
     @classmethod
     @check_args('loan')
     def _re_get_periodic_rate_from_annual_rate(cls, args, rate=1):
-        return args['loan'].get_rate(rate)
+        return Loan.calculate_rate(rate, args['loan'].payment_frequency)
 
     @classmethod
     def _re_get_loan(cls, args):

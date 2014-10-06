@@ -235,10 +235,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
             # TODO: Make it better
             for k, v in values.iteritems():
                 setattr(loan, k, v)
-            Pool().get('loan.payment').delete(loan.payments)
-            loan.increments, loan.payments = [], []
-            loan.calculate_increments()
-            loan.payments = loan.calculate_payments()
+            loan.calculate()
             loan.save()
             loan_endorsement.save()
 
@@ -371,7 +368,7 @@ class EndorsementLoanShare(relation_mixin(
         'on_change_with_loan')
     share = fields.Function(
         fields.Numeric('Share', digits=(5, 4)),
-       'on_change_with_share')
+        'on_change_with_share')
     start_date = fields.Function(
         fields.Date('Start Date'),
         'on_change_with_start_date')

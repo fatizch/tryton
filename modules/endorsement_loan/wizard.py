@@ -633,7 +633,7 @@ class StartEndorsement:
     def default_change_basic_loan_data(self, name):
         ChangeBasicLoanData = Pool().get('endorsement.loan.change_basic_data')
         result = ChangeBasicLoanData.get_state_view_default_values(self,
-            'loan.loan_simple_view_form', 'loan', 'change_basic_loan_data',
+            'loan.loan_form', 'loan', 'change_basic_loan_data',
             'loan_fields')
         result['loan'] = self.select_endorsement.loan.id
         return result
@@ -649,16 +649,14 @@ class StartEndorsement:
     def default_display_updated_payments(self, name):
         current_loan = self.change_basic_loan_data.current_value[0]
         new_loan = self.change_basic_loan_data.new_value[0]
-        new_loan.increments, new_loan.payments = [], []
-        new_loan.calculate_increments()
+        new_loan.calculate()
 
         return {
             'loan': current_loan.id,
             'current_payments': [x.id for x in current_loan.payments],
             'new_payments': [
-                dict([(x, getattr(payment, x, None))
-                        for x in PAYMENT_FIELDS])
-                for payment in new_loan.calculate_payments()]
+                dict([(x, getattr(payment, x, None)) for x in PAYMENT_FIELDS])
+                for payment in new_loan.payments]
             }
 
     def default_loan_select_contracts(self, name):

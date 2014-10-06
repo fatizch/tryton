@@ -1,3 +1,5 @@
+* Calculate loan increments and amortization table on the fly during loan creation/modification
+
 Version 1.2 - 2014-07-01
 * Changelog file creation
 * Add wizard to display outstanding amounts
