@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Relations" editable="bottom" sequence="sequence">
+<tree string="Relations" editable="bottom">
     <field name="from_"/>
     <field name="type"/>
     <field name="to"/>
