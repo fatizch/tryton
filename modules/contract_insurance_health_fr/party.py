@@ -50,6 +50,7 @@ class PartyRelation:
         cls._error_messages.update({
                 'invalid_social_security_relation': "%s can't be both a "
                 "social security insured and dependent",
+                'SSN_required': 'The SSN is required for %s',
                 })
 
     @classmethod
@@ -67,13 +68,36 @@ class PartyRelation:
                 ])
         for relation in relations:
             if (relation.type == social_security_dependent_relation
-                    and (relation.to.social_security_dependent
-                        or relation.from_.social_security_insured)
+                    and relation.to.social_security_dependent
                     or relation.type == social_security_insured_relation
-                    and (relation.to.social_security_insured
-                        or relation.from_.social_security_dependent)):
+                    and relation.to.social_security_insured):
                 cls.raise_user_error('invalid_social_security_relation',
                     relation.to.rec_name)
+            if (relation.type == social_security_dependent_relation
+                    and relation.from_.social_security_insured
+                    or relation.type == social_security_insured_relation
+                    and relation.from_.social_security_dependent):
+                cls.raise_user_error('invalid_social_security_relation',
+                    relation.from_.rec_name)
+
+    @classmethod
+    def delete(cls, relations):
+        pool = Pool()
+        RelationType = pool.get('party.relation.type')
+        social_security_dependent_relation, = RelationType.search([
+                ('xml_id', '=', 'contract_insurance_health_fr.'
+                    'social_security_dependent_relation_type'),
+                ])
+        social_security_insured_relation, = RelationType.search([
+                ('xml_id', '=', 'contract_insurance_health_fr.'
+                    'social_security_insured_relation_type'),
+                ])
+        for relation in relations:
+            if (relation.type == social_security_insured_relation and
+                    len(relation.to.social_security_dependent) == 1
+                    and not relation.to.ssn):
+                cls.raise_user_error('SSN_required', relation.to.rec_name)
+        super(PartyRelation, cls).delete(relations)
 
 
 class HealthPartyComplement:
