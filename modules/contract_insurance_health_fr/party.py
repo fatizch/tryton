@@ -30,7 +30,7 @@ class Party:
 
     def get_relations(self, name):
         return [relation.to.id for relation in self.relations
-            if relation.type.code == name]
+            if (relation.type and relation.type.code == name)]
 
     @fields.depends('relations')
     def on_change_with_social_security_dependent(self, name=None):
