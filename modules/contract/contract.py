@@ -284,7 +284,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             if elem.subscription_behaviour == 'optional':
                 continue
             new_opt = Option.init_default_values_from_coverage(elem,
-                self.product)
+                self.product, start_date=self.start_date)
             to_add.append([-1, new_opt])
         extra_vals = {}
         if self.extra_datas:
