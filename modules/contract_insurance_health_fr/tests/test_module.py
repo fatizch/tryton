@@ -34,15 +34,18 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ])
         party_insured = self.Party(name='Insured', first_name='M',
             gender='male', is_person=True,
-            birth_date=datetime.date(1978, 2, 15))
+            birth_date=datetime.date(1978, 2, 15),
+            ssn='178022460050197')
         party_insured.save()
         party_dependent = self.Party(name='Dependent', first_name='M',
             gender='male', is_person=True,
-            birth_date=datetime.date(2005, 2, 15))
+            birth_date=datetime.date(2005, 2, 15),
+            ssn='178029435711662')
         party_dependent.save()
         party_dependent2 = self.Party(name='Dependent', first_name='MBis',
             gender='male', is_person=True,
-            birth_date=datetime.date(1999, 2, 15))
+            birth_date=datetime.date(1999, 2, 15),
+            ssn='178025607673572')
         party_dependent2.save()
         relation = self.PartyRelation(from_=party_insured,
             type=relation_insured, to=party_dependent)
