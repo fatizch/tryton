@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Not, Bool, Or
 
 from trytond.modules.cog_utils import fields
 
@@ -20,6 +20,13 @@ class Party:
     social_security_insured = fields.Function(fields.One2Many('party.party',
             None, 'Social Security Insured', depends=['relations']),
         'get_relations')
+
+    @classmethod
+    def __setup__(cls):
+        super(Party, cls).__setup__()
+        cls.ssn.states['required'] = Or(cls.ssn.states.get('required', False),
+            Not(Bool(Eval('social_security_dependent', False))))
+        cls.ssn.depends.append('social_security_dependent')
 
     def get_relations(self, name):
         return [relation.to.id for relation in self.relations
