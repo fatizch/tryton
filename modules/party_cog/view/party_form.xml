@@ -68,7 +68,7 @@
             <label name="lang"/>
             <field name="lang" widget="selection"/>
         </group>
-        <field name="relations" colspan="2"/>
+        <field name="relations" colspan="2" view_ids="party_cog.relation_view_editable_list"/>
     </xpath>
     <!-- Add Company and Role pages-->
     <xpath expr="/form/notebook" position="inside">

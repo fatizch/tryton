@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Relations" editable="bottom" sequence="sequence">
+    <field name="from_"/>
+    <field name="type"/>
+    <field name="to"/>
+</tree>
