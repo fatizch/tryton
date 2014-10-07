@@ -213,8 +213,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        # ModuleTestCase))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+        ModuleTestCase))
     suite.addTests(doctest.DocFileSuite(
             'scenario_endorsement_change_start_date.rst',
             setUp=doctest_setup,tearDown=doctest_teardown, encoding='utf-8',
