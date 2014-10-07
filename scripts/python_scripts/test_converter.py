@@ -7,19 +7,19 @@ def convert_file(input_file, output_file):
         for line in i_file.readlines():
             if line.startswith('# -*- coding'):
                 continue
+            elif line.startswith('# #Title# #'):
+                o_file.write('=' * (len(line) - 11) + '\n')
+                o_file.write(line[11:])
+                o_file.write('=' * (len(line) - 11) + '\n')
+            elif line.startswith('# #Comment# #'):
+                o_file.write('\n')
+                o_file.write(line[13:-1] + '::')
+                o_file.write('\n\n')
+            elif line.startswith('# #Res# #'):
+                o_file.write('    ' + line[9:])
             elif line.lstrip().startswith('# '):
                 # No need to copy commented lines
                 continue
-            elif line.startswith('##Title##'):
-                o_file.write('=' * (len(line) - 9) + '\n')
-                o_file.write(line[9:])
-                o_file.write('=' * (len(line) - 9) + '\n')
-            elif line.startswith('##Comment##'):
-                o_file.write('\n')
-                o_file.write(line[11:-1] + '::')
-                o_file.write('\n\n')
-            elif line.startswith('##Res##'):
-                o_file.write('    ' + line[7:])
             elif (line.startswith('else:') or
                     line.startswith('except:') or
                     line.startswith('elif:') or
@@ -27,7 +27,7 @@ def convert_file(input_file, output_file):
                 o_file.write('    ... ' + line)
             elif line.startswith('    '):
                 o_file.write('    ... ' + line)
-            elif line == '':
+            elif line == '\n':
                 continue
             else:
                 o_file.write('    >>> ' + line)
