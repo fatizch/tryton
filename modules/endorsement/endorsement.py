@@ -51,6 +51,10 @@ def field_mixin(model):
                     'get_keys': RPC(instantiate=0),
                     })
 
+        @classmethod
+        def _export_light(cls):
+            return set(['field'])
+
         def get_rec_name(self, name):
             return self.field.rec_name
 

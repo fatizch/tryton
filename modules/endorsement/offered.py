@@ -40,6 +40,10 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         fields.Many2Many('endorsement.part', None, None, 'Endorsement Parts'),
         'get_endorsement_parts')
 
+    @classmethod
+    def _export_light(cls):
+        return set(['products'])
+
     @fields.depends('name', 'code')
     def on_change_with_code(self):
         if self.code:
@@ -110,7 +114,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
             'invisible': (Eval('kind', '') != 'contract')},
         depends=['kind'])
     definitions = fields.Many2Many('endorsement.definition-endorsement.part',
-        'endorsement_parts', 'definition', 'Used by')
+        'endorsement_part', 'definition', 'Used by')
     name = fields.Char('Name')
     description = fields.Text('Endorsement Description')
     kind = fields.Selection([
@@ -138,7 +142,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
     @classmethod
     def _export_skips(cls):
         result = super(EndorsementPart, cls)._export_skips()
-        result.add('products')
+        result.add('definitions')
         return result
 
     @fields.depends('name', 'code')
