@@ -14,6 +14,7 @@ __all__ = [
     'EndorsementDefinition',
     'EndorsementPart',
     'EndorsementDefinitionPartRelation',
+    'EndorsementPartMethodRelation',
     'EndorsementContractField',
     'EndorsementOptionField',
     'EndorsementActivationHistoryField',
@@ -83,6 +84,15 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
             #     coop_string.translate_model_name(state_class)
         return [(k, v) for k, v in result.iteritems()]  +  [('', '')]
 
+    def get_methods_for_model(self, model_name):
+        result = {}
+        for endorsement_part in self.endorsement_parts:
+            for method in endorsement_part.post_apply_actions:
+                if method.model.model != model_name:
+                    continue
+                result[method.method_name] = method
+        return sorted(result.values(), key=lambda x: x.priority)
+
 
 class EndorsementPart(model.CoopSQL, model.CoopView):
     'Endorsement Part'
@@ -113,6 +123,13 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
             'invisible': Eval('kind', '') != 'option',
             }, depends=['kind'])
     view = fields.Selection('get_possible_views', 'View')
+    post_apply_actions = fields.Many2Many('endorsement.part-method',
+        'endorsement_part', 'method', 'Post Apply Actions',
+        domain=[('model', '=', Eval('endorsed_model', None))],
+        depends=['endorsed_model'])
+    endorsed_model = fields.Function(
+        fields.Many2One('ir.model', 'Endorsed Model'),
+        'on_change_with_endorsed_model')
 
     @classmethod
     def _export_keys(cls):
@@ -129,6 +146,13 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
         if self.code:
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
+
+    @fields.depends('kind')
+    def on_change_with_endorsed_model(self, name=None):
+        if not self.kind:
+            return None
+        return Pool().get('ir.model').search([
+                ('model', '=', 'contract')])[0].id
 
     @classmethod
     def get_possible_views(cls):

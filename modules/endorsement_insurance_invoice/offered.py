@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, model
@@ -40,6 +40,12 @@ class EndorsementPart:
         super(EndorsementPart, cls).__setup__()
         cls.kind.selection.append(
             ('billing_information', 'Billing Information'))
+
+    def on_change_with_endorsed_model(self, name=None):
+        if self.kind == 'billing_information':
+            return Pool().get('ir.model').search([
+                    ('model', '=', 'contract')])[0].id
+        return super(EndorsementPart, self).on_change_with_endorsed_model(name)
 
     def clean_up(self, endorsement):
         super(EndorsementPart, self).clean_up(endorsement)

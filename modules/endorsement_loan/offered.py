@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import field_mixin
@@ -43,6 +43,15 @@ class EndorsementPart:
         super(EndorsementPart, cls).__setup__()
         cls.kind.selection.append(('loan', 'Loan'))
         cls.kind.selection.append(('loan_share', 'Loan Share'))
+
+    def on_change_with_endorsed_model(self, name=None):
+        if self.kind == 'loan':
+            return Pool().get('ir.model').search([
+                    ('model', '=', 'loan')])[0].id
+        elif self.kind == 'loan_share':
+            return Pool().get('ir.model').search([
+                    ('model', '=', 'contract')])[0].id
+        return super(EndorsementPart, self).on_change_with_endorsed_model(name)
 
     def clean_up(self, endorsement):
         if self.kind == 'loan':

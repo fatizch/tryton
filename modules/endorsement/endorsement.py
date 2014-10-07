@@ -558,6 +558,15 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         cls.write(endorsements, {'applied_by': Transaction().user,
                 'application_date': datetime.datetime.now()})
 
+        endorsements_per_model = cls.group_per_model(endorsements)
+        for model_name in cls.apply_order():
+            for endorsement in endorsements_per_model.get(model_name, []):
+                instance = endorsement.get_endorsed_record()
+                methods = endorsement.definition.get_methods_for_model(
+                    instance.__name__)
+                for method in methods:
+                    method.execute(endorsement, instance)
+
     @classmethod
     @model.CoopView.button_action('endorsement.act_contract_open')
     def open_contract(cls, endorsements):

@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, And
 
 from trytond.modules.cog_utils import fields, model
@@ -28,6 +28,12 @@ class EndorsementPart:
         cls.option_fields.states['invisible'] = And(
             cls.option_fields.states['invisible'],
             Eval('kind', '') != 'covered_element')
+
+    def on_change_with_endorsed_model(self, name=None):
+        if self.kind == 'covered_element':
+            return Pool().get('ir.model').search([
+                    ('model', '=', 'contract')])[0].id
+        return super(EndorsementPart, self).on_change_with_endorsed_model(name)
 
     def clean_up(self, endorsement):
         super(EndorsementPart, self).clean_up(endorsement)
