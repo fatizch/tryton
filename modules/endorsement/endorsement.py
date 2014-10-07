@@ -18,9 +18,11 @@ __all__ = [
     'relation_mixin',
     'Contract',
     'ContractOption',
+    'ContractActivationHistory',
     'Endorsement',
     'EndorsementContract',
     'EndorsementOption',
+    'EndorsementActivationHistory',
     ]
 
 
@@ -429,6 +431,12 @@ class ContractOption(object):
     __name__ = 'contract.option'
 
 
+class ContractActivationHistory(object):
+    __metaclass__ = PoolMeta
+    _history = True
+    __name__ = 'contract.activation_history'
+
+
 class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     'Endorsement'
 
@@ -506,7 +514,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     def new_endorsement(self, endorsement_part):
         # Return a new endorsement instantiation depending on the endorsement
         # part
-        if endorsement_part.kind in ('contract', 'option'):
+        if endorsement_part.kind in ('contract', 'option',
+                'activation_history'):
             return Pool().get('endorsement.contract')(endorsement=self)
 
     @classmethod
@@ -599,6 +608,13 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract'
 
+    activation_history = fields.One2Many(
+        'endorsement.contract.activation_history', 'contract_endorsement',
+        'Activation Historry', states={
+            'readonly': Eval('state') == 'applied',
+            },
+        depends=['state', 'contract', 'definition'],
+        context={'definition': Eval('definition')})
     contract = fields.Many2One('contract', 'Contract', required=True,
         datetime_field='applied_on',
         states={
@@ -668,6 +684,13 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             result += '  Option modifications :\n'
             result += option_summary
             result += '\n\n'
+        activation_summary = '\n'.join([activation_history.get_summary(
+                    'contract.activation_history', indent=4)
+                for activation_history in self.activation_history])
+        if activation_summary:
+            result += '  Activation modifications :\n'
+            result += activation_summary
+            result += '\n\n'
         return result
 
     def get_state(self, name):
@@ -681,6 +704,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         pool = Pool()
         Contract = pool.get('contract')
         ContractOption = pool.get('contract.option')
+        ActivationHistory = pool.get('contract.activation_history')
 
         hcontract = self.contract
         contract = Contract(self.contract.id)
@@ -689,6 +713,11 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         option_ids = set((o.id
                 for o in (contract.options + hcontract.options)))
         ContractOption.restore_history(list(option_ids),
+            self.applied_on)
+        activation_history_ids = set((o.id
+                for o in (contract.activation_history +
+                    hcontract.activation_history)))
+        ActivationHistory.restore_history(list(activation_history_ids),
             self.applied_on)
 
         return contract, hcontract
@@ -730,12 +759,29 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     @property
     def apply_values(self):
         values = (self.values if self.values else {}).copy()
-        options = []
+        options, activation_history = [], []
         for option in self.options:
             options.append(option.apply_values)
         if options:
             values['options'] = options
+        for activation_entry in self.activation_history:
+            activation_history.append(activation_entry.apply_values)
+        if activation_history:
+            values['activation_history'] = activation_history
         return values
+
+    @property
+    def new_activation_history(self):
+        elems = set([x for x in self.contract.activation_history])
+        for elem in getattr(self, 'activation_history', []):
+            if elem.action == 'add':
+                elems.add(elem)
+            elif elem.action == 'remove':
+                elems.remove(elem.option)
+            else:
+                elems.remove(elem.option)
+                elems.add(elem)
+        return elems
 
     @property
     def new_options(self):
@@ -753,10 +799,16 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     @property
     def updated_struct(self):
         EndorsementOption = Pool().get('endorsement.contract.option')
-        options = {}
+        options, activation_history = {}, {}
         for option in self.new_options:
             options[option] = EndorsementOption.updated_struct(option)
-        return {'options': options}
+        for activation_entry in self.new_activation_history:
+            activation_history[activation_entry] = \
+                EndorsementActivationHistory.updated_struct(activation_entry)
+        return {
+            'activation_history': activation_history,
+            'options': options,
+            }
 
     def get_endorsed_record(self):
         return self.contract
@@ -808,6 +860,28 @@ class EndorsementOption(relation_mixin(
             return self.option.rec_name
         return '%s : %s' % (self.raise_user_error('new_coverage',
                 raise_exception=False), self.coverage.rec_name)
+
+    def updated_struct(cls, option):
+        return {}
+
+
+class EndorsementActivationHistory(relation_mixin(
+            'endorsement.contract.activation_history.field',
+            'activation_history', 'contract.activation_history',
+            'Activation History'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Activation History'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.activation_history'
+
+    contract_endorsement = fields.Many2One('endorsement.contract',
+        'Endorsement', required=True, select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+
+    def get_definition(self, name):
+        return self.contract_endorsement.definition.id
 
     def updated_struct(cls, option):
         return {}

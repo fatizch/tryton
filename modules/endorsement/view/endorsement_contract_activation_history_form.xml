@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<form string="Endorsement Option">
+    <label name="definition"/>
+    <field name="definition"/>
+    <newline/>
+    <label name="action"/>
+    <field name="action"/>
+    <label name="activation_history"/>
+    <field name="activation_history"/>
+    <field name="values" colspan="4"/>
+</form>
+

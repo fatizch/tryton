@@ -17,6 +17,9 @@
                 <page name="contract_fields">
                     <field name="contract_fields"/>
                 </page>
+                <page name="activation_history_fields">
+                    <field name="activation_history_fields"/>
+                </page>
                 <page name="option_fields">
                     <field name="option_fields"/>
                 </page>

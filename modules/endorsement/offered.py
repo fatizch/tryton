@@ -16,6 +16,7 @@ __all__ = [
     'EndorsementDefinitionPartRelation',
     'EndorsementContractField',
     'EndorsementOptionField',
+    'EndorsementActivationHistoryField',
     'Product',
     'EndorsementDefinitionProductRelation',
     ]
@@ -88,10 +89,15 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
 
     __name__ = 'endorsement.part'
 
+    activation_history_fields = fields.One2Many(
+        'endorsement.contract.activation_history.field',
+        'endorsement_part', 'ActivationHistory fields', states={
+            'invisible': Eval('kind', '') != 'activation_history',
+            }, depends=['kind'])
     code = fields.Char('Code')
     contract_fields = fields.One2Many('endorsement.contract.field',
         'endorsement_part', 'Contract fields', states={
-            'invisible': Eval('kind', '') != 'contract'},
+            'invisible': (Eval('kind', '') != 'contract')},
         depends=['kind'])
     definitions = fields.Many2Many('endorsement.definition-endorsement.part',
         'endorsement_parts', 'definition', 'Used by')
@@ -100,6 +106,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
     kind = fields.Selection([
             ('contract', 'Contract'),
             ('option', 'Option'),
+            ('activation_history', 'Activation Dates'),
             ], 'Kind')
     option_fields = fields.One2Many('endorsement.contract.option.field',
         'endorsement_part', 'Option fields', states={
@@ -136,6 +143,9 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
             endorsement.values.pop(field.name, None)
         if self.option_fields:
             self.clean_up_relation(endorsement, 'option_fields', 'options')
+        if self.activation_history_fields:
+            self.clean_up_relation(endorsement, 'activation_history_fields',
+                'activation_history')
 
     def clean_up_relation(self, endorsement, field_name, endorsed_field_name):
         # Cleans up the current endorsement of relation data linked to the
@@ -171,6 +181,17 @@ class EndorsementDefinitionPartRelation(model.CoopSQL, model.CoopView):
         cls._order.append(('order', 'ASC'))
 
 
+class EndorsementPartMethodRelation(model.CoopSQL):
+    'Endorsement Part Method Relation'
+
+    __name__ = 'endorsement.part-method'
+
+    endorsement_part = fields.Many2One('endorsement.part', 'Endorsement Part',
+        required=True, select=1, ondelete='CASCADE')
+    method = fields.Many2One('ir.model.method', 'Method', required=True,
+        select=1, ondelete='RESTRICT')
+
+
 class EndorsementContractField(field_mixin('contract'), model.CoopSQL,
         model.CoopView):
     'Endorsement Contract Field'
@@ -183,6 +204,14 @@ class EndorsementOptionField(field_mixin('contract.option'),
     'Endorsement Option Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.option.field'
+
+
+class EndorsementActivationHistoryField(
+        field_mixin('contract.activation_history'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Activation History Field'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.activation_history.field'
 
 
 class Product:
