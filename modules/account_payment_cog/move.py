@@ -26,7 +26,7 @@ class MoveLine:
     @classmethod
     def __setup__(cls):
         super(MoveLine, cls).__setup__()
-        cls._check_modify_exclude.append('payment_date')
+        cls._check_modify_exclude.add('payment_date')
 
     def init_payment(self, journal):
         if self.debit > 0:
