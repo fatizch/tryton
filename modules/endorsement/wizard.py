@@ -14,6 +14,7 @@ __all__ = [
     'BasicPreview',
     'StartEndorsement',
     'OpenContractAtApplicationDate',
+    'ChangeContractStartDate',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
@@ -155,6 +156,25 @@ class EndorsementWizardPreviewMixin(object):
         raise NotImplementedError
 
 
+class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
+    'Change contract start date'
+
+    __name__ = 'endorsement.contract.change_start_date'
+
+    current_start_date = fields.Date('Current Start Date', readonly=True)
+    new_start_date = fields.Date('New Start Date')
+
+    def update_endorsement(self, base_endorsement, wizard):
+        base_endorsement.values = {'start_date': self.new_start_date}
+        base_endorsement.save()
+
+    @classmethod
+    def update_default_values(cls, wizard, base_endorsement, default_values):
+        return {
+            'new_start_date': base_endorsement.values.get('start_date', None),
+            }
+
+
 class SelectEndorsement(model.CoopView):
     'Select Endorsement'
 
@@ -241,6 +261,16 @@ class StartEndorsement(Wizard):
             Button('Apply', 'apply_endorsement', 'tryton-go-next',
                 default=True),
             ])
+    change_start_date = StateView('endorsement.contract.change_start_date',
+        'endorsement.endorsement_change_contract_start_date_view_form', [
+            Button('Previous', 'change_start_date_previous',
+                'tryton-go-previous'),
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Suspend', 'suspend', 'tryton-save'),
+            Button('Next', 'change_start_date_next', 'tryton-go-next',
+                default=True)])
+    change_start_date_previous = StateTransition()
+    change_start_date_next = StateTransition()
 
     @property
     def definition(self):
@@ -326,6 +356,33 @@ class StartEndorsement(Wizard):
     def transition_apply_endorsement(self):
         Pool().get('endorsement').apply([self.endorsement])
         return 'end'
+
+    def transition_change_start_date_previous(self):
+        self.end_current_part('change_start_date')
+        return self.get_state_before('change_start_date')
+
+    def default_change_start_date(self, name):
+        State = Pool().get('endorsement.contract.change_start_date')
+        contract = self.select_endorsement.contract
+        endorsement_part = self.get_endorsement_part_for_state(
+            'change_start_date')
+        endorsement_date = self.select_endorsement.effective_date
+        result = {
+            'endorsement_definition': self.definition.id,
+            'endorsement_part': endorsement_part.id,
+            'effective_date': endorsement_date,
+            'current_start_date': contract.start_date,
+            }
+        if self.endorsement and self.endorsement.contract_endorsements:
+            result.update(State.update_default_values(self,
+                    self.endorsement.contract_endorsements[0], result))
+        else:
+            result['new_start_date'] = self.select_endorsement.effective_date
+        return result
+
+    def transition_change_start_date_next(self):
+        self.end_current_part('change_start_date')
+        return self.get_next_state('change_start_date')
 
     def get_state_before(self, state_name):
         for part in reversed(self.definition.endorsement_parts):

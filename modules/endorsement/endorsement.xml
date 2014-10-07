@@ -91,5 +91,14 @@
         <field name="type">tree</field>
         <field name="name">endorsement_contract_activation_history_list</field>
     </record>
+    <!-- ###################### -->
+    <!-- # Method Definitions # -->
+    <!-- ###################### -->
+    <record model="ir.model.method" id="contract_update_start_date">
+        <field name="method_name">update_start_date</field>
+        <field name="name">Update Start Date</field>
+        <field name="model" search="[('model', '=', 'contract')]"/>
+        <field name="priority">1</field>
+    </record>
   </data>
 </tryton>

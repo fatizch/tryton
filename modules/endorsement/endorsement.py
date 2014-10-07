@@ -424,6 +424,18 @@ class Contract(object):
     _history = True
     __name__ = 'contract'
 
+    def update_start_date(self, caller=None):
+        if not caller:
+            return
+        pool = Pool()
+        ContractEndorsement = pool.get('endorsement.contract')
+        if not isinstance(caller, ContractEndorsement):
+            return
+        if not caller.values.get('start_date', None):
+            return
+        self.set_start_date(caller.values['start_date'])
+        self.save()
+
 
 class ContractOption(object):
     __metaclass__ = PoolMeta
