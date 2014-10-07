@@ -7,6 +7,7 @@ from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max, Min
 
 from trytond import backend
+from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool
@@ -151,7 +152,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_product_subscriber_kind')
     start_date = fields.Function(
         fields.Date('Start Date'),
-        'getter_contract_date', searcher='search_contract_date')
+        'getter_contract_date', 'set_contract_start_date',
+        searcher='search_contract_date')
     subscriber_kind = fields.Function(
         fields.Selection(
             [x for x in offered.SUBSCRIBER_KIND if x != ('all', 'All')],
@@ -179,6 +181,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'activation_period_overlaps': 'Activation Periods "%(first)s"'
                 ' and "%(second)s" overlap.',
                 'no_quote_sequence': 'No quote sequence defined',
+                'start_date_multiple_activation_history': 'Cannot change '
+                'start date, multiple activation period detected',
                 })
 
     @classmethod
@@ -204,12 +208,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if self.status == 'active':
             return 'contract_green'
         return 'contract'
-
-    @classmethod
-    def default_activation_history(cls):
-        return [{
-                'start_date': cls.default_start_date(),
-                }]
 
     @classmethod
     def default_company(cls):
@@ -369,6 +367,30 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.product.subscriber_kind
 
     @classmethod
+    def set_contract_start_date(cls, contract_ids, name, value):
+        pool = Pool()
+        ActivationHistory = pool.get('contract.activation_history')
+        to_create, to_write = [], []
+        for contract_slice in grouped_slice(contract_ids):
+            for contract_id in contract_slice:
+                existing = ActivationHistory.search([
+                        ('contract', '=', contract_id)])
+                if not existing:
+                    to_create.append({
+                            'contract': contract_id,
+                            'start_date': value,
+                            })
+                elif len(existing) == 1 and existing[0].start_date != value:
+                    to_write += [[existing[0]], {'start_date': value}]
+                else:
+                    cls.raise_user_error(
+                        'start_date_multiple_activation_history')
+        if to_create:
+            ActivationHistory.create(to_create)
+        if to_write:
+            ActivationHistory.write(*to_write)
+
+    @classmethod
     def search_contract_date(cls, name, clause):
         pool = Pool()
         _, operator, value = clause
@@ -450,9 +472,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def set_start_date(self, start_date):
         self.start_date = start_date
-        first_version = self.activation_history[0]
-        first_version.start_date = start_date
-        first_version.save()
         self.update_from_start_date()
 
     def update_from_start_date(self):
@@ -598,8 +617,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             }
 
     def init_from_product(self, product, start_date=None, end_date=None):
-        pool = Pool()
-        ActivationHistory = pool.get('contract.activation_history')
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(product, start_date):
@@ -607,8 +624,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             start_date = (
                 max(product.start_date, start_date)
                 if start_date else product.start_date)
-            self.activation_history = [ActivationHistory(
-                    start_date=start_date)]
             end_date = (
                 min(product.end_date, end_date)
                 if end_date else product.end_date)

@@ -43,13 +43,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract = self.Contract(
             product=product.id,
             company=product.company.id,
-            activation_history=[{
-                    'start_date': start_date,
-                    }],
+            start_date=start_date,
             appliable_conditions_date=start_date,
             )
         contract.save()
         self.assertEqual(contract.status, 'quote')
+        self.assertEqual(len(contract.activation_history), 1)
+        self.assertEqual(contract.activation_history[0].start_date, start_date)
         self.assertEqual(contract.start_date, start_date)
         contract.set_end_date(end_date)
         contract.save()
