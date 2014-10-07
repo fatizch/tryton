@@ -1,31 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ################## -->
-    <!-- # Version Object # -->
-    <!-- ################## -->
-    <record model="ir.ui.view" id="version_object_view_tree">
-      <field name="model">utils.version_object</field>
-      <field name="type">tree</field>
-      <field name="name">version_object_tree</field>
-    </record>
-    <record model="ir.ui.view" id="version_object_view_form">
-      <field name="model">utils.version_object</field>
-      <field name="type">form</field>
-      <field name="name">version_object_form</field>
-    </record>
-    <!-- #################### -->
-    <!-- # Versioned Object # -->
-    <!-- #################### -->
-    <record model="ir.ui.view" id="versionned_object_view_tree">
-      <field name="model">utils.versionned_object</field>
-      <field name="type">tree</field>
-      <field name="name">versionned_object_tree</field>
-    </record>
-    <record model="ir.ui.view" id="versionned_object_view_form">
-      <field name="model">utils.versionned_object</field>
-      <field name="type">form</field>
-      <field name="name">versionned_object_form</field>
-    </record>
-  </data>
+    <data>
+        <!-- ################## -->
+        <!-- # Version Object # -->
+        <!-- ################## -->
+        <record model="ir.ui.view" id="version_object_view_tree">
+            <field name="model">utils.version_object</field>
+            <field name="type">tree</field>
+            <field name="name">version_object_tree</field>
+        </record>
+        <record model="ir.ui.view" id="version_object_view_form">
+            <field name="model">utils.version_object</field>
+            <field name="type">form</field>
+            <field name="name">version_object_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Versioned Object # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="versionned_object_view_tree">
+            <field name="model">utils.versionned_object</field>
+            <field name="type">tree</field>
+            <field name="name">versionned_object_tree</field>
+        </record>
+        <record model="ir.ui.view" id="versionned_object_view_form">
+            <field name="model">utils.versionned_object</field>
+            <field name="type">form</field>
+            <field name="name">versionned_object_form</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # Method Definition # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="method_view_form">
+            <field name="model">ir.model.method</field>
+            <field name="type">form</field>
+            <field name="name">method_form</field>
+        </record>
+        <record model="ir.ui.view" id="method_view_list">
+            <field name="model">ir.model.method</field>
+            <field name="type">tree</field>
+            <field name="name">method_list</field>
+        </record>
+        <!-- Access Rights -->
+        <record model="ir.model.access" id="access_method_definition_admin">
+            <field name="model" search="[('model', '=', 'ir.model.method')]"/>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_method_definition">
+            <field name="model" search="[('model', '=', 'ir.model.method')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+    </data>
 </tryton>

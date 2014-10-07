@@ -51,6 +51,7 @@ def register():
         TestCaseFileSelector,
         Tag,
         TagObjectRelation,
+        MethodDefinition,
         module='cog_utils', type_='model')
     Pool.register(
         ImportWizard,

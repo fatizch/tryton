@@ -1,3 +1,4 @@
+import inspect
 import logging
 import time
 import datetime
@@ -34,6 +35,7 @@ __all__ = [
     'expand_tree',
     'UnionMixin',
     'TaggedMixin',
+    'MethodDefinition',
     ]
 
 
@@ -565,3 +567,81 @@ class TaggedMixin(object):
     @classmethod
     def search_tags(cls, name, clause):
         return [('tags.name',) + tuple(clause[1:])]
+
+
+class MethodDefinition(CoopSQL, CoopView):
+    'Method Definition'
+    '''
+        This model uses is what ir.model is for models and ir.model.field for
+        fields. It allows to make references to python methods, so that
+        configuration models can make reference to them.
+
+        It shall typically be used for processes, endorsements, etc.
+
+        Method signature should be:
+            def my_method(self, caller=None, **kwargs)
+
+        Methods will be called automatically, so regular args cannot be used.
+    '''
+
+    __name__ = 'ir.model.method'
+
+    description = fields.Text('Description')
+    method_name = fields.Selection('get_possible_methods', 'Method Name',
+        required=True)
+    model = fields.Many2One('ir.model', 'Model', required=True)
+    name = fields.Char('Name')
+    priority = fields.Integer('Priority', required=True)
+    code_preview = fields.Function(
+        fields.Text('Code Preview'),
+        'on_change_with_code_preview')
+
+    @classmethod
+    def __setup__(cls):
+        super(MethodDefinition, cls).__setup__()
+        cls._order = [('priority', 'ASC')]
+
+    @fields.depends('method_name', 'model')
+    def on_change_with_code_preview(self, name=None):
+        if not self.model or not self.method_name:
+            return ''
+        try:
+            Model = Pool().get(self.model.model)
+            func = getattr(Model, self.method_name)
+            return ''.join(inspect.getsourcelines(func)[0])
+        except:
+            return 'Source Code unavailable'
+
+    @fields.depends('model')
+    def get_possible_methods(self):
+        if not self.model:
+            return []
+        allowed_methods = []
+        Model = Pool().get(self.model.model)
+        for elem in dir(Model):
+            # Filter attributes starting with '_'
+            if elem.startswith('_'):
+                continue
+            attr = getattr(Model, elem)
+            # Check it is a method !
+            if not callable(attr):
+                continue
+            args = inspect.getargspec(attr)
+            arg_names = args[0]
+            # Check for instance method
+            if not arg_names or arg_names[0] != 'self':
+                continue
+            # Check for *args
+            if args[1]:
+                continue
+            # Check for 'caller' kwarg
+            if 'caller' not in arg_names:
+                continue
+            # Check all named arguments are kwargs
+            if len(arg_names) - 1 != len(args[3]):
+                continue
+            allowed_methods.append((elem, elem))
+        return allowed_methods
+
+    def execute(self, caller, callee):
+        return getattr(callee, self.method_name)(caller=caller)

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Methods">
+    <field name="name"/>
+    <field name="model"/>
+    <field name="method_name"/>
+    <field name="priority"/>
+</tree>
