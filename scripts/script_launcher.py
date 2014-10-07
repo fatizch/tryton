@@ -559,7 +559,7 @@ def configure(target_env):
                         '',
                         '[form]',
                         'statusbar = True']))
-    #configure documentation
+    # configure documentation
     proteusdir = os.path.dirname(proteus.__file__)
     if not os.path.islink(proteusdir):
         shutil.rmtree(proteusdir)
@@ -607,6 +607,7 @@ if __name__ == '__main__':
 
     work_data = init_work_data(config)
     possible_modules = os.listdir(work_data['modules']) + ['ir']
+    possible_modules.remove('__init__.py')
     possible_coop_modules = os.listdir(work_data['coop_modules']) + ['all']
 
     # Main parser
@@ -662,7 +663,7 @@ if __name__ == '__main__':
     parser_unittests = subparsers.add_parser('test', help='Test related '
         'actions')
     parser_unittests.add_argument('--module', '-m', default='all',
-        help='Module to unittest', nargs='+', choices=possible_coop_modules)
+        help='Module to unittest', nargs='+', choices=possible_modules)
     parser_unittests.add_argument('--database', '-d', help='Database name',
         default='', type=str)
     parser_unittests.add_argument('--with-test-cases', '-t', help='Allow test '
