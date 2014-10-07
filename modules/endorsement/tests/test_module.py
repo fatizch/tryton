@@ -1,8 +1,10 @@
 # encoding: utf-8
 import unittest
+import doctest
 import datetime
 
 import trytond.tests.test_tryton
+from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import test_framework
@@ -65,7 +67,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         possible_views = [
             x[0] for x in self.EndorsementPart.get_possible_views()]
-        self.assertEqual(possible_views, ['simple_contract_modification'])
+        self.assertEqual(possible_views, ['simple_contract_modification',
+                'change_start_date'])
 
     @test_framework.prepare_test(
         'endorsement.test0001_check_possible_views',
@@ -210,6 +213,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ModuleTestCase))
+    # suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+        # ModuleTestCase))
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_endorsement_change_start_date.rst',
+            setUp=doctest_setup,tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite
