@@ -17,7 +17,6 @@ elif param_age_kind() == "at_given_day_of_year":
     else:
         return given_date_in_birth_year + relativedelta(
             years=param_max_age_for_option(), days=-1)</field>
-            <field name="debug_mode">True</field>
             <field name="status">draft</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
