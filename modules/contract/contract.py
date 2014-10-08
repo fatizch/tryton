@@ -380,8 +380,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                             'contract': contract_id,
                             'start_date': value,
                             })
-                elif len(existing) == 1 and existing[0].start_date != value:
-                    to_write += [[existing[0]], {'start_date': value}]
+                elif len(existing) == 1:
+                    if existing[0].start_date != value:
+                        to_write += [[existing[0]], {'start_date': value}]
                 else:
                     cls.raise_user_error(
                         'start_date_multiple_activation_history')
