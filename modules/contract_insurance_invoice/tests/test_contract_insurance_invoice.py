@@ -1,4 +1,5 @@
 import unittest
+import doctest
 from decimal import Decimal
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -6,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import test_view, test_depends
 from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
+from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 from trytond.transaction import Transaction
 
 
@@ -229,4 +231,7 @@ def suite():
             suite.addTest(test)
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
             ContractInsuranceInvoiceTestCase))
+    suite.addTests(doctest.DocFileSuite('scenario_invoice_contract.rst',
+            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

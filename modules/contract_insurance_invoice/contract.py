@@ -88,6 +88,7 @@ class Contract:
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'button_calculate_prices': {},
+                'first_invoice': {},
                 })
 
     @classmethod
@@ -220,9 +221,13 @@ class Contract:
         if actions['cancel']:
             ContractInvoice.cancel(actions['cancel'])
 
-    def first_invoice(self):
-        self.clean_up_contract_invoices([self])
-        self.invoice([self], self.start_date)
+    @classmethod
+    @ModelView.button
+    def first_invoice(cls, contracts):
+        # Make sure all existing invoices are cleaned up
+        cls.clean_up_contract_invoices(contracts, from_date=datetime.date.min)
+        for contract in contracts:
+            cls.invoice([contract], contract.start_date)
 
     @classmethod
     def invoice(cls, contracts, up_to_date):
