@@ -30,7 +30,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'ExtraPremium': 'contract.option.extra_premium',
             'Contract': 'contract',
             'Option': 'contract.option',
-            'ActivationHistory': 'contract.activation_history',
             'ContractChangeStartDate': 'contract.change_start_date',
             'Coverage': 'offered.option.description',
             'CoveredElement': 'contract.covered_element',
@@ -87,11 +86,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         start_date = product.start_date + datetime.timedelta(weeks=4)
         end_date = start_date + datetime.timedelta(weeks=52)
         contract = self.Contract(
+            start_date=start_date,
             product=product.id,
             company=product.company.id,
-            activation_history=[{
-                    'start_date': start_date,
-                    }],
             appliable_conditions_date=start_date,
             )
         contract.save()
@@ -140,7 +137,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             covered_element.item_desc = coverage.item_desc
             covered_element.contract = contract
             covered_element.product = covered_element.on_change_with_product()
-            party = self.Party.search([("is_person", "=", "True")])[0]
+            party = self.Party.search([('is_person', '=', True)])[0]
             covered_element.party = party
             covered_element.save()
             contract.covered_elements = [covered_element.id]
@@ -238,7 +235,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             covered_element.item_desc = coverage.item_desc
             covered_element.contract = contract
             covered_element.product = covered_element.on_change_with_product()
-            party = self.Party.search([("is_person", "=", "True")])[0]
+            party = self.Party.search([('is_person', '=', True)])[0]
             covered_element.party = party
             covered_element.save()
 

@@ -81,7 +81,6 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
         BillingMode = POOL.get('offered.billing_mode')
         Company = POOL.get('company.company')
         User = POOL.get('res.user')
-        ActivationHistory = POOL.get('contract.activation_history')
 
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
             company, = Company.search([
@@ -152,8 +151,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'quote_number_sequence': quote_sequence.id,
                         }])
             contract = Contract(company=company,
-                activation_history=[ActivationHistory(
-                        start_date=date(2014, 4, 15))],
+                start_date=date(2014, 4,15),
                 product=product,
                 billing_informations=[
                     BillingInformation(date=None,
@@ -183,8 +181,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         contract.billing_informations[1])])
 
             contract = Contract(company=company,
-                activation_history=[ActivationHistory(
-                        start_date=date(2014, 4, 15))],
+                start_date=date(2014, 4, 15),
                 product=product,
                 billing_informations=[
                     BillingInformation(date=None,

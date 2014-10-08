@@ -52,7 +52,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Option': 'contract.option',
             'Party': 'party.party',
             'Insurer': 'insurer',
-            'ActivationHistory': 'contract.activation_history',
             'InsuredOutstandingLoanBalance':
                 'party.display_insured_outstanding_loan_balance',
             'InsuredOutstandingLoanBalanceView':
@@ -351,10 +350,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 product=product.id,
                 company=product.company.id,
                 appliable_conditions_date=start_date,
-                activation_history=[self.ActivationHistory(
-                    start_date=start_date,
-                    end_date=start_date + datetime.timedelta(weeks=3000))])
+                start_date=start_date,
+                )
             contract.save()
+            contract.activation_history[0].end_date = start_date + \
+                datetime.timedelta(weeks=3000)
+            contract.activation_history[0].save()
             contract.account_for_billing = account
             contract.subscriber = subscriber
             contract.finalize_contract()
