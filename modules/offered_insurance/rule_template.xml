@@ -5,10 +5,17 @@
             <field name="name">Option End Date Rule</field>
             <field name="short_name">Option End Date Rule</field>
             <field name="algorithm">birth_year = date_de_naissance().timetuple()[0]
-if param_age_kind() == "real":
+if param_age_kind() == 'real':
     return date_de_naissance() + relativedelta(
         years=param_max_age_for_option() + 1, days=-1)
-elif param_age_kind() == "at_given_day_of_year":
+elif param_age_kind() == 'at_end_of_month':
+    birthday_month_after = date_de_naissance() + relativedelta(
+        years=param_max_age_for_option() + 1, months=1)
+    year, month, _ = birthday_month_after.timetuple()[0:3]
+    first_day_following_month = datetime.date(year, month,
+        1)
+    return first_day_following_month + relativedelta(days=-1)
+elif param_age_kind() == 'at_given_day_of_year':
     given_date_in_birth_year = datetime.date(birth_year,
         int(param_given_month()), int(param_given_day()))
     if date_de_naissance() >= given_date_in_birth_year:
@@ -30,7 +37,8 @@ elif param_age_kind() == "at_given_day_of_year":
             <field name="name">age_kind</field>
             <field name="type_">selection</field>
             <field name="selection">real : Real
-at_given_day_of_year : At Given Day of Year</field>
+at_given_day_of_year : At Given Day of Year
+at_end_of_month : At End of Month</field>
             <field name="string">Age kind for ending rule</field>
             <field name="parent_rule" ref="option_end_date_rule"/>
         </record>
