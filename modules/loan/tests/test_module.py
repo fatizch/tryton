@@ -434,8 +434,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 covered_element2, base_date)
         create_loan_share('0.8', option_temp_dis_ins2_2, loan2)
 
-        john.loan_insurers = [insurer1, insurer2]
-
         def run_wizard(at_date, currency):
             with Transaction().set_context(active_id=john.id,
                     company=company.id):

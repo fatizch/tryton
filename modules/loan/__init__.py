@@ -29,7 +29,6 @@ def register():
         WizardOption,
         BillingPremium,
         LoanShareTreeExpansion,
-        Party,
         SynthesisMenuLoan,
         SynthesisMenu,
         InsuredOutstandingLoanBalanceView,

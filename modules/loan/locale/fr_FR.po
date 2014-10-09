@@ -593,10 +593,6 @@ msgctxt "field:party.display_insured_outstanding_loan_balance.view,insurers:"
 msgid "Loan Insurers"
 msgstr "Assureurs"
 
-msgctxt "field:party.party,loan_insurers:"
-msgid "Loan Insurers"
-msgstr "Assureurs"
-
 msgctxt "field:party.synthesis.menu.loan,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"

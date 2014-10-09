@@ -16,7 +16,6 @@ from trytond.modules.cog_utils import fields, model, coop_string, UnionMixin
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Party',
     'SynthesisMenuLoan',
     'SynthesisMenu',
     'SynthesisMenuOpen',
@@ -25,39 +24,6 @@ __all__ = [
     'InsuredOutstandingLoanBalanceLineView',
     'InsuredOutstandingLoanBalanceSelectDate',
     ]
-
-
-class Party:
-    __name__ = 'party.party'
-
-    loan_insurers = fields.Function(
-        fields.One2Many('insurer', None, 'Loan Insurers',
-            context={'party': Eval('id', '')}, depends=['id']),
-        'getter_loan_insurers')
-
-    @classmethod
-    def getter_loan_insurers(cls, parties, name):
-        cursor = Transaction().cursor
-        pool = Pool()
-
-        party = cls.__table__()
-        covered_element = pool.get('contract.covered_element').__table__()
-        option = pool.get('contract.option').__table__()
-        coverage = pool.get('offered.option.description').__table__()
-
-        query_table = covered_element.join(party, condition=(
-                covered_element.party.in_([x.id for x in parties]))
-            ).join(option, condition=(
-                    option.covered_element == covered_element.id)
-            ).join(coverage, condition=(option.coverage == coverage.id))
-
-        cursor.execute(*query_table.select(party.id, coverage.insurer))
-
-        result = defaultdict(list)
-        for party_id, insurer in cursor.fetchall():
-            result[party_id].append(insurer)
-
-        return result
 
 
 class SynthesisMenuLoan(model.CoopSQL):
