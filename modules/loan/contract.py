@@ -29,7 +29,7 @@ class Contract:
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
     loans = fields.Function(
-        fields.Many2Many('loan', None, None, 'Loans',
+        fields.One2Many('loan', None, 'Loans',
             domain=[('parties', 'in', Eval('parties'))],
             states={
                 'invisible': (~Eval('is_loan')) | (~Eval('subscriber', False)),
@@ -37,7 +37,7 @@ class Contract:
                 },
             depends=['is_loan', 'currency', 'status', 'subscriber', 'parties'],
             context={'currency': Eval('currency')}),
-        'on_change_with_loans', 'setter_void')
+        'on_change_with_loans', 'set_loans')
     used_loans = fields.Function(
         fields.Many2Many('loan', None, None, 'Used Loans',
             context={'contract': Eval('id')}, depends=['id']),
@@ -101,6 +101,21 @@ class Contract:
             return
         end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
         self.set_end_date(end_date, force=True)
+
+    @classmethod
+    def set_loans(cls, instances, name, vals):
+        Loan = Pool().get('loan')
+        for val in vals:
+            if val[0] == 'create':
+                Loan.create(val[1])
+            elif val[0] == 'write':
+                values = val[1:]
+                for i, x in enumerate(values):
+                    if i % 2 == 0:
+                        values[i] = [Loan(x[0])]
+                Loan.write(*values)
+            elif val[0] == 'delete':
+                Loan.delete([Loan(x) for x in val[1]])
 
 
 class ContractOption:
