@@ -179,8 +179,7 @@ class Loan(model.CoopSQL, model.CoopView):
 
     @classmethod
     def default_parties(cls):
-        party = Transaction().context.get('party', None)
-        return [party] if party else []
+        return Transaction().context.get('parties', [])
 
     @staticmethod
     def calculate_rate(annual_rate, payment_frequency):

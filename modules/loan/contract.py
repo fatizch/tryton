@@ -30,13 +30,15 @@ class Contract:
         'on_change_with_is_loan')
     loans = fields.Function(
         fields.One2Many('loan', None, 'Loans',
-            domain=[('parties', 'in', Eval('parties'))],
             states={
                 'invisible': (~Eval('is_loan')) | (~Eval('subscriber', False)),
                 'readonly': Eval('status') != 'quote',
                 },
             depends=['is_loan', 'currency', 'status', 'subscriber', 'parties'],
-            context={'currency': Eval('currency')}),
+            context={
+                'currency': Eval('currency'),
+                'parties': Eval('parties'),
+                }),
         'on_change_with_loans', 'set_loans')
     used_loans = fields.Function(
         fields.Many2Many('loan', None, None, 'Used Loans',
