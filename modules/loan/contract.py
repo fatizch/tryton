@@ -62,9 +62,6 @@ class Contract:
                 'subscriber_loans': Eval('loans', [])})
         cls.options.depends.append('is_loan')
         cls.options.depends.append('loans')
-        cls._buttons.update({
-                'create_loan': {'invisible': Eval('status') != 'quote'},
-                })
 
     @fields.depends('product')
     def on_change_product(self):
@@ -84,11 +81,6 @@ class Contract:
             return []
         return [x.loan.id for x in Pool().get('loan-party').search([
                 ('party', '=', self.subscriber)])]
-
-    @classmethod
-    @model.CoopView.button_action('loan.launch_loan_creation_wizard')
-    def create_loan(cls, loans):
-        pass
 
     def set_contract_end_date_from_loans(self):
         if not self.is_loan:

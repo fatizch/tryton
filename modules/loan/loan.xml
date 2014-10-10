@@ -46,15 +46,6 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-        <record model="ir.action.wizard" id="act_create_loan">
-            <field name="name">Create Loan</field>
-            <field name="wiz_name">loan.create</field>
-        </record>
-        <record model="ir.action.keyword" id="act_create_loan_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">loan,-1</field>
-            <field name="action" ref="act_create_loan"/>
-        </record>
         <record model="ir.sequence.type" id="sequence_type_loan">
             <field name="name">Loan</field>
             <field name="code">loan</field>

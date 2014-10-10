@@ -62,6 +62,7 @@ class Party(export.ExportImportMixin):
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             }, depends=['is_person'])
+    gender_string = gender.translated('gender')
     first_name = fields.UnaccentChar('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,

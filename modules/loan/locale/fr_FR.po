@@ -637,10 +637,6 @@ msgctxt "model:ir.action,name:"
 msgid "Loan Share Propagation"
 msgstr "Propager Quotité"
 
-msgctxt "model:ir.action,name:act_create_loan"
-msgid "Create Loan"
-msgstr "Créer un prêt"
-
 msgctxt "model:ir.action,name:act_display_insured_outstanding_loan_balance"
 msgid "Insured Outstanding Loan Balances"
 msgstr "Encours"
@@ -652,10 +648,6 @@ msgstr "Prêts"
 msgctxt "model:ir.action,name:act_loan_payment_relate_form"
 msgid "Loan Payments"
 msgstr "Echéances"
-
-msgctxt "model:ir.action,name:launch_loan_creation_wizard"
-msgid "Loan Create"
-msgstr "Création du Prêt"
 
 msgctxt "model:ir.sequence.type,name:sequence_type_loan"
 msgid "Loan"
