@@ -22,7 +22,7 @@ def register():
         PremiumFeeRelation,
         ContractDoBillingParameters,
         ContractDoBillingBill,
-        #From Offered
+        # From Offered
         Product,
         ProductPaymentMethodRelation,
         OptionDescription,

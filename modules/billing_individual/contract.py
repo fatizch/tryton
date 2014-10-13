@@ -558,7 +558,7 @@ class Contract:
         self.bill_and_post()
 
     def temp_endorsment_re_bill(self):
-        #TODO :Temporay while we don't have the endorsement date
+        # TODO :Temporay while we don't have the endorsement date
         self.re_bill_from_date(self.start_date)
 
     # From account => party
