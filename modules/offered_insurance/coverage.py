@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import copy
 import datetime
 
@@ -48,7 +48,7 @@ class OptionDescription:
                 continue
             if cur_attr.context is None:
                 cur_attr.context = {}
-            #cur_attr.context['for_family'] = Eval('family')
+            # cur_attr.context['for_family'] = Eval('family')
             cur_attr = copy.copy(cur_attr)
             setattr(cls, field_name, cur_attr)
 
@@ -210,5 +210,5 @@ class OfferedOptionDescription(offered.Offered):
     'OptionDescription'
 
     __name__ = 'offered.option.description'
-    #This empty override is necessary to have in the coverage the fields added
-    #in the override of offered
+    # This empty override is necessary to have in the coverage the fields added
+    # in the override of offered

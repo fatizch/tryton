@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -169,7 +169,7 @@ class Product:
         return (result, errors)
 
     def give_me_frequency(self, args):
-        if not 'date' in args:
+        if 'date' not in args:
             raise Exception('A date must be provided')
         try:
             return self.get_result('frequency', args, kind='premium')
@@ -264,8 +264,8 @@ class OfferedProduct(Offered):
     'Offered Product'
 
     __name__ = 'offered.product'
-    #This empty override is necessary to have in the product, the fields added
-    #in the override of offered
+    # This empty override is necessary to have in the product, the fields added
+    # in the override of offered
 
 
 class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):

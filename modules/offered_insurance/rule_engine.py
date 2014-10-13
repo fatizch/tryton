@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import functools
 
 from trytond.pool import PoolMeta
@@ -44,7 +44,7 @@ class RuleEngineExtraData(model.CoopSQL):
 
         super(RuleEngineExtraData, cls).__register__(module_name)
 
-         # Migration from 1.1: split rule parameters in multiple table
+        # Migration from 1.1: split rule parameters in multiple table
         extradata_definition = cls.__table__()
         if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
             cursor.execute(*extradata_definition.delete())
