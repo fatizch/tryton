@@ -22,7 +22,7 @@ class Contract:
         if (subscriber.is_person and item_desc.kind == 'person'
                 or subscriber.is_company and item_desc.kind == 'company'
                 or item_desc.kind == 'party'):
-            #Delete previous covered element
+            # Delete previous covered element
             CoveredElement = Pool().get('contract.covered_element')
             CoveredElement.delete(self.covered_elements)
             covered_element = CoveredElement()
