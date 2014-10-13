@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pyson import Eval, Or, And
 
 from trytond.modules.cog_utils import model, coop_date, fields, coop_string, \
@@ -91,8 +91,8 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
             return None
 
     def give_me_result(self, args):
-        #The deductible could be set at a higher level, the coverage,
-        #or a choice could be stored on the covered data or the option
+        # The deductible could be set at a higher level, the coverage,
+        # or a choice could be stored on the covered data or the option
         if args['deductible_duration']:
             return args['deductible_duration'].get_value(), []
         return super(DeductibleRule, self).give_me_result(args)
@@ -102,7 +102,7 @@ class DeductibleRule(BusinessRuleRoot, model.CoopSQL):
         res = {}
         if self.kind != 'duration':
             return None, errs
-        if not 'start_date' in args:
+        if 'start_date' not in args:
             errs += 'missing_date'
             return None, errs
         res['start_date'] = args['start_date']

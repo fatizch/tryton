@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import datetime
 
 from trytond.pyson import Eval, And, Not, Or

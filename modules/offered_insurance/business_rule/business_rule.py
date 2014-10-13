@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval, Or
 from trytond.transaction import Transaction
@@ -107,7 +107,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         # TODO : use class method to validate as a group
         cursor = Transaction().cursor
         table = self.__table__()
-        #offered depends if the link is a reference link or a M2O
+        # offered depends if the link is a reference link or a M2O
         if hasattr(self.__class__.offered, 'selection'):
             offered = '%s,%s' % (self.offered.__class__.__name__,
                 self.offered.id)

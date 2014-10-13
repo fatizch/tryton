@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# k-*- coding:utf-8 -*-
 from trytond.pyson import Eval, Or, And
 
 from trytond.modules.cog_utils import model, fields
@@ -20,7 +20,7 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
             ('amount', 'Amount'),
             ('cal_list', 'Calculated List'),
             ('another_coverage', 'From another Coverage'),
-        ], 'Kind', states={'invisible': STATE_ADVANCED}, )
+            ], 'Kind', states={'invisible': STATE_ADVANCED}, )
     amounts = fields.Char('Amounts',
         help='Specify amounts separated by ;', states={
             'invisible': Or(
@@ -100,7 +100,7 @@ class CoverageAmountRule(BusinessRuleRoot, model.CoopSQL):
             return (False, []), ['Coverage amount not found']
         amount = args['option'].coverage_amount
         if hasattr(self, 'amounts') and self.amounts:
-            if not amount in self.give_me_allowed_amounts(args)[0]:
+            if amount not in self.give_me_allowed_amounts(args)[0]:
                 errs = ['Amount %.2f not allowed on coverage %s' % (
                     amount,
                     args['option'].coverage.code)]

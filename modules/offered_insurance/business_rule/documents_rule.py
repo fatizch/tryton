@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import sys
 import traceback
 import os
@@ -356,14 +356,14 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
 
     @classmethod
     def default_for_object(cls):
-        if not 'request_owner' in Transaction().context:
+        if 'request_owner' not in Transaction().context:
             return ''
 
         needed_by = Transaction().context.get('request_owner')
 
         the_model, the_id = needed_by.split(',')
 
-        if not the_model in [
+        if the_model not in [
                 k for k, v in cls._fields['for_object'].selection]:
             return ''
 
@@ -478,7 +478,7 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
         id_docs = [(d.id, utils.convert_to_reference(o)) for d, o in docs]
         to_del = []
         for k, v in existing_docs.iteritems():
-            if not k in id_docs:
+            if k not in id_docs:
                 to_del.append(v)
         Document = Pool().get('document.request.line')
         Document.delete(to_del)
@@ -630,7 +630,7 @@ class DocumentFromFilename(Report):
 
     @classmethod
     def execute(cls, ids, data):
-        if not 'filepath' in data:
+        if 'filepath' not in data:
             raise Exception('Error', 'Report %s needs to be provided with a '
                 'filepath' % cls.__name__)
         if not os.path.isfile(data['filepath']):
@@ -710,7 +710,7 @@ class DocumentCreate(Wizard):
             pass
         cls._error_messages.update({
                 'parsing_error': 'Error while generating the letter:\n\n'
-                    '  Expression:\n%s\n\n  Error:\n%s',
+                '  Expression:\n%s\n\n  Error:\n%s',
                 })
 
     def default_select_model(self, fields):
@@ -943,7 +943,7 @@ class DocumentReceiveAttach(model.CoopView):
             return {}
         codes = {}
         for att in self.attachments:
-            if not att.resource in codes:
+            if att.resource not in codes:
                 codes[att.resource] = set()
             if att.name in codes[att.resource]:
                 self.raise_user_error('ident_name', att.name)
