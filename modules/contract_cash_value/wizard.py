@@ -69,8 +69,8 @@ class CollectionToCashValue(Wizard):
 
         to_date = self.select_date.to_date
         # Accounts to look for
-        accounts = [x.account_for_billing.id for x in OptionDescription.search([
-                    ('family', '=', 'cash_value')])]
+        accounts = [x.account_for_billing.id for x in OptionDescription.search(
+                [('family', '=', 'cash_value')])]
 
         query_table = move_table.join(line_table,
             condition=(
@@ -96,10 +96,7 @@ class CollectionToCashValue(Wizard):
                 Cast(Substring(move_table.origin,
                         Position(',', move_table.origin) + Literal(1)),
                     Move.id.sql_type().base),
-                    payment_table.date]))
-
-        # for elem in cursor.fetchall():
-            # print elem
+                payment_table.date]))
 
         return 'end'
 
@@ -131,7 +128,8 @@ class CollectionToCashValue(Wizard):
 
         # Accounts to look for
         coverage_accounts = dict([(x.account_for_billing.id, x)
-                for x in OptionDescription.search([('family', '=', 'cash_value')])])
+                for x in OptionDescription.search([
+                        ('family', '=', 'cash_value')])])
 
         query_table = move_table.join(contract_table, condition=(
                 (move_table.origin == Concat('contract,',
