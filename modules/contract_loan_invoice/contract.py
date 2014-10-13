@@ -121,10 +121,7 @@ class Contract:
                         ('contract', 'in', sub_contracts),
                         ('end', '>=', start or datetime.date.max)]))
         PremiumAmount.delete(premiums_to_delete)
-        # Delete invoices, as generate_premium_amount filters existing
-        # periods
-        cls.clean_up_contract_invoices(loan_contracts, start, end)
-        cls.generate_premium_amount(loan_contracts)
+        cls.generate_premium_amount(loan_contracts, force_start=start)
         return result
 
     def calculate_premium_aggregates(self, start=None, end=None):
@@ -237,7 +234,7 @@ class Contract:
         return lines
 
     @classmethod
-    def generate_premium_amount(cls, contracts):
+    def generate_premium_amount(cls, contracts, force_start=None):
         'Generate premium amount up to the contract end_date'
         pool = Pool()
         Amount = pool.get('contract.premium.amount')
@@ -247,7 +244,8 @@ class Contract:
             if not contract.is_loan:
                 continue
             assert contract.end_date
-            for period in contract.get_invoice_periods(contract.end_date):
+            for period in contract.get_invoice_periods(contract.end_date,
+                    from_date=force_start):
                 period = period[:2]  # XXX there is billing information
                 invoice_lines = contract.compute_invoice_lines(*period)
                 for invoice_line in invoice_lines:

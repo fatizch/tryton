@@ -88,7 +88,6 @@ class Contract:
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'button_calculate_prices': {},
-                'first_invoice': {},
                 })
 
     @classmethod
@@ -163,8 +162,10 @@ class Contract:
             until)
         return (invoice_rrule[0], invoice_rrule[1], billing_information)
 
-    def get_invoice_periods(self, up_to_date):
-        if self.last_invoice_end:
+    def get_invoice_periods(self, up_to_date, from_date=None):
+        if from_date:
+            start = max(from_date, self.start_date)
+        elif self.last_invoice_end:
             start = self.last_invoice_end + relativedelta(days=+1)
         else:
             start = self.start_date
@@ -222,7 +223,6 @@ class Contract:
             ContractInvoice.cancel(actions['cancel'])
 
     @classmethod
-    @ModelView.button
     def first_invoice(cls, contracts):
         # Make sure all existing invoices are cleaned up
         cls.clean_up_contract_invoices(contracts, from_date=datetime.date.min)
@@ -338,6 +338,10 @@ class Contract:
         cls.store_prices(prices)
         return True, ()
 
+    @classmethod
+    def force_calculate_prices(cls, contracts):
+        return cls.calculate_prices(contracts, start=datetime.date.min)
+
     def calculate_price_at_date(self, date):
         cur_dict = {
             'date': date,
@@ -347,7 +351,7 @@ class Contract:
         return (prices, errs)
 
     def calculate_prices_between_dates(self, start=None, end=None):
-        if not start:
+        if not start or start == datetime.date.min:
             start = self.start_date
         prices = {}
         errs = []
