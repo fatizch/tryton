@@ -616,9 +616,9 @@ class TableCell(ModelSQL, ModelView):
         super(TableCell, cls).__setup__()
         cls._error_messages.update({
                 'too_many_dimension_value':
-                    'Too many dimension values "%s" for "%s"',
+                'Too many dimension values "%s" for "%s"',
                 'too_few_dimension_value':
-                    'Too few dimension value "%s" for "%s"',
+                'Too few dimension value "%s" for "%s"',
                 })
 
     @classmethod
@@ -986,7 +986,7 @@ class Table2D(ModelSQL, ModelView):
         super(Table2D, cls).__setup__()
         cls._error_messages.update({
                 'not_2d': 'The table is not 2D',
-            })
+                })
 
     @classmethod
     def __post_setup__(cls):
@@ -1023,7 +1023,7 @@ class Table2D(ModelSQL, ModelView):
         dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
-            ])
+                ])
         columns_definitions = [('id', cls.id.sql_type().base)]
         columns_definitions += [
             ('col%d' % d.id, TableCell.value.sql_type().base)
@@ -1082,7 +1082,7 @@ class Table2D(ModelSQL, ModelView):
         dimensions2 = TableDefinitionDimension.search([
                 ('type', '=', 'dimension2'),
                 ('definition', '=', definition_id),
-            ])
+                ])
         fields = {}
         fields['row'] = cls.fields_get(['row'])['row']
         xml = '<?xml version="1.0"?>'
@@ -1146,7 +1146,7 @@ class Table2D(ModelSQL, ModelView):
             if cells:
                 TableCell.write(cells, {
                         'value': value,
-                    })
+                        })
             for dim1_id in (set(dim1_ids) -
                     set(i.dimension1.id for i in cells)):
                 to_create_values = {
