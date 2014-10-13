@@ -85,7 +85,7 @@ class OptionSubscription(model.CoopWizard):
         to_subscribe = set([x.coverage for x in self.options_displayer.options
                 if x.is_selected])
         to_delete = [x for x in options if x.coverage not in to_subscribe]
-        options[:] = [x for x in options if not x in to_delete]
+        options[:] = [x for x in options if x not in to_delete]
         Option.delete(to_delete)
 
         subscribed = set([x.coverage for x in options])

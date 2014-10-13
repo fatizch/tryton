@@ -15,7 +15,6 @@ def register():
     Pool.register(
         Configuration,
         Product,
-        # from contract
         Contract,
         ActivationHistory,
         ContractOption,
@@ -23,16 +22,11 @@ def register():
         ContractExtraDataRevision,
         ContractSelectEndDate,
         ContractSelectStartDate,
-        # From Service
         ContractService,
-        #From Rule Engine
         RuleEngineRuntime,
-        # from party
         Party,
         PartyInteraction,
-        # from test_case
         TestCaseModel,
-        #From Wizard
         OptionsDisplayer,
         WizardOption,
         SynthesisMenu,

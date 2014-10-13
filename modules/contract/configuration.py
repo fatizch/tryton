@@ -1,5 +1,4 @@
-from trytond.pool import Pool, PoolMeta
-from trytond.transaction import Transaction
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields

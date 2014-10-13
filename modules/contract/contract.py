@@ -538,7 +538,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         at_date = contract_dict.get('start_date', utils.today())
         self.init_from_product(product, at_date)
         self.init_default_address()
-        if not contract_dict or not 'extra_data' in contract_dict:
+        if not contract_dict or 'extra_data' not in contract_dict:
             return
         extra_data = self.on_change_extra_data()['extra_data']
         for key in extra_data.iterkeys():
@@ -576,7 +576,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         Party = pool.get('party.party')
         Product = pool.get('offered.product')
         sub_dict = contract_dict['subscriber']
-        if not 'code' in sub_dict:
+        if 'code' not in sub_dict:
             party_res = Party.ws_create_person(sub_dict)
             if not party_res.get('return'):
                 return {
@@ -1174,10 +1174,10 @@ class ContractSelectStartDate(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract', 'Contract', readonly=True)
     former_start_date = fields.Date('Former Start Date', readonly=True)
     new_start_date = fields.Date('New start date', required=True)
-    former_appliable_conditions_date = fields.Date('Former appliable conditions date',
-            readonly=True)
-    new_appliable_conditions_date = fields.Date('New appliable conditions date',
-            required=True)
+    former_appliable_conditions_date = fields.Date(
+        'Former appliable conditions date', readonly=True)
+    new_appliable_conditions_date = fields.Date(
+        'New appliable conditions date', required=True)
 
     @fields.depends('new_start_date')
     def on_change_new_start_date(self):
