@@ -41,9 +41,9 @@ class Contract(CogProcessFramework):
                 'need_option': 'At least one option must be selected for %s',
                 'need_covered': 'There must be at least one covered element',
                 'payment_bank_account_required': 'The payment bank account is '
-                    'required as the payment mode is Direct Debit',
+                'required as the payment mode is Direct Debit',
                 'no_subscriber_address': 'The selected subscriber does not '
-                    'have an address',
+                'have an address',
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
