@@ -2,7 +2,7 @@ from trytond.pool import PoolMeta
 from trytond.pyson import Eval, And
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [

@@ -43,7 +43,7 @@ class OptionDescription:
 
     @classmethod
     def search_is_health(cls, name, clause):
-        if clause[2] == True:
+        if clause[2] is True:
             return [('family', '=', 'health')]
         else:
             return [('family', '!=', 'health')]
