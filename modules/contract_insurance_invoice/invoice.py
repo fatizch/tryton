@@ -167,8 +167,8 @@ class Invoice:
             return line
         contract_revision_date = max(line['maturity_date'],
             utils.today())
-        with Transaction().set_context(contract_revision_date=
-                contract_revision_date):
+        with Transaction().set_context(
+                contract_revision_date=contract_revision_date):
             res = self.udpate_move_line_from_billing_information(
                 line, self.contract.billing_information)
             line.update(res)

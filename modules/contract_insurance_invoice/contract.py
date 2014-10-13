@@ -264,7 +264,7 @@ class Contract:
                     invoice.journal = journal
                 if (not invoice.invoice_address
                         and contract.subscriber.addresses):
-                    #TODO : To enhance
+                    # TODO : To enhance
                     invoice.invoice_address = contract.subscriber.addresses[0]
                 invoice.lines = contract.get_invoice_lines(*period[0:2])
                 invoices[period].append((contract, invoice))
@@ -471,7 +471,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
                     (Eval('_parent_contract', {}).get('status', '') ==
                         'active'))},
             sort=False, depends=['direct_debit']),
-            'get_direct_debit_day_selector', 'set_direct_debit_day_selector')
+        'get_direct_debit_day_selector', 'set_direct_debit_day_selector')
     direct_debit_day = fields.Integer('Direct Debit Day')
     direct_debit_account = fields.Many2One('bank.account',
         'Direct Debit Account',
