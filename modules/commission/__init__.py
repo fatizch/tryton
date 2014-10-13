@@ -11,12 +11,10 @@ from .account import *
 
 def register():
     Pool.register(
-        #From Offered
         Product,
         OptionDescription,
         CommissionOptionDescriptionOptionDescriptionRelation,
         CommissionRule,
-        #From Contract
         Contract,
         OptionCommissionOptionRelation,
         Option,
@@ -27,14 +25,11 @@ def register():
         InvoiceLine,
         Premium,
         PremiumCommission,
-        #From Party
         Party,
         Broker,
-        #From Distribution
         DistributionNetwork,
         DistributionNetworkComPlanRelation,
         DistributionNetworkBrokerRelation,
-        #Rule Engine
         RuleEngineRuntime,
         # Account
         MoveBreakdown,

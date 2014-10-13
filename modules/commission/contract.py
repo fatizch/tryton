@@ -101,7 +101,7 @@ class Contract:
     def before_activate(self, contract_dict=None):
         if not contract_dict:
             return super(Contract, self).before_activate(contract_dict)
-        if not 'agreements' in contract_dict:
+        if 'agreements' not in contract_dict:
             return super(Contract, self).before_activate(contract_dict)
         pool = Pool()
         Agreement = pool.get('contract-agreement')
@@ -116,9 +116,9 @@ class Contract:
                 parties = Party.search([
                         ('broker_role.reference', '=',
                             agreement_dict['broker']['code']),
-                    ], limit=1, order=[])
+                        ], limit=1, order=[])
                 if not parties:
-                    #TODO raise error
+                    # TODO raise error
                     continue
                 agreement.party = parties[0]
             self.agreements.append(agreement)
@@ -141,7 +141,7 @@ class Option:
     def update_com_options(self, agreement):
         CompOption = Pool().get('contract.option-commission.option')
         for com_option in agreement.options:
-            if not self.coverage in com_option.coverage.coverages:
+            if self.coverage not in com_option.coverage.coverages:
                 continue
             good_comp_option = None
             for comp_option in getattr(self, 'com_options', []):
@@ -239,7 +239,7 @@ class OptionCommissionOptionRelation(model.CoopSQL, model.CoopView,
             return 0
 
     def calculate_com(self, base_amount, at_date):
-        #TODO : deal with non linear com
+        # TODO : deal with non linear com
         com_rate = self.get_com_rate(at_date)
         return com_rate * base_amount, com_rate
 
