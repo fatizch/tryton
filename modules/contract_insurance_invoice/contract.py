@@ -55,6 +55,14 @@ PREMIUM_FREQUENCIES = FREQUENCIES + [
 class Contract:
     __name__ = 'contract'
     invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices')
+    due_invoices = fields.Function(
+        fields.One2Many('contract.invoice', None, 'Due Invoices'),
+        'get_due_invoices')
+    receivable_today = fields.Function(
+        fields.Numeric('Receivable Today',
+            digits=(16, Eval('currency_digits', 2)),
+            depends=['currency_digits']),
+        'get_receivable_today')
     premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
     payment_term = fields.Function(fields.Many2One(
         'account.invoice.payment_term', 'Payment Term'),
@@ -121,6 +129,17 @@ class Contract:
                     group_by=table.id))
             values.update(dict(cursor.fetchall()))
         return values
+
+    def get_due_invoices(self, name):
+        ContractInvoice = Pool().get('contract.invoice')
+        invoices = ContractInvoice.search([
+                ('contract', '=', self),
+                ('invoice.state', '=', 'posted'),
+                ])
+        return [x.id for x in invoices if x.invoice.amount_to_pay_today > 0]
+
+    def get_receivable_today(self, name):
+        return sum([x.invoice.amount_to_pay_today for x in self.due_invoices])
 
     @classmethod
     def search_last_invoice(cls, name, domain):
