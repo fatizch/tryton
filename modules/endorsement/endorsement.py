@@ -325,8 +325,8 @@ def values_mixin(value_model):
                     vals.append((k, field, prev_value, v))
             return '\n'.join([' ' * indent + u'%s : %s → %s' % (
                         coop_string.translate(
-                            ValueModel, fname, field.string, 'field'),
-                        old, new) for fname, field, old, new in vals
+                            ValueModel, fname, ffield.string, 'field'),
+                        old, new) for fname, ffield, old, new in vals
                     if old != new])
 
     return Mixin
@@ -589,7 +589,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         pass
 
     def extract_preview_values(self, extraction_method):
-        pool  =  Pool()
+        pool = Pool()
         current_values, old_values, new_values = {}, {}, {}
         for unitary_endorsement in self.all_endorsements():
             endorsed_record = unitary_endorsement.get_endorsed_record()

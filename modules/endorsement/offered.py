@@ -86,7 +86,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
             # endorsement_insurance_invoice override
             # result[state_name] = \
             #     coop_string.translate_model_name(state_class)
-        return [(k, v) for k, v in result.iteritems()]  +  [('', '')]
+        return [(k, v) for k, v in result.iteritems()] + [('', '')]
 
     def get_methods_for_model(self, model_name):
         result = {}

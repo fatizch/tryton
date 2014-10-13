@@ -79,7 +79,7 @@ class EndorsementWizardStepBasicObjectMixin(EndorsementWizardStepMixin):
     def update_new_value_from_endorsement(cls, endorsement, value,
             endorsement_part, value_field):
         for endorsed_field in getattr(endorsement_part, value_field):
-            if not endorsed_field.name in endorsement.values:
+            if endorsed_field.name not in endorsement.values:
                 continue
             value[endorsed_field.name] = endorsement.values[
                 endorsed_field.name]
@@ -90,7 +90,8 @@ class EndorsementWizardStepBasicObjectMixin(EndorsementWizardStepMixin):
         pool = Pool()
         View = pool.get('ir.ui.view')
         good_view, = View.search([('xml_id', '=', endorsed_field_view)])
-        endorsed_fields = wizard.get_fields_to_get(endorsed_model, good_view.id)
+        endorsed_fields = wizard.get_fields_to_get(endorsed_model,
+            good_view.id)
         endorsement_part = wizard.get_endorsement_part_for_state(state_name)
         endorsed_object = wizard.get_endorsed_object(endorsement_part)
         endorsement_date = wizard.select_endorsement.effective_date
