@@ -206,7 +206,7 @@ def create_inst_with_default_val(from_class, field_name, action=None):
 
 
 def append_inexisting(cur_list, item):
-    if not item in cur_list:
+    if item not in cur_list:
         cur_list.append(item)
     return cur_list
 
@@ -374,7 +374,7 @@ def update_states(cls, var_name, new_states, pyson_cond='Or'):
     if not field_name.states:
         field_name.states = {}
     for key, value in new_states.iteritems():
-        if not key in field_name.states:
+        if key not in field_name.states:
             field_name.states[key] = value
         elif field_name.states[key] != value:
             if pyson_cond == 'Or':

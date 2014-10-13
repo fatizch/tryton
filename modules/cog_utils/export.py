@@ -513,7 +513,7 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _import_finalize(cls, key, instance, created, relink):
-        if not cls.__name__ in created:
+        if cls.__name__ not in created:
             created[cls.__name__] = {}
         if key in created[cls.__name__]:
             raise NotExportImport('Already existing key (%s) for class %s' % (
@@ -587,7 +587,7 @@ class ExportImportMixin(Model):
         good_instance = cls._import_get_working_instance(my_key)
         good_instance._calculated_export_key = my_key
         for field_name in sorted(cls._fields.iterkeys()):
-            if not field_name in values:
+            if field_name not in values:
                 continue
             field = cls._fields[field_name]
             field_value = values[field_name]

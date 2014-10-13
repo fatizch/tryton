@@ -46,6 +46,6 @@ class TagObjectRelation(model.CoopSQL, model.CoopView):
         Model = pool.get('ir.model')
         models = Model.search([])
         res = []
-        for model in models:
-            res.append([model.model, model.name])
+        for cur_model in models:
+            res.append([cur_model.model, cur_model.name])
         return res

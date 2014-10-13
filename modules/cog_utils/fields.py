@@ -200,7 +200,7 @@ class UnaccentChar(tryton_fields.Char):
                 & (translation.res_id == -1)
                 & (translation.lang == language)
                 & (translation.type == 'model')
-                & (translation.fuzzy == False))
+                & (translation.fuzzy == False))  # NOQA
         elif Model.__name__ == 'ir.model.field':
             if name == 'field_description':
                 type_ = 'field'
@@ -214,14 +214,14 @@ class UnaccentChar(tryton_fields.Char):
                     & (translation.res_id == -1)
                     & (translation.lang == language)
                     & (translation.type == type_)
-                    & (translation.fuzzy == False))
+                    & (translation.fuzzy == False))  # NOQA
         else:
             return table.join(translation, 'LEFT',
                 condition=(translation.res_id == table.id)
                 & (translation.name == '%s,%s' % (Model.__name__, name))
                 & (translation.lang == language)
                 & (translation.type == 'model')
-                & (translation.fuzzy == False))
+                & (translation.fuzzy == False))  # NOQA
 
     def convert_domain(self, domain, tables, Model):
         if self.translate:

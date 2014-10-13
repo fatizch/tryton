@@ -117,7 +117,7 @@ class UIMenu(ExportImportMixin):
 
     @classmethod
     def search_rec_name(cls, name, clause):
-        #Bypass Tryton default search on parent
+        # Bypass Tryton default search on parent
         return [('name',) + tuple(clause[1:])]
 
     def get_full_name(self, name):

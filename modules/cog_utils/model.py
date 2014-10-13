@@ -53,7 +53,7 @@ def serialize_this(the_data, from_field=None):
                 res = '%s,%s' % (the_data.__name__, the_data.id)
         else:
             res = {}
-            if not the_data._values is None:
+            if the_data._values is not None:
                 for key, value in the_data._values.iteritems():
                     res[key] = serialize_this(value, the_data._fields[key])
     else:
@@ -158,7 +158,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
     @classmethod
     def search(cls, domain, offset=0, limit=None, order=None, count=False,
             query=False):
-        #Set your class here to see the domain on the search
+        # Set your class here to see the domain on the search
         # if cls.__name__ == 'rule_engine':
         #     print domain
         try:
@@ -539,8 +539,8 @@ class _RevisionMixin(object):
                 & where_parent,
                 group_by=parent_column)
             cursor.execute(*table.join(subquery,
-                    condition=
-                    (parent_column == Column(subquery, cls._parent_name))
+                    condition=(
+                        parent_column == Column(subquery, cls._parent_name))
                     & (Coalesce(table.date, datetime.date.min) ==
                         Coalesce(subquery.date, datetime.date.min))
                     ).select(*columns))

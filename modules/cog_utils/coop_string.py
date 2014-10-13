@@ -69,7 +69,7 @@ def get_field_as_summary(instance, var_name, with_label=True, at_date=None,
 
 def translate_label(instance, var_name, lang=None):
     field = instance._fields[var_name]
-    #function field
+    # function field
     if not hasattr(field, 'string') and hasattr(field, 'field'):
         string = field.field.string
     else:
@@ -86,7 +86,8 @@ def translate_value(instance, var_name, lang=None):
 
     ttype = None
     if _type == 'selection':
-        res = selection_as_string(instance.__class__, var_name, getattr(instance, var_name))
+        res = selection_as_string(instance.__class__, var_name,
+            getattr(instance, var_name))
         ttype = field.__class__._type
     elif _type == 'date':
         res = date_as_string(getattr(instance, var_name), lang)

@@ -151,7 +151,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         GoodModel = Pool().get(cls.__name__)
         group = {}
         for elem in objects:
-            if not elem.__name__ in group:
+            if elem.__name__ not in group:
                 group[elem.__name__] = []
             group[elem.__name__].append(elem)
         for class_name, elems in group.iteritems():
