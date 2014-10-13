@@ -152,7 +152,7 @@ class ContractOption:
                 for share in option.loan_shares:
                     if share.end_date and share.end_date <= end_date:
                         continue
-                    #TEMP fix before removing start_date/end_date from share
+                    # TEMP fix before removing start_date/end_date from share
                     share.end_date = min(end_date, share.loan.end_date)
             option.loan_shares = option.loan_shares
             option.save()
@@ -350,7 +350,7 @@ class OptionsDisplayer:
                 childs_dict['add'] = loans_to_add
 
             loans_to_remove = [x.id for x in option.childs
-                if not x.loan in self.loans]
+                if x.loan not in self.loans]
             if loans_to_remove:
                 childs_dict.setdefault('update', [])
                 childs_dict['update'] += [{'id': x, 'is_selected': False}
@@ -378,8 +378,8 @@ class OptionsDisplayer:
                         })
         return res
 
-    #This will unselect loans when the option is unselected
-    #and will prevent to select loans if the option is not selected
+    # This will unselect loans when the option is unselected
+    # and will prevent to select loans if the option is not selected
     def on_change_options(self):
         res = super(OptionsDisplayer, self).on_change_options()
         for option in self.options:
@@ -437,7 +437,7 @@ class WizardOption:
                 existing_loan_share = loan_share
                 break
         if self.is_selected and parent.is_selected:
-            if not self.loan in loans:
+            if self.loan not in loans:
                 loan_share = LoanShare()
                 loan_share.loan = self.loan
                 option.loan_shares.append(loan_share)

@@ -186,7 +186,7 @@ class DisplayInsuredOutstandingLoanBalance(Wizard):
                     & (covered_element.party == party.id)
                     & (Coalesce(option.start_date, datetime.date.min) <= date)
                     & (((option.manual_end_date != None) &
-                            (option.manual_end_date >= date)) |
+                            (option.manual_end_date >= date)) |  # NOQA
                         ((option.manual_end_date == None) &
                             (Coalesce(option.automatic_end_date,
                                 datetime.date.max) >= date))))
