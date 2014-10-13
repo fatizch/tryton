@@ -15,7 +15,7 @@ class PremiumRateFormLine:
             return
         key = (self.rate_line.covered_element,
             self.rate_line.option_.offered.account_for_billing)
-        if not key in work_set.lines:
+        if key not in work_set.lines:
             return
         line = work_set.lines[key]
         for comp_option in self.rate_line.option_.com_options:
