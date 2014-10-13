@@ -132,7 +132,7 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
                 for x in modified_covered_elements[0].options
                 if x.action == 'add'],
             }
-        return  update_dict
+        return update_dict
 
     def update_endorsement(self, endorsement, wizard):
         pool = Pool()
@@ -156,7 +156,7 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
                 for x in good_endorsement.options
                 if x.action == 'add' and 'coverage' in x.values])
         new_option_endorsements = [x for x in good_endorsement.options
-            if x.action !=  'add']
+            if x.action != 'add']
         for new_option in self.new_options:
             if new_option.coverage in option_endorsements:
                 option_endorsement = option_endorsements[new_option.coverage]
