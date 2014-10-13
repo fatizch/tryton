@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pyson import Eval
 from trytond.pool import PoolMeta
 from trytond.pyson import If, Bool
