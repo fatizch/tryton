@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.modules.cog_utils import coop_string, fields, model
 
 __all__ = [
@@ -22,14 +22,14 @@ class ZipCode(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def replace_city_name_with_support_for_french_sna(city):
-        #French zip code are validated by SNA
-        #http://www.laposte.fr/sna/rubrique.php3?id_rubrique=59
-        #and some modification must be made on city name to be validated
-        #remove accentued char
+        # French zip code are validated by SNA
+        # http://www.laposte.fr/sna/rubrique.php3?id_rubrique=59
+        # and some modification must be made on city name to be validated
+        # remove accentued char
         city = coop_string.remove_invalid_char(city)
-        #remove apostrophe
+        # remove apostrophe
         city = city.replace('\'', ' ').replace('-', ' ').upper()
-        #remove all other ponctuation
+        # remove all other ponctuation
         city = coop_string.remove_all_but_alphanumeric_and_space(city)
         if city.startswith('SAINT '):
             city = 'ST ' + city[6:]
