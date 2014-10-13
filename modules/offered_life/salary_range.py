@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pool import Pool
 
 from trytond.modules.cog_utils.model import CoopSQL, utils, fields
