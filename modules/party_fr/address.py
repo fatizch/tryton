@@ -14,8 +14,7 @@ class Address:
 
     __name__ = 'party.address'
 
-    line3 = fields.Char('Building (Line 3)', help=
-        '''AFNOR - Line 3
+    line3 = fields.Char('Building (Line 3)', help='''AFNOR - Line 3
         Delivery point location
         Wing or Building or Construction or Industrial zone''',
         states=STATES, depends=DEPENDS)
@@ -40,7 +39,7 @@ class Address:
             Identification Thoroughfare Complement BP (P.O box)
             and Locality (if different from the distribution area indicator'''
 
-        #Set Siret invisible for person
+        # Set Siret invisible for person
         cls.siret.states = {
             'invisible': Bool(~Eval('_parent_party', {}).get('is_company'))}
         cls.siret_nic.states = {
@@ -48,17 +47,17 @@ class Address:
 
     @fields.depends('street')
     def on_change_street(self):
-        #AFNOR rule, no comma after street number and line 4 should be upper
+        # AFNOR rule, no comma after street number and line 4 should be upper
         return {'street': self.street.replace(',', '').upper()}
 
     @fields.depends('streetbis')
     def on_change_streetbis(self):
-        #AFNOR rule, line 5 should be in uppercase
+        # AFNOR rule, line 5 should be in uppercase
         return {'streetbis': self.streetbis.upper()}
 
     @fields.depends('city')
     def on_change_city(self):
-        #AFNOR rule, line 6 must be in uppercase
+        # AFNOR rule, line 6 must be in uppercase
         return {'city': self.city.upper()}
 
     def get_full_address(self, name):

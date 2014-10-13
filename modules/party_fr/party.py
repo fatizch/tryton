@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import re
 
 from trytond.pool import PoolMeta
@@ -34,7 +34,7 @@ class Party:
                 'invalid_ssn_birth_date': 'Incompatible birth date and SSN',
                 'invalid_ssn_gender': 'Incompatible gender and SSN',
                 })
-        #Do not display SIREN for person
+        # Do not display SIREN for person
         cls.siren.states = {'invisible': Bool(~Eval('is_company'))}
 
     @classmethod
