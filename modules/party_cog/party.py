@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import copy
 import StringIO
 
@@ -57,7 +57,7 @@ class Party(export.ExportImportMixin):
         fields.Many2One('party.address', 'Main Address'),
         'get_main_address_id', searcher='search_main_address')
     ####################################
-    #Person information
+    # Person information
     gender = fields.Selection(GENDER, 'Gender', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
@@ -78,7 +78,7 @@ class Party(export.ExportImportMixin):
     ssn = fields.EmptyNullChar('SSN', states={'invisible': ~STATES_PERSON},
         depends=['is_person'])
     ####################################
-    #Company information
+    # Company information
     short_name = fields.Char('Short Name',
         states={'invisible': ~STATES_COMPANY},
         depends=['is_company'])
@@ -112,7 +112,7 @@ class Party(export.ExportImportMixin):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
             contact_field.readonly = False
-        #this loop will add for each One2Many role, a function field is_role
+        # this loop will add for each One2Many role, a function field is_role
         for field_name in dir(cls):
             if not field_name.endswith('role'):
                 continue
@@ -307,7 +307,7 @@ class Party(export.ExportImportMixin):
                     party, 'birth_name')
             if party.is_company:
                 pass
-            #res[party.id] += coop_string.get_field_as_summary(
+            # res[party.id] += coop_string.get_field_as_summary(
             #    party, 'extra_data', True, at_date, lang=lang)
             res[party.id] += coop_string.get_field_as_summary(
                 party, 'addresses', True, at_date, lang=lang)
@@ -421,7 +421,7 @@ class Party(export.ExportImportMixin):
                         'return': False,
                         'error_code': 'unknown_country',
                         'error_message': 'No country found for code %s' %
-                            cur_address['country'],
+                        cur_address['country'],
                         }
                 else:
                     cur_address['country'] = countries[0]

@@ -150,9 +150,9 @@ class TestCaseModel:
     @classmethod
     def create_party(cls, **kwargs):
         Party = Pool().get('party.party')
-        if not 'is_company' in kwargs:
+        if 'is_company' not in kwargs:
             kwargs['is_company'] = False
-        if not 'is_person' in kwargs:
+        if 'is_person' not in kwargs:
             kwargs['is_person'] = False
         party = Party(**kwargs)
         if 'contact_mechanisms' in kwargs:

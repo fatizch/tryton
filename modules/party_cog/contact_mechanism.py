@@ -85,7 +85,7 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         domain=[('party', '=', Eval('party'))], depends=['party'],
         states={'invisible': Eval('media') != 'mail'}, ondelete='RESTRICT')
     user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
-    #in case the user is deleted, we also keep tracks of his name
+    # in case the user is deleted, we also keep tracks of his name
     user_name = fields.Char('User Name')
     contact_datetime = fields.DateTime('Date and Time')
     comment = fields.Text('Comment')
@@ -122,5 +122,5 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
 
     @staticmethod
     def default_contact_datetime():
-        #TODO: use functional date
+        # TODO: use functional date
         return datetime.datetime.now()
