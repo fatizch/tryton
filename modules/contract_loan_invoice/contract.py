@@ -320,11 +320,11 @@ class PremiumAmountPerPeriod(ModelSQL, ModelView):
                 premium_amount.contract.as_('contract'),
                 Sum(Case((~premium.rated_entity.ilike(
                                 'account.fee.description,%'),
-                            premium_amount.amount),
+                            premium_amount.amount),  # NOQA
                         else_=0)).as_('amount'),
                 Sum(Case((premium.rated_entity.ilike(
                                 'account.fee.description,%'),
-                            premium_amount.amount),
+                            premium_amount.amount),  # NOQA
                         else_=0)).as_('fees'),
                 Sum(premium_amount.amount).as_('untaxed_amount'),
                 Sum(premium_amount.tax_amount).as_('tax_amount'),
