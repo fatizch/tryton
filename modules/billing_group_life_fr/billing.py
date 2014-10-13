@@ -724,7 +724,7 @@ class PremiumRateRule(business_rule.BusinessRuleRoot, model.CoopSQL):
         result = []
         errs = []
         for cov_data in args['option'].covered_data:
-            #TODO deal with date control, do not rate a future covered data
+            # TODO deal with date control, do not rate a future covered data
             cov_data_dict = {'covered_data': cov_data, 'rates': [],
                 'date': args['date']}
             result.append(cov_data_dict)

@@ -24,7 +24,6 @@ def register():
         FareClassGroup,
         FareClassGroupFareClassRelation,
         PremiumRateRuleLine,
-        #from Contract
         Contract,
         CoveredData,
         # from billing,

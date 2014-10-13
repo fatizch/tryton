@@ -108,7 +108,7 @@ already exists and can't be modified (%s)'''),
             for rate in rate_dict['rates']:
                 if not rate['rate']:
                     continue
-                if not option in option_dict:
+                if option not in option_dict:
                     sub_rate_line = rate_line.add_option_rate_line(
                         option)
                     option_dict[option] = sub_rate_line
@@ -122,10 +122,11 @@ already exists and can't be modified (%s)'''),
                     salary_range = None
                     index = rate['index']
                     fare_class = rate['key']
-                sub_rate_line.add_sub_rate_line(rate['rate'], salary_range=salary_range,
-                    fare_class=fare_class, index=index)
+                sub_rate_line.add_sub_rate_line(rate['rate'],
+                    salary_range=salary_range, fare_class=fare_class,
+                    index=index)
         for population in self.covered_elements:
-            if not population in [x[0] for x in pop_rates.iterkeys()]:
+            if population not in [x[0] for x in pop_rates.iterkeys()]:
                 continue
             for rate in [value for (key, value) in pop_rates.iteritems()
                     if key[0] == population]:
@@ -209,7 +210,7 @@ already exists and can't be modified (%s)'''),
             return {}
 
     def create_price_list(self, start_date, end_date):
-        if not 'rate_note' in Transaction().context:
+        if 'rate_note' not in Transaction().context:
             return super(Contract, self).create_price_list(
                 start_date, end_date)
         return []
@@ -223,7 +224,7 @@ already exists and can't be modified (%s)'''),
         return WorkSet
 
     def calculate_base_lines(self, work_set):
-        if not 'rate_note' in Transaction().context:
+        if 'rate_note' not in Transaction().context:
             return super(Contract, self).calculate_base_lines(
                 work_set)
         rate_note = Transaction().context.get('rate_note')
@@ -242,7 +243,7 @@ already exists and can't be modified (%s)'''),
         work_set.total_amount -= suspense_line.debit
 
     def compensate_existing_moves_on_period(self, work_set):
-        if not 'rate_note' in Transaction().context:
+        if 'rate_note' not in Transaction().context:
             return super(
                 Contract, self).compensate_existing_moves_on_period(
                     work_set)
