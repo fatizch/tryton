@@ -993,7 +993,7 @@ class ProcessFinder(Wizard):
             return good_obj
         else:
             pass
-            #TODO What if?
+            # TODO What if?
 
     def init_main_object_from_process(self, obj, process_param):
         return True, []
@@ -1069,7 +1069,7 @@ class ProcessResume(Wizard):
         if not active_logs:
             self.raise_user_error('no_process_found')
         active_log, = active_logs
-        if (active_log.locked == True and
+        if (active_log.locked is True and
                 active_log.user.id != Transaction().user):
             self.raise_user_error('lock_by_user', (active_log.user.name,))
         process_action = instance.current_state.process.get_act_window()
