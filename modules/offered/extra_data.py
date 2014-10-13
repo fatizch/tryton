@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import copy
 
 from trytond.pool import PoolMeta
@@ -107,7 +107,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         if self.default_value_selection is None:
             return {}
         selection = self.get_default_value_selection()
-        if not self.default_value_selection in selection:
+        if self.default_value_selection not in selection:
             return {'default_value_selection': selection[0] or None}
         return {}
 
@@ -226,10 +226,10 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         childs = set([])
         for schema in all_schemas:
             for sub_data in schema.sub_datas:
-                if not sub_data.child in all_schemas:
+                if sub_data.child not in all_schemas:
                     continue
                 childs.add(sub_data.child)
-        tree_top = [schema for schema in all_schemas if not schema in childs]
+        tree_top = [schema for schema in all_schemas if schema not in childs]
         forced_values = {}
         non_forced_values = {}
         for schema in tree_top:
@@ -263,7 +263,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                     new_vals[key] = (value, True)
         elif self.sub_data_config_kind == 'simple':
             for sub_data in self.sub_datas:
-                if not sub_data.child in valid_schemas:
+                if sub_data.child not in valid_schemas:
                     continue
                 sub_data.update_if_needed(
                     new_vals, cur_value, init_dict, valid_schemas)
@@ -314,7 +314,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         res = extra_data.get(key)
         if res is not None:
             return res
-        #TODO : To Enhance and load data_def in cache
+        # TODO : To Enhance and load data_def in cache
         data_def, = cls.search([('name', '=', key)])
         if data_def.type_ in ['integer', 'float', 'numeric']:
             return 0

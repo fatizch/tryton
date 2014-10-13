@@ -136,7 +136,7 @@ class GetResult(object):
         result = target_func(args)
         if isinstance(result, RuleEngineResult):
             return result
-        if not isinstance(result, tuple) and not result is None:
+        if not isinstance(result, tuple) and result is not None:
             return (result, [])
         return result
 
@@ -404,7 +404,7 @@ class Product(model.CoopSQL, Offered):
 
     def init_dict_for_rule_engine(self, args):
         super(Product, self).init_dict_for_rule_engine(args)
-        if not 'product' in args:
+        if 'product' not in args:
             args['product'] = self
 
     def get_extra_data_def(self, type_, existing_data, condition_date,
@@ -435,7 +435,7 @@ class Product(model.CoopSQL, Offered):
             if self.contract_generator else '')
 
     def give_me_extra_data_ids_aggregate(self, args):
-        if not 'dd_args' in args:
+        if 'dd_args' not in args:
             return [], []
         res = set()
         errs = []
@@ -448,11 +448,11 @@ class Product(model.CoopSQL, Offered):
         return list(res), errs
 
     def give_me_extra_data_getter(self, args):
-        if not 'dd_args' in args:
+        if 'dd_args' not in args:
             return [], []
         dd_args = args['dd_args']
-        if not 'path' in dd_args:
-            if not 'options' in dd_args:
+        if 'path' not in dd_args:
+            if 'options' not in dd_args:
                 return self.give_me_extra_data_ids(args)
             dd_args['path'] = 'all'
         return self.give_me_extra_data_ids_aggregate(args)
@@ -467,11 +467,11 @@ class Product(model.CoopSQL, Offered):
         #  - The list of all the schemas in the tree. This list should
         #    contain all the schemas from the first list
         #  - All the values available for all relevent schemas
-        if not 'contract' in args or not 'date' in args:
+        if 'contract' not in args or 'date' not in args:
             raise Exception('Expected contract and date in args, got %s' % (
                 str([k for k in args.iterkeys()])))
         all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
-        if not 'sub_elem' in args:
+        if 'sub_elem' not in args:
             for option in args['contract'].options:
                 if not option.coverage:
                     continue
@@ -668,7 +668,7 @@ class OptionDescription(model.CoopSQL, Offered):
         return True
 
     def give_me_extra_data_ids_aggregate(self, args):
-        if not 'dd_args' in args:
+        if 'dd_args' not in args:
             return [], []
         dd_args = args['dd_args']
         if not('options' in dd_args and dd_args['options'] != '' and
