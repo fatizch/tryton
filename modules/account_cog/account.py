@@ -123,7 +123,7 @@ class Period(export.ExportImportMixin):
                     vals['start_date']) or ('end_date' in found and
                     period.end_date != vals['end_date']) or (
                     'fiscalyear' in found and period.fiscalyear.id !=
-                        vals['fiscalyear']):
+                    vals['fiscalyear']):
                 if period.moves:
                     cls.raise_user_error('modify_del_period_moves', (
                         period.rec_name))
@@ -137,7 +137,7 @@ class Period(export.ExportImportMixin):
                 'fiscalyear.company.party.name'])
 
     def check_dates(self):
-        if not '__importing__' in Transaction().context:
+        if '__importing__' not in Transaction().context:
             return super(Period, self).check_dates()
         return True
 
