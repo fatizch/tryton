@@ -25,7 +25,7 @@ def register():
         # from contract
         Contract,
         Option,
-        #From Rule Engine
+        # From Rule Engine
         RuleEngineRuntime,
         # From Party,
         Party,

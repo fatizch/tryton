@@ -10,7 +10,8 @@ from trytond.transaction import Transaction
 from trytond.modules.cog_utils import model, utils, coop_date, fields
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
-from trytond.modules.benefit import benefit
+from trytond.modules.benefit import INDEMNIFICATION_DETAIL_KIND
+from trytond.modules.benefit import INDEMNIFICATION_KIND
 from trytond.modules.offered_insurance import Printable
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
@@ -60,10 +61,10 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     documents = fields.One2Many('document.request', 'needed_by', 'Documents')
     company = fields.Many2One('company.company', 'Company',
         ondelete='RESTRICT')
-    #The Main contract is only used to ease the declaration process for 80%
-    #of the claims where there is only one contract involved. This link should
-    #not be used for other reason than initiating sub elements on claim.
-    #Otherwise use claim.get_contract()
+    # The Main contract is only used to ease the declaration process for 80%
+    # of the claims where there is only one contract involved. This link should
+    # not be used for other reason than initiating sub elements on claim.
+    # Otherwise use claim.get_contract()
     main_contract = fields.Many2One('contract', 'Main Contract',
         ondelete='RESTRICT', domain=[('id', 'in', Eval('possible_contracts')),
             ('company', '=', Eval('company'))],
@@ -336,7 +337,7 @@ class Loss(model.CoopSQL, model.CoopView):
         depends=['claim', 'id'], ondelete='CASCADE',
         states={
             'invisible': Eval('_parent_claim', {}).get('reopened_reason')
-                != 'relapse'})
+            != 'relapse'})
     sub_losses = fields.One2Many('claim.loss', 'main_loss', 'Sub Losses')
     with_end_date = fields.Function(
         fields.Boolean('With End Date'),
@@ -349,7 +350,7 @@ class Loss(model.CoopSQL, model.CoopView):
         super(Loss, cls).__setup__()
         cls._error_messages.update({
                 'end_date_smaller_than_start_date':
-                    'End Date is smaller than start date',
+                'End Date is smaller than start date',
                 })
 
     def get_with_end_date(self, name):
@@ -414,8 +415,8 @@ class Loss(model.CoopSQL, model.CoopView):
     @fields.depends('main_loss', 'loss_desc')
     def on_change_main_loss(self):
         res = {}
-        #TODO : Add possibility to have compatible loss example a disability
-        #after a temporary incapacity
+        # TODO : Add possibility to have compatible loss example a disability
+        # after a temporary incapacity
         if self.main_loss and self.main_loss.loss_desc:
             res['loss_desc'] = self.main_loss.loss_desc.id
             res['with_end_date'] = self.main_loss.loss_desc.with_end_date
@@ -429,7 +430,7 @@ class Loss(model.CoopSQL, model.CoopView):
         res = {}
         res['with_end_date'] = self.get_with_end_date('')
         if (self.loss_desc and self.event_desc
-                and not self.event_desc in self.loss_desc.event_descs):
+                and self.event_desc not in self.loss_desc.event_descs):
             res['event_desc'] = None
         res['end_date'] = self.end_date if res['with_end_date'] else None
         return res
@@ -469,8 +470,8 @@ class Loss(model.CoopSQL, model.CoopView):
 
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['loss'] = self
-        #this date is the one used for finding the good rule,
-        #so the rules that was effective when the loss occured
+        # this date is the one used for finding the good rule,
+        # so the rules that was effective when the loss occured
         cur_dict['date'] = self.start_date
         cur_dict['start_date'] = self.start_date
         if self.end_date:
@@ -519,7 +520,7 @@ class DeliveredService:
             'extra_data']
 
     def get_covered_data(self):
-        #TODO : retrieve the good covered data
+        # TODO : retrieve the good covered data
         for covered_data in self.option.covered_data:
             return covered_data
 
@@ -593,7 +594,7 @@ class DeliveredService:
     def calculate(self):
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
-        #We first check the eligibility of the benefit
+        # We first check the eligibility of the benefit
         res, errs = self.benefit.get_result('eligibility', cur_dict)
         self.func_error = None
         if res and not res.eligible:
@@ -676,7 +677,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         'Delivered Service', ondelete='CASCADE',
         states={'readonly': Eval('status') == 'paid'})
     kind = fields.Function(
-        fields.Selection(benefit.INDEMNIFICATION_KIND, 'Kind', sort=False,
+        fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False,
             states={'invisible': True}),
         'get_kind')
     start_date = fields.Date('Start Date', states={
@@ -733,7 +734,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
 
     def init_from_service(self, service):
         self.status = 'calculated'
-        #TODO : To enhance
+        # TODO : To enhance
         self.customer = service.loss.claim.claimant
 
     def get_kind(self, name=None):
@@ -757,8 +758,8 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             self.details = list(self.details)
             Detail.delete(self.details)
             self.details[:] = []
-        for key, fancy_name in benefit.INDEMNIFICATION_DETAIL_KIND:
-            if not key in details_dict:
+        for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
+            if key not in details_dict:
                 continue
             for detail_dict in details_dict[key]:
                 detail = Detail()
@@ -766,7 +767,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
                 self.details.append(detail)
                 detail.kind = key
                 for field_name, value in detail_dict.iteritems():
-                    #TODO: Temporary Hack
+                    # TODO: Temporary Hack
                     if (field_name == 'beneficiary_kind'
                             and not getattr(self, 'beneficiary', None)):
                         self.beneficiary = self.get_beneficiary(value,
@@ -856,14 +857,13 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
         'Indemnification', ondelete='CASCADE')
     start_date = fields.Date('Start Date', states={
             'invisible':
-                Eval('_parent_indemnification', {}).get('kind') != 'period'
+            Eval('_parent_indemnification', {}).get('kind') != 'period'
             })
     end_date = fields.Date('End Date', states={
             'invisible':
-                Eval('_parent_indemnification', {}).get('kind') != 'period'
-    })
-    kind = fields.Selection(benefit.INDEMNIFICATION_DETAIL_KIND, 'Kind',
-        sort=False)
+            Eval('_parent_indemnification', {}).get('kind') != 'period'
+            })
+    kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
     amount_per_unit = fields.Numeric('Amount per Unit')
     nb_of_unit = fields.Numeric('Nb of Unit')
     unit = fields.Selection(coop_date.DAILY_DURATION, 'Unit')
@@ -876,8 +876,8 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
         self.amount = self.amount_per_unit * self.nb_of_unit
 
     def get_currency(self):
-        #If a local currency is used details are stored with the local currency
-        #to make only one conversion at the indemnification level
+        # If a local currency is used details are stored with the local
+        # currency to make only one conversion at the indemnification level
         if self.indemnification:
             if self.indemnification.local_currency:
                 return self.indemnification.local_currency

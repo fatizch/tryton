@@ -13,8 +13,8 @@ class OptionDescription:
 
     def get_possible_benefits(self, loss_desc=None, event_desc=None,
             at_date=None):
-        #ToDo replace this method with give_me_benefits
-        #and Extra Data
+        # ToDo replace this method with give_me_benefits
+        # and Extra Data
         res = []
         benefits = utils.get_good_versions_at_date(self, 'benefits', at_date)
         for benefit in benefits:
