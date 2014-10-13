@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.endorsement import field_mixin

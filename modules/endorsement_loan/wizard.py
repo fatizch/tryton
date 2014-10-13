@@ -1,4 +1,4 @@
-from  collections import defaultdict
+from collections import defaultdict
 import datetime
 
 from trytond.pool import PoolMeta, Pool
@@ -158,14 +158,17 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                                 continue
                             selector = template.copy()
                             if (loan_share.start_date == effective_date and
-                                    isinstance(loan_share, LoanShareEndorsement)):
+                                    isinstance(loan_share,
+                                        LoanShareEndorsement)):
                                 selector['new_share'] = loan_share.share
-                                selector['loan_share_endorsement'] = loan_share.id
+                                selector['loan_share_endorsement'] = \
+                                    loan_share.id
                                 if idx != len(sorted_list) - 1:
                                     future = sorted_list[idx + 1]
                                     selector['future_share'] = future.share
-                                    if (isinstance(future, LoanShareEndorsement)
-                                            and future.action == 'remove'):
+                                    if (isinstance(future,
+                                                LoanShareEndorsement) and
+                                            future.action == 'remove'):
                                         selector['override_future'] = True
                             else:
                                 selector['previous_share'] = loan_share.share
@@ -334,7 +337,7 @@ class SelectEndorsement:
                     self.contract.used_loans[0].funds_release_date,
                     }
             else:
-                return  {
+                return {
                     'is_loan': True,
                     'effective_date': None,
                     }
