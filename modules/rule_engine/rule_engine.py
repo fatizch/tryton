@@ -115,7 +115,7 @@ def check_args(*_args):
         def wrap(*args, **kwargs):
             f.needed_args = []
             for arg in _args:
-                if not arg in args[1]:
+                if arg not in args[1]:
                     args[1]['__result__'].errors.append('%s undefined !' % arg)
                     raise CatchedRuleEngineError
                 f.needed_args.append(arg)
@@ -439,7 +439,7 @@ class RuleEngineTable(model.CoopSQL):
 
         super(RuleEngineTable, cls).__register__(module_name)
 
-         # Migration from 1.1: split rule parameters in multiple table
+        # Migration from 1.1: split rule parameters in multiple table
         table_definition = cls.__table__()
         if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
             cursor.execute(*table_definition.delete())
@@ -470,7 +470,7 @@ class RuleEngineRuleEngine(model.CoopSQL):
 
         super(RuleEngineRuleEngine, cls).__register__(module_name)
 
-         # Migration from 1.1: split rule parameters in multiple table
+        # Migration from 1.1: split rule parameters in multiple table
         rule_definition = cls.__table__()
         if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
             cursor.execute(*rule_definition.delete())
@@ -500,7 +500,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
 
         super(RuleParameter, cls).__register__(module_name)
 
-         # Migration from 1.1: split rule parameters in multiple table
+        # Migration from 1.1: split rule parameters in multiple table
         parameter_definition = cls.__table__()
         if TableHandler.table_exist(cursor, 'rule_engine_parameter'):
             cursor.execute(*parameter_definition.delete())
@@ -548,7 +548,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     context = fields.Many2One('rule_engine.context', 'Context',
         ondelete='RESTRICT')
     short_name = fields.Char('Code', required=True)
-        #TODO : rename as code (before code was the name for algorithm)
+    # TODO : rename as code (before code was the name for algorithm)
     algorithm = fields.Text('Algorithm')
     data_tree = fields.Function(fields.Text('Data Tree'),
         'on_change_with_data_tree')
@@ -1595,7 +1595,7 @@ class InitTestCaseFromExecutionLog(Wizard):
         super(InitTestCaseFromExecutionLog, cls).__setup__()
         cls._error_messages.update({
                 'rule_engine_log_expected': 'This wizard should be run from'
-                    'a rule engine execution log selected',
+                'a rule engine execution log selected',
                 })
 
     def filter_override(self, method_name):
