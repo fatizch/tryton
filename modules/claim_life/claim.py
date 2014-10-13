@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, If, Bool
 
@@ -20,8 +20,8 @@ class Loss:
             states={'invisible': True}),
         'on_change_with_possible_covered_persons')
     covered_person = fields.Many2One('party.party', 'Covered Person',
-        #TODO: Temporary hack, the function field is not calculated
-        #when storing the object
+        # TODO: Temporary hack, the function field is not calculated
+        # when storing the object
         domain=[If(
                 Bool(Eval('possible_covered_persons')),
                 ('id', 'in', Eval('possible_covered_persons')),
