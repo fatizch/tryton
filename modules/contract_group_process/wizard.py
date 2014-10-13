@@ -29,7 +29,7 @@ class ContractSubscribeFindProcess:
         res = {}
         com_products = self.get_possible_com_product()
         res['possible_com_product'] = [x.id for x in com_products]
-        if self.com_product and not self.com_product in com_products:
+        if self.com_product and self.com_product not in com_products:
             res['com_product'] = None
         if (self.product and self.product not in
                 [x.product for x in com_products]):
