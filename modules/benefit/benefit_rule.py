@@ -143,8 +143,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             res = coop_string.translate_value(self, 'amount_kind')
             if self.coef_coverage_amount != 1:
                 res = '%s * %s' % (self.coef_coverage_amount, res)
-                #TODO : waiting tryton digits factor
-                #res = '%s%% * %s' % (self.coef_coverage_amount * 100, res)
+                # TODO : waiting tryton digits factor
+                # res = '%s%% * %s' % (self.coef_coverage_amount * 100, res)
             return res
 
     def get_rec_name(self, name):
@@ -208,7 +208,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         return self.get_revaluated_amount(amount, args['start_date'])
 
     def get_indemnification_for_non_capital(self, args):
-        if not 'start_date' in args:
+        if 'start_date' not in args:
             return [{}], 'missing_start_date'
         if not self.amount_evolves_over_time:
             return self.get_indemnifications_for_periods(args)

@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import model, fields

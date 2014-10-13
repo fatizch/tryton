@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from trytond.pyson import Eval
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
@@ -175,12 +175,12 @@ class Benefit(model.CoopSQL, offered.Offered):
         errs = []
         sub_args = args.copy()
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
-            #For indemnification we could have a list of result because the
-            #indemnification could change over time for example 3 month at 100%
-            #then 50% for the rest of the period
+            # For indemnification we could have a list of result because the
+            # indemnification could change over time for example 3 month at
+            # 100% then 50% for the rest of the period
             coverage = args['coverage']
             try:
-                #we first check that no rule are defined at a higher level
+                # we first check that no rule are defined at a higher level
                 indemn_dicts, indemn_errs = coverage.get_result(key, sub_args,
                     key)
             except offered.NonExistingRuleKindException:
@@ -193,7 +193,7 @@ class Benefit(model.CoopSQL, offered.Offered):
             if not indemn_dicts:
                 continue
             res[key] = indemn_dicts
-            #to retrieve the end date, we use the last calculated indemnificat
+            # to retrieve the end date, we use the last calculated indemnificat
             indemn_dict = indemn_dicts[-1]
             if (self.indemnification_kind == 'period'
                     and 'end_date' in indemn_dict):
@@ -235,7 +235,7 @@ class Benefit(model.CoopSQL, offered.Offered):
         #  - The list of all the schemas in the tree. This list should
         #    contain all the schemas from the first list
         #  - All the values available for all relevent schemas
-        if not 'loss' in args or not 'date' in args:
+        if 'loss' not in args or 'date' not in args:
             raise Exception('Expected loss and date in args, got %s' % (
                 str([k for k in args.iterkeys()])))
         all_schemas, possible_schemas = self.get_extra_data_for_exec(args)
@@ -251,8 +251,8 @@ class InsuranceBenefit(product.Offered):
     'Insurance Benefit'
 
     __name__ = 'benefit'
-    #This empty override is necessary to have in the benefit the fields added
-    #in the override of offered
+    # This empty override is necessary to have in the benefit the fields added
+    # in the override of offered
 
 
 class BenefitLossDescriptionRelation(model.CoopSQL):
