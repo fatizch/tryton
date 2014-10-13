@@ -55,5 +55,5 @@ class DocumentTemplate:
             result.append(('contract', 'Quote and Contract Documents'))
             result.append(('active_contract', 'Active Contract Documents'))
             result.append(('quote_contract', 'Quote Documents'))
-        
+
         return result

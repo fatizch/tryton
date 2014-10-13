@@ -185,7 +185,7 @@ class Contract(Printable):
         return agreement
 
     def get_protocol_offered(self, kind):
-        #what if several protocols exist?
+        # what if several protocols exist?
         return None
 
     @classmethod
@@ -196,16 +196,16 @@ class Contract(Printable):
                 ('start_date', '<=', at_date)])
 
     def update_agreements(self):
-        #This method will update the management role and find the good protocol
-        #based on real coverage subscribed
+        # This method will update the management role and find the good
+        # protocol based on real coverage subscribed
         if not getattr(self, 'agreements', None):
             return
         for role in [x for x in self.agreements]:
-            #we browse all roles that need to be updated on contract
+            # we browse all roles that need to be updated on contract
             if not getattr(role, 'protocol', None):
                 protocol_offered = self.get_protocol_offered(role.kind)
                 if not protocol_offered:
-                    #TODO : We can't find anything
+                    # TODO : We can't find anything
                     return
                 contracts = self.search_contract(protocol_offered, role.party,
                     self.start_date)
@@ -213,7 +213,7 @@ class Contract(Printable):
                 if len(contracts) == 1:
                     protocol = contracts[0]
                 elif len(contracts) > 1:
-                    #TODO
+                    # TODO
                     raise
                 else:
                     protocol = self.subscribe_contract(protocol_offered,
@@ -354,7 +354,7 @@ class Contract(Printable):
         super(Contract, self).init_contract(product, party, contract_dict)
         if not contract_dict:
             return
-        if not 'covered_elements' in contract_dict:
+        if 'covered_elements' not in contract_dict:
             return
         item_descs = product.item_descriptors
         if len(item_descs) != 1:
@@ -802,7 +802,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         res = self.on_change_extra_data()
         res['item_kind'] = self.on_change_with_item_kind()
         res['party_extra_data'] = self.get_party_extra_data()
-        #update extra_data dict with common extradata key from party_extra_data
+        # update extra_data dict with common extradata key from
+        # party_extra_data
         res['extra_data'].update(
             (k, res['party_extra_data'][k])
             for k in res['extra_data'].viewkeys()
@@ -952,7 +953,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @classmethod
     def get_parent_in_transaction(cls):
-        if not '_master_covered' in Transaction().context:
+        if '_master_covered' not in Transaction().context:
             return None
         GoodModel = Pool().get(cls.__name__)
         return GoodModel(Transaction().context.get('_master_covered'))
@@ -1024,7 +1025,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             Product = pool.get('offered.product')
             product = Product(product_id)
         res = []
-        if (self.item_desc and not self.item_desc.kind in
+        if (self.item_desc and self.item_desc.kind not in
                 ['party', 'person', 'company']):
             res.extend(self.item_desc.extra_data_def)
         res.extend(product.get_extra_data_def(['elem'], at_date=at_date))
@@ -1068,7 +1069,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     @classmethod
     def get_possible_covered_elements(cls, party, at_date):
         # TODO : Maybe this should be set in claim
-        #TODO : To enhance with status control on contract and option linked
+        # TODO : To enhance with status control on contract and option linked
         domain = [
             ('party', '=', party.id),
             ('option.start_date', '<=', at_date),
@@ -1124,7 +1125,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def init_covered_element(self, product, item_desc, cov_dict):
         if (item_desc.kind in ['person', 'party', 'company']
                 and 'party' in cov_dict):
-            #TODO to enhance if the party is not created yet
+            # TODO to enhance if the party is not created yet
             self.party, = Pool().get('party.party').search(
                 [('code', '=', cov_dict['party']['code'])], limit=1, order=[])
         self.product = product
@@ -1384,18 +1385,10 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         readonly=True)
     protocol = fields.Many2One('contract', 'Protocol', domain=[
-            # ['OR',
-                # [('end_date', '>=', Eval('start_date'))],
-                # [('end_date', '=', None)],
-                # ],
-            # ['OR',
-                # [('start_date', '<=', Eval('start_date'))],
-                # [('start_date', '=', None)],
-                # ],
             ('product.kind', '!=', 'insurance'),
             ('subscriber', '=', Eval('party')),
             ], depends=['start_date', 'end_date', 'party'],
-        #we only need to have a protocole when the management is effective
+        # we only need to have a protocole when the management is effective
         states={'required': ~~Eval('start_date')},
         ondelete='RESTRICT',)
     start_date = fields.Date('Start Date', states={
