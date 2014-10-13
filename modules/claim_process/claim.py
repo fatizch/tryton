@@ -140,8 +140,8 @@ class Claim(CogProcessFramework):
 class Loss:
     __name__ = 'claim.loss'
 
-    #The Benefit to deliver is just a shortcut to ease delivered service
-    #creation. it should not be used once a service has been created
+    # The Benefit to deliver is just a shortcut to ease delivered service
+    # creation. it should not be used once a service has been created
     benefit_to_deliver = fields.Function(
         fields.Many2One('benefit', 'Benefit',
             domain=[('id', 'in', Eval('benefits'))],
