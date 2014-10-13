@@ -342,6 +342,7 @@ class PremiumAmountPerPeriod(ModelSQL, ModelView):
         pool = Pool()
         PremiumAmount = pool.get('contract.premium.amount')
         premium_amounts = PremiumAmount.search([
+                ('contract', '=', self.contract),
                 ('period_start', '=', self.period_start),
                 ('period_end', '=', self.period_end),
                 ])
