@@ -96,6 +96,7 @@ class Contract:
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'button_calculate_prices': {},
+                'first_invoice': {},
                 })
 
     @classmethod
