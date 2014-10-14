@@ -26,14 +26,17 @@ class RuleEngineRuntime:
         subscriber = args['contract'].subscriber
         parties = [x.party for x in utils.get_good_versions_at_date(
                 contract, 'covered_elements', args['date'])]
+        parties.sort(key=lambda x: x.birth_date)
         x = 0
         for party in parties:
-            if (not relation_name
-                    or party.get_relation_with(subscriber,
-                        args['date']) == relation_name):
+            kinds = [rel.type.code for rel in
+                utils.get_good_versions_at_date(party, 'relations',
+                    args['date']) if rel.to.id == subscriber.id]
+            if not relation_name or relation_name in kinds:
                 x += 1
                 if party == person:
                     return x
+        return x
 
     @classmethod
     def _re_number_of_covered_with_relation(cls, args, relation_name=None):
@@ -43,7 +46,9 @@ class RuleEngineRuntime:
                 contract, 'covered_elements', args['date']) if x.party]
         res = 0
         for party in parties:
-            if (not relation_name or party.get_relation_with(subscriber,
-                    args['date']) == relation_name):
+            kinds = [rel.type.code for rel in
+                utils.get_good_versions_at_date(party, 'relations',
+                    args['date']) if rel.to.id == subscriber.id]
+            if not relation_name or relation_name in kinds:
                 res += 1
         return res
