@@ -181,7 +181,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                         trans.to_step == cur_step:
                     result[cur_step.id] = ('trans', trans)
                     break
-            if not cur_step.id in result:
+            if cur_step.id not in result:
                 result[cur_step.id] = ('step', cur_step)
         for trans in self.transitions:
             if (trans.from_step == step_relation.step and
@@ -402,7 +402,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         return xml
 
     def create_or_update_view(self, for_action, kind):
-        if not kind in ('tree', 'form'):
+        if kind not in ('tree', 'form'):
             raise Exception
         ActView = Pool().get('ir.action.act_window.view')
         View = Pool().get('ir.ui.view')
@@ -424,7 +424,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         good_view.model = self.on_model.model
         good_view.name = '%s_%s' % (self.technical_name, kind)
         good_view.type = kind
-        #TODO: Which modules should be used here ?
+        # TODO: Which modules should be used here ?
         good_view.module = 'process'
         good_view.priority = 100
         if kind == 'tree':
@@ -621,7 +621,7 @@ class Code(ModelSQL, ModelView):
 
     def get_on_model(self, name):
         if self.parent_step and self.parent_step.main_model:
-            #TODO : to change from process module to coop_process
+            # TODO : to change from process module to coop_process
             return self.parent_step.main_model.id
         elif (self.parent_transition and self.parent_transition.on_process
                 and self.parent_transition.on_process.on_model):
@@ -793,7 +793,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
             return self.entering_wizard.id
 
     def execute_after(self, target):
-        if not 'after_executed' in Transaction().context:
+        if 'after_executed' not in Transaction().context:
             for code in self.code_after:
                 code.execute(target)
         if self.exiting_wizard:
@@ -841,8 +841,8 @@ class GenerateGraph(Report):
         graph.set('ratio', 'auto')
         graph.set('splines', 'ortho')
         graph.set('fontname', 'Inconsolata')
-        #graph.set('concentrate', '1')
-        #graph.set('rankdir', 'LR')
+        # graph.set('concentrate', '1')
+        # graph.set('rankdir', 'LR')
         return graph
 
     @classmethod
@@ -850,9 +850,9 @@ class GenerateGraph(Report):
         nodes[step.id] = pydot.Node(step.fancy_name, style='filled',
             shape='rect', fontname='Century Gothic')
         # if not step.to_steps:
-            # nodes[step.id].set('style', 'filled')
-            # nodes[step.id].set('shape', 'circle')
-            # nodes[step.id].set('fillcolor', '#a2daf4')
+        #     nodes[step.id].set('style', 'filled')
+        #     nodes[step.id].set('shape', 'circle')
+        #     nodes[step.id].set('fillcolor', '# a2daf4')
 
     @classmethod
     def build_transition(cls, process, step, transition, graph, nodes, edges):
