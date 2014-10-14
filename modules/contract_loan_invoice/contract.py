@@ -53,6 +53,10 @@ class Premium:
         # Make sure premiums are properly ordered per loan
         cls._order.insert(0, ('loan', 'ASC'))
 
+    def duplicate_sort_key(self):
+        key = super(Premium, self).duplicate_sort_key()
+        return tuple([self.loan.id if self.loan else None] + list(key))
+
     def get_rec_name(self, name):
         rec_name = super(Premium, self).get_rec_name(name)
         if not self.loan:

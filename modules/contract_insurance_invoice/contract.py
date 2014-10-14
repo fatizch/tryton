@@ -995,17 +995,16 @@ class Premium(ModelSQL, ModelView):
         new_instance.frequency = line['frequency']
         return new_instance
 
+    def duplicate_sort_key(self):
+        return utils.convert_to_reference(self.rated_entity), self.start_date
+
     @classmethod
     def remove_duplicates(cls, parent, actions):
         new_list = []
         for act_name in ['keep', 'write', 'save']:
             new_list += [(act_name, elem) for elem in actions[act_name]]
 
-        def sort_key(action):
-            _, premium = action
-            return tuple((getattr(premium, fname) for fname, _ in cls._order))
-
-        new_list.sort(key=sort_key)
+        new_list.sort(key=lambda x: x.duplicate_sort_key())
         final_list = []
         prev_action, prev_premium = None, None
         for elem in new_list:
