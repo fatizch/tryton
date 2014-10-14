@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, Not, Bool, Or
+from trytond.pyson import Eval, If
 
 from trytond.modules.cog_utils import fields
 
@@ -21,16 +21,14 @@ class Party:
             None, 'Social Security Insured', depends=['relations']),
         'get_relations')
 
-    @classmethod
-    def __setup__(cls):
-        super(Party, cls).__setup__()
-        cls.ssn.states['required'] = Or(cls.ssn.states.get('required', False),
-            Not(Bool(Eval('social_security_dependent', False))))
-        cls.ssn.depends.append('social_security_dependent')
-
     def get_relations(self, name):
         return [relation.to.id for relation in self.relations
             if (relation.type and relation.type.code == name)]
+
+    def get_SSN_required(self, name):
+        if self.is_person and not self.social_security_dependent:
+            return True
+        return super(Party, self).get_SSN_required(name)
 
     @fields.depends('relations')
     def on_change_with_social_security_dependent(self, name=None):

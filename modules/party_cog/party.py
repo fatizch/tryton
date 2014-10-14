@@ -75,8 +75,12 @@ class Party(export.ExportImportMixin):
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             }, depends=['is_person'])
-    ssn = fields.EmptyNullChar('SSN', states={'invisible': ~STATES_PERSON},
-        depends=['is_person'])
+    ssn = fields.EmptyNullChar('SSN', states={
+            'invisible': ~STATES_PERSON,
+            'required': Eval('ssn_required', False)
+            }, depends=['is_person', 'ssn_required'])
+    ssn_required = fields.Function(fields.Boolean('SSN Required'),
+        'get_SSN_required')
     ####################################
     # Company information
     short_name = fields.Char('Short Name',
@@ -221,6 +225,9 @@ class Party(export.ExportImportMixin):
         if hasattr(self, field_name):
             field = getattr(self, field_name)
             return len(field) > 0
+        return False
+
+    def get_SSN_required(self, name):
         return False
 
     @classmethod
