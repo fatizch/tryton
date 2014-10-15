@@ -996,7 +996,7 @@ class Premium(ModelSQL, ModelView):
         return new_instance
 
     def duplicate_sort_key(self):
-        return utils.convert_to_reference(self.rated_entity), self.start_date
+        return utils.convert_to_reference(self.rated_entity), self.start
 
     @classmethod
     def remove_duplicates(cls, parent, actions):
@@ -1004,7 +1004,7 @@ class Premium(ModelSQL, ModelView):
         for act_name in ['keep', 'write', 'save']:
             new_list += [(act_name, elem) for elem in actions[act_name]]
 
-        new_list.sort(key=lambda x: x.duplicate_sort_key())
+        new_list.sort(key=lambda x: x[1].duplicate_sort_key())
         final_list = []
         prev_action, prev_premium = None, None
         for elem in new_list:
