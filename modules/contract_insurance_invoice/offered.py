@@ -48,6 +48,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True)
     frequency = fields.Selection(FREQUENCIES, 'Invoice Frequency',
         required=True, sort=False)
+    frequency_string = frequency.translated('frequency')
     direct_debit = fields.Boolean('Direct Debit Payment')
     allowed_direct_debit_days = fields.Char('Allowed Direct Debit Dates',
         states={'invisible': ~Eval('direct_debit')},
