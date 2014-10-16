@@ -14,6 +14,7 @@ def register():
         LoanIncrement,
         LoanPayment,
         LoanShare,
+        PremiumAmount,
         Endorsement,
         EndorsementContract,
         EndorsementLoan,

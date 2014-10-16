@@ -1,6 +1,7 @@
 # encoding: utf-8
 import copy
 import datetime
+from collections import defaultdict
 
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
@@ -751,27 +752,23 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     def search_state(cls, name, clause):
         return [('endorsement.state',) + tuple(clause[1:])]
 
-    def _restore_history(self):
+    def do_restore_history(self):
         pool = Pool()
-        Contract = pool.get('contract')
-        ContractOption = pool.get('contract.option')
-        ActivationHistory = pool.get('contract.activation_history')
+        restore_dict = defaultdict(list)
+        restore_dict['contract'] += [self.contract,
+            pool.get('contract')(self.contract.id)]
+        self._restore_history(restore_dict, self.applied_on)
 
-        hcontract = self.contract
-        contract = Contract(self.contract.id)
+        for k, v in restore_dict.iteritems():
+            pool.get(k).restore_history(list(set([x.id for x in v])),
+                self.applied_on)
 
-        Contract.restore_history([contract.id], self.applied_on)
-        option_ids = set((o.id
-                for o in (contract.options + hcontract.options)))
-        ContractOption.restore_history(list(option_ids),
-            self.applied_on)
-        activation_history_ids = set((o.id
-                for o in (contract.activation_history +
-                    hcontract.activation_history)))
-        ActivationHistory.restore_history(list(activation_history_ids),
-            self.applied_on)
-
-        return contract, hcontract
+    @classmethod
+    def _restore_history(cls, instances, at_date):
+        for contract in instances['contract']:
+            instances['contract.option'] += contract.options
+            instances['contract.activation_history'] += \
+                contract.activation_history
 
     @classmethod
     def draft(cls, contract_endorsements):
@@ -784,7 +781,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 cls.raise_user_error('not_latest_applied',
                     contract_endorsement.rec_name)
 
-            contract_endorsement._restore_history()
+            contract_endorsement.do_restore_history()
             contract_endorsement.set_applied_on(None)
             contract_endorsement.state = 'draft'
             contract_endorsement.save()

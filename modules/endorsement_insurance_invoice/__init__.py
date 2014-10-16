@@ -7,8 +7,6 @@ from .wizard import *
 def register():
     Pool.register(
         BillingInformation,
-        ContractInvoice,
-        CommissionInvoice,
         Contract,
         Endorsement,
         EndorsementContract,

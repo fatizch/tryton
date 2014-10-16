@@ -55,24 +55,14 @@ class EndorsementContract:
                 'Covered Elements Modification',
                 })
 
-    def _restore_history(self):
-        pool = Pool()
-        CoveredElement = pool.get('contract.covered_element')
-        Option = pool.get('contract.option')
-        contract, hcontract = super(EndorsementContract,
-            self)._restore_history()
-        covered_element_ids = set((covered_element.id for covered_element in (
-                    contract.covered_elements +
-                    hcontract.covered_elements)))
-        option_ids = set((option.id
-                for covered_element in (contract.covered_elements +
-                    hcontract.covered_elements)
-                for option in covered_element.options))
-        CoveredElement.restore_history(list(
-                covered_element_ids), self.applied_on)
-        Option.restore_history(list(option_ids), self.applied_on)
-
-        return contract, hcontract
+    @classmethod
+    def _restore_history(cls, instances, at_date):
+        super(EndorsementContract, cls)._restore_history(instances, at_date)
+        for contract in instances['contract']:
+            instances['contract.covered_element'] += contract.covered_elements
+            for covered_element in contract.covered_elements:
+                instances['contract.option'] += \
+                    covered_element.options
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)

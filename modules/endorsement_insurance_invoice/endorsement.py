@@ -10,8 +10,6 @@ from trytond.modules.endorsement import relation_mixin
 __metaclass__ = PoolMeta
 __all__ = [
     'BillingInformation',
-    'ContractInvoice',
-    'CommissionInvoice',
     'Contract',
     'Endorsement',
     'EndorsementContract',
@@ -23,18 +21,6 @@ class BillingInformation(object):
     _history = True
     __metaclass__ = PoolMeta
     __name__ = 'contract.billing_information'
-
-
-class ContractInvoice:
-    _history = True
-    __metaclass__ = PoolMeta
-    __name__ = 'contract.invoice'
-
-
-class CommissionInvoice:
-    _history = True
-    __metaclass__ = PoolMeta
-    __name__ = 'contract.invoice.commission'
 
 
 class Contract:
@@ -157,15 +143,16 @@ class EndorsementContract:
             result += '\n\n'
         return result
 
-    def _restore_history(self):
-        contract, hcontract = super(EndorsementContract,
-            self)._restore_history()
-        billing_info_ids = set((billing_info.id for billing_info in (
-                    contract.billing_informations +
-                    hcontract.billing_informations)))
-        Pool().get('contract.billing_information').restore_history(list(
-                billing_info_ids), self.applied_on)
-        return contract, hcontract
+    @classmethod
+    def _restore_history(cls, instances, at_date):
+        super(EndorsementContract, cls)._restore_history(instances, at_date)
+        for contract in instances['contract']:
+            instances['contract.billing_information'] += \
+                contract.billing_informations
+        for obj in (instances['contract'] +
+                instances['contract.covered_element'] +
+                instances['contract.option']):
+            instances['contract.premium'] += obj.premiums
 
     @property
     def apply_values(self):

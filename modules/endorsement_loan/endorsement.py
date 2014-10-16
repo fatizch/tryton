@@ -14,6 +14,7 @@ __all__ = [
     'LoanIncrement',
     'LoanPayment',
     'LoanShare',
+    'PremiumAmount',
     'Endorsement',
     'EndorsementContract',
     'EndorsementLoan',
@@ -115,17 +116,13 @@ class EndorsementContract:
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract'
 
-    def _restore_history(self):
-        LoanShare = Pool().get('loan.share')
-        contract, hcontract = super(EndorsementContract,
-            self)._restore_history()
-        share_ids = set((loan_share.id
-                for covered_element in (contract.covered_elements +
-                    hcontract.covered_elements)
-                for option in covered_element.options
-                for loan_share in option.loan_shares))
-        LoanShare.restore_history(list(share_ids), self.applied_on)
-        return contract, hcontract
+    @classmethod
+    def _restore_history(cls, instances, at_date):
+        super(EndorsementContract, cls)._restore_history(instances, at_date)
+        for contract in instances['contract']:
+            instances['contract.premium.amount'] += contract.premium_amounts
+        for option in instances['contract.option']:
+            instances['loan.share'] += option.loan_shares
 
 
 class EndorsementLoan(values_mixin('endorsement.loan.field'),
@@ -199,15 +196,21 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     def search_state(cls, name, clause):
         return [('endorsement.state',) + tuple(clause[1:])]
 
-    def _restore_history(self):
+    def do_restore_history(self):
         pool = Pool()
-        Loan = pool.get('loan')
+        restore_dict = defaultdict(list)
+        restore_dict['loan'] += [self.loan, pool.get('loan')(self.loan.id)]
+        self._restore_history(restore_dict, self.applied_on)
 
-        hloan = self.loan
-        loan = Loan(self.loan.id)
-        Loan.restore_history([loan.id], self.applied_on)
+        for k, v in restore_dict.iteritems():
+            pool.get(k).restore_history(list(set([x.id for x in v],
+                        self.applied_on)))
 
-        return loan, hloan
+    @classmethod
+    def _restore_history(cls, instances, at_date):
+        for loan in instances['loan']:
+            instances['loan.increment'] += loan.increments
+            instances['loan.payment'] += loan.payments
 
     @classmethod
     def draft(cls, loan_endorsements):
@@ -220,7 +223,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                 cls.raise_user_error('not_latest_applied',
                     loan_endorsement.rec_name)
 
-            loan_endorsement._restore_history()
+            loan_endorsement.do_restore_history()
             loan_endorsement.set_applied_on(None)
             loan_endorsement.state = 'draft'
             loan_endorsement.save()
