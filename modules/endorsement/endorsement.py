@@ -428,6 +428,29 @@ class Contract(object):
     _history = True
     __name__ = 'contract'
 
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._buttons.update({
+                'revert_last_endorsement': {},
+                })
+
+    @classmethod
+    @model.CoopView.button
+    def revert_last_endorsement(cls, contracts):
+        Endorsement = Pool().get('endorsement')
+        endorsements_to_cancel = set()
+        for contract in contracts:
+            last_endorsement = Endorsement.search([
+                    ('contracts', '=', contract.id),
+                    ('state', '=', 'applied'),
+                    ], order=[('application_date', 'DESC')], limit=1)
+            if last_endorsement:
+                endorsements_to_cancel.add(last_endorsement[0])
+        if endorsements_to_cancel:
+            Endorsement.draft(list(endorsements_to_cancel))
+        return 'close'
+
     def update_start_date(self, caller=None):
         if not caller:
             return

@@ -203,11 +203,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract_endorsement.base_instance.contract_number,
             previous_contract_number)
 
-        endorsement.draft([endorsement])
+        contract.revert_last_endorsement([contract])
         Transaction().cursor.commit()
+        endorsement = self.Endorsement(endorsement.id)
         contract = endorsement.contracts[0]
-        self.assertEqual(contract_endorsement.applied_on, None)
-        self.assertEqual(contract_endorsement.state, 'draft')
+        self.assertEqual(endorsement.application_date, None)
+        self.assertEqual(endorsement.state, 'draft')
         self.assertEqual(contract.contract_number, previous_contract_number)
 
 
