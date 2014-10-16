@@ -69,6 +69,14 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     mail_subject = fields.Char('eMail Subject')
     mail_body = fields.Text('eMail Body')
 
+    @classmethod
+    def __setup__(cls):
+        super(DocumentTemplate, cls).__setup__()
+        cls._error_messages.update({
+                'no_version_match': 'No letter model found for date %s '
+                'and language %s',
+                })
+
     def get_good_version(self, date, language):
         for version in self.versions:
             if (not version.language == language
@@ -80,6 +88,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 return version
             if version.end_date >= date:
                 return version
+        self.raise_user_error('no_version_match', (date, language))
 
     @fields.depends('on_model')
     def get_possible_kinds(self):
