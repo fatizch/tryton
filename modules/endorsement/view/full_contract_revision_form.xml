@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<form string="Full Contract Revision">
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <label name="endorsement_part"/>
+    <field name="endorsement_part"/>
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition"/>
+    <newline/>
+    <label name="current_start_date"/>
+    <field name="current_start_date"/>
+    <label name="new_start_date"/>
+    <field name="new_start_date"/>
+    <group id="void_group" string="" yexpand="1" yfill="1" colspan="4">
+    </group>
+    <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+    <label string="Full Contract Revision : The contract will be in an unstable state until the full revision process is either completed or aborted" id="full_contract_revision_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
+</form>

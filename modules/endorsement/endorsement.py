@@ -10,7 +10,8 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields, coop_string, utils
-
+from trytond.modules.process import ClassAttr
+from trytond.modules.process_cog import CogProcessFramework
 
 __all__ = [
     'field_mixin',
@@ -423,8 +424,8 @@ def relation_mixin(value_model, field, model, name):
     return Mixin
 
 
-class Contract(object):
-    __metaclass__ = PoolMeta
+class Contract(CogProcessFramework):
+    __metaclass__ = ClassAttr
     _history = True
     __name__ = 'contract'
 
@@ -695,7 +696,9 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         super(EndorsementContract, cls).__setup__()
         cls._error_messages.update({
                 'not_latest_applied': ('Endorsement "%s" is not the latest '
-                    'applied.')
+                    'applied.'),
+                'process_in_progress': ('Contract %s is currently locked in '
+                    'process %s.'),
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -792,6 +795,10 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         Contract = pool.get('contract')
         for contract_endorsement in contract_endorsements:
             contract = contract_endorsement.contract
+            if contract.current_state:
+                cls.raise_user_error('process_in_progress', (
+                        contract.rec_name,
+                        contract.current_state.process.fancy_name))
             contract_endorsement.set_applied_on(contract.write_date
                 or contract.create_date)
             values = contract_endorsement.apply_values

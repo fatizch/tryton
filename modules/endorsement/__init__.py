@@ -22,8 +22,10 @@ def register():
         EndorsementOptionField,
         EndorsementActivationHistory,
         EndorsementActivationHistoryField,
+        Process,
         SelectEndorsement,
         ChangeContractStartDate,
+        StartFullContractRevision,
         BasicPreview,
         module='endorsement', type_='model')
 
