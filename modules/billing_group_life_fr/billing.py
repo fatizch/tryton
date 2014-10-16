@@ -95,7 +95,7 @@ class PremiumRateLine(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     def get_rec_name(self, name):
         if self.covered_element:
             return '%s (%s)' % (self.covered_element.rec_name,
-                coop_string.date_as_string(self.start_date))
+                Pool().get('ir.date').date_as_string(self.start_date))
         elif self.option:
             return self.option.rec_name
         elif self.salary_range:

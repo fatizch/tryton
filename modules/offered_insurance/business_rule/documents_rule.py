@@ -558,8 +558,9 @@ class DocumentGenerateReport(Report):
         GoodModel = Pool().get(data['model'])
         good_obj = GoodModel(data['id'])
         good_party = Pool().get('party.party')(data['party'])
+        Date = pool.get('ir.date')
         filename = good_letter.name + ' - ' + good_obj.get_rec_name('') + \
-            ' - ' + coop_string.date_as_string(utils.today(), good_party.lang)
+            ' - ' + Date.date_as_string(utils.today(), good_party.lang)
         type, data = cls.parse(action_report, records, data, {})
         return (type, buffer(data), action_report.direct_print, filename)
 

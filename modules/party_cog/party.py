@@ -168,7 +168,7 @@ class Party(export.ExportImportMixin):
             for party in duplicate_parties:
                 if party.is_person:
                     message += '%s %s %s \n' % (party.name, party.first_name,
-                        coop_string.date_as_string(party.birth_date))
+                        Pool().get('ir.date').date_as_string(party.birth_date))
                 elif party.is_company:
                     message += '%s %s\n' % (party.name, party.short_name)
             if message:
@@ -267,7 +267,8 @@ class Party(export.ExportImportMixin):
             if self.ssn:
                 res += ' (%s)' % self.ssn
             if self.birth_date:
-                res += ' (%s)' % coop_string.date_as_string(self.birth_date)
+                Date = Pool().get('ir.date')
+                res += ' (%s)' % Date.date_as_string(self.birth_date)
         else:
             res = self.get_rec_name(name)
         return res

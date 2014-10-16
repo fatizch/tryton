@@ -26,18 +26,19 @@ class Payment(ModelSQL, ModelView):
         return 'payment'
 
     def get_synthesis_rec_name(self, name):
+        Date = Pool().get('ir.date')
         if self.date and self.state == 'succeeded':
             return '%s - %s - %s' % (self.journal.rec_name,
-                coop_string.date_as_string(self.date),
+                Date.date_as_string(self.date),
                 self.currency.amount_as_string(self.amount))
         elif self.date:
             return '%s - %s - %s - [%s]' % (self.journal.rec_name,
-                coop_string.date_as_string(self.date),
+                Date.date_as_string(self.date),
                 self.currency.amount_as_string(self.amount),
                 coop_string.translate_value(self, 'state'))
         else:
             return '%s - %s - [%s]' % (
-                coop_string.date_as_string(self.date),
+                Date.date_as_string(self.date),
                 self.currency.amount_as_string(self.amount),
                 coop_string.translate_value(self, 'state'))
 

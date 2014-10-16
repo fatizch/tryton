@@ -90,7 +90,8 @@ def translate_value(instance, var_name, lang=None):
             getattr(instance, var_name))
         ttype = field.__class__._type
     elif _type == 'date':
-        res = date_as_string(getattr(instance, var_name), lang)
+        Date = Pool().get('ir.date')
+        res = Date.date_as_string(getattr(instance, var_name), lang)
     elif _type == 'dict':
         CDataDef = Pool().get('extra_data')
         res = CDataDef.get_extra_data_summary([instance],
@@ -153,13 +154,6 @@ def selection_as_string(cls, var_name, value):
     for cur_tuple in selection:
         if cur_tuple[0] == value:
             return cur_tuple[1]
-
-
-def date_as_string(date, lang=None):
-    Lang = Pool().get('ir.lang')
-    if not lang:
-        lang = utils.get_user_language()
-    return Lang.strftime(date, lang.code, lang.date)
 
 
 def remove_invalid_char(from_string):

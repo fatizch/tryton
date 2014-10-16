@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import fields, coop_string
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 
@@ -29,7 +29,7 @@ class Line:
 
     def get_synthesis_rec_name(self, name):
         return '%s - %s - %s' % (self.statement.journal.rec_name,
-            coop_string.date_as_string(self.date),
+            Pool().get('ir.date').date_as_string(self.date),
             self.statement.journal.currency.amount_as_string(self.amount))
 
 

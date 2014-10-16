@@ -16,9 +16,9 @@ from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
+from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import offered
-from trytond.modules.cog_utils import coop_string
 
 
 CONTRACTSTATUSES = [
@@ -490,20 +490,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.contract_number
 
     def get_synthesis_rec_name(self, name):
+        Date = Pool().get('ir.date')
         if self.status == 'quote':
             return '%s (%s)[%s]' % (
                 coop_string.translate_value(self, 'status'),
                 self.product.rec_name,
-                coop_string.date_as_string(self.start_date))
+                Date.date_as_string(self.start_date))
         elif self.end_date:
             return '%s (%s)[%s - %s]' % (self.contract_number,
                 self.product.rec_name,
-                coop_string.date_as_string(self.start_date),
-                coop_string.date_as_string(self.end_date))
+                Date.date_as_string(self.start_date),
+                Date.date_as_string(self.end_date))
         else:
             return '%s (%s)[%s ]' % (self.contract_number,
                 self.product.rec_name,
-                coop_string.date_as_string(self.start_date))
+                Date.date_as_string(self.start_date))
 
     @classmethod
     def get_extra_data(cls, contracts, names):
@@ -1019,6 +1020,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @classmethod
     def set_end_date(cls, options, name, end_date):
+        Date = Pool().get('ir.date')
         to_write = []
         if not end_date:
             cls.raise_user_error('end_date_none')
@@ -1032,11 +1034,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                         to_write.append(option)
                     else:
                         cls.raise_user_error('end_date_posterior_to_contract',
-                            coop_string.date_as_string(
-                                option.contract.end_date))
+                            Date.date_as_string(option.contract.end_date))
                 else:
                     cls.raise_user_error('end_date_anterior_to_start_date',
-                            coop_string.date_as_string(option.start_date))
+                            Date.date_as_string(option.start_date))
         if to_write:
             cls.write(to_write, {'manual_end_date': end_date})
 

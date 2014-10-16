@@ -599,6 +599,7 @@ class ContractOption:
 
     @classmethod
     def set_end_date(cls, options, name, end_date):
+        Date = Pool().get('ir.date')
         to_write, to_super = [], []
         if not end_date:
             cls.raise_user_error('end_date_none')
@@ -612,11 +613,11 @@ class ContractOption:
                     to_write.append(option)
                 else:
                     cls.raise_user_error('end_date_posterior_to_contract',
-                        coop_string.date_as_string(
+                        Date.date_as_string(
                             option.parent_contract.end_date))
             else:
                 cls.raise_user_error('end_date_anterior_to_start_date',
-                        coop_string.date_as_string(option.start_date))
+                        Date.date_as_string(option.start_date))
         if to_write:
             cls.write(to_write, {'manual_end_date': end_date})
         if to_super:
