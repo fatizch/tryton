@@ -696,6 +696,44 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             option.status = 'active'
             option.save()
 
+    def clean_up_versions(self):
+        pool = Pool()
+        ActivationHistory = pool.get('contract.activation_history')
+        ExtraData = pool.get('contract.extra_data')
+        Option = pool.get('contract.option')
+
+        if self.activation_history:
+            activation_period_to_del = [x for x in self.activation_history[1:]]
+            self.activation_history = [self.activation_history[0]]
+            self.activation_history[0].start_date = self.start_date
+            self.activation_history[0].end_date = None
+            if activation_period_to_del:
+                ActivationHistory.delete(activation_period_to_del)
+
+        if self.extra_datas:
+            extra_data_to_del = [x for x in self.extra_datas[:-1]]
+            self.extra_datas = [self.extra_datas[-1]]
+            self.extra_datas[0].date = None
+            if extra_data_to_del:
+                ExtraData.delete(extra_data_to_del)
+
+        if self.options:
+            to_write = []
+            for option in self.options:
+                option.clean_up_versions(self)
+                to_write += [[x], x._save_values]
+            if to_write:
+                Option.write(*to_write)
+
+    @classmethod
+    def revert_to_project(cls, contracts):
+        to_write = []
+        for contract in contracts:
+            contract.clean_up_versions()
+            contract.status = 'quote'
+            to_write += [[contract], contract._save_values]
+        cls.write(*to_write)
+
     @classmethod
     def get_coverages(cls, product):
         return [x.coverage for x in product.ordered_coverages]
@@ -979,6 +1017,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     @classmethod
     def search_coverage_kind(cls, name, clause):
         return [('coverage.kind', ) + tuple(clause[1:])]
+
+    def clean_up_versions(self, contract):
+        pass
 
     def get_all_extra_data(self, at_date):
         res = self.coverage.get_all_extra_data(at_date)

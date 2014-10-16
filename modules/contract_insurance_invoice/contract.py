@@ -165,6 +165,16 @@ class Contract:
                         value))
         return [('id', 'in', query)]
 
+    def clean_up_versions(self):
+        BillingInformation = Pool().get('contract.billing_information')
+        if self.billing_informations:
+            billing_informations_to_del = [x
+                for x in self.billing_informations[:-1]]
+            self.billing_informations = [self.billing_informations[-1]]
+            self.billing_informations[0].date = None
+            if billing_informations_to_del:
+                BillingInformation.delete(billing_informations_to_del)
+
     def _get_invoice_rrule_and_billing_information(self, start):
         billing_informations = iter(self.billing_informations)
         billing_information = billing_informations.next()

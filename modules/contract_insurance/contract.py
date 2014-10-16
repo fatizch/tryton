@@ -101,6 +101,18 @@ class Contract(Printable):
             return []
         return [x.id for x in self.product.item_descriptors]
 
+    def clean_up_versions(self):
+        super(Contract, self).clean_up_versions()
+
+        CoveredElement = Pool().get('contract.covered_element')
+        if self.covered_elements:
+            to_write = []
+            for covered_element in self.covered_elements:
+                covered_element.clean_up_versions(self)
+                to_write += [[covered_element], covered_element._save_values]
+            if to_write:
+                CoveredElement.write(*to_write)
+
     def check_sub_elem_eligibility(self, ext=None):
         errors = []
         res, errs = (True, [])
@@ -946,6 +958,16 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                         for sub_cov_elem in val[1]:
                             sub_cov_elem['contract'] = cov_element.contract.id
         super(CoveredElement, cls).write(cov_elements, vals, *_args)
+
+    def clean_up_versions(self, contract):
+        Option = Pool().get('contract.option')
+        if self.options:
+            to_write = []
+            for option in self.options:
+                option.clean_up_versions(contract)
+                to_write += [[option], option._save_values]
+            if to_write:
+                Option.write(*to_write)
 
     @classmethod
     def get_var_names_for_full_extract(cls):

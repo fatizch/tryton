@@ -29,6 +29,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'ActivationHistory': 'contract.activation_history',
             'ContractChangeStartDate': 'contract.change_start_date',
             'Coverage': 'offered.option.description',
+            'ContractExtraData': 'contract.extra_data',
             }
 
     @test_framework.prepare_test(
@@ -63,6 +64,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.status, 'active')
         self.assert_(contract.contract_number)
         self.assertEqual(contract.start_date, start_date)
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
+    def test0015_testRevertToProject(self):
+        contract, = self.Contract.search([])
+        start_date = contract.start_date
+        self.assertEqual(contract.status, 'active')
+        contract.extra_datas = [
+            self.ContractExtraData(start=None),
+            self.ContractExtraData(
+                start=start_date + datetime.timedelta(weeks=10)),
+            ]
+        contract.save()
+        good_extra_id = contract.extra_datas[-1].id
+        self.Contract.revert_to_project([contract])
+        self.assertEqual(contract.status, 'quote')
+        self.assertEqual(len(contract.extra_datas), 1)
+        self.assertEqual(contract.extra_datas[0].id, good_extra_id)
 
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
