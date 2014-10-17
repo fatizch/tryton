@@ -3,7 +3,7 @@
     <data>
         <record model="rule_engine" id="option_end_date_rule">
             <field name="name">Option End Date Rule</field>
-            <field name="short_name">Option End Date Rule</field>
+            <field name="short_name">option_end_date_rule</field>
             <field name="algorithm">birth_year = date_de_naissance().timetuple()[0]
 if param_age_kind() == 'real':
     return date_de_naissance() + relativedelta(
