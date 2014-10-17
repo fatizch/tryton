@@ -32,6 +32,14 @@ class Line:
             Pool().get('ir.date').date_as_string(self.date),
             self.statement.journal.currency.amount_as_string(self.amount))
 
+    def create_move(self):
+        move = super(Line, self).create_move()
+        if move:
+            move.description = (self.description
+                if self.description else self.statement.journal.rec_name)
+            move.save()
+        return move
+
 
 class Statement:
     __name__ = 'account.statement'
