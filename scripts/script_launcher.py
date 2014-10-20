@@ -642,8 +642,10 @@ if __name__ == '__main__':
             'drop', 'test_case'], help='The action to take on the database')
     parser_database.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
-    parser_database.add_argument('--module', '-m', help='Module name',
-        default='ir', type=str, choices=possible_modules)
+    parser_database.add_argument('--module', '-m',
+        help='Module name {account,account_aggregate,etc...}',
+        default='ir', type=str, choices=possible_modules,
+        metavar='MODULE_NAME')
     parser_database.add_argument('--test-case', '-t', help='Test case to run',
         default='all')
 
@@ -663,7 +665,8 @@ if __name__ == '__main__':
     parser_unittests = subparsers.add_parser('test', help='Test related '
         'actions')
     parser_unittests.add_argument('--module', '-m', default='all',
-        help='Module to unittest', nargs='+', choices=possible_modules)
+        help='Module to unittest {account,account_aggregate,etc...}',
+        nargs='+', choices=possible_modules, metavar='MODULE_NAME')
     parser_unittests.add_argument('--database', '-d', help='Database name',
         default='', type=str)
     parser_unittests.add_argument('--with-test-cases', '-t', help='Allow test '
@@ -679,7 +682,8 @@ if __name__ == '__main__':
     parser_export.add_argument('--database', '-d', help='Database name',
         default=config.get('parameters', 'db_name'), type=str)
     parser_export.add_argument('--module', '-m', default='all',
-        help='Module to unittest', nargs='+', choices=possible_coop_modules)
+        help='Module to export {account,account_aggregate,etc...}',
+        nargs='+', choices=possible_coop_modules, metavar='MODULE_NAME')
 
     # Configure parser
     parser_configure = subparsers.add_parser('configure', help='Configure '
