@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
+        <label name="contract_set"/>
+        <field name="contract_set"/>
+    </xpath>
+</data>

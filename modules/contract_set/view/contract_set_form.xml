@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Contract Set">
+    <label name="number"/>
+    <field name="number"/>
+    <newline/>
+    <field name="contracts" colspan="4"/>
+</form>
