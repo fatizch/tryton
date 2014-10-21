@@ -434,7 +434,7 @@ class Contract(CogProcessFramework):
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
-                'revert_last_endorsement': {},
+                'revert_current_endorsement': {},
                 })
 
     @classmethod
@@ -450,7 +450,9 @@ class Contract(CogProcessFramework):
             if last_endorsement:
                 endorsements_to_cancel.add(last_endorsement[0])
         if endorsements_to_cancel:
-            Endorsement.draft(list(endorsements_to_cancel))
+            endorsements_to_cancel = list(endorsements_to_cancel)
+            Endorsement.draft(endorsements_to_cancel)
+            Endorsement.delete(endorsements_to_cancel)
         return 'close'
 
     def update_start_date(self, caller=None):
