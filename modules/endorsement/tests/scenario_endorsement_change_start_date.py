@@ -31,6 +31,7 @@ Method = Model.get('ir.model.method')
 User = Model.get('res.user')
 Currency = Model.get('currency.currency')
 CurrencyRate = Model.get('currency.currency.rate')
+Country = Model.get('country.country')
 Party = Model.get('party.party')
 Company = Model.get('company.company')
 Sequence = Model.get('ir.sequence')
@@ -64,6 +65,14 @@ if not currencies:
         rate=Decimal('1.0'), currency=currency).save()
 else:
     currency, = currencies
+
+# #Comment# #Create or fetch Country
+countries = Country.find([('code', '=', 'FR')])
+if not countries:
+    country = Country(name='France', code='FR')
+    country.save()
+else:
+    country, = countries
 
 # #Comment# #Create Company
 company_config = Wizard('company.company.config')

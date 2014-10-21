@@ -29,6 +29,7 @@ Get Models::
     >>> User = Model.get('res.user')
     >>> Currency = Model.get('currency.currency')
     >>> CurrencyRate = Model.get('currency.currency.rate')
+    >>> Country = Model.get('country.country')
     >>> Party = Model.get('party.party')
     >>> Company = Model.get('company.company')
     >>> Sequence = Model.get('ir.sequence')
@@ -64,6 +65,15 @@ Create or fetch Currency::
     ...         rate=Decimal('1.0'), currency=currency).save()
     ... else:
     ...     currency, = currencies
+
+Create or fetch Country::
+
+    >>> countries = Country.find([('code', '=', 'FR')])
+    >>> if not countries:
+    ...     country = Country(name='France', code='FR')
+    ...     country.save()
+    ... else:
+    ...     country, = countries
 
 Create Company::
 
