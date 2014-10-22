@@ -3,7 +3,7 @@
   <label name="generated_report"/>
   <field name="generated_report" colspan="3" widget="url"/>
   <label name="email"/>
-  <field name="email" colspan="3" widget="selection"/>
+  <field name="email" colspan="3"/>
   <field name="party"/>
   <field name="filename"/>
   <field name="exact_name"/>

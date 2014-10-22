@@ -671,9 +671,7 @@ class DocumentCreatePreview(model.CoopView):
             'invisible': ~Eval('generated_report')})
     party = fields.Many2One('party.party', 'Party',
         states={'invisible': True})
-    email = fields.Many2One('party.contact_mechanism', 'eMail', domain=[
-            ('party', '=', Eval('party')),
-            ('type', '=', 'email')], depends=['party'])
+    email = fields.Char('eMail')
     filename = fields.Char('Filename', states={'invisible': True})
     exact_name = fields.Char('Exact Name', states={'invisible': True})
 
@@ -702,8 +700,7 @@ class DocumentCreate(Wizard):
         'offered_insurance.document_create_preview_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Previous', 'select_model', 'tryton-go-previous'),
-            Button('Mail', 'mail', 'tryton-go-next', states={
-                    'readonly': ~Eval('email')}),
+            Button('Mail', 'mail', 'tryton-go-next'),
             ])
     attach = StateView('document.create.attach',
         'offered_insurance.document_create_attach_form', [
@@ -800,7 +797,7 @@ class DocumentCreate(Wizard):
                 ])
         if not email:
             return result
-        result['email'] = email[0].id
+        result['email'] = email[0].value
         return result
 
     def do_mail(self, action):
@@ -808,7 +805,7 @@ class DocumentCreate(Wizard):
         selected_model = DocumentTemplate(self.select_model.get_active_model())
         action['email_print'] = True
         action['email'] = {
-            'to': self.preview_document.email.value,
+            'to': self.preview_document.email,
             'subject': selected_model.mail_subject,
             'body': selected_model.mail_body}
         return action, {
