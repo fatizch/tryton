@@ -1107,10 +1107,9 @@ class DisplayContractPremium(Wizard):
             'contract.option': ['extra_premiums'],
             }
 
-    @classmethod
-    def new_line(cls, line=None):
+    def new_line(self, name, line=None):
         return {
-            'name': '%s - %s' % (line.start, line.end or '') if line else '',
+            'name': name,
             'premium': line.id if line else None,
             'premiums': [line.id] if line else [],
             'amount': line.amount if line else 0,
@@ -1123,22 +1122,23 @@ class DisplayContractPremium(Wizard):
             if not values:
                 continue
             for elem in values:
-                base_line = self.new_line()
-                base_line['name'] = elem.rec_name
+                base_line = self.new_line(elem.rec_name)
                 self.add_lines(elem, base_line)
                 parent['childs'].append(base_line)
                 parent['amount'] += base_line['amount']
         if source.premiums:
-            premium_root = self.new_line()
-            premium_root['name'] = 'Premium'
             for elem in source.premiums:
-                premium_line = self.new_line(line=elem)
+                name = ''
+                if elem.rated_entity.rec_name == source.rec_name:
+                    name = '%s - %s' % (elem.start, elem.end or '')
+                else:
+                    name = '%s (%s - %s)' % (elem.rated_entity.rec_name,
+                        elem.start, elem.end or '')
+                premium_line = self.new_line(name, elem)
                 if elem.start <= utils.today() <= (
                         elem.end or datetime.date.max):
-                    premium_root['amount'] += elem.amount
-                premium_root['childs'].append(premium_line)
-            parent['childs'].append(premium_root)
-            parent['amount'] += premium_root['amount']
+                    parent['amount'] += elem.amount
+                parent['childs'].append(premium_line)
         return parent
 
     def default_display(self, name):
@@ -1149,11 +1149,16 @@ class DisplayContractPremium(Wizard):
             self.raise_user_error('no_contract_found')
         lines = []
         for contract in contracts:
-            contract_line = self.new_line()
-            contract_line['name'] = contract.rec_name
+            contract_line = self.new_line(contract.rec_name)
             self.add_lines(contract, contract_line)
             lines.append(contract_line)
-        return {'premiums': lines}
+        if len(lines) == 1:
+            return {'premiums': lines}
+        contracts_line = self.new_line('Total')
+        contracts_line['amount'] = sum(line['amount']
+            for line in lines)
+        contracts_line['childs'] = lines
+        return {'premiums': [contracts_line]}
 
     def transition_calculate_prices(self):
         Contract = Pool().get('contract')
