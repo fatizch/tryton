@@ -1,4 +1,5 @@
 import unittest
+import datetime
 
 import trytond.tests.test_tryton
 
@@ -12,6 +13,68 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_module_name(cls):
         return 'health'
+
+    @classmethod
+    def get_models(cls):
+        return {
+            'Party': 'party.party',
+            'PartyRelationType': 'party.relation.type',
+            'PartyRelation': 'party.relation.all',
+            'Contract': 'contract',
+            'RuleEngineRuntime': 'rule_engine.runtime',
+            }
+
+    def test0016_test_rule_engine_function(self):
+        relation_spouse = self.PartyRelationType(name='Spouse', code='spouse')
+        relation_spouse.save()
+        relation_spouse.reverse = relation_spouse
+        relation_spouse.reverse.save()
+        relation_child = self.PartyRelationType(name='Child', code='child')
+        relation_child.save()
+        relation_parent = self.PartyRelationType(name='Parent', code='parent')
+        relation_parent.reverse = relation_child
+        relation_parent.save()
+        party_father = self.Party(name='Father', first_name='F', gender='male',
+            is_person=True, birth_date=datetime.date(1978, 2, 15))
+        party_father.save()
+        party_mother = self.Party(name='Mother', first_name='M',
+            gender='female', is_person=True,
+            birth_date=datetime.date(1975, 7, 10),
+            relations=[{'to': party_father, 'type': relation_spouse}])
+        party_mother.save()
+        party_child1 = self.Party(name='Child1', first_name='C', gender='male',
+            is_person=True, birth_date=datetime.date(2010, 3, 5),
+            relations=[{'to': party_father, 'type': relation_child},
+                {'to': party_mother, 'type': relation_child}])
+        party_child1.save()
+        party_child2 = self.Party(name='Child2', first_name='C',
+            gender='female', is_person=True,
+            birth_date=datetime.date(2009, 5, 15),
+            relations=[{'to': party_father, 'type': relation_child},
+                {'to': party_mother, 'type': relation_child}])
+        party_child2.save()
+
+        contract = self.Contract(subscriber=party_father,
+            covered_elements=[{'party': party_father},
+                    {'party': party_mother}, {'party': party_child1},
+                    {'party': party_child2}])
+        args = {'contract': contract, 'person': party_child1,
+            'date': datetime.date(2014, 1, 1)}
+        # test _re_relation_number
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age(args,
+                'child'), 2)
+        args = {'contract': contract, 'person': party_child2,
+            'date': datetime.date(2014, 1, 1)}
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age(args,
+                'child'), 1)
+        # test _re_number_of_covered_with_relation
+        args = {'contract': contract, 'date': datetime.date(2014, 1, 1)}
+        self.assertEqual(self.RuleEngineRuntime.
+            _re_number_of_covered_with_relation(args, 'child'), 2)
+        self.assertEqual(self.RuleEngineRuntime.
+            _re_number_of_covered_with_relation(args, 'spouse'), 2)
 
 
 def suite():

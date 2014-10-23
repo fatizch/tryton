@@ -3,7 +3,6 @@ from .contract import *
 from .party import *
 from .document import *
 from .renewal import *
-from .rule_engine import *
 from .wizard import *
 from .service import *
 
@@ -32,7 +31,6 @@ def register():
         Expense,
         RenewalStart,
         RenewalResult,
-        RuleEngineRuntime,
         OptionsDisplayer,
         WizardOption,
         ExtraPremiumSelector,

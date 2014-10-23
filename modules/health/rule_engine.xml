@@ -2,14 +2,14 @@
 <tryton>
     <data skiptest="1">
         <record model="rule_engine.function" id="te_relation_number">
-            <field name="description">Numéro de la Relation</field>
-            <field name="name">_re_relation_number</field>
+            <field name="description">Numéro de la relation par âge</field>
+            <field name="name">_re_relation_number_order_by_age</field>
             <field name="namespace">rule_engine.runtime</field>
             <field name="type">function</field>
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
-            <field name="translated_technical_name">numero_relation</field>
+            <field name="translated_technical_name">numero_relation_par_age</field>
             <field name="language" ref="ir.lang_fr"/>
-            <field name="fct_args">nom_relation[optionnel]</field>
+            <field name="fct_args">Nom de la relation</field>
         </record>
         <record model="rule_engine.function" id="te_number_of_covered_with_relation">
             <field name="description">Nombre de personnes couvertes avec la relation</field>
@@ -19,7 +19,7 @@
             <field name="parent" ref="offered_insurance.dossier_donnees_couverture"/>
             <field name="translated_technical_name">nombre_relation</field>
             <field name="language" ref="ir.lang_fr"/>
-            <field name="fct_args">Nom de la relation (optionnel)</field>
+            <field name="fct_args">Nom de la relation</field>
         </record>
     </data>
 </tryton>

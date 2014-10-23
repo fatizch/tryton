@@ -3,6 +3,7 @@ from trytond.pool import Pool
 from .offered import *
 from .party import *
 from .contract import *
+from .rule_engine import *
 
 
 def register():
@@ -15,4 +16,5 @@ def register():
         Contract,
         Option,
         CoveredElement,
+        RuleEngineRuntime,
         module='health', type_='model')
