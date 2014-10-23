@@ -261,15 +261,18 @@ class Party(export.ExportImportMixin):
     def set_is_actor(cls, parties, name, value):
         pass
 
-    def get_rec_name(self, name):
+    def get_full_name(self, name):
         if self.is_person:
-            return "[%s] %s %s %s " % (self.code, coop_string.translate_value(
-                self, 'gender'), self.name.upper(), self.first_name)
-        return super(Party, self).get_rec_name(name)
+            return '%s %s %s' % (self.gender_string, self.name.upper(),
+                self.first_name)
+        return super(Party, self).get_full_name(name)
+
+    def get_rec_name(self, name):
+        return '[%s] %s' % (self.code, self.full_name)
 
     def get_synthesis_rec_name(self, name):
         if self.is_person:
-            res = "%s %s %s" % (coop_string.translate_value(
+            res = '%s %s %s' % (coop_string.translate_value(
                 self, 'gender'), self.name.upper(), self.first_name)
             if self.ssn:
                 res += ' (%s)' % self.ssn
