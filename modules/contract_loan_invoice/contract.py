@@ -296,7 +296,7 @@ class PremiumAmountPerPeriod(ModelSQL, ModelView):
     contract = fields.Many2One('contract', 'Contract')
     amount = fields.Numeric('Amount')
     fees = fields.Numeric('Fees')
-    untaxed_amount = fields.Numeric('Total')
+    untaxed_amount = fields.Numeric('Untaxed Amount')
     tax_amount = fields.Numeric('Tax Amount')
     total = fields.Numeric('Total')
     period_start = fields.Date('Period Start')

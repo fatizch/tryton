@@ -4,7 +4,6 @@
     <field name="period_end"/>
     <field name="amount" sum="Amount"/>
     <field name="fees" sum="Fees"/>
-    <field name="untaxed_amount" sum="Untaxed Amount"/>
     <field name="tax_amount" sum="Tax Amount"/>
     <field name="total" sum="Total"/>
 </tree>
