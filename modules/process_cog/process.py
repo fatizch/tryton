@@ -901,10 +901,6 @@ class ProcessStart(model.CoopView):
         return ['model', 'date']
 
     @classmethod
-    def default_date(cls):
-        return utils.today()
-
-    @classmethod
     def default_model(cls):
         raise NotImplementedError
 
