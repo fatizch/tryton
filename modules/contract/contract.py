@@ -169,6 +169,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
+        cls.rec_name.string = 'Number'
         cls.__rpc__.update({'ws_subscribe_contract': RPC(readonly=False)})
         cls._buttons.update({
                 'option_subscription': {},
