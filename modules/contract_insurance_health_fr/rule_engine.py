@@ -23,3 +23,13 @@ class RuleEngineRuntime:
         if person.health_complement:
             return person.health_complement[0].department
         cls.append_error(args, 'Cannot find the department')
+
+    @classmethod
+    def _re_health_subscriber_department(cls, args):
+        if 'contract' in args:
+            person = args['contract'].subscriber
+        else:
+            person = cls.get_person(args)
+        if person.health_complement:
+            return person.health_complement[0].department
+        cls.append_error(args, 'Cannot find the department')
