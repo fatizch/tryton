@@ -611,6 +611,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
 class ContractInvoice(ModelSQL, ModelView):
     'Contract Invoice'
     __name__ = 'contract.invoice'
+    _rec_name = 'invoice'
+
     contract = fields.Many2One('contract', 'Contract', required=True)
     invoice = fields.Many2One('account.invoice', 'Invoice', required=True,
         ondelete='CASCADE')
