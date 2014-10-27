@@ -137,7 +137,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'on_change_with_current_policy_owner')
     end_date = fields.Function(
         fields.Date('End Date'),
-        'getter_contract_date', searcher='search_contract_date')
+        'getter_contract_date', 'set_contract_end_date',
+        searcher='search_contract_date')
     extra_data_values = fields.Function(
         fields.Dict('extra_data', 'Extra Data'),
         'get_extra_data')
@@ -387,6 +388,35 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 else:
                     cls.raise_user_error(
                         'start_date_multiple_activation_history')
+        if to_create:
+            ActivationHistory.create(to_create)
+        if to_write:
+            ActivationHistory.write(*to_write)
+
+    @classmethod
+    def set_contract_end_date(cls, contract_ids, name, value):
+        pool = Pool()
+        ActivationHistory = pool.get('contract.activation_history')
+        to_create, to_write, to_delete = [], [], []
+        for contract_slice in grouped_slice(contract_ids):
+            for contract_id in contract_slice:
+                existing = ActivationHistory.search([
+                        ('contract', '=', contract_id)])
+                if not existing:
+                    to_create.append({
+                            'contract': contract_id,
+                            'end_date': value,
+                            })
+                else:
+                    for elem in reversed(existing):
+                        if elem.start_date > value:
+                            to_delete.append(elem)
+                        elif elem.end_date != value:
+                            to_write += [[elem], {'end_date': value}]
+                        else:
+                            break
+        if to_delete:
+            ActivationHistory.delete(to_delete)
         if to_create:
             ActivationHistory.create(to_create)
         if to_write:
