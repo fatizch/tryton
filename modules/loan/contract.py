@@ -29,7 +29,7 @@ class Contract:
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
     loans = fields.Function(
-        fields.One2Many('loan', None, 'Loans',
+        fields.Many2Many('loan', None, None, 'Loans',
             states={
                 'invisible': (~Eval('is_loan')) | (~Eval('subscriber', False)),
                 'readonly': Eval('status') != 'quote',
@@ -213,7 +213,8 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
-    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True)
+    loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True,
+        domain=[('state', '=', 'calculated')])
     share = fields.Numeric('Loan Share', digits=(16, 4))
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),

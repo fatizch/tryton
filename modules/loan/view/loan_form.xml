@@ -48,4 +48,13 @@
             <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
         </page>
     </notebook>
+    <label name="state"/>
+    <field name="state"/>
+    <group col="2" colspan="2" id="buttons">
+        <button name="draft" string="_Draft"
+            icon="tryton-go-previous"/>
+        <button name="calculate_loan"
+            string="Calculate Amortization Table"
+            icon="tryton-go-next"/>
+    </group>
 </form>

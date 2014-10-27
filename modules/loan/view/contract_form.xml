@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='data']" position="inside">
-        <field name="loans" colspan="4"/>
+        <field name="loans" colspan="4" widget="one2many"/>
     </xpath>
     <xpath expr="//page[@id='cov_elements']/hpaned/child[@id='form']" position="inside">
         <field name="multi_mixed_view" group="multi_mixed_view" mode="form" relation="loan.share" relation_field="option" view_ids="loan.loan_share_view_form" expand_toolbar="0"/>
