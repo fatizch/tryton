@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from decimal import Decimal
 import unittest
 import datetime
@@ -144,7 +144,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan.get_outstanding_loan_balance(
                 at_date=datetime.date(2099, 9, 20)), Decimal(0))
 
-        #Test loan modification
+        # Test loan modification
         loan.rate = Decimal('0.0752')
         loan.funds_release_date = datetime.date(2014, 3, 5)
         loan.payment_frequency = 'quarter'
@@ -457,9 +457,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         test_date = base_date + datetime.timedelta(days=227)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertEqual(insurers, set(['Total', 'INSURER1', 'INSURER2']))
+        self.assertEqual(insurers, set(['Total', insurer1.rec_name,
+                    insurer2.rec_name]))
         for line in res:
-            if line['name'] == 'INSURER1':
+            if line['name'] == insurer1.rec_name:
                 self.assertEqual(line['amount'], Decimal('238370.12'))
                 coverages = set(x['name'] for x in line['childs'])
                 self.assertTrue(
@@ -469,7 +470,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                         self.assertEqual(child['amount'], Decimal('238370.12'))
                     if child['name'] == 'Partial Disability':
                         self.assertEqual(child['amount'], Decimal('33103.65'))
-            elif line['name'] == 'INSURER2':
+            elif line['name'] == insurer2.rec_name:
                 self.assertEqual(line['amount'], Decimal('192017.07'))
                 coverages = set(x['name'] for x in line['childs'])
                 self.assertTrue(coverages == set(['Temporary Disability']))
@@ -482,9 +483,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         test_date = base_date + datetime.timedelta(days=2662)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertEqual(insurers, set(['Total', 'INSURER1', 'INSURER2']))
+        self.assertEqual(insurers, set(['Total', insurer1.rec_name,
+                    insurer2.rec_name]))
         for line in res:
-            if line['name'] == 'INSURER1':
+            if line['name'] == insurer1.rec_name:
                 self.assertEqual(line['amount'], Decimal('88726.16'))
                 coverages = set(x['name'] for x in line['childs'])
                 self.assertTrue(
@@ -494,7 +496,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                         self.assertEqual(child['amount'], Decimal('88726.16'))
                     if child['name'] == 'Partial Disability':
                         self.assertEqual(child['amount'], Decimal('12321.84'))
-            elif line['name'] == 'INSURER2':
+            elif line['name'] == insurer2.rec_name:
                 self.assertEqual(line['amount'], Decimal('71472.62'))
                 coverages = set(x['name'] for x in line['childs'])
                 self.assertTrue(coverages == set(['Temporary Disability']))
@@ -508,7 +510,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         test_date = base_date + datetime.timedelta(weeks=2000)
         res = run_wizard(test_date, currency)
         insurers = set([x['name'] for x in res])
-        self.assertEqual(insurers, set(['Total', 'INSURER1', 'INSURER2']))
+        self.assertEqual(insurers, set(['Total', insurer1.rec_name,
+                    insurer2.rec_name]))
         for line in res:
             self.assertEqual(line['amount'], 0)
 
