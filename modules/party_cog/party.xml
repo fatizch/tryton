@@ -107,6 +107,22 @@
         </record>
 
         <!-- *******************************************
+            ******** Parent childreen relationship ******
+            ******************************************* -->
+        <record model="party.relation.type" id="child_relation_type">
+            <field name="code">child</field>
+            <field name="name">Child</field>
+        </record>
+        <record model="party.relation.type" id="parent_relation_type">
+            <field name="code">parent</field>
+            <field name="name">Parent</field>
+            <field name="reverse" ref="party_cog.child_relation_type"/>
+        </record>
+        <record model="party.relation.type" id="child_relation_type" update="1">
+            <field name="reverse" ref="party_cog.parent_relation_type"/>
+        </record>
+
+        <!-- *******************************************
             ******** Synthesis **********
             ******************************************* -->
         <record model="ir.ui.view" id="menu_view_tree">

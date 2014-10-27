@@ -664,6 +664,14 @@ msgctxt "model:party.interaction,name:"
 msgid "Party Interaction"
 msgstr "Historique des Contacts"
 
+msgctxt "model:party.relation.type,name:child_relation_type"
+msgid "Child"
+msgstr "Enfant"
+
+msgctxt "model:party.relation.type,name:parent_relation_type"
+msgid "Parent"
+msgstr "Parent"
+
 msgctxt "model:party.synthesis.menu,name:"
 msgid "Party Synthesis Menu"
 msgstr "Synthèse acteur"
