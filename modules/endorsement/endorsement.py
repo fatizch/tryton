@@ -456,6 +456,16 @@ class Contract(CogProcessFramework):
             Endorsement.delete(endorsements_to_cancel)
         return 'close'
 
+    @classmethod
+    def apply_in_progress_endorsement(cls, contracts):
+        Endorsement = Pool().get('endorsement')
+        endorsements = Endorsement.search([
+                ('contracts', 'in', [x.id for x in contracts]),
+                ('state', '=', 'in_progress')])
+        if not endorsements:
+            cls.raise_user_error('no_in_progress_endorsements')
+        Endorsement.apply(endorsements)
+
     def update_start_date(self, caller=None):
         if not caller:
             return

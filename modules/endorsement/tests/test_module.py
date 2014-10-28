@@ -6,6 +6,7 @@ import datetime
 import trytond.tests.test_tryton
 from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 from trytond.transaction import Transaction
+from trytond.exceptions import UserError
 
 from trytond.modules.cog_utils import test_framework
 
@@ -227,11 +228,20 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.contract_number, previous_contract_number)
         endorsement.in_progress([endorsement])
         Transaction().cursor.commit()
-
         contract.revert_current_endorsement([contract])
         Transaction().cursor.commit()
+
         self.assertEqual(endorsement.state, 'draft')
         self.assertEqual(endorsement.rollback_date, None)
+        endorsement.in_progress([endorsement])
+        Transaction().cursor.commit()
+        contract = endorsement.contracts[0]
+        contract.apply_in_progress_endorsement([contract])
+        Transaction().cursor.commit()
+
+        self.assertEqual(endorsement.state, 'applied')
+        self.assertRaises(UserError, contract.apply_in_progress_endorsement,
+            [contract])
 
 
 def suite():
