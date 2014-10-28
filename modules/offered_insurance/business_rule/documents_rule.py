@@ -26,7 +26,6 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
 from trytond.modules.cog_utils import BatchRoot
 
 __all__ = [
-    'DocumentDescription',
     'DocumentProductRelation',
     'DocumentRule',
     'RuleDocumentDescriptionRelation',
@@ -227,23 +226,6 @@ class Printable(Model):
 
     def get_document_filename(self):
         return self.rec_name
-
-
-class DocumentDescription(model.CoopSQL, model.CoopView):
-    'Document Description'
-
-    __name__ = 'document.description'
-
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True, translate=True)
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
-
-    @fields.depends('code', 'name')
-    def on_change_with_code(self):
-        if self.code:
-            return self.code
-        return coop_string.remove_blank_and_invalid_char(self.name)
 
 
 class DocumentRule(BusinessRuleRoot, model.CoopSQL):

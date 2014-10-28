@@ -2,34 +2,6 @@
 <tryton>
   <data>
     <!-- ################# -->
-    <!-- # Document Desc # -->
-    <!-- ################# -->
-    <record model="ir.ui.view" id="document_desc_form">
-      <field name="model">document.description</field>
-      <field name="type">form</field>
-      <field name="name">document_desc_form</field>
-    </record>
-    <record model="ir.ui.view" id="document_desc_tree">
-      <field name="model">document.description</field>
-      <field name="type">tree</field>
-      <field name="name">document_desc_tree</field>
-    </record>
-    <record model="ir.action.act_window" id="act_document_desc">
-      <field name="name">Document Descriptions</field>
-      <field name="res_model">document.description</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_document_desc_view1">
-      <field name="sequence" eval="16"/>
-      <field name="view" ref="document_desc_tree"/>
-      <field name="act_window" ref="act_document_desc"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_document_desc_view2">
-      <field name="sequence" eval="16"/>
-      <field name="view" ref="document_desc_form"/>
-      <field name="act_window" ref="act_document_desc"/>
-    </record>
-    <menuitem parent="offered.menu_product_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
-    <!-- ################# -->
     <!-- # Document Rule # -->
     <!-- ################# -->
     <record model="ir.ui.view" id="document_rule_form">
