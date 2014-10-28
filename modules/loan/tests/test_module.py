@@ -203,14 +203,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
             payment_frequency='half_year',
             currency=currency,
             company=company)
-        loan.first_payment_date = loan.on_change_funds_release_date()[
-            'first_payment_date']
+        loan.first_payment_date = loan.on_change_with_first_payment_date()
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 9, 5))
         loan.number_of_payments = 30
         loan.amount = Decimal(243455)
-        changes = loan.on_change_kind()
-        loan.deferal = changes['deferal']
-        loan.deferal_duration = changes['deferal_duration']
         loan.calculate()
         self.assertEqual(loan.get_payment_amount(loan.first_payment_date),
             Decimal('8240.95'))

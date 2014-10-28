@@ -84,9 +84,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         states={
             'required': Eval('kind').in_(
                 ['fixed_rate', 'intermediate', 'balloon']),
-            'invisible': ~Eval('kind').in_(
-                ['fixed_rate', 'intermediate', 'balloon', 'graduated']),
-            'readonly': Eval('state') != 'draft',
+            'readonly':
+                (Eval('state') != 'draft') | (Eval('kind') == 'interest_free'),
             },
         domain=[If(
                 Eval('kind').in_(['fixed_rate', 'intermediate', 'balloon']),
@@ -241,17 +240,21 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return currency.round(res)
 
     def init_increments(self):
-        increments = []
         if self.kind == 'graduated':
-            for increment in self.increments:
-                increments.append(increment)
-        elif (getattr(self, 'deferal', None)
-                and getattr(self, 'deferal_duration', None)):
-            increments = self.create_increments_from_deferal(
-                self.deferal_duration, self.deferal)
+            # Nothing to do, we keep current increments
+            return
+        elif self.kind in ['intermediate', 'balloon']:
+            deferal = 'partially'
+            deferal_duration = (self.number_of_payments - 1
+                if self.number_of_payments else None)
+        else:
+            deferal = getattr(self, 'deferal', None)
+            deferal_duration = getattr(self, 'deferal_duration', None)
+        if deferal and deferal_duration:
+            self.increments = self.create_increments_from_deferal(
+                deferal_duration, deferal)
         elif self.number_of_payments:
-            increments = [self.create_increment(self.number_of_payments)]
-        self.increments = increments
+            self.increments = [self.create_increment(self.number_of_payments)]
 
     def update_increments_and_calculate_payments(self):
         Payment = Pool().get('loan.payment')
@@ -403,65 +406,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             'start_date')
         return increment.payment_amount if increment else None
 
-    @fields.depends('kind', 'deferal', 'number_of_payments',
-            'deferal_duration', 'increments', 'rate',
-            'first_payment_date', 'payment_frequency', 'currency', 'amount',
-            'funds_release_date')
-    def _on_change(self, name=None):
-        changes = {}
-        if self.kind in ['intermediate', 'balloon']:
-            self.deferal = 'partially'
-            self.deferal_duration = (self.number_of_payments - 1
-                if self.number_of_payments else None)
-        elif self.kind in ['interest_free', 'graduated']:
-            self.deferal = None
-            self.deferal_duration = None
-            if self.kind == 'interest_free':
-                self.rate = Decimal(0)
-        changes['deferal'] = self.deferal
-        changes['deferal_duration'] = self.deferal_duration
-        changes['rate'] = self.rate
-
-        if name and name in ['funds_release_date', 'payment_frequency']:
-            if self.funds_release_date and self.payment_frequency:
-                self.first_payment_date = coop_date.add_duration(
-                    self.funds_release_date, self.payment_frequency)
-            else:
-                self.first_payment_date = None
-        changes['first_payment_date'] = self.first_payment_date
-
-        previous_increments = self.increments
-        self.init_increments()
-        if self.increments and self.kind != 'graduated':
-            changes['increments'] = {
-                'add': [(-1, x._save_values) for x in self.increments],
-                'remove': [x.id for x in previous_increments],
-                }
-        return changes
-
-    on_change_kind = _on_change
-    on_change_number_of_payments = _on_change
-    on_change_deferal = _on_change
-    on_change_deferal_duration = _on_change
-    on_change_rate = _on_change
-    on_change_currency = _on_change
-    on_change_amount = _on_change
-    on_change_first_payment_date = _on_change
-
-    @fields.depends('kind', 'deferal', 'number_of_payments',
-        'deferal_duration', 'increments', 'payments', 'rate',
-        'first_payment_date', 'payment_frequency', 'currency', 'amount',
-        'funds_release_date')
-    def on_change_funds_release_date(self):
-        return self._on_change('funds_release_date')
-
-    @fields.depends('kind', 'deferal', 'number_of_payments',
-        'deferal_duration', 'increments', 'payments', 'rate',
-        'first_payment_date', 'payment_frequency', 'currency', 'amount',
-        'funds_release_date')
-    def on_change_payment_frequency(self):
-        return self._on_change('payment_frequency')
-
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
@@ -473,6 +417,31 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @fields.depends('increments')
     def on_change_with_number_of_payments(self, name=None):
         return sum([x.number_of_payments for x in self.increments])
+
+    @fields.depends('payment_frequency', 'funds_release_date')
+    def on_change_with_first_payment_date(self):
+        if self.funds_release_date and self.payment_frequency:
+            return coop_date.add_duration(self.funds_release_date,
+                self.payment_frequency)
+        else:
+            return None
+
+    @fields.depends('kind', 'rate')
+    def on_change_with_rate(self):
+        if self.kind == 'interest_free':
+            return Decimal(0)
+        return self.rate
+
+    @fields.depends('kind', 'deferal', 'number_of_payments',
+            'deferal_duration', 'increments', 'rate')
+    def on_change_with_increments(self):
+        previous_increments = self.increments
+        self.init_increments()
+        if self.kind != 'graduated':
+            return {
+                'add': [(-1, x._save_values) for x in self.increments],
+                'remove': [x.id for x in previous_increments],
+                }
 
     @classmethod
     @model.CoopView.button
