@@ -10,6 +10,7 @@ from trytond.modules.endorsement import values_mixin, relation_mixin
 
 
 __all__ = [
+    'Contract',
     'Loan',
     'LoanIncrement',
     'LoanPayment',
@@ -21,6 +22,18 @@ __all__ = [
     'EndorsementCoveredElementOption',
     'EndorsementLoanShare',
     ]
+
+
+class Contract:
+    __metaclass__ = PoolMeta
+    __name__ = 'contract'
+
+    def update_start_date(self, caller=None):
+        super(Contract, self).update_start_date(caller)
+        # Recalculate the end_date as well to follow loan modifications (if
+        # any)
+        self.set_contract_end_date_from_loans()
+        self.save()
 
 
 class Loan:
