@@ -121,6 +121,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
     status = fields.Selection(CONTRACTSTATUSES, 'Status')
+    status_string = status.translated('status')
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[If(
                 Eval('subscriber_kind') == 'person',
