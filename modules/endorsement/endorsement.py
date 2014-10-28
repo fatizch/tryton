@@ -823,6 +823,13 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 cls.raise_user_error('not_latest_applied',
                     contract_endorsement.rec_name)
 
+            contract = contract_endorsement.contract
+            if contract.current_state and (
+                    contract_endorsement.endorsement.state != 'in_progress'):
+                cls.raise_user_error('process_in_progress', (
+                        contract.rec_name,
+                        contract.current_state.process.fancy_name))
+
             contract_endorsement.do_restore_history()
             contract_endorsement.set_applied_on(None)
             contract_endorsement.state = 'draft'
@@ -834,7 +841,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         Contract = pool.get('contract')
         for contract_endorsement in contract_endorsements:
             contract = contract_endorsement.contract
-            if contract.current_state:
+            if contract.current_state and (
+                    contract_endorsement.endorsement.state != 'in_progress'):
                 cls.raise_user_error('process_in_progress', (
                         contract.rec_name,
                         contract.current_state.process.fancy_name))

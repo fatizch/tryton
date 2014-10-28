@@ -232,10 +232,21 @@ class SelectEndorsement(model.CoopView):
     product = fields.Many2One('offered.product', 'Product', readonly=True)
     has_preview = fields.Boolean('Has Preview', readonly=True,
         states={'invisible': True})
+    contract_in_process = fields.Boolean('Contract in Progress',
+        states={'invisible': True})
 
     @fields.depends('contract')
     def on_change_contract(self):
-        return {'product': self.contract.product.id if self.contract else None}
+        if self.contract:
+            return {
+                'product': self.contract.product.id,
+                'contract_in_process': bool(self.contract.current_state),
+                }
+        else:
+            return {
+                'product': None,
+                'contract_in_process': False,
+                }
 
 
 class BasicPreview(EndorsementWizardPreviewMixin, model.CoopView):
