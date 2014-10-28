@@ -35,6 +35,7 @@ Company = Model.get('company.company')
 Contract = Model.get('contract')
 ContractInvoice = Model.get('contract.invoice')
 ContractPremium = Model.get('contract.premium')
+Country = Model.get('country.country')
 Currency = Model.get('currency.currency')
 CurrencyRate = Model.get('currency.currency.rate')
 FiscalYear = Model.get('account.fiscalyear')
@@ -57,6 +58,14 @@ contract_start_date = datetime.date(2014, 4, 10)
 currency, = Currency.find([('code', '=', 'EUR')])
 CurrencyRate(date=product_start_date, rate=Decimal('1.0'),
     currency=currency).save()
+
+# #Comment# #Create or fetch Country
+countries = Country.find([('code', '=', 'FR')])
+if not countries:
+    country = Country(name='France', code='FR')
+    country.save()
+else:
+    country, = countries
 
 # #Comment# #Create Company
 company_config = Wizard('company.company.config')
