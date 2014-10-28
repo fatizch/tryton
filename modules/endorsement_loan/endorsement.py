@@ -170,7 +170,9 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         super(EndorsementLoan, cls).__setup__()
         cls._error_messages.update({
                 'not_latest_applied': ('Endorsement "%s" is not the latest '
-                    'applied.')
+                    'applied.'),
+                'only_one_endorsement_in_progress': 'There may only be one '
+                'endorsement in_progress at a given time per loan',
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -242,6 +244,14 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
             loan_endorsement.set_applied_on(None)
             loan_endorsement.state = 'draft'
             loan_endorsement.save()
+
+    @classmethod
+    def check_in_progress_unicity(cls, loan_endorsements):
+        count = Pool().get('endorsement').search_count([
+                ('loans', 'in', [x.loan.id for x in loan_endorsements]),
+                ('state', '=', 'in_progress')])
+        if count:
+            cls.raise_user_error('only_one_endorsement_in_progress')
 
     @classmethod
     def apply(cls, loan_endorsements):

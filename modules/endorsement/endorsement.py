@@ -609,6 +609,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     @Workflow.transition('in_progress')
     def in_progress(cls, endorsements):
+        pool = Pool()
+        groups = cls.group_per_model(endorsements)
+        for model_name, values in groups.iteritems():
+            pool.get(model_name).check_in_progress_unicity(values)
         cls.write(endorsements, {'rollback_date': Now()})
 
     @classmethod
@@ -741,6 +745,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                     'applied.'),
                 'process_in_progress': ('Contract %s is currently locked in '
                     'process %s.'),
+                'only_one_endorsement_in_progress': 'There may only be one '
+                'endorsement in_progress at a given time per contract',
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -855,6 +861,15 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             values = contract_endorsement.apply_values
             Contract.write([contract], values)
             contract_endorsement.save()
+
+    @classmethod
+    def check_in_progress_unicity(cls, contract_endorsements):
+        count = Pool().get('endorsement').search_count([
+                ('contracts', 'in', [x.contract.id for x in
+                        contract_endorsements]),
+                ('state', '=', 'in_progress')])
+        if count:
+            cls.raise_user_error('only_one_endorsement_in_progress')
 
     def set_applied_on(self, at_datetime):
         self.applied_on = at_datetime
