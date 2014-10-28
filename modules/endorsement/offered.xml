@@ -154,9 +154,5 @@
             <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'product')]"/>
             <field name="endorsement_part" ref="full_contract_revision_part"/>
         </record>
-        <record model="endorsement.part-method" id="endorsement_update_start_date_method">
-            <field name="endorsement_part" ref="full_contract_revision_part"/>
-            <field name="method" ref="contract_update_start_date"/>
-        </record>
     </data>
 </tryton>

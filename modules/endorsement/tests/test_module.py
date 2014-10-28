@@ -192,8 +192,23 @@ class ModuleTestCase(test_framework.CoopTestCase):
                         'contract_number': u'1234',
                         }}})
 
+        endorsement.in_progress([endorsement])
+        Transaction().cursor.commit()
+
+        contract = endorsement.contracts[0]
+        self.assertEqual(contract.contract_number, 'Ctr1Y2014')
+        contract.contract_number = 'in_progress'
+        contract.save()
+        Transaction().cursor.commit()
+
+        contract = endorsement.contracts[0]
+        contract_endorsement, = endorsement.contract_endorsements
+        self.assert_(endorsement.rollback_date)
+        self.assertEqual(endorsement.application_date, None)
+        self.assertEqual(contract.contract_number, 'in_progress')
         endorsement.apply([endorsement])
         Transaction().cursor.commit()
+
         contract = endorsement.contracts[0]
         contract_endorsement, = endorsement.contract_endorsements
         self.assert_(endorsement.application_date)
@@ -202,14 +217,21 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.contract_number, '1234')
         self.assertEqual(contract_endorsement.base_instance.contract_number,
             previous_contract_number)
-
-        contract.revert_last_endorsement([contract])
+        endorsement.draft([endorsement])
         Transaction().cursor.commit()
+
         endorsement = self.Endorsement(endorsement.id)
         contract = endorsement.contracts[0]
         self.assertEqual(endorsement.application_date, None)
         self.assertEqual(endorsement.state, 'draft')
         self.assertEqual(contract.contract_number, previous_contract_number)
+        endorsement.in_progress([endorsement])
+        Transaction().cursor.commit()
+
+        contract.revert_current_endorsement([contract])
+        Transaction().cursor.commit()
+        self.assertEqual(endorsement.state, 'draft')
+        self.assertEqual(endorsement.rollback_date, None)
 
 
 def suite():
@@ -218,6 +240,6 @@ def suite():
         ModuleTestCase))
     suite.addTests(doctest.DocFileSuite(
             'scenario_endorsement_change_start_date.rst',
-            setUp=doctest_setup,tearDown=doctest_teardown, encoding='utf-8',
+            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

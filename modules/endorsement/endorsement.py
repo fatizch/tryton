@@ -2,6 +2,7 @@
 import copy
 import datetime
 from collections import defaultdict
+from sql.functions import Now
 
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
@@ -439,13 +440,13 @@ class Contract(CogProcessFramework):
 
     @classmethod
     @model.CoopView.button
-    def revert_last_endorsement(cls, contracts):
+    def revert_current_endorsement(cls, contracts):
         Endorsement = Pool().get('endorsement')
         endorsements_to_cancel = set()
         for contract in contracts:
             last_endorsement = Endorsement.search([
                     ('contracts', '=', contract.id),
-                    ('state', '=', 'applied'),
+                    ('state', '=', 'in_progress'),
                     ], order=[('application_date', 'DESC')], limit=1)
             if last_endorsement:
                 endorsements_to_cancel.add(last_endorsement[0])
@@ -490,6 +491,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     application_date = fields.DateTime('Application Date', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
         depends=['state'])
+    rollback_date = fields.Timestamp('Rollback Date', readonly=True)
     applied_by = fields.Many2One('res.user', 'Applied by', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
         depends=['state'])
@@ -500,6 +502,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     effective_date = fields.Date('Effective Date')
     state = fields.Selection([
             ('draft', 'Draft'),
+            ('in_progress', 'In Progress'),
             ('applied', 'Applied'),
             ], 'State', readonly=True)
     contracts = fields.Function(
@@ -514,6 +517,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         super(Endorsement, cls).__setup__()
         cls._transitions |= set((
                 ('draft', 'applied'),
+                ('draft', 'in_progress'),
+                ('in_progress', 'draft'),
+                ('in_progress', 'applied'),
                 ('applied', 'draft'),
                 ))
         cls._buttons.update({
@@ -584,8 +590,16 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 continue
             ModelClass = pool.get(model_name)
             ModelClass.draft(endorsements_per_model[model_name])
-        cls.write(endorsements, {'applied_by': None,
-                'application_date': None})
+        cls.write(endorsements, {
+                'applied_by': None,
+                'application_date': None,
+                'rollback_date': None,
+                })
+
+    @classmethod
+    @Workflow.transition('in_progress')
+    def in_progress(cls, endorsements):
+        cls.write(endorsements, {'rollback_date': Now()})
 
     @classmethod
     @model.CoopView.button
@@ -598,8 +612,23 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 continue
             ModelClass = pool.get(model_name)
             ModelClass.apply(endorsements_per_model[model_name])
-        cls.write(endorsements, {'applied_by': Transaction().user,
-                'application_date': datetime.datetime.now()})
+        set_rollback, do_not_set_rollback = [], []
+        for endorsement in endorsements:
+            if endorsement.rollback_date:
+                do_not_set_rollback.append(endorsement)
+            else:
+                set_rollback.append(endorsement)
+        if set_rollback:
+            cls.write(set_rollback, {
+                    'applied_by': Transaction().user,
+                    'rollback_date': Now(),
+                    'application_date': datetime.datetime.now(),
+                    })
+        if do_not_set_rollback:
+            cls.write(do_not_set_rollback, {
+                    'applied_by': Transaction().user,
+                    'application_date': datetime.datetime.now(),
+                    })
 
         endorsements_per_model = cls.group_per_model(endorsements)
         for model_name in cls.apply_order():
@@ -759,14 +788,15 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         restore_dict = defaultdict(list)
         restore_dict['contract'] += [self.contract,
             pool.get('contract')(self.contract.id)]
-        self._restore_history(restore_dict, self.applied_on)
+        self._prepare_restore_history(restore_dict,
+            self.endorsement.rollback_date)
 
         for k, v in restore_dict.iteritems():
-            pool.get(k).restore_history(list(set([x.id for x in v])),
-                self.applied_on)
+            pool.get(k).restore_history_before(list(set([x.id for x in v])),
+                self.endorsement.rollback_date)
 
     @classmethod
-    def _restore_history(cls, instances, at_date):
+    def _prepare_restore_history(cls, instances, at_date):
         for contract in instances['contract']:
             instances['contract.option'] += contract.options
             instances['contract.activation_history'] += \
@@ -777,7 +807,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         for contract_endorsement in contract_endorsements:
             latest_applied, = cls.search([
                     ('contract', '=', contract_endorsement.contract.id),
-                    ('state', '=', 'applied'),
+                    ('state', '!=', 'draft'),
                     ], order=[('applied_on', 'DESC')], limit=1)
             if latest_applied != contract_endorsement:
                 cls.raise_user_error('not_latest_applied',
@@ -798,8 +828,12 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 cls.raise_user_error('process_in_progress', (
                         contract.rec_name,
                         contract.current_state.process.fancy_name))
-            contract_endorsement.set_applied_on(contract.write_date
-                or contract.create_date)
+            if contract_endorsement.endorsement.rollback_date:
+                contract_endorsement.set_applied_on(
+                    contract_endorsement.endorsement.rollback_date)
+            else:
+                contract_endorsement.set_applied_on(contract.write_date
+                    or contract.create_date)
             values = contract_endorsement.apply_values
             Contract.write([contract], values)
             contract_endorsement.save()

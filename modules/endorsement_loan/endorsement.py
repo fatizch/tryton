@@ -130,8 +130,9 @@ class EndorsementContract:
     __name__ = 'endorsement.contract'
 
     @classmethod
-    def _restore_history(cls, instances, at_date):
-        super(EndorsementContract, cls)._restore_history(instances, at_date)
+    def _prepare_restore_history(cls, instances, at_date):
+        super(EndorsementContract, cls)._prepare_restore_history(instances,
+            at_date)
         for contract in instances['contract']:
             instances['contract.premium.amount'] += contract.premium_amounts
         for option in instances['contract.option']:
@@ -213,14 +214,15 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         pool = Pool()
         restore_dict = defaultdict(list)
         restore_dict['loan'] += [self.loan, pool.get('loan')(self.loan.id)]
-        self._restore_history(restore_dict, self.applied_on)
+        self._prepare_restore_history(restore_dict,
+            self.endorsement.rollback_date)
 
         for k, v in restore_dict.iteritems():
-            pool.get(k).restore_history(list(set([x.id for x in v],
-                        self.applied_on)))
+            pool.get(k).restore_history_before(list(set([x.id for x in v])),
+                self.endorsement.rollback_date)
 
     @classmethod
-    def _restore_history(cls, instances, at_date):
+    def _prepare_restore_history(cls, instances, at_date):
         for loan in instances['loan']:
             instances['loan.increment'] += loan.increments
             instances['loan.payment'] += loan.payments
@@ -230,7 +232,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         for loan_endorsement in loan_endorsements:
             latest_applied, = cls.search([
                     ('loan', '=', loan_endorsement.loan.id),
-                    ('state', '=', 'applied'),
+                    ('state', '!=', 'draft'),
                     ], order=[('applied_on', 'DESC')], limit=1)
             if latest_applied != loan_endorsement:
                 cls.raise_user_error('not_latest_applied',
@@ -245,8 +247,12 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     def apply(cls, loan_endorsements):
         for loan_endorsement in loan_endorsements:
             loan = loan_endorsement.loan
-            loan_endorsement.set_applied_on(loan.write_date
-                or loan.create_date)
+            if loan_endorsement.endorsement.rollback_date:
+                loan_endorsement.set_applied_on(
+                    loan_endorsement.endorsement.rollback_date)
+            else:
+                loan_endorsement.set_applied_on(loan.write_date
+                    or loan.create_date)
             values = loan_endorsement.apply_values
             # TODO: Make it better
             for k, v in values.iteritems():

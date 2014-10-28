@@ -56,8 +56,9 @@ class EndorsementContract:
                 })
 
     @classmethod
-    def _restore_history(cls, instances, at_date):
-        super(EndorsementContract, cls)._restore_history(instances, at_date)
+    def _prepare_restore_history(cls, instances, at_date):
+        super(EndorsementContract, cls)._prepare_restore_history(instances,
+            at_date)
         for contract in instances['contract']:
             instances['contract.covered_element'] += contract.covered_elements
             for covered_element in contract.covered_elements:

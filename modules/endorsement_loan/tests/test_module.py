@@ -168,9 +168,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('loans', '=', loan.id),
                 ])
         previous_loan_amount = loan.amount
-
         endorsement.apply([endorsement])
         Transaction().cursor.commit()
+
         loan = endorsement.loans[0]
         loan_endorsement, = endorsement.loan_endorsements
         self.assert_(endorsement.application_date)
@@ -179,9 +179,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan.amount, Decimal('150000'))
         self.assertEqual(loan_endorsement.base_instance.amount,
             previous_loan_amount)
-
+        self.assert_(endorsement.rollback_date)
         endorsement.draft([endorsement])
         Transaction().cursor.commit()
+
         loan = endorsement.loans[0]
         self.assertEqual(loan_endorsement.applied_on, None)
         self.assertEqual(loan_endorsement.state, 'draft')

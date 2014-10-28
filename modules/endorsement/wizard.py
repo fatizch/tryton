@@ -469,10 +469,15 @@ class StartEndorsement(Wizard):
         self.end_current_part('full_contract_revision')
 
         # Create a snapshot to revert back to
-        self.endorsement.apply([self.endorsement])
+        self.endorsement.in_progress([self.endorsement])
 
         # Clean up contract
         contract = Contract(self.select_endorsement.contract.id)
+        state = self.full_contract_revision
+        if state.new_start_date and (
+                state.new_start_date != state.current_start_date):
+            contract.set_start_date(state.new_start_date)
+            contract.save()
         Contract.revert_to_project([contract])
 
         # Everything else will be taken care of in
