@@ -16,32 +16,6 @@
       <field name="inherit" ref="businessruleroot_view_tree"/>
       <field name="arch" type="xml"/>
     </record>
-    <!-- ############ -->
-    <!-- # Document # -->
-    <!-- ############ -->
-    <record model="ir.ui.view" id="document_form">
-      <field name="model">document.request.line</field>
-      <field name="type">form</field>
-      <field name="name">document_form</field>
-    </record>
-    <record model="ir.ui.view" id="document_tree">
-      <field name="model">document.request.line</field>
-      <field name="type">tree</field>
-      <field name="name">document_tree</field>
-    </record>
-    <!-- #################### -->
-    <!-- # Document Request # -->
-    <!-- #################### -->
-    <record model="ir.ui.view" id="document_request_form">
-      <field name="model">document.request</field>
-      <field name="type">form</field>
-      <field name="name">document_request_form</field>
-    </record>
-    <record model="ir.ui.view" id="document_request_tree">
-      <field name="model">document.request</field>
-      <field name="type">tree</field>
-      <field name="name">document_request_tree</field>
-    </record>
     <!-- ############################## -->
     <!-- # Document Creation - Select # -->
     <!-- ############################## -->
@@ -95,11 +69,6 @@
       <field name="name">Letter Report</field>
       <field name="report_name">document.generate.report</field>
     </record>
-    <record model="ir.action.keyword" id="report_document_request_keyword">
-      <field name="keyword">form_action</field>
-      <field name="model">document.request,-1</field>
-      <field name="action" ref="letter_generation_wizard"/>
-    </record>
     <!-- ##################### -->
     <!-- # Document Template # -->
     <!-- ##################### -->
@@ -142,35 +111,5 @@
       <field name="type">tree</field>
       <field name="name">document_template_version_list</field>
     </record>
-    <!-- #################### -->
-    <!-- # Document Receive # -->
-    <!-- #################### -->
-    <record model="ir.ui.view" id="document_receive_request_form">
-      <field name="model">document.receive.request</field>
-      <field name="type">form</field>
-      <field name="name">document_receive_request_form</field>
-    </record>
-    <record model="ir.ui.view" id="document_receive_set_requests_form">
-      <field name="model">document.receive.set_requests</field>
-      <field name="type">form</field>
-      <field name="name">document_receive_set_requests_form</field>
-    </record>
-    <record model="ir.ui.view" id="document_receive_attach_form">
-      <field name="model">document.receive.attach</field>
-      <field name="type">form</field>
-      <field name="name">document_receive_attach_form</field>
-    </record>
-    <record model="ir.action.wizard" id="receive_documents_wizard">
-        <field name="name">Document Reception</field>
-        <field name="wiz_name">document.receive</field>
-    </record>
-    <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
-      <field name="keyword">form_action</field>
-      <field name="model">document.request,-1</field>
-      <field name="action" ref="receive_documents_wizard"/>
-    </record>
-    <menuitem name="EDM" id="menu_edm" sequence="2"/>
-    <menuitem name="Document Received" id="menu_receive_documents" sequence="15"
-        parent="menu_edm" action="receive_documents_wizard"/>
   </data>
 </tryton>

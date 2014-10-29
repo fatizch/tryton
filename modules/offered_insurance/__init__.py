@@ -40,16 +40,10 @@ def register():
         DocumentTemplateVersion,
         DocumentRule,
         RuleDocumentDescriptionRelation,
-        DocumentRequest,
-        DocumentRequestLine,
         DocumentCreateSelect,
         DocumentCreatePreview,
         DocumentCreatePreviewReport,
         DocumentCreateAttach,
-        DocumentReceiveRequest,
-        DocumentReceiveAttach,
-        DocumentReceiveSetRequests,
-        DocumentRequestBatch,
         # From business_rule.premium_rule
         PremiumDateConfiguration,
         PremiumRule,
@@ -84,5 +78,4 @@ def register():
     Pool.register(
         # From business_rule.documents_rule
         DocumentCreate,
-        DocumentReceive,
         module='offered_insurance', type_='wizard')

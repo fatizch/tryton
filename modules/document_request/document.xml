@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############ -->
+        <!-- # Document # -->
+        <!-- ############ -->
+        <record model="ir.ui.view" id="document_form">
+            <field name="model">document.request.line</field>
+            <field name="type">form</field>
+            <field name="name">document_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_tree">
+            <field name="model">document.request.line</field>
+            <field name="type">tree</field>
+            <field name="name">document_tree</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Document Request # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="document_request_form">
+            <field name="model">document.request</field>
+            <field name="type">form</field>
+            <field name="name">document_request_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_request_tree">
+            <field name="model">document.request</field>
+            <field name="type">tree</field>
+            <field name="name">document_request_tree</field>
+        </record>
+        <record model="ir.action.keyword" id="report_document_request_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">document.request,-1</field>
+            <field name="action" ref="offered_insurance.letter_generation_wizard"/>
+        </record>
+        <!-- #################### -->
+        <!-- # Document Receive # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="document_receive_request_form">
+            <field name="model">document.receive.request</field>
+            <field name="type">form</field>
+            <field name="name">document_receive_request_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_receive_set_requests_form">
+            <field name="model">document.receive.set_requests</field>
+            <field name="type">form</field>
+            <field name="name">document_receive_set_requests_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_receive_attach_form">
+            <field name="model">document.receive.attach</field>
+            <field name="type">form</field>
+            <field name="name">document_receive_attach_form</field>
+        </record>
+        <record model="ir.action.wizard" id="receive_documents_wizard">
+            <field name="name">Document Reception</field>
+            <field name="wiz_name">document.receive</field>
+        </record>
+        <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">document.request,-1</field>
+            <field name="action" ref="receive_documents_wizard"/>
+        </record>
+        <menuitem name="Receive Documents" id="menu_receive_documents" sequence="15"
+            parent="document.menu_document" action="receive_documents_wizard"/>
+    </data>
+</tryton>
