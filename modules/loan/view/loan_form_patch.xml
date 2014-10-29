@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form//label[@id='main_view_placeholder']" position="replace">
+        <label name="number"/>
+        <field name="number"/>
+        <label name="company"/>
+        <field name="company"/>
+        <label name="kind"/>
+        <field name="kind"/>
+        <label name="rate"/>
+        <group id="rate">
+            <field name="rate" factor="100" xexpand="0"/>
+            <label string="%" name="rate" xexpand="0" xalign="0"/>
+        </group>
+        <newline/>
+        <label name="amount"/>
+        <group id="amount">
+            <field name="amount" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
+        </group>
+        <label name="currency"/>
+        <field name="currency"/>
+        <newline/>
+        <newline/>
+        <label name="number_of_payments"/>
+        <group id="frequency">
+            <field name="number_of_payments"/>
+            <field name="payment_frequency"/>
+        </group>
+        <newline/>
+        <label name="funds_release_date"/>
+        <field name="funds_release_date"/>
+        <label name="first_payment_date"/>
+        <field name="first_payment_date"/>
+        <newline/>
+        <label name="deferal"/>
+        <field name="deferal"/>
+        <label name="deferal_duration"/>
+        <field name="deferal_duration"/>
+        <field name="increments" colspan="4" mode="tree"/>
+        <field name="parties" colspan="4" view_ids="party_cog.person_view_tree,party.party_view_form"/>
+    </xpath>
+</data>

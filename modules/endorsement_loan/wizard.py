@@ -636,8 +636,8 @@ class StartEndorsement:
     def default_change_basic_loan_data(self, name):
         ChangeBasicLoanData = Pool().get('endorsement.loan.change_basic_data')
         result = ChangeBasicLoanData.get_state_view_default_values(self,
-            'loan.loan_form', 'loan', 'change_basic_loan_data',
-            'loan_fields')
+            'loan.loan_simple_view_form', 'loan',
+            'change_basic_loan_data', 'loan_fields')
         result['loan'] = self.select_endorsement.loan.id
         return result
 

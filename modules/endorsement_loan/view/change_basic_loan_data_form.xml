@@ -10,10 +10,10 @@
     </group>
     <notebook>
         <page name="new_value">
-            <field name="new_value" mode="form" expand_toolbar="1"/>
+            <field name="new_value" mode="form" expand_toolbar="0" view_ids="loan.loan_simple_view_form"/>
         </page>
         <page name="current_value">
-            <field name="current_value" mode="form" expand_toolbar="1"/>
+            <field name="current_value" mode="form" expand_toolbar="0" view_ids="loan.loan_simple_view_form"/>
         </page>
     </notebook>
     <field name="endorsement_part"/>
