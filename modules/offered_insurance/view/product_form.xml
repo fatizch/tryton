@@ -11,10 +11,6 @@
             states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="deductible_rules" colspan="4"/>
         </page>
-        <page string="Documents" id="documents"
-            states="{'invisible': Eval('kind') != 'insurance'}">
-            <field name="document_rules"/>
-        </page>
         <page string="Term - Renewal" id="term_renewal"
             states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="term_renewal_rules" colspan="4"/>

@@ -62,8 +62,6 @@ class Contract(Printable):
             },
         depends=['status', 'id', 'product', 'start_date', 'extra_data_values',
             'possible_item_desc'])
-    documents = fields.One2Many('document.request', 'needed_by', 'Documents',
-        states=_STATES, depends=_DEPENDS, size=1)
     last_renewed = fields.Date('Last Renewed', states=_STATES,
         depends=_DEPENDS)
     next_renewal_date = fields.Date('Next Renewal Date', states=_STATES,

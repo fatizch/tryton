@@ -4,7 +4,6 @@ import traceback
 import os
 import subprocess
 import StringIO
-import functools
 import shutil
 import tempfile
 
@@ -20,7 +19,6 @@ from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.modules.cog_utils import fields, model, utils, coop_string
-from trytond.modules.cog_utils import coop_date
 from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 

@@ -31,12 +31,6 @@ class Offered:
         'Eligibility Rules')
     deductible_rules = fields.One2Many('offered.deductible.rule', 'offered',
         'Deductible Rules')
-    document_rules = fields.One2ManyDomain('document.rule', 'offered',
-        'Document Rules', context={'doc_rule_kind': 'main'},
-        domain=[('kind', '=', 'main')])
-    sub_document_rules = fields.One2ManyDomain('document.rule', 'offered',
-        'Sub Document Rules', context={'doc_rule_kind': 'sub'},
-        domain=[('kind', '=', 'sub')])
 
     def get_name_for_billing(self):
         return self.name
@@ -57,12 +51,6 @@ class Offered:
         except NonExistingRuleKindException:
             return (EligibilityResultLine(True), [])
         return res
-
-    def give_me_documents(self, args):
-        try:
-            return self.get_result('documents', args, kind='document')
-        except NonExistingRuleKindException:
-            return [], ()
 
 
 class Product:

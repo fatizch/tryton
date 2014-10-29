@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ################# -->
+        <!-- # Document Rule # -->
+        <!-- ################# -->
+        <record model="ir.ui.view" id="document_rule_form">
+            <field name="model">document.rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_insurance.businessruleroot_view_form"/>
+            <field name="name">document_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="document_rule_tree">
+            <field name="model">document.rule</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered_insurance.businessruleroot_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">offered.option.description</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="name">option_description_form</field>
+        </record>
+    </data>
+</tryton>
