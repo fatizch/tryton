@@ -228,7 +228,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.contract_number, previous_contract_number)
         endorsement.in_progress([endorsement])
         Transaction().cursor.commit()
-        contract.revert_current_endorsement([contract])
+        endorsement.draft([endorsement])
         Transaction().cursor.commit()
 
         self.assertEqual(endorsement.state, 'draft')
@@ -242,6 +242,16 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(endorsement.state, 'applied')
         self.assertRaises(UserError, contract.apply_in_progress_endorsement,
             [contract])
+        endorsement.draft([endorsement])
+        Transaction().cursor.commit()
+        endorsement.in_progress([endorsement])
+        contract.revert_current_endorsement([contract])
+
+        # revert_current_endorsement deletes the current "in_progress"
+        # endorsement
+        self.assertEqual([], self.Endorsement.search([
+                    ('contracts', '=', contract.id),
+                    ]))
 
 
 def suite():

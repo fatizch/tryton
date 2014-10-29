@@ -14,7 +14,6 @@ config.pool.test = True
 #     database='postgresql://tryton:tryton@localhost:5432/test_db',
 #     user='admin',
 #     language='en_US',
-#     password='admin',
 #     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
 #         'conf', 'trytond.conf'))
 
