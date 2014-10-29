@@ -341,12 +341,8 @@ class Contract:
 
     def compute_invoice_lines(self, start, end):
         lines = []
-        for premium in self.premiums:
+        for premium in self.all_premiums:
             lines.extend(premium.get_invoice_lines(start, end))
-        for option in self.options:
-            lines.extend(option.get_invoice_lines(start, end))
-        for covered_element in self.covered_elements:
-            lines.extend(covered_element.get_invoice_lines(start, end))
         return lines
 
     @classmethod
@@ -452,14 +448,6 @@ class Contract:
             if not elem._values:
                 continue
             elem.save()
-
-    def get_premium_list(self):
-        result = list(self.premiums)
-        for option in self.options:
-            result.extend(option.get_premium_list())
-        for covered_element in self.covered_elements:
-            result.extend(covered_element.get_premium_list())
-        return result
 
     def init_from_product(self, product, start_date=None, end_date=None):
         pool = Pool()
@@ -721,41 +709,11 @@ class CoveredElement:
     premiums = fields.One2Many('contract.premium', 'covered_element',
         'Premiums')
 
-    def get_invoice_lines(self, start, end):
-        lines = []
-        for premium in self.premiums:
-            lines.extend(premium.get_invoice_lines(start, end))
-        for option in self.options:
-            lines.extend(option.get_invoice_lines(start, end))
-        return lines
-
-    def get_premium_list(self):
-        result = list(self.premiums)
-        for option in self.options:
-            result.extend(option.get_premium_list())
-        return result
-
 
 class ContractOption:
     __name__ = 'contract.option'
 
     premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
-
-    def get_invoice_lines(self, start, end):
-        lines = []
-        if ((self.start_date or datetime.date.min) <= end
-                and start <= (self.end_date or datetime.date.max)):
-            for premium in self.premiums:
-                lines.extend(premium.get_invoice_lines(start, end))
-            for extra_premium in self.extra_premiums:
-                lines.extend(extra_premium.get_invoice_lines(start, end))
-        return lines
-
-    def get_premium_list(self):
-        result = list(self.premiums)
-        for extra_premium in self.extra_premiums:
-            result.extend(extra_premium.get_premium_list())
-        return result
 
 
 class ExtraPremium:
@@ -763,17 +721,6 @@ class ExtraPremium:
 
     premiums = fields.One2Many('contract.premium', 'extra_premium',
         'Premiums')
-
-    def get_invoice_lines(self, start, end):
-        lines = []
-        if ((self.start_date or datetime.date.min) <= end
-                and start <= (self.end_date or datetime.date.max)):
-            for premium in self.premiums:
-                lines.extend(premium.get_invoice_lines(start, end))
-        return lines
-
-    def get_premium_list(self):
-        return list(self.premiums)
 
 
 class Premium(ModelSQL, ModelView):
