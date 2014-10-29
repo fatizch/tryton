@@ -90,6 +90,8 @@ class Contract:
         searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
+    all_premiums = fields.One2Many('contract.premium', 'main_contract',
+        'All Premiums')
 
     @classmethod
     def __setup__(cls):
@@ -809,7 +811,7 @@ class Premium(ModelSQL, ModelView):
         'Invoice Lines', readonly=True)
     main_contract = fields.Function(
         fields.Many2One('contract', 'Contract'),
-        'get_main_contract')
+        'get_main_contract', searcher='search_main_contract')
     parent = fields.Function(
         fields.Reference('Parent', 'get_parent_models'),
         'get_parent')
@@ -879,6 +881,17 @@ class Premium(ModelSQL, ModelView):
             return self.option.parent_contract.id
         if self.extra_premium:
             return self.extra_premium.option.parent_contract.id
+
+    @classmethod
+    def search_main_contract(cls, name, clause):
+        # Assumes main_contract cannot be null (which, even though it is not
+        # enforced in the model, is still a safe assumption)
+        return ['OR',
+            ('contract',) + tuple(clause[1:]),
+            ('covered_element.contract',) + tuple(clause[1:]),
+            ('option.parent_contract',) + tuple(clause[1:]),
+            ('extra_premium.option.parent_contract',) + tuple(clause[1:]),
+            ]
 
     def get_description(self):
         return '%s - %s' % (self.parent.rec_name,
