@@ -408,7 +408,7 @@ class ContractOption:
         'on_change_with_parent_option')
     parent_contract = fields.Function(
         fields.Many2One('contract', 'Parent Contract'),
-        'on_change_with_parent_contract')
+        'on_change_with_parent_contract', searcher='search_parent_contract')
 
     @classmethod
     def __setup__(cls):
@@ -514,6 +514,13 @@ class ContractOption:
         if self.covered_element:
             return self.covered_element.contract.product.id
         return super(ContractOption, self).on_change_with_product(name)
+
+    @classmethod
+    def search_parent_contract(cls, name, clause):
+        return ['OR',
+            ('contract',) + tuple(clause[1:]),
+            ('covered_element.contract',) + tuple(clause[1:]),
+            ]
 
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
