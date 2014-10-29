@@ -395,17 +395,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             ActivationHistory.write(*to_write)
 
     @classmethod
-    def set_contract_end_date(cls, contract_ids, name, value):
+    def set_contract_end_date(cls, contracts, name, value):
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
         to_create, to_write, to_delete = [], [], []
-        for contract_slice in grouped_slice(contract_ids):
-            for contract_id in contract_slice:
+        for contract_slice in grouped_slice(contracts):
+            for contract in contract_slice:
                 existing = ActivationHistory.search([
-                        ('contract', '=', contract_id)])
+                        ('contract', '=', contract.id)])
                 if not existing:
                     to_create.append({
-                            'contract': contract_id,
+                            'contract': contract.id,
                             'end_date': value,
                             })
                 else:
