@@ -1,11 +1,11 @@
 #!/bin/bash
 SEP=------------------------------------------------
-EXPECTED_ARGS=2
+EXPECTED_ARGS=1
 
 if [ $# -ne $EXPECTED_ARGS ]
 then
         echo $SEP
-        echo "Usage: `basename $0` {path} {bitbucket fork repository}"
+        echo "Usage: `basename $0` {path}"
 elif [ ! -e "$1" ]
 then
         echo $SEP
@@ -26,7 +26,7 @@ else
 	echo $SEP
 	echo Getting Coop modules
 	echo $SEP
-	hg clone $2 -r default
+	hg clone ssh://hg@hg.coopengo.com/coopbusiness -r default
     echo $SEP
     echo Done
     echo $SEP
