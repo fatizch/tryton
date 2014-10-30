@@ -65,7 +65,7 @@ class OptionDescription:
         return not self.item_desc
 
     @fields.depends('is_service')
-    def on_change_wth_item_desc(self):
+    def on_change_with_item_desc(self):
         if self.is_service:
             return None
 
