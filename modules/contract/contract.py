@@ -1131,7 +1131,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.automatic_end_date = self.calculate_automatic_end_date()
 
     def calculate_automatic_end_date(self):
-        exec_context = {}
+        exec_context = {'date': self.start_date}
         self.init_dict_for_rule_engine(exec_context)
         return self.coverage.calculate_end_date(exec_context)
 
