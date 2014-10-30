@@ -753,7 +753,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             to_write = []
             for option in self.options:
                 option.clean_up_versions(self)
-                to_write += [[x], x._save_values]
+                to_write += [[option], option._save_values]
             if to_write:
                 Option.write(*to_write)
 
