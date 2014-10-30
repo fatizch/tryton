@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, coop_date
 from trytond.modules.endorsement import EndorsementWizardStepBasicObjectMixin
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
 from trytond.modules.endorsement import EndorsementWizardStepMixin
@@ -19,6 +19,7 @@ __all__ = [
     'LoanChangeBasicData',
     'LoanDisplayUpdatedPayments',
     'LoanSelectContracts',
+    'LoanContractDisplayer',
     'SelectLoanShares',
     'LoanShareSelector',
     'SharePerLoan',
@@ -61,11 +62,59 @@ class LoanSelectContracts(model.CoopView):
 
     __name__ = 'endorsement.loan.select_contracts'
 
-    possible_contracts = fields.Many2Many('contract', None, None,
-        'Possible Contracts', readonly=True)
-    selected_contracts = fields.Many2Many('contract', None, None,
-        'Contracts to update', depends=['possible_contracts'],
-        domain=[('id', 'in', Eval('possible_contracts'))])
+    selected_contracts = fields.One2Many(
+        'endorsement.loan.select_contracts.contract', None,
+        'Contracts to update')
+
+
+class LoanContractDisplayer(model.CoopView):
+    'Contract Displayer for the LoanSelectContracts view'
+
+    __name__ = 'endorsement.loan.select_contracts.contract'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    endorsement = fields.Many2One('endorsement', 'Endorsement',
+        states={'invisible': True}, readonly=True)
+    current_end_date = fields.Date('Current End Date', readonly=True)
+    current_start_date = fields.Date('Current Start Date', readonly=True)
+    new_end_date = fields.Date('New End Date', readonly=True)
+    new_start_date = fields.Date('New Start Date', states={
+            'readonly': ~Eval('to_update', False)})
+    to_update = fields.Boolean('To Update')
+
+    @fields.depends('to_update', 'new_start_date', 'contract', 'endorsement')
+    def _on_change(self):
+        if not self.to_update:
+            return {
+                'new_end_date': None,
+                'new_start_date': None,
+                }
+        contract_loans = set(self.contract.used_loans)
+        endorsed_loans = set(self.endorsement.loans)
+        contract_loans -= endorsed_loans
+
+        max_loan_end = datetime.date.min
+        if contract_loans:
+            max_loan_end = max([loan.end_date for loan in contract_loans])
+
+        for loan_endorsement in self.endorsement.loan_endorsements:
+            loan = loan_endorsement.loan
+            for k, v in loan_endorsement.values.iteritems():
+                # TODO : Make it cleaner
+                setattr(loan, k, v)
+            loan.simulate()
+            last_increment = loan.increments[-1]
+            last_increment.loan = loan
+            max_loan_end = max(max_loan_end,
+                last_increment.on_change_with_end_date())
+        result = {
+            'new_start_date': self.new_start_date or self.contract.start_date,
+            'new_end_date': coop_date.add_day(max_loan_end, -1),
+            }
+        return result
+
+    on_change_to_update = _on_change
+    on_change_new_start_date = _on_change
 
 
 class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
@@ -668,45 +717,62 @@ class StartEndorsement:
         possible_contracts = Contract.search([
                 ('covered_elements.options.loan_shares.loan', '=',
                     current_loan)])
-        selected_contracts = [x.id for x in self.endorsement.contracts]
-        if not selected_contracts and self.select_endorsement.contract:
-            selected_contracts = [self.select_endorsement.contract.id]
+        contract_displayers = []
+        for contract_endorsement in self.endorsement.contract_endorsements:
+            contract = contract_endorsement.contract
+            contract_displayers.append({
+                    'contract': contract.id,
+                    'to_update': True,
+                    'endorsement': self.endorsement.id,
+                    'current_start_date': contract.start_date,
+                    'new_start_date': contract_endorsement.values.get(
+                        'start_date', contract.start_date),
+                    'current_end_date': contract.end_date,
+                    'new_end_date': contract_endorsement.values.get(
+                        'end_date', contract.end_date),
+                    })
+            possible_contracts.pop(contract)
+        for contract in possible_contracts:
+            contract_displayers.append({
+                    'contract': contract.id,
+                    'to_update': False,
+                    'endorsement': self.endorsement.id,
+                    'current_start_date': contract.start_date,
+                    'current_end_date': contract.end_date,
+                    })
         return {
-            'possible_contracts': [x.id for x in possible_contracts],
-            'selected_contracts': selected_contracts,
+            'selected_contracts': contract_displayers,
             }
 
     def transition_loan_endorse_selected_contracts(self):
         ContractEndorsement = Pool().get('endorsement.contract')
-        new_loan = self.change_basic_loan_data.new_value[0]
-        current_loan = self.change_basic_loan_data.current_value[0]
-        to_delete, to_create = [], []
+        to_create, to_write, to_delete = [], [], {}
+
         for contract_endorsement in self.endorsement.contract_endorsements:
-            if (contract_endorsement.contract
-                    not in self.loan_select_contracts.selected_contracts):
-                if not contract_endorsement.apply_values:
-                    to_delete.append(contract_endorsement)
-        for contract in self.loan_select_contracts.selected_contracts:
-            if contract in self.endorsement.contracts:
+            to_delete[contract_endorsement.contract.id] = \
+                contract_endorsement
+        for displayer in self.loan_select_contracts.selected_contracts:
+            if not displayer.to_update:
                 continue
-            to_create.append({
-                    'endorsement': self.endorsement.id,
-                    'contract': contract.id,
-                    })
-            if new_loan.funds_release_date != current_loan.funds_release_date:
-                if current_loan.funds_release_date == contract.start_date:
-                    oldest_loan = min([x.funds_release_date
-                            for x in contract.used_loans
-                            if x.id != current_loan.id] +
-                        new_loan.funds_release_date)
-                    if oldest_loan != contract.start_date:
-                        to_create[-1]['values'] = {
-                            'start_date': oldest_loan,
-                            }
+            elif displayer.contract in to_delete:
+                endorsement = to_delete.pop(displayer.contract)
+                to_write.append(endorsement)
+            else:
+                endorsement = ContractEndorsement(
+                    endorsement=self.endorsement.id,
+                    contract=displayer.contract.id, values={})
+                to_create.append(endorsement)
+            endorsement.values['start_date'] = displayer.new_start_date
+            endorsement.values['end_date'] = displayer.new_end_date
         if to_delete:
             ContractEndorsement.delete(to_delete)
         if to_create:
-            ContractEndorsement.create(to_create)
+            ContractEndorsement.create([x._save_values for x in to_create])
+        if to_write:
+            ContractEndorsement.write(*[x
+                    for values in [[[instance], instance._save_values]
+                        for instance in to_write]
+                    for x in values])
         return 'change_basic_loan_data_next'
 
     def transition_change_basic_loan_data_next(self):
@@ -770,3 +836,26 @@ class StartEndorsement:
         preview_values = self.endorsement.extract_preview_values(
             ContractPaymentPreview.extract_endorsement_preview)
         return ContractPaymentPreview.init_from_preview_values(preview_values)
+
+    @classmethod
+    def get_fields_to_get(cls, model, view_id):
+        result = super(StartEndorsement, cls).get_fields_to_get(model, view_id)
+        if model == 'loan' and 'payments' in result:
+            result.remove('payments')
+        return result
+
+    @classmethod
+    def get_new_instance_fields(cls, base_instance, fields):
+        result = super(StartEndorsement, cls).get_new_instance_fields(
+            base_instance, fields)
+        if base_instance.__name__ != 'loan' or 'increments' not in fields:
+            return result
+        result['increments'] = [dict([
+                    (fname, getattr(x, fname))
+                    for fname in ('number_of_payments', 'deferal',
+                        'number', 'rate', 'payment_amount', 'start_date',
+                        'begin_balance', 'currency_symbol',
+                        'currency_digits')])
+            for x in Pool().get('loan.increment').browse(
+                result['increments'])]
+        return result

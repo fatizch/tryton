@@ -34,6 +34,14 @@
             <field name="type">form</field>
             <field name="name">select_contracts_form</field>
         </record>
+        <!-- ################################## -->
+        <!-- # Loan Select Contract Displayer # -->
+        <!-- ################################## -->
+        <record model="ir.ui.view" id="select_contract_displayer_view_list">
+            <field name="model">endorsement.loan.select_contracts.contract</field>
+            <field name="type">tree</field>
+            <field name="name">select_contract_displayer_list</field>
+        </record>
         <!-- ###################### -->
         <!-- # Select Loan Shares # -->
         <!-- ###################### -->

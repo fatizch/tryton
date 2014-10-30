@@ -601,7 +601,7 @@ class StartEndorsement(Wizard):
     @classmethod
     def get_fields_to_get(cls, model, view_id):
         fields_def = Pool().get(model).fields_view_get(view_id)
-        return fields_def['fields'].iterkeys()
+        return fields_def['fields'].keys()
 
     @classmethod
     def get_new_instance_fields(cls, base_instance, fields):

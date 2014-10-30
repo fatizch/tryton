@@ -24,6 +24,7 @@ def register():
         LoanChangeBasicData,
         LoanDisplayUpdatedPayments,
         LoanSelectContracts,
+        LoanContractDisplayer,
         SelectLoanShares,
         LoanShareSelector,
         SharePerLoan,

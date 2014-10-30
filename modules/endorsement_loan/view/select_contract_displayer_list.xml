@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Contracts" editable="bottom">
+    <field name="to_update"/>
+    <field name="contract"/>
+    <field name="current_start_date"/>
+    <field name="current_end_date"/>
+    <field name="new_start_date"/>
+    <field name="new_end_date"/>
+    <field name="endorsement" tree_invisible="1"/>
+</tree>
