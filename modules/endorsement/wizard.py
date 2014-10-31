@@ -11,28 +11,16 @@ from trytond.modules.cog_utils import model, coop_string, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'Process',
     'SelectEndorsement',
     'BasicPreview',
     'StartEndorsement',
     'OpenContractAtApplicationDate',
-    'StartFullContractRevision',
     'ChangeContractStartDate',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
     'EndorsementWizardPreviewMixin',
     ]
-
-
-class Process:
-    __name__ = 'process'
-
-    @classmethod
-    def __setup__(cls):
-        super(Process, cls).__setup__()
-        cls.kind.selection.append(
-            ('full_contract_revision', 'Full Contract Revision'))
 
 
 class EndorsementWizardStepMixin(object):
@@ -170,27 +158,6 @@ class EndorsementWizardPreviewMixin(object):
         raise NotImplementedError
 
 
-class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
-    'Start Full Contract Revision'
-
-    __name__ = 'endorsement.contract.full_revision_start'
-
-    current_start_date = fields.Date('Current Start Date', readonly=True)
-    new_start_date = fields.Date('New Start Date')
-
-    def update_endorsement(self, base_endorsement, wizard):
-        base_endorsement.values = {
-            'start_date': self.new_start_date or self.current_start_date,
-            }
-        base_endorsement.save()
-
-    @classmethod
-    def update_default_values(cls, wizard, base_endorsement, default_values):
-        return {
-            'new_start_date': base_endorsement.values.get('start_date', None),
-            }
-
-
 class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
     'Change contract start date'
 
@@ -317,26 +284,6 @@ class StartEndorsement(Wizard):
                 default=True)])
     change_start_date_previous = StateTransition()
     change_start_date_next = StateTransition()
-    full_contract_revision = StateView(
-        'endorsement.contract.full_revision_start',
-        'endorsement.full_contract_revision_view_form', [
-            Button('Previous', 'full_contract_revision_previous',
-                'tryton-go-previous'),
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Suspend', 'suspend', 'tryton-save'),
-            Button('Next', 'full_contract_revision_next', 'tryton-go-next',
-                default=True)])
-    full_contract_revision_previous = StateTransition()
-    full_contract_revision_next = StateTransition()
-    full_contract_revision_action = model.VoidStateAction()
-
-    @classmethod
-    def __setup__(cls):
-        super(StartEndorsement, cls).__setup__()
-        cls._error_messages.update({
-                'no_process_found': 'Cannot start full contract revision, '
-                'no matching process available',
-                })
 
     @property
     def definition(self):
@@ -449,85 +396,6 @@ class StartEndorsement(Wizard):
     def transition_change_start_date_next(self):
         self.end_current_part('change_start_date')
         return self.get_next_state('change_start_date')
-
-    def transition_full_contract_revision_previous(self):
-        self.end_current_part('full_contract_revision')
-        return self.get_state_before('full_contract_revision')
-
-    def default_full_contract_revision(self, name):
-        State = Pool().get('endorsement.contract.full_revision_start')
-        contract = self.select_endorsement.contract
-        endorsement_part = self.get_endorsement_part_for_state(
-            'full_contract_revision')
-        endorsement_date = self.select_endorsement.effective_date
-        result = {
-            'endorsement_definition': self.definition.id,
-            'endorsement_part': endorsement_part.id,
-            'effective_date': endorsement_date,
-            'current_start_date': contract.start_date,
-            }
-        if self.endorsement and self.endorsement.contract_endorsements:
-            result.update(State.update_default_values(self,
-                    self.endorsement.contract_endorsements[0], result))
-        else:
-            result['new_start_date'] = self.select_endorsement.effective_date
-        return result
-
-    def transition_full_contract_revision_next(self):
-        Contract = Pool().get('contract')
-
-        # End endorsement state as usual
-        self.end_current_part('full_contract_revision')
-
-        # Create a snapshot to revert back to
-        self.endorsement.in_progress([self.endorsement])
-
-        # Clean up contract
-        contract = Contract(self.select_endorsement.contract.id)
-        state = self.full_contract_revision
-        if state.new_start_date and (
-                state.new_start_date != state.current_start_date):
-            contract.set_start_date(state.new_start_date)
-            contract.save()
-        Contract.revert_to_project([contract])
-
-        # Everything else will be taken care of in
-        # do_full_contract_revision_action
-        return 'full_contract_revision_action'
-
-    def do_full_contract_revision_action(self, action):
-        pool = Pool()
-        Action = pool.get('ir.action')
-        Contract = pool.get('contract')
-        Process = pool.get('process')
-        contract = Contract(self.select_endorsement.contract.id)
-
-        # Find suitable process
-        candidates = Process.search([
-                ('on_model.model', '=', 'contract'),
-                ('kind', '=', 'full_contract_revision'),
-                ('for_products', '=', contract.product.id),
-                ])
-        if not candidates:
-            candidates = Process.search([
-                    ('on_model.model', '=', 'contract'),
-                    ('kind', '=', 'full_contract_revision'),
-                    ])
-        if not candidates:
-            self.raise_user_error('no_process_found')
-
-        process = candidates[0]
-        action = process.get_act_window()
-        values = Action.get_action_values('ir.action.act_window', [action.id])
-        values[0]['views'] = [view for view in values[0]['views']
-            if view[1] == 'form']
-
-        # Update contract state
-        contract.current_state = process.all_steps[0]
-        contract.current_state.step.execute_before(contract)
-        contract.save()
-
-        return values[0], {'res_id': contract.id}
 
     def get_state_before(self, state_name):
         for part in reversed(self.definition.endorsement_parts):

@@ -9,14 +9,6 @@
             <field name="type">form</field>
             <field name="name">endorsement_change_contract_start_date_form</field>
         </record>
-        <!-- ########################## -->
-        <!-- # Full Contract Revision # -->
-        <!-- ########################## -->
-        <record model="ir.ui.view" id="full_contract_revision_view_form">
-            <field name="model">endorsement.contract.full_revision_start</field>
-            <field name="type">form</field>
-            <field name="name">full_contract_revision_form</field>
-        </record>
         <!-- ###################### -->
         <!-- # Select Endorsement # -->
         <!-- ###################### -->

@@ -128,31 +128,5 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">1</field>
         </record>
-        <!-- ######################################## -->
-        <!-- # Full Contract Revision Configuration # -->
-        <!-- ######################################## -->
-        <record model="endorsement.definition" id="full_contract_revision_definition">
-            <field name="code">full_contract_revision</field>
-            <field name="name">Full Contract Revision</field>
-        </record>
-        <record model="endorsement.part" id="full_contract_revision_part">
-            <field name="code">full_contract_revision</field>
-            <field name="name">Full Contract Revision</field>
-            <field name="kind">contract</field>
-            <field name="view">full_contract_revision</field>
-        </record>
-        <record model="endorsement.definition-endorsement.part" id="full_contract_revision_relation">
-            <field name="definition" ref="full_contract_revision_definition"/>
-            <field name="endorsement_part" ref="full_contract_revision_part"/>
-            <field name="order">1</field>
-        </record>
-        <record model="endorsement.contract.field" id="start_date_contract_field">
-            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'start_date')]"/>
-            <field name="endorsement_part" ref="full_contract_revision_part"/>
-        </record>
-        <record model="endorsement.contract.field" id="product_contract_field">
-            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'product')]"/>
-            <field name="endorsement_part" ref="full_contract_revision_part"/>
-        </record>
     </data>
 </tryton>
