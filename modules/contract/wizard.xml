@@ -19,7 +19,7 @@
             <field name="model">contract.wizard.option_subscription.options_displayer.option</field>
             <field name="type">tree</field>
             <field name="name">wizard_option_tree</field>
-            <field name="field_childs">childs</field>
+            <field name="field_childs" eval="None"/>
         </record>
     </data>
 </tryton>

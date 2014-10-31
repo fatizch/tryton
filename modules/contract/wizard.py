@@ -23,7 +23,7 @@ class OptionSubscription(model.CoopWizard):
         'contract.wizard.option_subscription.options_displayer',
         'contract.options_displayer_view_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Next', 'update_options', 'tryton-go-next'),
+            Button('Next', 'update_options', 'tryton-go-next', default=True),
             ])
     update_options = StateTransition()
     start_state = 'options_displayer'
@@ -57,9 +57,9 @@ class OptionSubscription(model.CoopWizard):
                 'selection': selection,
                 'option': existing_option.id if existing_option else None,
                 }
-            option_dict['childs'] = cls.init_default_childs(contract,
-                coverage, existing_option, option_dict)
             options.append(option_dict)
+            options += cls.init_default_childs(contract,
+                coverage, existing_option, option_dict)
         return {
             'contract': contract.id,
             'options': options,
@@ -80,33 +80,31 @@ class OptionSubscription(model.CoopWizard):
         contract = Contract(contract_id)
         return self.init_default_options(contract, contract.options)
 
-    def add_remove_options(self, options):
+    def add_remove_options(self, options, lines):
         Option = Pool().get('contract.option')
-        to_subscribe = set([x.coverage for x in self.options_displayer.options
-                if x.is_selected])
+        to_subscribe = set([x.coverage for x in lines if x.is_selected])
         to_delete = [x for x in options if x.coverage not in to_subscribe]
         options[:] = [x for x in options if x not in to_delete]
         Option.delete(to_delete)
 
         subscribed = set([x.coverage for x in options])
-        for fake_option in self.options_displayer.options:
-            if not fake_option.is_selected:
+        for line in lines:
+            if not line.is_selected:
                 continue
-            if fake_option.coverage in subscribed:
-                fake_option.update_option_if_needed(fake_option.option)
-                fake_option.init_subscribed_option(self.options_displayer,
-                    fake_option.option)
-                fake_option.option.save()
+            if line.coverage in subscribed:
+                line.init_subscribed_option(self.options_displayer,
+                    line.option)
+                line.option.save()
                 continue
             option = Option()
-            fake_option.init_subscribed_option(self.options_displayer, option)
-            fake_option.update_option_if_needed(option)
+            line.init_subscribed_option(self.options_displayer, option)
             options.append(option)
 
     def transition_update_options(self):
         contract = self.options_displayer.contract
         contract.options = list(getattr(contract, 'options', []))
-        self.add_remove_options(self, contract.options)
+        self.add_remove_options(self, contract.options,
+            self.options_displayer.options)
         contract.init_extra_data()
         contract.save()
         return 'end'
@@ -125,14 +123,15 @@ class OptionsDisplayer(model.CoopView):
 
     @fields.depends('options')
     def on_change_options(self):
-        selected = [elem for elem in self.options if elem.is_selected]
+        selected = [elem for elem in self.options
+            if (elem.is_selected and getattr(elem, 'coverage', None))]
         to_update = []
         excluded = []
         required = []
         for x in selected:
             excluded += x.coverage.options_excluded
             required += x.coverage.options_required
-        for x in self.options:
+        for x in [x for x in self.options if getattr(x, 'coverage', None)]:
             if x.coverage in excluded:
                 is_selected = False
                 selection = 'automatic'
@@ -176,12 +175,6 @@ class WizardOption(model.CoopView):
             ('automatic', 'Automatic'),
             ('mandatory', 'Mandatory'),
             ], 'Selection')
-    parent = fields.Many2One(
-        'contract.wizard.option_subscription.options_displayer.option',
-        'Parent')
-    childs = fields.One2Many(
-        'contract.wizard.option_subscription.options_displayer.option',
-        'parent', 'Childs')
     option = fields.Many2One('contract.option', 'Option')
 
     @fields.depends('coverage', 'coverage_behaviour')
@@ -196,10 +189,6 @@ class WizardOption(model.CoopView):
         option.init_from_coverage(self.coverage, option.product,
             displayer.contract.start_date)
         option.calculate()
-
-    def update_option_if_needed(self, option, parent=None):
-        for child in self.childs:
-            child.update_option_if_needed(option, self)
 
     @staticmethod
     def default_selection():

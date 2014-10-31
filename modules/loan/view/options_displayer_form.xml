@@ -1,19 +1,10 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form" position="replace_attributes">
-        <form col="100"/>
-    </xpath>
-    <xpath expr="/form/field[@name='options']" position="replace_attributes">
-        <field name="options" colspan="99"/>
-    </xpath>
-    <xpath expr="/form/field[@name='options']" position="before">
-        <group id="loans" colspan="1" yfill="1" yexpand="0" col="2">
-            <label name="default_share"/>
-            <group id="default_share">
-                <field name="default_share" factor="100" xexpand="0"/>
-                <label string="%" id="percent" xexpand="0" xalign="0"/>
-            </group>
-            <field name="loans" colspan="2" widget="multiselection"/>
+    <xpath expr="/form/field[@name='contract']" position="after">
+        <label name="default_share"/>
+        <group id="default_share">
+            <field name="default_share" factor="100" xexpand="0"/>
+            <label string="%" id="percent" xexpand="0" xalign="0"/>
         </group>
     </xpath>
 </data>

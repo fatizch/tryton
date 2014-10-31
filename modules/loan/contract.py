@@ -210,7 +210,8 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
 
     __name__ = 'loan.share'
 
-    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
+    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
+        required=True, select=1)
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True,
@@ -278,23 +279,11 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
 class OptionSubscription:
     __name__ = 'contract.wizard.option_subscription'
 
-    def default_options_displayer(self, values):
-        res = super(OptionSubscription, self).default_options_displayer(values)
-        res['default_share'] = 1
-        return res
-
-    @classmethod
-    def init_default_options(cls, contract, subscribed_options):
-        res = super(OptionSubscription, cls).init_default_options(contract,
-            subscribed_options)
-        res['loans'] = [x.id for x in contract.used_loans]
-        return res
-
     @classmethod
     def init_default_childs(cls, contract, coverage, option, parent_dict):
         res = super(OptionSubscription, cls).init_default_childs(contract,
             coverage, option, parent_dict)
-        for loan in contract.used_loans:
+        for loan in contract.loans:
             loan_share = None
             for share in option.loan_shares if option else []:
                 if share.loan == loan:
@@ -302,113 +291,53 @@ class OptionSubscription:
                     break
             res.append({
                     'loan': loan.id,
-                    'name': loan.rec_name,
                     'share': loan_share.share if loan_share else 1,
                     'is_selected': (loan_share is not None
                         or parent_dict['is_selected']),
-                    'childs': [],
                     'selection': 'manual',
                     })
         return res
+
+    def add_remove_options(self, options, lines):
+        super(OptionSubscription, self).add_remove_options(options,
+            [x for x in lines if getattr(x, 'coverage', None)])
+        for line in lines:
+            if getattr(line, 'coverage', None):
+                parent = line
+                continue
+            line.update_loan_shares(parent.option, parent)
 
 
 class OptionsDisplayer:
     __name__ = 'contract.wizard.option_subscription.options_displayer'
 
     default_share = fields.Numeric('Default Loan Share', digits=(16, 4))
-    loans = fields.Many2Many('loan', None, None, 'Loans',
-        domain=[('parties', '=', Eval('party'))],
-        depends=['party'])
-
-    @fields.depends('loans', 'options', 'default_share')
-    def on_change_loans(self):
-        res = {}
-        option_dicts = []
-        for option in self.options:
-            loans_to_add = []
-            loans_to_remove = []
-            childs_dict = {}
-            for loan in self.loans:
-                for child in option.childs:
-                    if child.loan == loan:
-                        if option.is_selected:
-                            childs_dict.setdefault('update', []).append({
-                                    'id': child.id,
-                                    'is_selected': True,
-                                    })
-                        break
-                else:
-                    loan_dict = {
-                        'loan': loan.id,
-                        'childs': [],
-                        'name': loan.rec_name,
-                        'is_selected': option.is_selected,
-                        'share': self.default_share,
-                        'selection': 'manual',
-                        }
-                    loans_to_add.append((-1, loan_dict))
-            if loans_to_add:
-                childs_dict['add'] = loans_to_add
-
-            loans_to_remove = [x.id for x in option.childs
-                if x.loan not in self.loans]
-            if loans_to_remove:
-                childs_dict.setdefault('update', [])
-                childs_dict['update'] += [{'id': x, 'is_selected': False}
-                    for x in loans_to_remove]
-            if childs_dict:
-                option_dicts.append({'id': option.id, 'childs': childs_dict})
-        if option_dicts:
-            res = {'options': {'update': option_dicts}}
-        return res
 
     @fields.depends('default_share', 'options')
     def on_change_default_share(self):
-        res = {'options': {'update': []}}
-        for option in self.options:
-            option_dict = None
-            for child in option.childs:
-                if not child.loan:
-                    continue
-                if not option_dict:
-                    option_dict = {'id': option.id, 'childs': {'update': []}}
-                    res['options']['update'].append(option_dict)
-                option_dict['childs']['update'].append({
-                        'id': child.id,
-                        'share': self.default_share,
-                        })
-        return res
+        update_list = []
+        for line in [x for x in self.options if getattr(x, 'loan', None)]:
+            update_list.append({
+                    'id': line.id,
+                    'share': self.default_share,
+                    })
+        return {'options': {'update': update_list}}
 
     # This will unselect loans when the option is unselected
     # and will prevent to select loans if the option is not selected
     def on_change_options(self):
-        res = super(OptionsDisplayer, self).on_change_options()
-        for option in self.options:
-            if not option.childs or option.is_selected:
+        changes = super(OptionsDisplayer, self).on_change_options()
+        update_list = []
+        for line in self.options:
+            if not getattr(line, 'loan', None):
+                parent = line
                 continue
-            option_dict = None
-            for cur_option_dict in res.get('options', {}).get('update', []):
-                if cur_option_dict['id'] == option.id:
-                    option_dict = cur_option_dict
-                    break
-            if not option_dict:
-                option_dict = {'id': option.id}
-                res.setdefault('options', {}).setdefault('update', []).append(
-                    option_dict)
-            for child in option.childs:
-                child_dict = None
-                for cur_child_dict in option_dict.get('childs', {}).get(
-                        'update', []):
-                    if cur_child_dict['id'] == child.id:
-                        child_dict = cur_child_dict
-                        break
-                if not child_dict:
-                    child_dict = {'id': child.id}
-                    option_dict.setdefault('childs',
-                        {}).setdefault('update', []).append(child_dict)
-                child_dict['is_selected'] = option_dict.get('is_selected',
-                    option.is_selected)
-        return res
+            if line.is_selected and not parent.is_selected:
+                update_list = changes.setdefault('options', {}).setdefault(
+                    'update', [])
+                update_list.append(
+                    {'id': line.id, 'is_selected': parent.is_selected})
+        return changes
 
 
 class WizardOption:
@@ -421,13 +350,12 @@ class WizardOption:
     @fields.depends('loan')
     def on_change_with_name(self, name=None):
         if self.loan:
-            return self.loan.rec_name
+            return '    %s' % self.loan.rec_name
         else:
             return super(WizardOption, self).on_change_with_name(name)
 
-    def update_option_if_needed(self, option, parent=None):
-        super(WizardOption, self).update_option_if_needed(option)
-        if parent is None or not getattr(self, 'loan', None):
+    def update_loan_shares(self, option, parent):
+        if option is None:
             return
         LoanShare = Pool().get('loan.share')
         option.loan_shares = list(getattr(option, 'loan_shares', []))
@@ -442,12 +370,16 @@ class WizardOption:
                 loan_share = LoanShare()
                 loan_share.loan = self.loan
                 option.loan_shares.append(loan_share)
+                loan_share.share = self.share
+                option.save()
             else:
                 loan_share = existing_loan_share
-            loan_share.share = self.share
+                loan_share.share = self.share
+                loan_share.save()
         elif not self.is_selected and existing_loan_share:
             option.loan_shares.remove(existing_loan_share)
             LoanShare.delete([existing_loan_share])
+            option.save()
 
 
 class OptionSubscriptionWizardLauncher:
