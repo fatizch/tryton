@@ -9,6 +9,8 @@ from trytond.modules.cog_utils import model, fields
 from trytond.modules.cog_utils import utils, coop_date
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
+from trytond.modules.contract import _STATES, _DEPENDS, _CONTRACT_STATUS_STATES
+from trytond.modules.contract import _CONTRACT_STATUS_DEPENDS
 from trytond.modules.offered_insurance import Printable
 
 
@@ -29,11 +31,6 @@ __all__ = [
     'OptionExclusionKindRelation',
     'ContractAgreementRelation',
     ]
-
-_STATES = {
-    'readonly': Eval('status') != 'quote',
-    }
-_DEPENDS = ['status']
 
 
 class Contract(Printable):
@@ -384,19 +381,28 @@ class ContractOption:
     __name__ = 'contract.option'
 
     covered_element = fields.Many2One('contract.covered_element',
-        'Covered Element', ondelete='CASCADE')
+        'Covered Element', ondelete='CASCADE',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     exclusions = fields.Many2Many('contract.option-exclusion.kind',
-        'option', 'exclusion', 'Exclusions')
+        'option', 'exclusion', 'Exclusions',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     extra_data = fields.Dict('extra_data', 'Extra Data',
-        states={'invisible': ~Eval('extra_data')}, depends=['extra_data'])
+        states={
+            'invisible': ~Eval('extra_data'),
+            'readonly': Eval('contract_status') != 'quote'
+            },
+        depends=['extra_data', 'contract_status'])
     extra_premiums = fields.One2Many('contract.option.extra_premium',
-        'option', 'Extra Premiums')
+        'option', 'Extra Premiums',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     extra_premium_discounts = fields.One2ManyDomain(
         'contract.option.extra_premium', 'option', 'Discounts',
-        domain=[('motive.is_discount', '=', True)])
+        domain=[('motive.is_discount', '=', True)],
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     extra_premium_increases = fields.One2ManyDomain(
         'contract.option.extra_premium', 'option', 'Increases',
-        domain=[('motive.is_discount', '=', False)])
+        domain=[('motive.is_discount', '=', False)],
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     all_extra_datas = fields.Function(
         fields.Dict('extra_data', 'All Extra Datas'),
         'on_change_with_all_extra_data')
@@ -414,8 +420,8 @@ class ContractOption:
     def __setup__(cls):
         super(ContractOption, cls).__setup__()
         cls._buttons.update({
-                'propagate_extra_premiums': {},
-                'propagate_exclusions': {},
+                'propagate_extra_premiums': _CONTRACT_STATUS_STATES,
+                'propagate_exclusions': _CONTRACT_STATUS_STATES,
                 })
 
     @classmethod
@@ -514,6 +520,10 @@ class ContractOption:
         if self.covered_element:
             return self.covered_element.contract.product.id
         return super(ContractOption, self).on_change_with_product(name)
+
+    @fields.depends('parent_contract')
+    def on_change_with_contract_status(self, name=None):
+        return self.parent_contract.status if self.parent_contract else ''
 
     @classmethod
     def search_parent_contract(cls, name, clause):

@@ -18,4 +18,6 @@ class Contract:
         domain=['OR',
             [('clause', '=', None)],
             [('clause.products', '=', Eval('product'))],
-            ], depends=['product'])
+            ],
+        states={'readonly': Eval('status') != 'quote'},
+        depends=['product', 'status'])

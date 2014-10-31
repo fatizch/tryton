@@ -61,16 +61,24 @@ class ContractOption:
         domain=[('coverages', '=', Eval('coverage'))], states={
             'invisible': ~Eval('has_beneficiary_clause'),
             'required': Bool(Eval('has_beneficiary_clause')),
-            }, depends=['coverage', 'has_beneficiary_clause'],
-            ondelete='RESTRICT')
+            'readonly': Eval('contract_status') != 'quote',
+            },
+        depends=['coverage', 'has_beneficiary_clause', 'contract_status'],
+        ondelete='RESTRICT')
     customized_beneficiary_clause = fields.Text(
         'Customized Beneficiary Clause',
-        states={'invisible': ~Eval('has_beneficiary_clause')},
-        depends=['has_beneficiary_clause'])
+        states={
+            'invisible': ~Eval('has_beneficiary_clause'),
+            'readonly': Eval('contract_status') != 'quote',
+            },
+        depends=['has_beneficiary_clause', 'contract_status'])
     beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
         'Beneficiaries',
-        states={'invisible': ~Eval('has_beneficiary_clause')},
-        depends=['has_beneficiary_clause'])
+        states={
+            'invisible': ~Eval('has_beneficiary_clause'),
+            'readonly': Eval('contract_status') != 'quote',
+            },
+        depends=['has_beneficiary_clause', 'contract_status'])
 
     @classmethod
     def __setup__(cls):

@@ -17,6 +17,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.rpc import RPC
 
 from trytond.modules.cog_utils import coop_date, utils, batchs, model, fields
+from trytond.modules.contract import _STATES
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -81,7 +82,7 @@ class Contract:
                     ('direct_debit_account.owners', '=', Eval('subscriber')),
                     ('direct_debit_account', '=', None)],
                 [('direct_debit_account', '=', None)])],
-        depends=['product', 'subscriber'])
+        states=_STATES, depends=['product', 'subscriber', 'status'])
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
         searcher='search_last_invoice')

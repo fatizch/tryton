@@ -120,7 +120,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             'extra_data_values'])
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
-    status = fields.Selection(CONTRACTSTATUSES, 'Status')
+    status = fields.Selection(CONTRACTSTATUSES, 'Status', states=_STATES,
+        depends=_DEPENDS)
     status_string = status.translated('status')
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[If(
@@ -137,7 +138,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
     end_date = fields.Function(
-        fields.Date('End Date'),
+        fields.Date('End Date', states=_STATES, depends=_DEPENDS),
         'getter_contract_date', 'set_contract_end_date',
         searcher='search_contract_date')
     extra_data_values = fields.Function(
@@ -153,7 +154,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
     start_date = fields.Function(
-        fields.Date('Start Date'),
+        fields.Date('Start Date', states=_STATES, depends=_DEPENDS),
         'getter_contract_date', 'set_contract_start_date',
         searcher='search_contract_date')
     subscriber_kind = fields.Function(
@@ -166,7 +167,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 },
             depends=['status', 'product_subscriber_kind']),
         'on_change_with_subscriber_kind', 'setter_void')
-    contacts = fields.One2Many('contract.contact', 'contract', 'Contacts')
+    contacts = fields.One2Many('contract.contact', 'contract', 'Contacts',
+        states=_STATES, depends=_DEPENDS)
 
     @classmethod
     def __setup__(cls):
@@ -911,6 +913,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return {}
 
 
+_CONTRACT_STATUS_STATES = {
+    'readonly': Eval('contract_status') != 'quote',
+    }
+_CONTRACT_STATUS_DEPENDS = ['contract_status']
+
+
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             ModelCurrency):
     'Contract Option'
@@ -921,16 +929,20 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='RESTRICT', states={
-            'required': Eval('status') == 'active',
-            'readonly': Eval('status') != 'quote',
+            'required': Eval('contract_status') == 'active',
+            'readonly': Eval('contract_status') != 'quote',
             },
-        depends=['status', 'start_date', 'end_date', 'product'])
+        depends=['contract_status', 'start_date', 'end_date', 'product'])
     end_date = fields.Function(
-        fields.Date('End Date'), 'get_end_date', setter='set_end_date')
+        fields.Date('End Date', states=_CONTRACT_STATUS_STATES,
+            depends=_CONTRACT_STATUS_DEPENDS),
+        'get_end_date', setter='set_end_date')
     automatic_end_date = fields.Date('Automatic End Date', readonly=True)
     manual_end_date = fields.Date('Manual End Date', readonly=True)
-    start_date = fields.Date('Start Date', required=True)
-    status = fields.Selection(OPTIONSTATUS, 'Status')
+    start_date = fields.Date('Start Date', required=True,
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+    status = fields.Selection(OPTIONSTATUS, 'Status',
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     appliable_conditions_date = fields.Function(
         fields.Date('Appliable Conditions Date'),
         'on_change_with_appliable_conditions_date')
@@ -952,6 +964,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     product = fields.Function(
         fields.Many2One('offered.product', 'Product'),
         'on_change_with_product')
+    contract_status = fields.Function(
+        fields.Char('Contract Status'),
+        'on_change_with_contract_status')
 
     @classmethod
     def __setup__(cls):
@@ -1036,6 +1051,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             return product
         if self.contract and self.contract.product:
             return self.contract.product.id
+
+    @fields.depends('contract')
+    def on_change_with_contract_status(self, name=None):
+        return self.contract.status if self.contract else ''
 
     def get_rec_name(self, name):
         if self.coverage:

@@ -116,9 +116,12 @@ class ContractOption:
     __name__ = 'contract.option'
 
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
-        states={'invisible': Eval('coverage_family', '') != 'loan'}, domain=[
-            ('loan.parties', 'in', Eval('parties', []))],
-        depends=['coverage_family', 'parties'])
+        states={
+            'invisible': Eval('coverage_family', '') != 'loan',
+            'readonly': Eval('contract_status') != 'quote',
+            },
+        domain=[('loan.parties', 'in', Eval('parties', []))],
+        depends=['coverage_family', 'parties', 'contract_status'])
     multi_mixed_view = loan_shares
 
     @fields.depends('coverage', 'loan_shares')
@@ -205,18 +208,25 @@ class ExtraPremium:
         return super(ExtraPremium, self).on_change_with_rec_name(name)
 
 
+_STATES = {
+    'readonly': Eval('_parent_contract', {}).get('status', '') != 'quote'}
+_DEPENDS = ['contract']
+
+
 class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     'Loan Share'
 
     __name__ = 'loan.share'
 
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
-        required=True, select=1)
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
+        required=True, select=1, states=_STATES, depends=_DEPENDS)
+    start_date = fields.Date('Start Date', states=_STATES, depends=_DEPENDS)
+    end_date = fields.Date('End Date', states=_STATES, depends=_DEPENDS)
     loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True,
-        domain=[('state', '=', 'calculated')])
-    share = fields.Numeric('Loan Share', digits=(16, 4))
+        domain=[('state', '=', 'calculated')], states=_STATES,
+        depends=_DEPENDS)
+    share = fields.Numeric('Loan Share', digits=(16, 4), states=_STATES,
+        depends=_DEPENDS)
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
         'on_change_with_person')
