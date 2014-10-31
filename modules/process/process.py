@@ -100,7 +100,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         'Transitions')
     xml_header = fields.Text('Header XML')
     xml_footer = fields.Text('Footer XML')
-    xml_tree = fields.Text('Tree View XML')
+    xml_tree = fields.Text('Tree View XML', required=True)
     step_button_group_position = fields.Selection([
             ('', 'None'), ('right', 'Right'), ('bottom', 'Bottom')],
         'Process Overview Positioning')
@@ -140,6 +140,10 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def default_menu_icon(cls):
         Menu = Pool().get('ir.ui.menu')
         return Menu.default_icon()
+
+    @classmethod
+    def default_xml_tree(cls):
+        return '<field name="current_state"/>'
 
     @classmethod
     def list_icons(cls):
@@ -444,7 +448,10 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         # the database and provide access to them through a dedicated entry
         # point which is calculated, then can be modified / cloned.
         Lang = Pool().get('ir.lang')
-        good_langs = Lang.search([('translatable', '=', True)])
+        good_langs = Lang.search(['OR',
+                ('translatable', '=', True),
+                ('code', '=', 'en_US'),
+                ])
         good_menus = []
         for lang in good_langs:
             good_action = self.create_or_update_action(lang)
@@ -800,7 +807,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
             return self.exiting_wizard.id
 
     def build_step_main_view(self, process):
-        xml = ''.join(self.step_xml.split('\n'))
+        xml = ''.join((self.step_xml or '').split('\n'))
         return xml
 
     def get_pyson_for_display(self, step_relation):
