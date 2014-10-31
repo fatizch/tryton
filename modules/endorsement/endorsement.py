@@ -111,7 +111,7 @@ def field_mixin(model):
         def get_definitions(self, name):
             Definition = Pool().get('endorsement.definition')
             return [x.id for x in Definition.search([
-                        ('endorsement_parts', '=', self.template.id)])]
+                        ('endorsement_parts', '=', self.endorsement_part.id)])]
 
         @classmethod
         def search_definitions(cls, name, clause):
@@ -397,7 +397,7 @@ def relation_mixin(value_model, field, model, name):
             if self.action == 'remove':
                 return ' ' * indent + '%s %s' % (self.raise_user_error(
                         'mes_remove_version', raise_exception=False),
-                    self.base_instance.date)
+                    self.base_instance.rec_name)
             elif self.action == 'add':
                 result = ' ' * indent + '%s:\n' % self.raise_user_error(
                     'mes_new_version', raise_exception=False)
@@ -982,6 +982,7 @@ class EndorsementOption(relation_mixin(
         return '%s : %s' % (self.raise_user_error('new_coverage',
                 raise_exception=False), self.coverage.rec_name)
 
+    @classmethod
     def updated_struct(cls, option):
         return {}
 
@@ -1004,5 +1005,6 @@ class EndorsementActivationHistory(relation_mixin(
     def get_definition(self, name):
         return self.contract_endorsement.definition.id
 
-    def updated_struct(cls, option):
+    @classmethod
+    def updated_struct(cls, activation_history):
         return {}
