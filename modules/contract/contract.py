@@ -28,10 +28,18 @@ CONTRACTSTATUSES = [
     ('hold', 'Hold'),
     ('terminated', 'Terminated'),
     ]
-
 OPTIONSTATUS = CONTRACTSTATUSES + [
     ('refused', 'Refused'),
     ]
+_STATES = {
+    'readonly': Eval('status') != 'quote',
+    }
+_DEPENDS = ['status']
+_CONTRACT_STATUS_STATES = {
+    'readonly': Eval('contract_status') != 'quote',
+    }
+_CONTRACT_STATUS_DEPENDS = ['contract_status']
+
 
 __all__ = [
     'ActivationHistory',
@@ -43,6 +51,10 @@ __all__ = [
     'ContractEnd',
     'ContractSelectStartDate',
     'ContractChangeStartDate',
+    '_STATES',
+    '_DEPENDS',
+    '_CONTRACT_STATUS_STATES',
+    '_CONTRACT_STATUS_DEPENDS',
     ]
 
 
@@ -62,12 +74,6 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
             ('end_date', '=', None),
             ('end_date', '>=', Eval('start_date', datetime.date.min))],
         depends=['start_date'])
-
-
-_STATES = {
-    'readonly': Eval('status') != 'quote',
-    }
-_DEPENDS = ['status']
 
 
 class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
@@ -911,12 +917,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return {'subscriber': None}
         else:
             return {}
-
-
-_CONTRACT_STATUS_STATES = {
-    'readonly': Eval('contract_status') != 'quote',
-    }
-_CONTRACT_STATUS_DEPENDS = ['contract_status']
 
 
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
