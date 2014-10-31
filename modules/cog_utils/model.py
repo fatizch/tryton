@@ -180,7 +180,11 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
         for constraint in cls._sql_constraints:
             if 'UNIQUE' in constraint[1]:
                 constraints.append(constraint[1][7:-1])
-        if len(constraints) == 1:
+        # Only one constraint is dealt with, and it must be a char and it
+        # doesn't work with tuple or more.
+        # TODO : This is a temporary hack, the copy function should be coded
+        # explicitly in every object with a constraint
+        if len(constraints) == 1 and constraints[0].find(',') == -1:
             if default is None:
                 default = {}
             default = default.copy()
