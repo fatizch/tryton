@@ -22,6 +22,7 @@ def register():
         LoanPayment,
         LoanParty,
         Contract,
+        ContractLoan,
         ContractOption,
         ExtraPremium,
         LoanShare,

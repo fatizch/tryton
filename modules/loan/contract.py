@@ -11,6 +11,7 @@ from trytond.modules.cog_utils import coop_date
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
+    'ContractLoan',
     'ContractOption',
     'ExtraPremium',
     'LoanShare',
@@ -28,18 +29,13 @@ class Contract:
     is_loan = fields.Function(
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
-    loans = fields.Function(
-        fields.Many2Many('loan', None, None, 'Loans',
-            states={
-                'invisible': (~Eval('is_loan')) | (~Eval('subscriber', False)),
-                'readonly': Eval('status') != 'quote',
-                },
-            depends=['is_loan', 'currency', 'status', 'subscriber', 'parties'],
-            context={
-                'currency': Eval('currency'),
-                'parties': Eval('parties'),
-                }),
-        'on_change_with_loans', 'set_loans')
+    loans = fields.One2Many('contract-loan', 'contract', 'Loans',
+        states={
+            'invisible': (~Eval('is_loan')) | (~Eval('subscriber', False)),
+            'readonly': Eval('status') != 'quote',
+            },
+        context={'parties': Eval('parties')},
+        depends=['is_loan', 'status', 'parties'])
     used_loans = fields.Function(
         fields.Many2Many('loan', None, None, 'Used Loans',
             context={'contract': Eval('id')}, depends=['id']),
@@ -65,6 +61,18 @@ class Contract:
         cls.options.depends.append('is_loan')
         cls.options.depends.append('loans')
 
+    @classmethod
+    def write(cls, contracts, values, *args):
+        super(Contract, cls).write(contracts, values, *args)
+        ContractLoan = Pool().get('contract-loan')
+        to_write = []
+        for contract in contracts:
+            for i, loan in enumerate(contract.loans, 1):
+                if not loan.number:
+                    to_write += [[loan], {'number': i}]
+        if to_write:
+            ContractLoan.write(*to_write)
+
     @fields.depends('product')
     def on_change_product(self):
         result = super(Contract, self).on_change_product()
@@ -76,13 +84,6 @@ class Contract:
     @fields.depends('product')
     def on_change_with_is_loan(self, name=None):
         return self.product.is_loan if self.product else False
-
-    @fields.depends('subscriber')
-    def on_change_with_loans(self, name=None):
-        if not self.subscriber:
-            return []
-        return [x.loan.id for x in Pool().get('loan-party').search([
-                ('party', '=', self.subscriber)])]
 
     def set_contract_end_date_from_loans(self):
         if not self.is_loan:
@@ -96,20 +97,29 @@ class Contract:
         end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
         self.set_end_date(end_date, force=True)
 
+
+class ContractLoan(model.CoopSQL, model.CoopView):
+    'Contract Loan'
+
+    __name__ = 'contract-loan'
+
+    contract = fields.Many2One('contract', 'Contract', required=True,
+        ondelete='CASCADE')
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE',
+        context={'parties': Eval('_parent_contract', {}).get('parties')})
+    number = fields.Integer('Number')
+    loan_state = fields.Function(
+        fields.Char('Loan State'),
+        'on_change_with_loan_state')
+
     @classmethod
-    def set_loans(cls, instances, name, vals):
-        Loan = Pool().get('loan')
-        for val in vals:
-            if val[0] == 'create':
-                Loan.create(val[1])
-            elif val[0] == 'write':
-                values = val[1:]
-                for i, x in enumerate(values):
-                    if i % 2 == 0:
-                        values[i] = [Loan(x[0])]
-                Loan.write(*values)
-            elif val[0] == 'delete':
-                Loan.delete([Loan(x) for x in val[1]])
+    def __setup__(cls):
+        super(ContractLoan, cls).__setup__()
+        cls._order.insert(0, ('number', 'ASC'))
+
+    @fields.depends('loan')
+    def on_change_with_loan_state(self, name=None):
+        return self.loan.state if self.loan else ''
 
 
 class ContractOption:
@@ -293,7 +303,7 @@ class OptionSubscription:
     def init_default_childs(cls, contract, coverage, option, parent_dict):
         res = super(OptionSubscription, cls).init_default_childs(contract,
             coverage, option, parent_dict)
-        for loan in contract.loans:
+        for loan in [x.loan for x in contract.loans]:
             loan_share = None
             for share in option.loan_shares if option else []:
                 if share.loan == loan:

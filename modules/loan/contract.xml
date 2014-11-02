@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
-        <!-- ############################################################ -->
-        <!-- ########### Contract ########### -->
-        <!-- ############################################################ -->
         <record model="ir.ui.view" id="contract_view_form">
             <field name="model">contract</field>
             <field name="type">form</field>
@@ -16,9 +13,11 @@
             <field name="type">tree</field>
             <field name="arch" type="xml"/>
         </record>
-        <!-- ############################################################ -->
-        <!-- ########### Option ########### -->
-        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="contract-loan_view_list">
+            <field name="model">contract-loan</field>
+            <field name="type">tree</field>
+            <field name="name">contract-loan_list</field>
+        </record>
         <record model="ir.ui.view" id="option_view_form">
             <field name="model">contract.option</field>
             <field name="type">form</field>
