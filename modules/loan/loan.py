@@ -62,7 +62,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     number_of_payments = fields.Function(
         fields.Integer('Number of Payments', required=True, states=_STATES,
             depends=_DEPENDS),
-        'on_change_with_number_of_payments', 'setter_void')
+        'get_number_of_payments', 'setter_void')
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
         'Payment Frequency', sort=False, required=True,
         domain=[('payment_frequency', 'in',
@@ -108,8 +108,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             'readonly': (
                 Eval('kind') != 'graduated') | (Eval('state') != 'draft'),
             },
-        depends=['payment_frequency', 'rate', 'first_payment_date',
-            'increments', 'number_of_payments', 'kind'])
+        depends=['payment_frequency', 'rate', 'first_payment_date', 'kind'])
     deferal = fields.Function(
         fields.Selection(DEFERALS, 'Deferal',
             states={
@@ -414,8 +413,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def on_change_with_currency_symbol(self, name=None):
         return self.currency.symbol if self.currency else ''
 
-    @fields.depends('increments')
-    def on_change_with_number_of_payments(self, name=None):
+    def get_number_of_payments(self, name):
         return sum([x.number_of_payments for x in self.increments])
 
     @fields.depends('payment_frequency', 'funds_release_date')
