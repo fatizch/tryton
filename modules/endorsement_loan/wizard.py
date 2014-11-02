@@ -688,6 +688,7 @@ class StartEndorsement:
             'loan.loan_simple_view_form', 'loan',
             'change_basic_loan_data', 'loan_fields')
         result['loan'] = self.select_endorsement.loan.id
+        result['new_value'][0]['state'] = 'draft'
         return result
 
     def transition_change_basic_loan_data_previous(self):
