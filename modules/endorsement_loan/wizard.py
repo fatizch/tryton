@@ -6,8 +6,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model, coop_date
-from trytond.modules.endorsement import EndorsementWizardStepBasicObjectMixin
+from trytond.modules.cog_utils import fields, model, coop_date, utils
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
 from trytond.modules.endorsement import EndorsementWizardStepMixin
 
@@ -16,7 +15,9 @@ PAYMENT_FIELDS = ['kind', 'number', 'start_date', 'begin_balance',
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'LoanChangeBasicData',
+    'ChangeLoanDisplayer',
+    'ChangeLoan',
+    'ChangeLoanUpdatedPayments',
     'LoanDisplayUpdatedPayments',
     'LoanSelectContracts',
     'LoanContractDisplayer',
@@ -32,17 +33,126 @@ __all__ = [
     ]
 
 
-class LoanChangeBasicData(EndorsementWizardStepBasicObjectMixin,
-        model.CoopView):
-    'Change Basic Loan Data'
+class ChangeLoanDisplayer(model.CoopView):
+    'Change Loan Displayer'
 
-    __name__ = 'endorsement.loan.change_basic_data'
-    _target_model = 'loan'
+    __name__ = 'endorsement.loan.change.displayer'
 
-    loan = fields.Many2One('loan', 'Loan')
+    current_values = fields.One2Many('loan', None, 'Current Values',
+        readonly=True)
+    new_values = fields.One2Many('loan', None, 'New Values')
+    loan_id = fields.Integer('Loan Id')
+    loan_rec_name = fields.Char('Loan', readonly=True)
 
-    def update_endorsement(self, endorsement, wizard):
-        self._update_endorsement(endorsement, 'loan_fields')
+
+class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
+    'Change Loan Data'
+
+    __name__ = 'endorsement.loan.change'
+
+    loan_changes = fields.One2Many('endorsement.loan.change.displayer', None,
+        'Loan Changes')
+    loan_count = fields.Integer('Loan Count', states={'invisible': True})
+
+    @classmethod
+    def _loan_fields_to_extract(cls):
+        return {
+            'loan': ['currency', 'rate', 'payment_frequency', 'payment_amount',
+                'first_payment_date', 'funds_release_date', 'parties',
+                'outstanding_capital', 'kind', 'amount', 'number', 'company',
+                'increments', 'number_of_payments', 'currency_symbol',
+                'currency_digits'],
+            'loan.increment': ['number_of_payments', 'deferal', 'end_date',
+                'number', 'rate', 'payment_amount', 'start_date',
+                'begin_balance', 'currency_symbol', 'currency',
+                'currency_digits'],
+            }
+
+    @classmethod
+    def update_default_values(cls, wizard, endorsement, default_values):
+        loan_endorsements = {}
+        if endorsement:
+            loan_endorsements = {x.loan.id: x
+                for x in endorsement.loan_endorsements}
+        for loan_change, loan_id in [(x['new_values'][0], x['loan_id'])
+                    for x in default_values['loan_changes']]:
+            loan_change['state'] = 'draft'
+            if loan_id not in loan_endorsements:
+                continue
+            cur_changes = loan_endorsements[loan_id]
+            loan_change.update(cur_changes.values)
+            loan_change['increments'] = [x.values for x in
+                cur_changes.increments]
+
+    def update_endorsement(self, base_endorsement, wizard):
+        all_endorsements = {x.loan.id: x
+            for x in wizard.endorsement.loan_endorsements}
+        pool = Pool()
+        LoanEndorsement = pool.get('endorsement.loan')
+        IncrementEndorsement = pool.get('endorsement.loan.increment')
+        Loan = pool.get('loan')
+        to_delete, to_save, increment_to_delete = [], [], []
+        for loan_change in self.loan_changes:
+            base_loan = Loan(loan_change.loan_id)
+            if loan_change.loan_id in all_endorsements:
+                loan_endorsement = all_endorsements[loan_change.loan_id]
+            else:
+                loan_endorsement = LoanEndorsement(values={},
+                    loan=base_loan.id, endorsement=wizard.endorsement.id,
+                    increments=[])
+            new_values, new_increments = {}, []
+            for k, v in loan_change.new_values[0]._save_values.iteritems():
+                if k == 'increments':
+                    new_increments = v
+                    continue
+                if getattr(base_loan, k) == v or k in ('state', 'parties'):
+                    continue
+                if k == 'deferal' and (base_loan.deferal or None) == (
+                        v or None):
+                    # deferal may be None or ''
+                    continue
+                new_values[k] = v
+            if base_loan.kind != 'graduated' and not new_values:
+                # Nothing changed, remove endorsement
+                if loan_endorsement.id:
+                    to_delete.append(loan_endorsement)
+                continue
+            if base_loan.kind != 'graduated':
+                loan_endorsement.values = new_values
+                to_save.append(loan_endorsement)
+                continue
+            # Worst case scenario : we need to manually save the increments
+            increment_to_delete += list(loan_endorsement.increments)
+            increments_to_create = []
+            for increment_action in new_increments:
+                if increment_action[0] == 'create':
+                    increments_to_create += increment_action[1]
+            loan_endorsement.values = new_values
+            loan_endorsement.increments = [
+                IncrementEndorsement(action='remove', increment=increment.id)
+                for increment in base_loan.increments] + [
+                IncrementEndorsement(action='add', values=increment_dict)
+                for increment_dict in increments_to_create]
+            to_save.append(loan_endorsement)
+        if increment_to_delete:
+            IncrementEndorsement.delete(increment_to_delete)
+        if to_delete:
+            LoanEndorsement.delete(to_delete)
+        if to_save:
+            utils.save_all(to_save)
+
+
+class ChangeLoanUpdatedPayments(model.CoopView):
+    'Change Loan Updated Payments'
+
+    __name__ = 'endorsement.loan.change.updated_payments'
+
+    current_payments = fields.One2Many('loan.payment', None,
+        'Current Payments', readonly=True)
+    loan_id = fields.Integer('Loan Id', states={'invisible': True})
+    loan_rec_name = fields.Char('Loan')
+    new_payments = fields.One2Many('loan.payment', None, 'New Payments',
+        readonly=True)
 
 
 class LoanDisplayUpdatedPayments(model.CoopView):
@@ -50,11 +160,8 @@ class LoanDisplayUpdatedPayments(model.CoopView):
 
     __name__ = 'endorsement.loan.display_updated_payments'
 
-    current_payments = fields.One2Many('loan.payment', None,
-        'Current Payments', readonly=True)
-    loan = fields.Many2One('loan', 'Loan', readonly=True)
-    new_payments = fields.One2Many('loan.payment', None, 'New Payments',
-        readonly=True)
+    loans = fields.One2Many('endorsement.loan.change.updated_payments', None,
+        'Loan Payments')
 
 
 class LoanSelectContracts(model.CoopView):
@@ -98,10 +205,7 @@ class LoanContractDisplayer(model.CoopView):
             max_loan_end = max([loan.end_date for loan in contract_loans])
 
         for loan_endorsement in self.endorsement.loan_endorsements:
-            loan = loan_endorsement.loan
-            for k, v in loan_endorsement.values.iteritems():
-                # TODO : Make it cleaner
-                setattr(loan, k, v)
+            loan = loan_endorsement.update_loan()
             loan.simulate()
             last_increment = loan.increments[-1]
             last_increment.loan = loan
@@ -586,25 +690,25 @@ class ContractPreviewPayment(model.CoopView):
 class StartEndorsement:
     __name__ = 'endorsement.start'
 
-    change_basic_loan_data = StateView('endorsement.loan.change_basic_data',
-        'endorsement_loan.change_basic_loan_data_view_form',
-        [Button('Previous', 'change_basic_loan_data_previous',
+    change_loan_data = StateView('endorsement.loan.change',
+        'endorsement_loan.loan_change_view_form', [
+            Button('Previous', 'change_loan_data_previous',
                 'tryton-go-previous'),
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Suspend', 'suspend', 'tryton-save'),
             Button('Next', 'calculate_updated_payments', 'tryton-go-next',
                 default=True)])
-    change_basic_loan_data_previous = StateTransition()
+    change_loan_data_previous = StateTransition()
     calculate_updated_payments = StateTransition()
     display_updated_payments = StateView(
         'endorsement.loan.display_updated_payments',
         'endorsement_loan.display_updated_payments_view_form', [
-            Button('Previous', 'change_basic_loan_data', 'tryton-go-previous'),
+            Button('Previous', 'change_loan_data', 'tryton-go-previous'),
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Suspend', 'suspend', 'tryton-save'),
             Button('Next', 'loan_select_contracts', 'tryton-go-next',
                 default=True)])
-    change_basic_loan_data_next = StateTransition()
+    change_loan_data_next = StateTransition()
     loan_select_contracts = StateView('endorsement.loan.select_contracts',
         'endorsement_loan.select_contracts_view_form', [
             Button('Previous', 'display_updated_payments',
@@ -682,42 +786,60 @@ class StartEndorsement:
             result['loan'] == Transaction().context.get('active_id')
         return result
 
-    def default_change_basic_loan_data(self, name):
-        ChangeBasicLoanData = Pool().get('endorsement.loan.change_basic_data')
-        result = ChangeBasicLoanData.get_state_view_default_values(self,
-            'loan.loan_simple_view_form', 'loan',
-            'change_basic_loan_data', 'loan_fields')
-        result['loan'] = self.select_endorsement.loan.id
-        result['new_value'][0]['state'] = 'draft'
-        return result
+    def default_change_loan_data(self, name):
+        ChangeLoan = Pool().get('endorsement.loan.change')
+        endorsement_part = self.get_endorsement_part_for_state(
+            'change_loan_data')
+        contract = self.select_endorsement.contract
+        fields_to_extract = ChangeLoan._loan_fields_to_extract()
+        default_values = {
+            'endorsement_part': endorsement_part.id,
+            'contract': contract.id,
+            'loan_changes': [{
+                    'loan_id': loan.id,
+                    'loan_rec_name': loan.rec_name,
+                    'current_values': [loan.id],
+                    'new_values': [
+                        model.dictionarize(loan, fields_to_extract)],
+                    } for loan in contract.used_loans],
+            'loan_count': len(contract.used_loans),
+            }
+        ChangeLoan.update_default_values(self, self.endorsement,
+            default_values)
+        return default_values
 
-    def transition_change_basic_loan_data_previous(self):
-        self.end_current_part('change_basic_loan_data')
-        return self.get_state_before('change_basic_loan_data')
+    def transition_change_loan_data_previous(self):
+        self.change_loan_data.update_endorsement(None, self)
+        return self.get_state_before('change_loan_data')
 
     def transition_calculate_updated_payments(self):
-        self.end_current_part('change_basic_loan_data')
+        self.change_loan_data.update_endorsement(None, self)
         return 'display_updated_payments'
 
     def default_display_updated_payments(self, name):
-        current_loan = self.change_basic_loan_data.current_value[0]
-        new_loan = self.change_basic_loan_data.new_value[0]
-        new_loan.calculate()
-
-        return {
-            'loan': current_loan.id,
-            'current_payments': [x.id for x in current_loan.payments],
-            'new_payments': [
-                dict([(x, getattr(payment, x, None)) for x in PAYMENT_FIELDS])
-                for payment in new_loan.payments]
-            }
+        default_values = []
+        for endorsement in self.endorsement.loan_endorsements:
+            old_loan = endorsement.loan
+            new_loan = endorsement.update_loan()
+            new_loan.simulate()
+            default_values.append({
+                    'loan_id': old_loan.id,
+                    'loan_rec_name': new_loan.rec_name,
+                    'current_payments': [
+                        {x: getattr(payment, x, None) for x in PAYMENT_FIELDS}
+                        for payment in old_loan.payments],
+                    'new_payments': [
+                        {x: getattr(payment, x, None) for x in PAYMENT_FIELDS}
+                        for payment in new_loan.payments],
+                    })
+        return {'loans': default_values}
 
     def default_loan_select_contracts(self, name):
         Contract = Pool().get('contract')
-        current_loan = self.change_basic_loan_data.current_value[0]
+        all_loans = [x.id for x in self.endorsement.loans]
         possible_contracts = Contract.search([
-                ('covered_elements.options.loan_shares.loan', '=',
-                    current_loan)])
+                ('covered_elements.options.loan_shares.loan', 'in',
+                    all_loans)])
         contract_displayers = []
         for contract_endorsement in self.endorsement.contract_endorsements:
             contract = contract_endorsement.contract
@@ -732,7 +854,7 @@ class StartEndorsement:
                     'new_end_date': contract_endorsement.values.get(
                         'end_date', contract.end_date),
                     })
-            possible_contracts.pop(contract)
+            possible_contracts.remove(contract)
         for contract in possible_contracts:
             contract_displayers.append({
                     'contract': contract.id,
@@ -766,7 +888,7 @@ class StartEndorsement:
             endorsement.values['start_date'] = displayer.new_start_date
             endorsement.values['end_date'] = displayer.new_end_date
         if to_delete:
-            ContractEndorsement.delete(to_delete)
+            ContractEndorsement.delete(to_delete.values())
         if to_create:
             ContractEndorsement.create([x._save_values for x in to_create])
         if to_write:
@@ -774,10 +896,10 @@ class StartEndorsement:
                     for values in [[[instance], instance._save_values]
                         for instance in to_write]
                     for x in values])
-        return 'change_basic_loan_data_next'
+        return 'change_loan_data_next'
 
-    def transition_change_basic_loan_data_next(self):
-        return self.get_next_state('change_basic_loan_data')
+    def transition_change_loan_data_next(self):
+        return self.get_next_state('change_loan_data')
 
     def default_loan_share_update(self, name):
         ContractEndorsement = Pool().get('endorsement.contract')

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<form string="Change Loan">
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition" colspan="3"/>
+    <group id="one_loan" colspan="4" yexpand="1" yfill="1" states="{'invisible': Eval('loan_count', 0) != 1}">
+        <field name="loan_changes" colspan="4" mode="form" expand_toolbar="0"/>
+    </group>
+    <group id="multiple_loan" colspan="4" yexpand="1" yfill="1" states="{'invisible': Eval('loan_count', 0) == 1}">
+        <field name="loan_changes" colspan="4" mode="tree,form" expand_toolbar="0"/>
+    </group>
+    <newline/>
+    <field name="endorsement_part"/>
+    <field name="loan_count"/>
+</form>

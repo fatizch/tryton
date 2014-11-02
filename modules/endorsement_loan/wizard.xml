@@ -10,13 +10,39 @@
             <field name="inherit" ref="endorsement.select_endorsement_view_form"/>
             <field name="name">select_endorsement_form</field>
         </record>
-        <!-- ########################## -->
-        <!-- # Loan Change Basic Data # -->
-        <!-- ########################## -->
-        <record model="ir.ui.view" id="change_basic_loan_data_view_form">
-            <field name="model">endorsement.loan.change_basic_data</field>
+        <!-- ######################### -->
+        <!-- # Change Loan Displayer # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="loan_change_displayer_view_form">
+            <field name="model">endorsement.loan.change.displayer</field>
             <field name="type">form</field>
-            <field name="name">change_basic_loan_data_form</field>
+            <field name="name">loan_change_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_change_displayer_view_list">
+            <field name="model">endorsement.loan.change.displayer</field>
+            <field name="type">tree</field>
+            <field name="name">loan_change_displayer_list</field>
+        </record>
+        <!-- ############### -->
+        <!-- # Change Loan # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="loan_change_view_form">
+            <field name="model">endorsement.loan.change</field>
+            <field name="type">form</field>
+            <field name="name">loan_change_form</field>
+        </record>
+        <!-- ################################ -->
+        <!-- # Change Loan Updated Payments # -->
+        <!-- ################################ -->
+        <record model="ir.ui.view" id="loan_change_updated_payments_view_form">
+            <field name="model">endorsement.loan.change.updated_payments</field>
+            <field name="type">form</field>
+            <field name="name">loan_change_updated_payments_form</field>
+        </record>
+        <record model="ir.ui.view" id="loan_change_updated_payments_view_list">
+            <field name="model">endorsement.loan.change.updated_payments</field>
+            <field name="type">tree</field>
+            <field name="name">loan_change_updated_payments_list</field>
         </record>
         <!-- ################################ -->
         <!-- # Loan Dispay Updated Payments # -->

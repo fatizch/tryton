@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<form string="Updated Payments">
+    <notebook colspan="4">
+        <page name="new_payments">
+            <field name="new_payments" mode="tree" expand_toolbar="1"/>
+        </page>
+        <page name="current_payments">
+            <field name="current_payments" mode="tree" expand_toolbar="1"/>
+        </page>
+    </notebook>
+    <field name="loan_id"/>
+</form>
