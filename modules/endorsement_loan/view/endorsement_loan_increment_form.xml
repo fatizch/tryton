@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Endorsement Loan Increment">
+    <label name="loan_endorsement"/>
+    <field name="loan_endorsement"/>
+    <newline/>
+    <label name="action"/>
+    <field name="action"/>
+    <label name="increment"/>
+    <field name="increment"/>
+    <field name="values" colspan="4"/>
+</form>

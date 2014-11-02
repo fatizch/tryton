@@ -66,5 +66,18 @@
             <field name="type">tree</field>
             <field name="name">endorsement_loan_share_list</field>
         </record>
+        <!-- ############################## -->
+        <!-- # Endorsement Loan Increment # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="endorsement_loan_increment_view_form">
+            <field name="model">endorsement.loan.increment</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_loan_increment_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_loan_increment_view_list">
+            <field name="model">endorsement.loan.increment</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_loan_increment_list</field>
+        </record>
     </data>
 </tryton>

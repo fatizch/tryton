@@ -23,6 +23,7 @@ def register():
         EndorsementCoveredElementOption,
         EndorsementLoanShare,
         LoanChangeBasicData,
+        EndorsementLoanIncrement,
         LoanDisplayUpdatedPayments,
         LoanSelectContracts,
         LoanContractDisplayer,

@@ -21,6 +21,7 @@ __all__ = [
     'EndorsementLoan',
     'EndorsementCoveredElementOption',
     'EndorsementLoanShare',
+    'EndorsementLoanIncrement',
     ]
 
 
@@ -152,6 +153,8 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         depends=['state'])
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
         ondelete='CASCADE')
+    increments = fields.One2Many('endorsement.loan.increment',
+        'loan_endorsement', 'Loan Increments')
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
@@ -263,12 +266,9 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
             else:
                 loan_endorsement.set_applied_on(loan.write_date
                     or loan.create_date)
-            values = loan_endorsement.apply_values
-            # TODO: Make it better
-            for k, v in values.iteritems():
-                setattr(loan, k, v)
-            loan.calculate()
-            loan.save()
+            new_loan = loan_endorsement.update_loan(delete_increments=True)
+            new_loan.calculate()
+            new_loan.save()
             loan_endorsement.save()
 
     def set_applied_on(self, at_datetime):
@@ -276,10 +276,32 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
 
     @property
     def apply_values(self):
-        return (self.values if self.values else {}).copy()
+        values = super(EndorsementLoan, self).apply_values
+        increments = []
+        for increment in self.increments:
+            increments.append(increment.apply_values)
+        if increments:
+            values['increments'] = increments
+        return values
 
     def get_endorsed_record(self):
         return self.loan
+
+    def update_loan(self, delete_increments=False):
+        pool = Pool()
+        Loan = pool.get('loan')
+        Increment = pool.get('loan.increment')
+        base_loan = Loan(self.loan.id)
+        for k, v in self.values.iteritems():
+            setattr(base_loan, k, v)
+        if delete_increments:
+            Increment.delete(base_loan.increments)
+        base_loan.increments = []
+        for increment in self.increments:
+            if increment.action != 'add':
+                continue
+            base_loan.increments.append(Increment(**increment.values))
+        return base_loan
 
 
 class EndorsementCoveredElementOption:
@@ -445,3 +467,31 @@ class EndorsementLoanShare(relation_mixin(
     @classmethod
     def updated_struct(cls, loan_share):
         return {'instance': loan_share}
+
+
+class EndorsementLoanIncrement(relation_mixin(
+            'endorsement.loan.increment.field', 'increment', 'loan.increment',
+            'Loan Increments'),
+        model.CoopSQL, model.CoopView):
+    'Loan Increment'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.loan.increment'
+
+    loan_endorsement = fields.Many2One('endorsement.loan', 'Loan Endorsement',
+        required=True, select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementLoanIncrement, cls).__setup__()
+        cls.values.domain = [('definition', '=', Eval('definition'))]
+        cls.values.depends = ['definition']
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.loan_endorsement.definition.id
