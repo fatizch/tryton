@@ -4,6 +4,7 @@ import time
 import copy
 import string
 import random
+from collections import defaultdict
 
 from trytond.pool import Pool
 from trytond.model import Model
@@ -31,6 +32,33 @@ def to_list(data):
         return [data]
     else:
         return [data]
+
+
+def save_all(to_save):
+    create_indexes = defaultdict(list)
+    actions = defaultdict(lambda: defaultdict(list))
+    for idx, elem in enumerate(to_save):
+        save_values = elem._save_values
+        if elem.id and save_values:
+            actions[elem.__class__]['write'] += [[elem], save_values]
+        elif not elem.id:
+            create_indexes[elem.__class__].append(idx)
+            actions[elem.__class__]['create'].append(save_values)
+        else:
+            raise Exception('save_all cannot save %r' % elem)
+    for klass, action_dict in actions.iteritems():
+        for action_name, values in action_dict.iteritems():
+            if not values:
+                continue
+            if action_name == 'write':
+                klass.write(*values)
+            elif action_name == 'create':
+                ids = klass.create(values)
+                for id, idx in zip(ids, create_indexes[klass]):
+                    instance = to_save[idx]
+                    instance._values = None
+                    instance.id = id
+                    instance._ids.append(id)
 
 
 def add_results(results):
