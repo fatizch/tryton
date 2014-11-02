@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Manage Extra Premium">
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition"/>
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <field name="extra_premiums" colspan="4" expand_toolbar="0"/>
+    <group id="invisible" states="{'invisible': True}">
+        <field name="endorsement_part"/>
+    </group>
+</form>

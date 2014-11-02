@@ -18,6 +18,11 @@ def register():
         EndorsementPart,
         NewCoveredElement,
         NewOptionOnCoveredElement,
+        ExtraPremiumDisplayer,
+        ManageExtraPremium,
+        OptionSelector,
+        CoveredElementSelector,
+        NewExtraPremium,
         module='endorsement_insurance', type_='model')
 
     Pool.register(

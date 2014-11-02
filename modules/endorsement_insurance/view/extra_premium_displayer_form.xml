@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<form string="Extra Premium">
+    <field name="extra_premium" mode="form" colspan="4" expand_toolbar="0"/>
+    <group id="invisible" states="{'invisible': True}">
+        <field name="contract"/>
+        <field name="covered_element_name"/>
+        <field name="option_name"/>
+        <field name="extra_premium_name"/>
+        <field name="covered_element"/>
+        <field name="covered_element_endorsement"/>
+        <field name="option"/>
+        <field name="option_endorsement"/>
+        <field name="extra_premium_id"/>
+        <field name="extra_premium"/>
+    </group>
+</form>

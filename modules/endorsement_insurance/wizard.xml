@@ -17,5 +17,50 @@
             <field name="type">form</field>
             <field name="name">add_option_to_covered_element_form</field>
         </record>
+        <!-- ######################## -->
+        <!-- # Manage Extra Premium # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="manage_extra_premium_view_form">
+            <field name="model">endorsement.contract.manage_extra_premium</field>
+            <field name="type">form</field>
+            <field name="name">manage_extra_premium_form</field>
+        </record>
+        <!-- ########################### -->
+        <!-- # Extra Premium Displayer # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="extra_premium_displayer_view_form">
+            <field name="model">endorsement.contract.extra_premium.displayer</field>
+            <field name="type">form</field>
+            <field name="name">extra_premium_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="extra_premium_displayer_view_list">
+            <field name="model">endorsement.contract.extra_premium.displayer</field>
+            <field name="type">tree</field>
+            <field name="name">extra_premium_displayer_list</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Option Selector # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="endorsement_option_selector_view_list">
+            <field name="model">endorsement.option.selector</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_option_selector_list</field>
+        </record>
+        <!-- ############################ -->
+        <!-- # Covered Element Selector # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="endorsement_covered_element_selector_view_list">
+            <field name="model">endorsement.covered_element.selector</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_covered_element_selector_list</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # New Extra Premium # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="new_extra_premium_view_form">
+            <field name="model">endorsement.contract.new_extra_premium</field>
+            <field name="type">form</field>
+            <field name="name">new_extra_premium_form</field>
+        </record>
     </data>
 </tryton>

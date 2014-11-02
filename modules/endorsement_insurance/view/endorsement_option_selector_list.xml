@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Options" editable="bottom">
+    <field name="selected"/>
+    <field name="covered_element_rec_name"/>
+    <field name="covered_element_id" tree_invisible="1"/>
+    <field name="covered_element_endorsement_id" tree_invisible="1"/>
+    <field name="option_rec_name"/>
+    <field name="option_id" tree_invisible="1"/>
+    <field name="option_endorsement_id" tree_invisible="1"/>
+</tree>
