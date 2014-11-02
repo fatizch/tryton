@@ -12,6 +12,7 @@ def register():
         EndorsementCoveredElement,
         EndorsementCoveredElementOption,
         EndorsementCoveredElementField,
+        EndorsementExtraPremiumField,
         EndorsementPart,
         NewCoveredElement,
         NewOptionOnCoveredElement,

@@ -9,6 +9,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'EndorsementPart',
     'EndorsementCoveredElementField',
+    'EndorsementExtraPremiumField',
     ]
 
 
@@ -20,17 +21,34 @@ class EndorsementPart:
         'Covered Element Fields', states={
             'invisible': Eval('kind', '') != 'covered_element'},
         depends=['kind'])
+    extra_premium_fields_ = fields.Many2Many(
+        'endorsement.contract.extra_premium.field', 'endorsement_part',
+        'field', 'Extra Premium Fields', states={
+            'invisible': Eval('kind', '') != 'extra_premium'},
+        depends=['kind'])
+    extra_premium_fields = fields.One2Many(
+        'endorsement.contract.extra_premium.field', 'endorsement_part',
+        'Extra Premium Fields', states={
+            'invisible': Eval('kind', '') != 'extra_premium'},
+        depends=['kind'])
 
     @classmethod
     def __setup__(cls):
         super(EndorsementPart, cls).__setup__()
         cls.kind.selection.append(('covered_element', 'Covered Element'))
+        cls.kind.selection.append(('extra_premium', 'Extra Premium'))
         cls.option_fields.states['invisible'] = And(
             cls.option_fields.states['invisible'],
             Eval('kind', '') != 'covered_element')
 
+    @classmethod
+    def __post_setup__(cls):
+        super(EndorsementPart, cls).__post_setup__()
+        cls.extra_premium_fields_.domain = Pool().get(
+            'endorsement.contract.extra_premium.field')._fields['field'].domain
+
     def on_change_with_endorsed_model(self, name=None):
-        if self.kind == 'covered_element':
+        if self.kind in ('covered_element', 'extra_premium'):
             return Pool().get('ir.model').search([
                     ('model', '=', 'contract')])[0].id
         return super(EndorsementPart, self).on_change_with_endorsed_model(name)
@@ -41,6 +59,26 @@ class EndorsementPart:
                 and not self.option_fields):
             self.clean_up_relation(endorsement, 'covered_elements_fields',
                 'covered_elements')
+        if self.kind == 'extra_premium':
+            to_delete = []
+            for covered_element in endorsement.covered_elements:
+                for option in covered_element.options:
+                    extra_premiums = []
+                    for extra_premium in option.extra_premiums:
+                        if extra_premium.values:
+                            for field in self.extra_premium_fields:
+                                if field.name in extra_premium.values:
+                                    del extra_premium.values[field.name]
+                        if not extra_premium.values:
+                            to_delete.append(extra_premium)
+                        else:
+                            extra_premiums.append(extra_premium)
+                    option.extra_premiums = extra_premiums
+            if to_delete:
+                ExtraPremiumEndorsement = Pool().get(
+                    'endorsement.contract.extra_premium')
+                ExtraPremiumEndorsement.delete(to_delete)
+        super(EndorsementPart, self).clean_up(endorsement)
 
 
 class EndorsementCoveredElementField(field_mixin('contract.covered_element'),
@@ -48,3 +86,10 @@ class EndorsementCoveredElementField(field_mixin('contract.covered_element'),
     'Endorsement Covered Element Field'
 
     __name__ = 'endorsement.contract.covered_element.field'
+
+
+class EndorsementExtraPremiumField(field_mixin(
+            'contract.option.extra_premium'), model.CoopSQL, model.CoopView):
+    'Endorsement Extra Premium Field'
+
+    __name__ = 'endorsement.contract.extra_premium.field'
