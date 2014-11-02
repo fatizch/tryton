@@ -494,13 +494,17 @@ class NewExtraPremium(model.CoopView):
                         option_selector.covered_element_id)
                     ce_endorsement = CoveredElementEndorsement(action='update',
                         options=[option_endorsement],
-                        relation=covered_element.id,
+                        covered_element=covered_element.id,
                         contract_endorsement=all_endorsements[
-                            covered_element.contract.id])
+                            covered_element.contract.id].id)
                     new_covered_elements[covered_element.id] = ce_endorsement
-                else:
+                elif option_selector.covered_element_endorsement_id:
                     option_endorsement.covered_element_endorsement = \
                         option_selector.covered_element_endorsement_id
+                else:
+                    covered_endorsement = new_covered_elements[
+                        option_selector.covered_element_id]
+                    covered_endorsement.options.append(option_endorsement)
 
             save_values = new_values.copy()
             if option_selector.option_endorsement_id:
@@ -518,7 +522,7 @@ class NewExtraPremium(model.CoopView):
                     if getattr(x, 'covered_element_endorsement', None)])
         if new_covered_elements:
             CoveredElementEndorsement.create([x._save_values
-                    for x in new_covered_elements
+                    for x in new_covered_elements.itervalues()
                     if getattr(x, 'contract_endorsement', None)])
 
 
