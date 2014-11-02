@@ -10,7 +10,7 @@ from trytond import backend
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval, If
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -65,11 +65,7 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
 
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
-    start_date = fields.Date('Start Date', required=True, domain=[If(
-                Bool(Eval('end_date', None)),
-                ('start_date', '<=', Eval('end_date')),
-                ('start_date', '>=', datetime.date.min))],
-        depends=['end_date'])
+    start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date', domain=['OR',
             ('end_date', '=', None),
             ('end_date', '>=', Eval('start_date', datetime.date.min))],
@@ -160,7 +156,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
     start_date = fields.Function(
-        fields.Date('Start Date', states=_STATES, depends=_DEPENDS),
+        fields.Date('Start Date', states=_STATES, depends=_DEPENDS,
+            required=True),
         'getter_contract_date', 'set_contract_start_date',
         searcher='search_contract_date')
     subscriber_kind = fields.Function(
