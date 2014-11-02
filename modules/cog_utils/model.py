@@ -61,6 +61,28 @@ def serialize_this(the_data, from_field=None):
     return res
 
 
+def dictionarize(instance, field_names):
+    # Returns a dict which may be used to initialize a copy of instance with
+    # for which the field_names fields are identical.
+    # field_names is either a list of field names to extract (in that case,
+    # O2Ms will be copied as ids, which may be bad), or a dict which states for
+    # each model the field_names to extract
+    if isinstance(field_names, (list, tuple)):
+        field_names = {instance.__name__: field_names}
+    if not field_names.get(instance.__name__, None):
+        return instance.id
+    res = {fname: getattr(instance, fname, None)
+        for fname in field_names[instance.__name__]}
+    for k, v in res.iteritems():
+        if isinstance(v, Model):
+            res[k] = v.id
+            if isinstance(instance._fields[k], tryton_fields.Reference):
+                res[k] = '%s,%s' % (v.__name__, v.id)
+        elif isinstance(v, (list, tuple)):
+            res[k] = [dictionarize(x, field_names) for x in v]
+    return res
+
+
 class ErrorManager(object):
     'Error Manager class, which stores non blocking errors to be able to raise'
     'them together'
