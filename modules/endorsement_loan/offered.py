@@ -11,6 +11,7 @@ __all__ = [
     'EndorsementPart',
     'EndorsementLoanField',
     'EndorsementLoanShareField',
+    'EndorsementLoanIncrementField',
     ]
 
 
@@ -37,12 +38,27 @@ class EndorsementPart:
         'endorsement_part', 'Endorsement Loan Share Fields', states={
             'invisible': Eval('kind', '') != 'loan_share'},
         depends=['kind'])
+    loan_increment_fields_ = fields.Many2Many(
+        'endorsement.loan.increment.field', 'endorsement_part', 'field',
+        'Endorsement Loan Increment Field', states={
+            'invisible': Eval('kind', '') != 'loan'},
+        depends=['kind'])
+    loan_increment_fields = fields.One2Many('endorsement.loan.increment.field',
+        'endorsement_part', 'Endorsement Loan Increment Field', states={
+            'invisible': Eval('kind', '') != 'loan'},
+        depends=['kind'])
 
     @classmethod
     def __setup__(cls):
         super(EndorsementPart, cls).__setup__()
         cls.kind.selection.append(('loan', 'Loan'))
         cls.kind.selection.append(('loan_share', 'Loan Share'))
+
+    @classmethod
+    def __post_setup__(cls):
+        super(EndorsementPart, cls).__post_setup__()
+        cls.loan_increment_fields_.domain = Pool().get(
+            'endorsement.loan.increment.field')._fields['field'].domain
 
     def on_change_with_endorsed_model(self, name=None):
         if self.kind == 'loan':
@@ -57,7 +73,10 @@ class EndorsementPart:
         if self.kind == 'loan':
             for field in self.loan_fields:
                 endorsement.values.pop(field.name, None)
-        if self.kind == 'loan_share':
+            if self.loan_increment_fields and endorsement.increments:
+                Pool().get('endorsement.loan.increment').delete(
+                    endorsement.increments)
+        elif self.kind == 'loan_share':
             to_delete = []
             for covered_element in endorsement.covered_elements:
                 for option in covered_element.options:
@@ -88,3 +107,10 @@ class EndorsementLoanShareField(field_mixin('loan.share'), model.CoopSQL,
     'Endorsement Loan Share Field'
 
     __name__ = 'endorsement.loan.share.field'
+
+
+class EndorsementLoanIncrementField(field_mixin('loan.increment'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Loan Increment Field'
+
+    __name__ = 'endorsement.loan.increment.field'

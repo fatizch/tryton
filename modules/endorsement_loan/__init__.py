@@ -7,9 +7,10 @@ from .wizard import *
 def register():
     Pool.register(
         EndorsementDefinition,
-        EndorsementPart,
         EndorsementLoanField,
         EndorsementLoanShareField,
+        EndorsementLoanIncrementField,
+        EndorsementPart,
         Contract,
         Loan,
         LoanIncrement,
