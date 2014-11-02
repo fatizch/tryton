@@ -295,6 +295,9 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         for k, v in self.values.iteritems():
             setattr(base_loan, k, v)
         if delete_increments:
+            # Horrible : if number_of_payments are not read before deleting
+            # Increments, it will fail
+            base_loan.number_of_payments = base_loan.number_of_payments
             Increment.delete(base_loan.increments)
         base_loan.increments = []
         for increment in self.increments:
