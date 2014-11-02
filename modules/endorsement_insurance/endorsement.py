@@ -7,10 +7,12 @@ from trytond.modules.endorsement import relation_mixin
 
 __all__ = [
     'CoveredElement',
+    'ExtraPremium',
     'Endorsement',
     'EndorsementContract',
     'EndorsementCoveredElement',
     'EndorsementCoveredElementOption',
+    'EndorsementExtraPremium',
     ]
 
 
@@ -20,18 +22,25 @@ class CoveredElement(object):
     __name__ = 'contract.covered_element'
 
 
+class ExtraPremium(object):
+    __metaclass__ = PoolMeta
+    _history = True
+    __name__ = 'contract.option.extra_premium'
+
+
 class Endorsement:
     __metaclass__ = PoolMeta
     __name__ = 'endorsement'
 
     def new_endorsement(self, endorsement_part):
-        if endorsement_part.kind in ('covered_element', 'option'):
+        if endorsement_part.kind in ('covered_element', 'option',
+                'extra_premium'):
             return Pool().get('endorsement.contract')(endorsement=self,
                 covered_elements=[])
         return super(Endorsement, self).new_endorsement(endorsement_part)
 
     def find_parts(self, endorsement_part):
-        if endorsement_part.kind == 'covered_element':
+        if endorsement_part.kind in ('covered_element', 'extra_premium'):
             return self.contract_endorsements
         return super(Endorsement, self).find_parts(endorsement_part)
 
@@ -64,6 +73,9 @@ class EndorsementContract:
             for covered_element in contract.covered_elements:
                 instances['contract.option'] += \
                     covered_element.options
+                for option in covered_element.options:
+                    instances['contract.option.extra_premium'] += \
+                        option.extra_premiums
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)
@@ -219,6 +231,8 @@ class EndorsementCoveredElementOption(relation_mixin(
     covered_element_endorsement = fields.Many2One(
         'endorsement.contract.covered_element', 'Covered Element Endorsement',
         required=True, select=True, ondelete='CASCADE')
+    extra_premiums = fields.One2Many('endorsement.contract.extra_premium',
+        'covered_option_endorsement', 'Extra Premium Endorsement')
     coverage = fields.Function(
         fields.Many2One('offered.option.description', 'Coverage'),
         'on_change_with_coverage')
@@ -233,6 +247,7 @@ class EndorsementCoveredElementOption(relation_mixin(
         cls.values.depends = ['definition']
         cls._error_messages.update({
                 'new_coverage': 'New Coverage: %s',
+                'mes_option_modifications': 'Extra Premium Modification',
                 })
 
     @classmethod
@@ -254,6 +269,105 @@ class EndorsementCoveredElementOption(relation_mixin(
         if self.option:
             return self.option.rec_name
         return self.raise_user_error('new_coverage', (self.coverage.rec_name),
+            raise_exception=False)
+
+    def get_summary(self, model, base_object=None, indent=0, increment=2):
+        result = super(EndorsementCoveredElementOption, self).get_summary(
+            model, base_object, indent, increment)
+        if self.action == 'remove':
+            return result
+        extra_premium_summary = '\n'.join([x.get_summary(
+                    'contract.option.extra_premium', x.extra_premium,
+                    indent=indent + increment, increment=increment)
+                for x in self.extra_premiums])
+        if extra_premium_summary:
+            result += '%s%s :\n' % (' ' * indent, self.raise_user_error(
+                    'mes_extra_premium_modifications', raise_exception=False))
+            result += extra_premium_summary
+            result += '\n\n'
+        return result
+
+    @property
+    def apply_values(self):
+        values = super(EndorsementCoveredElementOption, self).apply_values
+        extra_premium_values = []
+        for extra_premium in self.extra_premiums:
+            extra_premium_values.append(extra_premium.apply_values)
+        if extra_premium_values:
+            if self.action == 'add':
+                values[1][0]['extra_premiums'] = extra_premium_values
+            elif self.action == 'update':
+                values[2]['extra_premiums'] = extra_premium_values
+        return values
+
+    @property
+    def new_extra_premiums(self):
+        if self.action == 'remove':
+            return []
+        elif self.action == 'add':
+            return list(self.extra_premiums)
+        else:
+            elems = set([x for x in self.option.extra_premiums])
+            for elem in self.extra_premiums:
+                if elem.action == 'add':
+                    elems.add(elem)
+                elif elem.action == 'remove':
+                    elems.remove(elem.extra_premium)
+                    elems.add(elem)
+                else:
+                    elems.remove(elem.extra_premium)
+                    elems.add(elem)
+        return elems
+
+    @classmethod
+    def updated_struct(cls, element):
+        EndorsementExtraPremium = Pool().get(
+            'endorsement.contract.extra_premium')
+        return {'extra_premiums': {
+                x: EndorsementExtraPremium.updated_struct(x)
+                for x in (element.new_extra_premiums
+                    if isinstance(element, cls)
+                    else element.extra_premiums)}}
+
+
+class EndorsementExtraPremium(relation_mixin(
+            'endorsement.contract.extra_premium.field', 'extra_premium',
+            'contract.option.extra_premium', 'Extra Premiums'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Extra Premium'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.extra_premium'
+
+    covered_option_endorsement = fields.Many2One(
+        'endorsement.contract.covered_element.option',
+        'Extra Premium Endorsement', required=True, select=True,
+        ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementExtraPremium, cls).__setup__()
+        cls.values.domain = [('definition', '=', Eval('definition'))]
+        cls.values.depends = ['definition']
+        cls._error_messages.update({
+                'new_extra_premium': 'New Extra Premium: %s',
+                })
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.covered_option_endorsement.definition.id
+
+    def get_rec_name(self, name):
+        if self.extra_premium:
+            return self.extra_premium.rec_name
+        ExtraPremium = Pool().get('contract.option.extra_premium')
+        return self.raise_user_error('new_extra_premium',
+            ExtraPremium(**self.values).get_rec_name(None),
             raise_exception=False)
 
     @classmethod

@@ -9,4 +9,5 @@
     <field name="option"/>
     <newline/>
     <field name="values" colspan="4"/>
+    <field name="extra_premiums" colspan="4"/>
 </form>

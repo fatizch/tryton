@@ -7,11 +7,13 @@ from .wizard import *
 def register():
     Pool.register(
         CoveredElement,
+        ExtraPremium,
         Endorsement,
         EndorsementContract,
         EndorsementCoveredElement,
         EndorsementCoveredElementOption,
         EndorsementCoveredElementField,
+        EndorsementExtraPremium,
         EndorsementExtraPremiumField,
         EndorsementPart,
         NewCoveredElement,
