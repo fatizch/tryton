@@ -111,9 +111,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 wizard = self.ContractChangeStartDate(wizard_id)
                 wizard._execute('change_date')
                 wizard.change_date.new_start_date = new_date
-                wizard.change_date.new_appliable_conditions_date = (
-                        wizard.change_date.on_change_new_start_date()[
-                            'new_appliable_conditions_date'])
+                wizard.change_date.on_change_new_start_date()
                 wizard._execute('apply')
 
         # case 1 : new date posterior to start_date

@@ -451,43 +451,43 @@ class ModuleTestCase(test_framework.CoopTestCase):
             tc.rule = rule
             tc.test_values = []
             self.maxDiff = None
-            self.assertEqual(tc.on_change_test_values(), {
-                    'low_debug': u"Entering table_test_code\n\t"
-                    "args : ('test', 30)\n\t"
-                    "result = None\n"
-                    "Entering add_error\n\t"
-                    "args : ('test error',)\n\t"
-                    "result = None\n"
-                    "Entering add_warning\n\t"
-                    "args : ('test warning',)\n\t"
-                    "result = None\n"
-                    "Entering add_info\n\t"
-                    "args : ('test info',)\n\t"
-                    "result = None\n"
-                    "Entering table_test_code\n\t"
-                    "args : ('foo', 1)\n\t"
-                    "result = ham\n"
-                    "Entering rule_test_rule\n\t"
-                    "kwargs : {'test_parameter': 20}",
-                    'debug': '',
-                    'result_errors': u'test error',
-                    'expected_result': '[20, [test error], [test warning],'
-                    ' [test info]]',
-                    'result_info': u'test info',
-                    'result_value': u'20',
-                    'result_warning': u'test warning',
-                    })
+            tc.on_change_test_values()
+            self.assertEqual(tc.low_debug,
+                u"Entering table_test_code\n\t"
+                "args : ('test', 30)\n\t"
+                "result = None\n"
+                "Entering add_error\n\t"
+                "args : ('test error',)\n\t"
+                "result = None\n"
+                "Entering add_warning\n\t"
+                "args : ('test warning',)\n\t"
+                "result = None\n"
+                "Entering add_info\n\t"
+                "args : ('test info',)\n\t"
+                "result = None\n"
+                "Entering table_test_code\n\t"
+                "args : ('foo', 1)\n\t"
+                "result = ham\n"
+                "Entering rule_test_rule\n\t"
+                "kwargs : {'test_parameter': 20}")
+            self.assertEqual(tc.debug, '')
+            self.assertEqual(tc.result_errors, u'test error')
+            self.assertEqual(tc.expected_result,
+                '[20, [test error], [test warning], [test info]]')
+            self.assertEqual(tc.result_info, u'test info')
+            self.assertEqual(tc.result_value, u'20')
+            self.assertEqual(tc.result_warning, u'test warning')
             tc.test_values = [tcv1]
-            self.assertEqual(tc.on_change_test_values(), {
-                    'low_debug': u"Entering table_test_code\n\targs : "
-                    "('test', 30)\n\tresult = something",
-                    'result_warning': '',
-                    'result_value': u'10',
-                    'debug': '',
-                    'result_errors': '',
-                    'expected_result': '[10, [], [], []]',
-                    'result_info': ''})
-            tc.expected_result = "[10, [], [], []]"
+            tc.on_change_test_values()
+            self.assertEqual(tc.low_debug,
+                u"Entering table_test_code\n\targs : "
+                "('test', 30)\n\tresult = something")
+            self.assertEqual(tc.result_warning, '')
+            self.assertEqual(tc.result_value, u'10')
+            self.assertEqual(tc.debug, '')
+            self.assertEqual(tc.result_errors, '')
+            self.assertEqual(tc.expected_result, '[10, [], [], []]')
+            self.assertEqual(tc.result_info, '')
             tc.save()
 
             # Check override of function elements

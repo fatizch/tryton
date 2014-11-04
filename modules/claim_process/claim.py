@@ -190,22 +190,17 @@ class Loss:
     @fields.depends('benefit_to_deliver', 'services', 'claim', 'start_date',
         'loss_desc', 'event_desc')
     def on_change_benefit_to_deliver(self):
-        res = {}
+        pool = Pool()
+        Service = pool.get('contract.service')
         if not self.services:
-            res['services'] = utils.create_inst_with_default_val(
-                self, 'services', 'add')
-            del_serv_dict = res['services']['add'][0][1]
-        elif (len(self.services) == 1
-                and self.services[0].status == 'calculating'):
-            res['services'] = {'update':
-                [{'id': self.services[0].id}]
-            }
-            del_serv_dict = res['services']['update'][0]
-        else:
-            return res
-        del_serv_dict['benefit'] = (self.benefit_to_deliver.id
-            if self.benefit_to_deliver else None)
-        del_serv_dict['extra_data'] = (utils.init_extra_data(
+            self.services = [Service()]
+        elif not((len(self.services) == 1
+                and self.services[0].status == 'calculating')):
+            return
+        service = self.services[0]
+        service.benefit = (self.benefit_to_deliver if self.benefit_to_deliver
+            else None)
+        service.extra_data = (utils.init_extra_data(
                 self.benefit_to_deliver.extra_data_def)
             if self.benefit_to_deliver else {})
         contract = None
@@ -215,18 +210,17 @@ class Loss:
             contracts = self.claim.get_possible_contracts(self.start_date)
             if len(contracts) == 1:
                 contract = contracts[0]
-        if not contract:
-            return res
-        del_serv_dict['contract'] = contract.id
-        if not self.benefit_to_deliver:
-            return res
-        options = []
-        for option in contract.options:
-            if self.benefit_to_deliver in option.get_possible_benefits(self):
-                options.append(option)
-        if len(set(options)) == 1:
-            del_serv_dict['option'] = options[0].id
-        return res
+        if contract:
+            service.contract = contract
+            if self.benefit_to_deliver:
+                options = []
+                for option in contract.options:
+                    if self.benefit_to_deliver in \
+                            option.get_possible_benefits(self):
+                        options.append(option)
+                if len(set(options)) == 1:
+                    service.option = options[0]
+        self.services = self.services
 
     @fields.depends('services')
     def on_change_with_can_modify_benefit(self, name=None):

@@ -28,7 +28,7 @@ class Bank:
                 })
 
     def on_change_code_fr(self):
-        return {'code_fr': self.code_fr.zfill(5)}
+        self.code_fr = self.code_fr.zfill(5)
 
     @classmethod
     def validate(cls, banks):
@@ -173,23 +173,26 @@ class BankAccountNumber:
 
     @fields.depends('bank_code')
     def on_change_bank_code(self):
-        return {'number': self.bank_code, 'branch_code': '',
-            'account_number': '', 'key': ''}
+        self.number = self.bank_code
+        self.branch_code = ''
+        self.account_number = ''
+        self.key = ''
 
     @fields.depends('branch_code', 'bank_code')
     def on_change_branch_code(self):
-        return {'number': self.bank_code + self.branch_code,
-            'account_number': '', 'key': ''}
+        self.number = self.bank_code + self.branch_code
+        self.account_number = ''
+        self.key = ''
 
     @fields.depends('account_number', 'branch_code', 'bank_code')
     def on_change_account_number(self):
-        return {'number': self.bank_code + self.branch_code +
-            self.account_number, 'key': ''}
+        self.number = self.bank_code + self.branch_code + self.account_number
+        self.key = ''
 
     @fields.depends('key', 'bank_code', 'branch_code', 'account_number')
     def on_change_key(self):
-        return {'number': self.bank_code + self.branch_code +
-            self.account_number + self.key}
+        self.number = self.bank_code + self.branch_code + \
+            self.account_number + self.key
 
     def pre_validate(self):
         super(BankAccountNumber, self).pre_validate()

@@ -244,19 +244,19 @@ class CashSurrenderParameters(model.CoopView):
     @fields.depends('contract', 'surrender_date')
     def on_change_contract(self):
         if not (hasattr(self, 'surrender_date') and self.surrender_date):
-            return {}
+            return
         if not (hasattr(self, 'contract') and self.contract):
-            return {}
+            return
         pool = Pool()
         CashValueCollection = pool.get('contract.cash_value.collection')
         total_amount = CashValueCollection.update_values(
             self.contract.cash_value_collections,
             self.surrender_date, True, False)
-        return {'surrender_amount': total_amount}
+        self.surrender_amount = total_amount
 
     @fields.depends('contract', 'surrender_date')
     def on_change_surrender_date(self):
-        return self.on_change_contract()
+        self.on_change_contract()
 
 
 class CashSurrenderWizard(Wizard):
@@ -281,8 +281,8 @@ class CashSurrenderWizard(Wizard):
             tmp = CashSurrenderParameters()
             tmp.contract = pool.get('contract')(result['contract'])
             tmp.surrender_date = result['surrender_date']
-            result['surrender_amount'] = tmp.on_change_contract()[
-                'surrender_amount']
+            tmp.on_change_contract()
+            result['surrender_amount'] = tmp.surrender_amount
         return result
 
     def transition_surrend(self):

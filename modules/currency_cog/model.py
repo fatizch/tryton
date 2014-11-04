@@ -45,9 +45,8 @@ class ModelCurrency(object):
 
     @fields.depends('currency')
     def on_change_currency(self):
-        digits = self.currency.digits if self.currency else 2
-        symbol = self.currency.symbol if self.currency else ''
-        return {'currency_digits': digits, 'currency_symbol': symbol}
+        self.digits = self.currency.digits if self.currency else 2
+        self.symbol = self.currency.symbol if self.currency else ''
 
     def get_currency_id(self, name):
         currency = self.get_currency()
@@ -55,8 +54,10 @@ class ModelCurrency(object):
 
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
-        return self.on_change_currency()['currency_digits']
+        self.on_change_currency()
+        return self.digits
 
     @fields.depends('currency')
     def on_change_with_currency_symbol(self, name=None):
-        return self.on_change_currency()['currency_symbol']
+        self.on_change_currency()
+        return self.symbol

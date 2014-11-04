@@ -178,5 +178,7 @@ class Beneficiary(model.CoopSQL, model.CoopView):
     @fields.depends('accepting')
     def on_change_accepting(self):
         if not self.accepting:
-            return {'party': None, 'address': None}
-        return {'reference': ''}
+            self.party = None
+            self.address = None
+        else:
+            self.reference = ''

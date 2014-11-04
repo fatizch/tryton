@@ -105,25 +105,22 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         'with_default_value')
     def on_change_selection(self):
         if self.default_value_selection is None:
-            return {}
+            return
         selection = self.get_default_value_selection()
         if self.default_value_selection not in selection:
-            return {'default_value_selection': selection[0] or None}
-        return {}
+            self.default_value_selection = selection[0] or None
 
     @fields.depends('type_')
     def on_change_type_(self):
-        res = {}
         if not hasattr(self, 'type_'):
-            return {}
+            return
         if self.type_ == 'selection':
-            res['selection'] = ''
-            res['default_selection'] = ''
+            self.selection = ''
+            self.default_selection = ''
         elif self.type_ == 'boolean':
-            res['default_boolean'] = False
+            self.default_boolean = False
         else:
-            res['default'] = ''
-        return res
+            self.default = ''
 
     @fields.depends('name', 'string')
     def on_change_with_name(self):

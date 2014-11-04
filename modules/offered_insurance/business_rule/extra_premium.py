@@ -35,16 +35,13 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('name', 'code')
     def on_change_name(self):
-        if self.code:
-            return {}
-        return {'code': coop_string.remove_blank_and_invalid_char(self.name)}
+        if not self.code:
+            self.code = coop_string.remove_blank_and_invalid_char(self.name)
 
     @fields.depends('is_discount')
     def on_change_is_discount(self):
-        return {
-            'max_values': None,
-            'max_rate': None,
-        }
+        self.max_values = None
+        self.max_rate = None
 
     @fields.depends('max_value', 'max_rate')
     def on_change_with_ceiling(self, name=None):

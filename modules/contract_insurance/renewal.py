@@ -31,13 +31,13 @@ class RenewalStart(model.CoopView):
     @fields.depends('renewal_date', 'renew_what')
     def on_change_renewal_date(self):
         if not (hasattr(self, 'renew_what') and self.renew_what):
-            return {'will_be_renewed': []}
+            self.will_be_renewed = []
+
         Contract = Pool().get('contract')
-        to_renew = Contract.search([
+        self.will_be_renewed = Contract.search([
             ('next_renewal_date', '<=', self.renewal_date),
             ('status', '!=', 'quote')])
-        return {'will_be_renewed': [x.id for x in to_renew],
-            'this_contract': None}
+        self.this_contract = None
 
     on_change_renew_what = on_change_renewal_date
 

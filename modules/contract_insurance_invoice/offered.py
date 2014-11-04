@@ -164,8 +164,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
     @fields.depends('frequency')
     def on_change_frequency(self):
         if self.frequency == 'monthly':
-            return {'sync_month': None}
-        return {}
+            self.sync_month = None
 
     def get_change_payment_term_order(self, name):
         return False

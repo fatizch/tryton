@@ -520,7 +520,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('loan', 'start_date', 'number_of_payments')
     def on_change_loan(self):
-        return {'end_date': self.on_change_with_end_date()}
+        self.end_date = self.on_change_with_end_date()
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):

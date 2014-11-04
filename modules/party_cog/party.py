@@ -133,7 +133,7 @@ class Party(export.ExportImportMixin):
             def get_on_change(name):
                 # Use a method to create a new context different of the loop
                 def on_change(self):
-                    return self.on_change_generic(name)
+                    self.on_change_generic(name)
                 return on_change
 
             on_change_method = 'on_change_%s' % is_actor_var_name
@@ -241,21 +241,18 @@ class Party(export.ExportImportMixin):
         return [(field_name, ) + tuple(clause[1:])]
 
     def on_change_generic(self, is_role=''):
-        res = {}
         if is_role == '':
-            return res
+            return
         role = Party.get_actor_var_name(is_role)
-        if role == '' or is_role == '':
-            return res
-        res[role] = {}
-        if type(getattr(self, role)) == bool:
-            return res
-        if getattr(self, is_role) and not getattr(self, role):
-            res[role]['add'] = [(-1, {})]
-        elif not getattr(self, is_role) and getattr(self, role):
-            res[role].setdefault('remove', [])
-            res[role]['remove'].append(getattr(self, role)[0].id)
-        return res
+        if role == '':
+            return
+        role_attr = getattr(self, role)
+        if type(role_attr) == bool:
+            return
+        if getattr(self, is_role) and not role_attr:
+            setattr(self, role, [Pool().get(self._fields[role].model_name)])
+        elif not getattr(self, is_role) and role_attr:
+            setattr(self, role, [])
 
     @classmethod
     def set_is_actor(cls, parties, name, value):
@@ -362,11 +359,9 @@ class Party(export.ExportImportMixin):
 
     @fields.depends('gender')
     def on_change_gender(self):
-        res = {}
         if self.gender == 'female':
-            return res
-        res['birth_name'] = ''
-        return res
+            return
+        self.birth_name = ''
 
     @classmethod
     def get_var_names_for_full_extract(cls):

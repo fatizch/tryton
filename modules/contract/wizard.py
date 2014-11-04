@@ -125,7 +125,6 @@ class OptionsDisplayer(model.CoopView):
     def on_change_options(self):
         selected = [elem for elem in self.options
             if (elem.is_selected and getattr(elem, 'coverage', None))]
-        to_update = []
         excluded = []
         required = []
         for x in selected:
@@ -146,12 +145,9 @@ class OptionsDisplayer(model.CoopView):
                 selection = 'manual'
             else:
                 continue
-            to_update.append({
-                    'id': x.id,
-                    'is_selected': is_selected,
-                    'selection': selection,
-                    })
-        return {'options': {'update': to_update}}
+            x.is_selected = is_selected
+            x.selection = selection
+        self.options = self.options
 
 
 class WizardOption(model.CoopView):

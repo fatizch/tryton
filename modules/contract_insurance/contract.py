@@ -85,12 +85,9 @@ class Contract(Printable):
 
     @fields.depends('product')
     def on_change_product(self):
-        result = super(Contract, self).on_change_product()
-        if not self.product:
-            return result
-        result['possible_item_desc'] = [
-            x.id for x in self.product.item_descriptors]
-        return result
+        super(Contract, self).on_change_product()
+        if self.product:
+            self.possible_item_desc = list(self.product.item_descriptors)
 
     @fields.depends('product')
     def on_change_with_possible_item_desc(self, name=None):
@@ -435,19 +432,16 @@ class ContractOption:
     @fields.depends('all_extra_datas', 'start_date', 'coverage', 'contract',
         'appliable_conditions_date', 'product', 'covered_element')
     def on_change_coverage(self):
-        result = super(ContractOption, self).on_change_coverage()
-        result.update(self.on_change_extra_data())
-        return result
+        super(ContractOption, self).on_change_coverage()
+        self.on_change_extra_data()
 
     @fields.depends('extra_data', 'start_date', 'coverage', 'contract',
         'appliable_conditions_date', 'product', 'covered_element')
     def on_change_extra_data(self):
         if not self.coverage or not self.product:
             self.extra_data = {}
-            return {
-                'extra_data': self.extra_data,
-                'all_extra_datas': self.on_change_with_all_extra_data(),
-                }
+            self.all_extra_datas = self.on_change_with_all_extra_data()
+            return
         item_desc_id = Transaction().context.get('item_desc', None)
         item_desc = None
         if not item_desc_id:
@@ -459,10 +453,7 @@ class ContractOption:
             self.on_change_with_all_extra_data(),
             self.appliable_conditions_date, coverage=self.coverage,
             item_desc=item_desc)
-        return {
-            'extra_data': self.extra_data,
-            'all_extra_datas': self.on_change_with_all_extra_data(),
-            }
+        self.all_extra_datas = self.on_change_with_all_extra_data()
 
     @fields.depends('covered_element', 'contract', 'extra_data')
     def on_change_with_all_extra_data(self, name=None):
@@ -551,7 +542,7 @@ class ContractOption:
 
     def init_extra_data(self):
         self.extra_data = getattr(self, 'extra_data', {})
-        self.extra_data.update(self.on_change_extra_data()['extra_data'])
+        self.on_change_extra_data()
 
     @classmethod
     def init_default_values_from_coverage(cls, coverage, product,
@@ -806,66 +797,51 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def on_change_extra_data(self):
         if not self.item_desc or not self.product:
             self.extra_data = {}
-            return {
-                'extra_data': self.extra_data,
-                'all_extra_datas': self.on_change_with_all_extra_data(),
-                }
+            self.all_extra_datas = self.on_change_with_all_extra_data()
+            return
+
+        self.all_extra_datas = self.on_change_with_all_extra_data()
         self.extra_data = self.product.get_extra_data_def('covered_element',
             self.on_change_with_all_extra_data(),
             self.appliable_conditions_date, item_desc=self.item_desc)
-        res = {
-            'extra_data': self.extra_data,
-            'all_extra_datas': self.on_change_with_all_extra_data(),
-            }
 
         if self.party_extra_data:
             self.party_extra_data.update(dict([
                         (key, value) for (key, value)
                         in self.extra_data.iteritems()
                         if key in self.party_extra_data]))
-            res['party_extra_data'] = self.party_extra_data
-        return res
+            self.party_extra_data = self.party_extra_data
 
     @fields.depends('item_desc', 'all_extra_datas', 'party', 'product',
         'start_date', 'options')
     def on_change_item_desc(self):
-        res = self.on_change_extra_data()
-        res['item_kind'] = self.on_change_with_item_kind()
-        res['party_extra_data'] = self.get_party_extra_data()
+        self.on_change_extra_data()
+        self.item_kind = self.on_change_with_item_kind()
+        self.party_extra_data = self.get_party_extra_data()
         # update extra_data dict with common extradata key from
         # party_extra_data
-        res['extra_data'].update(
-            (k, res['party_extra_data'][k])
-            for k in res['extra_data'].viewkeys()
-            & res['party_extra_data'].viewkeys())
+
+        self.extra_data.update(self.party_extra_data)
+
         if self.item_desc is None:
-            res['options'] = {}
-            return res
+            self.options = []
+            return
         available_coverages = self.get_coverages(self.product, self.item_desc)
-        to_remove = []
         if self.options:
             for elem in self.options:
                 if elem.coverage not in available_coverages:
-                    to_remove.append(elem.id)
+                    self.options.remove(elem)
                 else:
                     available_coverages.remove(elem.coverage)
         Option = Pool().get('contract.option')
-        to_add = []
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
                 continue
             new_opt = Option.init_default_values_from_coverage(elem,
                 self.product, item_desc=self.item_desc,
                 start_date=self.start_date)
-            to_add.append([-1, new_opt])
-        if not to_add and not to_remove:
-            return res
-        res['options'] = {}
-        if to_add:
-            res['options']['add'] = to_add
-        if to_remove:
-            res['options']['remove'] = to_remove
-        return res
+            self.options.append(new_opt)
+            self.options = self.options
 
     @fields.depends('contract', 'extra_data')
     def on_change_with_all_extra_data(self, name=None):
@@ -1172,13 +1148,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.item_desc = item_desc
         if 'name' in cov_dict:
             self.name = cov_dict['name']
-        cov_as_dict = self.on_change_item_desc()
-        for key, val in cov_as_dict.iteritems():
-            if key == 'options':
-                the_list = [x[1] for x in val.get('add', [])]
-                self.options = the_list
-                continue
-            setattr(self, key, val)
+
+        self.on_change_item_desc()
         if 'extra_data' in cov_dict:
             self.extra_data.update(cov_dict['extra_data'])
 
@@ -1297,12 +1268,10 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('calculation_kind')
     def on_change_calculation_kind(self):
-        changes = {}
         if self.calculation_kind == 'flat':
-            changes['rate'] = None
+            self.rate = None
         elif self.calculation_kind == 'rate':
-            changes['flat_amount'] = None
-        return changes
+            self.flat_amount = None
 
     @fields.depends('start_date', 'end_date')
     def on_change_with_duration_unit(self, name=None):

@@ -588,8 +588,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     @fields.depends('direct_debit_day_selector')
     def on_change_direct_debit_day_selector(self):
         if not self.direct_debit_day_selector:
-            return {'direct_debit_day': None}
-        return {'direct_debit_day': int(self.direct_debit_day_selector)}
+            self.direct_debit_day = None
+            return
+        self.direct_debit_day = int(self.direct_debit_day_selector)
 
     def get_direct_debit_planned_date(self, line):
         if not (self.direct_debit and self.direct_debit_day):

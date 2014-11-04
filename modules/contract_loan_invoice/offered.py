@@ -62,14 +62,11 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
 
     @fields.depends('use_default_rule', 'fee_rules')
     def on_change_use_default_rule(self):
-        result = {
-            'contract_rule': None,
-            'option_rule': None,
-            'default_fee_action': 'prorata',
-            }
+        self.contract_rule = None
+        self.option_rule = None
+        self.default_fee_action = 'prorata'
         if self.fee_rules:
-            result['fee_rules'] = {'remove': [x.id for x in self.fee_rules]}
-        return result
+            self.fee_rules = []
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

@@ -60,12 +60,11 @@ class Templated(object):
 
     @fields.depends('template')
     def on_change_template(self):
-        if hasattr(self, 'template') and self.template:
-            if (not hasattr(self, 'template_behaviour')
-                    or not self.template_behaviour):
-                return {'template_behaviour': 'pass'}
+        if self.template:
+            if not self.template_behaviour:
+                self.template_behaviour = 'pass'
         else:
-            return {'template_behaviour': None}
+            self.template_behaviour = None
 
 
 class NonExistingRuleKindException(Exception):

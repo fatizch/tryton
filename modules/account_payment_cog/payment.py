@@ -44,10 +44,9 @@ class Payment(ModelSQL, ModelView):
 
     @fields.depends('line')
     def on_change_line(self):
-        change = super(Payment, self).on_change_line()
-        if change and self.line:
-            change['date'] = self.line.payment_date
-        return change
+        super(Payment, self).on_change_line()
+        if self.line:
+            self.date = self.line.payment_date
 
 
 class Configuration:

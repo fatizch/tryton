@@ -65,9 +65,8 @@ class Contract(CogProcessFramework):
         return self.subscriber.summary if self.subscriber else ''
 
     def on_change_subscriber_kind(self):
-        res = super(Contract, self).on_change_subscriber_kind()
-        res['subscriber_desc'] = ''
-        return res
+        super(Contract, self).on_change_subscriber_kind()
+        self.subscriber_desc = ''
 
     def check_product_not_null(self):
         if not self.product:
@@ -244,7 +243,7 @@ class ContractOption:
 
     @fields.depends('status_selection', 'status')
     def on_change_status_selection(self):
-        return {'status': 'active' if self.status_selection else 'refused'}
+        self.status = 'active' if self.status_selection else 'refused'
 
     @fields.depends('status')
     def on_change_with_status_selection(self, name=None):

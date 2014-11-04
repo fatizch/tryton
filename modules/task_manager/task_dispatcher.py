@@ -165,17 +165,17 @@ class TaskSelector(model.CoopView):
         states={'readonly': True})
 
     @fields.depends('team', 'nb_tasks_team', 'nb_users_team', 'tasks_team',
-        'tasks')
+        'tasks', 'selected_task')
     def on_change_team(self):
-        if not (hasattr(self, 'team') and self.team):
-            return {
-                'nb_users_team': 0,
-                'nb_tasks_team': 0,
-                'tasks_team': []}
-        User = Pool().get('res.user')
-        Log = Pool().get('process.log')
-        result = {}
-        result['nb_users_team'] = User.search_count([('team', '=', self.team)])
+        if not self.team:
+            self.nb_users_team = 0
+            self.nb_tasks_team = 0
+            self.tasks_team = []
+            return
+        pool = Pool()
+        User = pool.get('res.user')
+        Log = pool.get('process.log')
+        self.nb_users_team = User.search_count([('team', '=', self.team)])
         tmp_result = {}
         final_result = []
         nb_tasks = 0
@@ -194,24 +194,21 @@ class TaskSelector(model.CoopView):
             tmp_result[(priority.process_step.id, priority.priority)] = task
             final_result.append(task)
             valid_states.append(priority.process_step.id)
-        result['tasks_team'] = model.serialize_this(final_result)
-        result['nb_tasks_team'] = nb_tasks
-        result['tasks'] = model.serialize_this(Log.search([
+        self.tasks_team = final_result
+        self.nb_tasks_team = nb_tasks
+        self.tasks = Log.search([
                 ('latest', '=', True), ('locked', '=', False),
                 ('to_state', 'in', valid_states)],
-                order=[('priority', 'ASC')]))
-        if not (hasattr(self, 'selected_task') and self.selected_task):
-            result['selected_task'] = \
-                result['tasks'][0] if result['tasks'] else None
-        return result
+                order=[('priority', 'ASC')])
+        if not self.selected_task:
+            self.selected_task = self.tasks[0] if self.tasks else None
 
     @fields.depends('process', 'nb_tasks_process', 'tasks_process')
     def on_change_process(self):
-        if not (hasattr(self, 'process') and self.process):
-            return {
-                'nb_tasks_process': 0,
-                'tasks_process': []}
-        result = {}
+        if not self.process:
+            self.nb_tasks_process = 0
+            self.tasks_process = []
+            return
         tmp_result = []
         nb_tasks = 0
         TaskDisplayer = Pool().get('task.select.available_tasks.task')
@@ -224,32 +221,26 @@ class TaskSelector(model.CoopView):
             task.nb_tasks = task.on_change_with_nb_tasks()
             nb_tasks += task.nb_tasks
             tmp_result.append(task)
-        result['tasks_process'] = model.serialize_this(tmp_result)
-        result['nb_tasks_process'] = nb_tasks
-        return result
+        self.tasks_process = tmp_result
+        self.nb_tasks_process = nb_tasks
 
     @fields.depends('selected_task', 'tasks')
     def on_change_tasks(self):
-        if not (hasattr(self, 'tasks') and self.tasks):
-            return None
-        found = None
+        if not self.tasks:
+            return
         for task in self.tasks:
             if task.task_selected:
-                if not(hasattr(self, 'selected_task') and self.selected_task) \
-                        or task.id != self.selected_task.id:
-                    found = task
-        if not found:
-            if hasattr(self, 'selected_task') and self.selected_task:
-                found = self.selected_task
+                if not self.selected_task or task.id != self.selected_task.id:
+                    break
+        else:
+            if self.selected_task:
+                task = self.selected_task
             else:
-                return None
-        result = {}
-        result['selected_task'] = found.id
-        result['tasks'] = {
-            'update': [
-                {'id': x.id, 'task_selected': x.id == found.id}
-                for x in self.tasks]}
-        return result
+                return
+        self.selected_task = task
+        for cur_task in self.tasks:
+            cur_task.task_selected = cur_task.id == task.id
+        self.tasks = self.tasks
 
 
 class TaskDispatcher(Wizard):
@@ -293,10 +284,8 @@ class TaskDispatcher(Wizard):
             return {}
         good_priority = user.team.priorities[0]
         selector.process = good_priority.process_step.process
-        changes = selector.on_change_team()
-        changes.update(selector.on_change_process())
-        for k, v in changes.iteritems():
-            setattr(selector, k, v)
+        selector.on_change_team()
+        selector.on_change_process()
         return model.serialize_this(selector)
 
     def transition_remove_locks(self):

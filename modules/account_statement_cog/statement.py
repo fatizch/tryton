@@ -20,8 +20,8 @@ class Line:
 
     @fields.depends('statement')
     def on_change_statement(self):
-        return {'in_bank_deposit_ticket':
-            self.on_change_with_in_bank_deposit_ticket()}
+        self.in_bank_deposit_ticket = \
+            self.on_change_with_in_bank_deposit_ticket()
 
     @fields.depends('statement')
     def on_change_with_in_bank_deposit_ticket(self, name=None):

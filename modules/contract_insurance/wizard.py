@@ -161,41 +161,37 @@ class ExtraPremiumDisplay(model.CoopView):
     @fields.depends('covered_element', 'extra_premiums', 'coverages',
             'options', 'option', 'extra_premium')
     def on_change_covered_element(self):
-        extra_to_delete = [x.id for x in self.extra_premiums]
-        options_to_delete = [x.id for x in self.options]
-        result = {
-            'extra_premiums': {'remove': extra_to_delete},
-            'options': {'remove': options_to_delete},
-            }
-        if not self.covered_element:
-            return result
-        existing_extras = []
-        existing_options = []
-        for option in self.covered_element.options:
-            if self.option and self.option != option:
-                continue
-            for extra_premium in option.extra_premiums:
-                if self.extra_premium and self.extra_premium != extra_premium:
+        pool = Pool()
+        Extra = pool.get('contract.manage_extra_premium.select.extra')
+        Option = pool.get('contract.manage_extra_premium.select.option')
+        if self.covered_element:
+            for option in self.covered_element.options:
+                if self.option and self.option != option:
                     continue
-                existing_extras.append((-1, {
+                for extra_premium in option.extra_premiums:
+                    if (self.extra_premium and
+                            self.extra_premium != extra_premium):
+                        continue
+                    self.extra_premiums.append(Extra({
                             'selected': (self.extra_premium
                                 and self.extra_premium == extra_premium),
                             'extra_premium': extra_premium.id,
                             'extra_premium_name': self.get_extra_premium_name(
                                 extra_premium),
                             }))
-        for option in self.covered_element.options:
-            if not self.option or self.option == option:
-                continue
-            existing_options.append((-1, {
-                        'selected': False,
-                        'option': option.id,
-                        'option_name': self.get_option_name(option),
-                        'extra_premiums': self.get_extra_premiums(option),
-                        }))
-        result['extra_premiums']['add'] = existing_extras
-        result['options']['add'] = existing_options
-        return result
+            self.extra_premiums = self.extra_premiums
+
+            for option in self.covered_element.options:
+                if not self.option or self.option == option:
+                    continue
+                self.options.append(Option({
+                            'selected': False,
+                            'option': option.id,
+                            'option_name': self.get_option_name(option),
+                            'extra_premiums': self.get_extra_premiums(option),
+                            }))
+
+            self.options = self.options
 
 
 class ManageExtraPremium(Wizard):

@@ -149,9 +149,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
     def update_services_extra_data(self):
         for loss in self.losses:
             for service in loss.services:
-                service.extra_data = \
-                    service.on_change_extra_data()[
-                        'extra_data']
+                service.on_change_extra_data()
                 service.save()
         return True
 
@@ -414,26 +412,22 @@ class Loss(model.CoopSQL, model.CoopView):
 
     @fields.depends('main_loss', 'loss_desc')
     def on_change_main_loss(self):
-        res = {}
         # TODO : Add possibility to have compatible loss example a disability
         # after a temporary incapacity
         if self.main_loss and self.main_loss.loss_desc:
-            res['loss_desc'] = self.main_loss.loss_desc.id
-            res['with_end_date'] = self.main_loss.loss_desc.with_end_date
+            self.loss_desc = self.main_loss.loss_desc
+            self.with_end_date = self.main_loss.loss_desc.with_end_date
         else:
-            res['loss_desc'] = None
-            res['with_end_date'] = False
-        return res
+            self.loss_desc = None
+            self.with_end_date = False
 
     @fields.depends('event_desc', 'loss_desc', 'with_end_date', 'end_date')
     def on_change_loss_desc(self):
-        res = {}
-        res['with_end_date'] = self.get_with_end_date('')
+        self.with_end_date = self.get_with_end_date('')
         if (self.loss_desc and self.event_desc
                 and self.event_desc not in self.loss_desc.event_descs):
-            res['event_desc'] = None
-        res['end_date'] = self.end_date if res['with_end_date'] else None
-        return res
+            self.event_desc = None
+        self.end_date = self.end_date if self.end_date else None
 
     @classmethod
     def validate(cls, instances):
@@ -516,8 +510,7 @@ class DeliveredService:
 
     def init_from_loss(self, loss, benefit):
         self.benefit = benefit
-        self.extra_data = self.on_change_extra_data()[
-            'extra_data']
+        self.on_change_extra_data()
 
     def get_covered_data(self):
         # TODO : retrieve the good covered data
@@ -627,8 +620,8 @@ class DeliveredService:
     def on_change_extra_data(self):
         args = {'date': self.loss.start_date, 'level': 'service'}
         self.init_dict_for_rule_engine(args)
-        return {'extra_data': self.benefit.get_result(
-                'calculated_extra_datas', args)[0]}
+        self.extra_data = self.benefit.get_result('calculated_extra_datas',
+            args)[0]
 
     def get_extra_data_def(self):
         if self.benefit:
@@ -983,16 +976,9 @@ class ClaimIndemnificationValidateSelect(model.CoopView):
 
     @fields.depends('indemnifications', 'modified', 'apply', 'global_value')
     def on_change_global_value(self):
-        result = []
         for elem in self.indemnifications:
             elem.selection = self.global_value
-            if (hasattr(elem, 'id') and elem.id):
-                elem.id = None
-            elem_as_dict = model.serialize_this(elem)
-            if 'id' in elem_as_dict:
-                del elem_as_dict['id']
-            result.append(elem_as_dict)
-        return {'indemnifications': result}
+        self.indemnifications = self.indemnifications
 
     @classmethod
     def find_indemnifications(cls, domain, search_size):
@@ -1020,8 +1006,29 @@ class ClaimIndemnificationValidateSelect(model.CoopView):
 
     @fields.depends('domain_string', 'indemnifications', 'search_size')
     def on_change_domain_string(self):
-        return self.find_indemnifications(
-            self.build_domain(self.domain_string, self.search_size))
+        Indemnification = Pool().get('claim.indemnification')
+        IndemnificationDisplay = Pool().get(
+            'claim.indemnification.validate.display')
+        indemnifications = Indemnification.search(
+            self.domain_string, order=[('start_date', 'ASC')],
+            limit=self.search_size)
+        self.modified = False
+        for indemnification in indemnifications:
+            claim = indemnification.service.loss.claim
+            indemnificationDisplay = IndemnificationDisplay(
+                    selection='nothing',
+                    indemnification=indemnification.id,
+                    amount=indemnification.amount,
+                    start_date=indemnification.start_date,
+                    end_date=indemnification.end_date,
+                    indemnification_displayer=[indemnification.id],
+                    which_display='indemnification',
+                    claim=claim.id,
+                    claim_declaration_date=claim.declaration_date,
+                    claim_number='%s' % claim.name,
+                    covered_element='%s' % (
+                        indemnification.customer.get_rec_name(None)))
+            self.indemnifications.append(indemnificationDisplay)
 
     @fields.depends('indemnifications')
     def on_change_with_modified(self):

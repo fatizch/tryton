@@ -29,39 +29,33 @@ class Line:
 
     @fields.depends('invoice', 'contract')
     def on_change_invoice(self):
-        changes = super(Line, self).on_change_invoice()
-        changes['contract'] = (self.invoice.contract.id if self.invoice
-            else None)
-        return changes
+        super(Line, self).on_change_invoice()
+        self.contract = (self.invoice.contract if self.invoice else None)
 
-    @fields.depends('statement')
+    @fields.depends('statement', 'date')
     def on_change_statement(self):
-        changes = super(Line, self).on_change_statement()
-        if self.statement and not changes.get('date', None):
-            changes['date'] = self.statement.date
-        return changes
+        super(Line, self).on_change_statement()
+        if self.statement and not self.date:
+            self.date = self.statement.date
 
     @fields.depends('party', 'contract')
     def on_change_party(self):
-        changes = super(Line, self).on_change_party()
+        super(Line, self).on_change_party()
         if (self.party and self.contract
                 and self.party != self.contract.subscriber):
-            changes['contract'] = None
-        return changes
+            self.contract = None
 
     @fields.depends('contract', 'party', 'invoice')
     def on_change_contract(self):
-        changes = {}
         if self.contract:
             if self.invoice:
                 if self.invoice.contract != self.contract:
-                    changes['invoice'] = None
+                    self.invoice = None
             if self.party:
                 if self.contract.subscriber != self.party:
-                    changes['party'] = None
+                    self.party = None
             else:
-                changes['party'] = self.contract.subscriber.id
-        return changes
+                self.party = self.contract.subscriber
 
 
 class BankDepositTicketReport(CompanyReport):

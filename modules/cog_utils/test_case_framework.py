@@ -515,41 +515,32 @@ class SelectTestCase(model.CoopView):
             if elem.selection in ('manual', 'not_selected') and elem.selected]
         order = TestCaseModel.build_dependency_graph(
             [x.test_case for x in selected])
-        to_update = []
         for x in self.test_cases:
             if x.test_case not in order:
-                to_update.append({
-                        'id': x.id,
-                        'selected': False,
-                        'selection': 'not_selected'})
+                x.selected = False
+                x.selection = 'not_selected'
                 continue
-            to_update.append({
-                    'id': x.id,
-                    'selected': True,
-                    'selection': 'manual' if x in selected else 'automatic'})
-        return {'test_cases': {'update': to_update}}
+            x.selected = True
+            x.selection = 'manual' if x in selected else 'automatic'
+        self.test_cases = self.test_cases
 
     @fields.depends('select_all_test_cases', 'test_cases')
     def on_change_select_all_test_cases(self):
-        if not (hasattr(self, 'test_cases') and self.test_cases):
-            return {}
-        return {
-            'test_cases': {'update': [{
-                        'id': x.id,
-                        'selection': 'manual' if self.select_all_test_cases
+        if not self.test_cases:
+            return
+        for test_case in self.test_cases:
+            test_case.selection = 'manual' if self.select_all_test_cases \
                         else 'not_selected',
-                        'selected': self.select_all_test_cases}
-                    for x in self.test_cases]}}
+            test_case.selected = self.select_all_test_cases
+        self.test_cases = self.test_cases
 
     @fields.depends('select_all_files', 'test_files')
     def on_change_select_all_files(self):
-        if not (hasattr(self, 'test_files') and self.test_files):
-            return {}
-        return {
-            'test_files': {'update': [{
-                        'id': x.id,
-                        'selected': self.select_all_files}
-                    for x in self.test_files]}}
+        if not self.test_files:
+            return
+        for test_file in self.test_files:
+            test_file.selected = self.select_all_files
+        self.test_files = self.test_files
 
 
 class TestCaseWizard(model.CoopWizard):

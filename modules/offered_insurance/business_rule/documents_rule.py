@@ -313,12 +313,10 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     @fields.depends('attachment', 'reception_date', 'received')
     def on_change_attachment(self):
         if not (hasattr(self, 'attachment') and self.attachment):
-            return {}
-        return {
-            'received': True,
-            'reception_date': (
-                hasattr(self, 'reception_date') and
-                self.reception_date) or utils.today()}
+            return
+        self.received = True
+        if not self.reception_date:
+            self.reception_date = utils.today()
 
     @fields.depends('reception_date')
     def on_change_with_received(self, name=None):
@@ -329,13 +327,11 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
 
     @fields.depends('received', 'reception_date')
     def on_change_received(self):
-        if (hasattr(self, 'received') and self.received):
-            if (hasattr(self, 'reception_date') and self.reception_date):
-                return {}
-            else:
-                return {'reception_date': utils.today()}
+        if self.received:
+            if not self.reception_date:
+                self.reception_date = utils.today()
         else:
-            return {'reception_date': None}
+            self.reception_date = None
 
     @fields.depends('attachment', 'reception_date')
     def on_change_with_reception_date(self, name=None):
@@ -437,21 +433,17 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
 
     @fields.depends('documents', 'is_complete')
     def on_change_documents(self):
-        return {'is_complete': self.on_change_with_is_complete()}
+        self.is_complete = self.on_change_with_is_complete()
 
     @fields.depends('documents', 'is_complete')
     def on_change_is_complete(self):
-        if not (hasattr(self, 'is_complete') or not self.is_complete):
-            return {}
-        if not (hasattr(self, 'documents') and self.documents):
-            return {}
-        return {
-            'documents': {
-                'update': [{
-                        'id': d.id,
-                        'received': True,
-                        'reception_date': d.reception_date or utils.today()}
-                    for d in self.documents]}}
+        if not (self.is_complete or self.documents):
+            return
+        for document in self.documents:
+            document.received = True
+            if not document.reception_date:
+                document.reception_date = utils.today()
+        self.documents = self.documents
 
     @classmethod
     def setter_void(cls, docs, values, name):
@@ -876,10 +868,11 @@ class DocumentReceiveRequest(model.CoopView):
                     return {}
 
                 relation = getattr(self, name)
-                if not (hasattr(relation, 'documents') and relation.documents):
-                    return {'value': utils.convert_to_reference(
-                        getattr(self, name))}
-                return {'request': relation.documents[0].id}
+                if not relation.documents:
+                    self.value = utils.convert_to_reference(
+                        getattr(self, name))
+                    return
+                self.request = relation.documents[0].id
             # Hack to fix http://bugs.python.org/issue3445
             tmp_function = functools.partial(on_change_tmp,
                 name='tmp_%s' % idx)
@@ -895,12 +888,10 @@ class DocumentReceiveRequest(model.CoopView):
 
     @fields.depends('kind')
     def on_change_kind(self):
-        result = {}
         for k, v in self._fields.iteritems():
             if not k.startswith('tmp_'):
                 continue
-            result[k] = None
-        return result
+            setattr(self, k, None)
 
     @classmethod
     def fields_view_get(cls, view_id=None, view_type='form'):
@@ -943,19 +934,6 @@ class DocumentReceiveAttach(model.CoopView):
         super(DocumentReceiveAttach, cls).__setup__()
         cls._error_messages.update({
             'ident_name': 'Duplicate name on attachments : %s'})
-
-    @fields.depends('attachments', 'resource')
-    def on_change_attachments(self):
-        if not (hasattr(self, 'attachments') and self.attachments):
-            return {}
-        codes = {}
-        for att in self.attachments:
-            if att.resource not in codes:
-                codes[att.resource] = set()
-            if att.name in codes[att.resource]:
-                self.raise_user_error('ident_name', att.name)
-            codes[att.resource].add(att.name)
-        return {}
 
 
 class DocumentReceiveSetRequests(model.CoopView):

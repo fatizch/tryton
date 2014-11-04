@@ -75,11 +75,10 @@ class Contract:
 
     @fields.depends('product')
     def on_change_product(self):
-        result = super(Contract, self).on_change_product()
-        result['is_loan'] = self.product.is_loan if self.product else False
-        if not result['is_loan']:
-            result['loans'] = []
-        return result
+        super(Contract, self).on_change_product()
+        self.is_loan = self.product.is_loan if self.product else False
+        if not self.is_loan:
+            self.loans = []
 
     @fields.depends('product')
     def on_change_with_is_loan(self, name=None):
@@ -136,11 +135,9 @@ class ContractOption:
 
     @fields.depends('coverage', 'loan_shares')
     def on_change_coverage(self):
-        result = super(ContractOption, self).on_change_coverage()
-        if result['coverage_family'] != 'loan':
-            result['loan_shares'] = {
-                'remove': [x.id for x in self.loan_shares]}
-        return result
+        super(ContractOption, self).on_change_coverage()
+        if self.coverage_family != 'loan':
+            self.loan_shares = []
 
     @fields.depends('start_date', 'end_date', 'loan_shares')
     def on_change_with_loan_shares(self):
@@ -253,7 +250,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
 
     @fields.depends('loan')
     def on_change_loan(self):
-        return {'end_date': self.loan.end_date if self.loan else None}
+        self.end_date = self.loan.end_date if self.loan else None
 
     def on_change_with_icon(self, name=None):
         return 'loan-interest'
@@ -335,29 +332,23 @@ class OptionsDisplayer:
 
     @fields.depends('default_share', 'options')
     def on_change_default_share(self):
-        update_list = []
-        for line in [x for x in self.options if getattr(x, 'loan', None)]:
-            update_list.append({
-                    'id': line.id,
-                    'share': self.default_share,
-                    })
-        return {'options': {'update': update_list}}
+        for option in self.options:
+            if not getattr(option, 'loan', None):
+                continue
+            option.share = self.default_share
+        self.options = self.options
 
     # This will unselect loans when the option is unselected
     # and will prevent to select loans if the option is not selected
     def on_change_options(self):
-        changes = super(OptionsDisplayer, self).on_change_options()
-        update_list = []
-        for line in self.options:
-            if not getattr(line, 'loan', None):
-                parent = line
+        super(OptionsDisplayer, self).on_change_options()
+        for option in self.options:
+            if not getattr(option, 'loan', None):
+                parent = option
                 continue
-            if line.is_selected and not parent.is_selected:
-                update_list = changes.setdefault('options', {}).setdefault(
-                    'update', [])
-                update_list.append(
-                    {'id': line.id, 'is_selected': parent.is_selected})
-        return changes
+            if option.is_selected and not parent.is_selected:
+                option.is_selected = parent.is_selected
+        self.options = self.options
 
 
 class WizardOption:

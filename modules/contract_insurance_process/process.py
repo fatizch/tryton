@@ -87,26 +87,24 @@ class ContractSubscribeFindProcess(ProcessStart):
 
     @fields.depends('business_provider')
     def on_change_business_provider(self):
-        res = {}
-        if not self.business_provider:
-            return res
-        if len(self.business_provider.dist_networks) == 1:
+        if (self.business_provider and
+                len(self.business_provider.dist_networks) == 1):
             network = self.business_provider.dist_networks[0]
-            res['dist_network'] = network.id
-            res['possible_com_product'] = [x.id for x in
-                network.all_com_products]
-        return res
+            self.dist_network = network
+            self.possible_com_product = list(network.all_com_products)
 
     @fields.depends('dist_network', 'possible_brokers', 'business_provider',
         'management_delegation')
     def on_change_dist_network(self):
-        res = {'possible_brokers': self.on_change_with_possible_brokers()}
+        if self.dist_network:
+            self.possible_brokers = self.dist_network.get_brokers()
+        else:
+            self.possible_brokers = []
         if (self.business_provider
-                and self.business_provider.id not in res['possible_brokers']):
-            res['business_provider'] = None
-        elif len(res['possible_brokers']) == 1:
-            res['business_provider'] = res['possible_brokers'][0]
-        return res
+                and self.business_provider.id not in self.possible_brokers):
+            self.business_provider = None
+        elif len(self.possible_brokers) == 1:
+            self.business_provider = self.possible_brokers[0]
 
     @fields.depends('dist_network')
     def on_change_with_possible_brokers(self, name=None):

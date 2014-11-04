@@ -65,31 +65,33 @@ class ModelInfo(ModelView):
                 pool._pool[pool.database_name]['model'].iterkeys()])
 
     def get_field_info(self, field, field_name):
-        result = {'name': field_name, 'string': field.string}
+        info = Pool().get('ir.model.debug.model_info.field_info')()
+        info.name = field_name
+        info.string = field.string
         if isinstance(field, fields.Function):
             if self.hide_functions:
                 return None
-            result['is_function'] = True
+            info.is_function = True
             real_field = field._field
         else:
-            result['is_function'] = False
+            info.is_function = False
             real_field = field
-        result['kind'] = real_field.__class__.__name__
+        info.kind = real_field.__class__.__name__
         if isinstance(field, (fields.Many2One, fields.One2Many)):
-            result['target_model'] = field.model_name
+            info.target_model = field.model_name
         elif isinstance(field, fields.Many2Many):
-            result['target_model'] = Pool().get(field.relation_name)._fields[
+            info.target_model = Pool().get(field.relation_name)._fields[
                 field.target].model_name
         else:
-            result['target_model'] = ''
+            info.target_model = ''
         for elem in ('required', 'readonly', 'invisible'):
-            result['is_%s' % elem] = getattr(field, elem, False)
-            result['state_%s' % elem] = repr(field.states.get(elem, {}))
+            setattr(info, 'is_%s' % elem, getattr(field, elem, False))
+            setattr(info, 'state_%s' % elem, repr(field.states.get(elem, {})))
         field_domain = getattr(field, 'domain', None)
         if field_domain:
-            result['has_domain'] = True
-            result['field_domain'] = repr(field_domain)
-        return result
+            info.has_domain = True
+            info.field_domain = repr(field_domain)
+        return info
 
     @classmethod
     def default_filter_value(cls):
@@ -98,26 +100,20 @@ class ModelInfo(ModelView):
     @fields.depends('model_name', 'hide_functions', 'filter_value',
         'field_infos', 'id_to_calculate')
     def on_change_filter_value(self):
-        return {
-            'field_infos': self.recalculate_field_infos(),
-            }
+        self.recalculate_field_infos()
 
     @fields.depends('model_name', 'hide_functions', 'filter_value',
         'field_infos', 'id_to_calculate')
     def on_change_hide_functions(self):
-        return {
-            'field_infos': self.recalculate_field_infos(),
-            }
+        self.recalculate_field_infos()
 
     @fields.depends('model_name', 'hide_functions', 'filter_value',
         'field_infos', 'id_to_calculate')
     def on_change_model_name(self):
-        return {
-            'id_to_calculate': None,
-            'to_evaluate': '',
-            'evaluation_result': '',
-            'field_infos': self.recalculate_field_infos(),
-            }
+        self.id_to_calculate = None
+        self.to_evaluate = ''
+        self.evaluation_result = ''
+        self.recalculate_field_infos()
 
     @fields.depends('model_name', 'id_to_calculate', 'to_evaluate')
     def on_change_with_evaluation_result(self):
@@ -133,26 +129,22 @@ class ModelInfo(ModelView):
             return 'ERROR: %s' % str(exc)
 
     def recalculate_field_infos(self):
-        if self.field_infos:
-            result = {'remove': [x.id for x in self.field_infos]}
-        else:
-            result = {}
+        self.field_infos = []
         if not self.model_name:
-            return result
+            return
         TargetModel = Pool().get(self.model_name)
-        result['add'] = [(-1, x) for x in sorted(
-                    filter(None, list([self.get_field_info(field, field_name)
+        self.field_infos = [sorted(filter(None, list([
+                            self.get_field_info(field, field_name)
                             for field_name, field
                             in TargetModel._fields.iteritems()])),
                     key=lambda x: x[self.filter_value])]
-        for k, v in result['add']:
-            if self.id_to_calculate:
+        if self.id_to_calculate:
+            for field in self.field_infos:
                 try:
-                    v['calculated_value'] = str(getattr(
-                            TargetModel(self.id_to_calculate), v['name']))
+                    field.calculated_value = str(getattr(
+                            TargetModel(self.id_to_calculate), field.name))
                 except Exception, exc:
-                    v['calculated_value'] = 'ERROR: %s' % str(exc)
-        return result
+                    field.calculated_value = 'ERROR: %s' % str(exc)
 
 
 class DebugModel(Wizard):

@@ -77,46 +77,33 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
     @fields.depends('covered_element', 'new_options', 'effective_date')
     def on_change_covered_element(self):
         if not self.covered_element:
-            return {
-                'existing_options': [],
-                'new_options': {
-                    'remove': [x.id for x in self.new_options]},
-                'possible_coverages': [],
-                }
+            self.new_options = []
+            self.possible_coverages = []
+            self.existing_options = []
+            return
         Coverage = Pool().get('offered.option.description')
-        result = {
-            'existing_options': [x.id for x in self.covered_element.options],
-            }
-        possible_coverages = list(
-            set([x.id for x in Coverage.search(
+        self.existing_options = [x for x in self.covered_element.options]
+        self.possible_coverages = list(
+            set([x for x in Coverage.search(
                         Coverage.get_possible_coverages_clause(
                             self.covered_element, self.effective_date))]) -
-            set([x.coverage.id for x in self.covered_element.options]))
-        result['possible_coverages'] = possible_coverages
-        return result
+            set([x.coverage for x in self.covered_element.options]))
 
-    def update_option_dict(self, option_dict):
+    def update_option(self, option):
         contract = self.covered_element.contract
-        option_dict.update({
-                'covered_element': self.covered_element.id,
-                'product': contract.product.id,
-                'start_date': self.effective_date,
-                'appliable_conditions_date':
-                contract.appliable_conditions_date,
-                'parties': [x.id for x in self.covered_element.parties],
-                'all_extra_datas': self.covered_element.all_extra_datas,
-                'status': 'quote',
-                })
-        return option_dict
+        option.covered_element = self.covered_element
+        option.product = contract.product
+        option.start_date = self.effective_date
+        option.appliable_conditions_date = contract.appliable_conditions_date
+        option.parties = self.covered_element.parties
+        option.all_extra_datas = self.covered_element.all_extra_datas
+        option.status = 'quote'
 
     @fields.depends('covered_element', 'new_options', 'effective_date')
     def on_change_new_options(self):
-        to_update = []
         for elem in self.new_options:
-            to_update.append(self.update_option_dict({'id': elem.id}))
-        if to_update:
-            return {'new_options': {'update': to_update}}
-        return {}
+            self.update_option(elem)
+        self.new_options = self.new_options
 
     @classmethod
     def update_default_values(cls, wizard, endorsement, default_values):
@@ -433,26 +420,20 @@ class NewExtraPremium(model.CoopView):
 
     @fields.depends('covered_elements', 'options')
     def on_change_covered_elements(self):
-        option_changes = []
         for covered_element in self.covered_elements:
             for option in self.options:
                 if (option.covered_element_id ==
                         covered_element.covered_element_id) and (
                         option.covered_element_endorsement_id ==
                         covered_element.covered_element_endorsement_id):
-                    if option.selected != covered_element.selected:
-                        option_changes.append({
-                                'id': option.id,
-                                'selected': covered_element.selected})
-        if option_changes:
-            return {'options': {'update': option_changes}}
-        return {}
+                    option.selected = covered_element.selected
+        self.options = self.options
 
     @fields.depends('covered_elements')
     def on_change_options(self):
-        return {'covered_elements': {'update': [
-                    {'id': x.id, 'selected': False}
-                    for x in self.covered_elements]}}
+        for covered_element in self.covered_elements:
+            covered_element.selected = False
+        self.covered_elements = self.covered_elements
 
     @classmethod
     def _extra_premium_fields_to_extract(cls):
@@ -605,8 +586,9 @@ class StartEndorsement:
                 }]
         new_covered_element = Pool().get('contract.covered_element')(
             **result['covered_elements'][0])
+        new_covered_element.on_change_item_desc()
         result['covered_elements'][0].update(
-            new_covered_element.on_change_item_desc())
+            new_covered_element._default_values)
         endorsement = self.get_endorsement_for_state('new_covered_element')
         if endorsement:
             self.update_default_covered_element_from_endorsement(endorsement,

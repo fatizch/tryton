@@ -1194,11 +1194,9 @@ class RuleFunction(ModelView, ModelSQL):
     @fields.depends('description', 'translated_technical_name')
     def on_change_description(self):
         if self.translated_technical_name:
-            return {}
-        return {
-            'translated_technical_name':
+            return
+        self.translated_technical_name = \
             coop_string.remove_blank_and_invalid_char(self.description)
-            }
 
     def as_tree(self):
         tree = {}
@@ -1389,44 +1387,36 @@ class TestCase(ModelView, ModelSQL):
         try:
             test_result = self.execute_test()
         except Exception as exc:
-            result_value = 'ERROR: {}'.format(exc)
-            return {
-                'result_value': result_value,
-                'result_info': '',
-                'result_warnings': '',
-                'result_errors': '',
-                'debug': '',
-                'low_debug': '',
-                'expected_result': result_value,
-                }
+            self.result_value = 'ERROR: {}'.format(exc)
+            self.result_info = self.result_warnings = self.result_errors = ''
+            self.debug = self.low_debug = ''
+            self.expected_result = self.result_values
+            return
         if test_result == {}:
-            return {}
-        return {
-            'result_value': test_result.print_result(),
-            'result_info': '\n'.join(test_result.print_info()),
-            'result_warning': '\n'.join(test_result.print_warnings()),
-            'result_errors': '\n'.join(test_result.print_errors()),
-            'debug': '\n'.join(test_result.print_debug()),
-            'low_debug': '\n'.join(test_result.print_low_level_debug()),
-            'expected_result': str(test_result),
-            }
+            return
+        self.result_value = test_result.print_result()
+        self.result_info = '\n'.join(test_result.print_info())
+        self.result_warning = '\n'.join(test_result.print_warnings())
+        self.result_errors = '\n'.join(test_result.print_errors())
+        self.debug = '\n'.join(test_result.print_debug())
+        self.low_debug = '\n'.join(test_result.print_low_level_debug())
+        self.expected_result = str(test_result)
 
     @classmethod
     @TrytonModelView.button
     def recalculate(cls, instances):
         for elem in instances:
-            result = elem.on_change_test_values()
-            for k, v in result.iteritems():
-                setattr(elem, k, v)
-            elem.save()
+            elem.on_change_test_values()
+        cls.save(instances)
 
     @classmethod
     @TrytonModelView.button
     def check_pass(cls, instances):
         passed, failed = [], []
         for elem in instances:
-            result = elem.on_change_test_values()
-            if result['expected_result'] == elem.expected_result:
+            prev_value = elem.expected_result
+            elem.on_change_test_values()
+            if elem.expected_result == prev_value:
                 passed.append(elem)
             else:
                 failed.append(elem)

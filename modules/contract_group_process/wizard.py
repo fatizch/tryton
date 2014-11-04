@@ -26,15 +26,13 @@ class ContractSubscribeFindProcess:
     @fields.depends('product', 'is_group', 'possible_com_product',
         'dist_network', 'com_product')
     def on_change_is_group(self):
-        res = {}
         com_products = self.get_possible_com_product()
-        res['possible_com_product'] = [x.id for x in com_products]
+        self.possible_com_product = [x for x in com_products]
         if self.com_product and self.com_product not in com_products:
-            res['com_product'] = None
+            self.com_product = None
         if (self.product and self.product not in
                 [x.product for x in com_products]):
-            res['product'] = None
-        return res
+            self.product = None
 
     def get_possible_com_product(self):
         res = super(ContractSubscribeFindProcess,

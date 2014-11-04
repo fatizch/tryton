@@ -235,7 +235,6 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
 
     @fields.depends('shares_per_loan', 'loan_share_selectors')
     def on_change_shares_per_loan(self):
-        selector_values, share_values = [], []
         for share_per_loan in self.shares_per_loan:
             if share_per_loan.share is None:
                 continue
@@ -243,16 +242,10 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                 if selector.loan != share_per_loan.loan:
                     continue
                 if selector.new_share != share_per_loan.share:
-                    selector_values.append({
-                            'new_share': share_per_loan.share,
-                            'id': selector.id,
-                            })
-            share_values.append({'share': None, 'id': share_per_loan.id})
-        result = {'shares_per_loan': {'update': share_values}}
-        if selector_values:
-            result['loan_share_selectors'] = {
-                'update': selector_values}
-        return result
+                    selector.new_share = share_per_loan.share
+            share_per_loan.share = None
+        self.shares_per_loan = self.shares_per_loan
+        self.loan_share_selectors = self.loan_share_selectors
 
     @staticmethod
     def update_dict(to_update, key, value):
@@ -477,29 +470,18 @@ class SelectEndorsement:
         if not self.endorsement_definition:
             return {'is_loan': False}
         if self.endorsement_definition.is_loan:
+            self.is_loan = True
             if self.loan:
-                return {
-                    'is_loan': True,
-                    'effective_date': self.loan.funds_release_date,
-                    }
+                self.effective_date = self.loan.funds_release_date
             elif self.contract and len(self.contract.used_loans) == 1:
-                return {
-                    'is_loan': True,
-                    'loan': self.contract.used_loans[0].id,
-                    'effective_date':
-                    self.contract.used_loans[0].funds_release_date,
-                    }
+                self.loan = self.contract.used_loans[0]
+                self.effective_date = self.loan.funds_release_date
             else:
-                return {
-                    'is_loan': True,
-                    'effective_date': None,
-                    }
+                self.effective_date = None
         else:
-            return {
-                'is_loan': False,
-                'loan': None,
-                'effective_date': None,
-                }
+            self.is_loan = False
+            self.loan = None
+            self.effective_date = None
 
     @fields.depends('is_loan', 'contract')
     def on_change_with_loan(self):

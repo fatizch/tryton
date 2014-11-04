@@ -205,15 +205,11 @@ class SelectEndorsement(model.CoopView):
     @fields.depends('contract')
     def on_change_contract(self):
         if self.contract:
-            return {
-                'product': self.contract.product.id,
-                'contract_in_process': bool(self.contract.current_state),
-                }
+            self.product = self.contract.product
+            self.contract_in_process = bool(self.contract.current_state)
         else:
-            return {
-                'product': None,
-                'contract_in_process': False,
-                }
+            self.product = None
+            self.contract_in_process = None
 
 
 class BasicPreview(EndorsementWizardPreviewMixin, model.CoopView):

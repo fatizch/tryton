@@ -35,12 +35,11 @@ class Loss:
         cls.main_loss.on_change.add('covered_person')
 
     def on_change_main_loss(self):
-        res = super(Loss, self).on_change_main_loss()
+        super(Loss, self).on_change_main_loss()
         if self.main_loss and self.main_loss.covered_person:
-            res['covered_person'] = self.main_loss.covered_person.id
+            self.covered_person = self.main_loss.covered_person
         else:
-            res['covered_person'] = None
-        return res
+            self.covered_person = None
 
     def get_possible_covered_persons(self):
         res = []
@@ -57,9 +56,7 @@ class Loss:
     @fields.depends('covered_person', 'possible_loss_descs', 'claim',
         'start_date', 'loss_desc', 'event_desc')
     def on_change_covered_person(self):
-        res = {}
-        res['possible_loss_descs'] = self.on_change_with_possible_loss_descs()
-        return res
+        self.possible_loss_descs = self.on_change_with_possible_loss_descs()
 
 
 class DeliveredService:

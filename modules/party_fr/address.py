@@ -48,17 +48,17 @@ class Address:
     @fields.depends('street')
     def on_change_street(self):
         # AFNOR rule, no comma after street number and line 4 should be upper
-        return {'street': self.street.replace(',', '').upper()}
+        self.street = self.street.replace(',', '').upper()
 
     @fields.depends('streetbis')
     def on_change_streetbis(self):
         # AFNOR rule, line 5 should be in uppercase
-        return {'streetbis': self.streetbis.upper()}
+        self.streetbis = self.streetbis.upper()
 
     @fields.depends('city')
     def on_change_city(self):
         # AFNOR rule, line 6 must be in uppercase
-        return {'city': self.city.upper()}
+        self.city = self.city.upper()
 
     def get_full_address(self, name):
         res = ''

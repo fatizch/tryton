@@ -268,80 +268,75 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('product', 'options', 'start_date', 'extra_datas',
         'appliable_conditions_date')
     def on_change_product(self):
+        pool = Pool()
+        ExtraData = pool.get('contract.extra_data')
         if self.product is None:
-            return {
-                'product_kind': '',
-                'subscriber_kind': 'person',
-                'options': {'remove': [x.id for x in self.options]},
-                'extra_datas': {'remove': [x.id for x in self.extra_datas]},
-                'extra_data_values': {},
-                }
+            self.product_kind = ''
+            self.subscriber_kind = 'person'
+            self.extra_data_values = {}
+            self.options = []
+            self.options = self.options
+            self.extra_datas = []
+            self.extra_datas = self.extra_datas
+            return
+
         available_coverages = self.get_coverages(self.product)
-        to_remove = []
         if self.options:
             for elem in self.options:
                 if elem.coverage not in available_coverages:
-                    to_remove.append(elem.id)
+                    self.options.remove(elem)
                 else:
                     available_coverages.remove(elem.coverage)
         Option = Pool().get('contract.option')
-        to_add = []
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
                 continue
             new_opt = Option.init_default_values_from_coverage(elem,
                 self.product, start_date=self.start_date)
-            to_add.append([-1, new_opt])
+            self.options.append(new_opt)
+        self.options = self.options
         extra_vals = {}
         if self.extra_datas:
             extra_vals = self.extra_datas[0].extra_data_values
         extra_data_value = self.product.get_extra_data_def(
                 'contract', extra_vals, self.appliable_conditions_date)
-        result = {
-            'product_kind': self.product.kind,
-            'subscriber_kind': ('person' if self.product.subscriber_kind in
-                ['all', 'person'] else 'company'),
-            'extra_datas': {
-                'remove': [x.id for x in self.extra_datas],
-                'add': [(-1, {
-                            'date': None,
-                            'extra_data_values': extra_data_value})]},
-            'extra_data_values': extra_data_value,
-            'product_subscriber_kind': self.product.subscriber_kind,
-            }
-        if not to_add and not to_remove:
-            return result
-        result['options'] = {}
-        if to_add:
-            result['options']['add'] = to_add
-        if to_remove:
-            result['options']['remove'] = to_remove
-        return result
+        self.product_kind = self.product.kind
+        self.subscriber_kind = ('person' if self.product.subscriber_kind in
+            ['all', 'person'] else 'company')
+        self.extra_datas = []
+        self.extra_datas.append(ExtraData(date=None,
+                extra_data_values=extra_data_value))
+        self.extra_datas = self.extra_datas
+        self.extra_data_values = extra_data_value
+        self.extra_data_values = self.extra_data_values
+        self.product_subscriber_kind = self.product.subscriber_kind
 
     @fields.depends('extra_datas', 'start_date', 'options', 'product',
         'appliable_conditions_date')
     def on_change_extra_datas(self):
+        pool = Pool()
+        ExtraData = pool.get('contract.extra_data')
+
         if not self.product:
-            return {'extra_datas': {'remove':
-                    [x.id for x in self.extra_datas]}}
-        values = {'extra_data_values': {}}
+            self.extra_datas = []
+            return
+
         if not self.extra_datas:
             self.extra_datas = [
-                Pool().get('contract.extra_data')(extra_data_values={})]
-            values['date'] = None
+                ExtraData(extra_data_values={}, date=None)]
         else:
-            values['id'] = self.extra_datas[-1].id
-        values['extra_data_values'] = self.product.get_extra_data_def(
-            'contract', self.extra_datas[-1].extra_data_values,
+            self.extra_datas = self.extra_datas
+
+        data_values = self.product.get_extra_data_def('contract',
+            self.extra_datas[-1].extra_data_values,
             self.appliable_conditions_date)
-        return {
-            'extra_datas': {'update':
-                [values]} if 'id' in values else {'add': [(-1, values)]},
-            'extra_data_values': values}
+
+        self.extra_datas[-1].extra_data_values = data_values
+        self.extra_data_values = data_values
 
     @fields.depends('start_date')
     def on_change_start_date(self):
-        return {'appliable_conditions_date': self.start_date}
+        self.appliable_conditions_date = self.start_date
 
     @fields.depends('subscriber')
     def on_change_with_current_policy_owner(self, name=None):
@@ -576,12 +571,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         at_date = contract_dict.get('start_date', utils.today())
         self.init_from_product(product, at_date)
         self.init_default_address()
-        if not contract_dict or 'extra_data' not in contract_dict:
-            return
-        extra_data = self.on_change_extra_data()['extra_data']
-        for key in extra_data.iterkeys():
-            if key in contract_dict['extra_data']:
-                self.extra_data[key] = contract_dict['extra_data'][key]
+        self.on_change_extra_data()
 
     def before_activate(self, contract_dict=None):
         pass
@@ -679,14 +669,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.appliable_conditions_date = self.start_date
 
     def init_extra_data(self):
-        ExtraData = Pool().get('contract.extra_data')
         if not (hasattr(self, 'extra_datas') and
                 self.extra_datas):
-            self.extra_data = []
-        on_change_values = self.on_change_extra_datas()
-        self.extra_datas = [ExtraData(**x[1])
-            for x in on_change_values['extra_datas']['add']]
-        self.extra_data_values = on_change_values['extra_data_values']
+            self.extra_datas = []
+            self.extra_datas = self.extra_datas
+        self.on_change_extra_datas()
 
     def get_extra_data_def(self):
         extra_data_defs = []
@@ -911,9 +898,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 and not self.subscriber.is_person
                 or self.subscriber_kind == 'company'
                 and not self.subscriber.is_company):
-            return {'subscriber': None}
-        else:
-            return {}
+            self.subscriber = None
 
 
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
@@ -1003,10 +988,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @fields.depends('coverage')
     def on_change_coverage(self):
-        return {
-            'coverage_kind': self.on_change_with_coverage_kind(),
-            'coverage_family': self.on_change_with_coverage_family(),
-            }
+        self.coverage_kind = self.on_change_with_coverage_kind()
+        self.coverage_family = self.on_change_with_coverage_family()
 
     @fields.depends('contract', 'start_date')
     def on_change_with_appliable_conditions_date(self, name=None):
@@ -1271,9 +1254,7 @@ class ContractSelectStartDate(model.CoopSQL, model.CoopView):
 
     @fields.depends('new_start_date')
     def on_change_new_start_date(self):
-        return {
-            'new_appliable_conditions_date': self.new_start_date
-            }
+        self.new_appliable_conditions_date = self.new_start_date
 
 
 class ContractChangeStartDate(Wizard):

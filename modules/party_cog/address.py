@@ -127,11 +127,8 @@ class Address(export.ExportImportMixin):
 
     @fields.depends('zip', 'country', 'city', 'zip_and_city')
     def on_change_zip_and_city(self):
-        res = {'city': '', 'zip': ''}
-        if self.zip_and_city:
-            res['city'] = self.zip_and_city.city
-            res['zip'] = self.zip_and_city.zip
-        return res
+        self.city = self.zip_and_city.city if self.zip_and_city else ''
+        self.zip = self.zip_and_city.zip if self.zip_and_city else ''
 
     @classmethod
     def set_zip_and_city(cls, addresses, name, vals):
