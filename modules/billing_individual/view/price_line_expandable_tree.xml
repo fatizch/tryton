@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<tree string="Pricing Lines">
-	<field name="name"/>
-    <field name="start_date"/>
-	<field name="amount">
-        <suffix name="currency_symbol"/>
-    </field>
-</tree>
