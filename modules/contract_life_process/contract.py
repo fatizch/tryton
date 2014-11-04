@@ -31,13 +31,7 @@ class Contract:
             covered_element.item_desc = item_desc
             covered_element.main_contract = self
             covered_element.product = self.product
-            cov_as_dict = covered_element.on_change_item_desc()
-            for key, val in cov_as_dict.iteritems():
-                if key == 'options':
-                    the_list = [x[1] for x in val.get('add', [])]
-                    covered_element.options = the_list
-                    continue
-                setattr(covered_element, key, val)
+            covered_element.on_change_item_desc()
             if not getattr(self, 'covered_elements', None):
                 self.covered_elements = [covered_element]
             else:
