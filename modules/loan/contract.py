@@ -104,7 +104,8 @@ class ContractLoan(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE',
-        context={'parties': Eval('_parent_contract', {}).get('parties')})
+        context={'parties': Eval('_parent_contract', {}).get('parties')},
+        required=True)
     number = fields.Integer('Number')
     loan_state = fields.Function(
         fields.Char('Loan State'),
