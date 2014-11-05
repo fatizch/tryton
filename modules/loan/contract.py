@@ -2,7 +2,6 @@
 import datetime
 
 from trytond.pool import PoolMeta, Pool
-from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields, model, coop_string
@@ -179,16 +178,9 @@ class ExtraPremium:
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
 
-    @classmethod
-    def default_is_loan(cls):
-        if 'is_loan' in Transaction().context:
-            return Transaction().context.get('is_loan')
-        return False
-
     @fields.depends('option')
     def on_change_with_is_loan(self, name=None):
-        return (self.option.coverage.family == 'loan' if self.option else
-            Transaction().context.get('is_loan', False))
+        return self.option.coverage.family == 'loan'
 
     @fields.depends('is_loan')
     def get_possible_extra_premiums_kind(self):
