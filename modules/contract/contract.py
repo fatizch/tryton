@@ -703,7 +703,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 })[0]
 
     def finalize_contract(self):
-        self.contract_number = self.get_new_contract_number()
+        if not getattr(self, 'contract_number', None):
+            self.contract_number = self.get_new_contract_number()
 
     def get_policy_owner(self, at_date=None):
         '''
