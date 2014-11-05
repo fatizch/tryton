@@ -32,6 +32,7 @@ import urlparse
 import re
 import ConfigParser
 import os
+import sys
 
 ISSUE_REGEXP = re.compile('(rietveld.coopengo.com/)([0-9]+)')
 CODEREVIEW_URL = 'http://rietveld.coopengo.com'

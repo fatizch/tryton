@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 """
 This script will review the pep8 for python file uploaded to rietveld.
@@ -39,7 +39,7 @@ import hgreview
 
 TITLE_FORMAT = re.compile('^([A-Za-z_][\w\.-]+)+ ?:')
 CODEREVIEW_URL = 'http://rietveld.coopengo.com'
-DB_PATH = os.path.expanduser('~/review_bot/.reviewbot.db') #  To adapt to config
+DB_PATH = os.path.expanduser('~/review_bot/.reviewbot.db')  # Adapt to config
 
 
 def get_session(url, email, password):
@@ -162,7 +162,7 @@ def install_repository(repo_url, branch=None):
 
 def patch_repository(repo_dir, issue_id, email, password):
     my_ui = ui.ui()
-    my_ui.setconfig('review', 'server', CODEREVIEW_URL )
+    my_ui.setconfig('review', 'server', CODEREVIEW_URL)
     my_ui.setconfig('review', 'username', email)
     my_ui.setconfig('review', 'password', password)
     repo = hg.repository(my_ui, repo_dir)
@@ -228,8 +228,6 @@ def process_issue(session, issue_url, path_to_repo, email, password):
     else:
         issue_info = json.loads(issue_info.text)
 
-
-
     # Test only last patchset has changed
     patchset = issue_info['patchsets'][-1]
     if not has_update(issue_id, patchset):
@@ -252,7 +250,7 @@ def process_issue(session, issue_url, path_to_repo, email, password):
             branch = ['coopengo']
     else:
         repository_url = path_to_repo + 'coopbusiness'
-	branch = ['default']
+        branch = ['default']
 
     repo_dir = install_repository(repository_url, branch)
     try:
