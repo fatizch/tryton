@@ -8,32 +8,32 @@
     <label name="calculation_kind"/>
     <field name="calculation_kind"/>
     <label name="flat_amount"/>
-    <group id="flat_amounts" col="99" xexpand="0" xfill="0">
+    <group id="flat_amounts" col="99">
         <group id="flat_amount_discount"
             states="{'invisible': Or(Eval('calculation_kind') != 'flat', ~Eval('is_discount'))}">
             <field name="flat_amount" xexpand="0" factor="-1"/>
-            <label name="currency_symbol" string="" xexpand="0"
+            <label name="currency_symbol" string="" xexpand="1"
                 xalign="0"/>
         </group>
         <group id="flat_amount"
             states="{'invisible': Or(Eval('calculation_kind') != 'flat', Bool(Eval('is_discount')))}">
             <field name="flat_amount" xexpand="0"/>
-            <label name="currency_symbol" string="" xexpand="0"
+            <label name="currency_symbol" string="" xexpand="1"
                 xalign="0"/>
         </group>
     </group>
     <newline/>
     <label name="rate"/>
-    <group id="rates" col="99" xexpand="0" xfill="0">
+    <group id="rates" col="99">
         <group id="rate_discount"
             states="{'invisible': Or(Eval('calculation_kind') != 'rate', ~Eval('is_discount')) }">
             <field name="rate" xexpand="0" factor="-100"/>
-            <label string="%" id="rate" xexpand="0" xalign="0"/>
+            <label string="%" id="rate" xexpand="1" xalign="0"/>
         </group>
         <group id="rate"
             states="{'invisible': Or(Eval('calculation_kind') != 'rate', Bool(Eval('is_discount')))}">
             <field name="rate" xexpand="0" factor="100"/>
-            <label string="%" id="rate" xexpand="0" xalign="0"/>
+            <label string="%" id="rate" xexpand="1" xalign="0"/>
         </group>
     </group>
     <newline/>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="//group[@id='rate']" position="after">
-    <newline/>
-    <label name="capital_per_mil_rate"/>
-    <group id="capital_per_mil">
-      <field name="capital_per_mil_rate" xexpand="0" factor="1000"/>
-      <label string="‰" id="capital_per_mil_rate" xexpand="0" xalign="0" states="{'invisible': Eval('calculation_kind') != 'capital_per_mil'}"/>
-    </group>
-  </xpath>
-  <xpath expr="/form" position="inside">
-    <field name="is_loan" invisible="1"/>
-  </xpath>
+    <xpath expr="//group[@id='rates']" position="after">
+      <newline/>
+        <label name="capital_per_mil_rate"/>
+        <group id="capital_per_mil">
+            <field name="capital_per_mil_rate" xexpand="0" factor="1000"/>
+            <label string="‰" id="capital_per_mil_rate" xexpand="1" xalign="0" states="{'invisible': Eval('calculation_kind') != 'capital_per_mil'}"/>
+        </group>
+    </xpath>
+    <xpath expr="/form" position="inside">
+        <field name="is_loan" invisible="1"/>
+    </xpath>
 </data>
