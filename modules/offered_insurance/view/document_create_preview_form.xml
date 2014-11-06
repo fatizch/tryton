@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Document Preview">
-  <label name="generated_report"/>
-  <field name="generated_report" colspan="3" widget="url"/>
-  <label name="email"/>
-  <field name="email" colspan="3"/>
-  <field name="party"/>
-  <field name="filename"/>
-  <field name="exact_name"/>
+<form string="Documents">
+    <field name="reports" colspan="4"/>
+    <label name="output_report_name"/>
+    <field name="output_report_name" colspan="3"/>
+    <label name="email"/>
+    <field name="email" colspan="3"/>
+    <field name="output_report_filepath"/>
+    <field name="party"/>
 </form>

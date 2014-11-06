@@ -6,6 +6,7 @@ import subprocess
 import StringIO
 import functools
 import shutil
+import tempfile
 
 from trytond.config import config
 from trytond.model import Model
@@ -36,9 +37,9 @@ __all__ = [
     'DocumentTemplate',
     'DocumentTemplateVersion',
     'Printable',
-    'DocumentCreateSelectTemplate',
     'DocumentCreateSelect',
     'DocumentCreatePreview',
+    'DocumentCreatePreviewReport',
     'DocumentCreateAttach',
     'DocumentGenerateReport',
     'DocumentFromFilename',
@@ -68,6 +69,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         'document_template', 'product', 'Products')
     mail_subject = fields.Char('eMail Subject')
     mail_body = fields.Text('eMail Body')
+    internal_edm = fields.Boolean('Use Internal EDM')
 
     @classmethod
     def __setup__(cls):
@@ -77,7 +79,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 'and language %s',
                 })
 
-    def get_good_version(self, date, language):
+    def get_selected_version(self, date, language):
         for version in self.versions:
             if (not version.language == language
                     and not version.language.code == language):
@@ -224,6 +226,9 @@ class Printable(Model):
         return {
             'Today': utils.today(),
             }
+
+    def get_document_filename(self):
+        return self.rec_name
 
 
 class DocumentDescription(model.CoopSQL, model.CoopView):
@@ -509,34 +514,21 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
         return self.needed_by.get_product()
 
 
-class DocumentCreateSelectTemplate(model.CoopView):
-    'Document Create Select Template'
-
-    __name__ = 'document.create.select.template'
-
-    doc_template = fields.Many2One('document.template', 'Document Template')
-    selected = fields.Boolean('Selected')
-
-
 class DocumentCreateSelect(model.CoopView):
     'Document Create Select'
 
     __name__ = 'document.create.select'
 
-    models = fields.One2Many('document.create.select.template', '', 'Models')
+    models = fields.Many2Many('document.template', None, None, 'Models',
+        domain=[('id', 'in', Eval('available_models'))],
+        depends=['available_models'])
+    available_models = fields.Many2Many('document.template', None, None,
+        'Available Models', states={'readonly': True, 'invisible': True})
     good_address = fields.Many2One('party.address', 'Mail Address',
         domain=[('party', '=', Eval('party'))], depends=['party'],
         required=True)
     party = fields.Many2One('party.party', 'Party',
         states={'invisible': True})
-
-    def get_active_model(self, id_only=True):
-        for elem in self.models:
-            if elem.selected:
-                if id_only:
-                    return elem.doc_template.id
-                else:
-                    return elem.doc_template
 
 
 class DocumentGenerateReport(Report):
@@ -554,14 +546,14 @@ class DocumentGenerateReport(Report):
         action_report = action_reports[0]
         records = None
         records = cls._get_records(ids, data['model'], data)
-        DocumentTemplate = Pool().get('document.template')
-        good_letter = DocumentTemplate(data['doc_template'])
-        GoodModel = Pool().get(data['model'])
-        good_obj = GoodModel(data['id'])
-        good_party = Pool().get('party.party')(data['party'])
+        selected_letter = data['doc_template'][0]
+        SelectedModel = pool.get(data['model'])
+        selected_obj = SelectedModel(data['id'])
+        selected_party = pool.get('party.party')(data['party'])
         Date = pool.get('ir.date')
-        filename = good_letter.name + ' - ' + good_obj.get_rec_name('') + \
-            ' - ' + Date.date_as_string(utils.today(), good_party.lang)
+        filename = '%s - %s - %s' % (selected_letter.name,
+            selected_obj.get_rec_name(''),
+            Date.date_as_string(utils.today(), selected_party.lang))
         type, data = cls.parse(action_report, records, data, {})
         return (type, buffer(data), action_report.direct_print, filename)
 
@@ -593,13 +585,12 @@ class DocumentGenerateReport(Report):
         localcontext['Date'] = pool.get('ir.date').today()
         localcontext['FDate'] = format_date
         # localcontext['Logo'] = data['logo']
-        GoodModel = pool.get(data['model'])
-        good_obj = GoodModel(data['id'])
-        localcontext.update(good_obj.get_publishing_context(localcontext))
-        DocumentTemplate = pool.get('document.template')
-        good_letter = DocumentTemplate(data['doc_template'])
-        report.report_content = good_letter.get_good_version(
-            utils.today(), good_obj.get_lang()).data
+        SelectedModel = pool.get(data['model'])
+        selected_obj = SelectedModel(data['id'])
+        localcontext.update(selected_obj.get_publishing_context(localcontext))
+        selected_letter = data['doc_template'][0]
+        report.report_content = selected_letter.get_selected_version(
+            utils.today(), selected_obj.get_lang()).data
         try:
             return super(DocumentGenerateReport, cls).parse(
                 report, records, data, localcontext)
@@ -626,135 +617,9 @@ class DocumentGenerateReport(Report):
                 pass
             raise exc
 
-
-class DocumentFromFilename(Report):
-    __name__ = 'document.generate.file_report'
-
     @classmethod
-    def execute(cls, ids, data):
-        if 'filepath' not in data:
-            raise Exception('Error', 'Report %s needs to be provided with a '
-                'filepath' % cls.__name__)
-        if not os.path.isfile(data['filepath']):
-            raise Exception('%s is not a valid filename' % data['filepath'])
-        value = buffer(cls.unoconv(data['filepath'], 'odt', 'pdf'))
-        return ('.pdf', value, False, data['filename'])
-
-    @classmethod
-    def unoconv(cls, filepath, input_format, output_format):
-        from trytond.report import FORMAT2EXT
-        oext = FORMAT2EXT.get(output_format, output_format)
-        cmd = ['unoconv',
-            '--connection=%s' % config.get('report', 'unoconv'),
-            '-f', oext, '--stdout', filepath]
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        stdoutdata, stderrdata = proc.communicate()
-        if proc.wait() != 0:
-            raise Exception(stderrdata)
-        return stdoutdata
-
-
-class DocumentCreatePreview(model.CoopView):
-    'Document Create Preview'
-
-    __name__ = 'document.create.preview'
-
-    generated_report = fields.Char('Generated report', states={
-            'invisible': ~Eval('generated_report')})
-    party = fields.Many2One('party.party', 'Party',
-        states={'invisible': True})
-    email = fields.Char('eMail')
-    filename = fields.Char('Filename', states={'invisible': True})
-    exact_name = fields.Char('Exact Name', states={'invisible': True})
-
-
-class DocumentCreateAttach(model.CoopView):
-    'Document Create Attach'
-
-    __name__ = 'document.create.attach'
-
-    attachment = fields.Binary('Data File', filename='name')
-    name = fields.Char('Filename')
-
-
-class DocumentCreate(Wizard):
-    __name__ = 'document.create'
-
-    start_state = 'select_model'
-    mail = StateAction('offered_insurance.generate_file_report')
-    post_generation = StateTransition()
-    select_model = StateView('document.create.select',
-        'offered_insurance.document_create_select_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Preview', 'preview_document', 'tryton-go-next'),
-            ])
-    preview_document = StateView('document.create.preview',
-        'offered_insurance.document_create_preview_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Previous', 'select_model', 'tryton-go-previous'),
-            Button('Mail', 'mail', 'tryton-go-next'),
-            ])
-    attach = StateView('document.create.attach',
-        'offered_insurance.document_create_attach_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Complete', 'post_generation', 'tryton-ok')])
-    attach_to_contact = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(DocumentCreate, cls).__setup__()
-        try:
-            shutil.rmtree(config.get('EDM', 'server_shared_folder'))
-        except:
-            pass
-        cls._error_messages.update({
-                'parsing_error': 'Error while generating the letter:\n\n'
-                '  Expression:\n%s\n\n  Error:\n%s',
-                })
-
-    def default_select_model(self, fields):
-        result = utils.set_state_view_defaults(self, 'select_model')
-        if result['id']:
-            return result
-        ActiveModel = Pool().get(Transaction().context.get('active_model'))
-        instance = ActiveModel(Transaction().context.get('active_id'))
-        if not instance:
-            return {}
-        letters = []
-        has_selection = True
-        for elem in instance.get_available_doc_templates():
-            letters.append({
-                'doc_template': elem.id,
-                'selected': has_selection})
-            has_selection = False
-        if letters:
-            result['models'] = letters
-        result['party'] = instance.get_contact().id
-        if instance.get_contact().addresses:
-            result['good_address'] = instance.get_contact().addresses[0].id
-        return result
-
-    def default_preview_document(self, fields):
-        pool = Pool()
-        ReportModel = pool.get('document.generate.report', type='report')
-        ContactMechanism = pool.get('party.contact_mechanism')
-        ActiveModel = pool.get(Transaction().context.get('active_model'))
-        instance = ActiveModel(Transaction().context.get('active_id'))
-        sender = instance.get_sender()
-        sender_address = instance.get_sender_address()
-        _, result, _, exact_name = ReportModel.execute(
-            [Transaction().context.get('active_id')], {
-                'id': Transaction().context.get('active_id'),
-                'ids': Transaction().context.get('active_ids'),
-                'model': Transaction().context.get('active_model'),
-                'doc_template': self.select_model.get_active_model(),
-                'party': self.select_model.party.id,
-                'address': self.select_model.good_address.id,
-                'sender': sender.id if sender else None,
-                'sender_address': sender_address.id if sender_address
-                else None,
-                })
-        filename = coop_string.remove_invalid_char(exact_name)
+    def EDM_write_report(cls, report_data, file_basename):
+        filename = coop_string.remove_invalid_char(file_basename)
         max_tries = MAX_TMP_TRIES
         while max_tries > 0:
             # Loop until we find an unused folder id
@@ -770,72 +635,244 @@ class DocumentCreate(Wizard):
         if max_tries == 0:
             raise Exception('Could not create tmp_directory in %s' %
                 config.get('EDM', 'server_shared_folder'))
-        server_filename = os.path.join(server_tmp_directory, '%s.odt' %
+        server_filepath = os.path.join(server_tmp_directory, '%s.odt' %
             filename)
-        client_filename = os.path.join(
+        client_filepath = os.path.join(
             config.get('EDM', 'client_shared_folder'),
             tmp_directory, '%s.odt' % filename)
-        with open(server_filename, 'w') as f:
-            f.write(result)
-        result = {
-            'generated_report': client_filename,
-            'party': self.select_model.party.id,
-            'filename': server_filename,
-            'exact_name': exact_name,
-            }
+        with open(server_filepath, 'w') as f:
+            f.write(report_data)
+            return(client_filepath, server_filepath)
+
+
+class DocumentFromFilename(Report):
+    __name__ = 'document.generate.file_report'
+
+    @classmethod
+    def execute(cls, ids, data):
+        with open(data['output_report_filepath'], 'r') as f:
+            value = buffer(f.read())
+        return ('.pdf', value, False,
+            os.path.splitext(
+                os.path.basename(data['output_report_filepath']))[0])
+
+    @classmethod
+    def generate_single_attachment(cls, input_paths, output_report_filepath):
+        pdf_paths = cls.unoconv(input_paths, 'odt', 'pdf')
+        if len(pdf_paths) > 1:
+            if os.path.splitext(output_report_filepath)[1] == '.pdf':
+                cmd = ['gs', '-dBATCH', '-dNOPAUSE', '-q', '-sDEVICE=pdfwrite',
+                    '-sOutputFile=%s' % output_report_filepath] + pdf_paths
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+                stdoutdata, stderrdata = proc.communicate()
+                if proc.wait() != 0:
+                    raise Exception(stderrdata)
+            # TODO: handle 'zip' format for grouping of mixed files formats
+        else:
+            shutil.move(pdf_paths[0], output_report_filepath)
+
+    @classmethod
+    def unoconv(cls, filepaths, input_format, output_format):
+        from trytond.report import FORMAT2EXT
+        oext = FORMAT2EXT.get(output_format, output_format)
+        cmd = ['unoconv',
+            '--connection=%s' % config.get('report', 'unoconv'),
+            '-f', oext] + filepaths
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        stdoutdata, stderrdata = proc.communicate()
+        if proc.wait() != 0:
+            raise Exception(stderrdata)
+        output_paths = [os.path.splitext(f)[0] + '.' + output_format for
+            f in filepaths]
+        return output_paths
+
+
+class DocumentCreatePreviewReport(model.CoopView):
+    'Document Create Preview Report'
+
+    __name__ = 'document.create.preview.report'
+
+    generated_report = fields.Char('Link')
+    server_filepath = fields.Char('Server Filename',
+        states={'invisible': True})
+    file_basename = fields.Char('Filename')
+
+
+class DocumentCreatePreview(model.CoopView):
+    'Document Create Preview'
+
+    __name__ = 'document.create.preview'
+
+    party = fields.Many2One('party.party', 'Party',
+        states={'invisible': True})
+    reports = fields.One2Many('document.create.preview.report', None,
+        'Reports', states={'readonly': True})
+    output_report_name = fields.Char('Output Report Name')
+    email = fields.Char('eMail')
+    output_report_filepath = fields.Char('Output Report Filepath',
+        states={'invisible': True})
+
+    @fields.depends('output_report_name')
+    def on_change_with_output_report_filepath(self, name=None):
+        # Generate unique temporary output report filepath
+        return os.path.join(tempfile.mkdtemp(),
+            coop_string.remove_blank_and_invalid_char(
+                self.output_report_name) + '.pdf')
+
+
+class DocumentCreateAttach(model.CoopView):
+    'Document Create Attach'
+
+    __name__ = 'document.create.attach'
+
+    attachment = fields.Binary('Data File', filename='name')
+    name = fields.Char('Filename')
+
+
+class DocumentCreate(Wizard):
+    __name__ = 'document.create'
+
+    start_state = 'select_model'
+    post_generation = StateTransition()
+    select_model = StateView('document.create.select',
+        'offered_insurance.document_create_select_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Preview', 'preview_document', 'tryton-go-next',
+                states={'readonly': ~Eval('models')}, default=True),
+            ])
+    preview_document = StateView('document.create.preview',
+        'offered_insurance.document_create_preview_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Previous', 'select_model', 'tryton-go-previous'),
+            Button('Mail', 'mail', 'tryton-go-next', default=True)
+            ])
+    mail = StateAction('offered_insurance.generate_file_report')
+    attach = StateView('document.create.attach',
+        'offered_insurance.document_create_attach_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Complete', 'post_generation', 'tryton-ok', default=True)])
+    attach_to_contact = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentCreate, cls).__setup__()
+        try:
+            shutil.rmtree(config.get('EDM', 'server_shared_folder'))
+        except:
+            pass
+        cls._error_messages.update({
+                'parsing_error': 'Error while generating the letter:\n\n'
+                '  Expression:\n%s\n\n  Error:\n%s',
+                })
+
+    def default_select_model(self, fields):
+        if self.select_model._default_values:
+            return self.select_model._default_values
+        result = {}
+        ActiveModel = Pool().get(Transaction().context.get('active_model'))
+        instance = ActiveModel(Transaction().context.get('active_id'))
+        if not instance:
+            return {}
+        result['available_models'] = [elem.id for elem in
+            instance.get_available_doc_templates()]
+        result['party'] = instance.get_contact().id
+        if instance.get_contact().addresses:
+            result['good_address'] = instance.get_contact().addresses[0].id
+        return result
+
+    def default_preview_document(self, fields):
+        pool = Pool()
+        ReportModel = pool.get('document.generate.report', type='report')
+        ContactMechanism = pool.get('party.contact_mechanism')
+        ActiveModel = pool.get(Transaction().context.get('active_model'))
+        printable_inst = ActiveModel(Transaction().context.get('active_id'))
+        sender = printable_inst.get_sender()
+        sender_address = printable_inst.get_sender_address()
+        result = {'reports': []}
+        for doc_template in self.select_model.models:
+            _, filedata, _, file_basename = ReportModel.execute(
+                [Transaction().context.get('active_id')], {
+                    'id': Transaction().context.get('active_id'),
+                    'ids': Transaction().context.get('active_ids'),
+                    'model': Transaction().context.get('active_model'),
+                    'doc_template': [doc_template],
+                    'party': self.select_model.party.id,
+                    'address': self.select_model.good_address.id,
+                    'sender': sender.id if sender else None,
+                    'sender_address': sender_address.id if sender_address
+                    else None,
+                    })
+            client_filepath, server_filepath = ReportModel.EDM_write_report(
+                filedata, file_basename)
+            result['reports'].append({'generated_report': client_filepath,
+                    'server_filepath': server_filepath,
+                    'file_basename': file_basename
+            })
         email = ContactMechanism.search([
                 ('party', '=', self.select_model.party.id),
                 ('type', '=', 'email'),
                 ])
-        if not email:
-            return result
-        result['email'] = email[0].value
+        if email:
+            result['email'] = email[0].value
+        if len(result['reports']) > 1:
+            # Use printable_inst name when sending multiple documents
+            output = printable_inst.get_document_filename()
+        else:
+            # Re-use source basename when sending a single document
+            output = os.path.splitext(result['reports'][0]['file_basename'])[0]
+        result['output_report_name'] = output
+        result['party'] = self.select_model.party.id
         return result
 
     def do_mail(self, action):
-        DocumentTemplate = Pool().get('document.template')
-        selected_model = DocumentTemplate(self.select_model.get_active_model())
+        pool = Pool()
+        Report = pool.get('document.generate.file_report', type='report')
+        Report.generate_single_attachment(
+            [d.server_filepath for d in self.preview_document.reports],
+            self.preview_document.output_report_filepath)
         action['email_print'] = True
-        action['email'] = {
-            'to': self.preview_document.email,
-            'subject': selected_model.mail_subject,
-            'body': selected_model.mail_body}
+        action['email'] = {'to': self.preview_document.email}
         return action, {
-            'filename': self.preview_document.exact_name,
-            'filepath': self.preview_document.filename,
-            }
+            'output_report_filepath':
+                self.preview_document.output_report_filepath,
+        }
 
     def transition_mail(self):
         return 'attach'
 
     def default_attach(self, fields):
-        result = {'name': self.preview_document.exact_name}
-        with open(self.preview_document.filename, 'r') as f:
-            result['attachment'] = buffer(f.read())
+        with open(self.preview_document.output_report_filepath, 'r') as f:
+            attachment = buffer(f.read())
+        result = {'attachment': attachment,
+            'name': os.path.basename(
+                self.preview_document.output_report_filepath),
+        }
         return result
 
     def transition_post_generation(self):
+        if not any([model.internal_edm for model in self.select_model.models]):
+            ReportModel = Pool().get('document.generate.report', type='report')
+            ReportModel.EDM_write_report(self.attach.attachment,
+                self.attach.name)
+            return 'end'
         GoodModel = Pool().get(Transaction().context.get('active_model'))
         good_obj = GoodModel(Transaction().context.get('active_id'))
         good_obj.post_generation()
-
         ContactHistory = Pool().get('party.interaction')
         contact = ContactHistory()
         contact.party = good_obj.get_contact()
         contact.media = 'mail'
         contact.address = self.select_model.good_address
-        contact.title = self.select_model.get_active_model(False).name
+        contact.title = self.select_model.models[0].name
         contact.for_object_ref = good_obj.get_object_for_contact()
         if (hasattr(self, 'attach') and self.attach):
-            if self.preview_document.generated_report:
-                Attachment = Pool().get('ir.attachment')
-                attachment = Attachment()
-                attachment.resource = contact.for_object_ref
-                with open(self.preview_document.filename, 'r') as f:
-                    attachment.data = buffer(f.read())
-                attachment.name = self.attach.name
-                attachment.save()
-                contact.attachment = attachment
+            Attachment = Pool().get('ir.attachment')
+            attachment = Attachment()
+            attachment.resource = contact.for_object_ref
+            attachment.data = self.attach.attachment
+            attachment.name = self.attach.name
+            attachment.save()
+            contact.attachment = attachment
         contact.save()
         return 'end'
 

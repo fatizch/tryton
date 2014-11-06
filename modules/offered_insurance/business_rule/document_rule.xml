@@ -70,14 +70,6 @@
       <field name="type">tree</field>
       <field name="name">document_request_tree</field>
     </record>
-    <!-- ######################################### -->
-    <!-- # Document Creation - Select - Template # -->
-    <!-- ######################################### -->
-    <record model="ir.ui.view" id="document_create_select_template_list">
-      <field name="model">document.create.select.template</field>
-      <field name="type">tree</field>
-      <field name="name">document_create_select_template_list</field>
-    </record>
     <!-- ############################## -->
     <!-- # Document Creation - Select # -->
     <!-- ############################## -->
@@ -93,6 +85,14 @@
       <field name="model">document.create.preview</field>
       <field name="type">form</field>
       <field name="name">document_create_preview_form</field>
+    </record>
+    <!-- ###################################### -->
+    <!-- # Document Creation - Report Preview # -->
+    <!-- ###################################### -->
+    <record model="ir.ui.view" id="document_create_preview_report_list">
+        <field name="model">document.create.preview.report</field>
+        <field name="type">tree</field>
+        <field name="name">document_create_preview_report_list</field>
     </record>
     <!-- ############################## -->
     <!-- # Document Creation - Attach # -->

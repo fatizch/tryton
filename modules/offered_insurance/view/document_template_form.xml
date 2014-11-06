@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Document Template">
-  <label name="name" xalign="0"/>
-  <field name="name"/>
-  <label name="code" xalign="0"/>
-  <field name="code"/>
-  <label name="on_model" xalign="0"/>
-  <field name="on_model" colspan="3" widget="selection"/>
-  <label name="kind" xalign="0"/>
-  <field name="kind" colspan="3"/>
-  <notebook>
-    <page string="Versions" id="versions">
-      <field name="versions"/>
-    </page>
-    <page string="Products" id="products">
-      <field name="products"/>
-    </page>
-    <page string="Mail" id="Mail" col="2">
-      <label name="mail_subject"/>
-      <field name="mail_subject"/>
-      <newline/>
-      <field name="mail_body" colspan="2"/>
-    </page>
-    <page name="tags">
-      <field name="tags" colspan="4" widget="multiselection"/>
-    </page>
-  </notebook>
+    <label name="name" xalign="0"/>
+    <field name="name"/>
+    <label name="code" xalign="0"/>
+    <field name="code"/>
+    <label name="on_model" xalign="0"/>
+    <field name="on_model" colspan="3" widget="selection"/>
+    <label name="kind" xalign="0"/>
+    <field name="kind" colspan="3"/>
+    <label name="internal_edm" xalign="0"/>
+    <field name="internal_edm" />
+    <notebook>
+        <page string="Versions" id="versions">
+            <field name="versions"/>
+        </page>
+        <page string="Products" id="products">
+            <field name="products"/>
+        </page>
+        <page string="Mail" id="Mail" col="2">
+            <label name="mail_subject"/>
+            <field name="mail_subject"/>
+            <newline/>
+            <field name="mail_body" colspan="2"/>
+        </page>
+        <page name="tags">
+            <field name="tags" colspan="4" widget="multiselection"/>
+        </page>
+    </notebook>
 </form>
