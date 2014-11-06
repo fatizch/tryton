@@ -192,10 +192,8 @@ class LoanContractDisplayer(model.CoopView):
     @fields.depends('to_update', 'new_start_date', 'contract', 'endorsement')
     def _on_change(self):
         if not self.to_update:
-            return {
-                'new_end_date': None,
-                'new_start_date': None,
-                }
+            self.new_end_date = self.new_start_date = None
+            return
         contract_loans = set(self.contract.used_loans)
         endorsed_loans = set(self.endorsement.loans)
         contract_loans -= endorsed_loans
@@ -211,11 +209,8 @@ class LoanContractDisplayer(model.CoopView):
             last_increment.loan = loan
             max_loan_end = max(max_loan_end,
                 last_increment.on_change_with_end_date())
-        result = {
-            'new_start_date': self.new_start_date or self.contract.start_date,
-            'new_end_date': coop_date.add_day(max_loan_end, -1),
-            }
-        return result
+        self.new_start_date = self.new_start_date or self.contract.start_date
+        self.new_end_date = coop_date.add_day(max_loan_end, -1)
 
     on_change_to_update = _on_change
     on_change_new_start_date = _on_change
