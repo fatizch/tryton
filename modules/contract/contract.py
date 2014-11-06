@@ -323,6 +323,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             self.extra_datas = self.extra_datas
             return
 
+        self.options = self.options
         available_coverages = self.get_coverages(self.product)
         if self.options:
             for elem in self.options:
@@ -336,7 +337,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 continue
             self.options.append(Option.new_option_from_coverage(elem,
                     self.product, start_date=self.start_date))
-        self.options = self.options
         extra_vals = {}
         if self.extra_datas:
             extra_vals = self.extra_datas[0].extra_data_values
