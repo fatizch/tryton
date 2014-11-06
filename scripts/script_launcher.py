@@ -423,30 +423,17 @@ def documentation(arguments, config, work_data):
         trydocdir = os.path.dirname(trydoc.__file__)
         if not os.path.exists(os.path.join(trydocdir,
                 'index.rst.' + arguments.language + '.template')):
-            shutil.copyfile(os.path.join(trydocdir, 'index.rst.es.template'),
+            shutil.copyfile(os.path.join(trydocdir, 'index.rst.fr.template'),
                 os.path.join(trydocdir, 'index.rst.' + arguments.language +
                     '.template'))
-        process = subprocess.Popen(['trydoc-quickstart', arguments.language,
-            doc_files])
+        process = subprocess.Popen(['sphinx-quickstart', doc_files])
         process.communicate()
-        if os.path.exists(os.path.join(doc_files, 'conf.py')):
-            with open(os.path.join(doc_files, 'conf.py'), 'a') as config:
-                config.write('')
-                config.write('#-- Options for Coog-----------------\n')
-                config.write("language = '" + arguments.language + "'")
     elif arguments.generate:
         create_symlinks(os.path.join(os.environ['VIRTUAL_ENV'],
             'tryton-workspace', 'coopbusiness', 'doc'), arguments.language,
             doc_files, True)
         process = subprocess.Popen(['make', arguments.format],
             cwd=doc_files)
-        process.communicate()
-    elif arguments.update_module:
-        process = subprocess.Popen(['trydoc-update-modules',
-            arguments.database, '-c',
-            os.path.join(doc_files, 'modules.cfg'), '-t',
-            os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-                'trytond')])
         process.communicate()
 
 
@@ -704,8 +691,6 @@ if __name__ == '__main__':
         'documentation', action='store_true')
     parser_doc.add_argument('--initialize', '-i', help='Launch the '
         'tyrdoc quickstart process', action='store_true')
-    parser_doc.add_argument('--update_module', '-u', help='Update the '
-        'configuration file containing modules', action='store_true')
     parser_doc.add_argument('--format', '-f', help='format for documentation '
         'generation : html, ...', default='html')
 
