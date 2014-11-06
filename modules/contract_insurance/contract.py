@@ -817,6 +817,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                     self.options.remove(elem)
                 else:
                     available_coverages.remove(elem.coverage)
+        else:
+            self.options = self.options
         Option = Pool().get('contract.option')
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
@@ -824,7 +826,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             self.options.append(Option.new_option_from_coverage(elem,
                     self.product, item_desc=self.item_desc,
                     start_date=self.start_date))
-            self.options = self.options
 
     @fields.depends('contract', 'extra_data')
     def on_change_with_all_extra_data(self, name=None):
