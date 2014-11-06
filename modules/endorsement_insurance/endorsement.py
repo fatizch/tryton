@@ -245,7 +245,8 @@ class EndorsementCoveredElementOption(relation_mixin(
         cls.values.depends = ['definition']
         cls._error_messages.update({
                 'new_coverage': 'New Coverage: %s',
-                'mes_option_modifications': 'Extra Premium Modification',
+                'mes_extra_premium_modifications':
+                'Extra Premium Modification',
                 })
 
     @classmethod
