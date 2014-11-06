@@ -53,6 +53,11 @@ class OptionDescription:
             setattr(cls, field_name, cur_attr)
 
     @classmethod
+    def _export_light(cls):
+        return (super(OptionDescription, cls)._export_light() |
+            set(['insurer']))
+
+    @classmethod
     def default_family(cls):
         return 'generic'
 

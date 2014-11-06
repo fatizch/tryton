@@ -19,7 +19,6 @@ from trytond.pyson import Eval, Bool, PYSONEncoder
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateAction, StateTransition, \
     Button
-from trytond.protocols.jsonrpc import JSONEncoder
 from trytond.tools import memoize
 
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
@@ -66,6 +65,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     "Table Definition"
 
     __name__ = 'table'
+    _func_key = 'code'
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
@@ -111,23 +111,23 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     @classmethod
     def copy(cls, records, default=None):
         result = []
+
         for record in records:
+            output = []
             existings = cls.search(['OR',
                     [('code', '=', '%s_clone' % record.code)],
                     [('name', '=', '%s Clone' % record.name)]])
             for existing in existings:
                 cls.raise_user_error('existing_clone',
                     (existing.name, existing.code))
-            values = json.dumps(record.export_json()[1], cls=JSONEncoder)
-            values = values.replace('["code", "%s"]' % record.code,
-                '["code", "%s_clone"]' % record.code)
-            values = values.replace('["definition.code", "%s"]' % record.code,
-                '["definition.code", "%s_clone"]' % record.code)
+            record.export_ws_json(output=output)
+            values = json.dumps(output[0])
             values = values.replace('"code": "%s"' % record.code,
                 '"code": "%s_clone"' % record.code)
             values = values.replace(u'"name": "%s"' % record.name,
                 u'"name": "%s Clone"' % record.name)
-            result += record.import_json(values)[cls.__name__].values()
+            tmp = record.import_ws_json(json.loads(values))
+            result.append(tmp)
         return result
 
     def _export_override_cells(self, exported, result, my_key):
@@ -186,6 +186,67 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         return table
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    def export_ws_json(self, skip_fields=None, already_exported=None,
+            output=None, main_object=None):
+        if skip_fields:
+            skip_fields.add('cells')
+        else:
+            skip_fields = set(['cells'])
+        result = super(TableDefinition, self).export_ws_json(
+            skip_fields=skip_fields, already_exported=already_exported,
+            output=output, main_object=main_object)
+        pool = Pool()
+        Cell = pool.get('table.cell')
+        DimensionValue = pool.get('table.dimension.value')
+
+        cursor = Transaction().cursor
+
+        cell = Cell.__table__()
+        dimension_tables = [DimensionValue.__table__()
+            for i in range(0, self.number_of_dimensions)]
+
+        query_table = None
+        for idx, table in enumerate(dimension_tables, 1):
+            query_table = (query_table if query_table else cell).join(table,
+                condition=(getattr(cell, 'dimension%s' % idx) == table.id))
+
+        columns = [x.name for x in dimension_tables] + [cell.value]
+        cursor.execute(*query_table.select(*columns,
+                where=(cell.definition == self.id)))
+
+        result['cells'] = cursor.fetchall()
+        return result
+
+    @classmethod
+    def import_ws_json(cls, values):
+        if "cells" not in values:
+            return super(TableDefinition, cls).import_ws_json(values)
+        pool = Pool()
+        Cell = pool.get('table.cell')
+        cells = values.pop("cells")
+        table, = cls.search_for_export_import(values)
+        if table:
+            Cell.delete(Cell.search([('definition', '=', table.id)]))
+        table = super(TableDefinition, cls).import_ws_json(values)
+        dimension_matcher = {}
+        for i in range(1, DIMENSION_MAX + 1):
+            dimension_values = getattr(table, 'dimension%s' % i)
+            dimension_matcher[i] = dict([
+                    (x.name, x.id) for x in dimension_values])
+        to_create = []
+        for elem in cells:
+            to_create.append(dict([
+                        ('dimension%s' % i, dimension_matcher[i][x])
+                        for i, x in enumerate(elem[:-1], 1)] +
+                    [('value', elem[-1])] +
+                    [('definition', table.id)]))
+        Cell.create(to_create)
+        return table
+
+    @classmethod
     def default_dimension_order(cls):
         return 'alpha'
 
@@ -230,14 +291,18 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
             type, field_children=field_children)
 
     @classmethod
-    def write(cls, records, values):
+    def write(cls, *args):
         pool = Pool()
         TableDefinitionDimension = pool.get('table.dimension.value')
-        super(TableDefinition, cls).write(records, values)
-        if any(k for k in values if k.startswith('dimension_order')):
-            dimensions = [d for r in records for i in xrange(DIMENSION_MAX)
-                          for d in getattr(r, 'dimension%s' % (i + 1)) or []]
-            TableDefinitionDimension.clean_sequence(dimensions)
+        super(TableDefinition, cls).write(*args)
+
+        actions = iter(args)
+        for records, values in zip(actions, actions):
+            if any(k for k in values if k.startswith('dimension_order')):
+                dimensions = [d for r in records
+                    for i in xrange(DIMENSION_MAX)
+                    for d in getattr(r, 'dimension%s' % (i + 1)) or []]
+                TableDefinitionDimension.clean_sequence(dimensions)
 
     @classmethod
     def get(cls, name):
@@ -414,9 +479,10 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         return records
 
     @classmethod
-    def write(cls, records, values):
+    def write(cls, *args):
         cls._get_dimension_cache.clear()
-        super(TableDefinitionDimension, cls).write(records, values)
+        super(TableDefinitionDimension, cls).write(*args)
+        records = sum(args[0::2], [])
         cls.clean_sequence(records)
         cls.set_name(records)
 
@@ -762,9 +828,13 @@ class TableCell(ModelSQL, ModelView):
         return super(TableCell, cls).create(values)
 
     @classmethod
-    def write(cls, records, values):
-        values = cls._dump_value(values)
-        return super(TableCell, cls).write(records, values)
+    def write(cls, *args):
+        new_args = []
+        actions = iter(args)
+        for records, values in zip(actions, actions):
+            new_values = cls._dump_value(values)
+            new_args.extend([records, new_values])
+        return super(TableCell, cls).write(*new_args)
 
     @classmethod
     def read(cls, ids, fields_names=None):

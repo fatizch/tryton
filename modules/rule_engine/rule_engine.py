@@ -655,6 +655,10 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         super(RuleEngine, cls).write(rules, values)
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def _export_keys(cls):
         return set(['short_name'])
 
@@ -663,6 +667,12 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         result = super(RuleEngine, cls)._export_skips()
         result.add('debug_mode')
         result.add('exec_logs')
+        return result
+
+    @classmethod
+    def _export_light(cls):
+        result = super(RuleEngine, cls)._export_light()
+        result.add('context')
         return result
 
     @classmethod

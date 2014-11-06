@@ -11,6 +11,7 @@ class FeeDescription(model.CoopSQL, model.VersionedObject):
     'Fee Description'
 
     __name__ = 'account.fee.description'
+    _func_key = 'code'
 
     name = fields.Char('Fee Name', required=True)
     code = fields.Char('Code', required=True)

@@ -336,24 +336,23 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test('table.test0060table_2dim')
     def test0090test_export(self):
+        self.maxDiff = None
         test_table = self.Definition.search([('code', '=', 'test_code')])[0]
-        file_name, result, _ = test_table.export_json()
+        file_name, result, _ = test_table.export_ws_json_to_file()
         self.assertEqual(file_name, '[%s][table]test_code.json' %
             datetime.date.today().strftime('%Y-%m-%d'))
         self.assertEqual(result, [
                 {'__name__': 'table',
-                    '_export_key': (('code', u'test_code'),),
+                    '_func_key': u'test_code',
                     'cells': [(u'bar', u'[1.0 - 10.0[', u'spam'),
                         (u'foo', u'[1.0 - 10.0[', u'ham'),
                         (u'bar', u'[20.0 - 42.0[', u'chicken'),
-                        (u'foo', u'[20.0 - 42.0[', u'egg')],
+                        (u'foo', u'[20.0 - 42.0[', u'egg'),
+                        ],
                     'code': u'test_code',
                     'dimension1': [{'__name__': 'table.dimension.value',
-                            '_export_key': (('definition.code', u'test_code'),
-                                ('type', u'dimension1'),
-                                ('name', u'bar')),
+                            '_func_key': u'bar',
                             'date': None,
-                            'definition': (('code', u'test_code'),),
                             'end': None,
                             'end_date': None,
                             'name': u'bar',
@@ -363,11 +362,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                             'type': u'dimension1',
                             'value': u'bar'},
                         {'__name__': 'table.dimension.value',
-                            '_export_key': (('definition.code', u'test_code'),
-                                ('type', u'dimension1'),
-                                ('name', u'foo')),
+                            '_func_key': u'foo',
                             'date': None,
-                            'definition': (('code', u'test_code'),),
                             'end': None,
                             'end_date': None,
                             'name': u'foo',
@@ -377,11 +373,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                             'type': u'dimension1',
                             'value': u'foo'}],
                     'dimension2': [{'__name__': 'table.dimension.value',
-                            '_export_key': (('definition.code', u'test_code'),
-                                ('type', u'dimension2'),
-                                ('name', u'[1.0 - 10.0[')),
+                            '_func_key': u'[1.0 - 10.0[',
                             'date': None,
-                            'definition': (('code', u'test_code'),),
                             'end': 10.0,
                             'end_date': None,
                             'name': u'[1.0 - 10.0[',
@@ -391,11 +384,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                             'type': u'dimension2',
                             'value': None},
                         {'__name__': 'table.dimension.value',
-                            '_export_key': (('definition.code', u'test_code'),
-                                ('type', u'dimension2'),
-                                ('name', u'[20.0 - 42.0[')),
+                            '_func_key': u'[20.0 - 42.0[',
                             'date': None,
-                            'definition': (('code', u'test_code'),),
                             'end': 42.0,
                             'end_date': None,
                             'name': u'[20.0 - 42.0[',

@@ -148,7 +148,7 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
     'Offered'
 
     __name__ = 'offered'
-    _export_name = 'code'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)
@@ -313,6 +313,7 @@ class Product(model.CoopSQL, Offered):
     'Product'
 
     __name__ = 'offered.product'
+    _func_key = 'code'
 
     kind = fields.Selection(None, 'Product Kind')
     coverages = fields.Many2Many('offered.product-option.description',
@@ -360,6 +361,15 @@ class Product(model.CoopSQL, Offered):
         default = {} if default is None else default.copy()
         default.setdefault('coverages', None)
         return super(Product, cls).copy(products, default=default)
+
+    @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
+    def _export_light(cls):
+        return (super(Product, cls)._export_light() |
+            set(['contract_generator', 'company', 'currency']))
 
     @classmethod
     def _export_skips(cls):
@@ -567,6 +577,7 @@ class OptionDescription(model.CoopSQL, Offered):
     'OptionDescription'
 
     __name__ = 'offered.option.description'
+    _func_key = 'code'
 
     kind = fields.Selection(None, 'Option Description Kind')
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
@@ -613,6 +624,20 @@ class OptionDescription(model.CoopSQL, Offered):
     def calculate_end_date(self, exec_context):
         if self.ending_rule:
             return self.ending_rule[0].calculate(exec_context)
+
+    @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
+    def _export_light(cls):
+        return (super(OptionDescription, cls)._export_light()
+            | set(['company', 'currency']))
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(OptionDescription, cls)._export_skips() |
+            set(['products']))
 
     @classmethod
     def __setup__(cls):
@@ -682,12 +707,6 @@ class OptionDescription(model.CoopSQL, Offered):
 
     def get_currency(self):
         return self.currency
-
-    @classmethod
-    def _export_skips(cls):
-        skips = super(OptionDescription, cls)._export_skips()
-        skips.add('products')
-        return skips
 
     @classmethod
     def get_var_names_for_full_extract(cls):

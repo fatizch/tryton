@@ -41,8 +41,9 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         'get_endorsement_parts')
 
     @classmethod
-    def _export_light(cls):
-        return set(['products'])
+    def _export_skips(cls):
+        return (super(EndorsementDefinition, cls)._export_skips() |
+            set(['products']))
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):

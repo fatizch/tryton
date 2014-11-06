@@ -421,6 +421,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
     'Premium Rule Component'
 
     __name__ = 'billing.premium.rule.component'
+    _func_key = 'code'
 
     premium_rule = fields.Many2One('billing.premium.rule', 'Premium Rule',
         ondelete='CASCADE')
