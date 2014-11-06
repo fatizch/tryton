@@ -23,3 +23,9 @@ class Party:
     @staticmethod
     def default_extra_data():
         return {}
+
+    @classmethod
+    def _export_skips(cls):
+        result = super(Party, cls)._export_skips()
+        result.add('covered_elements')
+        return result

@@ -44,6 +44,8 @@ MONTHS = [
 class BillingMode(model.CoopSQL, model.CoopView):
     'Billing Mode'
     __name__ = 'offered.billing_mode'
+    _func_key = 'code'
+
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     frequency = fields.Selection(FREQUENCIES, 'Invoice Frequency',
@@ -200,6 +202,11 @@ class Product:
         'Ordered Billing Mode', order=[('order', 'ASC')],
         states={'invisible': ~Eval('change_billing_modes_order')})
 
+    @classmethod
+    def _export_light(cls):
+        return (super(Product, cls)._export_light()
+            | set(['account_for_billing']))
+
     def get_change_billing_modes_order(self, name):
         return False
 
@@ -288,6 +295,11 @@ class OptionDescription:
             'invisible': ~~Eval('is_package'),
             }, ondelete='RESTRICT')
 
+    @classmethod
+    def _export_light(cls):
+        return (super(OptionDescription, cls)._export_light()
+            | set(['account_for_billing']))
+
 
 class FeeDesc:
     __name__ = 'account.fee.description'
@@ -297,6 +309,11 @@ class FeeDesc:
             ('kind', '=', 'revenue'),
             ('company', '=', Eval('context', {}).get('company'))],
         required=True, ondelete='RESTRICT')
+
+    @classmethod
+    def _export_light(cls):
+        return (super(FeeDesc, cls)._export_light()
+            | set(['account_for_billing']))
 
 
 class TaxDesc:

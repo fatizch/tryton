@@ -36,6 +36,7 @@ SEPARATOR = ' / '
 
 class Sequence(ExportImportMixin):
     __name__ = 'ir.sequence'
+    _func_key = 'code'
 
     @classmethod
     def _export_keys(cls):
@@ -351,6 +352,7 @@ class Property(ExportImportMixin):
 
 class Lang(ExportImportMixin):
     __name__ = 'ir.lang'
+    _func_key = 'code'
 
     @classmethod
     def _export_keys(cls):

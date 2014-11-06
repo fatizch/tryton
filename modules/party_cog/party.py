@@ -48,6 +48,7 @@ STATES_COMPANY = Bool(Eval('is_company'))
 
 class Party(export.ExportImportMixin):
     __name__ = 'party.party'
+    _func_key = 'code'
 
     is_person = fields.Boolean('Person')
     is_company = fields.Boolean('Company')
@@ -196,11 +197,22 @@ class Party(export.ExportImportMixin):
         return set(['name'])
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def _export_skips(cls):
         res = super(Party, cls)._export_skips()
-        res.add('code')
         res.add('code_length')
         res.add('synthesis')
+        res.add('account_payable')
+        res.add('account_receivable')
+        return res
+
+    @classmethod
+    def _export_light(cls):
+        res = super(Party, cls)._export_light()
+        res.add('lang')
         return res
 
     @classmethod

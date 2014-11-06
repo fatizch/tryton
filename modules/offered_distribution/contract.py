@@ -35,9 +35,13 @@ class Contract:
 
     def init_contract(self, product, party, contract_dict=None):
         super(Contract, self).init_contract(product, party, contract_dict)
-        if not contract_dict or not 'dist_network' in contract_dict:
+        if not contract_dict or 'dist_network' not in contract_dict:
             return
         DistributionNetwork = Pool().get('distribution.network')
         self.dist_network, = DistributionNetwork.search(
             [('code', '=', contract_dict['dist_network']['code'])], limit=1,
             order=[])
+
+    @classmethod
+    def _export_light(cls):
+        return super(Contract, cls)._export_light() | set(['dist_network'])

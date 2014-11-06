@@ -17,3 +17,8 @@ class BankAccountNumber(ModelSQL, ModelView):
             'readonly': True},
         domain=[('party.bank_accounts', '=', Eval('account'))],
         depends=['account'])
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(BankAccountNumber, cls)._export_skips() |
+            set(['mandates']))

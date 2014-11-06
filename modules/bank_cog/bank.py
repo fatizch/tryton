@@ -19,6 +19,7 @@ __all__ = [
 
 class Bank(export.ExportImportMixin):
     __name__ = 'bank'
+    _func_key = 'bic'
 
     main_address = fields.Function(
         fields.Many2One('party.address', 'Main Address'),
@@ -94,6 +95,7 @@ class Bank(export.ExportImportMixin):
 
 class BankAccount(export.ExportImportMixin):
     __name__ = 'bank.account'
+    _func_key = 'func_key'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
@@ -101,6 +103,18 @@ class BankAccount(export.ExportImportMixin):
         fields.Char('Main Account Number'),
         'get_main_bank_account_number',
         searcher='search_main_bank_account_number')
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    @classmethod
+    def _export_light(cls):
+        return (super(BankAccount, cls)._export_light() |
+            set(['bank', 'currency']))
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(BankAccount, cls)._export_skips() |
+            set(['owners']))
 
     @classmethod
     def __setup__(cls):
@@ -175,9 +189,21 @@ class BankAccount(export.ExportImportMixin):
         return '%s : %s' % (self.numbers[0].type,
             self.numbers[0].number)
 
+    def get_func_key(self, name):
+        return self.numbers[0].number_compact
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        return [('numbers',) + tuple(clause[1:])]
+
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values['numbers'][0]['number_compact']
+
 
 class BankAccountNumber(export.ExportImportMixin):
     __name__ = 'bank.account.number'
+    _func_key = 'number_compact'
 
     @classmethod
     def __setup__(cls):
@@ -209,6 +235,10 @@ class BankAccountNumber(export.ExportImportMixin):
             [('number',) + tuple(clause[1:])],
             [('number_compact',) + tuple(clause[1:])],
             ]
+
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values['number_compact']
 
 
 class BankAccountParty:

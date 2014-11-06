@@ -43,6 +43,7 @@ class AccountTypeTemplate(export.ExportImportMixin):
 
 class Account(export.ExportImportMixin):
     __name__ = 'account.account'
+    _func_key = 'code'
 
     @classmethod
     def _export_keys(cls):

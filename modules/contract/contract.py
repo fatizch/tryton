@@ -16,7 +16,7 @@ from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.cog_utils import coop_string, export
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import offered
 
@@ -62,7 +62,10 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     'Activation History'
 
     __name__ = 'contract.activation_history'
+    _func_key = 'func_key'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
     start_date = fields.Date('Start Date')
@@ -71,13 +74,23 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
             ('end_date', '>=', Eval('start_date', datetime.date.min))],
         depends=['start_date'])
 
+    def get_func_key(self, name):
+        return self.contract.quote_number
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        return [('contract.quote_number',) + tuple(clause[1:])]
+
 
 class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     'Contract'
 
     __name__ = 'contract'
     _history = True
+    _func_key = 'func_key'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     activation_history = fields.One2Many('contract.activation_history',
         'contract', 'Activation History', order=[('start_date', 'ASC')],
         states=_STATES, depends=_DEPENDS)
@@ -191,7 +204,37 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'no_quote_sequence': 'No quote sequence defined',
                 'start_date_multiple_activation_history': 'Cannot change '
                 'start date, multiple activation period detected',
+                'missing_values': 'Cannot add functional key : both quote'
+                'number and contract_number are missing from values'
                 })
+
+    def get_func_key(self, name):
+        return '%s|%s' % ((self.quote_number, self.contract_number))
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                quote_number, contract_number = operands
+                res = []
+                if quote_number != 'None':
+                    res.append(('quote_number', clause[1], quote_number))
+                if contract_number != 'None':
+                    res.append(('contract_number', clause[1], contract_number))
+                return res
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('quote_number', + clause[1:])],
+                [('contract_number', + clause[1:])],
+                ]
+
+    @classmethod
+    def is_master_object(cls):
+        return True
 
     @classmethod
     def create(cls, vlist):
@@ -596,6 +639,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return contract
 
     @classmethod
+    def _export_light(cls):
+        return (super(Contract, cls)._export_light() |
+            set(['product', 'company', 'addresses']))
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(Contract, cls)._export_skips() |
+            set(['logs']))
+
+    @classmethod
     def ws_subscribe_contract(cls, contract_dict):
         'This method is a standard API for webservice use'
         pool = Pool()
@@ -898,6 +951,18 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 and not self.subscriber.is_company):
             self.subscriber = None
 
+    @classmethod
+    def add_func_key(cls, values):
+        if 'quote_number' in values and 'contract_number' in values:
+            values['_func_key'] = '%s|%s' % (values['quote_number'],
+                values['contract_number'])
+        elif 'quote_number' not in values and 'contract_number' in values:
+            values['_func_key'] = 'None|%s' % values['contract_number']
+        elif 'quote_number' in values and 'contract_number' not in values:
+            values['_func_key'] = '%s|None' % values['quote_number']
+        else:
+            cls.raise_user_error('missing_values')
+
 
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             ModelCurrency):
@@ -905,7 +970,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     __name__ = 'contract.option'
     _history = True
+    _func_key = 'func_key'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='RESTRICT', states={
@@ -947,6 +1015,43 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     contract_status = fields.Function(
         fields.Char('Contract Status'),
         'on_change_with_contract_status')
+
+    def get_func_key(self, name):
+        if self.contract:
+            elems = [self.contract.quote_number,
+                self.contract.contract_number, self.coverage.rec_name]
+            return '|'.join(str(x) for x in elems)
+        else:
+            return 'None|None|' + self.coverage.rec_name
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 3:
+                quote_num, contract_num, coverage = operands
+                res = []
+                if quote_num != 'None':
+                    res.append(('contract.quote_number', clause[1], quote_num))
+                if contract_num != 'None':
+                    res.append(('contract.contract_number', clause[1],
+                            contract_num))
+                res.append(('coverage.rec_name', clause[1], coverage))
+                return res
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('contract.quote_number', + clause[1:])],
+                [('contract.contract_number', + clause[1:])],
+                [('coverage.rec_name', + clause[1:])],
+                ]
+
+    @classmethod
+    def _export_light(cls):
+        return (super(ContractOption, cls)._export_light() |
+            set(['coverage', 'product']))
 
     @classmethod
     def __setup__(cls):
@@ -1134,11 +1239,12 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
 
 class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
-        model.CoopView):
+        model.CoopView, export.ExportImportMixin):
     'Contract Extra Data'
 
     __name__ = 'contract.extra_data'
     _parent_name = 'contract'
+    _func_key = 'date'
 
     contract = fields.Many2One('contract', 'Contract', required=True,
         select=True, ondelete='CASCADE')
@@ -1159,6 +1265,13 @@ class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
     def get_extra_data_summary(cls, extra_datas, name):
         return Pool().get('extra_data').get_extra_data_summary(extra_datas,
             'extra_data_values')
+
+    @classmethod
+    def add_func_key(cls, values):
+        if 'date' in values:
+            values['_func_key'] = values['date']
+        else:
+            values['_func_key'] = None
 
 
 class ContractAddress(model.CoopSQL, model.CoopView):

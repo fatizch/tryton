@@ -20,3 +20,8 @@ class Product:
                 'required': Bool(Eval('context', {}).get('company')),
                 'invisible': ~Eval('context', {}).get('company'),
                 }))
+
+    @classmethod
+    def _export_light(cls):
+        return (super(Product, cls)._export_light() |
+            set(['quote_number_sequence']))

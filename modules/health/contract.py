@@ -19,7 +19,7 @@ class Contract:
         'get_is_health', searcher='search_is_health')
 
     def get_is_health(self, name):
-        if not self.options and self.product:
+        if self.product:
             return self.product.is_health
         return False
 

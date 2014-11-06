@@ -102,6 +102,12 @@ class ProcessFramework(ModelView):
         ondelete='RESTRICT', states={'readonly': True})
 
     @classmethod
+    def _export_light(cls):
+        res = super(ProcessFramework, cls)._export_light()
+        res.add('current_state')
+        return res
+
+    @classmethod
     def __setup__(cls):
         super(ProcessFramework, cls).__setup__()
         # We prepare the class to respond to generated buttons

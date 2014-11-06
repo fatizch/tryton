@@ -40,8 +40,18 @@ class Insurer(model.CoopView, model.CoopSQL):
 
     __name__ = 'insurer'
     _rec_name = 'party'
+    _func_key = 'func_key'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     party = fields.Many2One('party.party', 'Insurer', ondelete='CASCADE')
+
+    def get_func_key(self, name):
+        return self.party.code
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        return [('party.code',) + tuple(clause[1:])]
 
     @classmethod
     def _export_keys(cls):

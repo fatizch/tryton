@@ -4,7 +4,7 @@ from trytond.pyson import Eval, Equal, If
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils
+from trytond.modules.cog_utils import fields, model, utils, export
 from trytond.modules.currency_cog import ModelCurrency
 
 from .offered import COMMISSION_KIND
@@ -298,7 +298,7 @@ class CommissionInvoice(model.CoopSQL, model.CoopView):
         super(CommissionInvoice, cls).delete(com_invoices)
 
 
-class Invoice:
+class Invoice(export.ExportImportMixin):
     __name__ = 'account.invoice'
 
     com_invoices = fields.Function(
@@ -394,7 +394,7 @@ class Invoice:
                 for i in contract_com_invoices])
 
 
-class InvoiceLine:
+class InvoiceLine(export.ExportImportMixin):
     __name__ = 'account.invoice.line'
 
     def calculate_com_lines(self, com_currency):

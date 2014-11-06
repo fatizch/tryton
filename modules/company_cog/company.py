@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta
 
-from trytond.modules.cog_utils import export
+from trytond.modules.cog_utils import export, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -10,6 +10,10 @@ __all__ = [
 
 class Company(export.ExportImportMixin):
     __name__ = 'company.company'
+    _func_key = 'func_key'
+
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
 
     @classmethod
     def _export_keys(cls):
@@ -18,3 +22,10 @@ class Company(export.ExportImportMixin):
     def get_publishing_values(self):
         result = self.party.get_publishing_values()
         return result
+
+    def get_func_key(self, name):
+        return self.party.code
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        return [('party.code',) + tuple(clause[1:])]

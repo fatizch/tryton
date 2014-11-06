@@ -373,6 +373,10 @@ class Contract(Printable):
             covered_element.init_covered_element(product, item_desc, cov_dict)
             self.covered_elements.append(covered_element)
 
+    @classmethod
+    def _export_skips(cls):
+        return super(Contract, cls)._export_skips() | set(['multi_mixed_view'])
+
 
 class ContractOption:
     __name__ = 'contract.option'
@@ -655,6 +659,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     '''
 
     __name__ = 'contract.covered_element'
+    _func_key = 'party_code'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
         states={'invisible': ~Eval('contract')}, depends=['contract'])
@@ -738,7 +743,40 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     product = fields.Function(
         fields.Many2One('offered.product', 'Product'),
         'on_change_with_product')
+    party_code = fields.Function(
+        fields.Char('Party Code'), 'get_party_code',
+        searcher='search_party_code')
+
     multi_mixed_view = options
+
+    def get_party_code(self, name):
+        return self.party.code
+
+    @classmethod
+    def search_party_code(cls, name, clause):
+        return [('party.code',) + tuple(clause[1:])]
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(CoveredElement, cls)._export_skips() |
+            set(['multi_mixed_view']))
+
+    @classmethod
+    def _export_light(cls):
+        return (super(CoveredElement, cls)._export_light() |
+            set(['item_desc', 'product', 'contract', 'covered_relations']))
+
+    @classmethod
+    def add_func_key(cls, values):
+        pool = Pool()
+        Party = pool.get('party.party')
+        parties = Party.search_for_export_import(values['party'])
+        if not parties:
+            values['_func_key'] = ''
+        elif len(parties) == 1:
+            values['_func_key'] = parties[0].code
+        else:
+            cls.raise_user_error('too_many_party')
 
     @classmethod
     def default_all_extra_datas(cls):

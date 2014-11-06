@@ -15,6 +15,11 @@ class Company:
     fiscal_years = fields.One2Many('account.fiscalyear', 'company',
         'Fiscal Years')
 
+    @classmethod
+    def _export_skips(cls):
+        return (super(Company, cls)._export_skips() |
+            set(['fiscal_years']))
+
     def _post_import_set_default_accounts(self):
         account_configuration = Pool().get('account.configuration')(0)
         AccountType = Pool().get('account.account.type')

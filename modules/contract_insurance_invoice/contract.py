@@ -95,6 +95,11 @@ class Contract:
         'All Premiums')
 
     @classmethod
+    def _export_skips(cls):
+        return (super(Contract, cls)._export_skips() |
+            set(['invoices', 'account_invoices']))
+
+    @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
@@ -474,8 +479,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         model.CoopView):
     'Contract Billing Information'
     __name__ = 'contract.billing_information'
-
     _parent_name = 'contract'
+    _func_key = 'date'
+
     contract = fields.Many2One('contract', 'Contract', required=True,
         select=True, ondelete='CASCADE')
     billing_mode = fields.Many2One('offered.billing_mode', 'Billing Mode',
@@ -508,6 +514,11 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     possible_payment_terms = fields.Function(fields.One2Many(
             'account.invoice.payment_term', None, 'Possible Payment Term'),
             'on_change_with_possible_payment_terms')
+
+    @classmethod
+    def _export_light(cls):
+        return (super(ContractBillingInformation, cls)._export_light() |
+            set(['payment_term', 'direct_debit_account', 'billing_mode']))
 
     @classmethod
     def __setup__(cls):
@@ -598,6 +609,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         return coop_date.get_next_date_in_sync_with(
             max(line['maturity_date'], utils.today()),
             self.direct_debit_day)
+
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values.get('date', None)
 
 
 class ContractInvoice(ModelSQL, ModelView):
@@ -725,7 +740,7 @@ class ExtraPremium:
         'Premiums')
 
 
-class Premium(ModelSQL, ModelView):
+class Premium(model.CoopSQL, model.CoopView):
     'Premium'
     __name__ = 'contract.premium'
     contract = fields.Many2One('contract', 'Contract', select=True,
@@ -769,6 +784,16 @@ class Premium(ModelSQL, ModelView):
     def __setup__(cls):
         super(Premium, cls).__setup__()
         cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(Premium, cls)._export_skips() |
+            set(['invoice_lines']))
+
+    @classmethod
+    def _export_light(cls):
+        return (super(Premium, cls)._export_light() |
+            set(['account', 'rated_entity']))
 
     @classmethod
     def _get_rated_entities(cls):

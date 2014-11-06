@@ -9,7 +9,7 @@ from trytond.pyson import Eval, Bool
 from trytond.pool import Pool
 
 from trytond.modules.cog_utils import coop_string
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, export
 
 __all__ = [
     'Status',
@@ -43,15 +43,38 @@ class Status(ModelSQL, ModelView):
         return coop_string.remove_blank_and_invalid_char(self.name)
 
 
-class ProcessStepRelation(ModelSQL, ModelView):
+class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
     'Process to Step relation'
 
     __name__ = 'process-process.step'
+    _func_key = 'technical_step_name'
 
     process = fields.Many2One('process', 'Process', ondelete='CASCADE')
     step = fields.Many2One('process.step', 'Step', ondelete='RESTRICT')
     status = fields.Many2One('process.status', 'Status', ondelete='RESTRICT')
     order = fields.Integer('Order')
+    technical_step_name = fields.Function(fields.Char('Technical Step Name'),
+        'get_technical_step_name', searcher='search_technical_step_name')
+
+    def get_technical_step_name(self, name):
+        return self.step.technical_name + '|' + self.process.technical_name
+
+    @classmethod
+    def search_technical_step_name(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                step_name, process_name = clause[2].split('|')
+                return [('step.technical_name', clause[1], step_name),
+                    ('process.technical_name', clause[1], process_name)]
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('step.technical_name', + clause[1:])],
+                [('process.technical_name', + clause[1:])],
+                ]
 
     def get_rec_name(self, name):
         res = ''
