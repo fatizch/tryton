@@ -275,7 +275,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         self.applied_on = at_datetime
 
     def apply_values(self):
-        values = super(EndorsementLoan, self).apply_values()
+        values = (self.values if self.values else {}).copy()
         increments = []
         for increment in self.increments:
             increments.append(increment.apply_values())
@@ -292,7 +292,8 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         Increment = pool.get('loan.increment')
         base_loan = Loan(self.loan.id)
         for k, v in self.values.iteritems():
-            setattr(base_loan, k, v)
+            if k not in ('payments', 'increments', 'loan_shares'):
+                setattr(base_loan, k, v)
         if delete_increments:
             # Horrible : if number_of_payments are not read before deleting
             # Increments, it will fail
