@@ -155,12 +155,11 @@ class EndorsementContract:
                 instances['contract.option']):
             instances['contract.premium'] += obj.premiums
 
-    @property
     def apply_values(self):
-        values = super(EndorsementContract, self).apply_values
+        values = super(EndorsementContract, self).apply_values()
         billing_informations = []
         for billing_information in self.billing_informations:
-            billing_informations.append(billing_information.apply_values)
+            billing_informations.append(billing_information.apply_values())
         if billing_informations:
             values['billing_informations'] = billing_informations
         return values

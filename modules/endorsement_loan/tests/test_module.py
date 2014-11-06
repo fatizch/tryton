@@ -125,7 +125,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan_endorsement.definition, definition)
         self.assertEqual(list(endorsement.loans), [loan])
         self.assertEqual(loan.amount, previous_amount)
-        self.assertEqual(loan_endorsement.apply_values, {
+        self.assertEqual(loan_endorsement.apply_values(), {
                 'amount': Decimal('150000'),
                 })
 

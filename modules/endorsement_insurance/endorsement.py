@@ -90,12 +90,11 @@ class EndorsementContract:
             result += '\n\n'
         return result
 
-    @property
     def apply_values(self):
-        values = super(EndorsementContract, self).apply_values
+        values = super(EndorsementContract, self).apply_values()
         covered_elements = []
         for covered_element in self.covered_elements:
-            covered_elements.append(covered_element.apply_values)
+            covered_elements.append(covered_element.apply_values())
         if covered_elements:
             values['covered_elements'] = covered_elements
         return values
@@ -179,12 +178,11 @@ class EndorsementCoveredElement(relation_mixin(
             result += '\n\n'
         return result
 
-    @property
     def apply_values(self):
-        values = super(EndorsementCoveredElement, self).apply_values
+        values = super(EndorsementCoveredElement, self).apply_values()
         option_values = []
         for option in self.options:
-            option_values.append(option.apply_values)
+            option_values.append(option.apply_values())
         if option_values:
             if self.action == 'add':
                 values[1][0]['options'] = option_values
@@ -287,12 +285,11 @@ class EndorsementCoveredElementOption(relation_mixin(
             result += '\n\n'
         return result
 
-    @property
     def apply_values(self):
-        values = super(EndorsementCoveredElementOption, self).apply_values
+        values = super(EndorsementCoveredElementOption, self).apply_values()
         extra_premium_values = []
         for extra_premium in self.extra_premiums:
-            extra_premium_values.append(extra_premium.apply_values)
+            extra_premium_values.append(extra_premium.apply_values())
         if extra_premium_values:
             if self.action == 'add':
                 values[1][0]['extra_premiums'] = extra_premium_values

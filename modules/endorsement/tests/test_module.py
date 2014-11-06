@@ -142,7 +142,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract_endorsement.definition, definition)
         self.assertEqual(list(endorsement.contracts), [contract])
         self.assertEqual(contract.contract_number, previous_contract_number)
-        self.assertEqual(contract_endorsement.apply_values, {
+        self.assertEqual(contract_endorsement.apply_values(), {
                 'contract_number': '1234',
                 })
 

@@ -274,12 +274,11 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     def set_applied_on(self, at_datetime):
         self.applied_on = at_datetime
 
-    @property
     def apply_values(self):
-        values = super(EndorsementLoan, self).apply_values
+        values = super(EndorsementLoan, self).apply_values()
         increments = []
         for increment in self.increments:
-            increments.append(increment.apply_values)
+            increments.append(increment.apply_values())
         if increments:
             values['increments'] = increments
         return values
@@ -357,10 +356,9 @@ class EndorsementCoveredElementOption:
                     existing.add(elem)
         return existing
 
-    @property
     def apply_values(self):
         EndorsementLoanShare = Pool().get('endorsement.loan.share')
-        values = super(EndorsementCoveredElementOption, self).apply_values
+        values = super(EndorsementCoveredElementOption, self).apply_values()
         shares_per_loan = defaultdict(list)
         for elem in self.new_shares:
             shares_per_loan[(elem.loan, elem.option)].append(elem)
@@ -372,7 +370,7 @@ class EndorsementCoveredElementOption:
             for idx, loan_share in enumerate(loan_shares):
                 if not isinstance(loan_share, EndorsementLoanShare):
                     continue
-                loan_share_values.append(loan_share.apply_values)
+                loan_share_values.append(loan_share.apply_values())
                 if idx != 0:
                     previous = loan_shares[idx - 1]
                     previous_end = coop_date.add_day(loan_share.start_date, -1)

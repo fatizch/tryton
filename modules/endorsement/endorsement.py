@@ -376,7 +376,6 @@ def relation_mixin(value_model, field, model, name):
                     'relation': value,
                     })
 
-        @property
         def apply_values(self):
             values = (self.values if self.values else {}).copy()
             if self.action == 'add':
@@ -858,7 +857,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             else:
                 contract_endorsement.set_applied_on(contract.write_date
                     or contract.create_date)
-            values = contract_endorsement.apply_values
+            values = contract_endorsement.apply_values()
             Contract.write([contract], values)
             contract_endorsement.save()
 
@@ -877,16 +876,15 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             option.applied_on = at_datetime
         self.options = list(self.options)
 
-    @property
     def apply_values(self):
         values = (self.values if self.values else {}).copy()
         options, activation_history = [], []
         for option in self.options:
-            options.append(option.apply_values)
+            options.append(option.apply_values())
         if options:
             values['options'] = options
         for activation_entry in self.activation_history:
-            activation_history.append(activation_entry.apply_values)
+            activation_history.append(activation_entry.apply_values())
         if activation_history:
             values['activation_history'] = activation_history
         return values
