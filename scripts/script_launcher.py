@@ -513,7 +513,9 @@ def configure(target_env):
                         '[database]',
                         'db_type = sqlite',
                         'uri = sqlite://',
-                        'path = %s' % os.path.join(workspace, 'data'),
+                        'path = %s\n' % os.path.join(workspace, 'data'),
+                        '[env]',
+                        'testing = True',
                         ]))
     if not os.path.exists(os.path.join(workspace, 'conf', 'celeryconfig.py')):
         with open(os.path.join(workspace, 'conf', 'celeryconfig.py'),

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import traceback
 import sys
 import copy
@@ -9,7 +10,6 @@ try:
 except ImportError:
     import json
 
-from collections import defaultdict
 from sql.operators import Concat
 
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
@@ -46,6 +46,8 @@ class NotExportImport(Exception):
 class ExportImportMixin(Model):
     'Mixin to support export/import in json'
 
+    _func_key = 'rec_name'
+
     xml_id = fields.Function(
         fields.Char('XML Id', states={'invisible': True}),
         'get_xml_id', searcher='search_xml_id')
@@ -65,6 +67,16 @@ class ExportImportMixin(Model):
         cls.__rpc__['export_json'] = RPC(instantiate=0,
             result=lambda r: cls._export_format_result(r))
         cls.__rpc__['import_json'] = RPC(readonly=False, result=lambda r: None)
+        cls.__rpc__['export_ws_json_to_file'] = RPC(instantiate=0,
+            readonly=True, result=lambda r: cls._export_format_result(r))
+        cls.__rpc__['multiple_import_ws_json'] = RPC(readonly=False,
+            result=lambda r: None)
+        cls._error_messages.update({
+                'not_found': 'Cannot import : no object %s with functional '
+                'key: "%s" were found.',
+                'not_unique': 'Cannot import : the following objects:\n%s\n'
+                'share the same functional key:\n"%s".',
+                })
 
     @classmethod
     def __post_setup__(cls):
@@ -381,6 +393,21 @@ class ExportImportMixin(Model):
             export_log += '<b>%s</b>\n' % k
             for elem in v:
                 export_log += '    %s\n' % str(elem)
+        return filename, result, export_log
+
+    def export_ws_json_to_file(self):
+        filename = '%s%s.json' % (self._export_filename_prefix(),
+            self._export_filename())
+        result = []
+        self.export_ws_json(output=result)
+        export_log = 'The following records will be exported:\n '
+        instances = collections.defaultdict(list)
+        for value in result:
+            instances[value['__name__']].append(value['_func_key'])
+        for k, v in instances.iteritems():
+            export_log += '<b>%s</b>\n' % k
+            for elem in v:
+                export_log += '    %s\n' % elem
         return filename, result, export_log
 
     @classmethod
@@ -749,7 +776,7 @@ class ExportImportMixin(Model):
                 values = json.loads(values, object_hook=JSONDecoder())
                 values = map(utils.recursive_list_tuple_convert, values)
             created = {}
-            relink = defaultdict(
+            relink = collections.defaultdict(
                 lambda: {'from': {}, 'req': {}, 'opt': {}})
             main_instances = []
             for value in values:
@@ -768,6 +795,262 @@ class ExportImportMixin(Model):
             logging.getLogger('export_import').debug('Successfully imported %s'
                 % log_name)
         return created
+
+    @classmethod
+    def is_master_object(cls):
+        return False
+
+    @classmethod
+    def add_func_key(cls, values):
+        '''
+        The aim of this method is to add the _func_key in dictionnary
+        if missing to avoid sender filling _func_key
+        '''
+        raise NotImplementedError
+
+    @classmethod
+    def search_for_export_import(cls, values):
+        '''
+        The method is used to find existing object from values
+        By default it's searching based on the _func_key
+        '''
+        if '_func_key' not in values:
+            cls.add_func_key(values)
+        return cls.search([(cls._func_key, '=', values['_func_key'])])
+
+    @classmethod
+    def _import_ws_json(cls, values, main_object=None):
+        pool = Pool()
+        new_values = {}
+        lines = {}
+        for field_name, value in values.iteritems():
+            if field_name in ('__name__', '_func_key'):
+                continue
+            field = cls._fields[field_name]
+            if isinstance(field, (tryton_fields.Many2One,
+                        tryton_fields.Property, tryton_fields.One2One,
+                        tryton_fields.Reference)):
+                if value:
+                    if isinstance(field, tryton_fields.Reference):
+                        Target = pool.get(value['__name__'])
+                    else:
+                        Target = field.get_target()
+                    target = Target.import_ws_json(value)
+                    if not target:
+                        continue
+                    if isinstance(field, tryton_fields.Reference):
+                        new_values[field_name] = (target.__name__ +
+                            ',' + str(target.id))
+                    else:
+                        new_values[field_name] = target.id
+                else:
+                    new_values[field_name] = None
+            elif isinstance(field, (tryton_fields.One2Many,
+                    tryton_fields.Many2Many)):
+                lines[field_name] = value
+            else:
+                new_values[field_name] = value
+
+        for field_name, value in lines.iteritems():
+            field = cls._fields[field_name]
+            Target = field.get_target()
+            if main_object:
+                existing_lines = dict((getattr(l, l._func_key), l)
+                    for l in getattr(main_object, field_name))
+            else:
+                existing_lines = {}
+            to_write = []
+            to_create = []
+            to_add = []
+            to_delete = []
+            to_remove = []
+            for line in value:
+                if '_func_key' not in line:
+                    Target.add_func_key(line)
+                export_name = line['_func_key']
+                if export_name in existing_lines:
+                    existing_line = existing_lines[export_name]
+                    to_write.append(
+                        ('write', [existing_line.id],
+                            Target._import_ws_json(line,
+                                Target(existing_line.id))))
+                    del existing_lines[export_name]
+                else:
+                    if isinstance(field, tryton_fields.Many2Many):
+                        # One2many to master object are not managed
+                        if Target.search_for_export_import(line):
+                            target = Target.import_ws_json(line)
+                            to_add.append(target.id)
+                            continue
+                    obj_to_create = Target._import_ws_json(line, None)
+                    if obj_to_create:
+                        to_create.append(obj_to_create)
+            if existing_lines:
+                if isinstance(field, tryton_fields.Many2Many):
+                    to_remove.append(
+                        ('remove', [l.id for l in
+                                existing_lines.itervalues()]))
+                else:
+                    to_delete.append(
+                        ('delete', [l.id for l in
+                                existing_lines.itervalues()]))
+
+            new_values[field_name] = []
+            to_create = [('create', to_create)]
+            for action in (to_write, to_create, to_delete, to_remove):
+                if action:
+                    new_values[field_name].extend(action)
+            if to_add:
+                new_values[field_name].append(('add', to_add))
+
+        return new_values
+
+    @classmethod
+    def multiple_import_ws_json(cls, objects):
+        pool = Pool()
+        if isinstance(objects, basestring):
+            objects = json.loads(objects, object_hook=JSONDecoder())
+        for obj in objects:
+            Target = pool.get(obj['__name__'])
+            Target.import_ws_json(obj)
+
+    @classmethod
+    def import_ws_json(cls, values):
+        if isinstance(values, basestring):
+            values = json.loads(values, object_hook=JSONDecoder())
+        records = cls.search_for_export_import(values)
+        record = None
+        if records:
+            if len(records) > 1:
+                cls.raise_user_error('not_unique',
+                    ('\n'.join([(x.__name__ + ' with id ' + str(x.id))
+                                for x in records]),
+                        values['_func_key']))
+            record = (records or [None])[0]
+        new_values = cls._import_ws_json(values, record)
+
+        if not new_values:
+            # The export is light
+            if record:
+                return record
+            else:
+                cls.raise_user_error('not_found', (cls.__name__,
+                        values['_func_key']))
+
+        if record:
+            cls.write([record], new_values)
+        else:
+            records = cls.create([new_values])
+            record = records[0]
+        return record
+
+    def export_master(self, skip_fields=None, already_exported=None,
+            output=None, main_object=None):
+        if self.is_master_object():
+            if self not in already_exported:
+                self.export_ws_json(skip_fields, already_exported, output,
+                    main_object)
+            return {'_func_key': getattr(self, self._func_key),
+                '__name__': self.__name__}
+
+    def _export_ws_json_xxx2one(self, field_name, skip_fields=None,
+            already_exported=None, output=None, main_object=None):
+        target = getattr(self, field_name)
+        if target is None:
+            return None
+        if not hasattr(target, 'export_ws_json'):
+            raise NotExportImport('%s is not exportable' % target)
+        if target:
+            values = target.export_master(skip_fields, already_exported,
+                output, main_object)
+            if values is None:
+                values = target.export_ws_json(skip_fields, already_exported,
+                    output, main_object)
+            return values
+
+    def _export_ws_json_xxx2many(self, field_name, skip_fields=None,
+            already_exported=None, output=None, main_object=None):
+        if skip_fields is None:
+            skip_fields = set()
+        field = self._fields[field_name]
+        if isinstance(field, tryton_fields.One2Many):
+            skip_fields.add(field.field)
+        Target = field.get_target()
+        if Target is None:
+            return None
+        if not hasattr(Target, 'export_ws_json'):
+            raise NotExportImport('%s is not exportable'
+                % Target)
+        targets = getattr(self, field_name) or []
+        results = []
+        for t in targets:
+            values = t.export_master(skip_fields, already_exported, output,
+                main_object)
+            if not values:
+                values = t.export_ws_json(skip_fields, already_exported,
+                    output, main_object)
+            if values:
+                results.append(values)
+        return results
+
+    def export_ws_json(self, skip_fields=None, already_exported=None,
+            output=None, main_object=None):
+        if not main_object:
+            main_object = self
+        skip_fields = (skip_fields or set()) | self._export_skips()
+        values = {
+            '__name__': self.__name__,
+            '_func_key': getattr(self, self._func_key),
+            }
+        if already_exported and self in already_exported:
+            return values
+        elif not already_exported:
+            already_exported = set([self])
+        else:
+            already_exported.add(self)
+
+        light_exports = self._export_light()
+
+        for field_name, field in self._fields.iteritems():
+            if (field_name in skip_fields or
+                    (isinstance(field, tryton_fields.Function) and not
+                    isinstance(field, tryton_fields.Property))):
+                continue
+            elif field_name in light_exports:
+                field_value = getattr(self, field_name)
+                if isinstance(field, (tryton_fields.One2Many,
+                            tryton_fields.Many2Many)):
+                    values[field_name] = [
+                        {'_func_key': getattr(x, x._func_key)}
+                        for x in field_value]
+                elif isinstance(field, tryton_fields.Reference):
+                    if not field_value:
+                        values[field_name] = None
+                    else:
+                        values[field_name] = {'_func_key': getattr(
+                                field_value, field_value._func_key),
+                            '__name__': field_value.__name__}
+                else:
+                    if not field_value:
+                        values[field_name] = None
+                    else:
+                        values[field_name] = {'_func_key': getattr(
+                            field_value, field_value._func_key)}
+            elif isinstance(field, (tryton_fields.Many2One,
+                        tryton_fields.One2One, tryton_fields.Reference)):
+                values[field_name] = self._export_ws_json_xxx2one(
+                    field_name, None, already_exported, output,
+                    main_object)
+            elif isinstance(field, (tryton_fields.One2Many,
+                        tryton_fields.Many2Many)):
+                values[field_name] = self._export_ws_json_xxx2many(
+                    field_name, None, already_exported, output,
+                    main_object)
+            else:
+                values[field_name] = getattr(self, field_name)
+        if self.is_master_object() or main_object == self:
+            output.append(values)
+        return values
 
 
 class FileSelector(ModelView):

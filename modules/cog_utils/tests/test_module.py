@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import unittest
 import datetime
+from decimal import Decimal
 
 import mock
 
@@ -25,6 +27,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'View': 'ir.ui.view',
             'MethodDefinition': 'ir.model.method',
             'Model': 'ir.model',
+            'ExportTest': 'cog_utils.export_test',
+            'ExportTestTarget': 'cog_utils.export_test_target',
+            'ExportTestTargetSlave': 'cog_utils.export_test_target_slave',
+            'ExportTestRelation': 'cog_utils.export_test_relation',
             }
 
     def test0020get_module_path(self):
@@ -304,6 +310,203 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         callee = TestModel()
         self.assertEqual(method.execute(10, callee), 10)
+
+    def test0050_export_import_key_not_unique(self):
+        to_export = self.ExportTestTarget(char="sometext")
+        to_export.save()
+        duplicata = self.ExportTestTarget(char="sometext")
+        duplicata.save()
+        output = []
+        to_export.export_ws_json(output=output)
+
+        self.assertRaises(UserError, self.ExportTestTarget.import_ws_json,
+            output[0])
+
+    def test0051_export_import_non_relation_fields(self):
+        self.maxDiff = None
+        values = {
+            'boolean': True,
+            'integer': 0,
+            'float': 0.0002,
+            'numeric': Decimal("0.03"),
+            'char': "somekey",
+            'text': "line \n line2 \nline3",
+            'date': datetime.date(2012, 12, 3),
+            'datetime': datetime.datetime(2014, 11, 3, 2, 3, 1),
+            'selection': 'select1',
+        }
+
+        to_export = self.ExportTest(**values)
+        to_export.save()
+        output = []
+        to_export.export_ws_json(output=output)
+
+        values.update({'_func_key': 'somekey',
+                '__name__': 'cog_utils.export_test',
+                'reference': None,
+                'one2many': [],
+                'valid_one2many': [],
+                'many2many': [],
+                'many2one': None,
+                })
+
+        self.assertDictEqual(values, output[0])
+        output[0]['text'] = 'someothertext'
+        values['text'] = 'someothertext'
+        self.ExportTest.multiple_import_ws_json(output)
+        output = []
+        to_export.export_ws_json(output=output)
+
+        self.assertDictEqual(values, output[0])
+
+    def test0052_export_import_many2one(self):
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', many2one=target)
+        to_export.save()
+        output = []
+        to_export.export_ws_json(output=output)
+
+        self.assertEqual(output[0]['_func_key'], 'key')
+        self.assertEqual(output[1]['_func_key'], 'otherkey')
+
+        output[0]['integer'] = 12
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual(12, to_export.many2one.integer)
+
+    def test_0053_export_import_many2many(self):
+
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', many2many=[target])
+        to_export.save()
+        former = to_export.many2many
+        output = []
+        to_export.export_ws_json(output=output)
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual(to_export.many2many, former)
+
+    def test_0054_export_import_many2many_update(self):
+
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', many2many=[target])
+        to_export.save()
+        former_char = to_export.many2many[0].char
+        output = []
+        to_export.export_ws_json(output=output)
+
+        to_export.many2many = []
+        to_export.save()
+
+        self.ExportTestTarget.delete([target])
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual(to_export.many2many[0].char, former_char)
+
+    def test_00542_export_import_many2many_remove(self):
+
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', many2many=[target])
+        to_export.save()
+
+        output = []
+        to_export.export_ws_json(output=output)
+        output[1]['many2many'] = []
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual((), to_export.many2many)
+
+    def test0055_export_import_recursion(self):
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', many2one=target)
+        to_export.save()
+        target.many2one = to_export
+        target.save()
+        output = []
+        to_export.export_ws_json(output=output)
+        output[0]['integer'] = 12
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual(12, to_export.many2one.integer)
+        self.assertEqual(to_export, to_export.many2one.many2one)
+
+    def test0056_export_import_reference_field(self):
+        target = self.ExportTestTarget(char='key', integer=12)
+        target.save()
+        to_export = self.ExportTest(char='otherkey', reference=target)
+        to_export.save()
+        output = []
+        to_export.export_ws_json(output=output)
+        output[0]['reference']['integer'] = 3
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual(3, to_export.reference.integer)
+
+    def test_0057_export_import_one2many(self):
+
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', one2many=[target])
+        to_export.save()
+        former = to_export.one2many
+        output = []
+        to_export.export_ws_json(output=output)
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual(to_export.one2many, former)
+
+    def test_00571_export_import_one2many_update(self):
+
+        target = self.ExportTestTargetSlave(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', valid_one2many=[target])
+        to_export.save()
+        output = []
+        to_export.export_ws_json(output=output)
+
+        to_export.one2many = []
+        to_export.save()
+        self.ExportTestTargetSlave.delete([target])
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual(to_export.valid_one2many[0].char, 'key')
+
+    def test_00572_export_import_one2many_no_update(self):
+        # One2many to master object are not managed
+
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', one2many=[target])
+        to_export.save()
+        output = []
+        to_export.export_ws_json(output=output)
+
+        to_export.one2many = []
+        to_export.save()
+        self.ExportTestTarget.delete([target])
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual((), to_export.one2many)
+
+    def test_00573_export_import_one2many_delete(self):
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', one2many=[target])
+        to_export.save()
+        output = []
+        to_export.export_ws_json(output=output)
+
+        output[1]['one2many'] = []
+
+        self.ExportTest.multiple_import_ws_json(output)
+        self.assertEqual((), to_export.one2many)
+        self.assertEqual([], self.ExportTestTarget.search(
+                [('id', '!=', 0)]))
 
 
 def suite():
