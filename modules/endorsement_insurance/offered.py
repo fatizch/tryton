@@ -78,7 +78,6 @@ class EndorsementPart:
                 ExtraPremiumEndorsement = Pool().get(
                     'endorsement.contract.extra_premium')
                 ExtraPremiumEndorsement.delete(to_delete)
-        super(EndorsementPart, self).clean_up(endorsement)
 
 
 class EndorsementCoveredElementField(field_mixin('contract.covered_element'),
