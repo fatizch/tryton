@@ -243,7 +243,7 @@ change_first_payment_date_part = EndorsementPart()
 change_first_payment_date_part.name = 'Change First Payment Date'
 change_first_payment_date_part.code = 'change_first_payment_date'
 change_first_payment_date_part.kind = 'loan'
-change_first_payment_date_part.view = 'change_basic_loan_data'
+change_first_payment_date_part.view = 'change_loan_data'
 change_first_payment_date_part.loan_fields.append(
     EndorsementLoanField(field=Field.find([
                 ('model.model', '=', 'loan'),
@@ -318,9 +318,10 @@ new_endorsement.form.applicant = None
 new_endorsement.form.loan = loan
 new_endorsement.form.effective_date = contract_start_date
 new_endorsement.execute('start_endorsement')
-new_endorsement.form.new_value[0].amount == loan.amount
+new_endorsement.form.loan_changes[0].new_values[0].amount == loan.amount
 # #Res# #True
-new_endorsement.form.new_value[0].first_payment_date = new_payment_date
+new_endorsement.form.loan_changes[0].new_values[0].first_payment_date = \
+    new_payment_date
 new_endorsement.execute('calculate_updated_payments')
 new_endorsement.execute('loan_select_contracts')
 len(new_endorsement.form.selected_contracts)

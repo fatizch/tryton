@@ -153,9 +153,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         endorsement.apply([endorsement])
         loan = endorsement.loans[0]
         new_payment = loan.payments[20].outstanding_balance
-        self.assertEqual(new_payment, Decimal('143924.46'))
+        self.assertEqual(new_payment, Decimal('113159.16'))
         self.assertEqual(loan.amount, Decimal('150000'))
-        self.assertEqual(loan.payments[20].amount, Decimal('5538.33'))
+        self.assertEqual(loan.payments[20].amount, Decimal('4354.45'))
 
     @test_framework.prepare_test(
         'endorsement_loan.test0030_create_endorsement',
