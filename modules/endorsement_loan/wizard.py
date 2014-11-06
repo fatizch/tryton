@@ -57,11 +57,10 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
     @classmethod
     def _loan_fields_to_extract(cls):
         return {
-            'loan': ['currency', 'rate', 'payment_frequency', 'payment_amount',
+            'loan': ['currency', 'rate', 'payment_frequency',
                 'first_payment_date', 'funds_release_date', 'parties',
-                'outstanding_capital', 'kind', 'amount', 'number', 'company',
-                'increments', 'number_of_payments', 'currency_symbol',
-                'currency_digits'],
+                'kind', 'amount', 'number', 'company', 'increments',
+                'number_of_payments', 'currency_symbol', 'currency_digits'],
             'loan.increment': ['number_of_payments', 'deferal', 'end_date',
                 'number', 'rate', 'payment_amount', 'start_date',
                 'begin_balance', 'currency_symbol', 'currency',
@@ -105,7 +104,8 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
                 if k == 'increments':
                     new_increments = v
                     continue
-                if getattr(base_loan, k) == v or k in ('state', 'parties'):
+                if getattr(base_loan, k) == v or k in ('state', 'parties',
+                        'payments', 'loan_shares'):
                     continue
                 if k == 'deferal' and (base_loan.deferal or None) == (
                         v or None):
@@ -771,7 +771,6 @@ class StartEndorsement:
         fields_to_extract = ChangeLoan._loan_fields_to_extract()
         default_values = {
             'endorsement_part': endorsement_part.id,
-            'contract': contract.id,
             'loan_changes': [{
                     'loan_id': loan.id,
                     'loan_rec_name': loan.rec_name,
