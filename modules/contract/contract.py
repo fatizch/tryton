@@ -291,9 +291,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
                 continue
-            new_opt = Option.init_default_values_from_coverage(elem,
-                self.product, start_date=self.start_date)
-            self.options.append(new_opt)
+            self.options.append(Option.new_option_from_coverage(elem,
+                    self.product, start_date=self.start_date))
         self.options = self.options
         extra_vals = {}
         if self.extra_datas:
@@ -588,9 +587,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         contract.options = []
         for coverage in [x.coverage for x in product.ordered_coverages
                 if x.coverage.is_service]:
-            sub_option = SubscribedOpt()
-            sub_option.init_from_coverage(coverage, product, at_date)
-            contract.options.append(sub_option)
+            contract.options.append(SubscribedOpt.new_option_from_coverage(
+                    coverage, product, at_date))
         contract.before_activate(contract_dict)
         contract.activate_contract()
         contract.finalize_contract()
@@ -775,9 +773,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 good_opt = existing[coverage.code]
                 to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
-                good_opt = OptionModel()
-                good_opt.init_from_coverage(coverage, self.product,
-                    self.start_date)
+                good_opt = OptionModel.new_option_from_coverage(coverage,
+                    self.product, self.start_date)
                 good_opt.contract = self
             if good_opt:
                 good_opt.save()
@@ -1069,27 +1066,20 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return [('coverage', 'light'), 'start_date', 'end_date']
 
     @classmethod
-    def init_default_values_from_coverage(cls, coverage, product,
+    def new_option_from_coverage(cls, coverage, product,
             start_date=None, end_date=None):
         if not start_date:
             start_date = utils.today()
         if utils.is_effective_at_date(coverage, start_date):
-            result = {}
-            result['coverage'] = coverage.id
-            result['status'] = 'active'
-            result['start_date'] = start_date
-            result['appliable_conditions_date'] = start_date
-            return result
+            new_option = cls()
+            new_option.coverage = coverage.id
+            new_option.status = 'active'
+            new_option.start_date = start_date
+            new_option.appliable_conditions_date = start_date
+            return new_option
         else:
             cls.raise_user_error('inactive_coverage_at_date', (coverage.name,
                     start_date))
-
-    def init_from_coverage(self, coverage, product, start_date=None,
-            end_date=None):
-        cur_dict = self.init_default_values_from_coverage(coverage, product,
-            start_date, end_date)
-        for key, val in cur_dict.iteritems():
-            setattr(self, key, val)
 
     @classmethod
     def set_end_date(cls, options, name, end_date):

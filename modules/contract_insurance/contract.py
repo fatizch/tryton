@@ -540,29 +540,13 @@ class ContractOption:
         return self.coverage.get_extra_data_def(
             ['elem'])
 
-    def init_extra_data(self):
-        self.extra_data = getattr(self, 'extra_data', {})
-        self.on_change_extra_data()
-
     @classmethod
-    def init_default_values_from_coverage(cls, coverage, product,
-            start_date=None, end_date=None, item_desc=None):
-        result = super(ContractOption,
-            cls).init_default_values_from_coverage(coverage, product,
-                start_date, end_date)
-        all_extra_datas = cls.default_all_extra_datas()
-        result['extra_data'] = product.get_extra_data_def('option',
-            all_extra_datas, result['appliable_conditions_date'],
-            coverage=coverage, item_desc=item_desc)
-        all_extra_datas.update(result['extra_data'])
-        result['all_extra_datas'] = all_extra_datas
-        return result
-
-    def init_from_coverage(self, coverage, product, start_date=None,
-            end_date=None):
-        super(ContractOption, self).init_from_coverage(coverage, product,
-            start_date, end_date)
-        self.init_extra_data()
+    def new_option_from_coverage(cls, coverage, product, start_date=None,
+            end_date=None, item_desc=None):
+        new_option = super(ContractOption, cls).new_option_from_coverage(
+            coverage, product, start_date, end_date)
+        new_option.on_change_extra_data()
+        return new_option
 
     def init_from_covered_element(self, covered_element):
         self.covered_element = covered_element
@@ -837,10 +821,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
                 continue
-            new_opt = Option.init_default_values_from_coverage(elem,
-                self.product, item_desc=self.item_desc,
-                start_date=self.start_date)
-            self.options.append(new_opt)
+            self.options.append(Option.new_option_from_coverage(elem,
+                    self.product, item_desc=self.item_desc,
+                    start_date=self.start_date))
             self.options = self.options
 
     @fields.depends('contract', 'extra_data')
@@ -1002,8 +985,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 good_opt = existing[coverage]
                 to_delete.remove(good_opt)
             elif coverage.subscription_behaviour == 'mandatory':
-                good_opt = OptionModel()
-                good_opt.init_from_coverage(coverage, product, start_date)
+                good_opt = OptionModel.new_option_from_coverage(coverage,
+                    product, start_date)
             if good_opt:
                 good_opt.save()
                 good_options.append(good_opt)

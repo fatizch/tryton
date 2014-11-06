@@ -91,16 +91,17 @@ class ContractOption:
                 })
 
     @classmethod
-    def init_default_values_from_coverage(cls, coverage, product,
-            start_date=None, end_date=None, item_desc=None):
-        res = super(ContractOption, cls).init_default_values_from_coverage(
+    def new_option_from_coverage(cls, coverage, product, start_date=None,
+            end_date=None, item_desc=None):
+        new_option = super(ContractOption, cls).new_option_from_coverage(
             coverage, product, start_date, end_date, item_desc)
-        res['has_beneficiary_clause'] = len(coverage.beneficiaries_clauses)
+        new_option.has_beneficiary_clause = len(coverage.beneficiaries_clauses)
         if coverage.default_beneficiary_clause:
-            res['beneficiary_clause'] = coverage.default_beneficiary_clause.id
-            res['customized_beneficiary_clause'] = \
+            new_option.beneficiary_clause = \
+                coverage.default_beneficiary_clause.id
+            new_option.customized_beneficiary_clause = \
                 coverage.default_beneficiary_clause.content
-        return res
+        return new_option
 
     @fields.depends('coverage')
     def on_change_with_beneficiary_clause(self, name=None):
