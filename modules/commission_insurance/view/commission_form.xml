@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='origin']"
+        position="after">
+        <newline/>
+        <label name="commissionned_contract"/>
+        <field name="commissionned_contract"/>
+        <label name="commissionned_option"/>
+        <field name="commissionned_option"/>
+    </xpath>
+</data>
+

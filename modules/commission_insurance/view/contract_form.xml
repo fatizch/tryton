@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form/notebook" position="before">
+        <label name="agent"/>
+        <field name="agent"/>
+    </xpath>
+</data>

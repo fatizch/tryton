@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form/label[@name='product']" position="replace">
+        <field name="options" colspan="4"/>
+    </xpath>
+    <xpath expr="/form/field[@name='product']" position="replace"/>
+    <xpath expr="/form/label[@name='sequence']" position="replace"/>
+    <xpath expr="/form/field[@name='sequence']" position="replace"/>
+</data>
