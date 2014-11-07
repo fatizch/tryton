@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Or, And, Bool
+from trytond.pyson import Eval, And
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.offered_insurance import BusinessRuleRoot
 
@@ -67,7 +67,7 @@ class OptionDescription:
         cls.family.selection.append(('cash_value', 'Cash Value'))
         cls.coverage_amount_rules.states['invisible'] = And(
             cls.coverage_amount_rules.states['invisible'],
-            Or(Bool(Eval('is_package')), Eval('family') != 'cash_value'))
+            Eval('family') != 'cash_value')
 
     def get_is_cash_value_coverage(self, name):
         return self.family == 'cash_value'

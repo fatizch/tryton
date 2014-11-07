@@ -17,7 +17,6 @@ __all__ = [
     'Offered',
     'Product',
     'OptionDescription',
-    'PackageOptionDescription',
     'OptionDescriptionExtraDataRelation',
     'ProductOptionDescriptionRelation',
     'ProductExtraDataRelation',
@@ -330,6 +329,8 @@ class Product(model.CoopSQL, Offered):
     ordered_coverages = fields.One2Many('offered.product-option.description',
         'product', 'Ordered Coverages', order=[('order', 'ASC')],
         states={'invisible': ~Eval('change_coverages_order')})
+    packages = fields.Many2Many('offered.product-package', 'product',
+        'package', 'Packages')
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
     contract_generator = fields.Many2One('ir.sequence',
@@ -584,13 +585,6 @@ class OptionDescription(model.CoopSQL, Offered):
         ondelete='RESTRICT')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
         'Subscription Behaviour', sort=False)
-    is_package = fields.Boolean('Package')
-    coverages_in_package = fields.Many2Many(
-        'offered.package-option.description',
-        'package', 'coverage', 'OptionDescriptions In Package',
-        states={'invisible': Bool(~Eval('is_package'))},
-        depends=['is_package', 'kind'],
-        domain=[('is_package', '=', False), ('kind', '=', Eval('kind'))])
     extra_data_def = fields.Many2Many(
         'offered.option.description-extra_data',
         'coverage', 'extra_data_def', 'Extra Data',
@@ -642,10 +636,6 @@ class OptionDescription(model.CoopSQL, Offered):
     @classmethod
     def __setup__(cls):
         super(OptionDescription, cls).__setup__()
-        utils.update_domain(cls, 'template',
-            [('is_package', '=', Eval('is_package'))])
-        utils.update_depends(cls, 'template', ['is_package'])
-
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
@@ -731,17 +721,6 @@ class OptionDescription(model.CoopSQL, Offered):
     @staticmethod
     def default_is_service():
         return True
-
-
-class PackageOptionDescription(model.CoopSQL):
-    'Package to Option Description Relation'
-
-    __name__ = 'offered.package-option.description'
-
-    package = fields.Many2One('offered.option.description', 'Package',
-        ondelete='CASCADE')
-    coverage = fields.Many2One('offered.option.description',
-        'OptionDescription', ondelete='RESTRICT')
 
 
 class OptionDescriptionExtraDataRelation(model.CoopSQL):

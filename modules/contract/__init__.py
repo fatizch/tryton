@@ -27,6 +27,7 @@ def register():
         Party,
         PartyInteraction,
         TestCaseModel,
+        PackageSelection,
         OptionsDisplayer,
         WizardOption,
         SynthesisMenu,

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Or, Bool
+from trytond.pyson import Eval, Or
 
 from trytond.modules.cog_utils import fields
 from trytond.modules.cog_utils import coop_date
@@ -23,12 +23,8 @@ class OptionDescription:
     __name__ = 'offered.option.description'
 
     coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',
-        'offered', 'Coverage Amount Rules', states={
-            'invisible': Or(
-                Bool(Eval('is_package')),
-                Eval('family') != 'life',
-                )
-            })
+        'offered', 'Coverage Amount Rules',
+        states={'invisible': Eval('family') != 'life'})
     is_coverage_amount_needed = fields.Function(
         fields.Boolean('Coverage Amount Needed', states={'invisible': True}),
         'get_is_coverage_amount_needed')
@@ -47,7 +43,7 @@ class OptionDescription:
                 ])
 
     def get_is_coverage_amount_needed(self, name=None):
-        return not self.is_package and self.family == 'life'
+        return self.family == 'life'
 
 
 class EligibilityRule:

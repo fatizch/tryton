@@ -5,6 +5,7 @@ from .offered import *
 from .extra_data import *
 from .test_case import *
 from .configuration import *
+from .package import *
 
 
 def register():
@@ -12,11 +13,13 @@ def register():
         Configuration,
         Offered,
         OptionDescription,
-        PackageOptionDescription,
         Product,
         ProductOptionDescriptionRelation,
         OptionDescriptionRequired,
         OptionDescriptionExcluded,
+        Package,
+        PackageOptionDescriptionRelation,
+        ProductPackageRelation,
         ExtraData,
         ExtraDataSubExtraDataRelation,
         ProductExtraDataRelation,

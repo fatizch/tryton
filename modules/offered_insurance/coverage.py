@@ -3,7 +3,7 @@ import copy
 import datetime
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Or, And
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import utils, fields
 from trytond.modules.offered_insurance import offered
@@ -25,13 +25,13 @@ class OptionDescription:
     insurance_kind = fields.Selection([('', '')], 'Insurance Kind',
         states={'invisible': Eval('kind') != 'insurance'}, sort=False,
         depends=['kind'])
-    insurer = fields.Many2One('insurer', 'Insurer', states={
-            'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
-            }, depends=['is_package'], ondelete='RESTRICT')
-    family = fields.Selection([('generic', 'Generic')], 'Family', states={
-            'invisible': Or(~~Eval('is_package'), ~offered.IS_INSURANCE),
-            'required': And(~Eval('is_package'), offered.IS_INSURANCE),
-            }, depends=['is_package'])
+    insurer = fields.Many2One('insurer', 'Insurer',
+        states={'invisible': ~offered.IS_INSURANCE}, ondelete='RESTRICT')
+    family = fields.Selection([('generic', 'Generic')], 'Family',
+        states={
+            'invisible': ~offered.IS_INSURANCE,
+            'required': offered.IS_INSURANCE,
+            })
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
         depends=['is_service'])

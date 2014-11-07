@@ -19,11 +19,11 @@
     </xpath>
     <xpath expr="/form/notebook/page/notebook" position="inside">
         <page string="Deductible" id="deductible"
-            states="{'invisible': Or(Eval('kind') != 'insurance', ~~Eval('is_package'))}">
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="deductible_rules" colspan="4"/>
         </page>
         <page string="Documents" id="documents"
-            states="{'invisible': Or(Eval('kind') != 'insurance', ~~Eval('is_package'))}">
+            states="{'invisible': Eval('kind') != 'insurance'}">
             <field name="document_rules"/>
             <field name="sub_document_rules"/>
         </page>

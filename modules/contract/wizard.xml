@@ -9,7 +9,6 @@
           <field name="name">Option Subscription Launcher</field>
           <field name="wiz_name">contract.wizard.option_subscription_launcher</field>
         </record>
-
         <record model="ir.ui.view" id="options_displayer_view_form">
             <field name="model">contract.wizard.option_subscription.options_displayer</field>
             <field name="type">form</field>
@@ -20,6 +19,11 @@
             <field name="type">tree</field>
             <field name="name">wizard_option_tree</field>
             <field name="field_childs" eval="None"/>
+        </record>
+        <record model="ir.ui.view" id="select_package_view_form">
+            <field name="model">contract.wizard.option_subscription.select_package</field>
+            <field name="type">form</field>
+            <field name="name">select_package_form</field>
         </record>
     </data>
 </tryton>

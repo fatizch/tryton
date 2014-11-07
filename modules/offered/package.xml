@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="package_view_form">
+            <field name="model">offered.package</field>
+            <field name="type">form</field>
+            <field name="name">package_form</field>
+            <field name="inherit" eval="None"/>
+        </record>
+        <record model="ir.ui.view" id="package_view_list">
+            <field name="model">offered.package</field>
+            <field name="type">tree</field>
+            <field name="name">package_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_package">
+            <field name="name">Package</field>
+            <field name="res_model">offered.package</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_package_form_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="package_view_list"/>
+            <field name="act_window" ref="act_package"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_package_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="package_view_form"/>
+            <field name="act_window" ref="act_package"/>
+        </record>
+        <menuitem parent="menu_product" sequence="4" id="menu_package_form"
+            icon="tryton-list" action="act_package"/>
+    </data>
+</tryton>

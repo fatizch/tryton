@@ -17,15 +17,11 @@
             <field name="inherit" ref="offered.coverage_view_tree"/>
             <field name="name">option_description_list</field>
         </record>
-
         <record model="ir.action.act_window" id="offered.act_product_form">
             <field name="domain">[('kind', '=', 'insurance')]</field>
         </record>
         <record model="ir.action.act_window" id="offered.act_coverage_form">
-            <field name="domain">[('is_package', '=', False), ('kind', '=', 'insurance')]</field>
-        </record>
-        <record model="ir.action.act_window" id="offered.act_package_form">
-            <field name="domain">[("is_package", "=", True), ('kind', '=', 'insurance')]</field>
+            <field name="domain">[('kind', '=', 'insurance')]</field>
         </record>
     </data>
 </tryton>

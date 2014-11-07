@@ -15,6 +15,7 @@
             <newline/>
             <field name="coverages" colspan="4"/>
             <field name="ordered_coverages" colspan="4" mode="tree"/>
+            <field name="packages" colspan="4"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"

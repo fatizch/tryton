@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -1853,10 +1853,6 @@ msgctxt "field:offered.option.description,coverage_amount_rules:"
 msgid "Coverage Amount Rules"
 msgstr "Règles de Montant de Couverture"
 
-msgctxt "field:offered.option.description,coverages_in_package:"
-msgid "OptionDescriptions In Package"
-msgstr "Garanties de la Formule"
-
 msgctxt "field:offered.option.description,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -1916,10 +1912,6 @@ msgstr "Type d'assurance"
 msgctxt "field:offered.option.description,insurer:"
 msgid "Insurer"
 msgstr "Assureur"
-
-msgctxt "field:offered.option.description,is_package:"
-msgid "Package"
-msgstr "Formule"
 
 msgctxt "field:offered.option.description,is_service:"
 msgid "Is a Service"
@@ -1998,38 +1990,6 @@ msgid "Write Date"
 msgstr "Date de mise à jour"
 
 msgctxt "field:offered.option.description-extra_data,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.package-option.description,coverage:"
-msgid "OptionDescription"
-msgstr "Garantie"
-
-msgctxt "field:offered.package-option.description,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.package-option.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.package-option.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.package-option.description,package:"
-msgid "Package"
-msgstr "Formule"
-
-msgctxt "field:offered.package-option.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.package-option.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.package-option.description,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
@@ -2652,10 +2612,6 @@ msgstr "Garantie"
 msgctxt "model:offered.option.description-extra_data,name:"
 msgid "Relation between OptionDescription and Extra Data"
 msgstr "Garantie-Données Complémentaires Relation"
-
-msgctxt "model:offered.package-option.description,name:"
-msgid "Package to Option Description Relation"
-msgstr "Lien Formule Garantie"
 
 msgctxt "model:offered.product,name:"
 msgid "Product"

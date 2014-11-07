@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -22,10 +22,6 @@ msgctxt "model:ir.action,name:act_coverage_form"
 msgid "Group Coverages"
 msgstr "Garanties Groupe"
 
-msgctxt "model:ir.action,name:act_package_form"
-msgid "Group Packages"
-msgstr "Formules Groupe"
-
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Group Products"
 msgstr "Produits Groupe"
@@ -41,10 +37,6 @@ msgstr "Garanties Groupe"
 msgctxt "model:ir.ui.menu,name:menu_group"
 msgid "Group"
 msgstr "Groupe"
-
-msgctxt "model:ir.ui.menu,name:menu_package_form"
-msgid "Group Packages"
-msgstr "Formules Groupe"
 
 msgctxt "model:ir.ui.menu,name:menu_product_form"
 msgid "Group Products"

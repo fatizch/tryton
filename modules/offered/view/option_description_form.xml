@@ -5,12 +5,6 @@
             <field name="extra_data_def" colspan="4"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='managers']" position="before">
-        <page string="Option Descriptions" id="package"
-            states="{'invisible': Bool(~Eval('is_package'))}">
-            <field name="coverages_in_package"/>
-        </page>
-    </xpath>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page name="ending_rule">
             <field name="ending_rule" mode="form"/>
@@ -32,9 +26,6 @@
         <field name="kind"/>
         <label name="currency"/>
         <field name="currency"/>
-        <newline/>
-        <label name="is_package"/>
-        <field name="is_package"/>
         <newline/>
     </xpath>
 </data>

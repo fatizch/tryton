@@ -290,10 +290,7 @@ class OptionDescription:
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', depends=['company'], domain=[
             ('kind', '=', 'revenue'), ('company', '=', Eval('company'))],
-        states={
-            'required': ~Eval('is_package'),
-            'invisible': ~~Eval('is_package'),
-            }, ondelete='RESTRICT')
+        required=True, ondelete='RESTRICT')
 
     @classmethod
     def _export_light(cls):

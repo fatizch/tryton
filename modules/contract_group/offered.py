@@ -30,10 +30,3 @@ class OptionDescription:
 
     is_group = fields.Boolean('Group Coverage',
         states={'invisible': Eval('kind') != 'insurance'})
-
-    @classmethod
-    def __setup__(cls):
-        super(OptionDescription, cls).__setup__()
-        utils.update_domain(cls, 'coverages_in_package',
-            [('is_group', '=', Eval('is_group'))])
-        utils.update_depends(cls, 'coverages_in_package', ['is_group'])
