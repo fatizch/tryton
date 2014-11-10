@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Create Commission Invoice Principal">
+    <label name="company"/>
+    <field name="company"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="journal"/>
+    <field name="journal"/>
+    <field name="description" colspan="4"/>
+</form>

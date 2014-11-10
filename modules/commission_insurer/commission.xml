@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.action.wizard"
+            id="act_commission_create_invoice_principal">
+            <field name="name">Create Commission Invoice Principal</field>
+            <field name="wiz_name">commission.create_invoice_principal</field>
+        </record>
+
+        <record model="ir.ui.view"
+            id="commission_create_invoice_principal_ask_view_form">
+            <field name="model">commission.create_invoice_principal.ask</field>
+            <field name="type">form</field>
+            <field name="name">commission_create_invoice_principal_ask_form</field>
+        </record>
+
+        <menuitem parent="commission.menu_commission" sequence="50"
+            action="act_commission_create_invoice_principal"
+            id="menu_commission_create_invoice_principal"/>
+    </data>
+</tryton>

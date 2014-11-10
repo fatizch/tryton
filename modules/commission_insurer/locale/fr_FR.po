@@ -1,0 +1,59 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.invoice.line,principal_lines:"
+msgid "Principal Lines"
+msgstr "Lignes "
+
+msgctxt "field:account.move.line,principal_invoice_line:"
+msgid "Principal Invoice Line"
+msgstr "Ligne de facturation assureur"
+
+msgctxt "field:commission.create_invoice_principal.ask,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:commission.create_invoice_principal.ask,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:commission.create_invoice_principal.ask,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.create_invoice_principal.ask,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:commission.create_invoice_principal.ask,party:"
+msgid "Principal"
+msgstr "Assureur"
+
+msgctxt "field:insurer,waiting_account:"
+msgid "Waiting Account"
+msgstr "Compte d'attente"
+
+msgctxt "model:commission.create_invoice_principal.ask,name:"
+msgid "Create Invoice Principal"
+msgstr "Génération des bordereaux"
+
+msgctxt "model:ir.action,name:act_commission_create_invoice_principal"
+msgid "Create Commission Invoice Principal"
+msgstr "Générer les bordereaux assureurs"
+
+msgctxt "model:ir.ui.menu,name:menu_commission_create_invoice_principal"
+msgid "Create Commission Invoice Principal"
+msgstr "Générer les bordereaux assureurs"
+
+msgctxt "view:commission.create_invoice_principal.ask:"
+msgid "Create Commission Invoice Principal"
+msgstr "Générer les bordereaux assureurs"
+
+msgctxt "wizard_button:commission.create_invoice_principal,ask,create_:"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "wizard_button:commission.create_invoice_principal,ask,end:"
+msgid "Cancel"
+msgstr "Annuler"
