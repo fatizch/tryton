@@ -244,7 +244,8 @@ class ProcessFramework(ModelView):
             if (self.current_state and
                     self.current_state.step.id == executable.id):
                 return False
-            button_name = '_button_step_%s_%s' % (process.id, executable.id)
+            button_name = '_button_step_%s_%s_%s' % (process.id,
+                self.current_state.step.id, executable.id)
         elif executable.__name__ == 'process.transition':
             button_name = '_button_transition_%s_%s' % (
                 process.id, executable.id)

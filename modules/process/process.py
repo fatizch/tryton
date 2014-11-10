@@ -340,8 +340,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
                 xml += the_buttons[the_step.id][1].build_button()
                 continue
             elif the_buttons[the_step.id][0] == 'step':
-                xml += '<button string="%s" name="_button_step_%s_%s"/>' % (
-                    the_step.fancy_name, self.id, the_step.id)
+                xml += '<button string="%s" name="_button_step_%s_%s_%s"/>' % (
+                    the_step.fancy_name, self.id, step_relation.step.id,
+                    the_step.id)
                 continue
         if 'complete' in the_buttons:
             xml += the_buttons['complete'].build_button()
