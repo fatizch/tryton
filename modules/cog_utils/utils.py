@@ -338,6 +338,7 @@ def pyson_encode(pyson_expr, do_eval=False):
     # TODO : Make this safer
     res = res.replace('true', 'True')
     res = res.replace('false', 'False')
+    res = res.replace('null', 'None')
 
     if not do_eval:
         return res
