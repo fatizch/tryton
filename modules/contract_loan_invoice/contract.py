@@ -261,6 +261,7 @@ class Contract:
                 coverage_end=amount.end,
                 )
             lines.append(line)
+        self.finalize_invoices_lines(lines)
         return lines
 
     @classmethod

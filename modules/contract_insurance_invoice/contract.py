@@ -344,8 +344,13 @@ class Contract:
             description=self.rec_name,
             )
 
+    def finalize_invoices_lines(self, lines):
+        pass
+
     def get_invoice_lines(self, start, end):
-        return self.compute_invoice_lines(start, end)
+        lines = self.compute_invoice_lines(start, end)
+        self.finalize_invoices_lines(lines)
+        return lines
 
     def compute_invoice_lines(self, start, end):
         lines = []
