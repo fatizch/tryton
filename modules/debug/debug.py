@@ -133,11 +133,11 @@ class ModelInfo(ModelView):
         if not self.model_name:
             return
         TargetModel = Pool().get(self.model_name)
-        self.field_infos = [sorted(filter(None, list([
-                            self.get_field_info(field, field_name)
-                            for field_name, field
-                            in TargetModel._fields.iteritems()])),
-                    key=lambda x: x[self.filter_value])]
+        self.field_infos = sorted([
+                self.get_field_info(field, field_name)
+                for field_name, field
+                in TargetModel._fields.iteritems()],
+            key=lambda x: getattr(x, self.filter_value))
         if self.id_to_calculate:
             for field in self.field_infos:
                 try:
