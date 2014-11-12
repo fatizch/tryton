@@ -19,6 +19,7 @@ from trytond.modules.cog_utils import utils, model, fields, coop_date
 from trytond.modules.cog_utils import coop_string, export
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.offered import offered
+from trytond.error import UserError
 
 
 CONTRACTSTATUSES = [
@@ -205,7 +206,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'start_date_multiple_activation_history': 'Cannot change '
                 'start date, multiple activation period detected',
                 'missing_values': 'Cannot add functional key : both quote'
-                'number and contract_number are missing from values'
+                'number and contract_number are missing from values',
+                'invalid_format': 'Invalid file format',
                 })
 
     def get_func_key(self, name):
@@ -231,6 +233,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 [('quote_number',) + tuple(clause[1:])],
                 [('contract_number',) + tuple(clause[1:])],
                 ]
+
+    @classmethod
+    def update_contract_after_import(cls, contracts):
+        for contract in contracts:
+            contract.init_default_address()
 
     @classmethod
     def is_master_object(cls):
@@ -653,47 +660,34 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'This method is a standard API for webservice use'
         pool = Pool()
         Party = pool.get('party.party')
-        Product = pool.get('offered.product')
-        sub_dict = contract_dict['subscriber']
-        if 'code' not in sub_dict:
-            party_res = Party.ws_create_person(sub_dict)
-            if not party_res.get('return'):
-                return {
-                    'return': False,
-                    'error_code': 'subscriber_creation_impossible',
-                    'error_message': "Can't create subscriber record",
+        contracts = []
+        message = []
+        try:
+            for elem in contract_dict:
+                if elem['__name__'] == 'party.party':
+                    Party.import_ws_json(elem)
+                elif elem['__name__'] == 'contract':
+                    contract = cls.import_ws_json(elem)
+                    contracts.append(contract)
+                    message.append({
+                            'contract_id': contract.id,
+                            'contract_number': contract.contract_number,
+                            'quote_number': contract.quote_number,
+                             })
+                else:
+                    cls.raise_user_error('invalid_format')
+            cls.update_contract_after_import(contracts)
+        except UserError, exc:
+            Transaction().cursor.rollback()
+            return {'return': False,
+                'error': exc.message,
                 }
-            code = party_res['party_code']
-        else:
-            code = sub_dict['code']
-        subscribers = Party.search([('code', '=', code)],
-            limit=1, order=[])
-        if not subscribers:
-            return {
-                'return': False,
-                'error_code': 'unknown_subscriber',
-                'error_message': 'No subscriber found for code %s' % code,
+        if not contracts:
+            return {'return': False,
+                'error': 'No contracts created',
                 }
-        subscriber = subscribers[0]
-
-        products = Product.search(
-            [('code', '=', contract_dict['product']['code'])], limit=1,
-            order=[])
-        if not products:
-            return {
-                'return': False,
-                'error_code': 'unknown_product',
-                'error_message': 'No product available with code %s' % (
-                    contract_dict['product']['code'],
-                    ),
-            }
-        product = products[0]
-
-        contract = cls.subscribe_contract(product, subscriber, contract_dict)
-        contract.save()
-        return {
-            'return': True,
-            'contract_number': contract.contract_number,
+        return {'return': True,
+            'contracts': message,
             }
 
     def init_from_product(self, product, start_date=None, end_date=None):

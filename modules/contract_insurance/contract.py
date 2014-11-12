@@ -295,6 +295,12 @@ class Contract(Printable):
         return final_res, final_errs
 
     @classmethod
+    def update_contract_after_import(cls, contracts):
+        super(Contract, cls).update_contract_after_import(contracts)
+        for contract in contracts:
+            contract.init_covered_elements()
+
+    @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
     def manage_extra_premium(cls, instances):
         pass

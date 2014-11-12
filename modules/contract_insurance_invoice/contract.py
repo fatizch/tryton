@@ -476,6 +476,17 @@ class Contract:
             direct_debit_day=direct_debit_day)]
         return res, errs
 
+    @classmethod
+    def update_contract_after_import(cls, contracts):
+        super(Contract, cls).update_contract_after_import(contracts)
+        cls.calculate_prices(contracts)
+        for contract in contracts:
+            for billing_information in contract.billing_informations:
+                if (not billing_information.payment_term):
+                    billing_information.payment_term = billing_information.\
+                        billing_mode.allowed_payment_terms[0]
+                    billing_information.save()
+
 
 class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         model.CoopView):
