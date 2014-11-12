@@ -331,8 +331,8 @@ New Endorsement::
     >>> new_endorsement.form.endorsement_definition = change_first_payment_date
     >>> new_endorsement.form.endorsement = None
     >>> new_endorsement.form.applicant = None
-    >>> new_endorsement.form.loan = loan
-    >>> new_endorsement.form.effective_date = contract_start_date
+    >>> new_endorsement.form.effective_date == contract_start_date
+    True
     >>> new_endorsement.execute('start_endorsement')
     >>> new_endorsement.form.loan_changes[0].new_values[0].amount == loan.amount
     True

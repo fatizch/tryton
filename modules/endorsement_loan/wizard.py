@@ -270,8 +270,6 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
             updated_struct = endorsement.updated_struct
             loans = set(list(endorsement.contract.used_loans) + [
                     x.loan for x in wizard.endorsement.loan_endorsements])
-            if getattr(wizard.select_endorsement, 'loan', None):
-                loans.add(wizard.select_endorsement.loan)
             all_loans |= loans
             template['contract'] = endorsement.contract.id
             for covered_element, values in (
@@ -439,47 +437,16 @@ class SharePerLoan(model.CoopView):
 class SelectEndorsement:
     __name__ = 'endorsement.start.select_endorsement'
 
-    loan = fields.Many2One('loan', 'Loan', states={
-            'invisible': ~Eval('is_loan')}, domain=[
-            ('id', 'in', Eval('possible_loans'))],
-        depends=['is_loan', 'possible_loans'])
-    is_loan = fields.Boolean('Is Loan', states={'invisible': True})
-    possible_loans = fields.Many2Many('loan', None, None, 'Possible Loans',
-        states={'invisible': True})
-
-    @fields.depends('endorsement_definition', 'loan', 'effective_date',
-        'contract')
+    @fields.depends('endorsement_definition', 'effective_date', 'contract')
     def on_change_endorsement_definition(self):
-        if not self.endorsement_definition:
-            return {'is_loan': False}
-        if self.endorsement_definition.is_loan:
-            self.is_loan = True
-            if self.loan:
-                self.effective_date = self.loan.funds_release_date
-            elif self.contract and len(self.contract.used_loans) == 1:
-                self.loan = self.contract.used_loans[0]
-                self.effective_date = self.loan.funds_release_date
+        if self.endorsement_definition and self.endorsement_definition.is_loan:
+            if self.contract and len(self.contract.used_loans) == 1:
+                self.effective_date = \
+                    self.contract.used_loans[0].funds_release_date
             else:
                 self.effective_date = None
         else:
-            self.is_loan = False
-            self.loan = None
             self.effective_date = None
-
-    @fields.depends('is_loan', 'contract')
-    def on_change_with_loan(self):
-        if self.is_loan:
-            if not self.contract:
-                return None
-            if len(self.contract.used_loans) == 1:
-                return self.contract.used_loans[0].id
-        return None
-
-    @fields.depends('contract')
-    def on_change_with_possible_loans(self):
-        if not self.contract:
-            return []
-        return [x.id for x in self.contract.used_loans]
 
 
 class PreviewLoanEndorsement(EndorsementWizardPreviewMixin, model.CoopView):
@@ -717,25 +684,6 @@ class StartEndorsement:
                 'no_loan_share_on_new_coverage':
                 'The following coverages have no loan share :\n  %s',
                 })
-
-    def get_endorsed_object(self, endorsement_part):
-        if endorsement_part.kind == 'loan':
-            return self.select_endorsement.loan
-        return super(StartEndorsement, self).get_endorsed_object(
-            endorsement_part)
-
-    def set_main_object(self, endorsement):
-        if endorsement.__name__ == 'endorsement.loan':
-            endorsement.loan = self.select_endorsement.loan
-        else:
-            super(StartEndorsement, self).set_main_object(endorsement)
-
-    def transition_start(self):
-        result = super(StartEndorsement, self).transition_start()
-        endorsement = getattr(self.select_endorsement, 'endorsement', None)
-        if endorsement and endorsement.loans:
-            self.select_endorsement.loan = endorsement.loans[0].id
-        return result
 
     def default_select_endorsement(self, name):
         result = super(StartEndorsement, self).default_select_endorsement(name)

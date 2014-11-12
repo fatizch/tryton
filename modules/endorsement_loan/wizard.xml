@@ -1,15 +1,6 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <!-- ###################### -->
-        <!-- # Select Endorsement # -->
-        <!-- ###################### -->
-        <record model="ir.ui.view" id="select_endorsement_view_form">
-            <field name="model">endorsement.start.select_endorsement</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="endorsement.select_endorsement_view_form"/>
-            <field name="name">select_endorsement_form</field>
-        </record>
         <!-- ######################### -->
         <!-- # Change Loan Displayer # -->
         <!-- ######################### -->
