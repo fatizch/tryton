@@ -2,7 +2,7 @@
 <data>
     <xpath expr="/form/notebook/page[@id='definition']/notebook/page[@name='contract_fields']" position="after">
         <page name="beneficiary_fields">
-            <field name="beneficiary_fields" product="field"/>
+            <field name="beneficiary_fields"/>
         </page>
     </xpath>
 </data>
