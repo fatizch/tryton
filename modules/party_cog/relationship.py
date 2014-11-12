@@ -57,8 +57,8 @@ class PartyRelation(export.ExportImportMixin):
                 return [('id', '=', None)]
         else:
             return ['OR',
-                [('type.code', + clause[1:])],
-                [('to.code', + clause[1:])],
+                [('type.code',) + tuple(clause[1:])],
+                [('to.code',) + tuple(clause[1:])],
                 ]
 
 

@@ -72,8 +72,8 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
                 return [('id', '=', None)]
         else:
             return ['OR',
-                [('step.technical_name', + clause[1:])],
-                [('process.technical_name', + clause[1:])],
+                [('step.technical_name',) + tuple(clause[1:])],
+                [('process.technical_name',) + tuple(clause[1:])],
                 ]
 
     def get_rec_name(self, name):
