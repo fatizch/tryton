@@ -12,7 +12,7 @@ class Contract:
 
     def set_subscriber_as_covered_element(self):
         item_descs = self.product.item_descriptors
-        if len(item_descs) != 1:
+        if len(item_descs) != 1 or not self.subscriber:
             return True
         item_desc = item_descs[0]
         subscriber = self.get_policy_owner(self.start_date)
