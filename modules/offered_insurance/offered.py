@@ -272,6 +272,7 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'Item Description'
 
     __name__ = 'offered.item.description'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name')

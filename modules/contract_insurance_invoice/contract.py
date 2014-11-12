@@ -97,7 +97,7 @@ class Contract:
     @classmethod
     def _export_skips(cls):
         return (super(Contract, cls)._export_skips() |
-            set(['invoices', 'account_invoices']))
+            set(['invoices', 'account_invoices', 'all_premiums']))
 
     @classmethod
     def __setup__(cls):

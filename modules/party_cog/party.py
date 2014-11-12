@@ -144,6 +144,10 @@ class Party(export.ExportImportMixin):
         cls.name = fields.UnaccentChar('Name', required=True, select=True)
 
     @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values['code']
+
+    @classmethod
     def validate(cls, parties):
         super(Party, cls).validate(parties)
         cursor = Transaction().cursor

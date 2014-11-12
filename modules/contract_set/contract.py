@@ -47,6 +47,10 @@ class ContractSet(model.CoopSQL, model.CoopView):
     def search_products(cls, name, clause):
         return [('contracts.product',) + tuple(clause[1:])]
 
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values['number']
+
 
 class Contract:
     __name__ = 'contract'

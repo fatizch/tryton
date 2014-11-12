@@ -64,8 +64,12 @@ class HealthPartyComplement(model.CoopSQL, model.CoopView):
     party = fields.Many2One('party.party', 'Party', ondelete='CASCADE')
 
     def get_func_key(self, name):
-        return self.party.code
+        return ''
 
     @classmethod
     def search_func_key(cls, name, clause):
         return [('party.code',) + tuple(clause[1:])]
+
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = ''

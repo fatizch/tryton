@@ -11,6 +11,7 @@ class HealthCareSystem(model.CoopSQL, model.CoopView):
 
     __name__ = 'health.care_system'
     _order_name = 'code'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name')

@@ -64,6 +64,10 @@ class ContactMechanism(export.ExportImportMixin):
         elif self.type == 'email':
             return 'coopengo-email'
 
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values['value']
+
 
 class PartyInteraction(model.CoopSQL, model.CoopView):
     'Party Interaction'

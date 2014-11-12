@@ -228,8 +228,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 return [('id', '=', None)]
         else:
             return ['OR',
-                [('quote_number', + clause[1:])],
-                [('contract_number', + clause[1:])],
+                [('quote_number',) + tuple(clause[1:])],
+                [('contract_number',) + tuple(clause[1:])],
                 ]
 
     @classmethod
@@ -961,7 +961,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         elif 'quote_number' in values and 'contract_number' not in values:
             values['_func_key'] = '%s|None' % values['quote_number']
         else:
-            cls.raise_user_error('missing_values')
+            values['_func_key'] = 'None'  # We are creating a new contract
 
 
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
@@ -1043,9 +1043,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 return [('id', '=', None)]
         else:
             return ['OR',
-                [('contract.quote_number', + clause[1:])],
-                [('contract.contract_number', + clause[1:])],
-                [('coverage.rec_name', + clause[1:])],
+                [('contract.quote_number',) + tuple(clause[1:])],
+                [('contract.contract_number',) + tuple(clause[1:])],
+                [('coverage.rec_name',) + tuple(clause[1:])],
                 ]
 
     @classmethod

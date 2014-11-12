@@ -198,7 +198,7 @@ class BankAccount(export.ExportImportMixin):
 
     @classmethod
     def add_func_key(cls, values):
-        values['_func_key'] = values['numbers'][0]['number_compact']
+        values['_func_key'] = values['numbers'][0]['number']
 
 
 class BankAccountNumber(export.ExportImportMixin):
@@ -238,7 +238,7 @@ class BankAccountNumber(export.ExportImportMixin):
 
     @classmethod
     def add_func_key(cls, values):
-        values['_func_key'] = values['number_compact']
+        values['_func_key'] = values['number']
 
 
 class BankAccountParty:
