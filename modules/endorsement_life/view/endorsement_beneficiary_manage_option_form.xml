@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<form string="Option">
+    <notebook>
+        <page name="new_option">
+            <field name="new_option" mode="form" view_ids="endorsement_life.endorsement_option_beneficiary_view_form" expand_toolbar="0"/>
+        </page>
+        <page name="current_option">
+            <field name="current_option" mode="form" view_ids="endorsement_life.endorsement_option_beneficiary_view_form" expand_toolbar="0"/>
+        </page>
+    </notebook>
+</form>

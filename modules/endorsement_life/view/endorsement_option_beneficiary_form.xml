@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Option Beneficiary">
+    <label name="coverage"/>
+    <field name="coverage" colspan="3"/>
+    <label name="beneficiary_clause"/>
+    <field name="beneficiary_clause" colspan="3"/>
+    <newline/>
+    <field name="customized_beneficiary_clause" colspan="2"/>
+    <field name="beneficiaries" colspan="2"/>
+</form>

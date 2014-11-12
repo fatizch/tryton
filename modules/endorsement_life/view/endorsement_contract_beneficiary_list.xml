@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Endorsement Beneficiary">
+    <field name="covered_option_endorsement"/>
+    <field name="action"/>
+    <field name="beneficiary"/>
+</tree>

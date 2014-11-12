@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ###################################### -->
+        <!-- # Endorsement Covered Element Option # -->
+        <!-- ###################################### -->
+        <record model="ir.ui.view" id="endorsement_covered_element_option_view_form">
+            <field name="model">endorsement.contract.covered_element.option</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement_insurance.endorsement_covered_element_option_view_form"/>
+            <field name="name">endorsement_covered_element_option_form</field>
+        </record>
+        <!-- ########################### -->
+        <!-- # Endorsement Beneficiary # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="endorsement_contract_beneficary_view_form">
+            <field name="model">endorsement.contract.beneficiary</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_contract_beneficiary_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_contract_beneficiary_view_list">
+            <field name="model">endorsement.contract.beneficiary</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_contract_beneficiary_list</field>
+        </record>
+    </data>
+</tryton>

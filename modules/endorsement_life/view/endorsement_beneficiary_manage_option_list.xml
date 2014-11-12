@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tree string="Options">
+    <field name="covered_element_name"/>
+    <field name="option_name"/>
+    <field name="contract" tree_invisible="1"/>
+    <field name="covered_element" tree_invisible="1"/>
+    <field name="covered_element_endorsement" tree_invisible="1"/>
+    <field name="option_endorsement" tree_invisible="1"/>
+</tree>
