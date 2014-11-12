@@ -2,7 +2,7 @@ import datetime
 from collections import defaultdict
 from decimal import Decimal
 
-from dateutil.rrule import rrule, YEARLY, MONTHLY, DAILY
+from dateutil.rrule import rrule, rruleset, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max
 from sql import Column
@@ -196,9 +196,11 @@ class Contract:
         until = None
         if next_billing_information:
             until = next_billing_information.date
-        invoice_rrule = billing_information.billing_mode.get_rrule(start,
+        invoice_rrule = rruleset()
+        rule, until_date = billing_information.billing_mode.get_rrule(start,
             until)
-        return (invoice_rrule[0], invoice_rrule[1], billing_information)
+        invoice_rrule.rrule(rule)
+        return (invoice_rrule, until_date, billing_information)
 
     def get_invoice_periods(self, up_to_date, from_date=None):
         if from_date:
@@ -216,7 +218,7 @@ class Contract:
             for date in rule:
                 if hasattr(date, 'date'):
                     date = date.date()
-                if date == start:
+                if date <= start:
                     continue
                 end = date + relativedelta(days=-1)
                 periods.append((start, min(end, self.end_date or
