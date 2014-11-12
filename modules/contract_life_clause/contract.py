@@ -95,7 +95,8 @@ class ContractOption:
             end_date=None, item_desc=None):
         new_option = super(ContractOption, cls).new_option_from_coverage(
             coverage, product, start_date, end_date, item_desc)
-        new_option.has_beneficiary_clause = len(coverage.beneficiaries_clauses)
+        new_option.has_beneficiary_clause = bool(len(
+                coverage.beneficiaries_clauses))
         if coverage.default_beneficiary_clause:
             new_option.beneficiary_clause = \
                 coverage.default_beneficiary_clause.id
