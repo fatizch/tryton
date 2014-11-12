@@ -25,8 +25,6 @@ from trytond.modules.offered_insurance.business_rule.business_rule import \
     BusinessRuleRoot, STATE_ADVANCED
 from trytond.modules.cog_utils import BatchRoot
 
-MAX_TMP_TRIES = 10
-
 __all__ = [
     'DocumentDescription',
     'DocumentProductRelation',
@@ -620,26 +618,18 @@ class DocumentGenerateReport(Report):
     @classmethod
     def EDM_write_report(cls, report_data, file_basename):
         filename = coop_string.remove_invalid_char(file_basename)
-        max_tries = MAX_TMP_TRIES
-        while max_tries > 0:
-            # Loop until we find an unused folder id
-            tmp_directory = utils.id_generator()
-            server_tmp_directory = os.path.join(
-                config.get('EDM', 'server_shared_folder'), tmp_directory)
-            try:
-                os.makedirs(server_tmp_directory)
-                break
-            except:
-                pass
-            max_tries -= 1
-        if max_tries == 0:
-            raise Exception('Could not create tmp_directory in %s' %
-                config.get('EDM', 'server_shared_folder'))
-        server_filepath = os.path.join(server_tmp_directory, '%s.odt' %
-            filename)
-        client_filepath = os.path.join(
-            config.get('EDM', 'client_shared_folder'),
-            tmp_directory, '%s.odt' % filename)
+        server_shared_folder = config.get('EDM', 'server_shared_folder',
+            '/tmp')
+        client_shared_folder = config.get('EDM', 'client_shared_folder',
+            '/tmp')
+        try:
+            tmp_dir = tempfile.mkdtemp(dir=server_shared_folder)
+        except OSError as e:
+            raise Exception('Could not create tmp_directory in %s (%s)' %
+                (server_shared_folder, e))
+        tmp_suffix_path = os.path.join(tmp_dir, filename + '.odt')
+        server_filepath = os.path.join(server_shared_folder, tmp_suffix_path)
+        client_filepath = os.path.join(client_shared_folder, tmp_suffix_path)
         with open(server_filepath, 'w') as f:
             f.write(report_data)
             return(client_filepath, server_filepath)
