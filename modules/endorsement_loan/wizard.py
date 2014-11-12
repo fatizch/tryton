@@ -230,6 +230,8 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
 
     @fields.depends('shares_per_loan', 'loan_share_selectors')
     def on_change_shares_per_loan(self):
+        self.shares_per_loan = list(self.shares_per_loan)
+        self.loan_share_selectors = list(self.loan_share_selectors)
         for share_per_loan in self.shares_per_loan:
             if share_per_loan.share is None:
                 continue
@@ -239,8 +241,6 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                 if selector.new_share != share_per_loan.share:
                     selector.new_share = share_per_loan.share
             share_per_loan.share = None
-        self.shares_per_loan = self.shares_per_loan
-        self.loan_share_selectors = self.loan_share_selectors
 
     @staticmethod
     def update_dict(to_update, key, value):
@@ -332,7 +332,6 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
             endorsements = {x.contract.id: x
                 for x in wizard.endorsement.contract_endorsements}
         pool = Pool()
-        Endorsement = pool.get('endorsement.contract')
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
         OptionEndorsement = pool.get(
@@ -391,22 +390,11 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                     for x in new_options.itervalues()
                     if getattr(x, 'covered_element_endorsement', None)])
         if new_covered_elements:
-            to_create = [x._save_values
-                for x in new_covered_elements.itervalues()
-                if getattr(x, 'contract_endorsement', None)]
-            if to_create and len(to_create) == len(new_covered_elements):
-                CoveredElementEndorsement.create(to_create)
-            else:
-                to_write, to_create = [], []
-                for elem in endorsements:
-                    if elem.id:
-                        to_write += [[elem.id], elem._save_values]
-                    else:
-                        to_create.append(elem._save_values)
-                if to_write:
-                    Endorsement.write(*to_write)
-                if to_create:
-                    Endorsement.create(to_create)
+            CoveredElementEndorsement.create([x._save_values
+                    for x in new_covered_elements.itervalues()
+                    if getattr(x, 'contract_endorsement', None)])
+        for endorsement in [x for x in endorsements.itervalues() if not x.id]:
+            endorsement.save()
 
 
 class LoanShareSelector(model.CoopView):
