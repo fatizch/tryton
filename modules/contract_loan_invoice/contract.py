@@ -1,5 +1,6 @@
 import datetime
 from collections import defaultdict
+from dateutil.relativedelta import relativedelta
 
 from sql import Cast, Literal
 from sql.aggregate import Sum, Max
@@ -8,7 +9,7 @@ from sql.conditionals import Case
 
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
-from trytond.tools import grouped_slice
+from trytond.tools import grouped_slice, reduce_ids
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.model import ModelSQL, ModelView
@@ -95,6 +96,9 @@ class Contract:
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_total_premium_amount')
+    last_generated_premium_end = fields.Function(
+        fields.Date('Last Generated Premiumm End Date'),
+        'get_last_generated')
 
     @classmethod
     def get_total_premium_amount(cls, contracts, name):
@@ -115,6 +119,26 @@ class Contract:
         return values
 
     @classmethod
+    def get_last_generated(cls, contracts, name):
+        pool = Pool()
+        PremiumAmount = pool.get('contract.premium.amount')
+        cursor = Transaction().cursor
+        table = cls.__table__()
+        premium_amount = PremiumAmount.__table__()
+        values = dict.fromkeys((c.id for c in contracts))
+        in_max = cursor.IN_MAX
+        for i in range(0, len(contracts), in_max):
+            sub_ids = [c.id for c in contracts[i:i + in_max]]
+            where_id = reduce_ids(table.id, sub_ids)
+            cursor.execute(*table.join(premium_amount, 'LEFT',
+                    table.id == premium_amount.contract
+                    ).select(table.id, Max(premium_amount.period_end),
+                    where=where_id,
+                    group_by=table.id))
+            values.update(dict(cursor.fetchall()))
+        return values
+
+    @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
         result = super(Contract, cls).calculate_prices(contracts, start, end)
         loan_contracts = [x for x in contracts if x.is_loan]
@@ -127,7 +151,7 @@ class Contract:
                         ('contract', 'in', sub_contracts),
                         ('end', '>=', start or datetime.date.max)]))
         PremiumAmount.delete(premiums_to_delete)
-        cls.generate_premium_amount(loan_contracts, force_start=start)
+        cls.generate_premium_amount(loan_contracts)
         return result
 
     def calculate_premium_aggregates(self, start=None, end=None):
@@ -240,7 +264,7 @@ class Contract:
         return lines
 
     @classmethod
-    def generate_premium_amount(cls, contracts, force_start=None):
+    def generate_premium_amount(cls, contracts):
         'Generate premium amount up to the contract end_date'
         pool = Pool()
         Amount = pool.get('contract.premium.amount')
@@ -250,8 +274,12 @@ class Contract:
             if not contract.is_loan:
                 continue
             assert contract.end_date
+            generation_start = contract.start_date
+            if contract.last_generated_premium_end:
+                generation_start = contract.last_generated_premium_end + \
+                    relativedelta(days=+1)
             for period in contract.get_invoice_periods(contract.end_date,
-                    from_date=force_start):
+                    generation_start):
                 period = period[:2]  # XXX there is billing information
                 invoice_lines = contract.compute_invoice_lines(*period)
                 for invoice_line in invoice_lines:
