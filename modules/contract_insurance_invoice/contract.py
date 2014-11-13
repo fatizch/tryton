@@ -788,7 +788,7 @@ class Premium(model.CoopSQL, model.CoopView):
     account = fields.Many2One('account.account', 'Account', required=True,
         domain=[
             ('company', '=', Eval('context', {}).get('company', -1)),
-            ('kind', '=', 'revenue'),
+            ['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]]
             ])
     invoice_lines = fields.One2Many('account.invoice.line', 'origin',
         'Invoice Lines', readonly=True)

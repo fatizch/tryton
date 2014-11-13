@@ -190,7 +190,8 @@ class Product:
 
     account_for_billing = fields.Many2One('account.account',
         'Account for billing', required=True, depends=['company'],
-        domain=[('kind', '=', 'revenue'), ('company', '=', Eval('company'))],
+        domain=[['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]],
+            ('company', '=', Eval('company'))],
         ondelete='RESTRICT')
     billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
         'product', 'billing_mode', 'Billing Modes', order=[('order', 'ASC')],
@@ -289,8 +290,9 @@ class OptionDescription:
     __name__ = 'offered.option.description'
 
     account_for_billing = fields.Many2One('account.account',
-        'Account for billing', depends=['company'], domain=[
-            ('kind', '=', 'revenue'), ('company', '=', Eval('company'))],
+        'Account for billing', depends=['company'],
+        domain=[['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]],
+            ('company', '=', Eval('company'))],
         required=True, ondelete='RESTRICT')
 
     @classmethod
