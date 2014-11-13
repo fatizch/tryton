@@ -221,3 +221,8 @@ class HealthPartyComplement:
     @classmethod
     def set_void(cls, instances, vals, name):
         pass
+
+    @classmethod
+    def _export_light(cls):
+        return (super(HealthPartyComplement, cls)._export_light() |
+            set(['hc_system', 'insurance_fund']))
