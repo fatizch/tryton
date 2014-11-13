@@ -81,8 +81,11 @@ class Address:
             return ''
         if self.zip[0:2] in ['97', '98']:
             return self.zip[0:3]
-        else:
-            return self.zip[0:2]
+        if self.zip >= '20000' and self.zip <= '20199':
+            return '2A'
+        if self.zip >= '20200' and self.zip <= '20999':
+            return '2B'
+        return self.zip[0:2]
 
     @classmethod
     def get_var_names_for_full_extract(cls):
