@@ -38,9 +38,10 @@ __all__ = [
     ]
 
 TYPE = [
+    ('', ''),
+    ('numeric', 'Numeric'),
     ('char', 'Char'),
     ('integer', 'Integer'),
-    ('numeric', 'Numeric'),
     ('boolean', 'Boolean'),
     ('date', 'Date'),
     ]
@@ -69,7 +70,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
 
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
-    type_ = fields.Selection(TYPE, 'Type', required=True)
+    type_ = fields.Selection(TYPE, 'Type', required=True, sort=False)
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
     cells = fields.One2Many('table.cell', 'definition', 'Cells')
     number_of_digits = fields.Integer('Number of Digits', states={
@@ -252,7 +253,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
 
     @staticmethod
     def default_type_():
-        return 'char'
+        return ''
 
     def get_number_of_dimensions(self, name):
         for i in range(1, DIMENSION_MAX + 1):
