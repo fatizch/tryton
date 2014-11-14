@@ -28,7 +28,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         '''
         definition, = self.Definition.create([{
             'name': 'Test',
-            'code': 'test0'
+            'code': 'test0',
+            'type_': 'char',
         }])
         self.assertEqual(self.Definition.get('Test'), definition)
         self.assertRaises(IndexError, self.Definition.get, 'foo')
@@ -41,6 +42,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'name': 'Test',
                     'code': 'test1',
                     'dimension_kind1': 'value',
+                    'type_': 'char',
                     }])
         dim1_foo, = self.Dimension.create([{
                     'definition': definition.id,
@@ -74,6 +76,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         definition, = self.Definition.create([{
                     'name': 'Test',
                     'code': 'test2',
+                    'type_': 'char',
                     'dimension_kind1': 'date',
                     }])
         dim1_foo, = self.Dimension.create([{
@@ -108,6 +111,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         definition, = self.Definition.create([{
                     'name': 'Test',
                     'code': 'test3',
+                    'type_': 'char',
                     'dimension_kind1': 'range',
                     }])
         dim1_foo, = self.Dimension.create([{
@@ -147,6 +151,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         definition, = self.Definition.create([{
                     'name': 'Test',
                     'code': 'test',
+                    'type_': 'char',
                     'dimension_kind1': 'range',
                     }])
         dim1_foo, = self.Dimension.create([{
@@ -185,6 +190,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         definition, = self.Definition.create([{
                     'name': 'Test',
                     'code': 'test4',
+                    'type_': 'char',
                     'dimension_kind1': 'range-date',
                     }])
         dim1_foo, = self.Dimension.create([{
@@ -224,6 +230,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         definition, = self.Definition.create([{
                     'name': 'Test',
                     'code': 'test',
+                    'type_': 'char',
                     'dimension_kind1': 'range-date',
                     }])
         dim1_foo, = self.Dimension.create([{
@@ -262,6 +269,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         definition, = self.Definition.create([{
                     'name': 'Test',
                     'code': 'test_code',
+                    'type_': 'char',
                     'dimension_kind1': 'value',
                     'dimension_kind2': 'range',
                     'dimension_name1': 'Value',
