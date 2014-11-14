@@ -9,6 +9,7 @@ class DocumentDescription(model.CoopSQL, model.CoopView):
     'Document Description'
 
     __name__ = 'document.description'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)
