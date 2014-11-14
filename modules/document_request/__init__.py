@@ -4,8 +4,8 @@ from .document import *
 
 def register():
     Pool.register(
-        DocumentRequestLine,
         DocumentRequest,
+        DocumentRequestLine,
         DocumentReceiveRequest,
         DocumentReceiveAttach,
         DocumentReceiveSetRequests,
