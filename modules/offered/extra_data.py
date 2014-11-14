@@ -32,10 +32,13 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         'get_default_value', 'set_default_value')
     default_value_selection = fields.Function(
         fields.Selection('get_default_value_selection', 'Default Value',
-            depends=['type_', 'selection', 'with_default_value']),
+            states={'required': Eval('type_') == 'selection'},
+            depends=['type_', 'selection', 'with_default_value'],
+            ),
         'get_default_value', 'set_default_value')
     default_value = fields.Char('Default Value')
     kind = fields.Selection([
+            ('', ''),
             ('contract', 'Contract'),
             ('product', 'Product'),
             ('covered_element', 'Covered Element'),
@@ -68,6 +71,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
 
         cls.name.string = 'Code'
         cls.string.string = 'Name'
+        cls.type_.selection.insert(0, ('', ''))
 
         if not cls.type_.on_change:
             cls.type_.on_change = set()
@@ -88,10 +92,18 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 })
 
     @staticmethod
+    def default_type_():
+        return ''
+
+    @staticmethod
     def default_kind():
         if 'extra_data_kind' in Transaction().context:
             return Transaction().context['extra_data_kind']
-        return 'contract'
+        return ''
+
+    @staticmethod
+    def default_default_value_selection():
+        return ''
 
     @staticmethod
     def default_start_date():
@@ -134,14 +146,9 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
 
     @fields.depends('type_', 'selection', 'with_default_value')
     def get_default_value_selection(self):
-        if not self.type_:
-            return [('', '')]
-        if not self.selection:
-            return [('', '')]
-        selection = [x.split(':') for x in self.selection.splitlines()
-            if x and ':' in x]
-        if not self.with_default_value:
-            selection.append(('', ''))
+        selection = [('', '')]
+        selection += [x.split(':') for x in self.selection.splitlines()
+            if ':' in x] if self.selection else []
         return selection
 
     def get_default_value(self, name):
