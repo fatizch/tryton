@@ -129,7 +129,7 @@
     <record model="ir.action.keyword" id="receive_documents_wizard_keyword">
       <field name="keyword">form_action</field>
       <field name="model">claim,-1</field>
-      <field name="action" ref="offered_insurance.receive_documents_wizard"/>
+      <field name="action" ref="document_request.receive_documents_wizard"/>
     </record>
     <!-- Send Document -->
     <record model="ir.action.keyword" id="letter_generation_claim_keyword">

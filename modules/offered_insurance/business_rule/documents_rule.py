@@ -84,8 +84,6 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     @fields.depends('on_model')
     def get_possible_kinds(self):
-        if self.on_model and self.on_model.model == 'document.request':
-            return [('doc_request', 'Document Request')]
         return []
 
     @fields.depends('code', 'name')
