@@ -163,9 +163,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     parties = fields.Function(
         fields.Many2Many('party.party', None, None, 'Parties'),
         'on_change_with_parties')
-    product_kind = fields.Function(
-        fields.Char('Product Kind'),
-        'on_change_with_product_kind', searcher='search_product_kind')
     product_subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
@@ -321,7 +318,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         pool = Pool()
         ExtraData = pool.get('contract.extra_data')
         if self.product is None:
-            self.product_kind = ''
             self.subscriber_kind = 'person'
             self.extra_data_values = {}
             self.options = []
@@ -349,7 +345,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             extra_vals = self.extra_datas[0].extra_data_values
         extra_data_value = self.product.get_extra_data_def(
                 'contract', extra_vals, self.appliable_conditions_date)
-        self.product_kind = self.product.kind
         self.subscriber_kind = ('person' if self.product.subscriber_kind in
             ['all', 'person'] else 'company')
         self.extra_datas = []
@@ -397,12 +392,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if not self.subscriber:
             return []
         return [self.subscriber.id]
-
-    @fields.depends('product')
-    def on_change_with_product_kind(self, name=None):
-        if not self.product:
-            return ''
-        return self.product.kind
 
     @fields.depends('product')
     def on_change_with_subscriber_kind(self, name=None):
@@ -492,10 +481,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             group_by=activation_history.contract)
 
         return [('id', 'in', query)]
-
-    @classmethod
-    def search_product_kind(cls, name, clause):
-        return [('product.kind', ) + tuple(clause[1:])]
 
     @classmethod
     def validate(cls, contract):
@@ -995,9 +980,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     coverage_family = fields.Function(
         fields.Char('Coverage Family'),
         'on_change_with_coverage_family')
-    coverage_kind = fields.Function(
-        fields.Char('Coverage Kind', states={'invisible': True}),
-        'on_change_with_coverage_kind', searcher='search_coverage_kind')
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
@@ -1086,7 +1068,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @fields.depends('coverage')
     def on_change_coverage(self):
-        self.coverage_kind = self.on_change_with_coverage_kind()
         self.coverage_family = self.on_change_with_coverage_family()
 
     @fields.depends('contract', 'start_date')
@@ -1106,10 +1087,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     @fields.depends('coverage')
     def on_change_with_coverage_family(self, name=None):
         return self.coverage.family if self.coverage else ''
-
-    @fields.depends('coverage')
-    def on_change_with_coverage_kind(self, name=None):
-        return self.coverage.kind if self.coverage else ''
 
     @fields.depends('contract')
     def on_change_with_current_policy_owner(self, name=None):
@@ -1142,10 +1119,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def get_currency(self):
         if hasattr(self, 'coverage') and self.coverage:
             return self.coverage.currency
-
-    @classmethod
-    def search_coverage_kind(cls, name, clause):
-        return [('coverage.kind', ) + tuple(clause[1:])]
 
     def clean_up_versions(self, contract):
         pass

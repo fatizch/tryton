@@ -114,12 +114,6 @@ class Product:
         cls.delete_rules(entities)
         super(Product, cls).delete(entities)
 
-    @classmethod
-    def get_possible_product_kind(cls):
-        res = super(Product, cls).get_possible_product_kind()
-        res.append(('insurance', 'Insurance'))
-        return res
-
     def get_sub_elem_data(self):
         # This method is used by the get_result method to know where to look
         # for sub-elements to parse and what fields can be used for key

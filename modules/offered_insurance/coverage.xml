@@ -18,10 +18,10 @@
             <field name="name">option_description_list</field>
         </record>
         <record model="ir.action.act_window" id="offered.act_product_form">
-            <field name="domain">[('kind', '=', 'insurance')]</field>
+            <field name="domain" eval="None"/>
         </record>
         <record model="ir.action.act_window" id="offered.act_coverage_form">
-            <field name="domain">[('kind', '=', 'insurance')]</field>
+            <field name="domain" eval="None"/>
         </record>
     </data>
 </tryton>

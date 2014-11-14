@@ -7,7 +7,7 @@
     <field name="next_renewal_date"/>
   </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="before">
-      <page string="Covered Elements" id="cov_elements" states="{'invisible': Eval('product_kind') != 'insurance'}">
+      <page string="Covered Elements" id="cov_elements">
           <hpaned id="covered_element" position="200">
               <child id="tree">
                   <field name="multi_mixed_view" group="multi_mixed_view" mode="tree" view_ids="contract_insurance.covered_elements_clean_tree" expand_toolbar="0"/>

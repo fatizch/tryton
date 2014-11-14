@@ -32,8 +32,6 @@
         </page>
         <page string="Administration" id="admin" col="2">
             <group id="left" col="2" yfill="0">
-                <label name="product_kind"/>
-                <field name="product_kind"/>
                 <label name="product"/>
                 <field name="product"/>
                 <label name="appliable_conditions_date"/>

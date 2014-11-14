@@ -314,13 +314,11 @@ class Product(model.CoopSQL, Offered):
     __name__ = 'offered.product'
     _func_key = 'code'
 
-    kind = fields.Selection(None, 'Product Kind')
     coverages = fields.Many2Many('offered.product-option.description',
         'product', 'coverage', 'OptionDescriptions', domain=[
             ('currency', '=', Eval('currency')),
-            ('kind', '=', Eval('kind')),
             ('company', '=', Eval('company')),
-            ], depends=['currency', 'kind', 'company'],
+            ], depends=['currency', 'company'],
             order=[('order', 'ASC')],
             states={'invisible': Bool(Eval('change_coverages_order'))})
     change_coverages_order = fields.Function(
@@ -350,8 +348,6 @@ class Product(model.CoopSQL, Offered):
             ]
         cls.__rpc__.update({'get_product_def': RPC()})
 
-        cls.kind.selection = cls.get_possible_product_kind()
-        cls.kind.selection = list(set(cls.kind.selection))
         cls._error_messages.update({
                 'missing_contract_extra_data': 'The following contract extra'
                 'data should be set on the product: %s',
@@ -395,10 +391,6 @@ class Product(model.CoopSQL, Offered):
                 instance.raise_user_error('missing_contract_extra_data',
                     (', '.join((extra_data.string
                                 for extra_data in remaining))))
-
-    @classmethod
-    def get_possible_product_kind(cls):
-        return [('', '')]
 
     @classmethod
     def search_rec_name(cls, name, clause):

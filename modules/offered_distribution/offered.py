@@ -1,5 +1,4 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
 
@@ -13,8 +12,7 @@ class Product:
     __name__ = 'offered.product'
 
     com_products = fields.One2Many('distribution.commercial_product',
-        'product', 'Commercial Products',
-        states={'invisible': Eval('product_kind') != 'insurance'})
+        'product', 'Commercial Products')
 
     @classmethod
     def copy(cls, products, default=None):

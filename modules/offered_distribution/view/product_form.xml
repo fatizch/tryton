@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='admin']" position="before">
-        <page string="Commercial Products" id="com_products"
-            states="{'invisible': Eval('product_kind') != 'insurance'}">
+        <page string="Commercial Products" id="com_products">
             <field name="com_products" colspan="4"/>
         </page>
     </xpath>

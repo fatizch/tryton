@@ -15,8 +15,7 @@ class Contract:
     __name__ = 'contract'
 
     is_group = fields.Function(
-        fields.Boolean('Group Contract',
-            states={'invisible': Eval('product_kind') != 'insurance'}),
+        fields.Boolean('Group Contract'),
         'get_is_group', searcher='search_is_group')
 
     @classmethod
