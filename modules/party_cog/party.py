@@ -147,6 +147,19 @@ class Party(export.ExportImportMixin):
     def add_func_key(cls, values):
         values['_func_key'] = values['code']
 
+    def get_func_key(self, name):
+        return self.code
+
+    @classmethod
+    def get_existing_lines(cls, main_object, field_name):
+        if field_name == 'relations':
+            return dict((getattr(l, l._func_key), l)
+                        for l in getattr(main_object, field_name)
+                        if not l.id % 2)
+        else:
+            return super(Party, cls).get_existing_lines(main_object,
+                    field_name)
+
     @classmethod
     def validate(cls, parties):
         super(Party, cls).validate(parties)

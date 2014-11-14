@@ -819,6 +819,11 @@ class ExportImportMixin(Model):
         return cls.search([(cls._func_key, '=', values['_func_key'])])
 
     @classmethod
+    def get_existing_lines(cls, main_object, field_name):
+        return dict((getattr(l, l._func_key), l)
+                    for l in getattr(main_object, field_name))
+
+    @classmethod
     def _import_ws_json(cls, values, main_object=None):
         pool = Pool()
         new_values = {}
@@ -855,8 +860,8 @@ class ExportImportMixin(Model):
             field = cls._fields[field_name]
             Target = field.get_target()
             if main_object:
-                existing_lines = dict((getattr(l, l._func_key), l)
-                    for l in getattr(main_object, field_name))
+                existing_lines = cls.get_existing_lines(main_object,
+                    field_name)
             else:
                 existing_lines = {}
             to_write = []

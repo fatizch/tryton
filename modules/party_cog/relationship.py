@@ -79,3 +79,6 @@ class PartyRelationAll(PartyRelation):
         if not self.id % 2:
             return super(PartyRelationAll, self).export_ws_json(skip_fields,
                 already_exported, output, main_object)
+        else:
+            self.to.export_ws_json(skip_fields, already_exported, output,
+                main_object)
