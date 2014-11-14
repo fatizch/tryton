@@ -188,7 +188,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls.rec_name.string = 'Number'
-        cls.__rpc__.update({'ws_subscribe_contract': RPC(readonly=False)})
+        cls.__rpc__.update({'ws_subscribe_contracts': RPC(readonly=False)})
         cls._buttons.update({
                 'option_subscription': {},
                 'button_change_start_date': {
@@ -641,39 +641,38 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             set(['logs']))
 
     @classmethod
-    def ws_subscribe_contract(cls, contract_dict):
+    def ws_subscribe_contracts(cls, contract_dict):
         'This method is a standard API for webservice use'
         pool = Pool()
         Party = pool.get('party.party')
         contracts = []
         message = []
-        try:
-            for elem in contract_dict:
-                if elem['__name__'] == 'party.party':
-                    Party.import_ws_json(elem)
-                elif elem['__name__'] == 'contract':
-                    contract = cls.import_ws_json(elem)
-                    contracts.append(contract)
-                    message.append({
-                            'contract_id': contract.id,
-                            'contract_number': contract.contract_number,
-                            'quote_number': contract.quote_number,
-                             })
-                else:
-                    cls.raise_user_error('invalid_format')
-            cls.update_contract_after_import(contracts)
-        except UserError, exc:
-            Transaction().cursor.rollback()
-            return {'return': False,
-                'error': exc.message,
-                }
-        if not contracts:
-            return {'return': False,
-                'error': 'No contracts created',
-                }
-        return {'return': True,
-            'contracts': message,
-            }
+        for ext_id, objects in contract_dict.iteritems():
+            with Transaction().new_cursor() as transaction:
+                try:
+                    for item in objects:
+                        if item['__name__'] == 'party.party':
+                            Party.import_ws_json(item)
+                        elif item['__name__'] == 'contract':
+                            contract = cls.import_ws_json(item)
+                            contracts.append(contract)
+                            message.append({ext_id: {
+                                        'return': True,
+                                        'contract_number':
+                                            contract.contract_number,
+                                        'quote_number': contract.quote_number,
+                                        'status': contract.status
+                                        }})
+                            cls.update_contract_after_import([contract])
+                        else:
+                            cls.raise_user_error('invalid_format')
+                    transaction.cursor.commit()
+                except UserError as exc:
+                    Transaction().cursor.rollback()
+                    message.append({ext_id: {
+                            'return': False,
+                            'error': exc.message}})
+        return message
 
     def init_from_product(self, product, start_date=None, end_date=None):
         if not start_date:
