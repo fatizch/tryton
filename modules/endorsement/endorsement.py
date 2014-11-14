@@ -514,6 +514,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             ('in_progress', 'In Progress'),
             ('applied', 'Applied'),
             ], 'State', readonly=True)
+    state_string = state.translated('state')
     contracts = fields.Function(
         fields.Many2Many('contract', '', '', 'Contracts'),
         'get_contracts', searcher='search_contracts')
@@ -735,6 +736,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 ('applied', 'Applied'),
                 ], 'State'),
         'get_state', searcher='search_state')
+    state_string = state.translated('state')
 
     @classmethod
     def __setup__(cls):

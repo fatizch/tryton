@@ -119,6 +119,7 @@ class TaskDisplayer(model.CoopView):
     nb_tasks = fields.Integer('Number', depends=['task', 'kind'])
     kind = fields.Selection([('team', 'Team'), ('process', 'Process')], 'Kind',
         states={'invisible': True})
+    kind_string = kind.translated('kind')
     task_name = fields.Function(
         fields.Char('Task Name', depends=['task']),
         'on_change_with_task_name')

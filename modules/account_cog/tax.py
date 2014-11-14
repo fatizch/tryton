@@ -63,6 +63,7 @@ class TaxDescriptionVersion(model.CoopSQL, model.VersionObject):
             ('rate', 'Rate'),
             ('rule', 'Rule'),
             ], 'Rating mode', required=True)
+    kind_string = kind.translated('kind')
     value = fields.Numeric('Value')
 
     @classmethod

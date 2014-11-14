@@ -1200,6 +1200,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
         'Calculation Kind')
+    calculation_kind_string = calculation_kind.translated('calculation_kind')
     end_date = fields.Date('End date', states={
             'invisible': ~Eval('time_limited')}, depends=['time_limited'])
     flat_amount = fields.Numeric('Flat amount', states={
@@ -1262,6 +1263,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             'Duration Unit', sort=False,
             states={'invisible': ~Eval('time_limited')}),
         'on_change_with_duration_unit', 'setter_void')
+    duration_unit_string = duration_unit.translated('duration_unit')
     time_limited = fields.Function(
         fields.Boolean('Time Limited'),
         'on_change_with_time_limited', 'setter_void')
@@ -1419,6 +1421,7 @@ class ContractAgreementRelation(model.CoopSQL, model.CoopView):
             'invisible': Eval('_parent_contract', {}).get('status') == 'quote',
             })
     kind = fields.Selection([('', '')], 'Kind')
+    kind_string = kind.translated('kind')
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
         readonly=True)
     protocol = fields.Many2One('contract', 'Protocol', domain=[

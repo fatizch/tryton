@@ -23,6 +23,9 @@ class TestCaseModel:
             ('6', 'Half yearly'),
             ('12', 'Yearly'),
             ], 'Fiscal Year periods frequency')
+    fiscal_year_periods_frequency_string = \
+        fiscal_year_periods_frequency.translated(
+            'fiscal_year_periods_frequency')
     fiscal_year_number = fields.Integer('Number of Fiscal Years to create')
     account_template = fields.Many2One('account.account.template',
         'Account Template', domain=[('parent', '=', None)],

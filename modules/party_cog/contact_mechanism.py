@@ -78,6 +78,7 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         states={'readonly': True})
     title = fields.Char('Title')
     media = fields.Selection(MEDIA, 'Media')
+    media_string = media.translated('media')
     contact_mechanism = fields.Many2One('party.contact_mechanism',
         'Contact Mechanism', domain=[
             ('party', '=', Eval('party')),

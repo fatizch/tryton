@@ -775,6 +775,7 @@ class Premium(model.CoopSQL, model.CoopView):
     end = fields.Date('End')
     amount = fields.Numeric('Amount', required=True)
     frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)
+    frequency_string = frequency.translated('frequency')
     taxes = fields.Many2Many('contract.premium-account.tax',
         'premium', 'tax', 'Taxes',
         domain=[

@@ -41,8 +41,10 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             ('closed', 'Closed'),
             ('reopened', 'Reopened'),
             ], 'Status', sort=False, states={'readonly': True})
+    status_string = status.translated('status')
     sub_status = fields.Selection('get_possible_sub_status', 'Sub Status',
         states={'readonly': True})
+    sub_status_string = sub_status.translated('sub_status')
     reopened_reason = fields.Selection([
             ('', ''),
             ('relapse', 'Relapse'),
@@ -673,6 +675,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         fields.Selection(INDEMNIFICATION_KIND, 'Kind', sort=False,
             states={'invisible': True}),
         'get_kind')
+    kind_string = kind.translated('kind')
     start_date = fields.Date('Start Date', states={
             'invisible': Eval('kind') != 'period',
             'readonly': Or(~Eval('manual'), Eval('status') == 'paid'),
@@ -688,6 +691,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
             ('paid', 'Paid'),
             ], 'Status', sort=False,
         states={'readonly': Eval('status') == 'paid'})
+    status_string = status.translated('status')
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
         depends=['currency_digits'],
@@ -857,9 +861,11 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
             Eval('_parent_indemnification', {}).get('kind') != 'period'
             })
     kind = fields.Selection(INDEMNIFICATION_DETAIL_KIND, 'Kind', sort=False)
+    kind_string = kind.translated('kind')
     amount_per_unit = fields.Numeric('Amount per Unit')
     nb_of_unit = fields.Numeric('Nb of Unit')
     unit = fields.Selection(coop_date.DAILY_DURATION, 'Unit')
+    unit_string = unit.translated('unit')
     amount = fields.Numeric('Amount')
 
     def init_from_indemnification(self, indemnification):
@@ -888,6 +894,7 @@ class ClaimIndemnificationValidateDisplay(model.CoopView):
             ('validate', 'Validate'),
             ('refuse', 'Refuse'),
             ], 'Selection')
+    selection_string = selection.translated('selection')
     indemnification_displayer = fields.One2Many(
         'claim.indemnification', '', 'Indemnification',
         states={'readonly': True})
@@ -925,6 +932,7 @@ class ClaimIndemnificationValidateSelect(model.CoopView):
             ('validate', 'Validate'),
             ('refuse', 'Refuse'),
             ], 'Force Value')
+    global_value_string = global_value.translated('global_value')
     display_domain = fields.Boolean('Display Search')
     search_size = fields.Integer('Search Size',
         states={'invisible': ~Eval('display_domain')})

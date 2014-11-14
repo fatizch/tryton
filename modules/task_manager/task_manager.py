@@ -29,6 +29,7 @@ class Priority(model.CoopSQL, model.CoopView):
             ('non_user', 'Another User issues'),
             ('both', 'Both')],
         'Kind')
+    kind_string = kind.translated('kind')
 
     def get_task(self, user):
         if not self.process_step:

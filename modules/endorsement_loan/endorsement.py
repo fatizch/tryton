@@ -167,6 +167,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                 ('applied', 'Applied'),
                 ], 'State'),
         'get_state', searcher='search_state')
+    state_string = state.translated('state')
 
     @classmethod
     def __setup__(cls):

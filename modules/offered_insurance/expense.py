@@ -16,6 +16,7 @@ class ExpenseKind(model.CoopSQL, model.CoopView):
             ('judiciary', 'Judiciary'),
             ('other', 'Other'),
             ], 'Kind')
+    kind_string = kind.translated('kind')
     code = fields.Char('Code', required=True)
     name = fields.Char('Name')
     short_name = fields.Char('Short Name')

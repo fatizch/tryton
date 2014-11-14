@@ -71,6 +71,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     type_ = fields.Selection(TYPE, 'Type', required=True, sort=False)
+    type_string = type_.translated('type_')
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
     cells = fields.One2Many('table.cell', 'definition', 'Cells')
     number_of_digits = fields.Integer('Number of Digits', states={

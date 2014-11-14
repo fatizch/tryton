@@ -985,6 +985,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     status = fields.Selection(OPTIONSTATUS, 'Status',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+    status_string = status.translated('status')
     appliable_conditions_date = fields.Function(
         fields.Date('Appliable Conditions Date'),
         'on_change_with_appliable_conditions_date')

@@ -50,6 +50,7 @@ class FeeDescriptionVersion(model.CoopSQL, model.VersionObject):
             ('flat', 'Flat'),
             ('rate', 'Rate')
             ], 'Rating mode', required=True)
+    kind_string = kind.translated('kind')
     value = fields.Numeric('Value')
 
     @classmethod

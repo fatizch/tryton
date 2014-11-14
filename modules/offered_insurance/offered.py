@@ -286,6 +286,7 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
             ('person', 'Person'),
             ('company', 'Company'),
             ], 'Kind')
+    kind_string = kind.translated('kind')
     sub_item_descs = fields.Many2Many(
         'offered.item.description-sub_item.description',
         'item_desc', 'sub_item_desc', 'Sub Item Descriptions',

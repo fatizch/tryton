@@ -51,6 +51,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         )
     kind = fields.Selection(LOAN_KIND, 'Kind', required=True, sort=False,
         states=_STATES, depends=_DEPENDS)
+    kind_string = kind.translated('kind')
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT', states=_STATES, depends=_DEPENDS)
     currency_digits = fields.Function(
@@ -68,6 +69,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         domain=[('payment_frequency', 'in',
                 ['month', 'quarter', 'half_year', 'year'])],
         states=_STATES, depends=_DEPENDS)
+    payment_frequency_string = payment_frequency.translated(
+        'payment_frequency')
     amount = fields.Numeric('Amount',
         digits=(16, Eval('currency_digits', 2)),
         states=_STATES,
@@ -118,6 +121,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 },
             depends=['kind', 'state']),
         'get_deferal', 'setter_void')
+    deferal_string = deferal.translated('deferal')
     deferal_duration = fields.Function(
         fields.Integer('Deferal Duration',
             states={
@@ -146,6 +150,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             ('draft', 'Draft'),
             ('calculated', 'Calculated'),
             ], 'State', readonly=True)
+    state_string = state.translated('state')
 
     @classmethod
     def __setup__(cls):
@@ -484,6 +489,7 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
                 'state', '') == 'calculated',
             })
     deferal = fields.Selection(DEFERALS, 'Deferal', sort=False)
+    deferal_string = deferal.translated('deferal')
 
     @classmethod
     def __setup__(cls):
@@ -535,6 +541,7 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
             ('scheduled', 'Scheduled'),
             ('early', 'Early'),
             ('deffered', 'Deffered')], 'Kind')
+    kind_string = kind.translated('kind')
     number = fields.Integer('Number')
     start_date = fields.Date('Date')
     begin_balance = fields.Function(

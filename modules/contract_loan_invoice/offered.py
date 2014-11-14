@@ -38,6 +38,8 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
     default_fee_action = fields.Selection(FEE_ACTIONS, 'Default Fee Action',
         states={'invisible': ~Eval('use_default_rule')},
         depends=['use_default_rule'])
+    default_fee_action_string = default_fee_action.translated(
+        'default_fee_action')
     contract_rule = fields.Many2One('rule_engine', 'Contract rule',
         ondelete='RESTRICT', states={
             'required': ~Eval('use_default_rule'),
@@ -177,3 +179,4 @@ class FeeRule(model.CoopSQL, model.CoopView):
     rule = fields.Many2One('loan.average_premium_rule', 'Rule', required=True,
         ondelete='CASCADE')
     action = fields.Selection(FEE_ACTIONS, 'Behaviour')
+    action_string = action.translated('action')

@@ -18,6 +18,7 @@ class ContractService(model.CoopView, model.CoopSQL):
             ('calculated', 'Calculated'),
             ('delivered', 'Delivered'),
             ], 'Status')
+    status_string = status.translated('status')
     contract = fields.Many2One('contract', 'Contract', ondelete='RESTRICT')
     option = fields.Many2One(
         'contract.option', 'Coverage', ondelete='RESTRICT', domain=[

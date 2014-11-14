@@ -219,6 +219,7 @@ class RuleMixin(object):
     rule = fields.Many2One('rule_engine', 'Rule Engine', required=True,
         ondelete='RESTRICT')
     kind = fields.Selection([('', '')], 'Rule Kind')
+    kind_string = kind.translated('kind')
     rule_extra_data = fields.Dict('rule_engine.rule_parameter',
         'Rule Extra Data', states={
             'invisible': Not(Bool(Eval('rule_extra_data', False)))})
@@ -559,6 +560,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             ('draft', 'Draft'),
             ('validated', 'Validated')],
         'Status')
+    status_string = status.translated('status')
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
@@ -595,6 +597,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                 ('table', 'Table')],
             'Kind', states={'invisible': ~Eval('extra_data')}),
         'get_extra_data_kind', 'setter_void')
+    extra_data_kind_string = extra_data_kind.translated('extra_data_kind')
     passing_test_cases = fields.Function(
         fields.Boolean('Test Cases OK'),
         'get_passing_test_cases', searcher='search_passing_test_cases')
@@ -1138,6 +1141,7 @@ class RuleFunction(ModelView, ModelSQL):
             ('folder', 'Folder'),
             ('function', 'Function')],
         'Type', required=True)
+    type_string = type.translated('type')
     parent = fields.Many2One('rule_engine.function', 'Parent',
         ondelete='SET NULL')
     children = fields.One2Many('rule_engine.function', 'parent', 'Children')
@@ -1522,6 +1526,7 @@ class RuleError(model.CoopSQL, model.CoopView):
             ('warning', 'Warning'),
             ('error', 'Error')],
         'Kind', required=True)
+    kind_string = kind.translated('kind')
     arguments = fields.Char('Arguments')
 
     def __str__(self):

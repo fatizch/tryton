@@ -34,6 +34,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         'endorsement.definition-endorsement.part', 'definition',
         'Endorsement Parts')
     preview_state = fields.Selection('get_preview_states', 'Preview States')
+    preview_state_string = preview_state.translated('preview_state')
     products = fields.Many2Many('endorsement.definition-product',
         'endorsement_definition', 'product', 'Products')
     endorsement_parts = fields.Function(
@@ -123,6 +124,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
             ('option', 'Option'),
             ('activation_history', 'Activation Dates'),
             ], 'Kind')
+    kind_string = kind.translated('kind')
     option_fields = fields.One2Many('endorsement.contract.option.field',
         'endorsement_part', 'Option fields', states={
             'invisible': Eval('kind', '') != 'option',

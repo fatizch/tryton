@@ -35,6 +35,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             ('cov_amount', 'Coverage Amount'),
             ], 'Amount Kind',
         states={'invisible': Or(STATE_ADVANCED, STATES_AMOUNT_EVOLVES)})
+    amount_kind_string = amount_kind.translated('amount_kind')
     amount = fields.Numeric('Amount',
         digits=(16, Eval('context', {}).get('currency_digits', DEF_CUR_DIG)),
         states={
@@ -57,6 +58,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             'invisible': Or(STATES_CAPITAL, STATES_AMOUNT_EVOLVES),
             'required': ~STATES_CAPITAL,
             }, sort=False)
+    indemnification_calc_unit_string = indemnification_calc_unit.translated(
+        'indemnification_calc_unit')
     rule_stages = fields.One2Many('benefit.rule.stage',
         'benefit_rule', 'Benefit Rule Stages',
         states={'invisible': ~STATES_AMOUNT_EVOLVES})
@@ -84,6 +87,9 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
             'required': Or(STATES_ANNUITY,
                 Bool(Eval('max_duration_per_indemnification')))
             })
+    max_duration_per_indemnification_unit_string = \
+        max_duration_per_indemnification_unit.translated(
+            'max_duration_per_indemnification_unit')
     with_revaluation = fields.Boolean('With Revaluation',
         states={'invisible': Or(~STATES_ANNUITY, STATES_AMOUNT_EVOLVES)})
     revaluation_date = fields.Date('Revaluation Date',
@@ -113,6 +119,8 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         states={'invisible': Bool(~Eval('with_revaluation'))})
     validation_delay_unit = fields.Selection(coop_date.DAILY_DURATION,
         'Delay', states={'invisible': Bool(~Eval('with_revaluation'))})
+    validation_delay_unit_string = validation_delay_unit.translated(
+        'validation_delay_unit')
 
     @classmethod
     def __setup__(cls):
@@ -319,6 +327,7 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
         ondelete='CASCADE')
     config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
+    config_kind_string = config_kind.translated('config_kind')
     rule = fields.Many2One('rule_engine', 'Amount', ondelete='RESTRICT',
         states={'invisible': STATE_SIMPLE})
     rule_extra_data = fields.Dict('rule_engine.rule_parameter',
@@ -328,11 +337,14 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
         states={'invisible': STATE_ADVANCED})
     indemnification_calc_unit = fields.Selection(coop_date.DAILY_DURATION,
         'Calculation Unit', sort=False)
+    indemnification_calc_unit_string = indemnification_calc_unit.translated(
+        'indemnification_calc_unit')
     limited_duration = fields.Boolean('Limited Duration')
     duration = fields.Integer('Duration',
         states={'invisible': Bool(~Eval('limited_duration'))})
     duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         sort=False, states={'invisible': Bool(~Eval('limited_duration'))})
+    duration_unit_string = duration_unit.translated('duration_unit')
 
     @fields.depends('rule', 'rule_extra_data')
     def on_change_with_rule_extra_data(self):

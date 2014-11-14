@@ -204,6 +204,8 @@ class OpenThirdPartyBalanceStart():
             ('all', 'All'),
             ('only_unbalanced', 'Only Unbalanced Party')], 'Balance Option',
         required=True)
+    third_party_balance_option_string = third_party_balance_option.translated(
+        'third_party_balance_option')
 
 
 class OpenThirdPartyBalance():

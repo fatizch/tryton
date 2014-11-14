@@ -78,6 +78,7 @@ class LossDescription(model.CoopSQL, model.CoopView):
         'event_desc', 'Events Descriptions',
         domain=[('company', '=', Eval('company'))], depends=['company'])
     item_kind = fields.Selection([('', '')], 'Kind')
+    item_kind_string = item_kind.translated('item_kind')
     with_end_date = fields.Boolean('With End Date')
     extra_data_def = fields.Many2Many(
         'benefit.loss.description-extra_data',
@@ -143,6 +144,8 @@ class Benefit(model.CoopSQL, offered.Offered):
         'Reserve Rules')
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
         'Indemnification Kind', sort=False, required=True)
+    indemnification_kind_string = indemnification_kind.translated(
+        'indemnification_kind')
     loss_descs = fields.Many2Many('benefit-loss.description', 'benefit',
         'loss_desc', 'Loss Descriptions',
         domain=[('company', '=', Eval('company'))], depends=['company'],
@@ -153,6 +156,7 @@ class Benefit(model.CoopSQL, offered.Offered):
     use_local_currency = fields.Boolean('Use Local Currency')
     beneficiary_kind = fields.Selection('get_beneficiary_kind',
         'Beneficiary Kind', required=True, sort=False)
+    beneficiary_kind_string = beneficiary_kind.translated('beneficiary_kind')
 
     @classmethod
     def __setup__(cls):

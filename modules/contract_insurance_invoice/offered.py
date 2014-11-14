@@ -77,6 +77,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
     sync_month = fields.Selection(MONTHS, 'Sync Month', sort=False, states={
             'invisible': Eval('frequency') == 'monthly'},
             depends=['frequency'])
+    sync_month_string = sync_month.translated('sync_month')
     products = fields.Many2Many(
         'offered.product-offered.billing_mode',
         'billing_mode', 'product', 'Products', readonly=True)

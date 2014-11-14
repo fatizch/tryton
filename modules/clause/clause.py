@@ -14,6 +14,7 @@ class Clause(model.CoopSQL, model.CoopView):
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
     kind = fields.Selection([('specific', 'Specific')], 'Kind')
+    kind_string = kind.translated('kind')
     customizable = fields.Boolean('Customizable')
     content = fields.Text('Content')
 
