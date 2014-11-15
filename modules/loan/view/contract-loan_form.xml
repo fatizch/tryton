@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Loan">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="number"/>
+    <field name="number"/>
+    <label name="loan"/>
+    <field name="loan"/>
+</form>

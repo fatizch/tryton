@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<tree string="Contract Loan" editable="bottom" colors="If(Eval('loan_state') != 'calculated', 'red', 'black')">
+<tree string="Contract Loan" editable="bottom">
     <field name="contract"/>
-    <field name="number" readonly="1"/>
+    <field name="number"/>
     <field name="loan" expand="1"/>
-    <field name="loan_state" tree_invisible="1"/>
 </tree>

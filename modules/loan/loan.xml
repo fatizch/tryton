@@ -26,10 +26,15 @@
             <field name="inherit" ref="loan.loan_simple_view_form"/>
             <field name="name">loan_form_patch</field>
         </record>
-        <record model="ir.ui.view" id="loan_view_tree">
+        <record model="ir.ui.view" id="loan_view_list">
             <field name="model">loan</field>
             <field name="type">tree</field>
-            <field name="name">loan_tree</field>
+            <field name="name">loan_list</field>
+        </record>
+        <record model="ir.ui.view" id="ordered_loan_view_list">
+            <field name="model">loan</field>
+            <field name="type">tree</field>
+            <field name="name">ordered_loan_list</field>
         </record>
         <record model="ir.action.act_window" id="act_loan_form">
             <field name="name">Loans</field>
@@ -37,7 +42,7 @@
         </record>
         <record model="ir.action.act_window.view" id="act_loan_form_view_tree">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="loan_view_tree"/>
+            <field name="view" ref="loan_view_list"/>
             <field name="act_window" ref="act_loan_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_loan_form_view_form">

@@ -219,6 +219,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return 'draft'
 
     @staticmethod
+    def default_funds_release_date():
+        return Transaction().context.get('start_date', None)
+
+    @staticmethod
     def calculate_rate(annual_rate, payment_frequency):
         if not annual_rate:
             annual_rate = Decimal(0)
@@ -351,10 +355,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         if not contract_id:
             return None
         contract = Pool().get('contract')(contract_id)
-        for idx, loan in enumerate(contract.used_loans, 1):
-            if loan == self:
-                return idx
-        return None
+        for ordered_loan in contract.ordered_loans:
+            if ordered_loan.loan == self:
+                return ordered_loan.number
 
     def get_end_date(self, name):
         return self.increments[-1].end_date if self.increments else None

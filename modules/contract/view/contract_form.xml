@@ -24,7 +24,7 @@
             <field name="options" colspan="4"/>
         </page>
         <page string="Data" id="data">
-            <field name="extra_datas"/>
+            <field name="extra_datas" colspan="4"/>
         </page>
         <page string="Contacts" id="contacts">
             <field name="contacts" colspan="4"/>

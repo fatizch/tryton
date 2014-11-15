@@ -2,7 +2,7 @@
 import datetime
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields, model, coop_string
 from trytond.modules.cog_utils import coop_date
@@ -28,9 +28,31 @@ class Contract:
     is_loan = fields.Function(
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
-    loans = fields.One2Many('contract-loan', 'contract', 'Loans',
+    loans = fields.Many2Many('contract-loan', 'contract', 'loan', 'Loans',
         states={
-            'invisible': (~Eval('is_loan')) | (~Eval('subscriber', False)),
+            'invisible': (~Eval('is_loan') | ~Eval('subscriber', False)
+                | Bool(Eval('show_ordered_loans'))),
+            'readonly': Eval('status') != 'quote',
+            },
+        context={
+            'parties': Eval('parties'),
+            'contract': Eval('id'),
+            'start_date': Eval('start_date')
+            },
+        depends=['is_loan', 'status', 'parties', 'id', 'show_ordered_loans',
+            'start_date'])
+    show_ordered_loans = fields.Function(
+        fields.Boolean('Show Ordered Loans',
+            states={
+                'invisible': ~Eval('is_loan'),
+                'readonly': Eval('status') != 'quote',
+                }),
+        'get_show_ordered_loans', 'setter_void')
+    ordered_loans = fields.One2Many('contract-loan', 'contract',
+        'Ordered Loans',
+        states={
+            'invisible': (~Eval('is_loan') | ~Eval('subscriber', False)
+                | ~Eval('show_ordered_loans')),
             'readonly': Eval('status') != 'quote',
             },
         context={'parties': Eval('parties')},
@@ -39,14 +61,6 @@ class Contract:
         fields.Many2Many('loan', None, None, 'Used Loans',
             context={'contract': Eval('id')}, depends=['id']),
         'get_used_loans')
-
-    def get_used_loans(self, name):
-        loans = set([share.loan
-            for covered_element in self.covered_elements
-            for option in covered_element.options
-            for share in option.loan_shares])
-
-        return [x.id for x in sorted(list(loans), key=lambda x: x.id)]
 
     @classmethod
     def __setup__(cls):
@@ -66,11 +80,22 @@ class Contract:
         ContractLoan = Pool().get('contract-loan')
         to_write = []
         for contract in contracts:
-            for i, loan in enumerate(contract.loans, 1):
+            for i, loan in enumerate(contract.ordered_loans, 1):
                 if not loan.number:
                     to_write += [[loan], {'number': i}]
         if to_write:
             ContractLoan.write(*to_write)
+
+    def get_used_loans(self, name):
+        loans = set([share.loan
+            for covered_element in self.covered_elements
+            for option in covered_element.options
+            for share in option.loan_shares])
+
+        return [x.id for x in sorted(list(loans), key=lambda x: x.id)]
+
+    def get_show_ordered_loans(self, name):
+        return False
 
     @fields.depends('product')
     def on_change_product(self):
@@ -94,6 +119,14 @@ class Contract:
             return
         end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
         self.set_end_date(end_date, force=True)
+
+    @classmethod
+    def setter_void(cls, objects, name, values):
+        pass
+
+    @staticmethod
+    def default_show_ordered_loans():
+        return False
 
 
 class ContractLoan(model.CoopSQL, model.CoopView):
@@ -293,7 +326,7 @@ class OptionSubscription:
     def init_default_childs(cls, contract, coverage, option, parent_dict):
         res = super(OptionSubscription, cls).init_default_childs(contract,
             coverage, option, parent_dict)
-        for loan in [x.loan for x in contract.loans]:
+        for loan in [x.loan for x in contract.ordered_loans]:
             loan_share = None
             for share in option.loan_shares if option else []:
                 if share.loan == loan:

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree string="Loans">
+    <field name="order"/>
+    <field name="number"/>
+    <field name="kind"/>
+    <field name="rate" factor="100">
+        <suffix string="%"/>
+    </field>
+    <field name="number_of_payments"/>
+    <field name="amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="funds_release_date"/>
+    <field name="first_payment_date"/>
+</tree>
