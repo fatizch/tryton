@@ -231,6 +231,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 [('contract_number',) + tuple(clause[1:])],
                 ]
 
+    def calculate(self):
+        for option in self.options:
+            option.calculate()
+
     @classmethod
     def update_contract_after_import(cls, contracts):
         for contract in contracts:
@@ -1138,13 +1142,13 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return [('coverage', 'light'), 'start_date', 'end_date']
 
     @classmethod
-    def new_option_from_coverage(cls, coverage, product,
-            start_date=None, end_date=None):
-        if not start_date:
-            start_date = utils.today()
+    def new_option_from_coverage(cls, coverage, product, start_date,
+            end_date=None):
+        assert(start_date)
         if utils.is_effective_at_date(coverage, start_date):
             new_option = cls()
             new_option.coverage = coverage.id
+            new_option.product = product.id
             new_option.status = 'active'
             new_option.start_date = start_date
             new_option.appliable_conditions_date = start_date

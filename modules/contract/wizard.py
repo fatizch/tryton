@@ -43,7 +43,7 @@ class OptionSubscription(model.CoopWizard):
             excluded += option.coverage.options_excluded
         for coverage in [x.coverage
                 for x in contract.product.ordered_coverages]:
-            if (self.select_package.package
+            if (contract.product.packages and self.select_package.package
                     and coverage not in self.select_package.package.options):
                 continue
             existing_option = None
@@ -62,7 +62,8 @@ class OptionSubscription(model.CoopWizard):
                         'subscription_behaviour')),
                 'is_selected': (bool(existing_option)
                     or coverage.subscription_behaviour != 'optional'
-                    or bool(self.select_package.package)),
+                    or bool(contract.product.packages)
+                    and bool(self.select_package.package)),
                 'coverage_behaviour': coverage.subscription_behaviour,
                 'coverage': coverage.id,
                 'selection': selection,
@@ -113,15 +114,12 @@ class OptionSubscription(model.CoopWizard):
 
         subscribed = set([x.coverage for x in options])
         for line in lines:
-            if not line.is_selected:
+            if not line.is_selected or line.coverage in subscribed:
                 continue
-            if line.coverage in subscribed:
-                line.init_subscribed_option(self.options_displayer,
-                    line.option)
-                line.option.save()
-                continue
-            option = Option()
-            line.init_subscribed_option(self.options_displayer, option)
+            option = Option.new_option_from_coverage(line.coverage,
+                self.options_displayer.contract.product,
+                self.options_displayer.contract.start_date)
+            line.option = option
             options.append(option)
 
     def transition_start(self):
@@ -223,13 +221,6 @@ class WizardOption(model.CoopView):
         if self.coverage:
             return '%s [%s]' % (self.coverage.rec_name,
                 coop_string.translate_value(self, 'coverage_behaviour'))
-
-    def init_subscribed_option(self, displayer, option):
-        self.option = option
-        option.product = displayer.contract.product
-        option.init_from_coverage(self.coverage, option.product,
-            displayer.contract.start_date)
-        option.calculate()
 
     @staticmethod
     def default_selection():

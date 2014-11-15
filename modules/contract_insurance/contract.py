@@ -81,6 +81,11 @@ class Contract(Printable):
                 'generic_send_letter': {},
                 })
 
+    def calculate(self):
+        super(Contract, self).calculate()
+        for covered_element in self.covered_elements:
+            covered_element.calculate()
+
     @fields.depends('product')
     def on_change_product(self):
         super(Contract, self).on_change_product()
@@ -549,8 +554,8 @@ class ContractOption:
             ['elem'])
 
     @classmethod
-    def new_option_from_coverage(cls, coverage, product, start_date=None,
-            end_date=None, item_desc=None):
+    def new_option_from_coverage(cls, coverage, product,
+            start_date, end_date=None, item_desc=None):
         new_option = super(ContractOption, cls).new_option_from_coverage(
             coverage, product, start_date, end_date)
         new_option.on_change_extra_data()
@@ -752,6 +757,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         searcher='search_party_code')
 
     multi_mixed_view = options
+
+    def calculate(self):
+        for option in self.options:
+            option.calculate()
 
     def get_party_code(self, name):
         return self.party.code

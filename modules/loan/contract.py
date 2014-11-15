@@ -162,8 +162,7 @@ class ContractOption:
             'invisible': Eval('coverage_family', '') != 'loan',
             'readonly': Eval('contract_status') != 'quote',
             },
-        domain=[('loan.parties', 'in', Eval('parties', []))],
-        depends=['coverage_family', 'parties', 'contract_status'])
+        depends=['coverage_family', 'contract_status'])
     multi_mixed_view = loan_shares
 
     @fields.depends('coverage', 'loan_shares')
