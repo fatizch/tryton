@@ -263,11 +263,24 @@ class Contract:
             ContractInvoice.cancel(actions['cancel'])
 
     @classmethod
-    def first_invoice(cls, contracts):
+    def _first_invoice(cls, contracts, and_post=False):
+        Invoice = Pool().get('account.invoice')
         # Make sure all existing invoices are cleaned up
         cls.clean_up_contract_invoices(contracts, from_date=datetime.date.min)
+        contract_invoices = []
         for contract in contracts:
-            cls.invoice([contract], contract.start_date)
+            contract_invoices += cls.invoice([contract], contract.start_date)
+        if not and_post:
+            return
+        Invoice.post([x.invoice for x in contract_invoices])
+
+    @classmethod
+    def first_invoice(cls, contracts):
+        cls._first_invoice(contracts, and_post=False)
+
+    @classmethod
+    def first_invoice_and_post(cls, contracts):
+        cls._first_invoice(contracts, and_post=True)
 
     @classmethod
     def invoice(cls, contracts, up_to_date):
