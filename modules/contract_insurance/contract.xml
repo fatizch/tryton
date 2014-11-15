@@ -124,13 +124,5 @@
       <field name="type">tree</field>
       <field name="name">contract_agreement_list</field>
     </record>
-    <!-- ############################################################ -->
-    <!-- ########### Menu ########### -->
-    <!-- ############################################################ -->
-    <record model="ir.action.act_window" id="contract.act_contract_form">
-      <field name="name">Contracts</field>
-      <field name="res_model">contract</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('product.kind', '=', 'insurance')]</field>
-    </record>
   </data>
 </tryton>
