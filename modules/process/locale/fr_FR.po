@@ -643,6 +643,10 @@ msgid "==> Courtier"
 msgstr "==> Courtier"
 
 msgctxt "view:contract:"
+msgid "==> Garantie"
+msgstr ""
+
+msgctxt "view:contract:"
 msgid "==> Garanties"
 msgstr ""
 
@@ -671,8 +675,16 @@ msgid "==> Validation du contrat"
 msgstr ""
 
 msgctxt "view:contract:"
+msgid "Annuler l'avenant"
+msgstr ""
+
+msgctxt "view:contract:"
 msgid "Brouillard"
 msgstr "Brouillard"
+
+msgctxt "view:contract:"
+msgid "Change start date"
+msgstr "Modifier la date d'effet"
 
 msgctxt "view:contract:"
 msgid "Clauses"
@@ -697,6 +709,10 @@ msgstr "Risques Couverts"
 msgctxt "view:contract:"
 msgid "Create Loan"
 msgstr "Créer un prêt"
+
+msgctxt "view:contract:"
+msgid "Garantie"
+msgstr "Garantie"
 
 msgctxt "view:contract:"
 msgid "Garanties"
@@ -747,12 +763,20 @@ msgid "Quittances"
 msgstr "Quittances"
 
 msgctxt "view:contract:"
+msgid "Reprise Intégrale de Contrat"
+msgstr "Reprise Intégrale de Contrat"
+
+msgctxt "view:contract:"
 msgid "Souscripteur"
 msgstr "Souscripteur"
 
 msgctxt "view:contract:"
 msgid "Souscription Emprunteur"
 msgstr "Souscription Emprunteur"
+
+msgctxt "view:contract:"
+msgid "Souscription Perte d'Emploi"
+msgstr "Souscription Perte d'Emploi"
 
 msgctxt "view:contract:"
 msgid "Taux moyen prêt"

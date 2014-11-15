@@ -1,0 +1,15 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "view:endorsement.contract.full_revision_start:"
+msgid "Full Contract Revision"
+msgstr "Reprise intégrale de contrat"
+
+msgctxt "view:endorsement.contract.full_revision_start:"
+msgid ""
+"Full Contract Revision : The contract will be in an unstable state until the"
+" full revision process is either completed or aborted"
+msgstr ""
+"Reprise intégrale de contrat : Le contrat sera dans un état instable tant "
+"que la reprise intégrale n'est pas terminée ou annulée"

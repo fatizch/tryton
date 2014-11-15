@@ -158,6 +158,11 @@ msgctxt "field:account.move.line,reconciliation_lines:"
 msgid "Reconciliation Lines"
 msgstr "Lignes de réconciliation"
 
+msgctxt ""
+"field:account.open_third_party_balance.start,third_party_balance_option:"
+msgid "Balance Option"
+msgstr ""
+
 msgctxt "field:account.period,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -417,6 +422,16 @@ msgstr "Fixe"
 msgctxt "selection:account.fee.description.version,kind:"
 msgid "Rate"
 msgstr "Taux"
+
+msgctxt ""
+"selection:account.open_third_party_balance.start,third_party_balance_option:"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt ""
+"selection:account.open_third_party_balance.start,third_party_balance_option:"
+msgid "Only Unbalanced Party"
+msgstr "Seulement les tiers non balancés"
 
 msgctxt "selection:account.tax.description.version,kind:"
 msgid "Flat"

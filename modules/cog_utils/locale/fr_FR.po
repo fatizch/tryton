@@ -162,6 +162,62 @@ msgctxt "field:ir.model.field.access,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:ir.model.method,code_preview:"
+msgid "Code Preview"
+msgstr "Prévisualisation du code"
+
+msgctxt "field:ir.model.method,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.model.method,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.model.method,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.model.method,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:ir.model.method,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.model.method,method_name:"
+msgid "Method Name"
+msgstr "Nom de la Méthode"
+
+msgctxt "field:ir.model.method,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:ir.model.method,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.model.method,priority:"
+msgid "Priority"
+msgstr "Priorité"
+
+msgctxt "field:ir.model.method,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.model.method,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ir.model.method,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ir.model.method,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:ir.property,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -597,6 +653,10 @@ msgctxt "model:ir.import.select_file,name:"
 msgid "File Selector"
 msgstr "Selecteur de fichier"
 
+msgctxt "model:ir.model.method,name:"
+msgid "Method Definition"
+msgstr "Définition de la méthode"
+
 msgctxt "model:ir.test_case,name:"
 msgid "Test Case Model"
 msgstr "Jeux d'essais"
@@ -716,6 +776,14 @@ msgstr ""
 msgctxt "view:ir.import.select_file:"
 msgid "File Selection"
 msgstr "Sélection de Fichier"
+
+msgctxt "view:ir.model.method:"
+msgid "Method"
+msgstr "Méthode"
+
+msgctxt "view:ir.model.method:"
+msgid "Methods"
+msgstr "Méthodes"
 
 msgctxt "view:ir.test_case.instance:"
 msgid "Test Case Instance"

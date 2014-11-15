@@ -6,6 +6,18 @@ msgctxt "error:endorsement.contract.covered_element.option:"
 msgid "Loan Share Modifications"
 msgstr "Modifications des quotités"
 
+msgctxt "error:endorsement.loan.increment:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.loan.increment:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.loan.increment:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
 msgctxt "error:endorsement.loan.share:"
 msgid "New version"
 msgstr "Nouvelle version"
@@ -21,6 +33,11 @@ msgstr "Mise à jour de %s"
 msgctxt "error:endorsement.loan:"
 msgid "Endorsement \"%s\" is not the latest applied."
 msgstr "L'avenant \"%s\" n'est pas le plus récent appliqué"
+
+msgctxt "error:endorsement.loan:"
+msgid "There may only be one endorsement in_progress at a given time per loan"
+msgstr ""
+"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un prêt donné."
 
 msgctxt "error:endorsement.start:"
 msgid ""
@@ -192,6 +209,10 @@ msgctxt "field:endorsement.loan,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.loan,increments:"
+msgid "Loan Increments"
+msgstr "Paliers"
+
 msgctxt "field:endorsement.loan,loan:"
 msgid "Loan"
 msgstr "Prêt"
@@ -220,49 +241,77 @@ msgctxt "field:endorsement.loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:endorsement.loan.change_basic_data,current_value:"
-msgid "Current Value"
-msgstr "Valeur Courante"
-
-msgctxt "field:endorsement.loan.change_basic_data,effective_date:"
+msgctxt "field:endorsement.loan.change,effective_date:"
 msgid "Effective Date"
 msgstr "Date effective"
 
-msgctxt "field:endorsement.loan.change_basic_data,endorsement_definition:"
+msgctxt "field:endorsement.loan.change,endorsement_definition:"
 msgid "Endorsement Definition"
 msgstr "Définition d'avenant"
 
-msgctxt "field:endorsement.loan.change_basic_data,endorsement_part:"
+msgctxt "field:endorsement.loan.change,endorsement_part:"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
 
-msgctxt "field:endorsement.loan.change_basic_data,id:"
+msgctxt "field:endorsement.loan.change,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:endorsement.loan.change_basic_data,loan:"
+msgctxt "field:endorsement.loan.change,loan_changes:"
+msgid "Loan Changes"
+msgstr "Modifications du prêt"
+
+msgctxt "field:endorsement.loan.change,loan_count:"
+msgid "Loan Count"
+msgstr "Nombre de prêts"
+
+msgctxt "field:endorsement.loan.change.displayer,current_values:"
+msgid "Current Values"
+msgstr "Valeurs actuelles"
+
+msgctxt "field:endorsement.loan.change.displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.loan.change.displayer,loan_id:"
+msgid "Loan Id"
+msgstr "Prêt"
+
+msgctxt "field:endorsement.loan.change.displayer,loan_rec_name:"
 msgid "Loan"
 msgstr "Prêt"
 
-msgctxt "field:endorsement.loan.change_basic_data,new_value:"
-msgid "New Value"
-msgstr "Nouvelle valeur"
+msgctxt "field:endorsement.loan.change.displayer,new_values:"
+msgid "New Values"
+msgstr "Nouvelles valeurs"
 
-msgctxt "field:endorsement.loan.display_updated_payments,current_payments:"
+msgctxt "field:endorsement.loan.change.updated_payments,current_payments:"
 msgid "Current Payments"
-msgstr "Echéancier actuel"
+msgstr "Paiements actuels"
+
+msgctxt "field:endorsement.loan.change.updated_payments,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.loan.change.updated_payments,loan_id:"
+msgid "Loan Id"
+msgstr "Prêt"
+
+msgctxt "field:endorsement.loan.change.updated_payments,loan_rec_name:"
+msgid "Loan"
+msgstr "Prêt"
+
+msgctxt "field:endorsement.loan.change.updated_payments,new_payments:"
+msgid "New Payments"
+msgstr "Nouvel échéancier"
 
 msgctxt "field:endorsement.loan.display_updated_payments,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:endorsement.loan.display_updated_payments,loan:"
-msgid "Loan"
-msgstr "Prêt"
-
-msgctxt "field:endorsement.loan.display_updated_payments,new_payments:"
-msgid "New Payments"
-msgstr "Nouvel échéancier"
+msgctxt "field:endorsement.loan.display_updated_payments,loans:"
+msgid "Loan Payments"
+msgstr "Echéances"
 
 msgctxt "field:endorsement.loan.field,create_date:"
 msgid "Create Date"
@@ -312,17 +361,153 @@ msgctxt "field:endorsement.loan.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.loan.increment,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.loan.increment,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.loan.increment,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.loan.increment,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.loan.increment,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.loan.increment,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.loan.increment,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.loan.increment,increment:"
+msgid "Loan Increments"
+msgstr "Paliers"
+
+msgctxt "field:endorsement.loan.increment,loan_endorsement:"
+msgid "Loan Endorsement"
+msgstr "Modification de quotité"
+
+msgctxt "field:endorsement.loan.increment,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.loan.increment,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.loan.increment,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.loan.increment,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.loan.increment,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.loan.increment,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.loan.increment.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.loan.increment.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.loan.increment.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.loan.increment.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.loan.increment.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.loan.increment.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.loan.increment.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.loan.increment.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.loan.increment.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.loan.increment.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.loan.increment.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.loan.increment.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:endorsement.loan.select_contracts,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:endorsement.loan.select_contracts,possible_contracts:"
-msgid "Possible Contracts"
-msgstr "Contrats disponibles"
-
 msgctxt "field:endorsement.loan.select_contracts,selected_contracts:"
 msgid "Contracts to update"
 msgstr "Contrats à mettre à jour"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,current_end_date:"
+msgid "Current End Date"
+msgstr "Date de fin actuelle"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,current_start_date:"
+msgid "Current Start Date"
+msgstr "Date de fin actuelle"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'Avenant"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,new_end_date:"
+msgid "New End Date"
+msgstr "Nouvelle date de fin"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,new_start_date:"
+msgid "New Start Date"
+msgstr "Nouvelle date de début"
+
+msgctxt "field:endorsement.loan.select_contracts.contract,to_update:"
+msgid "To Update"
+msgstr "A mettre à jour"
 
 msgctxt "field:endorsement.loan.share,action:"
 msgid "Action"
@@ -447,6 +632,14 @@ msgstr "Identifiant XML"
 msgctxt "field:endorsement.part,loan_fields:"
 msgid "Loan Fields"
 msgstr "Champs du prêt"
+
+msgctxt "field:endorsement.part,loan_increment_fields:"
+msgid "Endorsement Loan Increment Field"
+msgstr "Modification des paliers"
+
+msgctxt "field:endorsement.part,loan_increment_fields_:"
+msgid "Endorsement Loan Increment Field"
+msgstr "Modification des paliers"
 
 msgctxt "field:endorsement.part,loan_share_fields:"
 msgid "Endorsement Loan Share Fields"
@@ -618,9 +811,17 @@ msgctxt "model:endorsement.loan,name:"
 msgid "Endorsement Loan"
 msgstr "Avenant au prêt"
 
-msgctxt "model:endorsement.loan.change_basic_data,name:"
-msgid "Change Basic Loan Data"
+msgctxt "model:endorsement.loan.change,name:"
+msgid "Change Loan Data"
 msgstr "Modification des données du prêt"
+
+msgctxt "model:endorsement.loan.change.displayer,name:"
+msgid "Change Loan Displayer"
+msgstr "Modification du prêt"
+
+msgctxt "model:endorsement.loan.change.updated_payments,name:"
+msgid "Change Loan Updated Payments"
+msgstr "Echéancier mis à jour après modification"
 
 msgctxt "model:endorsement.loan.display_updated_payments,name:"
 msgid "Display Updated Payments"
@@ -630,9 +831,21 @@ msgctxt "model:endorsement.loan.field,name:"
 msgid "Endorsement Loan Field"
 msgstr "Champs du prêt"
 
+msgctxt "model:endorsement.loan.increment,name:"
+msgid "Loan Increment"
+msgstr "Palier"
+
+msgctxt "model:endorsement.loan.increment.field,name:"
+msgid "Endorsement Loan Increment Field"
+msgstr "Modification des paliers"
+
 msgctxt "model:endorsement.loan.select_contracts,name:"
 msgid "Select contracts related to the loan for update"
 msgstr "Sélection des contrats liés au prêt pour mise à jour"
+
+msgctxt "model:endorsement.loan.select_contracts.contract,name:"
+msgid "Contract Displayer for the LoanSelectContracts view"
+msgstr "Prsenteur de contrat pour l'étape de sélection des contrats"
 
 msgctxt "model:endorsement.loan.share,name:"
 msgid "Loan Share"
@@ -669,6 +882,18 @@ msgstr "Appliqué"
 msgctxt "selection:endorsement.loan,state:"
 msgid "Draft"
 msgstr "Brouillon"
+
+msgctxt "selection:endorsement.loan.increment,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.loan.increment,action:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:endorsement.loan.increment,action:"
+msgid "Update"
+msgstr "Mise à jour"
 
 msgctxt "selection:endorsement.loan.share,action:"
 msgid "Add"
@@ -710,13 +935,29 @@ msgctxt "view:contract.covered_element.add_option.share_per_loan:"
 msgid "Shares per Loan"
 msgstr "Quotités par prêt"
 
-msgctxt "view:endorsement.loan.change_basic_data:"
-msgid "Change Loan Basic Data"
-msgstr "Modification des données du prêt"
+msgctxt "view:endorsement.loan.change.displayer:"
+msgid "Loan Change"
+msgstr "Modifications du prêt"
+
+msgctxt "view:endorsement.loan.change.displayer:"
+msgid "Loans"
+msgstr "Prêts"
+
+msgctxt "view:endorsement.loan.change.updated_payments:"
+msgid "New Payments"
+msgstr "Nouvel échéancier"
+
+msgctxt "view:endorsement.loan.change.updated_payments:"
+msgid "Updated Payments"
+msgstr "Echéancier actualisé"
+
+msgctxt "view:endorsement.loan.change:"
+msgid "Change Loan"
+msgstr "Modification du prêt"
 
 msgctxt "view:endorsement.loan.display_updated_payments:"
-msgid "Updated Payments"
-msgstr "Nouvel échéancier"
+msgid "Updated Loan Payments"
+msgstr "Echéancier actualisé"
 
 msgctxt "view:endorsement.loan.field:"
 msgid "Endorsement Field"
@@ -725,6 +966,26 @@ msgstr "Champs du prêt"
 msgctxt "view:endorsement.loan.field:"
 msgid "Endorsement Fields"
 msgstr "Modèle d'avenant"
+
+msgctxt "view:endorsement.loan.increment.field:"
+msgid "Endorsement Field"
+msgstr "Champs du prêt"
+
+msgctxt "view:endorsement.loan.increment.field:"
+msgid "Endorsement Fields"
+msgstr "Modèle d'avenant"
+
+msgctxt "view:endorsement.loan.increment:"
+msgid "Endorsement Loan Increment"
+msgstr "Modification des paliers"
+
+msgctxt "view:endorsement.loan.increment:"
+msgid "Endorsement Loan Increments"
+msgstr "Modification des paliers"
+
+msgctxt "view:endorsement.loan.select_contracts.contract:"
+msgid "Contracts"
+msgstr "Contrats"
 
 msgctxt "view:endorsement.loan.select_contracts:"
 msgid "Select Contracts to Update"
@@ -745,14 +1006,6 @@ msgstr "Modification de quotité"
 msgctxt "view:endorsement.loan.share:"
 msgid "Loan Endorsements"
 msgstr "Modifications de quotité"
-
-msgctxt "view:endorsement.loan:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "view:endorsement.loan:"
-msgid "Draft"
-msgstr "Brouillon"
 
 msgctxt "view:endorsement.loan:"
 msgid "Loan Endorsement"
@@ -783,25 +1036,25 @@ msgid "Loan Preview Changes"
 msgstr "Aperçu des changements du prêt"
 
 msgctxt ""
-"wizard_button:endorsement.start,change_basic_loan_data,calculate_updated_payments:"
+"wizard_button:endorsement.start,change_loan_data,calculate_updated_payments:"
 msgid "Next"
 msgstr "Suivant"
 
 msgctxt ""
-"wizard_button:endorsement.start,change_basic_loan_data,change_basic_loan_data_previous:"
+"wizard_button:endorsement.start,change_loan_data,change_loan_data_previous:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:endorsement.start,change_basic_loan_data,end:"
+msgctxt "wizard_button:endorsement.start,change_loan_data,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,change_basic_loan_data,suspend:"
+msgctxt "wizard_button:endorsement.start,change_loan_data,suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 
 msgctxt ""
-"wizard_button:endorsement.start,display_updated_payments,change_basic_loan_data:"
+"wizard_button:endorsement.start,display_updated_payments,change_loan_data:"
 msgid "Previous"
 msgstr "Précédent"
 

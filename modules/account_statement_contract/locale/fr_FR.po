@@ -1,7 +1,11 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "field:account.statement.line,contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "model:ir.action,name:report_bank_deposit_ticket"
+msgid "Bank Deposit Ticket"
+msgstr "Bordereaux de chèques"

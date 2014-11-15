@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:endorsement.contract.covered_element.option:"
+msgid "Extra Premium Modification"
+msgstr "Modification des surprimes"
+
+msgctxt "error:endorsement.contract.covered_element.option:"
 msgid "New Coverage: %s"
 msgstr "Nouvelle garantie : %s"
 
@@ -35,6 +39,22 @@ msgid "Remove version of"
 msgstr "Suppression de la version"
 
 msgctxt "error:endorsement.contract.covered_element:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.extra_premium:"
+msgid "New Extra Premium: %s"
+msgstr "Nouvelle surprime : %s"
+
+msgctxt "error:endorsement.contract.extra_premium:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.extra_premium:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.extra_premium:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
 
@@ -267,6 +287,10 @@ msgctxt "field:endorsement.contract.covered_element.option,definition:"
 msgid "Definition"
 msgstr "Définition"
 
+msgctxt "field:endorsement.contract.covered_element.option,extra_premiums:"
+msgid "Extra Premium Endorsement"
+msgstr "Modification des surprimes"
+
 msgctxt "field:endorsement.contract.covered_element.option,id:"
 msgid "ID"
 msgstr "ID"
@@ -299,9 +323,275 @@ msgctxt "field:endorsement.contract.covered_element.option,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.contract.extra_premium,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.extra_premium,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.extra_premium,covered_option_endorsement:"
+msgid "Extra Premium Endorsement"
+msgstr "Modification des surprimes"
+
+msgctxt "field:endorsement.contract.extra_premium,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_premium,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_premium,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.extra_premium,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.extra_premium,extra_premium:"
+msgid "Extra Premiums"
+msgstr "Surprimes"
+
+msgctxt "field:endorsement.contract.extra_premium,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.extra_premium,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.extra_premium,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.extra_premium,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.extra_premium,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.extra_premium,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.extra_premium,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt ""
+"field:endorsement.contract.extra_premium.displayer,covered_element_endorsement:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt ""
+"field:endorsement.contract.extra_premium.displayer,covered_element_name:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,extra_premium:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,extra_premium_id:"
+msgid "Extra Premium Id"
+msgstr "Surprime"
+
+msgctxt ""
+"field:endorsement.contract.extra_premium.displayer,extra_premium_name:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt ""
+"field:endorsement.contract.extra_premium.displayer,option_endorsement:"
+msgid "Option Endorsement"
+msgstr "Modification de garantie souscrite"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,option_name:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,to_add:"
+msgid "To Add"
+msgstr "A ajouter"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,to_delete:"
+msgid "To Delete"
+msgstr "A supprime"
+
+msgctxt "field:endorsement.contract.extra_premium.displayer,to_update:"
+msgid "To Update"
+msgstr "A mettre à jour"
+
+msgctxt "field:endorsement.contract.extra_premium.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_premium.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_premium.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.extra_premium.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.extra_premium.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.extra_premium.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.extra_premium.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.extra_premium.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.extra_premium.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.extra_premium.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.extra_premium.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.extra_premium.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.manage_extra_premium,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt ""
+"field:endorsement.contract.manage_extra_premium,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.manage_extra_premium,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.manage_extra_premium,extra_premiums:"
+msgid "Extra Premiums"
+msgstr "Surprimes"
+
+msgctxt "field:endorsement.contract.manage_extra_premium,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.new_extra_premium,covered_elements:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
+msgctxt "field:endorsement.contract.new_extra_premium,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.new_extra_premium,new_extra_premium:"
+msgid "New Extra Premium"
+msgstr "Nouvelle surprime"
+
+msgctxt "field:endorsement.contract.new_extra_premium,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt ""
+"field:endorsement.covered_element.selector,covered_element_endorsement_id:"
+msgid "Endorsement Id"
+msgstr "Avenant"
+
+msgctxt "field:endorsement.covered_element.selector,covered_element_id:"
+msgid "Covered Element Id"
+msgstr "Elément couvert"
+
+msgctxt "field:endorsement.covered_element.selector,covered_element_rec_name:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "field:endorsement.covered_element.selector,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.covered_element.selector,selected:"
+msgid "Selected"
+msgstr "Coché"
+
+msgctxt "field:endorsement.option.selector,covered_element_endorsement_id:"
+msgid "Endorsement Id"
+msgstr "Avenant"
+
+msgctxt "field:endorsement.option.selector,covered_element_id:"
+msgid "Covered Element Id"
+msgstr "Elément couvert"
+
+msgctxt "field:endorsement.option.selector,covered_element_rec_name:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "field:endorsement.option.selector,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.option.selector,option_endorsement_id:"
+msgid "Endorsement Id"
+msgstr "Avenant"
+
+msgctxt "field:endorsement.option.selector,option_id:"
+msgid "Option Id"
+msgstr "Garantie"
+
+msgctxt "field:endorsement.option.selector,option_rec_name:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:endorsement.option.selector,selected:"
+msgid "Selected"
+msgstr "Coché"
+
 msgctxt "field:endorsement.part,covered_elements_fields:"
 msgid "Covered Element Fields"
 msgstr "Champs des éléments couverts"
+
+msgctxt "field:endorsement.part,extra_premium_fields:"
+msgid "Extra Premium Fields"
+msgstr "Modification des surprimes"
+
+msgctxt "field:endorsement.part,extra_premium_fields_:"
+msgid "Extra Premium Fields"
+msgstr "Modification des surprimes"
 
 msgctxt "model:contract.covered_element.add_option,name:"
 msgid "New Covered Element Option"
@@ -323,6 +613,34 @@ msgctxt "model:endorsement.contract.covered_element.option,name:"
 msgid "Endorsement Option"
 msgstr "Champs de la garantie souscrite"
 
+msgctxt "model:endorsement.contract.extra_premium,name:"
+msgid "Endorsement Extra Premium"
+msgstr "Modification des surprimes"
+
+msgctxt "model:endorsement.contract.extra_premium.displayer,name:"
+msgid "Extra Premium Displayer"
+msgstr "Surprime"
+
+msgctxt "model:endorsement.contract.extra_premium.field,name:"
+msgid "Endorsement Extra Premium Field"
+msgstr "Modification des surprimes"
+
+msgctxt "model:endorsement.contract.manage_extra_premium,name:"
+msgid "Manage Extra Premium"
+msgstr "Gérer les surprimes"
+
+msgctxt "model:endorsement.contract.new_extra_premium,name:"
+msgid "New Extra Premium"
+msgstr "Nouvelle surprime"
+
+msgctxt "model:endorsement.covered_element.selector,name:"
+msgid "Covered Element Selector"
+msgstr "Elément couvert"
+
+msgctxt "model:endorsement.option.selector,name:"
+msgid "Option Selector"
+msgstr "Garantie"
+
 msgctxt "selection:endorsement.contract.covered_element,action:"
 msgid "Add"
 msgstr "Compléter"
@@ -344,12 +662,28 @@ msgid "Remove"
 msgstr "Remplacer"
 
 msgctxt "selection:endorsement.contract.covered_element.option,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "selection:endorsement.contract.extra_premium,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.extra_premium,action:"
+msgid "Remove"
+msgstr "Remplacer"
+
+msgctxt "selection:endorsement.contract.extra_premium,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
 msgctxt "selection:endorsement.part,kind:"
 msgid "Covered Element"
 msgstr "Risque Couvert"
+
+msgctxt "selection:endorsement.part,kind:"
+msgid "Extra Premium"
+msgstr "Surprime"
 
 msgctxt "view:contract.covered_element.add_option:"
 msgid "Add Option"
@@ -383,9 +717,64 @@ msgctxt "view:endorsement.contract.covered_element:"
 msgid "Endorsement Covered Elements"
 msgstr "Modifications des éléments couverts"
 
+msgctxt "view:endorsement.contract.extra_premium.displayer:"
+msgid "Extra Premium"
+msgstr "Surprime"
+
+msgctxt "view:endorsement.contract.extra_premium.displayer:"
+msgid "Extra Premiums"
+msgstr "Surprimes"
+
+msgctxt "view:endorsement.contract.extra_premium.field:"
+msgid "Endorsement Field"
+msgstr "Champs du prêt"
+
+msgctxt "view:endorsement.contract.extra_premium.field:"
+msgid "Endorsement Fields"
+msgstr "Modèle d'avenant"
+
+msgctxt "view:endorsement.contract.manage_extra_premium:"
+msgid "Manage Extra Premium"
+msgstr "Gérer les surprimes"
+
+msgctxt "view:endorsement.contract.new_extra_premium:"
+msgid "New Extra Premium"
+msgstr "Nouvelle surprime"
+
 msgctxt "view:endorsement.contract:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
+
+msgctxt "view:endorsement.covered_element.selector:"
+msgid "Covered Elements"
+msgstr "Risques Couverts"
+
+msgctxt "view:endorsement.option.selector:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "wizard_button:endorsement.start,manage_extra_premium,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_extra_premium,manage_extra_premium_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_extra_premium,manage_extra_premium_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,manage_extra_premium,start_new_extra_premium:"
+msgid "New Extra Premium"
+msgstr "Nouvelle surprime"
+
+msgctxt "wizard_button:endorsement.start,manage_extra_premium,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
 
 msgctxt ""
 "wizard_button:endorsement.start,new_covered_element,new_covered_element_next:"
@@ -400,6 +789,15 @@ msgstr "Précédent"
 msgctxt "wizard_button:endorsement.start,new_covered_element,suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,new_extra_premium,add_extra_premium:"
+msgid "Continue"
+msgstr "Continuer"
+
+msgctxt ""
+"wizard_button:endorsement.start,new_extra_premium,manage_extra_premium:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:endorsement.start,new_option_covered_element,end:"
 msgid "Cancel"

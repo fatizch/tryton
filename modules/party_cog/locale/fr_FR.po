@@ -12,6 +12,10 @@ msgid ""
 "%s"
 msgstr "Des doublons existent déjà:"
 
+msgctxt "error:party.party:"
+msgid "The SSN of the party must be unique."
+msgstr "Le NIR de l'acteur doit être unique"
+
 msgctxt "field:country.zipcode,city:"
 msgid "City"
 msgstr "Ville"
@@ -192,6 +196,10 @@ msgctxt "field:party.party,birth_date:"
 msgid "Birth Date"
 msgstr "Date de Naissance"
 
+msgctxt "field:party.party,birth_name:"
+msgid "Birth Name"
+msgstr "Nom de naissance"
+
 msgctxt "field:party.party,children:"
 msgid "Children"
 msgstr "Enfants"
@@ -216,10 +224,6 @@ msgctxt "field:party.party,logo:"
 msgid "Logo"
 msgstr "Logo"
 
-msgctxt "field:party.party,birth_name:"
-msgid "Birth Name"
-msgstr "Nom de naissance"
-
 msgctxt "field:party.party,main_address:"
 msgid "Main Address"
 msgstr "Adresse"
@@ -235,6 +239,10 @@ msgstr "Nom Court"
 msgctxt "field:party.party,ssn:"
 msgid "SSN"
 msgstr "NIR"
+
+msgctxt "field:party.party,ssn_required:"
+msgid "SSN Required"
+msgstr ""
 
 msgctxt "field:party.party,summary:"
 msgid "Summary"
@@ -402,7 +410,7 @@ msgstr "Tiers"
 
 msgctxt "field:party.synthesis.menu.action_refresh,rec_name:"
 msgid "Name"
-msgstr "Valeur"
+msgstr "Nom"
 
 msgctxt "field:party.synthesis.menu.action_refresh,write_date:"
 msgid "Write Date"
@@ -787,6 +795,10 @@ msgstr "Rôles"
 msgctxt "view:party.party:"
 msgid "Synthesis"
 msgstr "Synthèse"
+
+msgctxt "view:party.relation.all:"
+msgid "Relations"
+msgstr "Relations"
 
 msgctxt "view:party.synthesis.menu:"
 msgid "Party Synthesis Menu"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -272,6 +272,10 @@ msgctxt "field:offered.option.description,company:"
 msgid "Company"
 msgstr "Société"
 
+msgctxt "field:offered.option.description,coverages_in_package:"
+msgid "OptionDescriptions In Package"
+msgstr "Options de la Formule"
+
 msgctxt "field:offered.option.description,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -300,6 +304,10 @@ msgctxt "field:offered.option.description,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:offered.option.description,ending_rule:"
+msgid "Ending Rule"
+msgstr "Règle de terminaison"
+
 msgctxt "field:offered.option.description,extra_data:"
 msgid "Offered Kind"
 msgstr "Typage"
@@ -311,6 +319,10 @@ msgstr "Données Complémentaires"
 msgctxt "field:offered.option.description,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:offered.option.description,is_package:"
+msgid "Package"
+msgstr "Formule"
 
 msgctxt "field:offered.option.description,is_service:"
 msgid "Is a Service"
@@ -339,6 +351,10 @@ msgstr "Garanties"
 msgctxt "field:offered.option.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:offered.option.description,rules:"
+msgid "Rules"
+msgstr "Règles"
 
 msgctxt "field:offered.option.description,start_date:"
 msgid "Start Date"
@@ -545,6 +561,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:offered.option.description.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.package-option.description,coverage:"
+msgid "OptionDescription"
+msgstr "Description d'Option"
+
+msgctxt "field:offered.package-option.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.package-option.description,create_date_:"
+msgid "Creation date"
+msgstr "Creation date"
+
+msgctxt "field:offered.package-option.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.package-option.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.package-option.description,package:"
+msgid "Package"
+msgstr "Formule"
+
+msgctxt "field:offered.package-option.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.package-option.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.package-option.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.package-option.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -776,6 +832,10 @@ msgctxt "model:ir.action,name:act_model_extra_data"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "model:ir.action,name:act_package_form"
+msgid "Packages"
+msgstr "Formules"
+
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Products"
 msgstr "Produits"
@@ -843,6 +903,10 @@ msgstr "Option Requise"
 msgctxt "model:offered.option.description.rule,name:"
 msgid "Option Description Rule"
 msgstr "Règles d'une garantie"
+
+msgctxt "model:offered.package-option.description,name:"
+msgid "Package to Option Description Relation"
+msgstr "Relation Formules - Description d'Option"
 
 msgctxt "model:offered.product,name:"
 msgid "Product"
