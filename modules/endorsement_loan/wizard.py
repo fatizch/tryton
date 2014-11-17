@@ -44,6 +44,10 @@ class ChangeLoanDisplayer(model.CoopView):
     loan_id = fields.Integer('Loan Id')
     loan_rec_name = fields.Char('Loan', readonly=True)
 
+    @fields.depends('new_values')
+    def on_change_with_loan_rec_name(self):
+        return self.new_values[0].get_rec_name(None)
+
 
 class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
     'Change Loan Data'
