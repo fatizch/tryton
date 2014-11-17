@@ -497,10 +497,6 @@ class DocumentCreate(Wizard):
     @classmethod
     def __setup__(cls):
         super(DocumentCreate, cls).__setup__()
-        try:
-            shutil.rmtree(config.get('EDM', 'server_shared_folder'))
-        except:
-            pass
         cls._error_messages.update({
                 'parsing_error': 'Error while generating the letter:\n\n'
                 '  Expression:\n%s\n\n  Error:\n%s',
