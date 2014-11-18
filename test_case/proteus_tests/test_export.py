@@ -14,8 +14,6 @@ NEEDED_MODULES = [
     'claim_life_process',
     'claim_credit',
     'contract_group_process',
-    'commission',
-    'commission_group',
     'billing',
     'account_payment_cog',
     'account_payment_sepa_cog',

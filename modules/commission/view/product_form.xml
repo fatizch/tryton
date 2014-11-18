@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
-        <newline/>
-        <label name="commission_kind"/>
-        <field name="commission_kind"/>
-    </xpath>
-</data>

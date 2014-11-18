@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-  <xpath expr="/tree/field[@name='estimated_taxes']" position="after">
-    <field name="estimated_com">
-      <suffix name="currency_symbol"/>
-    </field>
-  </xpath>
-</data>

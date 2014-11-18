@@ -24,12 +24,6 @@
             <field name="inherit" ref="contract.contract_view_form"/>
             <field name="name">contract_form</field>
         </record>
-        <record model="ir.ui.view" id="option_view_form">
-            <field name="model">contract.option</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="contract.option_view_form"/>
-            <field name="name">option-commission_option_form</field>
-        </record>
         <record model="ir.ui.view" id="covered_element_view_form">
             <field name="model">contract.covered_element</field>
             <field name="type">form</field>
