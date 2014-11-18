@@ -650,7 +650,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         pool = Pool()
         Party = pool.get('party.party')
         contracts = []
-        message = []
+        message = {}
         for ext_id, objects in contract_dict.iteritems():
             with Transaction().new_cursor() as transaction:
                 try:
@@ -660,22 +660,23 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         elif item['__name__'] == 'contract':
                             contract = cls.import_ws_json(item)
                             contracts.append(contract)
-                            message.append({ext_id: {
-                                        'return': True,
-                                        'contract_number':
-                                            contract.contract_number,
-                                        'quote_number': contract.quote_number,
-                                        'status': contract.status
-                                        }})
+                            message[ext_id] = {
+                                'return': True,
+                                'contract_number':
+                                contract.contract_number,
+                                'quote_number': contract.quote_number,
+                                'status': contract.status
+                                }
                             cls.update_contract_after_import([contract])
                         else:
                             cls.raise_user_error('invalid_format')
                     transaction.cursor.commit()
                 except UserError as exc:
                     Transaction().cursor.rollback()
-                    message.append({ext_id: {
+                    message[ext_id] = {
                             'return': False,
-                            'error': exc.message}})
+                            'error': exc.message,
+                            'data': item}
         return message
 
     def init_from_product(self, product, start_date=None, end_date=None):
