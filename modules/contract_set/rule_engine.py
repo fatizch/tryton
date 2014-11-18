@@ -23,8 +23,7 @@ class RuleEngineRuntime:
             main_contract = args['contract']
             contract_set = main_contract.contract_set
         if not contract_set:
-            return cls._re_relation_number_order_by_age(cls, args,
-                relation_name)
+            return cls._re_relation_number_order_by_age(args, relation_name)
         person = cls.get_person(args)
         parties = []
         res = 0
@@ -56,8 +55,7 @@ class RuleEngineRuntime:
             main_contract = args['contract']
             contract_set = main_contract.contract_set
         if not contract_set:
-            return cls._re_number_of_covered_with_relation(cls, args,
-                relation_name)
+            return cls._re_number_of_covered_with_relation(args, relation_name)
         parties = []
         number_of_covered = 0
         for contract in contract_set.contracts:
