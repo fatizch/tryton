@@ -113,16 +113,5 @@
       <field name="model">contract,-1</field>
       <field name="action" ref="act_contract_activation_history_relate_form"/>
     </record>
-    <!-- Contract-Agreement Relation -->
-    <record model="ir.ui.view" id="contract_agreement_form">
-      <field name="model">contract-agreement</field>
-      <field name="type">form</field>
-      <field name="name">contract_agreement_form</field>
-    </record>
-    <record model="ir.ui.view" id="contract_agreement_list">
-      <field name="model">contract-agreement</field>
-      <field name="type">tree</field>
-      <field name="name">contract_agreement_list</field>
-    </record>
   </data>
 </tryton>

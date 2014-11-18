@@ -19,7 +19,4 @@
             'extra_data': {
                 },
             }],
-    'agreements': [{
-            'broker': {'code': '001'},
-            }]
 }

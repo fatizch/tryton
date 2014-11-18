@@ -29,23 +29,12 @@ __all__ = [
     'CoveredElementPartyRelation',
     'ExtraPremium',
     'OptionExclusionKindRelation',
-    'ContractAgreementRelation',
     ]
 
 
 class Contract(Printable):
     __name__ = 'contract'
 
-    agreements = fields.One2Many('contract-agreement', 'contract',
-        'Contract-Agreement Relations', states={
-            'invisible': Eval('product_kind') != 'insurance',
-            'readonly': Eval('status') != 'quote',
-            }, depends=['status', 'product_kind'])
-    contracts = fields.One2Many('contract-agreement',
-        'protocol', 'Managing Roles', states={
-            'invisible': Eval('product_kind') == 'insurance',
-            'readonly': Eval('status') != 'quote',
-            }, depends=['status', 'product_kind'])
     covered_elements = fields.One2ManyDomain('contract.covered_element',
         'contract', 'Covered Elements',
         context={
@@ -166,37 +155,6 @@ class Contract(Printable):
             elem.init_options(self.product, self.start_date)
             elem.save()
 
-    def get_agreement(self, kind, party=None, only_active_at_date=False,
-            at_date=None):
-        if only_active_at_date:
-            roles = utils.get_good_versions_at_date(self, 'agreements',
-                at_date)
-        elif getattr(self, 'agreements', None):
-            roles = self.agreements
-        else:
-            roles = []
-        good_roles = [x for x in roles if (not x.kind or x.kind == kind)
-            and (not party or x.party == party)]
-        return good_roles[0] if len(good_roles) == 1 else None
-
-    def get_or_create_agreement(self, kind, party):
-        Agreement = Pool().get('contract-agreement')
-        agreement = self.get_agreement(kind, party)
-        if not agreement:
-            agreement = Agreement()
-            agreement.party = party
-            agreement.kind = kind
-            if not getattr(self, 'agreements', None):
-                self.agreements = []
-            else:
-                self.agreements = list(self.agreements)
-            self.agreements.append(agreement)
-        return agreement
-
-    def get_protocol_offered(self, kind):
-        # what if several protocols exist?
-        return None
-
     @classmethod
     def search_contract(cls, product, subscriber, at_date):
         return cls.search([
@@ -204,42 +162,9 @@ class Contract(Printable):
                 ('subscriber', '=', subscriber),
                 ('start_date', '<=', at_date)])
 
-    def update_agreements(self):
-        # This method will update the management role and find the good
-        # protocol based on real coverage subscribed
-        if not getattr(self, 'agreements', None):
-            return
-        for role in [x for x in self.agreements]:
-            # we browse all roles that need to be updated on contract
-            if not getattr(role, 'protocol', None):
-                protocol_offered = self.get_protocol_offered(role.kind)
-                if not protocol_offered:
-                    # TODO : We can't find anything
-                    return
-                contracts = self.search_contract(protocol_offered, role.party,
-                    self.start_date)
-                protocol = None
-                if len(contracts) == 1:
-                    protocol = contracts[0]
-                elif len(contracts) > 1:
-                    # TODO
-                    raise
-                else:
-                    protocol = self.subscribe_contract(protocol_offered,
-                        role.party,
-                        {'start_date': protocol_offered.start_date})
-                    protocol.save()
-                role.protocol = protocol.id
-            role.start_date = self.start_date
-            role.save()
-
     def get_next_renewal_date(self):
         # TODO : make it better than just "yearly"
         return coop_date.add_frequency('yearly', self.start_date)
-
-    def finalize_contract(self):
-        super(Contract, self).finalize_contract()
-        self.update_agreements()
 
     def renew(self):
         renewal_date = self.next_renewal_date
@@ -1414,39 +1339,3 @@ class OptionExclusionKindRelation(model.CoopSQL):
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
     exclusion = fields.Many2One('offered.exclusion', 'Exclusion',
         ondelete='RESTRICT')
-
-
-class ContractAgreementRelation(model.CoopSQL, model.CoopView):
-    'Contract-Agreement Relation'
-
-    __name__ = 'contract-agreement'
-
-    agency = fields.Many2One('party.address', 'Agency', ondelete='RESTRICT',
-        domain=[('party', '=', Eval('party'))], depends=['party'])
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
-    end_date = fields.Date('End Date', states={
-            'invisible': Eval('_parent_contract', {}).get('status') == 'quote',
-            })
-    kind = fields.Selection([('', '')], 'Kind')
-    kind_string = kind.translated('kind')
-    party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',
-        readonly=True)
-    protocol = fields.Many2One('contract', 'Protocol', domain=[
-            ('product.kind', '!=', 'insurance'),
-            ('subscriber', '=', Eval('party')),
-            ], depends=['start_date', 'end_date', 'party'],
-        # we only need to have a protocole when the management is effective
-        states={'required': ~~Eval('start_date')},
-        ondelete='RESTRICT',)
-    start_date = fields.Date('Start Date', states={
-            'invisible': Eval('_parent_contract', {}).get('status') == 'quote',
-            })
-
-    @classmethod
-    def __setup__(cls):
-        cls.kind.selection = cls.get_possible_agreement_kind()
-        super(ContractAgreementRelation, cls).__setup__()
-
-    @classmethod
-    def get_possible_agreement_kind(cls):
-        return [('', '')]

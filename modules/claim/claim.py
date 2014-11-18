@@ -221,13 +221,7 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
         return service.option.contract
 
     def get_sender(self):
-        contract = self.get_main_contract()
-        if not contract:
-            return None
-        good_role = contract.get_agreement('claim_manager')
-        if not good_role:
-            return None
-        return good_role.protocol.party
+        return None
 
     @staticmethod
     def default_status():

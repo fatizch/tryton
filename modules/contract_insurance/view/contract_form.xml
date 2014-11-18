@@ -19,8 +19,4 @@
           </hpaned>
       </page>
   </xpath>
-  <xpath expr="/form/notebook/page[@id='data']" position="inside">
-      <field name="agreements" colspan="4"/>
-      <field name="contracts" colspan="4"/>
-  </xpath>
 </data>

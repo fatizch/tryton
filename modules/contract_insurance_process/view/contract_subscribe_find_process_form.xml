@@ -5,17 +5,11 @@
         <label name="dist_network"/>
         <field name="dist_network"/>
         <newline/>
-        <label name="business_provider"/>
-        <field name="business_provider"/>
-        <newline/>
         <label name="com_product"/>
         <field name="com_product"/>
         <newline/>
         <label name="product"/>
         <field name="product" colspan="3"/>
         <newline/>
-    </xpath>
-    <xpath expr="/form" position="inside">
-        <field name="possible_brokers"/>
     </xpath>
 </data>

@@ -28,9 +28,6 @@ class ContractSubscribeFindProcess(ProcessStart):
 
     __name__ = 'contract.subscribe.find_process'
 
-    business_provider = fields.Many2One('broker', 'Business Provider',
-        domain=[('id', 'in', Eval('possible_brokers'))],
-        depends=['possible_brokers'])
     com_product = fields.Many2One('distribution.commercial_product',
         'Commercial Product', domain=[
             ('id', 'in', Eval('possible_com_product')),
@@ -46,10 +43,6 @@ class ContractSubscribeFindProcess(ProcessStart):
     dist_network = fields.Many2One('distribution.network',
         'Distribution Network')
     product = fields.Many2One('offered.product', 'Product')
-    possible_brokers = fields.Function(
-        fields.Many2Many('party.party', None, None, 'Possible Brokers',
-            states={'invisible': True}),
-        'on_change_with_possible_brokers')
     possible_com_product = fields.Function(
         fields.Many2Many('distribution.commercial_product', None,
             None, 'Commercial Products Available'),
@@ -85,33 +78,6 @@ class ContractSubscribeFindProcess(ProcessStart):
     def get_possible_com_product(self):
         return self.dist_network.all_com_products if self.dist_network else []
 
-    @fields.depends('business_provider')
-    def on_change_business_provider(self):
-        if (self.business_provider and
-                len(self.business_provider.dist_networks) == 1):
-            network = self.business_provider.dist_networks[0]
-            self.dist_network = network
-            self.possible_com_product = list(network.all_com_products)
-
-    @fields.depends('dist_network', 'possible_brokers', 'business_provider',
-        'management_delegation')
-    def on_change_dist_network(self):
-        if self.dist_network:
-            self.possible_brokers = self.dist_network.get_brokers()
-        else:
-            self.possible_brokers = []
-        if (self.business_provider
-                and self.business_provider.id not in self.possible_brokers):
-            self.business_provider = None
-        elif len(self.possible_brokers) == 1:
-            self.business_provider = self.possible_brokers[0]
-
-    @fields.depends('dist_network')
-    def on_change_with_possible_brokers(self, name=None):
-        if not self.dist_network:
-            return []
-        return [x.id for x in self.dist_network.get_brokers()]
-
     @fields.depends('dist_network')
     def on_change_with_possible_com_product(self, name=None):
         return [x.id for x in self.get_possible_com_product()]
@@ -143,10 +109,6 @@ class ContractSubscribe(ProcessFinder):
         if res:
             res, err = obj.init_from_product(process_param.product,
                 process_param.date)
-            if (hasattr(process_param, 'business_provider') and
-                    process_param.business_provider):
-                obj.get_or_create_agreement('business_provider',
-                    process_param.business_provider.party)
             obj.dist_network = process_param.dist_network
             errs += err
         return res, errs

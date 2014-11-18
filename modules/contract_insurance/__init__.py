@@ -15,7 +15,6 @@ def register():
     Pool.register(
         Party,
         Contract,
-        ContractAgreementRelation,
         CoveredElement,
         ContractOption,
         CoveredElementTreeExpansion,
