@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
   <xpath expr="/form/group[@id='global_part']/field[@name='technical_name']" position="after">
-    <label name="pyson" xalign="0"/>
+    <label name="pyson"/>
     <field name="pyson"/>
-    <label name="main_model" xalign="0"/>
+    <label name="button_domain"/>
+    <field name="button_domain"/>
+    <label name="main_model"/>
     <field name="main_model"/>
   </xpath>
   <xpath expr="/form/notebook/page[@id='XML']" position="after">

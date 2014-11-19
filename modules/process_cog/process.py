@@ -340,7 +340,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
     def build_instruction_step_method(cls, process, data):
         def button_step_generic(works):
             ProcessStep = Pool().get('process.step')
-            target = ProcessStep(data[0])
+            target = ProcessStep(data[1])
             result = None
             for work in works:
                 result = target.execute(work)
@@ -355,32 +355,52 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
 
     @classmethod
     def button_next_states(cls, process, data):
-        result = []
+        clause_invisible = []
         for step_relation in process.all_steps:
             step = step_relation.step
             step_pyson, auth_pyson = step.get_pyson_for_display(step_relation)
             if auth_pyson:
-                result.append('And(%s, %s)' % (step_pyson, auth_pyson))
+                clause_invisible.append(
+                    'And(%s, %s)' % (step_pyson, auth_pyson))
             else:
-                result.append('%s' % step_pyson)
-        final_result = 'Not(Or(%s))' % ', '.join(result)
-        return {'invisible': utils.pyson_encode(final_result, True)}
+                clause_invisible.append('%s' % step_pyson)
+        button_states = {'invisible': utils.pyson_encode(
+                'Not(Or(%s))' % ', '.join(clause_invisible), True)}
+        pre_validate = []
+        for step_relation in process.all_steps:
+            step = step_relation.step
+            if step.button_domain in ('', '[]'):
+                continue
+            pre_validate.append("If(Eval('current_state', 0) == %i, %s, [])" %
+                (step_relation.id, step.button_domain))
+        if not pre_validate:
+            return button_states
+        button_states['pre_validate'] = utils.pyson_encode(
+            '[%s]' % ', '.join(pre_validate), True)
+        return button_states
 
     @classmethod
     def button_previous_states(cls, process, data):
-        return cls.button_next_states(process, data)
+        result = cls.button_next_states(process, data)
+        result.pop('pre_validate', None)
+        return result
 
     @classmethod
     def button_step_states(cls, process, step_data):
         if process.custom_transitions and \
                 not process.steps_implicitly_available:
             return {'readonly': True}
-        ProcessStep = Pool().get('process.step')
-        good_step = ProcessStep(int(step_data[0]))
-        if not good_step.pyson:
-            return {}
-        else:
-            return {'readonly': utils.pyson_encode(good_step.pyson, True)}
+        pool = Pool()
+        ProcessStep = pool.get('process.step')
+        from_step, to_step = ProcessStep.browse(map(int, step_data))
+        result = {}
+        if to_step.pyson:
+            result['readonly'] = utils.pyson_encode(to_step.pyson, True)
+        if from_step.button_domain and process.intermediate_steps(from_step,
+                to_step):
+            result['pre_validate'] = utils.pyson_encode(
+                from_step.button_domain, True)
+        return result
 
     @classmethod
     def button_complete_states(cls, process, step_relation):
@@ -822,6 +842,7 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
     __name__ = 'process.step'
 
     pyson = fields.Char('Pyson Constraint')
+    button_domain = fields.Char('Button Domain')
     custom_views = fields.One2Many('ir.ui.view.description', 'for_step',
         'Custom Views', context={'for_step_name': Eval('technical_name', '')},
         states={'readonly': ~Eval('technical_name')})
@@ -845,6 +866,10 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
         result = super(ProcessStep, cls)._export_light()
         result.add('main_model')
         return result
+
+    @classmethod
+    def default_button_domain(cls):
+        return '[]'
 
     def get_pyson_for_button(self):
         return self.pyson or ''
