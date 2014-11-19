@@ -287,6 +287,8 @@ class StartEndorsement(Wizard):
         cls._error_messages.update({
                 'active_contract_required': 'You cannot start an endorsement '
                 'on a non-active contract !',
+                'cannot_resume_applied': 'It is not possible to resume an '
+                'already applied endorsement',
                 })
 
     @property
@@ -306,6 +308,8 @@ class StartEndorsement(Wizard):
             return 'select_endorsement'
         endorsement = Pool().get('endorsement')(
             Transaction().context.get('active_id'))
+        if endorsement.state == 'applied':
+            self.raise_user_error('cannot_resume_applied')
         self.select_endorsement.endorsement = endorsement
         if endorsement.contracts:
             self.select_endorsement.contract = endorsement.contracts[0].id
