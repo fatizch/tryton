@@ -9,6 +9,7 @@
             <field name="type">tree</field>
             <field name="field_childs">current_loan_shares</field>
             <field name="name">loan_average_premium_tree</field>
+            <field name="priority" eval="99"/>
         </record>
         <!-- #################################### -->
         <!-- # Display Loan Average Premium Values # -->
