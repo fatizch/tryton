@@ -30,9 +30,17 @@ class Contract:
         return min(self.end_date or datetime.date.max,
             self.last_invoice_end or start_date)
 
+    def get_rebill_post_end(self, start_date):
+        ContractInvoice = Pool().get('contract.invoice')
+        last_posted = ContractInvoice.search([
+                ('contract', '=', self.id),
+                ('end', '>=', start_date),
+                ('invoice_state', 'not in', ('cancel', 'draft', 'validated')),
+                ], order=[('start', 'DESC')], limit=1)
+        return last_posted[0].start if last_posted else datetime.date.min
+
     def rebill(self, at_date):
         pool = Pool()
-        ContractInvoice = pool.get('contract.invoice')
         Invoice = pool.get('account.invoice')
 
         # Recalculate prices
@@ -42,33 +50,39 @@ class Contract:
         # we should rebill
         rebill_end = self.get_rebill_end_date(at_date)
 
-        invoices_to_delete = ContractInvoice.search([
-                ('contract', '=', self.id),
-                ('end', '>=', at_date),
-                ('invoice_state', '!=', 'cancel')],
-            order=[('start', 'ASC')])
+        # Calculate the date until which we will repost invoices
+        post_end = self.get_rebill_post_end(at_date)
 
-        # We want to post the invoices until the last current invoice post date
-        post_date = datetime.date.min
-        for invoice in invoices_to_delete:
-            if invoice.invoice_state != 'posted':
-                break
-            post_date = invoice.start
-        ContractInvoice.delete(invoices_to_delete)
+        # Delete or cancel overlapping invoices
+        self.clean_up_contract_invoices([self], from_date=at_date)
 
         # Rebill
         if rebill_end:
             self.invoice([self], rebill_end)
 
         # Post
-        if post_date < at_date:
+        if post_end < at_date:
             return
         invoices_to_post = Invoice.search([
                 ('contract', '=', self.id),
-                ('start', '<=', post_date),
+                ('start', '<=', post_end),
                 ('state', '=', 'validated')])
         if invoices_to_post:
             Invoice.post(invoices_to_post)
+
+    def _get_invoice_rrule_and_billing_information(self, start):
+        invoice_rrule = super(Contract,
+            self)._get_invoice_rrule_and_billing_information(start)
+        Endorsement = Pool().get('endorsement')
+        [invoice_rrule[0].rdate(
+                datetime.datetime.fromordinal(
+                    endorsement.effective_date.toordinal()) or
+                endorsement.application_date.date())
+            for endorsement in Endorsement.search([
+                        ('contracts', '=', self.id),
+                        ('state', '=', 'applied')])
+            if endorsement.definition.requires_contract_rebill]
+        return invoice_rrule
 
 
 class Endorsement:
