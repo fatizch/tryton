@@ -1,17 +1,19 @@
-from sql import Cast
 from sql.aggregate import Sum
-from sql.operators import Concat
 
-from trytond.model import fields
 from trytond.transaction import Transaction
+from trytond.tools import grouped_slice
+from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.cog_utils import coop_string, utils
+from trytond.modules.cog_utils import coop_string, utils, model, fields
+
+from .contract import PREMIUM_FREQUENCIES
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Invoice',
     'InvoiceLine',
+    'InvoiceLineDetail',
     ]
 
 
@@ -72,21 +74,23 @@ class Invoice:
     def get_fees(cls, invoices, name):
         pool = Pool()
         cursor = Transaction().cursor
-        premium = pool.get('contract.premium').__table__()
         invoice_line = pool.get('account.invoice.line').__table__()
+        invoice_line_detail = pool.get(
+            'account.invoice.line.detail').__table__()
+        result = {x.id: 0 for x in invoices}
 
-        query_table = invoice_line.join(premium, condition=(
-                invoice_line.invoice.in_([x.id for x in invoices]))
-            & (Concat('contract.premium,', Cast(premium.id, 'VARCHAR'))
-                == invoice_line.origin)
-            & (premium.rated_entity.like('account.fee.description,%')))
+        query_table = invoice_line.join(invoice_line_detail,
+            condition=(invoice_line.id == invoice_line_detail.invoice_line)
+            & (invoice_line_detail.fee != None))
 
-        cursor.execute(*query_table.select(invoice_line.invoice,
-                Sum(invoice_line.unit_price), group_by=[invoice_line.invoice]))
-
-        result = dict((x.id, 0) for x in invoices)
-        for invoice_id, total in cursor.fetchall():
-            result[invoice_id] = total
+        for invoice_slice in grouped_slice(invoices):
+            slice_clause = invoice_line.invoice.in_(
+                [x.id for x in invoice_slice])
+            cursor.execute(*query_table.select(invoice_line.invoice,
+                    Sum(invoice_line.unit_price),
+                    where=slice_clause, group_by=[invoice_line.invoice]))
+            for invoice_id, total in cursor.fetchall():
+                result[invoice_id] = total
         return result
 
     @classmethod
@@ -212,20 +216,144 @@ class InvoiceLine:
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
+    details = fields.One2Many('account.invoice.line.detail', 'invoice_line',
+        'Details', readonly=True, size=1)
+    detail = fields.Function(
+        fields.Many2One('account.invoice.line.detail', 'Detail'),
+        'get_detail')
+
+    def get_currency_symbol(self, name):
+        return self.currency.symbol if self.currency else ''
+
+    @classmethod
+    def get_detail(cls, lines, name):
+        result = {x.id: None for x in lines}
+        cursor = Transaction().cursor
+        detail_table = Pool().get('account.invoice.line.detail').__table__()
+
+        for line_slice in grouped_slice(lines):
+            cursor.execute(*detail_table.select(detail_table.invoice_line,
+                    detail_table.id, where=detail_table.invoice_line.in_(
+                        [x.id for x in line_slice])))
+
+            result.update(dict(cursor.fetchall()))
+        return result
 
     @property
     def origin_name(self):
-        pool = Pool()
-        Premium = pool.get('contract.premium')
-        name = super(InvoiceLine, self).origin_name
-        if isinstance(self.origin, Premium):
-            name = self.origin.parent.rec_name
-        return name
+        if self.detail:
+            return self.detail.parent.rec_name
+        return super(InvoiceLine, self).origin_name
 
     @classmethod
     def _get_origin(cls):
         return super(InvoiceLine, cls)._get_origin() + [
-            'contract.premium']
+            'contract']
 
-    def get_currency_symbol(self, name):
-        return self.currency.symbol if self.currency else ''
+
+class InvoiceLineDetail(model.CoopSQL, model.CoopView):
+    'Invoie Line Detail'
+
+    __name__ = 'account.invoice.line.detail'
+
+    invoice_line = fields.Many2One('account.invoice.line', 'Invoice Line',
+        ondelete='CASCADE', readonly=True, required=True)
+    contract = fields.Many2One('contract', 'Contract', select=True,
+        ondelete='RESTRICT', readonly=True)
+    covered_element = fields.Many2One('contract.covered_element',
+        'Covered Element', select=True, ondelete='RESTRICT', readonly=True)
+    option = fields.Many2One('contract.option', 'Option', select=True,
+        ondelete='RESTRICT', readonly=True)
+    extra_premium = fields.Many2One('contract.option.extra_premium',
+        'Extra Premium', select=True, ondelete='RESTRICT', readonly=True)
+    product = fields.Many2One('offered.product', 'Product', select=True,
+        readonly=True, ondelete='RESTRICT')
+    coverage = fields.Many2One('offered.option.description', 'Coverage',
+        select=True, readonly=True, ondelete='RESTRICT')
+    fee = fields.Many2One('account.fee.description', 'Fee', select=True,
+        ondelete='RESTRICT', readonly=True)
+    rate = fields.Numeric('Rate', digits=(16, 5), required=True)
+    frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)
+    taxes = fields.Char('Taxes', readonly=True)
+    parent = fields.Function(
+        fields.Reference('Parent Entity', 'get_parent_models'),
+        'get_parent', 'set_reference_field')
+    rated_entity = fields.Function(
+        fields.Reference('Rated Entity', 'get_rated_entity_models'),
+        'get_rated_entity', 'set_reference_field')
+    premium = fields.Many2One('contract.premium', 'Premium',
+        ondelete='SET NULL', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(InvoiceLineDetail, cls).__setup__()
+        cls.__rpc__.update({
+                'get_parent_models': RPC(readonly=1),
+                'get_rated_entity_models': RPC(readonly=1),
+                })
+
+    def get_parent(self, name):
+        for fname in self.get_possible_parent_field():
+            fvalue = getattr(self, fname)
+            if fvalue:
+                return '%s,%i' % (fvalue.__name__, fvalue.id)
+        raise Exception('Orphan Line')
+
+    def get_rated_entity(self, name):
+        for fname in self.get_possible_rated_entity_field():
+            fvalue = getattr(self, fname)
+            if fvalue:
+                return '%s,%i' % (fvalue.__name__, fvalue.id)
+        raise Exception('Orphan Line')
+
+    def get_rec_name(self, name):
+        return '%s : %s %s' % (self.rated_entity.rec_name, self.rate,
+            self.frequency)
+
+    @classmethod
+    def set_reference_field(cls, detail_ids, name, value):
+        value_model, value_id = value.split(',')
+        for fname in getattr(cls, 'get_possible_%s_field' % name)():
+            if cls._fields[fname].model_name == value_model:
+                break
+        else:
+            raise Exception('%s field does not accept %s model as value' % (
+                    name, value_model))
+        for detail_slice in grouped_slice(detail_ids):
+            cls.write(cls.browse(detail_slice), {fname: value_id})
+
+    @classmethod
+    def get_possible_parent_field(cls):
+        return set(['contract', 'covered_element', 'option', 'extra_premium'])
+
+    @classmethod
+    def get_parent_models(cls):
+        result = []
+        for field_name in cls.get_possible_parent_field():
+            field = cls._fields[field_name]
+            result.append((field.model_name, field.string))
+        return result
+
+    @classmethod
+    def get_possible_rated_entity_field(cls):
+        return ['product', 'coverage', 'fee']
+
+    @classmethod
+    def get_rated_entity_models(cls):
+        result = []
+        for field_name in cls.get_possible_rated_entity_field():
+            field = cls._fields[field_name]
+            result.append((field.model_name, field.string))
+        return result
+
+    @classmethod
+    def new_detail_from_premium(cls, premium=None):
+        new_detail = cls()
+        if premium is None:
+            return new_detail
+        for fname in ('rated_entity', 'parent', 'frequency'):
+            setattr(new_detail, fname, getattr(premium, fname))
+        new_detail.rate = premium.amount
+        new_detail.taxes = ', '.join([x.name for x in premium.taxes])
+        new_detail.premium = premium
+        return new_detail

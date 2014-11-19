@@ -238,6 +238,7 @@ class Contract:
         pool = Pool()
         Amount = pool.get('contract.premium.amount')
         InvoiceLine = pool.get('account.invoice.line')
+        InvoiceLineDetail = pool.get('account.invoice.line.detail')
         if not self.is_loan:
             return super(Contract, self).get_invoice_lines(start, end)
         lines = []
@@ -250,7 +251,7 @@ class Contract:
             line = InvoiceLine(
                 type='line',
                 description=amount.premium.get_description(),
-                origin=amount.premium,
+                origin=self,
                 quantity=1,
                 unit=None,
                 unit_price=amount.amount,
@@ -259,6 +260,8 @@ class Contract:
                 account=amount.premium.account,
                 coverage_start=amount.start,
                 coverage_end=amount.end,
+                details=[InvoiceLineDetail.new_detail_from_premium(
+                        amount.premium)],
                 )
             lines.append(line)
         self.finalize_invoices_lines(lines)
@@ -289,7 +292,7 @@ class Contract:
                         date=period[0])
                     tax_amount = sum(t['amount'] for t in taxes)
                     amount = Amount(
-                        premium=invoice_line.origin,
+                        premium=invoice_line.details[0].premium,
                         period_start=period[0],
                         period_end=period[1],
                         start=invoice_line.coverage_start,

@@ -958,6 +958,7 @@ class Premium(model.CoopSQL, model.CoopView):
     def get_invoice_lines(self, start, end):
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
+        InvoiceLineDetail = pool.get('account.invoice.line.detail')
         if ((self.start or datetime.date.min) > end
                 or (self.end or datetime.date.max) < start):
             return []
@@ -970,7 +971,7 @@ class Premium(model.CoopSQL, model.CoopView):
         return [InvoiceLine(
                 type='line',
                 description=self.get_description(),
-                origin=self,
+                origin=self.main_contract,
                 quantity=1,
                 unit=None,
                 unit_price=self.main_contract.company.currency.round(amount),
@@ -979,6 +980,7 @@ class Premium(model.CoopSQL, model.CoopView):
                 account=self.account,
                 coverage_start=start,
                 coverage_end=end,
+                details=[InvoiceLineDetail.new_detail_from_premium(self)],
                 )]
 
     def set_parent_from_line(self, line):

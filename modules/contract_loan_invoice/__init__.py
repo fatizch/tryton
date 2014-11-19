@@ -1,6 +1,7 @@
 from trytond.pool import Pool
 from .contract import *
 from .offered import *
+from .invoice import *
 
 
 def register():
@@ -15,6 +16,7 @@ def register():
         LoanAveragePremiumRule,
         FeeRule,
         Product,
+        InvoiceLineDetail,
         module='contract_loan_invoice', type_='model')
 
     Pool.register(

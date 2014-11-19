@@ -15,6 +15,7 @@ def register():
         OptionDescription,
         Invoice,
         InvoiceLine,
+        InvoiceLineDetail,
         Contract,
         ContractBillingInformation,
         ContractInvoice,
