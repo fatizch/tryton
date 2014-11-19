@@ -225,14 +225,9 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
 
     @fields.depends('extra_data')
     def on_change_with_extra_data(self):
-        if not hasattr(self, 'extra_data_def'):
-            return {}
         ExtraData = Pool().get('extra_data')
-        schemas = ExtraData.search([
-            'name', 'in', [k for k in self.extra_data_def.iterkeys()]])
-        if not schemas:
-            return {}
-        result = copy.copy(self.extra_data_def)
+        schemas = ExtraData.search(['name', 'in', self.extra_data.keys()])
+        result = copy.copy(self.extra_data)
         for schema in schemas:
             schema.update_field_value(result)
         return result
