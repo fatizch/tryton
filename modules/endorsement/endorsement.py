@@ -430,12 +430,25 @@ class Contract(CogProcessFramework):
     _history = True
     __name__ = 'contract'
 
+    latest_endorsement = fields.Function(
+        fields.Many2One('endorsement.contract', 'Last Endorsement'),
+        'get_latest_endorsement')
+
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'revert_current_endorsement': {},
                 })
+
+    def get_latest_endorsement(self):
+        Endorsement = Pool().get('endorsement')
+        endorsement = Endorsement.search([
+                ('contracts', '=', self.id),
+                ('state', '!=', 'draft'),
+                ], order=[('application_date', 'DESC')], limit=1)
+        if endorsement:
+            return endorsement.id
 
     @classmethod
     @model.CoopView.button
