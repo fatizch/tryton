@@ -439,6 +439,9 @@ class Contract(CogProcessFramework):
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'revert_current_endorsement': {},
+                'start_endorsement': {
+                    'invisible': Eval('status') != 'contract',
+                    }
                 })
 
     def get_latest_endorsement(self):
@@ -467,6 +470,11 @@ class Contract(CogProcessFramework):
             Endorsement.draft(endorsements_to_cancel)
             Endorsement.delete(endorsements_to_cancel)
         return 'close'
+
+    @classmethod
+    @model.CoopView.button_action('endorsement.act_start_endorsement')
+    def start_endorsement(cls, contracts):
+        pass
 
     @classmethod
     def apply_in_progress_endorsement(cls, contracts):

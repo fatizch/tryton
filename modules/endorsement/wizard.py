@@ -281,6 +281,14 @@ class StartEndorsement(Wizard):
     change_start_date_previous = StateTransition()
     change_start_date_next = StateTransition()
 
+    @classmethod
+    def __setup__(cls):
+        super(StartEndorsement, cls).__setup__()
+        cls._error_messages.update({
+                'active_contract_required': 'You cannot start an endorsement '
+                'on a non-active contract !',
+                })
+
     @property
     def definition(self):
         if not self.select_endorsement:
@@ -316,6 +324,8 @@ class StartEndorsement(Wizard):
         if Transaction().context.get('active_model') == 'contract':
             contract = pool.get('contract')(
                 Transaction().context.get('active_id'))
+            if contract.status != 'active':
+                self.raise_user_error('active_contract_required')
             return {
                 'effective_date': max(contract.start_date, Date.today()),
                 'contract': contract.id,
