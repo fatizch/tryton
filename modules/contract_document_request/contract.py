@@ -13,6 +13,7 @@ __metaclass__ = PoolMeta
 class Contract:
     __name__ = 'contract'
 
+    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments')
     doc_received = fields.Function(
         fields.Boolean('All Document Received', depends=['documents']),
         'on_change_with_doc_received')
