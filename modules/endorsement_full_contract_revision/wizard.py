@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.wizard import StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import model, fields
@@ -47,6 +48,8 @@ class StartEndorsement:
     full_contract_revision_previous = StateTransition()
     full_contract_revision_next = StateTransition()
     full_contract_revision_action = model.VoidStateAction()
+    resume_contract_process = model.StateAction(
+        'process_cog.act_resume_process')
 
     @classmethod
     def __setup__(cls):
@@ -55,6 +58,16 @@ class StartEndorsement:
                 'no_process_found': 'Cannot start full contract revision, '
                 'no matching process available',
                 })
+
+    def transition_start(self):
+        if Transaction().context.get('active_model') == 'endorsement':
+            endorsement = Pool().get('endorsement')(
+                Transaction().context.get('active_id'))
+            xml_id = 'endorsement_full_contract_revision.'
+            'full_contract_revision_definition'
+            if endorsement.definition.xml_id == xml_id:
+                return 'resume_contract_process'
+        return super(StartEndorsement, self).transition_start()
 
     def transition_full_contract_revision_previous(self):
         self.end_current_part('full_contract_revision')
@@ -133,3 +146,14 @@ class StartEndorsement:
         contract.save()
 
         return values[0], {'res_id': contract.id}
+
+    def do_resume_contract_process(self, action):
+        endorsement = Pool().get('endorsement')(
+            Transaction().context.get('active_id'))
+        contract_id = endorsement.contract_endorsements[0].contract.id
+        return (action, {
+                'id': contract_id,
+                'model': 'contract',
+                'res_id': contract_id,
+                'res_model': 'contract',
+                })
