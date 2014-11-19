@@ -71,6 +71,7 @@ class ExportImportMixin(Model):
             readonly=True, result=lambda r: cls._export_format_result(r))
         cls.__rpc__['multiple_import_ws_json'] = RPC(readonly=False,
             result=lambda r: None)
+        cls.__rpc__['ws_consult'] = RPC(readonly=True)
         cls._error_messages.update({
                 'not_found': 'Cannot import : no object %s with functional '
                 'key: "%s" were found.',
@@ -1056,6 +1057,28 @@ class ExportImportMixin(Model):
         if self.is_master_object() or main_object == self:
             output.append(values)
         return values
+
+    @classmethod
+    def ws_consult(cls, objects):
+        message = {}
+        for ext_id, values in objects.iteritems():
+            try:
+                possible_objects = cls.search_for_export_import(values)
+                if not possible_objects:
+                    cls.raise_user_error('No object found')
+                elif len(possible_objects) >= 2:
+                    cls.raise_user_error('Too many possibles objects')
+                object_values = []
+                possible_objects[0].export_ws_json(output=object_values)
+                message[ext_id] = {
+                    'return': True,
+                    'values': object_values,
+                    }
+            except UserError as exc:
+                message[ext_id] = {
+                    'return': False,
+                    'error': exc.message}
+        return message
 
 
 class FileSelector(ModelView):
