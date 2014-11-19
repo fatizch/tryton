@@ -19,8 +19,6 @@ __all__ = [
     'ItemDescriptionExtraDataRelation',
     ]
 
-IS_INSURANCE = Eval('kind') == 'insurance'
-
 
 class Offered:
     __name__ = 'offered'

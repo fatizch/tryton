@@ -23,15 +23,9 @@ class OptionDescription:
     __name__ = 'offered.option.description'
 
     insurance_kind = fields.Selection([('', '')], 'Insurance Kind',
-        states={'invisible': Eval('kind') != 'insurance'}, sort=False,
-        depends=['kind'])
-    insurer = fields.Many2One('insurer', 'Insurer',
-        states={'invisible': ~offered.IS_INSURANCE}, ondelete='RESTRICT')
-    family = fields.Selection([('generic', 'Generic')], 'Family',
-        states={
-            'invisible': ~offered.IS_INSURANCE,
-            'required': offered.IS_INSURANCE,
-            })
+        sort=False)
+    insurer = fields.Many2One('insurer', 'Insurer')
+    family = fields.Selection([('generic', 'Generic')], 'Family')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
         depends=['is_service'])
@@ -78,13 +72,6 @@ class OptionDescription:
     def delete(cls, entities):
         cls.delete_rules(entities)
         super(OptionDescription, cls).delete(entities)
-
-    @classmethod
-    def get_possible_option_description_kind(cls):
-        res = super(OptionDescription,
-            cls).get_possible_option_description_kind()
-        res.append(('insurance', 'Insurance'))
-        return res
 
     @classmethod
     def get_possible_coverages_clause(cls, instance, at_date):

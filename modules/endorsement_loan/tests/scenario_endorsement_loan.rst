@@ -205,7 +205,6 @@ Create Coverage::
     >>> coverage.name = 'Test Coverage'
     >>> coverage.code = 'test_coverage'
     >>> coverage.family = 'loan'
-    >>> coverage.kind = 'insurance'
     >>> coverage.inurance_kind = 'death'
     >>> coverage.start_date = product_start_date
     >>> coverage.account_for_billing = product_account
@@ -238,7 +237,6 @@ Create Product::
     >>> product.company = company
     >>> product.name = 'Test Product'
     >>> product.code = 'test_product'
-    >>> product.kind = 'insurance'
     >>> product.contract_generator = contract_sequence
     >>> product.quote_number_sequence = quote_sequence
     >>> product.start_date = product_start_date

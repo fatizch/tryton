@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page/notebook" position="inside">
-        <page string="Documents" id="documents" states="{'invisible': Or(Eval('kind') != 'insurance', ~~Eval('is_package'))}">
+        <page string="Documents" id="documents">
             <field name="document_rules"/>
             <field name="sub_document_rules"/>
         </page>

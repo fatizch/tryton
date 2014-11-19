@@ -22,8 +22,6 @@
     </xpath>
     <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
         position="inside">
-        <label name="kind"/>
-        <field name="kind"/>
         <label name="currency"/>
         <field name="currency"/>
         <newline/>

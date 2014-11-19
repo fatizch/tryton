@@ -14,8 +14,7 @@ __all__ = [
 class Product:
     __name__ = 'offered.product'
 
-    is_group = fields.Boolean('Group Product',
-        states={'invisible': Eval('kind') != 'insurance'})
+    is_group = fields.Boolean('Group Product')
 
     @classmethod
     def __setup__(cls):
@@ -28,5 +27,4 @@ class Product:
 class OptionDescription:
     __name__ = 'offered.option.description'
 
-    is_group = fields.Boolean('Group Coverage',
-        states={'invisible': Eval('kind') != 'insurance'})
+    is_group = fields.Boolean('Group Coverage')

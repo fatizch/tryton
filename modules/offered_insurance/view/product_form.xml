@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='option']" position="before">
-        <page string="Items" id="option"
-            states="{'invisible': Eval('kind') != 'insurance'}">
+        <page string="Items" id="option">
             <field name="item_descriptors"/>
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
-        <page string="Deductible" id="deductible"
-            states="{'invisible': Eval('kind') != 'insurance'}">
+        <page string="Deductible" id="deductible">
             <field name="deductible_rules" colspan="4"/>
         </page>
-        <page string="Term - Renewal" id="term_renewal"
-            states="{'invisible': Eval('kind') != 'insurance'}">
+        <page string="Term - Renewal" id="term_renewal">
             <field name="term_renewal_rules" colspan="4"/>
         </page>
     </xpath>

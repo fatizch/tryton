@@ -18,8 +18,7 @@
         <newline/>
     </xpath>
     <xpath expr="/form/notebook/page/notebook" position="inside">
-        <page string="Deductible" id="deductible"
-            states="{'invisible': Or(Eval('kind') != 'insurance', ~~Eval('is_package'))}">
+        <page string="Deductible" id="deductible">
             <field name="deductible_rules" colspan="4"/>
         </page>
     </xpath>

@@ -567,7 +567,6 @@ class OptionDescription(model.CoopSQL, Offered):
     __name__ = 'offered.option.description'
     _func_key = 'code'
 
-    kind = fields.Selection(None, 'Option Description Kind')
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
         ondelete='RESTRICT')
     subscription_behaviour = fields.Selection(SUBSCRIPTION_BEHAVIOUR,
@@ -578,22 +577,19 @@ class OptionDescription(model.CoopSQL, Offered):
         domain=[('kind', 'in', ['contract', 'option'])])
     options_required = fields.Many2Many('offered.option.description.required',
         'from_option_desc', 'to_option_desc', 'Options Required', domain=[
-            ('kind', '=', Eval('kind')),
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_excluded')),
-            ], depends=['kind', 'id', 'options_excluded'])
+            ], depends=['id', 'options_excluded'])
     options_excluded = fields.Many2Many('offered.option.description.excluded',
         'from_option_desc', 'to_option_desc', 'Options Excluded', domain=[
-            ('kind', '=', Eval('kind')),
             ('id', '!=', Eval('id')),
             ('id', 'not in', Eval('options_required')),
-            ], depends=['kind', 'id', 'options_required'])
+            ], depends=['id', 'options_required'])
     products = fields.Many2Many('offered.product-option.description',
         'coverage', 'product', 'OptionDescriptions', domain=[
             ('currency', '=', Eval('currency')),
-            ('kind', '=', Eval('kind')),
             ('company', '=', Eval('company')),
-            ], depends=['currency', 'kind', 'company'])
+            ], depends=['currency', 'company'])
     is_service = fields.Function(
         fields.Boolean('Is a Service'),
         'on_change_with_is_service', 'setter_void')
@@ -627,18 +623,11 @@ class OptionDescription(model.CoopSQL, Offered):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
-        cls.kind.selection = cls.get_possible_option_description_kind()
-        cls.kind.selection = list(set(cls.kind.selection))
-
     @classmethod
     def copy(cls, options, default=None):
         default = {} if default is None else default.copy()
         default.setdefault('products', None)
         return super(OptionDescription, cls).copy(options, default=default)
-
-    @classmethod
-    def get_possible_option_description_kind(cls):
-        return [('', '')]
 
     @classmethod
     def get_possible_coverages_clause(cls, instance, at_date):
