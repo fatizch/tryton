@@ -117,30 +117,6 @@ class Party(export.ExportImportMixin):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
             contact_field.readonly = False
-        # this loop will add for each One2Many role, a function field is_role
-        for field_name in dir(cls):
-            if not field_name.endswith('role'):
-                continue
-            field = getattr(cls, field_name)
-            if not hasattr(field, 'model_name'):
-                continue
-            is_actor_var_name = Party.get_is_actor_var_name(field_name)
-            field = fields.Function(
-                fields.Boolean(field.string, states=field.states),
-                'get_is_actor', setter='set_is_actor',
-                searcher='search_is_actor')
-            setattr(cls, is_actor_var_name, field)
-
-            def get_on_change(name):
-                # Use a method to create a new context different of the loop
-                def on_change(self):
-                    self.on_change_generic(name)
-                return on_change
-
-            on_change_method = 'on_change_%s' % is_actor_var_name
-            if not getattr(cls, on_change_method, None):
-                setattr(cls, on_change_method, fields.depends(field_name,
-                        is_actor_var_name)(get_on_change(is_actor_var_name)))
         cls.name = fields.UnaccentChar('Name', required=True, select=True)
 
     @classmethod
@@ -239,13 +215,6 @@ class Party(export.ExportImportMixin):
         return res
 
     @staticmethod
-    def get_is_actor_var_name(var_name):
-        res = 'is_'
-        if var_name.endswith('_role'):
-            res += var_name.split('_role')[0]
-        return res
-
-    @staticmethod
     def get_actor_var_name(var_name):
         return var_name.split('is_')[1] + '_role'
 
@@ -269,23 +238,24 @@ class Party(export.ExportImportMixin):
         field_name = Party.get_actor_var_name(name)
         return [(field_name, ) + tuple(clause[1:])]
 
-    def on_change_generic(self, is_role=''):
-        if is_role == '':
-            return
-        role = Party.get_actor_var_name(is_role)
-        if role == '':
-            return
-        role_attr = getattr(self, role)
-        if type(role_attr) == bool:
-            return
-        if getattr(self, is_role) and not role_attr:
-            setattr(self, role, [Pool().get(self._fields[role].model_name)])
-        elif not getattr(self, is_role) and role_attr:
-            setattr(self, role, [])
+    def _on_change_is_actor(self, name):
+        pool = Pool()
+        if getattr(self, name, False):
+            role_name = self.get_actor_var_name(name)
+            field = getattr(self.__class__, role_name)
+            Role = pool.get(field.model_name)
+            setattr(self, role_name, [Role()])
 
     @classmethod
     def set_is_actor(cls, parties, name, value):
-        pass
+        if not value:
+            field_name = cls.get_actor_var_name(name)
+            roles = []
+            for party in parties:
+                roles.extend(list(getattr(party, field_name)))
+            field = getattr(cls, field_name)
+            Role = Pool().get(field.model_name)
+            Role.delete(roles)
 
     def get_full_name(self, name):
         if self.is_person:

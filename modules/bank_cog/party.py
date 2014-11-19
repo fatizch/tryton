@@ -4,7 +4,7 @@ from sql.aggregate import Max
 from sql import Literal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Not, PYSONEncoder
+from trytond.pyson import Eval, PYSONEncoder, Not
 
 from trytond.modules.cog_utils import coop_string, fields, utils, model
 from trytond.modules.cog_utils import UnionMixin
@@ -27,8 +27,16 @@ class Party:
 
     bank_role = fields.One2Many(
         'bank', 'party', 'Bank', size=1, states={
-            'invisible': Not(STATES_COMPANY),
-        })
+            'invisible': ~Eval('is_bank', False) | Not(STATES_COMPANY)},
+        depends=['is_bank', 'is_company'])
+    is_bank = fields.Function(
+        fields.Boolean('Is Bank',
+            states={'invisible': Not(STATES_COMPANY)}),
+        'get_is_actor', setter='set_is_actor', searcher='search_is_actor')
+
+    @fields.depends('is_bank')
+    def on_change_is_bank(self):
+        self._on_change_is_actor('is_bank')
 
     @classmethod
     def _export_force_recreate(cls):
