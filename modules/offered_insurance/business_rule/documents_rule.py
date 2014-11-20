@@ -58,6 +58,8 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     mail_subject = fields.Char('eMail Subject')
     mail_body = fields.Text('eMail Body')
     internal_edm = fields.Boolean('Use Internal EDM')
+    document_desc = fields.Many2One('document.description',
+        'Document Description', ondelete='SET NULL')
 
     @classmethod
     def __setup__(cls):
@@ -608,6 +610,8 @@ class DocumentCreate(Wizard):
             attachment.resource = contact.for_object_ref
             attachment.data = self.attach.attachment
             attachment.name = self.attach.name
+            attachment.document_desc = \
+                self.select_model.models[0].document_desc
             attachment.save()
             contact.attachment = attachment
         contact.save()

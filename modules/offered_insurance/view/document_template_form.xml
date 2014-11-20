@@ -10,6 +10,8 @@
     <field name="kind" colspan="3"/>
     <label name="internal_edm" xalign="0"/>
     <field name="internal_edm" />
+    <label name="document_desc"/>
+    <field name="document_desc"/>
     <notebook>
         <page string="Versions" id="versions">
             <field name="versions"/>
