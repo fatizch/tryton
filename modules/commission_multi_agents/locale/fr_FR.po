@@ -1,0 +1,7 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "view:commission.plan:"
+msgid "Commissioned Agents"
+msgstr "Protocoles de commissionnement des courtiers commissionnés"

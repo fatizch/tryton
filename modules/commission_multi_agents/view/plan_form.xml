@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/notebook/page[@id='plan_relations']"
+        position="after">
+            <page string="Commissioned Agents" id="commissioned_agents">
+                <field name="commissionned_agents" colspan="4"/>
+            </page>
+    </xpath>
+</data>
+

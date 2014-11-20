@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='currency']"
+        position="after">
+        <newline/>
+        <label name="commissioned_with_agent"/>
+        <field name="commissioned_with_agent" colspan="3"/>
+        <field name="commissioned_agents" colspan="4"/>
+    </xpath>
+</data>
