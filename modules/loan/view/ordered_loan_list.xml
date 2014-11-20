@@ -12,4 +12,5 @@
     </field>
     <field name="funds_release_date"/>
     <field name="first_payment_date"/>
+    <field name="parties_name"/>
 </tree>

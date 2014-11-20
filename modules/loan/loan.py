@@ -83,6 +83,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
     parties = fields.Many2Many('loan-party', 'loan', 'party', 'Parties',
         required=True)
+    parties_name = fields.Function(
+        fields.Char('Parties Name'),
+        'on_change_with_parties_name', searcher='search_parties_name')
     rate = fields.Numeric('Annual Rate', digits=(16, 4),
         states={
             'required': Eval('kind').in_(
@@ -448,6 +451,14 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 'add': [(-1, x._save_values) for x in self.increments],
                 'remove': [x.id for x in previous_increments],
                 }
+
+    @fields.depends('parties')
+    def on_change_with_parties_name(self, name=None):
+        return ', '.join([x.rec_name for x in self.parties])
+
+    @classmethod
+    def search_parties_name(cls, name, clause):
+        return [('parties.rec_name',) + tuple(clause[1:])]
 
     @classmethod
     @model.CoopView.button
