@@ -29,8 +29,8 @@ class Contract:
         super(Contract, cls).__setup__()
 
     def get_is_group(self, name):
-        return self.offered.is_group if self.offered else False
+        return self.product.is_group if self.product else False
 
     @classmethod
     def search_is_group(cls, name, clause):
-        return [('offered.is_group', ) + tuple(clause[1:])]
+        return [('product.is_group', ) + tuple(clause[1:])]
