@@ -272,7 +272,7 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
         select=True, readonly=True, ondelete='RESTRICT')
     fee = fields.Many2One('account.fee.description', 'Fee', select=True,
         ondelete='RESTRICT', readonly=True)
-    rate = fields.Numeric('Rate', digits=(16, 5), required=True)
+    rate = fields.Numeric('Rate', required=True)
     frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)
     taxes = fields.Char('Taxes', readonly=True)
     parent = fields.Function(
