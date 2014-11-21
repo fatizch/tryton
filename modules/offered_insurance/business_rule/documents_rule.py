@@ -19,14 +19,10 @@ from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.modules.cog_utils import fields, model, utils, coop_string
-from trytond.modules.offered_insurance.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_ADVANCED
 
 
 __all__ = [
     'DocumentProductRelation',
-    'DocumentRule',
-    'RuleDocumentDescriptionRelation',
     'DocumentTemplate',
     'DocumentTemplateVersion',
     'Printable',
@@ -217,52 +213,6 @@ class Printable(Model):
 
     def get_document_filename(self):
         return self.rec_name
-
-
-class DocumentRule(BusinessRuleRoot, model.CoopSQL):
-    'Document Managing Rule'
-
-    __name__ = 'document.rule'
-
-    kind = fields.Selection([
-            ('', ''),
-            ('main', 'Main'),
-            ('sub', 'Sub Elem'),
-            ('loss', 'Loss'),
-            ], 'Kind')
-    documents = fields.Many2Many('document.rule-document.description', 'rule',
-        'document', 'Documents', states={'invisible': STATE_ADVANCED})
-
-    def give_me_documents(self, args):
-        if self.config_kind == 'simple':
-            return self.documents, []
-        if not self.rule:
-            return [], []
-        try:
-            rule_result = self.get_rule_result(args)
-        except Exception:
-            return [], ['Invalid rule']
-        try:
-            result = utils.get_those_objects(
-                'document.request.line', [
-                    ('code', 'in', rule_result.result)])
-            return result, []
-        except:
-            return [], ['Invalid documents']
-
-    @classmethod
-    def default_kind(cls):
-        return Transaction().context.get('doc_rule_kind', None)
-
-
-class RuleDocumentDescriptionRelation(model.CoopSQL):
-    'Rule to Document Description Relation'
-
-    __name__ = 'document.rule-document.description'
-
-    rule = fields.Many2One('document.rule', 'Rule', ondelete='CASCADE')
-    document = fields.Many2One('document.description', 'Document',
-        ondelete='RESTRICT')
 
 
 class DocumentCreateSelect(model.CoopView):

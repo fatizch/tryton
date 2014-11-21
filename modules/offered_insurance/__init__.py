@@ -38,8 +38,6 @@ def register():
         DocumentTemplate,
         DocumentProductRelation,
         DocumentTemplateVersion,
-        DocumentRule,
-        RuleDocumentDescriptionRelation,
         DocumentCreateSelect,
         DocumentCreatePreview,
         DocumentCreatePreviewReport,
