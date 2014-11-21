@@ -2,9 +2,8 @@ import datetime
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
-from sql import Cast, Literal
+from sql import Literal
 from sql.aggregate import Sum, Max
-from sql.operators import Concat
 from sql.conditionals import Case
 
 from trytond.wizard import Wizard, StateView, Button
@@ -14,7 +13,7 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.model import ModelSQL, ModelView
 
-from trytond.modules.cog_utils import fields, model, utils, coop_date
+from trytond.modules.cog_utils import fields, model, coop_date
 
 
 __metaclass__ = PoolMeta
@@ -36,11 +35,20 @@ class LoanShare:
     average_premium_rate = fields.Function(
         fields.Numeric('Average Premium Rate', digits=(6, 4)),
         'get_average_premium_rate')
+    base_premium_amount = fields.Function(
+        fields.Numeric('Base Premium Amount', digits=(16, 2)),
+        'get_average_premium_rate')
 
-    def get_average_premium_rate(self, name):
-        contract = self.option.covered_element.contract
-        rule = contract.product.average_loan_premium_rule
-        return rule.calculate_average_premium_for_option(contract, self)
+    @classmethod
+    def get_average_premium_rate(cls, shares, names):
+        field_values = {'average_premium_rate': {}, 'base_premium_amount': {}}
+        for share in shares:
+            contract = share.option.covered_element.contract
+            rule = contract.product.average_loan_premium_rule
+            vals = rule.calculate_average_premium_for_option(contract, share)
+            field_values['base_premium_amount'][share.id] = vals[0]
+            field_values['average_premium_rate'][share.id] = vals[1]
+        return field_values
 
 
 class Premium:
@@ -158,58 +166,26 @@ class Contract:
         cursor = Transaction().cursor
         pool = Pool()
         Premium = pool.get('contract.premium')
-        invoice = pool.get('account.invoice').__table__()
-        invoice_line = pool.get('account.invoice.line').__table__()
-        invoice_contract = pool.get('contract.invoice').__table__()
-        premium = Premium.__table__()
+        PremiumAmount = pool.get('contract.premium.amount')
+        premium_amount = PremiumAmount.__table__()
 
-        if start:
-            date_clause = invoice_line.coverage_start >= start
-        else:
-            date_clause = None
-        if end:
-            if date_clause:
-                date_clause &= (invoice_line.coverage_start <= end)
+        date_clause = ((premium_amount.end >= (start or datetime.date.min))
+            & (premium_amount.start <= (end or datetime.date.max)))
+        cursor.execute(*premium_amount.select(premium_amount.amount,
+                premium_amount.premium,
+                where=date_clause & (premium_amount.contract == self.id)))
 
-        query_table = invoice.join(invoice_contract, condition=(
-                (invoice_contract.invoice == invoice.id)
-                & (invoice.state.in_(['validated', 'posted', 'paid']))
-                & (invoice_contract.contract == self.id))
-            ).join(invoice_line, condition=(invoice_line.invoice == invoice.id)
-            ).join(premium, condition=(
-                Concat('contract.premium,', Cast(premium.id, 'VARCHAR'))
-                == invoice_line.origin)
-            )
-
-        premium_fields = Premium.get_possible_parent_field()
-        premium_parents = [getattr(premium, x) for x in premium_fields]
-        premium_parents_models = dict([
-                (x, pool.get(Premium._fields[x].model_name))
-                for x in premium_fields])
-
-        cursor.execute(*query_table.select(Sum(invoice_line.unit_price),
-                premium.loan, *premium_parents, where=date_clause,
-                group_by=[premium.loan] + premium_parents))
         per_contract_entity = defaultdict(lambda: defaultdict(lambda: 0))
-        for elem in cursor.dictfetchall():
-            parent = None
-            for x in premium_fields:
-                if not elem[x]:
-                    continue
-                parent = premium_parents_models[x](elem[x])
-                break
-            if parent:
-                per_contract_entity[parent][elem['loan']] = elem['sum']
-
-        cursor.execute(*query_table.select(premium.rated_entity, premium.loan,
-                Sum(invoice_line.unit_price), where=date_clause,
-                group_by=(premium.rated_entity, premium.loan)))
         per_offered_entity = defaultdict(lambda: defaultdict(lambda: 0))
-        for elem in cursor.dictfetchall():
-            parent = utils.convert_ref_to_obj(elem['rated_entity'])
-            per_offered_entity[parent][elem['loan']] = elem['sum']
 
-        def result_parser(kind, value=None, model_name='', loan_id=None):
+        # Unzip first to browse all premiums at once
+        amounts, premiums = zip(*cursor.fetchall())
+        premiums = Premium.browse(premiums)
+        for amount, premium in zip(amounts, premiums):
+            per_contract_entity[premium.parent][premium.loan] += amount
+            per_offered_entity[premium.rated_entity][premium.loan] += amount
+
+        def result_parser(kind, value=None, model_name='', loan=None):
             # Returns a function that can be used to browse the queries results
             # and aggregating them. It is possible to aggregate per model_name,
             # per a specific parent (eg. per covered_element), or per offered
@@ -222,11 +198,11 @@ class Contract:
                 values = per_contract_entity
             if value:
                 good_dict = values[value]
-                if loan_id:
-                    return good_dict[loan_id]
+                if loan:
+                    return good_dict[loan]
                 return sum(good_dict.values())
             if model_name:
-                result = sum([result_parser(kind, value=k, loan_id=loan_id)
+                result = sum([result_parser(kind, value=k, loan=loan)
                         for k, v in values.iteritems()
                         if k.__name__ == model_name])
                 return result
@@ -391,17 +367,25 @@ class Loan:
     average_premium_rate = fields.Function(
         fields.Numeric('Average Premium Rate', digits=(6, 4)),
         'get_average_premium_rate')
+    base_premium_amount = fields.Function(
+        fields.Numeric('Base Premium Amount', digits=(16, 2)),
+        'get_average_premium_rate')
 
-    def get_average_premium_rate(self, name, contract=None):
+    @classmethod
+    def get_average_premium_rate(cls, loans, names, contract=None):
         if not contract:
             contract_id = Transaction().context.get('contract', None)
             if contract_id:
                 contract = Pool().get('contract')(contract_id)
             else:
-                return None
+                return {name: {x.id for x in loans} for name in names}
+        field_values = {'average_premium_rate': {}, 'base_premium_amount': {}}
         rule = contract.product.average_loan_premium_rule
-        return (rule.calculate_average_premium_for_contract(self, contract)
-            if rule else None)
+        for loan in loans:
+            vals = rule.calculate_average_premium_for_contract(loan, contract)
+            field_values['base_premium_amount'][loan.id] = vals[0]
+            field_values['average_premium_rate'][loan.id] = vals[1]
+        return field_values
 
 
 class DisplayLoanAveragePremiumValues(model.CoopView):
@@ -409,10 +393,7 @@ class DisplayLoanAveragePremiumValues(model.CoopView):
 
     __name__ = 'loan.average_premium_rate.display.values'
 
-    loans = fields.One2Many('loan', None, 'Loans',
-        context={'contract': Eval('contract')},
-        depends=['contract'])
-    contract = fields.Many2One('contract', 'Contract')
+    loans = fields.One2Many('loan', None, 'Loans')
 
 
 class DisplayLoanAveragePremium(Wizard):
@@ -432,5 +413,15 @@ class DisplayLoanAveragePremium(Wizard):
         if contract_id is None:
             return {}
         contract = Pool().get('contract')(contract_id)
-        return {'contract': contract_id,
-            'loans': [x.id for x in contract.used_loans]}
+        with Transaction().set_context(contract=contract_id):
+            return {'loans': [{
+                        'rec_name': x.rec_name,
+                        'average_premium_rate': x.average_premium_rate,
+                        'base_premium_amount': x.base_premium_amount,
+                        'current_loan_shares': [{
+                                'rec_name': y.rec_name,
+                                'average_premium_rate': y.average_premium_rate,
+                                'base_premium_amount': x.base_premium_amount,
+                                } for y in x.current_loan_shares],
+                        } for x in contract.used_loans],
+                }

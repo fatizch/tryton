@@ -4,4 +4,5 @@
     <field name="average_premium_rate">
         <suffix string="%"/>
     </field>
+    <field name="base_premium_amount"/>
 </tree>

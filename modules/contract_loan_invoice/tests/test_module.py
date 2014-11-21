@@ -1,7 +1,8 @@
 import unittest
+import doctest
 import trytond.tests.test_tryton
+from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 
-from trytond.transaction import Transaction
 from trytond.modules.cog_utils import test_framework
 
 
@@ -18,5 +19,8 @@ def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
         ModuleTestCase))
-    # TODO add scenario to test invoicing
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_invoice_loan_contract.rst',
+            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite
