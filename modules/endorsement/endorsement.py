@@ -444,7 +444,7 @@ class Contract(CogProcessFramework):
                     }
                 })
 
-    def get_latest_endorsement(self):
+    def get_latest_endorsement(self, name):
         Endorsement = Pool().get('endorsement')
         endorsement = Endorsement.search([
                 ('contracts', '=', self.id),
