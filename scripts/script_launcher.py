@@ -308,7 +308,7 @@ def test(arguments, config, work_data):
         if (len(threads) < num_processes) and argument_list:
             t = threading.Thread(
                 target=test_module, args=[argument_list.pop(),
-                    work_data['coop_modules'],
+                    work_data['modules'],
                     log_dir, base_command_line])
             t.setDaemon(True)
             time.sleep(1)
