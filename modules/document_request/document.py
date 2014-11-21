@@ -34,17 +34,29 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     request_date = fields.Date('Request Date', states={'readonly': True})
     received = fields.Function(
         fields.Boolean('Received', depends=['attachment', 'reception_date']),
-        'on_change_with_received')
+        'on_change_with_received', setter='set_received')
     request = fields.Many2One('document.request', 'Document Request',
         ondelete='CASCADE')
-    attachment = fields.Many2One('ir.attachment', 'Attachment', domain=[
-            ('resource', '=', Eval('_parent_request', {}).get(
-                'needed_by_str'))], ondelete='SET NULL')
+    attachment = fields.Many2One('ir.attachment', 'Attachment',
+        domain=[('resource', '=', Eval('for_object'))],
+        depends=['for_object'], ondelete='RESTRICT')
+    attachment_name = fields.Function(fields.Char('Attachment Name',
+            depends=['attachment']),
+        'get_attachment_info')
+    attachment_data = fields.Function(
+        fields.Binary('Data', filename='attachment_name',
+            depends=['attachment']),
+        'get_attachment_info')
 
-    @fields.depends('attachment', 'reception_date', 'received')
+    @fields.depends('attachment', 'reception_date', 'received',
+        'attachment_name', 'attachment_data')
     def on_change_attachment(self):
         if not (hasattr(self, 'attachment') and self.attachment):
+            self.attachment_name = ''
+            self.attachment_data = None
             return
+        self.attachment_name = self.attachment.name
+        self.attachment_data = self.attachment.data
         self.received = True
         if not self.reception_date:
             self.reception_date = utils.today()
@@ -87,10 +99,6 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         return utils.today()
 
     @classmethod
-    def setter_void(cls, docs, values, name):
-        pass
-
-    @classmethod
     def default_for_object(cls):
         if 'request_owner' not in Transaction().context:
             return ''
@@ -104,6 +112,17 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
             return ''
 
         return needed_by
+
+    @classmethod
+    def set_received(cls, request_lines, name, value):
+        if value:
+            cls.write(request_lines, {'reception_date': utils.today()})
+        else:
+            cls.write(request_lines, {'reception_date': None})
+
+    def get_attachment_info(self, name):
+        if self.attachment:
+            return getattr(self.attachment, name.split('_')[1])
 
 
 class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
