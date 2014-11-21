@@ -451,7 +451,7 @@ class Contract(CogProcessFramework):
                 ('state', '!=', 'draft'),
                 ], order=[('application_date', 'DESC')], limit=1)
         if endorsement:
-            return endorsement.id
+            return endorsement[0].id
 
     @classmethod
     @model.CoopView.button
