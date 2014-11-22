@@ -3,4 +3,7 @@
     <xpath expr="/tree" position="replace_attributes">
         <tree editable="bottom"/>
     </xpath>
+    <xpath expr="/tree/field[@name='number']" position="replace_attributes">
+        <field name="number" expand="1"/>
+    </xpath>
 </data>
