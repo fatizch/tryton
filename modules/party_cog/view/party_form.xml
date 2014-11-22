@@ -40,7 +40,7 @@
         </group>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <button name="button_start_synthesis_menu" string="Synthesis"/>
+        <button name="button_start_synthesis_menu" string="Synthesis" xexpand="0" xalign="1"/>
     </xpath>
     <xpath expr="/form/field[@name='name']" position="replace"/>
     <xpath expr="/form/label[@name='name']" position="replace"/>
