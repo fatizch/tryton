@@ -690,8 +690,8 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "field:party.synthesis.menu.contract,rec_name:"
-msgid "Name"
-msgstr "Nom"
+msgid "Number"
+msgstr "Numéro"
 
 msgctxt "field:party.synthesis.menu.contract,subscriber:"
 msgid "Subscriber"
