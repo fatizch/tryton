@@ -4,7 +4,7 @@ import copy
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin
-from trytond.pyson import Eval, Bool, Or, And
+from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields, model, utils, coop_string
@@ -28,11 +28,23 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     end_date = fields.Date('End Date')
     with_default_value = fields.Boolean('Default Value')
     default_value_boolean = fields.Function(
-        fields.Boolean('Default Value'),
+        fields.Boolean('Default Value',
+            states={
+                'required': Bool(Eval('with_default_value')) & (
+                    Eval('type_') == 'boolean'),
+                'invisible': ~Eval('with_default_value') | (
+                    Eval('type_') != 'boolean'),
+                },
+            depends=['type_', 'with_default_value']),
         'get_default_value', 'set_default_value')
     default_value_selection = fields.Function(
         fields.Selection('get_default_value_selection', 'Default Value',
-            states={'required': Eval('type_') == 'selection'},
+            states={
+                'required': Bool(Eval('with_default_value')) & (
+                    Eval('type_') == 'selection'),
+                'invisible': ~Eval('with_default_value') | (
+                    Eval('type_') != 'selection'),
+                },
             depends=['type_', 'selection', 'with_default_value'],
             ),
         'get_default_value', 'set_default_value')
@@ -57,29 +69,9 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     @classmethod
     def __setup__(cls):
         super(ExtraData, cls).__setup__()
-
-        def update_field(field_name, field):
-            if not hasattr(field, 'states'):
-                field.states = {}
-            field.states['invisible'] = Or(
-                Eval('type_') != field_name[14:],
-                ~Bool(Eval('with_default_value')))
-
-        map(lambda x: update_field(x[0], x[1]),
-            [(elem, getattr(cls, elem)) for elem in dir(cls) if
-                elem.startswith('default_value_')])
-
         cls.name.string = 'Code'
         cls.string.string = 'Name'
         cls.type_.selection.insert(0, ('', ''))
-
-        if not cls.type_.on_change:
-            cls.type_.on_change = set()
-        cls.type_.on_change.add('type_')
-
-        cls.selection.states['required'] = And(Eval('type_') == 'selection',
-            ~~Eval('with_default_value'))
-
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(name)', 'The code must be unique!'),
             ]
