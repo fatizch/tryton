@@ -18,7 +18,7 @@ class Address(export.ExportImportMixin):
     end_date = fields.Date('End Date')
     zip_and_city = fields.Function(
         fields.Many2One('country.zipcode', 'Zip'),
-        'get_zip_and_city', 'set_zip_and_city')
+        'get_zip_and_city', 'set_zip_and_city', searcher='search_zip_and_city')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
@@ -183,9 +183,19 @@ class Address(export.ExportImportMixin):
     @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR',
-            [('street',) + tuple(clause[1:])],
-            [('city',) + tuple(clause[1:])],
-            [('zip',) + tuple(clause[1:])],
+            ('street',) + tuple(clause[1:]),
+            ('city',) + tuple(clause[1:]),
+            ('zip',) + tuple(clause[1:]),
+            ]
+
+    @classmethod
+    def search_zip_and_city(cls, name, clause):
+        return [
+            ('country',) + tuple(clause[1:]),
+            ['OR',
+                ('city',) + tuple(clause[1:]),
+                ('zip',) + tuple(clause[1:]),
+                ],
             ]
 
     def get_publishing_values(self):
