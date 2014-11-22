@@ -103,6 +103,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.deferal = 'partially'
         loan.deferal_duration = 12
         loan.calculate()
+        loan.save()
         self.assertEqual(loan.get_payment_amount(loan.first_payment_date),
             Decimal('333.33'))
         self.assertEqual(loan.get_payment_amount(datetime.date(2013, 7, 15)),
@@ -157,6 +158,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.deferal = 'fully'
         loan.deferal_duration = 8
         loan.calculate()
+        loan.save()
         self.assertEqual(loan.get_payment_amount(loan.first_payment_date),
             Decimal(0))
         self.assertEqual(len(loan.increments), 2)
@@ -203,11 +205,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
             payment_frequency='half_year',
             currency=currency,
             company=company)
+        loan.parties = self.Party.search([('name', '=', 'DOE')])
         loan.first_payment_date = loan.on_change_with_first_payment_date()
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 9, 5))
         loan.number_of_payments = 30
         loan.amount = Decimal(243455)
         loan.calculate()
+        loan.save()
         self.assertEqual(loan.get_payment_amount(loan.first_payment_date),
             Decimal('8240.95'))
         self.assertEqual(len(loan.increments), 2)
