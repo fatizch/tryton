@@ -211,8 +211,9 @@ class LoanContractDisplayer(model.CoopView):
             loan.simulate()
             last_increment = loan.increments[-1]
             last_increment.loan = loan
+            last_increment.start_date = last_increment.get_start_date(None)
             max_loan_end = max(max_loan_end,
-                last_increment.on_change_with_end_date())
+                last_increment.get_end_date(None))
         self.new_start_date = self.new_start_date or self.contract.start_date
         self.new_end_date = coop_date.add_day(max_loan_end, -1)
 
