@@ -156,10 +156,14 @@ def selection_as_string(cls, var_name, value):
             return cur_tuple[1]
 
 
-def remove_invalid_char(from_string):
+def remove_accentued_char(from_string):
     import unicodedata
-    res = ''.join((c for c in unicodedata.normalize('NFD',
+    return ''.join((c for c in unicodedata.normalize('NFD',
                 unicode(from_string)) if unicodedata.category(c) != 'Mn'))
+
+
+def remove_invalid_char(from_string):
+    res = remove_accentued_char(from_string)
     res = re.sub('[^0-9a-zA-Z]+', '_', res)
     return res
 

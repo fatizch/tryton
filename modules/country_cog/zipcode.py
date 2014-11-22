@@ -17,6 +17,17 @@ class ZipCode(model.CoopSQL, model.CoopView):
     country = fields.Many2One('country.country', 'Country', required=True,
         ondelete='CASCADE')
 
+    @classmethod
+    def __setup__(cls):
+        super(ZipCode, cls).__setup__()
+        cls._order.insert(0, ('country', 'ASC'))
+        cls._order.insert(1, ('zip', 'ASC'))
+        cls._order.insert(2, ('city', 'ASC'))
+        cls._sql_constraints += [
+            ('zip_uniq', 'UNIQUE(zip, city, country)',
+                'This city and this zipcode already exist for this country!'),
+            ]
+
     def get_rec_name(self, name=None):
         return '%s %s' % (self.zip, self.city)
 
@@ -26,7 +37,7 @@ class ZipCode(model.CoopSQL, model.CoopView):
         # http://www.laposte.fr/sna/rubrique.php3?id_rubrique=59
         # and some modification must be made on city name to be validated
         # remove accentued char
-        city = coop_string.remove_invalid_char(city)
+        city = coop_string.remove_accentued_char(city)
         # remove apostrophe
         city = city.replace('\'', ' ').replace('-', ' ').upper()
         # remove all other ponctuation
@@ -70,3 +81,9 @@ class ZipCode(model.CoopSQL, model.CoopView):
                 break
         return super(ZipCode, cls).search(
             domain, offset, limit, order, count, query)
+
+    @fields.depends('city', 'country')
+    def on_change_with_city(self):
+        if not self.country or self.country.code != 'FR':
+            return self.city
+        return self.replace_city_name_with_support_for_french_sna(self.city)
