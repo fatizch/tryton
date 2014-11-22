@@ -64,12 +64,11 @@ class Party(export.ExportImportMixin):
             'required': STATES_PERSON,
             }, depends=['is_person'])
     gender_string = gender.translated('gender')
-    first_name = fields.UnaccentChar('First Name', states={
+    first_name = fields.Char('First Name', states={
             'invisible': ~STATES_PERSON,
             'required': STATES_PERSON,
             }, depends=['is_person'])
-    birth_name = fields.UnaccentChar('Birth Name', states={
-            'readonly': Eval('gender') != 'female',
+    birth_name = fields.Char('Birth Name', states={
             'invisible': ~STATES_PERSON
             }, depends=['is_person'])
     birth_date = fields.Date('Birth Date', states={
@@ -117,7 +116,6 @@ class Party(export.ExportImportMixin):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
             contact_field.readonly = False
-        cls.name = fields.UnaccentChar('Name', required=True, select=True)
 
     @classmethod
     def add_func_key(cls, values):
