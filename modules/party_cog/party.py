@@ -262,7 +262,10 @@ class Party(export.ExportImportMixin):
         return super(Party, self).get_full_name(name)
 
     def get_rec_name(self, name):
-        return '[%s] %s' % (self.code, self.full_name)
+        if Transaction().context.get('company') == self.id:
+            return self.name
+        else:
+            return '[%s] %s' % (self.code, self.full_name)
 
     def get_synthesis_rec_name(self, name):
         if self.is_person:
