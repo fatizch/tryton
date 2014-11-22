@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree/field[@name='rec_name']" position="replace_attributes">
+        <field name="rec_name" expand="1"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='bank']" position="replace_attributes">
+        <field name="bank" expand="1"/>
+    </xpath>
+</data>

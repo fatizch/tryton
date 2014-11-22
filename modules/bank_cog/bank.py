@@ -64,8 +64,7 @@ class Bank(export.ExportImportMixin):
         return ['bic']
 
     def get_rec_name(self, name):
-        res = super(Bank, self).get_rec_name(name)
-        res = '[%s] %s' % (self.bic, res)
+        res = '[%s] %s' % (self.bic, self.party.name if self.party else '')
         return res
 
     @classmethod
