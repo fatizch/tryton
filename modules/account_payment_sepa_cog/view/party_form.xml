@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="//separator[@id='sepa']" position="replace_attributes">
+        <separator id="sepa" states="{'invisible': ~Eval('is_sepa_creditor_identifier_needed')}"/>
+    </xpath>
+</data>
