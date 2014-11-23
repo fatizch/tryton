@@ -199,6 +199,13 @@ class ContractOption:
             option.loan_shares = option.loan_shares
             option.save()
 
+    def calculate(self):
+        LoanShare = Pool().get('loan.share')
+        loan_shares_to_delete = [x for x in self.loan_shares
+            if not x.loan in self.parent_contract.loans]
+        LoanShare.delete(loan_shares_to_delete)
+        super(ContractOption, self).calculate()
+
 
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
