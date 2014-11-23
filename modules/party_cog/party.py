@@ -116,6 +116,8 @@ class Party(export.ExportImportMixin):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
             contact_field.readonly = False
+        cls.vat_number.states = {'invisible': True}
+        cls.vat_country.states = {'invisible': True}
 
     @classmethod
     def add_func_key(cls, values):
