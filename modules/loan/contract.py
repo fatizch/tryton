@@ -332,14 +332,16 @@ class OptionSubscription:
     def init_default_childs(cls, contract, coverage, option, parent_dict):
         res = super(OptionSubscription, cls).init_default_childs(contract,
             coverage, option, parent_dict)
-        for loan in [x.loan for x in contract.ordered_loans]:
+        for ordered_loan in [x for x in contract.ordered_loans]:
             loan_share = None
+            loan = ordered_loan.loan
             for share in option.loan_shares if option else []:
                 if share.loan == loan:
                     loan_share = share
                     break
             res.append({
                     'loan': loan.id,
+                    'order': ordered_loan.number,
                     'share': loan_share.share if loan_share else 1,
                     'is_selected': (loan_share is not None
                         or parent_dict['is_selected']),
@@ -389,11 +391,12 @@ class WizardOption:
     share = fields.Numeric('Loan Share', digits=(16, 4),
         states={'readonly': ~Eval('loan')})
     loan = fields.Many2One('loan', 'Loan')
+    order = fields.Integer('Order')
 
-    @fields.depends('loan')
+    @fields.depends('loan', 'order')
     def on_change_with_name(self, name=None):
         if self.loan:
-            return '    %s' % self.loan.rec_name
+            return '    %s %s' % (self.order, self.loan.rec_name)
         else:
             return super(WizardOption, self).on_change_with_name(name)
 

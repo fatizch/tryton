@@ -345,8 +345,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     def get_rec_name(self, name):
         name = []
+        if self.order:
+            name.append(str(self.order))
         if self.number:
-            name.append(self.number)
+            name.append('[%s]' % self.number)
         if self.kind:
             name.append(coop_string.translate_value(self, 'kind'))
         if self.amount:
