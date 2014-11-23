@@ -81,7 +81,7 @@ class Contract:
         to_write = []
         for contract in contracts:
             for i, loan in enumerate(contract.ordered_loans, 1):
-                if not loan.number:
+                if not loan.number or contract.status == 'quote':
                     to_write += [[loan], {'number': i}]
         if to_write:
             ContractLoan.write(*to_write)
