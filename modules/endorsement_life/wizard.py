@@ -170,7 +170,9 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                         relation=elem.covered_element.id)
                     ctr_endorsement = all_endorsements[elem.contract.id]
                     if not ctr_endorsement.id:
-                        ctr_endorsement.covered_elements.append(ce_endorsement)
+                        ctr_endorsement.covered_elements = list(
+                            ctr_endorsement.covered_elements) + [
+                                ce_endorsement]
                     else:
                         ce_endorsement.contract_endorsement = \
                             ctr_endorsement.id
@@ -183,7 +185,8 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                         option_endorsement.covered_element_endorsement = \
                             ce_endorsement.id
                     else:
-                        ce_endorsement.options.append(option_endorsement)
+                        ce_endorsement.options = list(
+                            ce_endorsement.options) + [option_endorsement]
             else:
                 option_endorsement = (elem.option_endorsement or
                     new_options[cur_option.id])
