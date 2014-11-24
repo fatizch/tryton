@@ -123,13 +123,24 @@
       <!-- <field name="auto_refresh">100</field> -->
       <field name="domain">[('latest', '=', True), ['OR', ('locked', '=', False), ('user', '=', Eval('context', {}).get('_user'))], ('to_state', '!=', None)]</field>
     </record>
+    <record model="ir.action.act_window.domain" id="act_process_log_domain_mine">
+        <field name="name">Mine</field>
+        <field name="sequence" eval="10"/>
+        <field name="domain">[('user', '=', Eval('_user'))]</field>
+        <field name="act_window" ref="act_process_log"/>
+    </record>
+    <record model="ir.action.act_window.domain" id="act_process_log_domain_all">
+        <field name="name">All</field>
+        <field name="sequence" eval="20"/>
+        <field name="act_window" ref="act_process_log"/>
+    </record>
     <record model="ir.action.act_window.view" id="act_process_log_view1">
-      <field name="sequence" eval="10"/>
+      <field name="sequence" eval="30"/>
       <field name="view" ref="process_log_launchable_view_list"/>
       <field name="act_window" ref="act_process_log"/>
     </record>
     <record model="ir.action.act_window.view" id="act_process_log_view2">
-      <field name="sequence" eval="11"/>
+      <field name="sequence" eval="40"/>
       <field name="view" ref="process_cog.process_log_form"/>
       <field name="act_window" ref="act_process_log"/>
     </record>
