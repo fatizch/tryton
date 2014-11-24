@@ -132,9 +132,9 @@ class OptionSubscription(model.CoopWizard):
 
     def transition_update_options(self):
         contract = self.options_displayer.contract
-        contract.options = list(getattr(contract, 'options', []))
-        self.add_remove_options(self, contract.options,
-            self.options_displayer.options)
+        options = list(getattr(contract, 'options', []))
+        self.add_remove_options(self, options, self.options_displayer.options)
+        contract.options = options
         contract.init_extra_data()
         contract.save()
         return 'end'

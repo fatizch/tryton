@@ -404,10 +404,10 @@ class WizardOption:
         if option is None:
             return
         LoanShare = Pool().get('loan.share')
-        option.loan_shares = list(getattr(option, 'loan_shares', []))
-        loans = [x.loan for x in option.loan_shares]
+        loan_shares = list(getattr(option, 'loan_shares', []))
+        loans = [x.loan for x in loan_shares]
         existing_loan_share = None
-        for loan_share in option.loan_shares:
+        for loan_share in loan_shares:
             if loan_share.loan == self.loan:
                 existing_loan_share = loan_share
                 break
@@ -415,17 +415,16 @@ class WizardOption:
             if self.loan not in loans:
                 loan_share = LoanShare()
                 loan_share.loan = self.loan
-                option.loan_shares.append(loan_share)
+                loan_shares.append(loan_share)
                 loan_share.share = self.share
-                option.save()
             else:
                 loan_share = existing_loan_share
                 loan_share.share = self.share
-                loan_share.save()
         elif not self.is_selected and existing_loan_share:
-            option.loan_shares.remove(existing_loan_share)
+            loan_shares.remove(existing_loan_share)
             LoanShare.delete([existing_loan_share])
-            option.save()
+        option.loan_shares = loan_shares
+        option.save()
 
 
 class OptionSubscriptionWizardLauncher:
