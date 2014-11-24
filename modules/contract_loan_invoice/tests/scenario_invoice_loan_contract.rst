@@ -276,7 +276,6 @@ Create Loans::
     >>> loan_1.rate = Decimal('0.045')
     >>> loan_1.amount = Decimal('250000')
     >>> loan_1.number_of_payments = 200
-    >>> loan_1.parties.append(Party(subscriber.id))
     >>> loan_1.save()
     >>> loan_2 = Loan()
     >>> loan_2.company = company
@@ -287,7 +286,6 @@ Create Loans::
     >>> loan_2.rate = Decimal('0.03')
     >>> loan_2.amount = Decimal('100000')
     >>> loan_2.number_of_payments = 220
-    >>> loan_2.parties.append(Party(subscriber.id))
     >>> loan_2.save()
     >>> Loan.calculate_loan([loan_1.id, loan_2.id], {})
 

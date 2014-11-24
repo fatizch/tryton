@@ -436,14 +436,6 @@ class ContractOption:
             if option.coverage == self.coverage:
                 return option.id
 
-    @fields.depends('covered_element', 'contract')
-    def on_change_with_parties(self, name=None):
-        if self.contract:
-            return super(ContractOption, self).on_change_with_parties(name)
-        if not self.covered_element or self.covered_element.id <= 0:
-            return Transaction().context.get('parties', [])
-        return [x.id for x in self.covered_element.parties]
-
     @fields.depends('covered_element')
     def on_change_with_product(self, name=None):
         if self.covered_element:
@@ -616,10 +608,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         context={
             'covered_element': Eval('id'),
             'item_desc': Eval('item_desc'),
-            'parties': Eval('parties'),
             'all_extra_datas': Eval('all_extra_datas'),
             },
-        depends=['id', 'item_desc', 'parties', 'all_extra_datas', 'product'])
+        depends=['id', 'item_desc', 'all_extra_datas', 'product'])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[
@@ -666,9 +657,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             states={'invisible': Bool(Eval('contract'))},
             depends=['contract']),
         'on_change_with_main_contract')
-    parties = fields.Function(
-        fields.Many2Many('party.party', None, None, 'Parties'),
-        'on_change_with_parties')
     party_extra_data = fields.Function(
         fields.Dict('extra_data', 'Party Extra Data',
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))},
@@ -737,10 +725,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def default_main_contract(cls):
         result = Transaction().context.get('contract')
         return result if result and result > 0 else None
-
-    @classmethod
-    def default_parties(cls):
-        return Transaction().context.get('parties', [])
 
     @classmethod
     def default_product(cls):
@@ -844,14 +828,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if self.item_desc:
             return self.item_desc.kind
         return ''
-
-    @fields.depends('contract', 'party')
-    def on_change_with_parties(self, name=None):
-        if not self.contract or self.contract.id <= 0:
-            result = Transaction().context.get('parties', [])
-        else:
-            result = [x.id for x in self.contract.parties]
-        return result + ([self.party.id] if self.party else [])
 
     def get_party_extra_data(self, name=None):
         res = {}

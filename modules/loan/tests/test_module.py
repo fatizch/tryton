@@ -99,7 +99,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             number_of_payments=180,
             currency=currency,
             company=company)
-        loan.parties = self.Party.search([('name', '=', 'DOE')])
         loan.deferal = 'partially'
         loan.deferal_duration = 12
         loan.calculate()
@@ -151,7 +150,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.payment_frequency = 'quarter'
         loan.first_payment_date = coop_date.add_duration(
             loan.funds_release_date, loan.payment_frequency)
-        loan.parties = self.Party.search([('name', '=', 'DOE')])
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 6, 5))
         loan.number_of_payments = 56
         loan.amount = Decimal(134566)
@@ -205,7 +203,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             payment_frequency='half_year',
             currency=currency,
             company=company)
-        loan.parties = self.Party.search([('name', '=', 'DOE')])
         loan.first_payment_date = loan.on_change_with_first_payment_date()
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 9, 5))
         loan.number_of_payments = 30
@@ -253,7 +250,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             number_of_payments=12,
             currency=currency,
             company=company)
-        loan.parties = self.Party.search([('name', '=', 'DOE')])
         loan.calculate()
         loan.save()
 
@@ -324,7 +320,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 number_of_payments=120,
                 currency=currency,
                 company=company)
-            loan.parties = self.Party.search([('name', '=', 'DOE')])
             loan.calculate()
             loan.save()
             return loan

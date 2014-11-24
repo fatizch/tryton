@@ -14,7 +14,6 @@ __all__ = [
     'Loan',
     'LoanIncrement',
     'LoanPayment',
-    'LoanParty',
     ]
 
 LOAN_KIND = [
@@ -81,11 +80,14 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     first_payment_date = fields.Date('First Payment Date', required=True,
         states=_STATES, depends=_DEPENDS)
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
-    parties = fields.Many2Many('loan-party', 'loan', 'party', 'Parties',
-        required=True)
-    parties_name = fields.Function(
-        fields.Char('Parties Name'),
-        'on_change_with_parties_name', searcher='search_parties_name')
+    insured_persons = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Insured Persons',
+            states={'invisible': ~Eval('insured_persons')}),
+        'get_insured_persons', searcher='search_insured_persons')
+    insured_persons_name = fields.Function(
+        fields.Char('Insured Persons'),
+        'on_change_with_insured_persons_name',
+        searcher='search_insured_persons_name')
     rate = fields.Numeric('Annual Rate', digits=(16, 4),
         states={
             'required': Eval('kind').in_(
@@ -210,10 +212,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @staticmethod
     def default_deferal():
         return ''
-
-    @classmethod
-    def default_parties(cls):
-        return Transaction().context.get('parties', [])
 
     @staticmethod
     def default_state():
@@ -376,6 +374,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         if self.deferal:
             return self.increments[0].number_of_payments
 
+    def get_insured_persons(self, name):
+        return list(set([x.person.id for x in self.loan_shares]))
+
     def init_from_borrowers(self, parties):
         if hasattr(self, 'loan_shares') and self.loan_shares:
             return
@@ -455,13 +456,17 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 'remove': [x.id for x in previous_increments],
                 }
 
-    @fields.depends('parties')
-    def on_change_with_parties_name(self, name=None):
-        return ', '.join([x.rec_name for x in self.parties])
+    @fields.depends('insured_persons')
+    def on_change_with_insured_persons_name(self, name=None):
+        return ', '.join([x.rec_name for x in self.insured_persons])
 
     @classmethod
-    def search_parties_name(cls, name, clause):
-        return [('parties.rec_name',) + tuple(clause[1:])]
+    def search_insured_persons(cls, name, clause):
+        return [('loan_shares.person',) + tuple(clause[1:])]
+
+    @classmethod
+    def search_insured_persons_name(cls, name, clause):
+        return [('insured_persons.rec_name',) + tuple(clause[1:])]
 
     @classmethod
     @model.CoopView.button
@@ -619,16 +624,3 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_begin_balance(self, name=None):
         if self.outstanding_balance is not None and self.principal is not None:
             return self.outstanding_balance + self.principal
-
-
-class LoanParty(model.CoopSQL):
-    'Loan Party relation'
-
-    __name__ = 'loan-party'
-
-    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE')
-    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE')
-
-    def get_synthesis_rec_name(self, name):
-        if self.loan:
-            return self.loan.get_rec_name(name)

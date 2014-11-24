@@ -43,7 +43,7 @@
         <record model="ir.action.act_window" id="act_loan_relate_form">
             <field name="name">Loans</field>
             <field name="res_model">loan</field>
-            <field name="domain">[('parties', '=', Eval('active_id'))]</field>
+            <field name="domain">[('insured_persons', '=', Eval('active_id'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_loan_relate_keyword">
             <field name="keyword">form_relate</field>

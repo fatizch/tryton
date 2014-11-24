@@ -133,10 +133,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         context={
             'start_date': Eval('start_date'),
             'product': Eval('product'),
-            'parties': Eval('parties'),
             'all_extra_datas': Eval('extra_data_values')},
         domain=[('coverage.products', '=', Eval('product'))],
-        states=_STATES, depends=['parties', 'status', 'start_date', 'product',
+        states=_STATES, depends=['status', 'start_date', 'product',
             'extra_data_values'])
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
@@ -174,9 +173,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     extra_data_values = fields.Function(
         fields.Dict('extra_data', 'Extra Data'),
         'get_extra_data')
-    parties = fields.Function(
-        fields.Many2Many('party.party', None, None, 'Parties'),
-        'on_change_with_parties')
     product_subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
@@ -405,12 +401,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def on_change_with_current_policy_owner(self, name=None):
         policy_owner = self.get_policy_owner(utils.today())
         return policy_owner.id if policy_owner else None
-
-    @fields.depends('subscriber')
-    def on_change_with_parties(self, name=None):
-        if not self.subscriber:
-            return []
-        return [self.subscriber.id]
 
     @fields.depends('product')
     def on_change_with_subscriber_kind(self, name=None):
@@ -1005,9 +995,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
-    parties = fields.Function(
-        fields.Many2Many('party.party', None, None, 'Parties'),
-        'on_change_with_parties')
     product = fields.Function(
         fields.Many2One('offered.product', 'Product'),
         'on_change_with_product')
@@ -1073,10 +1060,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return Pool().get('contract')(contract_id).appliable_conditions_date
 
     @classmethod
-    def default_parties(cls):
-        return Transaction().context.get('parties', [])
-
-    @classmethod
     def default_product(cls):
         return Transaction().context.get('product', None)
 
@@ -1114,12 +1097,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def on_change_with_current_policy_owner(self, name=None):
         if self.contract:
             return self.contract.current_policy_owner
-
-    @fields.depends('contract')
-    def on_change_with_parties(self, name=None):
-        if not self.contract or self.contract.id <= 0:
-            return Transaction().context.get('parties', [])
-        return [x.id for x in self.contract.parties]
 
     @fields.depends('contract')
     def on_change_with_product(self, name=None):

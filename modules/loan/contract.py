@@ -35,11 +35,10 @@ class Contract:
             'readonly': Eval('status') != 'quote',
             },
         context={
-            'parties': Eval('parties'),
             'contract': Eval('id'),
             'start_date': Eval('start_date')
             },
-        depends=['is_loan', 'status', 'parties', 'id', 'show_ordered_loans',
+        depends=['is_loan', 'status', 'id', 'show_ordered_loans',
             'start_date'])
     show_ordered_loans = fields.Function(
         fields.Boolean('Show Ordered Loans',
@@ -55,8 +54,7 @@ class Contract:
                 | ~Eval('show_ordered_loans')),
             'readonly': Eval('status') != 'quote',
             },
-        context={'parties': Eval('parties')},
-        depends=['is_loan', 'status', 'parties'])
+        depends=['is_loan', 'status'])
     used_loans = fields.Function(
         fields.Many2Many('loan', None, None, 'Used Loans',
             context={'contract': Eval('id')}, depends=['id']),
@@ -150,7 +148,6 @@ class ContractLoan(model.CoopSQL, model.CoopView):
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE',
-        context={'parties': Eval('_parent_contract', {}).get('parties')},
         required=True)
     number = fields.Integer('Number')
     loan_state = fields.Function(
@@ -281,7 +278,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         depends=_DEPENDS)
     person = fields.Function(
         fields.Many2One('party.party', 'Person'),
-        'on_change_with_person')
+        'on_change_with_person', searcher='search_person')
     icon = fields.Function(
         fields.Char('Icon'),
         'on_change_with_icon')
@@ -315,6 +312,10 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     @classmethod
     def search_contract(cls, name, clause):
         return [('option.covered_element.contract', ) + tuple(clause[1:])]
+
+    @classmethod
+    def search_person(cls, name, clause):
+        return [('option.covered_element.party',) + tuple(clause[1:])]
 
     def get_name_for_billing(self):
         return '%s %s%% %s' % (self.person.get_rec_name(None),

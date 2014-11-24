@@ -95,7 +95,6 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         option.product = contract.product
         option.start_date = self.effective_date
         option.appliable_conditions_date = contract.appliable_conditions_date
-        option.parties = self.covered_element.parties
         option.all_extra_datas = self.covered_element.all_extra_datas
         option.status = 'quote'
 

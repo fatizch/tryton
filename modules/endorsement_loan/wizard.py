@@ -62,7 +62,7 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
     def _loan_fields_to_extract(cls):
         return {
             'loan': ['currency', 'rate', 'payment_frequency',
-                'first_payment_date', 'funds_release_date', 'parties',
+                'first_payment_date', 'funds_release_date',
                 'kind', 'amount', 'number', 'company', 'increments',
                 'number_of_payments', 'currency_symbol', 'currency_digits'],
             'loan.increment': ['number_of_payments', 'deferal', 'end_date',
@@ -108,7 +108,7 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
                 if k == 'increments':
                     new_increments = v
                     continue
-                if getattr(base_loan, k) == v or k in ('state', 'parties',
+                if getattr(base_loan, k) == v or k in ('state',
                         'payments', 'loan_shares'):
                     continue
                 if k == 'deferal' and (base_loan.deferal or None) == (

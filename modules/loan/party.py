@@ -36,16 +36,29 @@ class SynthesisMenuLoan(model.CoopSQL):
     def table_query():
         pool = Pool()
         LoanSynthesis = pool.get('party.synthesis.menu.loan')
+        CoveredPerson = pool.get('contract.covered_element')
+        covered_person = CoveredPerson.__table__()
+        LoanShare = pool.get('loan.share')
+        loan_share = LoanShare.__table__()
+        Loan = pool.get('loan')
+        loan = Loan.__table__()
+        Option = pool.get('contract.option')
+        option = Option.__table__()
         party = pool.get('party.party').__table__()
-        loan_party = pool.get('loan-party').__table__()
-        query_table = party.join(loan_party, 'LEFT OUTER',
-            condition=(party.id == loan_party.party))
+        query_table = party.join(covered_person, 'LEFT OUTER',
+            condition=(party.id == covered_person.party)
+            ).join(option, 'LEFT OUTER',
+            condition=(covered_person.id == option.covered_element)
+            ).join(loan_share, 'LEFT OUTER',
+            condition=(option.id == loan_share.option)
+            ).join(loan, 'LEFT OUTER',
+            condition=(loan.id == loan_share.loan))
         return query_table.select(
             party.id,
-            Max(loan_party.create_uid).as_('create_uid'),
-            Max(loan_party.create_date).as_('create_date'),
-            Max(loan_party.write_uid).as_('write_uid'),
-            Max(loan_party.write_date).as_('write_date'),
+            Max(loan.create_uid).as_('create_uid'),
+            Max(loan.create_date).as_('create_date'),
+            Max(loan.write_uid).as_('write_uid'),
+            Max(loan.write_date).as_('write_date'),
             Literal(coop_string.translate_label(LoanSynthesis, 'name')).
             as_('name'), party.id.as_('party'),
             group_by=party.id)
@@ -67,7 +80,6 @@ class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
         res = super(SynthesisMenu, cls).union_models()
         res.extend([
             'party.synthesis.menu.loan',
-            'loan-party',
             ])
         return res
 
@@ -77,13 +89,13 @@ class SynthesisMenu(UnionMixin, model.CoopSQL, model.CoopView):
         if Model.__name__ == 'party.synthesis.menu.loan':
             if name == 'parent':
                 return Model._fields['party']
-        elif Model.__name__ == 'loan-party':
+        elif Model.__name__ == 'loan':
             if name == 'parent':
                 union_field = copy.deepcopy(Model._fields['party'])
                 union_field.model_name = 'party.synthesis.menu.loan'
                 return union_field
             elif name == 'name':
-                return Model._fields['loan']
+                return Model._fields['number']
         return union_field
 
     @classmethod
@@ -104,17 +116,12 @@ class SynthesisMenuOpen(Wizard):
                 Model.__name__ != 'loan-party'):
             return super(SynthesisMenuOpen, self).get_action(record)
         if Model.__name__ == 'party.synthesis.menu.loan':
-            domain = PYSONEncoder().encode([('parties', '=', record.id)])
+            domain = PYSONEncoder().encode(
+                [('insured_persons', '=', record.id)])
             actions = {
                 'res_model': 'loan',
                 'pyson_domain': domain,
                 'views': [(None, 'tree'), (None, 'form')]
-            }
-        elif Model.__name__ == 'loan-party':
-            actions = {
-                'res_model': 'loan',
-                'views': [(None, 'form')],
-                'res_id': record.loan.id
             }
         return actions
 
