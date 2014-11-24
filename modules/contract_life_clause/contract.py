@@ -42,13 +42,14 @@ class Contract:
                     and contact.party not in benef_parties):
                 to_del.append(contact)
         Contact.delete(to_del)
-        self.contacts = list(getattr(self, 'contacts', []))
+        contacts = list(getattr(self, 'contacts', []))
         for benef in accepting_benefs:
             if benef.party in contact_parties:
                 continue
             contact = Contact(type=contact_type, party=benef.party,
                 address=benef.address)
-            self.contacts.append(contact)
+            contacts.append(contact)
+        self.contacts = contacts
 
 
 class ContractOption:
