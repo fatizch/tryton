@@ -15,6 +15,7 @@ def register():
     Pool.register(
         Configuration,
         Product,
+        ContractSubStatus,
         Contract,
         ActivationHistory,
         ContractOption,

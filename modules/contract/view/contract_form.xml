@@ -3,7 +3,10 @@
     <label name="rec_name"/>
     <field name="rec_name"/>
     <label name="status"/>
-    <field name="status"/>
+    <group id="status">
+        <field name="status"/>
+        <field name="sub_status"/>
+    </group>
     <label name="start_date"/>
     <field name="start_date"/>
     <label name="end_date"/>

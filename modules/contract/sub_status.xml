@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <data>
+        <record model="contract.sub_status" id="sub_status_never_enforced">
+            <field name="name">Error</field>
+            <field name="code">error</field>
+            <field name="status">void</field>
+        </record>
+        <record model="contract.sub_status" id="cooling_off_cancelled">
+            <field name="name">Cancelled by customer</field>
+            <field name="code">Cancelled_by_customer</field>
+            <field name="status">void</field>
+        </record>
+        <record model="contract.sub_status" id="sub_status_reached_end_date">
+            <field name="name">Reached end date</field>
+            <field name="code">reached_end_date</field>
+            <field name="status">terminated</field>
+        </record>
+    </data>

@@ -66,6 +66,12 @@
         <field name="domain">[('status', '=', 'active')]</field>
         <field name="act_window" ref="act_contract_form"/>
     </record>
+    <record model="ir.action.act_window.domain" id="act_contract_domain_terminated">
+        <field name="name">Terminated</field>
+        <field name="sequence" eval="30"/>
+        <field name="domain">['OR', ('status', '=', 'terminated'), ('status', '=', 'void')]</field>
+        <field name="act_window" ref="act_contract_form"/>
+    </record>
     <!-- ############################ -->
     <!-- # Contract Select End Date # -->
     <!-- ############################ -->
@@ -187,5 +193,33 @@
         <field name="sequence_type" ref="sequence_type_quote"/>
         <field name="group" ref="res.group_admin"/>
     </record>
+    <!-- ############################################################ -->
+    <!-- Substatus -->
+    <!-- ############################################################ -->
+    <record model="ir.ui.view" id="sub_status_view_list">
+        <field name="model">contract.sub_status</field>
+        <field name="type">tree</field>
+        <field name="name">sub_status_list</field>
+        </record>
+    <record model="ir.ui.view" id="sub_status_view_form">
+        <field name="model">contract.sub_status</field>
+        <field name="type">form</field>
+        <field name="name">sub_status_form</field>
+    </record>
+    <record model="ir.action.act_window" id="act_sub_status_form">
+        <field name="name">Sub-status</field>
+        <field name="res_model">contract.sub_status</field>
+    </record>
+    <record model="ir.action.act_window.view" id="act_sub_status_view_list">
+        <field name="sequence" eval="10"/>
+        <field name="view" ref="sub_status_view_list"/>
+        <field name="act_window" ref="act_sub_status_form"/>
+    </record>
+    <record model="ir.action.act_window.view" id="act_sub_status_form_view">
+        <field name="sequence" eval="20"/>
+        <field name="view" ref="sub_status_view_form"/>
+        <field name="act_window" ref="act_sub_status_form"/>
+    </record>
+    <menuitem parent="offered.menu_contract_configuration" id="sub_status_form" icon="tryton-tree" action="act_sub_status_form"/>
   </data>
 </tryton>

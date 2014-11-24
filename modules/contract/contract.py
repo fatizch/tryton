@@ -10,7 +10,7 @@ from trytond import backend
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If
+from trytond.pyson import Eval, If, Bool
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -27,6 +27,7 @@ CONTRACTSTATUSES = [
     ('quote', 'Quote'),
     ('active', 'Active'),
     ('hold', 'Hold'),
+    ('void', 'Void'),
     ('terminated', 'Terminated'),
     ]
 OPTIONSTATUS = CONTRACTSTATUSES + [
@@ -40,6 +41,7 @@ _CONTRACT_STATUS_STATES = {
     'readonly': Eval('contract_status') != 'quote',
     }
 _CONTRACT_STATUS_DEPENDS = ['contract_status']
+_STATUSES_WITH_SUBSTATUS = ['void', 'terminated']
 
 
 __all__ = [
@@ -52,6 +54,7 @@ __all__ = [
     'ContractEnd',
     'ContractSelectStartDate',
     'ContractChangeStartDate',
+    'ContractSubStatus',
     '_STATES',
     '_DEPENDS',
     '_CONTRACT_STATUS_STATES',
@@ -158,6 +161,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Date('End Date', states=_STATES, depends=_DEPENDS),
         'getter_contract_date', 'set_contract_end_date',
         searcher='search_contract_date')
+    sub_status = fields.Many2One('contract.sub_status', 'Details on status',
+        states={
+            'required': Bool(Eval('is_sub_status_required')),
+            'invisible': ~Eval('is_sub_status_required')
+            },
+        domain=[('status', '=', Eval('status'))],
+        depends=['status', 'is_sub_status_required'])
+    is_sub_status_required = fields.Function(
+        fields.Boolean('Is Sub Status Required', depends=['status']),
+        'on_change_with_is_sub_status_required')
     extra_data_values = fields.Function(
         fields.Dict('extra_data', 'Extra Data'),
         'get_extra_data')
@@ -492,6 +505,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         super(Contract, cls).validate(contract)
         for contract in contract:
             contract.check_activation_dates()
+
+    def on_change_with_is_sub_status_required(self, name=None):
+        return self.status in _STATUSES_WITH_SUBSTATUS
 
     @classmethod
     def get_revision_value(cls, contracts, names, ContractRevision):
@@ -1372,3 +1388,19 @@ class ContractChangeStartDate(Wizard):
         selected_contract.set_start_date(new_date)
         selected_contract.save()
         return 'end'
+
+
+class ContractSubStatus(model.CoopSQL, model.CoopView):
+    'Contract SubStatus'
+
+    __name__ = 'contract.sub_status'
+
+    name = fields.Char('Name', required=True, translate=True)
+    code = fields.Char('Code', required=True)
+    status = fields.Selection(CONTRACTSTATUSES, 'Status', required=True)
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
