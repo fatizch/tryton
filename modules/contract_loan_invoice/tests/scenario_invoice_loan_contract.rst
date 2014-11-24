@@ -357,7 +357,7 @@ Create Premium Amounts::
 Test Average Premium Rate Wizard, fee => longest::
 
     >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
-    >>> loans = loan_average.form.loans
+    >>> loans = loan_average.form.loan_displayers
     >>> abs(loans[0].average_premium_rate - Decimal('0.00428571')) <= Decimal('1e-8')
     True
     >>> abs(loans[1].average_premium_rate - Decimal('0.01851851')) <= Decimal('1e-8')
@@ -376,7 +376,7 @@ Test Average Premium Rate Wizard, fee => biggest::
     >>> loan_average_rule.fee_rules[0].action = 'biggest'
     >>> loan_average_rule.save()
     >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
-    >>> loans = loan_average.form.loans
+    >>> loans = loan_average.form.loan_displayers
     >>> abs(loans[0].average_premium_rate - Decimal('0.00785714')) <= Decimal('1e-8')
     True
     >>> abs(loans[1].average_premium_rate - Decimal('0.01234567')) <= Decimal('1e-8')
@@ -392,7 +392,7 @@ Test Average Premium Rate Wizard, fee => prorata::
     >>> loan_average_rule.fee_rules[0].action = 'prorata'
     >>> loan_average_rule.save()
     >>> loan_average = Wizard('loan.average_premium_rate.display', models=[contract])
-    >>> loans = loan_average.form.loans
+    >>> loans = loan_average.form.loan_displayers
     >>> abs(loans[0].average_premium_rate - Decimal('0.00664420')) <= Decimal('1e-8')
     True
     >>> abs(loans[1].average_premium_rate - Decimal('0.01444211')) <= Decimal('1e-8')

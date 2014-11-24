@@ -420,7 +420,7 @@ class AveragePremiumRateLoanDisplayer(model.CoopView):
     average_premium_rate = fields.Numeric('Average Premium Rate',
         digits=(6, 4))
     base_premium_amount = fields.Numeric('Base Premium Amount',
-        digits=(16, Eval('currency_digits', 2)))
+        digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
     currency_digits = fields.Integer('Currency Digits')
     current_loan_shares = fields.One2Many(
         'loan.average_premium_rate.loan_displayer', None,
