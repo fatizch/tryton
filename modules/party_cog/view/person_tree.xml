@@ -6,5 +6,5 @@
     <field name="first_name"/>
     <field name="birth_date"/>
     <field name="main_address"/>
-    <field name="is_person"/>
+    <field name="is_person" tree_invisible="1"/>
 </tree>
