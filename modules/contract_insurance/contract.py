@@ -1131,8 +1131,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                  [('flat_amount', '<', Eval('max_value'))]]
                 ]))])
     motive = fields.Many2One('extra_premium.kind', 'Motive',
-        ondelete='RESTRICT', states={'required': True})
-    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE')
+        ondelete='RESTRICT', required=True)
+    option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
+        states={'invisible': ~Eval('option')})
     rate = fields.Numeric('Rate on Premium', states={
             'invisible': Eval('calculation_kind', '') != 'rate',
             'required': Eval('calculation_kind', '') == 'rate'},
