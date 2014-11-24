@@ -73,6 +73,11 @@ class Contract:
                 'subscriber_loans': Eval('loans', [])})
         cls.options.depends.append('is_loan')
         cls.options.depends.append('loans')
+        cls._error_messages.update({
+                'no_loan_on_contract': 'There must be at least one loan :',
+                'loan_not_calculated': 'Loan %s must be calculated before'
+                ' proceeding',
+                })
 
     @classmethod
     def write(cls, contracts, values, *args):
@@ -127,6 +132,14 @@ class Contract:
     @staticmethod
     def default_show_ordered_loans():
         return False
+
+    def check_contract_loans(self):
+        if not self.loans:
+            self.append_functional_error('no_loan_on_contract')
+        for loan in self.loans:
+            if not loan.state == 'calculated':
+                self.append_functional_error('loan_not_calculated', (
+                        loan.rec_name))
 
 
 class ContractLoan(model.CoopSQL, model.CoopView):
