@@ -440,7 +440,7 @@ class Contract(CogProcessFramework):
         cls._buttons.update({
                 'revert_current_endorsement': {},
                 'start_endorsement': {
-                    'invisible': Eval('status') != 'contract',
+                    'invisible': Eval('status') == 'quote',
                     }
                 })
 
