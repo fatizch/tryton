@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
+    <xpath expr="/tree/field[@name='name']" position="before">
+        <field name="full_name"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='name']" position="replace"/>
     <xpath expr="/tree/field[@name='lang']" position="replace"/>
     <xpath expr="/tree/field[@name='vat_code']" position="replace"/>
     <xpath expr="/tree" position="inside">
