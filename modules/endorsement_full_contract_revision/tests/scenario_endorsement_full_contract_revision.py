@@ -27,6 +27,7 @@ wizard = Wizard('ir.module.module.install_upgrade')
 wizard.execute('upgrade')
 
 # #Comment# #Get Models
+Action = Model.get('ir.action')
 Company = Model.get('company.company')
 Contract = Model.get('contract')
 Country = Model.get('country.country')
@@ -224,9 +225,10 @@ new_endorsement.execute('full_contract_revision_next')
 contract = Contract(contract.id)
 contract.quote_number = 'New Number'
 contract.save()
-Contract._proxy._button_next_1([contract.id], {})
-# The id of the process_cog.act_end_process action
-# #Res# #91
+end_process, = Action.find([
+        ('xml_id', '=', 'process_cog.act_end_process')])
+Contract._proxy._button_next_1([contract.id], {}) == end_process.id
+# #Res# #True
 
 # #Comment# #Check Application
 new_endorsement, = Endorsement.find([])
