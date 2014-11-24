@@ -96,10 +96,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0013_createTestContext(self):
         ct = self.Context()
         ct.name = 'test_context'
-        ct.allowed_elements = []
+        allowed_elements = []
         for elem in self.RuleFunction.search([
                     ('language.code', '=', 'en_US')]):
-            ct.allowed_elements.append(elem)
+            allowed_elements.append(elem)
+        ct.allowed_elements = allowed_elements
         self.assertEqual(len(ct.allowed_elements), 7)
         ct.save()
         return ct
