@@ -269,7 +269,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     def update_increments_and_calculate_payments(self):
         Payment = Pool().get('loan.payment')
-        self.payments = [Payment(
+        payments = [Payment(
                 kind='releasing_funds',
                 number=0,
                 start_date=self.funds_release_date,
@@ -293,11 +293,12 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 payment = Payment.create_payment(from_date, n,
                     begin_balance, increment, self.payment_frequency,
                     self.currency, self.number_of_payments)
-                self.payments.append(payment)
+                payments.append(payment)
                 begin_balance = payment.outstanding_balance
                 from_date = coop_date.add_duration(self.first_payment_date,
                     self.payment_frequency, n)
         self.increments = self.increments
+        self.payments = payments
 
     def simulate(self):
         # Simulate is different from calculate as it is reversible, no change
