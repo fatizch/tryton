@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <!-- ######## -->
-        <!-- # Loan # -->
-        <!-- ######## -->
+        <!-- ####################################### -->
+        <!-- # Average Premium Rate Loan Displayer # -->
+        <!-- ####################################### -->
         <record model="ir.ui.view" id="loan_average_premium_view_tree">
-            <field name="model">loan</field>
+            <field name="model">loan.average_premium_rate.loan_displayer</field>
             <field name="type">tree</field>
             <field name="field_childs">current_loan_shares</field>
             <field name="name">loan_average_premium_tree</field>

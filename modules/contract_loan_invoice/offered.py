@@ -80,9 +80,8 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
         if not self.use_default_rule:
             # TODO : Plug in rules
             return 0, 0
-        premium_aggregates = contract.calculate_premium_aggregates()
         loan_amount, insured_amount = 0, 0
-        for k, v in premium_aggregates('contract').iteritems():
+        for k, v in contract.extract_premium('contract').iteritems():
             if loan not in v:
                 continue
             if k.__name__ == 'contract.option':
@@ -115,7 +114,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             'prorata': prorata_ratio,
             }
         rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
-        for k, v in premium_aggregates('offered').iteritems():
+        for k, v in contract.extract_premium('offered').iteritems():
             if k.__name__ != 'account.fee.description':
                 continue
             action = rule_fees.get(k, self.default_fee_action)
@@ -133,10 +132,9 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             # TODO : Plug in rules
             return 0, 0
         loan = share.loan
-        premium_aggregates = contract.calculate_premium_aggregates()
         share_amount = 0
         for entity in [share.option] + list(share.option.extra_premiums):
-            share_amount += premium_aggregates('contract', value=entity,
+            share_amount += contract.extract_premium('contract', value=entity,
                 loan=share.loan)
         loan_insured, max_insured = {}, 0
         for cur_share in share.option.loan_shares:
@@ -158,7 +156,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             'prorata': prorata_ratio,
             }
         rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
-        for k, v in premium_aggregates('offered').iteritems():
+        for k, v in contract.extract_premium('offered').iteritems():
             if k.__name__ != 'account.fee.description':
                 continue
             action = rule_fees.get(k, self.default_fee_action)

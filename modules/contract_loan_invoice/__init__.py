@@ -12,6 +12,7 @@ def register():
         PremiumAmountPerPeriod,
         Contract,
         Loan,
+        AveragePremiumRateLoanDisplayer,
         DisplayLoanAveragePremiumValues,
         LoanAveragePremiumRule,
         FeeRule,

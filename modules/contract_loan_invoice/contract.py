@@ -10,6 +10,7 @@ from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, reduce_ids
 from trytond.pyson import Eval
+from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.model import ModelSQL, ModelView
 
@@ -24,6 +25,7 @@ __all__ = [
     'PremiumAmountPerPeriod',
     'Contract',
     'Loan',
+    'AveragePremiumRateLoanDisplayer',
     'DisplayLoanAveragePremiumValues',
     'DisplayLoanAveragePremium',
     ]
@@ -108,6 +110,15 @@ class Contract:
         fields.Date('Last Generated Premiumm End Date'),
         'get_last_generated')
 
+    _premium_aggregates_cache = Cache('calculate_premium_aggregates')
+
+    @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._error_messages.update({
+                'no_premium_found': 'No premium found for this contract !',
+                })
+
     @classmethod
     def get_total_premium_amount(cls, contracts, name):
         cursor = Transaction().cursor
@@ -163,6 +174,10 @@ class Contract:
         return result
 
     def calculate_premium_aggregates(self, start=None, end=None):
+        cached_values = self._premium_aggregates_cache.get(
+            (self.id, start, end), None)
+        if cached_values:
+            return cached_values
         cursor = Transaction().cursor
         pool = Pool()
         Premium = pool.get('contract.premium')
@@ -179,36 +194,45 @@ class Contract:
         per_offered_entity = defaultdict(lambda: defaultdict(lambda: 0))
 
         # Unzip first to browse all premiums at once
-        amounts, premiums = zip(*cursor.fetchall())
+        query_result = cursor.fetchall()
+        if not query_result:
+            self.raise_user_error('no_premium_found')
+        amounts, premiums = zip(*query_result)
         premiums = Premium.browse(premiums)
         for amount, premium in zip(amounts, premiums):
             per_contract_entity[premium.parent][premium.loan] += amount
             per_offered_entity[premium.rated_entity][premium.loan] += amount
 
-        def result_parser(kind, value=None, model_name='', loan=None):
-            # Returns a function that can be used to browse the queries results
-            # and aggregating them. It is possible to aggregate per model_name,
-            # per a specific parent (eg. per covered_element), or per offered
-            # entity (eg. offered coverage)
-            assert kind in ('offered', 'contract')
-            values = {}
-            if kind == 'offered':
-                values = per_offered_entity
-            elif kind == 'contract':
-                values = per_contract_entity
-            if value:
-                good_dict = values[value]
-                if loan:
-                    return good_dict[loan]
-                return sum(good_dict.values())
-            if model_name:
-                result = sum([result_parser(kind, value=k, loan=loan)
-                        for k, v in values.iteritems()
-                        if k.__name__ == model_name])
-                return result
-            return values
+        self._premium_aggregates_cache.set((self.id, start, end),
+            (per_contract_entity, per_offered_entity))
+        return per_contract_entity, per_offered_entity
 
-        return result_parser
+    def extract_premium(self, kind, start=None, end=None, value=None,
+            model_name='', loan=None):
+        # Returns a function that can be used to browse the queries results
+        # and aggregating them. It is possible to aggregate per model_name,
+        # per a specific parent (eg. per covered_element), or per offered
+        # entity (eg. offered coverage)
+        assert kind in ('offered', 'contract')
+        per_contract_entity, per_offered_entity = \
+            self.calculate_premium_aggregates(start, end)
+        values = {}
+        if kind == 'offered':
+            values = per_offered_entity
+        elif kind == 'contract':
+            values = per_contract_entity
+        if value:
+            good_dict = values[value]
+            if loan:
+                return good_dict[loan]
+            return sum(good_dict.values())
+        if model_name:
+            result = sum([self.extract_premium(kind, start, end, values=k,
+                        loan=loan)
+                    for k, v in values.iteritems()
+                    if k.__name__ == model_name])
+            return result
+        return values
 
     def get_invoice_lines(self, start, end):
         pool = Pool()
@@ -388,12 +412,31 @@ class Loan:
         return field_values
 
 
+class AveragePremiumRateLoanDisplayer(model.CoopView):
+    'Average Premium Rate Loan Displayer'
+
+    __name__ = 'loan.average_premium_rate.loan_displayer'
+
+    average_premium_rate = fields.Numeric('Average Premium Rate',
+        digits=(6, 4))
+    base_premium_amount = fields.Numeric('Base Premium Amount',
+        digits=(16, Eval('currency_digits', 2)))
+    currency_digits = fields.Integer('Currency Digits')
+    current_loan_shares = fields.One2Many(
+        'loan.average_premium_rate.loan_displayer', None,
+        'Current Loan Shares')
+    currency_symbol = fields.Char('Currency Symbol')
+    name = fields.Char('Name')
+
+
 class DisplayLoanAveragePremiumValues(model.CoopView):
     'Display Loan Average Premium Values'
 
     __name__ = 'loan.average_premium_rate.display.values'
 
-    loans = fields.One2Many('loan', None, 'Loans')
+    loan_displayers = fields.One2Many(
+        'loan.average_premium_rate.loan_displayer', None, 'Loans',
+        readonly=True)
 
 
 class DisplayLoanAveragePremium(Wizard):
@@ -413,15 +456,21 @@ class DisplayLoanAveragePremium(Wizard):
         if contract_id is None:
             return {}
         contract = Pool().get('contract')(contract_id)
+        contract._premium_aggregates_cache.clear()
         with Transaction().set_context(contract=contract_id):
-            return {'loans': [{
-                        'rec_name': x.rec_name,
+            return {'loan_displayers': [{
+                        'name': x.rec_name,
                         'average_premium_rate': x.average_premium_rate,
                         'base_premium_amount': x.base_premium_amount,
+                        'currency_digits': x.currency_digits,
+                        'currency_symbol': x.currency_symbol,
                         'current_loan_shares': [{
-                                'rec_name': y.rec_name,
+                                'name': y.option.rec_name,
                                 'average_premium_rate': y.average_premium_rate,
                                 'base_premium_amount': x.base_premium_amount,
+                                'currency_digits': x.currency_digits,
+                                'currency_symbol': x.currency_symbol,
+                                'current_loan_shares': [],
                                 } for y in x.current_loan_shares],
                         } for x in contract.used_loans],
                 }

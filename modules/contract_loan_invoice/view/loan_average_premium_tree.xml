@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <tree string="Loans">
-    <field name="rec_name"/>
+    <field name="name"/>
     <field name="average_premium_rate">
         <suffix string="%"/>
     </field>
-    <field name="base_premium_amount"/>
+    <field name="base_premium_amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="currency_digits" tree_invisible="1"/>
 </tree>
