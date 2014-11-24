@@ -104,9 +104,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         ct = self.Context()
         ct.name = 'test_context'
-        ct.allowed_elements = []
-        ct.allowed_elements.append(te8)
-        ct.allowed_elements.append(te4)
+        allowed_elements = []
+        allowed_elements.append(te8)
+        allowed_elements.append(te4)
+        ct.allowed_elements = allowed_elements
 
         ct.save()
 

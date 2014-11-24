@@ -344,20 +344,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             self.extra_datas = self.extra_datas
             return
 
-        self.options = self.options
+        options = list(self.options)
         available_coverages = self.get_coverages(self.product)
-        if self.options:
-            for elem in self.options:
+        if options:
+            for elem in options:
                 if elem.coverage not in available_coverages:
-                    self.options.remove(elem)
+                    options.remove(elem)
                 else:
                     available_coverages.remove(elem.coverage)
         Option = Pool().get('contract.option')
         for elem in available_coverages:
             if elem.subscription_behaviour == 'optional':
                 continue
-            self.options.append(Option.new_option_from_coverage(elem,
+            options.append(Option.new_option_from_coverage(elem,
                     self.product, start_date=self.start_date))
+        self.options = options
         extra_vals = {}
         if self.extra_datas:
             extra_vals = self.extra_datas[0].extra_data_values

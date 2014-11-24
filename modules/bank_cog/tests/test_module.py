@@ -100,8 +100,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         number = self.BankAccountNumber()
         number.type = 'iban'
         number.number = 'FR7610096002350004089177136'
-        bank_account.numbers = list(bank_account.numbers)
-        bank_account.numbers.append(number)
+        numbers = list(bank_account.numbers)
+        numbers.append(number)
+        bank_account.numbers = numbers
         try:
             bank_account.save()
         except UserError:
