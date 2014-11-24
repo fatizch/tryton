@@ -366,10 +366,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'contract', extra_vals, self.appliable_conditions_date)
         self.subscriber_kind = ('person' if self.product.subscriber_kind in
             ['all', 'person'] else 'company')
-        self.extra_datas = []
-        self.extra_datas.append(ExtraData(date=None,
+        extra_datas = []
+        extra_datas.append(ExtraData(date=None,
                 extra_data_values=extra_data_value))
-        self.extra_datas = self.extra_datas
+        self.extra_datas = extra_datas
         self.extra_data_values = extra_data_value
         self.extra_data_values = self.extra_data_values
         self.product_subscriber_kind = self.product.subscriber_kind
