@@ -69,7 +69,14 @@ class ChangeBillingInformation(EndorsementWizardStepVersionedObjectMixin,
         super(ChangeBillingInformation, cls).__setup__()
         cls.new_value.domain = [
             ('billing_mode.products', '=', Eval('product')),
-            ('direct_debit_account.owners', '=', Eval('subscriber'))]
+            ['OR',
+                [
+                    ('direct_debit', '=', False),
+                    ('direct_debit_account', '=', None),
+                ],
+                [
+                    ('direct_debit', '=', True),
+                    ('direct_debit_account.owners', '=', Eval('subscriber'))]]]
         cls.new_value.depends = ['product', 'subscriber']
 
     def update_endorsement(self, endorsement, wizard):
