@@ -1,6 +1,66 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract:"
+msgid "No premium found for this contract !"
+msgstr "Pas de prime trouvé pour ce contrat"
+
+msgctxt "error:loan.average_premium_rule.fee_rule:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:loan.average_premium_rule.fee_rule:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:loan.average_premium_rule:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:loan.average_premium_rule:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:account.invoice.line.detail,loan:"
+msgid "Loan"
+msgstr "Prêt"
+
+msgctxt "field:contract,last_generated_premium_end:"
+msgid "Last Generated Premiumm End Date"
+msgstr "Date de fin de la dernière quittance générée"
+
+msgctxt "field:contract,premium_amounts:"
+msgid "Premium Amounts"
+msgstr "Lignes d'échéancier de quittance"
+
+msgctxt "field:contract,premium_amounts_per_period:"
+msgid "Premium amounts per period"
+msgstr "Montant de prime par période"
+
+msgctxt "field:contract,total_premium_amount:"
+msgid "Total Premium Amount"
+msgstr "Montant total des primes"
 
 msgctxt "field:contract,used_loans:"
 msgid "Used Loans"
@@ -115,7 +175,7 @@ msgid "Total"
 msgstr "Total"
 
 msgctxt "field:contract.premium.amount.per_period,untaxed_amount:"
-msgid "Total"
+msgid "Untaxed Amount"
 msgstr "Total"
 
 msgctxt "field:contract.premium.amount.per_period,write_date:"
@@ -130,17 +190,45 @@ msgctxt "field:loan,average_premium_rate:"
 msgid "Average Premium Rate"
 msgstr "Taux moyen prêt"
 
-msgctxt "field:loan.average_premium_rate.display.values,contract:"
-msgid "Contract"
-msgstr "Contrat"
+msgctxt "field:loan,base_premium_amount:"
+msgid "Base Premium Amount"
+msgstr "Prime pure"
 
 msgctxt "field:loan.average_premium_rate.display.values,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:loan.average_premium_rate.display.values,loans:"
+msgctxt "field:loan.average_premium_rate.display.values,loan_displayers:"
 msgid "Loans"
 msgstr "Prêts"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,average_premium_rate:"
+msgid "Average Premium Rate"
+msgstr "Taux moyen prêt"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,base_premium_amount:"
+msgid "Base Premium Amount"
+msgstr "Prime pure"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,current_loan_shares:"
+msgid "Current Loan Shares"
+msgstr "Quotités actuelles"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:loan.average_premium_rate.loan_displayer,name:"
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:loan.average_premium_rule,code:"
 msgid "Code"
@@ -250,6 +338,10 @@ msgctxt "field:loan.share,average_premium_rate:"
 msgid "Average Premium Rate"
 msgstr "taux moyen prêt"
 
+msgctxt "field:loan.share,base_premium_amount:"
+msgid "Base Premium Amount"
+msgstr "Prime pure"
+
 msgctxt "field:offered.product,average_loan_premium_rule:"
 msgid "Average Loan Premium Rule"
 msgstr "Règle de taux moyen prêt"
@@ -281,6 +373,10 @@ msgstr "Règle de taux moyen prêt"
 msgctxt "model:loan.average_premium_rate.display.values,name:"
 msgid "Display Loan Average Premium Values"
 msgstr "Afficher taux moyen prêt"
+
+msgctxt "model:loan.average_premium_rate.loan_displayer,name:"
+msgid "Average Premium Rate Loan Displayer"
+msgstr "Présenteur de taux moyen prêt"
 
 msgctxt "model:loan.average_premium_rule,name:"
 msgid "Loan Average Premium Rule"
@@ -323,8 +419,24 @@ msgid "Do not use fee"
 msgstr "Ne pas prendre en compte les frais"
 
 msgctxt "view:contract.premium.amount.per_period:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "view:contract.premium.amount.per_period:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:contract.premium.amount.per_period:"
 msgid "Premium Amounts per Period"
 msgstr "Echéancier des quittances"
+
+msgctxt "view:contract.premium.amount.per_period:"
+msgid "Tax Amount"
+msgstr "Montant taxé"
+
+msgctxt "view:contract.premium.amount.per_period:"
+msgid "Total"
+msgstr "Total"
 
 msgctxt "view:contract.premium.amount:"
 msgid "Premium Amount"
@@ -336,6 +448,14 @@ msgstr "Lignes d'échéancier de quittance"
 
 msgctxt "view:loan.average_premium_rate.display.values:"
 msgid "Contract Loans"
+msgstr "Prêts"
+
+msgctxt "view:loan.average_premium_rate.loan_displayer:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:loan.average_premium_rate.loan_displayer:"
+msgid "Loans"
 msgstr "Prêts"
 
 msgctxt "view:loan.average_premium_rule.fee_rule:"

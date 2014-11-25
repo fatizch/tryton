@@ -2,6 +2,24 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:process-process.step:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:process-process.step:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
 msgctxt "error:process.action:"
 msgid "Method %s does not exist on model %s"
 msgstr "La méthode %s n'existe pas sur le modèle %s"
@@ -185,6 +203,10 @@ msgstr "Statut"
 msgctxt "field:process-process.step,step:"
 msgid "Step"
 msgstr "Etape"
+
+msgctxt "field:process-process.step,technical_step_name:"
+msgid "Technical Step Name"
+msgstr "Nom technique de l'étape"
 
 msgctxt "field:process-process.step,write_date:"
 msgid "Write Date"
@@ -707,10 +729,6 @@ msgid "Covered Elements"
 msgstr "Risques Couverts"
 
 msgctxt "view:contract:"
-msgid "Create Loan"
-msgstr "Créer un prêt"
-
-msgctxt "view:contract:"
 msgid "Garantie"
 msgstr "Garantie"
 
@@ -759,10 +777,6 @@ msgid "Quittance"
 msgstr "Quittance"
 
 msgctxt "view:contract:"
-msgid "Quittances"
-msgstr "Quittances"
-
-msgctxt "view:contract:"
 msgid "Reprise Intégrale de Contrat"
 msgstr "Reprise Intégrale de Contrat"
 
@@ -777,10 +791,6 @@ msgstr "Souscription Emprunteur"
 msgctxt "view:contract:"
 msgid "Souscription Perte d'Emploi"
 msgstr "Souscription Perte d'Emploi"
-
-msgctxt "view:contract:"
-msgid "Taux moyen prêt"
-msgstr "Taux moyen prêt"
 
 msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"

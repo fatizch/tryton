@@ -69,10 +69,6 @@ msgctxt "field:contract,current_state:"
 msgid "Current State"
 msgstr " "
 
-msgctxt "field:contract,doc_received:"
-msgid "All Document Received"
-msgstr "Documents Reçus"
-
 msgctxt "field:contract,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -92,10 +88,6 @@ msgstr "Type"
 msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
-
-msgctxt "field:contract.subscribe.find_process,business_provider:"
-msgid "Business Provider"
-msgstr "Apporteur d'affaires"
 
 msgctxt "field:contract.subscribe.find_process,com_product:"
 msgid "Commercial Product"
@@ -120,10 +112,6 @@ msgstr "ID"
 msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
-
-msgctxt "field:contract.subscribe.find_process,possible_brokers:"
-msgid "Possible Brokers"
-msgstr "Courtiers Possibles"
 
 msgctxt "field:contract.subscribe.find_process,possible_com_product:"
 msgid "Commercial Products Available"

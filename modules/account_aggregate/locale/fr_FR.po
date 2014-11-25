@@ -10,6 +10,10 @@ msgctxt "field:account.journal,aggregate:"
 msgid "Aggregate"
 msgstr "Agrégat"
 
+msgctxt "field:account.journal,aggregate_posting:"
+msgid "Aggregate Posting"
+msgstr ""
+
 msgctxt "field:account.move,snapshot:"
 msgid "Snapshot"
 msgstr "Instantané"
@@ -21,6 +25,10 @@ msgstr "Instantané"
 msgctxt "field:account.move.line.aggregated,account:"
 msgid "Account"
 msgstr "Compte"
+
+msgctxt "field:account.move.line.aggregated,aggregated_move_id:"
+msgid "Aggregated Move Id"
+msgstr ""
 
 msgctxt "field:account.move.line.aggregated,create_date:"
 msgid "Create Date"
@@ -159,16 +167,16 @@ msgid "Account Move Lines Aggregated"
 msgstr "Agrégat comptable"
 
 msgctxt "view:account.move.snapshot.done:"
-msgid "Moves Snapshots"
-msgstr "Instantanés"
+msgid "Moves Snapshot"
+msgstr ""
 
 msgctxt "view:account.move.snapshot.done:"
 msgid "The snapshot has been taken!"
 msgstr "L'instantané a été pris!"
 
 msgctxt "view:account.move.snapshot.start:"
-msgid "Moves Snapshots"
-msgstr "Instantanés"
+msgid "Moves Snapshot"
+msgstr ""
 
 msgctxt "view:account.move.snapshot.start:"
 msgid "Take a snapshot of moves"

@@ -2,10 +2,36 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.payment.sepa.mandate:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:account.payment.sepa.mandate:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
 msgctxt "field:account.payment.journal,sepa_bank_account_number:"
 msgid ""
 msgstr " "
 
+msgctxt "field:account.payment.sepa.mandate,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:bank.account.number,mandates:"
 msgid "Sepa Mandates"
 msgstr "Mandats SEPA"
+
+msgctxt "field:party.party,is_sepa_creditor_identifier_needed:"
+msgid "Need SEPA Creditor Identifier"
+msgstr "SEPA Creditor Identifier nécessaire"
