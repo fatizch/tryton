@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -110,7 +110,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:country.zipcode,zip:"
 msgid "Zip"
-msgstr " "
+msgstr "Code Postal"
 
 msgctxt "field:ir.test_case,load_all_zipcodes:"
 msgid "Load all Zip Codes"
