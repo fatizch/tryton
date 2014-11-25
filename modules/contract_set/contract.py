@@ -1,6 +1,7 @@
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import model, fields
+from trytond.modules.contract import _STATES, _DEPENDS
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -55,4 +56,4 @@ class ContractSet(model.CoopSQL, model.CoopView):
 class Contract:
     __name__ = 'contract'
     contract_set = fields.Many2One('contract.set', 'Contract Set',
-        ondelete='SET NULL')
+        ondelete='SET NULL', states=_STATES, depends=_DEPENDS)
