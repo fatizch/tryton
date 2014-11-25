@@ -252,7 +252,7 @@ class InvoiceLine:
 
 
 class InvoiceLineDetail(model.CoopSQL, model.CoopView):
-    'Invoie Line Detail'
+    'Invoice Line Detail'
 
     __name__ = 'account.invoice.line.detail'
 

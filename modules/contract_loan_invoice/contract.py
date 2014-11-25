@@ -110,7 +110,7 @@ class Contract:
             depends=['currency_digits']),
         'get_total_premium_amount')
     last_generated_premium_end = fields.Function(
-        fields.Date('Last Generated Premiumm End Date'),
+        fields.Date('Last Generated Premium End Date'),
         'get_last_generated')
 
     _premium_aggregates_cache = Cache('calculate_premium_aggregates')
