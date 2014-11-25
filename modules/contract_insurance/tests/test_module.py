@@ -378,6 +378,59 @@ class ModuleTestCase(test_framework.CoopTestCase):
         test_option(expected=contract_end_date, to_set=late_date,
             should_raise=True)
 
+    @test_framework.prepare_test(
+        'contract_insurance.test0012_testContractCreation',
+        'contract_insurance.test0001_testPersonCreation',
+    )
+    def test_0020_testLastOptionEndsContract(self):
+        # The ending date of a contract should be capped by
+        # the max ending date of covered elements options
+        contract, = self.Contract.search([])
+        current_end = contract.end_date
+        end_option1 = current_end - datetime.timedelta(weeks=2)
+        end_option2 = current_end - datetime.timedelta(weeks=4)
+
+        def add_covered_element_with_options(option_end_dates):
+            covered_element = self.CoveredElement()
+            options = []
+            for end_date in option_end_dates:
+                option = self.Option(
+                        start_date=contract.start_date,
+                        automatic_end_date=end_date,
+                        manual_end_date=end_date,
+                        end_date=end_date,
+                        parent_contract=contract,
+                        covered_element=covered_element
+                        )
+                options.append(option)
+            covered_element.options = options
+            return covered_element
+
+        def build_contract_covered_elements(end_date1, end_date2):
+            contract.covered_elements = [add_covered_element_with_options(
+                    [end_date1, end_date2]),
+                add_covered_element_with_options(
+                    [end_date2, end_date2])]
+
+        contract.options = []
+        build_contract_covered_elements(end_option1, end_option2)
+        self.assertEqual(contract.cap_end_date(current_end), end_option1)
+
+        # Of course, this cap should not be effective
+        # if the options ends after the contract
+        contract, = self.Contract.search([])
+        end_option1 = current_end + datetime.timedelta(weeks=2)
+        end_option2 = current_end + datetime.timedelta(weeks=4)
+        build_contract_covered_elements(end_option1, end_option2)
+        self.assertEqual(contract.cap_end_date(current_end), current_end)
+
+        # Checking an hypothetical contract with abslutely no options
+        # would also work
+        contract, = self.Contract.search([])
+        contract.covered_elements = []
+        contract.options = []
+        self.assertEqual(contract.cap_end_date(current_end), current_end)
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

@@ -549,6 +549,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             self.activation_history.pop(elem)
             for elem in to_delete])
 
+    def get_maximum_end_date(self):
+        all_end_dates = [option.end_date for option in self.options]
+        if all_end_dates:
+            return max(all_end_dates)
+        else:
+            return None
+
+    def cap_end_date(self, end_date):
+        return min(end_date, self.get_maximum_end_date() or datetime.date.max)
+
     def set_start_date(self, start_date):
         self.start_date = start_date
         self.update_from_start_date()

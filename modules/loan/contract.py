@@ -121,7 +121,7 @@ class Contract:
         if not loans:
             return
         end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
-        self.set_end_date(end_date, force=True)
+        self.set_end_date(self.cap_end_date(end_date), force=True)
 
     @classmethod
     def setter_void(cls, objects, name, values):

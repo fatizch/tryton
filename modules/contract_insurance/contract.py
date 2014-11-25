@@ -275,6 +275,18 @@ class Contract(Printable):
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 
+    def get_maximum_end_date(self):
+        contract_maximum = super(Contract, self).get_maximum_end_date()
+        all_end_dates = [option.end_date
+            for covered_elements in self.covered_elements
+            for option in covered_elements.options]
+        if contract_maximum is not None:
+            all_end_dates.append(contract_maximum)
+        if all_end_dates:
+            return max(all_end_dates)
+        else:
+            return None
+
     def update_from_start_date(self):
         super(Contract, self).update_from_start_date()
         for covered_element in self.covered_elements:

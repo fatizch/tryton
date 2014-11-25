@@ -38,7 +38,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0010_testContractCreation(self):
         product, = self.Product.search([
                 ('code', '=', 'AAA'),
-            ])
+                ])
         start_date = product.start_date + datetime.timedelta(weeks=4)
         end_date = start_date + datetime.timedelta(weeks=52)
         contract = self.Contract(
@@ -194,6 +194,40 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # try setting setting end date posterior to contract end date
         test_option(expected=contract_end_date, to_set=late_date,
             should_raise=True)
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
+    def test_maximum_end_date(self):
+        contract, = self.Contract.search([])
+        current_end = contract.end_date
+        end_option1 = current_end - datetime.timedelta(weeks=2)
+        end_option2 = current_end - datetime.timedelta(weeks=4)
+        end_option3 = current_end + datetime.timedelta(weeks=2)
+
+        def get_options(option_end_dates):
+            options = []
+            for end_date in option_end_dates:
+                option = self.Option(
+                        start_date=contract.start_date,
+                        automatic_end_date=end_date,
+                        manual_end_date=end_date,
+                        end_date=end_date,
+                        parent_contract=contract,
+                        )
+                options.append(option)
+            return options
+
+        # If the end dates of every options are below the contract
+        # end date, the maximum end_date is the latest option end date.
+        contract.options = get_options([end_option1, end_option2])
+        self.assertEqual(contract.cap_end_date(current_end), end_option1)
+
+        # If the contract end date is below just one of the options,
+        # the maximum end_date is not capped
+        contract.options = get_options([end_option1, end_option2,
+            end_option3])
+        self.assertEqual(contract.cap_end_date(current_end), current_end)
 
 
 def suite():
