@@ -85,6 +85,7 @@ class StartEndorsement:
         'endorsement_insurance_invoice.change_billing_information_view_form',
         [Button('Previous', 'billing_information_previous',
                 'tryton-go-previous'),
+            Button('Cancel', 'end', 'tryton-cancel'),
             Button('Suspend', 'suspend', 'tryton-save'),
             Button('Next', 'billing_information_next', 'tryton-go-next',
                 default=True)])
