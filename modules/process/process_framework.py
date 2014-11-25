@@ -192,11 +192,11 @@ class ProcessFramework(ModelView):
     @classmethod
     def raise_user_error(cls, errors, error_args=None, error_description='',
             error_description_args=None, raise_exception=True):
-        if error_args or error_description or error_description_args:
-            super(ProcessFramework, cls).raise_user_error(
+        if (error_args or error_description or error_description_args or not
+                raise_exception):
+            return super(ProcessFramework, cls).raise_user_error(
                 errors, error_args, error_description, error_description_args,
                 raise_exception)
-            return
 
         # We need a custom user error management as the displaying of errors
         # will be delayed in order to display several errors at one time.
