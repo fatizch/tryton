@@ -365,12 +365,14 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                     if endorsement.id:
                         ce_endorsement.contract_endorsement = endorsement
                     else:
-                        endorsement.covered_elements.append(ce_endorsement)
+                        endorsement.covered_elements = list(
+                            endorsement.covered_elements) + [ce_endorsement]
                 if ce_endorsement.id:
                     option_endorsement.covered_element_endorsement = \
                         ce_endorsement.id
                 else:
-                    ce_endorsement.options.append(option_endorsement)
+                    ce_endorsement.options = list(ce_endorsement.options) + [
+                        option_endorsement]
             for loan_share in option_endorsement.loan_shares:
                 if loan_share.loan == elem.loan:
                     loan_share.values['share'] = elem.new_share
@@ -384,7 +386,8 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
             if option_endorsement.id:
                 loan_share.option_endorsement = option_endorsement.id
             else:
-                option_endorsement.loan_shares.append(loan_share)
+                option_endorsement.loan_shares = list(
+                    option_endorsement.loan_shares) + [loan_share]
         if new_shares:
             LoanShareEndorsement.create([x._save_values for x in new_shares
                     if getattr(x, 'option_endorsement', None)])
