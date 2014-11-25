@@ -197,8 +197,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
             key, = cls.search([('name', '=', k)])
             if not key.validate_value(v):
                 res = False
-                errs.append(('invalid_value', (v, k, field_name,
-                            instance.get_rec_name(None))))
+                cls.append_functional_error('invalid_value', (v, k, field_name,
+                        instance.get_rec_name(None)))
         if expected_values is not None:
             for k, v in expected_values.iteritems():
                 # This is a serious error, as the user should have no way to
