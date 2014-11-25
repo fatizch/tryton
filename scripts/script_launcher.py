@@ -3,9 +3,7 @@
 # PYTHON_ARGCOMPLETE_OK
 import shutil
 import os
-import ConfigParser
-import argparse
-import argcomplete
+import glob
 import subprocess
 import datetime
 
@@ -413,29 +411,39 @@ def create_symlinks(modules_path, lang, root, remove=True):
         os.symlink(indexFileName, rootIndex)
 
 
-def documentation(arguments, config, work_data):
-    from sphinxcontrib import trydoc
+def documentation(arguments=None, config=None, work_data=None,
+        override_values=None):
+    override_values = override_values or {}
+    doc_files = override_values.get('doc_files', None) or (
+        os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
+            'doc_files'))
+    documentation_dir = os.path.join(override_values.get('repo',
+            None) or os.path.join(work_data['runtime_dir'], 'coopbusiness'),
+        'documentation')
+    modules = os.path.join(override_values.get('repo', None) or
+        os.path.join(work_data['runtime_dir'], 'coopbusiness'),
+        'modules')
+    language = override_values.get('lang', None) or arguments.language
+    format = override_values.get('format', None) or arguments.format
 
-    doc_files = os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
-        'doc_files')
-    if arguments.initialize:
-        if not os.path.exists(doc_files):
-            os.makedirs(doc_files)
-        trydocdir = os.path.dirname(trydoc.__file__)
-        if not os.path.exists(os.path.join(trydocdir,
-                'index.rst.' + arguments.language + '.template')):
-            shutil.copyfile(os.path.join(trydocdir, 'index.rst.fr.template'),
-                os.path.join(trydocdir, 'index.rst.' + arguments.language +
-                    '.template'))
-        process = subprocess.Popen(['sphinx-quickstart', doc_files])
-        process.communicate()
-    elif arguments.generate:
-        create_symlinks(os.path.join(os.environ['VIRTUAL_ENV'],
-            'tryton-workspace', 'coopbusiness', 'doc'), arguments.language,
-            doc_files, True)
-        process = subprocess.Popen(['make', arguments.format],
-            cwd=doc_files)
-        process.communicate()
+    # Clean up previous build
+    if os.path.exists(doc_files):
+        shutil.rmtree(doc_files)
+    shutil.copytree(documentation_dir, doc_files)
+
+    # Populate build folder
+    for module_doc_dir in glob.glob(os.path.join(modules,
+                '*', 'doc', language)):
+        module_name = os.path.basename(os.path.dirname(os.path.dirname(
+                    module_doc_dir)))
+        sym_link = os.path.join(doc_files, module_name)
+        os.symlink(module_doc_dir, sym_link)
+    shutil.copyfile(os.path.join(doc_files, 'index_%s.rst' % language),
+        os.path.join(doc_files, 'index.rst'))
+
+    # Generate the doc
+    process = subprocess.Popen(['make', format], cwd=doc_files)
+    process.communicate()
 
 
 def configure(target_env):
@@ -578,6 +586,10 @@ def configure(target_env):
 
 
 if __name__ == '__main__':
+    import ConfigParser
+    import argparse
+    import argcomplete
+
     if 'VIRTUAL_ENV' not in os.environ:
         target = os.path.join(DIR, '..', '..', '..', 'bin', 'activate_this.py')
         execfile(target, dict(__file__=target))
@@ -683,15 +695,8 @@ if __name__ == '__main__':
 
     # Doc parser
     parser_doc = subparsers.add_parser('doc', help='Generate documentation')
-    parser_doc.add_argument('--database', '-d', help='Define the '
-        'database to used',
-        default=os.path.basename(os.environ['VIRTUAL_ENV']))
     parser_doc.add_argument('--language', '-l', help='Documentation language',
         default='fr')
-    parser_doc.add_argument('--generate', '-g', help='Generate the '
-        'documentation', action='store_true')
-    parser_doc.add_argument('--initialize', '-i', help='Launch the '
-        'tyrdoc quickstart process', action='store_true')
     parser_doc.add_argument('--format', '-f', help='format for documentation '
         'generation : html, ...', default='html')
 
