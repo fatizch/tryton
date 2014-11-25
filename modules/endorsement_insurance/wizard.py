@@ -326,7 +326,9 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
                         relation=elem.covered_element.id)
                     ctr_endorsement = all_endorsements[elem.contract.id]
                     if not ctr_endorsement.id:
-                        ctr_endorsement.covered_elements.append(ce_endorsement)
+                        ctr_endorsement.covered_elements = list(
+                            ctr_endorsement.covered_elements) + [
+                                ce_endorsement]
                     else:
                         ce_endorsement.contract_endorsement = \
                             ctr_endorsement.id
@@ -339,7 +341,8 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
                         option_endorsement.covered_element_endorsement = \
                             ce_endorsement.id
                     else:
-                        ce_endorsement.options.append(option_endorsement)
+                        ce_endorsement.options = list(
+                            ce_endorsement.options) + [option_endorsement]
             else:
                 option_endorsement = (elem.option_endorsement or
                     new_options[elem.option.id])
@@ -348,7 +351,8 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
                     option_endorsement.id
                 to_create.append(ex_endorsement)
             else:
-                option_endorsement.extra_premiums.append(ex_endorsement)
+                option_endorsement.extra_premiums = list(
+                    option_endorsement.extra_premiums) + [ex_endorsement]
         if to_create:
             ExtraPremiumEndorsement.create([x._save_values for x in to_create])
         if new_options:
@@ -484,7 +488,8 @@ class NewExtraPremium(model.CoopView):
                 else:
                     covered_endorsement = new_covered_elements[
                         option_selector.covered_element_id]
-                    covered_endorsement.options.append(option_endorsement)
+                    covered_endorsement.options = list(
+                        covered_endorsement.options) + [option_endorsement]
 
             save_values = new_values.copy()
             if option_selector.option_endorsement_id:
@@ -492,8 +497,9 @@ class NewExtraPremium(model.CoopView):
                     option_selector.option_endorsement_id
                 to_create.append(save_values)
             else:
-                new_options[option_selector.option_id].extra_premiums.append(
-                    ExtraPremiumEndorsement(**save_values))
+                new_option = new_options[option_selector.option_id]
+                new_option.extra_premiums = list(new_option.extra_premiums) + [
+                    ExtraPremiumEndorsement(**save_values)]
         if to_create:
             ExtraPremiumEndorsement.create(to_create)
         if new_options:
