@@ -29,7 +29,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     __name__ = 'endorsement.definition'
 
     code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     ordered_endorsement_parts = fields.One2Many(
         'endorsement.definition-endorsement.part', 'definition',
         'Endorsement Parts')
@@ -117,7 +117,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
         depends=['kind'])
     definitions = fields.Many2Many('endorsement.definition-endorsement.part',
         'endorsement_part', 'definition', 'Used by')
-    name = fields.Char('Name')
+    name = fields.Char('Name', translate=True)
     description = fields.Text('Endorsement Description')
     kind = fields.Selection([
             ('contract', 'Contract'),
