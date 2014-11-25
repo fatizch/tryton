@@ -456,9 +456,8 @@ class OptionSubscriptionWizardLauncher:
 class DisplayContractPremium:
     __name__ = 'contract.premium.display'
 
-    @classmethod
-    def new_line(cls, line=None):
-        new_line = super(DisplayContractPremium, cls).new_line(line)
+    def new_line(self, name, line=None):
+        new_line = super(DisplayContractPremium, self).new_line(name, line)
         if not line or not line.loan:
             return new_line
         new_line['name'] = '[%s] %s' % (line.loan.number, new_line['name'])
