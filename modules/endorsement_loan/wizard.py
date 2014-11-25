@@ -61,7 +61,7 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
     @classmethod
     def _loan_fields_to_extract(cls):
         return {
-            'loan': ['currency', 'rate', 'payment_frequency',
+            'loan': ['currency', 'rate', 'payment_frequency', 'order',
                 'first_payment_date', 'funds_release_date',
                 'kind', 'amount', 'number', 'company', 'increments',
                 'number_of_payments', 'currency_symbol', 'currency_digits'],
