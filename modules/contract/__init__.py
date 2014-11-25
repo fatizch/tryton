@@ -9,6 +9,7 @@ from .service import *
 from .contact_type import *
 from .configuration import *
 from .offered import *
+from .batch import *
 
 
 def register():
@@ -20,6 +21,7 @@ def register():
         ActivationHistory,
         ContractOption,
         ContractAddress,
+        ContractEndDateTerminationBatch,
         ContractExtraDataRevision,
         ContractSelectEndDate,
         ContractSelectStartDate,

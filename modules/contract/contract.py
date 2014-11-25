@@ -802,6 +802,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cls.write(*to_write)
 
     @classmethod
+    def terminate(cls, contracts):
+        cls.write(contracts, {'status': 'terminated'})
+
+    @classmethod
     def get_coverages(cls, product):
         return [x.coverage for x in product.ordered_coverages]
 
