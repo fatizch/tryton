@@ -32,7 +32,6 @@ class Contract(CogProcessFramework):
                 'no_subscriber': 'A subscriber must be provided',
                 'no start_date': 'A start date must be provided',
                 'bad_date': '%s is not a valid start date for product %s',
-                'option_not_eligible': 'Option %s is not eligible',
                 'no_option': 'At least an option must be selected',
                 'bad_start_date': 'Option %s must be subscribed after %s',
                 'need_option': 'At least one option must be selected for %s',

@@ -116,7 +116,7 @@
       <field name="type">function</field>
       <field name="language" ref="ir.lang_fr"/>
       <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_get_initial_subscription_date</field>
+      <field name="name">_re_get_option_start_date</field>
       <field name="parent" ref="dossier_donnees_couverture"/>
     </record>
     <record model="rule_engine.function" id="date_fin_souscription">

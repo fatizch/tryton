@@ -225,7 +225,7 @@ class RuleEngineRuntime:
             cls.append_error(args, 'Cannot find an option to get')
 
     @classmethod
-    def _re_get_initial_subscription_date(cls, args):
+    def _re_get_option_start_date(cls, args):
         return cls.get_option(args).start_date
 
     @classmethod
