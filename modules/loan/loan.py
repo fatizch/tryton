@@ -344,7 +344,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     def get_rec_name(self, name):
         name = []
-        if self.order:
+        if getattr(self, 'order', None):
             name.append(str(self.order))
         if self.number:
             name.append('[%s]' % self.number)
