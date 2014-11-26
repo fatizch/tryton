@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data noupdate="1">
+        <record model="rule_engine.function" id="plan_commissionnement">
+            <field name="translated_technical_name">plan_commssionnement</field>
+            <field name="description">Plan de commissionnement</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_commission_plan</field>
+            <field name="parent" ref="contract.te_contract"/>
+        </record>
+    </data>
+</tryton>
