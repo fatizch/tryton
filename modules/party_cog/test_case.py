@@ -162,6 +162,7 @@ class TestCaseModel:
         possible_domains = ['gmail.com', 'yahoo.com', 'aol.com',
             'hotmail.com']
         for contact_type in ('phone', 'email'):
+            contacts = []
             if contact_type == 'email':
                 if party.is_company:
                     if party.short_name:
@@ -182,8 +183,9 @@ class TestCaseModel:
             elif contact_type == 'phone':
                 value = (Configuration.phone_prefix
                     + str(random.randint(100000000, 999999999)))
-            party.contact_mechanisms.append(cls.create_contact(
+            contacts.append(cls.create_contact(
                     type=contact_type, value=value))
+        party.contact_mechanisms = contacts
         return party
 
     @classmethod
