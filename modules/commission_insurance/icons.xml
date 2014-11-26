@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="broker_icon">
+            <field name="name">coog-broker</field>
+            <field name="path">icons/coog-broker.svg</field>
+        </record>
+    </data>
+</tryton>

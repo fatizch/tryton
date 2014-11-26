@@ -39,7 +39,7 @@
             <field name="act_window" ref="act_broker_form"/>
         </record>
         <menuitem parent="commission.menu_commission" sequence="20" id="menu_broker_form"
-        icon="tryton-list" action="act_broker_form"/>
+        icon="coog-broker" action="act_broker_form"/>
 
         <menuitem parent="commission.menu_commission" sequence="20" id="menu_commission_insurer_form" icon="insurer" action="offered_insurance.act_insurer_form"/>
 

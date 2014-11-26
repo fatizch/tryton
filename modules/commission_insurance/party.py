@@ -41,3 +41,13 @@ class Broker(model.CoopSQL, model.CoopView):
 
     party = fields.Many2One('party.party', 'Party', required=True,
         ondelete='CASCADE', select=True)
+    icon = fields.Function(fields.Char('Icon'), 'get_icon')
+
+    def get_icon(self, name=None):
+        return 'coopengo-broker'
+
+    @classmethod
+    def search_global(cls, text):
+        for id_, rec_name, icon in super(Broker, cls).search_global(text):
+            icon = icon or 'coog-broker'
+            yield id_, rec_name, icon
