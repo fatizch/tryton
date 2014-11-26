@@ -22,7 +22,7 @@ class Party:
             states={'invisible': Not(STATES_COMPANY)}),
         'get_is_actor', setter='set_is_actor', searcher='search_is_actor')
     agents = fields.One2Many('commission.agent', 'party', 'Agents',
-        depends=['is_broker'],
+        depends=['is_broker', 'is_insurer'],
         domain=[If(Bool(Eval('is_broker')),
                 [('type_', '=', 'agent')], []),
             If(Bool(Eval('is_insurer')),
