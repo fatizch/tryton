@@ -1,10 +1,23 @@
 from trytond.pyson import Eval
 from trytond.model import ModelSQL, ModelView
+from trytond.pool import PoolMeta
+
 from trytond.modules.cog_utils import fields
 
+__metaclass__ = PoolMeta
 __all__ = [
+    'Bank',
     'BankAccountNumber',
     ]
+
+
+class Bank:
+    __name__ = 'bank'
+
+    @classmethod
+    def __setup__(cls):
+        super(Bank, cls).__setup__()
+        cls.bic.required = True
 
 
 class BankAccountNumber(ModelSQL, ModelView):
