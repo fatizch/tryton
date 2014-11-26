@@ -103,7 +103,8 @@ class TestCaseModel:
     def bank_test_case_test_method(cls):
         Bank = Pool().get('bank')
         Configuration = cls.get_instance()
-        return Configuration.number_of_banks > Bank.search_count([])
+        return (Configuration.number_of_banks == -1
+            or Configuration.number_of_banks > Bank.search_count([]))
 
     @classmethod
     def create_bank_account(cls, **kwargs):
