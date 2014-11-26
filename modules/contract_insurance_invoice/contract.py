@@ -659,6 +659,8 @@ class ContractInvoice(ModelSQL, ModelView):
         'get_invoice_state', searcher='search_invoice_state')
     start = fields.Date('Start Date', required=True)
     end = fields.Date('End Date', required=True)
+    planned_payment_date = fields.Function(fields.Date('Planned Payment Date'),
+        'get_planned_payment_date')
 
     @classmethod
     def __setup__(cls):
@@ -675,6 +677,13 @@ class ContractInvoice(ModelSQL, ModelView):
 
     def get_invoice_state(self, name):
         return self.invoice.state
+
+    def get_planned_payment_date(self, name):
+        with Transaction().set_context({'contract_revision_date':
+                    self.invoice.start}):
+            billing_info = self.contract.billing_information
+            return billing_info.get_direct_debit_planned_date({'maturity_date':
+                    self.invoice.start})
 
     @classmethod
     def search_invoice_state(cls, name, domain):
