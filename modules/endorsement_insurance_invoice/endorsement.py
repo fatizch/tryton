@@ -74,14 +74,14 @@ class Contract:
         invoice_rrule = super(Contract,
             self)._get_invoice_rrule_and_billing_information(start)
         Endorsement = Pool().get('endorsement')
-        [invoice_rrule[0].rdate(
-                datetime.datetime.fromordinal(
-                    endorsement.effective_date.toordinal()) or
-                endorsement.application_date.date())
+        endorsement_dates = [endorsement.effective_date or
+            endorsement.application_date.date()
             for endorsement in Endorsement.search([
                         ('contracts', '=', self.id),
                         ('state', '=', 'applied')])
             if endorsement.definition.requires_contract_rebill]
+        if endorsement_dates:
+            invoice_rrule[0].rrule(endorsement_dates)
         return invoice_rrule
 
 
