@@ -15,6 +15,7 @@ from trytond.transaction import Transaction
 from trytond.tools import reduce_ids, grouped_slice
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.rpc import RPC
+from trytond.cache import Cache
 
 from trytond.modules.cog_utils import coop_date, utils, batchs, model, fields
 from trytond.modules.contract import _STATES
@@ -93,6 +94,7 @@ class Contract:
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
     all_premiums = fields.One2Many('contract.premium', 'main_contract',
         'All Premiums')
+    _invoices_cache = Cache('invoices_report')
 
     @classmethod
     def _export_skips(cls):
@@ -106,6 +108,34 @@ class Contract:
                 'button_calculate_prices': {},
                 'first_invoice': {},
                 })
+
+    def invoices_report(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        ContractInvoice = pool.get('contract.invoice')
+        cached_value = Contract._invoices_cache.get(self.id, default=None)
+        if not cached_value:
+            with Transaction().new_cursor() as transaction:
+                contract = Contract(self.id)
+                try:
+                    Contract.invoice([contract], contract.next_renewal_date)
+                    invoices = ContractInvoice.search([
+                            ('contract', '=', contract),
+                            ('invoice.state', '!=', 'cancel'),
+                            ])
+                    invoices = [{
+                            'start': x.invoice.start,
+                            'end': x.invoice.end,
+                            'total_amount': x.invoice.total_amount,
+                            'planned_payment_date': x.planned_payment_date}
+                            for x in invoices]
+                    # we want chronological order
+                    cached_value = [invoices[::-1],
+                        sum([x['total_amount'] for x in invoices])]
+                    Contract._invoices_cache.set(contract.id, cached_value)
+                finally:
+                    transaction.cursor.rollback()
+        return cached_value
 
     @classmethod
     def get_billing_information(cls, contracts, names):
@@ -289,6 +319,7 @@ class Contract:
         for contract in contracts:
             if contract.status not in ('active', 'quote'):
                 continue
+            cls._invoices_cache.set(contract.id, None)
             for period in contract.get_invoice_periods(min(up_to_date,
                         contract.end_date or datetime.date.max)):
                 periods[period].append(contract)
