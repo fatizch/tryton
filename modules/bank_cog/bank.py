@@ -28,6 +28,9 @@ class Bank(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Bank, cls).__setup__()
+        cls._sql_constraints += [
+            ('bic_uniq', 'UNIQUE(bic)', 'The bic must be unique!'),
+            ]
         cls._error_messages.update({
                 'invalid_bic': ('Invalid BIC : %s'),
                 })
