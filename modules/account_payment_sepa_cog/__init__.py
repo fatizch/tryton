@@ -11,7 +11,7 @@ def register():
         Party,
         # from payment
         Mandate,
-        # from bank
+        Bank,
         BankAccountNumber,
         # Test case
         TestCaseModel,
