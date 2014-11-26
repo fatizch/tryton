@@ -138,6 +138,8 @@ class Contract:
                     ).select(contract.id, Sum(premium_aggregate.total),
                     group_by=contract.id))
             values.update(dict(cursor.fetchall()))
+        for contract in contracts:
+            values[contract.id] = contract.currency.round(values[contract.id])
         return values
 
     @classmethod
