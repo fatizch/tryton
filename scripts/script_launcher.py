@@ -103,15 +103,16 @@ def kill(arguments, config, work_data):
 
 
 def sync(arguments, config, work_data):
-    def sync_this(repo_name):
+    def sync_this(repo_name, branch_name='default'):
         repo_path = os.path.join(work_data['runtime_dir'], repo_name)
         os.chdir(repo_path)
-        os.system('hg pull -u')
+        os.system('hg pull')
+        os.system('hg update %s' % branch_name)
 
     if arguments.target in ('server', 'all'):
-        sync_this('trytond')
+        sync_this('trytond', 'dev')
     if arguments.target in ('client', 'all'):
-        sync_this('tryton')
+        sync_this('tryton', 'coopengo')
     if arguments.target in ('proteus', 'all'):
         sync_this('proteus')
     if arguments.target in ('coop', 'all'):
