@@ -6,5 +6,7 @@
   <field name="method_name"/>
   <label name="technical_kind"/>
   <field name="technical_kind"/>
+  <label name="parameters"/>
+  <field name="parameters"/>
   <field name="source_code" colspan="2"/>
 </form>

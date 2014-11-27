@@ -1,5 +1,6 @@
 import pydot
 import inspect
+import ast
 
 from trytond.model import ModelView, ModelSQL
 from trytond.wizard import Wizard, StateAction
@@ -602,6 +603,7 @@ class Code(ModelSQL, ModelView):
     parent_transition = fields.Many2One('process.transition',
         'Parent Transition', ondelete='CASCADE')
     sequence = fields.Integer('Sequence', states={'invisible': True})
+    parameters = fields.Char('Parameters')
 
     @classmethod
     def __setup__(cls):
@@ -627,9 +629,17 @@ class Code(ModelSQL, ModelView):
         # Test if classmethod or not
         method = getattr(target.__class__, self.method_name)
         if not hasattr(method, 'im_self') or method.im_self:
-            result = method([target])
+            if self.parameters:
+                parameters = ast.literal_eval(self.parameters)
+                result = method([target], *parameters)
+            else:
+                result = method([target])
         else:
-            result = method(target)
+            if self.parameters:
+                parameters = ast.literal_eval(self.parameters)
+                result = method(target, *parameters)
+            else:
+                result = method(target)
         if (not result or
                 not isinstance(result, (list, tuple)) and result is True):
             return

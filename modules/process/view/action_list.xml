@@ -2,4 +2,5 @@
 <tree string="Code" sequence="sequence">
     <field name="on_model"/>
     <field name="method_name"/>
+    <field name="parameters"/>
 </tree>
