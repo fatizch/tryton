@@ -203,6 +203,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'option_subscription': {},
                 'button_change_start_date': {
                     'invisible': Eval('status') != 'quote'},
+                'button_activate': {
+                    'invisible': Eval('status') != 'quote'},
                     })
         cls._error_messages.update({
                 'inactive_product_at_date':
@@ -933,6 +935,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     @model.CoopView.button_action('contract.act_change_start_date')
     def button_change_start_date(cls, contracts):
+        pass
+
+    @classmethod
+    @model.CoopView.button_action('contract.act_activate')
+    def button_activate(cls, contracts):
         pass
 
     def get_all_extra_data(self, at_date):

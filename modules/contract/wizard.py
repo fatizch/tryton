@@ -12,6 +12,8 @@ __all__ = [
     'OptionsDisplayer',
     'WizardOption',
     'OptionSubscriptionWizardLauncher',
+    'ContractActivateConfirm',
+    'ContractActivate',
     ]
 
 
@@ -252,3 +254,65 @@ class OptionSubscriptionWizardLauncher(model.CoopWizard):
             'id': Transaction().context.get('active_id'),
             'ids': [Transaction().context.get('active_id')],
             }
+
+
+class ContractActivateConfirm(model.CoopView):
+    'Confirm Contract Activation View'
+    __name__ = 'contract.activate.confirm'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+
+
+class ContractActivate(model.CoopWizard):
+    'Activate Contract Wizard'
+
+    __name__ = 'contract.activate'
+    start_state = 'check_status'
+    check_status = StateTransition()
+    confirm = StateView(
+        'contract.activate.confirm',
+        'contract.activate_confirm_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next', default=True),
+            ])
+    apply = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractActivate, cls).__setup__()
+        cls._error_messages.update({
+                'not_quote': 'You cannot activate a contract '
+                'that is not in quote status !',
+                })
+
+    def default_confirm(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        active_id = Transaction().context.get('active_id')
+        selected_contract = Contract(active_id)
+        return {
+            'contract': selected_contract.id,
+            }
+
+    def transition_check_status(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        active_id = Transaction().context.get('active_id')
+        selected_contract = Contract(active_id)
+        if selected_contract.status != 'quote':
+            self.raise_user_error('not_quote')
+            return 'end'
+        else:
+            return 'confirm'
+
+    def transition_apply(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        active_id = Transaction().context.get('active_id')
+        selected_contract = Contract(active_id)
+        selected_contract.before_activate()
+        selected_contract.activate_contract()
+        selected_contract.finalize_contract()
+        selected_contract.save()
+
+        return 'end'

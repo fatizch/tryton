@@ -25,5 +25,14 @@
             <field name="type">form</field>
             <field name="name">select_package_form</field>
         </record>
+        <record model="ir.action.wizard" id="act_activate">
+            <field name="name">Activate</field>
+            <field name="wiz_name">contract.activate</field>
+        </record>
+        <record model="ir.ui.view" id="activate_confirm_view_form">
+            <field name="model">contract.activate.confirm</field>
+            <field name="type">form</field>
+            <field name="name">activate_confirm_form</field>
+        </record>
     </data>
 </tryton>

@@ -1,0 +1,4 @@
+<form string="Activate Contract">
+    <label name="contract"/>
+    <field name="contract"/>
+</form>
