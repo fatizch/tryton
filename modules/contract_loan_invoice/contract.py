@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 
@@ -126,7 +127,7 @@ class Contract:
     def get_total_premium_amount(cls, contracts, name):
         cursor = Transaction().cursor
         pool = Pool()
-        values = dict.fromkeys((c.id for c in contracts))
+        values = {x.id: Decimal(0) for x in contracts}
 
         PremiumAggregate = pool.get('contract.premium.amount.per_period')
         premium_aggregate = PremiumAggregate.__table__()
