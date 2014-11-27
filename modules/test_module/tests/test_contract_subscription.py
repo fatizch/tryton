@@ -33,7 +33,6 @@ wizard.execute('end')
 ##Comment##Get Models
 Product = Model.get('offered.product')
 OptionDescription = Model.get('offered.option.description')
-DistributionNetwork = Model.get('distribution.network')
 Process = Model.get('process')
 IrModel = Model.get('ir.model')
 Contract = Model.get('contract')
@@ -44,8 +43,6 @@ config._context = User.get_preferences(True, config.context)
 # Model.reset()
 ##Comment##Start subscription
 wizard = Wizard('contract.subscribe')
-dist_network = DistributionNetwork.find([('name', '=', 'Capvie')])[0]
-wizard.form.dist_network = dist_network
 product = Product.find([('code', '=', 'PREV')])[0]
 product.name
 ##Res##u'Pr\xe9voyance Indviduelle'

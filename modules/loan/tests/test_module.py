@@ -40,8 +40,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'SequenceType': 'ir.sequence.type',
             'ItemDescription': 'offered.item.description',
             'ContractProcessLauncher': 'contract.subscribe',
-            'DistNetwork': 'distribution.network',
-            'CommercialProduct': 'distribution.commercial_product',
             'ExtraPremiumKind': 'extra_premium.kind',
             'ExtraPremium': 'contract.option.extra_premium',
             'ExtraData': 'extra_data',
