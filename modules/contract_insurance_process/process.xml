@@ -22,23 +22,6 @@
       <field name="model">contract,-1</field>
       <field name="action" ref="act_contract_logs"/>
     </record>
-    <!-- Rights -->
-    <record model="ir.model.field.access" id="access_dist_subscription">
-      <field name="field" search="[('model.model', '=', 'contract.subscribe.find_process'), ('name', '=', 'dist_network')]"/>
-      <field name="group" ref="contract.group_contract"/>
-      <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="True"/>
-      <field name="perm_create" eval="False"/>
-      <field name="perm_delete" eval="True"/>
-    </record>
-    <record model="ir.model.field.access" id="access_admin_dist_subscription">
-      <field name="field" search="[('model.model', '=', 'contract.subscribe.find_process'), ('name', '=', 'dist_network')]"/>
-      <field name="group" ref="contract.group_contract_admin"/>
-      <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="True"/>
-      <field name="perm_create" eval="False"/>
-      <field name="perm_delete" eval="True"/>
-    </record>
     <!--################################################################ -->
     <!-- Synthesis -->
     <!--################################################################ -->
