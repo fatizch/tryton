@@ -319,20 +319,22 @@ class DocumentGenerateReport(Report):
             raise exc
 
     @classmethod
-    def EDM_write_report(cls, report_data, file_basename):
-        filename = coop_string.remove_invalid_char(file_basename)
+    def EDM_write_tmp_report(cls, report_data, filename):
+        basename, ext = os.path.splitext(filename)
+        filename = coop_string.remove_invalid_char(basename) + ext
         server_shared_folder = config.get('EDM', 'server_shared_folder',
             '/tmp')
-        client_shared_folder = config.get('EDM', 'client_shared_folder',
-            '/tmp')
+        client_shared_folder = config.get('EDM', 'client_shared_folder')
         try:
-            tmp_dir = tempfile.mkdtemp(dir=server_shared_folder)
+            tmp_dir = os.path.basename(
+                tempfile.mkdtemp(dir=server_shared_folder))
         except OSError as e:
             raise Exception('Could not create tmp_directory in %s (%s)' %
                 (server_shared_folder, e))
-        tmp_suffix_path = os.path.join(tmp_dir, filename + '.odt')
+        tmp_suffix_path = os.path.join(tmp_dir, filename)
         server_filepath = os.path.join(server_shared_folder, tmp_suffix_path)
-        client_filepath = os.path.join(client_shared_folder, tmp_suffix_path)
+        client_filepath = os.path.join(client_shared_folder, tmp_suffix_path) \
+            if client_shared_folder else ''
         with open(server_filepath, 'w') as f:
             f.write(report_data)
             return(client_filepath, server_filepath)
@@ -470,6 +472,7 @@ class DocumentCreate(Wizard):
         return result
 
     def default_preview_document(self, fields):
+        self.remove_EDM_temp_files()
         pool = Pool()
         ReportModel = pool.get('document.generate.report', type='report')
         ContactMechanism = pool.get('party.contact_mechanism')
@@ -479,7 +482,7 @@ class DocumentCreate(Wizard):
         sender_address = printable_inst.get_sender_address()
         result = {'reports': []}
         for doc_template in self.select_model.models:
-            _, filedata, _, file_basename = ReportModel.execute(
+            ext, filedata, _, file_basename = ReportModel.execute(
                 [Transaction().context.get('active_id')], {
                     'id': Transaction().context.get('active_id'),
                     'ids': Transaction().context.get('active_ids'),
@@ -491,8 +494,9 @@ class DocumentCreate(Wizard):
                     'sender_address': sender_address.id if sender_address
                     else None,
                     })
-            client_filepath, server_filepath = ReportModel.EDM_write_report(
-                filedata, file_basename)
+            client_filepath, server_filepath = \
+                ReportModel.EDM_write_tmp_report(filedata,
+                    '%s.%s' % (file_basename, ext))
             result['reports'].append({'generated_report': client_filepath,
                     'server_filepath': server_filepath,
                     'file_basename': file_basename
@@ -539,10 +543,7 @@ class DocumentCreate(Wizard):
         return result
 
     def transition_post_generation(self):
-        if not any([model.internal_edm for model in self.select_model.models]):
-            ReportModel = Pool().get('document.generate.report', type='report')
-            ReportModel.EDM_write_report(self.attach.attachment,
-                self.attach.name)
+        if all([not model.internal_edm for model in self.select_model.models]):
             return 'end'
         GoodModel = Pool().get(Transaction().context.get('active_model'))
         good_obj = GoodModel(Transaction().context.get('active_id'))
@@ -566,3 +567,14 @@ class DocumentCreate(Wizard):
             contact.attachment = attachment
         contact.save()
         return 'end'
+
+    def remove_EDM_temp_files(self):
+        try:
+            for f in self.preview_document.reports:
+                shutil.rmtree(os.path.dirname(f.server_filepath))
+        except (AttributeError, OSError):
+            # no reports or report already removed
+            pass
+
+    def end(self):
+        self.remove_EDM_temp_files()
