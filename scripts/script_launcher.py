@@ -104,7 +104,10 @@ def sync(arguments, config, work_data):
     def sync_this(repo_name, branch_name='default'):
         repo_path = os.path.join(work_data['runtime_dir'], repo_name)
         os.chdir(repo_path)
-        os.system('hg pull')
+        if arguments.insecure:
+            os.system('hg pull --insecure')
+        else:
+            os.system('hg pull')
         os.system('hg update %s' % branch_name)
 
     if arguments.target in ('server', 'all'):
@@ -662,6 +665,8 @@ if __name__ == '__main__':
         help='Sync current environment')
     parser_sync.add_argument('target', choices=['client', 'server', 'proteus',
             'coop', 'all'], default='all')
+    parser_sync.add_argument('--insecure', '-i', help='Allow https connections'
+        ' to self-signed certificates', action='store_true')
 
     # Test parser
     parser_unittests = subparsers.add_parser('test', help='Test related '
