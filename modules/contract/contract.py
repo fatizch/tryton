@@ -948,6 +948,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     @model.CoopView.button_action('contract.act_activate')
     def button_activate(cls, contracts):
+        pass
 
     @classmethod
     @model.CoopView.button_action('contract.act_decline')
