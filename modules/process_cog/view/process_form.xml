@@ -3,10 +3,6 @@
   <xpath expr="/form/group[@id='global_part']/field[@name='on_model']" position="after">
     <label name="kind"/>
     <field name="kind"/>
-    <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
     <label name="custom_transitions"/>
     <field name="custom_transitions"/>
     <label name="steps_implicitly_available"/>

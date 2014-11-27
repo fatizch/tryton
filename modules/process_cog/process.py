@@ -9,7 +9,7 @@ from trytond.pyson import Eval, Not, And
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
-from trytond.modules.cog_utils import utils, model, coop_date, fields
+from trytond.modules.cog_utils import utils, model, fields
 from trytond.modules.process import ProcessFramework
 
 
@@ -452,8 +452,6 @@ class Process(model.CoopSQL, model.TaggedMixin):
     steps_implicitly_available = fields.Boolean('Steps Implicitly Available',
         states={'invisible': ~Eval('custom_transitions')})
     kind = fields.Selection([('', '')], 'Kind')
-    start_date = fields.Date('Start Date', required=True)
-    end_date = fields.Date('End Date')
 
     @classmethod
     def __setup__(cls):
@@ -582,19 +580,6 @@ class Process(model.CoopSQL, model.TaggedMixin):
                 self.id, step_relation.id)
             nb += 1
         return nb, result
-
-    @classmethod
-    def create(cls, values):
-        for process in values:
-            last_version = cls.search([
-                ('on_model', '=', process['on_model']),
-                ('kind', '=', process['kind']),
-                ('end_date', '=', None),
-                ('start_date', '<', process['start_date'])])
-            if last_version:
-                cls.write(last_version, {
-                    'end_date': coop_date.add_day(process['start_date'], -1)})
-        return super(Process, cls).create(values)
 
     def intermediate_steps(self, step1, step2):
         # Returns True if step1 appears before step2 in self.all_steps
@@ -902,34 +887,31 @@ class ProcessStart(model.CoopView):
 
     __name__ = 'process.start'
 
-    date = fields.Date('Date')
     model = fields.Many2One('ir.model', 'Model',
         domain=[('is_workflow', '=', 'True')],
         states={'readonly': True, 'invisible': True})
     good_process = fields.Many2One('process', 'Good Process',
-        depends=['date', 'model'])
+        depends=['model'])
 
     @classmethod
     def __setup__(cls):
         super(ProcessStart, cls).__setup__()
         cls.good_process.domain = cls.build_process_domain()
         cls.good_process.depends = cls.build_process_depends()
-        cls.good_process.on_change_with = set(cls.build_process_depends())
 
     @classmethod
     def build_process_domain(cls):
-        return [('on_model', '=', Eval('model')),
-            utils.get_versioning_domain('date')]
+        return [('on_model', '=', Eval('model'))]
 
     @classmethod
     def build_process_depends(cls):
-        return ['model', 'date']
+        return ['model']
 
     @classmethod
     def default_model(cls):
         raise NotImplementedError
 
-    @fields.depends('date', 'model')
+    @fields.depends('model')
     def on_change_with_good_process(self):
         try:
             good_process = utils.get_domain_instances(self, 'good_process')
