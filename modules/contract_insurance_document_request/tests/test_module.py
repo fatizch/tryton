@@ -12,7 +12,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     @classmethod
     def get_module_name(cls):
-        return 'contract_document_request'
+        return 'contract_insurance_document_request'
 
 
 def suite():

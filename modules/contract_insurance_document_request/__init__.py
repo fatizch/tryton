@@ -16,4 +16,4 @@ def register():
         DocumentRequestLine,
         DocumentRequest,
         DocumentReceiveRequest,
-        module='contract_document_request', type_='model')
+        module='contract_insurance_document_request', type_='model')
