@@ -14,6 +14,8 @@ __all__ = [
     'OptionSubscriptionWizardLauncher',
     'ContractActivateConfirm',
     'ContractActivate',
+    'ContractSelectDeclineReason',
+    'ContractDecline',
     ]
 
 
@@ -315,4 +317,46 @@ class ContractActivate(model.CoopWizard):
         selected_contract.finalize_contract()
         selected_contract.save()
 
+        return 'end'
+
+
+
+class ContractSelectDeclineReason(model.CoopSQL, model.CoopView):
+    'Reason selector to decline contract'
+    __name__ = 'contract.decline.select_reason'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    reason = fields.Many2One('contract.sub_status', 'Reason', required=True,
+        domain=[('status', '=', 'declined')])
+
+
+class ContractDecline(model.CoopWizard):
+    'Decline Contract Wizard'
+
+    __name__ = 'contract.decline'
+    start_state = 'select_reason'
+    select_reason = StateView(
+        'contract.decline.select_reason',
+        'contract.select_decline_reason_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next', default=True),
+            ])
+    apply = StateTransition()
+
+    def default_select_reason(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        active_id = Transaction().context.get('active_id')
+        selected_contract = Contract(active_id)
+        return {
+            'contract': selected_contract.id,
+            }
+
+    def transition_apply(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        reason = self.select_reason.reason
+        active_id = Transaction().context.get('active_id')
+        selected_contract = Contract(active_id)
+        selected_contract.decline_contract(reason)
         return 'end'

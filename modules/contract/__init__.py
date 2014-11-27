@@ -38,6 +38,7 @@ def register():
         ContactType,
         ContractContact,
         ContractActivateConfirm,
+        ContractSelectDeclineReason,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
@@ -46,4 +47,5 @@ def register():
         ContractEnd,
         ContractChangeStartDate,
         ContractActivate,
+        ContractDecline,
         module='contract', type_='wizard')

@@ -29,6 +29,7 @@ CONTRACTSTATUSES = [
     ('hold', 'Hold'),
     ('void', 'Void'),
     ('terminated', 'Terminated'),
+    ('declined', 'Declined'),
     ]
 OPTIONSTATUS = CONTRACTSTATUSES + [
     ('refused', 'Refused'),
@@ -41,7 +42,7 @@ _CONTRACT_STATUS_STATES = {
     'readonly': Eval('contract_status') != 'quote',
     }
 _CONTRACT_STATUS_DEPENDS = ['contract_status']
-_STATUSES_WITH_SUBSTATUS = ['void', 'terminated']
+_STATUSES_WITH_SUBSTATUS = ['void', 'terminated', 'declined']
 
 
 __all__ = [
@@ -204,6 +205,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'button_change_start_date': {
                     'invisible': Eval('status') != 'quote'},
                 'button_activate': {
+                    'invisible': Eval('status') != 'quote'},
+                'button_decline': {
                     'invisible': Eval('status') != 'quote'},
                     })
         cls._error_messages.update({
@@ -775,6 +778,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             option.status = 'active'
             option.save()
 
+    def decline_contract(self, reason):
+        self.status = 'declined'
+        self.sub_status = reason
+        self.save()
+
     def clean_up_versions(self):
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
@@ -940,6 +948,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     @model.CoopView.button_action('contract.act_activate')
     def button_activate(cls, contracts):
+
+    @classmethod
+    @model.CoopView.button_action('contract.act_decline')
+    def button_decline(cls, contracts):
         pass
 
     def get_all_extra_data(self, at_date):
