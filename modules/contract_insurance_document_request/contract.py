@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
@@ -93,3 +95,21 @@ class Contract:
                     not request.send_date and not request.reception_date):
                 to_delete.append(request)
         DocumentRequestLine.delete(to_delete)
+
+    def link_attachments_to_requests(self):
+        attachments_grouped = defaultdict(list)
+        for attachment in self.attachments:
+            attachments_grouped[attachment.document_desc].append(attachment)
+        for request in self.document_request_lines:
+            if not (request.document_desc and
+                    len(attachments_grouped[request.document_desc]) == 1):
+                continue
+            request.attachment = attachments_grouped[request.document_desc][0]
+            request.save()
+
+    @classmethod
+    def update_contract_after_import(cls, contracts):
+        super(Contract, cls).update_contract_after_import(contracts)
+        for contract in contracts:
+            contract.init_subscription_document_request()
+            contract.link_attachments_to_requests()
