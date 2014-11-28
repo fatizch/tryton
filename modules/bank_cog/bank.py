@@ -36,6 +36,14 @@ class Bank(export.ExportImportMixin):
                 })
 
     @classmethod
+    def create(cls, vlist):
+        vlist = [x.copy() for x in vlist]
+        for vals in vlist:
+            if vals.get('bic', None) and len(vals['bic']) == 8:
+                vals['bic'] += 'XXX'
+        return super(Bank, cls).create(vlist)
+
+    @classmethod
     def _export_keys(cls):
         return set(['bic'])
 
@@ -52,15 +60,6 @@ class Bank(export.ExportImportMixin):
     def check_bic(self):
         if self.bic and not self.valid_BIC(self.bic):
             self.raise_user_error('invalid_bic', (self.bic))
-
-    @classmethod
-    def get_summary(cls, parties, name=None, at_date=None, lang=None):
-        res = {}
-        for party in parties:
-            res[party.id] = ''
-            res[party.id] += coop_string.get_field_as_summary(
-                party, 'bic', True, at_date, lang=lang)
-        return res
 
     @classmethod
     def get_var_names_for_light_extract(cls):
@@ -93,6 +92,10 @@ class Bank(export.ExportImportMixin):
         if not bic[6:8].isalnum():
             return False
         return True
+
+    @fields.depends('bic')
+    def on_change_with_bic(self):
+        return self.bic.upper().strip()
 
 
 class BankAccount(export.ExportImportMixin):
