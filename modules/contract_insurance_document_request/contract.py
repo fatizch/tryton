@@ -17,27 +17,23 @@ class Contract:
     doc_received = fields.Function(
         fields.Boolean('All Document Received', depends=['documents']),
         'on_change_with_doc_received')
-    documents = fields.One2Many('document.request', 'needed_by', 'Documents',
+    document_request_lines = fields.One2Many('document.request.line',
+        'for_object', 'Documents',
         states={'readonly': Eval('status') != 'quote'},
-        depends=['status'], size=1)
+        depends=['status'])
 
     @fields.depends('documents')
     def on_change_with_doc_received(self, name=None):
         if not self.documents:
             return False
         for doc in self.documents:
-            if not doc.is_complete:
+            if not doc.received:
                 return False
         return True
 
     def init_subscription_document_request(self):
-        DocRequest = Pool().get('document.request')
-        if not (hasattr(self, 'documents') and self.documents):
-            good_req = DocRequest()
-            good_req.needed_by = self
-            good_req.save()
-        else:
-            good_req = self.documents[0]
+        pool = Pool()
+        DocumentRequestLine = pool.get('document.request.line')
         documents = []
         product_docs, errs = self.product.get_result(
             'documents', {
@@ -47,11 +43,11 @@ class Contract:
         if errs:
             return False, errs
         if product_docs:
-            documents.extend([(doc_desc, self) for doc_desc in product_docs])
+            documents.extend(product_docs)
         for option in self.options:
             if not option.status == 'active':
                 continue
-            option_docs, errs = self.product.get_result(
+            option_docs, errs = option.coverage.get_result(
                 'documents', {
                     'contract': self,
                     'option': option.coverage.code,
@@ -62,12 +58,12 @@ class Contract:
                 return False, errs
             if not option_docs:
                 continue
-            documents.extend([(doc_desc, self) for doc_desc in option_docs])
+            documents.extend(option_docs)
         for elem in self.covered_elements:
             for option in elem.options:
                 if not option.status == 'active':
                     continue
-                sub_docs, errs = self.product.get_result(
+                sub_docs, errs = option.coverage.get_result(
                     'documents', {
                         'contract': self,
                         'option': option.coverage.code,
@@ -80,7 +76,20 @@ class Contract:
                     return False, errs
                 if not sub_docs:
                     continue
-                documents.extend([(doc_desc, elem) for doc_desc in sub_docs])
-        good_req.add_documents(self.start_date, documents)
-        good_req.clean_extras(documents)
-        return True, ()
+                documents.extend(sub_docs)
+        existing_document_desc = [request.document_desc
+            for request in self.document_request_lines]
+        for desc in documents:
+            if desc in existing_document_desc:
+                existing_document_desc.remove(desc)
+                continue
+            line = DocumentRequestLine()
+            line.document_desc = desc
+            line.for_object = '%s,%s' % (self.__name__, self.id)
+            line.save()
+        to_delete = []
+        for request in self.document_request_lines:
+            if (request.document_desc in existing_document_desc and
+                    not request.send_date and not request.reception_date):
+                to_delete.append(request)
+        DocumentRequestLine.delete(to_delete)
