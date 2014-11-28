@@ -9,6 +9,7 @@ except ImportError:
 
 from sql.aggregate import Max
 from sql import Literal, Cast
+from sql.conditionals import Coalesce
 
 from trytond.pyson import Eval, Bool
 from trytond.pool import PoolMeta, Pool
@@ -97,6 +98,8 @@ class Party(export.ExportImportMixin):
         readonly=True)
     synthesis_rec_name = fields.Function(
         fields.Char('Name'), 'get_synthesis_rec_name')
+    last_modification = fields.Function(fields.DateTime('Last Modification'),
+        'get_last_modification')
 
     @classmethod
     def __setup__(cls):
@@ -112,6 +115,7 @@ class Party(export.ExportImportMixin):
         cls._buttons.update({
                 'button_start_synthesis_menu': {},
                 })
+        cls._order.insert(0, ('last_modification', 'DESC'))
         for contact_type in ('phone', 'mobile', 'fax', 'email', 'website'):
             contact_field = getattr(cls, contact_type)
             contact_field.setter = 'set_contact'
@@ -180,6 +184,11 @@ class Party(export.ExportImportMixin):
             default = default.copy()
         default.setdefault('synthesis', None)
         return super(Party, cls).copy(parties, default=default)
+
+    @staticmethod
+    def order_last_modification(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.write_date, table.create_date)]
 
     @staticmethod
     def default_gender():
@@ -350,6 +359,10 @@ class Party(export.ExportImportMixin):
     def get_main_address_id(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)
         return address.id if address else None
+
+    def get_last_modification(self, name):
+        return (self.write_date if self.write_date else self.create_date
+            ).replace(microsecond=0)
 
     @classmethod
     def search_main_address(cls, name, clause):

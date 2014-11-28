@@ -25,6 +25,17 @@
             <field name="type">form</field>
             <field name="name">party_synthesis_form</field>
         </record>
+        <record model="ir.action.act_window.domain" id="act_party_domain_active">
+            <field name="name">All</field>
+            <field name="sequence" eval="10"/>
+            <field name="act_window" ref="party.act_party_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_party_domain_recent">
+            <field name="name">Recent</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
+            <field name="act_window" ref="party.act_party_form"/>
+        </record>
         <record model="ir.action.act_window" id="act_contact_mechanisms_relate_form">
             <field name="name">Contact Mechanisms</field>
             <field name="res_model">party.contact_mechanism</field>
@@ -64,6 +75,17 @@
             <field name="view" ref="person_view_form"/>
             <field name="act_window" ref="act_person_form"/>
         </record>
+        <record model="ir.action.act_window.domain" id="act_person_domain_active">
+            <field name="name">All</field>
+            <field name="sequence" eval="10"/>
+            <field name="act_window" ref="act_person_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_person_domain_recent">
+            <field name="name">Recent</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
+            <field name="act_window" ref="act_person_form"/>
+        </record>
         <menuitem parent="party.menu_party" sequence="0" id="menu_person_form"
             icon="coopengo-party" action="act_person_form"/>
 
@@ -94,6 +116,17 @@
         <record model="ir.action.act_window.view" id="act_company_form_view">
             <field name="sequence" eval="20"/>
             <field name="view" ref="company_view_form"/>
+            <field name="act_window" ref="act_company_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_company_domain_active">
+            <field name="name">All</field>
+            <field name="sequence" eval="10"/>
+            <field name="act_window" ref="act_company_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_company_domain_recent">
+            <field name="name">Recent</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
             <field name="act_window" ref="act_company_form"/>
         </record>
         <menuitem parent="party.menu_party" sequence="0" id="menu_company_form"

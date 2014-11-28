@@ -194,6 +194,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'on_change_with_subscriber_kind', 'setter_void')
     contacts = fields.One2Many('contract.contact', 'contract', 'Contacts',
         states=_STATES, depends=_DEPENDS)
+    last_modification = fields.Function(fields.DateTime('Last Modification'),
+        'get_last_modification')
 
     @classmethod
     def __setup__(cls):
@@ -221,6 +223,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'number and contract_number are missing from values',
                 'invalid_format': 'Invalid file format',
                 })
+        cls._order.insert(0, ('last_modification', 'DESC'))
+
+    @staticmethod
+    def order_last_modification(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.write_date, table.create_date)]
 
     def get_func_key(self, name):
         return '%s|%s' % ((self.quote_number, self.contract_number))
@@ -967,6 +975,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_product_subscriber_kind(self, name):
         return self.product.subscriber_kind if self.product else ''
+
+    def get_last_modification(self, name):
+        return (self.write_date if self.write_date else self.create_date
+            ).replace(microsecond=0)
 
     @fields.depends('subscriber_kind', 'subscriber')
     def on_change_subscriber_kind(self):
