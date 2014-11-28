@@ -55,9 +55,12 @@ class TestCaseModel:
         existing = dict((x.bic, x) for x in Bank.search([]))
         for bank_dict in bank_file:
             if (Configuration.number_of_banks > 0
-                    and len(existing) >= Configuration.number_of_banks or
-                    bank_dict['bic'] in existing):
+                    and len(existing) >= Configuration.number_of_banks):
                 break
+            bic = '%sXXX' % bank_dict['bic'] if len(bank_dict['bic']) == 8 \
+                else bank_dict['bic']
+            if bic in existing:
+                continue
             company = cls.new_company(bank_dict['bank_name'])
             country = cls.get_country_by_code(bank_dict['address_country'])
             address = cls.create_address(
