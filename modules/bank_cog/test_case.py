@@ -44,59 +44,37 @@ class TestCaseModel:
         return result
 
     @classmethod
-    def create_bank(cls, **kwargs):
-        Bank = Pool().get('bank')
-        return Bank(**kwargs)
-
-    @classmethod
-    def new_bank(cls, line, existing_bics):
-        bic = line[236:247].rstrip().replace(' ', '')
-        if not bic or bic in existing_bics:
-            return
-        company = cls.new_company(line[11:51].strip(),
-            line[51:61].strip())
-        address = cls.create_address(
-            name=line[11:49].strip(),
-            line3=line[88:120].strip(),
-            street=line[120:152].strip().upper(),
-            streetbis=line[152:184].strip().upper(),
-            zip=line[184:189].strip().upper(),
-            city=line[190:216].strip().upper(),
-            country=cls.get_country_by_code(line[240:242]),
-            )
-        company.addresses = [address]
-        bank = cls.create_bank(party=company, bic=bic)
-        existing_bics[bank.bic] = bank
-        return bank
-
-    @classmethod
     def bank_test_case(cls):
-        Bank = Pool().get('bank')
+        pool = Pool()
+        Bank = pool.get('bank')
         Configuration = cls.get_instance()
         cls.load_resources(MODULE_NAME)
-        bank_file = cls.read_list_file('bank.cfg', MODULE_NAME)
-        existing = dict((x.bic, x) for x in Bank.search([]))
-        banks = []
-        for line in bank_file:
-            if (Configuration.number_of_banks > 0
-                    and len(existing) >= Configuration.number_of_banks):
-                break
-            bank = cls.new_bank(line, existing)
-            if bank:
-                banks.append(bank)
-
         bank_file = cls.read_csv_file('bank.csv', MODULE_NAME,
             reader='dict')
+        banks = []
+        existing = dict((x.bic, x) for x in Bank.search([]))
         for bank_dict in bank_file:
             if (Configuration.number_of_banks > 0
-                    and len(existing) >= Configuration.number_of_banks):
+                    and len(existing) >= Configuration.number_of_banks or
+                    bank_dict['bic'] in existing):
                 break
-            if bank_dict['bic'] in existing:
-                continue
-            company = cls.new_company(bank_dict['party'])
-            bank = cls.create_bank(party=company, bic=bank_dict['bic'])
-            existing[bank.bic] = bank
-            banks.append(bank)
+            company = cls.new_company(bank_dict['bank_name'])
+            country = cls.get_country_by_code(bank_dict['address_country'])
+            address = cls.create_address(
+                street=bank_dict['address_street'],
+                zip=bank_dict['address_zip'],
+                city=bank_dict['address_city'],
+                country=country
+            )
+            company.addresses = [address]
+
+            bank = Bank(
+                bic=bank_dict['bic'],
+                party=company
+                )
+            if bank:
+                banks.append(bank)
+                existing[bank.bic] = bank
         Bank.create([x._save_values for x in banks])
 
     @classmethod
