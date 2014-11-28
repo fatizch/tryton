@@ -7,7 +7,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
 from trytond.pyson import Eval, Bool, And, Not, Len, If, PYSONEncoder
 
-from trytond.modules.cog_utils import model, coop_string, fields
+from trytond.modules.cog_utils import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -435,8 +435,11 @@ class StartEndorsement(Wizard):
             state_class = pool.get(state.model_name)
             if not issubclass(state_class, EndorsementWizardStepMixin):
                 continue
-            result[state_name] = coop_string.translate_model_name(
-                pool.get(state.model_name))
+            # Do NOT enable this unless you launch all endorsement modules
+            # tests (including scenarios) and they PASS !
+            # result[state_name] = coop_string.translate_model_name(
+            #     pool.get(state.model_name))
+            result[state_name] = state.model_name
         return result
 
     def get_endorsement_part_for_state(self, state_name):
