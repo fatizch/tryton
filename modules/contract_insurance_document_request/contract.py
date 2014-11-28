@@ -17,18 +17,19 @@ class Contract:
 
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments')
     doc_received = fields.Function(
-        fields.Boolean('All Document Received', depends=['documents']),
+        fields.Boolean('All Document Received',
+            depends=['document_request_lines']),
         'on_change_with_doc_received')
     document_request_lines = fields.One2Many('document.request.line',
         'for_object', 'Documents',
         states={'readonly': Eval('status') != 'quote'},
         depends=['status'])
 
-    @fields.depends('documents')
+    @fields.depends('document_request_lines')
     def on_change_with_doc_received(self, name=None):
-        if not self.documents:
+        if not self.document_request_lines:
             return False
-        for doc in self.documents:
+        for doc in self.document_request_lines:
             if not doc.received:
                 return False
         return True
