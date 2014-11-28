@@ -43,6 +43,12 @@ class Party:
                     'insurer_role', True, at_date, lang=lang)
         return res
 
+    def get_rec_name(self, name):
+        if self.is_insurer:
+            return self.name
+        else:
+            return super(Party, self).get_rec_name(name)
+
 
 class Insurer(model.CoopView, model.CoopSQL):
     'Insurer'

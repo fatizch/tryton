@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, If
 
 from trytond.modules.cog_utils import fields
 from trytond.modules.contract import _STATES, _DEPENDS
@@ -12,8 +13,19 @@ __metaclass__ = PoolMeta
 class Contract:
     __name__ = 'contract'
 
+    broker = fields.Function(
+        fields.Many2One('broker', 'Broker'),
+        'on_change_with_broker', 'setter_void')
+    broker_party = fields.Function(
+        fields.Many2One('party.party', 'Broker Party'),
+        'on_change_with_broker_party')
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT',
-        states=_STATES, depends=_DEPENDS)
+        domain=[
+            If(~Eval('broker_party'),
+                (),
+                ('party', '=', Eval('broker_party')),
+                )],
+        states=_STATES, depends=_DEPENDS + ['broker_party'])
 
     def get_invoice(self, start, end, billing_information):
         invoice = super(Contract, self).get_invoice(start, end,
@@ -60,3 +72,11 @@ class Contract:
         for line in lines:
             line.principal = self.find_insurer_agent(line)
         return lines
+
+    @fields.depends('agent')
+    def on_change_with_broker(self, name=None):
+        return self.agent.party.broker_role[0].id if self.agent else None
+
+    @fields.depends('broker')
+    def on_change_with_broker_party(self, name=None):
+        return self.broker.party.id if self.broker else None
