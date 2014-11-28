@@ -402,6 +402,50 @@ class Contract:
             lines.extend(premium.get_invoice_lines(start, end))
         return lines
 
+    def get_rebill_end_date(self, start_date):
+        return min(self.end_date or datetime.date.max,
+            self.last_invoice_end or start_date)
+
+    def get_rebill_post_end(self, start_date):
+        ContractInvoice = Pool().get('contract.invoice')
+        last_posted = ContractInvoice.search([
+                ('contract', '=', self.id),
+                ('end', '>=', start_date),
+                ('invoice_state', 'not in', ('cancel', 'draft', 'validated')),
+                ], order=[('start', 'DESC')], limit=1)
+        return last_posted[0].start if last_posted else datetime.date.min
+
+    def rebill(self, at_date):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+
+        # Recalculate prices
+        self.calculate_prices([self], at_date)
+
+        # Store the end date of the last invoice to be able to know up til when
+        # we should rebill
+        rebill_end = self.get_rebill_end_date(at_date)
+
+        # Calculate the date until which we will repost invoices
+        post_end = self.get_rebill_post_end(at_date)
+
+        # Delete or cancel overlapping invoices
+        self.clean_up_contract_invoices([self], from_date=at_date)
+
+        # Rebill
+        if rebill_end:
+            self.invoice([self], rebill_end)
+
+        # Post
+        if post_end < at_date:
+            return
+        invoices_to_post = Invoice.search([
+                ('contract', '=', self.id),
+                ('start', '<=', post_end),
+                ('state', '=', 'validated')])
+        if invoices_to_post:
+            Invoice.post(invoices_to_post)
+
     @classmethod
     @ModelView.button
     def button_calculate_prices(cls, contracts):
