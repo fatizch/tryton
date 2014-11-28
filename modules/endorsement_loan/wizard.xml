@@ -1,6 +1,30 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ########################### -->
+        <!-- # Extra Premium Displayer # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="extra_premium_displayer_view_form">
+            <field name="model">endorsement.contract.extra_premium.displayer</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement_insurance.extra_premium_displayer_view_form"/>
+            <field name="name">extra_premium_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="extra_premium_displayer_view_list">
+            <field name="model">endorsement.contract.extra_premium.displayer</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="endorsement_insurance.extra_premium_displayer_view_list"/>
+            <field name="name">extra_premium_displayer_list</field>
+        </record>
+        <!-- ##################### -->
+        <!-- # New Extra Premium # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="new_extra_premium_view_form">
+            <field name="model">endorsement.contract.new_extra_premium</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement_insurance.new_extra_premium_view_form"/>
+            <field name="name">new_extra_premium_form</field>
+        </record>
         <!-- ######################### -->
         <!-- # Change Loan Displayer # -->
         <!-- ######################### -->

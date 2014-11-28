@@ -15,6 +15,9 @@ PAYMENT_FIELDS = ['kind', 'number', 'start_date', 'begin_balance',
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'ExtraPremiumDisplayer',
+    'NewExtraPremium',
+    'ManageExtraPremium',
     'ChangeLoanDisplayer',
     'ChangeLoan',
     'ChangeLoanUpdatedPayments',
@@ -31,6 +34,59 @@ __all__ = [
     'ContractPreviewPayment',
     'StartEndorsement',
     ]
+
+
+class ExtraPremiumDisplayer:
+    __name__ = 'endorsement.contract.extra_premium.displayer'
+
+    is_loan = fields.Boolean('Is Loan', readonly=True, states={
+            'invisible': True})
+
+    @classmethod
+    def __setup__(cls):
+        super(ExtraPremiumDisplayer, cls).__setup__()
+        cls.extra_premium.context.update({
+                'is_loan': Eval('is_loan', False)})
+        cls.extra_premium.depends.append('is_loan')
+
+
+class ManageExtraPremium:
+    __name__ = 'endorsement.contract.manage_extra_premium'
+
+    @classmethod
+    def _extra_premium_fields_to_extract(cls):
+        field_names = super(ManageExtraPremium,
+            cls)._extra_premium_fields_to_extract()
+        field_names.append('is_loan')
+        return field_names
+
+    @classmethod
+    def create_displayer(cls, extra_premium, template):
+        displayer = super(ManageExtraPremium, cls).create_displayer(
+            extra_premium, template)
+        pool = Pool()
+        if template['option']:
+            coverage = pool.get('contract.option')(template['option']).coverage
+        elif template['option_endorsement']:
+            coverage = pool.get('endorsement.contract.covered_element.option')(
+                template['option_endorsement']).coverage
+        displayer['extra_premium'][0]['is_loan'] = coverage.is_loan
+        displayer['is_loan'] = coverage.is_loan
+        return displayer
+
+
+class NewExtraPremium:
+    __name__ = 'endorsement.contract.new_extra_premium'
+
+    is_loan = fields.Boolean('Is Loan', readonly=True, states={
+            'invisible': True})
+
+    @classmethod
+    def __setup__(cls):
+        super(NewExtraPremium, cls).__setup__()
+        cls.new_extra_premium.context.update({
+                'is_loan': Eval('is_loan', False)})
+        cls.new_extra_premium.depends.append('is_loan')
 
 
 class ChangeLoanDisplayer(model.CoopView):
@@ -901,4 +957,14 @@ class StartEndorsement:
                         'currency_digits')])
             for x in Pool().get('loan.increment').browse(
                 result['increments'])]
+        return result
+
+    def default_new_extra_premium(self, name):
+        result = super(StartEndorsement, self).default_new_extra_premium(name)
+        contracts = list(self.endorsement.contracts)
+        if Transaction().context.get('active_model') == 'contract':
+            contracts.append(Pool().get('contract')(
+                    Transaction().context.get('active_id')))
+        result['is_loan'] = result['new_extra_premium'][0]['is_loan'] = any([
+                contract.is_loan for contract in contracts])
         return result

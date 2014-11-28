@@ -217,7 +217,7 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
     def _extra_premium_fields_to_extract(cls):
         return ['calculation_kind', 'capital_per_mil_rate', 'currency',
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
-            'end_date', 'flat_amount', 'is_discount', 'is_loan', 'max_rate',
+            'end_date', 'flat_amount', 'is_discount', 'max_rate',
             'max_value', 'motive', 'option', 'rate', 'start_date',
             'time_limited']
 

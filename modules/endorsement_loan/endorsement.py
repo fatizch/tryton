@@ -16,6 +16,7 @@ __all__ = [
     'LoanPayment',
     'LoanShare',
     'PremiumAmount',
+    'ExtraPremium',
     'Endorsement',
     'EndorsementContract',
     'EndorsementLoan',
@@ -71,6 +72,17 @@ class PremiumAmount:
     _history = True
     __metaclass__ = PoolMeta
     __name__ = 'contract.premium.amount'
+
+
+class ExtraPremium:
+    __metaclass__ = PoolMeta
+    __name__ = 'contract.option.extra_premium'
+
+    @fields.depends('option')
+    def on_change_with_is_loan(self, name=None):
+        if self.option:
+            return super(ExtraPremium, self).on_change_with_is_loan(name)
+        return Transaction().context.get('is_loan', False)
 
 
 class Endorsement:
