@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.activate:"
+msgid "You cannot activate a contract that is not in quote status !"
+msgstr "Impossible d'activer un contrat qui n'est pas à l'état devis"
+
 msgctxt "error:contract.activation_history:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
@@ -63,6 +67,24 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:contract.contact:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:contract.decline.select_reason:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:contract.decline.select_reason:"
 msgid ""
 "Cannot import : the following objects:\n"
 "%s\n"
@@ -144,6 +166,10 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:contract.termination.treatment:"
+msgid "No Batch Path Specified"
+msgstr "Le chemin d'exécution des batchs n'est pas configuré"
 
 msgctxt "error:contract:"
 msgid "Activation Periods \"%(first)s\" and \"%(second)s\" overlap."
@@ -251,6 +277,10 @@ msgctxt "field:contract,is_sub_status_required:"
 msgid "Is Sub Status Required"
 msgstr "Sous statut nécessaire"
 
+msgctxt "field:contract,last_modification:"
+msgid "Last Modification"
+msgstr "Dernière modification"
+
 msgctxt "field:contract,options:"
 msgid "Options"
 msgstr "Garanties"
@@ -306,6 +336,14 @@ msgstr "Mis à jour par"
 msgctxt "field:contract,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:contract.activate.confirm,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.activate.confirm,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:contract.activation_history,contract:"
 msgid "Contract"
@@ -492,6 +530,46 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:contract.contact.type,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.decline.select_reason,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.decline.select_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.decline.select_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.decline.select_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.decline.select_reason,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.decline.select_reason,reason:"
+msgid "Reason"
+msgstr "Raison"
+
+msgctxt "field:contract.decline.select_reason,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.decline.select_reason,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.decline.select_reason,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.decline.select_reason,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -795,6 +873,10 @@ msgctxt "field:contract.sub_status,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.termination.treatment,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt ""
 "field:contract.wizard.option_subscription.options_displayer,contract:"
 msgid "Contract"
@@ -929,6 +1011,10 @@ msgctxt "model:contract,name:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "model:contract.activate.confirm,name:"
+msgid "Confirm Contract Activation View"
+msgstr "Confirmation de l'activation"
+
 msgctxt "model:contract.activation_history,name:"
 msgid "Activation History"
 msgstr "Historique d'activation"
@@ -944,6 +1030,10 @@ msgstr "Contact du contrat"
 msgctxt "model:contract.contact.type,name:"
 msgid "Contact Type"
 msgstr "Type de contact"
+
+msgctxt "model:contract.decline.select_reason,name:"
+msgid "Reason selector to decline contract"
+msgstr "Motif pour décliner le contrat"
 
 msgctxt "model:contract.end.select_date,name:"
 msgid "End date selector for contract"
@@ -981,6 +1071,10 @@ msgctxt "model:contract.sub_status,name:sub_status_reached_end_date"
 msgid "Reached end date"
 msgstr "Terme atteint"
 
+msgctxt "model:contract.termination.treatment,name:"
+msgid "Contract end date termination batch"
+msgstr "Batch de résiliation"
+
 msgctxt "model:contract.wizard.option_subscription.options_displayer,name:"
 msgid "Select Covered Element"
 msgstr "Choisir Le Risque Couvert"
@@ -998,6 +1092,10 @@ msgctxt "model:ir.action,name:"
 msgid "Devis"
 msgstr "Devis"
 
+msgctxt "model:ir.action,name:act_activate"
+msgid "Activate"
+msgstr "Activer"
+
 msgctxt "model:ir.action,name:act_change_start_date"
 msgid "Change Start Date"
 msgstr "Modifier la date d'effet"
@@ -1013,6 +1111,10 @@ msgstr "Contrats"
 msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contracts"
 msgstr "Contrats"
+
+msgctxt "model:ir.action,name:act_decline"
+msgid "Decline"
+msgstr "Décliner"
 
 msgctxt "model:ir.action,name:act_end"
 msgid "End Contract"
@@ -1041,6 +1143,10 @@ msgstr "Actif"
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_quote"
 msgid "Quote"
 msgstr "Devis"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_recent"
+msgid "Recent"
+msgstr "Mon historique"
 
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_contract_domain_terminated"
@@ -1108,6 +1214,10 @@ msgid "Active"
 msgstr "Active"
 
 msgctxt "selection:contract,status:"
+msgid "Declined"
+msgstr "Décliné"
+
+msgctxt "selection:contract,status:"
 msgid "Hold"
 msgstr "Suspendre"
 
@@ -1138,6 +1248,10 @@ msgstr " "
 msgctxt "selection:contract.option,status:"
 msgid "Active"
 msgstr "Active"
+
+msgctxt "selection:contract.option,status:"
+msgid "Declined"
+msgstr "Décliné"
 
 msgctxt "selection:contract.option,status:"
 msgid "Hold"
@@ -1182,6 +1296,10 @@ msgstr " "
 msgctxt "selection:contract.sub_status,status:"
 msgid "Active"
 msgstr "Active"
+
+msgctxt "selection:contract.sub_status,status:"
+msgid "Declined"
+msgstr "Décliné"
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Hold"
@@ -1233,6 +1351,10 @@ msgctxt "selection:party.interaction,for_object_ref:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "view:contract.activate.confirm:"
+msgid "Activate Contract"
+msgstr "Activer contrat"
+
 msgctxt "view:contract.activation_history:"
 msgid "Activation History"
 msgstr "Historique d'activation"
@@ -1248,6 +1370,10 @@ msgstr "Type de contact"
 msgctxt "view:contract.contact:"
 msgid "Contract Contact"
 msgstr "Contact du contrat"
+
+msgctxt "view:contract.decline.select_reason:"
+msgid "Select Declination Reason"
+msgstr "Choisir le motif pour décliner"
 
 msgctxt "view:contract.end.select_date:"
 msgid "Select End Date"
@@ -1294,6 +1420,10 @@ msgid "Select Package"
 msgstr "Choisir la formule"
 
 msgctxt "view:contract:"
+msgid "Activate Contract"
+msgstr "Activer contrat"
+
+msgctxt "view:contract:"
 msgid "Administration"
 msgstr "Administration"
 
@@ -1314,6 +1444,10 @@ msgid "Data"
 msgstr "Données"
 
 msgctxt "view:contract:"
+msgid "Decline Contract"
+msgstr "Décliner le contrat"
+
+msgctxt "view:contract:"
 msgid "Options"
 msgstr "Options"
 
@@ -1321,11 +1455,27 @@ msgctxt "view:party.party:"
 msgid "+"
 msgstr "+"
 
+msgctxt "wizard_button:contract.activate,confirm,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:contract.activate,confirm,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
 msgctxt "wizard_button:contract.change_start_date,change_date,apply:"
 msgid "Apply"
 msgstr "Appliquer"
 
 msgctxt "wizard_button:contract.change_start_date,change_date,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.decline,select_reason,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:contract.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 

@@ -1,0 +1,12 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:commission.plan,rule_engine_key:"
+msgid "Rule Engine Key"
+msgstr "Clé du moteur de règle"
+
+msgctxt "help:commission.plan,rule_engine_key:"
+msgid "key to retrieve the commission plan in rule engine algorithm"
+msgstr ""
+"Clé pour retrouver la plan de commissionnement au sein du moteur de règle"

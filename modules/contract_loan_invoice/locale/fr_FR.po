@@ -47,7 +47,7 @@ msgid "Loan"
 msgstr "Prêt"
 
 msgctxt "field:contract,last_generated_premium_end:"
-msgid "Last Generated Premiumm End Date"
+msgid "Last Generated Premium End Date"
 msgstr "Date de fin de la dernière quittance générée"
 
 msgctxt "field:contract,premium_amounts:"

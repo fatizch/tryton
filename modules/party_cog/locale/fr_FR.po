@@ -458,6 +458,10 @@ msgctxt "field:party.party,is_person:"
 msgid "Person"
 msgstr "Personne"
 
+msgctxt "field:party.party,last_modification:"
+msgid "Last Modification"
+msgstr "Dernière modification"
+
 msgctxt "field:party.party,logo:"
 msgid "Logo"
 msgstr "Logo"
@@ -897,6 +901,30 @@ msgstr "Synthèse"
 msgctxt "model:ir.action,name:wizard_open"
 msgid "Open Party Synthesis Menu"
 msgstr "Ouvrir la synthèse"
+
+msgctxt "model:ir.action.act_window.domain,name:act_company_domain_active"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt "model:ir.action.act_window.domain,name:act_company_domain_recent"
+msgid "Recent"
+msgstr "Mon historique"
+
+msgctxt "model:ir.action.act_window.domain,name:act_party_domain_active"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt "model:ir.action.act_window.domain,name:act_party_domain_recent"
+msgid "Recent"
+msgstr "Mon historique"
+
+msgctxt "model:ir.action.act_window.domain,name:act_person_domain_active"
+msgid "All"
+msgstr "Toutes"
+
+msgctxt "model:ir.action.act_window.domain,name:act_person_domain_recent"
+msgid "Recent"
+msgstr "Mon historique"
 
 msgctxt "model:ir.test_case.instance,name:hierarchy_test_case"
 msgid "Hierarchy Test Case"

@@ -222,17 +222,9 @@ msgctxt "field:process,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"
 
-msgctxt "field:process,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
 msgctxt "field:process,kind:"
 msgid "Kind"
 msgstr "Type"
-
-msgctxt "field:process,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
 
 msgctxt "field:process,steps_implicitly_available:"
 msgid "Steps Implicitly Available"
@@ -341,10 +333,6 @@ msgstr "Mis à jour par"
 msgctxt "field:process.log,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:process.start,date:"
-msgid "Date"
-msgstr "Date"
 
 msgctxt "field:process.start,good_process:"
 msgid "Good Process"

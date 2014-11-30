@@ -64,6 +64,10 @@ msgctxt "error:bank:"
 msgid "Invalid BIC : %s"
 msgstr ""
 
+msgctxt "error:bank:"
+msgid "The bic must be unique!"
+msgstr "Le BIC doit être unique!"
+
 msgctxt "error:party.synthesis.menu.bank_account:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""

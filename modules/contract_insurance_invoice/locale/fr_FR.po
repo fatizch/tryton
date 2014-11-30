@@ -550,6 +550,10 @@ msgctxt "field:contract.invoice,invoice_state:"
 msgid "Invoice State"
 msgstr "Etat"
 
+msgctxt "field:contract.invoice,planned_payment_date:"
+msgid "Planned Payment Date"
+msgstr "Date de paiement planifiée"
+
 msgctxt "field:contract.invoice,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -979,7 +983,7 @@ msgstr ""
 "Une liste vide signifie que tous les jours sont autorisés."
 
 msgctxt "model:account.invoice.line.detail,name:"
-msgid "Invoie Line Detail"
+msgid "Invoice Line Detail"
 msgstr "Détail de ligne de quittance"
 
 msgctxt "model:account.payment.creation,name:"

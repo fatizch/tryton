@@ -281,6 +281,14 @@ msgctxt "field:endorsement.contract.covered_element.option,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"
 
+msgctxt "field:endorsement.contract.extra_premium.displayer,is_loan:"
+msgid "Is Loan"
+msgstr "Emprunteur"
+
+msgctxt "field:endorsement.contract.new_extra_premium,is_loan:"
+msgid "Is Loan"
+msgstr "Emprunteur"
+
 msgctxt "field:endorsement.definition,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"

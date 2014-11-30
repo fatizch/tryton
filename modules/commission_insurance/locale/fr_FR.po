@@ -1,0 +1,273 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:broker:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:broker:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:commission.plan.lines-offered.option.description:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:commission.plan.lines-offered.option.description:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:commission_plan-commission_plan:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:commission_plan-commission_plan:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:broker,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:broker,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:broker,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:broker,icon:"
+msgid "Icon"
+msgstr "Icône"
+
+msgctxt "field:broker,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:broker,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:broker,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:broker,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:broker,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:broker,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:commission,commissionned_contract:"
+msgid "Commissioned Contract"
+msgstr "Contrat commissionné"
+
+msgctxt "field:commission,commissionned_option:"
+msgid "Commissioned Option"
+msgstr "Option commissionnée"
+
+msgctxt "field:commission.plan,plan_relation:"
+msgid "Plan Relation"
+msgstr "Plan lié"
+
+msgctxt "field:commission.plan,reverse_plan_relation:"
+msgid "Reverse Plan Relation"
+msgstr "Plan lié inverse"
+
+msgctxt "field:commission.plan.line,options:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:commission.plan.line,options_extract:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "field:commission.plan.lines-offered.option.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan.lines-offered.option.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan.lines-offered.option.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.plan.lines-offered.option.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.plan.lines-offered.option.description,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:commission.plan.lines-offered.option.description,plan_line:"
+msgid "Plan Line"
+msgstr "Ligne de plan de commissionnement"
+
+msgctxt "field:commission.plan.lines-offered.option.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.plan.lines-offered.option.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.plan.lines-offered.option.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.plan.lines-offered.option.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:commission_plan-commission_plan,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission_plan-commission_plan,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission_plan-commission_plan,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission_plan-commission_plan,from_:"
+msgid "Plan"
+msgstr "Plan"
+
+msgctxt "field:commission_plan-commission_plan,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission_plan-commission_plan,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission_plan-commission_plan,to:"
+msgid "Plan"
+msgstr "Plan"
+
+msgctxt "field:commission_plan-commission_plan,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission_plan-commission_plan,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission_plan-commission_plan,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract,agent:"
+msgid "Agent"
+msgstr "Agent"
+
+msgctxt "field:contract,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:contract,broker_party:"
+msgid "Broker Party"
+msgstr "Tiers du courtier"
+
+msgctxt "field:party.party,agents:"
+msgid "Agents"
+msgstr "Agents"
+
+msgctxt "field:party.party,broker_role:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "field:party.party,is_broker:"
+msgid "Is Broker"
+msgstr "Courtier"
+
+msgctxt "model:broker,name:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "model:commission.plan.lines-offered.option.description,name:"
+msgid "Commission Plan Line - Offered Option Description"
+msgstr "Lien Ligne de plan de commissionnement - Garantie offerte"
+
+msgctxt "model:commission_plan-commission_plan,name:"
+msgid "Commission Plan - Commission Plan"
+msgstr "Lien entre plans de commissionnement"
+
+msgctxt "model:ir.action,name:act_broker_commissionned_contract_relate_form"
+msgid "Commissionned Contracts"
+msgstr "Contrats commissionnés"
+
+msgctxt "model:ir.action,name:act_broker_form"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "model:ir.ui.menu,name:menu_broker_form"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "model:ir.ui.menu,name:menu_commission_insurer_form"
+msgid "Insurers"
+msgstr "Assureurs"
+
+msgctxt "view:broker:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "view:broker:"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "view:commission.plan:"
+msgid "Lines"
+msgstr "Lignes"
+
+msgctxt "view:commission.plan:"
+msgid "Plan Relation"
+msgstr "Plan lié"
+
+msgctxt "view:party.party:"
+msgid "Broker Agents"
+msgstr "Agents du courtier"

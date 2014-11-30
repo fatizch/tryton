@@ -236,6 +236,10 @@ msgctxt "field:process.action,on_model:"
 msgid "On Model"
 msgstr "Modèle"
 
+msgctxt "field:process.action,parameters:"
+msgid "Parameters"
+msgstr "Paramètres"
+
 msgctxt "field:process.action,parent_step:"
 msgid "Parent Step"
 msgstr "Etape Parente"
@@ -693,6 +697,10 @@ msgid "==> Souscripteur"
 msgstr "==> Souscripteur"
 
 msgctxt "view:contract:"
+msgid "==> Validation RIC"
+msgstr "==> Validation RIC"
+
+msgctxt "view:contract:"
 msgid "==> Validation du contrat"
 msgstr ""
 
@@ -795,6 +803,10 @@ msgstr "Souscription Perte d'Emploi"
 msgctxt "view:contract:"
 msgid "The current record completed the current process, please go ahead"
 msgstr "Processus Terminé. Commencez une nouvelle tâche"
+
+msgctxt "view:contract:"
+msgid "Validation RIC"
+msgstr "Validation RIC"
 
 msgctxt "view:contract:"
 msgid "Validation du contrat"

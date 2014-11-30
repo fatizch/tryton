@@ -39,10 +39,6 @@ msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:contract:"
-msgid "Option %s is not eligible"
-msgstr "La garantie %s n'est pas éligible"
-
-msgctxt "error:contract:"
 msgid "Option %s must be subscribed after %s"
 msgstr "La Garantie %s doit être souscrite après le %s"
 
@@ -89,17 +85,9 @@ msgctxt "field:contract.option,status_selection:"
 msgid "Status"
 msgstr "Statut"
 
-msgctxt "field:contract.subscribe.find_process,com_product:"
-msgid "Commercial Product"
-msgstr "Produit Commercial"
-
-msgctxt "field:contract.subscribe.find_process,date:"
-msgid "Date"
-msgstr "Date"
-
-msgctxt "field:contract.subscribe.find_process,dist_network:"
-msgid "Distribution Network"
-msgstr "Réseau de Distribution"
+msgctxt "field:contract.subscribe.find_process,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
 
 msgctxt "field:contract.subscribe.find_process,good_process:"
 msgid "Good Process"
@@ -112,10 +100,6 @@ msgstr "ID"
 msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
-
-msgctxt "field:contract.subscribe.find_process,possible_com_product:"
-msgid "Commercial Products Available"
-msgstr "Produits Commerciaux Disponibles"
 
 msgctxt "field:contract.subscribe.find_process,product:"
 msgid "Product"
