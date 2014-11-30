@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -37,3 +37,139 @@ msgstr "Quittance"
 msgctxt "view:account.tax:account."
 msgid "Invoice"
 msgstr "Quittance"
+
+msgctxt "error:account.move.line:account."
+msgid "Line \"%s\" (%d) already reconciled."
+msgstr "La ligne \"%s\" (%d) est déjà  lettrée."
+
+msgctxt "error:account.move.line:account."
+msgid "You can not modify line \"%s\" because it is reconciled."
+msgstr "Vous ne pouvez modifier la ligne « %s » car elle est lettrée."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not create a reconciliation where debit \"%(debit)s\" and credit "
+"\"%(credit)s\" differ."
+msgstr ""
+"Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le "
+"crédit « %(credit)s » diffèrent."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid "You can not modify a reconciliation."
+msgstr "Vous ne pouvez modifier un lettrage."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not reconcile line \"%(line)s\" because it's account \"%(account)s\""
+" is configured as not reconcilable."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %(line)s » car son compte « "
+"%(account)s » est configuré comme non-lettrable."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not reconcile line \"%(line)s\" because it's account "
+"\"%(account1)s\" is different from \"%(account2)s\"."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %(line)s »  car son compte  « "
+"%(account1)s » est différent de « %(account2)s »."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid ""
+"You can not reconcile line \"%(line)s\" because it's party \"%(party1)s\" is"
+" different from %(party2)s\"."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %(line)s »  car son tiers « %(party1)s"
+" » est différent de « %(party2)s »."
+
+msgctxt "error:account.move.reconciliation:account."
+msgid "You can not reconcile line \"%s\" because it is not in valid state."
+msgstr ""
+"Vous ne pouvez lettrer la ligne « %s » car elle n'est pas dans un état "
+"valide."
+
+msgctxt "field:account.account,reconcile:account."
+msgid "Reconcile"
+msgstr "A lettrer"
+
+msgctxt "field:account.account.template,reconcile:account."
+msgid "Reconcile"
+msgstr "A lettrer"
+
+msgctxt "field:account.move.line,reconciliation:account."
+msgid "Reconciliation"
+msgstr "Lettrage"
+
+msgctxt "model:account.move.reconcile_lines.writeoff,name:account."
+msgid "Reconcile Lines Write-Off"
+msgstr "Lettrer les lignes de pertes et profits"
+
+msgctxt "model:account.move.reconciliation,name:account."
+msgid "Account Move Reconciliation Lines"
+msgstr "Lignes de lettrage de mouvement comptable"
+
+msgctxt "model:ir.action,name:account.act_reconcile_lines"
+msgid "Reconcile Lines"
+msgstr "Lettrer les lignes"
+
+msgctxt "model:ir.action,name:account.act_unreconcile_lines"
+msgid "Unreconcile Lines"
+msgstr "Dé-lettrer les lignes"
+
+msgctxt "model:ir.sequence,name:account.sequence_account_move_reconciliation"
+msgid "Default Account Move Reconciliation"
+msgstr "Lettrage des mouvements comptables par défaut"
+
+msgctxt ""
+"model:ir.sequence.type,name:account.sequence_type_account_move_reconciliation"
+msgid "Account Move Reconciliation"
+msgstr "Lettrage de mouvements comptables"
+
+msgctxt "model:ir.ui.menu,name:account."
+msgid "Reconcile Lines"
+msgstr "Lettrer les lignes"
+
+msgctxt "view:account.move.reconciliation:account."
+msgid "Reconciliation"
+msgstr "Lettrage"
+
+msgctxt "view:account.move.reconciliation:account."
+msgid "Reconciliations"
+msgstr "Lettrages"
+
+msgctxt "view:account.reconcile.show:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+msgctxt "model:ir.action,name:account.act_reconcile"
+msgid "Reconcile Accounts"
+msgstr "Lettrer les comptes"
+
+
+msgctxt "model:ir.ui.menu,name:account.menu_reconcile"
+msgid "Reconcile Accounts"
+msgstr "Lettrer les comptes"
+
+msgctxt "model:ir.action,name:account.act_move_reconciliation_lines"
+msgid "Reconciliation Lines"
+msgstr "Lignes de lettrage"
+
+msgctxt "help:account.account,reconcile:account."
+msgid ""
+"Allow move lines of this account \n"
+"to be reconciled."
+msgstr "Autoriser le lettrage des ligne de mouvement de ce compte."
+
+msgctxt "model:account.reconcile.show,name:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+msgctxt "wizard_button:account.move.reconcile_lines,writeoff,reconcile:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+msgctxt "wizard_button:account.reconcile,show,reconcile:account."
+msgid "Reconcile"
+msgstr "Lettrer"
+
+

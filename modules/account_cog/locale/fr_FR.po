@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -426,7 +426,7 @@ msgstr "Symbole de la Devise"
 
 msgctxt "field:account.move.line,reconciliation_lines:"
 msgid "Reconciliation Lines"
-msgstr "Lignes de réconciliation"
+msgstr "Lignes de lettrage"
 
 msgctxt ""
 "field:account.open_third_party_balance.start,third_party_balance_option:"
@@ -757,7 +757,7 @@ msgstr "Paiements"
 
 msgctxt "view:account.move.line:"
 msgid "Reconciliation"
-msgstr "Réconciliation"
+msgstr "Lettrage"
 
 msgctxt "view:account.tax.description.version:"
 msgid "Tax Description Version"
