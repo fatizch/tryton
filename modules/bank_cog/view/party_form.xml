@@ -12,8 +12,8 @@
             <field name="bank_role" mode="form"/>
         </page>
     </xpath>
-    <xpath expr="//field[@name='addresses']" position="after">
-        <field name="bank_accounts" colspan="4" widget="one2many" yexpand="0" yfill="0"/>
+    <xpath expr="//field[@name='relations']" position="after">
+        <field name="bank_accounts" colspan="4" widget="one2many" pre_validate="1"/>
     </xpath>
     <xpath expr="//page[@id='banking']" position="replace"/>
 </data>

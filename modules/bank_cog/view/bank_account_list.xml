@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/tree/field[@name='rec_name']" position="replace_attributes">
-        <field name="rec_name" expand="1"/>
+    <xpath expr="/tree" position="replace_attributes">
+        <tree editable="bottom"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='rec_name']" position="replace"/>
+    <xpath expr="/tree/field[@name='bank']" position="before">
+        <field name="number" expand="1"/>
     </xpath>
     <xpath expr="/tree/field[@name='bank']" position="replace_attributes">
         <field name="bank" expand="1"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='currency']" position="before">
+        <field name="start_date"/>
+        <field name="end_date"/>
+    </xpath>
+    <xpath expr="/tree" position="inside">
+        <field name="numbers" tree_invisible="1"/>
     </xpath>
 </data>

@@ -1,5 +1,4 @@
 from trytond.pool import Pool, PoolMeta
-from trytond.transaction import Transaction
 from trytond.model import fields as tryton_fields
 from trytond.pyson import If, Bool, Eval
 
@@ -105,8 +104,8 @@ class BankAccount(export.ExportImportMixin):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     number = fields.Function(
-        fields.Char('Main Account Number'),
-        'get_main_bank_account_number',
+        fields.Char('Number'),
+        'get_main_bank_account_number', 'setter_void',
         searcher='search_main_bank_account_number')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
@@ -154,13 +153,6 @@ class BankAccount(export.ExportImportMixin):
             return currencies[0].id
 
     @staticmethod
-    def default_numbers():
-        if not Transaction().context.get('__importing__'):
-            return [{'sequence': 0}]
-        else:
-            return []
-
-    @staticmethod
     def default_start_date():
         return utils.today()
 
@@ -204,6 +196,25 @@ class BankAccount(export.ExportImportMixin):
     @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values['numbers'][0]['number']
+
+    @fields.depends('number', 'numbers')
+    def on_change_with_numbers(self):
+        if not self.numbers:
+            return {'add': [(-1, {'number': self.number, 'type': 'iban'})]}
+        else:
+            return {'update': [
+                    {'id': self.numbers[0].id, 'number': self.number},
+                    ]}
+
+    @classmethod
+    def setter_void(cls, objects, name, values):
+        pass
+
+    @fields.depends('numbers')
+    def pre_validate(self):
+        super(BankAccount, self).pre_validate()
+        for number in self.numbers:
+            number.pre_validate()
 
 
 class BankAccountNumber(export.ExportImportMixin):
