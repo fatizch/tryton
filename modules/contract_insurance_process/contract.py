@@ -1,7 +1,7 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
@@ -40,6 +40,8 @@ class Contract(CogProcessFramework):
                 'required as the payment mode is Direct Debit',
                 'no_subscriber_address': 'The selected subscriber does not '
                 'have an address',
+                'unoconv_err': 'Unoconv error: %s,\n the file will be saved in'
+                ' odt format',
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
@@ -160,6 +162,46 @@ class Contract(CogProcessFramework):
             result = super(Contract, cls).subscribe_contract(*args, **kwargs)
             result.save()
             return result
+
+    def generate_and_attach_reports(self, template_codes):
+        """template_codes should be a comma separated list
+        of document template codes between single quotes,
+        i.e : 'template1', 'template2', etc.
+        """
+        pool = Pool()
+        Template = pool.get('document.template')
+        Attachment = pool.get('ir.attachment')
+        Report = pool.get('document.generate.report', type='report')
+        Date = pool.get('ir.date')
+
+        template_instances = Template.search([('code', 'in', template_codes),
+                ('internal_edm', '=', 'True')])
+
+        for template_instance in template_instances:
+            _, filedata, _, file_basename = Report.execute(
+                [self.id], {
+                    'id': self.id,
+                    'ids': [self.id],
+                    'model': 'contract',
+                    'doc_template': [template_instance],
+                    'party': self.subscriber.id,
+                    'address': self.subscriber.addresses[0].id,
+                    'sender': None,
+                    'sender_address': None,
+                    })
+            try:
+                data = Report.unoconv(filedata, 'odt', 'pdf')
+            except Exception as e:
+                self.raise_user_error('unoconv_err', e.msg)
+
+            attachment = Attachment()
+            attachment.resource = 'contract,%s' % self.id
+            attachment.data = data
+            attachment.name = '%s_%s_%s' % (template_instance.name,
+                self.rec_name, Date.date_as_string(utils.today(),
+                self.company.party.lang))
+            attachment.document_desc = template_instance.document_desc
+            attachment.save()
 
 
 class ContractOption:
