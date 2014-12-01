@@ -32,6 +32,7 @@ class Bank(export.ExportImportMixin):
         cls._error_messages.update({
                 'invalid_bic': ('Invalid BIC : %s'),
                 })
+        cls.bic.select = True
 
     @classmethod
     def create(cls, vlist):
