@@ -17,6 +17,7 @@ def register():
         PaymentTreatmentBatch,
         PaymentCreationBatch,
         Configuration,
+        Journal,
         module='account_payment_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,

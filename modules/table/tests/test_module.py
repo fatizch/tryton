@@ -346,7 +346,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0090test_export(self):
         self.maxDiff = None
         test_table = self.Definition.search([('code', '=', 'test_code')])[0]
-        file_name, result, _ = test_table.export_ws_json_to_file()
+        file_name, result, _ = test_table.export_json_to_file()
         self.assertEqual(file_name, '[%s][table]test_code.json' %
             datetime.date.today().strftime('%Y-%m-%d'))
         self.assertEqual(result, [

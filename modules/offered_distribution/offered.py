@@ -21,12 +21,6 @@ class Product:
         return super(Product, cls).copy(products, default=default)
 
     @classmethod
-    def _export_force_recreate(cls):
-        res = super(Product, cls)._export_force_recreate()
-        res.remove('com_products')
-        return res
-
-    @classmethod
     def _export_skips(cls):
         result = super(Product, cls)._export_skips()
         result.add('com_products')

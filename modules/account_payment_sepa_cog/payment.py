@@ -40,4 +40,4 @@ class Mandate(export.ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return (super(Mandate, cls)._export_light() |
-            set(['company']))
+            set(['company', 'account_number']))

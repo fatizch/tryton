@@ -122,82 +122,27 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
             for existing in existings:
                 cls.raise_user_error('existing_clone',
                     (existing.name, existing.code))
-            record.export_ws_json(output=output)
+            record.export_json(output=output)
             values = json.dumps(output[0])
             values = values.replace('"code": "%s"' % record.code,
                 '"code": "%s_clone"' % record.code)
             values = values.replace(u'"name": "%s"' % record.name,
                 u'"name": "%s Clone"' % record.name)
-            tmp = record.import_ws_json(json.loads(values))
+            tmp = record.import_json(json.loads(values))
             result.append(tmp)
         return result
-
-    def _export_override_cells(self, exported, result, my_key):
-        pool = Pool()
-        Cell = pool.get('table.cell')
-        DimensionValue = pool.get('table.dimension.value')
-
-        cursor = Transaction().cursor
-
-        cell = Cell.__table__()
-        dimension_tables = [DimensionValue.__table__()
-            for i in range(0, self.number_of_dimensions)]
-
-        query_table = None
-        for idx, table in enumerate(dimension_tables, 1):
-            query_table = (query_table if query_table else cell).join(table,
-                condition=(getattr(cell, 'dimension%s' % idx) == table.id))
-
-        columns = [x.name for x in dimension_tables] + [cell.value]
-        cursor.execute(*query_table.select(*columns,
-                where=(cell.definition == self.id)))
-
-        return cursor.fetchall()
-
-    @classmethod
-    def _import_override_cells(cls, instance_key, good_instance,
-            field_value, values, created, relink, to_relink):
-        if not good_instance.id:
-            return
-        cell_table = Pool().get('table.cell').__table__()
-        Transaction().cursor.execute(*cell_table.delete(where=(
-                    cell_table.definition == good_instance.id)))
-
-    @classmethod
-    def _import_json(cls, values, created, relink, force_recreate=False):
-        table = super(TableDefinition, cls)._import_json(values, created,
-            relink, force_recreate)
-        if not values['cells']:
-            return table
-        # Import cells
-        Cell = Pool().get('table.cell')
-        Cell.delete(Cell.search([('definition', '=', table.id)]))
-        dimension_matcher = {}
-        for i in range(1, DIMENSION_MAX + 1):
-            dimension_values = getattr(table, 'dimension%s' % i)
-            dimension_matcher[i] = dict([
-                    (x.name, x.id) for x in dimension_values])
-        to_create = []
-        for elem in values['cells']:
-            to_create.append(dict([
-                        ('dimension%s' % i, dimension_matcher[i][x])
-                        for i, x in enumerate(elem[:-1], 1)] +
-                    [('value', elem[-1])] +
-                    [('definition', table.id)]))
-        Cell.create(to_create)
-        return table
 
     @classmethod
     def is_master_object(cls):
         return True
 
-    def export_ws_json(self, skip_fields=None, already_exported=None,
+    def export_json(self, skip_fields=None, already_exported=None,
             output=None, main_object=None):
         if skip_fields:
             skip_fields.add('cells')
         else:
             skip_fields = set(['cells'])
-        result = super(TableDefinition, self).export_ws_json(
+        result = super(TableDefinition, self).export_json(
             skip_fields=skip_fields, already_exported=already_exported,
             output=output, main_object=main_object)
         pool = Pool()
@@ -223,16 +168,16 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         return result
 
     @classmethod
-    def import_ws_json(cls, values):
+    def import_json(cls, values):
         if "cells" not in values:
-            return super(TableDefinition, cls).import_ws_json(values)
+            return super(TableDefinition, cls).import_json(values)
         pool = Pool()
         Cell = pool.get('table.cell')
         cells = values.pop("cells")
         table, = cls.search_for_export_import(values)
         if table:
             Cell.delete(Cell.search([('definition', '=', table.id)]))
-        table = super(TableDefinition, cls).import_ws_json(values)
+        table = super(TableDefinition, cls).import_json(values)
         dimension_matcher = {}
         for i in range(1, DIMENSION_MAX + 1):
             dimension_values = getattr(table, 'dimension%s' % i)
@@ -571,10 +516,6 @@ class TableDefinitionDimension(ModelSQL, ModelView):
         if operator == 'ilike':
             return [('name', 'ilike', value.strip('%'))]
         return [('name',) + tuple(clause[1:])]
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['definition.code', 'type', 'name'])
 
     @classmethod
     def get_dimension_id(cls, definition, dimension_idx, value):

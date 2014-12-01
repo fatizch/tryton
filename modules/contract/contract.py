@@ -687,9 +687,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 try:
                     for item in objects:
                         if item['__name__'] == 'party.party':
-                            Party.import_ws_json(item)
+                            Party.import_json(item)
                         elif item['__name__'] == 'contract':
-                            contract = cls.import_ws_json(item)
+                            contract = cls.import_json(item)
                             contracts.append(contract)
                             message[ext_id] = {
                                 'return': True,

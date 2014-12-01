@@ -54,10 +54,6 @@ class ContactMechanism(export.ExportImportMixin):
     def get_var_names_for_full_extract(cls):
         return ['type', 'value']
 
-    @classmethod
-    def _export_keys(cls):
-        return ('party.name', 'type', 'value')
-
     def get_icon(self):
         if self.type == 'phone' or self.type == 'mobile':
             return 'coopengo-phone'

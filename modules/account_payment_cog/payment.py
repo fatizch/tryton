@@ -7,7 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.model import ModelView, ModelSQL, fields
 
-from trytond.modules.cog_utils import coop_string, batchs
+from trytond.modules.cog_utils import coop_string, batchs, export
 
 __metaclass__ = PoolMeta
 
@@ -16,6 +16,7 @@ __all__ = [
     'PaymentTreatmentBatch',
     'PaymentCreationBatch',
     'Configuration',
+    'Journal',
     ]
 
 
@@ -55,6 +56,21 @@ class Configuration:
     direct_debit_journal = fields.Property(
         fields.Many2One('account.payment.journal', 'Direct Debit Journal',
             domain=[('process_method', '!=', 'manual')]))
+
+    def export_json(self, skip_fields=None, already_exported=None,
+            output=None, main_object=None):
+        values = super(Configuration, self).export_json(skip_fields,
+            already_exported, output, main_object)
+
+        field_value = getattr(self, 'direct_debit_journal')
+        values['direct_debit_journal'] = {'_func_key': getattr(
+            field_value, field_value._func_key)}
+        return values
+
+
+class Journal(export.ExportImportMixin):
+    __name__ = 'account.payment.journal'
+    _func_key = 'name'
 
 
 class PaymentTreatmentBatch(batchs.BatchRoot):

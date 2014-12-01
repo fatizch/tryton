@@ -467,19 +467,9 @@ class Process(model.CoopSQL, model.TaggedMixin):
         return result
 
     @classmethod
-    def _export_keys(cls):
-        return set(['technical_name'])
-
-    @classmethod
     def _export_light(cls):
         result = super(Process, cls)._export_light()
         result.add('on_model')
-        return result
-
-    @classmethod
-    def _export_force_recreate(cls):
-        result = super(Process, cls)._export_force_recreate()
-        result.remove('all_steps')
         return result
 
     @classmethod
@@ -596,16 +586,6 @@ class Process(model.CoopSQL, model.TaggedMixin):
             return []
         return map(lambda x: x.step, self.all_steps[step1_idx:step2_idx + 1])
 
-    def create_update_menu_entry(self):
-        if Transaction().context.get('__importing__'):
-            return []
-        return super(Process, self).create_update_menu_entry()
-
-    def set_menu_item_list(self, previous_ids, new_ids):
-        if Transaction().context.get('__importing__'):
-            return []
-        return super(Process, self).set_menu_item_list(previous_ids, new_ids)
-
 
 class ProcessStepRelation(model.CoopSQL):
     __name__ = 'process-process.step'
@@ -617,10 +597,6 @@ class ProcessStepRelation(model.CoopSQL):
                 ('main_model', '=', Eval('_parent_process', {}).get(
                         'on_model', 0))])
         cls.process.required = True
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['process.technical_name', 'step.technical_name'])
 
 
 class ViewDescription(model.CoopSQL, model.CoopView):
@@ -753,8 +729,6 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             the_step, self.on_change_with_view_name(), self.view_kind)
 
     def create_update_view(self):
-        if Transaction().context.get('__importing__'):
-            return None
         if (hasattr(self, 'the_view') and self.the_view):
             the_view = self.the_view
         else:
@@ -835,10 +809,6 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework'),
             ], depends=['processes'], required=True, ondelete='RESTRICT')
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['technical_name'])
 
     @classmethod
     def _export_skips(cls):

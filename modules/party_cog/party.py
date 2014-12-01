@@ -195,10 +195,6 @@ class Party(export.ExportImportMixin):
         return ''
 
     @classmethod
-    def _export_keys(cls):
-        return set(['name'])
-
-    @classmethod
     def is_master_object(cls):
         return True
 
@@ -215,12 +211,6 @@ class Party(export.ExportImportMixin):
     def _export_light(cls):
         res = super(Party, cls)._export_light()
         res.add('lang')
-        return res
-
-    @classmethod
-    def _export_force_recreate(cls):
-        res = super(Party, cls)._export_force_recreate()
-        res.remove('addresses')
         return res
 
     @staticmethod

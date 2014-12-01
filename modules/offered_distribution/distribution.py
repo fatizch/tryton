@@ -3,7 +3,6 @@ from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields, utils, coop_string
-from trytond.modules.cog_utils import export
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -71,12 +70,6 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     description = fields.Text('Description')
-
-    @classmethod
-    def __setup__(cls):
-        super(CommercialProduct, cls).__setup__()
-        cls.product.domain = export.clean_domain_for_import(
-            cls.product.domain, 'company')
 
     @classmethod
     def copy(cls, products, default=None):

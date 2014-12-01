@@ -82,10 +82,6 @@ class Address(export.ExportImportMixin):
         domain.append(('country', '=', country))
         return utils.get_those_objects('country.zipcode', domain)
 
-    @classmethod
-    def _export_keys(cls):
-        return set(('party.name', 'street', 'zip', 'city', 'country.code'))
-
     def on_change_with_city(self):
         if self.zip and self.country:
             cities = self.get_cities_from_zip(self.zip, self.country)

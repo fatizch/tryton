@@ -160,10 +160,6 @@ class BillingMode(model.CoopSQL, model.CoopView):
         return (rrule(freq, dtstart=start, until=until, bymonthday=bymonthday,
                 bymonth=bymonth), until)
 
-    @classmethod
-    def _export_keys(cls):
-        return set(['code'])
-
     @fields.depends('frequency')
     def on_change_frequency(self):
         if self.frequency == 'monthly':
@@ -175,10 +171,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
 
 class PaymentTerm(export.ExportImportMixin):
     __name__ = 'account.invoice.payment_term'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['name'])
+    _func_key = 'name'
 
 
 class PaymentTermLine(export.ExportImportMixin):

@@ -457,10 +457,6 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
         fields.Char('Value'),
         'get_summary')
 
-    @classmethod
-    def _export_keys(cls):
-        return set([])
-
     @staticmethod
     def default_kind():
         return 'base'

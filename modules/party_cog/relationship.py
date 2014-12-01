@@ -72,13 +72,13 @@ class PartyRelationAll(PartyRelation):
     def _export_light(cls):
         return set(['type'])
 
-    def export_ws_json(self, skip_fields=None, already_exported=None,
+    def export_json(self, skip_fields=None, already_exported=None,
             output=None, main_object=None):
         # Parity is used by tryton to know which direction of
         # the relationship is stored
         if not self.id % 2:
-            return super(PartyRelationAll, self).export_ws_json(skip_fields,
+            return super(PartyRelationAll, self).export_json(skip_fields,
                 already_exported, output, main_object)
         else:
-            self.to.export_ws_json(skip_fields, already_exported, output,
+            self.to.export_json(skip_fields, already_exported, output,
                 main_object)

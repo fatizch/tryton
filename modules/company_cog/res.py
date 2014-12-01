@@ -27,7 +27,3 @@ class User:
 
 class Employee(export.ExportImportMixin):
     __name__ = 'company.employee'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['party.name', 'company.party.name'])

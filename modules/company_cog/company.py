@@ -15,10 +15,6 @@ class Company(export.ExportImportMixin):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
-    @classmethod
-    def _export_keys(cls):
-        return set(['party.name'])
-
     def get_publishing_values(self):
         result = self.party.get_publishing_values()
         return result

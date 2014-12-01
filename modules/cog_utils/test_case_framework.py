@@ -155,26 +155,12 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
                 group[elem.__name__] = []
             group[elem.__name__].append(elem)
         for class_name, elems in group.iteritems():
-            force_save = False
-            if not elems[0]._export_keys():
-                force_save = True
-                cls.get_logger().warning('Unable to get export keys for '
-                    'model %s, no check will be done when saving' % class_name)
             save_method_hook = '_save_%s' % (
                 class_name.replace('.', '_').replace('-', '_'))
             if hasattr(GoodModel, save_method_hook):
                 getattr(GoodModel, save_method_hook)(elems)
             for elem in elems:
-                try:
-                    if force_save or not elem._export_find_instance(
-                            elem._export_get_key()):
-                        elem.save()
-                except export.NotExportImport:
-                    # Known Exception is _export_find_instance raising a
-                    # multiple found error due to bad key definition. As a key
-                    # is currently not properly se on some models
-                    # (party.party), we just re-save if it happens
-                    elem.save()
+                elem.save()
 
     @classmethod
     def set_global_search(cls):

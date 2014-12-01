@@ -15,13 +15,10 @@ DEF_CUR_DIG = 2
 
 class Currency(export.ExportImportMixin):
     __name__ = 'currency.currency'
+    _func_key = 'code'
 
     def round(self, amount, rounding=ROUND_HALF_UP):
         return super(Currency, self).round(amount, rounding)
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['code'])
 
     def amount_as_string(self, amount, symbol=True, lang=None):
         Lang = Pool().get('ir.lang')

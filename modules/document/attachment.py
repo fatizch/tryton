@@ -32,14 +32,14 @@ class Attachment(export.ExportImportMixin):
             set(['digest', 'collision']))
 
     @classmethod
-    def _import_ws_json(cls, values, main_object=None):
+    def _import_json(cls, values, main_object=None):
         if 'data' in values:
             values['data'] = base64.b64decode(values['data'])
-        return super(Attachment, cls)._import_ws_json(values, main_object)
+        return super(Attachment, cls)._import_json(values, main_object)
 
-    def export_ws_json(self, skip_fields=None, already_exported=None,
+    def export_json(self, skip_fields=None, already_exported=None,
             output=None, main_object=None):
-        new_values = super(Attachment, self).export_ws_json(skip_fields,
+        new_values = super(Attachment, self).export_json(skip_fields,
             already_exported, output, main_object)
         new_values['data'] = base64.b64encode(self.data)
         return new_values

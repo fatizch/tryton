@@ -1,6 +1,5 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.model import fields as tryton_fields
-from trytond.pyson import If, Bool, Eval
 
 from trytond.modules.cog_utils import utils, fields, export
 from trytond.modules.cog_utils import coop_string
@@ -41,10 +40,6 @@ class Bank(export.ExportImportMixin):
             if vals.get('bic', None) and len(vals['bic']) == 8:
                 vals['bic'] += 'XXX'
         return super(Bank, cls).create(vlist)
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['bic'])
 
     @classmethod
     def validate(cls, banks):
@@ -124,9 +119,6 @@ class BankAccount(export.ExportImportMixin):
     def __setup__(cls):
         super(BankAccount, cls).__setup__()
         cls.numbers.required = False
-        cls.numbers.states['required'] = If(
-            Bool(Eval('context', {}).get('__importing__', '')),
-            False, True)
 
     @classmethod
     def _export_keys(cls):

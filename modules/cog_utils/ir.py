@@ -36,11 +36,10 @@ SEPARATOR = ' / '
 
 class Sequence(ExportImportMixin):
     __name__ = 'ir.sequence'
-    _func_key = 'code'
+    _func_key = 'func_key'
 
-    @classmethod
-    def _export_keys(cls):
-        return set(['code', 'name'])
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
 
     @classmethod
     def _export_skips(cls):
@@ -48,13 +47,30 @@ class Sequence(ExportImportMixin):
         result.add('number_next_internal')
         return result
 
+    def get_func_key(self, values):
+        return '|'.join((self.code, self.name))
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        operands = clause[2].split('|')
+        if len(operands) == 2:
+            code, name = operands
+            res = []
+            if code != 'None':
+                res.append(('code', clause[1], code))
+            if name != 'None':
+                res.append(('name', clause[1], name))
+            return res
+        else:
+            return ['OR',
+                [('code',) + tuple(clause[1:])],
+                [('name',) + tuple(clause[1:])],
+                ]
+
 
 class SequenceStrict(ExportImportMixin):
     __name__ = 'ir.sequence.strict'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['code', 'name'])
 
     @classmethod
     def _export_skips(cls):
@@ -90,14 +106,12 @@ class DateClass:
 
 class View(ExportImportMixin):
     __name__ = 'ir.ui.view'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['module', 'type', 'name'])
+    _func_key = 'name'
 
 
 class UIMenu(ExportImportMixin):
     __name__ = 'ir.ui.menu'
+    _func_key = 'xml_id'
 
     @classmethod
     def __register__(cls, module_name):
@@ -121,10 +135,6 @@ class UIMenu(ExportImportMixin):
         return self.name
 
     @classmethod
-    def _export_keys(cls):
-        return set(['xml_id'])
-
-    @classmethod
     def search_rec_name(cls, name, clause):
         # Bypass Tryton default search on parent
         return [('name',) + tuple(clause[1:])]
@@ -140,19 +150,11 @@ class UIMenu(ExportImportMixin):
 
 class Rule(ExportImportMixin):
     __name__ = 'ir.rule'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['domain'])
+    _func_key = 'domain'
 
 
 class RuleGroup(ExportImportMixin):
     __name__ = 'ir.rule.group'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['model.model', 'global_p', 'default_p', 'perm_read',
-                'perm_write', 'perm_create', 'perm_delete'])
 
     @classmethod
     def _export_skips(cls):
@@ -170,6 +172,7 @@ class RuleGroup(ExportImportMixin):
 
 class Action(ExportImportMixin):
     __name__ = 'ir.action'
+    _func_key = 'xml_id'
 
     xml_id = fields.Function(
         fields.Char('Xml Id', states={'invisible': True}),
@@ -253,10 +256,6 @@ class Action(ExportImportMixin):
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     @classmethod
-    def _export_keys(cls):
-        return set(['xml_id'])
-
-    @classmethod
     def _export_skips(cls):
         res = super(Action, cls)._export_skips()
         res.add('keywords')
@@ -272,17 +271,10 @@ class Action(ExportImportMixin):
 class ActionKeyword(ExportImportMixin):
     __name__ = 'ir.action.keyword'
 
-    @classmethod
-    def _export_keys(cls):
-        return set(['keyword'])
-
 
 class IrModel(ExportImportMixin):
     __name__ = 'ir.model'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['model'])
+    _func_key = 'model'
 
     @classmethod
     def _export_skips(cls):
@@ -293,19 +285,35 @@ class IrModel(ExportImportMixin):
 
 class IrModelField(ExportImportMixin):
     __name__ = 'ir.model.field'
+    _func_key = 'func_key'
+
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    def get_func_key(self, values):
+        return '|'.join((self.name, self.model.model))
 
     @classmethod
-    def _export_keys(cls):
-        return set(['name', 'model.model'])
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        operands = clause[2].split('|')
+        if len(operands) == 2:
+            name, model_model = operands
+            res = []
+            if name != 'None':
+                res.append(('name', clause[1], name))
+            if model_model != 'None':
+                res.append(('model.model', clause[1], model_model))
+            return res
+        else:
+            return ['OR',
+                [('name',) + tuple(clause[1:])],
+                [('model.model',) + tuple(clause[1:])],
+                ]
 
 
 class IrModelFieldAccess(ExportImportMixin):
     __name__ = 'ir.model.field.access'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['field.name', 'field.model.model', 'group.name',
-                'perm_read', 'perm_write', 'perm_create', 'perm_delete'])
 
     @classmethod
     def _export_light(cls):
@@ -318,11 +326,6 @@ class ModelAccess(ExportImportMixin):
     __name__ = 'ir.model.access'
 
     @classmethod
-    def _export_keys(cls):
-        return set(['model.model', 'group.name', 'perm_read', 'perm_write',
-                'perm_create', 'perm_delete'])
-
-    @classmethod
     def _export_light(cls):
         result = super(ModelAccess, cls)._export_light()
         result.add('model')
@@ -331,13 +334,6 @@ class ModelAccess(ExportImportMixin):
 
 class Property(ExportImportMixin):
     __name__ = 'ir.property'
-
-    @classmethod
-    def _export_keys(cls):
-        # Properties are only fit for export / import if they are "global",
-        # meaning they are not set for a given instance. See
-        # account.configuration default accounts.
-        return set(['field.name', 'field.model.model', 'company.party.name'])
 
     @classmethod
     def _export_light(cls):
@@ -353,10 +349,6 @@ class Property(ExportImportMixin):
 class Lang(ExportImportMixin):
     __name__ = 'ir.lang'
     _func_key = 'code'
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['code'])
 
 
 class Icon(ExportImportMixin):

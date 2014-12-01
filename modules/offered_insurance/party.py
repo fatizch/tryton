@@ -28,12 +28,6 @@ class Party:
         self._on_change_is_actor('is_insurer')
 
     @classmethod
-    def _export_force_recreate(cls):
-        result = super(Party, cls)._export_force_recreate()
-        result.remove('insurer_role')
-        return result
-
-    @classmethod
     def get_summary(cls, parties, name=None, at_date=None, lang=None):
         res = super(Party, cls).get_summary(
             parties, name=name, at_date=at_date, lang=lang)
@@ -67,10 +61,6 @@ class Insurer(model.CoopView, model.CoopSQL):
     @classmethod
     def search_func_key(cls, name, clause):
         return [('party.code',) + tuple(clause[1:])]
-
-    @classmethod
-    def _export_keys(cls):
-        return set(['party.name'])
 
     @classmethod
     def get_summary(cls, insurers, name=None, at_date=None, lang=None):

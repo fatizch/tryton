@@ -102,6 +102,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
 
 class EndorsementPart(model.CoopSQL, model.CoopView):
     'Endorsement Part'
+    _func_key = 'code'
 
     __name__ = 'endorsement.part'
 
@@ -138,15 +139,9 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
         fields.Many2One('ir.model', 'Endorsed Model'),
         'on_change_with_endorsed_model')
 
-    @classmethod
-    def _export_keys(cls):
-        return set(['code'])
-
-    @classmethod
     def _export_skips(cls):
-        result = super(EndorsementPart, cls)._export_skips()
-        result.add('definitions')
-        return result
+        return (super(EndorsementPart, cls)._export_skips() |
+            set(['definitions']))
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):

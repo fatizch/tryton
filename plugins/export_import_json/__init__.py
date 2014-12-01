@@ -150,8 +150,8 @@ def export_json(data):
     model = data['model']
     record_id = data['id']
     try:
-        name, result, export_log = RPCExecute('model', model, 'export_json',
-            record_id)
+        name, result, export_log = RPCExecute('model', model,
+            'export_json_to_file', record_id)
     except RPCException:
         return
     LogDialog(name, result, export_log)
@@ -164,7 +164,7 @@ def import_json(data):
         with open(filename, 'rb') as fp:
             values = fp.read()
         try:
-            RPCExecute('model', model, 'import_json', values)
+            RPCExecute('model', model, 'multiple_import_json', values)
         except RPCException:
             return
 

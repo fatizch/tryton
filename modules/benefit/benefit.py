@@ -49,11 +49,10 @@ class EventDescription(model.CoopSQL, model.CoopView):
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
 
-    def __export_json(self, skip_fields=None):
-        if skip_fields is None:
-            skip_fields = set()
-        skip_fields.add('loss_descs')
-        return super(EventDescription, self).export_json(skip_fields)
+    @classmethod
+    def _export_light(cls):
+        return (super(EventDescription, cls)._export_light() |
+            set(['loss_descs']))
 
     @classmethod
     def default_company(cls):

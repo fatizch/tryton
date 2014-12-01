@@ -662,10 +662,6 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         return True
 
     @classmethod
-    def _export_keys(cls):
-        return set(['short_name'])
-
-    @classmethod
     def _export_skips(cls):
         result = super(RuleEngine, cls)._export_skips()
         result.add('debug_mode')
@@ -747,10 +743,6 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         return []
 
     @classmethod
-    def _post_import(cls, rules):
-        cls.validate(rules)
-
-    @classmethod
     def validate(cls, rules):
         super(RuleEngine, cls).validate(rules)
         for rule in rules:
@@ -771,8 +763,6 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             return True
 
     def check_code(self):
-        if '__importing__' in Transaction().context:
-            return True
         result = not bool(filter(
             lambda m: self.filter_errors(m),
             check_code(self.execution_code)))
@@ -1168,16 +1158,6 @@ class RuleFunction(ModelView, ModelSQL):
                 'name_accent_error': 'Technical name must only use ascii',
                 })
 
-    @classmethod
-    def _export_keys(cls):
-        return set(['type', 'translated_technical_name', 'language.code'])
-
-    @classmethod
-    def _export_force_recreate(cls):
-        result = super(RuleFunction, cls)._export_force_recreate()
-        result.remove('children')
-        return result
-
     def check_arguments_accents(self):
         if not self.fct_args:
             return True
@@ -1291,10 +1271,6 @@ class TestCaseValue(ModelView, ModelSQL):
                 'get_selection': RPC(instantiate=0),
                 })
 
-    @classmethod
-    def _export_keys(cls):
-        return set([])
-
     def get_rule(self, name):
         if (hasattr(self, 'test_case') and self.test_case) and (
                 hasattr(self.test_case, 'rule') and self.test_case.rule):
@@ -1333,16 +1309,6 @@ class TestCaseValue(ModelView, ModelSQL):
     @classmethod
     def default_override_value(cls):
         return True
-
-    @classmethod
-    def _validate(cls, records, field_names=None):
-        if Transaction().context.get('__importing__'):
-            return
-        super(TestCaseValue, cls)._validate(records, field_names)
-
-    @classmethod
-    def _post_import(cls, test_case_values):
-        cls._validate(test_case_values)
 
 
 class TestCase(ModelView, ModelSQL):
