@@ -339,6 +339,7 @@ class ContractOption:
             'readonly': Eval('contract_status') != 'quote'
             },
         depends=['extra_data', 'contract_status'])
+    extra_data_string = extra_data.translated('extra_data')
     extra_premiums = fields.One2Many('contract.option.extra_premium',
         'option', 'Extra Premiums',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
@@ -610,6 +611,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         states={'invisible': ~IS_PARTY})
     extra_data = fields.Dict('extra_data', 'Contract Extra Data',
         states={'invisible': ~Eval('extra_data')})
+    extra_data_string = extra_data.translated('extra_data')
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         depends=['product', 'options', 'extra_data'], ondelete='RESTRICT')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
@@ -674,6 +676,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             states={'invisible': Or(~IS_PARTY, ~Eval('party_extra_data'))},
             depends=['party_extra_data', 'item_kind']),
         'get_party_extra_data', 'set_party_extra_data')
+    party_extra_data_string = party_extra_data.translated('party_extra_data')
     product = fields.Function(
         fields.Many2One('offered.product', 'Product'),
         'on_change_with_product')

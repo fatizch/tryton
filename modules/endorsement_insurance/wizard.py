@@ -38,6 +38,7 @@ class NewCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         depends=['contract', 'product', 'start_date', 'extra_data',
             'possible_item_desc'])
     extra_data = fields.Dict('extra_data', 'Contract Extra Data')
+    extra_data_string = extra_data.translated('extra_data')
     contract = fields.Many2One('contract', 'Contract')
     possible_item_desc = fields.Many2Many('offered.item.description', None,
         None, 'Possible item desc')

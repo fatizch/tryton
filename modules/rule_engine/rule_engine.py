@@ -223,6 +223,7 @@ class RuleMixin(object):
     rule_extra_data = fields.Dict('rule_engine.rule_parameter',
         'Rule Extra Data', states={
             'invisible': Not(Bool(Eval('rule_extra_data', False)))})
+    rule_extra_data_string = rule_extra_data.translated('rule_extra_data')
 
     def calculate(self, args):
         return self.rule.execute(args, self.rule_extra_data).result

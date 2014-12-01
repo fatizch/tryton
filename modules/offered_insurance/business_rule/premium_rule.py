@@ -447,6 +447,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
                 Bool((Eval('config_kind') != 'advanced')))})
+    rule_extra_data_string = rule_extra_data.translated('rule_extra_data')
     kind = fields.Selection(PRICING_LINE_KINDS, 'Line kind', required=True)
     code = fields.Char('Code', required=True)
     tax = fields.Many2One('account.tax.description', 'Tax',

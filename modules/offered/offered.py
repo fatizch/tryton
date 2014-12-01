@@ -164,6 +164,7 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
     extra_data = fields.Dict('extra_data', 'Offered Kind',
         context={'extra_data_kind': 'product'},
         domain=[('kind', '=', 'product')])
+    extra_data_string = extra_data.translated('extra_data')
     company = fields.Many2One('company.company', 'Company', required=True,
         ondelete='RESTRICT')
 

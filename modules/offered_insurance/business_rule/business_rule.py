@@ -38,6 +38,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
     rule_extra_data = fields.Dict('rule_engine.rule_parameter',
         'Rule Extra Data', states={'invisible':
             Or(STATE_SIMPLE, ~Eval('rule_extra_data'))})
+    rule_extra_data_string = rule_extra_data.translated('rule_extra_data')
 
     @classmethod
     def __setup__(cls):
