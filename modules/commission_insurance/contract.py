@@ -46,7 +46,7 @@ class Contract:
 
     def get_insurer_pattern(self, line):
         pattern = {}
-        if self.agent.plan.plan_relation:
+        if self.agent and self.agent.plan.plan_relation:
             pattern['plan'] = self.agent.plan.plan_relation[0]
         coverage = getattr(line.details[0], 'rated_entity', None)
         if coverage:

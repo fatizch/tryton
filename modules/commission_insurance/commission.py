@@ -64,9 +64,8 @@ class Plan:
     reverse_plan_relation = fields.Many2Many('commission_plan-commission_plan',
         'to', 'from_', 'Reverse Plan Relation', size=1)
 
-    @classmethod
-    def get_context_formula(cls, amount, product, pattern=None):
-        context = super(Plan, cls).get_context_formula(amount, product)
+    def get_context_formula(self, amount, product, pattern=None):
+        context = super(Plan, self).get_context_formula(amount, product)
         context['names']['nb_years'] = (pattern or {}).get('nb_years', 0)
         return context
 
