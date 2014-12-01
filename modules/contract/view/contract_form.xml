@@ -7,18 +7,22 @@
         <field name="status"/>
         <field name="sub_status"/>
     </group>
+    <label name="product"/>
+    <field name="product"/>
     <label name="start_date"/>
-    <field name="start_date"/>
-    <label name="end_date"/>
-    <field name="end_date"/>
+    <group id="date">
+        <field name="start_date"/>
+        <label name="end_date"/>
+        <field name="end_date"/>
+    </group>
     <newline/>
     <label name="subscriber"/>
     <group id="subscriber" col="99">
         <field name="subscriber_kind"/>
-        <group id="person" states="{'invisible': Eval('subscriber_kind') != 'person'}">
+        <group id="person" states="{'invisible': Eval('subscriber_kind') != 'person'}" colspan="40">
             <field name="subscriber" view_ids="party_cog.person_view_tree"/>
         </group>
-        <group id="company" states="{'invisible': Eval('subscriber_kind')== 'person'}">
+        <group id="company" states="{'invisible': Eval('subscriber_kind')== 'person'}" colspan="40">
             <field name="subscriber"/>
         </group>
     </group>
@@ -35,8 +39,6 @@
         </page>
         <page string="Administration" id="admin" col="2">
             <group id="left" col="2" yfill="0">
-                <label name="product"/>
-                <field name="product"/>
                 <label name="appliable_conditions_date"/>
                 <field name="appliable_conditions_date"/>
                 <label name="quote_number"/>
