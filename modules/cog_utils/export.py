@@ -289,7 +289,6 @@ class ExportImportMixin(Model):
         record = None
         if records:
             if len(records) > 1:
-                print values
                 cls.raise_user_error('not_unique',
                     ('\n'.join([(x.__name__ + ' with id ' + str(x.id))
                                 for x in records]),

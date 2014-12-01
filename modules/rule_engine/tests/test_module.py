@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-try:
-    import simplejson as json
-except ImportError:
-    import json
 import unittest
 import trytond.tests.test_tryton
 
-from trytond.protocols.jsonrpc import JSONEncoder
 from trytond.transaction import Transaction
 from trytond.error import UserError
 
@@ -523,11 +518,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test('rule_engine.test0030_TestCaseCreation')
     def test0031_TestCaseExportImport(self):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
-        file_name, rule_as_jsondict, _ = rule.export_json()
-        rule_as_string = json.dumps(rule_as_jsondict, cls=JSONEncoder)
-        rule_as_string = rule_as_string.replace('test_rule_advanced',
-            'test_rule_advanced_1')
-        rule.import_json(rule_as_string)
+        output = []
+        rule.export_json(output=output)
+        output[2]['short_name'] = 'test_rule_advanced_1'
+        rule.multiple_import_json(output)
         rule_1, = self.RuleEngine.search([
                 ('short_name', '=', 'test_rule_advanced_1')])
 
@@ -538,8 +532,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             res = wizard.default_report(None)
             self.assertEqual(res, {'report':
                     'Fail Value ... SUCCESS\n\n'
-                    'Override rule ... SUCCESS\n'
-                    '\nRemove Errors ... SUCCESS'})
+                    'Remove Errors ... SUCCESS\n\n'
+                    'Override rule ... SUCCESS'})
 
     @test_framework.prepare_test('rule_engine.test0030_TestCaseCreation')
     def test0032_TestCaseValidation(self):
