@@ -1,3 +1,5 @@
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
@@ -28,8 +30,9 @@ class Contract:
         invoice_rrule = super(Contract,
             self)._get_invoice_rrule_and_billing_information(start)
         Endorsement = Pool().get('endorsement')
-        endorsement_dates = [endorsement.effective_date or
-            endorsement.application_date.date()
+        endorsement_dates = [datetime.datetime.combine(
+                endorsement.effective_date, datetime.time()) or
+            endorsement.application_date
             for endorsement in Endorsement.search([
                         ('contracts', '=', self.id),
                         ('state', '=', 'applied')])
