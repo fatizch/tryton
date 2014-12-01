@@ -57,3 +57,7 @@ msgstr "Bordereaux de chèques"
 msgctxt "selection:account.statement.journal,validation:"
 msgid "Manual"
 msgstr "Manuelle"
+
+msgctxt "model:ir.action.act_window.domain,name:"
+msgid "Posted"
+msgstr "Emise"

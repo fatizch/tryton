@@ -1496,3 +1496,7 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,options_displayer,update_options:"
 msgid "Next"
 msgstr "Suivant"
+
+msgctxt "error:contract.option:"
+msgid "End date should be posterior to start date: %s"
+msgstr "La date de fin devrait être postérieure à la date de début : %s"

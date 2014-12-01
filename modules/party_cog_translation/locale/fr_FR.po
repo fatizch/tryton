@@ -57,3 +57,7 @@ msgstr "Acteurs"
 msgctxt "view:party.party:party."
 msgid "Party"
 msgstr "Acteur"
+
+msgctxt "field:party.address,streetbis:party."
+msgid "Post Office (Line 5)"
+msgstr "Boîte Postale (Ligne 5)"

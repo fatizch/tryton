@@ -1376,3 +1376,7 @@ msgstr "Précédent"
 msgctxt "wizard_button:endorsement.start,summary,suspend:"
 msgid "Save"
 msgstr "Sauvegarder"
+
+msgctxt "field:endorsement.part,post_apply_actions:"
+msgid "Post Apply Actions"
+msgstr "Actions post-application"

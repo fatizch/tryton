@@ -193,3 +193,7 @@ msgstr "Annuler"
 msgctxt "wizard_button:account.move.snapshot,start,snap:"
 msgid "OK"
 msgstr "OK"
+
+msgctxt "field:account.move.line.aggregated,post_date:"
+msgid "Post Date"
+msgstr "Date de lettrage"

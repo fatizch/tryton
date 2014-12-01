@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -22,3 +22,15 @@ msgstr "Emis"
 msgctxt "view:account.statement:account_statement."
 msgid "Post"
 msgstr "Emettre"
+
+msgctxt "selection:account.statement,state:account_statement."
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "view:account.statement:account_statement."
+msgid "Post"
+msgstr "Emettre"
+
+msgctxt "model:ir.action.act_window.domain,name:account_statement.act_statement_form_domain_posted"
+msgid "Posted"
+msgstr "Emis"

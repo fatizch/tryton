@@ -1354,3 +1354,7 @@ msgstr "Ok"
 msgctxt "wizard_button:contract.premium.display,display,end:"
 msgid "Exit"
 msgstr "Sortir"
+
+msgctxt "model:contract.invoice.post,name:"
+msgid "Post Contract Invoice Batch"
+msgstr "Batch d'émission des quittances"

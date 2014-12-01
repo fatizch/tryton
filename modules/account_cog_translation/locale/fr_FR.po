@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -51,8 +51,8 @@ msgid ""
 "You can not create a reconciliation where debit \"%(debit)s\" and credit "
 "\"%(credit)s\" differ."
 msgstr ""
-"Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le "
-"crédit « %(credit)s » diffèrent."
+"Vous ne pouvez créer un lettrage où le débit « %(debit)s » et le crédit « "
+"%(credit)s » diffèrent."
 
 msgctxt "error:account.move.reconciliation:account."
 msgid "You can not modify a reconciliation."
@@ -63,24 +63,24 @@ msgid ""
 "You can not reconcile line \"%(line)s\" because it's account \"%(account)s\""
 " is configured as not reconcilable."
 msgstr ""
-"Vous ne pouvez lettrer la ligne « %(line)s » car son compte « "
-"%(account)s » est configuré comme non-lettrable."
+"Vous ne pouvez lettrer la ligne « %(line)s » car son compte « %(account)s » "
+"est configuré comme non-lettrable."
 
 msgctxt "error:account.move.reconciliation:account."
 msgid ""
 "You can not reconcile line \"%(line)s\" because it's account "
 "\"%(account1)s\" is different from \"%(account2)s\"."
 msgstr ""
-"Vous ne pouvez lettrer la ligne « %(line)s »  car son compte  « "
-"%(account1)s » est différent de « %(account2)s »."
+"Vous ne pouvez lettrer la ligne « %(line)s »  car son compte  « %(account1)s"
+" » est différent de « %(account2)s »."
 
 msgctxt "error:account.move.reconciliation:account."
 msgid ""
 "You can not reconcile line \"%(line)s\" because it's party \"%(party1)s\" is"
 " different from %(party2)s\"."
 msgstr ""
-"Vous ne pouvez lettrer la ligne « %(line)s »  car son tiers « %(party1)s"
-" » est différent de « %(party2)s »."
+"Vous ne pouvez lettrer la ligne « %(line)s »  car son tiers « %(party1)s » "
+"est différent de « %(party2)s »."
 
 msgctxt "error:account.move.reconciliation:account."
 msgid "You can not reconcile line \"%s\" because it is not in valid state."
@@ -145,7 +145,6 @@ msgctxt "model:ir.action,name:account.act_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
 
-
 msgctxt "model:ir.ui.menu,name:account.menu_reconcile"
 msgid "Reconcile Accounts"
 msgstr "Lettrer les comptes"
@@ -164,7 +163,8 @@ msgctxt "model:account.reconcile.show,name:account."
 msgid "Reconcile"
 msgstr "Lettrer"
 
-msgctxt "wizard_button:account.move.reconcile_lines,writeoff,reconcile:account."
+msgctxt ""
+"wizard_button:account.move.reconcile_lines,writeoff,reconcile:account."
 msgid "Reconcile"
 msgstr "Lettrer"
 
@@ -172,4 +172,150 @@ msgctxt "wizard_button:account.reconcile,show,reconcile:account."
 msgid "Reconcile"
 msgstr "Lettrer"
 
+msgctxt "error:account.period:account."
+msgid ""
+"You can not change the post move sequence of period \"%s\" because there are"
+" already posted moves in the period."
+msgstr ""
+"Vous ne pouvez changer la séquence des mouvements émis de la période « %s » "
+"car elle contient déjà des mouvements émis."
 
+msgctxt "field:account.open_chart.start,posted:account."
+msgid "Posted Moves"
+msgstr "Mouvements postés"
+
+msgctxt "field:account.move,post_number:account."
+msgid "Post Number"
+msgstr "Numéro de postage"
+
+msgctxt "error:account.move:account."
+msgid "You can not set posted move \"%(move)s\" to draft in journal \"%(journal)s\"."
+msgstr ""
+"Vous ne pouvez remettre en brouillon le mouvement posté « %(move)s » dans le"
+" journal « %(journal)s »."
+
+msgctxt "help:account.move.print_general_journal.start,posted:account."
+msgid "Show only posted move"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "help:account.open_aged_balance.start,posted:account."
+msgid "Show only posted move"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "field:account.open_balance_sheet.start,posted:account."
+msgid "Posted Move"
+msgstr "Mouvement posté"
+
+msgctxt "help:account.open_chart.start,posted:account."
+msgid "Show posted moves only"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "selection:account.move.line,move_state:account."
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "selection:account.move,state:account."
+msgid "Posted"
+msgstr "Emis"
+
+msgctxt "field:account.open_aged_balance.start,posted:account."
+msgid "Posted Move"
+msgstr "Mouvement posté"
+
+msgctxt "field:account.move,post_date:account."
+msgid "Post Date"
+msgstr "Date de postage"
+
+msgctxt "help:account.open_third_party_balance.start,posted:account."
+msgid "Show only posted move"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "help:account.open_balance_sheet.start,posted:account."
+msgid "Show only posted move"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "error:account.fiscalyear:account."
+msgid "Fiscal year \"%(first)s\" and \"%(second)s\" have the same post move sequence."
+msgstr ""
+"Les années fiscale « %(first)s » et « %(second)s » ont la même séquence de "
+"mouvement."
+
+msgctxt "field:account.print_general_ledger.start,posted:account."
+msgid "Posted Move"
+msgstr "Mouvement posté"
+
+msgctxt "error:account.move.line:account."
+msgid "You can not modify lines of move \"%s\" because it is already posted."
+msgstr ""
+"Vous ne pouvez modifier les lignes du mouvement « %s » car il est déjà "
+"posté."
+
+msgctxt "error:account.move:account."
+msgid "You can not post move \"%s\" because it is an unbalanced."
+msgstr "Vous ne pouvez poster le mouvement « %s » car il n'est pas balancé."
+
+msgctxt "field:account.fiscalyear,post_move_sequence:account."
+msgid "Post Move Sequence"
+msgstr "Séquence de mouvement posté"
+
+msgctxt "error:account.move:account."
+msgid "You can not modify move \"%s\" because it is already posted."
+msgstr "Vous ne pouvez modifier le mouvement « %s » car il est déjà posté."
+
+msgctxt "field:account.print_trial_balance.start,posted:account."
+msgid "Posted Move"
+msgstr "Mouvement posté"
+
+msgctxt "field:account.open_income_statement.start,posted:account."
+msgid "Posted Move"
+msgstr "Mouvement posté"
+
+msgctxt "help:account.open_income_statement.start,posted:account."
+msgid "Show only posted move"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "field:account.open_third_party_balance.start,posted:account."
+msgid "Posted Move"
+msgstr "Mouvement posté"
+
+msgctxt "field:account.move.print_general_journal.start,posted:account."
+msgid "Posted Move"
+msgstr "Mouvement posté"
+
+msgctxt "help:account.print_trial_balance.start,posted:account."
+msgid "Show only posted move"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "error:account.move:account."
+msgid "You can not post move \"%s\" because it is empty."
+msgstr "Vous ne pouvez poster le mouvement « %s » car il est vide."
+
+msgctxt "error:account.period:account."
+msgid ""
+"You can not close period \"%(period)s\" because there are non posted moves "
+"\"%(move)s\" in this period."
+msgstr ""
+"Vous ne pouvez pas clôturer la period « %(period)s » car il y a des "
+"mouvements non-postés « %(move)s » dans celle-ci."
+
+msgctxt "error:account.fiscalyear:account."
+msgid "You can not change the post move sequence in fiscal year \"%s\"."
+msgstr ""
+"Vous ne pouvez changer la séquence des mouvements postés pour l'année "
+"fiscale « %s »."
+
+msgctxt "help:account.print_general_ledger.start,posted:account."
+msgid "Show only posted move"
+msgstr "Montrer seulement les mouvements postés"
+
+msgctxt "field:account.period,post_move_sequence:account."
+msgid "Post Move Sequence"
+msgstr "Séquence de mouvement posté"
+
+msgctxt "view:account.move:account."
+msgid "Post"
+msgstr "Emettre"
+
+msgctxt "odt:account.move.general_journal:account."
+msgid "Posted"
+msgstr "Emis"

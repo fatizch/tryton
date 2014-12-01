@@ -5,3 +5,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 msgctxt "field:account.payment.sepa.mandate,party:account_payment_sepa."
 msgid "Party"
 msgstr "Acteur"
+
+msgctxt "odt:account.payment.sepa.mandate:account_payment_sepa."
+msgid "Postal code"
+msgstr "Code postal"
