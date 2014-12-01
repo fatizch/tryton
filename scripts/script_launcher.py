@@ -387,8 +387,6 @@ def export(arguments, config, work_data):
 
 
 def create_symlinks(modules_path, lang, root, remove=True):
-    import glob
-
     # TODO : called symlinks.py available in trydoc
     if remove:
         # Removing existing symlinks
@@ -611,9 +609,15 @@ if __name__ == '__main__':
                 config.readfp(fconf)
 
     work_data = init_work_data(config)
-    possible_modules = os.listdir(work_data['modules']) + ['ir']
-    possible_modules.remove('__init__.py')
-    possible_coop_modules = os.listdir(work_data['coop_modules']) + ['all']
+
+    def get_subdirectories(dirpath):
+        return [d for d in os.listdir(dirpath)
+            if os.path.isdir(os.path.join(dirpath, d))]
+
+    possible_modules = sorted(get_subdirectories(work_data['modules']) +
+        ['ir'])
+    possible_coop_modules = ['all'] + sorted(get_subdirectories(
+        work_data['coop_modules']))
 
     # Main parser
     parser = argparse.ArgumentParser(description='Launch utilitary scripts')
