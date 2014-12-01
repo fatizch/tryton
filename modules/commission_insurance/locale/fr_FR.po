@@ -202,7 +202,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:contract,agent:"
 msgid "Agent"
-msgstr "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "field:contract,broker:"
 msgid "Broker"
@@ -214,7 +214,7 @@ msgstr "Tiers du courtier"
 
 msgctxt "field:party.party,agents:"
 msgid "Agents"
-msgstr "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "field:party.party,broker_role:"
 msgid "Broker"
@@ -270,4 +270,4 @@ msgstr "Plan lié"
 
 msgctxt "view:party.party:"
 msgid "Broker Agents"
-msgstr "Agents du courtier"
+msgstr "Protocoles de commissionnement"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -12,7 +12,7 @@ msgstr ""
 
 msgctxt "field:account.invoice,agent:"
 msgid "Commission Agent"
-msgstr "Agent de commission"
+msgstr "Protocole de commissionnement"
 
 msgctxt "field:account.invoice,contract_invoice:"
 msgid "Contract Invoice"
@@ -32,7 +32,7 @@ msgstr "Assureur"
 
 msgctxt "field:commission,agent:"
 msgid "Agent"
-msgstr "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "field:commission,amount:"
 msgid "Amount"
@@ -244,7 +244,7 @@ msgstr "Assureurs"
 
 msgctxt "field:product.template-commission.agent,agent:"
 msgid "Agent"
-msgstr "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "field:product.template-commission.agent,create_date:"
 msgid "Create Date"
@@ -298,7 +298,7 @@ msgstr "Commission"
 
 msgctxt "model:commission.agent,name:"
 msgid "Commission Agent"
-msgstr "Agent de commission"
+msgstr "Protocole de commissionnement"
 
 msgctxt "model:commission.create_invoice.ask,name:"
 msgid "Create Commission Invoice"
@@ -314,7 +314,7 @@ msgstr "Ligne de plan de commissionnement"
 
 msgctxt "model:ir.action,name:act_agent_form"
 msgid "Agents"
-msgstr "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.action,name:act_commission_create_invoice"
 msgid "Create Commission Invoices"
@@ -338,7 +338,7 @@ msgstr "Plans de Commissionnement"
 
 msgctxt "model:ir.ui.menu,name:menu_agent_form"
 msgid "Agents"
-msgstr "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:menu_commission"
 msgid "Commission"
@@ -362,7 +362,7 @@ msgstr "Plans de Commissionnement"
 
 msgctxt "model:product.template-commission.agent,name:"
 msgid "Product Template - Commission Agent"
-msgstr "Template de produit - Agent de commissionnement"
+msgstr "Template de produit – Protocole de commissionnement"
 
 msgctxt "model:res.group,name:group_commission"
 msgid "Commission"
@@ -398,7 +398,7 @@ msgstr "A payer"
 
 msgctxt "selection:commission.agent,type_:"
 msgid "Agent Of"
-msgstr "Agent de"
+msgstr "Courtier de"
 
 msgctxt "selection:commission.agent,type_:"
 msgid "Principal Of"
@@ -454,11 +454,11 @@ msgstr "Commissions"
 
 msgctxt "view:commission.agent:"
 msgid "Agent"
-msgstr "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "view:commission.agent:"
 msgid "Agents"
-msgstr "Agents"
+msgstr "Protocoles de commissionnement"
 
 msgctxt "view:commission.create_invoice.ask:"
 msgid "Create Commission Invoice"
