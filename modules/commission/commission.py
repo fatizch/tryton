@@ -61,8 +61,11 @@ class Agent(ModelSQL, ModelView):
             return self.party.rec_name
 
     @classmethod
-    def search_rec_name(self, clause, name):
-        return [('party',) + tuple(clause[1:])]
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            ('party',) + tuple(clause[1:]),
+            ('plan',) + tuple(clause[1:]),
+            ]
 
     @classmethod
     def get_pending_amount(cls, agents, name):
@@ -122,8 +125,7 @@ class Plan(ModelSQL, ModelView):
     def default_commission_method():
         return 'posting'
 
-    @classmethod
-    def get_context_formula(cls, amount, product):
+    def get_context_formula(self, amount, product):
         return {
             'names': {
                 'amount': amount,

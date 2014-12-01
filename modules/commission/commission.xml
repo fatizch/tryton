@@ -196,8 +196,8 @@ this repository contains the full copyright notices and license terms. -->
             <field name="view" ref="commission_view_form"/>
             <field name="act_window" ref="act_commission_form"/>
         </record>
-        <menuitem parent="menu_commission" action="act_commission_form" sequence="30"
-            id="menu_commission_form"/>
+        <menuitem parent="menu_commission" action="act_commission_form"
+            sequence="30" id="menu_commission_form"/>
 
         <record model="ir.model.access" id="access_commission">
             <field name="model" search="[('model', '=', 'commission')]"/>

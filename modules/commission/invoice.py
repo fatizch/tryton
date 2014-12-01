@@ -116,11 +116,13 @@ class InvoiceLine:
                     ['in_invoice', 'in_credit_note'])),
             }, depends=['invoice_type', 'company'])
     commissions = fields.One2Many('commission', 'origin', 'Commissions',
-        readonly=True, states={
+        readonly=True,
+        states={
             'invisible': ~Eval('commissions'),
             })
     from_commissions = fields.One2Many('commission', 'invoice_line',
-        'From Commissions', readonly=True, states={
+        'From Commissions', readonly=True,
+        states={
             'invisible': ~Eval('from_commissions'),
             })
 
