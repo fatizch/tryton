@@ -50,10 +50,15 @@ class Attachment(export.ExportImportMixin):
         if ('resource' not in values or '__name__' not in values['resource'] or
                 'document_desc' not in values):
             return super(Attachment, cls).search_for_export_import(values)
-        resource, = pool.get(values['resource']['__name__']).\
+        resources = pool.get(values['resource']['__name__']).\
             search_for_export_import(values['resource'])
+        if len(resources) != 1:
+            cls.raise_user_error("Can't find object %s %s" % (
+                values['resource']['__name__'],
+                values['resource']['_func_key']))
         return cls.search([
-                ('resource', '=', '%s,%s' % (resource.__name__, resource.id)),
+                ('resource', '=', '%s,%s' % (resources[0].__name__,
+                    resources[0].id)),
                 ('document_desc.code', '=',
                     values['document_desc']['_func_key'])
-               ])
+                ])
