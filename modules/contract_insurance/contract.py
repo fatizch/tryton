@@ -69,6 +69,10 @@ class Contract(Printable):
                 'create_extra_premium': {},
                 'generic_send_letter': {},
                 })
+        cls._error_messages.update({
+                'error_in_renewal_date_calculation': 'Errors occurs during '
+                'renewal date calculation : %s'
+                })
 
     def calculate(self):
         super(Contract, self).calculate()
@@ -119,8 +123,7 @@ class Contract(Printable):
                 errs += errors
         return (res, errs)
 
-    def init_from_product(self, product, start_date=None, end_date=None):
-        super(Contract, self).init_from_product(product, start_date, end_date)
+    def init_next_renewal_date(self):
         self.last_renewed = self.start_date
         self.next_renewal_date = None
         self.next_renewal_date, errors = self.product.get_result(
@@ -128,12 +131,15 @@ class Contract(Printable):
                 'date': self.start_date,
                 'appliable_conditions_date': self.appliable_conditions_date,
                 'contract': self})
-        res = True, []
         if len(errors) == 1 and errors[0][0] == 'no_renewal_rule_configured':
-            return res[0], []
-        else:
-            res = (res[0] and not errors, res[1] + errors)
-            return res
+            errors = []
+        return errors
+
+    def init_from_product(self, product, start_date=None, end_date=None):
+        super(Contract, self).init_from_product(product,
+            start_date, end_date)
+        errors = self.init_next_renewal_date()
+        return (not errors, errors)
 
     def check_at_least_one_covered(self):
         errors = []
@@ -227,6 +233,10 @@ class Contract(Printable):
         super(Contract, cls).update_contract_after_import(contracts)
         for contract in contracts:
             contract.init_covered_elements()
+            errors = contract.init_next_renewal_date()
+            if errors:
+                cls.raise_user_error('error_in_renewal_date_calculation')
+            contract.save()
 
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
@@ -289,6 +299,9 @@ class Contract(Printable):
 
     def update_from_start_date(self):
         super(Contract, self).update_from_start_date()
+        errors = self.init_next_renewal_date()
+        if errors:
+            self.raise_user_error('error_in_renewal_date_calculation')
         for covered_element in self.covered_elements:
             for option in covered_element.options:
                 option.set_start_date(self.start_date)
