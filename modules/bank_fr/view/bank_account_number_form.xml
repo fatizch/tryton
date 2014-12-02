@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form" position="inside">
-        <field name="bank_code" xexpand="0"/>
-        <field name="branch_code" xexpand="0"/>
-        <field name="account_number" xexpand="0"/>
-        <field name="key" xexpand="0"/>
-    </xpath>
-</data>
