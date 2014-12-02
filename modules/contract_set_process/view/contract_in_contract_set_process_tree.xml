@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Contracts" readonly="1">
+<tree string="Contracts">
     <field name="quote_number"/>
     <field name="status"/>
     <field name="subscriber"/>
