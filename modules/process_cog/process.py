@@ -481,10 +481,6 @@ class Process(model.CoopSQL, model.TaggedMixin):
         cls.transitions.depends.append('custom_transitions')
 
     @classmethod
-    def default_close_tab_on_completion(cls):
-        return True
-
-    @classmethod
     def _export_skips(cls):
         result = super(Process, cls)._export_skips()
         result.add('menu_items')
