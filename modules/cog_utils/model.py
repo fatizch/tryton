@@ -284,6 +284,10 @@ def expand_tree(name, test_field='must_expand_tree'):
             if model == name and child_name:
                 Model = Pool().get(name)
                 domain = json.loads(domain)
+                # don't generate tree if no domain define
+                # performance issue
+                if not domain:
+                    return result
                 roots = Model.search(domain)
                 nodes = []
                 selected = []
