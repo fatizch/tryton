@@ -18,7 +18,7 @@ elif param_age_kind() == 'at_given_day_of_year':
         int(param_given_month()), int(param_given_day()))
     age = relativedelta(date_debut_souscription(), given_date_in_birth_year).years
 return param_max_age_for_option() > age</field>
-            <field name="status">draft</field>
+            <field name="status">validated</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
         <record model="rule_engine.rule_parameter" id="option_max_age">
@@ -92,9 +92,6 @@ at_end_of_month : At End of Month</field>
             <field name="selection_sorted">False</field>
             <field name="string">Given Month</field>
             <field name="parent_rule" ref="option_eligibility_on_age"/>
-        </record>
-        <record model="rule_engine" id="option_eligibility_on_age" update="1">
-            <field name="status">validated</field>
         </record>
     </data>
 </tryton>

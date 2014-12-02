@@ -764,6 +764,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             return True
 
     def check_code(self):
+        if Transaction().user == 0:
+            return True
         result = not bool(filter(
             lambda m: self.filter_errors(m),
             check_code(self.execution_code)))

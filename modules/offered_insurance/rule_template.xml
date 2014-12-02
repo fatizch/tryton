@@ -24,7 +24,7 @@ elif param_age_kind() == 'at_given_day_of_year':
     else:
         return given_date_in_birth_year + relativedelta(
             years=param_max_age_for_option(), days=-1)</field>
-            <field name="status">draft</field>
+            <field name="status">validated</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
         <record model="rule_engine.rule_parameter" id="option_max_age">
@@ -98,9 +98,6 @@ at_end_of_month : At End of Month</field>
             <field name="selection_sorted">False</field>
             <field name="string">Given Month</field>
             <field name="parent_rule" ref="option_end_date_rule"/>
-        </record>
-        <record model="rule_engine" id="option_end_date_rule" update="1">
-            <field name="status">validated</field>
         </record>
     </data>
 </tryton>

@@ -209,28 +209,29 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(tree_structure, target_tree_structure)
 
         # Check default code validates
-        rule.save()
-        self.assertEqual(rule.check_code(), True)
-        # Check context elem code validates
-        rule.algorithm = 'return today()'
-        rule.save()
-        self.assertEqual(rule.check_code(), True)
-        # Check warnings validates
-        rule.algorithm = 'toto = 10\n'
-        rule.algorithm += 'return today()'
-        rule.save()
-        self.assertEqual(rule.check_code(), True)
-        # Check unknown symbols fail
-        rule.algorithm = 'return some_unknown_symbol'
-        rule.save()
-        self.assertRaises(UserError, rule.check_code)
-        # Check syntax errors fail
-        rule.algorithm = 'if 10'
-        rule.algorithm += ' return'
-        self.assertRaises(UserError, rule.check_code)
+        with Transaction().set_user(1):
+            rule.save()
+            self.assertEqual(rule.check_code(), True)
+            # Check context elem code validates
+            rule.algorithm = 'return today()'
+            rule.save()
+            self.assertEqual(rule.check_code(), True)
+            # Check warnings validates
+            rule.algorithm = 'toto = 10\n'
+            rule.algorithm += 'return today()'
+            rule.save()
+            self.assertEqual(rule.check_code(), True)
+            # Check unknown symbols fail
+            rule.algorithm = 'return some_unknown_symbol'
+            rule.save()
+            self.assertRaises(UserError, rule.check_code)
+            # Check syntax errors fail
+            rule.algorithm = 'if 10'
+            rule.algorithm += ' return'
+            self.assertRaises(UserError, rule.check_code)
 
-        rule.algorithm = 'return 10.0'
-        rule.save()
+            rule.algorithm = 'return 10.0'
+            rule.save()
 
         self.assertEqual(rule.allowed_functions(), [
                 'add_debug', 'add_error', 'add_error_code', 'add_info',
@@ -255,7 +256,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.algorithm = 'return table_test_code(\'bar\', 5)'
         rule.save()
-        self.assertRaises(UserError, rule.check_code)
+        with Transaction().set_user(1):
+            self.assertRaises(UserError, rule.check_code)
 
         table = self.Table.search([('code', '=', 'test_code')])[0]
         table_parameter = self.RuleEngineTable()
@@ -279,14 +281,16 @@ class ModuleTestCase(test_framework.CoopTestCase):
                           'translated': u'table_test_code',
                           'type': 'function'}]})
 
-        self.assertEqual(rule.check_code(), True)
+        with Transaction().set_user(1):
+            self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('rule_engine.test0014_testRuleEngineCreation')
     def test0016_testExternalParameterKwarg(self):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.algorithm = 'return param_test_parameter()'
         rule.save()
-        self.assertRaises(UserError, rule.check_code)
+        with Transaction().set_user(1):
+            self.assertRaises(UserError, rule.check_code)
 
         kwarg_parameter = self.RuleParameter()
         kwarg_parameter.name = 'test_parameter'
@@ -313,7 +317,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                           'translated': u'param_test_parameter',
                           'type': 'function'}]})
 
-        self.assertEqual(rule.check_code(), True)
+        with Transaction().set_user(1):
+            self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test(
         'rule_engine.test0016_testExternalParameterKwarg')
@@ -321,7 +326,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule = self.RuleEngine.search([('name', '=', 'Test Rule')])[0]
         rule.algorithm = 'return rule_test_rule(test_parameter=True)'
         rule.save()
-        self.assertRaises(UserError, rule.check_code)
+        with Transaction().set_user(1):
+            self.assertRaises(UserError, rule.check_code)
 
         rule_parameter = self.RuleEngineRuleEngine()
         rule_parameter.rule = rule
@@ -361,7 +367,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
                           'name': 'UnusedVariable',
                           'translated': u'rule_test_rule',
                           'type': 'function'}]})
-        self.assertEqual(rule.check_code(), True)
+        with Transaction().set_user(1):
+            self.assertEqual(rule.check_code(), True)
 
     @test_framework.prepare_test('table.test0060table_2dim',
         'rule_engine.test0014_testRuleEngineCreation')
