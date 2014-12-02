@@ -707,7 +707,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     message[ext_id] = {
                             'return': False,
                             'error': exc.message,
-                            'data': item}
+                            }
         return message
 
     def init_from_product(self, product, start_date=None, end_date=None):
