@@ -531,6 +531,8 @@ class DocumentCreate(Wizard):
         }
 
     def transition_mail(self):
+        if all([not model.internal_edm for model in self.select_model.models]):
+            return 'end'
         return 'attach'
 
     def default_attach(self, fields):
@@ -543,8 +545,6 @@ class DocumentCreate(Wizard):
         return result
 
     def transition_post_generation(self):
-        if all([not model.internal_edm for model in self.select_model.models]):
-            return 'end'
         GoodModel = Pool().get(Transaction().context.get('active_model'))
         good_obj = GoodModel(Transaction().context.get('active_id'))
         good_obj.post_generation()
