@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tree string="Contracts" readonly="1">
+    <field name="quote_number"/>
+    <field name="status"/>
+    <field name="subscriber"/>
+    <field name="current_state_name"/>
+    <field name="current_state" tree_invisible="1"/>
+    <field name="product"/>
+    <button name="button_resume" string="Resume"/>
+</tree>

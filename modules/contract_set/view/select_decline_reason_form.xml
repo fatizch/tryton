@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Select Declination Reason">
+    <label name="contract_set"/>
+    <field name="contract_set"/>
+    <newline/>
+    <label name="reason"/>
+    <field name="reason" widget="selection"/>
+</form>

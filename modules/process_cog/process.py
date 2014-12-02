@@ -5,7 +5,7 @@ from trytond.model import fields as tryton_fields
 
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
-from trytond.pyson import Eval, Not, And
+from trytond.pyson import Eval, Not, And, Bool
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateAction, StateView, Button
 
@@ -208,6 +208,8 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
     current_log = fields.Function(
         fields.Many2One('process.log', 'Current Log'),
         'get_current_log')
+    current_state_name = fields.Function(
+        fields.Char('Current State In Process'), 'get_current_state_name')
 
     @classmethod
     def __setup__(cls):
@@ -215,6 +217,22 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         cls._error_messages.update({
                 'lock_fault': 'Object %s is currently locked by user %s',
                 })
+        cls._buttons.update({
+                'button_resume': {
+                    'invisible': Not(Bool(Eval('current_state', False))),
+                        }
+                    })
+
+    @classmethod
+    @model.CoopView.button_action('process_cog.act_resume_process')
+    def button_resume(cls, contracts):
+        pass
+
+    def get_current_state_name(self, name):
+        if self.current_state:
+            return self.current_state.step.fancy_name
+        else:
+            return None
 
     def get_current_log(self, name=None):
         if not (hasattr(self, 'id') and self.id):
@@ -422,6 +440,8 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
                 work.current_state.step.execute_after(work)
                 work.current_state = None
                 work.save()
+            if process.close_tab_on_completion:
+                return 'close'
             return action_id
 
         return button_complete_generic
@@ -452,12 +472,17 @@ class Process(model.CoopSQL, model.TaggedMixin):
     steps_implicitly_available = fields.Boolean('Steps Implicitly Available',
         states={'invisible': ~Eval('custom_transitions')})
     kind = fields.Selection([('', '')], 'Kind')
+    close_tab_on_completion = fields.Boolean('Close Tab On Completion')
 
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
         cls.transitions.states['invisible'] = ~Eval('custom_transitions')
         cls.transitions.depends.append('custom_transitions')
+
+    @classmethod
+    def default_close_tab_on_completion(cls):
+        return True
 
     @classmethod
     def _export_skips(cls):

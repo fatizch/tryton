@@ -8,4 +8,8 @@ def register():
         ContractSet,
         Contract,
         RuleEngineRuntime,
+        ContractSetSelectDeclineReason,
         module='contract_set', type_='model')
+    Pool.register(
+        ContractSetDecline,
+        module='contract_set', type_='wizard')
