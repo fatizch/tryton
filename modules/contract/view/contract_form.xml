@@ -39,6 +39,8 @@
         </page>
         <page string="Administration" id="admin" col="2">
             <group id="left" col="2" yfill="0">
+                <label name="signature_date"/>
+                <field name="signature_date"/>
                 <label name="appliable_conditions_date"/>
                 <field name="appliable_conditions_date"/>
                 <label name="quote_number"/>

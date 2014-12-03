@@ -182,6 +182,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             required=True),
         'getter_contract_date', 'set_contract_start_date',
         searcher='search_contract_date')
+    signature_date = fields.Date('Signature Date')
     subscriber_kind = fields.Function(
         fields.Selection(
             [x for x in offered.SUBSCRIBER_KIND if x != ('all', 'All')],
