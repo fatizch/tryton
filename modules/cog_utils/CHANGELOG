@@ -1,2 +1,5 @@
+* Externalize batches settings into a custom .conf file referenced by
+trytond.conf 'config_file' entry in a '[batch]' section.
+
 Version 1.2 - 2014-07-01
 * Changelog file creation

@@ -21,18 +21,6 @@ class ViewValidationBatch(batchs.BatchRoot):
         return 'ir.ui.view'
 
     @classmethod
-    def get_batch_name(cls):
-        return 'View validation batch'
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        return 'divide'
-
-    @classmethod
-    def get_batch_step(cls):
-        return 4
-
-    @classmethod
     def get_batch_domain(cls, treatment_date):
         Module = Pool().get('ir.module.module')
         modules = Module.search([])

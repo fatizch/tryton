@@ -1645,10 +1645,6 @@ class ValidateRuleBatch(batchs.BatchRoot):
         return 'rule_engine.test_case'
 
     @classmethod
-    def get_batch_name(cls):
-        return 'Rule Engine Test Case Validation'
-
-    @classmethod
     def get_batch_search_model(cls):
         return 'rule_engine.test_case'
 

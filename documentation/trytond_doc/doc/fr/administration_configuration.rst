@@ -8,4 +8,5 @@ Les documents suivants documentent les processus d'administration, de déploieme
    :maxdepth: 1
 
    configuration_serveur
+   configuration_batch
 

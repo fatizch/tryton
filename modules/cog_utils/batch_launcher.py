@@ -74,13 +74,14 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None):
             User.get_preferences(context_only=True),
             client_defined_date=connexion_date):
         ids = [x[0] for x in BatchModel.select_ids(treatment_date)]
-        if BatchModel.get_batch_stepping_mode() == 'number':
+        if BatchModel.get_conf_item('split_mode') == 'number':
             chunking = chunks_number
         else:
             chunking = chunks_size
         group(generate.s(BatchModel.__name__, tmp_list, connexion_date,
-                treatment_date)
-            for tmp_list in chunking(ids, BatchModel.get_batch_step()))()
+            treatment_date)
+            for tmp_list in chunking(ids, int(BatchModel.get_conf_item(
+                'split_size'))))()
 
 
 @celery.task(base=TrytonTask)
@@ -88,7 +89,7 @@ def generate(batch_name, ids, connexion_date, treatment_date):
     User = Pool().get('res.user')
     admin, = User.search([('login', '=', 'admin')])
     BatchModel = Pool().get(batch_name)
-    logger = get_task_logger(BatchModel.get_batch_name())
+    logger = get_task_logger(batch_name)
     with Transaction().set_user(admin.id), Transaction().set_context(
             User.get_preferences(context_only=True),
             client_defined_date=connexion_date):

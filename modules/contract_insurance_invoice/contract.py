@@ -1306,18 +1306,6 @@ class CreateInvoiceContractBatch(batchs.BatchRoot):
         return 'contract'
 
     @classmethod
-    def get_batch_name(cls):
-        return 'Contract invoice creation'
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        return 'divide'
-
-    @classmethod
-    def get_batch_step(cls):
-        return 4
-
-    @classmethod
     def select_ids(cls, treatment_date):
         cursor = Transaction().cursor
         pool = Pool()
@@ -1349,18 +1337,6 @@ class PostInvoiceContractBatch(batchs.BatchRoot):
     @classmethod
     def get_batch_main_model_name(cls):
         return 'account.invoice'
-
-    @classmethod
-    def get_batch_name(cls):
-        return 'Contract invoice posting'
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        return 'divide'
-
-    @classmethod
-    def get_batch_step(cls):
-        return 4
 
     @classmethod
     def select_ids(cls, treatment_date):

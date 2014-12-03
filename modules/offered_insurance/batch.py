@@ -22,10 +22,6 @@ class ProductValidationBatch(BatchRoot):
         return 'offered.product'
 
     @classmethod
-    def get_batch_name(cls):
-        return 'Product Validation Batch'
-
-    @classmethod
     def execute(cls, objects, ids, logger, treatment_date):
         # TODO : explose ModelStorage._validate in smaller functions that could
         # be individually called.
@@ -38,11 +34,3 @@ class ProductValidationBatch(BatchRoot):
             Product._validate(objects)
         except UserError as exc:
             logger.warning('Bad validation : %s' % exc)
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        return 'divide'
-
-    @classmethod
-    def get_batch_step(cls):
-        return 2

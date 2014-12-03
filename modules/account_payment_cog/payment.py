@@ -78,24 +78,17 @@ class PaymentTreatmentBatch(batchs.BatchRoot):
     __name__ = 'account.payment.treatment'
 
     @classmethod
+    def __setup__(cls):
+        super(PaymentTreatmentBatch, cls).__setup__()
+        cls._default_config_items.update({'dump_sepa_xml': u'no'})
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.payment'
 
     @classmethod
     def get_batch_search_model(cls):
         return 'account.payment'
-
-    @classmethod
-    def get_batch_name(cls):
-        return 'Payment treatment batch'
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        return 'divide'
-
-    @classmethod
-    def get_batch_step(cls):
-        return 1
 
     @classmethod
     def get_batch_domain(cls, treatment_date):
@@ -122,7 +115,11 @@ class PaymentTreatmentBatch(batchs.BatchRoot):
                 groups.append(group)
                 return group
             grouped_payments = list(grouped_payments)
-            Payment.process(list(grouped_payments), group)
+            payments_group = Payment.process(list(grouped_payments), group)
+            if coop_string.coerce_to_bool(cls.get_conf_item('dump_sepa_xml')):
+                for sepa_msg in payments_group.sepa_messages:
+                    cls.write_batch_output(sepa_msg.message.encode('utf-8'),
+                        sepa_msg.filename)
 
 
 class PaymentCreationBatch(batchs.BatchRoot):
@@ -136,18 +133,6 @@ class PaymentCreationBatch(batchs.BatchRoot):
     @classmethod
     def get_batch_search_model(cls):
         return 'account.move.line'
-
-    @classmethod
-    def get_batch_name(cls):
-        return 'Payment creation batch'
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        return 'divide'
-
-    @classmethod
-    def get_batch_step(cls):
-        return 1
 
     @classmethod
     def select_ids(cls, treatment_date):

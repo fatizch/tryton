@@ -531,10 +531,6 @@ class DocumentRequestBatch(BatchRoot):
         return [('request', 'ASC')]
 
     @classmethod
-    def get_batch_name(cls):
-        return 'Document Request Batch'
-
-    @classmethod
     def get_batch_domain(cls, treatment_date):
         return [
             ('reception_date', '=', None),
@@ -557,8 +553,8 @@ class DocumentRequestBatch(BatchRoot):
                     'select_model': data['view']['defaults']}, 'generate')
                 report_def, data = data['actions'][0]
                 Report = Pool().get(report_def['report_name'], type='report')
-                format, buffer, _, name = Report.execute([data['id']], data)
-                cls.write_batch_output(format, buffer, name)
+                ext, _buffer, _, name = Report.execute([data['id']], data)
+                cls.write_batch_output(_buffer, '%s.%s' % (name, ext))
                 wizard.execute(wizard_id, {}, 'post_generation')
                 logger.info(
                     'Treated Request for %s' % cur_object.get_rec_name(None))

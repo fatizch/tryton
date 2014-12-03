@@ -1,9 +1,14 @@
 import os
+import ConfigParser
+from datetime import datetime
 
+from trytond.config import config
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import ModelView
-from trytond.config import config
+
+from trytond.modules.cog_utils import coop_string
+from celeryconfig import CELERYD_CONCURRENCY
 
 __all__ = [
     'BatchRoot',
@@ -16,15 +21,34 @@ class BatchRoot(ModelView):
     @classmethod
     def __setup__(cls):
         super(BatchRoot, cls).__setup__()
-        cls._error_messages.update({
-                'no_batch_path': 'No Batch Path Specified'})
+        cls._default_config_items = {
+            'filepath_template': u'%{BATCHNAME}/%{FILENAME}',
+            'filepath_timestamp_format': u'%Y%m%d_%Hh%Mm%Ss',
+            'split_mode': u'divide',
+            'split_size': str(CELERYD_CONCURRENCY),
+        }
+        cls._config = ConfigParser.RawConfigParser()
+        config_file = config.get('batch', 'config_file')
+        if config_file:
+            try:
+                with open(config_file, 'r') as fconf:
+                    cls._config.readfp(fconf)
+            except IOError:
+                pass
+        for section in cls._config.sections():
+            if cls._config.has_option(section, 'filepath_template'):
+                assert('%{FILENAME}' in cls._config.get(section,
+                    'filepath_template'))
 
     @classmethod
-    def get_batch_name(cls):
-        if cls.__doc__:
-            return cls.__doc__
-        elif cls.__name__:
-            return cls.__name__
+    def get_conf_item(cls, key):
+        if cls._config.has_option(cls.__name__, key):
+            item = cls._config.get(cls.__name__, key)
+        elif cls._config.has_option('default', key):
+            item = cls._config.get('default', key)
+        else:
+            item = cls._default_config_items[key]
+        return item
 
     @classmethod
     def execute(cls, objects, ids):
@@ -77,14 +101,18 @@ class BatchRoot(ModelView):
         return res
 
     @classmethod
-    def get_batch_step(cls):
-        return 1
-
-    @classmethod
-    def get_batch_stepping_mode(cls):
-        # 'number' means the id list will be divided in chunks of X objects
-        # 'divide' means the id list will be divided in X
-        return 'number'
+    def generate_filepath(cls, filename):
+        filepath_template = cls.get_conf_item('filepath_template')
+        filepath_template = filepath_template.\
+            replace('%{FILENAME}', filename). \
+            replace('%{BATCHNAME}', coop_string.remove_blank_and_invalid_char(
+                cls.__name__))
+        if '%{TIMESTAMP}' in filepath_template:
+            date_format = cls.get_conf_item('filepath_timestamp_format')
+            timestamp = datetime.now().strftime(date_format)
+            filepath_template = filepath_template.replace('%{TIMESTAMP}',
+                timestamp)
+        return os.path.join(cls.get_conf_item('root_dir'), filepath_template)
 
     @classmethod
     def convert_to_instances(cls, ids):
@@ -92,16 +120,10 @@ class BatchRoot(ModelView):
         return MainModel.browse(ids)
 
     @classmethod
-    def write_batch_output(cls, format, buffer, name):
-        BATCH_PATH = config.get('batch', 'output_dir', None)
-        if not BATCH_PATH:
-            cls.raise_user_error('no_batch_path')
-        if not os.path.exists(BATCH_PATH):
-            os.makedirs(BATCH_PATH)
-        good_batch_path = os.path.join(BATCH_PATH, cls.get_batch_name())
-        if not os.path.exists(good_batch_path):
-            os.makedirs(good_batch_path)
-        f = open(os.path.join(good_batch_path, '%s.%s' % (
-                    name.replace(os.sep, '-'), format)), 'w')
-        f.write(buffer)
-        f.close()
+    def write_batch_output(cls, _buffer, filename):
+        batch_outpath = cls.generate_filepath(filename)
+        batch_dirpath = os.path.dirname(batch_outpath)
+        if not os.path.exists(batch_dirpath):
+            os.makedirs(batch_dirpath)
+        with open(batch_outpath, 'w') as f:
+            f.write(_buffer)

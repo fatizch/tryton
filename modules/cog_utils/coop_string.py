@@ -193,3 +193,11 @@ def check_for_pattern(s, pattern):
         if matchObj:
             return matchObj.group()
         return False
+
+
+def coerce_to_bool(s):
+    if s.lower() in ["1", "yes", "true", "on"]:
+        return True
+    if s.lower() in ["0", "no", "false", "off"]:
+        return False
+    raise ValueError('Not a boolean: %s' % s)
