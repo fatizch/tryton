@@ -61,6 +61,9 @@ class ExportTest(model.CoopSQL, export.ExportImportMixin):
             (None, ''),
             ('cog_utils.export_test_target', 'Target'),
             ])
+    property = fields.Property(
+        fields.Many2One('cog_utils.export_test_target', 'Property',
+            domain=[('char', '=', 'key')]))
 
     @classmethod
     def _export_light(cls):

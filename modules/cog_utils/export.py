@@ -379,6 +379,8 @@ class ExportImportMixin(Model):
         light_exports = self._export_light()
 
         for field_name, field in self._fields.iteritems():
+            if isinstance(field, tryton_fields.Property):
+                field = field._field
             if (field_name in skip_fields or
                     (isinstance(field, tryton_fields.Function) and not
                     isinstance(field, tryton_fields.Property))):

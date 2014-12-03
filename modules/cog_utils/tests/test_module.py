@@ -345,6 +345,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 '__name__': 'cog_utils.export_test',
                 'reference': None,
                 'one2many': [],
+                'property': None,
                 'valid_one2many': [],
                 'many2many': [],
                 'many2one': None,
@@ -507,6 +508,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual((), to_export.one2many)
         self.assertEqual([], self.ExportTestTarget.search(
                 [('id', '!=', 0)]))
+
+    def test_0058_export_import_property(self):
+        target = self.ExportTestTarget(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', property=target)
+        to_export.save()
+        output = []
+        to_export.export_json(output=output)
+
+        self.assertEqual(output[0]['_func_key'], 'key')
+        self.assertEqual(output[1]['_func_key'], 'otherkey')
+
+        output[0]['integer'] = 12
+
+        self.ExportTest.multiple_import_json(output)
+        self.assertEqual(12, to_export.property.integer)
 
 
 def suite():
