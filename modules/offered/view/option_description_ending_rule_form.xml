@@ -2,12 +2,6 @@
 <form string="Rule">
     <label name="rule"/>
     <field name="rule"/>
-    <group id="void" colspan="2">
-    </group>
-    <newline/>
-    <label name="kind"/>
-    <field name="kind" xexpand="0"/>
     <newline/>
     <field name="rule_extra_data" no_command="1" colspan="2"/>
 </form>
-

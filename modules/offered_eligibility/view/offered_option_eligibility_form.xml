@@ -4,5 +4,5 @@
         <page name="eligibility_rule">
             <field name="eligibility_rule" mode="form"/>
         </page>
-    </xpath> 
+    </xpath>
 </data>

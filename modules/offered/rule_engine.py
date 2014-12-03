@@ -88,15 +88,10 @@ class PricingResultLine(RuleEngineResultLine):
         self.details.append(new_detail)
 
 
-class OptionDescriptionRule(RuleMixin, model.CoopSQL, model.CoopView):
-    'Option Description Rule'
+class OptionDescriptionEndingRule(RuleMixin, model.CoopSQL, model.CoopView):
+    'Option Description Ending Rule'
 
-    __name__ = 'offered.option.description.rule'
+    __name__ = 'offered.option.description.ending_rule'
 
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         required=True, ondelete='CASCADE')
-
-    @classmethod
-    def __setup__(cls):
-        super(OptionDescriptionRule, cls).__setup__()
-        cls.kind.selection.append(('ending', 'Ending'))

@@ -24,6 +24,6 @@ def register():
         ExtraDataSubExtraDataRelation,
         ProductExtraDataRelation,
         OptionDescriptionExtraDataRelation,
-        OptionDescriptionRule,
+        OptionDescriptionEndingRule,
         TestCaseModel,
         module='offered', type_='model')

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Eligibility Rule">
+    <label name="rule"/>
+    <field name="rule"/>
+    <newline/>
+    <field name="rule_extra_data" no_command="1" colspan="2"/>
+</form>

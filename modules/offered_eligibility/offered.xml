@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
+        <!-- ###################### -->
+        <!-- # Option Description # -->
+        <!-- ###################### -->
         <record model="ir.ui.view" id="offered_view_form">
             <field name="model">offered.option.description</field>
             <field name="type">form</field>
             <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">offered_option_eligibility_form</field>
         </record>
-        <record model="ir.ui.view" id="eligibility_rule_form">
-            <field name="model">offered.option.description.rule</field>
+        <!-- ####################################### -->
+        <!-- # Option Description Eligibility Rule # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="option_description_eligibility_rule_view_form">
+            <field name="model">offered.option.description.eligibility_rule</field>
             <field name="type">form</field>
-            <field name="name">offered.option_description_rule_form</field>
+            <field name="name">option_description_eligibility_rule_form</field>
         </record>
     </data>
 </tryton>

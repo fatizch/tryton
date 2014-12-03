@@ -7,5 +7,5 @@ def register():
     Pool.register(
         OptionDescription,
         ContractOption,
-        OptionDescriptionRule,
+        OptionDescriptionEligibilityRule,
         module='offered_eligibility', type_='model')
