@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, export, coop_string
 
 __all__ = [
     'PlanLines',
@@ -7,6 +7,7 @@ __all__ = [
     'Commission',
     'Plan',
     'PlanRelation',
+    'Agent',
     ]
 __metaclass__ = PoolMeta
 
@@ -56,13 +57,22 @@ class Commission:
         return invoices
 
 
-class Plan:
+class Plan(export.ExportImportMixin):
     __name__ = 'commission.plan'
+    _func_key = 'code'
 
+    code = fields.Char('Code', required=True)
     plan_relation = fields.Many2Many('commission_plan-commission_plan',
         'from_', 'to', 'Plan Relation', size=1)
     reverse_plan_relation = fields.Many2Many('commission_plan-commission_plan',
         'to', 'from_', 'Reverse Plan Relation', size=1)
+
+    @classmethod
+    def __setup__(cls):
+        super(Plan, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ]
 
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product)
@@ -79,8 +89,18 @@ class Plan:
             if line.match(pattern):
                 return line.get_amount(**context)
 
+    @classmethod
+    def is_master_object(cls):
+        return True
 
-class PlanLines:
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
+
+
+class PlanLines(export.ExportImportMixin):
     __name__ = 'commission.plan.line'
 
     options = fields.Many2Many(
@@ -95,6 +115,10 @@ class PlanLines:
 
     def get_options_extract(self, name):
         return ' \n'.join((option.name for option in self.options))
+
+    @classmethod
+    def _export_light(cls):
+        return (super(PlanLines, cls)._export_light() | set(['options']))
 
 
 class PlanLinesCoverageRelation(model.CoopSQL, model.CoopView):
@@ -113,3 +137,16 @@ class PlanRelation(model.CoopSQL, model.CoopView):
 
     from_ = fields.Many2One('commission.plan', 'Plan')
     to = fields.Many2One('commission.plan', 'Plan')
+
+
+class Agent(export.ExportImportMixin):
+    __name__ = 'commission.agent'
+
+    @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
+    def _export_light(cls):
+        return (super(Agent, cls)._export_light() |
+            set(['company', 'currency']))

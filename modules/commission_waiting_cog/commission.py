@@ -2,7 +2,8 @@ from trytond.model import ModelView
 from trytond.pool import Pool, PoolMeta
 
 __all__ = [
-    'Commission'
+    'Commission',
+    'Agent',
     ]
 __metaclass__ = PoolMeta
 
@@ -19,3 +20,11 @@ class Commission:
         moves = [commission.waiting_move for commission in commissions
             if commission.waiting_move]
         Move.post(moves)
+
+
+class Agent:
+    __name__ = 'commission.agent'
+
+    @classmethod
+    def _export_light(cls):
+        return (super(Agent, cls)._export_light() | set(['waiting_account']))

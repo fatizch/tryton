@@ -47,6 +47,7 @@ class Account(export.ExportImportMixin):
         res.add('left')
         res.add('right')
         res.add('taxes')
+        res.add('deferrals')
         return res
 
 

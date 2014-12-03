@@ -3,6 +3,7 @@ from .contract import *
 from .commission import *
 from .invoice import *
 from .party import *
+from .product import *
 
 
 def register():
@@ -13,7 +14,11 @@ def register():
         Plan,
         PlanRelation,
         PlanLinesCoverageRelation,
+        Agent,
         InvoiceLine,
         Party,
         Broker,
+        Product,
+        Template,
+        Uom,
         module='commission_insurance', type_='model')

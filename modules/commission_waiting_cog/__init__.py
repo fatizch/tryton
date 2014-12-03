@@ -5,4 +5,5 @@ from .commission import *
 def register():
     Pool.register(
         Commission,
+        Agent,
         module='commission_waiting_cog', type_='model')

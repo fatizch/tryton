@@ -32,6 +32,10 @@ class Party:
     def on_change_is_broker(self):
         self._on_change_is_actor('is_broker')
 
+    @classmethod
+    def _export_skips(cls):
+        return (super(Party, cls)._export_skips() | set(['agents']))
+
 
 class Broker(model.CoopSQL, model.CoopView):
     'Broker'

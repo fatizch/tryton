@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/field[@name='lines']"
-        position="replace">
+    <xpath expr="/form/field[@name='name']" position="after">
+        <label name="code"/>
+        <field name="code"/>
+    </xpath>
+    <xpath expr="/form/field[@name='lines']" position="replace">
         <notebook colspan="4">
             <page string="Lines" id="lines">
                 <field name="lines" colspan="4" view_ids="commission.plan_line_view_list_sequence"/>
