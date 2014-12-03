@@ -147,15 +147,17 @@ class ExportImportMixin(Model):
         filename = '%s%s.json' % (self._export_filename_prefix(),
             self._export_filename())
         result = []
-        self.export_json(output=result)
+        already_exported = set()
+        self.export_json(output=result, already_exported=already_exported)
         export_log = 'The following records will be exported:\n '
         instances = collections.defaultdict(list)
-        for value in result:
-            instances[value['__name__']].append(value['_func_key'])
+        for value in already_exported:
+            instances[value.__name__].append((value.rec_name,
+                getattr(value, value._func_key)))
         for k, v in instances.iteritems():
             export_log += '<b>%s</b>\n' % k
             for elem in v:
-                export_log += '    %s\n' % elem
+                export_log += '    %s - %s\n' % elem
         return filename, result, export_log
 
     @classmethod
@@ -371,7 +373,7 @@ class ExportImportMixin(Model):
             }
         if already_exported and self in already_exported:
             return values
-        elif not already_exported:
+        elif already_exported is None:
             already_exported = set([self])
         else:
             already_exported.add(self)
