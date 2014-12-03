@@ -126,6 +126,7 @@ class Party:
         if not values.get('is_person', False):
             super(Party, cls).add_func_key(values)
             return
+        ssn = ''
         for rel in values['relations']:
             if rel['type']['_func_key'] == 'social_security_dependent':
                 ssn = rel['to']['_func_key']
