@@ -23,21 +23,18 @@ class Contract:
                 ('sepa_mandate.party', '=', Eval('subscriber'))])
         cls.billing_informations.depends.append('subscriber')
 
+    def init_sepa_mandate(self):
+        self.billing_information.init_sepa_mandate()
+
     def before_activate(self, contract_dict=None):
         super(Contract, self).before_activate()
-        # TODO search mandate only if necessary
-        if self.subscriber.sepa_mandates or not self.subscriber.bank_accounts:
-            return
-        Mandate = Pool().get('account.payment.sepa.mandate')
-        mandate = Mandate()
-        mandate.party = self.subscriber
-        mandate.account_number = self.subscriber.bank_accounts[0].numbers[0]
-        # TODO manage identification with sequence
-        # mandate.identification =
-        mandate.type = 'recurrent'
-        mandate.signature_date = contract_dict['start_date']
-        mandate.state = 'validated'
-        mandate.save()
+        self.init_sepa_mandate()
+
+    @classmethod
+    def update_contract_after_import(cls, contracts):
+        super(Contract, cls).update_contract_after_import(contracts)
+        for contract in contracts:
+            contract.init_sepa_mandate()
 
 
 class ContractBillingInformation:
@@ -75,3 +72,32 @@ class ContractBillingInformation:
                 "set sepa_mandate = c.sepa_mandate "
                 "from contract_billing_information as b, "
                 "contract as c where b.contract = c.id")
+
+    def init_sepa_mandate(self):
+        pool = Pool()
+        Mandate = pool.get('account.payment.sepa.mandate')
+        if (not self.direct_debit or self.sepa_mandate or
+                not self.direct_debit_account):
+            return
+        numbers_id = [number.id
+            for number in self.direct_debit_account.numbers]
+        mandates = Mandate.search([
+                ('type', '=', 'recurrent'),
+                ('scheme', '=', 'CORE'),
+                ('account_number', 'in', numbers_id),
+                ('party', '=', self.contract.subscriber.id),
+                ])
+        for mandate in mandates:
+            self.sepa_mandate = mandate
+            self.save()
+            return
+        mandate = Mandate(
+            party=self.contract.subscriber,
+            account_number=self.direct_debit_account.numbers[0],
+            type='recurrent',
+            scheme='CORE',
+            signature_date=self.contract.signature_date or
+                self.contract.start_date,
+            state='validated')
+        self.sepa_mandate = mandate
+        self.save()
