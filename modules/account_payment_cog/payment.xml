@@ -6,5 +6,15 @@
             <field name="inherit" ref="account.configuration_view_form"/>
             <field name="name">configuration_form</field>
         </record>
+        <record model="ir.ui.view" id="payment_group_view_list">
+            <field name="model">account.payment.group</field>
+            <field name="inherit" ref="account_payment.payment_group_view_list"/>
+            <field name="name">payment_group_list</field>
+        </record>
+        <record model="ir.ui.view" id="payment_group_view_form">
+            <field name="model">account.payment.group</field>
+            <field name="inherit" ref="account_payment.payment_group_view_form"/>
+            <field name="name">payment_group_form</field>
+        </record>
     </data>
 </tryton>

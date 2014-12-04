@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='kind']" position="after">
+        <button string="Acknowledge" name="acknowledge" colspan="2"/>
+        <field name="has_processing_payment" invisible="1"/>
+    </xpath>
+</data>
