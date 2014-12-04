@@ -180,7 +180,7 @@ class SynthesisMenuOpen(Wizard):
         Model = record.__class__
         if (Model.__name__ != 'party.synthesis.menu.contract'):
             return super(SynthesisMenuOpen, self).get_action(record)
-        domain = PYSONEncoder().encode([('subscriber', '=', record.id)])
+        domain = PYSONEncoder().encode([('parties', '=', record.id)])
         actions = {
             'res_model': 'contract',
             'pyson_domain': domain,

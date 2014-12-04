@@ -154,6 +154,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 [])],
         states=_STATES, depends=['subscriber_kind', 'status'],
         ondelete='RESTRICT')
+    parties = fields.Function(
+        fields.Many2Many('party.party', None, None, 'Parties'),
+        'get_parties', searcher='search_parties')
     current_policy_owner = fields.Function(
         fields.Many2One('party.party', 'Current Policy Owner'),
         'on_change_with_current_policy_owner')
@@ -504,6 +507,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             group_by=activation_history.contract)
 
         return [('id', 'in', query)]
+
+    @classmethod
+    def search_parties(cls, name, clause):
+        return [('subscriber.id',) + tuple(clause[1:])]
 
     @classmethod
     def validate(cls, contract):
@@ -980,6 +987,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def get_last_modification(self, name):
         return (self.write_date if self.write_date else self.create_date
             ).replace(microsecond=0)
+
+    def get_parties(self, name):
+        return [self.subscriber.id] if self.subscriber else []
 
     @fields.depends('subscriber_kind', 'subscriber')
     def on_change_subscriber_kind(self):

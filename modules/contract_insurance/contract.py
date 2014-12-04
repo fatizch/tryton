@@ -297,6 +297,11 @@ class Contract(Printable):
         else:
             return None
 
+    def get_parties(self, name):
+        parties = super(Contract, self).get_parties(name)
+        parties += [x.party.id for x in self.covered_elements if x.person]
+        return parties
+
     def update_from_start_date(self):
         super(Contract, self).update_from_start_date()
         errors = self.init_next_renewal_date()
@@ -335,6 +340,13 @@ class Contract(Printable):
     @classmethod
     def _export_skips(cls):
         return super(Contract, cls)._export_skips() | set(['multi_mixed_view'])
+
+    @classmethod
+    def search_parties(cls, name, clause):
+        return ['OR',
+            super(Contract, cls).search_parties(name, clause),
+            ('covered_elements.party.id',) + tuple(clause[1:]),
+            ]
 
 
 class ContractOption:
@@ -652,7 +664,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         states={
             'invisible': ~IS_PARTY,
             'required': IS_PARTY,
-            }, ondelete='RESTRICT', depends=['item_kind'])
+            }, ondelete='RESTRICT', depends=['item_kind'], select=True)
     sub_covered_elements = fields.One2Many('contract.covered_element',
         'parent', 'Sub Covered Elements',
         # TODO : invisibility should depend on a function field checking the
