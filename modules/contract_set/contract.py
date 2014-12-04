@@ -79,9 +79,13 @@ class ContractSet(model.CoopSQL, model.CoopView):
         for contract in self.contracts:
             contract.decline_contract(reason)
 
-    def generate_and_attach_reports_in_set(self, template_names):
+    def generate_and_attach_reports_in_set(self, template_codes):
+        """template_codes should be a comma separated list
+        of document template codes between single quotes,
+        i.e : 'template1', 'template2', etc.
+        """
         for contract in self.contracts:
-            contract.generate_and_attach_reports(template_names)
+            contract.generate_and_attach_reports(template_codes)
 
 
 class Contract:
