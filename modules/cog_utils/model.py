@@ -41,7 +41,7 @@ __all__ = [
 
 def serialize_this(the_data, from_field=None):
     res = None
-    if (isinstance(the_data, list) and the_data != [] and
+    if (isinstance(the_data, (tuple, list)) and the_data and
             isinstance(the_data[0], Model)):
         res = []
         for elem in the_data:
