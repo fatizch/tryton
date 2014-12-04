@@ -1,11 +1,12 @@
 import datetime
+
 from celery import Celery, group
+from celeryconfig import CELERY_RESULT_BACKEND
+from celery.utils.log import get_task_logger
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond_celery import TrytonTask
-
-from celery.utils.log import get_task_logger
 
 ##############################################################################
 # Celery Usage
@@ -38,9 +39,8 @@ from celery.utils.log import get_task_logger
 #
 ##############################################################################
 
-
-# Celery configuration file in cog_utils/celeryconfig.py
-celery = Celery('Coopengo Batch')
+logger = get_task_logger(__name__)
+celery = Celery('Coopengo Batch', backend=CELERY_RESULT_BACKEND)
 
 
 def chunks_number(l, n):
@@ -78,10 +78,12 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None):
             chunking = chunks_number
         else:
             chunking = chunks_size
-        group(generate.s(BatchModel.__name__, tmp_list, connexion_date,
+        logger.info('Executing %s' % batch_name)
+        job = group(generate.s(BatchModel.__name__, tmp_list, connexion_date,
             treatment_date)
             for tmp_list in chunking(ids, int(BatchModel.get_conf_item(
                 'split_size'))))()
+    return job
 
 
 @celery.task(base=TrytonTask)
@@ -89,10 +91,9 @@ def generate(batch_name, ids, connexion_date, treatment_date):
     User = Pool().get('res.user')
     admin, = User.search([('login', '=', 'admin')])
     BatchModel = Pool().get(batch_name)
-    logger = get_task_logger(batch_name)
     with Transaction().set_user(admin.id), Transaction().set_context(
             User.get_preferences(context_only=True),
             client_defined_date=connexion_date):
         to_treat = BatchModel.convert_to_instances(ids)
-        BatchModel.execute(to_treat, ids, logger, treatment_date)
-    return
+        BatchModel.execute(to_treat, ids, treatment_date)
+    return True

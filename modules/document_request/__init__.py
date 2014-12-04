@@ -1,4 +1,6 @@
 from trytond.pool import Pool
+
+from .batch import *
 from .document import *
 
 

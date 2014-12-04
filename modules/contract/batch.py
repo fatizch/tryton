@@ -1,9 +1,14 @@
 # -*- coding:utf-8 -*-
+from celery.utils.log import get_task_logger
+
 from trytond.pool import Pool
-from trytond.modules.cog_utils import batchs
+from trytond.modules.cog_utils import batch
 
 
-class ContractEndDateTerminationBatch(batchs.BatchRoot):
+logger = get_task_logger(__name__)
+
+
+class ContractEndDateTerminationBatch(batch.BatchRoot):
     'Contract end date termination batch'
 
     __name__ = 'contract.termination.treatment'
@@ -33,7 +38,7 @@ class ContractEndDateTerminationBatch(batchs.BatchRoot):
             ('end_date', '<=', treatment_date)]
 
     @classmethod
-    def execute(cls, objects, ids, logger, treatment_date):
+    def execute(cls, objects, ids, treatment_date):
         logger.info('Starting contract end-date termination batch.')
         Contract = Pool().get('contract')
         Contract.terminate(objects)

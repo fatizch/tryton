@@ -17,7 +17,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.rpc import RPC
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import coop_date, utils, batchs, model, fields
+from trytond.modules.cog_utils import coop_date, utils, model, fields
 from trytond.modules.contract import _STATES
 
 __metaclass__ = PoolMeta
@@ -35,8 +35,6 @@ __all__ = [
     'DisplayContractPremium',
     'DisplayContractPremiumDisplayer',
     'DisplayContractPremiumDisplayerPremiumLine',
-    'CreateInvoiceContractBatch',
-    'PostInvoiceContractBatch',
     ]
 
 FREQUENCIES = [
@@ -1294,67 +1292,3 @@ class DisplayContractPremiumDisplayerPremiumLine(model.CoopView):
     premiums = fields.One2Many('contract.premium', None, 'Premium')
     premium = fields.Many2One('contract.premium', 'Premium')
     name = fields.Char('Name')
-
-
-class CreateInvoiceContractBatch(batchs.BatchRoot):
-    'Contract Invoice Creation Batch'
-
-    __name__ = 'contract.invoice.create'
-
-    @classmethod
-    def get_batch_main_model_name(cls):
-        return 'contract'
-
-    @classmethod
-    def select_ids(cls, treatment_date):
-        cursor = Transaction().cursor
-        pool = Pool()
-
-        contract = pool.get('contract').__table__()
-        contract_invoice = pool.get('contract.invoice').__table__()
-
-        query_table = contract.join(contract_invoice, 'LEFT', condition=(
-                contract.id == contract_invoice.contract))
-
-        cursor.execute(*query_table.select(contract.id, group_by=contract.id,
-                where=(contract.status == 'active'),
-                having=(
-                    (Max(contract_invoice.end) < treatment_date)
-                    | (Max(contract_invoice.end) == None))))
-
-        return cursor.fetchall()
-
-    @classmethod
-    def execute(cls, objects, ids, logger, treatment_date):
-        Pool().get('contract').invoice(objects, treatment_date)
-
-
-class PostInvoiceContractBatch(batchs.BatchRoot):
-    'Post Contract Invoice Batch'
-
-    __name__ = 'contract.invoice.post'
-
-    @classmethod
-    def get_batch_main_model_name(cls):
-        return 'account.invoice'
-
-    @classmethod
-    def select_ids(cls, treatment_date):
-        cursor = Transaction().cursor
-        pool = Pool()
-
-        account_invoice = pool.get('account.invoice').__table__()
-        contract_invoice = pool.get('contract.invoice').__table__()
-
-        query_table = contract_invoice.join(account_invoice, 'LEFT',
-            condition=(account_invoice.id == contract_invoice.invoice))
-
-        cursor.execute(*query_table.select(account_invoice.id,
-                where=((contract_invoice.start <= treatment_date)
-                    & (account_invoice.state == 'validated'))))
-
-        return cursor.fetchall()
-
-    @classmethod
-    def execute(cls, objects, ids, logger, treatment_date):
-        Pool().get('account.invoice').post(objects)

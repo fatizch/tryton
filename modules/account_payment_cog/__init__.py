@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 
+from .batch import *
 from .party import *
 from .payment import *
 from .company import *

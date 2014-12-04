@@ -23,11 +23,10 @@ from trytond.transaction import Transaction
 from trytond.tools.misc import _compile_source, memoize
 from trytond.pyson import Eval, Or, Bool, Not
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import (coop_date, coop_string, fields,
+                                       model, utils)
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
-from trytond.modules.cog_utils import model, utils, coop_string, batchs
-from trytond.modules.cog_utils import coop_date
 from trytond.modules.table import table
 from trytond.model import DictSchemaMixin
 
@@ -53,7 +52,6 @@ __all__ = [
     'RuleEngineResult',
     'InitTestCaseFromExecutionLog',
     'ValidateRuleTestCases',
-    'ValidateRuleBatch',
     'RuleMixin',
     ]
 
@@ -1633,21 +1631,3 @@ class ValidateRuleTestCases(Wizard):
         TestCase.check_pass(TestCase.search([
                     ('rule', 'in', rule_ids)]))
         return 'end'
-
-
-class ValidateRuleBatch(batchs.BatchRoot):
-    'Rule Engine Test Case Validation Batch'
-
-    __name__ = 'rule_engine.validate'
-
-    @classmethod
-    def get_batch_main_model_name(cls):
-        return 'rule_engine.test_case'
-
-    @classmethod
-    def get_batch_search_model(cls):
-        return 'rule_engine.test_case'
-
-    @classmethod
-    def execute(cls, objects, ids, logger, treatment_date):
-        Pool().get('rule_engine.test_case').check_pass(objects)

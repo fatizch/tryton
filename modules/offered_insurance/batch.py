@@ -1,11 +1,16 @@
+from celery.utils.log import get_task_logger
+
 from trytond.pool import Pool
 from trytond.error import UserError
 
 from trytond.modules.cog_utils import BatchRoot
 
+
 __all___ = [
     'ProductValidationBatch',
     ]
+
+logger = get_task_logger(__name__)
 
 
 class ProductValidationBatch(BatchRoot):
@@ -22,8 +27,8 @@ class ProductValidationBatch(BatchRoot):
         return 'offered.product'
 
     @classmethod
-    def execute(cls, objects, ids, logger, treatment_date):
-        # TODO : explose ModelStorage._validate in smaller functions that could
+    def execute(cls, objects, ids, treatment_date):
+        # TODO : explode ModelStorage._validate in smaller functions that could
         # be individually called.
         # That would permit to see every test that failed, whereas as of the
         # current version, only the first error of all the batch of records is

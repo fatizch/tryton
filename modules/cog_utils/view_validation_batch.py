@@ -1,13 +1,17 @@
+from celery.utils.log import get_task_logger
+
 from trytond.pool import Pool
 
-import batchs
+from batch import BatchRoot
 
 __all__ = [
     'ViewValidationBatch',
     ]
 
+logger = get_task_logger(__name__)
 
-class ViewValidationBatch(batchs.BatchRoot):
+
+class ViewValidationBatch(BatchRoot):
     'View validation batch'
 
     __name__ = 'ir.ui.view.validate'
@@ -30,7 +34,7 @@ class ViewValidationBatch(batchs.BatchRoot):
         return [('module', 'in', coop_modules)]
 
     @classmethod
-    def execute(cls, objects, ids, logger, treatment_date):
+    def execute(cls, objects, ids, treatment_date):
         for view in objects:
             try:
                 full_xml_id = view.xml_id

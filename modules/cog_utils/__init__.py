@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 from trytond.config import config
+from .batch import *
 from .utils import *
 from .coop_date import *
 from .coop_string import *
@@ -10,8 +11,6 @@ from .model import *
 from .many2one_form import *
 from .business import *
 from .test_framework import *
-from .batchs import *
-from .view_validation_batch import *
 from .test_case_framework import *
 from .models_for_tests import *
 from .tag import *
