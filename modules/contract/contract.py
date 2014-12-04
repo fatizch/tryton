@@ -585,14 +585,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.appliable_conditions_date = new_date
 
     def get_rec_name(self, name):
-        if self.status == 'quote':
+        if self.status in ['quote', 'declined']:
             return self.quote_number
         else:
             return self.contract_number
 
     def get_synthesis_rec_name(self, name):
         Date = Pool().get('ir.date')
-        if self.status == 'quote':
+        if self.status in ['quote', 'declined']:
             return '%s (%s)[%s]' % (
                 coop_string.translate_value(self, 'status'),
                 self.product.rec_name,
@@ -631,7 +631,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 ('status', '!=', 'quote'),
                 ], [
                 ('quote_number',) + tuple(clause[1:]),
-                ('status', '=', 'quote'),
+                ('status', 'in', ['quote', 'declined']),
                 ],
             ]
 
