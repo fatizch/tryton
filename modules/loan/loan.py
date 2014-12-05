@@ -469,6 +469,13 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return [('insured_persons.rec_name',) + tuple(clause[1:])]
 
     @classmethod
+    def search_rec_name(cls, name, clause):
+        return ['OR',
+            [('number',) + tuple(clause[1:])],
+            [('insured_persons',) + tuple(clause[1:])],
+            ]
+
+    @classmethod
     @model.CoopView.button
     @Workflow.transition('draft')
     def draft(cls, loans):
