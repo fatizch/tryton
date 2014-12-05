@@ -42,6 +42,14 @@ class Invoice:
         fields.Numeric('Fees'),
         'get_fees')
 
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls._error_messages.update({
+                'post_on_non_active_contract': 'Impossible to post invoice '
+                '%(invoice)s on contract %(contract)s which is %(status)s',
+                })
+
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees
 
@@ -185,6 +193,14 @@ class Invoice:
 
     @classmethod
     def post(cls, invoices):
+        for invoice in invoices:
+            if invoice.contract and invoice.contract.status != 'active':
+                cls.raise_user_error(
+                    'post_on_non_active_contract', {
+                        'invoice': invoice.rec_name,
+                        'contract': invoice.contract.rec_name,
+                        'status': invoice.contract.status_string,
+                        })
         updated_invoices = []
         for invoice in invoices:
             if (invoice.state not in ('validated', 'draft') or
