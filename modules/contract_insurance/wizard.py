@@ -54,9 +54,9 @@ class OptionSubscription:
 
     def transition_update_options(self):
         cov_element = self.options_displayer.covered_element
-        options = list(getattr(cov_element, 'options', []))
-        self.add_remove_options(options, self.options_displayer.options)
-        cov_element.options = options
+        cov_element.options = self.add_remove_options(
+            list(getattr(cov_element, 'options', [])),
+            self.options_displayer.options)
         cov_element.save()
         return 'end'
 

@@ -113,10 +113,10 @@ class OptionSubscription(model.CoopWizard):
         Option = Pool().get('contract.option')
         to_subscribe = set([x.coverage for x in lines if x.is_selected])
         to_delete = [x for x in options if x.coverage not in to_subscribe]
-        options[:] = [x for x in options if x not in to_delete]
+        updated_options = [x for x in options if x not in to_delete]
         Option.delete(to_delete)
 
-        subscribed = set([x.coverage for x in options])
+        subscribed = set([x.coverage for x in updated_options])
         for line in lines:
             if not line.is_selected or line.coverage in subscribed:
                 continue
@@ -124,7 +124,8 @@ class OptionSubscription(model.CoopWizard):
                 self.options_displayer.contract.product,
                 self.options_displayer.contract.start_date)
             line.option = option
-            options.append(option)
+            updated_options.append(option)
+        return updated_options
 
     def transition_start(self):
         Contract = Pool().get('contract')
@@ -136,9 +137,9 @@ class OptionSubscription(model.CoopWizard):
 
     def transition_update_options(self):
         contract = self.options_displayer.contract
-        options = list(getattr(contract, 'options', []))
-        self.add_remove_options(self, options, self.options_displayer.options)
-        contract.options = options
+        contract.options = self.add_remove_options(
+            list(getattr(contract, 'options', [])),
+            self.options_displayer.options)
         contract.init_extra_data()
         contract.save()
         return 'end'

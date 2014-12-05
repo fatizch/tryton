@@ -360,13 +360,15 @@ class OptionSubscription:
         return res
 
     def add_remove_options(self, options, lines):
-        super(OptionSubscription, self).add_remove_options(options,
-            [x for x in lines if getattr(x, 'coverage', None)])
+        updated_options = super(OptionSubscription, self).add_remove_options(
+            options, [x for x in lines if getattr(x, 'coverage', None)])
         for line in lines:
             if getattr(line, 'coverage', None):
                 parent = line
                 continue
-            line.update_loan_shares(parent.option, parent)
+            if parent.option in updated_options:
+                line.update_loan_shares(parent.option, parent)
+        return updated_options
 
 
 class OptionsDisplayer:
