@@ -898,6 +898,7 @@ class Premium(model.CoopSQL, model.CoopView):
     def __setup__(cls):
         super(Premium, cls).__setup__()
         cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
+        cls.__rpc__.update({'get_parent_models': RPC()})
 
     @classmethod
     def _export_skips(cls):
@@ -1147,7 +1148,8 @@ class Premium(model.CoopSQL, model.CoopView):
         return True
 
     def get_rec_name(self, name):
-        return '(%s - %s) %s' % (self.start, self.end or '', self.amount)
+        return ' '.join(set(
+                [self.rated_entity.rec_name, self.parent.rec_name]))
 
 
 class PremiumTax(ModelSQL):

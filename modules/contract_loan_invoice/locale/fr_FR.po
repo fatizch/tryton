@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -88,7 +88,7 @@ msgstr "Créé par"
 
 msgctxt "field:contract.premium.amount,end:"
 msgid "End"
-msgstr "Terminer"
+msgstr "Fin"
 
 msgctxt "field:contract.premium.amount,id:"
 msgid "ID"
@@ -112,7 +112,7 @@ msgstr "Nom"
 
 msgctxt "field:contract.premium.amount,start:"
 msgid "Start"
-msgstr "Commencer"
+msgstr "Début"
 
 msgctxt "field:contract.premium.amount,tax_amount:"
 msgid "Tax Amount"
