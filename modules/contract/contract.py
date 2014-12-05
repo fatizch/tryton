@@ -316,10 +316,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return {}
 
     @staticmethod
-    def default_start_date():
-        return utils.today()
-
-    @staticmethod
     def default_status():
         return 'quote'
 
@@ -1122,13 +1118,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 'end_date_posterior_to_automatic_end_date': 'End date should '
                 'be anterior to option automatic end date : %s',
                 })
-
-    @classmethod
-    def default_appliable_conditions_date(cls):
-        contract_id = Transaction().context.get('contract', -1)
-        if contract_id <= 0:
-            return cls.default_start_date()
-        return Pool().get('contract')(contract_id).appliable_conditions_date
 
     @classmethod
     def default_product(cls):
