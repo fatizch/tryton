@@ -26,7 +26,6 @@ while getopts ":bdehkloprstux" opt; do
 -e export_translations
 -k killtryton
 -l launch
--o generate po file with replaced translations
 -r reset
 -s sync_coop
 -t test_case
@@ -36,8 +35,6 @@ while getopts ":bdehkloprstux" opt; do
             SCRIPT_NAME=killtryton  ;;
         l)
             SCRIPT_NAME=launch  ;;
-        o)
-            SCRIPT_NAME=replace_translations  ;;
         p)
             SCRIPT_NAME=print_status ;;
         r)
