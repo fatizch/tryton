@@ -14,7 +14,7 @@ class Contract:
     __name__ = 'contract'
 
     broker = fields.Function(
-        fields.Many2One('broker', 'Broker'),
+        fields.Many2One('broker', 'Broker', states=_STATES, depends=_DEPENDS),
         'on_change_with_broker', 'setter_void')
     broker_party = fields.Function(
         fields.Many2One('party.party', 'Broker Party'),

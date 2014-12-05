@@ -47,7 +47,6 @@
                 <field name="quote_number"/>
             </group>
             <group id="right" yfill="0">
-                <field name="activation_history" colspan="2" yfill="0" yexpand="0"/>
             </group>
         </page>
     </notebook>
