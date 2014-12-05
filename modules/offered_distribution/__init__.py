@@ -9,13 +9,13 @@ from .test_case import *
 def register():
     Pool.register(
         # from distribution
-        # DistributionNetwork,
-        # CommercialProduct,
-        # DistributionNetworkComProductRelation,
-        # # From Offered
-        # Product,
-        # # from contract
-        # Contract,
-        # # from test_case
-        # TestCaseModel,
+        DistributionNetwork,
+        CommercialProduct,
+        DistributionNetworkComProductRelation,
+        # From Offered
+        Product,
+        # from contract
+        Contract,
+        # from test_case
+        TestCaseModel,
         module='offered_distribution', type_='model')
