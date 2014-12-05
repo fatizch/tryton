@@ -158,6 +158,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 manual_end_date=manual_end_date,
                 contract=self.Contract(end_date=contract_end_date),
                 )
+            option.parent_contract = option.contract
             option.contract.end_date = contract_end_date
             self.assertEqual(option.get_end_date('end_date'), expected)
 
@@ -181,7 +182,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         # option with manual date
         test_option(automatic_end_date=auto_date, manual_end_date=manual_date,
-            expected=manual_date, to_set=test_date, should_set=True)
+            expected=min(manual_date, auto_date), to_set=test_date,
+            should_set=True)
 
         # option with no end date at all
         test_option(expected=contract_end_date, to_set=test_date,
@@ -221,13 +223,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # If the end dates of every options are below the contract
         # end date, the maximum end_date is the latest option end date.
         contract.options = get_options([end_option1, end_option2])
-        self.assertEqual(contract.cap_end_date(current_end), end_option1)
-
-        # If the contract end date is below just one of the options,
-        # the maximum end_date is not capped
-        contract.options = get_options([end_option1, end_option2,
-            end_option3])
-        self.assertEqual(contract.cap_end_date(current_end), current_end)
+        contract.calculate_end_date()
+        self.assertEqual(contract.end_date, end_option1)
 
 
 def suite():

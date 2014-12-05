@@ -385,9 +385,6 @@ class ContractOption:
     parent_option = fields.Function(
         fields.Many2One('contract.option', 'Parent Covered Data'),
         'on_change_with_parent_option')
-    parent_contract = fields.Function(
-        fields.Many2One('contract', 'Parent Contract'),
-        'on_change_with_parent_contract', searcher='search_parent_contract')
 
     @classmethod
     def __setup__(cls):
@@ -457,10 +454,12 @@ class ContractOption:
     def on_change_with_icon(self, name=None):
         return 'umbrella-black'
 
-    @fields.depends('contract', 'covered_element')
+    @fields.depends('covered_element')
     def on_change_with_parent_contract(self, name=None):
-        if self.contract:
-            return self.contract.id
+        contract_id = super(
+            ContractOption, self).on_change_with_parent_contract(name)
+        if contract_id:
+            return contract_id
         elif self.covered_element:
             contract = getattr(self.covered_element, 'contract')
             if contract:
@@ -568,47 +567,6 @@ class ContractOption:
         for extra_premium in self.extra_premiums:
             extra_premium.set_start_date(start_date)
             extra_premium.save()
-
-    @classmethod
-    def set_end_date(cls, options, name, end_date):
-        Date = Pool().get('ir.date')
-        to_write, to_super = [], []
-        if not end_date:
-            cls.raise_user_error('end_date_none')
-        for option in options:
-            if end_date > option.start_date:
-                if not option.parent_contract:
-                    to_super.append(option)
-                    continue
-                if end_date <= (option.parent_contract.end_date
-                        or datetime.date.max):
-                    to_write.append(option)
-                else:
-                    cls.raise_user_error('end_date_posterior_to_contract',
-                        Date.date_as_string(
-                            option.parent_contract.end_date))
-            else:
-                cls.raise_user_error('end_date_anterior_to_start_date',
-                        Date.date_as_string(option.start_date))
-        if to_write:
-            cls.write(to_write, {'manual_end_date': end_date})
-        if to_super:
-            super(ContractOption, cls).set_end_date(to_super, name, end_date)
-
-    def get_end_date(self, name):
-        if not self.covered_element:
-            return super(ContractOption, self).get_end_date(name)
-        if self.manual_end_date:
-            return self.manual_end_date
-        elif (self.automatic_end_date and
-                self.automatic_end_date > self.start_date):
-            if self.parent_contract:
-                return min(self.parent_contract.end_date or datetime.date.max,
-                    self.automatic_end_date)
-            else:
-                return self.automatic_end_date
-        elif self.parent_contract and self.parent_contract.end_date:
-            return self.parent_contract.end_date
 
 
 class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,

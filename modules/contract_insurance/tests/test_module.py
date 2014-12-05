@@ -324,9 +324,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     def test0015_testOptionEndDate(self):
         start_date = datetime.date(2012, 2, 15)
-        auto_date = start_date + datetime.timedelta(weeks=50)
-        manual_date = start_date + datetime.timedelta(weeks=60)
-        test_date = start_date + datetime.timedelta(weeks=30)
+        date1 = start_date + datetime.timedelta(weeks=30)
+        date2 = start_date + datetime.timedelta(weeks=50)
+        date3 = start_date + datetime.timedelta(weeks=60)
         contract_end_date = start_date + datetime.timedelta(weeks=70)
         early_date = start_date - datetime.timedelta(weeks=1)
         late_date = contract_end_date + datetime.timedelta(weeks=1)
@@ -359,15 +359,16 @@ class ModuleTestCase(test_framework.CoopTestCase):
                             {'manual_end_date': to_set})
 
         # option with auto date
-        test_option(automatic_end_date=auto_date, expected=auto_date,
-            to_set=test_date, should_set=True)
+        test_option(automatic_end_date=date2, expected=date2,
+            to_set=date1, should_set=True)
 
         # option with manual date
-        test_option(automatic_end_date=auto_date, manual_end_date=manual_date,
-            expected=manual_date, to_set=test_date, should_set=True)
+        test_option(automatic_end_date=date2, manual_end_date=date3,
+            expected=min(date3, date2), to_set=date1,
+            should_set=True)
 
         # option with no end date at all
-        test_option(expected=contract_end_date, to_set=test_date,
+        test_option(expected=contract_end_date, to_set=date1,
             should_set=True)
 
         # try setting setting end date anterior to start date
@@ -376,6 +377,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         # try setting setting end date posterior to contract end date
         test_option(expected=contract_end_date, to_set=late_date,
+            should_raise=True)
+
+        test_option(automatic_end_date=date2, expected=date2, to_set=date1,
+            should_set=True)
+
+        # try setting setting end date posterior to option automatic end date
+        test_option(automatic_end_date=date2, expected=date2, to_set=date3,
             should_raise=True)
 
     @test_framework.prepare_test(
@@ -396,8 +404,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             for end_date in option_end_dates:
                 option = self.Option(
                         start_date=contract.start_date,
-                        automatic_end_date=end_date,
-                        manual_end_date=end_date,
                         end_date=end_date,
                         parent_contract=contract,
                         covered_element=covered_element
@@ -414,7 +420,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         contract.options = []
         build_contract_covered_elements(end_option1, end_option2)
-        self.assertEqual(contract.cap_end_date(current_end), end_option1)
+        contract.calculate_end_date()
+        self.assertEqual(contract.end_date, max(end_option1, end_option2))
 
         # Of course, this cap should not be effective
         # if the options ends after the contract
@@ -422,14 +429,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         end_option1 = current_end + datetime.timedelta(weeks=2)
         end_option2 = current_end + datetime.timedelta(weeks=4)
         build_contract_covered_elements(end_option1, end_option2)
-        self.assertEqual(contract.cap_end_date(current_end), current_end)
-
-        # Checking an hypothetical contract with abslutely no options
-        # would also work
-        contract, = self.Contract.search([])
-        contract.covered_elements = []
-        contract.options = []
-        self.assertEqual(contract.cap_end_date(current_end), current_end)
+        contract.calculate_end_date()
+        self.assertEqual(contract.end_date, max(end_option1, end_option2))
 
 
 def suite():

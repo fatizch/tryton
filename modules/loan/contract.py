@@ -5,7 +5,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields, model, coop_string
-from trytond.modules.cog_utils import coop_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -111,18 +110,6 @@ class Contract:
     def on_change_with_is_loan(self, name=None):
         return self.product.is_loan if self.product else False
 
-    def set_contract_end_date_from_loans(self):
-        if not self.is_loan:
-            return
-        loans = set([share.loan
-                for covered_element in self.covered_elements
-                for option in covered_element.options
-                for share in option.loan_shares])
-        if not loans:
-            return
-        end_date = coop_date.add_day(max([x.end_date for x in loans]), -1)
-        self.set_end_date(self.cap_end_date(end_date), force=True)
-
     @classmethod
     def setter_void(cls, objects, name, values):
         pass
@@ -196,6 +183,15 @@ class ContractOption:
         if to_update:
             return {'update': to_update}
 
+    def get_possible_end_date(self):
+        dates = super(ContractOption, self).get_possible_end_date()
+        if not self.loan_shares:
+            return dates
+        dates.pop('contract_end_date', None)
+        for loan_share in self.loan_shares:
+            dates[loan_share.loan.id] = loan_share.loan.end_date
+        return dates
+
     @classmethod
     def set_end_date(cls, options, name, end_date):
         super(ContractOption, cls).set_end_date(options, name, end_date)
@@ -212,7 +208,7 @@ class ContractOption:
     def calculate(self):
         LoanShare = Pool().get('loan.share')
         loan_shares_to_delete = [x for x in self.loan_shares
-            if not x.loan in self.parent_contract.loans]
+            if x.loan not in self.parent_contract.loans]
         LoanShare.delete(loan_shares_to_delete)
         super(ContractOption, self).calculate()
 

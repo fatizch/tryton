@@ -162,7 +162,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'on_change_with_current_policy_owner')
     end_date = fields.Function(
         fields.Date('End Date', states=_STATES, depends=_DEPENDS),
-        'getter_contract_date', 'set_contract_end_date',
+        'getter_contract_date', 'setter_end_date',
         searcher='search_contract_date')
     sub_status = fields.Many2One('contract.sub_status', 'Details on status',
         states={
@@ -183,7 +183,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     start_date = fields.Function(
         fields.Date('Start Date', states=_STATES, depends=_DEPENDS,
             required=True),
-        'getter_contract_date', 'set_contract_start_date',
+        'getter_contract_date', 'setter_start_date',
         searcher='search_contract_date')
     signature_date = fields.Date('Signature Date')
     subscriber_kind = fields.Function(
@@ -258,9 +258,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 [('contract_number',) + tuple(clause[1:])],
                 ]
 
+    def get_date_used_for_contract_end_date(self):
+        # This method should be overriden for example if there is a renewal
+        # or a given date
+        # by default a contract has no end date
+        return None
+
+    def calculate_end_date(self):
+        dates = [self.get_date_used_for_contract_end_date()]
+        dates.append(self.get_maximum_end_date() or datetime.date.max)
+        self.set_end_date(min([x for x in dates if x]))
+
     def calculate(self):
         for option in self.options:
             option.calculate()
+        self.calculate_end_date()
 
     @classmethod
     def update_contract_after_import(cls, contracts):
@@ -434,7 +446,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.product.subscriber_kind
 
     @classmethod
-    def set_contract_start_date(cls, contract_ids, name, value):
+    def setter_start_date(cls, contract_ids, name, value):
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
         to_create, to_write = [], []
@@ -459,7 +471,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             ActivationHistory.write(*to_write)
 
     @classmethod
-    def set_contract_end_date(cls, contracts, name, value):
+    def setter_end_date(cls, contracts, name, value):
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
         to_create, to_write, to_delete = [], [], []
@@ -577,9 +589,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         else:
             return None
 
-    def cap_end_date(self, end_date):
-        return min(end_date, self.get_maximum_end_date() or datetime.date.max)
-
     def set_start_date(self, start_date):
         self.start_date = start_date
         self.update_from_start_date()
@@ -651,7 +660,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.on_change_extra_data()
 
     def before_activate(self, contract_dict=None):
-        pass
+        self.calculate()
 
     @classmethod
     def subscribe_contract(cls, product, party, contract_dict=None):
@@ -1023,6 +1032,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    parent_contract = fields.Function(
+        fields.Many2One('contract', 'Parent Contract'),
+        'on_change_with_parent_contract', searcher='search_parent_contract')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         ondelete='RESTRICT', states={
             'required': Eval('contract_status') == 'active',
@@ -1107,6 +1119,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 'posterior to start date: %s',
                 'end_date_posterior_to_contract': 'End date should be '
                 'anterior to end date of contract: %s',
+                'end_date_posterior_to_automatic_end_date': 'End date should '
+                'be anterior to option automatic end date : %s',
                 })
 
     @classmethod
@@ -1167,6 +1181,11 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def on_change_with_contract_status(self, name=None):
         return self.contract.status if self.contract else ''
 
+    @fields.depends('contract')
+    def on_change_with_parent_contract(self, name=None):
+        if self.contract:
+            return self.contract.id
+
     def get_rec_name(self, name):
         if self.coverage:
             return self.coverage.get_rec_name(name)
@@ -1219,32 +1238,44 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         else:
             for option in options:
                 if end_date > option.start_date:
-                    if not option.contract:
+                    if not option.parent_contract:
                         continue
-                    if end_date <= (option.contract.end_date
+                    if end_date <= (option.parent_contract.end_date
                             or datetime.date.max):
-                        to_write.append(option)
+                        if (not option.automatic_end_date
+                                or option.automatic_end_date > end_date):
+                            to_write.append(option)
+                        else:
+                            cls.raise_user_error(
+                                'end_date_posterior_to_automatic_end_date',
+                                Date.date_as_string(
+                                    option.automatic_end_date),
+                                )
                     else:
                         cls.raise_user_error('end_date_posterior_to_contract',
-                            Date.date_as_string(option.contract.end_date))
+                            Date.date_as_string(
+                                option.parent_contract.end_date))
                 else:
                     cls.raise_user_error('end_date_anterior_to_start_date',
                             Date.date_as_string(option.start_date))
         if to_write:
             cls.write(to_write, {'manual_end_date': end_date})
 
-    def get_end_date(self, name):
+    def get_possible_end_date(self):
+        dates = {}
         if self.manual_end_date:
-            return self.manual_end_date
-        if (self.automatic_end_date and
-                self.automatic_end_date > self.start_date):
-            if self.contract:
-                return min(self.contract.end_date or datetime.date.max,
-                    self.automatic_end_date)
-            else:
-                return self.automatic_end_date
-        if self.contract and self.contract.end_date:
-            return self.contract.end_date
+            dates['manual_date'] = self.manual_end_date
+        if self.automatic_end_date:
+            # If automatic end date is prior start date, we will have a date
+            # before the start date, whisch is strange but not wrong
+            dates['automatic_end_date'] = self.automatic_end_date
+        if self.parent_contract and self.parent_contract.end_date:
+            dates['contract_end_date'] = self.parent_contract.end_date
+        return dates
+
+    def get_end_date(self, name):
+        dates = [x for x in self.get_possible_end_date().itervalues()]
+        return min(dates) if dates else None
 
     def set_automatic_end_date(self):
         self.automatic_end_date = self.calculate_automatic_end_date()
@@ -1260,6 +1291,10 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     def calculate(self):
         self.set_automatic_end_date()
+
+    @classmethod
+    def search_parent_contract(cls, name, clause):
+        return [('contract',) + tuple(clause[1:])]
 
 
 class ContractExtraDataRevision(model._RevisionMixin, model.CoopSQL,
