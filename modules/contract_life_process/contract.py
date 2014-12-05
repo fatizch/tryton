@@ -16,15 +16,14 @@ class Contract:
             return True
         item_desc = item_descs[0]
         subscriber = self.get_policy_owner(self.start_date)
-        for covered_element in getattr(self, 'covered_elements', []):
-            if covered_element.party == subscriber:
-                return True
+        covered_elements = getattr(self, 'covered_elements', [])
+        if covered_elements:
+            return True
+        covered_elements = []
         if (subscriber.is_person and item_desc.kind == 'person'
                 or subscriber.is_company and item_desc.kind == 'company'
                 or item_desc.kind == 'party'):
-            # Delete previous covered element
             CoveredElement = Pool().get('contract.covered_element')
-            CoveredElement.delete(self.covered_elements)
             covered_element = CoveredElement()
             covered_element.party = subscriber
             covered_element.start_date = self.start_date
@@ -32,9 +31,6 @@ class Contract:
             covered_element.main_contract = self
             covered_element.product = self.product
             covered_element.on_change_item_desc()
-            if not getattr(self, 'covered_elements', None):
-                self.covered_elements = [covered_element]
-            else:
-                self.covered_elements = list(self.covered_elements)
-                self.covered_elements.append(covered_element)
+            covered_elements.append(covered_element)
+        self.covered_elements = covered_elements
         return True
