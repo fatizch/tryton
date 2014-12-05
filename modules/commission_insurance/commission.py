@@ -66,6 +66,10 @@ class Plan(export.ExportImportMixin):
         'from_', 'to', 'Plan Relation', size=1)
     reverse_plan_relation = fields.Many2Many('commission_plan-commission_plan',
         'to', 'from_', 'Reverse Plan Relation', size=1)
+    commissioned_products = fields.Function(
+        fields.Many2Many('offered.product', None, None,
+            'Commissioned Products'),
+        'get_commissionned_product', searcher='search_commissioned_products')
 
     @classmethod
     def __setup__(cls):
@@ -98,6 +102,38 @@ class Plan(export.ExportImportMixin):
         if self.code:
             return self.code
         return coop_string.remove_blank_and_invalid_char(self.name)
+
+    def get_commissionned_products(self, name):
+        products = []
+        for line in self.lines:
+            for option in line.options:
+                products.extend([product.id for product in option.products])
+        return list(set(products))
+
+    @classmethod
+    def search_commissioned_products(cls, name, clause):
+        pool = Pool()
+        option = pool.get('offered.option.description').__table__()
+        product_option = \
+            pool.get('offered.product-option.description').__table__()
+        plan_lines = pool.get('commission.plan.line').__table__()
+        plan_lines_coverage = pool.get(
+            'commission.plan.lines-offered.option.description').__table__()
+
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+
+        query_table = product_option.join(option, condition=(
+                product_option.coverage == option.id)
+            ).join(plan_lines_coverage, condition=(
+                plan_lines_coverage.option == option.id)
+            ).join(plan_lines, condition=(
+                plan_lines.id == plan_lines_coverage.plan_line))
+
+        query = query_table.select(product_option.product, where=Operator(
+            plan_lines.plan, getattr(cls, 'id').sql_format(value)))
+
+        return [('id', 'in', query)]
 
 
 class PlanLines(export.ExportImportMixin):

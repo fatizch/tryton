@@ -21,6 +21,8 @@ class Contract:
         'on_change_with_broker_party')
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT',
         domain=[
+            ('type_', '=', 'agent'),
+            ('plan.commissioned_products', '=', Eval('product')),
             If(~Eval('broker_party'),
                 (),
                 ('party', '=', Eval('broker_party')),
