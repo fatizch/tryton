@@ -214,7 +214,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     'invisible': Eval('status') != 'quote'},
                 'button_decline': {
                     'invisible': Eval('status') != 'quote'},
-                    })
+                })
         cls._error_messages.update({
                 'inactive_product_at_date':
                 'Product %s is inactive at date %s',
@@ -236,6 +236,25 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_func_key(self, name):
         return '%s|%s' % ((self.quote_number, self.contract_number))
+
+    @classmethod
+    def copy(cls, contracts, default=None):
+        default = {} if default is None else default.copy()
+        if not Transaction().context.get('copy_mode', None):
+            # The Functional mode is by default through the UI, but could
+            # be overriden through code
+            skips = cls._export_skips() | cls.functional_skips_for_duplicate()
+            for x in skips:
+                default.setdefault(x, None)
+            default.setdefault('status', cls.default_status())
+            with Transaction().set_context(copy_mode='functional'):
+                return super(Contract, cls).copy(contracts, default=default)
+        return super(Contract, cls).copy(contracts, default=default)
+
+    @classmethod
+    def functional_skips_for_duplicate(cls):
+        return set(['quote_number', 'contract_number', 'sub_status',
+            'start_date', 'end_date'])
 
     @classmethod
     def search_func_key(cls, name, clause):
@@ -1118,6 +1137,19 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 'end_date_posterior_to_automatic_end_date': 'End date should '
                 'be anterior to option automatic end date : %s',
                 })
+
+    @classmethod
+    def copy(cls, options, default=None):
+        default = {} if default is None else default.copy()
+        if Transaction().context.get('copy_mode', '') == 'functional':
+            skips = cls._export_skips() | cls.functional_skips_for_duplicate()
+            for x in skips:
+                default.setdefault(x, None)
+        return super(ContractOption, cls).copy(options, default=default)
+
+    @classmethod
+    def functional_skips_for_duplicate(cls):
+        return set(['automatic_end_date'])
 
     @classmethod
     def default_product(cls):

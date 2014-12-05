@@ -395,6 +395,11 @@ class ContractOption:
                 })
 
     @classmethod
+    def _export_skips(cls):
+        return (super(ContractOption, cls)._export_skips() |
+            set(['extra_premium_discounts', 'extra_premium_increases']))
+
+    @classmethod
     def default_all_extra_datas(cls):
         return {}
 
@@ -668,6 +673,19 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         searcher='search_party_code')
 
     multi_mixed_view = options
+
+    @classmethod
+    def copy(cls, instances, default=None):
+        default = {} if default is None else default.copy()
+        if Transaction().context.get('copy_mode', '') == 'functional':
+            skips = cls._export_skips() | cls.functional_skips_for_duplicate()
+            for x in skips:
+                default.setdefault(x, None)
+        return super(CoveredElement, cls).copy(instances, default=default)
+
+    @classmethod
+    def functional_skips_for_duplicate(cls):
+        return set([])
 
     def calculate(self):
         for option in self.options:

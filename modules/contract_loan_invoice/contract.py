@@ -124,6 +124,11 @@ class Contract:
                 })
 
     @classmethod
+    def functional_skips_for_duplicate(cls):
+        return (super(Contract, cls).functional_skips_for_duplicate() |
+            set(['premium_amounts', 'premium_amounts_per_period']))
+
+    @classmethod
     def get_total_premium_amount(cls, contracts, name):
         cursor = Transaction().cursor
         pool = Pool()

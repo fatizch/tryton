@@ -162,6 +162,11 @@ class ContractOption:
         depends=['coverage_family', 'contract_status'])
     multi_mixed_view = loan_shares
 
+    @classmethod
+    def _export_skips(cls):
+        return (super(ContractOption, cls)._export_skips() |
+            set(['multi_mixed_view']))
+
     @fields.depends('coverage', 'loan_shares')
     def on_change_coverage(self):
         super(ContractOption, self).on_change_coverage()

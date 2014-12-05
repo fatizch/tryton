@@ -45,6 +45,24 @@ class Contract(CogProcessFramework):
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
+    @classmethod
+    def copy(cls, contracts, default=None):
+        clones = super(Contract, cls).copy(contracts, default)
+        if Transaction().context.get('copy_mode', 'functional') != 'functional':
+            return clones
+        Process = Pool().get('process')
+        products = set([x.product for x in clones])
+        processes = Process.search([
+                ('for_products', 'in', [x.id for x in products]),
+                ('kind', '=', 'subscription'),
+                ])
+        for clone in clones:
+            process = [x for x in processes if clone.product in x.for_products]
+            if process:
+                clone.current_state = process[0].all_steps[0]
+                clone.save()
+        return clones
+
     @fields.depends('com_product')
     def on_change_with_product_desc(self, name=None):
         return self.com_product.description if self.com_product else ''

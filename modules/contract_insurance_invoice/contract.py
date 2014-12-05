@@ -839,11 +839,21 @@ class CoveredElement:
     premiums = fields.One2Many('contract.premium', 'covered_element',
         'Premiums')
 
+    @classmethod
+    def functional_skips_for_duplicate(cls):
+        return (super(CoveredElement, cls).functional_skips_for_duplicate() |
+            set(['premiums']))
+
 
 class ContractOption:
     __name__ = 'contract.option'
 
     premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
+
+    @classmethod
+    def functional_skips_for_duplicate(cls):
+        return (super(ContractOption, cls).functional_skips_for_duplicate() |
+        set(['premiums']))
 
 
 class ExtraPremium:

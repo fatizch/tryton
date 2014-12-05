@@ -25,6 +25,11 @@ class Contract:
         states={'readonly': Eval('status') != 'quote'},
         depends=['status'])
 
+    @classmethod
+    def functional_skips_for_duplicate(cls):
+        return (super(Contract, cls).functional_skips_for_duplicate() |
+            set(['attachments']))
+
     @fields.depends('document_request_lines')
     def on_change_with_doc_received(self, name=None):
         if not self.document_request_lines:
