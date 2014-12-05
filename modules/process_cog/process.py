@@ -832,6 +832,13 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
             ], depends=['processes'], required=True, ondelete='RESTRICT')
 
     @classmethod
+    def copy(cls, steps, default=None):
+        if default is None:
+            default = {}
+        default.setdefault('processes', None)
+        return super(ProcessStep, cls).copy(steps, default=default)
+
+    @classmethod
     def _export_skips(cls):
         result = super(ProcessStep, cls)._export_skips()
         result.add('processes')
