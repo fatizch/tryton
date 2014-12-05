@@ -26,14 +26,20 @@ class Contract:
         depends=['status'])
 
     @classmethod
+    def __setup__(cls):
+        super(Contract, cls).__setup__()
+        cls._error_messages.update({
+                'missing_required_document':
+                'Some required documents are missing.',
+                })
+
+    @classmethod
     def functional_skips_for_duplicate(cls):
         return (super(Contract, cls).functional_skips_for_duplicate() |
             set(['attachments']))
 
     @fields.depends('document_request_lines')
     def on_change_with_doc_received(self, name=None):
-        if not self.document_request_lines:
-            return False
         for doc in self.document_request_lines:
             if not doc.received:
                 return False
@@ -119,3 +125,8 @@ class Contract:
         for contract in contracts:
             contract.init_subscription_document_request()
             contract.link_attachments_to_requests()
+
+    def before_activate(self, contract_dict=None):
+        if not self.doc_received:
+            self.raise_user_error('missing_required_document')
+        super(Contract, self).before_activate()
