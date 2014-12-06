@@ -27,7 +27,7 @@ class Contract:
                 (),
                 ('party', '=', Eval('broker_party')),
                 )],
-        states=_STATES, depends=_DEPENDS + ['broker_party'])
+        states=_STATES, depends=_DEPENDS + ['broker_party', 'product'])
 
     def get_invoice(self, start, end, billing_information):
         invoice = super(Contract, self).get_invoice(start, end,
