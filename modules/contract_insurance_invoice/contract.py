@@ -297,7 +297,12 @@ class Contract:
         cls.clean_up_contract_invoices(contracts, from_date=datetime.date.min)
         contract_invoices = []
         for contract in contracts:
-            contract_invoices += cls.invoice([contract], contract.start_date)
+            invoices = cls.invoice([contract], contract.start_date)
+            for invoice in invoices:
+                # We need to update the function field as the contract has not
+                # been stored since it has been activated
+                invoice.invoice.contract = contract
+            contract_invoices += invoices
         if not and_post:
             return
         Invoice.post([x.invoice for x in contract_invoices])
