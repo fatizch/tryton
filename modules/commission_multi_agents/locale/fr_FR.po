@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -78,4 +78,4 @@ msgstr "LIen Plan de Commissionnement - Protocole de Commission"
 
 msgctxt "view:commission.plan:"
 msgid "Commissioned Agents"
-msgstr "Protocoles de commissionnement des courtiers commissionnés"
+msgstr "Protocoles de commissionnement liés"
