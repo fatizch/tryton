@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -208,6 +208,10 @@ msgctxt "field:broker,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:commission,broker:"
+msgid "Broker"
+msgstr "Courtier"
+
 msgctxt "field:commission,commissionned_contract:"
 msgid "Commissioned Contract"
 msgstr "Contrat commissionné"
@@ -216,9 +220,17 @@ msgctxt "field:commission,commissionned_option:"
 msgid "Commissioned Option"
 msgstr "Option commissionnée"
 
+msgctxt "field:commission,party:"
+msgid "Party"
+msgstr "Acteur"
+
 msgctxt "field:commission.agent,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:commission.plan,broker_plan:"
+msgid "Broker Plan"
+msgstr "Plan Courtier"
 
 msgctxt "field:commission.plan,code:"
 msgid "Code"
@@ -228,13 +240,17 @@ msgctxt "field:commission.plan,commissioned_products:"
 msgid "Commissioned Products"
 msgstr "Produits commissionés"
 
+msgctxt "field:commission.plan,commissioned_products_name:"
+msgid "Commissioned Products"
+msgstr "Produits commissionés"
+
 msgctxt "field:commission.plan,insurer_plan:"
 msgid "Insurer Plan"
 msgstr "Plan lié"
 
-msgctxt "field:commission.plan,broker_plan:"
-msgid "Broker Plan"
-msgstr "Plan Courtier"
+msgctxt "field:commission.plan,type_:"
+msgid "Type"
+msgstr "Type"
 
 msgctxt "field:commission.plan,xml_id:"
 msgid "XML Id"
@@ -388,6 +404,18 @@ msgctxt "model:ir.action,name:act_broker_form"
 msgid "Brokers"
 msgstr "Courtiers"
 
+msgctxt "model:ir.action,name:act_commission_relate_form"
+msgid "Commission"
+msgstr "Commission"
+
+msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_broker"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_insurer"
+msgid "Insurer"
+msgstr "Assureur"
+
 msgctxt "model:ir.ui.menu,name:menu_broker_form"
 msgid "Brokers"
 msgstr "Courtiers"
@@ -395,6 +423,14 @@ msgstr "Courtiers"
 msgctxt "model:ir.ui.menu,name:menu_commission_insurer_form"
 msgid "Insurers"
 msgstr "Assureurs"
+
+msgctxt "selection:commission.plan,type_:"
+msgid "Broker"
+msgstr "Courtier"
+
+msgctxt "selection:commission.plan,type_:"
+msgid "Insurer"
+msgstr "Assureur"
 
 msgctxt "view:broker:"
 msgid "Broker"
@@ -405,12 +441,20 @@ msgid "Brokers"
 msgstr "Courtiers"
 
 msgctxt "view:commission.plan:"
+msgid "Insurer Plan"
+msgstr "Plan Assureur"
+
+msgctxt "view:commission.plan:"
 msgid "Lines"
 msgstr "Lignes"
 
 msgctxt "view:commission.plan:"
-msgid "Insurer Plan"
-msgstr "Plan Assureur"
+msgid "Plan Relation"
+msgstr ""
+
+msgctxt "view:commission:"
+msgid "Amount"
+msgstr "Montant"
 
 msgctxt "view:party.party:"
 msgid "Broker Agents"
