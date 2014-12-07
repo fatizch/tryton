@@ -1178,14 +1178,14 @@ class PremiumTax(ModelSQL):
 
 class InvoiceContractStart(ModelView):
     'Invoice Contract'
-    __name__ = 'contract.invoice.start'
+    __name__ = 'contract.do_invoice.start'
     up_to_date = fields.Date('Up To Date', required=True)
 
 
 class InvoiceContract(Wizard):
     'Invoice Contract'
-    __name__ = 'contract.invoice'
-    start = StateView('contract.invoice.start',
+    __name__ = 'contract.do_invoice'
+    start = StateView('contract.do_invoice.start',
         'contract_insurance_invoice.invoice_start_view_form', [
             Button('Cancel', 'end', icon='tryton-cancel'),
             Button('Ok', 'invoice', icon='tryton-ok', default=True),

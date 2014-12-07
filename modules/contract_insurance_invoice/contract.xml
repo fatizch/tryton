@@ -88,14 +88,14 @@
         </record>
 
         <record model="ir.ui.view" id="invoice_start_view_form">
-            <field name="model">contract.invoice.start</field>
+            <field name="model">contract.do_invoice.start</field>
             <field name="type">form</field>
             <field name="name">invoice_start_form</field>
         </record>
 
         <record model="ir.action.wizard" id="act_invoice">
             <field name="name">Invoice Contracts</field>
-            <field name="wiz_name">contract.invoice</field>
+            <field name="wiz_name">contract.do_invoice</field>
             <field name="model">contract</field>
         </record>
         <record model="ir.action.keyword" id="act_invoice_keyword1">

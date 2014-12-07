@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -570,11 +570,11 @@ msgctxt "field:contract.invoice.post,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.invoice.start,id:"
+msgctxt "field:contract.do_invoice.start,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:contract.invoice.start,up_to_date:"
+msgctxt "field:contract.do_invoice.start,up_to_date:"
 msgid "Up To Date"
 msgstr "Jusqu'au"
 
@@ -1002,7 +1002,7 @@ msgctxt "model:contract.invoice.post,name:"
 msgid "Post Contract Invoice Batch"
 msgstr "Batch d'émission des quittances"
 
-msgctxt "model:contract.invoice.start,name:"
+msgctxt "model:contract.do_invoice.start,name:"
 msgid "Invoice Contract"
 msgstr "Génération des quittances"
 
@@ -1271,7 +1271,7 @@ msgctxt "view:contract.covered_element:"
 msgid "Premiums"
 msgstr "Prime"
 
-msgctxt "view:contract.invoice.start:"
+msgctxt "view:contract.do_invoice.start:"
 msgid "Invoice Contract"
 msgstr "Génération des quittances"
 
@@ -1335,11 +1335,11 @@ msgctxt "view:offered.product:"
 msgid "Billing Modes"
 msgstr "Modes de quittancement"
 
-msgctxt "wizard_button:contract.invoice,start,end:"
+msgctxt "wizard_button:contract.do_invoice,start,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:contract.invoice,start,invoice:"
+msgctxt "wizard_button:contract.do_invoice,start,invoice:"
 msgid "Ok"
 msgstr "Ok"
 
