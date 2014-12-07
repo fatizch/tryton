@@ -6,14 +6,23 @@
     </xpath>
     <xpath expr="/form/field[@name='lines']" position="replace">
         <notebook colspan="4">
-            <page string="Lines" id="lines">
+            <page name="lines">
                 <field name="lines" colspan="4" view_ids="commission.plan_line_view_list_sequence"/>
             </page>
-            <page string="Plan Relation" id="plan_relations">
-                <field name="plan_relation"/>
-                <field name="reverse_plan_relation"/>
+            <page name="commissioned_products">
+                <field name="commissioned_products"/>
             </page>
         </notebook>
+    </xpath>
+    <xpath expr="/form/notebook" position="before">
+        <label name="type_"/>
+        <field name="type_"/>
+        <newline/>
+        <label name="insurer_plan"/>
+        <field name="insurer_plan"/>
+        <newline/>
+        <label name="broker_plan"/>
+        <field name="broker_plan"/>
     </xpath>
 </data>
 

@@ -24,13 +24,31 @@
             <field name="type">tree</field>
             <field name="inherit" ref="commission.commission_view_list"/>
             <field name="name">commission_list</field>
+            </record>
+        <record model="ir.action.act_window.domain" id="act_commission_domain_broker">
+            <field name="name">Broker</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain">[('type_', '=', 'out')]</field>
+            <field name="act_window" ref="commission.act_commission_form"/>
         </record>
-
+        <record model="ir.action.act_window.domain" id="act_commission_domain_insurer">
+            <field name="name">Insurer</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">[('type_', '=', 'in')]</field>
+            <field name="act_window" ref="commission.act_commission_form"/>
+        </record>
         <record model="ir.ui.view" id="plan_view_form">
             <field name="model">commission.plan</field>
             <field name="type">form</field>
             <field name="inherit" ref="commission.plan_view_form"/>
             <field name="name">plan_form</field>
         </record>
+        <record model="ir.ui.view" id="plan_view_list">
+            <field name="model">commission.plan</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="commission.plan_view_list"/>
+            <field name="name">plan_list</field>
+        </record>
+
     </data>
 </tryton>

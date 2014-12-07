@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree" position="inside">
+        <field name="type_"/>
+        <field name="commissioned_products_name"/>
+    </xpath>
+</data>

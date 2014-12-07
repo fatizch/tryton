@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
 
@@ -12,4 +13,6 @@ class Plan:
     __name__ = 'commission.plan'
 
     rule_engine_key = fields.Char('Rule Engine Key',
-        help='key to retrieve the commission plan in rule engine algorithm')
+        states={'invisible': Eval('type_') != 'agent'},
+        help='key to retrieve the commission plan in rule engine algorithm',
+        depends=['type_'])

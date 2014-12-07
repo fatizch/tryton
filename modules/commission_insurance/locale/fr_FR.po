@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -228,13 +228,13 @@ msgctxt "field:commission.plan,commissioned_products:"
 msgid "Commissioned Products"
 msgstr "Produits commissionés"
 
-msgctxt "field:commission.plan,plan_relation:"
-msgid "Plan Relation"
+msgctxt "field:commission.plan,insurer_plan:"
+msgid "Insurer Plan"
 msgstr "Plan lié"
 
-msgctxt "field:commission.plan,reverse_plan_relation:"
-msgid "Reverse Plan Relation"
-msgstr "Plan lié inverse"
+msgctxt "field:commission.plan,broker_plan:"
+msgid "Broker Plan"
+msgstr "Plan Courtier"
 
 msgctxt "field:commission.plan,xml_id:"
 msgid "XML Id"
@@ -409,8 +409,8 @@ msgid "Lines"
 msgstr "Lignes"
 
 msgctxt "view:commission.plan:"
-msgid "Plan Relation"
-msgstr "Plan lié"
+msgid "Insurer Plan"
+msgstr "Plan Assureur"
 
 msgctxt "view:party.party:"
 msgid "Broker Agents"

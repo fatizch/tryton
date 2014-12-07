@@ -1,4 +1,6 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval
+
 from trytond.modules.cog_utils import fields, model, export, coop_string
 
 __all__ = [
@@ -20,6 +22,17 @@ class Commission:
     commissionned_option = fields.Function(
         fields.Many2One('contract.option', 'Commissioned Option'),
         'get_commissionned_option')
+    party = fields.Function(
+        fields.Many2One('party.party', 'Party'),
+        'get_party', searcher='search_party')
+    broker = fields.Function(
+        fields.Many2One('broker', 'Broker'),
+        'get_broker', searcher='search_broker')
+
+    @classmethod
+    def __setup__(cls):
+        super(Commission, cls).__setup__()
+        cls.type_.searcher = 'search_type_'
 
     def get_commissionned_option(self, name):
         if (self.origin and self.origin.details[0] and
@@ -30,6 +43,13 @@ class Commission:
         if (self.origin and self.origin.details[0] and
                 getattr(self.origin.details[0], 'option', None)):
             return self.origin.details[0].option.parent_contract.id
+
+    def get_party(self, name):
+        return self.agent.party.id if self.agent else None
+
+    def get_broker(self, name):
+        return (self.agent.party.broker_role[0].id
+            if self.agent and self.agent.party.broker_role else None)
 
     def _group_to_invoice_key(self):
         direction = {
@@ -56,20 +76,47 @@ class Commission:
             Invoice.write(in_credit_note_invoice, {'type': 'out_credit_note'})
         return invoices
 
+    @classmethod
+    def search_type_(cls, name, clause):
+        clause[2] = {'out': 'agent', 'in': 'principal'}.get(clause[2], '')
+        return [('agent.type_',) + tuple(clause[1:])],
+
+    @classmethod
+    def search_party(cls, name, clause):
+        return [('agent.party',) + tuple(clause[1:])],
+
+    @classmethod
+    def search_broker(cls, name, clause):
+        return [('agent.party.broker_role',) + tuple(clause[1:])],
+
 
 class Plan(export.ExportImportMixin):
     __name__ = 'commission.plan'
     _func_key = 'code'
 
     code = fields.Char('Code', required=True)
-    plan_relation = fields.Many2Many('commission_plan-commission_plan',
-        'from_', 'to', 'Plan Relation', size=1)
-    reverse_plan_relation = fields.Many2Many('commission_plan-commission_plan',
-        'to', 'from_', 'Reverse Plan Relation', size=1)
+    type_ = fields.Selection([
+            ('agent', 'Broker'),
+            ('principal', 'Insurer'),
+            ], 'Type', required=True)
+    insurer_plan = fields.One2One('commission_plan-commission_plan',
+        'from_', 'to', 'Insurer Plan',
+        states={'invisible': Eval('type_') != 'agent'},
+        domain=[('type_', '=', 'principal')],
+        depends=['type_'])
+    broker_plan = fields.One2One('commission_plan-commission_plan',
+        'to', 'from_', 'Broker Plan',
+        states={'invisible': Eval('type_') != 'principal'},
+        domain=[('type_', '=', 'agent')],
+        depends=['type_'])
     commissioned_products = fields.Function(
         fields.Many2Many('offered.product', None, None,
             'Commissioned Products'),
-        'get_commissionned_product', searcher='search_commissioned_products')
+        'get_commissionned_products', searcher='search_commissioned_products')
+    commissioned_products_name = fields.Function(
+        fields.Char('Commissioned Products'),
+        'get_commissionned_products_name',
+        searcher='search_commissioned_products')
 
     @classmethod
     def __setup__(cls):
@@ -77,6 +124,10 @@ class Plan(export.ExportImportMixin):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
+
+    @staticmethod
+    def default_type_():
+        return 'agent'
 
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product)
@@ -110,30 +161,12 @@ class Plan(export.ExportImportMixin):
                 products.extend([product.id for product in option.products])
         return list(set(products))
 
+    def get_commissionned_products_name(self, name):
+        return ', '.join([x.name for x in self.commissioned_products])
+
     @classmethod
     def search_commissioned_products(cls, name, clause):
-        pool = Pool()
-        option = pool.get('offered.option.description').__table__()
-        product_option = \
-            pool.get('offered.product-option.description').__table__()
-        plan_lines = pool.get('commission.plan.line').__table__()
-        plan_lines_coverage = pool.get(
-            'commission.plan.lines-offered.option.description').__table__()
-
-        _, operator, value = clause
-        Operator = fields.SQL_OPERATORS[operator]
-
-        query_table = product_option.join(option, condition=(
-                product_option.coverage == option.id)
-            ).join(plan_lines_coverage, condition=(
-                plan_lines_coverage.option == option.id)
-            ).join(plan_lines, condition=(
-                plan_lines.id == plan_lines_coverage.plan_line))
-
-        query = query_table.select(product_option.product, where=Operator(
-            plan_lines.plan, getattr(cls, 'id').sql_format(value)))
-
-        return [('id', 'in', query)]
+        return [('lines.options.products',) + tuple(clause[1:])]
 
 
 class PlanLines(export.ExportImportMixin):
@@ -179,6 +212,13 @@ class Agent(export.ExportImportMixin):
     __name__ = 'commission.agent'
 
     @classmethod
+    def __setup__(cls):
+        super(Agent, cls).__setup__()
+        cls.plan.domain = [('type_', '=', Eval('type_'))]
+        cls.plan.depends = ['type_']
+        cls.plan.required = True
+
+    @classmethod
     def is_master_object(cls):
         return True
 
@@ -186,3 +226,6 @@ class Agent(export.ExportImportMixin):
     def _export_light(cls):
         return (super(Agent, cls)._export_light() |
             set(['company', 'currency']))
+
+    def get_rec_name(self, name):
+        return self.plan.rec_name

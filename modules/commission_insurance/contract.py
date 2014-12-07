@@ -26,7 +26,8 @@ class Contract:
             If(~Eval('broker_party'),
                 (),
                 ('party', '=', Eval('broker_party')),
-                )],
+                )
+            ],
         states=_STATES, depends=_DEPENDS + ['broker_party', 'product'])
 
     def get_invoice(self, start, end, billing_information):
@@ -37,8 +38,8 @@ class Contract:
 
     def find_insurer_agent_domain(self, line):
         domain = [('type_', '=', 'principal')]
-        if self.agent and self.agent.plan.plan_relation:
-            domain.append(('plan', '=', self.agent.plan.plan_relation[0]))
+        if self.agent and self.agent.plan.insurer_plan:
+            domain.append(('plan', '=', self.agent.plan.insurer_plan))
         coverage = getattr(line.details[0], 'rated_entity', None)
         if coverage and getattr(coverage, 'insurer', None):
             domain.append(('party', '=', coverage.insurer.party))
@@ -48,8 +49,8 @@ class Contract:
 
     def get_insurer_pattern(self, line):
         pattern = {}
-        if self.agent and self.agent.plan.plan_relation:
-            pattern['plan'] = self.agent.plan.plan_relation[0]
+        if self.agent and self.agent.plan.insurer_plan:
+            pattern['plan'] = self.agent.plan.insurer_plan
         coverage = getattr(line.details[0], 'rated_entity', None)
         if coverage:
             pattern['option'] = coverage
