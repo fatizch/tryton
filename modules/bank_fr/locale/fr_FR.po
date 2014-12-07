@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:bank.account.number:"
-msgid "Invalid RIB number : %s"
-msgstr ""
-
 msgctxt "error:bank:"
 msgid "The bank code %s must contain 5 numeric chars."
 msgstr "Le code banque %s doit contenir 5 caractères numériques"
@@ -13,23 +9,3 @@ msgstr "Le code banque %s doit contenir 5 caractères numériques"
 msgctxt "field:bank,code_fr:"
 msgid "Bank Code"
 msgstr "Code Banque"
-
-msgctxt "field:bank.account.number,account_number:"
-msgid "Account Number"
-msgstr "Numéro de Compte"
-
-msgctxt "field:bank.account.number,bank_code:"
-msgid "Bank Code"
-msgstr "Code Banque"
-
-msgctxt "field:bank.account.number,branch_code:"
-msgid "Branch Code"
-msgstr "Code Guichet"
-
-msgctxt "field:bank.account.number,key:"
-msgid "Key"
-msgstr "Clé"
-
-msgctxt "selection:bank.account.number,type:"
-msgid "RIB"
-msgstr ""

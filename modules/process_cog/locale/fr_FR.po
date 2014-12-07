@@ -148,7 +148,7 @@ msgstr "Créé par"
 
 msgctxt "field:ir.ui.view.description,field_childs:"
 msgid "Children field"
-msgstr ""
+msgstr "Champ enfants"
 
 msgctxt "field:ir.ui.view.description,for_step:"
 msgid "For Step"
@@ -213,6 +213,10 @@ msgstr "Mis à jour par"
 msgctxt "field:ir.ui.view.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:process,close_tab_on_completion:"
+msgid "Close Tab On Completion"
+msgstr "Fermer l'onglet à la fin"
 
 msgctxt "field:process,create_date_:"
 msgid "Creation date"
@@ -388,11 +392,11 @@ msgstr "Identifiant XML"
 
 msgctxt "field:process.transition,choice_if_false:"
 msgid "Transition if False"
-msgstr " "
+msgstr "Transistion si faux "
 
 msgctxt "field:process.transition,choice_if_true:"
 msgid "Transition if True"
-msgstr " "
+msgstr "Transition si vrai"
 
 msgctxt "field:process.transition,create_date_:"
 msgid "Creation date"
@@ -400,11 +404,11 @@ msgstr "Creation date"
 
 msgctxt "field:process.transition,pyson_choice:"
 msgid "Choice"
-msgstr " "
+msgstr "Choix"
 
 msgctxt "field:process.transition,pyson_description:"
 msgid "Pyson Description"
-msgstr " "
+msgstr "Descriptin Pyson"
 
 msgctxt "field:process.transition,xml_id:"
 msgid "XML Id"
@@ -412,7 +416,7 @@ msgstr "Identifiant XML"
 
 msgctxt "model:ir.action,name:act_end_process"
 msgid "End Process"
-msgstr ""
+msgstr "Fin du processus"
 
 msgctxt "model:ir.action,name:act_resume_process"
 msgid "Resume Current Process"
@@ -424,7 +428,7 @@ msgstr "Descripteur de Vue XML"
 
 msgctxt "model:process.log,name:"
 msgid "Process Log"
-msgstr ""
+msgstr "Trace du processus"
 
 msgctxt "model:process.start,name:"
 msgid "Process Start"
@@ -464,7 +468,7 @@ msgstr "Descripteurs de Vue"
 
 msgctxt "view:process.log:"
 msgid "Log"
-msgstr ""
+msgstr "Trace"
 
 msgctxt "view:process.log:"
 msgid "Logs"
@@ -484,7 +488,7 @@ msgstr "Démarrer le processus"
 
 msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
 msgid "Start Process (_k)"
-msgstr "Démarrer le processus (_k)"
+msgstr "Démarrer Processus (_k)"
 
 msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
 msgid "Cancel"

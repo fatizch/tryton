@@ -40,11 +40,11 @@ msgstr ""
 
 msgctxt "error:extra_data:"
 msgid "Expected key %s to be set in field %s of %s"
-msgstr ""
+msgstr "%s doit être renseigné dans le champ %s de %s"
 
 msgctxt "error:extra_data:"
 msgid "Invalid value %s for key %s in field %s of %s"
-msgstr ""
+msgstr "Valeur invalide %s pour %s du champ %s de %s"
 
 msgctxt "error:extra_data:"
 msgid "The code must be unique!"
@@ -68,6 +68,24 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
+msgctxt "error:offered.option.description.ending_rule:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:offered.option.description.ending_rule:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
 msgctxt "error:offered.option.description.excluded:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
@@ -93,24 +111,6 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:offered.option.description.required:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:offered.option.description.rule:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:offered.option.description.rule:"
 msgid ""
 "Cannot import : the following objects:\n"
 "%s\n"
@@ -304,7 +304,7 @@ msgstr "Nom"
 
 msgctxt "field:extra_data,sub_data_config_kind:"
 msgid "Sub Data Config Kind"
-msgstr ""
+msgstr "Configuration de la sous donnée"
 
 msgctxt "field:extra_data,sub_datas:"
 msgid "Sub Data"
@@ -542,10 +542,6 @@ msgctxt "field:offered.option.description,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:offered.option.description,rules:"
-msgid "Rules"
-msgstr "Règles"
-
 msgctxt "field:offered.option.description,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -626,6 +622,54 @@ msgctxt "field:offered.option.description-extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:offered.option.description.ending_rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description.ending_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.ending_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.ending_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.ending_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description.ending_rule,kind:"
+msgid "Rule Kind"
+msgstr "Type de règle"
+
+msgctxt "field:offered.option.description.ending_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.ending_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.option.description.ending_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.option.description.ending_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description.ending_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description.ending_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:offered.option.description.excluded,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -640,7 +684,7 @@ msgstr "Créé par"
 
 msgctxt "field:offered.option.description.excluded,from_option_desc:"
 msgid "From Option Description"
-msgstr ""
+msgstr "De l'option"
 
 msgctxt "field:offered.option.description.excluded,id:"
 msgid "ID"
@@ -652,7 +696,7 @@ msgstr "Nom"
 
 msgctxt "field:offered.option.description.excluded,to_option_desc:"
 msgid "To Option Description"
-msgstr ""
+msgstr "Vers Option"
 
 msgctxt "field:offered.option.description.excluded,write_date:"
 msgid "Write Date"
@@ -680,7 +724,7 @@ msgstr "Créé par"
 
 msgctxt "field:offered.option.description.required,from_option_desc:"
 msgid "From Option Description"
-msgstr ""
+msgstr "Depuis la garantie"
 
 msgctxt "field:offered.option.description.required,id:"
 msgid "ID"
@@ -692,7 +736,7 @@ msgstr "Nom"
 
 msgctxt "field:offered.option.description.required,to_option_desc:"
 msgid "To Option Description"
-msgstr ""
+msgstr "Vers l'option"
 
 msgctxt "field:offered.option.description.required,write_date:"
 msgid "Write Date"
@@ -703,54 +747,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:offered.option.description.required,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered.option.description.rule,coverage:"
-msgid "Coverage"
-msgstr "Garantie"
-
-msgctxt "field:offered.option.description.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:offered.option.description.rule,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:offered.option.description.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.option.description.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.option.description.rule,kind:"
-msgid "Rule Kind"
-msgstr "Type de règle"
-
-msgctxt "field:offered.option.description.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.option.description.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.option.description.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.option.description.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.option.description.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.option.description.rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1166,6 +1162,10 @@ msgctxt "model:offered.option.description-extra_data,name:"
 msgid "Relation between OptionDescription and Extra Data"
 msgstr "Relation Description d'Option - Données Complémentaires"
 
+msgctxt "model:offered.option.description.ending_rule,name:"
+msgid "Option Description Ending Rule"
+msgstr "Règle de fin d'option"
+
 msgctxt "model:offered.option.description.excluded,name:"
 msgid "Option Description Excluded"
 msgstr "Option Exclue"
@@ -1173,10 +1173,6 @@ msgstr "Option Exclue"
 msgctxt "model:offered.option.description.required,name:"
 msgid "Option Description Required"
 msgstr "Option Requise"
-
-msgctxt "model:offered.option.description.rule,name:"
-msgid "Option Description Rule"
-msgstr "Règles d'une garantie"
 
 msgctxt "model:offered.package,name:"
 msgid "Package"
@@ -1318,13 +1314,9 @@ msgctxt "selection:offered.option.description,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered.option.description.rule,kind:"
+msgctxt "selection:offered.option.description.ending_rule,kind:"
 msgid ""
 msgstr " "
-
-msgctxt "selection:offered.option.description.rule,kind:"
-msgid "Ending"
-msgstr "Résiliation"
 
 msgctxt "selection:offered.product,subscriber_kind:"
 msgid "All"
@@ -1378,7 +1370,7 @@ msgctxt "view:offered.configuration:"
 msgid "Offered Configuration"
 msgstr "Administration produit"
 
-msgctxt "view:offered.option.description.rule:"
+msgctxt "view:offered.option.description.ending_rule:"
 msgid "Rule"
 msgstr "Règle"
 

@@ -207,6 +207,10 @@ msgctxt "error:endorsement.start:"
 msgid "You cannot start an endorsement on a non-active contract !"
 msgstr "Vous ne pouvez démarrer un avenant sur un contrat non actif!"
 
+msgctxt "field:contract,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
 msgctxt "field:contract,latest_endorsement:"
 msgid "Last Endorsement"
 msgstr "Dernier avenant"
@@ -329,7 +333,7 @@ msgstr "Options"
 
 msgctxt "field:endorsement.contract,rec_name:"
 msgid "Name"
-msgstr "Nom"
+msgstr "Numéro"
 
 msgctxt "field:endorsement.contract,state:"
 msgid "State"
@@ -1376,7 +1380,3 @@ msgstr "Précédent"
 msgctxt "wizard_button:endorsement.start,summary,suspend:"
 msgid "Save"
 msgstr "Sauvegarder"
-
-msgctxt "field:endorsement.part,post_apply_actions:"
-msgid "Post Apply Actions"
-msgstr "Actions post-application"

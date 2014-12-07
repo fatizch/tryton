@@ -1,0 +1,89 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.invoice.logging:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:account.invoice.logging:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:account.invoice.logging,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.invoice.logging,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.invoice.logging,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.invoice.logging,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.invoice.logging,invoice:"
+msgid "Invoice"
+msgstr "Quittance"
+
+msgctxt "field:account.invoice.logging,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.invoice.logging,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:account.invoice.logging,state_date:"
+msgid "State Date"
+msgstr "Date de l'état"
+
+msgctxt "field:account.invoice.logging,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.invoice.logging,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.invoice.logging,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:account.invoice.logging,name:"
+msgid "Invoice Logging"
+msgstr "Enregistrement des quittances"
+
+msgctxt "selection:account.invoice.logging,state:"
+msgid "Canceled"
+msgstr "Annulé"
+
+msgctxt "selection:account.invoice.logging,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:account.invoice.logging,state:"
+msgid "Paid"
+msgstr "Payée"
+
+msgctxt "selection:account.invoice.logging,state:"
+msgid "Posted"
+msgstr "Emise"
+
+msgctxt "selection:account.invoice.logging,state:"
+msgid "Validated"
+msgstr "Validé"

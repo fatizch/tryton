@@ -70,7 +70,7 @@ msgstr "Identifiant XML"
 
 msgctxt "model:offered.product-clause,name:"
 msgid "Product Clause Relation"
-msgstr ""
+msgstr "Relation produit - clause"
 
 msgctxt "view:offered.option.description:"
 msgid "Clause"

@@ -16,15 +16,15 @@ msgstr "Résultats du calcul"
 
 msgctxt "field:ir.model.debug.model_info,field_infos:"
 msgid "Fields Infos"
-msgstr ""
+msgstr "Information des champs"
 
 msgctxt "field:ir.model.debug.model_info,filter_value:"
 msgid "Filter Value"
-msgstr ""
+msgstr "Filtrer la valeur"
 
 msgctxt "field:ir.model.debug.model_info,hide_functions:"
 msgid "Hide Functions"
-msgstr ""
+msgstr "Cacher les champs fonctions"
 
 msgctxt "field:ir.model.debug.model_info,id:"
 msgid "ID"
@@ -52,7 +52,7 @@ msgstr "Domaine"
 
 msgctxt "field:ir.model.debug.model_info.field_info,has_domain:"
 msgid "Has domain"
-msgstr ""
+msgstr "A un domaine"
 
 msgctxt "field:ir.model.debug.model_info.field_info,id:"
 msgid "ID"
@@ -64,39 +64,39 @@ msgstr "id à calculer"
 
 msgctxt "field:ir.model.debug.model_info.field_info,is_function:"
 msgid "Is Function"
-msgstr ""
+msgstr "Est un champ fonction"
 
 msgctxt "field:ir.model.debug.model_info.field_info,is_invisible:"
 msgid "Is invisible"
-msgstr ""
+msgstr "Est invisible"
 
 msgctxt "field:ir.model.debug.model_info.field_info,is_readonly:"
 msgid "Is readonly"
-msgstr ""
+msgstr "Est en lecture seule"
 
 msgctxt "field:ir.model.debug.model_info.field_info,is_required:"
 msgid "Is required"
-msgstr ""
+msgstr "Est obligatoire"
 
 msgctxt "field:ir.model.debug.model_info.field_info,kind:"
 msgid "Field type"
-msgstr ""
+msgstr "Type de champ"
 
 msgctxt "field:ir.model.debug.model_info.field_info,name:"
 msgid "Field name"
-msgstr ""
+msgstr "Nom du champ"
 
 msgctxt "field:ir.model.debug.model_info.field_info,state_invisible:"
 msgid "State Invisible"
-msgstr ""
+msgstr "Etat invisible"
 
 msgctxt "field:ir.model.debug.model_info.field_info,state_readonly:"
 msgid "State Readonly"
-msgstr ""
+msgstr "Etat en lecture seule"
 
 msgctxt "field:ir.model.debug.model_info.field_info,state_required:"
 msgid "State Required"
-msgstr ""
+msgstr "Etat requis"
 
 msgctxt "field:ir.model.debug.model_info.field_info,string:"
 msgid "String"
@@ -104,7 +104,7 @@ msgstr "Nom"
 
 msgctxt "field:ir.model.debug.model_info.field_info,target_model:"
 msgid "Target Model"
-msgstr ""
+msgstr "Modèle cible"
 
 msgctxt "help:ir.model.debug.model_info,to_evaluate:"
 msgid "Use the 'instance' keyword to get the instanciated model"
@@ -112,7 +112,7 @@ msgstr "Utiliser l'instance keyword pour avoir le modèle instancié"
 
 msgctxt "model:debug.visualize,name:"
 msgid "Debug Visualize"
-msgstr ""
+msgstr "Visualisation du débogage"
 
 msgctxt "model:ir.action,name:act_debug"
 msgid "Debug"
@@ -120,7 +120,7 @@ msgstr "Debug"
 
 msgctxt "model:ir.action,name:act_model_debug"
 msgid "Debug Model"
-msgstr ""
+msgstr "Débogage de modèle"
 
 msgctxt "model:ir.model.debug.model_info,name:"
 msgid "Model Name"
@@ -128,7 +128,7 @@ msgstr "Nom du modèle"
 
 msgctxt "model:ir.model.debug.model_info.field_info,name:"
 msgid "Field Info"
-msgstr ""
+msgstr "Information du champ"
 
 msgctxt "model:ir.ui.menu,name:menu_debug"
 msgid "Debug"
@@ -136,7 +136,7 @@ msgstr "Debug"
 
 msgctxt "model:ir.ui.menu,name:menu_model_debug"
 msgid "Model Debug"
-msgstr ""
+msgstr "Débogage de modèle"
 
 msgctxt "selection:ir.model.debug.model_info,filter_value:"
 msgid "Kind"
@@ -152,11 +152,11 @@ msgstr "Nom"
 
 msgctxt "view:debug.visualize:"
 msgid "Debug Result"
-msgstr ""
+msgstr "Résultat de débogage"
 
 msgctxt "view:ir.model.debug.model_info.field_info:"
 msgid "Field Info"
-msgstr ""
+msgstr "Information du champ"
 
 msgctxt "view:ir.model.debug.model_info.field_info:"
 msgid "Fields"
@@ -164,7 +164,7 @@ msgstr "Champs"
 
 msgctxt "view:ir.model.debug.model_info:"
 msgid "Model Debug"
-msgstr ""
+msgstr "Débogage de modèle"
 
 msgctxt "wizard_button:debug,display,end:"
 msgid "Quit"
@@ -172,7 +172,7 @@ msgstr "Quitter"
 
 msgctxt "wizard_button:debug,display,run:"
 msgid "Re-Run"
-msgstr ""
+msgstr "Re-executer"
 
 msgctxt "wizard_button:ir.model.debug,model_info,end:"
 msgid "Quit"

@@ -207,10 +207,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "error:rule_engine.validate:"
-msgid "No Batch Path Specified"
-msgstr "Le chemin d'exécution des batchs n'est pas configuré"
-
 msgctxt "error:rule_engine:"
 msgid ""
 "An error occured in rule %s.For more information, activate debug mode and see the logs\n"
@@ -346,7 +342,7 @@ msgstr "Paramètres"
 
 msgctxt "field:rule_engine,passing_test_cases:"
 msgid "Test Cases OK"
-msgstr ""
+msgstr "Cas de tests OK"
 
 msgctxt "field:rule_engine,rec_name:"
 msgid "Name"
@@ -814,7 +810,7 @@ msgstr "ID"
 
 msgctxt "field:rule_engine.test_case,last_passing_date:"
 msgid "Last passing run date"
-msgstr ""
+msgstr "Date du dernier cas passant"
 
 msgctxt "field:rule_engine.test_case,low_debug:"
 msgid "Low Level Debug Info"
@@ -838,7 +834,7 @@ msgstr "Valeur du Résultat"
 
 msgctxt "field:rule_engine.test_case,result_warnings:"
 msgid "Result Warnings"
-msgstr ""
+msgstr "Résultat d'avertissement"
 
 msgctxt "field:rule_engine.test_case,rule:"
 msgid "Rule"

@@ -396,7 +396,7 @@ msgstr "ID"
 
 msgctxt "field:party.interaction,media:"
 msgid "Media"
-msgstr ""
+msgstr "Media"
 
 msgctxt "field:party.interaction,party:"
 msgid "Party"
@@ -484,7 +484,7 @@ msgstr "NIR"
 
 msgctxt "field:party.party,ssn_required:"
 msgid "SSN Required"
-msgstr ""
+msgstr "Numéro de SS obligatoire"
 
 msgctxt "field:party.party,summary:"
 msgid "Summary"

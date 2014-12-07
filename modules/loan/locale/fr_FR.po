@@ -940,7 +940,7 @@ msgstr "Prêt"
 
 msgctxt "view:contract.option.extra_premium:"
 msgid "‰"
-msgstr ""
+msgstr "‰"
 
 msgctxt "view:contract.wizard.option_subscription.options_displayer.option:"
 msgid "%"

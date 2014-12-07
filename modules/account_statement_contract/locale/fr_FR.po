@@ -12,7 +12,7 @@ msgstr "Bordereaux de chèques"
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
 msgid "#"
-msgstr ""
+msgstr "N°"
 
 msgctxt "odt:account.statement.bank_deposit_ticket_report:"
 msgid ")"

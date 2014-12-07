@@ -62,7 +62,7 @@ msgstr ""
 
 msgctxt "error:bank:"
 msgid "Invalid BIC : %s"
-msgstr ""
+msgstr "BIC invalide : %s"
 
 msgctxt "error:bank:"
 msgid "The bic must be unique!"
@@ -103,8 +103,8 @@ msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
 msgctxt "field:bank.account,number:"
-msgid "Main Account Number"
-msgstr ""
+msgid "Number"
+msgstr "Numéro"
 
 msgctxt "field:bank.account,start_date:"
 msgid "Start Date"

@@ -57,13 +57,21 @@ msgctxt "error:contract:"
 msgid "There must be at least one covered element"
 msgstr "Saisir un risque couvert"
 
+msgctxt "error:contract:"
+msgid ""
+"Unoconv error: %s,\n"
+" the file will be saved in odt format"
+msgstr ""
+"Erreur unoconv : %s,\n"
+"le fichier va être sauvegardé au format odt"
+
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
 msgstr "Trace Courante"
 
 msgctxt "field:contract,current_state:"
 msgid "Current State"
-msgstr " "
+msgstr "Etat courant"
 
 msgctxt "field:contract,logs:"
 msgid "Task"
@@ -143,7 +151,7 @@ msgstr "Démarrer le processus"
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process (_k)"
-msgstr "Démarrer le processus (_k)"
+msgstr "Démarrer Processus (_k)"
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,end:"
 msgid "Cancel"

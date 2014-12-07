@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -431,7 +431,7 @@ msgstr "Lignes de lettrage"
 msgctxt ""
 "field:account.open_third_party_balance.start,third_party_balance_option:"
 msgid "Balance Option"
-msgstr ""
+msgstr "Option de compensation"
 
 msgctxt "field:account.period,xml_id:"
 msgid "XML Id"

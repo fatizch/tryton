@@ -586,7 +586,7 @@ msgstr "Code"
 
 msgctxt "model:process.process_framework,name:"
 msgid "Process Framework"
-msgstr ""
+msgstr "Structure des processus"
 
 msgctxt "model:process.status,name:"
 msgid "Process Status"
@@ -670,15 +670,15 @@ msgstr "==> Courtier"
 
 msgctxt "view:contract:"
 msgid "==> Garantie"
-msgstr ""
+msgstr "==> Garantie"
 
 msgctxt "view:contract:"
 msgid "==> Garanties"
-msgstr ""
+msgstr "==> Garanties"
 
 msgctxt "view:contract:"
 msgid "==> Personnes Couvertes"
-msgstr ""
+msgstr "==> Personnes Couvertes"
 
 msgctxt "view:contract:"
 msgid "==> Prélèvement"
@@ -690,7 +690,7 @@ msgstr "==> Prêt"
 
 msgctxt "view:contract:"
 msgid "==> Quittance"
-msgstr ""
+msgstr "==> Quittance"
 
 msgctxt "view:contract:"
 msgid "==> Souscripteur"
@@ -702,11 +702,11 @@ msgstr "==> Validation RIC"
 
 msgctxt "view:contract:"
 msgid "==> Validation du contrat"
-msgstr ""
+msgstr "==> Validation du contrat"
 
 msgctxt "view:contract:"
 msgid "Annuler l'avenant"
-msgstr ""
+msgstr "Annuler l'avenant"
 
 msgctxt "view:contract:"
 msgid "Brouillard"
@@ -814,7 +814,7 @@ msgstr "Validation du contrat"
 
 msgctxt "view:process-process.step:"
 msgid "Process Relation"
-msgstr ""
+msgstr "Relation Prossus - Etape"
 
 msgctxt "view:process-process.step:"
 msgid "Process Steps"

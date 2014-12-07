@@ -334,10 +334,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "error:ir.ui.view.validate:"
-msgid "No Batch Path Specified"
-msgstr "Le chemin d'exécution des batchs n'est pas configuré"
-
 msgctxt "error:ir.ui.view:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
@@ -586,6 +582,10 @@ msgctxt "field:ir.model.access,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:ir.model.field,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:ir.model.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -661,6 +661,10 @@ msgstr "Identifiant XML"
 msgctxt "field:ir.rule.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:ir.sequence,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:ir.sequence,xml_id:"
 msgid "XML Id"
@@ -1063,7 +1067,7 @@ msgstr "Gestionnaire de jeux d'essai"
 
 msgctxt "model:ir.action,name:export_package_wizard"
 msgid "Select Export Package"
-msgstr ""
+msgstr "Sélectionner un paquet d'export"
 
 msgctxt "model:ir.action,name:import_wizard"
 msgid "Import File"
@@ -1075,7 +1079,7 @@ msgstr "Exports groupés"
 
 msgctxt "model:ir.export_package.add_records.start,name:"
 msgid "Export Package Selector"
-msgstr ""
+msgstr "Selectionneur de paquet d'export"
 
 msgctxt "model:ir.export_package.item,name:"
 msgid "Export Instance"
@@ -1151,7 +1155,7 @@ msgstr "Gestionnaire des jeux d'essai"
 
 msgctxt "model:ir.ui.view.validate,name:"
 msgid "View validation batch"
-msgstr ""
+msgstr "Voir batch de validation"
 
 msgctxt "model:party.category,name:"
 msgid "Category"
@@ -1187,7 +1191,7 @@ msgstr "Non Sélectionné"
 
 msgctxt "view:ir.export_package.add_records.start:"
 msgid "Select An Export Package"
-msgstr ""
+msgstr "Sélectionner un paquet d'export"
 
 msgctxt "view:ir.export_package.item:"
 msgid "Export Instance"
@@ -1195,7 +1199,7 @@ msgstr "Elément à exporter"
 
 msgctxt "view:ir.export_package.item:"
 msgid "Export instances"
-msgstr ""
+msgstr "Exporter les instances"
 
 msgctxt "view:ir.export_package:"
 msgid "Export Package"
@@ -1203,7 +1207,7 @@ msgstr "Exports groupés"
 
 msgctxt "view:ir.export_package:"
 msgid "Export Packages"
-msgstr ""
+msgstr "Paquets d'export"
 
 msgctxt "view:ir.import.select_file:"
 msgid "File Selection"

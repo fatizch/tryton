@@ -124,6 +124,11 @@ msgstr ""
 "La date de fin devrait être antérieure à la date de fin du contrat : %s"
 
 msgctxt "error:contract.option:"
+msgid "End date should be anterior to option automatic end date : %s"
+msgstr ""
+"La date de fin devrait être antérieure à la date de fin automatique : %s"
+
+msgctxt "error:contract.option:"
 msgid "End date should be posterior to start date: %s"
 msgstr "La date de fin devrait être postérieure à la date de début : %s"
 
@@ -167,10 +172,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "error:contract.termination.treatment:"
-msgid "No Batch Path Specified"
-msgstr "Le chemin d'exécution des batchs n'est pas configuré"
-
 msgctxt "error:contract:"
 msgid "Activation Periods \"%(first)s\" and \"%(second)s\" overlap."
 msgstr "Les périodes \"%(première)s\" et \"%(seconde)s\" se chevauchent"
@@ -178,6 +179,8 @@ msgstr "Les périodes \"%(première)s\" et \"%(seconde)s\" se chevauchent"
 msgctxt "error:contract:"
 msgid "Cannot change start date, multiple activation period detected"
 msgstr ""
+"Impossible de changer la date de début, il existe plusieurs période "
+"d'activation"
 
 msgctxt "error:contract:"
 msgid "No quote sequence defined"
@@ -285,6 +288,10 @@ msgctxt "field:contract,options:"
 msgid "Options"
 msgstr "Garanties"
 
+msgctxt "field:contract,parties:"
+msgid "Parties"
+msgstr "Acteurs"
+
 msgctxt "field:contract,product:"
 msgid "Product"
 msgstr "Produit"
@@ -299,7 +306,11 @@ msgstr "Numéro de devis"
 
 msgctxt "field:contract,rec_name:"
 msgid "Number"
-msgstr "Nom"
+msgstr "Numéro"
+
+msgctxt "field:contract,signature_date:"
+msgid "Signature Date"
+msgstr "Date de signature"
 
 msgctxt "field:contract,start_date:"
 msgid "Start Date"
@@ -1037,7 +1048,7 @@ msgstr "Motif pour décliner le contrat"
 
 msgctxt "model:contract.end.select_date,name:"
 msgid "End date selector for contract"
-msgstr ""
+msgstr "Choix de la date de fin pour le contrat"
 
 msgctxt "model:contract.extra_data,name:"
 msgid "Contract Extra Data"
@@ -1104,11 +1115,11 @@ msgctxt "model:ir.action,name:act_contact_type_form"
 msgid "Contact Type"
 msgstr "Type de contact"
 
-msgctxt "model:ir.action,name:act_contract_button"
+msgctxt "model:ir.action,name:act_contract_form"
 msgid "Contracts"
 msgstr "Contrats"
 
-msgctxt "model:ir.action,name:act_contract_form"
+msgctxt "model:ir.action,name:act_contract_relate_form"
 msgid "Contracts"
 msgstr "Contrats"
 
@@ -1118,11 +1129,7 @@ msgstr "Décliner"
 
 msgctxt "model:ir.action,name:act_end"
 msgid "End Contract"
-msgstr ""
-
-msgctxt "model:ir.action,name:act_quote_button"
-msgid "Contracts"
-msgstr "Contrats"
+msgstr "Terminer Contrat"
 
 msgctxt "model:ir.action,name:act_sub_status_form"
 msgid "Sub-status"
@@ -1139,6 +1146,10 @@ msgstr "Souscription des options"
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_active"
 msgid "Active"
 msgstr "Actif"
+
+msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_all"
+msgid "All"
+msgstr "Tous"
 
 msgctxt "model:ir.action.act_window.domain,name:act_contract_domain_quote"
 msgid "Quote"
@@ -1496,7 +1507,3 @@ msgctxt ""
 "wizard_button:contract.wizard.option_subscription,options_displayer,update_options:"
 msgid "Next"
 msgstr "Suivant"
-
-msgctxt "error:contract.option:"
-msgid "End date should be posterior to start date: %s"
-msgstr "La date de fin devrait être postérieure à la date de début : %s"

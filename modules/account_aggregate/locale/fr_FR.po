@@ -12,7 +12,7 @@ msgstr "Agrégat"
 
 msgctxt "field:account.journal,aggregate_posting:"
 msgid "Aggregate Posting"
-msgstr ""
+msgstr "Agréger à l'émission"
 
 msgctxt "field:account.move,snapshot:"
 msgid "Snapshot"
@@ -28,7 +28,7 @@ msgstr "Compte"
 
 msgctxt "field:account.move.line.aggregated,aggregated_move_id:"
 msgid "Aggregated Move Id"
-msgstr ""
+msgstr "Identifiant du mouvement agrégé"
 
 msgctxt "field:account.move.line.aggregated,create_date:"
 msgid "Create Date"
@@ -168,7 +168,7 @@ msgstr "Agrégat comptable"
 
 msgctxt "view:account.move.snapshot.done:"
 msgid "Moves Snapshot"
-msgstr ""
+msgstr "Instantanné des mouvements"
 
 msgctxt "view:account.move.snapshot.done:"
 msgid "The snapshot has been taken!"
@@ -176,7 +176,7 @@ msgstr "L'instantané a été pris!"
 
 msgctxt "view:account.move.snapshot.start:"
 msgid "Moves Snapshot"
-msgstr ""
+msgstr "Instantanné des mouvements"
 
 msgctxt "view:account.move.snapshot.start:"
 msgid "Take a snapshot of moves"
@@ -193,7 +193,3 @@ msgstr "Annuler"
 msgctxt "wizard_button:account.move.snapshot,start,snap:"
 msgid "OK"
 msgstr "OK"
-
-msgctxt "field:account.move.line.aggregated,post_date:"
-msgid "Post Date"
-msgstr "Date de lettrage"

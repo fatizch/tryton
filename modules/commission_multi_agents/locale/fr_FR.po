@@ -1,6 +1,80 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:commission_plan-agent:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:commission_plan-agent:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:commission.agent,commissioned_agents:"
+msgid "Commissioned Agent"
+msgstr "Protocoles de commission liés"
+
+msgctxt "field:commission.agent,commissioned_with_agent:"
+msgid "Commissioned With Agent"
+msgstr "Commissionné avec"
+
+msgctxt "field:commission.plan,commissionned_agents:"
+msgid "Commissioned Agents"
+msgstr "Protocoles de commissionnement liés"
+
+msgctxt "field:commission_plan-agent,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:commission_plan-agent,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission_plan-agent,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission_plan-agent,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission_plan-agent,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission_plan-agent,plan:"
+msgid "Plan"
+msgstr "Plan"
+
+msgctxt "field:commission_plan-agent,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission_plan-agent,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission_plan-agent,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission_plan-agent,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:commission_plan-agent,name:"
+msgid "Commission Plan - Agent"
+msgstr "LIen Plan de Commissionnement - Protocole de Commission"
 
 msgctxt "view:commission.plan:"
 msgid "Commissioned Agents"

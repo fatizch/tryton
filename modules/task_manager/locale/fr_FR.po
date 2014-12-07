@@ -62,7 +62,7 @@ msgstr "Pas de Tâche Sélectionnée"
 
 msgctxt "field:process.log,is_current_user:"
 msgid "Is current user"
-msgstr ""
+msgstr "Est l'utisateur courant"
 
 msgctxt "field:process.log,priority:"
 msgid "Priority"

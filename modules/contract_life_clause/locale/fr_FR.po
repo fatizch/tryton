@@ -22,11 +22,11 @@ msgstr ""
 
 msgctxt "error:contract.option:"
 msgid "Either all share must be completed or none"
-msgstr ""
+msgstr "Soit toutes les quotités doivent être saisies soit aucune"
 
 msgctxt "error:contract.option:"
 msgid "Total share for clause %s is invalid"
-msgstr ""
+msgstr "La quotité totale pour la clause % est invalide"
 
 msgctxt "field:contract.option,beneficiaries:"
 msgid "Beneficiaries"

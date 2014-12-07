@@ -26,6 +26,10 @@ msgctxt "model:ir.action,name:act_statement_bank_deposit_form"
 msgid "Bank Deposit Ticket"
 msgstr "Bordereaux de chèques"
 
+msgctxt "model:ir.action.act_window.domain,name:"
+msgid "Posted"
+msgstr "Emise"
+
 msgctxt ""
 "model:ir.action.act_window.domain,name:act_statement_bank_deposit_form_domain_all"
 msgid "All"
@@ -57,7 +61,3 @@ msgstr "Bordereaux de chèques"
 msgctxt "selection:account.statement.journal,validation:"
 msgid "Manual"
 msgstr "Manuelle"
-
-msgctxt "model:ir.action.act_window.domain,name:"
-msgid "Posted"
-msgstr "Emise"
