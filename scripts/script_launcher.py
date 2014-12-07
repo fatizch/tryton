@@ -323,7 +323,7 @@ def test(arguments, config, work_data):
                     threads.remove(thread)
 
     # Delete test databases if needed
-    if arguments.delete_test_databases:
+    if not arguments.keep_test_databases:
         try:
             db_user = config.get('parameters', 'test_postgres_user')
         except:
@@ -682,8 +682,8 @@ if __name__ == '__main__':
         default='', type=str)
     parser_unittests.add_argument('--with-test-cases', '-t', help='Allow test '
         'cases execution as unittests', action='store_true')
-    parser_unittests.add_argument('--delete-test-databases', '-k',
-        help='Delete test databases after execution', action='store_true')
+    parser_unittests.add_argument('--keep-test-databases', '-k',
+        help='Keep test databases after execution', action='store_true')
 
     # Export parser
     parser_export = subparsers.add_parser('export', help='Export various '
