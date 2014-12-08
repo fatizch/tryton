@@ -125,6 +125,17 @@ class Plan(export.ExportImportMixin):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
+    @classmethod
+    def copy(cls, commissions, default=None):
+        if default is None:
+            default = {}
+        default.setdefault('code', 'temp_for_copy')
+        clones = super(Plan, cls).copy(commissions, default=default)
+        for clone, original in zip(clones, commissions):
+            clone.code = original.code + '_1'
+            clone.save()
+        return clones
+
     @staticmethod
     def default_type_():
         return 'agent'
