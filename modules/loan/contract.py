@@ -193,8 +193,7 @@ class ContractOption:
         if not self.loan_shares:
             return dates
         dates.pop('contract_end_date', None)
-        for loan_share in self.loan_shares:
-            dates[loan_share.loan.id] = loan_share.loan.end_date
+        dates['loan'] = max([x.loan.end_date for x in self.loan_shares])
         return dates
 
     @classmethod
