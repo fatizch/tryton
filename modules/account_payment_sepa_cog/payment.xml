@@ -7,5 +7,27 @@
             <field name="inherit" ref="account_payment.payment_view_form"/>
             <field name="name">payment_form</field>
         </record>
+        <record model="ir.sequence.type"
+            id="sequence_type_account_payment_merged">
+            <field name="name">Account Payment Merged</field>
+            <field name="code">account.payment.merged</field>
+        </record>
+        <record model="ir.sequence.type-res.group"
+            id="sequence_type_account_payment_merged_group_admin">
+            <field name="sequence_type"
+                ref="sequence_type_account_payment_merged"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.sequence.type-res.group"
+            id="sequence_type_account_payment_merged_group_account_admin">
+            <field name="sequence_type"
+                ref="sequence_type_account_payment_merged"/>
+            <field name="group" ref="account.group_account_admin"/>
+        </record>
+
+        <record model="ir.sequence" id="sequence_account_payment_merged">
+            <field name="name">Default Account Payment Merged</field>
+            <field name="code">account.payment.merged</field>
+        </record>
     </data>
 </tryton>
