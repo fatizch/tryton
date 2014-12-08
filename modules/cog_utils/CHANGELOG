@@ -3,3 +3,4 @@ trytond.conf 'config_file' entry in a '[batch]' section.
 
 Version 1.2 - 2014-07-01
 * Changelog file creation
+* Add Event and EventType

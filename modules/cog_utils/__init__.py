@@ -14,6 +14,7 @@ from .test_framework import *
 from .test_case_framework import *
 from .models_for_tests import *
 from .tag import *
+from .event import *
 
 
 def register():
@@ -53,6 +54,8 @@ def register():
         Tag,
         TagObjectRelation,
         MethodDefinition,
+        Event,
+        EventType,
         module='cog_utils', type_='model')
     if config.get('env', 'testing') == 'True':
         Pool.register(

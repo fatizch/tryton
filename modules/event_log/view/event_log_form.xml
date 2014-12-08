@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Event Log">
+    <label name="date"/>
+    <field name="date"/>
+    <label name="user"/>
+    <field name="user"/>
+    <label name="event_type"/>
+    <field name="event_type"/>
+    <label name="object_"/>
+    <field name="object_" widget="many2one"/>
+    <label name="description"/>
+    <field name="description"/>
+</form>
