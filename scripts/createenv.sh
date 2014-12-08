@@ -45,6 +45,10 @@ else
     echo $SEP
     # Genshi 0.6 for relatorio compatibility
     pip install lxml polib genshi==0.6 relatorio python-ldap pywebdav vobject pydot ibanlib argcomplete python-stdnum python-sql raven Mock simpleeval
+    # Install latest relatorio version
+    hg clone https://code.google.com/p/python-relatorio /tmp/relatorio_source
+    pip install /tmp/relatorio_source
+    rm -r /tmp/relatorio_source
     echo $SEP
     echo Installing client packages
     echo $SEP
