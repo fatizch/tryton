@@ -814,15 +814,21 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.subscriber
 
     def activate_contract(self):
+        pool = Pool()
+        Event = pool.get('event')
         self.status = 'active'
         for option in self.options:
             option.status = 'active'
             option.save()
+        Event.notify_events([self], 'activate')
 
     def decline_contract(self, reason):
+        pool = Pool()
+        Event = pool.get('event')
         self.status = 'declined'
         self.sub_status = reason
         self.save()
+        Event.notify_events([self], 'decline', description=reason.name)
 
     def clean_up_versions(self):
         pool = Pool()
@@ -864,7 +870,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def terminate(cls, contracts):
+        pool = Pool()
+        Event = pool.get('event')
         cls.write(contracts, {'status': 'terminated'})
+        Event.notify_events(contracts, 'terminate')
 
     @classmethod
     def get_coverages(cls, product):
