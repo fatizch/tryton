@@ -297,7 +297,7 @@ class InsuredOutstandingLoanBalanceLineView(model.CoopView):
     insurers = fields.Char('Loan Insurers', states={'invisible': True})
 
 
-class InsuredOutstandingLoanBalanceSelectDate(model.CoopSQL, model.CoopView):
+class InsuredOutstandingLoanBalanceSelectDate(model.CoopView):
     'Date selector for insured outstanding loan balance display'
 
     __name__ = 'party.display_insured_outstanding_loan_balance.select_date'
