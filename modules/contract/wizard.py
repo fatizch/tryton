@@ -321,8 +321,7 @@ class ContractActivate(model.CoopWizard):
         return 'end'
 
 
-
-class ContractSelectDeclineReason(model.CoopSQL, model.CoopView):
+class ContractSelectDeclineReason(model.CoopView):
     'Reason selector to decline contract'
     __name__ = 'contract.decline.select_reason'
 
