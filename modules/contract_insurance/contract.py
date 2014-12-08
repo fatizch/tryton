@@ -59,6 +59,9 @@ class Contract(Printable):
         fields.Many2Many('offered.item.description', None, None,
             'Possible Item Desc', states={'invisible': True}),
         'on_change_with_possible_item_desc')
+    covered_element_options = fields.Function(
+        fields.One2Many('contract.option', None, 'Covered Element Options'),
+        'get_covered_element_options')
     multi_mixed_view = covered_elements
 
     @classmethod
@@ -90,6 +93,11 @@ class Contract(Printable):
         if not self.product:
             return []
         return [x.id for x in self.product.item_descriptors]
+
+    def get_covered_element_options(self, name):
+        return [option.id
+            for covered_element in self.covered_elements
+            for option in covered_element.options]
 
     def clean_up_versions(self):
         super(Contract, self).clean_up_versions()
