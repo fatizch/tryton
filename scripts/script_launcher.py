@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 # PYTHON_ARGCOMPLETE_OK
-import shutil
-import os
-import glob
-import subprocess
 import datetime
+import glob
+import os
+import shutil
+import subprocess
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -124,23 +124,20 @@ def sync(arguments, config, work_data):
 
 def database(arguments, config, work_data):
     if arguments.action == 'drop':
-        os.system('sudo su postgres -c "dropdb %s"' % arguments.database)
+        cmd = 'sudo su postgres -c "dropdb %s"' % arguments.database
     elif arguments.action == 'install':
-        subprocess.Popen([work_data['trytond_exec'], '-d', arguments.database,
-                '-c', work_data['trytond_conf'], '--init', arguments.module])
+        cmd = [work_data['trytond_exec'], '-d', arguments.database,
+            '-c', work_data['trytond_conf'], '--init', arguments.module]
     elif arguments.action == 'update':
-        subprocess.Popen([work_data['trytond_exec'], '-d', arguments.database,
-                '-c', work_data['trytond_conf'], '--update', arguments.module])
+        cmd = [work_data['trytond_exec'], '-d', arguments.database,
+            '-c', work_data['trytond_conf'], '--update', arguments.module]
     elif arguments.action == 'test_case':
-        command_line = [work_data['python_exec'],
-            work_data['tryton_script_launcher'], os.path.join(
-                work_data['runtime_dir'], 'coopbusiness', 'test_case',
+        cmd = [work_data['python_exec'], work_data['tryton_script_launcher'],
+            os.path.join(work_data['runtime_dir'], 'coopbusiness', 'test_case',
                 'proteus_test_case.py'), arguments.database]
-        if arguments.test_case == 'all':
-            process = subprocess.Popen(command_line)
-        else:
-            process = subprocess.Popen(command_line, arguments.test_case)
-        process.communicate()
+        if arguments.test_case != 'all':
+            cmd += arguments.test_case
+    return subprocess.call(cmd)
 
 
 def test(arguments, config, work_data):
@@ -711,7 +708,7 @@ if __name__ == '__main__':
 
     argcomplete.autocomplete(parser)
     arguments = parser.parse_args()
-
+    exit_status = 0
     if arguments.command == 'start':
         start(arguments, config, work_data)
     elif arguments.command == 'kill':
@@ -719,7 +716,7 @@ if __name__ == '__main__':
     elif arguments.command == 'sync':
         sync(arguments, config, work_data)
     elif arguments.command == 'database':
-        database(arguments, config, work_data)
+        exit_status = database(arguments, config, work_data)
     elif arguments.command == 'test':
         test(arguments, config, work_data)
     elif arguments.command == 'batch':
@@ -730,3 +727,4 @@ if __name__ == '__main__':
         configure(arguments.env)
     elif arguments.command == 'doc':
         documentation(arguments, config, work_data)
+    exit(exit_status)
