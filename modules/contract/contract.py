@@ -1433,7 +1433,7 @@ class ContractEnd(Wizard):
         return 'end'
 
 
-class ContractSelectStartDate(model.CoopSQL, model.CoopView):
+class ContractSelectStartDate(model.CoopView):
     'Start date selector for contract'
 
     __name__ = 'contract.select_start_date'
