@@ -55,10 +55,12 @@ class OptionSubscription(model.CoopWizard):
                 if option.coverage == coverage:
                     existing_option = option
                     break
+            with_package = (bool(contract.product.packages)
+                and bool(self.select_package.package))
             selection = 'manual'
             if coverage.subscription_behaviour == 'mandatory':
                 selection = 'mandatory'
-            elif coverage in excluded:
+            elif not with_package and coverage in excluded:
                 selection = 'automatic'
             option_dict = {
                 'name': '%s [%s]' % (coverage.rec_name,
@@ -66,8 +68,7 @@ class OptionSubscription(model.CoopWizard):
                         'subscription_behaviour')),
                 'is_selected': (bool(existing_option)
                     or coverage.subscription_behaviour != 'optional'
-                    or bool(contract.product.packages)
-                    and bool(self.select_package.package)),
+                    or with_package),
                 'coverage_behaviour': coverage.subscription_behaviour,
                 'coverage': coverage.id,
                 'selection': selection,
@@ -79,6 +80,7 @@ class OptionSubscription(model.CoopWizard):
         return {
             'contract': contract.id,
             'options': options,
+            'with_package': with_package
             }
 
     @classmethod
@@ -164,13 +166,15 @@ class OptionsDisplayer(model.CoopView):
 
     contract = fields.Many2One('contract', 'Contract',
         states={'invisible': True}, ondelete='RESTRICT')
-
     options = fields.One2Many(
         'contract.wizard.option_subscription.options_displayer.option',
         'displayer', 'Options')
+    with_package = fields.Boolean('With Package', states={'invisible': True})
 
-    @fields.depends('options')
+    @fields.depends('options', 'with_package')
     def on_change_options(self):
+        if self.with_package:
+            return
         selected = [elem for elem in self.options
             if (elem.is_selected and getattr(elem, 'coverage', None))]
         excluded = []
