@@ -323,6 +323,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
 
     def init_dict_for_rule_engine(self, current_dict):
         self.loan.init_dict_for_rule_engine(current_dict)
+        self.option.init_dict_for_rule_engine(current_dict)
         current_dict['share'] = self
 
     def get_publishing_values(self):
