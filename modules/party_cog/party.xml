@@ -212,7 +212,11 @@
             <field name="wiz_name">party.synthesis.menu.open</field>
             <field name="model">party.synthesis.menu</field>
         </record>
-
+        <record model="ir.action.keyword" id="wizard_open_keyword1">
+            <field name="keyword">tree_open</field>
+            <field name="model">party.synthesis.menu,-1</field>
+            <field name="action" ref="wizard_open"/>
+        </record>
         <record model="ir.action.act_window" id="act_menu_open">
             <field name="name">Open Party Synthesis Menu</field>
             <field name="window_name" eval="False"/>
