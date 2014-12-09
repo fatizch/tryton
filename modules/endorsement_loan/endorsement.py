@@ -303,6 +303,8 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         pool = Pool()
         Loan = pool.get('loan')
         Increment = pool.get('loan.increment')
+        if not self.values:
+            return Loan(self.loan.id)
         base_loan = Loan(self.loan.id)
         for k, v in self.values.iteritems():
             if k not in ('payments', 'increments', 'loan_shares'):

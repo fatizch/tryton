@@ -31,6 +31,7 @@ Get Models::
     >>> Account = Model.get('account.account')
     >>> AccountInvoice = Model.get('account.invoice')
     >>> AccountKind = Model.get('account.account.type')
+    >>> Action = Model.get('ir.action')
     >>> BillingInformation = Model.get('contract.billing_information')
     >>> BillingMode = Model.get('offered.billing_mode')
     >>> Company = Model.get('company.company')
@@ -355,4 +356,38 @@ Revert Current process::
     'close'
     >>> loan = Loan(loan.id)
     >>> loan.amount == Decimal('250000')
+    True
+
+Start Again::
+
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.contract = contract
+    >>> new_endorsement.form.endorsement_definition = EndorsementDefinition.find([
+    ...         ('code', '=', 'full_contract_revision')])[0]
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = contract.start_date
+    >>> new_endorsement.execute('start_endorsement')
+    >>> new_endorsement.execute('full_contract_revision_next')
+
+Modify Contract::
+
+    >>> loan = Loan(loan.id)
+    >>> loan.amount == Decimal('250000')
+    True
+    >>> Loan.draft([loan.id], {})
+    >>> loan = Loan(loan.id)
+    >>> loan.amount = Decimal('1000000')
+    >>> loan.save()
+    >>> Loan.calculate_loan([loan.id], {})
+
+This time, complete::
+
+    >>> end_process, = Action.find([
+    ...         ('xml_id', '=', 'process_cog.act_end_process')])
+    >>> Contract._proxy._button_next_1([contract.id], {}) == end_process.id
+    True
+    >>> contract = Contract(contract.id)
+    >>> loan = Loan(loan.id)
+    >>> loan.amount == Decimal('1000000')
     True
