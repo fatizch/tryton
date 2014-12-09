@@ -14,7 +14,6 @@ def register():
         Payment,
         Mandate,
         Group,
-        Payment,
         Bank,
         BankAccountNumber,
         # Test case
