@@ -1,8 +1,10 @@
 # -*- coding:utf-8 -*-
-from trytond.model import fields, ModelSQL, ModelView
+from trytond.transaction import Transaction
+from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import coop_string, export
+from trytond.modules.cog_utils import coop_string, export, fields
 
 __metaclass__ = PoolMeta
 
@@ -10,6 +12,7 @@ __all__ = [
     'Payment',
     'Configuration',
     'Journal',
+    'Group'
     ]
 
 
@@ -59,6 +62,49 @@ class Configuration:
         values['direct_debit_journal'] = {'_func_key': getattr(
             field_value, field_value._func_key)}
         return values
+
+
+class Group:
+    __name__ = 'account.payment.group'
+
+    processing_payments = fields.One2ManyDomain('account.payment', 'group',
+        'Processing Payments',
+        domain=[('state', '=', 'processing')])
+    has_processing_payment = fields.Function(fields.Boolean(
+        'Has Processing Payment'), 'get_has_processing_payment')
+
+    @classmethod
+    def __setup__(cls):
+        super(Group, cls).__setup__()
+        cls._buttons.update({
+                'acknowledge': {
+                    'invisible': ~Eval('has_processing_payment'),
+                    },
+                })
+
+    @classmethod
+    @ModelView.button
+    def acknowledge(cls, groups):
+        Payment = Pool().get('account.payment')
+        payments = []
+        for group in groups:
+            payments.extend(group.processing_payments)
+        Payment.succeed(payments)
+
+    @classmethod
+    def get_has_processing_payment(cls, groups, name):
+        pool = Pool()
+        cursor = Transaction().cursor
+        account_payment = pool.get('account.payment').__table__()
+        result = {x.id: False for x in groups}
+
+        cursor.execute(*account_payment.select(account_payment.group,
+                where=(account_payment.state == 'processing'),
+                group_by=[account_payment.group]))
+
+        for group_id, in cursor.fetchall():
+            result[group_id] = True
+        return result
 
 
 class Journal(export.ExportImportMixin):
