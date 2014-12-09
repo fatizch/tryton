@@ -72,16 +72,16 @@
         <field name="domain">['OR', ('status', '=', 'terminated'), ('status', '=', 'void')]</field>
         <field name="act_window" ref="act_contract_form"/>
     </record>
-    <record model="ir.action.act_window.domain" id="act_contract_domain_recent">
-        <field name="name">Recent</field>
-        <field name="sequence" eval="30"/>
-        <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
-        <field name="act_window" ref="act_contract_form"/>
-    </record>
     <record model="ir.action.act_window.domain" id="act_contract_domain_all">
         <field name="name">All</field>
         <field name="sequence" eval="40"/>
         <field name="domain">[]</field>
+        <field name="act_window" ref="act_contract_form"/>
+    </record>
+    <record model="ir.action.act_window.domain" id="act_contract_domain_recent">
+        <field name="name">Recent</field>
+        <field name="sequence" eval="50"/>
+        <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
         <field name="act_window" ref="act_contract_form"/>
     </record>
     <!-- ############################ -->
