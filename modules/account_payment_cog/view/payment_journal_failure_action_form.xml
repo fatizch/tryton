@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Payment Journal Failure Action">
+    <label name="journal"/>
+    <field name="journal" colspan="3"/>
+    <label name="reject_reason"/>
+    <field name="reject_reason"/>
+    <label name="action"/>
+    <field name="action"/>
+</form>

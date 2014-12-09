@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<form string="Payment Journal Reject Code">
+    <label name="code"/>
+    <field name="code"/>
+    <label name="description"/>
+    <field name="description"/>
+    <label name="process_method"/>
+    <field name="process_method"/>
+</form>

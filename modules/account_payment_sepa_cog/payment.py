@@ -132,3 +132,10 @@ class Payment:
                 ('sepa_merged_id',) + tuple(domain[1:]),
                 ]
             ]
+    @property
+    def fail_code(self):
+        code = super(Payment, self).fail_code
+        if not code:
+            return self.sepa_return_reason_code
+        return code
+

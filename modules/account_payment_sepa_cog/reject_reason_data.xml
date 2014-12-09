@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="account.payment.journal.reject_reason" id="sepa_AC01">
+            <field name="code">AC01</field>
+            <field name="description">Account identifier incorrect</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_AC04">
+            <field name="code">AC04</field>
+            <field name="description">Account closed</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_AC06">
+            <field name="code">AC06</field>
+            <field name="description">Account blocked</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_AG01">
+            <field name="code">AG01</field>
+            <field name="description">Transaction forbidden</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_AG02">
+            <field name="code">AG02</field>
+            <field name="description">Invalid bank operation code</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_AM04">
+            <field name="code">AM04</field>
+            <field name="description">Insufficient funds</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_AM05">
+            <field name="code">AM05</field>
+            <field name="description">Duplication</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_BE05">
+            <field name="code">BE05</field>
+            <field name="description">Unrecognised initiating party</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_FF01">
+            <field name="code">FF01</field>
+            <field name="description">Invalid file format</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_FF05">
+            <field name="code">FF05</field>
+            <field name="description">Incorrect direct debit type</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_MD01">
+            <field name="code">MD01</field>
+            <field name="description">No mandate</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_MD02">
+            <field name="code">MD02</field>
+            <field name="description">No valid mandate</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_MD06">
+            <field name="code">MD06</field>
+            <field name="description">Refund request by end customer</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_MD07">
+            <field name="code">MD07</field>
+            <field name="description">End customer deceased</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_MS02">
+            <field name="code">MS02</field>
+            <field name="description">Refusal by debtor</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_MS03">
+            <field name="code">MS03</field>
+            <field name="description">Not specified reason</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_RC01">
+            <field name="code">RC01</field>
+            <field name="description">Incorrect bank identifier</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_RR01">
+            <field name="code">RR01</field>
+            <field name="description">Missing debtor account or identification</field>
+            <field name="process_method">sepa</field>
+        </record>        
+        <record model="account.payment.journal.reject_reason" id="sepa_RR02">
+            <field name="code">RR02</field>
+            <field name="description">Missing debtor name or address</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_RR03">
+            <field name="code">RR03</field>
+            <field name="description">Missing creditor name or address</field>
+            <field name="process_method">sepa</field>
+        </record>    
+        <record model="account.payment.journal.reject_reason" id="sepa_RR04">
+            <field name="code">RR04</field>
+            <field name="description">Regulatory reason</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_SL01">
+            <field name="code">SL01</field>
+            <field name="description">Specific service by debtor agent</field>
+            <field name="process_method">sepa</field>
+        </record>
+    </data>
+</tryton>

@@ -9,6 +9,9 @@ from .move import *
 
 def register():
     Pool.register(
+        Journal,
+        RejectReason,
+        JournalFailureAction,
         Payment,
         SynthesisMenuPayment,
         SynthesisMenu,
@@ -18,7 +21,6 @@ def register():
         PaymentTreatmentBatch,
         PaymentCreationBatch,
         Configuration,
-        Journal,
         Group,
         module='account_payment_cog', type_='model')
     Pool.register(

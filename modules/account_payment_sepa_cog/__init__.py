@@ -11,6 +11,7 @@ def register():
     Pool.register(
         Party,
         # from payment
+        Payment,
         Mandate,
         Group,
         Payment,

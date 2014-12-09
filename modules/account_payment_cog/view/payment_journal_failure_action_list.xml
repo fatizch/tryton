@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Payment Journal Failure Actions">
+    <field name="journal"/>
+    <field name="reject_reason"/>
+    <field name="action"/>
+</tree>
