@@ -79,7 +79,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         states=_STATES, depends=_DEPENDS)
     first_payment_date = fields.Date('First Payment Date', required=True,
         states=_STATES, depends=_DEPENDS)
-    loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares')
+    loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares',
+        readonly=True, states={'invisible': ~Eval('loan_shares')})
     insured_persons = fields.Function(
         fields.Many2Many('party.party', None, None, 'Insured Persons',
             states={'invisible': ~Eval('insured_persons')}),
@@ -376,16 +377,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
 
     def get_insured_persons(self, name):
         return list(set([x.person.id for x in self.loan_shares]))
-
-    def init_from_borrowers(self, parties):
-        if hasattr(self, 'loan_shares') and self.loan_shares:
-            return
-        self.loan_shares = []
-        LoanShare = Pool().get('loan.share')
-        for party in parties:
-            share = LoanShare()
-            share.person = party
-            self.loan_shares.append(share)
 
     def get_payment(self, at_date=None):
         if not at_date:
