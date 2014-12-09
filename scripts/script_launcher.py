@@ -49,6 +49,14 @@ def find_matching_processes(name):
     return targets
 
 
+def get_batch_names(modules_dirpath):
+    out = subprocess.check_output(
+        "grep -r -A3 --include='batch.py' 'BatchRoot):' %s" % modules_dirpath,
+        shell=True)
+    return [l.split('=')[1].strip("' ")
+        for l in out.split('\n') if '__name__' in l]
+
+
 def start(arguments, config, work_data):
     if arguments.target in ('server', 'all'):
         servers = find_matching_processes('python %s' %
@@ -606,6 +614,7 @@ if __name__ == '__main__':
     import ConfigParser
     import argparse
     import argcomplete
+    from argparse import RawTextHelpFormatter
 
     if 'VIRTUAL_ENV' not in os.environ:
         target = os.path.join(DIR, '..', '..', '..', 'bin', 'activate_this.py')
@@ -649,10 +658,26 @@ if __name__ == '__main__':
             'debug'], default=config.get('parameters', 'start_mode'))
 
     # Batch parser
-    parser_batch = subparsers.add_parser('batch', help='Launches a batch')
-    parser_batch.add_argument('action', choices=['init', 'execute', 'monitor'])
-    parser_batch.add_argument('--name', type=str, help='Name of the batch'
-        'to launch')
+    usage_str = \
+"""Examples:
+  Restart celery workers pool: coop batch init
+  Enter an unknown name to list available batches: coop batch --name ???
+  Run a batch: coop batch execute --name account.payment.creation -t 2015-01-01
+    """
+    action_str = \
+"""init   : kill running celery workers and start a new pool of workers.
+execute: run a batch. REQUIRES: --name
+monitor: starts celery flower server on http://localhost:5555"""
+    help_str = ('Interacts with coop batch environment based on celery '
+ '<http://www.celeryproject.org/>')
+    parser_batch = subparsers.add_parser('batch',
+        description=help_str,
+        epilog=usage_str, formatter_class=RawTextHelpFormatter)
+    parser_batch.add_argument('action', choices=['init', 'execute', 'monitor'],
+        help=action_str)
+    parser_batch.add_argument('--name', type=str, help='Name of the batch to'
+        'launch', choices=sorted(get_batch_names(work_data['coop_modules'])),
+        metavar='BATCH_NAME')
     parser_batch.add_argument('--connexion-date', '-c', type=str,
         help='Date used to log in',
         default=datetime.date.today().isoformat())
