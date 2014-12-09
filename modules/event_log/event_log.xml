@@ -25,6 +25,12 @@
             <field name="view" ref="event_log_view_form"/>
             <field name="act_window" ref="act_event_log_form"/>
         </record>
+        <record model="ir.ui.view" id="trigger_view_form">
+            <field name="model">ir.trigger</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="ir.trigger_view_form"/>
+            <field name="name">trigger_form</field>
+        </record>
         <menuitem parent="cog_utils.menu_event" sequence="20" id="menu_event_log" action="act_event_log_form"/>
     </data>
 </tryton>

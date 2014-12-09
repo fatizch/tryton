@@ -25,12 +25,6 @@
         <field name="view" ref="event_type_view_form"/>
         <field name="act_window" ref="act_event_type_form"/>
     </record>
-    <record model="ir.ui.view" id="trigger_view_form">
-        <field name="model">ir.trigger</field>
-        <field name="type">form</field>
-        <field name="inherit" ref="ir.trigger_view_form"/>
-        <field name="name">trigger_form</field>
-    </record>
     <menuitem name="Event" id="menu_event" sequence="100" parent="ir.menu_administration"/>
     <menuitem name="Event Type" id="event_type" sequence="1" parent="menu_event" action="act_event_type_form"/>
   </data>

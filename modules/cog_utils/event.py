@@ -3,6 +3,7 @@ from trytond.model import Model
 
 import model
 import fields
+import coop_string
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -28,6 +29,9 @@ class EventType(model.CoopSQL, model.CoopView):
     __name__ = 'event.type'
     _func_key = 'code'
 
+    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True)
+
     @classmethod
     def __setup__(cls):
         super(EventType, cls).__setup__()
@@ -35,5 +39,8 @@ class EventType(model.CoopSQL, model.CoopView):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
-    code = fields.Char('Code', required=True)
-    name = fields.Char('Name', required=True)
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.remove_blank_and_invalid_char(self.name)
