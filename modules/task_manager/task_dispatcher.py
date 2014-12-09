@@ -12,7 +12,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'ProcessLog',
     'TaskDispatcher',
-    'TaskDisplayer',
     'TaskSelector',
     'LaunchTask',
     ]
@@ -21,37 +20,18 @@ __all__ = [
 class ProcessLog:
     __name__ = 'process.log'
 
-    priority = fields.Function(fields.Integer('Priority'), 'get_priority')
     task_start = fields.Function(
         fields.DateTime('Task Start'),
         'on_change_with_task_start')
-    task_selected = fields.Function(
-        fields.Boolean('Selected'),
-        'get_task_selected', setter='setter_void')
     is_current_user = fields.Function(
         fields.Boolean('Is current user', depends=['user']),
         'get_is_current_user')
-
-    @classmethod
-    def order_priority(cls, tables):
-        process_log, _ = tables[None]
-        return [process_log.id]
-
-    @classmethod
-    def setter_void(cls, *args):
-        pass
-
-    def get_priority(self, name):
-        team = utils.get_team()
-        if not team:
-            return None
-        for priority in team.priorities:
-            if priority.process_step.id == self.to_state.id:
-                return priority.priority
-        return None
-
-    def get_task_selected(self, name):
-        return False
+    task_start_date = fields.Function(
+        fields.Date('Task Start'),
+        'on_change_with_task_start_date')
+    task_nb = fields.Function(
+        fields.Integer('Task Number'),
+        'get_task_nb')
 
     @fields.depends('task')
     def on_change_with_task_start(self, name=None):
@@ -62,84 +42,23 @@ class ProcessLog:
             ('task', '=', utils.convert_to_reference(self.task))], limit=1)
         return start_log.start_time
 
-    @classmethod
-    def search(cls, domain, offset=0, limit=None, order=None, count=False,
-            query=False):
-        result = super(ProcessLog, cls).search(domain, offset, limit, order,
-            count, query)
-        if not (order and len(order) == 1):
-            return result
-        if not order[0][0] in ('priority', 'task_start'):
-            return result
-        elif order[0][0] == 'priority':
-            team = utils.get_team()
-            if not team:
-                return result
-            ordering_table = {}
-            count = 0
-            for priority in team.priorities:
-                if priority.process_step.id in ordering_table:
-                    continue
-                ordering_table[priority.process_step.id] = count
-                count += 1
-
-            def order_priority(x):
-                try:
-                    result = ordering_table[x.to_state.id]
-                    if x.user.id == Transaction().user:
-                        return result - 0.5
-                    return result
-                except KeyError:
-                    return len(ordering_table) + 1
-
-            order_func = order_priority
-        elif order[0][0] == 'task_start':
-            def order_start_task(x):
-                return x.task_start if hasattr(x, 'task_start') else None
-
-            order_func = order_start_task
-
-        if order[0][1] == 'ASC':
-            return sorted(result, key=order_func)
-        else:
-            return sorted(result, key=order_func, reverse=True)
+    @fields.depends('task')
+    def on_change_with_task_start_date(self, name=None):
+        if not (hasattr(self, 'task') and self.task):
+            return None
+        start_log, = self.search([
+                ('from_state', '=', None),
+                ('task', '=', utils.convert_to_reference(self.task))], limit=1)
+        return start_log.start_time.date()
 
     def get_is_current_user(self, name):
         if not Transaction().user:
             return False
         return Transaction().user == self.user.id
 
-
-class TaskDisplayer(model.CoopView):
-    'Task Displayer'
-
-    __name__ = 'task.select.available_tasks.task'
-
-    task = fields.Many2One('process-process.step', 'Task')
-    nb_tasks = fields.Integer('Number', depends=['task', 'kind'])
-    kind = fields.Selection([('team', 'Team'), ('process', 'Process')], 'Kind',
-        states={'invisible': True})
-    kind_string = kind.translated('kind')
-    task_name = fields.Function(
-        fields.Char('Task Name', depends=['task']),
-        'on_change_with_task_name')
-
-    @fields.depends('task')
-    def on_change_with_task_name(self, name=None):
-        if not (hasattr(self, 'task') and self.task):
-            return ''
-        return '%s - %s' % (self.task.process.fancy_name,
-            self.task.step.fancy_name)
-
-    @fields.depends('task')
-    def on_change_with_nb_tasks(self):
-        if not (hasattr(self, 'task') and self.task):
-            return None
-        Log = Pool().get('process.log')
-        return Log.search_count([
-            ('latest', '=', True),
-            ('to_state', '=', self.task),
-            ('locked', '=', False)])
+    def get_task_nb(self, name):
+        # used by graph presenter
+        return 1
 
 
 class TaskSelector(model.CoopView):
@@ -147,101 +66,19 @@ class TaskSelector(model.CoopView):
 
     __name__ = 'task.select.available_tasks'
 
-    team = fields.Many2One('res.team', 'Team')
-    process = fields.Many2One('process', 'Process')
-    nb_tasks_team = fields.Integer('Team Tasks', states={'readonly': True})
-    nb_users_team = fields.Integer('Team Users', states={'readonly': True})
-    nb_tasks_process = fields.Integer('Process Tasks',
-        states={'readonly': True})
-    tasks_team = fields.One2ManyDomain('task.select.available_tasks.task', '',
-        'Team Tasks', domain=[('kind', '=', 'team')],
-        states={'readonly': True})
-    tasks_process = fields.One2ManyDomain('task.select.available_tasks.task',
-        '', 'Process Tasks', domain=[('kind', '=', 'process')],
-        states={'readonly': True})
-    tasks = fields.One2Many('process.log', '', 'Tasks',
-        domain=[('latest', '=', True), ('locked', '=', False)],
-        order=[('priority', 'ASC')])
+    user = fields.Many2One('res.user', 'User')
     selected_task = fields.Many2One('process.log', 'Selected Task',
         states={'readonly': True})
+    selected_task_presenter = fields.Function(
+        fields.One2Many('process.log', None, 'Seleteted Task', readonly=True,
+            depends=['selected_task'], size=1),
+        'on_change_with_selected_task_presenter')
 
-    @fields.depends('team', 'nb_tasks_team', 'nb_users_team', 'tasks_team',
-        'tasks', 'selected_task')
-    def on_change_team(self):
-        if not self.team:
-            self.nb_users_team = 0
-            self.nb_tasks_team = 0
-            self.tasks_team = []
-            return
-        pool = Pool()
-        User = pool.get('res.user')
-        Log = pool.get('process.log')
-        self.nb_users_team = User.search_count([('team', '=', self.team)])
-        tmp_result = {}
-        final_result = []
-        nb_tasks = 0
-        TaskDisplayer = Pool().get('task.select.available_tasks.task')
-        valid_states = []
-        for priority in self.team.priorities:
-            if (priority.process_step.id, priority.priority) in tmp_result:
-                continue
-            task = TaskDisplayer()
-            task.kind = 'team'
-            task.task = priority.process_step
-            task.task_name = '%s - %s' % (task.task.process.fancy_name,
-                task.task.step.fancy_name)
-            task.nb_tasks = task.on_change_with_nb_tasks()
-            nb_tasks += task.nb_tasks
-            tmp_result[(priority.process_step.id, priority.priority)] = task
-            final_result.append(task)
-            valid_states.append(priority.process_step.id)
-        self.tasks_team = final_result
-        self.nb_tasks_team = nb_tasks
-        self.tasks = Log.search([
-                ('latest', '=', True), ('locked', '=', False),
-                ('to_state', 'in', valid_states)],
-                order=[('priority', 'ASC')])
-        if not self.selected_task:
-            self.selected_task = self.tasks[0] if self.tasks else None
-
-    @fields.depends('process', 'nb_tasks_process', 'tasks_process')
-    def on_change_process(self):
-        if not self.process:
-            self.nb_tasks_process = 0
-            self.tasks_process = []
-            return
-        tmp_result = []
-        nb_tasks = 0
-        TaskDisplayer = Pool().get('task.select.available_tasks.task')
-        for step in self.process.all_steps:
-            task = TaskDisplayer()
-            task.kind = 'process'
-            task.task = step.id
-            task.task_name = '%s - %s' % (task.task.process.fancy_name,
-                task.task.step.fancy_name)
-            task.nb_tasks = task.on_change_with_nb_tasks()
-            nb_tasks += task.nb_tasks
-            tmp_result.append(task)
-        self.tasks_process = tmp_result
-        self.nb_tasks_process = nb_tasks
-
-    @fields.depends('selected_task', 'tasks')
-    def on_change_tasks(self):
-        if not self.tasks:
-            return
-        for task in self.tasks:
-            if task.task_selected:
-                if not self.selected_task or task.id != self.selected_task.id:
-                    break
-        else:
-            if self.selected_task:
-                task = self.selected_task
-            else:
-                return
-        self.selected_task = task
-        for cur_task in self.tasks:
-            cur_task.task_selected = cur_task.id == task.id
-        self.tasks = self.tasks
+    @fields.depends('selected_task')
+    def on_change_with_selected_task_presenter(self, name=None):
+        if self.selected_task:
+            return [self.selected_task.id]
+        return []
 
 
 class TaskDispatcher(Wizard):
@@ -271,23 +108,19 @@ class TaskDispatcher(Wizard):
         super(TaskDispatcher, cls).__setup__()
         cls._error_messages.update({
                 'no_task_selected': 'No task has been selected.',
+                'no_task_found': 'No task found'
                 })
 
     def default_select_context(self, name):
         Selector = Pool().get('task.select.available_tasks')
         User = Pool().get('res.user')
         user = User(Transaction().user)
-        if not (hasattr(user, 'team') and user.team):
-            return {}
         selector = Selector()
-        selector.team = user.team
-        if not user.team.priorities:
-            return {}
-        good_priority = user.team.priorities[0]
-        selector.process = good_priority.process_step.process
-        selector.on_change_team()
-        selector.on_change_process()
-        return model.serialize_this(selector)
+        selector.user = user
+        task = user.search_next_priority_task()
+        if not task:
+            self.raise_user_error('no_task_found')
+        return {'user': user.id, 'selected_task': task.id}
 
     def transition_remove_locks(self):
         Log = Pool().get('process.log')

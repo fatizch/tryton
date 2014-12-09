@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<graph string="Tasks Repartition By Date" type="vbar">
+    <x>
+        <field name="task_start_date"/>
+    </x>
+    <y>
+       <field name="task_nb"/>
+    </y>
+</graph>
