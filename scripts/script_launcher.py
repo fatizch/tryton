@@ -6,6 +6,7 @@ import glob
 import os
 import shutil
 import subprocess
+import time
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -145,7 +146,6 @@ def test(arguments, config, work_data):
     import datetime
     import threading
     import multiprocessing
-    import time
 
     def set_logger():
         log_dir = os.path.join(work_data['runtime_dir'], 'test_log')
@@ -341,29 +341,49 @@ def test(arguments, config, work_data):
 
 
 def batch(arguments, config, work_data):
-    if arguments.action == 'kill':
+    import celery
+    from celery.result import GroupResult
+    from trytond.modules.cog_utils import batch_launcher
+
+    log_path = os.path.join(work_data['runtime_dir'], 'logs',
+        'celery_batch.log')
+    APPNAME = 'trytond.modules.cog_utils.batch_launcher'
+    PING_ATTEMPTS_DELAY = (10, .3)
+    if arguments.action == 'init':
         workers = find_matching_processes('celery')
-        if not workers:
-            print 'No celery process found'
-        else:
-            result = subprocess.Popen(['kill', '-9'] + workers)
-            result.communicate()
+        if workers:
+            subprocess.call(['kill', '-9'] + workers)
+            print 'Running workers killed.'
+        cmd = ['celery', 'worker', '-l', 'info',
+            '--config=celeryconfig', '--app=%s' % APPNAME,
+            '--logfile=%s' % log_path]
+        with open(os.devnull, 'w') as fnull:
+            subprocess.Popen(' '.join(cmd), shell=True, stdout=fnull,
+                stderr=subprocess.STDOUT)
+        for i in range(PING_ATTEMPTS_DELAY[0]):
+            if celery.current_app.control.inspect().ping():
+                print 'Workers started, see %s' % log_path
+                return 0
+            time.sleep(PING_ATTEMPTS_DELAY[1])
+        print 'Failed starting worker instance'
+        return 1
     elif arguments.action == 'execute':
-        import time
-        log_path = os.path.join(work_data['runtime_dir'], 'logs',
-            arguments.name + '.log'),
-        subprocess.Popen('celery worker -l info '
-            '--config=celeryconfig '
-            '--app=trytond.modules.cog_utils.batch_launcher'
-            ' --logfile=%s' % log_path, shell=True, stdout=subprocess.PIPE)
-        time.sleep(2)
-        _execution = subprocess.Popen('celery call '
-            'trytond.modules.cog_utils.batch_launcher.generate_all '
-            '--args=\'["%s", "%s", "%s"]\'' % (arguments.name,
-                arguments.connexion_date, arguments.treatment_date),
-            shell=True, stdout=subprocess.PIPE)
-        _execution.communicate()
-        print 'See log at %s' % log_path
+        if not celery.current_app.control.inspect().ping():
+            print 'No celery worker found. Run `coop batch init` first.'
+            return 1
+        else:
+            status = batch_launcher.generate_all.delay(arguments.name,
+                arguments.connexion_date, arguments.treatment_date)
+            for s in status.collect():
+                if isinstance(s[0], (GroupResult, tuple)):
+                    result, value = s
+                    return not all(value)
+    elif arguments.action == 'monitor':
+        with open(os.devnull, 'w') as fnull:
+            subprocess.Popen(['celery', '--app=%s' % APPNAME,
+                        'flower'], stdout=fnull, stderr=subprocess.STDOUT)
+            print 'Celery monitoring web server available at localhost:5555'
+    return 0
 
 
 def export(arguments, config, work_data):
@@ -409,8 +429,7 @@ def create_symlinks(modules_path, lang, root, remove=True):
         os.symlink(indexFileName, rootIndex)
 
 
-def documentation(arguments=None, config=None, work_data=None,
-        override_values=None):
+def doc(arguments=None, config=None, work_data=None, override_values=None):
     override_values = override_values or {}
     doc_files = override_values.get('doc_files', None) or (
         os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
@@ -631,7 +650,7 @@ if __name__ == '__main__':
 
     # Batch parser
     parser_batch = subparsers.add_parser('batch', help='Launches a batch')
-    parser_batch.add_argument('action', choices=['kill', 'execute'])
+    parser_batch.add_argument('action', choices=['init', 'execute', 'monitor'])
     parser_batch.add_argument('--name', type=str, help='Name of the batch'
         'to launch')
     parser_batch.add_argument('--connexion-date', '-c', type=str,
@@ -708,23 +727,9 @@ if __name__ == '__main__':
 
     argcomplete.autocomplete(parser)
     arguments = parser.parse_args()
-    exit_status = 0
-    if arguments.command == 'start':
-        start(arguments, config, work_data)
-    elif arguments.command == 'kill':
-        kill(arguments, config, work_data)
-    elif arguments.command == 'sync':
-        sync(arguments, config, work_data)
-    elif arguments.command == 'database':
-        exit_status = database(arguments, config, work_data)
-    elif arguments.command == 'test':
-        test(arguments, config, work_data)
-    elif arguments.command == 'batch':
-        batch(arguments, config, work_data)
-    elif arguments.command == 'export':
-        export(arguments, config, work_data)
-    elif arguments.command == 'configure':
+
+    if arguments.command == 'configure':
         configure(arguments.env)
-    elif arguments.command == 'doc':
-        documentation(arguments, config, work_data)
-    exit(exit_status)
+    else:
+        status = globals()[arguments.command](arguments, config, work_data)
+        exit(status or 0)
