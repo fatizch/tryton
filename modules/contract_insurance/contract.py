@@ -297,7 +297,7 @@ class Contract(Printable):
         contract_maximum = super(Contract, self).get_maximum_end_date()
         all_end_dates = [option.end_date
             for covered_elements in self.covered_elements
-            for option in covered_elements.options]
+            for option in covered_elements.options if option.end_date]
         if contract_maximum is not None:
             all_end_dates.append(contract_maximum)
         if all_end_dates:
