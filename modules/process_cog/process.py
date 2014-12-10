@@ -421,9 +421,6 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
                 to_step):
             result['pre_validate'] = utils.pyson_encode(
                 from_step.button_domain, True)
-        result['invisible'] = utils.pyson_encode(
-            "Eval('current_state', -1) != %i" % (
-                process.get_step_relation(from_step).id), True)
         return result
 
     @classmethod
