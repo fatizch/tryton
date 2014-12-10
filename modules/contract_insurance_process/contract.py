@@ -40,8 +40,6 @@ class Contract(CogProcessFramework):
                 'required as the payment mode is Direct Debit',
                 'no_subscriber_address': 'The selected subscriber does not '
                 'have an address',
-                'unoconv_err': 'Unoconv error: %s,\n the file will be saved in'
-                ' odt format',
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
 
@@ -207,10 +205,7 @@ class Contract(CogProcessFramework):
                     'sender': None,
                     'sender_address': None,
                     })
-            try:
-                data = Report.unoconv(filedata, 'odt', 'pdf')
-            except Exception as e:
-                self.raise_user_error('unoconv_err', e.msg)
+            data = Report.unoconv(filedata, 'odt', 'pdf')
 
             attachment = Attachment()
             attachment.resource = 'contract,%s' % self.id
