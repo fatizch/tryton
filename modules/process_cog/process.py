@@ -244,46 +244,49 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         return current_log[0].id if current_log else None
 
     @classmethod
-    def write(cls, instances, values, *_args):
-        for instance in instances:
-            if instance.current_log and instance.current_log.locked:
-                if instance.current_log.user.id != Transaction().user:
-                    cls.raise_user_error('lock_fault', (
-                            instance.get_rec_name(None),
-                            instance.current_log.user.get_rec_name(None)))
-        super(CogProcessFramework, cls).write(instances, values, *_args)
-        Session = Pool().get('ir.session')
-        Log = Pool().get('process.log')
-        try:
-            good_session, = Session.search(
-                [('create_uid', '=', Transaction().user)])
-        except:
-            # TODO : find what to do if there is no current session (proteus)
-            return
+    def write(cls,  *args):
+        actions = iter(args)
+        for instances, values in zip(actions, actions):
+            for instance in instances:
+                if instance.current_log and instance.current_log.locked:
+                    if instance.current_log.user.id != Transaction().user:
+                        cls.raise_user_error('lock_fault', (
+                                instance.get_rec_name(None),
+                                instance.current_log.user.get_rec_name(None)))
+            super(CogProcessFramework, cls).write(*args)
+            Session = Pool().get('ir.session')
+            Log = Pool().get('process.log')
+            try:
+                good_session, = Session.search(
+                    [('create_uid', '=', Transaction().user)])
+            except:
+                # TODO : find what to do if there is no current session
+                # (proteus)
+                return
 
-        for instance in instances:
-            good_log = instance.current_log
-            if not good_log:
-                continue
-            if good_log.session != good_session.key:
-                good_log.latest = False
+            for instance in instances:
+                good_log = instance.current_log
+                if not good_log:
+                    continue
+                if good_log.session != good_session.key:
+                    good_log.latest = False
+                    good_log.save()
+                    old_log = good_log
+                    good_log = Log()
+                    good_log.session = good_session.key
+                    good_log.user = Transaction().user
+                    good_log.start_time = datetime.datetime.now()
+                    if not (hasattr(old_log, 'to_state') and old_log.to_state):
+                        good_log.from_state = instance.current_state
+                    else:
+                        good_log.from_state = old_log.to_state
+                    good_log.latest = True
+                    good_log.task = instance
+                good_log.to_state = instance.current_state
+                good_log.end_time = datetime.datetime.now()
+                if instance.current_state is None:
+                    good_log.locked = False
                 good_log.save()
-                old_log = good_log
-                good_log = Log()
-                good_log.session = good_session.key
-                good_log.user = Transaction().user
-                good_log.start_time = datetime.datetime.now()
-                if not (hasattr(old_log, 'to_state') and old_log.to_state):
-                    good_log.from_state = instance.current_state
-                else:
-                    good_log.from_state = old_log.to_state
-                good_log.latest = True
-                good_log.task = instance
-            good_log.to_state = instance.current_state
-            good_log.end_time = datetime.datetime.now()
-            if instance.current_state is None:
-                good_log.locked = False
-            good_log.save()
 
     @classmethod
     def create(cls, values):
@@ -795,14 +798,16 @@ class ViewDescription(model.CoopSQL, model.CoopView):
         return view_descs
 
     @classmethod
-    def write(cls, instances, values):
-        super(ViewDescription, cls).write(instances, values)
-        if 'the_view' in values:
-            return
-        for view_desc in instances:
-            the_view = view_desc.create_update_view()
-            if not view_desc.the_view:
-                cls.write([view_desc], {'the_view': the_view})
+    def write(cls, *args):
+        super(ViewDescription, cls).write(*args)
+        actions = iter(args)
+        for instances, values in zip(actions, actions):
+            if 'the_view' in values:
+                continue
+            for view_desc in instances:
+                the_view = view_desc.create_update_view()
+                if not view_desc.the_view:
+                    cls.write([view_desc], {'the_view': the_view})
 
     @classmethod
     def delete(cls, records):

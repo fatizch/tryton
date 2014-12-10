@@ -532,16 +532,18 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         return processes
 
     @classmethod
-    def write(cls, instances, values):
+    def write(cls, *args):
         # Each time we write the process, we update the view
-        super(Process, cls).write(instances, values)
-        if 'menu_items' in values:
-            return
-        for process in instances:
-            existing_menus = [x.id for x in process.menu_items]
-            menus = process.create_update_menu_entry()
-            menus_ids = [x.id for x in menus]
-            process.set_menu_item_list(existing_menus, menus_ids)
+        super(Process, cls).write(*args)
+        actions = iter(args)
+        for instances, values in zip(actions, actions):
+            if 'menu_items' in values:
+                continue
+            for process in instances:
+                existing_menus = [x.id for x in process.menu_items]
+                menus = process.create_update_menu_entry()
+                menus_ids = [x.id for x in menus]
+                process.set_menu_item_list(existing_menus, menus_ids)
 
     @classmethod
     def delete(cls, processes):
@@ -814,13 +816,15 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
                 'The technical name must be unique')]
 
     @classmethod
-    def write(cls, steps, values):
-        super(ProcessStep, cls).write(steps, values)
+    def write(cls, *args):
+        super(ProcessStep, cls).write(*args)
         ProcessStepRelation = Pool().get('process-process.step')
         processes = set()
-        for step in steps:
-            used_in = ProcessStepRelation.search([('step', '=', step)])
-            processes |= set(map(lambda x: x.process.id, used_in))
+        actions = iter(args)
+        for steps, values in zip(actions, actions):
+            for step in steps:
+                used_in = ProcessStepRelation.search([('step', '=', step)])
+                processes |= set(map(lambda x: x.process.id, used_in))
         if not processes:
             return
         Process = Pool().get('process')
