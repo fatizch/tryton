@@ -1,3 +1,5 @@
+import pprint
+
 from trytond.wizard import Wizard, StateTransition, StateView, Button
 from trytond.model import ModelView, fields
 from trytond.transaction import Transaction
@@ -54,9 +56,10 @@ class ModelInfo(ModelView):
             'invisible': ~Bool(Eval('id_to_calculate', False))},
         help="Use the 'instance' keyword to get the instanciated model",
         depends=['id_to_calculate'])
-    evaluation_result = fields.Char('Evaluation Result', states={
+    evaluation_result = fields.Text('Evaluation Result', states={
             'invisible': ~Bool(Eval('id_to_calculate', False))},
         readonly=True, depends=['id_to_calculate'])
+    must_raise_exception = fields.Boolean('Must Raise Exception')
 
     @classmethod
     def get_possible_model_names(cls):
@@ -115,7 +118,8 @@ class ModelInfo(ModelView):
         self.evaluation_result = ''
         self.recalculate_field_infos()
 
-    @fields.depends('model_name', 'id_to_calculate', 'to_evaluate')
+    @fields.depends('model_name', 'id_to_calculate', 'to_evaluate',
+        'must_raise_exception')
     def on_change_with_evaluation_result(self):
         if (not self.id_to_calculate or not self.to_evaluate or not
                 self.model_name):
@@ -124,8 +128,10 @@ class ModelInfo(ModelView):
             context = {
                 'instance': Pool().get(self.model_name)(self.id_to_calculate),
                 }
-            return str(eval(self.to_evaluate, context))
+            return pprint.pformat(eval(self.to_evaluate, context))
         except Exception, exc:
+            if self.must_raise_exception:
+                raise
             return 'ERROR: %s' % str(exc)
 
     def recalculate_field_infos(self):
