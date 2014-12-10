@@ -216,8 +216,6 @@ class RuleMixin(object):
 
     rule = fields.Many2One('rule_engine', 'Rule Engine', required=True,
         ondelete='RESTRICT')
-    kind = fields.Selection([('', '')], 'Rule Kind')
-    kind_string = kind.translated('kind')
     rule_extra_data = fields.Dict('rule_engine.rule_parameter',
         'Rule Extra Data', states={
             'invisible': Not(Bool(Eval('rule_extra_data', False)))})
