@@ -31,10 +31,12 @@ class Move(export.ExportImportMixin):
 
 class AccountKind(export.ExportImportMixin):
     __name__ = 'account.account.type'
+    _func_key = 'name'
 
 
 class AccountTypeTemplate(export.ExportImportMixin):
     __name__ = 'account.account.type.template'
+    _func_key = 'name'
 
 
 class Account(export.ExportImportMixin):
@@ -50,13 +52,20 @@ class Account(export.ExportImportMixin):
         res.add('deferrals')
         return res
 
+    @classmethod
+    def _export_light(cls):
+        return (super(Account, cls)._export_light() |
+            set(['company', 'template']))
+
 
 class AccountTemplate(export.ExportImportMixin):
     __name__ = 'account.account.template'
+    _func_key = 'code'
 
 
 class Journal(export.ExportImportMixin):
     __name__ = 'account.journal'
+    _func_key = 'code'
 
     @classmethod
     def _export_skips(cls):
@@ -69,6 +78,7 @@ class FiscalYear(export.ExportImportMixin):
     'Fiscal Year'
 
     __name__ = 'account.fiscalyear'
+    _func_key = 'code'
 
     @classmethod
     def _export_skips(cls):
