@@ -507,13 +507,13 @@ class DocumentCreate(Wizard):
                 ])
         if email:
             result['email'] = email[0].value
-        if len(result['reports']) > 1:
-            # Use printable_inst name when sending multiple documents
-            output = printable_inst.get_document_filename()
-        else:
-            # Re-use source basename when sending a single document
-            output = os.path.splitext(result['reports'][0]['file_basename'])[0]
-        result['output_report_name'] = output
+        output = printable_inst.get_document_filename()
+        if len(result['reports']) == 1:
+            model_name = os.path.splitext(
+                result['reports'][0]['file_basename'])[0]
+            output = '%s-%s' % (output, model_name)
+        result['output_report_name'] = \
+            coop_string.remove_blank_and_invalid_char(output)
         result['party'] = self.select_model.party.id
         return result
 
