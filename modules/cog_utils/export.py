@@ -178,6 +178,8 @@ class ExportImportMixin(Model):
         The method is used to find existing object from values
         By default it's searching based on the _func_key
         '''
+        print cls.__name__
+        print values
         if '_func_key' not in values:
             cls.add_func_key(values)
         return cls.search([(cls._func_key, '=', values['_func_key'])])
@@ -494,7 +496,7 @@ class ImportWizard(Wizard):
             self.raise_user_error('no_file_selected')
         file_buffer = self.file_selector.selected_file
         values = str(file_buffer)
-        ExportImportMixin.import_json(values)
+        ExportImportMixin.multiple_import_json(values)
         return 'end'
 
 
