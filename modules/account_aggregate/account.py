@@ -4,7 +4,7 @@ from itertools import groupby
 Null = None  # TODO remove when python-sql >=0.3
 from sql.aggregate import Max, Sum
 from sql.conditionals import Coalesce, Case
-from sql.functions import Now, ToChar
+from sql.functions import ToChar, Now
 from sql.operators import Concat
 
 from trytond.pool import PoolMeta, Pool
@@ -95,19 +95,8 @@ class TakeSnapshot(Wizard):
             ])
 
     def transition_snap(self):
-        pool = Pool()
-        Move = pool.get('account.move')
-        Snapshot = pool.get('account.move.snapshot')
-
-        snapshot, = Snapshot.create([{}])
-
-        move = Move.__table__()
-        cursor = Transaction().cursor
-        cursor.execute(*move.update(
-                [move.snapshot, move.write_date, move.write_uid],
-                [snapshot.id, Now(), Transaction().user],
-                where=(move.snapshot == Null)
-                & (move.post_date != Null)))
+        Snapshot = Pool().get('account.move.snapshot')
+        Snapshot.take_snapshot()
         return 'done'
 
 
@@ -138,6 +127,21 @@ class Snapshot(ModelSQL, ModelView):
             if not values.get('name'):
                 values['name'] = Sequence.get_id(config.snapshot_sequence.id)
         return super(Snapshot, cls).create(vlist)
+
+    @classmethod
+    def take_snapshot(cls):
+        pool = Pool()
+        Move = pool.get('account.move')
+
+        snapshot, = cls.create([{}])
+        move = Move.__table__()
+        cursor = Transaction().cursor
+        cursor.execute(*move.update(
+                [move.snapshot, move.write_date, move.write_uid],
+                [snapshot.id, Now(), Transaction().user],
+                where=(move.snapshot == Null)
+                & (move.post_date != Null)))
+        return snapshot.id
 
 
 class LineAggregated(ModelSQL, ModelView):

@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 from .account import *
+from .batch import *
 
 
 def register():
@@ -11,6 +12,7 @@ def register():
         Configuration,
         SnapshotStart,
         SnapshotDone,
+        SnapshotTakeBatch,
         LineAggregated,
         module='account_aggregate', type_='model')
     Pool.register(
