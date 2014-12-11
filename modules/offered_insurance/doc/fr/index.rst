@@ -1,4 +1,8 @@
 Module offered_insurance
 ============================================
 
-TODO
+.. toctree::
+   :maxdepth: 2
+
+   creer_un_produit_tuto
+   imprimer_courrier

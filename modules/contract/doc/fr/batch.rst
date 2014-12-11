@@ -1,5 +1,5 @@
-Batch de résiliation pour fin de contrat
-========================================
+Batch de résiliation pour fin de contrat [contract.termination.treatment]
+=========================================================================
 
 Géré par la classe ContractEndDateTerminationBatch, dans batch.py du module Contract, ce batch doit tourner quotidiennement pour clore les contrats actifs ou suspendus.
 

@@ -11,11 +11,12 @@ Les modèles peuvent être édités via un traitement de texte externe ou
 accessibles uniquement en lecture, suivant la configuration de coog (cf
 :ref:`configuration`).
 Chaque fichier odt est individuellement converti vers le format pdf, puis les
- pdf sont fusionnés pour constituer un unique fichier.
+pdf sont fusionnés pour constituer un unique fichier.
 Si l'un des modèles utilisés a l'attribut "GED interne" coché, alors le pdf est
 ajouté à la GED interne de coog.
 
 .. _configuration:
+
 Configuration
 -------------
 Les outils *gs* et *unoconv* doivent être présents sur le serveur.

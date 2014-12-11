@@ -47,7 +47,8 @@ Lorsque l'on définit une table il faut saisir les informations suivantes:
 - *le nom*: le nom de la table
 - *le code*: identifiant technique qui doit être unique (initialisé automatiquement à partir du nom)
 - *le type*: le type de retour de la table. Il peut être de type numérique, alphanumérique, booléen, date, entier. Dans l'exemple, le tarif est de type numérique. Dans le cas du type numérique, il faut définir le nombre de décimales. Les tarifs de la table sont arrondis à deux chiffres après la virgule donc le nombre de décimales sera 2.
-- *les dimensions*: pour chaque dimension d'entrée de la table on définit
+- *les dimensions*: pour chaque dimension d'entrée de la table on définit :
+
     - *le type*: le type peut être Intervalle, Date, Intervalle de date,  Valeur
     - *le nom*: le nom de la dimension
 

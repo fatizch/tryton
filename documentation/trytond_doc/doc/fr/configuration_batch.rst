@@ -7,6 +7,11 @@ Les batches sont configurables via un fichier spécifique à référencer dans
     [batch]
     config_file = /path/to/batch.conf
 
+Le fichier ``batch.conf`` contient une section pour chaque batch nommée d'après
+le nom du batch.
+Pour avoir accès au paramétrage spécifique d'un batch donné, se référer à la
+:doc:`documentation du batch en question<../batches>`.
+Ci-dessous, énumération des options communes à tous les batches.
 
 default
 -------
@@ -15,6 +20,7 @@ Ces réglages peuvent aussi être modifiés dans les sections spécifiques à ch
 batch.
 
 .. _filepath_template:
+
 filepath_template
 ~~~~~~~~~~~~~~~~~
 Expression définissant comment nommer les fichiers produits par le batch.
@@ -41,14 +47,15 @@ Répertoire racine contenant tous les fichiers écrits par les batches.
 **Cet attribut doit être défini manuellement.**
 
 .. _split_mode:
+
 split_mode
 ~~~~~~~~~~
 Mode de division de la charge de travail entre les différents workers.
 Les valeurs possibles sont :
 
-- ``divide``: charge globale divisée en ``split_size`` groupes de tailles
-  égales
+- ``divide``: charge globale divisée en ``split_size`` groupes de tailles égales
 - ``number``: charge globale divisée en groupes de ``split_size`` objets
+
 Défaut : ``divide``
 
 split_size
@@ -57,5 +64,4 @@ cf :ref:`split_mode`
 
 Défaut : autant que le nomber de workers threads défini par
 ``CELERYD_CONCURRENCY`` dans le fichier de configuration celery.
-
 

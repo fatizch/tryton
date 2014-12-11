@@ -1,4 +1,7 @@
 Module contract
-============================================
+===============
 
-TODO
+.. toctree::
+   :maxdepth: 2
+
+   batch

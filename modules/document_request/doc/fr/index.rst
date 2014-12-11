@@ -1,4 +1,7 @@
-Le module document_request permet de créer des demandes de pièces.
+Module document_request
+=======================
+
+Permet de créer des demandes de pièces.
 
 Il intègre un wizard qui permet de réceptionner les pièces et de les rapprocher
 à des demandes. La pièce reçue est stockée dans la GED.

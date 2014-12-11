@@ -7,6 +7,8 @@ Les documents suivants documentent les processus d'administration, de déploieme
 .. toctree::
    :maxdepth: 1
 
-   configuration_serveur
    configuration_batch
+   configuration_celery
+   configuration_serveur
+   utilisation_coop
 

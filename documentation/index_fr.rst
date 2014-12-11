@@ -8,10 +8,8 @@ Contenu:
 .. toctree::
    :maxdepth: 2
 
-   trytond_doc/doc/fr/fonctionalites
-   trytond_doc/doc/fr/tutoriels
-   trytond_doc/doc/fr/modules
-   trytond_doc/doc/fr/administration_configuration
+   trytond_doc/doc/fr/index
+
 
 * :ref:`Search`
 
