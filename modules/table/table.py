@@ -89,7 +89,8 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         ]
         cls._order.insert(0, ('name', 'ASC'))
         cls._error_messages.update({
-                'existing_clone': ('A clone record already exists : %s(%s)')})
+                'existing_clone': ('A clone record already exists : %s(%s)'),
+                'multiple_tables': 'Multiple tables found'})
 
     @classmethod
     def __register__(cls, module_name):
@@ -174,9 +175,11 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         pool = Pool()
         Cell = pool.get('table.cell')
         cells = values.pop("cells")
-        table, = cls.search_for_export_import(values)
-        if table:
-            Cell.delete(Cell.search([('definition', '=', table.id)]))
+        tables = cls.search_for_export_import(values)
+        if len(tables) > 1:
+            cls.raise_user_error('multiple_tables')
+        if tables:
+            Cell.delete(Cell.search([('definition', '=', tables[0].id)]))
         table = super(TableDefinition, cls).import_json(values)
         dimension_matcher = {}
         for i in range(1, DIMENSION_MAX + 1):
