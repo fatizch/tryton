@@ -157,9 +157,8 @@ class ContractOption:
     loan_shares = fields.One2Many('loan.share', 'option', 'Loan Shares',
         states={
             'invisible': Eval('coverage_family', '') != 'loan',
-            'readonly': Eval('contract_status') != 'quote',
             },
-        depends=['coverage_family', 'contract_status'])
+        depends=['coverage_family', 'contract_status'], readonly=True)
     multi_mixed_view = loan_shares
 
     @classmethod
