@@ -21,8 +21,8 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
     @classmethod
     def get_batch_domain(cls, treatment_date):
         return [['OR',
-                ('state', '=', 'active'),
-                ('state', '=', 'hold')],
+                ('status', '=', 'active'),
+                ('status', '=', 'hold')],
             ('end_date', '!=', None),
             ('end_date', '<=', treatment_date)]
 
