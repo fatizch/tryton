@@ -16,10 +16,10 @@
             <field name="inherit" ref="account_invoice.invoice_view_tree"/>
             <field name="name">invoice_list</field>
         </record>
-        <record model="ir.ui.view" id="light_invoice_view_list">
+        <record model="ir.ui.view" id="premium_notice_view_list">
             <field name="model">account.invoice</field>
             <field name="type">tree</field>
-            <field name="name">light_invoice_list</field>
+            <field name="name">premium_notice_view_list</field>
         </record>
         <!-- ################ -->
         <!-- # Invoice Line # -->

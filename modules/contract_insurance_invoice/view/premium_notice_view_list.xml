@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<tree string="Premium Notices">
+    <field name="number"/>
+    <field name="start"/>
+    <field name="end"/>
+    <field name="state"/>
+    <field name="total_amount" sum="Total Amount">
+        <suffix name="currency_symbol"/>
+    </field>
+    <field name="amount_to_pay_today"/>
+    <field name="contract"/>
+</tree>

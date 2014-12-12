@@ -47,44 +47,51 @@
             <field name="name">contract_invoice_form</field>
         </record>
 
-        <record model="ir.action.act_window" id="act_invoice_form">
-            <field name="name">Contract Invoices</field>
+        <record model="ir.action.act_window" id="act_premium_notice_form">
+            <field name="name">Premium Notices</field>
             <field name="res_model">account.invoice</field>
             <field name="domain">[('contract', 'in', Eval('active_ids'))]</field>
+            <field name="order">[('start', 'DESC')]</field>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_view1">
             <field name="sequence" eval="10"/>
-            <field name="view" ref="invoice_view_list"/>
-            <field name="act_window" ref="act_invoice_form"/>
+            <field name="view" ref="premium_notice_view_list"/>
+            <field name="act_window" ref="act_premium_notice_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_view2">
             <field name="sequence" eval="10"/>
             <field name="view" ref="invoice_view_form"/>
-            <field name="act_window" ref="act_invoice_form"/>
+            <field name="act_window" ref="act_premium_notice_form"/>
         </record>
-        <record model="ir.action.act_window.domain" id="act_invoice_domain_posted_paid">
-            <field name="name">Validated - Posted - Paid</field>
+        <record model="ir.action.act_window.domain" id="act_invoice_domain_pending">
+            <field name="name">Pending</field>
             <field name="sequence" eval="10"/>
-            <field name="domain">[('state', 'in', ('posted', 'paid', 'validated'))]</field>
-            <field name="act_window" ref="act_invoice_form"/>
+            <field name="domain">[('state', 'in', ('posted', 'validated'))]</field>
+            <field name="act_window" ref="act_premium_notice_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_invoice_domain_paid">
+            <field name="name">Paid</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">[('state', '=', 'paid')]</field>
+            <field name="act_window" ref="act_premium_notice_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_invoice_domain_canceled">
             <field name="name">Canceled</field>
-            <field name="sequence" eval="20"/>
+            <field name="sequence" eval="30"/>
             <field name="domain">[('state', '=', 'cancel')]</field>
-            <field name="act_window" ref="act_invoice_form"/>
+            <field name="act_window" ref="act_premium_notice_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_invoice_domain_all">
             <field name="name">All</field>
-            <field name="sequence" eval="9999"/>
+            <field name="sequence" eval="99"/>
             <field name="domain"></field>
-            <field name="act_window" ref="act_invoice_form"/>
+            <field name="act_window" ref="act_premium_notice_form"/>
         </record>
 
-        <record model="ir.action.keyword" id="act_invoice_form_keyword1">
+        <record model="ir.action.keyword" id="act_premium_notice_form_keyword1">
             <field name="keyword">form_relate</field>
             <field name="model">contract,-1</field>
-            <field name="action" ref="act_invoice_form"/>
+            <field name="action" ref="act_premium_notice_form"/>
         </record>
 
         <record model="ir.ui.view" id="invoice_start_view_form">

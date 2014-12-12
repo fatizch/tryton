@@ -4,6 +4,7 @@ from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import coop_string, utils, model, fields
 
@@ -14,32 +15,38 @@ __all__ = [
     'Invoice',
     'InvoiceLine',
     'InvoiceLineDetail',
+    '_STATES',
+    '_DEPENDS',
     ]
+_STATES = {'invisible': ~Eval('contract_invoice')}
+_DEPENDS = ['contract_invoice']
 
 
 class Invoice:
     __name__ = 'account.invoice'
 
     start = fields.Function(
-        fields.Date('Start Date'),
+        fields.Date('Start Date', states=_STATES, depends=_DEPENDS),
         'get_contract_invoice_field', searcher='search_contract_invoice')
     end = fields.Function(
-        fields.Date('End Date'),
+        fields.Date('End Date', states=_STATES, depends=_DEPENDS),
         'get_contract_invoice_field', searcher='search_contract_invoice')
     base_amount = fields.Function(
-        fields.Numeric('Base amount'),
+        fields.Numeric('Base amount', states=_STATES, depends=_DEPENDS),
         'get_base_amount')
     contract = fields.Function(
-        fields.Many2One('contract', 'Contract'),
+        fields.Many2One('contract', 'Contract', states=_STATES,
+            depends=_DEPENDS),
         'get_contract_invoice_field', searcher='search_contract_invoice')
     contract_invoice = fields.Function(
-        fields.Many2One('contract.invoice', 'Contract Invoice'),
+        fields.Many2One('contract.invoice', 'Contract Invoice', _STATES,
+            _DEPENDS),
         'get_contract_invoice_field')
     currency_symbol = fields.Function(
         fields.Char('Currency Symbol'),
         'get_currency_symbol')
     fees = fields.Function(
-        fields.Numeric('Fees'),
+        fields.Numeric('Fees', states=_STATES, depends=_DEPENDS),
         'get_fees')
 
     @classmethod
@@ -49,6 +56,10 @@ class Invoice:
                 'post_on_non_active_contract': 'Impossible to post invoice '
                 '%(invoice)s on contract %(contract)s which is %(status)s',
                 })
+        cls.untaxed_amount.states = {
+            'invisible': Bool(Eval('contract_invoice')),
+            }
+        cls.untaxed_amount.depends += ['contract_invoice']
 
     def get_base_amount(self, name):
         return self.untaxed_amount - self.fees

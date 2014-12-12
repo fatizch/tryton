@@ -104,7 +104,7 @@ class SynthesisMenuOpen(Wizard):
             'res_model': 'account.invoice',
             'pyson_domain': domain,
             'views': [(Pool().get('ir.ui.view').search([('xml_id', '=',
-                    'account_invoice.invoice_view_tree')
+                    'contract_insurance_invoice.premium_notice_view_list')
                         ])[0].id, 'tree'),
                     (Pool().get('ir.ui.view').search([('xml_id', '=',
                         'account_invoice.invoice_view_form')

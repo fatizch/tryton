@@ -3,35 +3,4 @@
     <xpath expr="/tree" position="replace_attributes">
         <tree colors="If(Eval('state') == 'paid', 'green', If(Eval('state') == 'posted', 'blue', 'black'))"/>
     </xpath>
-    <xpath expr="/tree/field[@name='number']" position="before">
-        <field name="contract"/>
-        <field name="start"/>
-        <field name="end"/>
-    </xpath>
-    <xpath expr="/tree/field[@name='reference']" position="replace"/>
-    <xpath expr="/tree/field[@name='currency']" position="replace"/>
-    <xpath expr="/tree/field[@name='untaxed_amount']" position="replace">
-        <field name="base_amount" sum="Base Amount">
-            <suffix name="currency_symbol"/>
-        </field>
-        <field name="fees" sum="Fees">
-            <suffix name="currency_symbol"/>
-        </field>
-    </xpath>
-    <xpath expr="/tree/field[@name='tax_amount']" position="replace">
-        <field name="tax_amount" sum="Tax Amount">
-            <suffix name="currency_symbol"/>
-        </field>
-    </xpath>
-    <xpath expr="/tree/field[@name='total_amount']" position="replace">
-        <field name="total_amount" sum="Total Amount">
-            <suffix name="currency_symbol"/>
-        </field>
-    </xpath>
-    <xpath expr="/tree/field[@name='amount_to_pay_today']" position="replace">
-        <field name="amount_to_pay_today" sum="To be paid">
-            <suffix name="currency_symbol"/>
-        </field>
-    </xpath>
-    <xpath expr="/tree/field[@name='description']" position="replace"/>
 </data>
