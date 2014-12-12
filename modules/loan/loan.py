@@ -155,6 +155,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             ('calculated', 'Calculated'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
+    is_used_on_active_contract = fields.Function(
+        fields.Boolean('Used on an active contract',
+            states={'invisible': True}),
+        'get_is_used_on_active_contract')
 
     @classmethod
     def __setup__(cls):
@@ -170,6 +174,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         cls._buttons.update({
                 'draft': {
                     'invisible': Eval('state') != 'calculated',
+                    'readonly': Bool(Eval('is_used_on_active_contract')),
                     },
                 'calculate_loan': {
                     'invisible': Eval('state') != 'draft',
@@ -410,6 +415,12 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         increment = utils.get_value_at_date(self.increments, at_date,
             'start_date')
         return increment.payment_amount if increment else None
+
+    def get_is_used_on_active_contract(self, name):
+        for share in self.loan_shares:
+            if share.contract.status == 'active':
+                return True
+        return False
 
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):

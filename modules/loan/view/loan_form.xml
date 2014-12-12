@@ -20,4 +20,6 @@
             string="Calculate Amortization Table"
             icon="tryton-go-next"/>
     </group>
+    <label name="is_used_on_active_contract"/>
+    <field name="is_used_on_active_contract"/>
 </form>
