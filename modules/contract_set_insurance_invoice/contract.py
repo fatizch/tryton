@@ -5,6 +5,7 @@ from trytond.transaction import Transaction
 __all__ = [
     'Contract',
     'DisplayContractSetPremium',
+    'ContractSet',
     ]
 
 __metaclass__ = PoolMeta
@@ -53,3 +54,11 @@ class DisplayContractSetPremium(Wizard):
         return action, {
             'ids': contracts,
         }
+
+
+class ContractSet:
+    __name__ = 'contract.set'
+
+    def invoice_contracts_till_next_renewal_date(self):
+        for contract in self.contracts:
+            contract.invoice_till_next_renewal_date()

@@ -109,31 +109,24 @@ class Contract:
 
     def invoices_report(self):
         pool = Pool()
-        Contract = pool.get('contract')
         ContractInvoice = pool.get('contract.invoice')
-        cached_value = Contract._invoices_cache.get(self.id, default=None)
-        if not cached_value:
-            with Transaction().new_cursor() as transaction:
-                contract = Contract(self.id)
-                try:
-                    Contract.invoice([contract], contract.next_renewal_date)
-                    invoices = ContractInvoice.search([
-                            ('contract', '=', contract),
-                            ('invoice.state', '!=', 'cancel'),
-                            ])
-                    invoices = [{
-                            'start': x.invoice.start,
-                            'end': x.invoice.end,
-                            'total_amount': x.invoice.total_amount,
-                            'planned_payment_date': x.planned_payment_date}
-                            for x in invoices]
-                    # we want chronological order
-                    cached_value = [invoices[::-1],
-                        sum([x['total_amount'] for x in invoices])]
-                    Contract._invoices_cache.set(contract.id, cached_value)
-                finally:
-                    transaction.cursor.rollback()
-        return cached_value
+        invoices = ContractInvoice.search([
+                ('contract', '=', self),
+                ('invoice.state', '!=', 'cancel'),
+                ])
+        invoices = [{
+                'start': x.invoice.start,
+                'end': x.invoice.end,
+                'total_amount': x.invoice.total_amount,
+                'planned_payment_date': x.planned_payment_date}
+                for x in invoices]
+        # we want chronological order
+        return [invoices[::-1],
+            sum([x['total_amount'] for x in invoices])]
+
+    def invoice_till_next_renewal_date(self):
+        Contract.invoice([self],
+            self.next_renewal_date - relativedelta(days=1))
 
     @classmethod
     def get_billing_information(cls, contracts, names):
