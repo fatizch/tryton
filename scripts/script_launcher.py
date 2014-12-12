@@ -545,13 +545,16 @@ def configure(target_env):
                         "BROKER_URL = 'amqp://guest:guest@localhost:5672//'",
                         'CELERYD_CONCURRENCY = 4',
                         'CELERY_REDIRECT_STDOUT = False',
+                        "CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'",
                         'CELERYD_TASK_LOG_FORMAT = '
                         "'[%(asctime)s: %(levelname)s/%(processName)s]"
-                        "[%(task_name)s] %(message)s'",
-                        "TRYTON_DATABASE = '%s'" % base_name,
+                        "[%(name)s] %(message)s'",
                         "CELERY_ACCEPT_CONTENT = ['pickle', 'json']",
+                        "CELERY_RESULT_BACKEND = 'amqp'",
+                        "TRYTON_DATABASE = '%s'" % base_name,
                         "TRYTON_CONFIG = '%s'" % os.path.join(workspace,
-                            'conf', 'trytond.conf')]))
+                            'conf', 'trytond.conf')])),
+
     if not os.path.exists(os.path.join(workspace, 'conf', 'tryton.conf')):
         with open(os.path.join(workspace, 'conf', 'tryton.conf'), 'w') as f:
             f.write('\n'.join([
