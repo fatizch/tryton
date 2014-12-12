@@ -94,6 +94,22 @@ def generate(batch_name, ids, connexion_date, treatment_date):
     with Transaction().set_user(admin.id), Transaction().set_context(
             User.get_preferences(context_only=True),
             client_defined_date=connexion_date):
+
         to_treat = BatchModel.convert_to_instances(ids)
-        BatchModel.execute(to_treat, ids, treatment_date)
-    return True
+        try:
+            BatchModel.execute(to_treat, ids, treatment_date)
+        except Exception:
+            do_not_divide = BatchModel.get_conf_item('split_mode') == \
+                'divide' and BatchModel.get_conf_item('split_size') == 1
+            if len(ids) < 2 or do_not_divide:
+                logger.error(
+                    '[%s] failed. Task cannot be divided, aborting.' %
+                    batch_name)
+                return 1
+            logger.warning(
+                '[%s] failed. Splitting task in subtasks and retrying.' %
+                batch_name)
+            half_idx = len(ids) / 2
+            group(generate.s(batch_name, _ids, connexion_date, treatment_date)
+                for _ids in (ids[:half_idx], ids[half_idx:]))()
+    return 0

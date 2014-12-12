@@ -384,8 +384,9 @@ def batch(arguments, config, work_data):
                 arguments.connexion_date, arguments.treatment_date)
             for s in status.collect():
                 if isinstance(s[0], (GroupResult, tuple)):
-                    result, value = s
-                    return not all(value)
+                    result, vals = s
+                    if any(vals):
+                        return 1
     elif arguments.action == 'monitor':
         with open(os.devnull, 'w') as fnull:
             subprocess.Popen(['celery', '--app=%s' % APPNAME,
