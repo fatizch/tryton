@@ -117,11 +117,6 @@ class BankAccount(export.ExportImportMixin):
             set(['owners']))
 
     @classmethod
-    def __setup__(cls):
-        super(BankAccount, cls).__setup__()
-        cls.numbers.required = False
-
-    @classmethod
     def _export_keys(cls):
         return set(['number'])
 
