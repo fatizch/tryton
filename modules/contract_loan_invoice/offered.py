@@ -178,6 +178,6 @@ class FeeRule(model.CoopSQL, model.CoopView):
     fee = fields.Many2One('account.fee.description', 'Fee', required=True,
         ondelete='CASCADE')
     rule = fields.Many2One('loan.average_premium_rule', 'Rule', required=True,
-        ondelete='CASCADE')
+        ondelete='RESTRICT')
     action = fields.Selection(FEE_ACTIONS, 'Behaviour')
     action_string = action.translated('action')

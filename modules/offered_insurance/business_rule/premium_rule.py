@@ -437,7 +437,7 @@ class PremiumRuleComponent(model.CoopSQL, model.CoopView):
             ('global', 'Global'),
             ('sub_item', 'Covered Item'),
             ], 'Rated Object Level', required=True)
-    rule = fields.Many2One('rule_engine', 'Rule Engine', ondelete='CASCADE',
+    rule = fields.Many2One('rule_engine', 'Rule Engine', ondelete='RESTRICT',
         depends=['config_kind', 'kind'], states={
             'invisible': Or(
                 Bool((Eval('kind') != 'base')),
