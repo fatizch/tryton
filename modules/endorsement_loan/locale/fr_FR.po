@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -403,7 +403,7 @@ msgstr "Nouvelles valeurs"
 
 msgctxt "field:endorsement.loan.change.updated_payments,current_payments:"
 msgid "Current Payments"
-msgstr "Paiements actuels"
+msgstr "Echéancier actuel"
 
 msgctxt "field:endorsement.loan.change.updated_payments,id:"
 msgid "ID"
@@ -897,7 +897,7 @@ msgstr "Montant actuel"
 
 msgctxt "field:endorsement.start.preview_loan,old_payments:"
 msgid "Current Payments"
-msgstr "Paiements actuels"
+msgstr "Echéancier actuel"
 
 msgctxt "model:contract.covered_element.add_option.loan_share_selector,name:"
 msgid "Loan Share Selector"
