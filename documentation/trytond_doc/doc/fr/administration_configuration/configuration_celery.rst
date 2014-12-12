@@ -1,7 +1,9 @@
 Configuration Celery
 ====================
 
-Celery <http://celery.readthedocs.org/en/latest/> est le système utilisé par l'outil ``coop batch`` pour faire des traitements de batches distribués.
+`Celery`_ est le système utilisé par l'outil ``coop batch`` pour faire des traitements de batches distribués.
+
+.. _Celery: http://celery.readthedocs.org/en/latest/
 
 celeryconfig.py
 ---------------
