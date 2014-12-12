@@ -1,11 +1,7 @@
-from celery.utils.log import get_task_logger
-
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import batch, coop_date
-
-logger = get_task_logger(__name__)
 
 __all__ = [
     'DocumentRequestBatch',
@@ -16,6 +12,8 @@ class DocumentRequestBatch(batch.BatchRoot):
     'Document Request Batch Definition'
 
     __name__ = 'document.request.batch'
+
+    logger = batch.get_logger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -59,5 +57,7 @@ class DocumentRequestBatch(batch.BatchRoot):
                 ext, _buffer, _, name = Report.execute([data['id']], data)
                 cls.write_batch_output(_buffer, '%s.%s' % (name, ext))
                 wizard.execute(wizard_id, {}, 'post_generation')
-                logger.info(
-                    'Treated Request for %s' % cur_object.get_rec_name(None))
+                cls.logger.info('Processed document request for %s' %
+                    cur_object.get_rec_name(None))
+        cls.logger.info('Processed documents requests on %d objects' %
+            len(objects))

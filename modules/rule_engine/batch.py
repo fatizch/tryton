@@ -1,4 +1,4 @@
-from trytond.modules.cog_utils.batch import BatchRoot
+from trytond.modules.cog_utils import batch
 from trytond.pool import Pool
 
 __all__ = [
@@ -6,10 +6,12 @@ __all__ = [
     ]
 
 
-class ValidateRuleBatch(BatchRoot):
+class ValidateRuleBatch(batch.BatchRoot):
     'Rule Engine Test Case Validation Batch'
 
     __name__ = 'rule_engine.validate'
+
+    logger = batch.get_logger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -22,3 +24,4 @@ class ValidateRuleBatch(BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date):
         Pool().get('rule_engine.test_case').check_pass(objects)
+        cls.logger.info('%s objects validated' % len(objects))

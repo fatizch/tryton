@@ -1,22 +1,20 @@
-from celery.utils.log import get_task_logger
-
 from trytond.pool import Pool
 from trytond.error import UserError
 
-from trytond.modules.cog_utils import BatchRoot
+from trytond.modules.cog_utils import batch
 
 
 __all___ = [
     'ProductValidationBatch',
     ]
 
-logger = get_task_logger(__name__)
 
-
-class ProductValidationBatch(BatchRoot):
+class ProductValidationBatch(batch.BatchRoot):
     'Product Validation Batch'
 
     __name__ = 'offered.validate.batch'
+
+    logger = batch.get_logger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -34,8 +32,9 @@ class ProductValidationBatch(BatchRoot):
         # current version, only the first error of all the batch of records is
         # reported
         Product = Pool().get('offered.product')
-        logger.info('Validating products %s' % objects)
         try:
             Product._validate(objects)
+            cls.logger.info('Validated %d products' % len(objects))
         except UserError as exc:
-            logger.warning('Bad validation : %s' % exc)
+            cls.logger.error('FAILED. Bad validation : %s' % exc)
+            raise

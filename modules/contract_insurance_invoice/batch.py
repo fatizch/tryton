@@ -1,12 +1,10 @@
-from celery.utils.log import get_task_logger
 from sql.aggregate import Max
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils.batch import BatchRoot
+from trytond.modules.cog_utils import batch
 
-logger = get_task_logger(__name__)
 
 __all__ = [
     'CreateInvoiceContractBatch',
@@ -14,10 +12,12 @@ __all__ = [
     ]
 
 
-class CreateInvoiceContractBatch(BatchRoot):
+class CreateInvoiceContractBatch(batch.BatchRoot):
     'Contract Invoice Creation Batch'
 
     __name__ = 'contract.invoice.create'
+
+    logger = batch.get_logger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -45,12 +45,15 @@ class CreateInvoiceContractBatch(BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date):
         Pool().get('contract').invoice(objects, treatment_date)
+        cls.logger.info('%d invoices created' % len(objects))
 
 
-class PostInvoiceContractBatch(BatchRoot):
+class PostInvoiceContractBatch(batch.BatchRoot):
     'Post Contract Invoice Batch'
 
     __name__ = 'contract.invoice.post'
+
+    logger = batch.get_logger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -76,3 +79,4 @@ class PostInvoiceContractBatch(BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date):
         Pool().get('account.invoice').post(objects)
+        cls.logger.info('%d invoices posted' % len(objects))

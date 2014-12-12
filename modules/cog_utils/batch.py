@@ -1,8 +1,9 @@
 import os
+import logging
 import ConfigParser
 from datetime import datetime
 
-from celeryconfig import CELERYD_CONCURRENCY
+from celeryconfig import CELERYD_CONCURRENCY, CELERYD_TASK_LOG_FORMAT
 from celery.utils.log import get_task_logger
 
 from trytond.config import config
@@ -17,7 +18,18 @@ __all__ = [
     'ViewValidationBatch',
     ]
 
-logger = get_task_logger(__name__)
+
+def get_logger(batch_name):
+    logger = get_task_logger(batch_name)
+    log_dir = config.get('batch', 'log_dir', '')
+    if log_dir:
+        handler = logging.FileHandler(os.path.join(
+            log_dir, batch_name + '.log'), delay=True)
+        format_string = CELERYD_TASK_LOG_FORMAT.replace('[%(name)s]', '')
+        formatter = logging.Formatter(format_string)
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+    return logger
 
 
 class BatchRoot(ModelView):
@@ -139,6 +151,8 @@ class ViewValidationBatch(BatchRoot):
 
     __name__ = 'ir.ui.view.validate'
 
+    logger = get_logger(__name__)
+
     @classmethod
     def get_batch_main_model_name(cls):
         return 'ir.ui.view'
@@ -167,9 +181,9 @@ class ViewValidationBatch(BatchRoot):
                 if view.inherit:
                     full_inherited_xml_id = view.inherit.xml_id
                     if full_inherited_xml_id.split('.')[-1] != xml_id:
-                        logger.warning('View %s inherits from %s but has '
+                        cls.logger.warning('View %s inherits from %s but has '
                             'different id !' % (full_xml_id,
                                 full_inherited_xml_id))
             except:
-                logger.error('Failed testing view %s' % view.id)
+                cls.logger.error('Failed testing view %s' % view.id)
                 raise

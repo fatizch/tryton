@@ -1,12 +1,12 @@
 from itertools import groupby
-from celery.utils.log import get_task_logger
 from sql.operators import Equal
 from sql.aggregate import Count
 
 from trytond.pool import Pool
+from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch, coop_string
+from trytond.modules.cog_utils import batch
 
 
 _all__ = [
@@ -14,17 +14,20 @@ _all__ = [
     'PaymentCreationBatch'
     ]
 
-logger = get_task_logger(__name__)
-
 
 class PaymentTreatmentBatch(batch.BatchRoot):
     "Payment Treatment Batch"
+
     __name__ = 'account.payment.treatment'
+
+    logger = batch.get_logger(__name__)
 
     @classmethod
     def __setup__(cls):
         super(PaymentTreatmentBatch, cls).__setup__()
-        cls._default_config_items.update({'dump_sepa_xml': u'no'})
+        cls._default_config_items.update({
+                'split_size': 1,
+                })
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -49,7 +52,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         groups = []
         Payment = Pool().get('account.payment')
         payments = sorted(objects, key=cls._group_payment_key)
-        for key, grouped_payments in groupby(payments,
+        for key, _grouped_payments in groupby(payments,
                 key=cls._group_payment_key):
             def group():
                 pool = Pool()
@@ -58,17 +61,22 @@ class PaymentTreatmentBatch(batch.BatchRoot):
                 group.save()
                 groups.append(group)
                 return group
-            grouped_payments = list(grouped_payments)
-            payments_group = Payment.process(list(grouped_payments), group)
-            if coop_string.coerce_to_bool(cls.get_conf_item('dump_sepa_xml')):
-                for sepa_msg in payments_group.sepa_messages:
-                    cls.write_batch_output(sepa_msg.message.encode('utf-8'),
-                        sepa_msg.filename)
+            grouped_payments = list(_grouped_payments)
+            try:
+                Payment.process(grouped_payments, group)
+            except UserError, e:
+                msg = 'FAILED. Ids: %s. Error: %s' % (ids, e)
+                cls.logger.error(msg)
+                raise
+            cls.logger.info('group of %d payments processed' %
+                len(grouped_payments))
 
 
 class PaymentCreationBatch(batch.BatchRoot):
     "Payment Creation Batch"
     __name__ = 'account.payment.creation'
+
+    logger = batch.get_logger(__name__)
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -106,3 +114,4 @@ class PaymentCreationBatch(batch.BatchRoot):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         MoveLine.create_payments(objects)
+        cls.logger.info('%s payments created' % len(objects))
