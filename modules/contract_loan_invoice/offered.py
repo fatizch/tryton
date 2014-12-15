@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import model, fields, coop_string, coop_date
@@ -9,6 +9,9 @@ __all__ = [
     'Product',
     'LoanAveragePremiumRule',
     'FeeRule',
+    'OptionDescriptionPricingRule',
+    'OptionDescription',
+    'ProductPricingDates',
     ]
 FEE_ACTIONS = [
     ('do_not_use', 'Do not use fee'),
@@ -25,6 +28,20 @@ class Product:
         'Average Loan Premium Rule', states={
             'required': Bool(Eval('is_loan', False))},
         depends=['is_loan'], ondelete='RESTRICT')
+
+    def get_option_dates(self, dates, option):
+        super(Product, self).get_option_dates(dates, option)
+        for elem in option.loan_shares:
+            if elem.start_date:
+                dates.add(elem.start_date)
+
+    def get_dates(self, contract):
+        dates = super(Product, self).get_dates(contract)
+        for loan in contract.used_loans:
+            dates.add(loan.funds_release_date)
+            dates.add(loan.first_payment_date)
+            dates.add(loan.end_date)
+        return dates
 
 
 class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
@@ -181,3 +198,56 @@ class FeeRule(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT')
     action = fields.Selection(FEE_ACTIONS, 'Behaviour')
     action_string = action.translated('action')
+
+
+class OptionDescriptionPricingRule:
+    __name__ = 'offered.option.description.premium_rule'
+
+    @classmethod
+    def __setup__(cls):
+        super(OptionDescriptionPricingRule, cls).__setup__()
+        cls.premium_base.selection.append(
+            ('loan.share', 'Loan'))
+
+    @fields.depends('coverage')
+    def on_change_with_premium_base(self, name=None):
+        if self.coverage and self.coverage.is_loan:
+            return 'loan.share'
+        return super(OptionDescriptionPricingRule,
+            self).on_change_with_premium_base(name)
+
+
+class OptionDescription:
+    __name__ = 'offered.option.description'
+
+    def get_rated_instances(self, base_instance):
+        result = super(OptionDescription,
+            self).get_rated_instances(base_instance)
+        pool = Pool()
+        Option = pool.get('contract.option')
+        LoanShare = pool.get('loan.share')
+        if isinstance(base_instance, Option):
+            if base_instance.coverage == self:
+                for loan_share in base_instance.loan_shares:
+                    result += self.get_rated_instances(loan_share)
+        elif isinstance(base_instance, LoanShare):
+            result.append(base_instance)
+        return result
+
+
+class ProductPricingDates:
+    __name__ = 'offered.product.premium_dates'
+
+    every_loan_payment = fields.Boolean('Calculate each payment', states={
+            'invisible': ~Eval('_parent_product', {}).get('is_loan', False)})
+
+    def get_dates_for_contract(self, contract):
+        dates = super(ProductPricingDates, self).get_dates_for_contract(
+            contract)
+        if not contract.is_loan:
+            return dates
+        if self.every_loan_payment:
+            for loan in contract.used_loans:
+                for payment in loan.payments:
+                    dates.append(payment.start_date)
+        return dates

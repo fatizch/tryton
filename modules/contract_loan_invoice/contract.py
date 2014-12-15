@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from sql import Literal
 from sql.aggregate import Sum, Max
 from sql.conditionals import Case
+from sql.functions import Round
 
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
@@ -81,13 +82,17 @@ class Premium:
 
     @classmethod
     def new_line(cls, line, start_date, end_date):
+        loan = None
+        if isinstance(line.rated_instance, Pool().get('loan.share')):
+            loan = line.rated_instance.loan
+            line.rated_instance = line.rated_instance.option
         result = super(Premium, cls).new_line(line, start_date, end_date)
-        if 'loan' not in line:
+        if loan is None:
             result.loan = None
             return result
-        result.loan = line['loan']
+        result.loan = loan
         result.end = min(end_date or datetime.date.max,
-            coop_date.add_day(line['loan'].end_date, -1))
+            coop_date.add_day(loan.end_date, -1))
         return result
 
     def get_description(self):
@@ -366,17 +371,17 @@ class PremiumAmountPerPeriod(ModelSQL, ModelView):
                 Literal(0).as_('write_date'),
                 premium_amount.contract.as_('contract'),
                 Sum(Case((~premium.rated_entity.ilike(
-                                'account.fee.description,%'),
+                                'account.fee,%'),
                             premium_amount.amount),  # NOQA
                         else_=0)).as_('amount'),
                 Sum(Case((premium.rated_entity.ilike(
-                                'account.fee.description,%'),
+                                'account.fee,%'),
                             premium_amount.amount),  # NOQA
                         else_=0)).as_('fees'),
                 Sum(premium_amount.amount).as_('untaxed_amount'),
-                Sum(premium_amount.tax_amount).as_('tax_amount'),
-                Sum(premium_amount.amount
-                    + premium_amount.tax_amount).as_('total'),
+                Round(Sum(premium_amount.tax_amount), 2).as_('tax_amount'),
+                Round(Sum(premium_amount.amount + premium_amount.tax_amount),
+                    2).as_('total'),
                 premium_amount.period_start.as_('period_start'),
                 premium_amount.period_end.as_('period_end'),
                 group_by=[

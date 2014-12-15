@@ -13,7 +13,6 @@ LoanShareTreeExpansion = expand_tree('loan.share')
 
 def register():
     Pool.register(
-        PremiumDateConfiguration,
         Product,
         OptionDescription,
         RuleEngineRuntime,

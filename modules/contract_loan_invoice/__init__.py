@@ -16,6 +16,9 @@ def register():
         DisplayLoanAveragePremiumValues,
         LoanAveragePremiumRule,
         FeeRule,
+        OptionDescriptionPricingRule,
+        OptionDescription,
+        ProductPricingDates,
         Product,
         InvoiceLineDetail,
         module='contract_loan_invoice', type_='model')

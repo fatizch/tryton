@@ -52,5 +52,14 @@
             <field name="type">tree</field>
             <field name="name">fee_rule_list</field>
         </record>
+        <!-- ######################### -->
+        <!-- # Product Pricing Dates # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="premium_dates_view_form">
+            <field name="model">offered.product.premium_dates</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="premium.premium_dates_view_form"/>
+            <field name="name">premium_dates_form</field>
+        </record>
     </data>
 </tryton>

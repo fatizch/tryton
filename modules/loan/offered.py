@@ -10,28 +10,9 @@ from trytond.modules.offered_insurance import offered
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'PremiumDateConfiguration',
     'Product',
     'OptionDescription',
     ]
-
-
-class PremiumDateConfiguration:
-    __name__ = 'billing.premium.date_configuration'
-
-    every_loan_payment = fields.Boolean('Calculate each payment', states={
-            'invisible': ~Eval('_parent_product', {}).get('is_loan', False)})
-
-    def get_dates_for_contract(self, contract):
-        dates = super(PremiumDateConfiguration, self).get_dates_for_contract(
-            contract)
-        if not contract.is_loan:
-            return dates
-        if self.every_loan_payment:
-            for loan in contract.used_loans:
-                for payment in loan.payments:
-                    dates.append(payment.start_date)
-        return dates
 
 
 class Product:
@@ -46,20 +27,6 @@ class Product:
             if coverage.is_loan:
                 return True
         return False
-
-    def get_option_dates(self, dates, option):
-        super(Product, self).get_option_dates(dates, option)
-        for elem in option.loan_shares:
-            if elem.start_date:
-                dates.add(elem.start_date)
-
-    def get_dates(self, contract):
-        dates = super(Product, self).get_dates(contract)
-        for loan in contract.used_loans:
-            dates.add(loan.funds_release_date)
-            dates.add(loan.first_payment_date)
-            dates.add(loan.end_date)
-        return dates
 
 
 class OptionDescription:
