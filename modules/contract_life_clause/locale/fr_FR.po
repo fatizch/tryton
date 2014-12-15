@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -86,7 +86,7 @@ msgstr "Référence"
 
 msgctxt "field:contract.option.beneficiary,share:"
 msgid "Share"
-msgstr "Quote-Part"
+msgstr "Quotité"
 
 msgctxt "field:contract.option.beneficiary,write_date:"
 msgid "Write Date"
