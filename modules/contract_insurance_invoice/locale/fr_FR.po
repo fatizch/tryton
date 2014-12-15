@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -514,6 +514,14 @@ msgctxt "field:contract.covered_element,premiums:"
 msgid "Premiums"
 msgstr "Primes"
 
+msgctxt "field:contract.do_invoice.start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.do_invoice.start,up_to_date:"
+msgid "Up To Date"
+msgstr "Jusqu'au"
+
 msgctxt "field:contract.invoice,contract:"
 msgid "Contract"
 msgstr "Contrat"
@@ -569,14 +577,6 @@ msgstr "ID"
 msgctxt "field:contract.invoice.post,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:contract.do_invoice.start,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.do_invoice.start,up_to_date:"
-msgid "Up To Date"
-msgstr "Jusqu'au"
 
 msgctxt "field:contract.option,premiums:"
 msgid "Premiums"
@@ -990,6 +990,10 @@ msgctxt "model:contract.billing_information,name:"
 msgid "Contract Billing Information"
 msgstr "Quittancement"
 
+msgctxt "model:contract.do_invoice.start,name:"
+msgid "Invoice Contract"
+msgstr "Génération des quittances"
+
 msgctxt "model:contract.invoice,name:"
 msgid "Contract Invoice"
 msgstr "Quittance"
@@ -1001,10 +1005,6 @@ msgstr "Batch de quittancement"
 msgctxt "model:contract.invoice.post,name:"
 msgid "Post Contract Invoice Batch"
 msgstr "Batch d'émission des quittances"
-
-msgctxt "model:contract.do_invoice.start,name:"
-msgid "Invoice Contract"
-msgstr "Génération des quittances"
 
 msgctxt "model:contract.premium,name:"
 msgid "Premium"
@@ -1030,10 +1030,6 @@ msgctxt "model:ir.action,name:act_invoice"
 msgid "Invoice Contracts"
 msgstr "Génération des quittances"
 
-msgctxt "model:ir.action,name:act_invoice_form"
-msgid "Contract Invoices"
-msgstr "Quittances"
-
 msgctxt "model:ir.action,name:act_offered_billing_mode"
 msgid "Billing Modes"
 msgstr "Modes de quittancement"
@@ -1041,6 +1037,10 @@ msgstr "Modes de quittancement"
 msgctxt "model:ir.action,name:act_premium_display"
 msgid "Display Contract Premium"
 msgstr "Afficher la prime du contrat"
+
+msgctxt "model:ir.action,name:act_premium_notice_form"
+msgid "Premium Notices"
+msgstr "Quittances"
 
 msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_all"
 msgid "All"
@@ -1050,10 +1050,13 @@ msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_canceled"
 msgid "Canceled"
 msgstr "Annulé"
 
-msgctxt ""
-"model:ir.action.act_window.domain,name:act_invoice_domain_posted_paid"
-msgid "Emises - Payées"
-msgstr "Validées - Emises - Payées"
+msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_paid"
+msgid "Paid"
+msgstr "Payée"
+
+msgctxt "model:ir.action.act_window.domain,name:act_invoice_domain_pending"
+msgid "Pending"
+msgstr "En cours"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Invoice Frequencies"
@@ -1240,24 +1243,8 @@ msgid "Notes"
 msgstr "Notes"
 
 msgctxt "view:account.invoice:"
-msgid "Base Amount"
-msgstr "Montant de base"
-
-msgctxt "view:account.invoice:"
-msgid "Fees"
-msgstr "Frais"
-
-msgctxt "view:account.invoice:"
-msgid "Invoices"
-msgstr "Factures"
-
-msgctxt "view:account.invoice:"
-msgid "Tax Amount"
-msgstr "Montant de la taxe"
-
-msgctxt "view:account.invoice:"
-msgid "To be paid"
-msgstr "A payer"
+msgid "Premium Notices"
+msgstr "Quittances"
 
 msgctxt "view:account.invoice:"
 msgid "Total Amount"
@@ -1306,6 +1293,10 @@ msgstr "Primes"
 msgctxt "view:contract.premium.display.premiums:"
 msgid "Contract Premiums"
 msgstr "Primes du contrat"
+
+msgctxt "view:contract.premium:"
+msgid "Amount"
+msgstr "Montant"
 
 msgctxt "view:contract.premium:"
 msgid "Premium"

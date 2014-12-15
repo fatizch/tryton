@@ -631,11 +631,11 @@ msgid "Cells"
 msgstr "Cellules"
 
 msgctxt "model:ir.action,name:act_definition_dimension_form"
-msgid "Definition Dimension"
+msgid "Dimension Value"
 msgstr "Valeurs des dimensions"
 
 msgctxt "model:ir.action,name:act_dimension_value_open"
-msgid "Definition Dimension"
+msgid "Define Dimension Value"
 msgstr "Valeurs des dimensions"
 
 msgctxt "model:ir.action,name:act_table_2d_open"

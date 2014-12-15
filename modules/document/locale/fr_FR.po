@@ -42,6 +42,46 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
+msgctxt "field:document.description,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:document.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.description,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.description,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:ir.attachment,document_desc:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
@@ -49,6 +89,10 @@ msgstr "Descripteur de Document"
 msgctxt "field:ir.attachment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "model:document.description,name:"
+msgid "Document Description"
+msgstr "Descripteur de Document"
 
 msgctxt "model:ir.action,name:act_document_desc"
 msgid "Document Descriptions"

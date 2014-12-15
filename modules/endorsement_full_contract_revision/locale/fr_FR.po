@@ -2,6 +2,53 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:endorsement.start:"
+msgid "Cannot start full contract revision, no matching process available"
+msgstr ""
+"Impossible de démarrer la reprise intégrale de contrat, un processus est "
+"déjà en cours."
+
+msgctxt "field:endorsement.contract.full_revision_start,current_start_date:"
+msgid "Current Start Date"
+msgstr "Date de début actuelle"
+
+msgctxt "field:endorsement.contract.full_revision_start,effective_date:"
+msgid "Effective Date"
+msgstr "Date d\"effet"
+
+msgctxt ""
+"field:endorsement.contract.full_revision_start,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.full_revision_start,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.full_revision_start,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.full_revision_start,new_start_date:"
+msgid "New Start Date"
+msgstr "Nouvelle date de début"
+
+msgctxt "model:endorsement.contract.full_revision_start,name:"
+msgid "Start Full Contract Revision"
+msgstr "Démarrer la reprise intégrale de contrat"
+
+msgctxt "model:endorsement.definition,name:full_contract_revision_definition"
+msgid "Full Contract Revision"
+msgstr "Reprise intégrale de contrat"
+
+msgctxt "model:endorsement.part,name:full_contract_revision_part"
+msgid "Full Contract Revision"
+msgstr "Reprise intégrale de contrat"
+
+msgctxt "selection:process,kind:"
+msgid "Full Contract Revision"
+msgstr "Reprise intégrale de contrat"
+
 msgctxt "view:endorsement.contract.full_revision_start:"
 msgid "Full Contract Revision"
 msgstr "Reprise intégrale de contrat"
@@ -13,3 +60,21 @@ msgid ""
 msgstr ""
 "Reprise intégrale de contrat : Le contrat sera dans un état instable tant "
 "que la reprise intégrale n'est pas terminée ou annulée"
+
+msgctxt "wizard_button:endorsement.start,full_contract_revision,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,full_contract_revision,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
