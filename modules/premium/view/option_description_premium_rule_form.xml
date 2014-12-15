@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<form string="Premium Rule">
+    <label name="frequency"/>
+    <field name="frequency"/>
+    <newline/>
+    <label name="rule"/>
+    <field name="rule"/>
+    <separator name="rule_extra_data" colspan="4"/>
+    <field name="rule_extra_data" no_command="1" colspan="4"/>
+    <newline/>
+    <field name="premium_base"/>
+</form>

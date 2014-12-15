@@ -784,9 +784,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     at_date=option.start_date))
         return set(extra_data_defs)
 
-    def get_dates(self):
-        return self.product.get_dates(self)
-
     def init_dict_for_rule_engine(self, cur_dict):
         cur_dict['contract'] = self
         cur_dict['appliable_conditions_date'] = self.appliable_conditions_date

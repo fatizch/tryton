@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ################### -->
+        <!-- # Display Premium # -->
+        <!-- ################### -->
+        <record model="ir.ui.view" id="display_premiums_view_form">
+            <field name="model">contract.premium.display.premiums</field>
+            <field name="type">form</field>
+            <field name="name">display_premiums_form</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Display Premium List # -->
+        <!-- ######################## -->
+        <record model="ir.ui.view" id="display_premiums_line_view_form">
+            <field name="model">contract.premium.display.premiums.line</field>
+            <field name="type">form</field>
+            <field name="name">display_premiums_line_form</field>
+        </record>
+        <record model="ir.ui.view" id="display_premiums_line_view_list">
+            <field name="model">contract.premium.display.premiums.line</field>
+            <field name="type">tree</field>
+            <field name="field_childs">childs</field>
+            <field name="name">display_premiums_line_list</field>
+        </record>
+        <!-- ############################ -->
+        <!-- # Display Contract Premium # -->
+        <!-- ############################ -->
+        <record model="ir.action.wizard" id="act_premium_display">
+            <field name="name">Display Contract Premium</field>
+            <field name="wiz_name">contract.premium.display</field>
+        </record>
+        <record model="ir.action.keyword" id="act_premium_display_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_premium_display"/>
+        </record>
+    </data>
+</tryton>

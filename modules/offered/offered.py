@@ -284,22 +284,6 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
     def validate_consistency(self, data):
         pass
 
-    def get_contract_dates(self, dates, contract):
-        dates.add(contract.start_date)
-
-    def get_option_dates(self, dates, option):
-        dates.add(option.start_date)
-
-    def get_dates(self, contract):
-        dates = set()
-        self.get_contract_dates(dates, contract)
-        for option in contract.options:
-            self.get_option_dates(dates, option)
-        for extra_data in contract.extra_datas:
-            if extra_data.date:
-                dates.add(extra_data.date)
-        return dates
-
     def get_all_extra_data(self, at_date):
         return getattr(self, 'extra_data', {})
 

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Contract Fees" editable="bottom" colors="If(Eval('accept_fee', False), 'black', 'grey')">
+    <field name="accept_fee"/>
+    <field name="rec_name"/>
+    <field name="amount_as_string"/>
+    <field name="overriden_rate" tree_invisible="1"/>
+    <field name="overriden_amount" tree_invisible="1"/>
+</tree>

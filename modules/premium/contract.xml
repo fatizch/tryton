@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ################ -->
+        <!-- # Contract Fee # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="contract_fee_view_form">
+            <field name="model">contract.fee</field>
+            <field name="type">form</field>
+            <field name="name">contract_fee_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_fee_view_list">
+            <field name="model">contract.fee</field>
+            <field name="type">tree</field>
+            <field name="name">contract_fee_list</field>
+        </record>
+        <!-- ########### -->
+        <!-- # Premium # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="premium_view_form">
+            <field name="model">contract.premium</field>
+            <field name="type">form</field>
+            <field name="name">premium_form</field>
+        </record>
+        <record model="ir.ui.view" id="premium_view_list">
+            <field name="model">contract.premium</field>
+            <field name="type">tree</field>
+            <field name="name">premium_list</field>
+        </record>
+    </data>
+</tryton>

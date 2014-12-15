@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<form string="Fee">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="type"/>
+    <field name="type" colspan="3"/>
+    <group col="1" id="label_amount_rate">
+        <label name="amount" yfill="1" xexpand="1" yexpand="1"/>
+        <label name="rate" yfill="1" xexpand="1" yexpand="1"/>
+    </group>
+    <group col="1" id="amount_rate">
+        <group name="amount" string="">
+            <field name="amount" xalign="1" xexpand="0"/>
+            <label name="currency_symbol" string="" xexpand="1" xalign="0"/>
+        </group>
+        <group name="rate" string="">
+            <field name="rate" factor="100" xexpand="0"/>
+            <label name="rate" string="%" xexpand="1" xalign="0"/>
+        </group>
+    </group>
+    <label name="frequency"/>
+    <field name="frequency"/>
+    <label name="product"/>
+    <field name="product"/>
+    <label name="allow_override"/>
+    <field name="allow_override"/>
+</form>

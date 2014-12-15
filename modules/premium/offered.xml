@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ######################### -->
+        <!-- # Product Premium Dates # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="premium_dates_view_form">
+            <field name="model">offered.product.premium_dates</field>
+            <field name="type">form</field>
+            <field name="name">premium_dates_form</field>
+        </record>
+        <!-- ########### -->
+        <!-- # Product # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Option Description # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="option_description_view_form">
+            <field name="model">offered.option.description</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.coverage_view_form"/>
+            <field name="name">option_description_form</field>
+        </record>
+        <!-- ################################### -->
+        <!-- # Option Description Premium Rule # -->
+        <!-- ################################### -->
+        <record model="ir.ui.view" id="option_description_premium_rule_view_form">
+            <field name="model">offered.option.description.premium_rule</field>
+            <field name="type">form</field>
+            <field name="name">option_description_premium_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="option_description_premium_rule_view_list">
+            <field name="model">offered.option.description.premium_rule</field>
+            <field name="type">tree</field>
+            <field name="name">option_description_premium_rule_list</field>
+        </record>
+    </data>
+</tryton>
