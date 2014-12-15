@@ -5,7 +5,7 @@ import datetime
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import utils, fields
+from trytond.modules.cog_utils import fields
 from trytond.modules.offered_insurance import offered
 from trytond.modules.offered import EligibilityResultLine
 
@@ -82,44 +82,6 @@ class OptionDescription:
                 ('products', '=', instance.product.id),
                 ('item_desc', '=', instance.item_desc.id)]
         return clause
-
-    def calculate_main_price(self, args, errs, date, contract):
-        try:
-            coverage_lines, coverage_errs = self.get_result(
-                'price', args, kind='premium')
-        except offered.NonExistingRuleKindException:
-            coverage_lines = []
-            coverage_errs = []
-        errs += coverage_errs
-        return coverage_lines
-
-    def calculate_sub_elem_price(self, args, errs):
-        lines, errs = [], []
-        for covered, option in self.give_me_covered_elements_at_date(
-                args)[0]:
-            tmp_args = args.copy()
-            option.init_dict_for_rule_engine(tmp_args)
-            try:
-                sub_elem_lines, sub_elem_errs = self.get_result(
-                    'sub_elem_price', tmp_args, kind='premium')
-            except offered.NonExistingRuleKindException:
-                sub_elem_lines = []
-                sub_elem_errs = []
-            errs += sub_elem_errs
-            lines += sub_elem_lines
-        return lines
-
-    def give_me_price(self, args):
-        data_dict, errs = utils.get_data_from_dict(['contract', 'date'], args)
-        if errs:
-            return ([], errs)
-        contract = data_dict['contract']
-        date = data_dict['date']
-        result = []
-        result += self.calculate_main_price(args, errs, date, contract)
-        result += self.calculate_sub_elem_price(args, errs)
-
-        return (result, errs)
 
     def give_me_eligibility(self, args):
         try:

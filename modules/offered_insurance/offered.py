@@ -2,7 +2,7 @@
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import model, utils, fields, coop_date
+from trytond.modules.cog_utils import model, utils, fields
 from trytond.modules.cog_utils import coop_string
 
 from trytond.modules.offered import NonExistingRuleKindException
@@ -23,8 +23,6 @@ __all__ = [
 class Offered:
     __name__ = 'offered'
 
-    premium_rules = fields.One2Many('billing.premium.rule', 'offered',
-        'Premium Rules')
     eligibility_rules = fields.One2Many('offered.eligibility.rule', 'offered',
         'Eligibility Rules')
     deductible_rules = fields.One2Many('offered.deductible.rule', 'offered',
@@ -56,8 +54,6 @@ class Product:
 
     term_renewal_rules = fields.One2Many('offered.term.rule', 'offered',
         'Term - Renewal')
-    premium_dates = fields.One2Many('billing.premium.date_configuration',
-        'product', 'Premium Dates', size=1)
     item_descriptors = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Item Descriptions'),
@@ -73,10 +69,6 @@ class Product:
                 'missing_covered_element_extra_data': 'The following covered '
                 'element extra data should be set on the product: %s',
                 })
-
-    @classmethod
-    def default_premium_dates(cls):
-        return [{}]
 
     @classmethod
     def validate(cls, instances):
@@ -110,36 +102,6 @@ class Product:
         # 'name' as keys.
         return ('coverages', ['code', 'name'])
 
-    def give_me_coverages_price(self, args):
-        errs = []
-        res = []
-        self.init_dict_for_rule_engine(args)
-        for coverage in self.get_valid_coverages():
-            _res, _errs = coverage.get_result('price', args)
-            if _res:
-                res += _res
-            errs += _errs
-        return res, errs
-
-    def give_me_product_price(self, args):
-        # There is a pricing manager on the products so we can just forward the
-        # request.
-        self.init_dict_for_rule_engine(args)
-        try:
-            product_lines, product_errs = self.get_result('price', args,
-                kind='premium')
-        except NonExistingRuleKindException:
-            product_lines = []
-            product_errs = []
-        return product_lines, product_errs
-
-    def give_me_total_price(self, args):
-        # Total price is the sum of coverages price and Product price
-        p_price, errs_product = self.give_me_product_price(args)
-        o_price, errs_coverages = self.give_me_coverages_price(args)
-
-        return (p_price + o_price, errs_product + errs_coverages)
-
     def give_me_families(self, args):
         self.update_args(args)
         result = []
@@ -147,21 +109,6 @@ class Product:
         for coverage in self.get_valid_coverages():
             result.append(coverage.family)
         return (result, errors)
-
-    def give_me_frequency(self, args):
-        if 'date' not in args:
-            raise Exception('A date must be provided')
-        try:
-            return self.get_result('frequency', args, kind='premium')
-        except NonExistingRuleKindException:
-            pass
-        for coverage in self.get_valid_coverages():
-            try:
-                return coverage.get_result(
-                    'frequency', args, kind='premium')
-            except NonExistingRuleKindException:
-                pass
-        return 'yearly', []
 
     def give_me_documents(self, args):
         if 'option' in args:
@@ -201,43 +148,6 @@ class Product:
         res = super(Product, cls).get_var_names_for_full_extract()
         res.extend(['item_descriptors'])
         return res
-
-    def get_contract_dates(self, dates, contract):
-        super(Product, self).get_contract_dates(dates, contract)
-        if contract.next_renewal_date:
-            dates.add(contract.next_renewal_date)
-            if not contract.end_date:
-                return
-            # Calculate every anniversary date until contrat termination
-            cur_date = contract.next_renewal_date
-            while cur_date <= contract.end_date:
-                dates.add(cur_date)
-                cur_date = coop_date.add_year(cur_date, 1)
-        return dates
-
-    def get_option_dates(self, dates, option):
-        super(Product, self).get_option_dates(dates, option)
-        if (hasattr(option, 'extra_premiums') and
-                option.extra_premiums):
-            for elem in option.extra_premiums:
-                dates.add(elem.start_date)
-
-    def get_covered_element_dates(self, dates, covered_element):
-        for data in covered_element.options:
-            self.get_option_dates(dates, data)
-        if hasattr(covered_element, 'sub_covered_elements'):
-            for sub_elem in covered_element.sub_covered_elements:
-                self.get_covered_element_dates(dates, sub_elem)
-
-    def get_dates(self, contract):
-        dates = super(Product, self).get_dates(contract)
-        for covered in contract.covered_elements:
-            self.get_covered_element_dates(dates, covered)
-        if self.premium_dates:
-            premium_date_configuration = self.premium_dates[0]
-            dates.update(premium_date_configuration.get_dates_for_contract(
-                    contract))
-        return dates
 
     @classmethod
     def _re_get_option_start_date(cls, args):

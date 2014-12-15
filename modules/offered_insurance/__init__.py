@@ -42,12 +42,6 @@ def register():
         DocumentCreatePreview,
         DocumentCreatePreviewReport,
         DocumentCreateAttach,
-        # From business_rule.premium_rule
-        PremiumDateConfiguration,
-        PremiumRule,
-        PremiumRuleComponent,
-        TaxVersion,
-        FeeVersion,
         # From business_rule.eligibility_rule
         EligibilityRule,
         CoverageAmountRule,

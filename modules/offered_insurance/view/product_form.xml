@@ -13,7 +13,4 @@
             <field name="term_renewal_rules" colspan="4"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='managers']/notebook/page[@id='pricing']" position="inside">
-        <field name="premium_dates" colspan="4" mode="form" expand_toolbar="0"/>
-    </xpath>
 </data>

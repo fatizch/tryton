@@ -560,9 +560,6 @@ class ContractOption:
 
     def init_dict_for_rule_engine(self, args):
         args['option'] = self
-        args['extra_premiums'] = []
-        for elem in getattr(self, 'extra_premiums', []):
-            args['extra_premiums'].append(elem)
         covered_element = getattr(self, 'covered_element', None)
         if covered_element is not None:
             covered_element.init_dict_for_rule_engine(args)
