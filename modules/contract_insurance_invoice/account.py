@@ -10,4 +10,4 @@ class Fee:
     __name__ = 'account.fee'
 
     def get_account_for_billing(self, line):
-        return self.account_revenue_used
+        return self.product.template.account_revenue_used

@@ -5,7 +5,6 @@ from decimal import Decimal
 from dateutil.rrule import rrule, rruleset, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max
-from sql import Column
 
 from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
@@ -24,17 +23,11 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
     'ContractBillingInformation',
-    'ContractInvoice',
-    'CoveredElement',
-    'ContractOption',
-    'ExtraPremium',
     'Premium',
-    'PremiumTax',
+    'ContractInvoice',
     'InvoiceContract',
     'InvoiceContractStart',
     'DisplayContractPremium',
-    'DisplayContractPremiumDisplayer',
-    'DisplayContractPremiumDisplayerPremiumLine',
     ]
 
 FREQUENCIES = [
@@ -43,12 +36,6 @@ FREQUENCIES = [
     ('quarterly', 'Quarterly'),
     ('half_yearly', 'Half-yearly'),
     ('yearly', 'Yearly'),
-    ]
-
-PREMIUM_FREQUENCIES = FREQUENCIES + [
-    ('yearly_360', 'Yearly (360 days)'),
-    ('yearly_365', 'Yearly (365 days)'),
-    ('once_per_invoice', 'Once per Invoice'),
     ]
 
 
@@ -63,7 +50,6 @@ class Contract:
             digits=(16, Eval('currency_digits', 2)),
             depends=['currency_digits']),
         'get_receivable_today')
-    premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
     payment_term = fields.Function(fields.Many2One(
         'account.invoice.payment_term', 'Payment Term'),
         'get_billing_information')
@@ -90,21 +76,18 @@ class Contract:
         searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
-    all_premiums = fields.One2Many('contract.premium', 'main_contract',
-        'All Premiums')
     _invoices_cache = Cache('invoices_report')
 
     @classmethod
     def _export_skips(cls):
         return (super(Contract, cls)._export_skips() |
-            set(['invoices', 'account_invoices', 'all_premiums']))
+            set(['invoices', 'account_invoices']))
 
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'button_calculate_prices': {},
-                'first_invoice': {},
                 })
 
     def invoices_report(self):
@@ -442,110 +425,6 @@ class Contract:
         if invoices_to_post:
             Invoice.post(invoices_to_post)
 
-    @classmethod
-    @ModelView.button
-    def button_calculate_prices(cls, contracts):
-        cls.calculate_prices(contracts)
-
-    def before_activate(self, contract_dict=None):
-        super(Contract, self).before_activate(contract_dict)
-        self.save()
-        self.calculate_prices([self])
-
-    @classmethod
-    def calculate_prices(cls, contracts, start=None, end=None):
-        final_prices = defaultdict(list)
-        for contract in contracts:
-            prices, errs = contract.calculate_prices_between_dates(start, end)
-            if errs:
-                return False, errs
-            for date, price in prices.iteritems():
-                final_prices[date].extend(price)
-        cls.store_prices(final_prices)
-        return True, ()
-
-    @classmethod
-    def force_calculate_prices(cls, contracts):
-        return cls.calculate_prices(contracts, start=datetime.date.min)
-
-    def calculate_price_at_date(self, date):
-        cur_dict = {
-            'date': date,
-            'appliable_conditions_date': self.appliable_conditions_date}
-        self.init_dict_for_rule_engine(cur_dict)
-        prices, errs = self.product.get_result('total_price', cur_dict)
-        return (prices, errs)
-
-    def calculate_prices_between_dates(self, start=None, end=None):
-        if not start or start == datetime.date.min:
-            start = self.start_date
-        prices = {}
-        errs = []
-        dates = self.get_dates()
-        dates = utils.limit_dates(dates, start)
-        for cur_date in dates:
-            price, err = self.calculate_price_at_date(cur_date)
-            if price:
-                prices[cur_date] = price
-            errs += err
-            if errs:
-                return {}, errs
-        return prices, errs
-
-    @classmethod
-    def store_price(cls, price, start_date, end_date):
-        Premium = Pool().get('contract.premium')
-        new_premium = Premium.new_line(price, start_date, end_date)
-        return [new_premium] if new_premium else []
-
-    @classmethod
-    def store_prices(cls, prices):
-        if not prices:
-            return
-        pool = Pool()
-        Premium = pool.get('contract.premium')
-        dates = list(prices.iterkeys())
-        dates.sort()
-        to_save = []
-        parents_to_update = {}
-        for date, price_list in prices.iteritems():
-            date_pos = dates.index(date)
-            if date_pos < len(dates) - 1:
-                end_date = dates[date_pos + 1] + datetime.timedelta(days=-1)
-            else:
-                end_date = None
-            for price in price_list:
-                prices = cls.store_price(price, start_date=date,
-                    end_date=end_date)
-                to_save += prices
-        for premium in to_save:
-            if premium.parent in parents_to_update:
-                parents_to_update[premium.parent]['save'].append(premium)
-            else:
-                parents_to_update[premium.parent] = {
-                    'save': [premium],
-                    'delete': [],
-                    'keep': [],
-                    'write': [],
-                    }
-        for elem in parents_to_update.iterkeys():
-            existing = [x for x in getattr(elem, 'premiums', []) if x.id > 0]
-            for premium in existing:
-                if premium.start >= dates[0]:
-                    parents_to_update[elem]['delete'].append(premium)
-                elif (premium.start or datetime.date.min) < dates[0] <= (
-                        premium.end or datetime.date.max):
-                    premium.end = coop_date.add_day(dates[0], -1)
-                    parents_to_update[elem]['write'].append(premium)
-                else:
-                    parents_to_update[elem]['keep'].append(premium)
-            Premium.remove_duplicates(elem, parents_to_update[elem])
-
-        for elem in parents_to_update.iterkeys():
-            if not elem._values:
-                continue
-            elem.save()
-
     def init_from_product(self, product, start_date=None, end_date=None):
         pool = Pool()
         res, errs = super(Contract, self).init_from_product(product,
@@ -568,7 +447,6 @@ class Contract:
     @classmethod
     def update_contract_after_import(cls, contracts):
         super(Contract, cls).update_contract_after_import(contracts)
-        cls.calculate_prices(contracts)
         for contract in contracts:
             for billing_information in contract.billing_informations:
                 if (not billing_information.payment_term):
@@ -717,6 +595,112 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         values['_func_key'] = values.get('date', None)
 
 
+class Premium:
+    __name__ = 'contract.premium'
+
+    account = fields.Many2One('account.account', 'Account', required=True,
+        domain=[
+            ('company', '=', Eval('context', {}).get('company', -1)),
+            ['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]]
+            ])
+
+    @classmethod
+    def _export_light(cls):
+        return super(Premium, cls)._export_light() | {'account'}
+
+    @classmethod
+    def new_line(cls, line, start_date, end_date):
+        new_line = super(Premium, cls).new_line(line, start_date, end_date)
+        if not new_line:
+            return None
+        new_line.account = line.account
+        return new_line
+
+    def get_description(self):
+        return '%s - %s' % (self.parent.rec_name,
+            self.rated_entity.rec_name)
+
+    def _get_rrule(self, start):
+        if self.frequency in ('monthly', 'quarterly', 'half_yearly'):
+            freq = MONTHLY
+            interval = {
+                'monthly': 1,
+                'quarterly': 3,
+                'half_yearly': 6,
+                }.get(self.frequency)
+        elif self.frequency == 'yearly':
+            freq = YEARLY
+            interval = 1
+        elif self.frequency == 'yearly_360':
+            freq = DAILY
+            interval = 360
+        elif self.frequency == 'yearly_365':
+            freq = DAILY
+            interval = 365
+        elif self.frequency in ('once_per_contract'):
+            return rrule(MONTHLY, dtstart=self.start, count=2)
+        else:
+            return
+        return rrule(freq, interval=interval, dtstart=start)
+
+    def get_amount(self, start, end):
+        if self.frequency in ('once_per_invoice'):
+            return self.amount
+        rrule = self._get_rrule(start)
+        start = datetime.datetime.combine(start, datetime.time())
+        end = datetime.datetime.combine(end, datetime.time())
+        occurences = rrule.between(start, end + datetime.timedelta(2))
+        amount = len(occurences) * self.amount
+        try:
+            last_date = occurences[-1]
+        except IndexError:
+            last_date = start
+        next_date = rrule.after(last_date)
+        if self.frequency in ('once_per_contract'):
+            if (last_date <= datetime.datetime.combine(self.start,
+                    datetime.time()) <= next_date):
+                return self.amount
+            elif (start <= datetime.datetime.combine(self.start,
+                    datetime.time())):
+                return self.amount
+            else:
+                return 0
+        if next_date and (next_date - end).days > 1:
+            if (next_date - last_date).days != 0:
+                ratio = (((end - last_date).days + 1.)
+                    / ((next_date - last_date).days))
+                amount += self.amount * Decimal(ratio)
+        return amount
+
+    def get_invoice_lines(self, start, end):
+        pool = Pool()
+        InvoiceLine = pool.get('account.invoice.line')
+        InvoiceLineDetail = pool.get('account.invoice.line.detail')
+        if ((self.start or datetime.date.min) > end
+                or (self.end or datetime.date.max) < start):
+            return []
+        start = (start if start > (self.start or datetime.date.min)
+            else self.start)
+        end = end if end < (self.end or datetime.date.max) else self.end
+        amount = self.get_amount(start, end)
+        if not amount:
+            return []
+        return [InvoiceLine(
+                type='line',
+                description=self.get_description(),
+                origin=self.main_contract,
+                quantity=1,
+                unit=None,
+                unit_price=self.main_contract.company.currency.round(amount),
+                taxes=self.taxes,
+                invoice_type='out_invoice',
+                account=self.account,
+                coverage_start=start,
+                coverage_end=end,
+                details=[InvoiceLineDetail.new_detail_from_premium(self)],
+                )]
+
+
 class ContractInvoice(ModelSQL, ModelView):
     'Contract Invoice'
     __name__ = 'contract.invoice'
@@ -831,344 +815,6 @@ class ContractInvoice(ModelSQL, ModelView):
         return 'cancel'
 
 
-class CoveredElement:
-    __name__ = 'contract.covered_element'
-
-    premiums = fields.One2Many('contract.premium', 'covered_element',
-        'Premiums')
-
-    @classmethod
-    def functional_skips_for_duplicate(cls):
-        return (super(CoveredElement, cls).functional_skips_for_duplicate() |
-            set(['premiums']))
-
-
-class ContractOption:
-    __name__ = 'contract.option'
-
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
-
-    @classmethod
-    def functional_skips_for_duplicate(cls):
-        return (super(ContractOption, cls).functional_skips_for_duplicate() |
-        set(['premiums']))
-
-
-class ExtraPremium:
-    __name__ = 'contract.option.extra_premium'
-
-    premiums = fields.One2Many('contract.premium', 'extra_premium',
-        'Premiums')
-
-
-class Premium(model.CoopSQL, model.CoopView):
-    'Premium'
-    __name__ = 'contract.premium'
-    contract = fields.Many2One('contract', 'Contract', select=True,
-        ondelete='CASCADE')
-    covered_element = fields.Many2One('contract.covered_element',
-        'Covered Element', select=True, ondelete='CASCADE')
-    option = fields.Many2One('contract.option', 'Option', select=True,
-        ondelete='CASCADE')
-    extra_premium = fields.Many2One('contract.option.extra_premium',
-        'Extra Premium', select=True, ondelete='CASCADE')
-    rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
-        required=True)
-    start = fields.Date('Start')
-    end = fields.Date('End')
-    amount = fields.Numeric('Amount', required=True)
-    frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)
-    frequency_string = frequency.translated('frequency')
-    taxes = fields.Many2Many('contract.premium-account.tax',
-        'premium', 'tax', 'Taxes',
-        domain=[
-            ('parent', '=', None),
-            ['OR',
-                ('group', '=', None),
-                ('group.kind', 'in', ['sale', 'both']),
-                ],
-            ])
-    account = fields.Many2One('account.account', 'Account', required=True,
-        domain=[
-            ('company', '=', Eval('context', {}).get('company', -1)),
-            ['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]]
-            ])
-    invoice_lines = fields.One2Many('account.invoice.line', 'origin',
-        'Invoice Lines', readonly=True)
-    main_contract = fields.Function(
-        fields.Many2One('contract', 'Contract'),
-        'get_main_contract', searcher='search_main_contract')
-    parent = fields.Function(
-        fields.Reference('Parent', 'get_parent_models'),
-        'get_parent')
-
-    @classmethod
-    def __setup__(cls):
-        super(Premium, cls).__setup__()
-        cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
-        cls.__rpc__.update({'get_parent_models': RPC()})
-
-    @classmethod
-    def _export_skips(cls):
-        return (super(Premium, cls)._export_skips() |
-            set(['invoice_lines']))
-
-    @classmethod
-    def _export_light(cls):
-        return (super(Premium, cls)._export_light() |
-            set(['account', 'rated_entity']))
-
-    @classmethod
-    def _get_rated_entities(cls):
-        'Return list of Model names for origin Reference'
-        return [
-            'offered.product',
-            'offered.option.description',
-            'account.fee.description',
-            ]
-
-    @classmethod
-    def get_rated_entities(cls):
-        Model = Pool().get('ir.model')
-        models = cls._get_rated_entities()
-        models = Model.search([
-                ('model', 'in', models),
-                ])
-        return [(None, '')] + [(m.model, m.name) for m in models]
-
-    @classmethod
-    def get_possible_parent_field(cls):
-        return set(['contract', 'covered_element', 'option', 'extra_premium'])
-
-    @classmethod
-    def get_parent_models(cls):
-        result = []
-        for field_name in cls.get_possible_parent_field():
-            field = cls._fields[field_name]
-            result.append((field.model_name, field.string))
-        return result
-
-    @classmethod
-    def get_parent(cls, premiums, name):
-        cursor = Transaction().cursor
-        premium_table = cls.__table__()
-        models, columns = [], []
-        for field_name in cls.get_possible_parent_field():
-            field = cls._fields[field_name]
-            models.append(field.model_name)
-            columns.append(Column(premium_table, field_name))
-
-        cursor.execute(*premium_table.select(premium_table.id, *columns,
-                where=premium_table.id.in_([x.id for x in premiums])))
-
-        result = {}
-        for elem in cursor.fetchall():
-            for model_name, value in zip(models, elem[1:]):
-                if value:
-                    result[elem[0]] = '%s,%i' % (model_name, value)
-                    break
-        return result
-
-    def get_main_contract(self, name=None):
-        if self.contract:
-            return self.contract.id
-        if self.covered_element:
-            return self.covered_element.main_contract.id
-        if self.option:
-            return self.option.parent_contract.id
-        if self.extra_premium:
-            return self.extra_premium.option.parent_contract.id
-
-    @classmethod
-    def search_main_contract(cls, name, clause):
-        # Assumes main_contract cannot be null (which, even though it is not
-        # enforced in the model, is still a safe assumption)
-        return ['OR',
-            ('contract',) + tuple(clause[1:]),
-            ('covered_element.contract',) + tuple(clause[1:]),
-            ('option.parent_contract',) + tuple(clause[1:]),
-            ('extra_premium.option.parent_contract',) + tuple(clause[1:]),
-            ]
-
-    def get_description(self):
-        return '%s - %s' % (self.parent.rec_name,
-            self.rated_entity.rec_name)
-
-    def _get_rrule(self, start):
-        if self.frequency in ('monthly', 'quarterly', 'half_yearly'):
-            freq = MONTHLY
-            interval = {
-                'monthly': 1,
-                'quarterly': 3,
-                'half_yearly': 6,
-                }.get(self.frequency)
-        elif self.frequency == 'yearly':
-            freq = YEARLY
-            interval = 1
-        elif self.frequency == 'yearly_360':
-            freq = DAILY
-            interval = 360
-        elif self.frequency == 'yearly_365':
-            freq = DAILY
-            interval = 365
-        elif self.frequency in ('once_per_contract'):
-            return rrule(MONTHLY, dtstart=self.start, count=2)
-        else:
-            return
-        return rrule(freq, interval=interval, dtstart=start)
-
-    def get_amount(self, start, end):
-        if self.frequency in ('once_per_invoice'):
-            return self.amount
-        rrule = self._get_rrule(start)
-        start = datetime.datetime.combine(start, datetime.time())
-        end = datetime.datetime.combine(end, datetime.time())
-        occurences = rrule.between(start, end + datetime.timedelta(2))
-        amount = len(occurences) * self.amount
-        try:
-            last_date = occurences[-1]
-        except IndexError:
-            last_date = start
-        next_date = rrule.after(last_date)
-        if self.frequency in ('once_per_contract'):
-            if (last_date <= datetime.datetime.combine(self.start,
-                    datetime.time()) <= next_date):
-                return self.amount
-            elif (start <= datetime.datetime.combine(self.start,
-                    datetime.time())):
-                return self.amount
-            else:
-                return 0
-        if next_date and (next_date - end).days > 1:
-            if (next_date - last_date).days != 0:
-                ratio = (((end - last_date).days + 1.)
-                    / ((next_date - last_date).days))
-                amount += self.amount * Decimal(ratio)
-        return amount
-
-    def get_invoice_lines(self, start, end):
-        pool = Pool()
-        InvoiceLine = pool.get('account.invoice.line')
-        InvoiceLineDetail = pool.get('account.invoice.line.detail')
-        if ((self.start or datetime.date.min) > end
-                or (self.end or datetime.date.max) < start):
-            return []
-        start = (start if start > (self.start or datetime.date.min)
-            else self.start)
-        end = end if end < (self.end or datetime.date.max) else self.end
-        amount = self.get_amount(start, end)
-        if not amount:
-            return []
-        return [InvoiceLine(
-                type='line',
-                description=self.get_description(),
-                origin=self.main_contract,
-                quantity=1,
-                unit=None,
-                unit_price=self.main_contract.company.currency.round(amount),
-                taxes=self.taxes,
-                invoice_type='out_invoice',
-                account=self.account,
-                coverage_start=start,
-                coverage_end=end,
-                details=[InvoiceLineDetail.new_detail_from_premium(self)],
-                )]
-
-    def set_parent_from_line(self, line):
-        for elem in self.get_possible_parent_field():
-            field = self._fields[elem]
-            if field.model_name == line['target'].__name__:
-                setattr(self, elem, line['target'])
-                self.parent = line['target']
-                break
-
-    def calculate_rated_entity(self):
-        # TODO : use the line rated_entity once it is implemented
-        if self.parent.__name__ == 'contract':
-            rated_entity = self.parent.product
-        elif self.parent.__name__ == 'contract.option':
-            rated_entity = self.parent.coverage
-        elif self.parent.__name__ == 'contract.covered_element':
-            rated_entity = self.parent.contract
-        elif self.parent.__name__ == 'extra_premium':
-            rated_entity = self.parent.option
-        else:
-            rated_entity = None
-        return rated_entity
-
-    @classmethod
-    def new_line(cls, line, start_date, end_date):
-        if 'target' not in line:
-            return None
-        new_instance = cls()
-        new_instance.set_parent_from_line(line)
-        if not new_instance.parent:
-            # TODO : Should raise an error
-            return None
-        new_instance.rated_entity = line['rated_entity']
-        # TODO : use the line account once it is implemented
-        new_instance.account = new_instance.rated_entity.account_for_billing
-        new_instance.start = start_date
-        if getattr(new_instance.parent, 'end_date', None) and (not end_date
-                or new_instance.parent.end_date < end_date):
-            new_instance.end = new_instance.parent.end_date
-        else:
-            new_instance.end = end_date
-        new_instance.amount = line['amount']
-        new_instance.taxes = line.get('taxes', [])
-        new_instance.frequency = line['frequency']
-        return new_instance
-
-    def duplicate_sort_key(self):
-        return utils.convert_to_reference(self.rated_entity), self.start
-
-    @classmethod
-    def remove_duplicates(cls, parent, actions):
-        new_list = []
-        for act_name in ['keep', 'write', 'save']:
-            new_list += [(act_name, elem) for elem in actions[act_name]]
-
-        new_list.sort(key=lambda x: x[1].duplicate_sort_key())
-        final_list = []
-        prev_action, prev_premium = None, None
-        for elem in new_list:
-            action, premium = elem
-            if not prev_action:
-                prev_action, prev_premium = action, premium
-            elif prev_premium.same_value(premium):
-                prev_premium.end = premium.end
-            else:
-                final_list.append(prev_premium)
-                prev_action, prev_premium = action, premium
-
-        # Do not forget the final element :)
-        final_list.append(prev_premium)
-        setattr(parent, 'premiums', final_list)
-
-    def same_value(self, other):
-        ident_fields = ('parent', 'amount', 'frequency', 'rated_entity',
-            'account')
-        for elem in ident_fields:
-            if getattr(self, elem) != getattr(other, elem):
-                return False
-        if set(self.taxes) != set(other.taxes):
-            return False
-        return True
-
-    def get_rec_name(self, name):
-        return ' '.join(set(
-                [self.rated_entity.rec_name, self.parent.rec_name]))
-
-
-class PremiumTax(ModelSQL):
-    'Premium - Tax'
-    __name__ = 'contract.premium-account.tax'
-    premium = fields.Many2One('contract.premium', 'Premium',
-        ondelete='CASCADE', select=True, required=True)
-    tax = fields.Many2One('account.tax', 'Tax', ondelete='RESTRICT',
-        required=True)
-
-
 class InvoiceContractStart(ModelView):
     'Invoice Contract'
     __name__ = 'contract.do_invoice.start'
@@ -1193,112 +839,13 @@ class InvoiceContract(Wizard):
         return 'end'
 
 
-class DisplayContractPremium(Wizard):
-    'Display Contrat Premium'
-
+class DisplayContractPremium:
     __name__ = 'contract.premium.display'
-
-    start_state = 'display'
-    display = StateView('contract.premium.display.premiums',
-        'contract_insurance_invoice.display_premiums_view_form', [
-            # TODO: calculate price should be done in a separate transaction
-            # in order to see the difference
-            # Button('Calculate Prices', 'calculate_prices', 'tryton-refresh'),
-            Button('Exit', 'end', 'tryton-cancel', default=True)])
-    calculate_prices = StateTransition()
-
-    @classmethod
-    def __setup__(cls):
-        super(DisplayContractPremium, cls).__setup__()
-        cls._error_messages.update({
-                'no_contract_found': 'No contract found in context',
-                })
 
     @classmethod
     def get_children_fields(cls):
-        return {
-            'contract': ['options', 'covered_elements'],
-            'contract.covered_element': ['options'],
-            'contract.option': ['extra_premiums'],
-            }
-
-    def new_line(self, name, line=None):
-        return {
-            'name': name,
-            'premium': line.id if line else None,
-            'premiums': [line.id] if line else [],
-            'amount': line.amount if line else 0,
-            'childs': [],
-            }
-
-    def add_lines(self, source, parent):
-        for field_name in self.get_children_fields().get(source.__name__, ()):
-            values = getattr(source, field_name, None)
-            if not values:
-                continue
-            for elem in values:
-                base_line = self.new_line(elem.rec_name)
-                self.add_lines(elem, base_line)
-                parent['childs'].append(base_line)
-                parent['amount'] += base_line['amount']
-        if source.premiums:
-            for elem in source.premiums:
-                name = ''
-                if elem.rated_entity.rec_name == source.rec_name:
-                    name = '%s - %s' % (elem.start, elem.end or '')
-                else:
-                    name = '%s (%s - %s)' % (elem.rated_entity.rec_name,
-                        elem.start, elem.end or '')
-                premium_line = self.new_line(name, elem)
-                if elem.start <= utils.today() <= (
-                        elem.end or datetime.date.max):
-                    parent['amount'] += elem.amount
-                parent['childs'].append(premium_line)
-        return parent
-
-    def default_display(self, name):
-        try:
-            contracts = Pool().get('contract').browse(
-                Transaction().context.get('active_ids'))
-        except:
-            self.raise_user_error('no_contract_found')
-        lines = []
-        for contract in contracts:
-            contract_line = self.new_line(contract.rec_name)
-            self.add_lines(contract, contract_line)
-            lines.append(contract_line)
-        if len(lines) == 1:
-            return {'premiums': lines}
-        contracts_line = self.new_line('Total')
-        contracts_line['amount'] = sum(line['amount']
-            for line in lines)
-        contracts_line['childs'] = lines
-        return {'premiums': [contracts_line]}
-
-    def transition_calculate_prices(self):
-        Contract = Pool().get('contract')
-        Contract.button_calculate_prices(Contract.browse(
-                Transaction().context.get('active_ids', [])))
-        return 'display'
-
-
-class DisplayContractPremiumDisplayer(model.CoopView):
-    'Display Contract Premium Displayer'
-
-    __name__ = 'contract.premium.display.premiums'
-
-    premiums = fields.One2Many('contract.premium.display.premiums.line',
-        None, 'Premiums', readonly=True)
-
-
-class DisplayContractPremiumDisplayerPremiumLine(model.CoopView):
-    'Display Contract Premium Displayer Prmeium Line'
-
-    __name__ = 'contract.premium.display.premiums.line'
-
-    amount = fields.Numeric('Amount Today')
-    childs = fields.One2Many('contract.premium.display.premiums.line', None,
-        'Childs')
-    premiums = fields.One2Many('contract.premium', None, 'Premium')
-    premium = fields.Many2One('contract.premium', 'Premium')
-    name = fields.Char('Name')
+        children = super(DisplayContractPremium, cls).get_children_fields()
+        children['contract'].append('covered_elements')
+        children['contract.covered_element'] = ['options']
+        children['options'].append('extra_premiums')
+        return children

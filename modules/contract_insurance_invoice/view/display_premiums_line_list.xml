@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<tree string="Premiums">
-  <field name="name"/>
-  <field name="amount"/>
-</tree>

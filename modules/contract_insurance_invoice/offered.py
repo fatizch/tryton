@@ -1,7 +1,8 @@
 import datetime
+from decimal import Decimal
 from dateutil.rrule import rrule, YEARLY, MONTHLY
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 from trytond import backend
 from trytond.transaction import Transaction
@@ -18,6 +19,7 @@ __all__ = [
     'ProductBillingModeRelation',
     'BillingModePaymentTermRelation',
     'OptionDescription',
+    'OptionDescriptionPremiumRule',
     'FeeDesc',
     'TaxDesc',
     'PaymentTerm',
@@ -39,6 +41,14 @@ MONTHS = [
     ('11', 'November'),
     ('12', 'December'),
     ]
+CONVERSION_TABLE = {
+    'yearly': Decimal(12),
+    'yearly_360': Decimal(12),
+    'yearly_365': Decimal(12),
+    'half_yearly': Decimal(6),
+    'quarterly': Decimal(3),
+    'monthly': Decimal(1),
+    }
 
 
 class BillingMode(model.CoopSQL, model.CoopView):
@@ -205,6 +215,9 @@ class Product:
     def get_change_billing_modes_order(self, name):
         return False
 
+    def get_account_for_billing(self, line):
+        return self.account_for_billing
+
 
 class ProductBillingModeRelation(model.CoopSQL, model.CoopView):
     'Product Billing Mode Relation'
@@ -292,6 +305,56 @@ class OptionDescription:
     def _export_light(cls):
         return (super(OptionDescription, cls)._export_light()
             | set(['account_for_billing']))
+
+    def get_account_for_billing(self, line):
+        return self.account_for_billing
+
+
+class OptionDescriptionPremiumRule:
+    __name__ = 'offered.option.description.premium_rule'
+
+    match_contract_frequency = fields.Boolean('Match Contract Frequency',
+        help='Should the premium be stored at the contract\'s frequency ?')
+
+    @classmethod
+    def get_premium_result_class(cls):
+        Parent = super(OptionDescriptionPremiumRule,
+            cls).get_premium_result_class()
+
+        class Child(Parent):
+            def __init__(self, amount, data_dict):
+                super(Child, self).__init__(amount, data_dict)
+                self.account = self.rated_entity.get_account_for_billing(self)
+
+        return Child
+
+    @classmethod
+    def convert_premium_frequency(cls, src_frequency, dest_frequency):
+        if src_frequency in ('once_per_invoice', 'once_per_contract'):
+            return
+        if dest_frequency in ('once_per_invoice', 'once_per_contract'):
+            return
+        return CONVERSION_TABLE[src_frequency] / CONVERSION_TABLE[
+            dest_frequency]
+
+    def set_line_frequencies(self, lines, rated_instance, date):
+        contract = lines[0].contract if lines else None
+        if not contract:
+            return lines
+        pool = Pool()
+        ContractBillingInformation = pool.get('contract.billing_information')
+        ContractBillingMode = pool.get('offered.billing_mode')
+        if not self.match_contract_frequency:
+            super(OptionDescriptionPremiumRule, self).set_line_frequencies(
+                lines, rated_instance, date)
+            return
+        contract_billing_mode = ContractBillingInformation.get_values(
+            [contract], date=date,)['billing_mode'][contract.id]
+        new_frequency = ContractBillingMode(contract_billing_mode).frequency
+        factor = self.convert_premium_frequency(self.frequency, new_frequency)
+        for line in lines:
+            line.frequency = new_frequency
+            line.amount = line.amount / factor
 
 
 class FeeDesc:

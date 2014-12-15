@@ -5,6 +5,7 @@ from .invoice import *
 from .party import *
 from .offered import *
 from .contract import *
+from .account import *
 
 
 def register():
@@ -14,22 +15,18 @@ def register():
         Product,
         BillingModePaymentTermRelation,
         OptionDescription,
+        OptionDescriptionPremiumRule,
         Invoice,
         InvoiceLine,
+        Fee,
         Contract,
         ContractBillingInformation,
-        ContractInvoice,
-        ContractOption,
-        CoveredElement,
-        ExtraPremium,
         Premium,
+        ContractInvoice,
         InvoiceLineDetail,
-        PremiumTax,
         FeeDesc,
         TaxDesc,
         InvoiceContractStart,
-        DisplayContractPremiumDisplayer,
-        DisplayContractPremiumDisplayerPremiumLine,
         CreateInvoiceContractBatch,
         PostInvoiceContractBatch,
         PaymentTerm,

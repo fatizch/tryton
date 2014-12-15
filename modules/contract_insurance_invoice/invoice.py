@@ -7,8 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import coop_string, utils, model, fields
-
-from .contract import PREMIUM_FREQUENCIES
+from trytond.modules.premium.offered import PREMIUM_FREQUENCY
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -297,10 +296,10 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
         readonly=True, ondelete='RESTRICT')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         select=True, readonly=True, ondelete='RESTRICT')
-    fee = fields.Many2One('account.fee.description', 'Fee', select=True,
+    fee = fields.Many2One('account.fee', 'Fee', select=True,
         ondelete='RESTRICT', readonly=True)
     rate = fields.Numeric('Rate', required=True)
-    frequency = fields.Selection(PREMIUM_FREQUENCIES, 'Frequency', sort=False)
+    frequency = fields.Selection(PREMIUM_FREQUENCY, 'Frequency', sort=False)
     taxes = fields.Char('Taxes', readonly=True)
     parent = fields.Function(
         fields.Reference('Parent Entity', 'get_parent_models'),

@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
+        <!-- ################ -->
+        <!-- # Billing Mode # -->
+        <!-- ################ -->
         <record model="ir.ui.view" id="offered_billing_mode_view_form">
             <field name="model">offered.billing_mode</field>
             <field name="type">form</field>
@@ -15,19 +18,6 @@
             <field name="name">Billing Modes</field>
             <field name="res_model">offered.billing_mode</field>
         </record>
-
-        <record model="ir.ui.view" id="product-billing_mode_view_list">
-            <field name="model">offered.product-offered.billing_mode</field>
-            <field name="type">tree</field>
-            <field name="name">product-billing_mode_list</field>
-        </record>
-
-        <record model="ir.ui.view" id="billing_mode-payment_term_view_list">
-            <field name="model">offered.billing.mode-account.invoice.payment_term</field>
-            <field name="type">tree</field>
-            <field name="name">billing_mode-payment_term_list</field>
-        </record>
-
         <record model="ir.action.act_window.view" id="act_offered_billing_mode_view1">
             <field name="sequence" eval="16"/>
             <field name="view" ref="offered_billing_mode_view_list"/>
@@ -39,22 +29,58 @@
             <field name="act_window" ref="act_offered_billing_mode"/>
         </record>
         <menuitem parent="account.menu_account_configuration" sequence="20" action="act_offered_billing_mode" icon="tryton-list" id="menu_offered_billing_mode"/>
-
+        <!-- ################################# -->
+        <!-- # Product Billing Mode Relation # -->
+        <!-- ################################# -->
+        <record model="ir.ui.view" id="product-billing_mode_view_list">
+            <field name="model">offered.product-offered.billing_mode</field>
+            <field name="type">tree</field>
+            <field name="name">product-billing_mode_list</field>
+        </record>
+        <!-- ###################################### -->
+        <!-- # Billing Mode Payment Term Relation # -->
+        <!-- ###################################### -->
+        <record model="ir.ui.view" id="billing_mode-payment_term_view_list">
+            <field name="model">offered.billing.mode-account.invoice.payment_term</field>
+            <field name="type">tree</field>
+            <field name="name">billing_mode-payment_term_list</field>
+        </record>
+        <!-- ########### -->
+        <!-- # Product # -->
+        <!-- ########### -->
         <record model="ir.ui.view" id="product_view_form">
             <field name="model">offered.product</field>
             <field name="inherit" ref="offered.product_view_form"/>
             <field name="name">product_form</field>
         </record>
+        <!-- ###################### -->
+        <!-- # Option Description # -->
+        <!-- ###################### -->
         <record model="ir.ui.view" id="option_description_view_form">
             <field name="model">offered.option.description</field>
             <field name="inherit" ref="offered.coverage_view_form"/>
             <field name="name">option_description_form</field>
         </record>
+        <!-- ################################### -->
+        <!-- # Option Description Premium Rule # -->
+        <!-- ################################### -->
+        <record model="ir.ui.view" id="option_description_premium_rule_view_form">
+            <field name="model">offered.option.description.premium_rule</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="premium.option_description_premium_rule_view_form"/>
+            <field name="name">option_description_premium_rule_form</field>
+        </record>
+        <!-- ################### -->
+        <!-- # Fee Description # -->
+        <!-- ################### -->
         <record model="ir.ui.view" id="fee_description_view_form">
             <field name="model">account.fee.description</field>
             <field name="inherit" ref="account_cog.fee_description_view_form"/>
             <field name="name">fee_description_form</field>
         </record>
+        <!-- ################### -->
+        <!-- # Tax Description # -->
+        <!-- ################### -->
         <record model="ir.ui.view" id="tax_description_view_form">
             <field name="model">account.tax.description</field>
             <field name="inherit" ref="account_cog.tax_desc_view_form"/>
