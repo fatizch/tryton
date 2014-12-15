@@ -562,9 +562,7 @@ class ContractOption:
         args['option'] = self
         args['extra_premiums'] = []
         for elem in getattr(self, 'extra_premiums', []):
-            if elem.start_date <= args['date'] <= (elem.end_date or
-                    datetime.date.max):
-                args['extra_premiums'].append(elem)
+            args['extra_premiums'].append(elem)
         covered_element = getattr(self, 'covered_element', None)
         if covered_element is not None:
             covered_element.init_dict_for_rule_engine(args)
