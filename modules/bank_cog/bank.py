@@ -100,7 +100,7 @@ class BankAccount(export.ExportImportMixin):
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')
     number = fields.Function(
-        fields.Char('Number'),
+        fields.Char('Number', required=True),
         'get_main_bank_account_number', 'setter_void',
         searcher='search_main_bank_account_number')
     func_key = fields.Function(fields.Char('Functional Key'),
