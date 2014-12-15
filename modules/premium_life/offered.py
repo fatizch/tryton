@@ -6,18 +6,18 @@ from trytond.modules.cog_utils import fields
 __metaclass__ = PoolMeta
 
 __all__ = [
-    'PremiumDateConfiguration',
+    'ProductPremiumDates',
     ]
 
 
-class PremiumDateConfiguration:
-    __name__ = 'billing.premium.date_configuration'
+class ProductPremiumDates:
+    __name__ = 'offered.product.premium_dates'
 
     yearly_each_covered_anniversary_date = fields.Boolean('Yearly Each '
         'Covered Anniversary Date')
 
     def get_dates_for_contract(self, contract):
-        res = super(PremiumDateConfiguration, self).get_dates_for_contract(
+        res = super(ProductPremiumDates, self).get_dates_for_contract(
             contract)
         max_date = contract.end_date or contract.next_renewal_date
         if not max_date:
