@@ -1,8 +1,7 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import unittest
 import datetime
 from decimal import Decimal
-from mock import Mock
 
 import trytond.tests.test_tryton
 
@@ -27,9 +26,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Product': 'offered.product',
             'OptionDescription': 'offered.option.description',
-            'Pricing': 'billing.premium.rule',
             'Eligibility': 'offered.eligibility.rule',
-            'PremiumRuleComponent': 'billing.premium.rule.component',
             'Tax': 'account.tax.description',
             'TaxVersion': 'account.tax.description.version',
             'Fee': 'account.fee.description',
@@ -38,7 +35,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Lang': 'ir.lang',
             'ItemDesc': 'offered.item.description',
             'ExtraPremiumKind': 'extra_premium.kind',
-            'PremiumConfiguration': 'billing.premium.date_configuration',
             }
 
     def test0001_testFunctionalRuleCreation(self):
@@ -214,69 +210,13 @@ return True'''
                 ('code', '=', 'contract')])[0]
 
         # Coverage A
-
-        tax = self.Tax.search([('code', '=', 'TT')])[0]
-        fee = self.Fee.search([('code', '=', 'FEE')])[0]
         item_desc = self.ItemDesc.search([('code', '=', 'person')])[0]
-
-        pricing_comp1 = self.PremiumRuleComponent()
-        pricing_comp1.config_kind = 'simple'
-        pricing_comp1.fixed_amount = 12
-        pricing_comp1.kind = 'base'
-        pricing_comp1.code = 'PP'
-        pricing_comp1.rated_object_kind = 'global'
-
-        pricing_comp11 = self.PremiumRuleComponent()
-        pricing_comp11.kind = 'tax'
-        pricing_comp11.tax = tax
-        pricing_comp11.code = tax.code
-        pricing_comp11.rated_object_kind = 'global'
-
-        pricing_comp12 = self.PremiumRuleComponent()
-        pricing_comp12.kind = 'fee'
-        pricing_comp12.fee = fee
-        pricing_comp12.code = fee.code
-        pricing_comp12.rated_object_kind = 'global'
-
-        pricing_comp2 = self.PremiumRuleComponent()
-        pricing_comp2.config_kind = 'simple'
-        pricing_comp2.fixed_amount = 1
-        pricing_comp2.kind = 'base'
-        pricing_comp2.code = 'PP'
-        pricing_comp2.rated_object_kind = 'sub_item'
-
-        premium_rulea = self.Pricing()
-
-        premium_rulea.components = [
-            pricing_comp1, pricing_comp11, pricing_comp12]
-        premium_rulea.sub_item_components = [pricing_comp2]
-
-        premium_rulea.start_date = datetime.date.today()
-        premium_rulea.end_date = datetime.date.today() + \
-            datetime.timedelta(days=10)
-
-        pricing_comp3 = self.PremiumRuleComponent()
-        pricing_comp3.config_kind = 'simple'
-        pricing_comp3.fixed_amount = 15
-        pricing_comp3.kind = 'base'
-        pricing_comp3.code = 'PP'
-        pricing_comp3.rated_object_kind = 'global'
-
-        premium_ruleb = self.Pricing()
-        premium_ruleb.components = [pricing_comp3]
-
-        premium_ruleb.start_date = datetime.date.today() + \
-            datetime.timedelta(days=11)
-        premium_ruleb.end_date = datetime.date.today() + \
-            datetime.timedelta(days=20)
 
         coverage_a = self.OptionDescription()
         coverage_a.family = coverage_a._fields['family'].selection[0][0]
         coverage_a.code = 'ALP'
         coverage_a.name = 'Alpha Coverage'
         coverage_a.start_date = datetime.date.today()
-
-        coverage_a.premium_rules = [premium_rulea]
 
         coverage_a.item_desc = item_desc
 
@@ -285,37 +225,12 @@ return True'''
 
         # Coverage B
 
-        tax_1 = self.Tax.search([('code', '=', 'TTA')])[0]
-
-        pricing_comp4 = self.PremiumRuleComponent()
-        pricing_comp4.config_kind = 'simple'
-        pricing_comp4.fixed_amount = 30
-        pricing_comp4.kind = 'base'
-        pricing_comp4.code = 'PP'
-        pricing_comp4.rated_object_kind = 'global'
-
-        pricing_comp41 = self.PremiumRuleComponent()
-        pricing_comp41.kind = 'tax'
-        pricing_comp41.tax = tax_1
-        pricing_comp41.code = tax_1.code
-        pricing_comp41.rated_object_kind = 'global'
-
-        premium_rulec = self.Pricing()
-        premium_rulec.config_kind = 'simple'
-        premium_rulec.components = [pricing_comp4, pricing_comp41]
-
-        premium_rulec.start_date = datetime.date.today()
-        premium_rulec.end_date = datetime.date.today() + \
-            datetime.timedelta(days=10)
-
         coverage_b = self.OptionDescription()
         coverage_b.code = 'BET'
         coverage_b.name = 'Beta Coverage'
         coverage_b.family = coverage_a._fields['family'].selection[0][0]
         coverage_b.start_date = datetime.date.today() + \
             datetime.timedelta(days=5)
-
-        coverage_b.premium_rules = [premium_ruleb]
 
         coverage_b.item_desc = item_desc
         coverage_b.company = company
@@ -391,7 +306,7 @@ return True'''
 
     def test0100_testExtraPremiumKindCreation(self):
         def createExtraPremiumKind(code, is_discount=False, max_rate=None,
-                                   max_value=None):
+                max_value=None):
             extra_premium_kind = self.ExtraPremiumKind()
             extra_premium_kind.code = code
             extra_premium_kind.name = code
@@ -406,51 +321,19 @@ return True'''
 
         extra_premium_kind1.save()
         extra_premium_kind1, = self.ExtraPremiumKind.search([
-            ('code', '=', 'reduc_no_limit'), ])
+                ('code', '=', 'reduc_no_limit'),
+                ])
         self.assert_(extra_premium_kind1.id)
         self.assert_(extra_premium_kind1.is_discount)
 
-        extra_premium_kind2 = createExtraPremiumKind('reduc_max_10_prct',
-                                                     True, '-0.10')
+        extra_premium_kind2 = createExtraPremiumKind('reduc_max_10_prct', True,
+            '-0.10')
         extra_premium_kind2.save()
 
         extra_premium_kind3 = createExtraPremiumKind('majo_max_10_prct',
-                                                     max_rate='0.10')
+            max_rate='0.10')
         extra_premium_kind3.save()
         self.assertFalse(extra_premium_kind3.is_discount)
-
-    def test0011_premium_date_configuration(self):
-        premium_configuration = self.PremiumConfiguration(
-            yearly_on_new_eve=True,
-            yearly_on_start_date=True,
-            yearly_custom_date=None)
-        contract = Mock()
-        contract.start_date = datetime.date(2014, 02, 12)
-        contract.end_date = datetime.date(2015, 4, 25)
-
-        dates = premium_configuration.get_dates_for_contract(contract)
-        dates = sorted(list(set(dates)))
-        self.assertEqual(dates, [datetime.date(2014, 02, 12),
-                datetime.date(2015, 01, 01), datetime.date(2015, 02, 12)])
-
-        contract = Mock()
-        contract.start_date = datetime.date(2014, 03, 01)
-        contract.end_date = datetime.date(2015, 12, 31)
-
-        dates = premium_configuration.get_dates_for_contract(contract)
-        dates = sorted(list(set(dates)))
-        self.assertEqual(dates, [datetime.date(2014, 03, 01),
-                datetime.date(2015, 01, 01), datetime.date(2015, 03, 01)])
-
-        premium_configuration2 = self.PremiumConfiguration(
-            yearly_on_new_eve=False,
-            yearly_on_start_date=False,
-            yearly_custom_date=datetime.date(2014, 04, 26))
-
-        dates = premium_configuration2.get_dates_for_contract(contract)
-        dates = sorted(list(set(dates)))
-        self.assertEqual(dates, [datetime.date(2014, 04, 26),
-                datetime.date(2015, 04, 26)])
 
 
 def suite():
