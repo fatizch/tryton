@@ -265,7 +265,7 @@ class ProcessFramework(ModelView):
         return states
 
     @classmethod
-    def button_currentstate_states(cls, transition_id):
+    def button_current_states(cls, process, data):
         return {'readonly': True}
 
     @classmethod
