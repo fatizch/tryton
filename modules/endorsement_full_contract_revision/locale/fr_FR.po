@@ -61,6 +61,14 @@ msgstr ""
 "Reprise intégrale de contrat : Le contrat sera dans un état instable tant "
 "que la reprise intégrale n'est pas terminée ou annulée"
 
+msgctxt "model:endorsement.definition,name:full_contract_revision_definition"
+msgid "Full Contract Revision"
+msgstr "Reprise intégrale de contrat"
+
+msgctxt "model:endorsement.part,name:full_contract_revision_part"
+msgid "Full Contract Revision"
+msgstr "Reprise intégrale de contrat"
+
 msgctxt "wizard_button:endorsement.start,full_contract_revision,end:"
 msgid "Cancel"
 msgstr "Annuler"
