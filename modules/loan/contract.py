@@ -159,7 +159,12 @@ class ContractOption:
             'invisible': Eval('coverage_family', '') != 'loan',
             },
         depends=['coverage_family', 'contract_status'], readonly=True)
-    multi_mixed_view = loan_shares
+    latest_loan_shares = fields.Function(
+        fields.One2Many('loan.share', 'option', 'Loan Shares', states={
+            'invisible': Eval('coverage_family', '') != 'loan',
+            }, depends=['coverage_family']),
+        'get_latest_loan_shares')
+    multi_mixed_view = latest_loan_shares
 
     @classmethod
     def _export_skips(cls):
@@ -186,6 +191,18 @@ class ContractOption:
                 to_update.append(res)
         if to_update:
             return {'update': to_update}
+
+    def get_latest_loan_shares(self, name):
+        latest_shares = []
+        for loan_share in sorted(self.loan_shares, reverse=True,
+                key=lambda x: (x.loan, x.start_date or datetime.date.min)):
+            if not latest_shares:
+                latest_shares.append(loan_share)
+                continue
+            if latest_shares[-1].loan == loan_share.loan:
+                continue
+            latest_shares.append(loan_share)
+        return [x.id for x in latest_shares]
 
     def get_possible_end_date(self):
         dates = super(ContractOption, self).get_possible_end_date()
