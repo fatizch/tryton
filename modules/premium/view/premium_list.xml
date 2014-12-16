@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Premium Rules">
+    <field name="start"/>
+    <field name="end"/>
+    <field name="amount"/>
+    <field name="frequency"/>
+</tree>
