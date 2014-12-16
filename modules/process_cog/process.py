@@ -244,7 +244,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
         return current_log[0].id if current_log else None
 
     @classmethod
-    def write(cls,  *args):
+    def write(cls, *args):
         actions = iter(args)
         for instances, values in zip(actions, actions):
             for instance in instances:
@@ -592,7 +592,8 @@ class Process(model.CoopSQL, model.TaggedMixin):
     def build_step_buttons(self, step_relation):
         nb, result = super(Process, self).build_step_buttons(step_relation)
         if not self.custom_transitions and self.all_steps[-1] == step_relation:
-            result += '<button string="Complete" '
+            result += '<button string="%s" ' % (self.end_step_name or
+                'Complete')
             result += 'name="_button_complete_%s_%s"/>' % (
                 self.id, step_relation.id)
             nb += 1

@@ -131,6 +131,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     menu_items = fields.Many2Many('process-menu', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
     menu_name = fields.Char('Menu name')
+    end_step_name = fields.Char('End Step Name')
 
     @classmethod
     def __setup__(cls):
@@ -731,7 +732,8 @@ class ProcessTransition(ModelSQL, ModelView):
 
     def build_button(self):
         if self.kind == 'complete':
-            xml = '<button string="Complete" '
+            complete_name = self.on_process.end_step_name or 'Complete'
+            xml = '<button string="%s" ' % complete_name
             xml += 'name="_button_transition_%s_%s"/>' % (
                 self.on_process.id, self.id)
             return xml
