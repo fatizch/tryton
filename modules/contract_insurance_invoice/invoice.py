@@ -53,7 +53,8 @@ class Invoice:
         super(Invoice, cls).__setup__()
         cls._error_messages.update({
                 'post_on_non_active_contract': 'Impossible to post invoice '
-                '%(invoice)s on contract %(contract)s which is %(status)s',
+                '"%(invoice)s" on contract "%(contract)s" which is '
+                '"%(status)s"',
                 })
         cls.untaxed_amount.states = {
             'invisible': Bool(Eval('contract_invoice')),
