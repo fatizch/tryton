@@ -330,8 +330,8 @@ class PremiumAmount(ModelSQL, ModelView):
     # search via premium
     contract = fields.Many2One('contract', 'Contract', select=True,
         ondelete='CASCADE')
-    period_start = fields.Date('Period Start')
-    period_end = fields.Date('Period End')
+    period_start = fields.Date('Period Start', select=True)
+    period_end = fields.Date('Period End', select=True)
     start = fields.Date('Start')
     end = fields.Date('End')
     amount = fields.Numeric('Amount')
