@@ -176,6 +176,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     extra_data_values = fields.Function(
         fields.Dict('extra_data', 'Extra Data'),
         'get_extra_data')
+    extra_data_values_string = extra_data_values.translated(
+        'extra_data_values')
     product_subscriber_kind = fields.Function(
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
