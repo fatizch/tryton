@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -19,10 +19,6 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
-
-msgctxt "field:account.payment.journal,sepa_bank_account_number:"
-msgid ""
-msgstr " "
 
 msgctxt "field:account.payment.sepa.mandate,xml_id:"
 msgid "XML Id"
