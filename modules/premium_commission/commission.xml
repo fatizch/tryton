@@ -10,5 +10,14 @@
             <field name="inherit" ref="commission.plan_view_form"/>
             <field name="name">plan_form</field>
         </record>
+        <!-- ######### -->
+        <!-- # Agent # -->
+        <!-- ######### -->
+        <record model="ir.ui.view" id="agent_view_form">
+            <field name="model">commission.agent</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="commission.agent_view_form"/>
+            <field name="name">agent_form</field>
+        </record>
     </data>
 </tryton>

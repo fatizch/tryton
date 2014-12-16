@@ -6,6 +6,8 @@ __metaclass__ = PoolMeta
 __all__ = [
     'CommissionPlan',
     'CommissionPlanFee',
+    'Agent',
+    'AgentFee',
     ]
 
 
@@ -24,4 +26,22 @@ class CommissionPlanFee(model.CoopSQL):
     fee = fields.Many2One('account.fee', 'Fee', ondelete='RESTRICT',
         required=True)
     plan = fields.Many2One('commission.plan', 'Plan', ondelete='CASCADE',
+        required=True)
+
+
+class Agent:
+    __name__ = 'commission.agent'
+
+    fees = fields.Many2Many('commission.agent-account.fee', 'agent', 'fee',
+        'Fees')
+
+
+class AgentFee(model.CoopSQL):
+    'Agent Fee'
+
+    __name__ = 'commission.agent-account.fee'
+
+    fee = fields.Many2One('account.fee', 'Fee', ondelete='RESTRICT',
+        required=True)
+    agent = fields.Many2One('commission.agent', 'Agent', ondelete='CASCADE',
         required=True)
