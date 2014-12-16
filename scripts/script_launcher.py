@@ -473,8 +473,6 @@ def doc(arguments=None, config=None, work_data=None, override_values=None):
 
 
 def configure(target_env):
-    import proteus
-
     root = os.path.normpath(os.path.abspath(target_env))
     base_name = os.path.basename(root)
     workspace = os.path.join(root, 'tryton-workspace')
@@ -586,11 +584,6 @@ def configure(target_env):
                         '',
                         '[form]',
                         'statusbar = True']))
-    # configure documentation
-    proteusdir = os.path.dirname(proteus.__file__)
-    if not os.path.islink(proteusdir):
-        shutil.rmtree(proteusdir)
-        os.symlink(os.path.join(workspace, 'proteus', 'proteus'), proteusdir)
 
     def path_inserter(target, filename):
         target_file = os.path.join(root, 'lib', 'python2.7', 'site-packages',
