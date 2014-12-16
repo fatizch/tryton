@@ -308,12 +308,10 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
     return '\n'.join(tmp)
 
 
-def pyson_result(pyson_expr, target, evaled=False):
+def pyson_result(pyson_expr, target):
     encoder = PYSONEncoder()
     if isinstance(pyson_expr, str):
         the_pyson = encoder.encode(safe_eval(pyson_expr, CONTEXT))
-    elif isinstance(pyson_expr, dict):
-        the_pyson = encoder.encode(safe_eval(str(pyson_expr), CONTEXT))
     else:
         the_pyson = encoder.encode(pyson_expr)
     if the_pyson is True:

@@ -235,9 +235,9 @@ class ProcessFramework(ModelView):
             return True
         return not(
             'readonly' in good_button and
-            utils.pyson_result(good_button['readonly'], self, evaled=True) or
+            utils.pyson_result(good_button['readonly'], self) or
             'invisible' in good_button and
-            utils.pyson_result(good_button['invisible'], self, evaled=True))
+            utils.pyson_result(good_button['invisible'], self))
 
     def is_button_available(self, process, executable):
         if executable.__name__ == 'process.step':
