@@ -23,7 +23,6 @@ from trytond.error import UserError
 
 
 CONTRACTSTATUSES = [
-    ('', ''),
     ('quote', 'Quote'),
     ('active', 'Active'),
     ('hold', 'Hold'),
@@ -141,7 +140,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
     status = fields.Selection(CONTRACTSTATUSES, 'Status', states=_STATES,
-        depends=_DEPENDS)
+        depends=_DEPENDS, required=True)
     status_string = status.translated('status')
     subscriber = fields.Many2One('party.party', 'Subscriber',
         domain=[If(
