@@ -81,6 +81,11 @@ class Endorsement:
         for contract, at_date in to_rebill.iteritems():
             contract.rebill(at_date)
 
+    def find_parts(self, endorsement_part):
+        if endorsement_part.kind in 'billing_information':
+            return self.contract_endorsements
+        return super(Endorsement, self).find_parts(endorsement_part)
+
 
 class EndorsementContract:
     __name__ = 'endorsement.contract'
