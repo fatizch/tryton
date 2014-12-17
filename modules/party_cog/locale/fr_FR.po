@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -948,7 +948,7 @@ msgstr "Mon historique"
 
 msgctxt "model:ir.action.act_window.domain,name:act_party_domain_active"
 msgid "All"
-msgstr "Toutes"
+msgstr "Tous"
 
 msgctxt "model:ir.action.act_window.domain,name:act_party_domain_recent"
 msgid "Recent"
