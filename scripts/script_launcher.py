@@ -513,77 +513,25 @@ def configure(target_env):
                         'db_name = %s' % base_name,
                         'start_mode = demo',
                         'runtime_dir = tryton-workspace']))
-    if not os.path.exists(os.path.join(workspace, 'conf', 'trytond.conf')):
-        with open(os.path.join(workspace, 'conf', 'trytond.conf'), 'w') as f:
-            f.write('\n'.join([
-                        '[jsonrpc]',
-                        'listen = localhost:8000\n',
-                        '[database]',
-                        'uri = postgresql://tryton:tryton@localhost:5432/',
-                        'path = %s\n' % os.path.join(workspace, 'data'),
-                        '[session]',
-                        'super_pwd = zqpVUjCebLpr6',
-                        '# default password is admin',
-                        ]))
-    if not os.path.exists(os.path.join(workspace, 'conf', 'tests.conf')):
-        with open(os.path.join(workspace, 'conf', 'tests.conf'), 'w') as f:
-            f.write('\n'.join([
-                        '[jsonrpc]',
-                        'listen = localhost:8000\n',
-                        '[database]',
-                        'db_type = sqlite',
-                        'uri = sqlite://',
-                        'path = %s\n' % os.path.join(workspace, 'data'),
-                        '[env]',
-                        'testing = True',
-                        ]))
-    if not os.path.exists(os.path.join(workspace, 'conf', 'celeryconfig.py')):
-        with open(os.path.join(workspace, 'conf', 'celeryconfig.py'),
-                'w') as f:
-            f.write('\n'.join([
-                        "BROKER_URL = 'amqp://guest:guest@localhost:5672//'",
-                        'CELERYD_CONCURRENCY = 4',
-                        'CELERY_REDIRECT_STDOUT = False',
-                        "CELERY_REDIRECT_STDOUTS_LEVEL = 'INFO'",
-                        'CELERYD_TASK_LOG_FORMAT = '
-                        "'[%(asctime)s: %(levelname)s/%(processName)s]"
-                        "[%(name)s] %(message)s'",
-                        "CELERY_ACCEPT_CONTENT = ['pickle', 'json']",
-                        "CELERY_RESULT_BACKEND = 'amqp'",
-                        "TRYTON_DATABASE = '%s'" % base_name,
-                        "TRYTON_CONFIG = '%s'" % os.path.join(workspace,
-                            'conf', 'trytond.conf')])),
+    conf_files = [os.path.join(workspace, 'conf', cfg)
+        for cfg in ['trytond.conf', 'tests.conf', 'celeryconfig.py',
+            'tryton.conf']]
+    template_vals = dict(
+        WORKSPACE=workspace,
+        DATABASE=base_name,
+    )
+    for fname in conf_files:
+        if not os.path.exists(fname):
+            with open(fname, 'w') as f, \
+                    open(os.path.join(workspace, 'coopbusiness', 'defaults',
+                            os.path.basename(fname))) as template:
+                data = template.read()
+                for key in template_vals.keys():
+                    placeholder = '$' + key
+                    if placeholder in data:
+                        data = data.replace(placeholder, template_vals[key])
+                f.write(data)
 
-    if not os.path.exists(os.path.join(workspace, 'conf', 'tryton.conf')):
-        with open(os.path.join(workspace, 'conf', 'tryton.conf'), 'w') as f:
-            f.write('\n'.join([
-                        '[login]',
-                        'login = admin',
-                        'profile = Test',
-                        'expanded = True',
-                        'port = 8000',
-                        'server = localhost',
-                        'db = %s' % base_name,
-                        '',
-                        '[client]',
-                        'save_tree_expanded_state = True',
-                        'default_height = 800',
-                        'language_direction = ltr',
-                        'form_tab = top',
-                        'lang = fr_FR',
-                        'modepda = False',
-                        'save_tree_state = True',
-                        'toolbar = default',
-                        'default_width = 1280',
-                        'save_width_height = True',
-                        'maximize = True',
-                        '',
-                        '[menu]',
-                        'pane = 220',
-                        'expanded = True',
-                        '',
-                        '[form]',
-                        'statusbar = True']))
 
     def path_inserter(target, filename):
         target_file = os.path.join(root, 'lib', 'python2.7', 'site-packages',
