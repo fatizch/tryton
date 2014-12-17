@@ -87,7 +87,7 @@ class Contract:
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
-                'button_calculate_prices': {},
+                'first_invoice': {},
                 })
 
     def invoices_report(self):
