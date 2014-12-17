@@ -2,17 +2,9 @@
 <data>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page id="premium_data" string="Premium Data">
-            <notebook>
-                <page name="premium_rules">
-                    <field name="premium_rules" mode="form"/>
-                </page>
-                <page name="fees">
-                    <field name="fees"/>
-                </page>
-                <page name="taxes">
-                    <field name="taxes"/>
-                </page>
-            </notebook>
+            <field name="premium_rules" mode="form" colspan="4"/>
+            <field name="fees" colspan="4"/>
+            <field name="taxes" colspan="4"/>
         </page>
     </xpath>
 </data>
