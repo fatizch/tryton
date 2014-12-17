@@ -7,6 +7,7 @@ from celery.utils.log import get_task_logger
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond_celery import TrytonTask
+from trytond.modules.cog_utils import batch
 
 ##############################################################################
 # Celery Usage
@@ -39,7 +40,7 @@ from trytond_celery import TrytonTask
 #
 ##############################################################################
 
-logger = get_task_logger(__name__)
+logger = batch.BatchLogger(get_task_logger(__name__), {})
 celery = Celery('Coopengo Batch', backend=CELERY_RESULT_BACKEND)
 
 
@@ -99,16 +100,15 @@ def generate(batch_name, ids, connexion_date, treatment_date):
         try:
             BatchModel.execute(to_treat, ids, treatment_date)
         except Exception:
+            logger = batch.get_logger(batch_name)
+            logger.exception('Exception occured when processing %s',
+                batch.get_print_infos(ids))
             do_not_divide = BatchModel.get_conf_item('split_mode') == \
                 'divide' and BatchModel.get_conf_item('split_size') == 1
             if len(ids) < 2 or do_not_divide:
-                logger.error(
-                    '[%s] failed. Task cannot be divided, aborting.' %
-                    batch_name)
+                logger.failure('Task cannot be divided, aborting.')
                 return 1
-            logger.warning(
-                '[%s] failed. Splitting task in subtasks and retrying.' %
-                batch_name)
+            logger.info('Splitting task in subtasks and retrying.')
             half_idx = len(ids) / 2
             group(generate.s(batch_name, _ids, connexion_date, treatment_date)
                 for _ids in (ids[:half_idx], ids[half_idx:]))()

@@ -11,7 +11,7 @@ from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.model import ModelView
 
-from trytond.modules.cog_utils import coop_string
+import coop_string
 
 __all__ = [
     'BatchRoot',
@@ -19,17 +19,40 @@ __all__ = [
     ]
 
 
+class BatchLogger(logging.LoggerAdapter):
+    def init(self, logger, extra):
+        super(BatchLogger, self).__init__(logger, extra)
+
+    def success(self, msg, *args, **kwargs):
+        self.info('[SUCCESS] ' + msg, *args, **kwargs)
+
+    def failure(self, msg, *args, **kwargs):
+        self.info('[FAILURE] ' + msg, *args, **kwargs)
+
+
 def get_logger(batch_name):
     logger = get_task_logger(batch_name)
     log_dir = config.get('batch', 'log_dir', '')
-    if log_dir:
+    if log_dir and len(logger.handlers) < 2:
         handler = logging.FileHandler(os.path.join(
             log_dir, batch_name + '.log'), delay=True)
         format_string = CELERYD_TASK_LOG_FORMAT.replace('[%(name)s]', '')
         formatter = logging.Formatter(format_string)
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-    return logger
+    return BatchLogger(logger, {})
+
+
+def get_print_infos(lst, obj_name=None):
+    length = len(lst)
+    if length == 1:
+        min_max = ': %s' % lst
+    elif length > 1:
+        min_max = ': %d...%d' % (lst[0], lst[-1])
+    else:
+        min_max = ''
+    return '%d %s%s%s' % (length, obj_name or 'obj',
+        's' if length > 1 else '', min_max)
 
 
 class BatchRoot(ModelView):

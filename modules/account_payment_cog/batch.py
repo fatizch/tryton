@@ -3,7 +3,6 @@ from sql.operators import Equal
 from sql.aggregate import Count
 
 from trytond.pool import Pool
-from trytond.exceptions import UserError
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import batch
@@ -52,8 +51,9 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         groups = []
         Payment = Pool().get('account.payment')
         payments = sorted(objects, key=cls._group_payment_key)
-        for key, _grouped_payments in groupby(payments,
-                key=cls._group_payment_key):
+        grouped_payments_list = groupby(payments, key=cls._group_payment_key)
+        keys = []
+        for key, _grouped_payments in grouped_payments_list:
             def group():
                 pool = Pool()
                 Group = pool.get('account.payment.group')
@@ -61,15 +61,13 @@ class PaymentTreatmentBatch(batch.BatchRoot):
                 group.save()
                 groups.append(group)
                 return group
+            keys.append(key)
             grouped_payments = list(_grouped_payments)
-            try:
-                Payment.process(grouped_payments, group)
-            except UserError, e:
-                msg = 'FAILED. Ids: %s. Error: %s' % (ids, e)
-                cls.logger.error(msg)
-                raise
-            cls.logger.info('group of %d payments processed' %
-                len(grouped_payments))
+            cls.logger.info('processing group %s of %s' % (key,
+                batch.get_print_infos(grouped_payments, 'payment')))
+            Payment.process(list(grouped_payments), group)
+        cls.logger.success('%s processed' %
+            batch.get_print_infos(keys, 'payments group'))
 
 
 class PaymentCreationBatch(batch.BatchRoot):
@@ -114,4 +112,5 @@ class PaymentCreationBatch(batch.BatchRoot):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         MoveLine.create_payments(objects)
-        cls.logger.info('%s payments created' % len(objects))
+        cls.logger.success('%s created' %
+            batch.get_print_infos([x.id for x in objects], 'payment'))
