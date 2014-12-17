@@ -6,7 +6,7 @@ from trytond.modules.cog_utils import batch
 class ContractEndDateTerminationBatch(batch.BatchRoot):
     'Contract end date termination batch'
 
-    __name__ = 'contract.termination.treatment'
+    __name__ = 'contract.termination.process'
 
     logger = batch.get_logger(__name__)
 

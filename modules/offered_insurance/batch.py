@@ -12,7 +12,7 @@ __all___ = [
 class ProductValidationBatch(batch.BatchRoot):
     'Product Validation Batch'
 
-    __name__ = 'offered.validate.batch'
+    __name__ = 'offered.validate'
 
     logger = batch.get_logger(__name__)
 

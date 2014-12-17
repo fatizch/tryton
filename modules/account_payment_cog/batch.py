@@ -18,7 +18,7 @@ _all__ = [
 class PaymentTreatmentBatch(batch.BatchRoot):
     "Payment Treatment Batch"
 
-    __name__ = 'account.payment.treatment'
+    __name__ = 'account.payment.process'
 
     logger = batch.get_logger(__name__)
 

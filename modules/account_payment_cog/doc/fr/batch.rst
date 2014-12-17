@@ -1,5 +1,5 @@
-Batch de création de paiements [account.payment.creation]
-=========================================================
+Batch de création de paiements [account.payment.create]
+=======================================================
 
 Ce batch créé des groupes de paiements pour les quittances qui valident les
 critères suivants :
@@ -11,8 +11,8 @@ critères suivants :
 
 Ce batch n'a aucune configuration spécifique à l'heure actuelle.
 
-Batch de traitement de paiements [account.payment.treatment]
-============================================================
+Batch de traitement de paiements [account.payment.process]
+==========================================================
 
 Ce batch fait passer les paiements du statut *Approuvé* au statut
 *Traitement* en générant optionnellement au passage le fichier de
