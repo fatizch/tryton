@@ -7,6 +7,7 @@ __all__ = [
     'Contract',
     'CoveredElement',
     'ExtraPremium',
+    'Premium',
     ]
 
 
