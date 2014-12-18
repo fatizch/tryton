@@ -12,5 +12,5 @@ class Contract:
     def appliable_fees(self):
         all_fees = super(Contract, self).appliable_fees()
         if self.agent:
-            all_fees = all_fees | self.agent.fees | self.agent.plan.fees
+            all_fees = all_fees | set(self.agent.fees + self.agent.plan.fees)
         return all_fees
