@@ -20,6 +20,7 @@ def register():
         Model,
         # From process_framework
         ProcessFramework,
+        ProcessActWindow,
         module='process', type_='model')
 
     Pool.register(

@@ -7,11 +7,12 @@ from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
 from trytond.pyson import Eval, Bool
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.cog_utils import fields, model, export
 
+__metaclass__ = PoolMeta
 __all__ = [
     'Status',
     'ProcessStepRelation',
@@ -24,6 +25,7 @@ __all__ = [
     'StepGroupRelation',
     'GenerateGraph',
     'GenerateGraphWizard',
+    'ProcessActWindow',
     ]
 
 
@@ -131,6 +133,8 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     menu_items = fields.Many2Many('process-menu', 'process', 'menu', 'Menus')
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
     menu_name = fields.Char('Menu name')
+    action_windows = fields.One2Many('process.process-act_window',
+        'process', 'Action Windows')
     end_step_name = fields.Char('End Step Name')
 
     @classmethod
@@ -251,7 +255,10 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         return good_menu
 
     def create_or_update_action(self, lang):
-        ActWin = Pool().get('ir.action.act_window')
+        pool = Pool()
+        ActWin = pool.get('ir.action.act_window')
+        ProcessActWindow = pool.get('process.process-act_window')
+
         good_action = None
         if (hasattr(self, 'menu_items') and self.menu_items):
             for menu in self.menu_items:
@@ -270,6 +277,19 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             ','.join(map(lambda x: str(x.id), self.all_steps)))
         good_action.sequence = 10
         good_action.save()
+
+        existing = [x for x in self.action_windows if
+            x.action_window == good_action and x.language == lang]
+
+        if existing:
+            return good_action
+
+        new_relation = ProcessActWindow()
+        new_relation.process = self
+        new_relation.language = lang
+        new_relation.action_window = good_action
+        new_relation.save()
+
         return good_action
 
     def get_xml_header(self, colspan="4"):
@@ -557,9 +577,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         if not self.menu_items:
             return None
         lang = Transaction().context.get('language')
-        for menu in self.menu_items:
-            if menu.name == '%s_%s' % (self.technical_name, lang):
-                return menu.action
+        action, = [x.action_window for x in self.action_windows if
+            x.language.code == lang]
+        return action
 
     @fields.depends('fancy_name', 'technical_name')
     def on_change_with_technical_name(self):
@@ -984,3 +1004,14 @@ class GenerateGraphWizard(Wizard):
 
     def do_print_(self, action):
         return action, {'id': Transaction().context.get('active_id')}
+
+
+class ProcessActWindow(model.CoopSQL):
+    'Process to Action Window Relation'
+
+    __name__ = 'process.process-act_window'
+
+    process = fields.Many2One('process', 'Process', ondelete='CASCADE')
+    action_window = fields.Many2One('ir.action.act_window', 'Action Window',
+        ondelete='CASCADE')
+    language = fields.Many2One('ir.lang', 'Language', ondelete='RESTRICT')
