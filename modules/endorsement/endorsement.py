@@ -363,6 +363,32 @@ def relation_mixin(value_model, field, model, name):
                     'mes_update_version': 'Update %s',
                     })
 
+        @classmethod
+        def read(cls, ids, fields_names=None):
+            BaseModel = Pool().get(model)
+            relation_fields_to_read = [fname for fname in fields_names
+                if isinstance(cls._fields[fname], tryton_fields.Function)
+                and fname in BaseModel._fields and
+                not cls._fields[fname].getter]
+            if relation_fields_to_read:
+                result = super(Mixin, cls).read(ids, list(set(fields_names) -
+                        set(relation_fields_to_read)) + ['relation', 'values'])
+            else:
+                return super(Mixin, cls).read(ids, fields_names)
+
+            relation_values = BaseModel.read([x['relation'] for x in result
+                    if x['relation']], relation_fields_to_read)
+            relation_values = {x['id']: x for x in relation_values}
+            for row in result:
+                if 'values' not in row or not row['relation']:
+                    row[fname] = None
+                for fname in relation_fields_to_read:
+                    if 'values' in row and fname in row['values']:
+                        row[fname] = row['values'][fname]
+                    else:
+                        row[fname] = relation_values[row['relation']][fname]
+            return result
+
         @staticmethod
         def default_action():
             return 'add'
