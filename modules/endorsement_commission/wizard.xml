@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ############################## -->
+        <!-- # Change Contract Commission # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="change_contract_commission_view_form">
+            <field name="model">endorsement.contract.change_commission</field>
+            <field name="type">form</field>
+            <field name="name">change_contract_commission_form</field>
+        </record>
+        <!-- ########################## -->
+        <!-- # Change Contract Broker # -->
+        <!-- ########################## -->
+        <record model="ir.ui.view" id="change_contract_broker_view_form">
+            <field name="model">endorsement.contract.change_broker</field>
+            <field name="type">form</field>
+            <field name="name">change_contract_broker_form</field>
+        </record>
+    </data>
+</tryton>

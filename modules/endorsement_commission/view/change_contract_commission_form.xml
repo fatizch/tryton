@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<form string="Change Contract Broker">
+    <label name="current_broker"/>
+    <field name="current_broker" colspan="3"/>
+    <label name="current_agent"/>
+    <field name="current_agent" colspan="3"/>
+    <newline/>
+    <label name="broker"/>
+    <field name="broker" colspan="3"/>
+    <label name="agent"/>
+    <field name="agent" colspan="3"/>
+    <newline/>
+    <field name="product"/>
+    <field name="endorsement_part"/>
+    <field name="broker_party"/>
+    <field name="current_plan"/>
+</form>
