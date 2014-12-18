@@ -341,8 +341,9 @@ class EndorsementCoveredElementOption:
             model, base_object, indent, increment)
         if self.action == 'remove':
             return result
-        loan_shares_summary = '\n'.join([x.get_summary('loan.share', None,
-                    indent=indent + 2 * increment, increment=increment)
+        loan_shares_summary = '\n'.join([x.get_summary('loan.share',
+                    x.loan_share, indent=indent + 2 * increment,
+                    increment=increment)
                 for x in self.loan_shares])
         if loan_shares_summary:
             result += '\n%s%s :\n' % (' ' * (indent + increment),
@@ -358,10 +359,7 @@ class EndorsementCoveredElementOption:
         elif self.action == 'add':
             return list(self.loan_shares)
         else:
-            existing = set()
-            for option in (
-                    self.covered_element_endorsement.covered_element.options):
-                [existing.add(x) for x in option.loan_shares]
+            existing = set([x for x in self.option.loan_shares])
             for elem in self.loan_shares:
                 if elem.action == 'add':
                     existing.add(elem)
@@ -436,13 +434,13 @@ class EndorsementLoanShare(relation_mixin(
         'get_definition')
     loan = fields.Function(
         fields.Many2One('loan', 'Loan'),
-        'on_change_with_loan')
+        '')
     share = fields.Function(
         fields.Numeric('Share', digits=(5, 4)),
-        'on_change_with_share')
+        '')
     start_date = fields.Function(
         fields.Date('Start Date'),
-        'on_change_with_start_date')
+        '')
 
     @classmethod
     def __setup__(cls):

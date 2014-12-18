@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Loan Shares" editable="bottom" colors="If(Bool(Eval('option_endorsement', False)), 'blue', 'grey')">
+<tree string="Loan Shares" editable="bottom" colors="If(Bool(Eval('new_share', False)), 'green', If(Not(Bool(Eval('previous_share', False))), 'blue', 'grey'))">
     <field name="contract"/>
     <field name="covered_element_name"/>
     <field name="option_name"/>

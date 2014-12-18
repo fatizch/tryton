@@ -344,25 +344,27 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                     for loan, shares in o_values['loan_shares'].iteritems():
                         template['loan'] = loan.id
                         template['previous_share'] = None
-                        sorted_list = sorted([x['instance'] for x in shares],
-                            key=lambda x: x.start_date or
-                            datetime.date.min)
                         selector = template.copy()
                         if not shares:
                             selectors.append(selector)
                             continue
+                        sorted_list = sorted([x['instance'] for x in shares],
+                            key=lambda x: x.start_date or datetime.date.min)
+                        selector = template.copy()
                         for idx, loan_share in enumerate(sorted_list):
-                            if ((loan_share.start_date or datetime.date.min) <
-                                    effective_date):
-                                template['previous_share'] = loan_share.share
-                                continue
-                            selector = template.copy()
-                            if (loan_share.start_date == effective_date and
-                                    isinstance(loan_share,
-                                        LoanShareEndorsement)):
+                            if ((loan_share.start_date or
+                                        endorsement.contract.start_date)
+                                    == effective_date and isinstance(
+                                        loan_share, LoanShareEndorsement)):
                                 selector['new_share'] = loan_share.share
                                 selector['loan_share_endorsement'] = \
                                     loan_share.id
+                                if idx == 0 and loan_share.relation:
+                                    selector['previous_share'] = \
+                                        loan_share.loan_share.share
+                                elif idx > 0:
+                                    selector['previous_share'] = \
+                                        sorted_list[idx - 1].share
                                 if idx != len(sorted_list) - 1:
                                     future = sorted_list[idx + 1]
                                     selector['future_share'] = future.share
@@ -390,6 +392,7 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
         else:
             endorsements = {x.contract.id: x
                 for x in wizard.endorsement.contract_endorsements}
+        effective_date = wizard.endorsement.effective_date
         pool = Pool()
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
@@ -434,10 +437,23 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                     loan_share.values['share'] = elem.new_share
                     break
             else:
-                loan_share = LoanShareEndorsement(action='add', values={
-                        'loan': elem.loan.id, 'share': elem.new_share,
-                        'start_date': self.effective_date},
-                    loan=elem.loan)
+                existing_shares = []
+                option = elem.option or elem.option_endorsement.option
+                if option:
+                    existing_shares = [x for x in option.loan_shares
+                        if x.loan == elem.loan and effective_date == (
+                            x.start_date or elem.contract.start_date)]
+                if existing_shares:
+                    # We just want to update the existing loan_share, no need
+                    # to create another one
+                    loan_share = LoanShareEndorsement(action='update',
+                        relation=existing_shares[0].id,
+                        values={'share': elem.new_share})
+                else:
+                    loan_share = LoanShareEndorsement(action='add', values={
+                            'loan': elem.loan.id, 'share': elem.new_share,
+                            'start_date': self.effective_date},
+                        loan=elem.loan)
                 new_shares.append(loan_share)
             if option_endorsement.id:
                 loan_share.option_endorsement = option_endorsement.id
