@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Id
+from trytond.pyson import Eval, If
 
 from trytond.modules.cog_utils import model, fields, coop_string
 from trytond.modules.currency_cog import ModelCurrency
@@ -32,13 +32,6 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
             ], select=True)
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
-    product = fields.Many2One('product.product', 'Product', required=True,
-        domain=[
-            ('type', '=', 'service'),
-            ('default_uom', '=', Id('product', 'uom_unit')),
-            ('template.type', '=', 'service'),
-            ('template.default_uom', '=', Id('product', 'uom_unit')),
-            ])
     frequency = fields.Selection(FEE_FREQUENCIES, 'Frequency', states={
             'invisible': Eval('type', '') != 'fixed',
             'required': Eval('type', '') == 'fixed'})

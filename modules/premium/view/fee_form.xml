@@ -22,8 +22,6 @@
     </group>
     <label name="frequency"/>
     <field name="frequency"/>
-    <label name="product"/>
-    <field name="product"/>
     <label name="allow_override"/>
     <field name="allow_override"/>
 </form>
