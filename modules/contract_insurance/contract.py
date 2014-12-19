@@ -1,5 +1,3 @@
-import datetime
-
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
@@ -561,8 +559,9 @@ class ContractOption:
     def init_dict_for_rule_engine(self, args):
         args['option'] = self
         covered_element = getattr(self, 'covered_element', None)
-        if covered_element is not None:
-            covered_element.init_dict_for_rule_engine(args)
+        if covered_element is None:
+            return super(ContractOption, self).init_dict_for_rule_engine(args)
+        covered_element.init_dict_for_rule_engine(args)
         self.coverage.init_dict_for_rule_engine(args)
 
     def get_publishing_values(self):
