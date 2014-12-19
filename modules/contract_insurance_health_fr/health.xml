@@ -71,4 +71,38 @@
                 <field name="short_name">RSI</field>
             </record>
         </data>
+
+        <!-- Model Access-->
+        <record model="ir.model.access" id="hc_system_health_admin_access">
+            <field name="group" ref="health.group_health_admin"/>
+            <field name="model" search="[('model', '=', 'health.care_system')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="hc_system_health_access">
+            <field name="group" ref="health.group_health"/>
+            <field name="model" search="[('model', '=', 'health.care_system')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="insurance_fund_health_admin_access">
+            <field name="group" ref="health.group_health_admin"/>
+            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="insurance_fund_health_access">
+            <field name="group" ref="health.group_health"/>
+            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
 </tryton>
