@@ -298,6 +298,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def update_contract_after_import(cls, contracts):
         for contract in contracts:
+            contract.init_options()
             contract.init_default_address()
 
     @classmethod
