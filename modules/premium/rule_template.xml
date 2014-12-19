@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine" id="simple_premium_rule">
+            <field name="name">Simple Premium Rule</field>
+            <field name="short_name">simple_premium_rule</field>
+            <field name="algorithm">return param_premium_amount()</field>
+            <field name="status">validated</field>
+            <field name="context" ref="rule_engine.default_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="premium_amount">
+            <field name="name">premium_amount</field>
+            <field name="type_">numeric</field>
+            <field name="string">Premium Amount</field>
+            <field name="parent_rule" ref="simple_premium_rule"/>
+        </record>
+    </data>
+</tryton>
