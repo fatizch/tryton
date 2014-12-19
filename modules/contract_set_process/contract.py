@@ -3,7 +3,7 @@ from trytond.pyson import Eval
 
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -60,6 +60,47 @@ class ContractSet(CogProcessFramework):
         parties = list(set(parties))
         res = [party.id for party in parties]
         return res
+
+    def generate_and_attach_reports_on_set(self, template_codes):
+            """template_codes should be a comma separated list
+            of document template codes between single quotes,
+            i.e : 'template1', 'template2', etc.
+            """
+            pool = Pool()
+            Template = pool.get('document.template')
+            Attachment = pool.get('ir.attachment')
+            Report = pool.get('document.generate.report', type='report')
+            Date = pool.get('ir.date')
+
+            template_instances = Template.search([('code', 'in',
+                        template_codes), ('internal_edm', '=', 'True')])
+
+            for template_instance in template_instances:
+                _, filedata, _, file_basename = Report.execute(
+                    [self.id], {
+                            'id': self.id,
+                            'ids': [self.id],
+                            'model': 'contract.set',
+                            'doc_template': [template_instance],
+                            'party': self.contracts[0].subscriber.id,
+                            'address': (
+                                self.contracts[0].subscriber.addresses[0].id),
+                            'sender': None,
+                            'sender_address': None,
+                            })
+            data = Report.unoconv(filedata, 'odt', 'pdf')
+
+            attachment = Attachment()
+            attachment.resource = 'contract.set,%s' % self.id
+            attachment.data = data
+            date_string = Date.date_as_string(utils.today(),
+                    self.company.party.lang)
+            date_string_underscore = ''.join([c if c.isdigit() else "_"
+                    for c in date_string])
+            attachment.name = '%s_%s_%s.pdf' % (template_instance.name,
+                self.rec_name, date_string_underscore)
+            attachment.document_desc = template_instance.document_desc
+            attachment.save()
 
     def get_attachments(self, name):
         pool = Pool()
