@@ -51,10 +51,10 @@ def find_matching_processes(name):
 
 def get_batch_names(modules_dirpath):
     out = subprocess.check_output(
-        "grep -r -A3 --include='batch.py' 'BatchRoot):' %s" % modules_dirpath,
-        shell=True)
+        "grep -R -A9 --include='batch.py' 'BatchRoot):' %s"
+        % modules_dirpath, shell=True)
     return [l.split('=')[1].strip("' ")
-        for l in out.split('\n') if '__name__' in l]
+        for l in out.split('\n') if '__name__ =' in l]
 
 
 def start(arguments, config, work_data):
@@ -532,7 +532,6 @@ def configure(target_env):
                         data = data.replace(placeholder, template_vals[key])
                 f.write(data)
 
-
     def path_inserter(target, filename):
         target_file = os.path.join(root, 'lib', 'python2.7', 'site-packages',
             filename + '.pth')
@@ -621,8 +620,8 @@ monitor: starts celery flower server on http://localhost:5555"""
     parser_batch.add_argument('action', choices=['init', 'execute', 'monitor'],
         help=action_str)
     parser_batch.add_argument('--name', type=str, help='Name of the batch to'
-        'launch', choices=sorted(get_batch_names(work_data['coop_modules'])),
-        metavar='BATCH_NAME')
+        'launch', choices=sorted(get_batch_names(work_data['modules'])),
+         metavar='BATCH_NAME')
     parser_batch.add_argument('--connexion-date', '-c', type=str,
         help='Date used to log in',
         default=datetime.date.today().isoformat())
