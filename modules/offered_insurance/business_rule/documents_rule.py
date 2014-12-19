@@ -164,13 +164,18 @@ class Printable(Model):
             domain_kind = ('kind', '=', kind)
         else:
             domain_kind = ('kind', 'in', self.get_doc_template_kind())
-        domain = [
-            ('on_model.model', '=', self.__name__),
-            ('products', '=', self.product.id),
-            ['OR',
-                domain_kind,
-                ('kind', '=', '')],
-            ]
+        if hasattr(self, 'product'):
+            domain = [
+                ('on_model.model', '=', self.__name__),
+                ('products', '=', self.product.id),
+                ['OR',
+                    domain_kind,
+                    ('kind', '=', '')],
+                ]
+        else:
+            domain = [
+                ('on_model.model', '=', self.__name__),
+                ]
         return DocumentTemplate.search(domain)
 
     def get_doc_template_kind(self):

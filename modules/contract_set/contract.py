@@ -4,6 +4,7 @@ from trytond.transaction import Transaction
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.contract import _STATES, _DEPENDS
 from trytond.wizard import StateTransition, StateView, Button
+from trytond.modules.offered_insurance import Printable
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -11,10 +12,11 @@ __all__ = [
     'Contract',
     'ContractSetDecline',
     'ContractSetSelectDeclineReason',
+    'DocumentTemplate',
     ]
 
 
-class ContractSet(model.CoopSQL, model.CoopView):
+class ContractSet(model.CoopSQL, model.CoopView, Printable):
     'Contract Set'
 
     __name__ = 'contract.set'
@@ -87,6 +89,12 @@ class ContractSet(model.CoopSQL, model.CoopView):
         for contract in self.contracts:
             contract.generate_and_attach_reports(template_codes)
 
+    def get_contact(self):
+        return self.contracts[0].subscriber
+
+    def get_sender(self):
+        return self.contracts[0].company.party
+
 
 class Contract:
     __name__ = 'contract'
@@ -135,3 +143,13 @@ class ContractSetDecline(model.CoopWizard):
         selected_contract_set = ContractSet(active_id)
         selected_contract_set.decline_set(reason)
         return 'end'
+
+
+class DocumentTemplate:
+    __name__ = 'document.template'
+
+    def get_possible_kinds(self):
+        result = super(DocumentTemplate, self).get_possible_kinds()
+        if self.on_model and self.on_model.model == 'contract.set':
+            result.append(('contract_set', 'Contract Set'))
+        return result

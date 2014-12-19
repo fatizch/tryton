@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.action.keyword" id="letter_generation_wizard">
+            <field name="keyword">form_action</field>
+            <field name="model">contract.set,-1</field>
+            <field name="action" ref="offered_insurance.letter_generation_wizard"/>
+        </record>
+    </data>
+</tryton>

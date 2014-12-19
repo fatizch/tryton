@@ -9,6 +9,7 @@ def register():
         Contract,
         RuleEngineRuntime,
         ContractSetSelectDeclineReason,
+        DocumentTemplate,
         module='contract_set', type_='model')
     Pool.register(
         ContractSetDecline,
