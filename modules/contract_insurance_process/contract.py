@@ -210,9 +210,12 @@ class Contract(CogProcessFramework):
             attachment = Attachment()
             attachment.resource = 'contract,%s' % self.id
             attachment.data = data
-            attachment.name = '%s_%s_%s' % (template_instance.name,
-                self.rec_name, Date.date_as_string(utils.today(),
-                self.company.party.lang))
+            date_string = Date.date_as_string(utils.today(),
+                    self.company.party.lang)
+            date_string_underscore = ''.join([c if c.isdigit() else "_"
+                    for c in date_string])
+            attachment.name = '%s_%s_%s.pdf' % (template_instance.name,
+                self.rec_name, date_string_underscore)
             attachment.document_desc = template_instance.document_desc
             attachment.save()
 
