@@ -5,7 +5,6 @@ from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.cog_utils import fields
 
-
 __metaclass__ = PoolMeta
 __all__ = [
     'ContractSet',
@@ -27,6 +26,9 @@ class ContractSet(CogProcessFramework):
                 [('to', 'in', Eval('covered_parties'))]
                 ]),
         'get_party_relations', setter='set_party_relations')
+    attachments = fields.Function(
+        fields.One2Many('ir.attachment', 'resource', 'Contracts Attachments'),
+        'get_attachments')
 
     def get_party_relations(self, name):
         parties = []
@@ -58,3 +60,17 @@ class ContractSet(CogProcessFramework):
         parties = list(set(parties))
         res = [party.id for party in parties]
         return res
+
+    def get_attachments(self, name):
+        pool = Pool()
+        Attachment = pool.get('ir.attachment')
+        attachments = []
+
+        operand = ['%s,%s' % (contract.__name__, contract.id)
+            for contract in self.contracts]
+        operand.append('%s,%s' % (self.__name__, self.id))
+
+        attachments.extend([x.id for x in Attachment.search(
+                [('resource', 'in', operand)])])
+
+        return attachments
