@@ -17,11 +17,6 @@
     <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
     <menuitem name="Laboratory" id="menu_product" sequence="20" icon="laboratory"/>
     <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
-    <!-- Group Access to Menu -->
-    <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract_configuration">
-       <field name="group" ref="contract.group_contract_admin"/>
-       <field name="menu" ref="menu_contract_configuration"/>
-    </record>
     <!-- Moving existing Entry Points -->
     <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
     <!-- ############################################################ -->

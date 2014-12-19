@@ -233,5 +233,10 @@
         <field name="act_window" ref="act_sub_status_form"/>
     </record>
     <menuitem parent="offered.menu_contract_configuration" id="sub_status_form" icon="tryton-tree" action="act_sub_status_form"/>
+    <!-- Group Access to Menu -->
+    <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract_configuration">
+       <field name="group" ref="group_contract_admin"/>
+       <field name="menu" ref="offered.menu_contract_configuration"/>
+    </record>
   </data>
 </tryton>
