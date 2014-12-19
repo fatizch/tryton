@@ -4,5 +4,66 @@
         <menuitem name="Health" id="menu_health" sequence="15"/>
         <menuitem name="Configuration" parent="menu_health"
             id="menu_health_configuration" sequence="100" icon="tryton-preferences"/>
+        <!-- Group Access to Menu -->
+        <record model="res.group" id="group_health_admin">
+            <field name="name">Health Administration</field>
+        </record>
+        <record model="res.group" id="group_health">
+            <field name="name">Health</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_health_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_health_admin"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_health">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_health"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_health_admin_menu_health_configuration">
+           <field name="group" ref="group_health_admin"/>
+           <field name="menu" ref="menu_health_configuration"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_health_admin_menu_health">
+           <field name="group" ref="group_health_admin"/>
+           <field name="menu" ref="menu_health"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_health_menu_health">
+           <field name="group" ref="group_health"/>
+           <field name="menu" ref="menu_health"/>
+        </record>
+
+        <!-- Model Access-->
+        <record model="ir.model.access" id="hc_system_health_admin_access">
+            <field name="group" ref="group_health_admin"/>
+            <field name="model" search="[('model', '=', 'health.care_system')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="hc_system_health_access">
+            <field name="group" ref="group_health"/>
+            <field name="model" search="[('model', '=', 'health.care_system')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="insurance_fund_health_admin_access">
+            <field name="group" ref="group_health_admin"/>
+            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="insurance_fund_health_access">
+            <field name="group" ref="group_health"/>
+            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
     </data>
 </tryton>

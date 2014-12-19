@@ -26,6 +26,7 @@
             <field name="view" ref="contact_type_view_form"/>
             <field name="act_window" ref="act_contact_type_form"/>
         </record>
+
         <menuitem parent="offered.menu_contract_configuration" id="menu_contact_type_form"
             icon="tryton-tree" action="act_contact_type_form"/>
 
@@ -38,6 +39,21 @@
             <field name="model">contract.contact</field>
             <field name="type">tree</field>
             <field name="name">contract_contact_list</field>
+        </record>
+        <record model="ir.model.access" id="contact_kind_default_access">
+            <field name="model" search="[('model', '=', 'contract.contact.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="contact_kind_product_admin_access">
+            <field name="group" ref="offered.group_offered_admin"/>
+            <field name="model" search="[('model', '=', 'contract.contact.type')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
         </record>
 
     </data>

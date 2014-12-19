@@ -268,20 +268,22 @@ class Contract:
 
     @classmethod
     def _first_invoice(cls, contracts, and_post=False):
-        Invoice = Pool().get('account.invoice')
-        # Make sure all existing invoices are cleaned up
-        cls.clean_up_contract_invoices(contracts, from_date=datetime.date.min)
-        contract_invoices = []
-        for contract in contracts:
-            invoices = cls.invoice([contract], contract.start_date)
-            for invoice in invoices:
-                # We need to update the function field as the contract has not
-                # been stored since it has been activated
-                invoice.invoice.contract = contract
-            contract_invoices += invoices
-        if not and_post:
-            return
-        Invoice.post([x.invoice for x in contract_invoices])
+        with Transaction().set_user(0, set_context=True):
+            Invoice = Pool().get('account.invoice')
+            # Make sure all existing invoices are cleaned up
+            cls.clean_up_contract_invoices(contracts,
+                from_date=datetime.date.min)
+            contract_invoices = []
+            for contract in contracts:
+                invoices = cls.invoice([contract], contract.start_date)
+                for invoice in invoices:
+                    # We need to update the function field as the
+                    # contract has not been stored since it has been activated
+                    invoice.invoice.contract = contract
+                contract_invoices += invoices
+            if not and_post:
+                return
+            Invoice.post([x.invoice for x in contract_invoices])
 
     @classmethod
     def first_invoice(cls, contracts):

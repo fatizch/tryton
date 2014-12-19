@@ -7,10 +7,6 @@
         <record model="res.group" id="group_offered_admin">
             <field name="name">Offered Administration</field>
         </record>
-        <record model="res.user-res.group" id="user_admin_group_offered">
-            <field name="user" ref="res.user_admin"/>
-            <field name="group" ref="group_offered"/>
-        </record>
         <record model="res.user-res.group" id="user_admin_group_offered_admin">
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_offered_admin"/>
@@ -21,6 +17,11 @@
     <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
     <menuitem name="Laboratory" id="menu_product" sequence="20" icon="laboratory"/>
     <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
+    <!-- Group Access to Menu -->
+    <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract_configuration">
+       <field name="group" ref="contract.group_contract_admin"/>
+       <field name="menu" ref="menu_contract_configuration"/>
+    </record>
     <!-- Moving existing Entry Points -->
     <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
     <!-- ############################################################ -->
@@ -77,7 +78,8 @@
       <field name="act_window" ref="act_product_form"/>
     </record>
     <menuitem parent="menu_product" sequence="3" id="menu_product_form" icon="tryton-list" action="act_product_form"/>
-    <record model="ir.model.access" id="access_product">
+    <!-- Default product access to false -->
+    <record model="ir.model.access" id="default_access_product">
         <field name="model" search="[('model', '=', 'offered.product')]"/>
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>

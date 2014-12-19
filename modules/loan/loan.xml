@@ -4,6 +4,12 @@
         <!-- ############################################################ -->
         <!-- ########### Loan ########### -->
         <!-- ############################################################ -->
+        <record model = "res.group" id = "group_loan_read">
+            <field name="name">Loan consultation</field>
+        </record>
+        <record model = "res.group" id = "group_loan_admin">
+            <field name="name">Loan administration</field>
+        </record>
         <record model="ir.ui.view" id="loan_view_form">
             <field name="model">loan</field>
             <field name="type">form</field>
@@ -51,14 +57,6 @@
             <field name="act_window" ref="act_loan_form"/>
         </record>
         <menuitem id="menu_loan_form" icon="loan-interest" action="act_loan_form"/>
-        <record model="ir.model.access" id="access_loan">
-            <field name="model" search="[('model', '=', 'loan')]"/>
-            <field name="group" ref="contract.group_contract"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
         <record model="ir.model.access" id="access_loan_admin">
             <field name="model" search="[('model', '=', 'loan')]"/>
             <field name="group" ref="contract.group_contract_admin"/>
@@ -110,9 +108,25 @@
             <field name="type">tree</field>
             <field name="name">loan_increment_tree</field>
         </record>
-        <record model="ir.model.access" id="access_loan_payment">
-            <field name="model" search="[('model', '=', 'loan.payment')]"/>
-            <field name="group" ref="contract.group_contract"/>
+        <!-- Default : no access -->
+        <record model="ir.model.access" id="default_access_loan">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="read_access_loan">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="group" ref="group_loan_read"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="admin_access_loan">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="group" ref="group_loan_admin"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>

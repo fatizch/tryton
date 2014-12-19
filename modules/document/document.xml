@@ -42,6 +42,11 @@
             <field name="view" ref="document_desc_form"/>
             <field name="act_window" ref="act_document_desc"/>
         </record>
+        <!-- Group Access to Menu -->
+        <record model="ir.ui.menu-res.group" id="group_document_admin_menu_document">
+           <field name="group" ref="group_document_admin"/>
+           <field name="menu" ref="menu_document"/>
+        </record>
         <menuitem parent="menu_document_configuration" sequence="30" action="act_document_desc" id="menu_document_desc"/>
     </data>
 </tryton>

@@ -55,5 +55,15 @@
         <!-- Moving Currency entry point -->
         <menuitem name="Currency" id="currency.menu_currency" sequence="100"
             icon="tryton-currency" parent="menu_account"/>
+
+        <!-- Group Access to menu -->
+        <record model="ir.ui.menu-res.group" id="group_account_admin_menu_accounting">
+           <field name="group" ref="account.group_account_admin"/>
+           <field name="menu" ref="menu_account"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_account_menu_accounting">
+           <field name="group" ref="account.group_account"/>
+           <field name="menu" ref="menu_account"/>
+        </record>
     </data>
 </tryton>
