@@ -132,7 +132,7 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
         new_line = PremiumRule._premium_result_class(amount,
             rule_dict_template)
         new_line.frequency = frequency
-        new_line.rated_instance = rule_dict_template['contract']
+        new_line.rated_instance = rule_dict_template['contract_fee']
         return [new_line]
 
     def finalize_lines(self, lines):

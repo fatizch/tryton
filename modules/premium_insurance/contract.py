@@ -85,3 +85,9 @@ class Premium:
             ('extra_premium.option.parent_contract',) + tuple(clause[1:]),
             ]
         return new_clause
+
+    def get_rec_name(self, name):
+        name = super(Premium, self).get_rec_name(name)
+        if self.option and self.option.covered_element:
+            return '%s - %s' % (name, self.option.covered_element.rec_name)
+        return name

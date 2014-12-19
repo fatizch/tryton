@@ -931,12 +931,9 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         GoodModel = Pool().get(cls.__name__)
         return GoodModel(Transaction().context.get('_master_covered'))
 
-    def get_name_for_info(self):
-        return self.get_rec_name('info')
-
     def get_rec_name(self, value):
         if self.party:
-            return self.party.rec_name
+            return self.party.full_name
         names = [super(CoveredElement, self).get_rec_name(value)]
         names.append(self.item_desc.rec_name if self.item_desc else None)
         names.append(self.name)

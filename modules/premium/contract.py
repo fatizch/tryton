@@ -180,6 +180,7 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
         ondelete='CASCADE')
     fee = fields.Many2One('account.fee', 'Fee', required=True,
         ondelete='RESTRICT')
+    premiums = fields.One2Many('contract.premium', 'fee', 'Premiums')
     overriden_amount = fields.Numeric('Amount', states={
             'readonly': ~Eval('fee_allow_override', False),
             'invisible': Eval('fee_type', '') != 'fixed'},
@@ -276,6 +277,7 @@ class Premium(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     option = fields.Many2One('contract.option', 'Option', select=True,
         ondelete='CASCADE')
+    fee = fields.Many2One('contract.fee', 'Fee', ondelete='CASCADE')
     rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
         required=True)
     start = fields.Date('Start')
@@ -314,10 +316,12 @@ class Premium(model.CoopSQL, model.CoopView):
             return self.contract.id
         elif self.option:
             return self.option.parent_contract.id
+        elif self.fee:
+            return self.fee.contract.id
 
     @classmethod
     def get_possible_parent_field(cls):
-        return set(['contract', 'option'])
+        return set(['contract', 'option', 'fee'])
 
     @classmethod
     def get_parent_models(cls):
@@ -367,8 +371,7 @@ class Premium(model.CoopSQL, model.CoopView):
         return [(None, '')] + [(m.model, m.name) for m in models]
 
     def get_rec_name(self, name):
-        return ' '.join(set(
-                [self.rated_entity.rec_name, self.parent.rec_name]))
+        return self.parent.rec_name
 
     @classmethod
     def search_main_contract(cls, name, clause):
@@ -377,6 +380,7 @@ class Premium(model.CoopSQL, model.CoopView):
         return ['OR',
             ('contract',) + tuple(clause[1:]),
             ('option.parent_contract',) + tuple(clause[1:]),
+            ('fee.contract',) + tuple(clause[1:]),
             ]
 
     @classmethod
