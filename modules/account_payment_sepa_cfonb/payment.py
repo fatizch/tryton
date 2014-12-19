@@ -40,4 +40,4 @@ class Group:
         if (self.kind == 'receivable'
                 and self.journal.sepa_receivable_flavor.endswith('-cfonb')):
             return loader.load('%s.xml' % self.journal.sepa_receivable_flavor)
-        return super(Journal, self).get_sepa_template()
+        return super(Group, self).get_sepa_template()
