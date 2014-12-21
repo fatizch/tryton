@@ -75,7 +75,6 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         for contract in self.contracts:
             contract.activate_contract()
             contract.finalize_contract()
-            contract.save()
 
     def decline_set(self, reason):
         for contract in self.contracts:

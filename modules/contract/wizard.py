@@ -320,7 +320,6 @@ class ContractActivate(model.CoopWizard):
         selected_contract.before_activate()
         selected_contract.activate_contract()
         selected_contract.finalize_contract()
-        selected_contract.save()
 
         return 'end'
 

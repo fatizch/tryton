@@ -696,7 +696,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         contract.before_activate(contract_dict)
         contract.activate_contract()
         contract.finalize_contract()
-        contract.save()
         return contract
 
     @classmethod
@@ -801,6 +800,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def finalize_contract(self):
         if not getattr(self, 'contract_number', None):
             self.contract_number = self.get_new_contract_number()
+        self.save()
 
     def get_policy_owner(self, at_date=None):
         '''
@@ -815,9 +815,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         pool = Pool()
         Event = pool.get('event')
         self.status = 'active'
-        for option in self.options:
+        options = list(self.options)
+        for option in options:
             option.status = 'active'
-            option.save()
+        self.options = options
         Event.notify_events([self], 'activate')
 
     def decline_contract(self, reason):
