@@ -132,7 +132,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             }
         rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
         for k, v in contract.extract_premium('offered').iteritems():
-            if k.__name__ != 'account.fee.description':
+            if k.__name__ != 'account.fee':
                 continue
             action = rule_fees.get(k, self.default_fee_action)
             if action == 'do_not_use':
@@ -174,7 +174,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             }
         rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
         for k, v in contract.extract_premium('offered').iteritems():
-            if k.__name__ != 'account.fee.description':
+            if k.__name__ != 'account.fee':
                 continue
             action = rule_fees.get(k, self.default_fee_action)
             if action == 'do_not_use':
@@ -192,7 +192,7 @@ class FeeRule(model.CoopSQL, model.CoopView):
 
     __name__ = 'loan.average_premium_rule.fee_rule'
 
-    fee = fields.Many2One('account.fee.description', 'Fee', required=True,
+    fee = fields.Many2One('account.fee', 'Fee', required=True,
         ondelete='CASCADE')
     rule = fields.Many2One('loan.average_premium_rule', 'Rule', required=True,
         ondelete='RESTRICT')

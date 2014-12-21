@@ -26,6 +26,7 @@ Get Models::
 
     >>> Account = Model.get('account.account')
     >>> AccountInvoice = Model.get('account.invoice')
+    >>> AccountProduct = Model.get('product.product')
     >>> AccountKind = Model.get('account.account.type')
     >>> BillingInformation = Model.get('contract.billing_information')
     >>> BillingMode = Model.get('offered.billing_mode')
@@ -37,7 +38,7 @@ Get Models::
     >>> Country = Model.get('country.country')
     >>> Currency = Model.get('currency.currency')
     >>> CurrencyRate = Model.get('currency.currency.rate')
-    >>> Fee = Model.get('account.fee.description')
+    >>> Fee = Model.get('account.fee')
     >>> FiscalYear = Model.get('account.fiscalyear')
     >>> ItemDescription = Model.get('offered.item.description')
     >>> Loan = Model.get('loan')
@@ -47,9 +48,11 @@ Get Models::
     >>> PaymentTerm = Model.get('account.invoice.payment_term')
     >>> PaymentTermLine = Model.get('account.invoice.payment_term.line')
     >>> Product = Model.get('offered.product')
+    >>> ProductTemplate = Model.get('product.template')
     >>> Sequence = Model.get('ir.sequence')
     >>> SequenceStrict = Model.get('ir.sequence.strict')
     >>> SequenceType = Model.get('ir.sequence.type')
+    >>> Uom = Model.get('product.uom')
     >>> User = Model.get('res.user')
 
 Constants::
@@ -173,12 +176,27 @@ Create billing modes::
     >>> freq_yearly.allowed_payment_terms.append(PaymentTerm.find([])[0])
     >>> freq_yearly.save()
 
-Create Fee Description::
+Create Fee::
 
+    >>> product_template = ProductTemplate()
+    >>> product_template.name = 'Fee'
+    >>> product_template.type = 'service'
+    >>> product_template.default_uom = Uom(1)
+    >>> product_template.list_price = Decimal(1)
+    >>> product_template.cost_price = Decimal(0)
+    >>> product_template.save()
+    >>> product = AccountProduct()
+    >>> product.template = product_template
+    >>> product.type = 'service'
+    >>> product.default_uom = product_template.default_uom
+    >>> product.save()
     >>> fee = Fee()
     >>> fee.name = 'Test Fee'
     >>> fee.code = 'test_fee'
-    >>> fee.account_for_billing = product_account
+    >>> fee.type = 'fixed'
+    >>> fee.amount = Decimal('20')
+    >>> fee.frequency = 'once_per_contract'
+    >>> fee.product = product
     >>> fee.save()
 
 Create Loan Average Premium Rule::
