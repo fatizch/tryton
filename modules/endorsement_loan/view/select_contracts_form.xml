@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <form string="Select Contracts to Update">
-    <field name="selected_contracts" colspan="4"/>
+    <field name="selected_contracts" colspan="4" mode="tree" expand_toolbar="0"/>
 </form>
