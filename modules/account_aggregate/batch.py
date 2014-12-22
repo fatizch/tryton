@@ -12,26 +12,10 @@ __all__ = [
 logger = get_task_logger(__name__)
 
 
-class SnapshotTakeBatch(batch.BatchRoot):
+class SnapshotTakeBatch(batch.BatchRootNoSelect):
     'Snapshot Moves Take batch'
 
     __name__ = 'account.move.snapshot.take'
-
-    @classmethod
-    def get_batch_main_model_name(cls):
-        return 'account.move.snapshot.take'
-
-    @classmethod
-    def get_batch_search_model(cls):
-        return 'account.move.snapshot.take'
-
-    @classmethod
-    def select_ids(cls, treatment_date):
-        return []
-
-    @classmethod
-    def convert_to_instances(cls, ids):
-        return []
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):

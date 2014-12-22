@@ -15,6 +15,7 @@ import coop_string
 
 __all__ = [
     'BatchRoot',
+    'BatchRootNoSelect',
     'ViewValidationBatch',
     ]
 
@@ -167,6 +168,31 @@ class BatchRoot(ModelView):
             os.makedirs(batch_dirpath)
         with open(batch_outpath, 'w') as f:
             f.write(_buffer)
+
+
+class BatchRootNoSelect(BatchRoot):
+    "Root class for batches that don't query the database."
+
+    @classmethod
+    def __setup__(cls):
+        super(BatchRootNoSelect, cls).__setup__()
+        cls._default_config_items.update({'split_size': 1})
+
+    @classmethod
+    def convert_to_instances(cls, ids):
+        return []
+
+    @classmethod
+    def get_batch_main_model_name(cls):
+        raise ''
+
+    @classmethod
+    def get_batch_search_model(cls):
+        raise ''
+
+    @classmethod
+    def select_ids(cls, treatment_date):
+        return []
 
 
 class ViewValidationBatch(BatchRoot):
