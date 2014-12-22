@@ -100,7 +100,7 @@ class ContractSet(CogProcessFramework):
             attachment.resource = 'contract.set,%s' % self.id
             attachment.data = data
             date_string = Date.date_as_string(utils.today(),
-                    self.company.party.lang)
+                    self.contracts[0].company.party.lang)
             date_string_underscore = ''.join([c if c.isdigit() else "_"
                     for c in date_string])
             attachment.name = '%s_%s_%s.pdf' % (template_instance.name,
