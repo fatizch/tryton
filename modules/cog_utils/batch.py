@@ -200,8 +200,6 @@ class ViewValidationBatch(BatchRoot):
 
     __name__ = 'ir.ui.view.validate'
 
-    logger = get_logger(__name__)
-
     @classmethod
     def get_batch_main_model_name(cls):
         return 'ir.ui.view'
@@ -221,18 +219,16 @@ class ViewValidationBatch(BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):
+        logger = get_logger(cls.__name__)
         for view in objects:
-            try:
-                full_xml_id = view.xml_id
-                if full_xml_id == '':
-                    continue
-                xml_id = full_xml_id.split('.')[-1]
-                if view.inherit:
-                    full_inherited_xml_id = view.inherit.xml_id
-                    if full_inherited_xml_id.split('.')[-1] != xml_id:
-                        cls.logger.warning('View %s inherits from %s but has '
-                            'different id !' % (full_xml_id,
-                                full_inherited_xml_id))
-            except:
-                cls.logger.error('Failed testing view %s' % view.id)
-                raise
+            full_xml_id = view.xml_id
+            if full_xml_id == '':
+                continue
+            xml_id = full_xml_id.split('.')[-1]
+            if view.inherit:
+                full_inherited_xml_id = view.inherit.xml_id
+                if full_inherited_xml_id.split('.')[-1] != xml_id:
+                    logger.warning('View %s inherits from %s but has '
+                        'different id !' % (full_xml_id,
+                            full_inherited_xml_id))
+        logger.success('%d views checked' % len(objects))
