@@ -29,6 +29,12 @@ class ContractSet(CogProcessFramework):
     attachments = fields.Function(
         fields.One2Many('ir.attachment', 'resource', 'Contracts Attachments'),
         'get_attachments')
+    contracts_processes_over = fields.Function(
+        fields.Boolean('All Processes On Contracts Are Over', readonly=True),
+        'getter_contracts_processes_over')
+
+    def getter_contracts_processes_over(self, name):
+        return all([not x.current_state for x in self.contracts])
 
     def get_party_relations(self, name):
         parties = []
