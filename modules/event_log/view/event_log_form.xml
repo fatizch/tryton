@@ -7,7 +7,7 @@
     <label name="event_type"/>
     <field name="event_type"/>
     <label name="object_"/>
-    <field name="object_" widget="many2one"/>
+    <field name="object_"/>
     <label name="description"/>
     <field name="description"/>
 </form>
