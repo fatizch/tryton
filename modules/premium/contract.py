@@ -130,7 +130,7 @@ class Contract:
 
     def appliable_fees(self):
         all_fees = list(self.product.fees)
-        [all_fees.extend(option.fees) for option in self.options]
+        [all_fees.extend(option.fees) for option in self.product.coverages]
         return set(all_fees)
 
     def pre_calculate_fees(self):
