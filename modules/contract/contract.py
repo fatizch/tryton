@@ -703,34 +703,34 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         pool = Pool()
         Party = pool.get('party.party')
         contracts = []
-        message = {}
+        messages = {}
         for ext_id, objects in contract_dict.iteritems():
-            with Transaction().new_cursor() as transaction:
-                try:
-                    for item in objects:
-                        if item['__name__'] == 'party.party':
-                            Party.import_json(item)
-                        elif item['__name__'] == 'contract':
-                            contract = cls.import_json(item)
-                            contracts.append(contract)
-                            message[ext_id] = {
-                                'return': True,
-                                'contract_number':
-                                contract.contract_number,
+            message = []
+            messages[ext_id] = {'return': True, 'messages': message}
+            try:
+                for item in objects:
+                    if item['__name__'] == 'party.party':
+                        party = Party.import_json(item)
+                        message.append({
+                                'party_code': party.code
+                                })
+                    elif item['__name__'] == 'contract':
+                        contract = cls.import_json(item)
+                        contracts.append(contract)
+                        message.append({
+                                'contract_number': contract.contract_number,
                                 'quote_number': contract.quote_number,
                                 'status': contract.status
-                                }
-                            cls.update_contract_after_import([contract])
-                        else:
-                            cls.raise_user_error('invalid_format')
-                    transaction.cursor.commit()
-                except UserError as exc:
-                    Transaction().cursor.rollback()
-                    message[ext_id] = {
-                            'return': False,
-                            'error': exc.message,
-                            }
-        return message
+                                })
+                        cls.update_contract_after_import([contract])
+                    else:
+                        cls.raise_user_error('invalid_format')
+            except UserError as exc:
+                return {ext_id: {
+                        'return': False,
+                        'error': exc.message,
+                        }}
+        return messages
 
     def init_from_product(self, product, start_date=None, end_date=None):
         if not start_date:
