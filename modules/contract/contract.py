@@ -289,7 +289,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         dates = [self.get_date_used_for_contract_end_date()]
         dates.append(self.get_maximum_end_date())
         dates = [x for x in dates if x] or [None]
-        self.set_and_propagate_end_date(dates)
+        self.set_and_propagate_end_date(min(dates))
 
     def calculate(self):
         for option in self.options:
