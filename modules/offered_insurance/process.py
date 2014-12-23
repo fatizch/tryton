@@ -26,3 +26,7 @@ class Process:
 
     for_products = fields.Many2Many('process-offered.product',
         'process', 'product', 'Products')
+
+    @classmethod
+    def _export_light(cls):
+        return super(Process, cls)._export_light() | {'for_products'}

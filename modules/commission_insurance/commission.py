@@ -126,6 +126,14 @@ class Plan(export.ExportImportMixin):
             ]
 
     @classmethod
+    def _export_skips(cls):
+        return super(Plan, cls)._export_skips() | {'broker_plan'}
+
+    @classmethod
+    def _export_light(cls):
+        return super(Plan, cls)._export_light() | {'commission_product'}
+
+    @classmethod
     def copy(cls, commissions, default=None):
         if default is None:
             default = {}
@@ -221,6 +229,10 @@ class PlanRelation(model.CoopSQL, model.CoopView):
 
 class Agent(export.ExportImportMixin):
     __name__ = 'commission.agent'
+    _func_key = 'func_key'
+
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
 
     @classmethod
     def __setup__(cls):
@@ -236,7 +248,27 @@ class Agent(export.ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return (super(Agent, cls)._export_light() |
-            set(['company', 'currency']))
+            set(['company', 'currency', 'plan']))
+
+    def get_func_key(self, name):
+        return '%s|%s' % ((self.party.code, self.plan.code))
 
     def get_rec_name(self, name):
         return self.plan.rec_name
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                party_code, plan_code = clause[2].split('|')
+                return [('party.code', clause[1], party_code),
+                    ('plan.code', clause[1], plan_code)]
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('party.code',) + tuple(clause[1:])],
+                [('plan.code',) + tuple(clause[1:])],
+                ]

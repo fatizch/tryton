@@ -541,6 +541,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
 class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     "Rule"
     __name__ = 'rule_engine'
+    _func_key = 'short_name'
 
     name = fields.Char('Name', required=True)
     context = fields.Many2One('rule_engine.context', 'Context',
@@ -667,9 +668,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
 
     @classmethod
     def _export_light(cls):
-        result = super(RuleEngine, cls)._export_light()
-        result.add('context')
-        return result
+        return super(RuleEngine, cls)._export_light() | {'context',
+            'tables_used', 'tags'}
 
     @classmethod
     def fill_empty_data_tree(cls):

@@ -213,6 +213,10 @@ class OptionDescription:
     taxes = fields.Many2Many('offered.option.description-account.tax',
         'coverage', 'tax', 'Taxes')
 
+    @classmethod
+    def _export_light(cls):
+        return super(OptionDescription, cls)._export_light() | {'taxes'}
+
     def get_rated_instances(self, base_instance):
         pool = Pool()
         Contract = pool.get('contract')

@@ -16,6 +16,7 @@ class TaxDescription(model.CoopSQL, model.VersionedObject):
     'Tax Description'
 
     __name__ = 'account.tax.description'
+    _func_key = 'code'
 
     name = fields.Char('Name')
     code = fields.Char('Code', required=True)

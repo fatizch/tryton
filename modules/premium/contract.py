@@ -298,7 +298,7 @@ class Premium(model.CoopSQL, model.CoopView):
 
     @classmethod
     def _export_light(cls):
-        return super(Premium, cls)._export_light() | {'rated_entity'}
+        return super(Premium, cls)._export_light() | {'rated_entity', 'taxes'}
 
     def get_main_contract(self, name=None):
         if self.contract:

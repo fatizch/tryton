@@ -19,6 +19,10 @@ class Tag(model.CoopSQL, model.CoopView):
     tagged_objects = fields.One2Many('tag-object', 'tag', 'Tagged Objects')
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def _export_skips(cls):
         result = super(Tag, cls)._export_skips()
         result.add('tagged_objects')

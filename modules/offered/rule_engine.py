@@ -92,6 +92,21 @@ class OptionDescriptionEndingRule(RuleMixin, model.CoopSQL, model.CoopView):
     'Option Description Ending Rule'
 
     __name__ = 'offered.option.description.ending_rule'
+    _func_key = 'func_key'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         required=True, ondelete='CASCADE')
+
+    @classmethod
+    def _export_light(cls):
+        return super(OptionDescriptionEndingRule, cls)._export_light() | {
+            'rule'}
+
+    def get_func_key(self, name):
+        return self.coverage.code
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        return [('coverage.code',) + tuple(clause[1:])]

@@ -472,6 +472,7 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
 
 class Process(model.CoopSQL, model.TaggedMixin):
     __name__ = 'process'
+    _func_key = 'technical_name'
 
     with_prev_next = fields.Boolean('With Previous / Next button')
     custom_transitions = fields.Boolean('Custom Transitions')
@@ -631,6 +632,7 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     'View Description'
 
     __name__ = 'ir.ui.view.description'
+    _func_key = 'func_key'
 
     the_view = fields.Many2One('ir.ui.view', 'View', states={'readonly': True},
         ondelete='SET NULL')
@@ -666,6 +668,8 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     field_childs = fields.Selection('get_field_childs', 'Children field',
         depends=['view_model'], states={
             'invisible': Eval('view_kind') != 'tree'})
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
 
     @classmethod
     def __setup__(cls):
@@ -719,6 +723,9 @@ class ViewDescription(model.CoopSQL, model.CoopView):
             (field_name, field.string)
             for field_name, field in ViewModel._fields.iteritems()
             if isinstance(field, tryton_fields.One2Many)] + [('', '')]
+
+    def get_func_key(self, name):
+        return '%s|%s' % ((self.for_step.technical_name, self.view_name))
 
     @classmethod
     def default_view_final_name(cls):
@@ -826,9 +833,27 @@ class ViewDescription(model.CoopSQL, model.CoopView):
         View = Pool().get('ir.ui.view')
         View.delete(to_delete)
 
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                step_code, view_code = clause[2].split('|')
+                return [('for_step.technical_name', clause[1], step_code),
+                    ('view_name', clause[1], view_code)]
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('for_step.technical_name',) + tuple(clause[1:])],
+                [('view_name',) + tuple(clause[1:])],
+                ]
+
 
 class ProcessStep(model.CoopSQL, model.TaggedMixin):
     __name__ = 'process.step'
+    _func_key = 'technical_name'
 
     pyson = fields.Char('Pyson Constraint')
     button_domain = fields.Char('Button Domain')
@@ -846,6 +871,10 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
             default = {}
         default.setdefault('processes', None)
         return super(ProcessStep, cls).copy(steps, default=default)
+
+    @classmethod
+    def is_master_object(cls):
+        return True
 
     @classmethod
     def _export_skips(cls):

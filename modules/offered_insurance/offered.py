@@ -207,6 +207,10 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
         result.add('coverages')
         return result
 
+    @classmethod
+    def _export_light(cls):
+        return super(ItemDescription, cls)._export_light() | {'tags'}
+
 
 class ItemDescSubItemDescRelation(model.CoopSQL):
     'Relation between Item Desc and Sub Item Desc'

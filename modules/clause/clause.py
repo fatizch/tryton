@@ -10,6 +10,7 @@ class Clause(model.CoopSQL, model.CoopView):
     'Clause'
 
     __name__ = 'clause'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
@@ -17,6 +18,17 @@ class Clause(model.CoopSQL, model.CoopView):
     kind_string = kind.translated('kind')
     customizable = fields.Boolean('Customizable')
     content = fields.Text('Content')
+
+    @classmethod
+    def __setup__(cls):
+        super(Clause, cls).__setup__()
+        cls._sql_constraints += [
+            ('code', 'UNIQUE(code)', 'The code must be unique!'),
+            ]
+
+    @classmethod
+    def is_master_object(cls):
+        return True
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

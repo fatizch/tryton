@@ -34,6 +34,10 @@ class AccountKind(export.ExportImportMixin):
     __name__ = 'account.account.type'
     _func_key = 'name'
 
+    @classmethod
+    def _export_light(cls):
+        return super(AccountKind, cls)._export_light() | {'company'}
+
 
 class AccountTypeTemplate(export.ExportImportMixin):
     __name__ = 'account.account.type.template'
@@ -70,9 +74,12 @@ class Journal(export.ExportImportMixin):
 
     @classmethod
     def _export_skips(cls):
-        result = super(Journal, cls)._export_skips()
-        result.add('view')
-        return result
+        return super(Journal, cls)._export_skips() | {'view'}
+
+    @classmethod
+    def _export_light(cls):
+        return super(Journal, cls)._export_light() | {'sequence',
+            'credit_account', 'debit_account'}
 
 
 class FiscalYear(export.ExportImportMixin):

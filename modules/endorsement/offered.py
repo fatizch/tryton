@@ -249,6 +249,11 @@ class Product:
         'endorsement.definition-product', 'product', 'endorsement_definition',
         'Endorsement Definitions')
 
+    @classmethod
+    def _export_light(cls):
+        return super(Product, cls)._export_light() | {
+            'endorsement_definitions'}
+
 
 class EndorsementDefinitionProductRelation(model.CoopSQL):
     'Endorsement Definition to Product Relation'

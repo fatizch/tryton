@@ -345,8 +345,8 @@ class Product(model.CoopSQL, Offered):
 
     @classmethod
     def _export_light(cls):
-        return (super(Product, cls)._export_light() |
-            set(['contract_generator', 'company', 'currency']))
+        return super(Product, cls)._export_light() | {'contract_generator',
+            'company', 'currency', 'tags'}
 
     @classmethod
     def _export_skips(cls):
@@ -591,8 +591,8 @@ class OptionDescription(model.CoopSQL, Offered):
 
     @classmethod
     def _export_light(cls):
-        return (super(OptionDescription, cls)._export_light()
-            | set(['company', 'currency']))
+        return super(OptionDescription, cls)._export_light() | {'company',
+            'currency', 'tags'}
 
     @classmethod
     def _export_skips(cls):

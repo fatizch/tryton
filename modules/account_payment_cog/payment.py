@@ -31,8 +31,12 @@ class Journal(export.ExportImportMixin):
             if action.reject_reason.code == code:
                 return action.action
 
+    @classmethod
+    def _export_light(cls):
+        return super(Journal, cls)._export_light() | {'currency', 'company'}
 
-class JournalFailureAction(model.ModelSQL, model.ModelView):
+
+class JournalFailureAction(model.CoopSQL, model.CoopView):
     'Payment Journal Failure Action'
 
     __name__ = 'account.payment.journal.failure_action'
@@ -56,9 +60,10 @@ class JournalFailureAction(model.ModelSQL, model.ModelView):
             ]
 
 
-class RejectReason(model.ModelSQL, model.ModelView):
+class RejectReason(model.CoopSQL, model.CoopView):
     'Payment Journal Reject Reason'
     __name__ = 'account.payment.journal.reject_reason'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     description = fields.Char('Description', required=True, translate=True)
@@ -71,6 +76,10 @@ class RejectReason(model.ModelSQL, model.ModelView):
             ('code_unique', 'UNIQUE(code)',
                 'The code must be unique'),
             ]
+
+    @classmethod
+    def is_master_object(cls):
+        return True
 
     def get_rec_name(self, name):
         return '[%s] %s' % (self.code, self.description)

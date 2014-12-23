@@ -29,6 +29,21 @@ class OptionDescriptionEligibilityRule(RuleMixin, model.CoopSQL,
     'Option Description Eligibility Rule'
 
     __name__ = 'offered.option.description.eligibility_rule'
+    _func_key = 'func_key'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         required=True, ondelete='CASCADE')
+
+    @classmethod
+    def _export_light(cls):
+        return super(OptionDescriptionEligibilityRule, cls)._export_light() | {
+            'rule'}
+
+    def get_func_key(self, name):
+        return self.coverage.code
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        return [('coverage.code',) + tuple(clause[1:])]

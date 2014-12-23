@@ -13,6 +13,11 @@ class Journal:
     __name__ = 'account.payment.journal'
     post_clearing_move = fields.Boolean('Post Clearing Move')
 
+    @classmethod
+    def _export_light(cls):
+        return super(Journal, cls)._export_light() | {'clearing_account',
+            'clearing_journal'}
+
 
 class Payment:
     __name__ = 'account.payment'
