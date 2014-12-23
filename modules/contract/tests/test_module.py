@@ -52,7 +52,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(len(contract.activation_history), 1)
         self.assertEqual(contract.activation_history[0].start_date, start_date)
         self.assertEqual(contract.start_date, start_date)
-        contract.set_end_date(end_date)
+        contract.set_and_propagate_end_date(end_date)
         contract.save()
         self.assertEqual(contract.end_date, end_date)
         self.assertEqual(contract.start_date, start_date)

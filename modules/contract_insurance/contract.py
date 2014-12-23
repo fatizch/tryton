@@ -282,12 +282,14 @@ class Contract(Printable):
             kinds.append('active_contract')
         return kinds
 
-    def set_end_date(self, end_date, force=False):
-        super(Contract, self).set_end_date(end_date, force)
+    def set_and_propagate_end_date(self, end_date):
+        super(Contract, self).set_and_propagate_end_date(end_date)
         for covered_element in self.covered_elements:
             for option in covered_element.options:
                 if not option.end_date:
                     option.end_date = end_date
+                    # Need to force reload of contract end_date without saving
+                    option.parent_contract.end_date = end_date
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 

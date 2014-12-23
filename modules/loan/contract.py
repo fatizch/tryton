@@ -206,10 +206,11 @@ class ContractOption:
 
     def get_possible_end_date(self):
         dates = super(ContractOption, self).get_possible_end_date()
-        if not self.loan_shares:
+        if self.coverage_family != 'loan':
             return dates
         dates.pop('contract_end_date', None)
-        dates['loan'] = max([x.loan.end_date for x in self.loan_shares])
+        if self.loan_shares:
+            dates['loan'] = max([x.loan.end_date for x in self.loan_shares])
         return dates
 
     @classmethod

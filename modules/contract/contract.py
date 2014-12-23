@@ -287,8 +287,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def calculate_end_date(self):
         dates = [self.get_date_used_for_contract_end_date()]
-        dates.append(self.get_maximum_end_date() or datetime.date.max)
-        self.set_end_date(min([x for x in dates if x]))
+        dates.append(self.get_maximum_end_date())
+        dates = [x for x in dates if x] or [None]
+        self.set_and_propagate_end_date(dates)
 
     def calculate(self):
         for option in self.options:
@@ -504,7 +505,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                             })
                 else:
                     for elem in reversed(existing):
-                        if elem.start_date > value:
+                        if value and elem.start_date > value:
                             to_delete.append(elem)
                         elif elem.end_date != value:
                             to_write += [[elem], {'end_date': value}]
@@ -573,32 +574,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         })
             previous_period = period
 
-    def set_end_date(self, end_date, force=False):
+    def set_and_propagate_end_date(self, end_date):
         # Allows to set the contract's end_date and cascading the change in the
         # contract's one2manys (options, history, etc...)
         self.end_date = end_date
-        ActivationHistory = Pool().get('contract.activation_history')
-        if isinstance(self.activation_history, tuple):
-            self.activation_history = list(self.activation_history)
-        to_delete = []
-        for idx, elem in enumerate(reversed(self.activation_history)):
-            if elem.start_date >= end_date:
-                to_delete.append(len(self.activation_history) - 1 - idx)
-                continue
-            elem.end_date = end_date
-            break
-        for option in self.options:
-            if not force and option.end_date and option.end_date <= end_date:
+        options = list(self.options)
+        for option in options:
+            if option.end_date and option.end_date <= end_date:
                 continue
             if not option.end_date:
                 option.end_date = end_date
-        if isinstance(self.options, tuple):
-            self.options = list(self.options)
-        if not to_delete:
-            return
-        ActivationHistory.delete([
-            self.activation_history.pop(elem)
-            for elem in to_delete])
+                # Need to force reload of contract end_date without saving
+                option.parent_contract.end_date = end_date
+        self.options = options
 
     def get_maximum_end_date(self):
         all_end_dates = [option.end_date for option in self.options]
@@ -1264,31 +1252,27 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def set_end_date(cls, options, name, end_date):
         Date = Pool().get('ir.date')
         to_write = []
-        if not end_date:
-            cls.raise_user_error('end_date_none')
-        else:
-            for option in options:
-                if end_date > option.start_date:
-                    if not option.parent_contract:
-                        continue
-                    if end_date <= (option.parent_contract.end_date
-                            or datetime.date.max):
-                        if (not option.automatic_end_date
-                                or option.automatic_end_date > end_date):
+        for option in options:
+            if not end_date or end_date > option.start_date:
+                if not option.parent_contract:
+                    continue
+                if end_date <= option.parent_contract.end_date:
+                    if not end_date or (not option.automatic_end_date
+                            or option.automatic_end_date >= end_date):
+                        if end_date:
                             to_write.append(option)
-                        else:
-                            cls.raise_user_error(
-                                'end_date_posterior_to_automatic_end_date',
-                                Date.date_as_string(
-                                    option.automatic_end_date),
-                                )
                     else:
-                        cls.raise_user_error('end_date_posterior_to_contract',
-                            Date.date_as_string(
-                                option.parent_contract.end_date))
+                        cls.raise_user_error(
+                            'end_date_posterior_to_automatic_end_date',
+                            Date.date_as_string(option.automatic_end_date),
+                            )
                 else:
-                    cls.raise_user_error('end_date_anterior_to_start_date',
-                            Date.date_as_string(option.start_date))
+                    cls.raise_user_error('end_date_posterior_to_contract',
+                        Date.date_as_string(
+                            option.parent_contract.end_date))
+            else:
+                cls.raise_user_error('end_date_anterior_to_start_date',
+                    Date.date_as_string(option.start_date))
         if to_write:
             cls.write(to_write, {'manual_end_date': end_date})
 
@@ -1426,7 +1410,7 @@ class ContractEnd(Wizard):
         contracts = []
         for contract in Contract.browse(
                 Transaction().context.get('active_ids')):
-            contract.set_end_date(self.select_date.end_date)
+            contract.set_and_propagate_end_date(self.select_date.end_date)
             contracts.append([contract])
             contracts.append(contract._save_values)
         Contract.write(*contracts)
