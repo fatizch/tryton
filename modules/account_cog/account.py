@@ -4,6 +4,7 @@ from sql.aggregate import Sum
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.report import Report
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import export, fields
 
@@ -120,7 +121,7 @@ class Configuration(export.ExportImportMixin):
         return super(Configuration, cls)._import_json(values, main_object)
 
 
-class OpenThirdPartyBalanceStart():
+class OpenThirdPartyBalanceStart:
     __name__ = 'account.open_third_party_balance.start'
     third_party_balance_option = fields.Selection([
             ('all', 'All'),
@@ -128,19 +129,31 @@ class OpenThirdPartyBalanceStart():
         required=True)
     third_party_balance_option_string = third_party_balance_option.translated(
         'third_party_balance_option')
+    account = fields.Many2One('account.account', 'Account',
+        domain=[('company', '=', Eval('company'))],
+        depends=['company'])
+
+    @staticmethod
+    def default_posted():
+        return True
+
+    @staticmethod
+    def default_third_party_balance_option():
+        return 'only_unbalanced'
 
 
-class OpenThirdPartyBalance():
+class OpenThirdPartyBalance:
     __name__ = 'account.open_third_party_balance'
 
     def do_print_(self, action):
         action, data = super(OpenThirdPartyBalance, self).do_print_(action)
         data['third_party_balance_option'] = \
             self.start.third_party_balance_option
+        data['account'] = self.start.account.id if self.start.account else None
         return action, data
 
 
-class ThirdPartyBalance():
+class ThirdPartyBalance:
     __name__ = 'account.third_party_balance'
 
     @classmethod
@@ -171,6 +184,11 @@ class ThirdPartyBalance():
         else:
             posted_clause = Literal(True)
 
+        if data['account']:
+            account_clause = account.id == data['account']
+        else:
+            account_clause = Literal(True)
+
         cursor.execute(*line.join(move, condition=line.move == move.id
                 ).join(account, condition=line.account == account.id
                 ).select(line.party, Sum(line.debit), Sum(line.credit),
@@ -179,7 +197,8 @@ class ThirdPartyBalance():
                 & account.kind.in_(('payable', 'receivable'))
                 & (account.company == data['company'])
                 & (line.reconciliation == None)
-                & line_query & posted_clause,
+                & line_query & posted_clause
+                & account_clause,
                 group_by=line.party,
                 having=(((Sum(line.debit) != 0) | (Sum(line.credit) != 0)))))
 
