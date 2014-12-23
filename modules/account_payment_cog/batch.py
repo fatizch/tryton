@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.modules.cog_utils import batch
 
 
-_all__ = [
+__all__ = [
     'PaymentTreatmentBatch',
     'PaymentCreationBatch'
     ]

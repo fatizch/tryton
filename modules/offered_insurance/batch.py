@@ -1,10 +1,9 @@
 from trytond.pool import Pool
-from trytond.error import UserError
 
 from trytond.modules.cog_utils import batch
 
 
-__all___ = [
+__all__ = [
     'ProductValidationBatch',
     ]
 
@@ -32,9 +31,5 @@ class ProductValidationBatch(batch.BatchRoot):
         # current version, only the first error of all the batch of records is
         # reported
         Product = Pool().get('offered.product')
-        try:
-            Product._validate(objects)
-            cls.logger.info('Validated %d products' % len(objects))
-        except UserError as exc:
-            cls.logger.error('FAILED. Bad validation : %s' % exc)
-            raise
+        Product._validate(objects)
+        cls.logger.success('Validated %d products' % len(objects))

@@ -11,7 +11,7 @@ __all__ = [
 class DocumentRequestBatch(batch.BatchRoot):
     'Document Request Batch Definition'
 
-    __name__ = 'document.request.batch'
+    __name__ = 'document.request.process'
 
     logger = batch.get_logger(__name__)
 
@@ -59,5 +59,5 @@ class DocumentRequestBatch(batch.BatchRoot):
                 wizard.execute(wizard_id, {}, 'post_generation')
                 cls.logger.info('Processed document request for %s' %
                     cur_object.get_rec_name(None))
-        cls.logger.info('Processed documents requests on %d objects' %
+        cls.logger.success('Processed documents requests on %d objects' %
             len(objects))
