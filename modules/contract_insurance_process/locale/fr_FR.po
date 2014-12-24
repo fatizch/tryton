@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -47,7 +47,7 @@ msgid ""
 "The payment bank account is required as the payment mode is Direct Debit"
 msgstr ""
 "Le compte bancaire de paiement doit être renseigné, le mode de paiement "
-"choisit étant le prélèvement"
+"choisi étant le prélèvement"
 
 msgctxt "error:contract:"
 msgid "The selected subscriber does not have an address"

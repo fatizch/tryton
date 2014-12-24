@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -26,8 +26,8 @@ msgstr ""
 "La table d'amortissement du prêt %s doit être calculé avant de continuer"
 
 msgctxt "error:contract:"
-msgid "There must be at least one loan :"
-msgstr "Il doit y avoir au moins un prêt :"
+msgid "There must be at least one loan"
+msgstr "Il doit y avoir au moins un prêt"
 
 msgctxt "error:loan.increment:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
