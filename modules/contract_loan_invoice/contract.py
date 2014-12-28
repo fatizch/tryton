@@ -231,8 +231,11 @@ class Contract:
         amounts, premiums = zip(*query_result)
         premiums = Premium.browse(premiums)
         for amount, premium in zip(amounts, premiums):
-            per_contract_entity[premium.parent][premium.loan] += amount
-            per_offered_entity[premium.rated_entity][premium.loan] += amount
+            per_contract_entity[(premium.parent.__name__, premium.parent.id)][
+                premium.loan.id if premium.loan else None] += amount
+            per_offered_entity[(premium.rated_entity.__name__,
+                    premium.rated_entity.id)][
+                        premium.loan.id if premium.loan else None] += amount
 
         self._premium_aggregates_cache.set((self.id, start, end),
             (per_contract_entity, per_offered_entity))
@@ -253,15 +256,15 @@ class Contract:
         elif kind == 'contract':
             values = per_contract_entity
         if value:
-            good_dict = values[value]
+            good_dict = values[(value.__name__, value.id)]
             if loan:
-                return good_dict[loan]
+                return good_dict[loan.id]
             return sum(good_dict.values())
         if model_name:
             result = sum([self.extract_premium(kind, start, end, values=k,
                         loan=loan)
                     for k, v in values.iteritems()
-                    if k.__name__ == model_name])
+                    if k[0] == model_name])
             return result
         return values
 
@@ -309,6 +312,8 @@ class Contract:
         for contract in contracts:
             if not contract.is_loan:
                 continue
+            contract._premium_aggregates_cache.set(
+                (contract.id, None, None), None)
             assert contract.end_date
             generation_start = contract.start_date
             if contract.last_generated_premium_end:
@@ -499,7 +504,7 @@ class DisplayLoanAveragePremium(Wizard):
         if contract_id is None:
             return {}
         contract = Pool().get('contract')(contract_id)
-        contract._premium_aggregates_cache.clear()
+        contract._premium_aggregates_cache.set((contract_id, None, None), None)
         with Transaction().set_context(contract=contract_id):
             return {'loan_displayers': [{
                         'name': x.rec_name,

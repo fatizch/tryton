@@ -97,17 +97,21 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
         if not self.use_default_rule:
             # TODO : Plug in rules
             return 0, 0
+        pool = Pool()
+        Fee = pool.get('account.fee')
+        Option = pool.get('contract.option')
+        ExtraPremium = pool.get('contract.option.extra_premium')
         loan_amount, insured_amount = 0, 0
         for k, v in contract.extract_premium('contract').iteritems():
-            if loan not in v:
+            if loan.id not in v:
                 continue
-            if k.__name__ == 'contract.option':
-                option = k
-            elif k.__name__ == 'contract.option.extra_premium':
-                option = k.option
+            if k[0] == 'contract.option':
+                option = Option(k[1])
+            elif k[0] == 'contract.option.extra_premium':
+                option = ExtraPremium(k[1]).option
             for share in option.loan_shares:
                 if share.loan == loan and share.share:
-                    loan_amount += v[loan]
+                    loan_amount += v[loan.id]
                     insured_amount = loan.amount * share.share
                     break
 
@@ -132,9 +136,9 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             }
         rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
         for k, v in contract.extract_premium('offered').iteritems():
-            if k.__name__ != 'account.fee':
+            if k[0] != 'account.fee':
                 continue
-            action = rule_fees.get(k, self.default_fee_action)
+            action = rule_fees.get(Fee(k[1]), self.default_fee_action)
             if action == 'do_not_use':
                 continue
             fee_amount += sum(v.values()) * ratios[action]
@@ -148,6 +152,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
         if not self.use_default_rule:
             # TODO : Plug in rules
             return 0, 0
+        Fee = Pool().get('account.fee')
         loan = share.loan
         share_amount = 0
         for entity in [share.option] + list(share.option.extra_premiums):
@@ -174,9 +179,9 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
             }
         rule_fees = dict([(x.fee, x.action) for x in self.fee_rules])
         for k, v in contract.extract_premium('offered').iteritems():
-            if k.__name__ != 'account.fee':
+            if k[0] != 'account.fee':
                 continue
-            action = rule_fees.get(k, self.default_fee_action)
+            action = rule_fees.get(Fee(k[1]), self.default_fee_action)
             if action == 'do_not_use':
                 continue
             fee_amount += sum(v.values()) * ratios[action]
