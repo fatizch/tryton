@@ -11,161 +11,172 @@
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_offered_admin"/>
         </record>
-    <!-- ############################################################ -->
-    <!-- Menus -->
-    <!-- ############################################################ -->
-    <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
-    <menuitem name="Laboratory" id="menu_product" sequence="20" icon="laboratory"/>
-    <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
-    <!-- Moving existing Entry Points -->
-    <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
-    <!-- ############################################################ -->
-    <!-- Offered -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="offered_view_form">
-      <field name="model">offered</field>
-      <field name="type">form</field>
-      <field name="name">offered_form</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Product -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="product_view_form">
-      <field name="model">offered.product</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="offered_view_form"/>
-      <field name="name">product_form</field>
-    </record>
-    <record model="ir.ui.view" id="product_view_tree">
-      <field name="model">offered.product</field>
-      <field name="type">tree</field>
-      <field name="inherit" eval="None"/>
-      <field name="name">product_list</field>
-    </record>
-    <!-- Read / Write rule -->
-    <record model="ir.rule.group" id="rule_group_product">
-        <field name="model" search="[('model', '=', 'offered.product')]"/>
-        <field name="global_p" eval="True"/>
-    </record>
-    <record model="ir.rule" id="rule_product_1">
-      <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
-      <field name="rule_group" ref="rule_group_product"/>
-    </record>
-    <!-- Entry Point -->
-    <record model="ir.action.act_window" id="act_product_form">
-      <field name="name">Products</field>
-      <field name="res_model">offered.product</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_product_view_list">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="product_view_tree"/>
-      <field name="act_window" ref="act_product_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_product_view_form">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="product_view_form"/>
-      <field name="act_window" ref="act_product_form"/>
-    </record>
-    <menuitem parent="menu_product" sequence="3" id="menu_product_form" icon="tryton-list" action="act_product_form"/>
-    <!-- Default product access to false -->
-    <record model="ir.model.access" id="default_access_product">
-        <field name="model" search="[('model', '=', 'offered.product')]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_delete" eval="False"/>
-    </record>
-    <record model="ir.model.access" id="access_product_admin">
-        <field name="model" search="[('model', '=', 'offered.product')]"/>
-        <field name="group" ref="group_offered_admin"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_delete" eval="True"/>
-    </record>
-     <!-- ############################################################ -->
-    <!-- OptionDescription -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="coverage_view_form">
-      <field name="model">offered.option.description</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="offered_view_form"/>
-      <field name="name">option_description_form</field>
-    </record>
-    <record model="ir.ui.view" id="coverage_view_tree">
-      <field name="model">offered.option.description</field>
-      <field name="type">tree</field>
-      <field name="inherit" eval="None"/>
-      <field name="name">option_description_list</field>
-    </record>
-    <!-- Read / Write rule -->
-    <record model="ir.rule.group" id="rule_group_coverage">
-        <field name="model" search="[('model', '=', 'offered.option.description')]"/>
-        <field name="global_p" eval="True"/>
-    </record>
-    <record model="ir.rule" id="rule_coverage_1">
-      <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
-      <field name="rule_group" ref="rule_group_coverage"/>
-    </record>
-    <!-- Entry Point -->
-    <record model="ir.action.act_window" id="act_coverage_form">
-      <field name="name">OptionDescriptions</field>
-      <field name="res_model">offered.option.description</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_coverage_tree_view">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="coverage_view_tree"/>
-      <field name="act_window" ref="act_coverage_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_coverage_form_view2">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="coverage_view_form"/>
-      <field name="act_window" ref="act_coverage_form"/>
-    </record>
-    <menuitem parent="menu_product" sequence="2" id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>
-    <record model="ir.model.access" id="access_option_description">
-        <field name="model" search="[('model', '=', 'offered.option.description')]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_delete" eval="False"/>
-    </record>
-    <record model="ir.model.access" id="access_option_description_admin">
-        <field name="model" search="[('model', '=', 'offered.option.description')]"/>
-        <field name="group" ref="group_offered_admin"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_delete" eval="True"/>
-    </record>
-    <!-- ############################################################ -->
-    <!-- ########### Product Option Relation ########### -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="product-option_description_view_list">
-        <field name="model">offered.product-option.description</field>
-        <field name="type">tree</field>
-        <field name="name">product-option_description_list</field>
-    </record>
-    <!--################################################################ -->
-    <!-- Contract Number Generator -->
-    <!--################################################################ -->
-    <record model="ir.sequence.type" id="sequence_type_contract_number">
-      <field name="name">Contract Number</field>
-      <field name="code">contract</field>
-    </record>
-    <record model="ir.sequence.type-res.group" id="sequence_type_contract_number_group_admin">
-      <field name="sequence_type" ref="sequence_type_contract_number"/>
-      <field name="group" ref="res.group_admin"/>
-    </record>
-    <!-- ################################## -->
-    <!-- # Option Description Ending Rule # -->
-    <!-- ################################## -->
-    <record model="ir.ui.view" id="option_description_ending_rule_view_form">
-      <field name="model">offered.option.description.ending_rule</field>
-      <field name="type">form</field>
-      <field name="name">option_description_ending_rule_form</field>
-    </record>
-  </data>
+        <!-- ############################################################ -->
+        <!-- Menus -->
+        <!-- ############################################################ -->
+        <menuitem name="Contract Configuration" id="menu_contract_configuration" sequence="15" icon="tryton-preferences"/>
+        <menuitem name="Laboratory" id="menu_product" sequence="20" icon="laboratory"/>
+        <menuitem name="Configuration" parent="menu_product" id="menu_product_configuration" sequence="100" icon="tryton-preferences"/>
+        <!-- Moving existing Entry Points -->
+        <menuitem parent="menu_product_configuration" name="Rule Engine" id="rule_engine.menu_rule_engine" sequence="100"/>
+        <!-- ############################################################ -->
+        <!-- Offered -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="offered_view_form">
+            <field name="model">offered</field>
+            <field name="type">form</field>
+            <field name="name">offered_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- Product -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+        <record model="ir.ui.view" id="product_view_tree">
+            <field name="model">offered.product</field>
+            <field name="type">tree</field>
+            <field name="inherit" eval="None"/>
+            <field name="name">product_list</field>
+        </record>
+        <!-- Read / Write rule -->
+        <record model="ir.rule.group" id="rule_group_product">
+            <field name="model" search="[('model', '=', 'offered.product')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_product_1">
+            <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+            <field name="rule_group" ref="rule_group_product"/>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_product_form">
+            <field name="name">Products</field>
+            <field name="res_model">offered.product</field>
+            <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_product_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="product_view_tree"/>
+            <field name="act_window" ref="act_product_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_product_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="product_view_form"/>
+            <field name="act_window" ref="act_product_form"/>
+        </record>
+        <menuitem parent="menu_product" sequence="3" id="menu_product_form" icon="tryton-list" action="act_product_form"/>
+        <!-- Default product access to false -->
+        <record model="ir.model.access" id="default_access_product">
+            <field name="model" search="[('model', '=', 'offered.product')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_product_admin">
+            <field name="model" search="[('model', '=', 'offered.product')]"/>
+            <field name="group" ref="group_offered_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- OptionDescription -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="coverage_view_form">
+            <field name="model">offered.option.description</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered_view_form"/>
+            <field name="name">option_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="coverage_view_tree">
+            <field name="model">offered.option.description</field>
+            <field name="type">tree</field>
+            <field name="inherit" eval="None"/>
+            <field name="name">option_description_list</field>
+        </record>
+        <!-- Read / Write rule -->
+        <record model="ir.rule.group" id="rule_group_coverage">
+            <field name="model" search="[('model', '=', 'offered.option.description')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_coverage_1">
+            <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+            <field name="rule_group" ref="rule_group_coverage"/>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_coverage_form">
+            <field name="name">OptionDescriptions</field>
+            <field name="res_model">offered.option.description</field>
+            <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_coverage_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="coverage_view_tree"/>
+            <field name="act_window" ref="act_coverage_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_coverage_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="coverage_view_form"/>
+            <field name="act_window" ref="act_coverage_form"/>
+        </record>
+        <menuitem parent="menu_product" sequence="2" id="menu_coverage_form" icon="tryton-list" action="act_coverage_form"/>
+        <record model="ir.model.access" id="access_option_description">
+            <field name="model" search="[('model', '=', 'offered.option.description')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_option_description_admin">
+            <field name="model" search="[('model', '=', 'offered.option.description')]"/>
+            <field name="group" ref="group_offered_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Product Option Relation ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="product-option_description_view_list">
+            <field name="model">offered.product-option.description</field>
+            <field name="type">tree</field>
+            <field name="name">product-option_description_list</field>
+        </record>
+        <!--################################################################ -->
+        <!-- Contract Number Generator -->
+        <!--################################################################ -->
+        <record model="ir.sequence.type" id="sequence_type_contract_number">
+            <field name="name">Contract Number</field>
+            <field name="code">contract</field>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_contract_number_group_admin">
+            <field name="sequence_type" ref="sequence_type_contract_number"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <!-- ################################## -->
+        <!-- # Option Description Ending Rule # -->
+        <!-- ################################## -->
+        <record model="ir.ui.view" id="option_description_ending_rule_view_form">
+            <field name="model">offered.option.description.ending_rule</field>
+            <field name="type">form</field>
+            <field name="name">option_description_ending_rule_form</field>
+        </record>
+        <!-- ############ -->
+        <!-- # Sequence # -->
+        <!-- ############ -->
+        <record model="ir.model.access" id="access_ir_sequence_admin">
+            <field name="model" search="[('model', '=', 'ir.sequence')]"/>
+            <field name="group" ref="group_offered_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
 </tryton>
