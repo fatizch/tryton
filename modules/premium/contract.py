@@ -105,6 +105,17 @@ class Contract:
                     'keep': [],
                     'write': [],
                     }
+        contracts = set()
+        for x in parents_to_update.iterkeys():
+            if x.__name__ == 'contract':
+                contracts.add(x.id)
+            elif x.__name__ == 'contract.option':
+                contracts.add(x.parent_contract.id)
+            elif x.__name__ == 'contract.fee':
+                contracts.add(x.contract.id)
+        Premium.delete(Premium.search([
+                    ('main_contract', 'in', list(contracts)),
+                    ('start', '>=', dates[0])]))
         for elem in parents_to_update.iterkeys():
             existing = [x for x in getattr(elem, 'premiums', []) if x.id > 0]
             for premium in existing:
