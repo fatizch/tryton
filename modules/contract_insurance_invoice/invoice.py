@@ -297,6 +297,8 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
         ondelete='RESTRICT', readonly=True)
     extra_premium = fields.Many2One('contract.option.extra_premium',
         'Extra Premium', select=True, ondelete='RESTRICT', readonly=True)
+    contract_fee = fields.Many2One('contract.fee', 'Contract Fee',
+        select=True, ondelete='RESTRICT', readonly=True)
     product = fields.Many2One('offered.product', 'Product', select=True,
         readonly=True, ondelete='RESTRICT')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
@@ -355,7 +357,8 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_possible_parent_field(cls):
-        return set(['contract', 'covered_element', 'option', 'extra_premium'])
+        return set(['contract', 'covered_element', 'option', 'extra_premium',
+                'contract_fee'])
 
     @classmethod
     def get_parent_models(cls):
