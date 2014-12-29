@@ -3,7 +3,6 @@ from .offered import *
 from .contract import *
 from .rule_engine import *
 from .loan import *
-from .billing import *
 from .party import *
 from .wizard import *
 
@@ -26,7 +25,6 @@ def register():
         LoanShare,
         OptionsDisplayer,
         WizardOption,
-        BillingPremium,
         LoanShareTreeExpansion,
         SynthesisMenuLoan,
         SynthesisMenu,
