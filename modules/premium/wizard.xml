@@ -30,10 +30,5 @@
             <field name="name">Display Contract Premium</field>
             <field name="wiz_name">contract.premium.display</field>
         </record>
-        <record model="ir.action.keyword" id="act_premium_display_keyword">
-            <field name="keyword">form_action</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="act_premium_display"/>
-        </record>
     </data>
 </tryton>

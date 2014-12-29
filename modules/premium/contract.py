@@ -37,6 +37,7 @@ class Contract:
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'button_calculate_prices': {},
+                'button_display_premium': {},
                 })
 
     @classmethod
@@ -47,6 +48,11 @@ class Contract:
     @model.CoopView.button
     def button_calculate_prices(cls, contracts):
         cls.calculate_prices(contracts)
+
+    @classmethod
+    @model.CoopView.button_action('contract.premium.display')
+    def button_display_premium(cls, contracts):
+        pass
 
     @classmethod
     def update_contract_after_import(cls, contracts):
