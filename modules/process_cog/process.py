@@ -489,10 +489,8 @@ class Process(model.CoopSQL, model.TaggedMixin):
 
     @classmethod
     def _export_skips(cls):
-        result = super(Process, cls)._export_skips()
-        result.add('menu_items')
-        result.add('steps_to_display')
-        return result
+        return super(Process, cls)._export_skips() | {'menu_items',
+            'steps_to_display', 'action_windows'}
 
     @classmethod
     def _export_light(cls):
