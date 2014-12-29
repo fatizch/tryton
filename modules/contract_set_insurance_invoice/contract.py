@@ -24,6 +24,18 @@ class Contract:
         return super(Contract, cls).calculate_prices(new_contracts,
             start, end)
 
+    def appliable_fees(self):
+        all_fees = super(Contract, self).appliable_fees()
+        if self.contract_set:
+            contract_ids = [contract.id for contract in
+                self.contract_set.contracts]
+            contract_ids.sort()
+            if self.id == contract_ids[0]:
+                return all_fees
+            else:
+                return set([fee for fee in all_fees if not fee.one_per_set])
+        return all_fees
+
 
 class DisplayContractSetPremium(Wizard):
     'Display Contract Set Premium'

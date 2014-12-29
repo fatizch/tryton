@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='allow_override']" position="after">
+            <label name="one_per_set"/>
+            <field name="one_per_set"/>
+    </xpath>
+</data>
