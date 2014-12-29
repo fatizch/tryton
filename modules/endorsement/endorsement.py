@@ -314,7 +314,8 @@ def values_mixin(value_model):
             if not self.values:
                 return ''
             for k, v in self.values.iteritems():
-                prev_value = getattr(base_object, k, '') if base_object else ''
+                prev_value = getattr(base_object, k, '') if (base_object and
+                    hasattr(base_object, k)) else ''
                 field = ValueModel._fields[k]
                 if isinstance(field, tryton_fields.Many2One):
                     if v:
