@@ -30,7 +30,7 @@ class DisplayContractSetPremium(Wizard):
     __name__ = 'contract.set.premium.display'
 
     start_state = 'display'
-    display = StateAction('contract_insurance_invoice.act_premium_display')
+    display = StateAction('premium.act_premium_display')
 
     @classmethod
     def __setup__(cls):
