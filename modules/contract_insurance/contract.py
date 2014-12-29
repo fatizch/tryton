@@ -256,7 +256,8 @@ class Contract(Printable):
 
     def get_publishing_context(self, cur_context):
         result = super(Contract, self).get_publishing_context(cur_context)
-        result['Insurers'] = [x.coverage.insurer.party for x in self.options]
+        result['Insurers'] = [x.coverage.insurer.party for x in self.options
+            if x.coverage.insurer]
         return result
 
     def get_option_for_coverage_at_date(self, coverage):
