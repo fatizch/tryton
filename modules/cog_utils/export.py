@@ -265,7 +265,8 @@ class ExportImportMixin(Model):
                                 existing_lines.itervalues()]))
 
             new_values[field_name] = []
-            to_create = [('create', to_create)]
+            if to_create:
+                to_create = [('create', to_create)]
             for action in (to_write, to_create, to_delete, to_remove):
                 if action:
                     new_values[field_name].extend(action)
