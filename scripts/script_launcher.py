@@ -66,6 +66,8 @@ def start(arguments, config, work_data):
         else:
             base_line = [work_data['python_exec'], work_data['trytond_exec'],
                 '-c', work_data['trytond_conf']]
+            if arguments.cron:
+                base_line += ['--cron']
             if arguments.mode == 'dev':
                 base_line += ['--dev']
             elif arguments.mode == 'debug':
@@ -598,6 +600,8 @@ if __name__ == '__main__':
             'all'], help='What should be started')
     parser_start.add_argument('--mode', '-m', choices=['demo', 'dev',
             'debug'], default=config.get('parameters', 'start_mode'))
+    parser_start.add_argument('--cron', help='Launch the server with cron'
+        ' functionality', action='store_true')
 
     # Batch parser
     usage_str = \
