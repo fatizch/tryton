@@ -20,7 +20,7 @@ class DisplayContractPremium(Wizard):
 
     start_state = 'display'
     display = StateView('contract.premium.display.premiums',
-        'contract_insurance_invoice.display_premiums_view_form', [
+        'premium.display_premiums_view_form', [
             # TODO: calculate price should be done in a separate transaction
             # in order to see the difference
             # Button('Calculate Prices', 'calculate_prices', 'tryton-refresh'),
@@ -39,6 +39,7 @@ class DisplayContractPremium(Wizard):
         return {
             'contract': ['options'],
             'contract.option': [],
+            'options': [],
             }
 
     def new_line(self, name, line=None):
