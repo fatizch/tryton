@@ -23,7 +23,7 @@ class Clause(model.CoopSQL, model.CoopView):
     def __setup__(cls):
         super(Clause, cls).__setup__()
         cls._sql_constraints += [
-            ('code', 'UNIQUE(code)', 'The code must be unique!'),
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
 
     @classmethod
