@@ -555,16 +555,16 @@ def configure(target_env):
 
 
 if __name__ == '__main__':
-    import ConfigParser
-    import argparse
-    import argcomplete
-    from argparse import RawTextHelpFormatter
-
     if 'VIRTUAL_ENV' not in os.environ:
         target = os.path.join(DIR, '..', '..', '..', 'bin', 'activate_this.py')
         execfile(target, dict(__file__=target))
         os.environ['VIRTUAL_ENV'] = os.path.abspath(os.path.join(target, '..',
                 '..'))
+
+    import ConfigParser
+    import argparse
+    import argcomplete
+    from argparse import RawTextHelpFormatter
 
     config = ConfigParser.ConfigParser()
     try:
