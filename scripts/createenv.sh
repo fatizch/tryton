@@ -44,7 +44,10 @@ else
     echo Installing server pip packages
     echo $SEP
     # Genshi 0.6 for relatorio compatibility
-    pip install lxml polib genshi==0.6 relatorio python-ldap pywebdav vobject pydot ibanlib argcomplete python-stdnum python-sql raven Mock simpleeval
+    pip install lxml polib genshi==0.6 relatorio python-ldap pywebdav vobject \
+    pydot ibanlib argcomplete python-stdnum python-sql raven Mock simpleeval
+    # Install celery-tryton without trytond dependency (others deps are already satisfied)
+    pip install --no-deps celery-tryton
     # Install latest relatorio version
     hg clone https://code.google.com/p/python-relatorio /tmp/relatorio_source
     pip install /tmp/relatorio_source
@@ -52,7 +55,7 @@ else
     echo $SEP
     echo Installing client packages
     echo $SEP
-   # More relinking than installing
+    # More relinking than installing
     if [ -e "/usr/lib/python2.7/dist-packages/gobject" ]
     then
         # Looks like we found the shared libraries path
@@ -74,7 +77,7 @@ else
         echo No gtk libraries were found, the client will not be fonctional
     fi
     echo $SEP
-    echo Installing Optionnal packages
+    echo Installing Optional packages
     echo $SEP
     # Postgres support
     pip install psycopg2

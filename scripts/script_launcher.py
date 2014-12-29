@@ -550,8 +550,6 @@ def configure(target_env):
     path_inserter(os.path.join(workspace, 'tryton'), '_tryton_path')
     path_inserter(os.path.join(workspace, 'proteus'), '_proteus_path')
     path_inserter(os.path.join(workspace, 'conf'), '_celery_conf_path')
-    path_inserter(os.path.join(workspace, 'coopbusiness', 'trytond_celery'),
-        '_trytond_celery_path')
 
 
 if __name__ == '__main__':

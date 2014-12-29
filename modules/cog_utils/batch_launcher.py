@@ -3,10 +3,10 @@ import datetime
 from celery import Celery, group
 from celeryconfig import CELERY_RESULT_BACKEND
 from celery.utils.log import get_task_logger
+from celery_tryton import TrytonTask
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond_celery import TrytonTask
 from trytond.modules.cog_utils import batch
 
 ##############################################################################
