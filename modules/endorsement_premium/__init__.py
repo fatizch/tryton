@@ -1,9 +1,12 @@
 from trytond.pool import Pool
+from .endorsement import *
 from .wizard import *
 
 
 def register():
     Pool.register(
+        ContractFee,
+        EndorsementContract,
         PreviewContractPremiums,
         ContractPreview,
         ContractPreviewPremium,
