@@ -6,8 +6,8 @@
     </xpath>
     <xpath expr="/form/notebook/page[@id='general']/label[@name='product']" position="replace"/>
     <xpath expr="/form/notebook/page[@id='general']/field[@name='product']" position="replace"/>
-    <xpath expr="/form/notebook/page[@id='general']/label[@name='sequence']" position="replace"/>
-    <xpath expr="/form/notebook/page[@id='general']/field[@name='sequence']" position="replace"/>
+    <xpath expr="//label[@name='sequence']" position="replace"/>
+    <xpath expr="//field[@name='sequence']" position="replace"/>
     <xpath expr="/form/notebook/page[@id='general']/label[@name='quantity']" position="replace"/>
     <xpath expr="/form/notebook/page[@id='general']/field[@name='quantity']" position="replace"/>
     <xpath expr="/form/notebook/page[@id='general']/label[@name='unit']" position="replace"/>
