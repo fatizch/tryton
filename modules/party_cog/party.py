@@ -339,12 +339,13 @@ class Party(export.ExportImportMixin):
         if self.is_company:
             return self.company
 
-    def address_get(self, type=None, at_date=None, kind=None):
+    def address_get(self, type=None, at_date=None):
         addresses = utils.get_good_versions_at_date(self, 'addresses', at_date)
         for address in addresses:
-            if ((not type or getattr(address, type)) and
-                    (not kind or address.kind == kind)):
+            if not type or getattr(address, type):
                 return address
+        if addresses:
+            return addresses[0]
 
     def get_main_address_id(self, name=None, at_date=None):
         address = self.address_get(at_date=at_date)

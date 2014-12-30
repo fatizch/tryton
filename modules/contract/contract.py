@@ -929,8 +929,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if getattr(self, 'addresses', None):
             return True
         Address = Pool().get('contract.address')
-        addresses = self.subscriber.address_get(
-            at_date=self.start_date)
+        addresses = self.subscriber.address_get(at_date=self.start_date)
         if addresses:
             cur_address = Address()
             cur_address.address = addresses
