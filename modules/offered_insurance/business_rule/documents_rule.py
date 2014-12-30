@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 import sys
+import base64
 import traceback
 import os
 import subprocess
@@ -18,7 +19,7 @@ from trytond.exceptions import UserError
 
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
-from trytond.modules.cog_utils import fields, model, utils, coop_string
+from trytond.modules.cog_utils import fields, model, utils, coop_string, export
 
 
 __all__ = [
@@ -41,6 +42,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     'Document Template'
 
     __name__ = 'document.template'
+    _func_key = 'code'
 
     name = fields.Char('Name', required=True, translate=True)
     on_model = fields.Many2One('ir.model', 'Model',
@@ -60,10 +62,19 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     @classmethod
     def __setup__(cls):
         super(DocumentTemplate, cls).__setup__()
+        cls._sql_constraints = [
+            ('code_unique', 'UNIQUE(code)',
+                'The document template code must be unique'),
+            ]
         cls._error_messages.update({
                 'no_version_match': 'No letter model found for date %s '
                 'and language %s',
                 })
+
+    @classmethod
+    def _export_light(cls):
+        return super(DocumentTemplate, cls)._export_light() | {'products',
+            'document_desc', 'on_model'}
 
     def get_selected_version(self, date, language):
         for version in self.versions:
@@ -99,7 +110,7 @@ class DocumentProductRelation(model.CoopSQL):
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
 
 
-class DocumentTemplateVersion(Attachment):
+class DocumentTemplateVersion(Attachment, export.ExportImportMixin):
     'Document Template Version'
 
     __name__ = 'document.template.version'
@@ -119,6 +130,30 @@ class DocumentTemplateVersion(Attachment):
     @classmethod
     def default_type(cls):
         return 'data'
+
+    @classmethod
+    def _export_light(cls):
+        return (super(DocumentTemplateVersion, cls)._export_light() |
+            set(['resource', 'language']))
+
+    @classmethod
+    def _export_skips(cls):
+        return (super(DocumentTemplateVersion, cls)._export_skips() |
+            set(['digest', 'collision']))
+
+    @classmethod
+    def _import_json(cls, values, main_object=None):
+        if 'data' in values:
+            values['data'] = base64.b64decode(values['data'])
+        return super(DocumentTemplateVersion, cls)._import_json(values,
+            main_object)
+
+    def export_json(self, skip_fields=None, already_exported=None,
+            output=None, main_object=None):
+        new_values = super(Attachment, self).export_json(skip_fields,
+            already_exported, output, main_object)
+        new_values['data'] = base64.b64encode(self.data) if self.data else ''
+        return new_values
 
 
 class Printable(Model):
