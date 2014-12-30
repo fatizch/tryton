@@ -23,6 +23,7 @@ from trytond.modules.contract import _STATES
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
+    'ContractFee',
     'ContractOption',
     'ContractBillingInformation',
     'Premium',
@@ -474,6 +475,36 @@ class Contract:
                     billing_information.payment_term = billing_information.\
                         billing_mode.allowed_payment_terms[0]
                     billing_information.save()
+
+
+class ContractFee:
+    __name__ = 'contract.fee'
+
+    active = fields.Boolean('Active')
+
+    @classmethod
+    def default_active(cls):
+        return True
+
+    @classmethod
+    def delete(cls, contract_fees):
+        to_deactivate = []
+        contract_fee_dict = {x.id: x for x in contract_fees}
+
+        cursor = Transaction().cursor
+        invoice_detail = Pool().get('account.invoice.line.detail').__table__()
+        for contract_fee_slice in grouped_slice(contract_fees):
+            cursor.execute(*invoice_detail.select(invoice_detail.contract_fee,
+                    Count(invoice_detail.id), where=(
+                        invoice_detail.contract_fee.in_(
+                            [x.id for x in contract_fee_slice])),
+                    group_by=invoice_detail.contract_fee))
+            for contract_fee_id, _ in cursor.fetchall():
+                to_deactivate.append(contract_fee_dict.pop(contract_fee_id))
+        if to_deactivate:
+            cls.write(to_deactivate, {'active': False})
+        if contract_fee_dict:
+            super(ContractFee, cls).delete(contract_fee_dict.values())
 
 
 class ContractOption:
