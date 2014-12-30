@@ -527,10 +527,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rule, = self.RuleEngine.search([('name', '=', 'Test Rule Advanced')])
         output = []
         rule.export_json(output=output)
-        output[2]['short_name'] = 'test_rule_advanced_1'
+        output[1]['short_name'] = 'test_rule_advanced'
         rule.multiple_import_json(output)
         rule_1, = self.RuleEngine.search([
-                ('short_name', '=', 'test_rule_advanced_1')])
+                ('short_name', '=', 'test_rule_advanced')])
 
         with Transaction().set_context({'active_id': rule_1.id}):
             wizard_id, _, _ = self.RunTests.create()
