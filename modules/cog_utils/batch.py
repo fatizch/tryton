@@ -142,7 +142,7 @@ class BatchRoot(ModelView):
         return res
 
     @classmethod
-    def generate_filepath(cls, filename):
+    def generate_filepath(cls, filename, makedirs=True):
         filepath_template = cls.get_conf_item('filepath_template')
         filepath_template = filepath_template.\
             replace('%{FILENAME}', filename). \
@@ -153,7 +153,12 @@ class BatchRoot(ModelView):
             timestamp = datetime.now().strftime(date_format)
             filepath_template = filepath_template.replace('%{TIMESTAMP}',
                 timestamp)
-        return os.path.join(cls.get_conf_item('root_dir'), filepath_template)
+        filepath = os.path.join(cls.get_conf_item('root_dir'),
+            filepath_template)
+        dirpath = os.path.dirname(filepath)
+        if makedirs and not os.path.exists(dirpath):
+            os.makedirs(dirpath, 0o755)  # 755 permissions in octal notation
+        return filepath
 
     @classmethod
     def convert_to_instances(cls, ids):
@@ -163,9 +168,6 @@ class BatchRoot(ModelView):
     @classmethod
     def write_batch_output(cls, _buffer, filename):
         batch_outpath = cls.generate_filepath(filename)
-        batch_dirpath = os.path.dirname(batch_outpath)
-        if not os.path.exists(batch_dirpath):
-            os.makedirs(batch_dirpath)
         with open(batch_outpath, 'w') as f:
             f.write(_buffer)
 
