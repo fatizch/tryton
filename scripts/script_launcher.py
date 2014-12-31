@@ -50,9 +50,14 @@ def find_matching_processes(name):
 
 
 def get_batch_names(modules_dirpath):
-    out = subprocess.check_output(
-        "grep -R -A9 --include='batch.py' -e 'class.*BatchRoot.*):' %s"
-        % modules_dirpath, shell=True)
+    try:
+        out = subprocess.check_output(
+            "grep -R -A9 --include='batch.py' -e 'class.*BatchRoot.*):' %s"
+            % modules_dirpath, shell=True)
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 1:  # no line selected
+            return ['']
+        raise e
     return [l.split('=')[1].strip("' ")
         for l in out.split('\n') if '__name__ =' in l]
 
