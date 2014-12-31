@@ -16,6 +16,7 @@ def register():
         Group,
         Bank,
         BankAccountNumber,
+        InvoiceLine,
         # Test case
         TestCaseModel,
         Configuration,

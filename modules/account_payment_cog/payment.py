@@ -24,7 +24,11 @@ class Journal(export.ExportImportMixin):
     _func_key = 'name'
 
     failure_actions = fields.One2Many('account.payment.journal.failure_action',
-        'journal', 'Failure Actions')
+        'journal', 'Failure Actions',
+        context={'default_fee_id': Eval('default_reject_fee')},
+        depends=['default_reject_fee'])
+    default_reject_fee = fields.Many2One('account.fee',
+        'Default Fee', ondelete='RESTRICT')
 
     def get_action(self, code):
         for action in self.failure_actions:
@@ -50,6 +54,10 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
             ('manual', 'Manual'),
             ('retry', 'Retry'),
             ], 'Action')
+    rejected_payment_fee = fields.Many2One('account.fee',
+        'Fee', ondelete='RESTRICT')
+    is_fee_required = fields.Function(fields.Boolean('Fee Required'),
+        'on_change_with_is_fee_required', setter='setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -58,6 +66,34 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
             ('code_unique', 'UNIQUE(journal, reject_reason)',
                 'Action must be unique for a journal and a reject reason'),
             ]
+        cls._error_messages.update({
+                'unknown_reject_reason_code':
+                'Unknown reject code : %s',
+                })
+
+    @classmethod
+    def get_rejected_payment_fee(cls, code):
+        JournalFailureAction = Pool().get(
+            'account.payment.journal.failure_action')
+        failure_actions = JournalFailureAction.search([
+                ('reject_reason.code', '=', code)
+                ])
+        if len(failure_actions) == 0:
+            cls.raise_user_error('unknown_reject_reason_code', (code))
+        failure_action = failure_actions[0]
+        return failure_action.rejected_payment_fee
+
+    @fields.depends('rejected_payment_fee')
+    def on_change_with_is_fee_required(self, name=None):
+        return self.rejected_payment_fee is not None
+
+    @fields.depends('is_fee_required', 'rejected_payment_fee')
+    def on_change_is_fee_required(self):
+        if not self.is_fee_required:
+            self.rejected_payment_fee = None
+        else:
+            self.rejected_payment_fee = Transaction().context.get(
+                'default_fee_id', None)
 
 
 class RejectReason(model.CoopSQL, model.CoopView):
@@ -171,6 +207,9 @@ class Configuration:
     direct_debit_journal = fields.Property(
         fields.Many2One('account.payment.journal', 'Direct Debit Journal',
             domain=[('process_method', '!=', 'manual')]))
+    reject_fee_journal = fields.Property(
+        fields.Many2One('account.journal', 'Reject Fee Journal',
+            domain=[('type', '=', 'write-off')]))
 
     def export_json(self, skip_fields=None, already_exported=None,
             output=None, main_object=None):

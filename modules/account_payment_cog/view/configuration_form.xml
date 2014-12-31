@@ -4,5 +4,7 @@
         position="after">
         <label name="direct_debit_journal"/>
         <field name="direct_debit_journal"/>
+        <label name="reject_fee_journal"/>
+        <field name="reject_fee_journal"/>
     </xpath>
 </data>
