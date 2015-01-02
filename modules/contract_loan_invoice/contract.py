@@ -289,6 +289,7 @@ class Contract:
         pool = Pool()
         Amount = pool.get('contract.premium.amount')
         Tax = pool.get('account.tax')
+        config = pool.get('account.configuration')(1)
         amounts = []
         for contract in contracts:
             if not contract.is_loan:
@@ -306,7 +307,11 @@ class Contract:
                     taxes = Tax.compute(invoice_line.taxes,
                         invoice_line.unit_price, invoice_line.quantity,
                         date=period[0])
-                    tax_amount = sum(t['amount'] for t in taxes)
+                    if config.tax_rounding == 'line':
+                        tax_amount = sum(contract.currency.round(t['amount'])
+                            for t in taxes)
+                    else:
+                        tax_amount = sum(t['amount'] for t in taxes)
                     amount = Amount(
                         premium=invoice_line.details[0].premium,
                         period_start=period[0],
