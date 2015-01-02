@@ -577,7 +577,7 @@ class OptionDescription(model.CoopSQL, Offered):
             ], depends=['currency', 'company'])
     is_service = fields.Function(
         fields.Boolean('Is a Service'),
-        'on_change_with_is_service', 'setter_void')
+        'on_change_with_is_service')
     ending_rule = fields.One2Many('offered.option.description.ending_rule',
         'coverage', 'Ending Rule', size=1)
 

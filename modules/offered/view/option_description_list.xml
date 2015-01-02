@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
-<data>
-    <xpath expr="/tree/field[@name='code']" position="after">
-        <field name="is_service"/>
-    </xpath>
-</data>
+<tree string="Coverages">
+    <field name="name"/>
+    <field name="code"/>
+    <field name="start_date"/>
+    <field name="end_date"/>
+    <field name="tags_name"/>
+</tree>

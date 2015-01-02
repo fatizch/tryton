@@ -63,11 +63,6 @@ class OptionDescription:
     def on_change_with_is_service(self, name=None):
         return not self.item_desc
 
-    @fields.depends('is_service')
-    def on_change_with_item_desc(self):
-        if self.is_service:
-            return None
-
     @classmethod
     def delete(cls, entities):
         cls.delete_rules(entities)
