@@ -26,7 +26,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         return {
             'Product': 'offered.product',
             'OptionDescription': 'offered.option.description',
-            'Eligibility': 'offered.eligibility.rule',
             'Tax': 'account.tax.description',
             'TaxVersion': 'account.tax.description.version',
             'Fee': 'account.fee.description',
@@ -205,7 +204,6 @@ return True'''
             Tests coverage creation
         '''
         company, = self.Company.search([('party.name', '=', 'World Company')])
-        rule = self.RuleEngine.search([('name', '=', 'test_rule')])[0]
         ng = self.Sequence.search([
                 ('code', '=', 'contract')])[0]
 
@@ -238,20 +236,11 @@ return True'''
 
         # Coverage C
 
-        eligibility_rule_a = self.Eligibility()
-        eligibility_rule_a.config_kind = 'advanced'
-        eligibility_rule_a.min_age = 100
-        eligibility_rule_a.rule = rule
-
-        eligibility_rule_a.start_date = datetime.date.today()
-
         coverage_c = self.OptionDescription()
         coverage_c.code = 'GAM'
         coverage_c.name = 'GammaCoverage'
         coverage_c.family = coverage_a._fields['family'].selection[0][0]
         coverage_c.start_date = datetime.date.today()
-
-        coverage_c.eligibility_rules = [eligibility_rule_a]
 
         coverage_c.item_desc = item_desc
         coverage_c.company = company
@@ -260,33 +249,16 @@ return True'''
 
         # Coverage D
 
-        eligibility_rule_d = self.Eligibility()
-        eligibility_rule_d.config_kind = 'simple'
-        eligibility_rule_d.is_eligible = True
-        eligibility_rule_d.is_sub_elem_eligible = False
-
-        eligibility_rule_d.start_date = datetime.date.today()
-
         coverage_d = self.OptionDescription()
         coverage_d.code = 'DEL'
         coverage_d.name = 'Delta Coverage'
         coverage_d.family = coverage_a._fields['family'].selection[0][0]
         coverage_d.start_date = datetime.date.today()
 
-        coverage_d.eligibility_rules = [eligibility_rule_d]
-
         coverage_d.item_desc = item_desc
         coverage_d.company = company
 
         coverage_d.save()
-
-        # Product Eligibility Manager
-
-        eligibility_rule_b = self.Eligibility()
-        eligibility_rule_b.config_kind = 'simple'
-        eligibility_rule_b.min_age = 40
-        eligibility_rule_b.max_age = 45
-        eligibility_rule_b.start_date = datetime.date.today()
 
         # Product
 
@@ -296,7 +268,6 @@ return True'''
         product_a.start_date = datetime.date.today()
         product_a.coverages = [
             coverage_a, coverage_b, coverage_c, coverage_d]
-        product_a.eligibility_rules = [eligibility_rule_b]
         product_a.contract_generator = ng
         product_a.item_descriptors = [item_desc]
         product_a.company = company

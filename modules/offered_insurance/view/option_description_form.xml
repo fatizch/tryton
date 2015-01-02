@@ -18,10 +18,6 @@
         <newline/>
     </xpath>
     <xpath expr="/form/notebook/page/notebook" position="inside">
-        <page string="Deductible" id="deductible">
-            <field name="deductible_rules" colspan="4"/>
-        </page>
-    </xpath>
     <xpath expr="/form/field[@name='family']" position="after">
         <label name="insurance_kind"/>
         <field name="insurance_kind"/>

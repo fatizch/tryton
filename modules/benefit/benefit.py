@@ -5,7 +5,6 @@ from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, coop_date, fields, coop_string
 from trytond.modules.offered import offered
-from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.offered_insurance import offered as product
 
 __metaclass__ = PoolMeta
@@ -203,13 +202,6 @@ class Benefit(model.CoopSQL, offered.Offered):
                 sub_args['start_date'] = coop_date.add_day(
                     indemn_dict['end_date'], 1)
         return res, errs
-
-    def give_me_eligibility(self, args):
-        try:
-            res = self.get_result('eligibility', args, kind='eligibility')
-        except offered.NonExistingRuleKindException:
-            return (EligibilityResultLine(True), [])
-        return res
 
     @classmethod
     def get_beneficiary_kind(cls):

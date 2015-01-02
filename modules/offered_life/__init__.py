@@ -9,7 +9,6 @@ def register():
     Pool.register(
         # from offered
         OptionDescription,
-        EligibilityRule,
         # From rule_engine
         RuleEngineRuntime,
         # from salary_range

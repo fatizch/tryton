@@ -109,26 +109,6 @@ class Contract(Printable):
             if to_write:
                 CoveredElement.write(*to_write)
 
-    def check_sub_elem_eligibility(self, ext=None):
-        errors = []
-        res, errs = (True, [])
-        for covered_element in self.covered_elements:
-            for option in covered_element.options:
-                eligibility, errors = option.coverage.get_result(
-                    'sub_elem_eligibility',
-                    {
-                        'date': self.start_date,
-                        'appliable_conditions_date':
-                        self.appliable_conditions_date,
-                        'elem': covered_element,
-                        'option': option,
-                    })
-                res = res and (not eligibility or eligibility.eligible)
-                if eligibility:
-                    errs += eligibility.details
-                errs += errors
-        return (res, errs)
-
     def init_next_renewal_date(self):
         self.last_renewed = self.start_date
         self.next_renewal_date = None

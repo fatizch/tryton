@@ -100,39 +100,6 @@ class Contract(CogProcessFramework):
         return False, (('bad_date', (
             self.start_date, self.product.get_rec_name(None))),)
 
-    def check_product_eligibility(self):
-        eligibility, errors = self.product.get_result('eligibility',
-            {
-                'subscriber': self.subscriber,
-                'date': self.start_date,
-                'appliable_conditions_date': self.appliable_conditions_date,
-            })
-        if eligibility:
-            return eligibility.eligible, eligibility.details + errors
-        return True, ()
-
-    def check_options_eligibility(self):
-        errs = []
-        eligible = True
-        for option in self.options:
-            if option.status != 'active':
-                continue
-            eligibility, errors = option.coverage.get_result(
-                'eligibility',
-                {
-                    'date': self.start_date,
-                    'subscriber': self.subscriber,
-                    'appliable_conditions_date':
-                    self.appliable_conditions_date,
-                })
-            if eligibility and not eligibility.eligible:
-                errs.append(('option_not_eligible', (option.coverage.code)))
-                errs += (
-                    ('%s' % elem, ())
-                    for elem in eligibility.details + errors)
-                eligible = False
-        return eligible, errs
-
     def check_option_selected(self):
         for option in self.options:
             if option.status == 'active':

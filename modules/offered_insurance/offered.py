@@ -6,7 +6,6 @@ from trytond.modules.cog_utils import model, utils, fields
 from trytond.modules.cog_utils import coop_string
 
 from trytond.modules.offered import NonExistingRuleKindException
-from trytond.modules.offered import EligibilityResultLine
 
 
 __metaclass__ = PoolMeta
@@ -23,11 +22,6 @@ __all__ = [
 class Offered:
     __name__ = 'offered'
 
-    eligibility_rules = fields.One2Many('offered.eligibility.rule', 'offered',
-        'Eligibility Rules')
-    deductible_rules = fields.One2Many('offered.deductible.rule', 'offered',
-        'Deductible Rules')
-
     def get_name_for_billing(self):
         return self.name
 
@@ -39,14 +33,6 @@ class Offered:
                 continue
             utils.delete_reference_backref(
                 entities, field.model_name, field.field)
-
-    def give_me_sub_elem_eligibility(self, args):
-        try:
-            res = self.get_result('sub_elem_eligibility', args,
-                kind='eligibility')
-        except NonExistingRuleKindException:
-            return (EligibilityResultLine(True), [])
-        return res
 
 
 class Product:

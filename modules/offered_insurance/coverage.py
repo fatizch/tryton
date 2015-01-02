@@ -7,7 +7,6 @@ from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
 from trytond.modules.offered_insurance import offered
-from trytond.modules.offered import EligibilityResultLine
 
 
 __metaclass__ = PoolMeta
@@ -77,13 +76,6 @@ class OptionDescription:
                 ('products', '=', instance.product.id),
                 ('item_desc', '=', instance.item_desc.id)]
         return clause
-
-    def give_me_eligibility(self, args):
-        try:
-            res = self.get_result('eligibility', args, kind='eligibility')
-        except offered.NonExistingRuleKindException:
-            return (EligibilityResultLine(True), [])
-        return res
 
     def give_me_covered_elements_at_date(self, args):
         contract = args['contract']

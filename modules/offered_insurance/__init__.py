@@ -42,11 +42,7 @@ def register():
         DocumentCreatePreview,
         DocumentCreatePreviewReport,
         DocumentCreateAttach,
-        # From business_rule.eligibility_rule
-        EligibilityRule,
         CoverageAmountRule,
-        DeductibleRule,
-        DeductibleDuration,
         TermRule,
         # From business_rule.exclusion
         ExclusionKind,

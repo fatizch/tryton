@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath
-        expr="/form/notebook/page[@id='managers']/notebook/page[@id='eligibility']"
-        position="before">
-        <page string="Coverage Amount" id="coverage_amount"
-            states="{'invisible': Eval('family') != 'life'}">
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
+        <page string="Coverage Amount" id="coverage_amount" states="{'invisible': Eval('family') != 'life'}">
             <field name="coverage_amount_rules"/>
         </page>
     </xpath>

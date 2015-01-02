@@ -7,7 +7,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'RuleEngine',
     'OptionDescriptionEndingRule',
-    'EligibilityResultLine',
     ]
 
 
@@ -19,29 +18,6 @@ class RuleEngineResultLine(object):
     def __init__(self, rule_errors=None):
         super(RuleEngineResultLine, self).__init__()
         self.rule_errors = rule_errors or []
-
-
-class EligibilityResultLine(RuleEngineResultLine):
-    'Eligibility Line Result'
-
-    def __init__(self, eligible=False, details=None):
-        super(EligibilityResultLine, self).__init__()
-        self.eligible = eligible
-        self.details = details or []
-
-    def __iadd__(self, other):
-        if other is None or other.eligible is None:
-            return self
-        self.eligible = self.eligible and other.eligible
-        self.details += other.details
-        return self
-
-    def __add__(self, other):
-        tmp = EligibilityResultLine()
-
-        tmp.eligible = self.eligible + other.eligible
-        tmp.details = self.details + other.details
-        return tmp
 
 
 class PricingResultDetail(object):

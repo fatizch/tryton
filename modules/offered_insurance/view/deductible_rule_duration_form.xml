@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<form string="Deductible Duration">
-    <label name="duration"/>
-    <field name="duration"/>
-    <label name="duration_unit"/>
-    <field name="duration_unit"/>
-</form>

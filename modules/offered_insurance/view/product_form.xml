@@ -6,9 +6,6 @@
         </page>
     </xpath>
     <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
-        <page string="Deductible" id="deductible">
-            <field name="deductible_rules" colspan="4"/>
-        </page>
         <page string="Term - Renewal" id="term_renewal">
             <field name="term_renewal_rules" colspan="4"/>
         </page>

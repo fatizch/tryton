@@ -5,10 +5,9 @@ from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 
-from trytond.modules.cog_utils import model, business, utils, fields
+from trytond.modules.cog_utils import model, utils, fields
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
-from trytond.modules.offered import EligibilityResultLine
 from trytond.modules.rule_engine import RuleEngineResult
 
 __all__ = [
@@ -484,25 +483,6 @@ class Product(model.CoopSQL, Offered):
         result = ExtraData.calculate_value_set(
             possible_schemas, all_schemas, existing_data, args)
         return result, ()
-
-    def give_me_eligibility(self, args):
-        # First of all, we look for a subscriber data in the args and update
-        # the args dictionnary for sub values.
-        try:
-            business.update_args_with_subscriber(args)
-        except business.ArgsDoNotMatchException:
-            # If no Subscriber is found, automatic refusal
-            return (EligibilityResultLine(
-                False, ['Subscriber not defined in args']), [])
-
-        res, errs = self.check_subscriber_kind(args)
-        if not res:
-            return EligibilityResultLine(False, errs)
-        try:
-            res = self.get_result('eligibility', args, kind='eligibility')
-        except NonExistingRuleKindException:
-            return (EligibilityResultLine(True), [])
-        return res
 
     def check_subscriber_kind(self, args):
         # We define a match_table which will tell what data to look for
