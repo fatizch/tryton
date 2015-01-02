@@ -3,6 +3,7 @@ from .account import *
 from .offered import *
 from .contract import *
 from .wizard import *
+from .rule_engine import *
 
 
 def register():
@@ -18,6 +19,7 @@ def register():
         Contract,
         ContractOption,
         ContractFee,
+        RuleEngine,
         Premium,
         PremiumTax,
         DisplayContractPremiumDisplayer,

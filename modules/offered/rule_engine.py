@@ -1,6 +1,14 @@
-# -*- coding:utf-8 -*-
+from trytond.pool import PoolMeta
+
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.rule_engine import RuleMixin
+
+__metaclass__ = PoolMeta
+__all__ = [
+    'RuleEngine',
+    'OptionDescriptionEndingRule',
+    'EligibilityResultLine',
+    ]
 
 
 class RuleEngineResultLine(object):
@@ -88,6 +96,15 @@ class PricingResultLine(RuleEngineResultLine):
         self.details.append(new_detail)
 
 
+class RuleEngine:
+    __name__ = 'rule_engine'
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngine, cls).__setup__()
+        cls.type_.selection.append(('ending', 'Ending'))
+
+
 class OptionDescriptionEndingRule(RuleMixin, model.CoopSQL, model.CoopView):
     'Option Description Ending Rule'
 
@@ -98,6 +115,11 @@ class OptionDescriptionEndingRule(RuleMixin, model.CoopSQL, model.CoopView):
         'get_func_key', searcher='search_func_key')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
         required=True, ondelete='CASCADE')
+
+    @classmethod
+    def __setup__(cls):
+        super(OptionDescriptionEndingRule, cls).__setup__()
+        cls.rule.domain = [('type_', '=', 'ending')]
 
     @classmethod
     def _export_light(cls):

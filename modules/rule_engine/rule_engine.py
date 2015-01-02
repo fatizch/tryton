@@ -559,6 +559,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             ('validated', 'Validated')],
         'Status')
     status_string = status.translated('status')
+    type_ = fields.Selection([('', '')], 'Type')
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},

@@ -130,6 +130,11 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
         'on_change_with_premium_base')
 
     @classmethod
+    def __setup__(cls):
+        super(OptionDescriptionPremiumRule, cls).__setup__()
+        cls.rule.domain = [('type_', '=', 'premium')]
+
+    @classmethod
     def __post_setup__(cls):
         super(OptionDescriptionPremiumRule, cls).__post_setup__()
         cls._premium_result_class = cls.get_premium_result_class()

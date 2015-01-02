@@ -6,6 +6,7 @@
             <field name="short_name">simple_premium_rule</field>
             <field name="algorithm">return param_premium_amount()</field>
             <field name="status">validated</field>
+            <field name="type_">premium</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
         <record model="rule_engine.rule_parameter" id="premium_amount">

@@ -37,6 +37,11 @@ class OptionDescriptionEligibilityRule(RuleMixin, model.CoopSQL,
         required=True, ondelete='CASCADE')
 
     @classmethod
+    def __setup__(cls):
+        super(OptionDescriptionEligibilityRule, cls).__setup__()
+        cls.rule.domain = [('type_', '=', 'eligibility')]
+
+    @classmethod
     def _export_light(cls):
         return super(OptionDescriptionEligibilityRule, cls)._export_light() | {
             'rule'}

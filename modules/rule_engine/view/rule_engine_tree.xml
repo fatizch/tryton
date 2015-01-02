@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tree string="Rules" colors="If(~Eval('passing_test_cases', False), 'red', 'green')">
+    <field name="type_"/>
     <field name="name"/>
     <field name="context"/>
     <field name="status"/>
