@@ -21,23 +21,31 @@ class TestCaseModel:
             'name': '%s - %s %s' % (translater('In Credit Note Sequence'),
                 translater_account('Fiscal Year'), start_date.year),
             'code': 'account.invoice',
+            'prefix': str(start_date.year),
+            'padding': 9,
             }
         result.in_invoice_sequence = {
             'company': cls.get_company(),
             'name': '%s - %s %s' % (translater('In Invoice Sequence'),
                 translater_account('Fiscal Year'), start_date.year),
             'code': 'account.invoice',
+            'prefix': str(start_date.year),
+            'padding': 9,
             }
         result.out_credit_note_sequence = {
             'company': cls.get_company(),
             'name': '%s - %s %s' % (translater('Out Credit Note Sequence'),
                 translater_account('Fiscal Year'), start_date.year),
             'code': 'account.invoice',
+            'prefix': str(start_date.year),
+            'padding': 9,
             }
         result.out_invoice_sequence = {
             'company': cls.get_company(),
             'name': '%s - %s %s' % (translater('Out Invoice Sequence'),
                 translater_account('Fiscal Year'), start_date.year),
             'code': 'account.invoice',
+            'prefix': str(start_date.year),
+            'padding': 9,
             }
         return result

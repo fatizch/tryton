@@ -189,6 +189,8 @@ class TestCaseModel:
                         'Post Move Sequence'), translater('Fiscal Year'),
                     start_date.year),
                 'code': 'account.move',
+                'prefix': str(start_date.year),
+                'padding': 9,
                 },
             )
 
