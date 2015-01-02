@@ -87,6 +87,18 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_(coop_date.duration_between_and_is_it_exact(start_date,
             end_date, 'year') == (1, False))
 
+        start_date = datetime.date(2016, 2, 29)
+        self.assertEqual(coop_date.add_duration(start_date, 'month', 1),
+            datetime.date(2016, 3, 29))
+        self.assertEqual(coop_date.add_duration(start_date, 'month', 1, True),
+            datetime.date(2016, 3, 31))
+
+        start_date = datetime.date(2015, 2, 28)
+        self.assertEqual(coop_date.add_duration(start_date, 'year', 1),
+            datetime.date(2016, 2, 28))
+        self.assertEqual(coop_date.add_duration(start_date, 'year', 1, True),
+            datetime.date(2016, 2, 29))
+
     def test0035_functional_error(self):
         class PatchedView(self.View, model.FunctionalErrorMixIn):
             @classmethod

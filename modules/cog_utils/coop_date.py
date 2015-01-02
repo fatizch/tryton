@@ -49,15 +49,23 @@ def add_day(date, nb):
     return date + relativedelta(days=nb)
 
 
-def add_month(date, nb):
-    return date + relativedelta(months=nb)
+def add_month(date, nb, stick_to_end_of_month=False):
+    # If stick_to_end_of_month is True 28/02/2015 + 1 month = 31/03/2015
+    next_month = date + relativedelta(months=nb)
+    if not stick_to_end_of_month or date != get_end_of_month(date):
+        return next_month
+    return get_end_of_month(next_month)
 
 
-def add_year(date, nb):
-    return date + relativedelta(years=nb)
+def add_year(date, nb, stick_to_end_of_month=False):
+    # If stick_to_end_of_month is True 28/02/2015 + 1 year = 29/02/2016
+    next_year = date + relativedelta(years=nb)
+    if not stick_to_end_of_month or date != get_end_of_month(date):
+        return next_year
+    return get_end_of_month(next_year)
 
 
-def add_duration(date, duration_unit, duration=1):
+def add_duration(date, duration_unit, duration=1, stick_to_end_of_month=False):
     '''
     Returns the first day of the begining of the next period
     for example : 01/01/Y + 1 year = 01/01/Y+1
@@ -67,14 +75,18 @@ def add_duration(date, duration_unit, duration=1):
     elif duration_unit in ['week', 'weekly']:
         res = add_day(date, 7 * duration)
     elif duration_unit in ['month', 'monthly']:
-        res = add_month(date, duration)
+        res = add_month(date, duration, stick_to_end_of_month)
     elif duration_unit in ['quarter', 'quarterly']:
-        res = add_month(date, 3 * duration)
+        res = add_month(date, 3 * duration, stick_to_end_of_month)
     elif duration_unit in ['half_year', 'half_yearly']:
-        res = add_month(date, 6 * duration)
+        res = add_month(date, 6 * duration, stick_to_end_of_month)
     elif duration_unit in ['year', 'yearly']:
-        res = add_year(date, duration)
+        res = add_year(date, duration, stick_to_end_of_month)
     return res
+
+
+def get_end_of_month(date):
+    return date + relativedelta(day=31)
 
 
 def get_end_of_period(date, duration_unit, duration=1):
@@ -84,13 +96,6 @@ def get_end_of_period(date, duration_unit, duration=1):
     '''
     res = add_duration(date, duration_unit, duration)
     return add_day(res, -1)
-
-
-def get_end_of_month(date):
-    res = datetime.date(date.year, date.month, 1)
-    res = add_month(res, 1)
-    res = add_day(res, -1)
-    return res
 
 
 def convert_to_periods(dates):

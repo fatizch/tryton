@@ -279,8 +279,15 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                 start_date=self.funds_release_date,
                 outstanding_balance=self.amount,
                 )]
-        n = 0
         begin_balance = self.amount
+        if self.first_payment_date == self.on_change_with_first_payment_date():
+            # First payment date is synchronised with funds release date
+            initial_date = self.funds_release_date
+            shift = 1
+        else:
+            initial_date = self.first_payment_date
+            shift = 0
+        n = 0
         from_date = self.first_payment_date
         for i, increment in enumerate(self.increments, 1):
             increment.number = i
@@ -299,8 +306,9 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     self.currency, self.number_of_payments)
                 payments.append(payment)
                 begin_balance = payment.outstanding_balance
-                from_date = coop_date.add_duration(self.first_payment_date,
-                    self.payment_frequency, n)
+                from_date = coop_date.add_duration(initial_date,
+                    self.payment_frequency, n + shift,
+                    stick_to_end_of_month=True)
         self.increments = self.increments
         self.payments = payments
 
@@ -437,7 +445,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def on_change_with_first_payment_date(self):
         if self.funds_release_date and self.payment_frequency:
             return coop_date.add_duration(self.funds_release_date,
-                self.payment_frequency)
+                self.payment_frequency, stick_to_end_of_month=True)
         else:
             return None
 
@@ -546,11 +554,13 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
             if increment == self:
                 return start_date
             start_date = coop_date.add_duration(start_date,
-                self.loan.payment_frequency, increment.number_of_payments)
+                self.loan.payment_frequency, increment.number_of_payments,
+                stick_to_end_of_month=True)
 
     def get_end_date(self, name):
         return coop_date.add_duration(self.start_date,
-            self.loan.payment_frequency, self.number_of_payments - 1)
+            self.loan.payment_frequency, self.number_of_payments - 1,
+            stick_to_end_of_month=True)
 
 
 class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):

@@ -147,7 +147,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         loan.funds_release_date = datetime.date(2014, 3, 5)
         loan.payment_frequency = 'quarter'
         loan.first_payment_date = coop_date.add_duration(
-            loan.funds_release_date, loan.payment_frequency)
+            loan.funds_release_date, loan.payment_frequency,
+            stick_to_end_of_month=True)
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 6, 5))
         loan.number_of_payments = 56
         loan.amount = Decimal(134566)
@@ -227,6 +228,33 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assert_payment(loan, datetime.date(2029, 3, 5), 30, loan.amount,
             Decimal('251695.95'), loan.amount, Decimal('8240.95'),
             Decimal('0'))
+
+        loan = self.Loan(
+            kind='interest_free',
+            funds_release_date=datetime.date(2016, 1, 31),
+            rate=None,
+            amount=Decimal(100000),
+            number_of_payments=120,
+            payment_frequency='month',
+            currency=currency,
+            company=company)
+        loan.first_payment_date = loan.on_change_with_first_payment_date()
+        self.assertEqual(loan.first_payment_date, datetime.date(2016, 2, 29))
+        loan.calculate()
+        self.assertEqual(loan.payments[1].start_date,
+            datetime.date(2016, 2, 29))
+        self.assertEqual(loan.payments[2].start_date,
+            datetime.date(2016, 3, 31))
+        self.assertEqual(loan.payments[13].start_date,
+            datetime.date(2017, 2, 28))
+        self.assertEqual(loan.payments[-1].start_date,
+            datetime.date(2026, 1, 31))
+
+        loan.first_payment_date = datetime.date(2016, 2, 27)
+        loan.calculate()
+        self.assertEqual(loan.payments[2].start_date,
+            datetime.date(2016, 3, 27))
+
 
     @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
