@@ -13,8 +13,8 @@
     <record model="ir.ui.view" id="benefit_view_tree">
       <field name="model">benefit</field>
       <field name="type">tree</field>
-      <field name="inherit" ref="offered.offered_view_tree"/>
-      <field name="name">benefit_tree</field>
+      <field name="inherit" eval="None"/>
+      <field name="name">benefit_list</field>
     </record>
     <!-- Read / Write rule -->
     <record model="ir.rule.group" id="rule_group_benefit">
