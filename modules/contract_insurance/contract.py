@@ -809,6 +809,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                     start_date=self.start_date))
         self.options = new_options
 
+    @fields.depends('item_desc', 'all_extra_datas', 'party', 'product',
+        'start_date', 'options')
+    def on_change_party(self):
+        self.on_change_item_desc()
+
     @fields.depends('contract', 'extra_data')
     def on_change_with_all_extra_data(self, name=None):
         contract_extra_data = Transaction().context.get('all_extra_datas',
