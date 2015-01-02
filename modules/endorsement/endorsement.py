@@ -569,6 +569,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     endorsement_summary = fields.Function(
         fields.Text('Endorsement Summary'),
         'get_endorsement_summary')
+    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments')
 
     @classmethod
     def __setup__(cls):
