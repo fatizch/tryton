@@ -20,7 +20,7 @@
       <field name="parameters" view_ids="rule_engine.parameter_tree,rule_engine.parameter_form" colspan="4"/>
     </page>
     <page name="tags">
-      <field name="tags" colspan="4" widget="multiselection"/>
+      <field name="tags" colspan="4"/>
     </page>
     <page name="test_cases">
       <field name="test_cases" colspan="4"/>

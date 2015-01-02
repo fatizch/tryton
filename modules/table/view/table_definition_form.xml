@@ -16,7 +16,7 @@
             <newline/>
         </page>
         <page name="tags">
-            <field name="tags" colspan="4" widget="multiselection"/>
+            <field name="tags" colspan="4"/>
         </page>
     </notebook>
 </form>
