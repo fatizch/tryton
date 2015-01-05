@@ -220,7 +220,7 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
             'end_date', 'flat_amount', 'is_discount', 'max_rate',
             'max_value', 'motive', 'option', 'rate', 'start_date',
-            'time_limited']
+            'time_limited', 'flat_amount_frequency']
 
     @classmethod
     def create_displayer(cls, extra_premium, template):
@@ -445,7 +445,7 @@ class NewExtraPremium(model.CoopView):
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
             'end_date', 'flat_amount', 'is_discount', 'is_loan', 'max_rate',
             'max_value', 'motive', 'option', 'rate', 'start_date',
-            'time_limited']
+            'time_limited', 'flat_amount_frequency']
 
     def update_endorsement(self, wizard):
         all_endorsements = {x.contract.id: x

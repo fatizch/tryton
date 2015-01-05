@@ -1125,17 +1125,17 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         depends=['currency_digits', 'calculation_kind', 'is_discount',
                  'max_value'],
         domain= [If(Eval('calculation_kind', '') != 'flat',
-            [],
-            If(Bool(Eval('is_discount')),
-               [('flat_amount', '<', 0),
-                ['OR',
-                 [('max_value', '=', None)],
-                 [('flat_amount', '>', Eval('max_value'))]]],
-               [('flat_amount', '>', 0),
-                ['OR',
-                 [('max_value', '=', None)],
-                 [('flat_amount', '<', Eval('max_value'))]]
-                ]))])
+                [],
+                If(Bool(Eval('is_discount')),
+                    [('flat_amount', '<', 0),
+                        ['OR',
+                            [('max_value', '=', None)],
+                            [('flat_amount', '>', Eval('max_value'))]]],
+                    [('flat_amount', '>', 0),
+                        ['OR',
+                            [('max_value', '=', None)],
+                            [('flat_amount', '<', Eval('max_value'))]]
+                        ]))])
     motive = fields.Many2One('extra_premium.kind', 'Motive',
         ondelete='RESTRICT', required=True)
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
@@ -1149,13 +1149,13 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                 [],
                 If(Bool(Eval('is_discount')),
                     [('rate', '<', 0),
-                     ['OR',
-                      [('max_rate', '=', None)],
-                      [('rate', '>', Eval('max_rate'))]]],
+                        ['OR',
+                            [('max_rate', '=', None)],
+                            [('rate', '>', Eval('max_rate'))]]],
                     [('rate', '>', 0),
-                     ['OR',
-                      [('max_rate', '=', None)],
-                      [('rate', '<', Eval('max_rate'))]]]
+                        ['OR',
+                            [('max_rate', '=', None)],
+                            [('rate', '<', Eval('max_rate'))]]]
                     ))])
     is_discount = fields.Function(
         fields.Boolean('Is Discount'),

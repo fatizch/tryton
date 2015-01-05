@@ -338,21 +338,22 @@ class OptionDescriptionPremiumRule:
             dest_frequency]
 
     def set_line_frequencies(self, lines, rated_instance, date):
+        super(OptionDescriptionPremiumRule, self).set_line_frequencies(lines,
+            rated_instance, date)
+        if not self.match_contract_frequency:
+            return
         contract = lines[0].contract if lines else None
         if not contract:
             return lines
         pool = Pool()
         ContractBillingInformation = pool.get('contract.billing_information')
         ContractBillingMode = pool.get('offered.billing_mode')
-        if not self.match_contract_frequency:
-            super(OptionDescriptionPremiumRule, self).set_line_frequencies(
-                lines, rated_instance, date)
-            return
         contract_billing_mode = ContractBillingInformation.get_values(
             [contract], date=date,)['billing_mode'][contract.id]
         new_frequency = ContractBillingMode(contract_billing_mode).frequency
-        factor = self.convert_premium_frequency(self.frequency, new_frequency)
         for line in lines:
+            factor = self.convert_premium_frequency(line.frequency,
+                new_frequency)
             line.frequency = new_frequency
             line.amount = line.amount / factor
 

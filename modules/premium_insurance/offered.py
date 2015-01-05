@@ -35,6 +35,8 @@ class Product:
                 option.extra_premiums):
             for elem in option.extra_premiums:
                 dates.add(elem.start_date)
+                if elem.end_date:
+                    dates.add(coop_date.add_day(elem.end_date, 1))
 
     def get_covered_element_dates(self, dates, covered_element):
         for data in covered_element.options:
@@ -66,7 +68,7 @@ class OptionDescriptionPremiumRule:
     def get_appliable_extra_premiums(self, rule_dict):
         return [extra for extra in rule_dict['option'].extra_premiums
             if ((extra.start_date or datetime.date.min) <= rule_dict['date'] <=
-                    (extra.end_date or datetime.date.max))]
+                (extra.end_date or datetime.date.max))]
 
     def do_calculate(self, rule_dict):
         lines = super(OptionDescriptionPremiumRule, self).do_calculate(
@@ -75,11 +77,22 @@ class OptionDescriptionPremiumRule:
         for extra_premium in self.get_appliable_extra_premiums(rule_dict):
             extra_dict = rule_dict.copy()
             extra_dict['extra_premium'] = extra_premium
+            extra_dict['_rated_instance'] = extra_premium
             lines.append(self._premium_result_class(
                     extra_premium.calculate_premium_amount(
                         extra_dict, base_amount),
                     extra_dict))
         return lines
+
+    def set_line_frequencies(self, lines, rated_instance, date):
+        ExtraPremium = Pool().get('contract.option.extra_premium')
+        for line in lines:
+            if not isinstance(line.rated_instance, ExtraPremium):
+                continue
+            if line.rated_instance.flat_amount_frequency:
+                line.frequency = line.rated_instance.flat_amount_frequency
+        super(OptionDescriptionPremiumRule, self).set_line_frequencies(
+            lines, rated_instance, date)
 
 
 class OptionDescription:

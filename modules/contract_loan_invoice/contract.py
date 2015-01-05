@@ -11,7 +11,7 @@ from sql.functions import Round
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, reduce_ids
-from trytond.pyson import Eval
+from trytond.pyson import Eval, And, Or
 from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.model import ModelSQL, ModelView
@@ -22,6 +22,7 @@ from trytond.modules.cog_utils import fields, model, coop_date
 __metaclass__ = PoolMeta
 __all__ = [
     'LoanShare',
+    'ExtraPremium',
     'Premium',
     'PremiumAmount',
     'PremiumAmountPerPeriod',
@@ -53,6 +54,20 @@ class LoanShare:
             field_values['base_premium_amount'][share.id] = vals[0]
             field_values['average_premium_rate'][share.id] = vals[1]
         return field_values
+
+
+class ExtraPremium:
+    __name__ = 'contract.option.extra_premium'
+
+    @classmethod
+    def __setup__(cls):
+        super(ExtraPremium, cls).__setup__()
+        cls.flat_amount_frequency.states['invisible'] = And(
+            cls.flat_amount_frequency.states['invisible'],
+            Eval('calculation_kind', '') != 'capital_per_mil')
+        cls.flat_amount_frequency.states['required'] = Or(
+            cls.flat_amount_frequency.states['required'],
+            Eval('calculation_kind', '') == 'capital_per_mil')
 
 
 class Premium:

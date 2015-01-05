@@ -7,6 +7,7 @@ from .invoice import *
 def register():
     Pool.register(
         LoanShare,
+        ExtraPremium,
         Premium,
         PremiumAmount,
         PremiumAmountPerPeriod,

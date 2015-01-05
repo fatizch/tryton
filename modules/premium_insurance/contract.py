@@ -1,6 +1,13 @@
 from trytond.pool import PoolMeta
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
+
+# Keys should exist in premium.offered.PREMIUM_FREQUENCY
+EXTRA_PREMIUM_FREQUENCIES = [
+    ('', ''),
+    ('yearly', 'Per Year'),
+    ]
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -37,8 +44,17 @@ class CoveredElement:
 class ExtraPremium:
     __name__ = 'contract.option.extra_premium'
 
+    flat_amount_frequency = fields.Selection(EXTRA_PREMIUM_FREQUENCIES,
+        'Amount frequency', states={
+            'invisible': Eval('calculation_kind', '') != 'flat',
+            'required': Eval('calculation_kind', '') == 'flat',
+            })
     premiums = fields.One2Many('contract.premium', 'extra_premium',
         'Premiums')
+
+    @classmethod
+    def default_flat_amount_frequency(cls):
+        return 'yearly'
 
 
 class Premium:

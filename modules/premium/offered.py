@@ -184,6 +184,9 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
 
     def set_line_frequencies(self, lines, rated_instance, date):
         for line in lines:
+            # Do not override already set frequency
+            if line.frequency:
+                continue
             line.frequency = self.frequency
 
     def finalize_lines(self, lines):
