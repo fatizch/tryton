@@ -17,7 +17,6 @@
         <field name="family" xexpand="1"/>
         <newline/>
     </xpath>
-    <xpath expr="/form/notebook/page/notebook" position="inside">
     <xpath expr="/form/field[@name='family']" position="after">
         <label name="insurance_kind"/>
         <field name="insurance_kind"/>
