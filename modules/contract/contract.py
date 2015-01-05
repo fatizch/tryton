@@ -739,6 +739,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                                 'status': contract.status
                                 })
                         cls.update_contract_after_import([contract])
+                        contract.calculate()
                     else:
                         cls.raise_user_error('invalid_format')
             except UserError as exc:

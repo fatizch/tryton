@@ -55,11 +55,6 @@ class Contract:
         pass
 
     @classmethod
-    def update_contract_after_import(cls, contracts):
-        super(Contract, cls).update_contract_after_import(contracts)
-        cls.calculate_prices(contracts)
-
-    @classmethod
     def force_calculate_prices(cls, contracts):
         return cls.calculate_prices(contracts, start=datetime.date.min)
 
@@ -162,7 +157,7 @@ class Contract:
     @classmethod
     def _calculate_methods(cls, product):
         return super(Contract, cls)._calculate_methods(product) + \
-            ['calculate_prices']
+            ['pre_calculate_fees', 'calculate_prices']
 
 
 class ContractOption:
