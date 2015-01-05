@@ -14,6 +14,10 @@
         <label name="fees" xalign="1.0" xexpand="1"/>
         <field name="fees" xalign="1.0" xexpand="0"/>
     </xpath>
+    <xpath expr="/form/notebook/page[@id='invoice']/group[@id='taxes_amount_state_buttons']/group[@id='amount_state_buttons']/group[@id='reconciled_state']/field[@name='state']" position="after">
+        <label name="reconciliation_date"/>
+        <field name="reconciliation_date"/>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='payment']/field[@name='payment_lines']" position="replace">
         <field name="lines_to_pay" colspan="4" view_ids="account_cog.move_line_to_pay_view_list"/>
     </xpath>

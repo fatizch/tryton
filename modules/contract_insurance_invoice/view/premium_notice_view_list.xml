@@ -9,4 +9,5 @@
     </field>
     <field name="amount_to_pay_today"/>
     <field name="contract"/>
+    <field name="reconciliation_date"/>
 </tree>

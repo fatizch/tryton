@@ -1,4 +1,5 @@
-from sql.aggregate import Sum
+from sql.aggregate import Sum, Max
+from sql.operators import Concat
 
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
@@ -47,6 +48,10 @@ class Invoice:
     fees = fields.Function(
         fields.Numeric('Fees', states=_STATES, depends=_DEPENDS),
         'get_fees')
+    reconciliation_date = fields.Function(
+        fields.Date('Reconciliation Date',
+            states={'invisible': ~Eval('reconciliation_date')}),
+        'get_reconciliation_date')
 
     @classmethod
     def __setup__(cls):
@@ -237,6 +242,35 @@ class Invoice:
         # Don't print invoice report if it's a contract invoice
         if not self.contract:
             super(Invoice, self).print_invoice()
+
+    @classmethod
+    def get_reconciliation_date(cls, invoices, name):
+        pool = Pool()
+        cursor = Transaction().cursor
+        reconciliation = pool.get('account.move.reconciliation').__table__()
+        line = pool.get('account.move.line').__table__()
+        move = pool.get('account.move').__table__()
+        invoice_table = cls.__table__()
+
+        result = {x.id: None for x in invoices}
+
+        for invoices_slice in grouped_slice(invoices):
+            query_table = reconciliation.join(line, condition=(
+                    line.reconciliation == reconciliation.id)
+                ).join(move, condition=(
+                    line.move == move.id)
+                ).join(invoice_table, condition=(
+                    move.origin == Concat(cls.__name__ + ',',
+                        invoice_table.id)))
+
+            cursor.execute(*query_table.select(invoice_table.id,
+                Max(reconciliation.create_date),
+                where=((invoice_table.id.in_([x.id for x in invoices_slice])) &
+                    (invoice_table.state == 'paid')),
+                group_by=[invoice_table.id]))
+
+            result.update(dict(cursor.fetchall()))
+        return result
 
 
 class InvoiceLine:
