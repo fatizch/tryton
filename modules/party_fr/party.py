@@ -53,8 +53,17 @@ class Party:
     def check_ssn(self):
         if not self.ssn:
             res = True
+        elif self.ssn[0] in ['3', '4', '7', '8']:
+            pattern = """^([3-4]|[7-8])
+                [0-9]{2}
+                [0-9][0-9]
+                (2[AB]|[0-9]{2})
+                [0-9]{3}
+                [0-9]{3}
+                [0-9]{2}$"""
+            res = re.search(pattern, self.ssn, re.X)
         else:
-            pattern = """^([1-3]|[7-8])
+            pattern = """^[1-2]
                 [0-9]{2}
                 [0-1][0-9]
                 (2[AB]|[0-9]{2})
