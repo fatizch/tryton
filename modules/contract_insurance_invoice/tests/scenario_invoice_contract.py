@@ -2,7 +2,6 @@
 # #Comment# #Imports
 import datetime
 from proteus import config, Model, Wizard
-from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
 # #Comment# #Init Database
@@ -50,7 +49,6 @@ SequenceType = Model.get('ir.sequence.type')
 User = Model.get('res.user')
 
 # #Comment# #Constants
-today = datetime.date.today()
 product_start_date = datetime.date(2014, 1, 1)
 contract_start_date = datetime.date(2014, 4, 10)
 
@@ -87,15 +85,15 @@ config._context = User.get_preferences(True, config.context)
 config._context['company'] = company.id
 
 # #Comment# #Create Fiscal Year
-fiscalyear = FiscalYear(name=str(today.year))
-fiscalyear.start_date = today + relativedelta(month=1, day=1)
-fiscalyear.end_date = today + relativedelta(month=12, day=31)
+fiscalyear = FiscalYear(name='2014')
+fiscalyear.start_date = datetime.date(2014, 1, 1)
+fiscalyear.end_date = datetime.date(2014, 12, 31)
 fiscalyear.company = company
-post_move_seq = Sequence(name=str(today.year), code='account.move',
+post_move_seq = Sequence(name='2014', code='account.move',
     company=company)
 post_move_seq.save()
 fiscalyear.post_move_sequence = post_move_seq
-invoice_seq = SequenceStrict(name=str(today.year),
+invoice_seq = SequenceStrict(name='2014',
     code='account.invoice', company=company)
 invoice_seq.save()
 fiscalyear.out_invoice_sequence = invoice_seq
