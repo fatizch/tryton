@@ -340,6 +340,13 @@ class Contract:
                     amounts.append(amount)
         Amount.create([a._save_values for a in amounts])
 
+    @classmethod
+    def _calculate_methods(cls, product):
+        methods = super(Contract, cls)._calculate_methods(product)
+        if product.is_loan:
+            methods.remove('calculate_prices')
+        return methods
+
 
 class PremiumAmount(ModelSQL, ModelView):
     'Premium Amount'

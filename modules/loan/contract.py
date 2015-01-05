@@ -236,12 +236,16 @@ class ContractOption:
             option.loan_shares = option.loan_shares
             option.save()
 
-    def calculate(self):
+    def remove_unneeded_loan_share(self):
         LoanShare = Pool().get('loan.share')
         loan_shares_to_delete = [x for x in self.loan_shares
             if x.loan not in self.parent_contract.loans]
         LoanShare.delete(loan_shares_to_delete)
-        super(ContractOption, self).calculate()
+
+    @classmethod
+    def _calculate_methods(cls, coverage):
+        return ['remove_unneeded_loan_share'] + \
+            super(ContractOption, cls)._calculate_methods(coverage)
 
     def check_at_least_one_loan(self):
         return True if self.loan_shares else False

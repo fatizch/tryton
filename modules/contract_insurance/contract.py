@@ -669,9 +669,19 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def functional_skips_for_duplicate(cls):
         return set([])
 
+    @classmethod
+    def _calculate_methods(cls, item_desc):
+        return []
+
     def calculate(self):
         for option in self.options:
             option.calculate()
+        for method_name in self._calculate_methods(self.item_desc):
+            method = getattr(self.__class__, method_name)
+            if not hasattr(method, 'im_self') or method.im_self:
+                method([self])
+            else:
+                method(self)
 
     def get_party_code(self, name):
         return self.party.code

@@ -159,6 +159,11 @@ class Contract:
     def get_dates(self):
         return self.product.get_dates(self)
 
+    @classmethod
+    def _calculate_methods(cls, product):
+        return super(Contract, cls)._calculate_methods(product) + \
+            ['calculate_prices']
+
 
 class ContractOption:
     __name__ = 'contract.option'

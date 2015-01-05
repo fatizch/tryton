@@ -25,6 +25,7 @@ class ContractOption:
             return False
         return True
 
-    def calculate(self):
-        if self.check_eligibility():
-            super(ContractOption, self).calculate()
+    @classmethod
+    def _calculate_methods(cls, coverage):
+        return super(ContractOption, cls)._calculate_methods(coverage) + \
+            ['check_eligibility']

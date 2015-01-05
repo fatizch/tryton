@@ -291,10 +291,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         dates = [x for x in dates if x] or [None]
         self.set_and_propagate_end_date(min(dates))
 
+    @classmethod
+    def _calculate_methods(cls, product):
+        return ['calculate_end_date']
+
     def calculate(self):
         for option in self.options:
             option.calculate()
-        self.calculate_end_date()
+        for method_name in self._calculate_methods(self.product):
+            method = getattr(self.__class__, method_name)
+            if not hasattr(method, 'im_self') or method.im_self:
+                method([self])
+            else:
+                method(self)
 
     @classmethod
     def update_contract_after_import(cls, contracts):
@@ -1304,8 +1313,17 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if self.start_date and self.start_date < new_start_date:
             self.start_date = new_start_date
 
+    @classmethod
+    def _calculate_methods(cls, coverage):
+        return ['set_automatic_end_date']
+
     def calculate(self):
-        self.set_automatic_end_date()
+        for method_name in self._calculate_methods(self.coverage):
+            method = getattr(self.__class__, method_name)
+            if not hasattr(method, 'im_self') or method.im_self:
+                method([self])
+            else:
+                method(self)
 
     @classmethod
     def search_parent_contract(cls, name, clause):
