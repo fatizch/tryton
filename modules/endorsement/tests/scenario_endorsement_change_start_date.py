@@ -184,7 +184,7 @@ contract.start_date  # Should  match new_contract_start_date
 # #Res# #datetime.date(2014, 10, 21)
 contract.options[0].start_date  # Should  match new_contract_start_date
 # #Res# #datetime.date(2014, 10, 21)
-Endorsement.draft([good_endorsement.id], config._context)
+Endorsement.cancel([good_endorsement.id], config._context)
 contract = Contract(contract.id)
 contract.start_date  # Should  match contract_start_date
 # #Res# #datetime.date(2014, 4, 10)

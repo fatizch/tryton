@@ -1,95 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
-  <data>
-    <!-- ############################################################ -->
-    <!-- Menus -->
-    <!-- ############################################################ -->
-    <menuitem parent="offered.menu_contract_configuration" name="Endorsement Configuration" id="menu_configuration" sequence="0" icon="tryton-preferences"/>
-    <!-- ############################################################ -->
-    <!-- Endorsement -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="endorsement_view_form">
-      <field name="model">endorsement</field>
-      <field name="type">form</field>
-      <field name="name">endorsement_form</field>
-    </record>
-    <record model="ir.ui.view" id="endorsement_view_list">
-      <field name="model">endorsement</field>
-      <field name="type">tree</field>
-      <field name="name">endorsement_list</field>
-    </record>
-    <!-- Entry Point -->
-    <record model="ir.action.act_window" id="act_endorsement">
-        <field name="name">Endorsement</field>
-        <field name="res_model">endorsement</field>
-        <field name="domain">[('contracts', '=', Eval('active_id'))]</field>
-        <field name="context">{'contract': Eval('active_id')}</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_endorsement_view1">
-        <field name="sequence" eval="10"/>
-        <field name="view" ref="endorsement_view_list"/>
-        <field name="act_window" ref="act_endorsement"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_endorsement_view2">
-        <field name="sequence" eval="10"/>
-        <field name="view" ref="endorsement_view_form"/>
-        <field name="act_window" ref="act_endorsement"/>
-    </record>
-    <record model="ir.action.act_window.domain" id="act_endorsement_domain_applied">
-        <field name="name">Applied</field>
-        <field name="sequence" eval="20"/>
-        <field name="domain">[('state', '=', 'applied')]</field>
-        <field name="act_window" ref="act_endorsement"/>
-    </record>
-    <record model="ir.action.act_window.domain" id="act_endorsement_domain_started">
-        <field name="name">Started</field>
-        <field name="sequence" eval="10"/>
-        <field name="domain">[('state', '!=', 'applied')]</field>
-        <field name="act_window" ref="act_endorsement"/>
-    </record>
-    <record model="ir.action.keyword" id="act_show_endorsements_keyword">
-        <field name="keyword">form_relate</field>
-        <field name="model">contract,-1</field>
-        <field name="action" ref="act_endorsement"/>
-    </record>
-    <!-- ##################### -->
-    <!-- # Endorsement Group # -->
-    <!-- ##################### -->
-    <record model="ir.ui.view" id="endorsement_contract_view_form">
-        <field name="model">endorsement.contract</field>
-        <field name="type">form</field>
-        <field name="name">endorsement_contract_form</field>
-    </record>
-    <record model="ir.ui.view" id="endorsement_contract_view_list">
-        <field name="model">endorsement.contract</field>
-        <field name="type">tree</field>
-        <field name="name">endorsement_contract_list</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Endorsement Option -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="endorsement_contract_option_view_form">
-      <field name="model">endorsement.contract.option</field>
-      <field name="type">form</field>
-      <field name="name">endorsement_contract_option_form</field>
-    </record>
-    <record model="ir.ui.view" id="endorsement_contract_option_view_list">
-      <field name="model">endorsement.contract.option</field>
-      <field name="type">tree</field>
-      <field name="name">endorsement_contract_option_list</field>
-    </record>
-    <!-- ################################## -->
-    <!-- # Endorsement Activation History # -->
-    <!-- ################################## -->
-    <record model="ir.ui.view" id="endorsement_contract_activation_history_view_form">
-        <field name="model">endorsement.contract.activation_history</field>
-        <field name="type">form</field>
-        <field name="name">endorsement_contract_activation_history_form</field>
-    </record>
-    <record model="ir.ui.view" id="endorsement_contract_activation_history_view_list">
-        <field name="model">endorsement.contract.activation_history</field>
-        <field name="type">tree</field>
-        <field name="name">endorsement_contract_activation_history_list</field>
-    </record>
-  </data>
+    <data>
+        <!-- ######### -->
+        <!-- # Menus # -->
+        <!-- ######### -->
+        <menuitem parent="offered.menu_contract_configuration" name="Endorsement Configuration" id="menu_configuration" sequence="0" icon="tryton-preferences"/>
+        <!-- ############### -->
+        <!-- # Endorsement # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="endorsement_view_form">
+            <field name="model">endorsement</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_view_list">
+            <field name="model">endorsement</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_endorsement">
+            <field name="name">Endorsement</field>
+            <field name="res_model">endorsement</field>
+            <field name="domain">[('contracts', '=', Eval('active_id'))]</field>
+            <field name="context">{'contract': Eval('active_id')}</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_view_list"/>
+            <field name="act_window" ref="act_endorsement"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_view2">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_view_form"/>
+            <field name="act_window" ref="act_endorsement"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_endorsement_domain_applied">
+            <field name="name">Applied</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">[('state', '=', 'applied')]</field>
+            <field name="act_window" ref="act_endorsement"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_endorsement_domain_started">
+            <field name="name">Started</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain">[('state', '!=', 'applied')]</field>
+            <field name="act_window" ref="act_endorsement"/>
+        </record>
+        <record model="ir.action.keyword" id="act_show_endorsements_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_endorsement"/>
+        </record>
+        <!-- ##################### -->
+        <!-- # Endorsement Group # -->
+        <!-- ##################### -->
+        <record model="ir.ui.view" id="endorsement_contract_view_form">
+            <field name="model">endorsement.contract</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_contract_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_contract_view_list">
+            <field name="model">endorsement.contract</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_contract_list</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Endorsement Option # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="endorsement_contract_option_view_form">
+            <field name="model">endorsement.contract.option</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_contract_option_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_contract_option_view_list">
+            <field name="model">endorsement.contract.option</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_contract_option_list</field>
+        </record>
+        <!-- ################################## -->
+        <!-- # Endorsement Activation History # -->
+        <!-- ################################## -->
+        <record model="ir.ui.view" id="endorsement_contract_activation_history_view_form">
+            <field name="model">endorsement.contract.activation_history</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_contract_activation_history_form</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_contract_activation_history_view_list">
+            <field name="model">endorsement.contract.activation_history</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_contract_activation_history_list</field>
+        </record>
+        <!-- ################# -->
+        <!-- # Access Rights # -->
+        <!-- ################# -->
+        <record model="res.group" id="group_endorsement_super_user">
+            <field name="name">Endorsement Super User</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_endorsement_super_user">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_endorsement_super_user"/>
+        </record>
+        <record model="ir.model.button" id="endorsement_draft_button">
+            <field name="name">draft</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
+        <record model="ir.model.button" id="endorsement_cancel_button">
+            <field name="name">cancel</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
+        <record model="ir.model.button-res.group" id="endorsement_draft_button_group_endorsement_super_user">
+            <field name="button" ref="endorsement_draft_button"/>
+            <field name="group" ref="group_endorsement_super_user"/>
+        </record>
+        <record model="ir.model.button-res.group" id="endorsement_cancel_button_group_endorsement_super_user">
+            <field name="button" ref="endorsement_cancel_button"/>
+            <field name="group" ref="group_endorsement_super_user"/>
+        </record>
+    </data>
 </tryton>

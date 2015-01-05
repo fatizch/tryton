@@ -218,13 +218,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.contract_number, '1234')
         self.assertEqual(contract_endorsement.base_instance.contract_number,
             previous_contract_number)
-        endorsement.draft([endorsement])
+        endorsement.cancel([endorsement])
         Transaction().cursor.commit()
 
         endorsement = self.Endorsement(endorsement.id)
         contract = endorsement.contracts[0]
-        self.assertEqual(endorsement.application_date, None)
-        self.assertEqual(endorsement.state, 'draft')
+        self.assertEqual(endorsement.state, 'canceled')
         self.assertEqual(contract.contract_number, previous_contract_number)
         endorsement.in_progress([endorsement])
         Transaction().cursor.commit()
@@ -242,7 +241,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(endorsement.state, 'applied')
         self.assertRaises(UserError, contract.apply_in_progress_endorsement,
             [contract])
-        endorsement.draft([endorsement])
+        endorsement.cancel([endorsement])
         Transaction().cursor.commit()
         endorsement.in_progress([endorsement])
         contract.revert_current_endorsement([contract])

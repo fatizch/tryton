@@ -60,9 +60,9 @@ class Endorsement:
         cls.rebill_contracts(to_rebill)
 
     @classmethod
-    def draft(cls, endorsement_groups):
-        super(Endorsement, cls).draft(endorsement_groups)
-        to_rebill = [x for x in endorsement_groups
+    def _draft(cls, endorsements):
+        super(Endorsement, cls)._draft(endorsements)
+        to_rebill = [x for x in endorsements
             if x.definition.requires_contract_rebill]
         if not to_rebill:
             return

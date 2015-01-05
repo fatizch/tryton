@@ -475,7 +475,7 @@ class Contract(CogProcessFramework):
         Endorsement = Pool().get('endorsement')
         endorsement = Endorsement.search([
                 ('contracts', '=', self.id),
-                ('state', '!=', 'draft'),
+                ('state', 'not in', ['draft', 'canceled']),
                 ], order=[('application_date', 'DESC')], limit=1)
         if endorsement:
             return endorsement[0].id
@@ -561,6 +561,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             ('draft', 'Draft'),
             ('in_progress', 'In Progress'),
             ('applied', 'Applied'),
+            ('canceled', 'Canceled'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
     contracts = fields.Function(
@@ -579,14 +580,19 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 ('draft', 'in_progress'),
                 ('in_progress', 'draft'),
                 ('in_progress', 'applied'),
-                ('applied', 'draft'),
+                ('applied', 'canceled'),
+                ('canceled', 'applied'),
+                ('canceled', 'in_progress'),
                 ))
         cls._buttons.update({
                 'draft': {
-                    'invisible': ~Eval('state').in_(['applied']),
+                    'invisible': ~Eval('state').in_(['in_progress']),
                     },
                 'apply': {
                     'invisible': ~Eval('state').in_(['draft']),
+                    },
+                'cancel': {
+                    'invisible': ~Eval('state').in_(['applied']),
                     },
                 'open_contract': {
                     'invisible': ~Eval('state').in_(['applied']),
@@ -639,9 +645,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         return ['endorsement.contract']
 
     @classmethod
-    @model.CoopView.button
-    @Workflow.transition('draft')
-    def draft(cls, endorsements):
+    def _draft(cls, endorsements):
         pool = Pool()
         endorsements_per_model = cls.group_per_model(endorsements)
         for model_name in cls.apply_order():
@@ -649,10 +653,27 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 continue
             ModelClass = pool.get(model_name)
             ModelClass.draft(endorsements_per_model[model_name])
+
+    @classmethod
+    @model.CoopView.button
+    @Workflow.transition('canceled')
+    def cancel(cls, endorsements):
+        cls._draft(endorsements)
+        cls.write(endorsements, {
+                'rollback_date': None,
+                'state': 'canceled',
+                })
+
+    @classmethod
+    @model.CoopView.button
+    @Workflow.transition('draft')
+    def draft(cls, endorsements):
+        cls._draft(endorsements)
         cls.write(endorsements, {
                 'applied_by': None,
                 'application_date': None,
                 'rollback_date': None,
+                'state': 'draft',
                 })
 
     @classmethod

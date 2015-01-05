@@ -17,7 +17,8 @@
     <group id="application" colspan="4">
         <group id="application_buttons" yfill="1">
             <button string="Apply" name="apply"/>
-            <button string="Draft" name="draft"/>
+            <button string="Cancel" name="cancel"/>
+            <button string="Open Contract" name="open_contract"/>
         </group>
         <group id="application_info" xfill="0">
             <label name="application_date"/>

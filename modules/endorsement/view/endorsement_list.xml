@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <tree string="Endorsement Groups">
-  <field name="effective_date"/>
-  <field name="definition"/>
-  <field name="state"/>
-  <field name="application_date"/>
-  <field name="applied_by"/>
-  <button string="Draft" name="draft"/>
-  <button string="Apply" name="apply"/>
-  <button string="Open Contract" name="open_contract"/>
+    <field name="effective_date"/>
+    <field name="definition"/>
+    <field name="state"/>
+    <field name="application_date"/>
+    <field name="applied_by"/>
+    <button string="Cancel" name="cancel" tree_invisible="1"/>
+    <button string="Apply" name="apply" tree_invisible="1"/>
+    <button string="Open Contract" name="open_contract" tree_invisible="1"/>
 </tree>
