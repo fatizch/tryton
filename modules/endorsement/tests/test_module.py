@@ -186,7 +186,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             {
                 'old': {
                     'contract,%i' % contract_id: {
-                        'contract_number': u'Ctr1Y2014',
+                        'contract_number': previous_contract_number,
                         }},
                 'new': {
                     'contract,%i' % contract_id: {
@@ -197,7 +197,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         Transaction().cursor.commit()
 
         contract = endorsement.contracts[0]
-        self.assertEqual(contract.contract_number, 'Ctr1Y2014')
+        self.assertEqual(contract.contract_number, previous_contract_number)
         contract.contract_number = 'in_progress'
         contract.save()
         Transaction().cursor.commit()
