@@ -40,7 +40,6 @@ def get_config(cfg_dict):
 
     return pconfig.set_trytond(
         user=cfg_dict['user'],
-        language=cfg_dict['language'],
         config_file=cfg_dict['config_file'],
     )
 
