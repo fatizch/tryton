@@ -41,7 +41,25 @@ class AccountKind(export.ExportImportMixin):
 
 class AccountTypeTemplate(export.ExportImportMixin):
     __name__ = 'account.account.type.template'
-    _func_key = 'name'
+
+    @classmethod
+    def _export_light(cls):
+        return super(AccountTypeTemplate, cls)._export_light() | {'parent'}
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        operator, operand = clause[1:]
+        if '\\' in operand:
+            last = operand.split('\\')[-1]
+            previous = '\\'.join(operand.split('\\')[0:-1])
+        else:
+            previous = None
+
+        if previous:
+            return [('name',) + tuple([operator, last]), ('parent.rec_name',
+                    operator, previous)]
+        else:
+            return [('name',) + tuple(clause[1:])]
 
 
 class Account(export.ExportImportMixin):
@@ -55,17 +73,46 @@ class Account(export.ExportImportMixin):
         res.add('right')
         res.add('taxes')
         res.add('deferrals')
+        res.add('childs')
         return res
 
     @classmethod
     def _export_light(cls):
         return (super(Account, cls)._export_light() |
-            set(['company', 'template']))
+            set(['company', 'template', 'parent', 'type']))
 
 
 class AccountTemplate(export.ExportImportMixin):
     __name__ = 'account.account.template'
-    _func_key = 'code'
+    _func_key = 'func_key'
+
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    @classmethod
+    def _export_light(cls):
+        return super(AccountTemplate, cls)._export_light() | {'parent'}
+
+    def get_func_key(self, name):
+        if self.parent:
+            return self.parent.get_func_key(name) + '\\' + self.name
+        else:
+            return self.name
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        operator, operand = clause[1:]
+        if '\\' in operand:
+            last = operand.split('\\')[-1]
+            previous = '\\'.join(operand.split('\\')[0:-1])
+        else:
+            previous = None
+
+        if previous:
+            return [('name',) + tuple([operator, last]), ('parent.func_key',
+                    operator, previous)]
+        else:
+            return [('name',) + tuple(clause[1:])]
 
 
 class Journal(export.ExportImportMixin):
