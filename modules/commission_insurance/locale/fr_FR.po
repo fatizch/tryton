@@ -224,6 +224,10 @@ msgctxt "field:commission,party:"
 msgid "Party"
 msgstr "Acteur"
 
+msgctxt "field:commission.agent,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:commission.agent,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

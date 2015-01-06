@@ -1,6 +1,10 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.option:"
+msgid "Option %s is not eligible"
+msgstr "Option %s n'est pas éligible"
 
 msgctxt "error:offered.option.description.eligibility_rule:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -39,6 +43,10 @@ msgstr "Date de Création"
 msgctxt "field:offered.option.description.eligibility_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:offered.option.description.eligibility_rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:offered.option.description.eligibility_rule,id:"
 msgid "ID"
@@ -191,6 +199,10 @@ msgstr "Type d'age pour la règle d'éligibilité"
 msgctxt "model:rule_engine.rule_parameter,string:option_max_age"
 msgid "Maximum age for option (age included)"
 msgstr "Age maximum pour l'option (age inclu)"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Eligibility"
+msgstr "Eligibilité"
 
 msgctxt "view:offered.option.description.eligibility_rule:"
 msgid "Eligibility Rule"

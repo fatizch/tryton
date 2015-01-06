@@ -346,6 +346,10 @@ msgctxt "field:offered.product,average_loan_premium_rule:"
 msgid "Average Loan Premium Rule"
 msgstr "Règle de taux moyen prêt"
 
+msgctxt "field:offered.product.premium_dates,every_loan_payment:"
+msgid "Calculate each payment"
+msgstr "Calculer à chaque échéance"
+
 msgctxt "model:contract.premium.amount,name:"
 msgid "Premium Amount"
 msgstr "Montant de la prime"
@@ -417,6 +421,10 @@ msgstr "Appliquer au prêt le plus long"
 msgctxt "selection:loan.average_premium_rule.fee_rule,action:"
 msgid "Do not use fee"
 msgstr "Ne pas prendre en compte les frais"
+
+msgctxt "selection:offered.option.description.premium_rule,premium_base:"
+msgid "Loan"
+msgstr "Prêt"
 
 msgctxt "view:contract.premium.amount.per_period:"
 msgid "Amount"

@@ -38,72 +38,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "error:billing.premium.date_configuration:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:billing.premium.date_configuration:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:billing.premium.rule.component:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:billing.premium.rule.component:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:billing.premium.rule:"
-msgid "%s : Rule combination unavailable with fee (%s) version (%s)"
-msgstr ""
-
-msgctxt "error:billing.premium.rule:"
-msgid "%s : Rule combination unavailable with tax (%s) version (%s)"
-msgstr ""
-
-msgctxt "error:billing.premium.rule:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:billing.premium.rule:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:billing.premium.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
 msgctxt "error:document.create:"
 msgid ""
 "Error while generating the letter:\n"
@@ -141,6 +75,24 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:document.template.version:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:document.template.version:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:document.template.version:"
 msgid "The  names of attachments must be unique by resource!"
 msgstr ""
 "Le nom des pièces jointes doivent être unique pour une même ressource !"
@@ -166,6 +118,10 @@ msgstr ""
 msgctxt "error:document.template:"
 msgid "No letter model found for date %s and language %s"
 msgstr "Pas de modèle de lettre trouvé pour le %s et la langue %s"
+
+msgctxt "error:document.template:"
+msgid "The document template code must be unique"
+msgstr ""
 
 msgctxt "error:expense.kind:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -292,68 +248,6 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:offered.coverage_amount.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:offered.deductible.rule.duration:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:offered.deductible.rule.duration:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:offered.deductible.rule:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:offered.deductible.rule:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:offered.deductible.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
-msgctxt "error:offered.eligibility.rule:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:offered.eligibility.rule:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:offered.eligibility.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
@@ -599,238 +493,6 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
-
-msgctxt "field:account.fee.description.version,apply_at_pricing_time:"
-msgid "Apply when Pricing"
-msgstr "Appliquer lors de la Tarification"
-
-msgctxt "field:account.tax.description.version,apply_at_pricing_time:"
-msgid "Apply when Pricing"
-msgstr "Appliquer lors de la Tarification"
-
-msgctxt "field:billing.premium.date_configuration,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:billing.premium.date_configuration,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:billing.premium.date_configuration,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:billing.premium.date_configuration,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:billing.premium.date_configuration,product:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "field:billing.premium.date_configuration,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:billing.premium.date_configuration,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:billing.premium.date_configuration,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:billing.premium.date_configuration,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:billing.premium.date_configuration,yearly_custom_date:"
-msgid "Yearly, this day"
-msgstr "Annuellement, à cette date"
-
-msgctxt "field:billing.premium.date_configuration,yearly_on_new_eve:"
-msgid "Every first day of the year"
-msgstr "Chaque 1er janvier"
-
-msgctxt "field:billing.premium.date_configuration,yearly_on_start_date:"
-msgid "Yearly from the contract start"
-msgstr "Annuellement, à la date d'effet du contrat"
-
-msgctxt "field:billing.premium.rule,basic_price:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:billing.premium.rule,basic_tax:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "field:billing.premium.rule,components:"
-msgid "Components"
-msgstr "Composantes"
-
-msgctxt "field:billing.premium.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:billing.premium.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:billing.premium.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:billing.premium.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:billing.premium.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:billing.premium.rule,frequency:"
-msgid "Rate Frequency"
-msgstr "Fréquence de calcul"
-
-msgctxt "field:billing.premium.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:billing.premium.rule,match_contract_frequency:"
-msgid "Match Contract Frequency"
-msgstr "Synchroniser avec la fréquence du contrat"
-
-msgctxt "field:billing.premium.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:billing.premium.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:billing.premium.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:billing.premium.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:billing.premium.rule,specific_combination_rule:"
-msgid "Combination Rule"
-msgstr "Règle de Combinaison"
-
-msgctxt "field:billing.premium.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:billing.premium.rule,sub_item_components:"
-msgid "Covered Item Components"
-msgstr "Composantes Risques Couverts"
-
-msgctxt "field:billing.premium.rule,sub_item_specific_combination_rule:"
-msgid "Sub Item Combination Rule"
-msgstr "Règle de Combinaison Elèments Couverts"
-
-msgctxt "field:billing.premium.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:billing.premium.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:billing.premium.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:billing.premium.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:billing.premium.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:billing.premium.rule,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:billing.premium.rule.component,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:billing.premium.rule.component,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:billing.premium.rule.component,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:billing.premium.rule.component,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:billing.premium.rule.component,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:billing.premium.rule.component,fee:"
-msgid "Fee"
-msgstr "Frais"
-
-msgctxt "field:billing.premium.rule.component,fixed_amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:billing.premium.rule.component,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:billing.premium.rule.component,kind:"
-msgid "Line kind"
-msgstr "Type"
-
-msgctxt "field:billing.premium.rule.component,premium_rule:"
-msgid "Premium Rule"
-msgstr "Règle de Cotisation"
-
-msgctxt "field:billing.premium.rule.component,rated_object_kind:"
-msgid "Rated Object Level"
-msgstr "Niveau d'Objet Tarifé"
-
-msgctxt "field:billing.premium.rule.component,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:billing.premium.rule.component,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:billing.premium.rule.component,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:billing.premium.rule.component,summary:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "field:billing.premium.rule.component,tax:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "field:billing.premium.rule.component,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:billing.premium.rule.component,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:billing.premium.rule.component,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
 
 msgctxt "field:clause,code:"
 msgid "Code"
@@ -1192,6 +854,10 @@ msgctxt "field:document.template.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
+msgctxt "field:document.template.version,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:expense.kind,code:"
 msgid "Code"
 msgstr "Code"
@@ -1476,17 +1142,9 @@ msgctxt "field:offered,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:offered,deductible_rules:"
-msgid "Deductible Rules"
-msgstr "Franchises"
-
 msgctxt "field:offered,description:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "field:offered,eligibility_rules:"
-msgid "Eligibility Rules"
-msgstr "Règles d'Eligibilité"
 
 msgctxt "field:offered,end_date:"
 msgid "End Date"
@@ -1503,10 +1161,6 @@ msgstr "ID"
 msgctxt "field:offered,name:"
 msgid "Name"
 msgstr "Nom"
-
-msgctxt "field:offered,premium_rules:"
-msgid "Premium Rules"
-msgstr "Règles de Cotisation"
 
 msgctxt "field:offered,start_date:"
 msgid "Start Date"
@@ -1653,234 +1307,6 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:offered.coverage_amount.rule,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered.deductible.rule,amount:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "field:offered.deductible.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.deductible.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.deductible.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.deductible.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.deductible.rule,duration:"
-msgid "Duration"
-msgstr "Durée"
-
-msgctxt "field:offered.deductible.rule,duration_unit:"
-msgid "Duration Unit"
-msgstr "Unité de la Durée"
-
-msgctxt "field:offered.deductible.rule,durations:"
-msgid "Durations"
-msgstr "Durées"
-
-msgctxt "field:offered.deductible.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.deductible.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.deductible.rule,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:offered.deductible.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:offered.deductible.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.deductible.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.deductible.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.deductible.rule,scope:"
-msgid "Scope"
-msgstr "Champ d'Application"
-
-msgctxt "field:offered.deductible.rule,simple_config_choice:"
-msgid "Simple Config. Choice"
-msgstr "Choix de Config. Simple"
-
-msgctxt "field:offered.deductible.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.deductible.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.deductible.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.deductible.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.deductible.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.deductible.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.deductible.rule,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered.deductible.rule.duration,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.deductible.rule.duration,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.deductible.rule.duration,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.deductible.rule.duration,deductible_rule:"
-msgid "Deductible Rule"
-msgstr "Franchise"
-
-msgctxt "field:offered.deductible.rule.duration,duration:"
-msgid "Duration"
-msgstr "Durée"
-
-msgctxt "field:offered.deductible.rule.duration,duration_unit:"
-msgid "Duration Unit"
-msgstr "Unité de la Durée"
-
-msgctxt "field:offered.deductible.rule.duration,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.deductible.rule.duration,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.deductible.rule.duration,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.deductible.rule.duration,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.deductible.rule.duration,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:offered.eligibility.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.eligibility.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de création"
-
-msgctxt "field:offered.eligibility.rule,create_date_:"
-msgid "Creation date"
-msgstr "Creation date"
-
-msgctxt "field:offered.eligibility.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:offered.eligibility.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:offered.eligibility.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:offered.eligibility.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:offered.eligibility.rule,offered_kind:"
-msgid "Offered Kind"
-msgstr "Typage"
-
-msgctxt "field:offered.eligibility.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.eligibility.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.eligibility.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.eligibility.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:offered.eligibility.rule,sub_elem_config_kind:"
-msgid "Sub Elem Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:offered.eligibility.rule,sub_elem_rule:"
-msgid "Sub Elem Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:offered.eligibility.rule,sub_elem_rule_extra_data:"
-msgid "Rule Parameters"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:offered.eligibility.rule,subscriber_classes:"
-msgid "Can be subscribed"
-msgstr "Peut-être souscrit par"
-
-msgctxt "field:offered.eligibility.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:offered.eligibility.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:offered.eligibility.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:offered.eligibility.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:offered.eligibility.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:offered.eligibility.rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -2096,17 +1522,9 @@ msgctxt "field:offered.option.description,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
 
-msgctxt "field:offered.option.description,deductible_rules:"
-msgid "Deductible Rules"
-msgstr "Franchises"
-
 msgctxt "field:offered.option.description,description:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "field:offered.option.description,eligibility_rules:"
-msgid "Eligibility Rules"
-msgstr "Règles d'Eligibilité"
 
 msgctxt "field:offered.option.description,end_date:"
 msgid "End Date"
@@ -2268,17 +1686,9 @@ msgctxt "field:offered.product,currency_digits:"
 msgid "Currency Digits"
 msgstr "Nbre de chiffres après la virgule"
 
-msgctxt "field:offered.product,deductible_rules:"
-msgid "Deductible Rules"
-msgstr "Franchises"
-
 msgctxt "field:offered.product,description:"
 msgid "Description"
 msgstr "Description"
-
-msgctxt "field:offered.product,eligibility_rules:"
-msgid "Eligibility Rules"
-msgstr "Règles d'Eligibilité"
 
 msgctxt "field:offered.product,end_date:"
 msgid "End Date"
@@ -2311,10 +1721,6 @@ msgstr "Formules"
 msgctxt "field:offered.product,premium_dates:"
 msgid "Premium Dates"
 msgstr "Dates de calcul"
-
-msgctxt "field:offered.product,premium_rules:"
-msgid "Premium Rules"
-msgstr "Règles de Cotisation"
 
 msgctxt "field:offered.product,rec_name:"
 msgid "Name"
@@ -2500,7 +1906,7 @@ msgctxt "field:offered.term.rule,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:offered.validate.batch,id:"
+msgctxt "field:offered.validate,id:"
 msgid "ID"
 msgstr "ID"
 
@@ -2600,10 +2006,6 @@ msgctxt "field:rule_engine-extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "help:billing.premium.rule,match_contract_frequency:"
-msgid "Should the premium be stored at the contract's frequency ?"
-msgstr "La prime doit-elle être stockée à la fréquence du contrat?"
-
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
@@ -2611,18 +2013,6 @@ msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
 msgctxt "help:offered.coverage_amount.rule,amounts:"
 msgid "Specify amounts separated by ;"
 msgstr "Spécifier les montants séparés par des ;"
-
-msgctxt "model:billing.premium.date_configuration,name:"
-msgid "Premium Date Configuration"
-msgstr "Configuration des dates de calcul des primes"
-
-msgctxt "model:billing.premium.rule,name:"
-msgid "Premium Rule"
-msgstr "Règle de Cotisation"
-
-msgctxt "model:billing.premium.rule.component,name:"
-msgid "Premium Rule Component"
-msgstr "Composante de Cotisation"
 
 msgctxt "model:clause,name:"
 msgid "Clause"
@@ -2768,18 +2158,6 @@ msgctxt "model:offered.coverage_amount.rule,name:"
 msgid "Coverage Amount Rule"
 msgstr "Montant de Couverture"
 
-msgctxt "model:offered.deductible.rule,name:"
-msgid "Deductible Rule"
-msgstr "Franchise"
-
-msgctxt "model:offered.deductible.rule.duration,name:"
-msgid "Deductible Duration"
-msgstr "Franchise"
-
-msgctxt "model:offered.eligibility.rule,name:"
-msgid "Eligibility Rule"
-msgstr "Eligibilite"
-
 msgctxt "model:offered.exclusion,name:"
 msgid "Exclusion Kind"
 msgstr "Type d'exclusion"
@@ -2824,9 +2202,9 @@ msgctxt "model:offered.term.rule,name:"
 msgid "Term Rule"
 msgstr "Règle de Terme - Renouvellement"
 
-msgctxt "model:offered.validate.batch,name:"
+msgctxt "model:offered.validate,name:"
 msgid "Product Validation Batch"
-msgstr "Batch de validation produit"
+msgstr ""
 
 msgctxt "model:process-offered.product,name:"
 msgid "Process Product Relation"
@@ -2955,98 +2333,6 @@ msgstr "Type d'age pour règle de résiliation"
 msgctxt "model:rule_engine.rule_parameter,string:option_max_age"
 msgid "Maximum age for option (age included)"
 msgstr "Age maximum pour l'option (age inclu)"
-
-msgctxt "selection:billing.premium.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:billing.premium.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Half-yearly"
-msgstr "Semestriel"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Monthly"
-msgstr "Mensuel"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Once per Contract"
-msgstr "Une fois par contrat"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Once per Invoice"
-msgstr "Une fois par quittance"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Quarterly"
-msgstr "Trimestriel"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Yearly (360 days)"
-msgstr "Annuel (360 jours)"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Yearly (365 days)"
-msgstr "Annuel (365 jours)"
-
-msgctxt "selection:billing.premium.rule,frequency:"
-msgid "Yearly (Exact)"
-msgstr "Annuel (exact)"
-
-msgctxt "selection:billing.premium.rule,offered:"
-msgid "Option Description"
-msgstr "Garantie"
-
-msgctxt "selection:billing.premium.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:billing.premium.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:billing.premium.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:billing.premium.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:billing.premium.rule.component,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:billing.premium.rule.component,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:billing.premium.rule.component,kind:"
-msgid "Base Price"
-msgstr "Prime de base"
-
-msgctxt "selection:billing.premium.rule.component,kind:"
-msgid "Extra"
-msgstr "Surprime"
-
-msgctxt "selection:billing.premium.rule.component,kind:"
-msgid "Fee"
-msgstr "Frais"
-
-msgctxt "selection:billing.premium.rule.component,kind:"
-msgid "Tax"
-msgstr "Taxe"
-
-msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
-msgid "Covered Item"
-msgstr "Risque Couvert"
-
-msgctxt "selection:billing.premium.rule.component,rated_object_kind:"
-msgid "Global"
-msgstr "Global"
 
 msgctxt "selection:document.template,kind:"
 msgid ""
@@ -3200,170 +2486,6 @@ msgctxt "selection:offered.coverage_amount.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
-msgctxt "selection:offered.deductible.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:offered.deductible.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:offered.deductible.rule,duration_unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.deductible.rule,duration_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:offered.deductible.rule,duration_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:offered.deductible.rule,duration_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:offered.deductible.rule,duration_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:offered.deductible.rule,duration_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:offered.deductible.rule,duration_unit:"
-msgid "Year"
-msgstr "Année"
-
-msgctxt "selection:offered.deductible.rule,kind:"
-msgid "Amount"
-msgstr "Montant"
-
-msgctxt "selection:offered.deductible.rule,kind:"
-msgid "Duration"
-msgstr "Durée"
-
-msgctxt "selection:offered.deductible.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:offered.deductible.rule,offered:"
-msgid "Option Description"
-msgstr "Garantie"
-
-msgctxt "selection:offered.deductible.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:offered.deductible.rule,scope:"
-msgid "Coverage"
-msgstr "Offre"
-
-msgctxt "selection:offered.deductible.rule,scope:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "selection:offered.deductible.rule,simple_config_choice:"
-msgid "List"
-msgstr "Liste"
-
-msgctxt "selection:offered.deductible.rule,simple_config_choice:"
-msgid "Value"
-msgstr "Valeur"
-
-msgctxt "selection:offered.deductible.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.deductible.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.deductible.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Day"
-msgstr "Jour"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Half-year"
-msgstr "Semestre"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Quarter"
-msgstr "Trimestre"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Week"
-msgstr "Semaine"
-
-msgctxt "selection:offered.deductible.rule.duration,duration_unit:"
-msgid "Year"
-msgstr "Année"
-
-msgctxt "selection:offered.eligibility.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:offered.eligibility.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:offered.eligibility.rule,offered:"
-msgid "Benefit"
-msgstr "Prestation"
-
-msgctxt "selection:offered.eligibility.rule,offered:"
-msgid "Option Description"
-msgstr "Offre"
-
-msgctxt "selection:offered.eligibility.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:offered.eligibility.rule,sub_elem_config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:offered.eligibility.rule,sub_elem_config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:offered.eligibility.rule,subscriber_classes:"
-msgid "All"
-msgstr "Tous"
-
-msgctxt "selection:offered.eligibility.rule,subscriber_classes:"
-msgid "Person"
-msgstr "Personne Physique"
-
-msgctxt "selection:offered.eligibility.rule,subscriber_classes:"
-msgid "Society"
-msgstr "Société"
-
-msgctxt "selection:offered.eligibility.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.eligibility.rule,template_behaviour:"
-msgid "Add"
-msgstr "Compléter"
-
-msgctxt "selection:offered.eligibility.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
-
 msgctxt "selection:offered.item.description,kind:"
 msgid ""
 msgstr " "
@@ -3480,26 +2602,6 @@ msgctxt "selection:rule_engine,extra_data_kind:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
-msgctxt "view:billing.premium.date_configuration:"
-msgid "Premium Date Configuration"
-msgstr "Configuration des dates de calcul des primes"
-
-msgctxt "view:billing.premium.rule.component:"
-msgid "Premium Rule Component"
-msgstr "Composante de Cotisation"
-
-msgctxt "view:billing.premium.rule.component:"
-msgid "Premium Rule Components"
-msgstr "Composantes de Cotisation"
-
-msgctxt "view:billing.premium.rule:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "view:billing.premium.rule:"
-msgid "Pricing rule"
-msgstr "Règle de Cotisation"
-
 msgctxt "view:clause:"
 msgid "Clause"
 msgstr "Clause"
@@ -3600,22 +2702,6 @@ msgctxt "view:offered.coverage_amount.rule:"
 msgid "Coverage Amount rule"
 msgstr "Montant de Couverture"
 
-msgctxt "view:offered.deductible.rule.duration:"
-msgid "Deductible Duration"
-msgstr "Franchise"
-
-msgctxt "view:offered.deductible.rule:"
-msgid "Deductible rule"
-msgstr "Franchise"
-
-msgctxt "view:offered.eligibility.rule:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "view:offered.eligibility.rule:"
-msgid "Eligibility rule"
-msgstr "Eligibilite"
-
 msgctxt "view:offered.exclusion:"
 msgid "Exclusion Kind"
 msgstr "Type d'exclusion"
@@ -3627,14 +2713,6 @@ msgstr "Types d'exclusions"
 msgctxt "view:offered.option.description:"
 msgid "Coverage"
 msgstr "Garantie"
-
-msgctxt "view:offered.option.description:"
-msgid "Deductible"
-msgstr "Franchise"
-
-msgctxt "view:offered.product:"
-msgid "Deductible"
-msgstr "Franchise"
 
 msgctxt "view:offered.product:"
 msgid "Items"

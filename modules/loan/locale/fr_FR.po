@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -19,6 +19,10 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:contract:"
+msgid "At least one loan must be selected for %s"
+msgstr "Au moins un prêt doit être sélectionné pour %s"
 
 msgctxt "error:contract:"
 msgid "Loan %s must be calculated before proceeding"
@@ -123,10 +127,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "field:billing.premium.date_configuration,every_loan_payment:"
-msgid "Calculate each payment"
-msgstr "Calculer chaque paiement"
-
 msgctxt "field:contract,is_loan:"
 msgid "Is Loan"
 msgstr "Emprunteur"
@@ -198,6 +198,10 @@ msgstr "Mis à jour par"
 msgctxt "field:contract-loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:contract.option,latest_loan_shares:"
+msgid "Loan Shares"
+msgstr "Quotités"
 
 msgctxt "field:contract.option,loan_shares:"
 msgid "Loan Shares"
@@ -776,6 +780,14 @@ msgstr "Vue des encours"
 msgctxt "model:party.synthesis.menu.loan,name:"
 msgid "Party Synthesis Menu Loan"
 msgstr "Synthèse acteur - Prêts"
+
+msgctxt "model:res.group,name:group_loan_admin"
+msgid "Loan administration"
+msgstr "Administration des prêts"
+
+msgctxt "model:res.group,name:group_loan_read"
+msgid "Loan consultation"
+msgstr "Consultation des prêts"
 
 msgctxt "model:tag,name:tag_loan"
 msgid "Loan"

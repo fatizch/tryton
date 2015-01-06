@@ -91,6 +91,10 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:table:"
+msgid "Multiple tables found"
+msgstr "Plusieurs table trouvées"
+
+msgctxt "error:table:"
 msgid "The code of \"Table Definition\" must be unique"
 msgstr "Le code de la table doit être unique"
 

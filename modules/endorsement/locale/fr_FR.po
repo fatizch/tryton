@@ -10,6 +10,14 @@ msgctxt "error:contract:"
 msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
+msgctxt "error:contract:"
+msgid "The field '%s' is required"
+msgstr "Le champ '%s' est requis"
+
+msgctxt "error:contract:"
+msgid "The field '%s' of '%s' is required"
+msgstr "Le champ '%s' de '%s' est requis"
+
 msgctxt "error:endorsement.contract.activation_history.field:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
@@ -318,6 +326,10 @@ msgstr "Date d'application"
 msgctxt "field:endorsement,applied_by:"
 msgid "Applied by"
 msgstr "Appliqué par"
+
+msgctxt "field:endorsement,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
 
 msgctxt "field:endorsement,contract_endorsements:"
 msgid "Contract Endorsement"
@@ -1195,9 +1207,17 @@ msgctxt "model:ir.ui.menu,name:menu_endorsement_part"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
 
+msgctxt "model:res.group,name:group_endorsement_super_user"
+msgid "Endorsement Super User"
+msgstr "Super gestionnaire avenant"
+
 msgctxt "selection:endorsement,state:"
 msgid "Applied"
 msgstr "Appliqué"
+
+msgctxt "selection:endorsement,state:"
+msgid "Canceled"
+msgstr "Annulé"
 
 msgctxt "selection:endorsement,state:"
 msgid "Draft"
@@ -1377,8 +1397,8 @@ msgid "Apply"
 msgstr "Appliquer"
 
 msgctxt "view:endorsement:"
-msgid "Draft"
-msgstr "Brouillon"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "view:endorsement:"
 msgid "Endorsement Group"

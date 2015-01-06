@@ -38,27 +38,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt ""
-"field:billing.premium.date_configuration,yearly_each_covered_anniversary_date:"
-msgid "Yearly Each Covered Anniversary Date"
-msgstr "Annuellement, à la date anniversaire des personnes couvertes"
-
-msgctxt "field:offered.eligibility.rule,max_age:"
-msgid "Maximum Age"
-msgstr "Age Maximum"
-
-msgctxt "field:offered.eligibility.rule,min_age:"
-msgid "Minimum Age"
-msgstr "Age Minimum"
-
-msgctxt "field:offered.eligibility.rule,sub_max_age:"
-msgid "Maximum Age"
-msgstr "Age Maximum"
-
-msgctxt "field:offered.eligibility.rule,sub_min_age:"
-msgid "Minimum Age"
-msgstr "Age Minimum"
-
 msgctxt "field:offered.item.description,kind:"
 msgid "Kind"
 msgstr "Type"

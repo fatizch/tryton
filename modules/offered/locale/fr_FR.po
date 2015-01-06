@@ -674,6 +674,10 @@ msgctxt "field:offered.option.description.ending_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:offered.option.description.ending_rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:offered.option.description.ending_rule,id:"
 msgid "ID"
 msgstr "ID"
@@ -1374,6 +1378,10 @@ msgctxt "selection:offered.product,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
 
+msgctxt "selection:rule_engine,type_:"
+msgid "Ending"
+msgstr "Terminaison"
+
 msgctxt "view:extra_data-sub_extra_data:"
 msgid "Relation"
 msgstr "Relation"
@@ -1407,6 +1415,10 @@ msgid "Rule"
 msgstr "Règle"
 
 msgctxt "view:offered.option.description:"
+msgid "Coverages"
+msgstr "Garanties"
+
+msgctxt "view:offered.option.description:"
 msgid "Extra Data"
 msgstr "Données Complémentaires"
 
@@ -1437,6 +1449,10 @@ msgstr "Garanties"
 msgctxt "view:offered.product:"
 msgid "Product"
 msgstr "Produit"
+
+msgctxt "view:offered.product:"
+msgid "Products"
+msgstr "Produits"
 
 msgctxt "view:offered:"
 msgid "Administration"

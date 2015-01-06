@@ -1,0 +1,19 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:contract.option.extra_premium,flat_amount_frequency:"
+msgid "Amount frequency"
+msgstr "Fréquence du montant"
+
+msgctxt "selection:contract.option.extra_premium,flat_amount_frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:contract.option.extra_premium,flat_amount_frequency:"
+msgid "Per Year"
+msgstr "Par année"
+
+msgctxt "selection:offered.option.description.premium_rule,premium_base:"
+msgid "Covered Element"
+msgstr "Risque Couvert"

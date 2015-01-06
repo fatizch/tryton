@@ -356,6 +356,10 @@ msgctxt "field:account.account,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.account.template,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:account.account.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -499,6 +503,10 @@ msgstr "Symbole de la Devise"
 msgctxt "field:account.move.line,reconciliation_lines:"
 msgid "Reconciliation Lines"
 msgstr "Lignes de lettrage"
+
+msgctxt "field:account.open_third_party_balance.start,account:"
+msgid "Account"
+msgstr "Compte"
 
 msgctxt ""
 "field:account.open_third_party_balance.start,third_party_balance_option:"

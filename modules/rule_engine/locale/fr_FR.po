@@ -394,6 +394,10 @@ msgctxt "field:rule_engine,test_cases:"
 msgid "Test Cases"
 msgstr "Jeux de Test"
 
+msgctxt "field:rule_engine,type_:"
+msgid "Type"
+msgstr "Type"
+
 msgctxt "field:rule_engine,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -1145,6 +1149,10 @@ msgstr "Brouillon"
 msgctxt "selection:rule_engine,status:"
 msgid "Validated"
 msgstr "Validé"
+
+msgctxt "selection:rule_engine,type_:"
+msgid ""
+msgstr " "
 
 msgctxt "selection:rule_engine.function,type:"
 msgid "Folder"

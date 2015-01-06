@@ -1,0 +1,135 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:commission.agent-account.fee:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:commission.agent-account.fee:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:commission.plan-account.fee:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:commission.plan-account.fee:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:commission.agent,fees:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:commission.agent-account.fee,agent:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
+
+msgctxt "field:commission.agent-account.fee,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.agent-account.fee,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.agent-account.fee,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.agent-account.fee,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:commission.agent-account.fee,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.agent-account.fee,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.agent-account.fee,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.agent-account.fee,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.agent-account.fee,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:commission.plan,fees:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:commission.plan-account.fee,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan-account.fee,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan-account.fee,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.plan-account.fee,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:commission.plan-account.fee,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.plan-account.fee,plan:"
+msgid "Plan"
+msgstr "Plan"
+
+msgctxt "field:commission.plan-account.fee,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.plan-account.fee,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.plan-account.fee,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.plan-account.fee,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:commission.agent-account.fee,name:"
+msgid "Agent Fee"
+msgstr "Frais du courtier"
+
+msgctxt "model:commission.plan-account.fee,name:"
+msgid "Commission Plan Fee"
+msgstr "Frais du plan de commissionnement"

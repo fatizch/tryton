@@ -1,0 +1,751 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.fee:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:account.fee:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:account.fee:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "error:contract.fee:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:contract.fee:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:contract.premium-account.tax:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:contract.premium-account.tax:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:offered.option.description-account.fee:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:offered.option.description-account.fee:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:offered.option.description-account.tax:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:offered.option.description-account.tax:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:offered.option.description.premium_rule:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:offered.option.description.premium_rule:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:offered.product-account.fee:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:offered.product-account.fee:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:offered.product.premium_dates:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:offered.product.premium_dates:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:account.fee,allow_override:"
+msgid "Allow Override"
+msgstr "Permettre la surcharge"
+
+msgctxt "field:account.fee,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:account.fee,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:account.fee,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:account.fee,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.fee,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.fee,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.fee,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:account.fee,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:account.fee,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:account.fee,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt "field:account.fee,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.fee,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.fee,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:account.fee,rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:account.fee,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.fee,type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:account.fee,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.fee,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.fee,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract,fees:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:contract.fee,accept_fee:"
+msgid "Accept Fee"
+msgstr "Accepter les frais"
+
+msgctxt "field:contract.fee,amount_as_string:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:contract.fee,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.fee,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.fee,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.fee,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.fee,currency:"
+msgid "Currency"
+msgstr "Devises"
+
+msgctxt "field:contract.fee,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt "field:contract.fee,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.fee,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:contract.fee,fee_allow_override:"
+msgid "Override Allowed"
+msgstr "Surcharge autorisée"
+
+msgctxt "field:contract.fee,fee_type:"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "field:contract.fee,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.fee,overriden_amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:contract.fee,overriden_rate:"
+msgid "Rate"
+msgstr "Taux"
+
+msgctxt "field:contract.fee,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.fee,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.fee,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.fee,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.premium-account.tax,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.premium-account.tax,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.option.description,fees:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:offered.option.description,taxes:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:offered.option.description-account.fee,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description-account.fee,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description-account.fee,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description-account.fee,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description-account.fee,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:offered.option.description-account.fee,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description-account.fee,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description-account.fee,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description-account.fee,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description-account.fee,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.option.description-account.tax,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description-account.tax,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description-account.tax,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description-account.tax,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description-account.tax,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description-account.tax,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description-account.tax,tax:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "field:offered.option.description-account.tax,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description-account.tax,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description-account.tax,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.option.description.premium_rule,coverage:"
+msgid "Coverage"
+msgstr "Garantie"
+
+msgctxt "field:offered.option.description.premium_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.premium_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.option.description.premium_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.option.description.premium_rule,frequency:"
+msgid "Rate Frequency"
+msgstr ""
+
+msgctxt "field:offered.option.description.premium_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.option.description.premium_rule,premium_base:"
+msgid "Premium Base"
+msgstr "Base de la prime"
+
+msgctxt "field:offered.option.description.premium_rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.option.description.premium_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:offered.option.description.premium_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:offered.option.description.premium_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.option.description.premium_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.option.description.premium_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.product,fees:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "field:offered.product-account.fee,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product-account.fee,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product-account.fee,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.product-account.fee,fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:offered.product-account.fee,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.product-account.fee,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:offered.product-account.fee,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.product-account.fee,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.product-account.fee,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.product-account.fee,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.product.premium_dates,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.premium_dates,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:offered.product.premium_dates,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:offered.product.premium_dates,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:offered.product.premium_dates,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:offered.product.premium_dates,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:offered.product.premium_dates,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:offered.product.premium_dates,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:offered.product.premium_dates,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered.product.premium_dates,yearly_custom_date:"
+msgid "Yearly, this day"
+msgstr ""
+
+msgctxt "field:offered.product.premium_dates,yearly_on_new_eve:"
+msgid "Every first day of the year"
+msgstr ""
+
+msgctxt "field:offered.product.premium_dates,yearly_on_start_date:"
+msgid "Yearly from the contract start"
+msgstr ""
+
+msgctxt "help:account.fee,amount:"
+msgid "In company's currency"
+msgstr "Dans la devise de la société"
+
+msgctxt "model:account.fee,name:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "model:contract.fee,name:"
+msgid "Contract Fee"
+msgstr "Frais du contrat"
+
+msgctxt "model:ir.action,name:act_fee"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "model:ir.action,name:act_premium_display"
+msgid "Display Contract Premium"
+msgstr "Afficher les primes du contrat"
+
+msgctxt "model:ir.ui.menu,name:menu_fee"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "model:offered.option.description-account.fee,name:"
+msgid "Option Description Fee Relation"
+msgstr "Relation Garantie - Frais"
+
+msgctxt "model:offered.option.description-account.tax,name:"
+msgid "Option Description Tax Relation"
+msgstr "Relation Garantie - Taxe"
+
+msgctxt "model:offered.option.description.premium_rule,name:"
+msgid "Option Description Premium Rule"
+msgstr "Règle de cotisation"
+
+msgctxt "model:offered.product-account.fee,name:"
+msgid "Product Fee Relation"
+msgstr "Relation Produit - Frais"
+
+msgctxt "model:offered.product.premium_dates,name:"
+msgid "Product Premium Dates"
+msgstr ""
+
+msgctxt "model:rule_engine.rule_parameter,string:premium_amount"
+msgid "Premium Amount"
+msgstr "Montant de la prime"
+
+msgctxt "selection:account.fee,frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:account.fee,frequency:"
+msgid "At contract signature"
+msgstr "A la signature du contrat"
+
+msgctxt "selection:account.fee,frequency:"
+msgid "Once per Contract"
+msgstr "Une fois par contrat"
+
+msgctxt "selection:account.fee,frequency:"
+msgid "Once per Invoice"
+msgstr "Une fois par quittance"
+
+msgctxt "selection:account.fee,type:"
+msgid "Fixed"
+msgstr "Fixe"
+
+msgctxt "selection:account.fee,type:"
+msgid "Percentage"
+msgstr "Pourcentage"
+
+msgctxt "selection:contract.fee,fee_type:"
+msgid "Fixed"
+msgstr "Fixe"
+
+msgctxt "selection:contract.fee,fee_type:"
+msgid "Percentage"
+msgstr "Pourcentage"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "At contract signature"
+msgstr "A la signature du contrat"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Once per Contract"
+msgstr "Une fois par contrat"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Yearly (Exact)"
+msgstr "Annuel (exact)"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "At contract signature"
+msgstr "A la signature du contrat"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Half-yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Once per Contract"
+msgstr "Une fois par contrat"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Once per Invoice"
+msgstr "Une fois par quittance"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Yearly (360 days)"
+msgstr "Annuel (360 jours)"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Yearly (365 days)"
+msgstr "Annuel (365 jours)"
+
+msgctxt "selection:offered.option.description.premium_rule,frequency:"
+msgid "Yearly (Exact)"
+msgstr "Annuel (exact)"
+
+msgctxt "selection:offered.option.description.premium_rule,premium_base:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "view:account.fee:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:account.fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "view:account.fee:"
+msgid "Fees"
+msgstr "Frais"
+
+msgctxt "view:contract.fee:"
+msgid "%"
+msgstr "%"
+
+msgctxt "view:contract.fee:"
+msgid "Contract Fee"
+msgstr "Frais du contrat"
+
+msgctxt "view:contract.fee:"
+msgid "Contract Fees"
+msgstr "Frais du contrat"
+
+msgctxt "view:contract.premium.display.premiums.line:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "view:contract.premium.display.premiums.line:"
+msgid "Premiums"
+msgstr "Primes"
+
+msgctxt "view:contract.premium.display.premiums:"
+msgid "Contract Premiums"
+msgstr "Primes du contrat"
+
+msgctxt "view:contract.premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "view:contract.premium:"
+msgid "Premium Rules"
+msgstr "Règles de Cotisation"
+
+msgctxt "view:offered.option.description.premium_rule:"
+msgid "Premium Rule"
+msgstr "Règle de cotisation"
+
+msgctxt "view:offered.option.description.premium_rule:"
+msgid "Premium Rules"
+msgstr "Règles de Cotisation"
+
+msgctxt "view:offered.option.description:"
+msgid "Premium Data"
+msgstr "Données de prime"
+
+msgctxt "view:offered.product.premium_dates:"
+msgid "Pricing Date Configuration"
+msgstr ""
+
+msgctxt "view:offered.product:"
+msgid "Premium Data"
+msgstr "Données de prime"

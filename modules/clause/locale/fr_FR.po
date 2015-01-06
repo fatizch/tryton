@@ -20,6 +20,10 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
+msgctxt "error:clause:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
 msgctxt "field:clause,code:"
 msgid "Code"
 msgstr "Code"

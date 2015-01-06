@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -386,10 +386,6 @@ msgctxt "field:account.payment.creation,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:account.payment.treatment,id:"
-msgid "ID"
-msgstr "ID"
-
 msgctxt "field:account.tax.description,tax:"
 msgid "Tax"
 msgstr "Taxe"
@@ -598,6 +594,10 @@ msgctxt "field:contract.premium,contract:"
 msgid "Contract"
 msgstr "Contrat"
 
+msgctxt "field:contract.premium,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
 msgctxt "field:contract.premium,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -613,6 +613,10 @@ msgstr "Créé par"
 msgctxt "field:contract.premium,end:"
 msgid "End"
 msgstr "Terminer"
+
+msgctxt "field:contract.premium,extra_premium:"
+msgid "Extra Premium"
+msgstr "Surprime"
 
 msgctxt "field:contract.premium,frequency:"
 msgid "Frequency"
@@ -979,10 +983,6 @@ msgstr "Détail de ligne de quittance"
 msgctxt "model:account.payment.creation,name:"
 msgid "Payment Creation Batch"
 msgstr "Batch de création des paiements"
-
-msgctxt "model:account.payment.treatment,name:"
-msgid "Payment Treatment Batch"
-msgstr "Batch de traitement des paiements"
 
 msgctxt "model:contract.billing_information,name:"
 msgid "Contract Billing Information"
