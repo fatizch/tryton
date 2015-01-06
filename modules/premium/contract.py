@@ -145,12 +145,15 @@ class Contract:
         current_fees = set(contract_fees.keys())
         required_fees = self.appliable_fees()
 
+        to_delete = []
         for fee in current_fees - required_fees:
-            contract_fees.pop(fee)
+            to_delete.append(contract_fees.pop(fee))
         for fee in required_fees - current_fees:
             contract_fees[fee] = ContractFee.new_fee(fee)
 
         self.fees = sorted(contract_fees.values(), key=lambda x: x.fee)
+        if to_delete:
+            ContractFee.delete(to_delete)
         self.save()
 
     def get_dates(self):
