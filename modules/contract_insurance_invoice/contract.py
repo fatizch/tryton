@@ -16,7 +16,8 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.rpc import RPC
 from trytond.cache import Cache
 
-from trytond.modules.cog_utils import coop_date, utils, model, fields
+from trytond.modules.cog_utils import (coop_date, coop_string, utils, model,
+    fields)
 from trytond.modules.contract import _STATES
 
 __metaclass__ = PoolMeta
@@ -60,13 +61,20 @@ class Contract:
         fields.Many2One('contract.billing_information',
             'Current Billing Information'), 'get_billing_information')
     billing_informations = fields.One2Many('contract.billing_information',
-        'contract', 'Billing Information', domain=[
+        'contract', 'Billing Information',
+        domain=[
             ('billing_mode.products', '=', Eval('product')),
             If(Bool(Eval('subscriber', False)),
                 ['OR',
                     ('direct_debit_account.owners', '=', Eval('subscriber')),
                     ('direct_debit_account', '=', None)],
-                [('direct_debit_account', '=', None)])],
+                [('direct_debit_account', '=', None)]),
+            If(Bool(Eval('status' == 'active')),
+                ['OR',
+                    ('direct_debit', '=', False),
+                    ('direct_debit_account', '!=', None)],
+                [])
+        ],
         states=_STATES, depends=['product', 'subscriber', 'status'])
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',
@@ -110,6 +118,16 @@ class Contract:
     def invoice_till_next_renewal_date(self):
         Contract.invoice([self],
             self.next_renewal_date - relativedelta(days=1))
+
+    def check_billing_information(self):
+        for billing in self.billing_informations:
+            if billing.direct_debit and not billing.direct_debit_account:
+                parent = coop_string.translate_label(
+                    self, 'billing_information')
+                field = coop_string.translate_label(billing,
+                    'direct_debit_account')
+                self.append_functional_error('child_field_required',
+                    (field, parent))
 
     @classmethod
     def get_billing_information(cls, contracts, names):
@@ -489,9 +507,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     direct_debit_day = fields.Integer('Direct Debit Day')
     direct_debit_account = fields.Many2One('bank.account',
         'Direct Debit Account',
-        states={'invisible': ~Eval('direct_debit'),
-            'required': And(Eval('direct_debit', False),
-                (Eval('_parent_contract', {}).get('status', '') == 'active'))},
+        states={'invisible': ~Eval('direct_debit')},
         depends=['direct_debit'])
     possible_payment_terms = fields.Function(fields.One2Many(
             'account.invoice.payment_term', None, 'Possible Payment Term'),

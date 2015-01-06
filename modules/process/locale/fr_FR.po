@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -879,3 +879,11 @@ msgstr "Recharger le Menu"
 msgctxt "view:process:"
 msgid "XML"
 msgstr "Description de la Vue"
+
+msgctxt "error:process.process_framework:"
+msgid "The field '%s' is required"
+msgstr "Le champ '%s' est requis"
+
+msgctxt "error:process.process_framework:"
+msgid "The field '%s' of '%s' is required"
+msgstr "Le champ '%s' de '%s' est requis"

@@ -71,7 +71,9 @@ class Contract:
         cls.options.depends.append('is_loan')
         cls.options.depends.append('loans')
         cls._error_messages.update({
-                'no_loan_on_contract': 'There must be at least one loan :',
+                'no_loan_on_contract': 'There must be at least one loan',
+                'no_loan_on_option': 'At least one loan must be '
+                'selected for %s',
                 'loan_not_calculated': 'Loan %s must be calculated before'
                 ' proceeding',
                 })
@@ -125,6 +127,17 @@ class Contract:
             if not loan.state == 'calculated':
                 self.append_functional_error('loan_not_calculated', (
                         loan.rec_name))
+
+    def check_no_option_without_loan(self):
+        for covered in self.covered_elements:
+            for option in covered.options:
+                if option.coverage.is_loan and not \
+                        option.check_at_least_one_loan():
+                    self.append_functional_error('no_loan_on_option',
+                        (option.get_rec_name('')))
+
+    def check_at_least_one_loan(self):
+        return True if self.loan_shares else False
 
 
 class ContractLoan(model.CoopSQL, model.CoopView):

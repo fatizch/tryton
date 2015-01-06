@@ -72,7 +72,8 @@ class Contract(Printable):
                 })
         cls._error_messages.update({
                 'error_in_renewal_date_calculation': 'Errors occurs during '
-                'renewal date calculation : %s'
+                'renewal date calculation : %s',
+                'need_option': 'At least one option must be selected for %s',
                 })
 
     def calculate(self):
@@ -128,14 +129,10 @@ class Contract(Printable):
         return (not errors, errors)
 
     def check_at_least_one_covered(self):
-        errors = []
         for covered in self.covered_elements:
-            found, errors = covered.check_at_least_one_covered(errors)
-            if found:
-                break
-        if errors:
-            return False, errors
-        return True, ()
+            if not covered.check_at_least_one_covered():
+                self.append_functional_error('need_option',
+                    (covered.get_rec_name('')))
 
     @classmethod
     def get_coverages(cls, product):
@@ -954,19 +951,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             OptionModel.delete(to_delete)
         self.options = good_options
 
-    def check_at_least_one_covered(self, errors=None):
-        if not errors:
-            errors = []
-        found = False
+    def check_at_least_one_covered(self):
         for option in self.options:
             if option.status == 'active':
-                found = True
-                break
-        if not found:
-            errors.append(('need_option', (self.get_rec_name(''))))
-        if errors:
-            return False, errors
-        return True, ()
+                return True
+        return False
 
     def get_extra_data_def(self, at_date=None):
         pool = Pool()

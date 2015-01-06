@@ -4,7 +4,7 @@ from trytond.transaction import Transaction
 from trytond.exceptions import UserError
 from trytond.model import ModelView, fields
 
-from trytond.modules.cog_utils import utils
+from trytond.modules.cog_utils import coop_string, utils
 
 
 __all__ = [
@@ -117,7 +117,9 @@ class ProcessFramework(ModelView):
         cls._buttons = DynamicButtonDict(cls.__allowed_buttons__,
             cls._buttons, cls)
         cls._error_messages.update({
-                'everything_ok': 'Everything is good !'
+                'everything_ok': 'Everything is good !',
+                'field_required': "The field '%s' is required",
+                'child_field_required': "The field '%s' of '%s' is required",
                 })
 
     @classmethod
@@ -250,6 +252,12 @@ class ProcessFramework(ModelView):
             button_name = '_button_transition_%s_%s' % (
                 process.id, executable.id)
         return self.button_is_active(button_name)
+
+    def check_not_null(self, *args):
+        for field in args:
+            if not getattr(self, field):
+                self.append_functional_error('field_required',
+                    (coop_string.translate_label(self, field)))
 
     @classmethod
     def button_transition_states(cls, process, transition_data):

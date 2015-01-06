@@ -28,16 +28,10 @@ class Contract(CogProcessFramework):
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._error_messages.update({
-                'no_product': 'A product must be provided',
-                'no_subscriber': 'A subscriber must be provided',
-                'no start_date': 'A start date must be provided',
-                'bad_date': '%s is not a valid start date for product %s',
                 'no_option': 'At least an option must be selected',
                 'bad_start_date': 'Option %s must be subscribed after %s',
                 'need_option': 'At least one option must be selected for %s',
                 'need_covered': 'There must be at least one covered element',
-                'payment_bank_account_required': 'The payment bank account is '
-                'required as the payment mode is Direct Debit',
                 'no_subscriber_address': 'The selected subscriber does not '
                 'have an address',
                 })
@@ -46,7 +40,8 @@ class Contract(CogProcessFramework):
     @classmethod
     def copy(cls, contracts, default=None):
         clones = super(Contract, cls).copy(contracts, default)
-        if Transaction().context.get('copy_mode', 'functional') != 'functional':
+        if Transaction().context.get('copy_mode', 'functional') != \
+                'functional':
             return clones
         Process = Pool().get('process')
         products = set([x.product for x in clones])
@@ -73,16 +68,6 @@ class Contract(CogProcessFramework):
         super(Contract, self).on_change_subscriber_kind()
         self.subscriber_desc = ''
 
-    def check_product_not_null(self):
-        if not self.product:
-            return False, (('no_product', ()),)
-        return True, ()
-
-    def check_subscriber_not_null(self):
-        if not self.subscriber:
-            return False, (('no_subscriber', ()),)
-        return True, ()
-
     def check_subscriber_address(self):
         if not self.subscriber:
             return False, (('no_subscriber', ()),)
@@ -90,33 +75,11 @@ class Contract(CogProcessFramework):
             return False, (('no_subscriber_address', ()),)
         return True, ()
 
-    def check_start_date_valid(self):
-        if not self.start_date:
-            return False, (('no_start_date', ()),)
-        if self.start_date >= self.product.start_date and (
-                not self.product.end_date
-                or self.start_date < self.product.end_date):
-            return True, ()
-        return False, (('bad_date', (
-            self.start_date, self.product.get_rec_name(None))),)
-
     def check_option_selected(self):
         for option in self.options:
             if option.status == 'active':
                 return True, ()
         return False, (('no_option', ()),)
-
-    def check_billing_data(self):
-        # TODO : Move to billing_individual
-        result = True
-        errs = []
-        for manager in self.billing_datas:
-            if not manager.payment_mode == 'direct_debit':
-                continue
-            if not manager.payment_bank_account:
-                result = False
-                errs.append(('payment_bank_account_required', ()))
-        return result, errs
 
     def check_option_dates(self):
         result = True

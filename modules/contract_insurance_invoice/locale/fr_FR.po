@@ -472,7 +472,7 @@ msgstr "Prélèvement"
 
 msgctxt "field:contract.billing_information,direct_debit_account:"
 msgid "Direct Debit Account"
-msgstr "Compte bancaire "
+msgstr "Compte bancaire"
 
 msgctxt "field:contract.billing_information,direct_debit_day:"
 msgid "Direct Debit Day"
