@@ -136,9 +136,6 @@ class Contract:
                     self.append_functional_error('no_loan_on_option',
                         (option.get_rec_name('')))
 
-    def check_at_least_one_loan(self):
-        return True if self.loan_shares else False
-
 
 class ContractLoan(model.CoopSQL, model.CoopView):
     'Contract Loan'
@@ -245,6 +242,9 @@ class ContractOption:
             if x.loan not in self.parent_contract.loans]
         LoanShare.delete(loan_shares_to_delete)
         super(ContractOption, self).calculate()
+
+    def check_at_least_one_loan(self):
+        return True if self.loan_shares else False
 
 
 class ExtraPremium:
