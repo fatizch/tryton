@@ -250,7 +250,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         for loan_endorsement in loan_endorsements:
             latest_applied, = cls.search([
                     ('loan', '=', loan_endorsement.loan.id),
-                    ('state', 'not in', ['draft', 'canceled']),
+                    ('state', 'not in', ['draft', 'canceled', 'declined']),
                     ], order=[('applied_on', 'DESC')], limit=1)
             if latest_applied != loan_endorsement:
                 cls.raise_user_error('not_latest_applied',

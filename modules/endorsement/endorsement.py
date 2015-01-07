@@ -475,7 +475,7 @@ class Contract(CogProcessFramework):
         Endorsement = Pool().get('endorsement')
         endorsement = Endorsement.search([
                 ('contracts', '=', self.id),
-                ('state', 'not in', ['draft', 'canceled']),
+                ('state', 'not in', ['draft', 'canceled', 'declined']),
                 ], order=[('application_date', 'DESC')], limit=1)
         if endorsement:
             return endorsement[0].id
@@ -562,6 +562,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             ('in_progress', 'In Progress'),
             ('applied', 'Applied'),
             ('canceled', 'Canceled'),
+            ('declined', 'Declined'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
     contracts = fields.Function(
@@ -578,11 +579,13 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         cls._transitions |= set((
                 ('draft', 'applied'),
                 ('draft', 'in_progress'),
+                ('draft', 'declined'),
                 ('in_progress', 'draft'),
                 ('in_progress', 'applied'),
                 ('applied', 'canceled'),
                 ('canceled', 'applied'),
                 ('canceled', 'in_progress'),
+                ('declined', 'draft'),
                 ))
         cls._buttons.update({
                 'draft': {
@@ -593,6 +596,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     },
                 'cancel': {
                     'invisible': ~Eval('state').in_(['applied']),
+                    },
+                'decline': {
+                    'invisible': ~Eval('state').in_(['draft']),
                     },
                 'open_contract': {
                     'invisible': ~Eval('state').in_(['applied']),
@@ -666,9 +672,17 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
 
     @classmethod
     @model.CoopView.button
+    @Workflow.transition('declined')
+    def decline(cls, endorsements):
+        cls.write(endorsements, {
+                'state': 'declined',
+                })
+
+    @classmethod
+    @model.CoopView.button
     @Workflow.transition('draft')
     def draft(cls, endorsements):
-        cls._draft(endorsements)
+        cls._draft([x for x in endorsements if x.state != 'declined'])
         cls.write(endorsements, {
                 'applied_by': None,
                 'application_date': None,

@@ -109,12 +109,20 @@
             <field name="name">cancel</field>
             <field name="model" search="[('model', '=', 'endorsement')]"/>
         </record>
+        <record model="ir.model.button" id="endorsement_decline_button">
+            <field name="name">decline</field>
+            <field name="model" search="[('model', '=', 'endorsement')]"/>
+        </record>
         <record model="ir.model.button-res.group" id="endorsement_draft_button_group_endorsement_super_user">
             <field name="button" ref="endorsement_draft_button"/>
             <field name="group" ref="group_endorsement_super_user"/>
         </record>
         <record model="ir.model.button-res.group" id="endorsement_cancel_button_group_endorsement_super_user">
             <field name="button" ref="endorsement_cancel_button"/>
+            <field name="group" ref="group_endorsement_super_user"/>
+        </record>
+        <record model="ir.model.button-res.group" id="endorsement_decline_button_group_endorsement_super_user">
+            <field name="button" ref="endorsement_decline_button"/>
             <field name="group" ref="group_endorsement_super_user"/>
         </record>
     </data>

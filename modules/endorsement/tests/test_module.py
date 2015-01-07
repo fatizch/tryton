@@ -163,6 +163,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test(
         'endorsement.test0030_create_endorsement',
         )
+    def test0032_endorsement_decline(self):
+        contract, = self.Contract.search([
+                ('product.code', '=', 'AAA'),
+                ])
+        endorsement, = self.Endorsement.search([
+                ('contracts', '=', contract.id),
+                ])
+        self.assertEqual(endorsement.state, 'draft')
+        endorsement.decline([endorsement])
+        self.assertEqual(endorsement.state, 'declined')
+        endorsement.draft([endorsement])
+        self.assertEqual(endorsement.state, 'draft')
+
+    @test_framework.prepare_test(
+        'endorsement.test0030_create_endorsement',
+        )
     def test0035_revert_endorsement(self):
         # WARNING: No dependency, commit required for the history / write dates
         # to kick in properly
