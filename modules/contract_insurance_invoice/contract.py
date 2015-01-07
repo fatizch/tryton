@@ -69,7 +69,7 @@ class Contract:
                     ('direct_debit_account.owners', '=', Eval('subscriber')),
                     ('direct_debit_account', '=', None)],
                 [('direct_debit_account', '=', None)]),
-            If(Bool(Eval('status' == 'active')),
+            If(Bool(Eval('status') == 'active'),
                 ['OR',
                     ('direct_debit', '=', False),
                     ('direct_debit_account', '!=', None)],
