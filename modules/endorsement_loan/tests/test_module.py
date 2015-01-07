@@ -182,12 +182,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan_endorsement.base_instance.amount,
             previous_loan_amount)
         self.assert_(endorsement.rollback_date)
-        endorsement.draft([endorsement])
+        endorsement.cancel([endorsement])
         Transaction().cursor.commit()
 
         loan = endorsement.loans[0]
-        self.assertEqual(loan_endorsement.applied_on, None)
-        self.assertEqual(loan_endorsement.state, 'draft')
+        self.assertEqual(loan_endorsement.state, 'canceled')
         self.assertEqual(loan.amount, previous_loan_amount)
 
 
