@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="//group[@id='rates']" position="after">
+    <xpath expr="/form/label[@name='flat_amount']" position="before">
       <newline/>
         <label name="capital_per_mil_rate"/>
         <group id="capital_per_mil">
