@@ -1,12 +1,18 @@
 Batch de création des quittances [contract.invoice.create]
 ==========================================================
 
-Ce batch doit tourner quotidiennement pour clore les contrats actifs ou suspendus.
+Pour tous les contrats au statut "actif", crée les quittances dont la date de
+fin est strictement inférieure à la date de traitement et leur donne le statut
+"validé".
 
-Sur chaque contrat dont la date de fin est inférieure ou égale à la date du jour, il appelle la méthode terminate, qui doit au minimum passer le statut du contrat à "terminated" (résilié). En fonction du contrat, d'autres comportements sont possibles (émission de courriers, etc.).
-
+*Fréquence suggérée:* quotidienne*
+*Date de traitement à fournir:* date du jour
 
 Batch d'émission des quittances [contract.invoice.post]
 =======================================================
 
-TODO
+Fait passer toutes les quittances validées dont la date de début est
+inférieure ou égale à la date de traitement au statut "émises".
+
+*Fréquence suggérée: quotidienne*
+*Date de traitement à fournir:* date du jour

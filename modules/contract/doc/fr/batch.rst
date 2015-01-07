@@ -1,6 +1,11 @@
 Batch de résiliation pour fin de contrat [contract.termination.process]
 =======================================================================
 
-Géré par la classe ContractEndDateTerminationBatch, dans batch.py du module Contract, ce batch doit tourner quotidiennement pour clore les contrats actifs ou suspendus.
+Ce batch clôt les contrats qui valident les conditions suivantes :
+- status actif ou suspendu
+- date de fin de contrat non renseignée (``None``) ou non postérieure à la date de traitement
 
-Sur chaque contrat dont la date de fin est inférieure ou égale à la date du jour, il appelle la méthode terminate, qui doit au minimum passer le statut du contrat à "terminated" (résilié). En fonction du contrat, d'autres comportements sont possibles (émission de courriers, etc.).
+En conséquence, le statut de ces contrats est passé à "résilié".
+En fonction du contrat, des actions supplémentaires liées à la clôture peuvent être exécutées (émission de courriers, etc.).
+
+*Fréquence suggérée: quotidienne*

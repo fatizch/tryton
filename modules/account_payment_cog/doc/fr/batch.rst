@@ -1,25 +1,32 @@
 Batch de création de paiements [account.payment.create]
 =======================================================
 
-Ce batch créé des groupes de paiements pour les quittances qui valident les
-critères suivants :
+Ce batch créé des paiements et groupes de paiements pour les quittances qui
+valident les critères suivants :
 
 - mandat SEPA valide de configuré
 - date de paiement antérieure à la date de traitement
 - aucun paiement non échoué associé
 - aucun mouvement de réconciliation associé
 
-Ce batch n'a aucune configuration spécifique à l'heure actuelle.
+Les paiements sont créés avec le statut "Approuvé".
+
+*Fréquence suggérée:* quotidienne*
+*Date de traitement à fournir:* prochaine date de prélèvement postérieure à la
+date du jour
 
 Batch de traitement de paiements [account.payment.process]
 ==========================================================
 
-Ce batch fait passer les paiements du statut *Approuvé* au statut
+Ce batch fait passer les paiements du statut "Approuvé au statut
 *Traitement* en générant optionnellement au passage le fichier de
 prélèvements SEPA à transmettre à la banque (cf :ref:`dump_sepa_xml`).
 
+*Fréquence suggérée:* autant de fois que de dates de prélèvement possibles sur
+les contrats
+
 Ce batch possède les paramétrages suivants à définir dans une section
-``account.payment.creation`` du fichier de configuration batch.
+``account.payment.process`` du fichier de configuration batch.
 
 .. _dump_sepa_xml:
 
