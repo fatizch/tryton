@@ -466,7 +466,7 @@ class ContractOption:
 
     @fields.depends('covered_element')
     def on_change_with_product(self, name=None):
-        if self.covered_element:
+        if self.covered_element and self.covered_element.contract:
             return self.covered_element.contract.product.id
         return super(ContractOption, self).on_change_with_product(name)
 
