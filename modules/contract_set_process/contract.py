@@ -108,6 +108,14 @@ class ContractSet(CogProcessFramework):
             attachment.document_desc = template_instance.document_desc
             attachment.save()
 
+    def generate_and_attach_reports_in_set(self, template_codes):
+        """template_codes should be a comma separated list
+        of document template codes between single quotes,
+        i.e : 'template1', 'template2', etc.
+        """
+        for contract in self.contracts:
+            contract.generate_and_attach_reports(template_codes)
+
     def get_attachments(self, name):
         pool = Pool()
         Attachment = pool.get('ir.attachment')
