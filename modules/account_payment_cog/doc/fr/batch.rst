@@ -11,9 +11,9 @@ valident les critères suivants :
 
 Les paiements sont créés avec le statut "Approuvé".
 
-*Fréquence suggérée:* quotidienne
-*Date de traitement à fournir:* prochaine date de prélèvement postérieure à la
-date du jour
+- *Fréquence suggérée:* quotidienne
+- *Date de traitement à fournir:* prochaine date de prélèvement postérieure à
+  la date du jour
 
 Batch de traitement de paiements [account.payment.process]
 ==========================================================
@@ -22,8 +22,8 @@ Ce batch fait passer les paiements du statut "Approuvé au statut
 *Traitement* en générant optionnellement au passage le fichier de
 prélèvements SEPA à transmettre à la banque (cf :ref:`dump_sepa_xml`).
 
-*Fréquence suggérée:* autant de fois que de dates de prélèvement possibles sur
-les contrats
+- *Fréquence suggérée:* autant de fois que de dates de prélèvement possibles 
+  sur les contrats
 
 Ce batch possède les paramétrages suivants à définir dans une section
 ``account.payment.process`` du fichier de configuration batch.
