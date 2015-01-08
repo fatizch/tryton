@@ -23,7 +23,9 @@ class OptionDescription:
 
     insurance_kind = fields.Selection([('', '')], 'Insurance Kind',
         sort=False)
-    insurer = fields.Many2One('insurer', 'Insurer')
+    insurer = fields.Many2One('insurer', 'Insurer',
+        states={'required': ~Eval('is_service')},
+        depends=['is_service'])
     family = fields.Selection([('generic', 'Generic')], 'Family')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
