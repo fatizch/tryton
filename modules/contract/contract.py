@@ -1265,7 +1265,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             if not end_date or end_date > option.start_date:
                 if not option.parent_contract:
                     continue
-                if end_date <= option.parent_contract.end_date:
+                if (not option.parent_contract.end_date
+                        or end_date <= option.parent_contract.end_date):
                     if not end_date or (not option.automatic_end_date
                             or option.automatic_end_date >= end_date):
                         if end_date:
