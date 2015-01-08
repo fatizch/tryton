@@ -72,7 +72,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
 
 class PaymentCreationBatch(batch.BatchRoot):
     "Payment Creation Batch"
-    __name__ = 'account.payment.creation'
+    __name__ = 'account.payment.create'
 
     logger = batch.get_logger(__name__)
 
