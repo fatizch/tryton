@@ -11,7 +11,7 @@ valident les critères suivants :
 
 Les paiements sont créés avec le statut "Approuvé".
 
-*Fréquence suggérée:* quotidienne*
+*Fréquence suggérée:* quotidienne
 *Date de traitement à fournir:* prochaine date de prélèvement postérieure à la
 date du jour
 
