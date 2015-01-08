@@ -56,6 +56,11 @@ class PostInvoiceContractBatch(batch.BatchRoot):
     logger = batch.get_logger(__name__)
 
     @classmethod
+    def __setup__(cls):
+        super(PostInvoiceContractBatch, cls).__setup__()
+        cls._default_config_items.update({'split_size': 1})
+
+    @classmethod
     def get_batch_main_model_name(cls):
         return 'account.invoice'
 
