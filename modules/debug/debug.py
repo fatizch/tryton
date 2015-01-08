@@ -1,6 +1,7 @@
 import pprint
 
 from trytond.wizard import Wizard, StateTransition, StateView, Button
+from trytond.rpc import RPC
 from trytond.model import ModelView, fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool
@@ -62,6 +63,14 @@ class ModelInfo(ModelView):
     must_raise_exception = fields.Boolean('Must Raise Exception')
 
     @classmethod
+    def __setup__(cls):
+        super(ModelInfo, cls).__setup__()
+        cls.__rpc__.update({
+                'raw_model_infos': RPC(),
+                'raw_field_infos': RPC(),
+                })
+
+    @classmethod
     def get_possible_model_names(cls):
         pool = Pool()
         return list([(x, x) for x in
@@ -83,8 +92,11 @@ class ModelInfo(ModelView):
         if isinstance(field, (fields.Many2One, fields.One2Many)):
             info.target_model = field.model_name
         elif isinstance(field, fields.Many2Many):
-            info.target_model = Pool().get(field.relation_name)._fields[
-                field.target].model_name
+            if field.target:
+                info.target_model = Pool().get(field.relation_name)._fields[
+                    field.target].model_name
+            else:
+                info.target_model = field.relation_name
         else:
             info.target_model = ''
         for elem in ('required', 'readonly', 'invisible'):
@@ -151,6 +163,69 @@ class ModelInfo(ModelView):
                             TargetModel(self.id_to_calculate), field.name))
                 except Exception, exc:
                     field.calculated_value = 'ERROR: %s' % str(exc)
+
+    @classmethod
+    def raw_field_info(cls, base_model, field_name):
+        if isinstance(base_model, basestring):
+            base_model = Pool().get(base_model)
+        field = base_model._fields[field_name]
+        result = {
+            'name': field_name,
+            'string': field.string,
+            }
+        if isinstance(field, fields.Function):
+            result['is_function'] = True
+            field = field._field
+        result['kind'] = field.__class__.__name__
+        if isinstance(field, (fields.Many2One, fields.One2Many)):
+            result['target_model'] = field.model_name
+        elif isinstance(field, fields.Many2Many):
+            if field.target:
+                result['target_model'] = Pool().get(
+                    field.relation_name)._fields[field.target].model_name
+            else:
+                result['target_model'] = field.relation_name
+        else:
+            result['target_model'] = ''
+        for elem in ('required', 'readonly', 'invisible'):
+            result['is_%s' % elem] = getattr(field, elem, False)
+            result['state_%s' % elem] = repr(field.states.get(elem, {}))
+        field_domain = getattr(field, 'domain', None) or None
+        result['has_domain'] = bool(field_domain)
+        if field_domain:
+            result['domain'] = repr(field_domain)
+        return result
+
+    @classmethod
+    def raw_field_infos(cls, model_name=''):
+        pool = Pool()
+        models = [model_name] if model_name else [
+            x[0] for x in cls.get_possible_model_names()]
+        infos = cls.raw_model_infos(models)
+        for name in models:
+            base_model = pool.get(name)
+            infos[name]['fields'] = {}
+            for fname in base_model._fields:
+                infos[name]['fields'][fname] = cls.raw_field_info(base_model,
+                    fname)
+        return infos
+
+    @classmethod
+    def raw_model_infos(cls, models=None):
+        pool = Pool()
+        models = models or [x[0] for x in cls.get_possible_model_names()]
+        infos = {}
+        for model_name in models:
+            Model = pool.get(model_name)
+            try:
+                string = Model._get_name()
+            except AttributeError:
+                # None type has no attribute splitlines
+                string = Model.__name__
+            infos[model_name] = {
+                'string': string,
+                }
+        return infos
 
 
 class DebugModel(Wizard):
