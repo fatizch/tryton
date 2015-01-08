@@ -494,7 +494,8 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         domain=[('id', 'in', Eval('possible_payment_terms'))],
         depends=['possible_payment_terms'])
     direct_debit = fields.Function(
-        fields.Boolean('Direct Debit Payment'), 'on_change_with_direct_debit')
+        fields.Boolean('Direct Debit Payment'), 'on_change_with_direct_debit',
+        searcher='search_direct_debit')
     direct_debit_day_selector = fields.Function(
         fields.Selection('get_allowed_direct_debit_days',
             'Direct Debit Day', states={
@@ -611,6 +612,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values.get('date', None)
+
+    @classmethod
+    def search_direct_debit(cls, name, domain):
+        return [('billing_mode.direct_debit',) + tuple(domain[1:])]
 
 
 class Premium:
