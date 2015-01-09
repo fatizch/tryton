@@ -44,8 +44,9 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date):
-        Pool().get('contract').invoice(objects, treatment_date)
-        cls.logger.success('%d invoices created' % len(objects))
+        invoices = Pool().get('contract').invoice(objects, treatment_date)
+        cls.logger.success('%d invoices created for %s' %
+            (len(invoices), batch.get_print_infos(ids, 'contracts')))
 
 
 class PostInvoiceContractBatch(batch.BatchRoot):

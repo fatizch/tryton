@@ -79,7 +79,8 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None):
             chunking = chunks_number
         else:
             chunking = chunks_size
-        logger.info('Executing %s' % batch_name)
+        logger.info('Executing %s with %s' % (batch_name,
+            batch.get_print_infos(ids)))
         job = group(generate.s(BatchModel.__name__, tmp_list, connexion_date,
             treatment_date)
             for tmp_list in chunking(ids, int(BatchModel.get_conf_item(
@@ -95,7 +96,6 @@ def generate(batch_name, ids, connexion_date, treatment_date):
     with Transaction().set_user(admin.id), Transaction().set_context(
             User.get_preferences(context_only=True),
             client_defined_date=connexion_date):
-
         to_treat = BatchModel.convert_to_instances(ids)
         try:
             BatchModel.execute(to_treat, ids, treatment_date)

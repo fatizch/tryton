@@ -66,7 +66,7 @@ class MoveLine:
                 continue
             payments.append(payment)
 
-        Payment.create(payments)
+        return Payment.create(payments)
 
 
 class PaymentInformationSelection(model.CoopView):

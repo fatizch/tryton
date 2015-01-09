@@ -1,8 +1,8 @@
 Batch de création de paiements [account.payment.create]
 =======================================================
 
-Ce batch créé des paiements et groupes de paiements pour les quittances qui
-valident les critères suivants :
+Ce batch créé des paiements et groupes de paiements pour les lignes de 
+mouvements qui valident les critères suivants :
 
 - mandat SEPA valide de configuré
 - date de paiement antérieure à la date de traitement

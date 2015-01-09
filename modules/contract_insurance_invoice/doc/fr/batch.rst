@@ -12,7 +12,8 @@ Batch d'émission des quittances [contract.invoice.post]
 =======================================================
 
 Fait passer toutes les quittances validées dont la date de début est
-inférieure ou égale à la date de traitement au statut "émises".
+inférieure ou égale à la date de traitement au statut "émises" et créé 
+les lignes de mouvements correspondantes.
 
 - *Fréquence suggérée:* quotidienne
 - *Date de traitement à fournir:* date du jour
