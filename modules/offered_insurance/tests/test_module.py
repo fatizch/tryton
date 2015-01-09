@@ -34,6 +34,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Lang': 'ir.lang',
             'ItemDesc': 'offered.item.description',
             'ExtraPremiumKind': 'extra_premium.kind',
+            'Insurer': 'insurer',
+            'Party': 'party.party',
             }
 
     def test0001_testFunctionalRuleCreation(self):
@@ -191,6 +193,14 @@ return True'''
         item_desc.save()
         self.assert_(item_desc.id)
 
+    def test0005_testInsurerCreation(self):
+        insurer = self.Insurer()
+        insurer.party = self.Party()
+        insurer.party.name = 'Insurer'
+        insurer.party.save()
+        insurer.save()
+        self.assert_(insurer.id)
+
     @test_framework.prepare_test(
         'offered_insurance.test0001_testFunctionalRuleCreation',
         'offered_insurance.test0002_testTaxCreation',
@@ -198,12 +208,14 @@ return True'''
         'offered.test0001_testNumberGeneratorCreation',
         'offered_insurance.test0005_testItemDescCreation',
         'company_cog.test0001_testCompanyCreation',
+        'offered_insurance.test0005_testInsurerCreation',
         )
     def test0010Coverage_creation(self):
         '''
             Tests coverage creation
         '''
         company, = self.Company.search([('party.name', '=', 'World Company')])
+        insurer, = self.Insurer.search([])
         ng = self.Sequence.search([
                 ('code', '=', 'contract')])[0]
 
@@ -217,6 +229,7 @@ return True'''
         coverage_a.start_date = datetime.date.today()
 
         coverage_a.item_desc = item_desc
+        coverage_a.insurer = insurer
 
         coverage_a.company = company
         coverage_a.save()
@@ -231,6 +244,7 @@ return True'''
             datetime.timedelta(days=5)
 
         coverage_b.item_desc = item_desc
+        coverage_b.insurer = insurer
         coverage_b.company = company
         coverage_b.save()
 
@@ -243,6 +257,7 @@ return True'''
         coverage_c.start_date = datetime.date.today()
 
         coverage_c.item_desc = item_desc
+        coverage_c.insurer = insurer
         coverage_c.company = company
 
         coverage_c.save()
@@ -256,6 +271,7 @@ return True'''
         coverage_d.start_date = datetime.date.today()
 
         coverage_d.item_desc = item_desc
+        coverage_d.insurer = insurer
         coverage_d.company = company
 
         coverage_d.save()
