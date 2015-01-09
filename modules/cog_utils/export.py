@@ -196,9 +196,10 @@ class ExportImportMixin(Model):
             if field_name in ('__name__', '_func_key'):
                 continue
             field = cls._fields[field_name]
+            if isinstance(field, tryton_fields.Property):
+                field = field._field
             if isinstance(field, (tryton_fields.Many2One,
-                        tryton_fields.Property, tryton_fields.One2One,
-                        tryton_fields.Reference)):
+                        tryton_fields.One2One, tryton_fields.Reference)):
                 if value:
                     if isinstance(field, tryton_fields.Reference):
                         Target = pool.get(value['__name__'])

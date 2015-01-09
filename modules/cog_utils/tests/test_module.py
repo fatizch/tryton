@@ -357,7 +357,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 '__name__': 'cog_utils.export_test',
                 'reference': None,
                 'one2many': [],
-                'property': None,
+                'property_m2o': None,
+                'property_numeric': None,
+                'property_char': None,
+                'property_selection': None,
                 'valid_one2many': [],
                 'many2many': [],
                 'many2one': None,
@@ -521,10 +524,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual([], self.ExportTestTarget.search(
                 [('id', '!=', 0)]))
 
-    def test_0058_export_import_property(self):
+    def test_0058_export_import_property_m2o(self):
         target = self.ExportTestTarget(char='key')
         target.save()
-        to_export = self.ExportTest(char='otherkey', property=target)
+        to_export = self.ExportTest(char='otherkey', property_m2o=target)
         to_export.save()
         output = []
         to_export.export_json(output=output)
@@ -535,7 +538,44 @@ class ModuleTestCase(test_framework.CoopTestCase):
         output[0]['integer'] = 12
 
         self.ExportTest.multiple_import_json(output)
-        self.assertEqual(12, to_export.property.integer)
+        self.assertEqual(12, to_export.property_m2o.integer)
+
+    def test_0059_export_import_property_numeric(self):
+        to_export = self.ExportTest(char='otherkey', property_numeric='1.5')
+        to_export.save()
+        output = []
+        to_export.export_json(output=output)
+
+        self.assertEqual(output[0]['property_numeric'], Decimal('1.5'))
+        output[0]['property_numeric'] = Decimal('3.2')
+
+        self.ExportTest.multiple_import_json(output)
+        self.assertEqual(Decimal('3.2'), to_export.property_numeric)
+
+    def test_0060_export_import_property_char(self):
+        to_export = self.ExportTest(char='otherkey', property_char='Hello')
+        to_export.save()
+        output = []
+        to_export.export_json(output=output)
+
+        self.assertEqual(output[0]['property_char'], 'Hello')
+
+        output[0]['property_char'] = 'hi'
+        self.ExportTest.multiple_import_json(output)
+        self.assertEqual('hi', to_export.property_char)
+
+    def test_0062_export_import_property_selection(self):
+        to_export = self.ExportTest(char='otherkey',
+            property_selection='select1')
+        to_export.save()
+        output = []
+        to_export.export_json(output=output)
+
+        self.assertEqual(output[0]['property_selection'], 'select1')
+        output[0]['property_selection'] = 'select2'
+
+        self.ExportTest.multiple_import_json(output)
+        self.assertEqual('select2', to_export.property_selection)
 
 
 def suite():
