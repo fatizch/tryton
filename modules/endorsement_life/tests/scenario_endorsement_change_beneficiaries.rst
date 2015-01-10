@@ -47,6 +47,7 @@ Get Models::
     >>> Sequence = Model.get('ir.sequence')
     >>> SequenceType = Model.get('ir.sequence.type')
     >>> User = Model.get('res.user')
+    >>> Insurer = Model.get('insurer')
 
 Constants::
 
@@ -152,6 +153,16 @@ Create Item Description::
     >>> item_description.kind = 'person'
     >>> item_description.save()
 
+Create Insurer::
+
+    >>> insurer = Insurer()
+    >>> insurer.party = Party()
+    >>> insurer.party.name = 'Insurer'
+    >>> insurer.party.account_receivable = receivable_account
+    >>> insurer.party.account_payable = payable_account
+    >>> insurer.party.save()
+    >>> insurer.save()
+
 Create Coverage::
 
     >>> coverage = OptionDescription()
@@ -162,6 +173,7 @@ Create Coverage::
     >>> coverage.inurance_kind = 'death'
     >>> coverage.start_date = product_start_date
     >>> coverage.item_desc = item_description
+    >>> coverage.insurer = insurer
     >>> coverage.beneficiaries_clauses.append(clause1)
     >>> coverage.beneficiaries_clauses.append(clause2)
     >>> coverage.save()

@@ -61,6 +61,7 @@ Sequence = Model.get('ir.sequence')
 SequenceStrict = Model.get('ir.sequence.strict')
 SequenceType = Model.get('ir.sequence.type')
 User = Model.get('res.user')
+Insurer = Model.get('insurer')
 
 # #Comment# #Constants
 today = datetime.date.today()
@@ -189,6 +190,16 @@ item_description.code = 'test_item_description'
 item_description.kind = 'person'
 item_description.save()
 
+
+# #Comment# #Create Insurer
+insurer = Insurer()
+insurer.party = Party()
+insurer.party.name = 'Insurer'
+insurer.party.account_receivable = receivable_account
+insurer.party.account_payable = payable_account
+insurer.party.save()
+insurer.save()
+
 # #Comment# #Create Coverage
 coverage = OptionDescription()
 coverage.company = company
@@ -199,6 +210,7 @@ coverage.inurance_kind = 'death'
 coverage.start_date = product_start_date
 coverage.account_for_billing = product_account
 coverage.item_desc = item_description
+coverage.insurer = insurer
 coverage.save()
 
 # #Comment# #Create Product
