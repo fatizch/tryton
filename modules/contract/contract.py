@@ -605,13 +605,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return None
 
     def set_start_date(self, start_date):
+        previous_start_date = self.start_date
         self.start_date = start_date
-        self.update_from_start_date()
+        self.update_from_start_date(previous_start_date)
 
-    def update_from_start_date(self):
+    def update_from_start_date(self, previous_start_date):
         for option in self.options:
-            option.set_start_date(self.start_date)
-            option.save()
+            option.set_start_date(self.start_date, previous_start_date)
+        self.options = self.options
 
     def set_appliable_conditions_date(self, new_date):
         self.appliable_conditions_date = new_date
@@ -1310,8 +1311,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.init_dict_for_rule_engine(exec_context)
         return self.coverage.calculate_end_date(exec_context)
 
-    def set_start_date(self, new_start_date):
-        if self.start_date and self.start_date < new_start_date:
+    def set_start_date(self, new_start_date, previous_start_date):
+        if self.start_date and (self.start_date == previous_start_date
+                or self.start_date < new_start_date):
             self.start_date = new_start_date
 
     @classmethod

@@ -288,15 +288,16 @@ class Contract(Printable):
         parties += [x.party.id for x in self.covered_elements if x.person]
         return parties
 
-    def update_from_start_date(self):
-        super(Contract, self).update_from_start_date()
+    def update_from_start_date(self, previous_start_date):
+        super(Contract, self).update_from_start_date(previous_start_date)
         errors = self.init_next_renewal_date()
         if errors:
             self.raise_user_error('error_in_renewal_date_calculation')
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                option.set_start_date(self.start_date)
-                option.save()
+                option.set_start_date(self.start_date, previous_start_date)
+            covered_element.options = covered_element.options
+        self.covered_elements = self.covered_elements
 
     def activate_contract(self):
         super(Contract, self).activate_contract()
@@ -549,11 +550,12 @@ class ContractOption:
         result['offered'] = self.coverage
         return result
 
-    def set_start_date(self, start_date):
-        super(ContractOption, self).set_start_date(start_date)
+    def set_start_date(self, start_date, previous_start_date):
+        super(ContractOption, self).set_start_date(start_date,
+                previous_start_date)
         for extra_premium in self.extra_premiums:
-            extra_premium.set_start_date(start_date)
-            extra_premium.save()
+            extra_premium.set_start_date(start_date, previous_start_date)
+        self.extra_premiums = self.extra_premiums
 
 
 class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
@@ -1309,8 +1311,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             return None
         return res[0]
 
-    def set_start_date(self, new_start_date):
-        if self.start_date and self.start_date < new_start_date:
+    def set_start_date(self, new_start_date, previous_start_date):
+        if self.start_date and (self.start_date == previous_start_date
+                or self.start_date < new_start_date):
             self.start_date = new_start_date
 
 
