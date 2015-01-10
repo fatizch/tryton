@@ -8,6 +8,9 @@ from .process import *
 from .party import *
 from .test_case import *
 from .batch import *
+from .ir import *
+from .exclusion import *
+from .extra_premium import *
 
 
 def register():
