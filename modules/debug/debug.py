@@ -173,6 +173,7 @@ class ModelInfo(ModelView):
             'name': field_name,
             'string': field.string,
             }
+        result['is_function'] = False
         if isinstance(field, fields.Function):
             result['is_function'] = True
             field = field._field
@@ -190,6 +191,8 @@ class ModelInfo(ModelView):
         for elem in ('required', 'readonly', 'invisible'):
             result['is_%s' % elem] = getattr(field, elem, False)
             result['state_%s' % elem] = repr(field.states.get(elem, {}))
+        for elem in ('on_change', 'on_change_with', 'default'):
+            result[elem] = hasattr(base_model, '%s_%s' % (elem, field_name))
         field_domain = getattr(field, 'domain', None) or None
         result['has_domain'] = bool(field_domain)
         if field_domain:
@@ -212,6 +215,32 @@ class ModelInfo(ModelView):
 
     @classmethod
     def raw_model_infos(cls, models=None):
+        def extract_mro(mro, model_name):
+            result, first_occurence = {}, False
+            model_name_dots = len(model_name.split('.'))
+            for line in mro[::-1][1:]:
+                full_name = str(line)[8:-2].split('.')
+                if full_name[1] == 'pool':
+                    continue
+                new_line = {
+                    'module': '',
+                    'override': 0,
+                    'initial': 0,
+                    'base_name': full_name[-1],
+                    'path': '.'.join(full_name[:-1]),
+                    }
+                if full_name[1] == 'modules':
+                    new_line['module'] = full_name[2]
+                    if str(line)[:-2].endswith(model_name):
+                        new_line['override'] = 1 if first_occurence else 0
+                        new_line['initial'] = 0 if first_occurence else 1
+                        new_line['base_name'] = model_name
+                        new_line['path'] = '.'.join(
+                            full_name[:-model_name_dots])
+                        first_occurence = True
+                result['% 3d' % (len(result) + 1)] = new_line
+            return result
+
         pool = Pool()
         models = models or [x[0] for x in cls.get_possible_model_names()]
         infos = {}
@@ -224,6 +253,7 @@ class ModelInfo(ModelView):
                 string = Model.__name__
             infos[model_name] = {
                 'string': string,
+                'mro': extract_mro(Model.__mro__, model_name),
                 }
         return infos
 
