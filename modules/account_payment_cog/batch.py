@@ -24,9 +24,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
     @classmethod
     def __setup__(cls):
         super(PaymentTreatmentBatch, cls).__setup__()
-        cls._default_config_items.update({
-                'split_size': 1,
-                })
+        cls._default_config_items.update({'split_size': 1})
 
     @classmethod
     def get_batch_main_model_name(cls):
@@ -65,7 +63,17 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             grouped_payments = list(_grouped_payments)
             cls.logger.info('processing group %s of %s' % (key,
                 batch.get_print_infos(grouped_payments, 'payment')))
-            Payment.process(list(grouped_payments), group)
+            payments_group = Payment.process(list(grouped_payments), group)
+            for sepa_msg in payments_group.sepa_messages:
+                filename = cls.generate_filepath(sepa_msg.filename)
+                with open(filename, 'w') as _file:
+                    _file.write(sepa_msg.message.encode('utf-8'))
+                    cls.logger.info('SEPA message written to %s' %
+                        filename)
+            Message = Pool().get('account.payment.sepa.message')
+            Message.do(payments_group.sepa_messages)
+            cls.logger.info("apply transition 'done' to %s" %
+                payments_group.sepa_messages)
         cls.logger.success('%s processed' %
             batch.get_print_infos(keys, 'payments group'))
 
