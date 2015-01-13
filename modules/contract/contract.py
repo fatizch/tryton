@@ -744,9 +744,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         cls.raise_user_error('invalid_format')
             except UserError as exc:
                 Transaction().cursor.rollback()
+                message.append({'error': exc.message})
                 return {ext_id: {
                         'return': False,
-                        'error': exc.message,
+                        'messages': message,
                         }}
         return messages
 
