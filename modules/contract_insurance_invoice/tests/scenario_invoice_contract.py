@@ -38,6 +38,7 @@ Country = Model.get('country.country')
 Currency = Model.get('currency.currency')
 CurrencyRate = Model.get('currency.currency.rate')
 FiscalYear = Model.get('account.fiscalyear')
+Option = Model.get('contract.option')
 OptionDescription = Model.get('offered.option.description')
 Party = Model.get('party.party')
 PaymentTerm = Model.get('account.invoice.payment_term')
@@ -218,6 +219,9 @@ contract.subscriber = subscriber
 contract.start_date = contract_start_date
 contract.product = product
 contract.status = 'active'
+contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
+        amount=Decimal('100'), frequency='once_per_contract',
+        account=product_account, rated_entity=coverage))
 contract.premiums.append(ContractPremium(start=contract_start_date,
         amount=Decimal('15'), frequency='monthly', account=product_account,
         rated_entity=product))
@@ -234,12 +238,12 @@ contract.save()
 Contract.first_invoice([contract.id], config.context)
 first_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
 first_invoice.invoice.total_amount
-# #Res# #Decimal('197.81')
+# #Res# #Decimal('297.81')
 first_invoice.invoice.state
 # #Res# #u'validated'
 [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
     for x in first_invoice.invoice.lines]
-# #Res# #[(u'123456789 - Test Coverage', Decimal('17.81'), datetime.date(2014, 5, 20), datetime.date(2015, 4, 9)), (u'123456789 - Test Product', Decimal('180.00'), datetime.date(2014, 4, 10), datetime.date(2015, 4, 9))]
+# #Res# #[(u'Test Coverage - Test Coverage', Decimal('100.00'), datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)), (u'123456789 - Test Coverage', Decimal('17.81'), datetime.date(2014, 5, 20), datetime.date(2015, 4, 9)), (u'123456789 - Test Product', Decimal('180.00'), datetime.date(2014, 4, 10), datetime.date(2015, 4, 9))]
 Contract.first_invoice([contract.id], config.context)
 second_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
 AccountInvoice.post([second_invoice.invoice.id], config.context)
@@ -251,3 +255,15 @@ all_invoices[0].invoice.state
 # #Res# #u'cancel'
 all_invoices[1].invoice.state
 # #Res# #u'validated'
+
+# #Comment# #Test option declined
+contract = Contract(contract.id)
+option_id = contract.options[0].id
+Option.delete([Option(option_id)])
+Option(option_id).status
+# #Res# #u'declined'
+contract = Contract(contract.id)
+len(contract.options)
+# #Res# #0
+len(contract.declined_options)
+# #Res# #1

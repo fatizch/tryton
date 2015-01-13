@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from dateutil.rrule import rrule, rruleset, YEARLY, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
-from sql.aggregate import Max
+from sql.aggregate import Max, Count
 
 from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
@@ -23,6 +23,7 @@ from trytond.modules.contract import _STATES
 __metaclass__ = PoolMeta
 __all__ = [
     'Contract',
+    'ContractOption',
     'ContractBillingInformation',
     'Premium',
     'ContractInvoice',
@@ -473,6 +474,30 @@ class Contract:
                     billing_information.payment_term = billing_information.\
                         billing_mode.allowed_payment_terms[0]
                     billing_information.save()
+
+
+class ContractOption:
+    __name__ = 'contract.option'
+
+    @classmethod
+    def delete(cls, options):
+        to_decline = []
+        option_dict = {x.id: x for x in options}
+
+        cursor = Transaction().cursor
+        invoice_detail = Pool().get('account.invoice.line.detail').__table__()
+        for option_slice in grouped_slice(options):
+            cursor.execute(*invoice_detail.select(invoice_detail.option,
+                    Count(invoice_detail.id), where=(
+                        invoice_detail.option.in_(
+                            [x.id for x in option_slice])),
+                    group_by=invoice_detail.option))
+            for option_id, _ in cursor.fetchall():
+                to_decline.append(option_dict.pop(option_id))
+        if to_decline:
+            cls.write(to_decline, {'status': 'declined'})
+        if option_dict:
+            super(ContractOption, cls).delete(option_dict.values())
 
 
 class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,

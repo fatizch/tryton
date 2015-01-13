@@ -20,6 +20,7 @@ def register():
         InvoiceLine,
         Fee,
         Contract,
+        ContractOption,
         ContractBillingInformation,
         Premium,
         ContractInvoice,
