@@ -587,16 +587,21 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
         depends=['product', 'options', 'extra_data'], ondelete='RESTRICT')
     name = fields.Char('Name', states={'invisible': IS_PARTY})
-    options = fields.One2Many('contract.option', 'covered_element', 'Options',
-        domain=[
+    options = fields.One2ManyDomain('contract.option', 'covered_element',
+        'Options', domain=[
             ('coverage.products', '=', Eval('product')),
-            ('coverage.item_desc', '=', Eval('item_desc'))],
+            ('coverage.item_desc', '=', Eval('item_desc')),
+            ('status', '!=', 'declined'),
+            ],
         context={
             'covered_element': Eval('id'),
             'item_desc': Eval('item_desc'),
             'all_extra_datas': Eval('all_extra_datas'),
             },
         depends=['id', 'item_desc', 'all_extra_datas', 'product'])
+    declined_options = fields.One2ManyDomain('contract.option',
+        'covered_element', 'Declined Options',
+        domain=[('status', '=', 'declined')])
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[

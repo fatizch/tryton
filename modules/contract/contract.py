@@ -129,14 +129,20 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 ],
             ('company', '=', Eval('company')),
             ], states=_STATES, depends=['start_date', 'status', 'company'])
-    options = fields.One2Many('contract.option', 'contract', 'Options',
+    options = fields.One2ManyDomain('contract.option', 'contract', 'Options',
         context={
             'start_date': Eval('start_date'),
             'product': Eval('product'),
             'all_extra_datas': Eval('extra_data_values')},
-        domain=[('coverage.products', '=', Eval('product'))],
+        domain=[
+            ('coverage.products', '=', Eval('product')),
+            ('status', '!=', 'declined'),
+            ],
         states=_STATES, depends=['status', 'start_date', 'product',
             'extra_data_values'])
+    declined_options = fields.One2ManyDomain('contract.option', 'contract',
+        'Declined Options', states=_STATES, depends=['status'],
+        domain=[('status', '=', 'declined')])
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
     status = fields.Selection(CONTRACTSTATUSES, 'Status', states=_STATES,
