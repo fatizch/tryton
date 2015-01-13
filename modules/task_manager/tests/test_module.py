@@ -35,17 +35,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'name': 'user 1',
                     'login': 'user1',
                     'active': True,
-                    'team': team.id,
+                    'teams': [('add', [team.id])],
                     }, {
                     'name': 'user 2',
                     'login': 'user2',
                     'active': True,
-                    'team': team.id,
+                    'teams': [('add', [team.id])],
                     }, {
                     'name': 'user 3',
                     'login': 'user3',
                     'active': True,
-                    'team': team.id,
+                    'teams': [('add', [team.id])],
                     }])
         process_model, = self.IrModel.search([
                 ('model', '=', self.ProcessTestModel.__name__)])
@@ -101,23 +101,20 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'process_step': step1.id,
                     'team': team.id,
                     'value': 1,
-                    'kind': 'both',
                     }, {
                     'process_step': step2.id,
                     'team': team.id,
                     'value': 2,
-                    'kind': 'both',
                     }, {
                     'process_step': step3.id,
                     'team': team.id,
                     'value': 3,
-                    'kind': 'both',
                     }])
         self.assertEqual(user1.search_next_priority_task(), log1)
-        priority1.priority = 4
+        priority1.value = 4
         priority1.save()
         self.assertEqual(user1.search_next_priority_task(), log3)
-        priority3.priority = 1
+        priority3.value = 1
         priority3.save()
         self.assertEqual(user1.search_next_priority_task(), log3)
 
