@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############################# -->
+        <!-- # Preview Contract Premiums # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="preview_contract_premiums_view_form">
+            <field name="model">endorsement.start.preview_contract_premiums</field>
+            <field name="type">form</field>
+            <field name="name">preview_contract_premiums_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Contract Preview # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="contract_preview_view_form">
+            <field name="model">endorsement.start.preview_contract_premiums.contract</field>
+            <field name="type">form</field>
+            <field name="name">contract_preview_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_preview_view_list">
+            <field name="model">endorsement.start.preview_contract_premiums.contract</field>
+            <field name="type">tree</field>
+            <field name="name">contract_preview_list</field>
+        </record>
+        <!-- ############################ -->
+        <!-- # Contract Preview Premium # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="contract_preview_premium_view_list">
+            <field name="model">endorsement.start.preview_contract_premiums.premium</field>
+            <field name="type">tree</field>
+            <field name="name">contract_preview_premium_list</field>
+        </record>
+    </data>
+</tryton>

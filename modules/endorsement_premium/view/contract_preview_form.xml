@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Contract Premiums Preview">
+    <label name="contract"/>
+    <field name="contract"/>
+    <field name="old_contract_premiums" mode="tree" colspan="4"/>
+    <field name="new_contract_premiums" mode="tree" colspan="4"/>
+</form>
