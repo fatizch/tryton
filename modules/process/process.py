@@ -647,23 +647,21 @@ class Code(ModelSQL, ModelView):
                     self.method_name, self.on_model.get_rec_name(None)))
 
     def execute(self, target):
+        def call_method(method, target, parameters=None):
+            if parameters:
+                parameters = ast.literal_eval('(%s,)' % parameters)
+                result = method(target, *parameters)
+            else:
+                result = method(target)
+            return result
         if not target.__name__ == self.on_model.model:
             raise Exception('Bad models ! Expected %s got %s' % (
                     self.on_model.model, target.__name__))
         # Test if classmethod or not
         method = getattr(target.__class__, self.method_name)
         if not hasattr(method, 'im_self') or method.im_self:
-            if self.parameters:
-                parameters = ast.literal_eval(self.parameters)
-                result = method([target], *parameters)
-            else:
-                result = method([target])
-        else:
-            if self.parameters:
-                parameters = ast.literal_eval(self.parameters)
-                result = method(target, *parameters)
-            else:
-                result = method(target)
+            target = [target]
+        result = call_method(method, target, self.parameters)
         if (not result or
                 not isinstance(result, (list, tuple)) and result is True):
             return
