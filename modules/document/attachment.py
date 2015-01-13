@@ -18,6 +18,13 @@ class Attachment(export.ExportImportMixin):
         'Document Description', ondelete='SET NULL')
 
     @classmethod
+    def __setup__(cls):
+        super(Attachment, cls).__setup__()
+        cls._error_messages.update({
+                'can_t_decode_base64': "Can't decode attachment in base 64"
+                })
+
+    @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values['name']
 
@@ -34,7 +41,10 @@ class Attachment(export.ExportImportMixin):
     @classmethod
     def _import_json(cls, values, main_object=None):
         if 'data' in values:
-            values['data'] = base64.b64decode(values['data'])
+            try:
+                values['data'] = base64.b64decode(values['data'])
+            except Exception:
+                cls.raise_user_error('can_t_decode_base64')
         return super(Attachment, cls)._import_json(values, main_object)
 
     def export_json(self, skip_fields=None, already_exported=None,
