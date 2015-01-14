@@ -71,9 +71,9 @@ class Contract(Printable):
                 'generic_send_letter': {},
                 })
         cls._error_messages.update({
-                'error_in_renewal_date_calculation': 'Errors occurs during '
+                'error_in_renewal_date_calculation': 'Errors occured during '
                 'renewal date calculation : %s',
-                'need_option': 'At least one option must be selected for %s',
+                'need_option': 'Select at least one option for %s',
                 })
 
     def calculate(self):

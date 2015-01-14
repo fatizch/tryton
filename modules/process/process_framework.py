@@ -118,8 +118,8 @@ class ProcessFramework(ModelView):
             cls._buttons, cls)
         cls._error_messages.update({
                 'everything_ok': 'Everything is good !',
-                'field_required': "The field '%s' is required",
-                'child_field_required': "The field '%s' of '%s' is required",
+                'field_required': "Enter a value for field(s): %s",
+                'child_field_required': "Enter a value for field '%s' of '%s'",
                 })
 
     @classmethod
@@ -254,10 +254,13 @@ class ProcessFramework(ModelView):
         return self.button_is_active(button_name)
 
     def check_not_null(self, *args):
+        labels = []
         for field in args:
             if not getattr(self, field):
-                self.append_functional_error('field_required',
-                    (coop_string.translate_label(self, field)))
+                labels.append(coop_string.translate_label(self, field))
+        if labels:
+            self.append_functional_error('field_required',
+                ', '.join(["'%s'" % l for l in labels]))
 
     @classmethod
     def button_transition_states(cls, process, transition_data):
