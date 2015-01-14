@@ -2,16 +2,16 @@
 <tryton>
     <data>
         <record model="event.type" id="event_activate_contract">
-            <field name="name">Activate</field>
-            <field name="code">activate</field>
+            <field name="name">Activate Contract</field>
+            <field name="code">activate_contract</field>
         </record>
         <record model="event.type" id="event_decline_contract">
-            <field name="name">Decline</field>
-            <field name="code">decline</field>
+            <field name="name">Decline Contract</field>
+            <field name="code">decline_contract</field>
         </record>
         <record model="event.type" id="event_terminate_contract">
-            <field name="name">Terminate</field>
-            <field name="code">terminate</field>
+            <field name="name">Terminate Contract</field>
+            <field name="code">terminate_contract</field>
         </record>
     </data>
 </tryton>

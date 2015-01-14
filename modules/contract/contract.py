@@ -826,7 +826,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         for option in options:
             option.status = 'active'
         self.options = options
-        Event.notify_events([self], 'activate')
+        Event.notify_events([self], 'activate_contract')
 
     def decline_contract(self, reason):
         pool = Pool()
@@ -834,7 +834,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.status = 'declined'
         self.sub_status = reason
         self.save()
-        Event.notify_events([self], 'decline', description=reason.name)
+        Event.notify_events([self], 'decline_contract',
+            description=reason.name)
 
     def clean_up_versions(self):
         pool = Pool()
