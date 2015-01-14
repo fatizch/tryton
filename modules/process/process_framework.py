@@ -120,6 +120,8 @@ class ProcessFramework(ModelView):
                 'everything_ok': 'Everything is good !',
                 'field_required': "Enter a value for field(s): %s",
                 'child_field_required': "Enter a value for field '%s' of '%s'",
+                'date_in_future': 'Select a date that is not in the future '
+                'for field(s): %s',
                 })
 
     @classmethod
@@ -260,6 +262,16 @@ class ProcessFramework(ModelView):
                 labels.append(coop_string.translate_label(self, field))
         if labels:
             self.append_functional_error('field_required',
+                ', '.join(["'%s'" % l for l in labels]))
+
+    def check_not_future(self, *args):
+        labels = []
+        for field in args:
+            date = getattr(self, field)
+            if date and date > utils.today():
+                labels.append(coop_string.translate_label(self, field))
+        if labels:
+            self.append_functional_error('date_in_future',
                 ', '.join(["'%s'" % l for l in labels]))
 
     @classmethod
