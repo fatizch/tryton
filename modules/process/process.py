@@ -43,7 +43,7 @@ class Status(ModelSQL, ModelView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.remove_blank_and_invalid_char(self.name)
+        return coop_string.slugify(self.name)
 
 
 class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
@@ -585,7 +585,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     def on_change_with_technical_name(self):
         if self.technical_name:
             return self.technical_name
-        return coop_string.remove_blank_and_invalid_char(self.fancy_name)
+        return coop_string.slugify(self.fancy_name)
 
     def get_display_steps_without_status(self, name):
         return False
@@ -890,7 +890,7 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
         if self.technical_name:
             return self.technical_name
         elif self.fancy_name:
-            return coop_string.remove_blank_and_invalid_char(self.fancy_name)
+            return coop_string.slugify(self.fancy_name)
 
     @classmethod
     def default_colspan(cls):

@@ -50,7 +50,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.remove_blank_and_invalid_char(self.name)
+        return coop_string.slugify(self.name)
 
     @classmethod
     def get_endorsement_parts(cls, definitions, name):
@@ -147,7 +147,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.remove_blank_and_invalid_char(self.name)
+        return coop_string.slugify(self.name)
 
     @fields.depends('kind')
     def on_change_with_endorsed_model(self, name=None):

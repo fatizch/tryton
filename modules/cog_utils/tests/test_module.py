@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import unittest
 import datetime
-from decimal import Decimal
-
 import mock
+from decimal import Decimal
 
 import trytond.tests.test_tryton
 from trytond.model import ModelSQL, fields
 from trytond.exceptions import UserError
 
 from trytond.modules.cog_utils import test_framework
-from trytond.modules.cog_utils import utils, coop_date, model
+from trytond.modules.cog_utils import utils, coop_string, coop_date, model
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
@@ -577,9 +576,16 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.ExportTest.multiple_import_json(output)
         self.assertEqual('select2', to_export.property_selection)
 
+    def test_string_replace(self):
+        s = u'café-THÉ:20$'
+
+        self.assertEqual(coop_string.slugify(s, lower=False), u'cafe-THE_20_')
+        self.assertEqual(coop_string.slugify(s), u'cafe-the_20_')
+        self.assertEqual(coop_string.asciify(s), u'cafe-THE:20$')
+        self.assertEqual(coop_string.slugify(s, '-'), u'cafe-the-20-')
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-            ModuleTestCase))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
     return suite

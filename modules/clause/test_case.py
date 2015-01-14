@@ -16,8 +16,7 @@ class TestCaseModel:
     def create_clause(cls, **kwargs):
         Clause = Pool().get('clause')
         if 'code' not in kwargs:
-            kwargs['code'] = coop_string.remove_blank_and_invalid_char(
-                kwargs['name'])
+            kwargs['code'] = coop_string.slugify(kwargs['name'])
         if 'customizable' not in kwargs:
             kwargs['customizable'] = True
         return Clause(**kwargs)

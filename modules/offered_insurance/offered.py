@@ -179,7 +179,7 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
         if self.code:
             return self.code
         elif self.name:
-            return coop_string.remove_blank_and_invalid_char(self.name)
+            return coop_string.slugify(self.name)
 
     @classmethod
     def get_var_names_for_full_extract(cls):

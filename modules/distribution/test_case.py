@@ -18,7 +18,7 @@ class TestCaseModel:
     def create_distribution_network(cls, **kwargs):
         DistributionNetwork = Pool().get('distribution.network')
         if 'code' not in kwargs:
-            kwargs['code'] = coop_string.remove_blank_and_invalid_char(
+            kwargs['code'] = coop_string.slugify(
                 kwargs['name'])
         return DistributionNetwork(**kwargs)
 

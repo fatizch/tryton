@@ -146,8 +146,7 @@ class BatchRoot(ModelView):
         filepath_template = cls.get_conf_item('filepath_template')
         filepath_template = filepath_template.\
             replace('%{FILENAME}', filename). \
-            replace('%{BATCHNAME}', coop_string.remove_blank_and_invalid_char(
-                cls.__name__))
+            replace('%{BATCHNAME}', coop_string.slugify(cls.__name__))
         if '%{TIMESTAMP}' in filepath_template:
             date_format = cls.get_conf_item('filepath_timestamp_format')
             timestamp = datetime.now().strftime(date_format)

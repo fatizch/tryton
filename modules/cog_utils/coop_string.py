@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
+from unidecode import unidecode
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -156,26 +157,13 @@ def selection_as_string(cls, var_name, value):
             return cur_tuple[1]
 
 
-def remove_accentued_char(from_string):
-    import unicodedata
-    return ''.join((c for c in unicodedata.normalize('NFD',
-                unicode(from_string)) if unicodedata.category(c) != 'Mn'))
+def asciify(text):
+    return unicode(unidecode(text))
 
 
-def remove_invalid_char(from_string):
-    res = remove_accentued_char(from_string)
-    res = re.sub('[^0-9a-zA-Z]+', '_', res)
-    return res
-
-
-def remove_all_but_alphanumeric_and_space(from_string):
-    pattern = re.compile(r'([^\s\w]|_)+')
-    return pattern.sub('', from_string)
-
-
-def remove_blank_and_invalid_char(from_string, lower_case=True):
-    res = remove_invalid_char(from_string).replace(' ', '_')
-    return res.lower() if lower_case else res
+def slugify(text, char='_', lower=True):
+    res = re.sub(r'[^\w\-]+', char, asciify(text))
+    return res.lower() if lower else res
 
 
 def is_ascii(s):
@@ -196,8 +184,8 @@ def check_for_pattern(s, pattern):
 
 
 def coerce_to_bool(s):
-    if s.lower() in ["1", "yes", "true", "on"]:
+    if s.lower() in ['1', 'yes', 'true', 'on']:
         return True
-    if s.lower() in ["0", "no", "false", "off"]:
+    if s.lower() in ['0', 'no', 'false', 'off']:
         return False
     raise ValueError('Not a boolean: %s' % s)

@@ -88,7 +88,7 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.remove_blank_and_invalid_char(self.name)
+        return coop_string.slugify(self.name)
 
 
 class DistributionNetworkComProductRelation(model.CoopSQL):

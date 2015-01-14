@@ -529,7 +529,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
     def on_change_with_name(self):
         if self.name:
             return self.name
-        return coop_string.remove_blank_and_invalid_char(self.string)
+        return coop_string.slugify(self.string)
 
     @classmethod
     def __setup__(cls):
@@ -706,7 +706,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     def on_change_with_short_name(self):
         if self.short_name:
             return self.short_name
-        return coop_string.remove_blank_and_invalid_char(self.name)
+        return coop_string.slugify(self.name)
 
     @classmethod
     def get_passing_test_cases(cls, instances, name):
@@ -909,7 +909,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                         rule_execution.user = Transaction().user
                         rule_execution.init_from_rule_result(the_result)
                         rule_execution.errors += '\n' + (
-                            coop_string.remove_invalid_char(self.name) +
+                            coop_string.slugify(self.name) +
                             ' - ' + str(exc))
                         rule_execution.save()
                         DatabaseOperationalError = backend.get(
@@ -951,8 +951,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                 if not dim_name:
                     dim_name = 'Col #%s' % idx
                 dimension_names.append(dim_name)
-            res = ', '.join(
-                map(coop_string.remove_invalid_char, dimension_names))
+            res = ', '.join([coop_string.slugify(x, lower=False)
+                for x in dimension_names])
         elif kind == 'rule':
             res = ', '.join(('%s=' % elem.name
                 for elem in elem.parameters))
@@ -1190,7 +1190,7 @@ class RuleFunction(ModelView, ModelSQL):
         if self.translated_technical_name:
             return
         self.translated_technical_name = \
-            coop_string.remove_blank_and_invalid_char(self.description)
+            coop_string.slugify(self.description)
 
     def as_tree(self):
         tree = {}
@@ -1225,7 +1225,7 @@ class RuleFunction(ModelView, ModelSQL):
     @fields.depends('rule')
     def on_change_with_translated_technical_name(self):
         if self.rule:
-            return coop_string.remove_blank_and_invalid_char(self.rule.name)
+            return coop_string.slugify(self.rule.name)
 
     @staticmethod
     def default_long_description():
@@ -1532,7 +1532,7 @@ class RuleError(model.CoopSQL, model.CoopView):
         if self.code:
             return self.code
         elif self.name:
-            return coop_string.remove_blank_and_invalid_char(self.name)
+            return coop_string.slugify(self.name)
 
     @classmethod
     def get_functional_errors_from_errors(cls, errors):

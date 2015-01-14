@@ -97,7 +97,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.remove_blank_and_invalid_char(self.name)
+        return coop_string.slugify(self.name)
 
 
 class DocumentProductRelation(model.CoopSQL):
@@ -361,7 +361,7 @@ class DocumentGenerateReport(Report):
     @classmethod
     def EDM_write_tmp_report(cls, report_data, filename):
         basename, ext = os.path.splitext(filename)
-        filename = coop_string.remove_invalid_char(basename) + ext
+        filename = coop_string.slugify(basename, lower=False) + ext
         server_shared_folder = config.get('EDM', 'server_shared_folder',
             '/tmp')
         client_shared_folder = config.get('EDM', 'client_shared_folder')
@@ -451,8 +451,7 @@ class DocumentCreatePreview(model.CoopView):
     def on_change_with_output_report_filepath(self, name=None):
         # Generate unique temporary output report filepath
         return os.path.join(tempfile.mkdtemp(),
-            coop_string.remove_blank_and_invalid_char(
-                self.output_report_name) + '.pdf')
+            coop_string.slugify(self.output_report_name) + '.pdf', lower=False)
 
 
 class DocumentCreateAttach(model.CoopView):
@@ -552,8 +551,7 @@ class DocumentCreate(Wizard):
             model_name = os.path.splitext(
                 result['reports'][0]['file_basename'])[0]
             output = '%s-%s' % (output, model_name)
-        result['output_report_name'] = \
-            coop_string.remove_blank_and_invalid_char(output)
+        result['output_report_name'] = coop_string.slugify(output, lower=False)
         result['party'] = self.select_model.party.id
         return result
 

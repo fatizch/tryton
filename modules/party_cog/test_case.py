@@ -169,14 +169,14 @@ class TestCaseModel:
                         suffix = party.short_name
                     else:
                         suffix = party.name
-                    suffix = coop_string.remove_invalid_char(suffix)
+                    suffix = coop_string.slugify(suffix, lower=False)
                     value = 'contact@%s.com' % suffix
                 elif party.is_person:
                     prefix = ''
                     if party.first_name:
-                        prefix = '%s.' % coop_string.remove_invalid_char(
-                            party.first_name)
-                    prefix += coop_string.remove_invalid_char(party.name)
+                        prefix = '%s.' % coop_string.slugify(
+                            party.first_name, lower=False)
+                    prefix += coop_string.slugify(party.name, lower=False)
                     value = '%s@%s' % (prefix, random.choice(
                             possible_domains))
                 value = value.replace(' ', '').lower()

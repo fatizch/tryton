@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 from trytond.config import config
+
 from .batch import *
 from .utils import *
 from .coop_date import *

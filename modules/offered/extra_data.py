@@ -129,7 +129,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     @fields.depends('name', 'string')
     def on_change_with_name(self):
         if not self.name and self.string:
-            return coop_string.remove_blank_and_invalid_char(self.string)
+            return coop_string.slugify(self.string)
         return self.name
 
     @fields.depends('tags')

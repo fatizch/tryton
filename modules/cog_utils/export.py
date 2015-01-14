@@ -536,7 +536,7 @@ class ExportPackage(ExportImportMixin, ModelSQL, ModelView):
     def on_change_with_code(self):
         if self.code:
             return self.code
-        return coop_string.remove_blank_and_invalid_char(self.package_name)
+        return coop_string.slugify(self.package_name)
 
 
 class Add2ExportPackageWizardStart(ModelView):

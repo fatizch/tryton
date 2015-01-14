@@ -72,7 +72,7 @@ class TestCaseModel:
             tables = []
         return cls.create_rule(
             name=name,
-            short_name=coop_string.remove_blank_and_invalid_char(name),
+            short_name=coop_string.slugify(name),
             algorithm=code,
             parameters=[],
             context=Context(1),

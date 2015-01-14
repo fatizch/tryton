@@ -183,8 +183,8 @@ quote_sequence.company = company
 quote_sequence.save()
 coverage = OptionDescription()
 coverage.company = company
-coverage.name = 'Test Coverage'
-coverage.code = 'test_coverage'
+coverage.name = u'Test Coverage'
+coverage.code = u'test_coverage'
 coverage.start_date = product_start_date
 coverage.account_for_billing = product_account
 coverage.save()
