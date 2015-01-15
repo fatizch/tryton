@@ -673,10 +673,14 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     @model.CoopView.button
     @Workflow.transition('declined')
-    def decline(cls, endorsements):
+    def decline(cls, endorsements, reason=None):
+        pool = Pool()
+        Event = pool.get('event')
         cls.write(endorsements, {
                 'state': 'declined',
                 })
+        Event.notify_events(endorsements, 'decline_endorsement',
+                description=(reason.name if reason else None))
 
     @classmethod
     @model.CoopView.button
@@ -703,6 +707,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     @model.CoopView.button
     @Workflow.transition('applied')
     def apply(cls, endorsements):
+        pool = Pool()
+        Event = pool.get('event')
         pool = Pool()
         endorsements_per_model = cls.group_per_model(endorsements)
         for model_name in cls.apply_order():
@@ -736,6 +742,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     instance.__name__)
                 for method in methods:
                     method.execute(endorsement, instance)
+        Event.notify_events(endorsements, 'apply_endorsement')
 
     @classmethod
     @model.CoopView.button_action('endorsement.act_contract_open')
