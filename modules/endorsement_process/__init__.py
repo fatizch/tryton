@@ -1,0 +1,19 @@
+from trytond.pool import Pool
+from .endorsement import *
+from .process import *
+from .wizard import *
+
+
+def register():
+    Pool.register(
+        Process,
+        Endorsement,
+        EndorsementContract,
+        EndorsementFindProcess,
+        EndorsementPartUnion,
+        module='endorsement_process', type_='model')
+    Pool.register(
+        StartEndorsement,
+        EndorsementStartProcess,
+        PreviewChangesWizard,
+        module='endorsement_process', type_='wizard')

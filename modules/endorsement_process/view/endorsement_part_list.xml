@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Endorsement Parts">
+    <field name="contracts_name"/>
+    <field name="name"/>
+    <button name="button_modify" string="Modify"/>
+</tree>

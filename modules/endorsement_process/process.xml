@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <record model="ir.action.wizard" id="endorsement_process_launcher">
+        <field name="name">Start Endorsement Process</field>
+        <field name="wiz_name">endorsement.start_process</field>
+    </record>
+    <menuitem parent="contract.menu_contract" sequence="1" action="endorsement_process_launcher" id="menu_start_endorsement_process"/>
+  </data>
+</tryton>

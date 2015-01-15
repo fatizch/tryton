@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="endorsement_process_endorsement_contract_view_list">
+            <field name="model">endorsement.contract</field>
+            <field name="inherit" ref="endorsement.endorsement_contract_view_list"/>
+            <field name="name">endorsement_contract_list</field>
+        </record>
+        <record model="ir.ui.view" id="endorsement_process_endorsement_part_view_list">
+            <field name="model">endorsement.part.union</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_part_list</field>
+        </record>
+    </data>
+</tryton>
