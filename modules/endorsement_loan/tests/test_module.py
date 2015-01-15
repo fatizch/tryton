@@ -161,6 +161,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         'endorsement_loan.test0030_create_endorsement',
         )
     def test0099_revert_endorsement(self):
+        # Note: test pass only with a database configured as postgresql
         # WARNING: No dependency, commit required for the history / write dates
         # to kick in properly
         Transaction().cursor.commit()

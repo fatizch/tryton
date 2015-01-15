@@ -344,6 +344,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     @test_framework.prepare_test('table.test0060table_2dim')
     def test0090test_export(self):
+        # Note: test pass only with a database configured as postgresql
         self.maxDiff = None
         test_table = self.Definition.search([('code', '=', 'test_code')])[0]
         file_name, result, _ = test_table.export_json_to_file()
@@ -402,23 +403,23 @@ class ModuleTestCase(test_framework.CoopTestCase):
                             'start_date': None,
                             'type': u'dimension2',
                             'value': None}],
-                   'dimension3': [],
-                   'dimension4': [],
-                   'dimension_kind1': u'value',
-                   'dimension_kind2': u'range',
-                   'dimension_kind3': None,
-                   'dimension_kind4': None,
-                   'dimension_name1': u'Value',
-                   'dimension_name2': u'Range',
-                   'dimension_name3': None,
-                   'dimension_name4': None,
-                   'dimension_order1': u'alpha',
-                   'dimension_order2': u'alpha',
-                   'dimension_order3': u'alpha',
-                   'dimension_order4': u'alpha',
-                   'name': u'Test',
-                   'number_of_digits': 2,
-                   'tags': [],
+                    'dimension3': [],
+                    'dimension4': [],
+                    'dimension_kind1': u'value',
+                    'dimension_kind2': u'range',
+                    'dimension_kind3': None,
+                    'dimension_kind4': None,
+                    'dimension_name1': u'Value',
+                    'dimension_name2': u'Range',
+                    'dimension_name3': None,
+                    'dimension_name4': None,
+                    'dimension_order1': u'alpha',
+                    'dimension_order2': u'alpha',
+                    'dimension_order3': u'alpha',
+                    'dimension_order4': u'alpha',
+                    'name': u'Test',
+                    'number_of_digits': 2,
+                    'tags': [],
                'type_': u'char'}])
 
     @test_framework.prepare_test('table.test0060table_2dim')
