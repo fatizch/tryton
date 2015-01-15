@@ -87,8 +87,8 @@ config._context['company'] = company.id
 
 # #Comment# #Create Fiscal Year
 fiscalyear = FiscalYear(name='2014')
-fiscalyear.start_date = datetime.date(2014, 1, 1)
-fiscalyear.end_date = datetime.date(2014, 12, 31)
+fiscalyear.start_date = datetime.date(datetime.date.today().year, 1, 1)
+fiscalyear.end_date = datetime.date(datetime.date.today().year, 12, 31)
 fiscalyear.company = company
 post_move_seq = Sequence(name='2014', code='account.move',
     company=company)

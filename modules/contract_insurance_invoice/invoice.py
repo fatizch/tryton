@@ -200,7 +200,11 @@ class Invoice:
 
     def update_invoice_before_post(self):
         self.invoice_date = self.contract_invoice.start
-        return {'invoice_date': self.contract_invoice.start}
+        self.accounting_date = max(self.invoice_date, utils.today())
+        return {
+            'invoice_date': self.invoice_date,
+            'accounting_date': self.accounting_date,
+            }
 
     @classmethod
     def post(cls, invoices):
