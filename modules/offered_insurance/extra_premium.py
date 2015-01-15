@@ -36,7 +36,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
     @fields.depends('name', 'code')
     def on_change_name(self):
         if not self.code:
-            self.code = coop_string.remove_blank_and_invalid_char(self.name)
+            self.code = coop_string.slugify(self.name)
 
     @fields.depends('is_discount')
     def on_change_is_discount(self):

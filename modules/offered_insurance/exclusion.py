@@ -25,7 +25,7 @@ class ExclusionKind(model.CoopSQL, model.CoopView):
     @fields.depends('name', 'code')
     def on_change_name(self):
         if not self.code:
-            self.code = coop_string.remove_blank_and_invalid_char(self.name)
+            self.code = coop_string.slugify(self.name)
 
     @classmethod
     def search_rec_name(cls, name, clause):
