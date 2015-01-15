@@ -116,12 +116,21 @@ class Snapshot(ModelSQL, ModelView):
     name = fields.Char('Name', required=True)
 
     @classmethod
+    def __setup__(cls):
+        super(Snapshot, cls).__setup__()
+        cls._error_messages.update({
+            'no_sequence_defined': 'No sequence defined in configuration'
+            })
+
+    @classmethod
     def create(cls, vlist):
         pool = Pool()
         Sequence = pool.get('ir.sequence')
         Configuration = pool.get('account.configuration')
 
         config = Configuration(1)
+        if not config.snapshot_sequence:
+            cls.raise_user_error('no_sequence_defined')
         vlist = [v.copy() for v in vlist]
         for values in vlist:
             if not values.get('name'):
@@ -151,6 +160,7 @@ class LineAggregated(ModelSQL, ModelView):
     aggregated_move_id = fields.Char('Aggregated Move Id')
     account = fields.Many2One('account.account', 'Account')
     journal = fields.Many2One('account.journal', 'Journal')
+    date = fields.Date('Date')
     post_date = fields.Date('Post Date')
     snapshot = fields.Many2One('account.move.snapshot', 'Snapshot')
     debit = fields.Numeric('Debit', digits=(16, Eval('currency_digits', 2)),
@@ -191,6 +201,7 @@ class LineAggregated(ModelSQL, ModelView):
                     else_=Max(move.number)).as_('aggregated_move_id'),
                 line.account.as_('account'),
                 move.journal.as_('journal'),
+                move.date.as_('date'),
                 move.post_date.as_('post_date'),
                 move.snapshot.as_('snapshot'),
                 Sum(Coalesce(line.debit, 0)).as_('debit'),
@@ -200,6 +211,7 @@ class LineAggregated(ModelSQL, ModelView):
                     Case((journal.aggregate, move.journal), else_=line.id),
                     journal.aggregate,
                     move.journal,
+                    move.date,
                     move.post_date,
                     move.snapshot])
 
@@ -251,6 +263,7 @@ class OpenLine(Wizard):
                     ('account', '=', l.account.id),
                     ('move.journal', '=', l.journal.id),
                     ('move.post_date', '=', l.post_date),
+                    ('move.date', '=', l.date),
                     ('move.snapshot', '=', l.snapshot.id),
                     ]
             else:

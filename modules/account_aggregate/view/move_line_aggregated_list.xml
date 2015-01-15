@@ -4,6 +4,7 @@
     <field name="snapshot"/>
     <field name="account"/>
     <field name="journal"/>
+    <field name="date"/>
     <field name="post_date"/>
     <field name="description"/>
     <field name="debit"/>
