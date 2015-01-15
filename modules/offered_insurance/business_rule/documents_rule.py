@@ -451,7 +451,7 @@ class DocumentCreatePreview(model.CoopView):
     def on_change_with_output_report_filepath(self, name=None):
         # Generate unique temporary output report filepath
         return os.path.join(tempfile.mkdtemp(),
-            coop_string.slugify(self.output_report_name) + '.pdf', lower=False)
+            coop_string.slugify(self.output_report_name, lower=False) + '.pdf')
 
 
 class DocumentCreateAttach(model.CoopView):
