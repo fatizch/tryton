@@ -11,4 +11,8 @@ def register():
         CommissionPlanFee,
         Agent,
         AgentFee,
+        CreateAgentsAsk,
         module='premium_commission', type_='model')
+    Pool.register(
+        CreateAgents,
+        module='premium_commission', type_='wizard')

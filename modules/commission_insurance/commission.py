@@ -1,5 +1,10 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, PYSONEncoder
+from trytond.wizard import Wizard, StateView, Button, StateTransition
+from trytond.wizard import StateAction
+
+from trytond.transaction import Transaction
+from trytond.tools import grouped_slice
 
 from trytond.modules.cog_utils import fields, model, export, coop_string
 
@@ -10,6 +15,9 @@ __all__ = [
     'Plan',
     'PlanRelation',
     'Agent',
+    'CreateAgents',
+    'CreateAgentsParties',
+    'CreateAgentsAsk',
     ]
 __metaclass__ = PoolMeta
 
@@ -272,3 +280,146 @@ class Agent(export.ExportImportMixin):
                 [('party.code',) + tuple(clause[1:])],
                 [('plan.code',) + tuple(clause[1:])],
                 ]
+
+
+class CreateAgents(Wizard):
+    'Create Agents'
+
+    __name__ = 'commission.create_agents'
+
+    start_state = 'parties'
+    parties = StateView('commission.create_agents.parties',
+        'commission_insurance.commission_create_agents_parties_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Next', 'create_brokers', 'tryton-go-next',
+                default=True),
+            ])
+    create_brokers = StateTransition()
+    ask = StateView('commission.create_agents.ask',
+        'commission_insurance.commission_create_agents_ask_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('OK', 'create_', 'tryton-ok', default=True),
+            ])
+    create_ = StateAction('commission.act_agent_form')
+
+    def transition_create_brokers(self):
+        pool = Pool()
+        Party = pool.get('party.party')
+        if self.parties.parties:
+            Party.write(list(self.parties.parties),
+                {'account_payable': self.parties.account_payable.id})
+
+        Broker = pool.get('broker')
+        brokers = []
+        Address = pool.get('party.address')
+        adresses_to_create = []
+        adresses_to_write = []
+        for party in self.parties.parties:
+            address = party.address_get('invoice')
+            if not address:
+                adresses_to_create.append({'party': party.id, 'invoice': True})
+            elif not address.invoice:
+                adresses_to_write.append(address)
+            if party.broker_role:
+                continue
+            brokers.append({'party': party.id})
+
+        if brokers:
+            Broker.create(brokers)
+        if adresses_to_create:
+            Address.create(adresses_to_create)
+        if adresses_to_write:
+            Address.write(adresses_to_write, {'invoice': True})
+        return 'ask'
+
+    def new_agent(self, party, plan):
+        return {
+            'party': party.id,
+            'plan': plan.id,
+            'company': self.parties.company.id,
+            'currency': self.parties.company.currency.id,
+            'type_': 'agent',
+            }
+
+    def agent_update_values(self):
+        return {}
+
+    def do_create_(self, action):
+        pool = Pool()
+        Agent = pool.get('commission.agent')
+        existing_agents = {}
+        agents_to_create = []
+        agents_to_update = []
+        agents = []
+        for party_slice in grouped_slice([x.party for x in self.ask.brokers]):
+            for agent in Agent.search([
+                    ('party', 'in', [x.id for x in party_slice]),
+                    ('plan', 'in', [x.id for x in self.ask.plans]),
+                    ('company', '=', self.parties.company),
+                    ('currency', '=', self.parties.company.currency),
+                    ('type_', '=', 'agent'),
+                    ]):
+                existing_agents[(agent.party.id, agent.plan.id)] = agent
+        for party in [x.party for x in self.ask.brokers]:
+            for plan in self.ask.plans:
+                agent = existing_agents.get((party.id, plan.id), None)
+                if agent:
+                    agents_to_update.append(agent)
+                else:
+                    agents_to_create.append(self.new_agent(party, plan))
+        if agents_to_create:
+            agents += [x.id for x in Agent.create(agents_to_create)]
+
+        vals = self.agent_update_values()
+        if vals and agents_to_update:
+            Agent.write(agents_to_update, vals)
+            agents += [x.id for x in agents_to_update]
+        encoder = PYSONEncoder()
+        action['pyson_domain'] = encoder.encode([('id', 'in', agents)])
+        action['pyson_search_value'] = encoder.encode([])
+        return action, {}
+
+    def default_ask(self, name):
+        return {
+            'brokers': [x.broker_role[0].id for x in self.parties.parties],
+            }
+
+
+class CreateAgentsParties(model.CoopView):
+    'Create Agents'
+
+    __name__ = 'commission.create_agents.parties'
+
+    company = fields.Many2One('company.company', 'Company', required=True)
+    parties = fields.Many2Many('party.party', None, None, 'Parties',
+        domain=[
+            ('is_company', '=', True),
+            ('is_bank', '=', False),
+            ('is_insurer', '=', False),
+            ])
+    account_payable = fields.Many2One('account.account', 'Account Payable',
+        domain=[
+            ('kind', '=', 'payable'),
+            ('company', '=', Eval('company')),
+            ],
+        states={'required': Bool(Eval('parties'))},
+        depends=['company', 'parties'])
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')
+
+
+class CreateAgentsAsk(model.CoopView):
+    'Create Agents'
+
+    __name__ = 'commission.create_agents.ask'
+
+    company = fields.Many2One('company.company', 'Company', required=True)
+    brokers = fields.Many2Many('broker', None, None, 'Brokers', required=True)
+    plans = fields.Many2Many('commission.plan', None, None, 'Plans',
+        domain=[('type_', '=', 'agent')], required=True)
+
+    @staticmethod
+    def default_company():
+        return Transaction().context.get('company')

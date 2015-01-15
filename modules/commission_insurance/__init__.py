@@ -21,4 +21,9 @@ def register():
         Product,
         Template,
         Uom,
+        CreateAgentsParties,
+        CreateAgentsAsk,
         module='commission_insurance', type_='model')
+    Pool.register(
+        CreateAgents,
+        module='commission_insurance', type_='wizard')

@@ -1,9 +1,12 @@
-from trytond.model import ModelView
+from trytond.model import ModelView, fields
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
 
 __all__ = [
     'Commission',
     'Agent',
+    'CreateAgents',
+    'CreateAgentsAsk',
     ]
 __metaclass__ = PoolMeta
 
@@ -28,3 +31,28 @@ class Agent:
     @classmethod
     def _export_light(cls):
         return (super(Agent, cls)._export_light() | set(['waiting_account']))
+
+
+class CreateAgents:
+    __name__ = 'commission.create_agents'
+
+    def new_agent(self, party, plan):
+        agent = super(CreateAgents, self).new_agent(party, plan)
+        agent['waiting_account'] = self.ask.waiting_account
+        return agent
+
+    def agent_update_values(self):
+        vals = super(CreateAgents, self).agent_update_values()
+        vals['waiting_account'] = self.ask.waiting_account
+        return vals
+
+
+class CreateAgentsAsk:
+    __name__ = 'commission.create_agents.ask'
+
+    waiting_account = fields.Many2One('account.account', 'Waiting Account',
+        domain=[
+            ('company', '=', Eval('company')),
+            ('kind', 'in', ['payable', 'other']),
+            ],
+        depends=['company'], required=True)

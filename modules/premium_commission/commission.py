@@ -8,6 +8,8 @@ __all__ = [
     'CommissionPlanFee',
     'Agent',
     'AgentFee',
+    'CreateAgents',
+    'CreateAgentsAsk',
     ]
 
 
@@ -45,3 +47,23 @@ class AgentFee(model.CoopSQL):
         required=True)
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='CASCADE',
         required=True)
+
+
+class CreateAgents:
+    __name__ = 'commission.create_agents'
+
+    def new_agent(self, party, plan):
+        agent = super(CreateAgents, self).new_agent(party, plan)
+        agent['fees'] = [('add', [x.id for x in self.ask.fees])]
+        return agent
+
+    def agent_update_values(self):
+        vals = super(CreateAgents, self).agent_update_values()
+        vals['fees'] = [('add', [x.id for x in self.ask.fees])]
+        return vals
+
+
+class CreateAgentsAsk:
+    __name__ = 'commission.create_agents.ask'
+
+    fees = fields.Many2Many('account.fee', None, None, 'Fees')
