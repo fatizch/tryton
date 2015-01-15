@@ -93,11 +93,17 @@ class StartEndorsement:
         [Button('Previous', 'billing_information_previous',
                 'tryton-go-previous'),
             Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Suspend', 'suspend', 'tryton-save'),
+            Button('Suspend', 'change_billing_information_suspend',
+                'tryton-save'),
             Button('Next', 'billing_information_next', 'tryton-go-next',
                 default=True)])
+    change_billing_information_suspend = StateTransition()
     billing_information_next = StateTransition()
     billing_information_previous = StateTransition()
+
+    def transition_change_billing_information_suspend(self):
+        self.end_current_part('change_billing_information')
+        return 'end'
 
     def default_change_billing_information(self, name):
         result = self.get_revision_state_defaults(

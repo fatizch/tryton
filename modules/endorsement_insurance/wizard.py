@@ -520,10 +520,12 @@ class StartEndorsement:
         'endorsement_insurance.new_covered_element_view_form', [
             Button('Previous', 'new_covered_element_previous',
                 'tryton-go-previous'),
-            Button('Suspend', 'suspend', 'tryton-save'),
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Suspend', 'new_covered_element_suspend', 'tryton-save'),
             Button('Next', 'new_covered_element_next', 'tryton-go-next')])
     new_covered_element_previous = StateTransition()
     new_covered_element_next = StateTransition()
+    new_covered_element_suspend = StateTransition()
     new_option_covered_element = StateView(
         'contract.covered_element.add_option',
         'endorsement_insurance.add_option_to_covered_element_view_form', [
@@ -600,6 +602,10 @@ class StartEndorsement:
             self.update_default_covered_element_from_endorsement(endorsement,
                 result)
         return result
+
+    def transition_new_covered_element_suspend(self):
+        self.end_current_part('new_covered_element')
+        return 'end'
 
     def transition_new_covered_element_next(self):
         self.end_current_part('new_covered_element')
