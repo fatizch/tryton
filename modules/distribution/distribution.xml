@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ############################################################ -->
-    <!-- Menus -->
-    <!-- ############################################################ -->
-    <menuitem name="Distribution" id="menu_distribution" sequence="15"/>
-    <menuitem name="Configuration" parent="menu_distribution" id="menu_distribution_configuration" sequence="100" icon="tryton-preferences"/>
-    <!-- ############################################################ -->
-    <!-- Distribution Network -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="dist_network_view_form">
-      <field name="model">distribution.network</field>
-      <field name="type">form</field>
-      <field name="name">distribution_network_form</field>
-    </record>
-    <record model="ir.ui.view" id="dist_network_view_tree">
-      <field name="model">distribution.network</field>
-      <field name="type">tree</field>
-      <field name="field_childs">childs</field>
-      <field name="name">dist_network_tree</field>
-    </record>
-    <!-- Entry Point -->
-    <record model="ir.action.act_window" id="act_dist_network_form">
-      <field name="name">Distribution Networks</field>
-      <field name="res_model">distribution.network</field>
-      <field name="domain">[('parent', '=', None)]</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_dist_network_tree_view">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="dist_network_view_tree"/>
-      <field name="act_window" ref="act_dist_network_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_dist_network_form_view">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="dist_network_view_form"/>
-      <field name="act_window" ref="act_dist_network_form"/>
-    </record>
-    <menuitem parent="menu_distribution" sequence="2" id="menu_dist_network_form" icon="tryton-list" action="act_dist_network_form"/>
-    <!-- Rights -->
-    <record model='res.group' id="group_distribution">
-      <field name="name">Distribution Administration</field>
-    </record>>
-    <record model="ir.model.access" id="access_distribution_network_admin">
-      <field name="model" search="[('model', '=', 'distribution.network')]"/>
-      <field name="group" ref="group_distribution"/>
-      <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="True"/>
-      <field name="perm_create" eval="True"/>
-      <field name="perm_delete" eval="True"/>
-    </record>
-    <record model="res.user-res.group" id="user_admin_group_distribution">
-      <field name="user" ref="res.user_admin"/>
-      <field name="group" ref="group_distribution"/>
-    </record>
-  </data>
+    <data>
+        <!--############################################################-->
+        <!--Menus-->
+        <!--############################################################-->
+        <menuitem name="Distribution" id="menu_distribution" sequence="15"/>
+        <menuitem name="Configuration" parent="menu_distribution" id="menu_distribution_configuration" sequence="100" icon="tryton-preferences"/>
+        <!--############################################################-->
+        <!--Distribution Network-->
+        <!--############################################################-->
+        <record model="ir.ui.view" id="dist_network_view_form">
+            <field name="model">distribution.network</field>
+            <field name="type">form</field>
+            <field name="name">distribution_network_form</field>
+        </record>
+        <record model="ir.ui.view" id="dist_network_view_list">
+            <field name="model">distribution.network</field>
+            <field name="type">tree</field>
+            <field name="field_childs">childs</field>
+            <field name="name">distribution_network_list</field>
+        </record>
+        <record model="ir.ui.view" id="dist_network_view_list_with_contacts">
+            <field name="model">distribution.network</field>
+            <field name="type">tree</field>
+            <field name="field_childs">childs</field>
+            <field name="name">distribution_network_list_with_contacts</field>
+        </record>
+        <!--Entry Point-->
+        <record model="ir.action.act_window" id="act_dist_network_form">
+            <field name="name">Distribution Networks</field>
+            <field name="res_model">distribution.network</field>
+            <field name="domain">[('parent', '=', None)]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_dist_network_tree_view">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="dist_network_view_list"/>
+            <field name="act_window" ref="act_dist_network_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_dist_network_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="dist_network_view_form"/>
+            <field name="act_window" ref="act_dist_network_form"/>
+        </record>
+        <menuitem parent="menu_distribution" sequence="2" id="menu_dist_network_form" icon="tryton-list" action="act_dist_network_form"/>
+        <!--Rights-->
+        <record model='res.group' id="group_distribution">
+            <field name="name">Distribution Administration</field>
+        </record>>
+        <record model="ir.model.access" id="access_distribution_network_admin">
+            <field name="model" search="[('model', '=', 'distribution.network')]"/>
+            <field name="group" ref="group_distribution"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_distribution">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_distribution"/>
+        </record>
+    </data>
 </tryton>

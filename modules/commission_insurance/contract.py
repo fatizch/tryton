@@ -14,11 +14,16 @@ class Contract:
     __name__ = 'contract'
 
     broker = fields.Function(
-        fields.Many2One('broker', 'Broker', states=_STATES, depends=_DEPENDS),
+        fields.Many2One('distribution.network', 'Broker',
+            domain=[('party.agents', '!=', None)], states=_STATES,
+            depends=_DEPENDS),
         'on_change_with_broker', 'setter_void')
     broker_party = fields.Function(
         fields.Many2One('party.party', 'Broker Party'),
         'on_change_with_broker_party')
+    agency = fields.Many2One('distribution.network', 'Agency',
+        domain=[('parents', '=', Eval('broker'))],
+        depends=['broker'])
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT',
         domain=[
             ('type_', '=', 'agent'),
@@ -78,7 +83,8 @@ class Contract:
 
     @fields.depends('agent')
     def on_change_with_broker(self, name=None):
-        return self.agent.party.broker_role[0].id if self.agent else None
+        return (self.agent.party.network[0].id
+            if self.agent and self.agent.party.network else None)
 
     @fields.depends('broker')
     def on_change_with_broker_party(self, name=None):

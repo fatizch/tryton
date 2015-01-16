@@ -4,11 +4,18 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
+    <label name="party"/>
+    <field name="party"/>
+    <label name="address"/>
+    <field name="address"/>
     <notebook>
         <page id="hierarchy" string="Hierarchy">
             <label name="parent"/>
             <field name="parent"/>
-            <field name="childs" colspan="4"/>
+            <field name="childs" colspan="4" view_ids="distribution.dist_network_view_list_with_contacts,distribution.dist_network_view_form"/>
+        </page>
+        <page name="contact_mechanisms">
+            <field name="contact_mechanisms" colspan="4"/>
         </page>
     </notebook>
 </form>

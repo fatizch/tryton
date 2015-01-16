@@ -6,6 +6,8 @@
             <field name="broker"/>
             <label name="agent"/>
             <field name="agent"/>
+            <label name="agency"/>
+            <field name="agency"/>
         </page>
     </xpath>
 </data>

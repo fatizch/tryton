@@ -158,7 +158,7 @@ def selection_as_string(cls, var_name, value):
 
 
 def asciify(text):
-    return unicode(unidecode(text))
+    return unicode(unidecode(text)) if text else ''
 
 
 def slugify(text, char='_', lower=True):
