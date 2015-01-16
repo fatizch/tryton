@@ -23,6 +23,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     'Extra Data'
 
     __name__ = 'extra_data'
+    _func_key = 'name'
 
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date')

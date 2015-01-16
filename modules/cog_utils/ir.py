@@ -68,6 +68,10 @@ class Sequence(ExportImportMixin):
                 [('name',) + tuple(clause[1:])],
                 ]
 
+    @classmethod
+    def is_master_object(cls):
+        return True
+
 
 class SequenceStrict(ExportImportMixin):
     __name__ = 'ir.sequence.strict'
@@ -77,6 +81,10 @@ class SequenceStrict(ExportImportMixin):
         result = super(SequenceStrict, cls)._export_skips()
         result.add('number_next_internal')
         return result
+
+    @classmethod
+    def is_master_object(cls):
+        return True
 
 
 class DateClass:

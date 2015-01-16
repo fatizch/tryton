@@ -11,6 +11,7 @@ class Package(model.CoopSQL, model.CoopView):
     'Package'
 
     __name__ = 'offered.package'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True)
@@ -23,6 +24,10 @@ class Package(model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
+
+    @classmethod
+    def _export_light(cls):
+        return super(Package, cls)._export_light() | {'options'}
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
