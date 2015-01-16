@@ -224,6 +224,11 @@ class CogProcessFramework(ProcessFramework, model.CoopView):
                     })
 
     @classmethod
+    def _export_skips(cls):
+        return (super(CogProcessFramework, cls)._export_skips() |
+            set(['logs']))
+
+    @classmethod
     @model.CoopView.button_action('process_cog.act_resume_process')
     def button_resume(cls, contracts):
         pass
