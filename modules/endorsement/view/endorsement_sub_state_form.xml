@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Endorsement Sub-state">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label name="state"/>
+    <field name="state"/>
+</form>

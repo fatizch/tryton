@@ -7,13 +7,15 @@ from sql.functions import Now
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
 from trytond.model import Workflow, Model, fields as tryton_fields
-from trytond.pyson import Eval, PYSONEncoder, PYSON
+from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields, coop_string, utils
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
+
+_STATES_WITH_SUBSTATES = ['declined']
 
 __all__ = [
     'field_mixin',
@@ -565,6 +567,16 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             ('declined', 'Declined'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
+    sub_state = fields.Many2One('endorsement.sub_state', 'Details on state',
+        states={
+            'required': Bool(Eval('sub_state_required')),
+            'invisible': ~Eval('sub_state_required')
+            },
+        domain=[('state', '=', Eval('state'))],
+        depends=['state', 'sub_state_required'])
+    sub_state_required = fields.Function(
+        fields.Boolean('Sub State Required'),
+        'on_change_with_sub_state_required')
     contracts = fields.Function(
         fields.Many2Many('contract', '', '', 'Contracts'),
         'get_contracts', searcher='search_contracts')
@@ -609,6 +621,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     def default_state(cls):
         return 'draft'
+
+    @fields.depends('state')
+    def on_change_with_sub_state_required(self, name=None):
+        return self.state in _STATES_WITH_SUBSTATES
 
     def get_contracts(self, name):
         return [x.contract.id for x in self.contract_endorsements]

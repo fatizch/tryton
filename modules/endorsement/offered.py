@@ -20,6 +20,7 @@ __all__ = [
     'EndorsementActivationHistoryField',
     'Product',
     'EndorsementDefinitionProductRelation',
+    'EndorsementSubState',
     ]
 
 
@@ -263,3 +264,28 @@ class EndorsementDefinitionProductRelation(model.CoopSQL):
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
     endorsement_definition = fields.Many2One('endorsement.definition',
         'Definition', ondelete='RESTRICT')
+
+
+class EndorsementSubState(model.CoopSQL, model.CoopView):
+    'Endorsement SubState'
+
+    __name__ = 'endorsement.sub_state'
+
+    name = fields.Char('Name', required=True, translate=True)
+    code = fields.Char('Code', required=True)
+    state = fields.Selection([
+            ('declined', 'Declined'),
+            ], 'State', required=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementSubState, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ]
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.slugify(self.name)

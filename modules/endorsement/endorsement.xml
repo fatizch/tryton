@@ -125,5 +125,41 @@
             <field name="button" ref="endorsement_decline_button"/>
             <field name="group" ref="group_endorsement_super_user"/>
         </record>
+        <record model="ir.model.access" id="endorsement_sub_state_access">
+            <field name="model" search="[('model', '=', 'endorsement.sub_state')]"/>
+            <field name="group" ref="group_endorsement_super_user"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- SubState -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="endorsement_sub_state_view_list">
+            <field name="model">endorsement.sub_state</field>
+            <field name="type">tree</field>
+            <field name="name">endorsement_sub_state_list</field>
+            </record>
+        <record model="ir.ui.view" id="endorsement_sub_state_view_form">
+            <field name="model">endorsement.sub_state</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_sub_state_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_endorsement_sub_state_form">
+            <field name="name">Endorsement Sub-state</field>
+            <field name="res_model">endorsement.sub_state</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_sub_state_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="endorsement_sub_state_view_list"/>
+            <field name="act_window" ref="act_endorsement_sub_state_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_endorsement_sub_state_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="endorsement_sub_state_view_form"/>
+            <field name="act_window" ref="act_endorsement_sub_state_form"/>
+        </record>
+        <menuitem parent="offered.menu_contract_configuration" id="endorsement_sub_state_form" icon="tryton-tree" action="act_endorsement_sub_state_form"/>
     </data>
 </tryton>

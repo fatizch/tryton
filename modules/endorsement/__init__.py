@@ -6,6 +6,7 @@ from .wizard import *
 
 def register():
     Pool.register(
+        EndorsementSubState,
         EndorsementDefinition,
         EndorsementPart,
         EndorsementDefinitionPartRelation,
