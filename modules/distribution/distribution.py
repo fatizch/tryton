@@ -34,12 +34,12 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         fields.Many2One('party.party', 'Parent Party'),
         'get_parent_party')
     address = fields.Many2One('party.address', 'Address', ondelete='SET NULL',
-       # domain=[('party', '=', Eval('parent_party'))],
+       domain=[('party', '=', Eval('parent_party'))],
         depends=['parent_party'])
     contact_mechanisms = fields.Many2Many(
         'distribution_network-party.contact_mechanism', 'distribution_network',
         'contact_mechanism', 'Contact Mechanisms',
-        #domain=[('party', '=', Eval('parent_party'))],
+        domain=[('party', '=', Eval('parent_party'))],
         depends=['parent_party'])
     phone = fields.Function(fields.Char('Phone'), 'get_mechanism')
     mobile = fields.Function(fields.Char('Mobile'), 'get_mechanism')
