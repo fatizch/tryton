@@ -67,6 +67,7 @@ class ModelInfo(ModelView):
         super(ModelInfo, cls).__setup__()
         cls.__rpc__.update({
                 'raw_model_infos': RPC(),
+                'raw_module_infos': RPC(),
                 'raw_field_infos': RPC(),
                 })
 
@@ -186,8 +187,12 @@ class ModelInfo(ModelView):
                     field.relation_name)._fields[field.target].model_name
             else:
                 result['target_model'] = field.relation_name
-        else:
-            result['target_model'] = ''
+        if isinstance(field, fields.Selection):
+            if isinstance(field.selection, basestring):
+                result['selection_method'] = field.selection
+            else:
+                result['selection_values'] = dict([x
+                        for x in field.selection if x[0]])
         for elem in ('required', 'readonly', 'invisible'):
             result['is_%s' % elem] = getattr(field, elem, False)
             result['state_%s' % elem] = repr(field.states.get(elem, {}))
@@ -200,10 +205,9 @@ class ModelInfo(ModelView):
         return result
 
     @classmethod
-    def raw_field_infos(cls, model_name=''):
+    def raw_field_infos(cls):
         pool = Pool()
-        models = [model_name] if model_name else [
-            x[0] for x in cls.get_possible_model_names()]
+        models = [x[0] for x in cls.get_possible_model_names()]
         infos = cls.raw_model_infos(models)
         for name in models:
             base_model = pool.get(name)
@@ -214,7 +218,7 @@ class ModelInfo(ModelView):
         return infos
 
     @classmethod
-    def raw_model_infos(cls, models=None):
+    def raw_model_infos(cls, models):
         def extract_mro(mro, model_name):
             result, first_occurence = {}, False
             model_name_dots = len(model_name.split('.'))
@@ -242,7 +246,6 @@ class ModelInfo(ModelView):
             return result
 
         pool = Pool()
-        models = models or [x[0] for x in cls.get_possible_model_names()]
         infos = {}
         for model_name in models:
             Model = pool.get(model_name)
@@ -254,6 +257,17 @@ class ModelInfo(ModelView):
             infos[model_name] = {
                 'string': string,
                 'mro': extract_mro(Model.__mro__, model_name),
+                }
+        return infos
+
+    @classmethod
+    def raw_module_infos(cls):
+        infos = {}
+        for module in Pool().get('ir.module.module').search([],
+                order=[('name', 'DESC')]):
+            infos[module.name] = {
+                'state': module.state,
+                'childs': [x.name for x in module.childs],
                 }
         return infos
 
