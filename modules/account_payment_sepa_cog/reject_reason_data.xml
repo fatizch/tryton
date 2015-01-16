@@ -16,6 +16,11 @@
             <field name="description">Account blocked</field>
             <field name="process_method">sepa</field>
         </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_AC13">
+            <field name="code">AC13</field>
+            <field name="description">Debtor account is a consumer account</field>
+            <field name="process_method">sepa</field>
+        </record>
         <record model="account.payment.journal.reject_reason" id="sepa_AG01">
             <field name="code">AG01</field>
             <field name="description">Transaction forbidden</field>
@@ -36,9 +41,39 @@
             <field name="description">Duplication</field>
             <field name="process_method">sepa</field>
         </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_ARDT">
+            <field name="code">ARDT</field>
+            <field name="description">The transaction has already been returned</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_BE04">
+            <field name="code">BE04</field>
+            <field name="description">Account address invalid</field>
+            <field name="process_method">sepa</field>
+        </record>
         <record model="account.payment.journal.reject_reason" id="sepa_BE05">
             <field name="code">BE05</field>
             <field name="description">Unrecognised initiating party</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_BE06">
+            <field name="code">BE06</field>
+            <field name="description">Unknown customer</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_CUST">
+            <field name="code">CUST</field>
+            <field name="description">Cancellation requested by customer</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_DUPL">
+            <field name="code">DUPL</field>
+            <field name="description">Duplicate sending</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_ED01">
+            <field name="code">ED01</field>
+            <field name="description">Correspondant bank not possible</field>
             <field name="process_method">sepa</field>
         </record>
         <record model="account.payment.journal.reject_reason" id="sepa_FF01">
@@ -49,6 +84,21 @@
         <record model="account.payment.journal.reject_reason" id="sepa_FF05">
             <field name="code">FF05</field>
             <field name="description">Incorrect direct debit type</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_FOCR">
+            <field name="code">FOCR</field>
+            <field name="description">Positive answer to the recall</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_FRAD">
+            <field name="code">FRAD</field>
+            <field name="description">Fraudulent originated credit transfer</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_LEGL">
+            <field name="code">LEGL</field>
+            <field name="description">Legal reason</field>
             <field name="process_method">sepa</field>
         </record>
         <record model="account.payment.journal.reject_reason" id="sepa_MD01">
@@ -81,6 +131,16 @@
             <field name="description">Not specified reason</field>
             <field name="process_method">sepa</field>
         </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_NOAS">
+            <field name="code">NOAS</field>
+            <field name="description">No response from beneficiary</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_NOOR">
+            <field name="code">NOOR</field>
+            <field name="description">Original credit transfer never received</field>
+            <field name="process_method">sepa</field>
+        </record>
         <record model="account.payment.journal.reject_reason" id="sepa_RC01">
             <field name="code">RC01</field>
             <field name="description">Incorrect bank identifier</field>
@@ -109,6 +169,16 @@
         <record model="account.payment.journal.reject_reason" id="sepa_SL01">
             <field name="code">SL01</field>
             <field name="description">Specific service by debtor agent</field>
+            <field name="process_method">sepa</field>
+        </record>
+        <record model="account.payment.journal.reject_reason" id="sepa_TECH">
+            <field name="code">TECH</field>
+            <field name="description">Technical problems resulting in erroneous SCTs</field>
+            <field name="process_method">sepa</field>
+        </record>
+       <record model="account.payment.journal.reject_reason" id="sepa_TM01">
+            <field name="code">TM01</field>
+            <field name="description">File receive after Cut-off time</field>
             <field name="process_method">sepa</field>
         </record>
     </data>
