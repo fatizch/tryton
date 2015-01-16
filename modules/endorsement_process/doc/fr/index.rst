@@ -43,7 +43,7 @@ Champs:
 
   .. code:: xml
 
-    <field name="endorsements_parts_union" colspan="4" readonly="1"/>
+    <field name="endorsement_parts_union"/>
 
   Dans la vue d'une étape, ce champ affiche une liste d'avenants unitaires,
   avec un bouton qui permet d'afficher le masque de saisie correspondant.
