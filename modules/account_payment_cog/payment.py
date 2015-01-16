@@ -37,7 +37,8 @@ class Journal(export.ExportImportMixin):
 
     @classmethod
     def _export_light(cls):
-        return super(Journal, cls)._export_light() | {'currency', 'company'}
+        return super(Journal, cls)._export_light() | {'currency', 'company',
+            'default_reject_fee'}
 
 
 class JournalFailureAction(model.CoopSQL, model.CoopView):
@@ -45,6 +46,7 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
 
     __name__ = 'account.payment.journal.failure_action'
     _rec_name = 'reject_reason'
+    _func_key = 'func_key'
 
     reject_reason = fields.Many2One('account.payment.journal.reject_reason',
         'Reject Reason', required=True, ondelete='RESTRICT')
@@ -58,6 +60,13 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
         'Fee', ondelete='RESTRICT')
     is_fee_required = fields.Function(fields.Boolean('Fee Required'),
         'on_change_with_is_fee_required', setter='setter_void')
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    @classmethod
+    def _export_light(cls):
+        return super(JournalFailureAction, cls)._export_light() | {
+            'reject_reason', 'rejected_payment_fee'}
 
     @classmethod
     def __setup__(cls):
@@ -94,6 +103,26 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
         else:
             self.rejected_payment_fee = Transaction().context.get(
                 'default_fee_id', None)
+
+    def get_func_key(self, name):
+        return '%s|%s' % ((self.journal.name, self.reject_reason.code))
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                journal_name, reject_reason_code = clause[2].split('|')
+                return [('journal.name', clause[1], journal_name),
+                    ('reject_reason.code', clause[1], reject_reason_code)]
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('journal.name',) + tuple(clause[1:])],
+                [('reject_reason.code',) + tuple(clause[1:])],
+                ]
 
 
 class RejectReason(model.CoopSQL, model.CoopView):
