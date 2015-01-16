@@ -106,7 +106,7 @@ class DocumentProductRelation(model.CoopSQL):
     __name__ = 'document.template-offered.product'
 
     document_template = fields.Many2One('document.template', 'Document',
-        ondelete='RESTRICT')
+        ondelete='CASCADE')
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
 
 
