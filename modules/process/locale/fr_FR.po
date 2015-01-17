@@ -887,3 +887,15 @@ msgstr "Le champ '%s' est requis"
 msgctxt "error:process.process_framework:"
 msgid "The field '%s' of '%s' is required"
 msgstr "Le champ '%s' de '%s' est requis"
+
+msgctxt "error:process.process_framework:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:process.process_framework:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:process.process_framework:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
