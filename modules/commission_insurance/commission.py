@@ -305,9 +305,13 @@ class CreateAgents(Wizard):
     def transition_create_brokers(self):
         pool = Pool()
         Party = pool.get('party.party')
+        PaymentTerm = pool.get('account.invoice.payment_term')
+        payment_terms = PaymentTerm.search([])
         if self.parties.parties:
-            Party.write(list(self.parties.parties),
-                {'account_payable': self.parties.account_payable.id})
+            Party.write(list(self.parties.parties), {
+                    'account_payable': self.parties.account_payable.id,
+                    'supplier_payment_term': payment_terms[0].id,
+                    })
 
         Broker = pool.get('broker')
         brokers = []
