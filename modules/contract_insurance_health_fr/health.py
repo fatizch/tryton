@@ -22,6 +22,7 @@ class InsuranceFund(model.CoopSQL, model.CoopView):
     'Insurance Fund'
 
     __name__ = 'health.insurance_fund'
+    _func_key = 'code'
     code = fields.Char('Code')
     name = fields.Char('Name')
     department = fields.Char('Department')
@@ -38,3 +39,14 @@ class InsuranceFund(model.CoopSQL, model.CoopView):
                 ('department', '=', dep),
                 ('hc_system', '=', hc_system),
                 ])
+
+    @classmethod
+    def search_rec_name(cls, name, clause):
+        return [
+            'OR',
+            ('name',) + tuple(clause[1:]),
+            ('code',) + tuple(clause[1:]),
+        ]
+
+    def get_rec_name(self, name):
+        return '%s (%s)' % (self.name, self.code)

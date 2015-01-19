@@ -6,6 +6,8 @@
         <field name="hc_system"/>
         <label name="department"/>
         <field name="department" xexpand="0"/>
+        <label name="insurance_fund_number"/>
+        <field name="insurance_fund_number"/>
         <label name="insurance_fund"/>
         <field name="insurance_fund"/>
     </xpath>

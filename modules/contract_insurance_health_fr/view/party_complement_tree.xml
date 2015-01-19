@@ -3,6 +3,7 @@
     <xpath expr="/tree" position="inside">
         <field name="hc_system"/>
         <field name="department" tree_invisible="1"/>
+        <field name="insurance_fund_number"/>
         <field name="insurance_fund"/>
     </xpath>
 </data>

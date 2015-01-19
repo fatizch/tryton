@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from trytond.pool import PoolMeta, Pool
 
 
@@ -75,13 +77,33 @@ class TestCaseModel:
 
     @classmethod
     def fund_test_case(cls):
-        Fund = Pool().get('health.insurance_fund')
+        pool = Pool()
+        Fund = pool.get('health.insurance_fund')
+        HealthCareSystem = pool.get('health.care_system')
         cls.load_resources(MODULE_NAME)
-        fund_file = cls.read_csv_file('caisse_affiliation.csv', MODULE_NAME,
-            reader='dict')
-        addresses = dict([(x['ID_ADR'], x) for x in cls.read_csv_file(
-                'caisse_affiliation_adresse.csv', MODULE_NAME, reader='dict')])
+        systems = {}
+        health_care_systems = HealthCareSystem.search([])
+        for health_care_system in health_care_systems:
+            systems[health_care_system.code] = health_care_system.id
+
+        first_line = True
         funds = []
-        for fund_data in fund_file:
-            funds.append(cls.new_fund(fund_data, addresses))
-        Fund.create([x._save_values for x in funds])
+        with open(cls._loaded_resources[MODULE_NAME]['files']['orgdest.csv'],
+                'r') as f:
+            for line in f:
+                if first_line:
+                    first_line = False
+                    continue
+                decode_line = line.decode('latin-1')
+                decode_line = decode_line.replace('"', '')
+                fund_data = decode_line.split(';')
+                funds.append(Fund(
+                    code=fund_data[0] + fund_data[1] + fund_data[2],
+                    name=fund_data[3],
+                    hc_system=systems[fund_data[0]],
+                    department=fund_data[10][0:2]))
+                print 'code ', fund_data[0] + fund_data[1] + fund_data[2],\
+                    ' name ', fund_data[3],\
+                    ' hc_system', systems[fund_data[0]],\
+                    'department', fund_data[10][0:2]
+            Fund.create([x._save_values for x in funds])

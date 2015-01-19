@@ -1,7 +1,9 @@
-from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If
+import re
 from sql.aggregate import Max
+from collections import defaultdict
 
+from trytond.transaction import Transaction
+from trytond.pool import PoolMeta, Pool
 from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
@@ -205,15 +207,57 @@ class HealthPartyComplement:
         'get_department', 'set_void')
     hc_system = fields.Many2One('health.care_system', 'Health Care System',
         ondelete='RESTRICT')
-    insurance_fund = fields.Many2One('health.insurance_fund', 'Insurance Fund',
-        ondelete='RESTRICT', domain=[
-            [If(
-                    ~Eval('department'),
-                    (),
-                    ('department', '=', Eval('department')),
-                    )],
-            ('hc_system', '=', Eval('hc_system')),
-            ], depends=['department', 'hc_system'])
+    insurance_fund = fields.Function(fields.Many2One('health.insurance_fund',
+            'Insurance Fund', depends=['insurance_fund_number']),
+        'get_insurance_fund')
+    insurance_fund_number = fields.Char('Health Care System Number', size=9)
+
+    @classmethod
+    def __setup__(cls):
+        super(HealthPartyComplement, cls).__setup__()
+        cls._error_messages.update({
+            'wrong_insurance_fund_number': 'Wrong Insurance Fund Number: %s',
+            })
+
+    @classmethod
+    def get_insurance_fund(cls, complements, name=None):
+        ''' Some Insurance funds group more than one insurance fund number
+        In this case the last 4 characters of the insurance fund are set to
+        0000'''
+
+        pool = Pool()
+        cursor = Transaction().cursor
+        fund = pool.get('health.insurance_fund').__table__()
+        codes = defaultdict(list)
+        for complement in complements:
+            codes[complement.insurance_fund_number].append(complement)
+        result = {x.id: None for x in complements}
+
+        cursor.execute(*fund.select(fund.id, fund.code,
+                where=(fund.code.in_([x.insurance_fund_number
+                            for x in complements]))))
+        for fund_id, fund_code in cursor.fetchall():
+            for complement in codes[fund_code]:
+                result[complement.id] = fund_id
+
+        outstanding_codes = {}
+        for complement in complements:
+            if result[x.id] is None:
+                outstanding_codes[complement.insurance_fund_number[0:5] +
+                    '0000'] = complement.insurance_fund_number
+        if not outstanding_codes:
+            return result
+        cursor.execute(*fund.select(fund.id, fund.code,
+                where=(fund.code.in_(outstanding_codes.keys()))))
+        for fund_id, fund_code in cursor.fetchall():
+            for complement in codes[outstanding_codes[fund_code]]:
+                result[complement.id] = fund_id
+
+        return result
+
+    @fields.depends('insurance_fund_number')
+    def on_change_with_insurance_fund(self):
+        return self.__class__.get_insurance_fund([self])[self.id]
 
     def get_department(self, name):
         address = self.party.address_get() if self.party else None
@@ -227,3 +271,13 @@ class HealthPartyComplement:
     def _export_light(cls):
         return (super(HealthPartyComplement, cls)._export_light() |
             set(['hc_system', 'insurance_fund']))
+
+    def check_insurance_fund_number(self):
+        if (not re.match('%s[0-9]{7}' % self.hc_system.code,
+                self.insurance_fund_number) or not self.insurance_fund):
+            self.raise_user_error('wrong_insurance_fund_number',
+                self.insurance_fund_number)
+
+    def pre_validate(self):
+        super(HealthPartyComplement, self).pre_validate()
+        self.check_insurance_fund_number()
