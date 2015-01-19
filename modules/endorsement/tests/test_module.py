@@ -31,6 +31,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'EndorsementContractField': 'endorsement.contract.field',
             'EndorsementOptionField': 'endorsement.contract.option.field',
             'Field': 'ir.model.field',
+            'SubState': 'endorsement.sub_state',
             }
 
     @classmethod
@@ -164,6 +165,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         'endorsement.test0030_create_endorsement',
         )
     def test0032_endorsement_decline(self):
+        sub_state = self.SubState(name='Illegible', code='illegible',
+                state='declined')
+        sub_state.save()
+
         contract, = self.Contract.search([
                 ('product.code', '=', 'AAA'),
                 ])
@@ -171,7 +176,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('contracts', '=', contract.id),
                 ])
         self.assertEqual(endorsement.state, 'draft')
-        endorsement.decline([endorsement])
+        endorsement.decline([endorsement], reason=sub_state)
         self.assertEqual(endorsement.state, 'declined')
         endorsement.draft([endorsement])
         self.assertEqual(endorsement.state, 'draft')

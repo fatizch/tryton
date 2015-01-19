@@ -709,6 +709,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 'application_date': None,
                 'rollback_date': None,
                 'state': 'draft',
+                'sub_state': None,
                 })
 
     @classmethod
