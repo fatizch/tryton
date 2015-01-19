@@ -96,8 +96,9 @@ class ContractBillingInformation:
             account_number=self.direct_debit_account.numbers[0],
             type='recurrent',
             scheme='CORE',
-            signature_date=self.contract.signature_date or
-                self.contract.start_date,
+            signature_date=(self.contract.signature_date or
+                self.contract.start_date),
+            company=self.contract.company,
             state='validated')
         self.sepa_mandate = mandate
         self.save()

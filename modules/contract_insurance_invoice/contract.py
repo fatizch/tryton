@@ -390,7 +390,8 @@ class Contract:
             )
 
     def finalize_invoices_lines(self, lines):
-        pass
+        for line in lines:
+            line.company = self.company
 
     def get_invoice_lines(self, start, end):
         lines = self.compute_invoice_lines(start, end)
