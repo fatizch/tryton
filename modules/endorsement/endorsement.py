@@ -694,6 +694,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         Event = pool.get('event')
         cls.write(endorsements, {
                 'state': 'declined',
+                'sub_state': reason,
                 })
         Event.notify_events(endorsements, 'decline_endorsement',
                 description=(reason.name if reason else None))
