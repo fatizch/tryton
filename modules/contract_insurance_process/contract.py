@@ -109,7 +109,7 @@ class Contract(CogProcessFramework):
             result.save()
             return result
 
-    def generate_and_attach_reports(self, template_codes):
+    def generate_and_attach_reports(self, template_codes, creator=None):
         """template_codes should be a comma separated list
         of document template codes between single quotes,
         i.e : 'template1', 'template2', etc.
@@ -147,6 +147,7 @@ class Contract(CogProcessFramework):
             attachment.name = '%s_%s_%s.pdf' % (template_instance.name,
                 self.rec_name, date_string_underscore)
             attachment.document_desc = template_instance.document_desc
+            attachment.origin = creator or self
             attachment.save()
 
 

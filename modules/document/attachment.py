@@ -16,6 +16,14 @@ class Attachment(export.ExportImportMixin):
 
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
+    origin = fields.Reference('Origin',
+        selection='get_possible_origin', select=True)
+
+    @classmethod
+    def get_possible_origin(cls):
+        res = cls.models_get()
+        res.append(('', ''))
+        return res
 
     @classmethod
     def __setup__(cls):
@@ -31,7 +39,7 @@ class Attachment(export.ExportImportMixin):
     @classmethod
     def _export_light(cls):
         return (super(Attachment, cls)._export_light() |
-            set(['resource', 'document_desc']))
+            set(['resource', 'document_desc', 'origin']))
 
     @classmethod
     def _export_skips(cls):
@@ -57,18 +65,38 @@ class Attachment(export.ExportImportMixin):
     @classmethod
     def search_for_export_import(cls, values):
         pool = Pool()
-        if ('resource' not in values or '__name__' not in values['resource'] or
-                'document_desc' not in values):
-            return super(Attachment, cls).search_for_export_import(values)
-        resources = pool.get(values['resource']['__name__']).\
-            search_for_export_import(values['resource'])
-        if len(resources) != 1:
-            cls.raise_user_error("Can't find object %s %s" % (
-                values['resource']['__name__'],
-                values['resource']['_func_key']))
-        return cls.search([
-                ('resource', '=', '%s,%s' % (resources[0].__name__,
-                    resources[0].id)),
+
+        def domain_by_attribute_name(attribute_name):
+            attribute_present = (attribute_name in values and
+                values[attribute_name])
+            if not attribute_present:
+                return []
+            assert '__name__' in values[attribute_name]
+
+            attributes = pool.get(values[attribute_name]['__name__']).\
+                search_for_export_import(values[attribute_name])
+            if len(attributes) != 1:
+                cls.raise_user_error("Can't find object %s %s" % (
+                    values[attribute_name]['__name__'],
+                    values[attribute_name]['_func_key']))
+            domain_res = [
+                    (attribute_name, '=', '%s,%s' % (attributes[0].__name__,
+                        attributes[0].id))
+                    ]
+            return domain_res
+
+        if 'document_desc' in values:
+            my_domain = [
                 ('document_desc.code', '=',
-                    values['document_desc']['_func_key'])
-                ])
+                    values['document_desc']['_func_key'])]
+        else:
+            my_domain = []
+
+        for attribute_name in ['resource', 'origin']:
+            dom = domain_by_attribute_name(attribute_name)
+            if dom:
+                my_domain.extend(dom)
+
+        if my_domain:
+            return cls.search(my_domain)
+        return super(Attachment, cls).search_for_export_import(values)

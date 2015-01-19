@@ -67,7 +67,7 @@ class ContractSet(CogProcessFramework):
         res = [party.id for party in parties]
         return res
 
-    def generate_and_attach_reports_on_set(self, template_codes):
+    def generate_and_attach_reports_on_set(self, template_codes, creator=None):
             """template_codes should be a comma separated list
             of document template codes between single quotes,
             i.e : 'template1', 'template2', etc.
@@ -106,6 +106,7 @@ class ContractSet(CogProcessFramework):
             attachment.name = '%s_%s_%s.pdf' % (template_instance.name,
                 self.rec_name, date_string_underscore)
             attachment.document_desc = template_instance.document_desc
+            attachment.origin = creator or self
             attachment.save()
 
     def generate_and_attach_reports_in_set(self, template_codes):
