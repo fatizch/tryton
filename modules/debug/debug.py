@@ -235,13 +235,13 @@ class ModelInfo(ModelView):
                     }
                 if full_name[1] == 'modules':
                     new_line['module'] = full_name[2]
-                    if str(line)[:-2].endswith(model_name):
-                        new_line['override'] = 1 if first_occurence else 0
-                        new_line['initial'] = 0 if first_occurence else 1
-                        new_line['base_name'] = model_name
-                        new_line['path'] = '.'.join(
-                            full_name[:-model_name_dots])
-                        first_occurence = True
+                if str(line)[:-2].endswith(model_name):
+                    new_line['override'] = 1 if first_occurence else 0
+                    new_line['initial'] = 0 if first_occurence else 1
+                    new_line['base_name'] = model_name
+                    new_line['path'] = '.'.join(
+                        full_name[:-model_name_dots])
+                    first_occurence = True
                 result['% 3d' % (len(result) + 1)] = new_line
             return result
 
