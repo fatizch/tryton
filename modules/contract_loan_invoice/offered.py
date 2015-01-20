@@ -9,7 +9,7 @@ __all__ = [
     'Product',
     'LoanAveragePremiumRule',
     'FeeRule',
-    'OptionDescriptionPricingRule',
+    'OptionDescriptionPremiumRule',
     'OptionDescription',
     'ProductPricingDates',
     ]
@@ -205,12 +205,12 @@ class FeeRule(model.CoopSQL, model.CoopView):
     action_string = action.translated('action')
 
 
-class OptionDescriptionPricingRule:
+class OptionDescriptionPremiumRule:
     __name__ = 'offered.option.description.premium_rule'
 
     @classmethod
     def __setup__(cls):
-        super(OptionDescriptionPricingRule, cls).__setup__()
+        super(OptionDescriptionPremiumRule, cls).__setup__()
         cls.premium_base.selection.append(
             ('loan.share', 'Loan'))
 
@@ -218,8 +218,20 @@ class OptionDescriptionPricingRule:
     def on_change_with_premium_base(self, name=None):
         if self.coverage and self.coverage.is_loan:
             return 'loan.share'
-        return super(OptionDescriptionPricingRule,
+        return super(OptionDescriptionPremiumRule,
             self).on_change_with_premium_base(name)
+
+    @classmethod
+    def get_premium_result_class(cls):
+        Parent = super(OptionDescriptionPremiumRule,
+            cls).get_premium_result_class()
+
+        class Child(Parent):
+            def __init__(self, amount, data_dict):
+                super(Child, self).__init__(amount, data_dict)
+                self.loan = self.data_dict.get('loan', None)
+
+        return Child
 
 
 class OptionDescription:

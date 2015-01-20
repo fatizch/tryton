@@ -5,18 +5,17 @@ from dateutil.relativedelta import relativedelta
 
 from sql import Literal
 from sql.aggregate import Sum, Max
-from sql.conditionals import Case
+from sql.conditionals import Case, Coalesce
 from sql.functions import Round
 
 from trytond.wizard import Wizard, StateView, Button
 from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, reduce_ids
 from trytond.pyson import Eval, And, Or
-from trytond.cache import Cache
 from trytond.transaction import Transaction
 from trytond.model import ModelSQL, ModelView
 
-from trytond.modules.cog_utils import fields, model, coop_date
+from trytond.modules.cog_utils import fields, model
 
 
 __metaclass__ = PoolMeta
@@ -97,17 +96,10 @@ class Premium:
 
     @classmethod
     def new_line(cls, line, start_date, end_date):
-        loan = None
         if isinstance(line.rated_instance, Pool().get('loan.share')):
-            loan = line.rated_instance.loan
             line.rated_instance = line.rated_instance.option
         result = super(Premium, cls).new_line(line, start_date, end_date)
-        if loan is None:
-            result.loan = None
-            return result
-        result.loan = loan
-        result.end = min(end_date or datetime.date.max,
-            coop_date.add_day(loan.end_date, -1))
+        result.loan = line.loan
         return result
 
     def get_description(self):
@@ -133,8 +125,6 @@ class Contract:
     last_generated_premium_end = fields.Function(
         fields.Date('Last Generated Premium End Date'),
         'get_last_generated')
-
-    _premium_aggregates_cache = Cache('calculate_premium_aggregates')
 
     @classmethod
     def __setup__(cls):
@@ -204,6 +194,16 @@ class Contract:
         cls.generate_premium_amount(loan_contracts)
         return result
 
+    @property
+    def _premium_aggregates_cache(self):
+        if hasattr(self, '__premium_cache'):
+            return self.__premium_cache
+        self.__premium_cache = {}
+        return self.__premium_cache
+
+    def _clear_premium_aggregates_cache(self):
+        self.__premium_cache = {}
+
     def calculate_premium_aggregates(self, start=None, end=None):
         cached_values = self._premium_aggregates_cache.get(
             (self.id, start, end), None)
@@ -217,12 +217,16 @@ class Contract:
 
         date_clause = ((premium_amount.end >= (start or datetime.date.min))
             & (premium_amount.start <= (end or datetime.date.max)))
-        cursor.execute(*premium_amount.select(premium_amount.amount,
+        cursor.execute(*premium_amount.select(
+                Coalesce(premium_amount.amount, Literal(0)) + Coalesce(
+                    premium_amount.tax_amount, Literal(0)),
                 premium_amount.premium,
                 where=date_clause & (premium_amount.contract == self.id)))
 
-        per_contract_entity = defaultdict(lambda: defaultdict(lambda: 0))
-        per_offered_entity = defaultdict(lambda: defaultdict(lambda: 0))
+        per_contract_entity = defaultdict(
+            lambda: defaultdict(lambda: Decimal(0)))
+        per_offered_entity = defaultdict(
+            lambda: defaultdict(lambda: Decimal(0)))
 
         # Unzip first to browse all premiums at once
         query_result = cursor.fetchall()
@@ -237,8 +241,8 @@ class Contract:
                     premium.rated_entity.id)][
                         premium.loan.id if premium.loan else None] += amount
 
-        self._premium_aggregates_cache.set((self.id, start, end),
-            (per_contract_entity, per_offered_entity))
+        self._premium_aggregates_cache[(self.id, start, end)] = (
+            per_contract_entity, per_offered_entity)
         return per_contract_entity, per_offered_entity
 
     def extract_premium(self, kind, start=None, end=None, value=None,
@@ -312,8 +316,7 @@ class Contract:
         for contract in contracts:
             if not contract.is_loan:
                 continue
-            contract._premium_aggregates_cache.set(
-                (contract.id, None, None), None)
+            contract._clear_premium_aggregates_cache()
             assert contract.end_date
             generation_start = contract.start_date
             if contract.last_generated_premium_end:
@@ -504,7 +507,6 @@ class DisplayLoanAveragePremium(Wizard):
         if contract_id is None:
             return {}
         contract = Pool().get('contract')(contract_id)
-        contract._premium_aggregates_cache.set((contract_id, None, None), None)
         with Transaction().set_context(contract=contract_id):
             return {'loan_displayers': [{
                         'name': x.rec_name,
@@ -515,7 +517,7 @@ class DisplayLoanAveragePremium(Wizard):
                         'current_loan_shares': [{
                                 'name': y.option.rec_name,
                                 'average_premium_rate': y.average_premium_rate,
-                                'base_premium_amount': x.base_premium_amount,
+                                'base_premium_amount': y.base_premium_amount,
                                 'currency_digits': x.currency_digits,
                                 'currency_symbol': x.currency_symbol,
                                 'current_loan_shares': [],

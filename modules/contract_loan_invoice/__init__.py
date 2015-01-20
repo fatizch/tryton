@@ -17,7 +17,7 @@ def register():
         DisplayLoanAveragePremiumValues,
         LoanAveragePremiumRule,
         FeeRule,
-        OptionDescriptionPricingRule,
+        OptionDescriptionPremiumRule,
         OptionDescription,
         ProductPricingDates,
         Product,
