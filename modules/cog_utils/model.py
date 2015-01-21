@@ -659,19 +659,25 @@ class MethodDefinition(CoopSQL, CoopView):
             args = inspect.getargspec(attr)
             arg_names = args[0]
             # Check for instance method
-            if not arg_names or arg_names[0] != 'self':
+            if not arg_names:
                 continue
-            # Check for *args
-            if args[1]:
-                continue
-            # Check for 'caller' kwarg
             if 'caller' not in arg_names:
                 continue
-            # Check all named arguments are kwargs
-            if len(arg_names) - 1 != len(args[3]):
+            if arg_names[0] == 'self' and len(args[3]) != len(arg_names) - 1:
+                continue
+            if arg_names[0] == 'cls' and len(args[3]) != len(arg_names) - 2:
+                continue
+            if arg_names[0] not in ('self', 'cls'):
                 continue
             allowed_methods.append((elem, elem))
         return allowed_methods
 
-    def execute(self, caller, callee):
-        return getattr(callee, self.method_name)(caller=caller)
+    def execute(self, caller, callees):
+        method = getattr(Pool().get(self.model.model), self.method_name)
+        if not hasattr(method, 'im_self') or method.im_self:
+            return method(callees, caller=caller)
+        else:
+            if isinstance(callees, (list, tuple)):
+                return [method(x, caller=caller) for x in callees]
+            else:
+                return method(callees, caller=caller)

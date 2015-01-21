@@ -306,6 +306,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         method.model = self.Model.search([
                 ('model', '=', 'cog_utils.test_model_method_definition')])[0]
+        method.model.model = 'cog_utils.test_model_method_definition'
 
         with mock.patch.object(trytond.tests.test_tryton.POOL,
                 'get') as pool_get:
@@ -320,7 +321,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         method.method_name = 'good_one'
 
         callee = TestModel()
-        self.assertEqual(method.execute(10, callee), 10)
+        with mock.patch.object(trytond.tests.test_tryton.POOL,
+                'get') as pool_get:
+            pool_get.return_value = TestModel
+            self.assertEqual(method.execute(10, callee), 10)
+            pool_get.assert_called_with(
+                'cog_utils.test_model_method_definition')
 
     def test0050_export_import_key_not_unique(self):
         to_export = self.ExportTestTarget(char="sometext")
