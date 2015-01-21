@@ -131,6 +131,10 @@ def values_mixin(value_model):
         applied_on = fields.Timestamp('Applied On', readonly=True)
 
         @classmethod
+        def default_values(cls):
+            return {}
+
+        @classmethod
         def _view_look_dom_arch(cls, tree, type, field_children=None):
             pool = Pool()
             ValueModel = pool.get(value_model)
