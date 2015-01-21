@@ -31,9 +31,18 @@ class Contract:
             If(~Eval('broker_party'),
                 (),
                 ('party', '=', Eval('broker_party')),
-                )
+                ),
+            ['OR',
+                ('end_date', '>=', Eval('start_date')),
+                ('end_date', '=', None),
+                ],
+            ['OR',
+                ('start_date', '<=', Eval('start_date')),
+                ('start_date', '=', None),
+                ],
             ],
-        states=_STATES, depends=_DEPENDS + ['broker_party', 'product'])
+        states=_STATES, depends=_DEPENDS + ['broker_party', 'product',
+            'start_date'])
 
     def get_invoice(self, start, end, billing_information):
         invoice = super(Contract, self).get_invoice(start, end,

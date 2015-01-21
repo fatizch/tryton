@@ -239,6 +239,8 @@ class Agent(export.ExportImportMixin):
     __name__ = 'commission.agent'
     _func_key = 'func_key'
 
+    start_date = fields.Date('Start Date')
+    end_date = fields.Date('End Date')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
