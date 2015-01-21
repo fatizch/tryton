@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -294,6 +294,10 @@ msgctxt "field:contract.fee,overriden_rate:"
 msgid "Rate"
 msgstr "Taux"
 
+msgctxt "field:contract.fee,premiums:"
+msgid "Premiums"
+msgstr "Primes"
+
 msgctxt "field:contract.fee,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -309,6 +313,10 @@ msgstr "Mis à jour par"
 msgctxt "field:contract.fee,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:contract.premium,fee:"
+msgid "Fee"
+msgstr "Frais"
 
 msgctxt "field:contract.premium-account.tax,create_date_:"
 msgid "Creation date"

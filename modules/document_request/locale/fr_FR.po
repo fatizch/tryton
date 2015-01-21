@@ -1,0 +1,63 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:document.receive:"
+msgid "No document request found for this object"
+msgstr "Pas de demande de documents trouvée pour cet objet"
+
+msgctxt "field:document.request.line,attachment_data:"
+msgid "Data"
+msgstr "Données"
+
+msgctxt "field:document.request.line,attachment_name:"
+msgid "Attachment Name"
+msgstr "Nom de la pièce jointe"
+
+msgctxt "field:document.request.process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "model:document.request.process,name:"
+msgid "Document Request Batch Definition"
+msgstr "Définition du batch de demande de documents"
+
+msgctxt "model:ir.action,name:receive_documents_wizard"
+msgid "Document Reception"
+msgstr "Réception des documents"
+
+msgctxt "model:ir.ui.menu,name:menu_receive_documents"
+msgid "Receive Documents"
+msgstr "Documents reçus"
+
+msgctxt "view:document.receive.attach:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "view:document.receive.request:"
+msgid "Document Receive Request"
+msgstr "Demande de documents"
+
+msgctxt "view:document.receive.set_requests:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "view:document.request.line:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "view:document.request.line:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:document.request:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "view:document.request:"
+msgid "Requests"
+msgstr "Demandes"
+
+msgctxt "view:document.request:"
+msgid "Send Request"
+msgstr "Envoyer la demande"

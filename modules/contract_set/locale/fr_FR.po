@@ -1,0 +1,175 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.set.decline.select_reason:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:contract.set.decline.select_reason:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:contract.set:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:contract.set:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:contract.set:"
+msgid "The contract set number must be unique."
+msgstr "Le numéro de l'ensemble de contrat sdoit être unique."
+
+msgctxt "field:contract,contract_set:"
+msgid "Contract Set"
+msgstr "Ensemble de contrats"
+
+msgctxt "field:contract.set,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:contract.set,contracts_declined:"
+msgid "Contracts Declined"
+msgstr "Contrats déclinés"
+
+msgctxt "field:contract.set,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.set,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.set,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.set,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.set,number:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:contract.set,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:contract.set,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:contract.set,subscribers:"
+msgid "Subscribers"
+msgstr "Souscripteurs"
+
+msgctxt "field:contract.set,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.set,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.set,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.set.decline.select_reason,contract_set:"
+msgid "Contract Set"
+msgstr "Ensemble de contrats"
+
+msgctxt "field:contract.set.decline.select_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.set.decline.select_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.set.decline.select_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.set.decline.select_reason,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.set.decline.select_reason,reason:"
+msgid "Reason"
+msgstr "Raison"
+
+msgctxt "field:contract.set.decline.select_reason,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:contract.set.decline.select_reason,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.set.decline.select_reason,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.set.decline.select_reason,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:contract.set,name:"
+msgid "Contract Set"
+msgstr "Ensemble de contrats"
+
+msgctxt "model:contract.set.decline.select_reason,name:"
+msgid "Reason selector to decline contract set"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_contract_set_form"
+msgid "Contract Sets"
+msgstr "Ensembles de contrats"
+
+msgctxt "model:ir.action,name:act_decline_set"
+msgid "Decline Set"
+msgstr "Décliner l'ensemble de contrats"
+
+msgctxt "model:ir.ui.menu,name:menu_contract_set"
+msgid "Contract Sets"
+msgstr "Ensembles de contrats"
+
+msgctxt "view:contract.set.decline.select_reason:"
+msgid "Select Declination Reason"
+msgstr "Choisir le motif pour décliner"
+
+msgctxt "view:contract.set:"
+msgid "Contract Set"
+msgstr "Ensemble de contrats"
+
+msgctxt "wizard_button:contract.set.decline,select_reason,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:contract.set.decline,select_reason,end:"
+msgid "Cancel"
+msgstr "Annuler"

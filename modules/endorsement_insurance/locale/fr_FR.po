@@ -920,6 +920,10 @@ msgctxt "wizard_button:endorsement.start,manage_extra_premium,suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 
+msgctxt "wizard_button:endorsement.start,new_covered_element,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
 msgctxt ""
 "wizard_button:endorsement.start,new_covered_element,new_covered_element_next:"
 msgid "Next"
@@ -930,7 +934,8 @@ msgctxt ""
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:endorsement.start,new_covered_element,suspend:"
+msgctxt ""
+"wizard_button:endorsement.start,new_covered_element,new_covered_element_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 

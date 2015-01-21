@@ -7,22 +7,6 @@ msgid "Please pick a process from the selection"
 msgstr "Choisir un processus de la sélection"
 
 msgctxt "error:contract:"
-msgid "%s is not a valid start date for product %s"
-msgstr "%s n'est pas une date d'effet compatible avec le produit %s"
-
-msgctxt "error:contract:"
-msgid "A product must be provided"
-msgstr "Saisir un produit"
-
-msgctxt "error:contract:"
-msgid "A start date must be provided"
-msgstr "Saisir la date d'effet"
-
-msgctxt "error:contract:"
-msgid "A subscriber must be provided"
-msgstr "Saisir le Souscripteur"
-
-msgctxt "error:contract:"
 msgid "At least an option must be selected"
 msgstr "Saisir une garantie"
 
@@ -43,13 +27,6 @@ msgid "Option %s must be subscribed after %s"
 msgstr "La Garantie %s doit être souscrite après le %s"
 
 msgctxt "error:contract:"
-msgid ""
-"The payment bank account is required as the payment mode is Direct Debit"
-msgstr ""
-"Le compte bancaire de paiement doit être renseigné, le mode de paiement "
-"choisi étant le prélèvement"
-
-msgctxt "error:contract:"
 msgid "The selected subscriber does not have an address"
 msgstr "Le souscripteur sélectionné n'a pas d'adresse."
 
@@ -64,6 +41,10 @@ msgstr "Trace Courante"
 msgctxt "field:contract,current_state:"
 msgid "Current State"
 msgstr "Etat courant"
+
+msgctxt "field:contract,doc_received:"
+msgid "All Document Received"
+msgstr "Tous les documents ont été reçus"
 
 msgctxt "field:contract,logs:"
 msgid "Task"
@@ -143,7 +124,7 @@ msgstr "Démarrer le processus"
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,action:"
 msgid "Start Process (_k)"
-msgstr "Démarrer Processus (_k)"
+msgstr "Démarrer le processus (_k)"
 
 msgctxt "wizard_button:contract.subscribe,process_parameters,end:"
 msgid "Cancel"

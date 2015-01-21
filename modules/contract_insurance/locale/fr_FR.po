@@ -160,7 +160,7 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:contract:"
-msgid "Errors occurs during renewal date calculation : %s"
+msgid "Errors occured during renewal date calculation : %s"
 msgstr ""
 
 msgctxt "error:contract:"
@@ -364,6 +364,10 @@ msgstr "Précision"
 msgctxt "field:contract.covered_element,currency_symbol:"
 msgid "Currency Symbol"
 msgstr "Symbole de la Devise"
+
+msgctxt "field:contract.covered_element,declined_options:"
+msgid "Declined Options"
+msgstr ""
 
 msgctxt "field:contract.covered_element,extra_data:"
 msgid "Contract Extra Data"
@@ -890,6 +894,10 @@ msgctxt ""
 msgid "Covered Elements"
 msgstr "Risques Couverts"
 
+msgctxt "field:document.receive.request,tmp_0:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:expense,amount:"
 msgid "Amount"
 msgstr "Montant"
@@ -1129,6 +1137,26 @@ msgstr "Delivré"
 msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
+
+msgctxt "selection:document.receive.request,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request,needed_by:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Option"
+msgstr "Option"
 
 msgctxt "selection:document.template,kind:"
 msgid "Contract Documents"

@@ -1,6 +1,50 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:health.care_system:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:health.care_system:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:health.insurance_fund:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:health.insurance_fund:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:party.relation:"
+msgid "%s can't be both a social security insured and dependent"
+msgstr "%s ne peut être à la fois assuré social et ayant droit"
+
+msgctxt "error:party.relation:"
+msgid "The SSN is required for %s"
+msgstr "Le numéro NIR est requis pour %s"
 
 msgctxt "field:contract.covered_element,is_law_madelin:"
 msgid "Law Madelin"
@@ -113,6 +157,22 @@ msgstr "Régime"
 msgctxt "field:health.party_complement,insurance_fund:"
 msgid "Insurance Fund"
 msgstr "Caisse d'Affiliation"
+
+msgctxt "field:party.party,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:party.party,main_insured_ssn:"
+msgid "Main Insured SSN"
+msgstr "Assuré"
+
+msgctxt "field:party.party,social_security_dependent:"
+msgid "Social Security Dependent"
+msgstr "Ayant droit"
+
+msgctxt "field:party.party,social_security_insured:"
+msgid "Social Security Insured"
+msgstr "Assuré social"
 
 msgctxt "model:health.care_system,name:"
 msgid "Health Care System"

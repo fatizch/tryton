@@ -172,6 +172,10 @@ msgctxt "field:ir.ui.view.description,for_step:"
 msgid "For Step"
 msgstr "Pour l'Etape"
 
+msgctxt "field:ir.ui.view.description,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:ir.ui.view.description,header_line:"
 msgid "Header Line"
 msgstr "Ligne d'Entête"
@@ -243,6 +247,10 @@ msgstr "Creation date"
 msgctxt "field:process,custom_transitions:"
 msgid "Custom Transitions"
 msgstr "Transitions Personnalisés"
+
+msgctxt "field:process,end_step_name:"
+msgid "End Step Name"
+msgstr "Nom de l'étape de fin"
 
 msgctxt "field:process,kind:"
 msgid "Kind"
@@ -506,7 +514,7 @@ msgstr "Démarrer le processus"
 
 msgctxt "wizard_button:ProcessFinder,process_parameters,action:"
 msgid "Start Process (_k)"
-msgstr "Démarrer Processus (_k)"
+msgstr "Démarrer le processus (_k)"
 
 msgctxt "wizard_button:ProcessFinder,process_parameters,end:"
 msgid "Cancel"

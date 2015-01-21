@@ -56,6 +56,28 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
+msgctxt "error:res.user-res.team:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:res.user-res.team:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:task.select:"
+msgid "No task found"
+msgstr "Pas de tâche trouvée"
+
 msgctxt "error:task.select:"
 msgid "No task has been selected."
 msgstr "Pas de Tâche Sélectionnée"
@@ -64,21 +86,17 @@ msgctxt "field:process.log,is_current_user:"
 msgid "Is current user"
 msgstr "Est l'utisateur courant"
 
-msgctxt "field:process.log,priority:"
-msgid "Priority"
-msgstr "Priorité"
-
-msgctxt "field:process.log,task_selected:"
-msgid "Selected"
-msgstr "Coché"
+msgctxt "field:process.log,task_nb:"
+msgid "Task Number"
+msgstr "Nombre de tâches"
 
 msgctxt "field:process.log,task_start:"
 msgid "Task Start"
 msgstr "Début de la Tâche"
 
-msgctxt "field:res.team,authorizations:"
-msgid "Authorizations"
-msgstr "Autorisations"
+msgctxt "field:process.log,task_start_date:"
+msgid "Task Start"
+msgstr "Début de la Tâche"
 
 msgctxt "field:res.team,code:"
 msgid "Code"
@@ -100,13 +118,13 @@ msgctxt "field:res.team,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:res.team,members:"
-msgid "Members"
-msgstr "Membres"
-
 msgctxt "field:res.team,name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:res.team,nb_tasks:"
+msgid "Number of Tasks"
+msgstr "Nombre de tâches"
 
 msgctxt "field:res.team,priorities:"
 msgid "Priorities"
@@ -115,6 +133,18 @@ msgstr "Priorités"
 msgctxt "field:res.team,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:res.team,tasks_team:"
+msgid "Team Tasks"
+msgstr "Tâches de l'équipe"
+
+msgctxt "field:res.team,users:"
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgctxt "field:res.team,users_links:"
+msgid "Users"
+msgstr "Utilisateurs"
 
 msgctxt "field:res.team,write_date:"
 msgid "Write Date"
@@ -168,18 +198,6 @@ msgctxt "field:res.team-res.group,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:res.team.add_user.select,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:res.team.add_user.select,user:"
-msgid "User"
-msgstr "Utilisateur"
-
-msgctxt "field:res.team.add_user.select,user_ok:"
-msgid "User Ok"
-msgstr "Utilisateur Ok"
-
 msgctxt "field:res.team.priority,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
@@ -196,13 +214,9 @@ msgctxt "field:res.team.priority,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:res.team.priority,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:res.team.priority,priority:"
-msgid "Priority"
-msgstr "Priorité"
+msgctxt "field:res.team.priority,nb_tasks:"
+msgid "Number of Tasks"
+msgstr "Nombre de tâches"
 
 msgctxt "field:res.team.priority,process_step:"
 msgid "Process Step"
@@ -212,9 +226,17 @@ msgctxt "field:res.team.priority,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:res.team.priority,task_name:"
+msgid "Task Name"
+msgstr "Nom de la tâche"
+
 msgctxt "field:res.team.priority,team:"
 msgid "Team"
 msgstr "Equipe"
+
+msgctxt "field:res.team.priority,value:"
+msgid "Value"
+msgstr "Valeur"
 
 msgctxt "field:res.team.priority,write_date:"
 msgid "Write Date"
@@ -228,73 +250,81 @@ msgctxt "field:res.team.priority,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:res.user,team:"
+msgctxt "field:res.user,nb_tasks:"
+msgid "Number of Tasks"
+msgstr "Nombre de tâches"
+
+msgctxt "field:res.user,teams:"
+msgid "Teams"
+msgstr "Equipes"
+
+msgctxt "field:res.user-res.team,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:res.user-res.team,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:res.user-res.team,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:res.user-res.team,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:res.user-res.team,nb_tasks:"
+msgid "Number of Tasks"
+msgstr "Nombre de tâches"
+
+msgctxt "field:res.user-res.team,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:res.user-res.team,team:"
 msgid "Team"
 msgstr "Equipe"
+
+msgctxt "field:res.user-res.team,user:"
+msgid "User"
+msgstr "Utilisateur"
+
+msgctxt "field:res.user-res.team,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:res.user-res.team,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:res.user-res.team,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:task.select.available_tasks,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:task.select.available_tasks,nb_tasks_process:"
-msgid "Process Tasks"
-msgstr "Tâches du Process"
-
-msgctxt "field:task.select.available_tasks,nb_tasks_team:"
-msgid "Team Tasks"
-msgstr "Tâches de l'Equipe"
-
-msgctxt "field:task.select.available_tasks,nb_users_team:"
-msgid "Team Users"
-msgstr "Membre de l'Equipe"
-
-msgctxt "field:task.select.available_tasks,process:"
-msgid "Process"
-msgstr "Processus"
-
 msgctxt "field:task.select.available_tasks,selected_task:"
 msgid "Selected Task"
 msgstr "Tâche Sélectionnée"
 
-msgctxt "field:task.select.available_tasks,tasks:"
-msgid "Tasks"
-msgstr "Tâches"
+msgctxt "field:task.select.available_tasks,selected_task_presenter:"
+msgid "Seleteted Task"
+msgstr "Tâche séléctionnée"
 
-msgctxt "field:task.select.available_tasks,tasks_process:"
-msgid "Process Tasks"
-msgstr "Tâches du Process"
-
-msgctxt "field:task.select.available_tasks,tasks_team:"
-msgid "Team Tasks"
-msgstr "Tâches de l'Equipe"
-
-msgctxt "field:task.select.available_tasks,team:"
-msgid "Team"
-msgstr "Equipe"
-
-msgctxt "field:task.select.available_tasks.task,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:task.select.available_tasks.task,kind:"
-msgid "Kind"
-msgstr "Type"
-
-msgctxt "field:task.select.available_tasks.task,nb_tasks:"
-msgid "Number"
-msgstr "Numéro"
-
-msgctxt "field:task.select.available_tasks.task,task:"
-msgid "Task"
-msgstr "Tâche"
-
-msgctxt "field:task.select.available_tasks.task,task_name:"
-msgid "Task Name"
-msgstr "Nom de la Tâche"
+msgctxt "field:task.select.available_tasks,user:"
+msgid "User"
+msgstr "Utilisateur"
 
 msgctxt "model:ir.action,name:act_launch_task_wizard"
 msgid "Launch Task"
 msgstr "Lancer un Tâche"
+
+msgctxt "model:ir.action,name:act_management_team"
+msgid "Team Management"
+msgstr "Gestion des équipes"
 
 msgctxt "model:ir.action,name:act_process_log"
 msgid "Waiting Tasks"
@@ -308,10 +338,6 @@ msgctxt "model:ir.action,name:act_team"
 msgid "Team"
 msgstr "Equipe"
 
-msgctxt "model:ir.action,name:wizard_add_user"
-msgid "Add Team User"
-msgstr "Ajouter un utilisateur à l'équipe"
-
 msgctxt "model:ir.action.act_window.domain,name:act_process_log_domain_all"
 msgid "All"
 msgstr "Toutes"
@@ -323,6 +349,10 @@ msgstr "Les miennes"
 msgctxt "model:ir.ui.menu,name:menu_launch_existing_tasks"
 msgid "Waiting Tasks"
 msgstr "Tâches en attente"
+
+msgctxt "model:ir.ui.menu,name:menu_management_team"
+msgid "Team Management"
+msgstr "Gestion des équipes"
 
 msgctxt "model:ir.ui.menu,name:menu_task"
 msgid "Task Manager"
@@ -336,6 +366,10 @@ msgctxt "model:ir.ui.menu,name:menu_team"
 msgid "Team"
 msgstr "Equipe"
 
+msgctxt "model:res.group,name:team_management_admin"
+msgid "Team Management"
+msgstr "Gestion des équipes"
+
 msgctxt "model:res.team,name:"
 msgid "Team"
 msgstr "Equipe"
@@ -344,53 +378,25 @@ msgctxt "model:res.team-res.group,name:"
 msgid "Team - Group Relation"
 msgstr "Relation Equipe - Groupe"
 
-msgctxt "model:res.team.add_user.select,name:"
-msgid "Select User"
-msgstr "Saisir un utilisateur"
-
 msgctxt "model:res.team.priority,name:"
 msgid "Priority"
 msgstr "Priorité"
 
+msgctxt "model:res.user-res.team,name:"
+msgid "Relation between User and Team"
+msgstr "Relation entre l'utilisateur et l'équipe"
+
 msgctxt "model:task.select.available_tasks,name:"
 msgid "Task Selector"
 msgstr "Sélectionneur de Tâche"
-
-msgctxt "model:task.select.available_tasks.task,name:"
-msgid "Task Displayer"
-msgstr "Tableau de Bord"
-
-msgctxt "selection:res.team.priority,kind:"
-msgid "Another User issues"
-msgstr "Tâches des Autres Utilisateurs"
-
-msgctxt "selection:res.team.priority,kind:"
-msgid "Both"
-msgstr "Les Deux"
-
-msgctxt "selection:res.team.priority,kind:"
-msgid "User Issues"
-msgstr "Tâches de l'utilisateur"
-
-msgctxt "selection:task.select.available_tasks.task,kind:"
-msgid "Process"
-msgstr "Processus"
-
-msgctxt "selection:task.select.available_tasks.task,kind:"
-msgid "Team"
-msgstr "Equipe"
 
 msgctxt "view:process.log:"
 msgid "Current Tasks"
 msgstr "Tâche courante"
 
 msgctxt "view:process.log:"
-msgid "Tasks"
-msgstr "Tâches"
-
-msgctxt "view:res.team.add_user.select:"
-msgid "Add User"
-msgstr "Ajouter l'Utilisateur"
+msgid "Tasks Repartition By Date"
+msgstr "Tâches par date"
 
 msgctxt "view:res.team.priority:"
 msgid "Priorities"
@@ -400,41 +406,45 @@ msgctxt "view:res.team.priority:"
 msgid "Priority"
 msgstr "Priorité"
 
+msgctxt "view:res.team.priority:"
+msgid "Tasks Repartition"
+msgstr "Répartition des tâches"
+
 msgctxt "view:res.team:"
-msgid "Add User"
-msgstr "Ajouter l'Utilisateur"
+msgid "Priorities"
+msgstr "Priorités"
+
+msgctxt "view:res.team:"
+msgid "Summary"
+msgstr "Résumé"
+
+msgctxt "view:res.team:"
+msgid "Tasks Details"
+msgstr "Détails des tâches"
 
 msgctxt "view:res.team:"
 msgid "Team"
 msgstr "Equipe"
 
 msgctxt "view:res.team:"
+msgid "Team Management"
+msgstr "Gestion des équipes"
+
+msgctxt "view:res.team:"
 msgid "Teams"
 msgstr "Equipes"
+
+msgctxt "view:res.user-res.team:"
+msgid "Tasks Repartition"
+msgstr "Répartition des tâches"
 
 msgctxt "view:res.user:"
 msgid "Team management"
 msgstr "Gestion de l'Equipe"
 
-msgctxt "view:task.select.available_tasks.task:"
-msgid "Tasks"
-msgstr "Tâches"
-
-msgctxt "view:task.select.available_tasks.task:"
-msgid "Tasks Repartition"
-msgstr "Repartition des Tâches"
-
 msgctxt "view:task.select.available_tasks:"
 msgid "Task Selector"
 msgstr "Sélectionneur de Tâche"
-
-msgctxt "wizard_button:res.team.add_user,select_user,add_user:"
-msgid "Add User"
-msgstr "Ajouter l'Utilisateur"
-
-msgctxt "wizard_button:res.team.add_user,select_user,end:"
-msgid "Cancel"
-msgstr "Annuler"
 
 msgctxt "wizard_button:task.select,select_context,calculate_action:"
 msgid "Compute Task"

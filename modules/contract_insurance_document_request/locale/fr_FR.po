@@ -1,0 +1,23 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract:"
+msgid "Some required documents are missing."
+msgstr "Des documents requis sont manquants."
+
+msgctxt "field:contract,document_request_lines:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:document.rule:"
+msgid "Document Rule"
+msgstr "Règle des gestion des documents"
+
+msgctxt "view:offered.option.description:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:offered.product:"
+msgid "Documents"
+msgstr "Documents"

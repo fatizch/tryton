@@ -1,0 +1,107 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.set.validate:"
+msgid "Please pick a process from the selection"
+msgstr "Choisir un processus de la sélection"
+
+msgctxt "error:contract.set:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:contract.set:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:contract.set:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:contract.set:"
+msgid "Object %s is currently locked by user %s"
+msgstr "L'objet %s est verrouillé par l'utilisateur %s"
+
+msgctxt "error:contract.set:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
+msgctxt "field:contract.set,attachments:"
+msgid "Contracts Attachments"
+msgstr "Pièces jointes des contrats"
+
+msgctxt "field:contract.set,contracts_processes_over:"
+msgid "All Processes On Contracts Are Over"
+msgstr "Tous les processus des contrats sont terminés"
+
+msgctxt "field:contract.set,covered_parties:"
+msgid "Covered Parties"
+msgstr "Acteurs couverts"
+
+msgctxt "field:contract.set,current_log:"
+msgid "Current Log"
+msgstr "Trace Courante"
+
+msgctxt "field:contract.set,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:contract.set,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etape dans le processus"
+
+msgctxt "field:contract.set,logs:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:contract.set,party_relations:"
+msgid "Party Relations"
+msgstr "Relations tiers"
+
+msgctxt "field:contract.set.validate.find_process,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:contract.set.validate.find_process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.set.validate.find_process,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "model:contract.set.validate.find_process,name:"
+msgid "ContractSetValidate Find Process"
+msgstr ""
+
+msgctxt "model:ir.action,name:act_contract_set_logs"
+msgid "Logs"
+msgstr "Traces"
+
+msgctxt "model:ir.action,name:validation_process_launcher"
+msgid "Start Validation"
+msgstr "Démarrer la validation"
+
+msgctxt "model:ir.ui.menu,name:menu_start_validation"
+msgid "Start Validation"
+msgstr "Démarrer la validation"
+
+msgctxt "selection:process,kind:"
+msgid "Contract Set Validation"
+msgstr "Validation d'un ensemble de contrat"
+
+msgctxt "view:contract:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "view:contract:"
+msgid "Resume"
+msgstr "Lancer"
+
+msgctxt "wizard_button:contract.set.validate,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr "Démarrer le processus (_k)"
+
+msgctxt "wizard_button:contract.set.validate,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

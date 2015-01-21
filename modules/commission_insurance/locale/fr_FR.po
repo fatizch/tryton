@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -224,13 +224,53 @@ msgctxt "field:commission,party:"
 msgid "Party"
 msgstr "Acteur"
 
+msgctxt "field:commission.agent,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
 msgctxt "field:commission.agent,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
 
+msgctxt "field:commission.agent,start_date:"
+msgid "Start Date"
+msgstr "Date de début"
+
 msgctxt "field:commission.agent,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:commission.create_agents.ask,brokers:"
+msgid "Brokers"
+msgstr "Courtiers"
+
+msgctxt "field:commission.create_agents.ask,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:commission.create_agents.ask,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.create_agents.ask,plans:"
+msgid "Plans"
+msgstr ""
+
+msgctxt "field:commission.create_agents.parties,account_payable:"
+msgid "Account Payable"
+msgstr "Compte à payer"
+
+msgctxt "field:commission.create_agents.parties,company:"
+msgid "Company"
+msgstr "Société"
+
+msgctxt "field:commission.create_agents.parties,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.create_agents.parties,parties:"
+msgid "Parties"
+msgstr "Tiers"
 
 msgctxt "field:commission.plan,broker_plan:"
 msgid "Broker Plan"
@@ -352,6 +392,10 @@ msgctxt "field:commission_plan-commission_plan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract,agency:"
+msgid "Agency"
+msgstr "Agence"
+
 msgctxt "field:contract,agent:"
 msgid "Agent"
 msgstr "Protocole de commissionnement"
@@ -392,6 +436,14 @@ msgctxt "model:broker,name:"
 msgid "Broker"
 msgstr "Courtier"
 
+msgctxt "model:commission.create_agents.ask,name:"
+msgid "Create Agents"
+msgstr "Créer les protocoles de commissionnement"
+
+msgctxt "model:commission.create_agents.parties,name:"
+msgid "Create Agents"
+msgstr "Créer les protocoles de commissionnement"
+
 msgctxt "model:commission.plan.lines-offered.option.description,name:"
 msgid "Commission Plan Line - Offered Option Description"
 msgstr "Lien Ligne de plan de commissionnement - Garantie offerte"
@@ -408,6 +460,10 @@ msgctxt "model:ir.action,name:act_broker_form"
 msgid "Brokers"
 msgstr "Courtiers"
 
+msgctxt "model:ir.action,name:act_commission_create_agents"
+msgid "Create Agents"
+msgstr "Créer les protocoles de commissionnement"
+
 msgctxt "model:ir.action,name:act_commission_relate_form"
 msgid "Commission"
 msgstr "Commission"
@@ -423,6 +479,10 @@ msgstr "Assureur"
 msgctxt "model:ir.ui.menu,name:menu_broker_form"
 msgid "Brokers"
 msgstr "Courtiers"
+
+msgctxt "model:ir.ui.menu,name:menu_commission_create_agents"
+msgid "Create Agents"
+msgstr "Créer les protocoles de commissionnement"
 
 msgctxt "model:ir.ui.menu,name:menu_commission_insurer_form"
 msgid "Insurers"
@@ -444,6 +504,14 @@ msgctxt "view:broker:"
 msgid "Brokers"
 msgstr "Courtiers"
 
+msgctxt "view:commission.create_agents.ask:"
+msgid "Create Agents"
+msgstr "Créer les protocoles de commissionnement"
+
+msgctxt "view:commission.create_agents.parties:"
+msgid "Create Agents"
+msgstr "Créer les protocoles de commissionnement"
+
 msgctxt "view:commission.plan:"
 msgid "Insurer Plan"
 msgstr "Plan Assureur"
@@ -463,3 +531,19 @@ msgstr "Montant"
 msgctxt "view:party.party:"
 msgid "Broker Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "wizard_button:commission.create_agents,ask,create_:"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "wizard_button:commission.create_agents,ask,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:commission.create_agents,parties,create_brokers:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:commission.create_agents,parties,end:"
+msgid "Cancel"
+msgstr "Annuler"

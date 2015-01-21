@@ -25,6 +25,10 @@ msgid "The document description code must be unique"
 msgstr "Le code du modèle de document doit être unique"
 
 msgctxt "error:ir.attachment:"
+msgid "Can't decode attachment in base 64"
+msgstr "Impossible de décoder la pièce jointe en base 64"
+
+msgctxt "error:ir.attachment:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -85,6 +89,10 @@ msgstr "Identifiant XML"
 msgctxt "field:ir.attachment,document_desc:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
+
+msgctxt "field:ir.attachment,origin:"
+msgid "Origin"
+msgstr "Origine"
 
 msgctxt "field:ir.attachment,xml_id:"
 msgid "XML Id"

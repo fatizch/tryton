@@ -1,6 +1,24 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:health.party_complement:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:health.party_complement:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
 
 msgctxt "field:contract,is_health:"
 msgid "Is Health"
@@ -30,13 +48,13 @@ msgctxt "field:health.party_complement,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:health.party_complement,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:health.party_complement,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:health.party_complement,must_expand_tree:"
-msgid "Must Expand Tree"
-msgstr "Etendre l'arbre"
 
 msgctxt "field:health.party_complement,party:"
 msgid "Party"
@@ -109,6 +127,14 @@ msgstr "Acteurs"
 msgctxt "model:ir.ui.menu,name:menu_person_form"
 msgid "Persons"
 msgstr "Personnes"
+
+msgctxt "model:res.group,name:group_health"
+msgid "Health"
+msgstr "Santé"
+
+msgctxt "model:res.group,name:group_health_admin"
+msgid "Health Administration"
+msgstr "Administration Santé"
 
 msgctxt "model:tag,name:tag_health"
 msgid "Health"

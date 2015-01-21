@@ -1,0 +1,15 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.set.premium.display:"
+msgid "No contract set found in context"
+msgstr "Pas d'ensemble de contrats trouvé dans le contexte"
+
+msgctxt "field:account.fee,one_per_set:"
+msgid "One Per Set"
+msgstr "Un par ensemble de contrats"
+
+msgctxt "model:ir.action,name:act_premium_display_on_contract_set"
+msgid "Display Premiums"
+msgstr "Afficher les primes"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -234,6 +234,10 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
+msgctxt "field:account.fee,product:"
+msgid "Product"
+msgstr "Produit"
+
 msgctxt "field:account.fee.description,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte pour le quittancement"
@@ -262,6 +266,10 @@ msgctxt "field:account.invoice,fees:"
 msgid "Fees"
 msgstr "Frais"
 
+msgctxt "field:account.invoice,reconciliation_date:"
+msgid "Reconciliation Date"
+msgstr "Date de lettrage"
+
 msgctxt "field:account.invoice,start:"
 msgid "Start Date"
 msgstr "Date d'Effet"
@@ -289,6 +297,10 @@ msgstr "Détails"
 msgctxt "field:account.invoice.line.detail,contract:"
 msgid "Contract"
 msgstr "Contrat"
+
+msgctxt "field:account.invoice.line.detail,contract_fee:"
+msgid "Contract Fee"
+msgstr "Frais du contrat"
 
 msgctxt "field:account.invoice.line.detail,coverage:"
 msgid "Coverage"
@@ -381,10 +393,6 @@ msgstr "Identifiant XML"
 msgctxt "field:account.invoice.payment_term.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
-
-msgctxt "field:account.payment.creation,id:"
-msgid "ID"
-msgstr "ID"
 
 msgctxt "field:account.tax.description,tax:"
 msgid "Tax"
@@ -517,6 +525,10 @@ msgstr "ID"
 msgctxt "field:contract.do_invoice.start,up_to_date:"
 msgid "Up To Date"
 msgstr "Jusqu'au"
+
+msgctxt "field:contract.fee,active:"
+msgid "Active"
+msgstr "Actif"
 
 msgctxt "field:contract.invoice,contract:"
 msgid "Contract"
@@ -980,10 +992,6 @@ msgctxt "model:account.invoice.line.detail,name:"
 msgid "Invoice Line Detail"
 msgstr "Détail de ligne de quittance"
 
-msgctxt "model:account.payment.creation,name:"
-msgid "Payment Creation Batch"
-msgstr "Batch de création des paiements"
-
 msgctxt "model:contract.billing_information,name:"
 msgid "Contract Billing Information"
 msgstr "Quittancement"
@@ -1078,7 +1086,7 @@ msgstr "Synthèse quittance"
 
 msgctxt "selection:account.invoice.line.detail,frequency:"
 msgid "At contract signature"
-msgstr ""
+msgstr "A la signature du contrat"
 
 msgctxt "selection:account.invoice.line.detail,frequency:"
 msgid "Half-yearly"
