@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.model import fields
 from trytond.transaction import Transaction
@@ -26,4 +26,7 @@ class Party:
             'is_sepa_creditor_identifier_needed')
 
     def get_is_sepa_creditor_identifier_needed(self, name):
-        return self.id == Transaction().context.get('company', -1)
+        company_id = Transaction().context.get('company', None)
+        if company_id is None:
+            return
+        return self == Pool().get('company.company')(company_id).party
