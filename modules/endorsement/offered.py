@@ -28,6 +28,7 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     'Endorsement Definition'
 
     __name__ = 'endorsement.definition'
+    _func_key = 'code'
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', required=True, translate=True)

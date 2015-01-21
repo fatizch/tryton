@@ -4,8 +4,9 @@ import datetime
 from collections import defaultdict
 from sql.functions import Now
 
-from trytond.pool import PoolMeta
+from trytond.error import UserError
 from trytond.rpc import RPC
+from trytond.pool import PoolMeta
 from trytond.model import Workflow, Model, fields as tryton_fields
 from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool
 from trytond.pool import Pool
@@ -405,6 +406,52 @@ def relation_mixin(value_model, field, model, name):
                     'relation': value,
                     })
 
+        @classmethod
+        def _import_json(cls, values, main_object=None):
+            pool = Pool()
+            the_model = pool.get(model)
+            if 'values' in values:
+                values_field = values['values']
+                if values_field:
+                    new_values_field = {}
+                    for key, value in values_field.iteritems():
+                        field = the_model._fields[key]
+                        # TODO handle Reference fields
+                        if isinstance(field, tryton_fields.Many2One) and value:
+                            Target = field.get_target()
+                            target = Target.import_json(value)
+                            target.save()
+                            new_values_field[key] = target.id
+                        else:
+                            new_values_field[key] = value
+                    values['values'] = new_values_field
+            return super(Mixin, cls)._import_json(values, main_object)
+
+        def export_json(self, skip_fields=None, already_exported=None,
+                output=None, main_object=None):
+
+            pool = Pool()
+            the_model = pool.get(model)
+            values = super(Mixin, self).export_json(skip_fields,
+                already_exported, output, main_object)
+            if 'values' in values:
+                values_field = values['values']
+                if values_field:
+                    new_values_field = {}
+                    for key, value in values_field.iteritems():
+                        field = the_model._fields[key]
+                        if isinstance(field, tryton_fields.Many2One) and value:
+                            Target = field.get_target()
+                            target, = Target.search([('id', '=', value)])
+                            export = []
+                            target.export_json(output=export)
+                            new_values_field[key] = export[-1]
+                        else:
+                            new_values_field[key] = value
+                    values['values'] = new_values_field
+
+            return values
+
         def apply_values(self):
             values = (self.values if self.values else {}).copy()
             if self.action == 'add':
@@ -545,6 +592,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
 
     __metaclass__ = PoolMeta
     __name__ = 'endorsement'
+    _func_key = 'id'
 
     applicant = fields.Many2One('party.party', 'Applicant')
     application_date = fields.DateTime('Application Date', readonly=True,
@@ -599,7 +647,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 ('canceled', 'in_progress'),
                 ('declined', 'draft'),
                 ))
-        cls._buttons.update({
+        cls._buttons.update(
+            {
+                'start_endorsement': {
+                    'invisible': ~Eval('state').in_(['draft'])
+                    },
                 'draft': {
                     'invisible': ~Eval('state').in_(['in_progress']),
                     },
@@ -617,6 +669,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     },
                 })
         cls._order = [('application_date', 'DESC'), ('create_date', 'DESC')]
+        cls.__rpc__.update({'ws_create_endorsements': RPC(readonly=False)})
+        cls._error_messages.update({
+                'invalid_format': 'Invalid file format',
+                })
 
     @classmethod
     def default_state(cls):
@@ -767,7 +823,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     def open_contract(cls, endorsements):
         pass
 
-    def extract_preview_values(self, extraction_method):
+    def extract_preview_values(self, extraction_method, **kwargs):
         pool = Pool()
         current_values, old_values, new_values = {}, {}, {}
         for unitary_endorsement in self.all_endorsements():
@@ -775,7 +831,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             endorsed_model, endorsed_id = (endorsed_record.__name__,
                 endorsed_record.id)
             current_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                extraction_method(endorsed_record)
+                extraction_method(endorsed_record, **kwargs)
         if self.application_date:
             for unitary_endorsement in self.all_endorsements():
                 endorsed_record = unitary_endorsement.get_endorsed_record()
@@ -784,7 +840,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 old_record = utils.get_history_instance(endorsed_model,
                     endorsed_id, self.application_date)
                 old_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                    extraction_method(old_record)
+                    extraction_method(old_record, **kwargs)
             new_values = current_values
         else:
             # Make sure all changes are saved
@@ -800,10 +856,49 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                         endorsed_record.id)
                     record = pool.get(endorsed_model)(endorsed_id)
                     new_values['%s,%i' % (endorsed_model, endorsed_id)] = \
-                        extraction_method(record)
+                        extraction_method(record, **kwargs)
                 old_values = current_values
                 Transaction().cursor.rollback()
             return {'old': old_values, 'new': new_values}
+
+    @classmethod
+    def _export_light(cls):
+        return (super(Endorsement, cls)._export_light() |
+            set(['applied_by', 'applicant', 'definition']))
+
+    @classmethod
+    def ws_create_endorsements(cls, endorsements_dict):
+        'This method is a standard API for webservice use'
+        result = {}
+        for ext_id, objects in endorsements_dict.iteritems():
+            message = []
+            result[ext_id] = {'return': True, 'messages': message}
+            try:
+                for item in objects:
+                    if item['__name__'] == 'endorsement':
+                        endorsement = cls.import_json(item)
+                        message.append({
+                            'endorsement_id': endorsement.id
+                            })
+                    else:
+                        cls.raise_user_error('invalid_format')
+            except UserError as exc:
+                Transaction().cursor.rollback()
+                message.append({'error': exc.message})
+                return {ext_id: {
+                        'return': False,
+                        'messages': message,
+                    }}
+        return result
+
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = 0
+
+    @classmethod
+    @model.CoopView.button_action('endorsement.act_resume_endorsement')
+    def start_endorsement(cls, endorsements):
+        pass
 
 
 class EndorsementContract(values_mixin('endorsement.contract.field'),
@@ -811,6 +906,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
     'Endorsement Contract'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract'
+    _func_key = 'func_key'
 
     activation_history = fields.One2Many(
         'endorsement.contract.activation_history', 'contract_endorsement',
@@ -846,6 +942,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 ], 'State'),
         'get_state', searcher='search_state')
     state_string = state.translated('state')
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key')
 
     @classmethod
     def __setup__(cls):
@@ -863,6 +961,9 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             }
         cls.values.domain = [('definition', '=', Eval('definition'))]
         cls.values.depends = ['state', 'definition']
+
+    def get_func_key(self, name):
+        return self.contract.contract_number
 
     @staticmethod
     def default_state():
@@ -1042,6 +1143,18 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 
     def get_endorsed_record(self):
         return self.contract
+
+    @classmethod
+    def _export_light(cls):
+        return (super(EndorsementContract, cls)._export_light() |
+            set(['contract']))
+
+    @classmethod
+    def add_func_key(cls, values):
+        if 'contract' in values and '_func_key' in values['contract']:
+            values['_func_key'] = values['contract']['_func_key']
+        else:
+            values['_func_key'] = 0
 
 
 class EndorsementOption(relation_mixin(
