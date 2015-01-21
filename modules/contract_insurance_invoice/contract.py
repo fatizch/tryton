@@ -542,9 +542,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     contract = fields.Many2One('contract', 'Contract', required=True,
         select=True, ondelete='CASCADE')
     billing_mode = fields.Many2One('offered.billing_mode', 'Billing Mode',
-        required=True, ondelete='CASCADE')
+        required=True, ondelete='RESTRICT')
     payment_term = fields.Many2One('account.invoice.payment_term',
-        'Payment Term', ondelete='CASCADE', states={
+        'Payment Term', ondelete='RESTRICT', states={
             'required': And(Eval('direct_debit', False),
                 (Eval('_parent_contract', {}).get('status', '') == 'active')),
             'invisible': Len(Eval('possible_payment_terms', [])) < 2},
@@ -566,7 +566,7 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     direct_debit_account = fields.Many2One('bank.account',
         'Direct Debit Account',
         states={'invisible': ~Eval('direct_debit')},
-        depends=['direct_debit'])
+        depends=['direct_debit'], ondelete='RESTRICT')
     possible_payment_terms = fields.Function(fields.One2Many(
             'account.invoice.payment_term', None, 'Possible Payment Term'),
             'on_change_with_possible_payment_terms')
@@ -682,7 +682,8 @@ class Premium:
         domain=[
             ('company', '=', Eval('context', {}).get('company', -1)),
             ['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]]
-            ])
+            ],
+        ondelete='RESTRICT')
 
     @classmethod
     def _export_light(cls):
@@ -786,7 +787,8 @@ class ContractInvoice(ModelSQL, ModelView):
     __name__ = 'contract.invoice'
     _rec_name = 'invoice'
 
-    contract = fields.Many2One('contract', 'Contract', required=True)
+    contract = fields.Many2One('contract', 'Contract', required=True,
+        ondelete='CASCADE')
     invoice = fields.Many2One('account.invoice', 'Invoice', required=True,
         ondelete='CASCADE')
     invoice_state = fields.Function(
