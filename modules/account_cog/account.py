@@ -1,4 +1,4 @@
-from sql import Literal
+from sql import Literal, Null
 from sql.aggregate import Sum
 
 from trytond.pool import PoolMeta, Pool
@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.report import Report
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import export, fields
+from trytond.modules.cog_utils import export, fields, utils
 
 
 __metaclass__ = PoolMeta
@@ -186,10 +186,15 @@ class OpenThirdPartyBalanceStart:
     account = fields.Many2One('account.account', 'Account',
         domain=[('company', '=', Eval('company'))],
         depends=['company'])
+    at_date = fields.Date('At date', required=True)
 
     @staticmethod
     def default_posted():
         return True
+
+    @staticmethod
+    def default_at_date():
+        return utils.today()
 
     @staticmethod
     def default_third_party_balance_option():
@@ -204,6 +209,7 @@ class OpenThirdPartyBalance:
         data['third_party_balance_option'] = \
             self.start.third_party_balance_option
         data['account'] = self.start.account.id if self.start.account else None
+        data['at_date'] = self.start.at_date
         return action, data
 
 
@@ -246,11 +252,13 @@ class ThirdPartyBalance:
         cursor.execute(*line.join(move, condition=line.move == move.id
                 ).join(account, condition=line.account == account.id
                 ).select(line.party, Sum(line.debit), Sum(line.credit),
-                where=(line.party != None)
+                where=(line.party != Null)
                 & account.active
                 & account.kind.in_(('payable', 'receivable'))
                 & (account.company == data['company'])
-                & (line.reconciliation == None)
+                & ((line.maturity_date <= data['at_date'])
+                    | (line.maturity_date == Null))
+                & (line.reconciliation == Null)
                 & line_query & posted_clause
                 & account_clause,
                 group_by=line.party,
