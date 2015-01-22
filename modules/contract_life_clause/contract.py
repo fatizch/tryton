@@ -174,7 +174,7 @@ class Beneficiary(model.CoopSQL, model.CoopView):
 
     def get_rec_name(self, name=None):
         if self.party:
-            return self.party.rec_name
+            return self.party.full_name
         else:
             return self.reference
 
