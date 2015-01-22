@@ -120,16 +120,19 @@ class EndorsementContract:
         return result
 
     @classmethod
+    def _get_restore_history_order(cls):
+        order = super(EndorsementContract, cls)._get_restore_history_order()
+        contract_idx = order.index('contract')
+        order.insert(contract_idx + 1, 'contract.billing_information')
+        return order
+
+    @classmethod
     def _prepare_restore_history(cls, instances, at_date):
         super(EndorsementContract, cls)._prepare_restore_history(instances,
             at_date)
         for contract in instances['contract']:
             instances['contract.billing_information'] += \
                 contract.billing_informations
-        for obj in (instances['contract'] +
-                instances['contract.covered_element'] +
-                instances['contract.option']):
-            instances['contract.premium'] += obj.premiums
 
     def apply_values(self):
         values = super(EndorsementContract, self).apply_values()

@@ -62,12 +62,6 @@ class LoanShare:
     __name__ = 'loan.share'
 
 
-class Premium:
-    _history = True
-    __metaclass__ = PoolMeta
-    __name__ = 'contract.premium'
-
-
 class PremiumAmount:
     _history = True
     __metaclass__ = PoolMeta
@@ -143,6 +137,14 @@ class EndorsementContract:
     __name__ = 'endorsement.contract'
 
     @classmethod
+    def _get_restore_history_order(cls):
+        order = super(EndorsementContract, cls)._get_restore_history_order()
+        option_idx = order.index('contract.option')
+        order.insert(option_idx + 1, 'loan.share')
+        order.append('contract.premium.amount')
+        return order
+
+    @classmethod
     def _prepare_restore_history(cls, instances, at_date):
         super(EndorsementContract, cls)._prepare_restore_history(instances,
             at_date)
@@ -159,10 +161,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     __name__ = 'endorsement.loan'
 
     loan = fields.Many2One('loan', 'Loan', required=True,
-        datetime_field='applied_on', states={
-            'readonly': Eval('state') == 'applied',
-            },
-        depends=['state'])
+        states={'readonly': Eval('state') == 'applied'}, depends=['state'])
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
         ondelete='CASCADE')
     increments = fields.One2Many('endorsement.loan.increment',
@@ -204,11 +203,12 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     def base_instance(self):
         if not self.loan:
             return None
-        if not self.applied_on:
+        if not self.endorsement.rollback_date:
             return self.loan
-        Loan = Pool().get('loan')
-        with Transaction().set_context(_datetime=self.applied_on):
-            return Loan(self.loan.id)
+        with Transaction().set_context(
+                _datetime=self.endorsement.rollback_date,
+                _datetime_exclude=True):
+            return Pool().get('loan')(self.loan.id)
 
     def get_definition(self, name):
         return self.endorsement.definition.id if self.endorsement else None
@@ -228,15 +228,23 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     def search_state(cls, name, clause):
         return [('endorsement.state',) + tuple(clause[1:])]
 
+    @classmethod
+    def _get_restore_history_order(cls):
+        return ['loan', 'loan.increment', 'loan.payment']
+
     def do_restore_history(self):
         pool = Pool()
-        restore_dict = defaultdict(list)
-        restore_dict['loan'] += [self.loan, pool.get('loan')(self.loan.id)]
+        models_to_restore = self._get_restore_history_order()
+        restore_dict = {x: [] for x in models_to_restore}
+        restore_dict['loan'] += [self.loan, self.base_instance]
         self._prepare_restore_history(restore_dict,
             self.endorsement.rollback_date)
 
-        for k, v in restore_dict.iteritems():
-            pool.get(k).restore_history_before(list(set([x.id for x in v])),
+        for model_name in models_to_restore:
+            if not restore_dict[model_name]:
+                continue
+            pool.get(model_name).restore_history_before(
+                list(set([x.id for x in restore_dict[model_name]])),
                 self.endorsement.rollback_date)
 
     @classmethod

@@ -25,6 +25,13 @@ class EndorsementContract:
     __name__ = 'endorsement.contract'
 
     @classmethod
+    def _get_restore_history_order(cls):
+        order = super(EndorsementContract, cls)._get_restore_history_order()
+        option_idx = order.index('contract.option')
+        order.insert(option_idx + 1, 'contract.option.beneficiary')
+        return order
+
+    @classmethod
     def _prepare_restore_history(cls, instances, at_date):
         super(EndorsementContract, cls)._prepare_restore_history(instances,
             at_date)

@@ -6,6 +6,7 @@ from .wizard import *
 def register():
     Pool.register(
         ContractFee,
+        Premium,
         EndorsementContract,
         PreviewContractPremiums,
         ContractPreview,

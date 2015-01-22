@@ -255,7 +255,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(loan.payments[2].start_date,
             datetime.date(2016, 3, 27))
 
-
     @test_framework.prepare_test(
         'contract_insurance.test0001_testPersonCreation',
         'loan.test0010loan_basic_data',

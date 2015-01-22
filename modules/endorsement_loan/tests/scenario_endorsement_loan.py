@@ -40,6 +40,7 @@ Country = Model.get('country.country')
 CoveredElement = Model.get('contract.covered_element')
 Currency = Model.get('currency.currency')
 CurrencyRate = Model.get('currency.currency.rate')
+Endorsement = Model.get('endorsement')
 EndorsementDefinition = Model.get('endorsement.definition')
 EndorsementPart = Model.get('endorsement.part')
 EndorsementDefinitionPartRelation = Model.get(
@@ -47,8 +48,10 @@ EndorsementDefinitionPartRelation = Model.get(
 EndorsementLoanField = Model.get('endorsement.loan.field')
 Field = Model.get('ir.model.field')
 FiscalYear = Model.get('account.fiscalyear')
+Insurer = Model.get('insurer')
 ItemDescription = Model.get('offered.item.description')
 Loan = Model.get('loan')
+LoanIncrement = Model.get('loan.increment')
 LoanShare = Model.get('loan.share')
 LoanAveragePremiumRule = Model.get('loan.average_premium_rule')
 Party = Model.get('party.party')
@@ -61,7 +64,6 @@ Sequence = Model.get('ir.sequence')
 SequenceStrict = Model.get('ir.sequence.strict')
 SequenceType = Model.get('ir.sequence.type')
 User = Model.get('res.user')
-Insurer = Model.get('insurer')
 
 # #Comment# #Constants
 today = datetime.date.today()
@@ -363,4 +365,11 @@ loan.funds_release_date == contract_start_date
 loan.first_payment_date == new_payment_date
 # #Res# #True
 loan.end_date == new_loan_end_date
+# #Res# #True
+
+# #Comment# #Test cancellation
+endorsement, = Endorsement.find([('loans', '=', loan.id)])
+Endorsement.cancel([endorsement.id], config._context)
+increments = LoanIncrement.find([('loan', '=', loan.id)])
+len(increments) == 1
 # #Res# #True

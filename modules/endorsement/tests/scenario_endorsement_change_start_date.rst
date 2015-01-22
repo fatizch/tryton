@@ -24,27 +24,27 @@ Install Modules::
 
 Get Models::
 
-    >>> Field = Model.get('ir.model.field')
-    >>> Method = Model.get('ir.model.method')
-    >>> User = Model.get('res.user')
+    >>> Company = Model.get('company.company')
+    >>> Contract = Model.get('contract')
+    >>> Country = Model.get('country.country')
     >>> Currency = Model.get('currency.currency')
     >>> CurrencyRate = Model.get('currency.currency.rate')
-    >>> Country = Model.get('country.country')
-    >>> Party = Model.get('party.party')
-    >>> Company = Model.get('company.company')
-    >>> Sequence = Model.get('ir.sequence')
-    >>> SequenceType = Model.get('ir.sequence.type')
-    >>> Product = Model.get('offered.product')
-    >>> OptionDescription = Model.get('offered.option.description')
-    >>> Contract = Model.get('contract')
-    >>> EndorsementDefinition = Model.get('endorsement.definition')
-    >>> EndorsementPart = Model.get('endorsement.part')
-    >>> EndorsementDefinitionPartRelation = Model.get(
-    ...     'endorsement.definition-endorsement.part')
-    >>> EndorsementContractField = Model.get('endorsement.contract.field')
-    >>> MethodDefinition = Model.get('ir.model.method')
     >>> Endorsement = Model.get('endorsement')
     >>> EndorsementContract = Model.get('endorsement.contract')
+    >>> EndorsementContractField = Model.get('endorsement.contract.field')
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> EndorsementDefinitionPartRelation = Model.get(
+    ...     'endorsement.definition-endorsement.part')
+    >>> EndorsementPart = Model.get('endorsement.part')
+    >>> Field = Model.get('ir.model.field')
+    >>> MethodDefinition = Model.get('ir.model.method')
+    >>> Option = Model.get('contract.option')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Party = Model.get('party.party')
+    >>> Product = Model.get('offered.product')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> User = Model.get('res.user')
 
 Constants::
 
@@ -145,7 +145,7 @@ Create Change Start Date Endorsement::
     ...     EndorsementContractField(field=Field.find([
     ...                 ('model.model', '=', 'contract'),
     ...                 ('name', '=', 'start_date')])[0].id))
-    >>> change_start_date_part.post_apply_actions.extend(Method.find([
+    >>> change_start_date_part.post_apply_actions.extend(MethodDefinition.find([
     ...             ('xml_id', '=', 'endorsement.contract_update_start_date')]))
     >>> change_start_date_part.save()
     >>> change_start_date = EndorsementDefinition()
@@ -172,10 +172,10 @@ New Endorsement::
     >>> new_endorsement.form.applicant = None
     >>> new_endorsement.form.effective_date = new_contract_start_date
     >>> new_endorsement.execute('start_endorsement')
-    >>> new_endorsement.form.current_start_date  # Should  match contract_start_date
-    datetime.date(2014, 4, 10)
-    >>> new_endorsement.form.new_start_date  # Should  match new_contract_start_date
-    datetime.date(2014, 10, 21)
+    >>> new_endorsement.form.current_start_date == contract_start_date
+    True
+    >>> new_endorsement.form.new_start_date == new_contract_start_date
+    True
     >>> new_endorsement.execute('change_start_date_next')
     >>> new_endorsement.execute('suspend')
 
@@ -184,19 +184,32 @@ New Endorsement::
     >>> good_endorsement, = Endorsement.find([
     ...         ('contracts', '=', contract.id)])
     >>> contract = Contract(contract.id)
-    >>> contract.start_date  # Should  match contract_start_date
-    datetime.date(2014, 4, 10)
-    >>> contract.options[0].start_date  # Should  match contract_start_date
-    datetime.date(2014, 4, 10)
+    >>> contract.start_date == contract_start_date
+    True
+    >>> contract.options[0].start_date == contract_start_date
+    True
     >>> Endorsement.apply([good_endorsement.id], config._context)
     >>> contract = Contract(contract.id)
-    >>> contract.start_date  # Should  match new_contract_start_date
-    datetime.date(2014, 10, 21)
-    >>> contract.options[0].start_date  # Should  match new_contract_start_date
-    datetime.date(2014, 10, 21)
+    >>> contract.start_date == new_contract_start_date
+    True
+    >>> contract.options[0].start_date == new_contract_start_date
+    True
     >>> Endorsement.cancel([good_endorsement.id], config._context)
     >>> contract = Contract(contract.id)
-    >>> contract.start_date  # Should  match contract_start_date
-    datetime.date(2014, 4, 10)
-    >>> contract.options[0].start_date  # Should  match contract_start_date
-    datetime.date(2014, 4, 10)
+    >>> contract.start_date == contract_start_date
+    True
+    >>> contract.options[0].start_date == contract_start_date
+    True
+
+Test options restauration::
+
+    >>> Endorsement.apply([good_endorsement.id], config._context)
+    >>> contract = Contract(contract.id)
+    >>> Option.delete([contract.options[0]])
+    >>> contract = Contract(contract.id)
+    >>> len(contract.options) == 0
+    True
+    >>> Endorsement.cancel([good_endorsement.id], config._context)
+    >>> contract = Contract(contract.id)
+    >>> len(contract.options) == 1
+    True
