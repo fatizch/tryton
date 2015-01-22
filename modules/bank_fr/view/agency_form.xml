@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<form string="Agency">
+    <label name="bank"/>
+    <field name="bank"/>
+    <newline/>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="bank_code"/>
+    <field name="bank_code"/>
+    <label name="branch_code"/>
+    <field name="branch_code"/>
+</form>

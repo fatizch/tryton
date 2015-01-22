@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tree string="Agencies">
+    <field name="bank"/>
+    <field name="bank_code"/>
+    <field name="branch_code"/>
+    <field name="name"/>
+</tree>

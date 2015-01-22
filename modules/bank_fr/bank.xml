@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
-        <record model="ir.ui.view" id="bank_view_form">
-            <field name="model">bank</field>
+        <record model="ir.ui.view" id="agency_view_form">
+            <field name="model">bank.agency</field>
             <field name="type">form</field>
-            <field name="inherit" ref="bank.bank_view_form"/>
-            <field name="name">bank_form</field>
+            <field name="name">agency_form</field>
         </record>
-        <record model="ir.ui.view" id="bank_view_list">
-            <field name="model">bank</field>
+        <record model="ir.ui.view" id="agency_view_list">
+            <field name="model">bank.agency</field>
             <field name="type">tree</field>
-            <field name="inherit" ref="bank.bank_view_list"/>
-            <field name="name">bank_list</field>
+            <field name="name">agency_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_agency_relate_form">
+            <field name="name">Agencies</field>
+            <field name="res_model">bank.agency</field>
+            <field name="domain">[('bank', '=', Eval('active_id'))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_agency_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">bank,-1</field>
+            <field name="action" ref="act_agency_relate_form"/>
         </record>
     </data>
 </tryton>
