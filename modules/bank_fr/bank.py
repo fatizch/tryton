@@ -35,7 +35,7 @@ class Agency(model.CoopSQL, model.CoopView):
     bank_code = fields.Char('Bank Code', size=5)
     branch_code = fields.Char('Branch Code', size=5)
 
-    @classmethod3ef0cb7bb7e1
+    @classmethod
     def __setup__(cls):
         super(Agency, cls).__setup__()
         cls._error_messages.update({
