@@ -675,6 +675,8 @@ class MethodDefinition(CoopSQL, CoopView):
     def execute(self, caller, callees):
         method = getattr(Pool().get(self.model.model), self.method_name)
         if not hasattr(method, 'im_self') or method.im_self:
+            if not isinstance(callees, (list, tuple)):
+                callees = [callees]
             return method(callees, caller=caller)
         else:
             if isinstance(callees, (list, tuple)):
