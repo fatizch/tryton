@@ -128,5 +128,11 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">1</field>
         </record>
+        <record model="ir.model.method" id="contract_calculate_after_endorsement_method">
+            <field name="method_name">calculate_after_endorsement</field>
+            <field name="name">Calculate After Endorsement</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">1000</field>
+        </record>
     </data>
 </tryton>

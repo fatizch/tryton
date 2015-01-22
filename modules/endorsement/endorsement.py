@@ -577,6 +577,9 @@ class Contract(CogProcessFramework):
         self.set_start_date(caller.values['start_date'])
         self.save()
 
+    def calculate_after_endorsement(self, caller=None):
+        self.calculate()
+
 
 class ContractOption(object):
     __metaclass__ = PoolMeta
@@ -786,7 +789,6 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     def apply(cls, endorsements):
         pool = Pool()
         Event = pool.get('event')
-        pool = Pool()
         endorsements_per_model = cls.group_per_model(endorsements)
         for model_name in cls.apply_order():
             if model_name not in endorsements_per_model:
@@ -811,6 +813,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     'application_date': datetime.datetime.now(),
                     })
 
+        # Force reload endorsement list
+        for idx, endorsement in enumerate(cls.browse(
+                    [x.id for x in endorsements])):
+            endorsements[idx] = endorsement
         endorsements_per_model = cls.group_per_model(endorsements)
         for model_name in cls.apply_order():
             for endorsement in endorsements_per_model.get(model_name, []):
@@ -819,7 +825,13 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     instance.__name__)
                 for method in methods:
                     method.execute(endorsement, instance)
+                instance.save()
         Event.notify_events(endorsements, 'apply_endorsement')
+
+    @classmethod
+    def soft_apply(cls, endorsements):
+        with Transaction().set_context(endorsement_soft_apply=True):
+            cls.apply(endorsements)
 
     @classmethod
     @model.CoopView.button_action('endorsement.act_contract_open')
