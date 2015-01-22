@@ -1,6 +1,6 @@
 * Store final .pdf file in the EDM instead of intermediary .odt
-* Send mail with one attachment made of many documents merged into a single pdf
-file
+* Send mail with one attachment made of many documents merged into a single pdf file
+* Remove business rules, use separate modules
 
 Version 1.2 - 2014-07-01
 * Changelog file creation

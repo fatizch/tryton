@@ -1,3 +1,6 @@
+* Add reject fee invoices
+* Allow to easily get the xml sepa message
+* Mass validation of payment groups
 * Add payment creation and payment treatment batch
 
 Version 1.2 - 2014-07-01

@@ -1,3 +1,6 @@
+* Centralize calculate method
+* Add automatic calculation of end_dates
+* Add subscription web service
 * Add possibility to subscribe several options at the same time with a package
 * Added Wizard to change start date of contract with propagation to related objects before activation.
 

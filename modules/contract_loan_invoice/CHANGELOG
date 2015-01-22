@@ -1,2 +1,6 @@
+* Calculate base premium amount per loan
+* Use contract.premium.amount to cache invoice lines to be generated
+* Use cache to improve performances
+
 Version 1.2 - 2014-07-01
 * Changelog file creation

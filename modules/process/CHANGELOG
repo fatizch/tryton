@@ -1,2 +1,6 @@
+* Allow to pass parameters to process actions
+* Clean up buttons
+* Use an Icon to mark the current step
+
 Version 1.2 - 2014-07-01
 * Changelog file creation

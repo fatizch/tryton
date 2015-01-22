@@ -1,2 +1,7 @@
+* Add module parsing
+* Add mro parsing
+* Add model parsing
+* Add Eval interface
+
 Version 1.2 - 2014-07-01
 * Changelog file creation

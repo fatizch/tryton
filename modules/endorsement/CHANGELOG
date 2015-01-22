@@ -1,4 +1,8 @@
 * Add sub-state to endorsement
+* Allow to revert back to the version before the endorsement application
+* Add rollback_date
+* Add in_progress status for endorsements
+* Improve endorsement engine
 
 Version 1.2 - 2014-07-01
 * Changelog file creation
