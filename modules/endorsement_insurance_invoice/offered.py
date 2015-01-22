@@ -20,6 +20,15 @@ class EndorsementDefinition:
         fields.Boolean('Requires Contract Rebill'),
         'get_requires_contract_rebill')
 
+    def get_methods_for_model(self, model_name):
+        methods = super(EndorsementDefinition, self).get_methods_for_model(
+            model_name)
+        if model_name == 'contract' and self.requires_contract_rebill:
+            methods += Pool().get('ir.model.method').search([
+                    ('xml_id', '=', 'endorsement_insurance_invoice.'
+                        'contract_rebill_after_endorsement_method')])
+        return methods
+
     def get_requires_contract_rebill(self, name):
         return any((endorsement_part.requires_contract_rebill
                 for endorsement_part in self.endorsement_parts))

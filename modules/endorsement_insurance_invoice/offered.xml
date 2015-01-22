@@ -38,5 +38,14 @@
             <field name="type">tree</field>
             <field name="name">endorsement_field_list</field>
         </record>
+        <!-- ###################### -->
+        <!-- # Method Definitions # -->
+        <!-- ###################### -->
+        <record model="ir.model.method" id="contract_rebill_after_endorsement_method">
+            <field name="method_name">rebill_after_endorsement</field>
+            <field name="name">Rebill After Endorsement</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">2000</field>
+        </record>
     </data>
 </tryton>

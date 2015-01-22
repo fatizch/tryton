@@ -41,6 +41,32 @@ class Contract:
             invoice_rrule[0].rrule(endorsement_dates)
         return invoice_rrule
 
+    @classmethod
+    def rebill_after_endorsement(cls, contracts, caller=None):
+        if Transaction().context.get('endorsement_soft_apply', False):
+            return
+        if not isinstance(caller, (tuple, list)):
+            caller = [caller]
+        if caller[0].__name__ != 'endorsement.contract':
+            return
+        rebill_dict = {}
+        for endorsement in caller:
+            if endorsement.contract not in contracts:
+                continue
+            if (endorsement.endorsement.effective_date ==
+                    endorsement.contract.start_date):
+                # The endorsement (maybe) changed the start_date, we should
+                # recalculate everything
+                base_date = datetime.date.min
+            else:
+                base_date = endorsement.endorsement.effective_date
+            rebill_dict[endorsement.contract] = min(
+                rebill_dict.get(endorsement.contract,
+                    endorsement.endorsement.effective_date),
+                base_date)
+        for contract, date in rebill_dict.iteritems():
+            contract.rebill(date)
+
 
 class Endorsement:
     __name__ = 'endorsement'
@@ -51,35 +77,15 @@ class Endorsement:
         return super(Endorsement, self).new_endorsement(endorsement_part)
 
     @classmethod
-    def apply(cls, endorsement_groups):
-        super(Endorsement, cls).apply(endorsement_groups)
-        to_rebill = [x for x in endorsement_groups
-            if x.definition.requires_contract_rebill]
-        if not to_rebill:
-            return
-        cls.rebill_contracts(to_rebill)
-
-    @classmethod
     def _draft(cls, endorsements):
         super(Endorsement, cls)._draft(endorsements)
+        # For now there are no "post_draft_actions" on endorsement parts
         to_rebill = [x for x in endorsements
             if x.definition.requires_contract_rebill]
-        if not to_rebill:
-            return
-        cls.rebill_contracts(to_rebill)
-
-    @classmethod
-    def rebill_contracts(cls, endorsements):
-        to_rebill = {}
-        for endorsement in endorsements:
-            for contract in endorsement.contracts:
-                if contract not in to_rebill:
-                    to_rebill[contract] = endorsement.effective_date
-                else:
-                    to_rebill[contract] = min(to_rebill[contract],
-                        endorsement.effective_date)
-        for contract, at_date in to_rebill.iteritems():
-            contract.rebill(at_date)
+        if to_rebill:
+            Pool().get('contract').rebill_after_endorsement(sum(
+                    [list(x.contract) for x in to_rebill], []),
+                caller=sum([x.contract_endorsements for x in to_rebill], []))
 
     def find_parts(self, endorsement_part):
         if endorsement_part.kind in 'billing_information':
