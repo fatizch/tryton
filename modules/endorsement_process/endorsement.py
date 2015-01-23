@@ -5,6 +5,8 @@ from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.cog_utils import model, fields
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
+from trytond.pyson import Eval
 
 __all__ = [
     'Endorsement',
@@ -20,7 +22,9 @@ class Endorsement(CogProcessFramework):
     __name__ = 'endorsement'
 
     endorsement_parts_union = fields.One2Many('endorsement.part.union',
-        'endorsement', 'Endorsement Parts')
+        'endorsement', 'Endorsement Parts',
+        context={'endorsement': [Eval('id')]},
+        depends=['id'])
     created_attachments = fields.Function(
         fields.One2Many('ir.attachment', 'origin',
             'Created Attachments'), 'get_created_attachments')
@@ -84,6 +88,17 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
         we concatenate the part id and the endorsement id"""
 
         pool = Pool()
+        ctx_endorsement = Transaction().context.get('endorsement', None)
+        active_model = Transaction().context.get('active_model', None)
+
+        if active_model == 'endorsement.part.union':
+            good_endorsements = [
+                Transaction().context.get('active_ids')[0] / 100000]
+        elif ctx_endorsement:
+            good_endorsements = ctx_endorsement
+        else:
+            return
+
         endorsement = pool.get('endorsement').__table__()
         endorsement_part = pool.get('endorsement.part').__table__()
         endorsement_def_part_rel = pool.get(
@@ -93,10 +108,11 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
                 endorsement_def_part_rel.endorsement_part ==
                 endorsement_part.id)
             ).join(endorsement, condition=(
-                endorsement.definition == endorsement_def_part_rel.definition)
+                (endorsement.definition == endorsement_def_part_rel.definition)
+                & (endorsement.id.in_(good_endorsements)))
             ).select(
-                (endorsement.id + Mul(10000000,
-                        endorsement_part.id)).as_('id'),
+                (endorsement_part.id + Mul(100000,
+                        endorsement.id)).as_('id'),
                 Literal(0).as_('create_uid'),
                 Literal(0).as_('create_date'),
                 Literal(0).as_('write_uid'),

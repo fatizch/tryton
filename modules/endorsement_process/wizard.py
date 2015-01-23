@@ -129,8 +129,11 @@ class StartEndorsement:
                 endorsement = EndorsementPartUnion(
                         Transaction().context.get('active_id')).endorsement
             elif active_model == 'endorsement.contract':
+                # See the explanation in the table_query method on
+                # endorsement.part.union model
+                # in endorsement_process/endorsement.py
                 endorsement = Endorsement(
-                    Transaction().context.get('active_id') % 10000000)
+                    Transaction().context.get('active_id') / 100000)
             elif endorsement.state == 'applied':
                 self.raise_user_error('cannot_resume_applied')
             self.select_endorsement.endorsement = endorsement
@@ -158,4 +161,4 @@ class StartEndorsement:
         # See the explanation in the table_query method on
         # endorsement.part.union model in endorsement_process/endorsement.py
         return EndorsementPart(Transaction().context.get(
-                'active_id') / 10000000).view
+                'active_id') % 100000).view
