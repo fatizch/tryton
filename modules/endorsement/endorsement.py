@@ -345,6 +345,8 @@ def values_mixin(value_model):
 def relation_mixin(value_model, field, model, name):
 
     class Mixin(values_mixin(value_model)):
+        _func_key = 'func_key'
+
         action = fields.Selection([
                 ('add', 'Add'),
                 ('update', 'Update'),
@@ -356,6 +358,8 @@ def relation_mixin(value_model, field, model, name):
                 'invisible': Eval('action') == 'add',
                 },
             depends=['action'])
+        func_key = fields.Function(
+            fields.Char('Functional Key'), 'get_func_key')
 
         @classmethod
         def __setup__(cls):
@@ -491,6 +495,10 @@ def relation_mixin(value_model, field, model, name):
                 return result
             return super(Mixin, self).get_summary(model, base_object, indent,
                 increment)
+
+        def get_func_key(self, name):
+            return getattr(self, field).func_key if getattr(self, field) \
+                else ''
 
     setattr(Mixin, field, fields.Function(fields.Many2One(model, name,
                 datetime_field='applied_on',
