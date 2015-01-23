@@ -46,8 +46,25 @@ class NewCoveredElement(model.CoopView, EndorsementWizardStepMixin):
     start_date = fields.Date('Start Date')
 
     def update_endorsement(self, endorsement, wizard):
+        pool = Pool()
+        EndorsementCoveredElementOption = pool.get(
+            'endorsement.contract.covered_element.option')
         wizard.update_add_to_list_endorsement(self, endorsement,
             'covered_elements')
+        endorsement.save()
+        vlist = []
+        for i, covered_element in enumerate(self.covered_elements):
+            template = {'action': 'add', 'values': {}}
+            for option in covered_element.options:
+                template['covered_element_endorsement'] = \
+                    endorsement.covered_elements[i]
+                for field in self.endorsement_part.option_fields:
+                    new_value = getattr(option, field.name, None)
+                    if isinstance(new_value, Model):
+                        new_value = new_value.id
+                    template['values'][field.name] = new_value
+            vlist.append(template)
+        EndorsementCoveredElementOption.create(vlist)
 
 
 class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
@@ -562,16 +579,15 @@ class StartEndorsement:
         super(StartEndorsement, self).set_main_object(endorsement)
         endorsement.covered_elements = []
 
-    def update_default_covered_element_from_endorsement(self, endorsement,
+    def update_default_covered_element_from_endorsement(self, endorsements,
             default_values):
-        if not getattr(endorsement, 'covered_elements', None):
-            return
-        default_covered_element = default_values['covered_elements'][0]
-        # TODO : improve for multiple covered_elements
-        for covered_element in endorsement.covered_elements:
-            if covered_element.action == 'add':
-                default_covered_element.update(covered_element.values)
-                break
+        for endorsement in endorsements:
+            default_covered_element = default_values['covered_elements'][0]
+            # TODO : improve for multiple covered_elements
+            for covered_element in endorsement.covered_elements:
+                if covered_element.action == 'add':
+                    default_covered_element.update(covered_element.values)
+                    break
 
     def default_new_covered_element(self, name):
         endorsement_part = self.get_endorsement_part_for_state(
@@ -584,7 +600,7 @@ class StartEndorsement:
             'start_date': endorsement_date,
             'contract': contract.id,
             'possible_item_desc': [x.id for x in contract.possible_item_desc],
-            'extra_data': contract.extra_data,
+            'extra_datas': [x.id for x in contract.extra_datas],
             }
         result['covered_elements'] = [{
                 'start_date': endorsement_date,
@@ -597,9 +613,9 @@ class StartEndorsement:
         new_covered_element.on_change_item_desc()
         result['covered_elements'][0].update(
             new_covered_element._default_values)
-        endorsement = self.get_endorsement_for_state('new_covered_element')
-        if endorsement:
-            self.update_default_covered_element_from_endorsement(endorsement,
+        endorsements = self.get_endorsements_for_state('new_covered_element')
+        if endorsements:
+            self.update_default_covered_element_from_endorsement(endorsements,
                 result)
         return result
 
