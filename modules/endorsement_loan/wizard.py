@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model, coop_date, utils
+from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
 from trytond.modules.endorsement import EndorsementWizardStepMixin
 
@@ -249,29 +249,46 @@ class LoanContractDisplayer(model.CoopView):
             'readonly': ~Eval('to_update', False)})
     to_update = fields.Boolean('To Update')
 
-    @fields.depends('to_update', 'new_start_date', 'contract', 'endorsement')
+    @fields.depends('to_update', 'new_start_date', 'new_end_date', 'contract',
+        'endorsement')
     def _on_change(self):
         if not self.to_update:
-            self.new_end_date = self.new_start_date = None
+            self.new_start_date = None
+            self.new_end_date = None
             return
-        contract_loans = set(self.contract.used_loans)
-        endorsed_loans = set(self.endorsement.loans)
-        contract_loans -= endorsed_loans
 
-        max_loan_end = datetime.date.min
-        if contract_loans:
-            max_loan_end = max([loan.end_date for loan in contract_loans])
+        if not self.new_start_date:
+            self.new_start_date = self.contract.start_date
+        pool = Pool()
+        Contract = pool.get('contract')
+        Endorsement = pool.get('endorsement')
+        ContractEndorsement = pool.get('endorsement.contract')
+        contract_id = self.contract.id
+        endorsement_id = self.endorsement.id
+        add_endorsement = False
+        if contract_id not in [x.id for x in self.endorsement.contracts]:
+            add_endorsement = True
 
-        for loan_endorsement in self.endorsement.loan_endorsements:
-            loan = loan_endorsement.update_loan()
-            loan.simulate()
-            last_increment = loan.increments[-1]
-            last_increment.loan = loan
-            last_increment.start_date = last_increment.get_start_date(None)
-            max_loan_end = max(max_loan_end,
-                last_increment.get_end_date(None))
-        self.new_start_date = self.new_start_date or self.contract.start_date
-        self.new_end_date = coop_date.add_day(max_loan_end, -1)
+        with Transaction().new_cursor():
+            try:
+                if add_endorsement:
+                    ContractEndorsement(contract=contract_id,
+                        endorsement=endorsement_id, values={}).save()
+
+                _endorsement = Endorsement(endorsement_id)
+                _contract_endorsement = [x
+                    for x in _endorsement.contract_endorsements
+                    if x.contract.id == contract_id][0]
+                _contract_endorsement.values.pop('end_date', None)
+                _contract_endorsement.values['start_date'] = \
+                    self.new_start_date or self.contract.start_date
+                Endorsement.soft_apply([_endorsement])
+                _contract = Contract(contract_id)
+                new_end_date = _contract.end_date
+            finally:
+                Transaction().cursor.rollback()
+
+        self.new_end_date = new_end_date
 
     on_change_to_update = _on_change
     on_change_new_start_date = _on_change
