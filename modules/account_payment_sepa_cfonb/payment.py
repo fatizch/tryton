@@ -19,11 +19,16 @@ class Journal:
     @classmethod
     def __setup__(cls):
         super(Journal, cls).__setup__()
+        payable_flavor_cfonb = ('pain.001.001.03-cfonb',
+            'pain.001.001.03 CFONB')
         receivable_flavor_cfonb = ('pain.008.001.02-cfonb',
             'pain.008.001.02 CFONB')
-        if receivable_flavor_cfonb not in cls.sepa_receivable_flavor.selection:
-            cls.sepa_receivable_flavor.selection.append(
-                receivable_flavor_cfonb)
+        for flavor, field in [
+                (payable_flavor_cfonb, cls.sepa_payable_flavor),
+                (receivable_flavor_cfonb, cls.sepa_receivable_flavor),
+                ]:
+            if flavor not in field.selection:
+                field.selection.append(flavor)
 
 loader = genshi.template.TemplateLoader([
         os.path.join(os.path.dirname(__file__), 'template'),
@@ -37,6 +42,9 @@ class Group:
     __name__ = 'account.payment.group'
 
     def get_sepa_template(self):
+        if (self.kind == 'payable'
+                and self.journal.sepa_payable_flavor.endswith('-cfonb')):
+            return loader.load('%s.xml' % self.journal.sepa_payable_flavor)
         if (self.kind == 'receivable'
                 and self.journal.sepa_receivable_flavor.endswith('-cfonb')):
             return loader.load('%s.xml' % self.journal.sepa_receivable_flavor)

@@ -23,6 +23,12 @@ class AccountPaymentSepaCFONBTestCase(unittest.TestCase):
         'Test depends'
         test_depends()
 
+    def test_pain001_001_03_cfonb(self):
+        'Test pain.00r.001.03-cfonb xsd validation'
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            validate_file('pain.001.001.03-cfonb', 'payable',
+                xsd='pain.001.001.03')
+
     def test_pain008_001_02_cfonb(self):
         'Test pain.008.001.02-cfonb xsd validation'
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
