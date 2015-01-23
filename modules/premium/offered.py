@@ -1,9 +1,10 @@
+import datetime
 from dateutil import rrule
 
 from trytond.pool import PoolMeta, Pool
 from trytond.model import MatchMixin
 
-from trytond.modules.cog_utils import fields, model
+from trytond.modules.cog_utils import fields, model, coop_date
 from trytond.modules.rule_engine import RuleMixin
 
 
@@ -91,6 +92,8 @@ class Product:
 
     def get_option_dates(self, dates, option):
         dates.add(option.start_date)
+        if option.end_date:
+            dates.add(coop_date.add_day(option.end_date, 1))
 
     def get_dates(self, contract):
         dates = set()
@@ -169,6 +172,10 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
         return PremiumResult
 
     def must_be_rated(self, rated_instance, date):
+        Option = Pool().get('contract.option')
+        if isinstance(rated_instance, Option):
+            return ((rated_instance.start_date or datetime.date.min) <=
+                date <= (rated_instance.end_date or datetime.date.max))
         return True
 
     def do_calculate(self, rule_dict):

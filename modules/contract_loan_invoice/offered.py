@@ -1,3 +1,5 @@
+import datetime
+
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
@@ -34,6 +36,8 @@ class Product:
         for elem in option.loan_shares:
             if elem.start_date:
                 dates.add(elem.start_date)
+            if elem.end_date:
+                dates.add(coop_date.add_day(elem.end_date, 1))
 
     def get_dates(self, contract):
         dates = super(Product, self).get_dates(contract)
@@ -232,6 +236,14 @@ class OptionDescriptionPremiumRule:
                 self.loan = self.data_dict.get('loan', None)
 
         return Child
+
+    def must_be_rated(self, rated_instance, date):
+        LoanShare = Pool().get('loan.share')
+        if isinstance(rated_instance, LoanShare):
+            return super(OptionDescriptionPremiumRule, self).must_be_rated(
+                rated_instance.option, date) and (
+                (rated_instance.start_date or datetime.date.min) <=
+                date <= (rated_instance.end_date or datetime.date.max))
 
 
 class OptionDescription:
