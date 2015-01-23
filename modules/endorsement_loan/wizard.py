@@ -284,6 +284,7 @@ class LoanContractDisplayer(model.CoopView):
                     self.new_start_date or self.contract.start_date
                 Endorsement.soft_apply([_endorsement])
                 _contract = Contract(contract_id)
+                _contract.calculate()
                 new_end_date = _contract.end_date
             finally:
                 Transaction().cursor.rollback()
