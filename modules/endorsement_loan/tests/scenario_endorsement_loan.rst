@@ -336,7 +336,7 @@ Create Test Contract::
 New Endorsement::
 
     >>> new_payment_date = datetime.date(2014, 7, 1)
-    >>> new_end_date = datetime.date(2031, 1, 31)
+    >>> new_end_date = datetime.date(2031, 2, 1)
     >>> new_endorsement = Wizard('endorsement.start')
     >>> new_endorsement.form.contract = contract
     >>> new_endorsement.form.endorsement_definition = change_first_payment_date
