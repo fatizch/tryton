@@ -8,7 +8,7 @@ Configuration celery et celeryd
 Fichier de coniguration celeryconfig.py
 ---------------------------------------
 
-Voir description des directives sur <http://celery.readthedocs.org/en/latest/configuration.html>
+Voir description des directives sur <http://celery.readthedocs.org/en/latest/configuration.html>.
 
 Ce fichier est créé dans le répertoire *conf* par la commande
 ``coop configure``.
