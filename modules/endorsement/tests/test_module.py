@@ -38,6 +38,64 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def depending_modules(cls):
         return ['offered', 'contract']
 
+    def test0000_test_add_endorsement_step(self):
+        'Tests the add_endorsement_step method'
+        from trytond.pool import Pool
+        from trytond.wizard import StateView, StateTransition
+        from trytond.modules.cog_utils import model
+        from trytond.modules.endorsement.wizard import (add_endorsement_step,
+            EndorsementWizardStepMixin, StartEndorsement)
+
+        class FakeEndorsement(StartEndorsement):
+            def __init__(self):
+                pass
+
+        class TestStep(EndorsementWizardStepMixin, model.CoopView):
+            'Test Step'
+            __name__ = 'my_test_step'
+
+            @classmethod
+            def state_view_name(cls):
+                return 'test.test_my_test_step_view_form'
+
+            def step_default(self, *args):
+                return ('default', args)
+
+            def step_previous(self, *args):
+                return ('previous', args)
+
+            def step_next(self, *args):
+                return ('next', args)
+
+            def step_suspend(self, *args):
+                return ('suspend', args)
+
+        add_endorsement_step(FakeEndorsement, TestStep, 'test_endorsement')
+
+        self.assert_(isinstance(FakeEndorsement.test_endorsement, StateView))
+        self.assert_(isinstance(FakeEndorsement.test_endorsement_previous,
+                StateTransition))
+        self.assert_(isinstance(FakeEndorsement.test_endorsement_next,
+                StateTransition))
+        self.assert_(isinstance(FakeEndorsement.test_endorsement_suspend,
+                StateTransition))
+
+        TestStep.__setup__()
+        TestStep.__post_setup__()
+        TestStep.__register__('endorsement')
+
+        Pool().add(TestStep)
+
+        test_wizard = FakeEndorsement()
+        self.assertEqual(test_wizard.default_test_endorsement('foo'),
+            ('default', (test_wizard, 'test_endorsement', 'foo')))
+        self.assertEqual(test_wizard.transition_test_endorsement_previous(),
+            ('previous', (test_wizard, 'test_endorsement')))
+        self.assertEqual(test_wizard.transition_test_endorsement_next(),
+            ('next', (test_wizard, 'test_endorsement')))
+        self.assertEqual(test_wizard.transition_test_endorsement_suspend(),
+            ('suspend', (test_wizard, 'test_endorsement')))
+
     def test0001_check_possible_views(self):
         from trytond.pool import Pool
         from trytond.wizard import StateView

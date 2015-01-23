@@ -11,6 +11,7 @@ from trytond.modules.cog_utils import model, fields
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'add_endorsement_step',
     'SelectEndorsement',
     'BasicPreview',
     'StartEndorsement',
@@ -21,6 +22,51 @@ __all__ = [
     'EndorsementWizardStepVersionedObjectMixin',
     'EndorsementWizardPreviewMixin',
     ]
+
+
+def add_endorsement_step(wizard_class, step_class, step_name):
+    '''
+        This method adds a StateView named <step_name> on the class
+        <wizard_class>. This state view will be bound to the model defined by
+        <step_class>.
+
+        It will automatically add previous, next, and suspend transitions.
+        The methods defining those transistions will be automatically defined
+        and bound to the matching method which will be defined on <step_class>.
+        The default method for the state view will be defined as well.
+
+            default             =>  step_default
+            transition_next     =>  step_next
+            transition_previous =>  step_previous
+            transition_suspend  =>  step_suspend
+
+        The default behaviour for those method is that of the
+        EndorsementWizardStepMixin class definitions.
+    '''
+    assert issubclass(step_class, EndorsementWizardStepMixin)
+    assert issubclass(wizard_class, StartEndorsement)
+    assert step_name not in dir(wizard_class)
+
+    def get_step_method(kind):
+        def wizard_method(wizard, *args, **kwargs):
+            cur_state = getattr(wizard, step_name, None)
+            if not cur_state or isinstance(cur_state, StateView):
+                cur_state = Pool().get(step_class.__name__)()
+            return getattr(cur_state, 'step_' + kind)(wizard, step_name,
+                *args, **kwargs)
+        return wizard_method
+
+    setattr(wizard_class, step_name, step_class._get_state_view(step_name))
+    setattr(wizard_class, step_name + '_previous', StateTransition())
+    setattr(wizard_class, step_name + '_next', StateTransition())
+    setattr(wizard_class, step_name + '_suspend', StateTransition())
+    setattr(wizard_class, 'default_' + step_name, get_step_method('default'))
+    setattr(wizard_class, 'transition_' + step_name + '_previous',
+        get_step_method('previous'))
+    setattr(wizard_class, 'transition_' + step_name + '_next',
+        get_step_method('next'))
+    setattr(wizard_class, 'transition_' + step_name + '_suspend',
+        get_step_method('suspend'))
 
 
 class EndorsementWizardStepMixin(object):
@@ -43,7 +89,83 @@ class EndorsementWizardStepMixin(object):
     def update_endorsement(self, endorsement, wizard):
         # Updates the current endorsement using the data provided in the
         # current instance of the wizard
+        return self.step_update(wizard)
+
+    @classmethod
+    def state_view_name(cls):
         raise NotImplementedError
+
+    @classmethod
+    def _get_state_view(cls, step_name):
+        return StateView(cls.__name__, cls.state_view_name(), [
+                Button('Previous', step_name + '_previous',
+                    'tryton-go-previous'),
+                Button('Cancel', 'end', 'tryton-cancel'),
+                Button('Suspend', step_name + '_suspend', 'tryton-save'),
+                Button('Next', step_name + '_next', 'tryton-go-next',
+                    default=True)])
+
+    def step_default(self, wizard, step_name, name):
+        return {
+            'endorsement_definition': wizard.definition.id,
+            'endorsement_part':
+            wizard.get_endorsement_part_for_state(step_name).id,
+            'effective_date': wizard.select_endorsement.effective_date,
+            }
+
+    def step_previous(self, wizard, step_name):
+        wizard.end_current_part(step_name)
+        return wizard.get_next_before(step_name)
+
+    def step_suspend(self, wizard, step_name):
+        return 'end'
+
+    def step_next(self, wizard, step_name):
+        wizard.end_current_part(step_name)
+        return wizard.get_next_state(step_name)
+
+    def step_update(self, wizard):
+        raise NotImplementedError
+
+    def _get_contracts(self, wizard):
+        return {x.contract.id: x
+            for x in wizard.endorsement.contract_endorsements}
+
+    @classmethod
+    def _update_values(cls, new_instance, base_instance, values, fnames):
+        dict_modified = False
+        for fname in fnames:
+            destination = getattr(new_instance, fname)
+            origin = getattr(base_instance, fname)
+            if isinstance(destination, Model):
+                destination = destination.id
+            if isinstance(origin, Model):
+                origin = origin.id
+            if fname not in values:
+                if origin != destination:
+                    values[fname] = destination
+                    dict_modified = True
+            else:
+                if origin == destination:
+                    values.pop(fname)
+                else:
+                    values[fname] = destination
+                dict_modified = True
+        return dict_modified
+
+    @classmethod
+    def _get_default_values(cls, values, default, fnames):
+        result = {}
+        for fname in fnames:
+            if fname == 'id':
+                # Special treatment for id, the displayer cannot use the 'id'
+                # field, so we use _id instead
+                result['id_'] = default.id
+                continue
+            fval = values.get(fname, getattr(default, fname, None))
+            fval = fval.id if isinstance(fval, Model) else fval
+            result[fname] = fval
+        return result
 
 
 class EndorsementWizardStepBasicObjectMixin(EndorsementWizardStepMixin):
@@ -173,7 +295,8 @@ class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
     @classmethod
     def update_default_values(cls, wizard, base_endorsement, default_values):
         return {
-            'new_start_date': base_endorsement.values.get('start_date', None),
+            'new_start_date': base_endorsement.values.get('start_date',
+                wizard.endorsement.effective_date),
             }
 
 
@@ -353,6 +476,11 @@ class StartEndorsement(Wizard):
             endorsement.definition = self.definition
             if self.select_endorsement.applicant:
                 endorsement.applicant = self.select_endorsement.applicant
+            if self.select_endorsement.contract:
+                endorsement.contract_endorsements = [{
+                        'contract': self.select_endorsement.contract.id,
+                        'values': {},
+                        }]
             endorsement.save()
             self.select_endorsement.endorsement = endorsement.id
         return self.definition.endorsement_parts[0].view
