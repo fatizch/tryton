@@ -7,6 +7,9 @@ from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 
+METHOD_NAMES = ['create', 'write', 'delete', '__setup__', '__register__',
+    'read']
+METHOD_TEMPLATES = ['default_', 'on_change_with_', 'on_change_']
 
 __all__ = [
     'FieldInfo',
@@ -219,8 +222,28 @@ class ModelInfo(ModelView):
 
     @classmethod
     def raw_model_infos(cls, models):
-        def extract_mro(mro, model_name):
-            result, first_occurence = {}, False
+        def extract_mro(Model, model_name):
+            result, methods, first_occurence = {}, {}, False
+            for mname in METHOD_NAMES:
+                methods[mname] = {
+                    'field': '',
+                    '_function': None,
+                    'field_mro': {},
+                    }
+            for elem in dir(Model):
+                if elem == 'on_change_with':
+                    # Particular case
+                    continue
+                for ftemplate in METHOD_TEMPLATES:
+                    if elem.startswith(ftemplate):
+                        methods[elem] = {
+                            'field': elem[len(ftemplate):],
+                            '_function': None,
+                            'field_mro': {},
+                            }
+                        break
+            mro = Model.__mro__
+
             model_name_dots = len(model_name.split('.'))
             for line in mro[::-1][1:]:
                 full_name = str(line)[8:-2].split('.')
@@ -243,7 +266,21 @@ class ModelInfo(ModelView):
                         full_name[:-model_name_dots])
                     first_occurence = True
                 result['% 3d' % (len(result) + 1)] = new_line
-            return result
+                for mname, mvalues in methods.iteritems():
+                    cur_func = getattr(line, mname, None)
+                    if not cur_func or not getattr(cur_func, 'im_func', None):
+                        continue
+                    if cur_func.im_func == mvalues['_function']:
+                        continue
+                    m_mro = dict(new_line)
+                    m_mro.pop('override')
+                    m_mro['initial'] = 0 if len(mvalues['field_mro']) else 1
+                    mvalues['field_mro']['% 3d' % (
+                            len(mvalues['field_mro']) + 1)] = m_mro
+                    mvalues['_function'] = cur_func.im_func
+            for mname, mvalues in methods.iteritems():
+                mvalues.pop('_function')
+            return result, methods
 
         pool = Pool()
         infos = {}
@@ -254,9 +291,11 @@ class ModelInfo(ModelView):
             except AttributeError:
                 # None type has no attribute splitlines
                 string = Model.__name__
+            mro, methods = extract_mro(Model, model_name)
             infos[model_name] = {
                 'string': string,
-                'mro': extract_mro(Model.__mro__, model_name),
+                'mro': mro,
+                'methods': methods,
                 }
         return infos
 
