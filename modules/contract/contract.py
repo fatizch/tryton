@@ -1336,6 +1336,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 method([self])
             else:
                 method(self)
+        self.save()
 
     @classmethod
     def search_parent_contract(cls, name, clause):
