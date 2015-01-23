@@ -452,7 +452,7 @@ def doc(arguments=None, config=None, work_data=None, override_values=None):
             'doc_files'))
     documentation_dir = os.path.join(override_values.get('repo',
             None) or os.path.join(work_data['runtime_dir'], 'coopbusiness'),
-        'documentation')
+        'documentation', 'user_manual')
     modules = os.path.join(override_values.get('repo', None) or
         os.path.join(work_data['runtime_dir'], 'coopbusiness'),
         'modules')
