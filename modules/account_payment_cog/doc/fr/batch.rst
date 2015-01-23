@@ -1,7 +1,7 @@
 Batch de création de paiements [account.payment.create]
 =======================================================
 
-Ce batch créé des paiements et groupes de paiements pour les lignes de 
+Ce batch créé des paiements et groupes de paiements pour les lignes de
 mouvements qui valident les critères suivants :
 
 - mandat SEPA valide de configuré
@@ -20,9 +20,9 @@ Batch de traitement de paiements [account.payment.process]
 
 Ce batch fait passer les paiements du statut "Approuvé au statut
 *Traitement* et génère le fichier de prélèvements SEPA à transmettre à la
- banque (cf :ref:`dump_sepa_xml`).
+banque.
 
-- *Fréquence suggérée:* X jours avant chaque date de prélèvement possibles 
+- *Fréquence suggérée:* X jours avant chaque date de prélèvement possibles
   sur les contrats
 
 Ce batch possède les paramétrages suivants à définir dans une section
