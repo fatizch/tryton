@@ -152,8 +152,8 @@ class RejectReason(model.CoopSQL, model.CoopView):
     @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR',
-            [(u'code',) + tuple(clause[1:])],
-            [(u'description',) + tuple(clause[1:])]
+            ('code',) + tuple(clause[1:]),
+            ('description',) + tuple(clause[1:])
             ]
 
 
