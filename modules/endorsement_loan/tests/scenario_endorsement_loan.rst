@@ -356,8 +356,11 @@ New Endorsement::
     >>> contract_displayer = new_endorsement.form.selected_contracts[0]
     >>> contract_displayer.contract == contract
     True
-    >>> contract_displayer.to_update is False
+    >>> contract_displayer.to_update is True
     True
+    >>> contract_displayer.new_start_date == contract.start_date
+    True
+    >>> contract_displayer.to_update = False
     >>> contract_displayer.current_end_date == contract.end_date
     True
     >>> contract_displayer.to_update = True

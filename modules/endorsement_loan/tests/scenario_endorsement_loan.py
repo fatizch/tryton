@@ -340,8 +340,11 @@ len(new_endorsement.form.selected_contracts)
 contract_displayer = new_endorsement.form.selected_contracts[0]
 contract_displayer.contract == contract
 # #Res# #True
-contract_displayer.to_update is False
+contract_displayer.to_update is True
 # #Res# #True
+contract_displayer.new_start_date == contract.start_date
+# #Res# #True
+contract_displayer.to_update = False
 contract_displayer.current_end_date == contract.end_date
 # #Res# #True
 contract_displayer.to_update = True
