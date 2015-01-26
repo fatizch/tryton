@@ -43,10 +43,6 @@ def add_endorsement_step(wizard_class, step_class, step_name):
         The default behaviour for those method is that of the
         EndorsementWizardStepMixin class definitions.
     '''
-    assert issubclass(step_class, EndorsementWizardStepMixin)
-    assert issubclass(wizard_class, StartEndorsement)
-    assert step_name not in dir(wizard_class)
-
     def get_step_method(kind):
         def wizard_method(wizard, *args, **kwargs):
             cur_state = getattr(wizard, step_name, None)
@@ -106,11 +102,14 @@ class EndorsementWizardStepMixin(object):
                     default=True)])
 
     def step_default(self, wizard, step_name, name):
+        self.endorsement_definition = wizard.definition
+        self.endorsement_part = wizard.get_endorsement_part_for_state(
+            step_name)
+        self.effective_date = wizard.select_endorsement.effective_date
         return {
-            'endorsement_definition': wizard.definition.id,
-            'endorsement_part':
-            wizard.get_endorsement_part_for_state(step_name).id,
-            'effective_date': wizard.select_endorsement.effective_date,
+            'endorsement_definition': self.endorsement_definition.id,
+            'endorsement_part': self.endorsement_part.id,
+            'effective_date': self.effective_date,
             }
 
     def step_previous(self, wizard, step_name):
