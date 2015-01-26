@@ -58,8 +58,6 @@ class ExportImportMixin(Model):
     @classmethod
     def __setup__(cls):
         super(ExportImportMixin, cls).__setup__()
-        cls.__rpc__['export_json'] = RPC(instantiate=0,
-            result=lambda r: cls._export_format_result(r))
         cls.__rpc__['import_json'] = RPC(readonly=False, result=lambda r: None)
         cls.__rpc__['export_json_to_file'] = RPC(instantiate=0,
             readonly=True, result=lambda r: cls._export_format_result(r))
