@@ -177,8 +177,9 @@ new_endorsement.form.effective_date = new_contract_start_date
 new_endorsement.execute('start_endorsement')
 new_endorsement.form.current_start_date == contract_start_date
 # #Res# #True
-new_endorsement.form.new_start_date == new_contract_start_date
+new_endorsement.form.start_date == contract_start_date
 # #Res# #True
+new_endorsement.form.start_date = new_contract_start_date
 new_endorsement.execute('full_contract_revision_next')
 
 # #Comment# #Modify Contract
@@ -217,8 +218,7 @@ new_endorsement.form.effective_date = new_contract_start_date
 new_endorsement.execute('start_endorsement')
 new_endorsement.form.current_start_date == contract_start_date
 # #Res# #True
-new_endorsement.form.new_start_date == new_contract_start_date
-# #Res# #True
+new_endorsement.form.start_date = new_contract_start_date
 new_endorsement.execute('full_contract_revision_next')
 
 # #Comment# #Modify Contract

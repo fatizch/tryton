@@ -1,9 +1,9 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
-from trytond.wizard import StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import model, fields
-from trytond.modules.endorsement import EndorsementWizardStepMixin
+from trytond.modules.endorsement import (EndorsementWizardStepMixin,
+    add_endorsement_step)
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,35 +18,57 @@ class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
     __name__ = 'endorsement.contract.full_revision_start'
 
     current_start_date = fields.Date('Current Start Date', readonly=True)
-    new_start_date = fields.Date('New Start Date')
-
-    def update_endorsement(self, base_endorsement, wizard):
-        base_endorsement.values = {
-            'start_date': self.new_start_date or self.current_start_date,
-            }
-        base_endorsement.save()
+    start_date = fields.Date('New Start Date')
 
     @classmethod
-    def update_default_values(cls, wizard, base_endorsement, default_values):
-        return {
-            'new_start_date': base_endorsement.values.get('start_date', None),
-            }
+    def state_view_name(cls):
+        return 'endorsement_full_contract_revision.' + \
+            'full_contract_revision_view_form'
+
+    def step_default(self, wizard, step_name, name):
+        defaults = super(StartFullContractRevision, self).step_default(wizard,
+            step_name, name)
+        contracts = self._get_contracts(wizard)
+        if len(contracts) != 1:
+            self.raise_user_error('only_one_contract')
+        endorsement = contracts.values()[0]
+        defaults['current_start_date'] = endorsement.contract.start_date
+        defaults.update(self._get_default_values(endorsement.values,
+                endorsement.contract, ['start_date']))
+        return defaults
+
+    def step_next(self, wizard, step_name):
+        super(StartFullContractRevision, self).step_next(wizard,
+            step_name)
+
+        Contract = Pool().get('contract')
+        contracts = self._get_contracts(wizard)
+
+        # Create a snapshot to revert back to
+        wizard.endorsement.in_progress([wizard.endorsement])
+
+        # Clean up contract
+        contract = Contract(contracts.keys()[0])
+        if self.start_date and (self.start_date != self.current_start_date):
+            contract.set_start_date(self.start_date)
+            contract.save()
+        Contract.revert_to_project([contract])
+
+        # Everything else will be taken care of in
+        # do_full_contract_revision_action
+        return 'full_contract_revision_action'
+
+    def step_update(self, wizard):
+        contracts = self._get_contracts(wizard)
+        endorsement = contracts.values()[0]
+        if self._update_values(self, endorsement.contract, endorsement.values,
+                ['start_date']):
+            endorsement.save()
 
 
 class StartEndorsement:
     __name__ = 'endorsement.start'
 
-    full_contract_revision = StateView(
-        'endorsement.contract.full_revision_start',
-        'endorsement_full_contract_revision.full_contract_revision_view_form',
-        [Button('Previous', 'full_contract_revision_previous',
-                'tryton-go-previous'),
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Suspend', 'suspend', 'tryton-save'),
-            Button('Next', 'full_contract_revision_next', 'tryton-go-next',
-                default=True)])
-    full_contract_revision_previous = StateTransition()
-    full_contract_revision_next = StateTransition()
     full_contract_revision_action = model.VoidStateAction()
     resume_contract_process = model.StateAction(
         'process_cog.act_resume_process')
@@ -68,51 +90,6 @@ class StartEndorsement:
             if endorsement.definition.xml_id == xml_id:
                 return 'resume_contract_process'
         return super(StartEndorsement, self).transition_start()
-
-    def transition_full_contract_revision_previous(self):
-        self.end_current_part('full_contract_revision')
-        return self.get_state_before('full_contract_revision')
-
-    def default_full_contract_revision(self, name):
-        State = Pool().get('endorsement.contract.full_revision_start')
-        contract = self.select_endorsement.contract
-        endorsement_part = self.get_endorsement_part_for_state(
-            'full_contract_revision')
-        endorsement_date = self.select_endorsement.effective_date
-        result = {
-            'endorsement_definition': self.definition.id,
-            'endorsement_part': endorsement_part.id,
-            'effective_date': endorsement_date,
-            'current_start_date': contract.start_date,
-            }
-        if self.endorsement and self.endorsement.contract_endorsements:
-            result.update(State.update_default_values(self,
-                    self.endorsement.contract_endorsements[0], result))
-        else:
-            result['new_start_date'] = self.select_endorsement.effective_date
-        return result
-
-    def transition_full_contract_revision_next(self):
-        Contract = Pool().get('contract')
-
-        # End endorsement state as usual
-        self.end_current_part('full_contract_revision')
-
-        # Create a snapshot to revert back to
-        self.endorsement.in_progress([self.endorsement])
-
-        # Clean up contract
-        contract = Contract(self.select_endorsement.contract.id)
-        state = self.full_contract_revision
-        if state.new_start_date and (
-                state.new_start_date != state.current_start_date):
-            contract.set_start_date(state.new_start_date)
-            contract.save()
-        Contract.revert_to_project([contract])
-
-        # Everything else will be taken care of in
-        # do_full_contract_revision_action
-        return 'full_contract_revision_action'
 
     def do_full_contract_revision_action(self, action):
         pool = Pool()
@@ -157,3 +134,7 @@ class StartEndorsement:
                 'res_id': contract_id,
                 'res_model': 'contract',
                 })
+
+
+add_endorsement_step(StartEndorsement, StartFullContractRevision,
+    'full_contract_revision')

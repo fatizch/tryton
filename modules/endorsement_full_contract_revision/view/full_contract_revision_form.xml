@@ -9,8 +9,8 @@
     <newline/>
     <label name="current_start_date"/>
     <field name="current_start_date"/>
-    <label name="new_start_date"/>
-    <field name="new_start_date"/>
+    <label name="start_date"/>
+    <field name="start_date"/>
     <group id="void_group" string="" yexpand="1" yfill="1" colspan="4">
     </group>
     <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
