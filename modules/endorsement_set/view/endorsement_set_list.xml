@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tree>
+    <field name="number"/>
+    <field name="subscribers_summary"/>
+    <field name="contracts_summary"/>
+    <field name="contracts_endorsements_summary"/>
+    <field name="contract_set"/>
+</tree>

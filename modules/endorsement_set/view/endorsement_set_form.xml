@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Endorsement Set">
+    <label name="number"/>
+    <field name="number"/>
+    <label name="contract_set"/>
+    <field name="contract_set"/>
+    <newline/>
+    <field name="endorsements" colspan="4"/>
+</form>

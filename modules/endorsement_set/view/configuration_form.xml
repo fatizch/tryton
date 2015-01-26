@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='endorsement_number_sequence']" position="after">
+        <newline/>
+        <label name="endorsement_set_number_sequence"/>
+        <field name="endorsement_set_number_sequence"/>
+    </xpath>
+</data>
