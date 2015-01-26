@@ -22,6 +22,7 @@ def register():
         Contract,
         ContractFee,
         ContractOption,
+        ExtraPremium,
         ContractBillingInformation,
         Premium,
         ContractInvoice,

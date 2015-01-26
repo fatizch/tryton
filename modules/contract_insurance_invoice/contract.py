@@ -25,6 +25,7 @@ __all__ = [
     'Contract',
     'ContractFee',
     'ContractOption',
+    'ExtraPremium',
     'ContractBillingInformation',
     'Premium',
     'ContractInvoice',
@@ -530,6 +531,36 @@ class ContractOption:
             cls.write(to_decline, {'status': 'declined'})
         if option_dict:
             super(ContractOption, cls).delete(option_dict.values())
+
+
+class ExtraPremium:
+    __name__ = 'contract.option.extra_premium'
+
+    active = fields.Boolean('Active')
+
+    @classmethod
+    def default_active(cls):
+        return True
+
+    @classmethod
+    def delete(cls, extra_premiums):
+        to_deactivate = []
+        extra_premium_dict = {x.id: x for x in extra_premiums}
+
+        cursor = Transaction().cursor
+        invoice_detail = Pool().get('account.invoice.line.detail').__table__()
+        for extra_premium_slice in grouped_slice(extra_premiums):
+            cursor.execute(*invoice_detail.select(invoice_detail.extra_premium,
+                    Count(invoice_detail.id), where=(
+                        invoice_detail.extra_premium.in_(
+                            [x.id for x in extra_premium_slice])),
+                    group_by=invoice_detail.extra_premium))
+            for extra_premium_id, _ in cursor.fetchall():
+                to_deactivate.append(extra_premium_dict.pop(extra_premium_id))
+        if to_deactivate:
+            cls.write(to_deactivate, {'active': False})
+        if extra_premium_dict:
+            super(ExtraPremium, cls).delete(extra_premium_dict.values())
 
 
 class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
