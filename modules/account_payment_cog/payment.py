@@ -37,8 +37,7 @@ class Journal(export.ExportImportMixin):
 
     @classmethod
     def _export_light(cls):
-        return super(Journal, cls)._export_light() | {'currency', 'company',
-            'default_reject_fee'}
+        return super(Journal, cls)._export_light() | {'currency', 'company'}
 
 
 class JournalFailureAction(model.CoopSQL, model.CoopView):

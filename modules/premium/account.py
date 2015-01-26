@@ -53,6 +53,14 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
     allow_override = fields.Boolean('Allow Override')
 
     @classmethod
+    def _export_light(cls):
+        return super(Fee, cls)._export_light() | {'company'}
+
+    @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def __setup__(cls):
         super(Fee, cls).__setup__()
         cls._sql_constraints += [
