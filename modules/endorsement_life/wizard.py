@@ -1,8 +1,8 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.wizard import StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import model, fields
-from trytond.modules.endorsement import EndorsementWizardStepMixin
+from trytond.modules.endorsement import (EndorsementWizardStepMixin,
+    add_endorsement_step)
 
 
 __metaclass__ = PoolMeta
@@ -42,6 +42,11 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
     options = fields.One2Many('endorsement.contract.beneficiary.manage.option',
         None, 'Options with Beneficiaries')
 
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_life.' \
+            'endorsement_contract_beneficiary_manage_view_form'
+
     @staticmethod
     def update_dict(to_update, key, value):
         # TODO : find a cleaner endorsement class detection
@@ -60,7 +65,7 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                 'beneficiary_clause', 'beneficiaries',
                 'customized_beneficiary_clause', 'contract_status'],
             'contract.option.beneficiary': ['accepting', 'party', 'address',
-                'reference', 'share'],
+                'reference', 'share', 'rec_name'],
             }
 
     @classmethod
@@ -109,38 +114,26 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
         displayer['new_option'][0]['rec_name'] = instance.rec_name
         return displayer
 
-    @classmethod
-    def update_default_values(cls, wizard, base_endorsement, default_values):
-        # Base_endorsement may be the current new endorsement. But we also have
-        # to look in wizard.endorsement.contract_endorsements to detect other
-        # contracts that may be modified
-        if not base_endorsement.id:
-            # New endorsement, no need to look somewhere else.
-            all_endorsements = [base_endorsement]
-        else:
-            all_endorsements = list(wizard.endorsement.contract_endorsements)
+    def step_default(self, wizard, step_name, name):
+        defaults = super(ManageBeneficiaries, self).step_default(wizard,
+            step_name, name)
+        contracts = self._get_contracts(wizard)
         displayers, template = [], {}
-        for endorsement in all_endorsements:
+        for contract_id, endorsement in contracts.iteritems():
             updated_struct = endorsement.updated_struct
             template['contract'] = endorsement.contract.id
             for covered_element, values in (
                     updated_struct['covered_elements'].iteritems()):
-                cls.update_dict(template, 'covered_element', covered_element)
+                self.update_dict(template, 'covered_element', covered_element)
                 for option, o_values in values['options'].iteritems():
-                    new_displayer = cls.create_displayer(option, template)
+                    new_displayer = self.create_displayer(option, template)
                     if new_displayer:
                         displayers.append(new_displayer)
-        return {'options': displayers}
+        defaults['options'] = displayers
+        return defaults
 
-    def update_endorsement(self, base_endorsement, wizard):
-        # Base_endorsement may be the current new endorsement. But we also have
-        # to look in wizard.endorsement.contract_endorsements to detect other
-        # contracts that may be modified
-        if not base_endorsement.id:
-            all_endorsements = {base_endorsement.contract.id: base_endorsement}
-        else:
-            all_endorsements = {x.contract.id: x
-                for x in wizard.endorsement.contract_endorsements}
+    def step_update(self, wizard):
+        contracts = self._get_contracts(wizard)
         pool = Pool()
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
@@ -168,7 +161,7 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                     ce_endorsement = CoveredElementEndorsement(action='update',
                         options=[option_endorsement],
                         relation=elem.covered_element.id)
-                    ctr_endorsement = all_endorsements[elem.contract.id]
+                    ctr_endorsement = contracts[elem.contract.id]
                     if not ctr_endorsement.id:
                         ctr_endorsement.covered_elements = list(
                             ctr_endorsement.covered_elements) + [
@@ -234,49 +227,13 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                     if getattr(x, 'covered_element_endorsement', None)])
         if new_covered_elements:
             CoveredElementEndorsement.create([x._save_values
-                    for x in new_covered_elements
+                    for x in new_covered_elements.itervalues()
                     if getattr(x, 'contract_endorsement', None)])
 
 
 class StartEndorsement:
     __name__ = 'endorsement.start'
 
-    manage_beneficiaries = StateView('endorsement.contract.beneficiary.manage',
-        'endorsement_life.endorsement_contract_beneficiary_manage_view_form', [
-            Button('Previous', 'manage_beneficiaries_previous',
-                'tryton-go-previous'),
-            Button('Suspend', 'suspend', 'tryton-save'),
-            Button('Next', 'manage_beneficiaries_next', 'tryton-go-next')])
-    manage_beneficiaries_previous = StateTransition()
-    manage_beneficiaries_next = StateTransition()
 
-    def default_manage_beneficiaries(self, name):
-        ContractEndorsement = Pool().get('endorsement.contract')
-        endorsement_part = self.get_endorsement_part_for_state(
-            'manage_beneficiaries')
-        endorsement_date = self.select_endorsement.effective_date
-        result = {
-            'endorsement_part': endorsement_part.id,
-            'effective_date': endorsement_date,
-            }
-        endorsements = self.get_endorsements_for_state('manage_beneficiaries')
-        if not endorsements:
-            if self.select_endorsement.contract:
-                endorsements = [ContractEndorsement(definition=self.definition,
-                        endorsement=self.endorsement,
-                        contract=self.select_endorsement.contract)]
-            else:
-                return result
-        ManageBeneficiaries = Pool().get(
-            'endorsement.contract.beneficiary.manage')
-        result.update(ManageBeneficiaries.update_default_values(self,
-                endorsements[0], result))
-        return result
-
-    def transition_manage_beneficiaries_next(self):
-        self.end_current_part('manage_beneficiaries')
-        return self.get_next_state('manage_beneficiaries')
-
-    def transition_manage_beneficiaries_previous(self):
-        self.end_current_part('manage_beneficiaries')
-        return self.get_state_before('manage_beneficiaries')
+add_endorsement_step(StartEndorsement, ManageBeneficiaries,
+    'manage_beneficiaries')
