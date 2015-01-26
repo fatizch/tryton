@@ -6,7 +6,8 @@ from sql.functions import Now
 from trytond.error import UserError
 from trytond.rpc import RPC
 from trytond.pool import PoolMeta
-from trytond.model import Workflow, Model, fields as tryton_fields
+from trytond.model import Workflow, Model, fields as tryton_fields, \
+    ModelSingleton
 from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -28,6 +29,7 @@ __all__ = [
     'EndorsementContract',
     'EndorsementOption',
     'EndorsementActivationHistory',
+    'Configuration',
     ]
 
 
@@ -1258,3 +1260,11 @@ class EndorsementActivationHistory(relation_mixin(
     @classmethod
     def updated_struct(cls, activation_history):
         return {}
+
+
+class Configuration(ModelSingleton, model.CoopSQL, model.CoopView):
+    'Endorsement Configuration'
+    __name__ = 'endorsement.configuration'
+
+    endorsement_number_sequence = fields.Property(
+        fields.Many2One('ir.sequence', 'Endorsement Number Sequence'))

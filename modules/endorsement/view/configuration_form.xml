@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form string="Endorsement Configuration">
+    <label name="endorsement_number_sequence"/>
+    <field name="endorsement_number_sequence"/>
+</form>

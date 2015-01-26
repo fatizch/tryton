@@ -97,9 +97,16 @@
         <record model="res.group" id="group_endorsement_super_user">
             <field name="name">Endorsement Super User</field>
         </record>
+        <record model="res.group" id="group_endorsement_admin">
+            <field name="name">Endorsement Administration</field>
+        </record>
         <record model="res.user-res.group" id="user_admin_group_endorsement_super_user">
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_endorsement_super_user"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_endorsement_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_endorsement_admin"/>
         </record>
         <record model="ir.model.button" id="endorsement_draft_button">
             <field name="name">draft</field>
@@ -133,6 +140,14 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="endorsement_configuration_access">
+            <field name="model" search="[('model', '=', 'endorsement.configuration')]"/>
+            <field name="group" ref="group_endorsement_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
         <!-- ############################################################ -->
         <!-- SubState -->
         <!-- ############################################################ -->
@@ -161,5 +176,27 @@
             <field name="act_window" ref="act_endorsement_sub_state_form"/>
         </record>
         <menuitem parent="offered.menu_contract_configuration" id="endorsement_sub_state_form" icon="tryton-tree" action="act_endorsement_sub_state_form"/>
+        <!-- ################# -->
+        <!-- # Configuration # -->
+        <!-- ################# -->
+        <record model="ir.sequence.type" id="sequence_type_number">
+            <field name="name">Endorsement Number</field>
+            <field name="code">endorsement_number</field>
+        </record>
+        <record model="ir.ui.view" id="configuration_view_form">
+            <field name="model">endorsement.configuration</field>
+            <field name="type">form</field>
+            <field name="name">configuration_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_configuration_form">
+            <field name="name">Endorsement Configuration</field>
+            <field name="res_model">endorsement.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_configuration_view1">
+            <field name="sequence" eval="1"/>
+            <field name="view" ref="configuration_view_form"/>
+            <field name="act_window" ref="act_configuration_form"/>
+        </record>
+        <menuitem parent="offered.menu_contract_configuration" action="act_configuration_form" id="menuitem_endorsement_configuration" sequence="0" icon="tryton-preferences"/>
     </data>
 </tryton>
