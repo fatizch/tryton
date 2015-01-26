@@ -21,7 +21,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'EndorsementSet': 'endorsement.set',
-            'Configuration': 'endorsement.configuration',
             }
 
     @test_framework.prepare_test(
@@ -69,11 +68,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(endorsement.state, 'draft')
         self.assertEqual(endorsement2.state, 'draft')
 
-        config = self.Configuration(1)
-        ng = self.Sequence(name="sequence", code="endorsement_set_number")
-        ng.save()
-        config.endorsement_set_number_sequence = ng
-        config.save()
         endorsement_set = self.EndorsementSet(
             endorsements=[endorsement, endorsement2])
         endorsement_set.save()

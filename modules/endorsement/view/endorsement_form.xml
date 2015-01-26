@@ -2,6 +2,8 @@
 <form string="Endorsement Group">
     <label name="effective_date"/>
     <field name="effective_date"/>
+    <label name="number"/>
+    <field name="number"/>
     <label name="definition"/>
     <field name="definition"/>
     <label name="state"/>

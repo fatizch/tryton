@@ -608,8 +608,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
 
     __metaclass__ = PoolMeta
     __name__ = 'endorsement'
-    _func_key = 'id'
+    _rec_name = 'number'
 
+    number = fields.Char('Number', readonly=True, required=True)
     applicant = fields.Many2One('party.party', 'Applicant')
     application_date = fields.DateTime('Application Date', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
@@ -688,7 +689,28 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         cls.__rpc__.update({'ws_create_endorsements': RPC(readonly=False)})
         cls._error_messages.update({
                 'invalid_format': 'Invalid file format',
+                'no_sequence_defined': 'No sequence defined in configuration',
                 })
+        cls._sql_constraints = [
+            ('number_uniq', 'UNIQUE(number)',
+                'The endorsement number must be unique.')
+        ]
+
+    @classmethod
+    def create(cls, vlist):
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        Configuration = pool.get('endorsement.configuration')
+
+        config = Configuration(1)
+        if not config.endorsement_number_sequence:
+            cls.raise_user_error('no_sequence_defined')
+        vlist = [v.copy() for v in vlist]
+        for values in vlist:
+            if not values.get('number', None):
+                values['number'] = Sequence.get_id(
+                    config.endorsement_number_sequence.id)
+        return super(Endorsement, cls).create(vlist)
 
     @classmethod
     def default_state(cls):
@@ -918,7 +940,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
 
     @classmethod
     def add_func_key(cls, values):
-        values['_func_key'] = 0
+        values['_func_key'] = '0'
 
     @classmethod
     @model.CoopView.button_action('endorsement.act_resume_endorsement')

@@ -183,6 +183,21 @@
             <field name="name">Endorsement Number</field>
             <field name="code">endorsement_number</field>
         </record>
+        <record model="ir.sequence" id="sequence_number">
+            <field name="name">Endorsement Number Sequence</field>
+            <field name="code">endorsement_number</field>
+        </record>
+        <record model="endorsement.configuration" id="endorsement_configuration">
+            <field name="endorsement_number_sequence" ref="sequence_number"/>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_number_group_admin">
+            <field name="sequence_type" ref="sequence_type_number"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_number_group_endorsement_admin">
+            <field name="sequence_type" ref="sequence_type_number"/>
+            <field name="group" ref="group_endorsement_admin"/>
+        </record>
         <record model="ir.ui.view" id="configuration_view_form">
             <field name="model">endorsement.configuration</field>
             <field name="type">form</field>

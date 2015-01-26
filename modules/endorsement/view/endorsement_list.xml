@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <tree string="Endorsement Groups">
     <field name="effective_date"/>
+    <field name="number"/>
     <field name="definition"/>
     <field name="state"/>
     <field name="application_date"/>
