@@ -21,7 +21,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'EndorsementSet': 'endorsement.set',
-            'Configuration': 'endorsement.set.configuration',
+            'Configuration': 'endorsement.configuration',
             }
 
     @test_framework.prepare_test(

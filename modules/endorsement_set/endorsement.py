@@ -72,7 +72,7 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
     def create(cls, vlist):
         pool = Pool()
         Sequence = pool.get('ir.sequence')
-        Configuration = pool.get('endorsement.set.configuration')
+        Configuration = pool.get('endorsement.configuration')
 
         config = Configuration(1)
         if not config.endorsement_set_number_sequence:
