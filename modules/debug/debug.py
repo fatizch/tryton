@@ -7,8 +7,6 @@ from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 
-METHOD_NAMES = ['create', 'write', 'delete', '__setup__', '__register__',
-    'read']
 METHOD_TEMPLATES = ['default_', 'on_change_with_', 'on_change_']
 
 __all__ = [
@@ -224,24 +222,29 @@ class ModelInfo(ModelView):
     def raw_model_infos(cls, models):
         def extract_mro(Model, model_name):
             result, methods, first_occurence = {}, {}, False
-            for mname in METHOD_NAMES:
-                methods[mname] = {
-                    'field': '',
-                    '_function': None,
-                    'field_mro': {},
-                    }
             for elem in dir(Model):
                 if elem == 'on_change_with':
                     # Particular case
+                    continue
+                if elem.startswith('__') and elem not in ('__register__',
+                        '__setup__'):
+                    continue
+                if not callable(getattr(Model, elem)):
                     continue
                 for ftemplate in METHOD_TEMPLATES:
                     if elem.startswith(ftemplate):
                         methods[elem] = {
                             'field': elem[len(ftemplate):],
                             '_function': None,
-                            'field_mro': {},
+                            'mro': {},
                             }
                         break
+                else:
+                    methods[elem] = {
+                        'field': '',
+                        '_function': None,
+                        'mro': {},
+                        }
             mro = Model.__mro__
 
             model_name_dots = len(model_name.split('.'))
@@ -268,18 +271,28 @@ class ModelInfo(ModelView):
                 result['% 3d' % (len(result) + 1)] = new_line
                 for mname, mvalues in methods.iteritems():
                     cur_func = getattr(line, mname, None)
-                    if not cur_func or not getattr(cur_func, 'im_func', None):
+                    if not cur_func:
                         continue
-                    if cur_func.im_func == mvalues['_function']:
+                    key = getattr(cur_func, 'im_func', cur_func)
+                    if key == mvalues['_function']:
                         continue
                     m_mro = dict(new_line)
-                    m_mro.pop('override')
-                    m_mro['initial'] = 0 if len(mvalues['field_mro']) else 1
-                    mvalues['field_mro']['% 3d' % (
-                            len(mvalues['field_mro']) + 1)] = m_mro
-                    mvalues['_function'] = cur_func.im_func
+                    m_mro['initial'] = 0 if len(mvalues['mro']) else 1
+                    m_mro['override'] = 1 if len(mvalues['mro']) else 0
+                    mvalues['mro']['% 3d' % (
+                            len(mvalues['mro']) + 1)] = m_mro
+                    mvalues['_function'] = key
+            to_pop = []
             for mname, mvalues in methods.iteritems():
+                if not mvalues['mro']:
+                    to_pop.append(mname)
+                    continue
+                if not mvalues['mro']['% 3d' % len(mvalues['mro'])]['module']:
+                    to_pop.append(mname)
+                    continue
                 mvalues.pop('_function')
+            for mname in to_pop:
+                methods.pop(mname)
             return result, methods
 
         pool = Pool()
