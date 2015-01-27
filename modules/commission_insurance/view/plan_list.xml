@@ -3,5 +3,6 @@
     <xpath expr="/tree" position="inside">
         <field name="type_"/>
         <field name="commissioned_products_name"/>
+        <field name="tags_name"/>
     </xpath>
 </data>

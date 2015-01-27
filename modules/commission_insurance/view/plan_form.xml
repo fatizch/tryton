@@ -12,6 +12,9 @@
             <page name="commissioned_products">
                 <field name="commissioned_products"/>
             </page>
+            <page name="tags">
+                <field name="tags"/>
+            </page>
         </notebook>
     </xpath>
     <xpath expr="/form/notebook" position="before">

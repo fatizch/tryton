@@ -98,7 +98,7 @@ class Commission:
         return [('agent.party.broker_role',) + tuple(clause[1:])],
 
 
-class Plan(export.ExportImportMixin):
+class Plan(export.ExportImportMixin, model.TaggedMixin):
     __name__ = 'commission.plan'
     _func_key = 'code'
 
