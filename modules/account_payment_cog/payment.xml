@@ -58,5 +58,17 @@
         </record>
         <menuitem parent="account_payment.menu_payment_configuration" sequence="20"
             action="act_reject_reason_form" id="menu_reject_reason_form"/>
+        <record model="event.type" id="event_process_payment">
+            <field name="name">Process Payment</field>
+            <field name="code">process_payment</field>
+        </record>
+        <record model="event.type" id="event_fail_payment">
+            <field name="name">Fail Payment</field>
+            <field name="code">fail_payment</field>
+        </record>
+        <record model="event.type" id="event_succeed_payment">
+            <field name="name">Succeed payment</field>
+            <field name="code">succeed_payment</field>
+        </record>
     </data>
 </tryton>

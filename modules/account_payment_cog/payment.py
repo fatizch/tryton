@@ -192,7 +192,10 @@ class Payment:
 
     @classmethod
     def fail(cls, payments):
+        pool = Pool()
+        Event = pool.get('event')
         super(Payment, cls).fail(payments)
+        Event.notify_events(payments, 'fail_payment')
 
         actions = defaultdict(list)
         for payment in payments:
@@ -227,6 +230,20 @@ class Payment:
         super(Payment, self).on_change_line()
         if self.line:
             self.date = self.line.payment_date
+
+    @classmethod
+    def process(cls, payments, group):
+        pool = Pool()
+        Event = pool.get('event')
+        super(Payment, cls).process(payments, group)
+        Event.notify_events(payments, 'process_payment')
+
+    @classmethod
+    def succeed(cls, payments):
+        pool = Pool()
+        Event = pool.get('event')
+        super(Payment, cls).succeed(payments)
+        Event.notify_events(payments, 'succeed_payment')
 
 
 class Configuration:
