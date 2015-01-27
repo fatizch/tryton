@@ -1,77 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ######## -->
-    <!-- # Menu # -->
-    <!-- ######## -->
-    <menuitem name="Export Import" id="menu_export_import" sequence="50" parent="ir.menu_administration"/>
-    <!-- ###################### -->
-    <!-- # Import Select File # -->
-    <!-- ###################### -->
-    <record model="ir.ui.view" id="import_select_file_form">
-      <field name="model">ir.import.select_file</field>
-      <field name="type">form</field>
-      <field name="name">import_select_file_form</field>
-    </record>
-    <!-- ################# -->
-    <!-- # Import Wizard # -->
-    <!-- ################# -->
-    <record model="ir.action.wizard" id="import_wizard">
-      <field name="name">Import File</field>
-      <field name="wiz_name">ir.import</field>
-    </record>
-    <menuitem name="Import Wizard" id="menu_import_wizard" sequence="50" parent="menu_export_import" action="import_wizard"/>
-    <!-- ####################### -->
-    <!-- # Export Package Item # -->
-    <!-- ####################### -->
-    <record model="ir.ui.view" id="export_package_item_form">
-      <field name="model">ir.export_package.item</field>
-      <field name="type">form</field>
-      <field name="name">export_package_item_form</field>
-    </record>
-    <record model="ir.ui.view" id="export_package_item_list">
-      <field name="model">ir.export_package.item</field>
-      <field name="type">tree</field>
-      <field name="name">export_package_item_list</field>
-    </record>
-    <!-- ################## -->
-    <!-- # Export Package # -->
-    <!-- ################## -->
-    <record model="ir.ui.view" id="export_package_form">
-      <field name="model">ir.export_package</field>
-      <field name="type">form</field>
-      <field name="name">export_package_form</field>
-    </record>
-    <record model="ir.ui.view" id="export_package_tree">
-      <field name="model">ir.export_package</field>
-      <field name="type">tree</field>
-      <field name="name">export_package_tree</field>
-    </record>
-    <!-- Entry Point -->
-    <record model="ir.action.act_window" id="act_export_package">
-      <field name="name">Export Package</field>
-      <field name="res_model">ir.export_package</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_export_package_view1">
-      <field name="sequence" eval="16"/>
-      <field name="view" ref="export_package_tree"/>
-      <field name="act_window" ref="act_export_package"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_export_package_view2">
-      <field name="sequence" eval="16"/>
-      <field name="view" ref="export_package_form"/>
-      <field name="act_window" ref="act_export_package"/>
-    </record>
-    <menuitem parent="menu_export_import" sequence="1" action="act_export_package" id="menu_export_package"/>
+    <data>
+        <!-- ######## -->
+        <!-- # Menu # -->
+        <!-- ######## -->
+        <menuitem name="Export Import" id="menu_export_import" sequence="50" parent="ir.menu_administration"/>
+        <!-- ###################### -->
+        <!-- # Import Select File # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="import_select_file_form">
+            <field name="model">ir.import.select_file</field>
+            <field name="type">form</field>
+            <field name="name">import_select_file_form</field>
+        </record>
+        <!-- ################# -->
+        <!-- # Import Wizard # -->
+        <!-- ################# -->
+        <record model="ir.action.wizard" id="import_wizard">
+            <field name="name">Import File</field>
+            <field name="wiz_name">ir.import</field>
+        </record>
+        <menuitem name="Import Wizard" id="menu_import_wizard" sequence="50" parent="menu_export_import" action="import_wizard"/>
+        <!-- ####################### -->
+        <!-- # Export Package Item # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="export_package_item_form">
+            <field name="model">ir.export_package.item</field>
+            <field name="type">form</field>
+            <field name="name">export_package_item_form</field>
+        </record>
+        <record model="ir.ui.view" id="export_package_item_list">
+            <field name="model">ir.export_package.item</field>
+            <field name="type">tree</field>
+            <field name="name">export_package_item_list</field>
+        </record>
+        <!-- ################## -->
+        <!-- # Export Package # -->
+        <!-- ################## -->
+        <record model="ir.ui.view" id="export_package_form">
+            <field name="model">ir.export_package</field>
+            <field name="type">form</field>
+            <field name="name">export_package_form</field>
+        </record>
+        <record model="ir.ui.view" id="export_package_tree">
+            <field name="model">ir.export_package</field>
+            <field name="type">tree</field>
+            <field name="name">export_package_tree</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_export_package">
+            <field name="name">Export Package</field>
+            <field name="res_model">ir.export_package</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_export_package_view1">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="export_package_tree"/>
+            <field name="act_window" ref="act_export_package"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_export_package_view2">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="export_package_form"/>
+            <field name="act_window" ref="act_export_package"/>
+        </record>
+        <menuitem parent="menu_export_import" sequence="10" action="act_export_package" id="menu_export_package"/>
 
-    <record model="ir.ui.view" id="ir_export_package_add_records_start">
-        <field name="model">ir.export_package.add_records.start</field>
-        <field name="type">form</field>
-        <field name="name">export_package_add_records_start</field>
-    </record>
-    <record model="ir.action.wizard" id="export_package_wizard">
-        <field name="name">Select Export Package</field>
-        <field name="wiz_name">ir.export_package.add_records</field>
-    </record>
-  </data>
+        <record model="ir.ui.view" id="ir_export_package_add_records_start">
+            <field name="model">ir.export_package.add_records.start</field>
+            <field name="type">form</field>
+            <field name="name">export_package_add_records_start</field>
+        </record>
+        <record model="ir.action.wizard" id="export_package_wizard">
+            <field name="name">Select Export Package</field>
+            <field name="wiz_name">ir.export_package.add_records</field>
+        </record>
+        <!-- ######################## -->
+        <!-- # Export Configuration # -->
+        <!-- ######################## -->
+        <menuitem name="Configuration" parent="menu_export_import" sequence="1" id="menu_export_configuration"/>
+        <record model="ir.ui.view" id="export_configuration_form_view">
+            <field name="model">ir.export.configuration</field>
+            <field name="type">form</field>
+            <field name="name">export_configuration_form</field>
+        </record>
+        <record model="ir.ui.view" id="export_configuration_list_view">
+            <field name="model">ir.export.configuration</field>
+            <field name="type">tree</field>
+            <field name="name">export_configuration_list</field>
+        </record>
+        <record model="ir.ui.view" id="export_configuration_model_form_view">
+            <field name="model">ir.export.configuration.model</field>
+            <field name="type">form</field>
+            <field name="name">export_configuration_model_form</field>
+        </record>
+        <record model="ir.ui.view" id="export_configuration_model_list_view">
+            <field name="model">ir.export.configuration.model</field>
+            <field name="type">tree</field>
+            <field name="name">export_configuration_model_list</field>
+        </record>
+        <record model="ir.ui.view" id="export_configuration_field_form_view">
+            <field name="model">ir.export.configuration.field</field>
+            <field name="type">form</field>
+            <field name="name">export_configuration_field_form</field>
+        </record>
+        <record model="ir.ui.view" id="export_configuration_field_list_view">
+            <field name="model">ir.export.configuration.field</field>
+            <field name="type">tree</field>
+            <field name="name">export_configuration_field_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_export_configuration">
+            <field name="name">Export Configurations</field>
+            <field name="res_model">ir.export.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_export_configuration_view1">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="export_configuration_list_view"/>
+            <field name="act_window" ref="act_export_configuration"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_export_configuration_view2">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="export_configuration_form_view"/>
+            <field name="act_window" ref="act_export_configuration"/>
+        </record>
+        <menuitem parent="menu_export_configuration" sequence="10" action="act_export_configuration" id="menu_export_configuration_definition"/>
+        <record model="ir.action.act_window" id="act_export_configuration_model">
+            <field name="name">Model Configurations</field>
+            <field name="res_model">ir.export.configuration.model</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_export_configuration_model_view1">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="export_configuration_model_list_view"/>
+            <field name="act_window" ref="act_export_configuration_model"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_export_configuration_model_view2">
+            <field name="sequence" eval="16"/>
+            <field name="view" ref="export_configuration_model_form_view"/>
+            <field name="act_window" ref="act_export_configuration_model"/>
+        </record>
+        <menuitem parent="menu_export_configuration" sequence="20" action="act_export_configuration_model" id="menu_export_configuration__model"/>
+        <!-- wizard -->
+        <record model="ir.action.wizard" id="export_fields_selection">
+            <field name="name">Add Fields</field>
+            <field name="wiz_name">export.fields.selection</field>
+        </record>
+        <record model="ir.ui.view" id="export_fields_select_view_form">
+            <field name="model">export.fields.select</field>
+            <field name="type">form</field>
+            <field name="name">export_fields_select_form</field>
+        </record>
+        <record model="ir.action.wizard" id="export_to_file">
+            <field name="name">Export To File</field>
+            <field name="wiz_name">export.export_to_file</field>
+        </record>
+        <record model="ir.ui.view" id="export_configuration_selection_view_form">
+            <field name="model">export.export_configuration_selection</field>
+            <field name="type">form</field>
+            <field name="name">export_configuration_selection_form</field>
+        </record>
+        <record model="ir.ui.view" id="export_summary_view_form">
+            <field name="model">export.export_summary</field>
+            <field name="type">form</field>
+            <field name="name">export_summary_form</field>
+        </record>
+    </data>
 </tryton>

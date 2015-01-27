@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Export Fields Selection">
+    <field name="selected_fields" colspan="4"/>
+</form>

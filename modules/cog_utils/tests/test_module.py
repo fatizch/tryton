@@ -30,6 +30,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'ExportTestTarget': 'cog_utils.export_test_target',
             'ExportTestTargetSlave': 'cog_utils.export_test_target_slave',
             'ExportTestRelation': 'cog_utils.export_test_relation',
+            'ExportModelConfiguration': 'ir.export.configuration.model',
+            'ExportConfiguration': 'ir.export.configuration',
+            'ExportFieldConfiguration': 'ir.export.configuration.field',
             }
 
     def test0020get_module_path(self):
@@ -581,6 +584,42 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         self.ExportTest.multiple_import_json(output)
         self.assertEqual('select2', to_export.property_selection)
+
+    def test_0063_export_import_configuration(self):
+        model = self.Model.search([('model', '=', 'cog_utils.export_test')])[0]
+        model_configuration = self.ExportModelConfiguration(name='Export Test',
+            code='export_test', model=model,
+            model_name='cog_utils.export_test')
+        model_configuration.save()
+        field_configuration = self.ExportFieldConfiguration(field_name='char',
+            model=model_configuration, export_light_strategy=True)
+        field_configuration.save()
+        conf = self.ExportConfiguration(name='MyConf', code='my_conf',
+            models_configuration=[model_configuration])
+        target = self.ExportTestTargetSlave(char='key')
+        target.save()
+        to_export = self.ExportTest(char='otherkey', valid_one2many=[target])
+        to_export.save()
+        output = []
+        to_export.export_json(output=output, configuration=conf)
+        self.assertEqual(output[0]['char'], 'otherkey')
+        self.assertEqual(len(output[0]), 3)
+
+        field_configuration = self.ExportFieldConfiguration(
+            field_name='valid_one2many', model=model_configuration,
+            export_light_strategy=False)
+        field_configuration.save()
+        output = []
+        conf._configuration = None
+        to_export.export_json(output=output, configuration=conf)
+        self.assertEqual(len(output[0]['valid_one2many']), 1)
+
+        field_configuration.export_light_strategy = True
+        field_configuration.save()
+        output = []
+        conf._configuration = None
+        to_export.export_json(output=output, configuration=conf)
+        self.assertEqual(output[0]['valid_one2many'][0]['char'], 'key')
 
     def test_string_replace(self):
         s = u'café-THÉ:20$'

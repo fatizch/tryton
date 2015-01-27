@@ -9,6 +9,7 @@ except ImportError:
 
 from sql.operators import Concat
 
+from trytond.pyson import Eval
 from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.model import Model, ModelSQL, ModelView, fields as tryton_fields
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -30,6 +31,15 @@ __all__ = [
     'ExportPackage',
     'Add2ExportPackageWizard',
     'Add2ExportPackageWizardStart',
+    'ExportConfiguration',
+    'ExportModelConfiguration',
+    'ExportFieldConfiguration',
+    'ExportModelExportConfigurationRelation',
+    'ExportSelectFields',
+    'ExportFieldsSelection',
+    'ExportToFile',
+    'ExportSummary',
+    'ExportConfigurationSelection',
     ]
 
 
@@ -69,6 +79,8 @@ class ExportImportMixin(Model):
                 'key: "%s" were found.',
                 'not_unique': 'Cannot import : the following objects:\n%s\n'
                 'share the same functional key:\n"%s".',
+                'missing_export_configuration': "Can't find configuration "
+                "for code %s",
                 })
 
     @classmethod
@@ -141,12 +153,13 @@ class ExportImportMixin(Model):
     def _export_filename_prefix(self):
         return '[%s][%s]' % (datetime.date.today().isoformat(), self.__name__)
 
-    def export_json_to_file(self):
+    def export_json_to_file(self, configuration=None):
         filename = '%s%s.json' % (self._export_filename_prefix(),
             self._export_filename())
         result = []
         already_exported = set()
-        self.export_json(output=result, already_exported=already_exported)
+        self.export_json(output=result, already_exported=already_exported,
+            configuration=configuration)
         export_log = 'The following records will be exported:\n '
         instances = collections.defaultdict(list)
         for value in already_exported:
@@ -314,16 +327,17 @@ class ExportImportMixin(Model):
         return record
 
     def export_master(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None):
+            output=None, main_object=None, configuration=None):
         if self.is_master_object():
             if self not in already_exported:
                 self.export_json(skip_fields, already_exported, output,
-                    main_object)
+                    main_object, configuration)
             return {'_func_key': getattr(self, self._func_key),
                 '__name__': self.__name__}
 
     def _export_json_xxx2one(self, field_name, skip_fields=None,
-            already_exported=None, output=None, main_object=None):
+            already_exported=None, output=None, main_object=None,
+            configuration=None):
         target = getattr(self, field_name)
         if target is None:
             return None
@@ -331,14 +345,15 @@ class ExportImportMixin(Model):
             raise NotExportImport('%s is not exportable' % target)
         if target:
             values = target.export_master(skip_fields, already_exported,
-                output, main_object)
+                output, main_object, configuration)
             if values is None:
                 values = target.export_json(skip_fields, already_exported,
-                    output, main_object)
+                    output, main_object, configuration)
             return values
 
     def _export_json_xxx2many(self, field_name, skip_fields=None,
-            already_exported=None, output=None, main_object=None):
+            already_exported=None, output=None, main_object=None,
+            configuration=None):
         if skip_fields is None:
             skip_fields = set()
         field = self._fields[field_name]
@@ -354,16 +369,16 @@ class ExportImportMixin(Model):
         results = []
         for t in targets:
             values = t.export_master(skip_fields, already_exported, output,
-                main_object)
+                main_object, configuration)
             if not values:
                 values = t.export_json(skip_fields, already_exported,
-                    output, main_object)
+                    output, main_object, configuration)
             if values:
                 results.append(values)
         return results
 
     def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None):
+            output=None, main_object=None, configuration=None):
         if not main_object:
             main_object = self
         skip_fields = (skip_fields or set()) | self._export_skips()
@@ -380,21 +395,38 @@ class ExportImportMixin(Model):
 
         light_exports = self._export_light()
 
+        if configuration:
+            model_configuration = configuration.get_model_configuration(
+                self.__name__)
+        else:
+            model_configuration = None
+
         for field_name, field in self._fields.iteritems():
             if isinstance(field, tryton_fields.Property):
                 field = field._field
-            if (field_name in skip_fields or
-                    (isinstance(field, tryton_fields.Function) and not
-                    isinstance(field, tryton_fields.Property))):
+            if field_name in skip_fields:
                 continue
-            elif field_name in light_exports:
+            if (model_configuration and
+                    field_name not in model_configuration['light'] and
+                    field_name not in model_configuration['complete']):
+                continue
+            if (isinstance(field, tryton_fields.Function) and not
+                    isinstance(field, tryton_fields.Property) and
+                    not configuration):
+                continue
+            if (field_name in light_exports or model_configuration and
+                    field_name in model_configuration['light']):
                 field_value = getattr(self, field_name)
-                if isinstance(field, (tryton_fields.One2Many,
-                            tryton_fields.Many2Many)):
+                if (isinstance(field, (tryton_fields.One2Many,
+                            tryton_fields.Many2Many)) or
+                        isinstance(field, tryton_fields.Function) and
+                        field._type in ('one2many', 'many2many')):
                     values[field_name] = [
                         {'_func_key': getattr(x, x._func_key)}
                         for x in field_value]
-                elif isinstance(field, tryton_fields.Reference):
+                elif (isinstance(field, tryton_fields.Reference) or
+                        isinstance(field, tryton_fields.Function) and
+                        field._type == 'reference'):
                     if not field_value:
                         values[field_name] = None
                     else:
@@ -407,16 +439,20 @@ class ExportImportMixin(Model):
                     else:
                         values[field_name] = {'_func_key': getattr(
                             field_value, field_value._func_key)}
-            elif isinstance(field, (tryton_fields.Many2One,
-                        tryton_fields.One2One, tryton_fields.Reference)):
+            elif (isinstance(field, (tryton_fields.Many2One,
+                        tryton_fields.One2One, tryton_fields.Reference)) or
+                    isinstance(field, tryton_fields.Function) and
+                    field._type in ('many2one', 'one2one', 'reference')):
                 values[field_name] = self._export_json_xxx2one(
                     field_name, None, already_exported, output,
-                    main_object)
-            elif isinstance(field, (tryton_fields.One2Many,
-                        tryton_fields.Many2Many)):
+                    main_object, configuration)
+            elif (isinstance(field, (tryton_fields.One2Many,
+                        tryton_fields.Many2Many)) or
+                    isinstance(field, tryton_fields.Function) and
+                    field._type in ('one2many', 'many2many')):
                 values[field_name] = self._export_json_xxx2many(
                     field_name, None, already_exported, output,
-                    main_object)
+                    main_object, configuration)
             else:
                 values[field_name] = getattr(self, field_name)
         if self.is_master_object() or main_object == self:
@@ -424,8 +460,19 @@ class ExportImportMixin(Model):
         return values
 
     @classmethod
-    def ws_consult(cls, objects):
+    def ws_consult(cls, objects, configuration_code=None):
+        pool = Pool()
+        ExportConfiguration = pool.get('ir.export.configuration')
         message = {}
+        conf = None
+        if configuration_code:
+            configurations = ExportConfiguration.search([
+                    ('code', '=', configuration_code)])
+            if configurations:
+                conf = configurations[0]
+            else:
+                cls.raise_user_error('missing_export_configuration',
+                    configuration_code)
         for ext_id, values in objects.iteritems():
             try:
                 possible_objects = cls.search_for_export_import(values)
@@ -434,7 +481,11 @@ class ExportImportMixin(Model):
                 elif len(possible_objects) >= 2:
                     cls.raise_user_error('Too many possibles objects')
                 object_values = []
-                possible_objects[0].export_json(output=object_values)
+                if conf:
+                    possible_objects[0].export_json(output=object_values,
+                        configuration=conf)
+                else:
+                    possible_objects[0].export_json(output=object_values)
                 message[ext_id] = {
                     'return': True,
                     'values': object_values,
@@ -561,10 +612,277 @@ class Add2ExportPackageWizard(Wizard):
         pool = Pool()
         ExportPackageItem = pool.get('ir.export_package.item')
         ids = Transaction().context['active_ids']
-        print Transaction().context
         model = Transaction().context['active_model']
         ExportPackageItem.create([{
                     'to_export': '%s,%s' % (model, id_),
                     'package': self.start.export_package,
                     } for id_ in ids])
         return 'end'
+
+
+class ExportConfiguration(ModelSQL, ModelView, ExportImportMixin):
+    'Export Configuration'
+    __name__ = 'ir.export.configuration'
+    _func_key = 'code'
+
+    name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
+    models_configuration = fields.Many2Many(
+        'ir.export_configuration-export_model', 'configuration', 'model',
+        'Models Configuration')
+
+    @classmethod
+    def __setup__(cls):
+        super(ExportConfiguration, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ]
+
+    @property
+    def configuration(self):
+        if not getattr(self, '_configuration', None):
+            self.init_configuration()
+        return self._configuration
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.slugify(self.name)
+
+    def init_configuration(self):
+        self._configuration = {}
+        for model_configuration in self.models_configuration:
+            self._configuration[model_configuration.model.model] = \
+                model_configuration.get_fields()
+
+    def get_model_configuration(self, model_name):
+        conf = self.configuration
+        if model_name in conf:
+            return conf[model_name]
+        return None
+
+
+class ExportModelConfiguration(ModelSQL, ModelView, ExportImportMixin):
+    'Export Model Configuration'
+    __name__ = 'ir.export.configuration.model'
+
+    name = fields.Char('Name', required=True)
+    code = fields.Char('Code', required=True)
+    model = fields.Function(fields.Many2One('ir.model', 'Model',
+            required=True),
+        'get_model', setter='set_model')
+    model_name = fields.Char('Model Name')
+    fields_configuration = fields.One2Many('ir.export.configuration.field',
+        'model', 'Model Configuration')
+
+    @classmethod
+    def __setup__(cls):
+        super(ExportModelConfiguration, cls).__setup__()
+        cls._sql_constraints += [
+            ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ]
+        cls._buttons.update({
+                'button_select_fields': {},
+                })
+
+    def get_model(self, name):
+        pool = Pool()
+        Model = pool.get('ir.model')
+        if self.model_name:
+            the_model, = Model.search([('model', '=', self.model_name)])
+            return the_model.id
+
+    @classmethod
+    def set_model(cls, configurations, name, value):
+        pool = Pool()
+        Model = pool.get('ir.model')
+        if value:
+            model = Model(value)
+            cls.write(configurations, {'model_name': model.model})
+        else:
+            cls.write(configurations, {'model_name': ''})
+
+    @fields.depends('code', 'name')
+    def on_change_with_code(self):
+        if self.code:
+            return self.code
+        return coop_string.slugify(self.name)
+
+    def get_fields(self):
+        res = collections.defaultdict(list)
+        for field in self.fields_configuration:
+            if field.export_light_strategy:
+                res['light'].append(field.field_name)
+            else:
+                res['complete'].append(field.field_name)
+        return res
+
+    @classmethod
+    def _export_light(cls):
+        return (super(ExportModelConfiguration, cls)._export_light() |
+            set(['model']))
+
+    @classmethod
+    @ModelView.button_action('cog_utils.export_fields_selection')
+    def button_select_fields(cls, export_models):
+        pass
+
+
+class ExportFieldConfiguration(ModelSQL, ModelView, ExportImportMixin):
+    'Export Field Configuration'
+    __name__ = 'ir.export.configuration.field'
+    _rec_name = 'field_name'
+
+    model = fields.Many2One('ir.export.configuration.model',
+        'Model Configuration', required=True, ondelete='CASCADE')
+    field_model = fields.Function(
+        fields.Many2One('ir.model.field', 'Field Model', required=True),
+        'get_field_model')
+    field_name = fields.Char('Field Name')
+    is_relation_field = fields.Function(
+        fields.Boolean('Is A Relation Field'),
+        'get_is_relation_field')
+    export_light_strategy = fields.Boolean('Export Light',
+        depends=['is_relation_field', 'field_model'],
+        states={'invisible': ~Eval('is_relation_field')})
+
+    @classmethod
+    def __setup__(cls):
+        super(ExportFieldConfiguration, cls).__setup__()
+        cls._error_messages.update({
+                'wrong_field_name': 'Field %s is not defined in model %s'
+                })
+
+    def get_field_model(self, name):
+        pool = Pool()
+        FieldModel = pool.get('ir.model.field')
+        if self.field_name:
+            the_field, = FieldModel.search([
+                    ('name', '=', self.field_name),
+                    ('model', '=', self.model.model.id)])
+            return the_field.id
+
+    def get_is_relation_field(self, name):
+        if self.field_model:
+            return self.field_model.ttype in ('many2one', 'many2many',
+                'one2many', 'one2one', 'reference')
+
+
+class ExportModelExportConfigurationRelation(ModelSQL):
+    'Relation between export configuration and export model'
+    __name__ = 'ir.export_configuration-export_model'
+
+    configuration = fields.Many2One('ir.export.configuration',
+        'Export Configuration', ondelete='CASCADE')
+    model = fields.Many2One('ir.export.configuration.model', 'Export Model',
+        ondelete='RESTRICT')
+
+
+class ExportSelectFields(ModelView):
+    'Select Export Fields'
+    __name__ = 'export.fields.select'
+
+    possible_fields = fields.One2Many('ir.model.field', None,
+        'Possible Fields')
+    selected_fields = fields.Many2Many('ir.model.field', None, None,
+        'Selected Fields', domain=[('id', 'in', Eval('possible_fields'))],
+        depends=['possible_fields'])
+
+
+class ExportFieldsSelection(Wizard):
+    'Fields Selection Wizard'
+    __name__ = 'export.fields.selection'
+
+    start_state = 'fields_selection'
+    fields_selection = StateView('export.fields.select',
+        'cog_utils.export_fields_select_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next')])
+    apply = StateTransition()
+
+    def get_export_model(self):
+        pool = Pool()
+        ExportModel = pool.get('ir.export.configuration.model')
+        return ExportModel(Transaction().context.get('active_id'))
+
+    def default_fields_selection(self, name):
+        pool = Pool()
+        export_model = self.get_export_model()
+        ExportModel = pool.get(export_model.model.model)
+        skips = ExportModel._export_skips()
+        return {
+            'possible_fields': [x.id for x in export_model.model.fields
+                if x.name not in skips]
+            }
+
+    def transition_apply(self):
+        pool = Pool()
+        ExportField = pool.get('ir.export.configuration.field')
+        export_model = self.get_export_model()
+        ExportModel = pool.get(export_model.model.model)
+        export_fields = []
+        light = ExportModel._export_light()
+        for field in self.fields_selection.selected_fields:
+            if field.name in light:
+                is_light = True
+            else:
+                is_light = False
+            export_fields.append(ExportField(
+                    field_name=field.name,
+                    model=export_model,
+                    export_light_strategy=is_light)
+                )
+        ExportField.create([x._save_values for x in export_fields])
+        return 'end'
+
+
+class ExportConfigurationSelection(ModelView):
+    'Export Configuration Selection'
+    __name__ = 'export.export_configuration_selection'
+
+    configuration = fields.Many2One('ir.export.configuration', 'Configuration',
+        None)
+
+
+class ExportSummary(ModelView):
+    'Export Summary'
+    __name__ = 'export.export_summary'
+
+    summary = fields.Text('Export Summary', readonly=True)
+    file = fields.Binary('Export File', filename='file_name', readonly=True)
+    file_name = fields.Char('File Name')
+
+
+class ExportToFile(Wizard):
+    'Export To File Wizard'
+    __name__ = 'export.export_to_file'
+
+    start_state = 'conf_selection'
+    conf_selection = StateView('export.export_configuration_selection',
+        'cog_utils.export_configuration_selection_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Next', 'export', 'tryton-go-next')])
+    export = StateTransition()
+    export_summary = StateView('export.export_summary',
+        'cog_utils.export_summary_view_form', [
+            Button('Previous', 'conf_selection', 'tryton-go-previous'),
+            Button('Ok', 'end', 'tryton-ok')])
+
+    def transition_export(self):
+        pool = Pool()
+        model = Transaction().context.get('active_model')
+        Model = pool.get(model)
+        model_id = Transaction().context.get('active_id')
+        export_object = Model(model_id)
+        self._file_name, self._result, self._summary = \
+            export_object.export_json_to_file(
+                self.conf_selection.configuration)
+        return 'export_summary'
+
+    def default_export_summary(self, name):
+        return {
+            'summary': self._summary,
+            'file': buffer(json.dumps(self._result, cls=JSONEncoder)),
+            'file_name': self._file_name,
+            }

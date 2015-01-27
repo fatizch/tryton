@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<form string="Export Configuration">
+    <label name="configuration"/>
+    <field name="configuration" colspan="3"/>
+</form>

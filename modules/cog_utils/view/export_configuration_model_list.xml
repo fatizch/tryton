@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tree string="Export Model Configuration">
+    <field name="name"/>
+    <field name="code"/>
+    <field name="model"/>
+</tree>

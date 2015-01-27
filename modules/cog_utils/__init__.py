@@ -22,6 +22,11 @@ def register():
     Pool.register(
         ExportPackage,
         ExportInstance,
+        ExportConfiguration,
+        ExportModelConfiguration,
+        ExportFieldConfiguration,
+        ExportModelExportConfigurationRelation,
+        ExportSelectFields,
         Add2ExportPackageWizardStart,
         Sequence,
         SequenceStrict,
@@ -57,6 +62,8 @@ def register():
         MethodDefinition,
         Event,
         EventType,
+        ExportSummary,
+        ExportConfigurationSelection,
         module='cog_utils', type_='model')
     if config.get('env', 'testing') == 'True':
         Pool.register(
@@ -71,4 +78,6 @@ def register():
         ImportWizard,
         Add2ExportPackageWizard,
         TestCaseWizard,
+        ExportFieldsSelection,
+        ExportToFile,
         module='cog_utils', type_='wizard')

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form string="Export Field Configuration">
+    <label name="field_model"/>
+    <field name="field_model"/>
+    <label name="export_light_strategy"/>
+    <field name="export_light_strategy"/>
+</form>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<form string="Export Summary">
+    <label name="file"/>
+    <field name="file"/>
+    <field name="summary" colspan="4" widget="richtext"/>
+</form>
