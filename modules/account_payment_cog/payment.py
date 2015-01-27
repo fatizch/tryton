@@ -37,7 +37,8 @@ class Journal(export.ExportImportMixin):
 
     @classmethod
     def _export_light(cls):
-        return super(Journal, cls)._export_light() | {'currency', 'company'}
+        return super(Journal, cls)._export_light() | {'currency', 'company',
+            'default_reject_fee'}
 
 
 class JournalFailureAction(model.CoopSQL, model.CoopView):
@@ -156,8 +157,9 @@ class RejectReason(model.CoopSQL, model.CoopView):
             ]
 
 
-class Payment:
+class Payment(export.ExportImportMixin):
     __name__ = 'account.payment'
+    _func_key = 'id'
 
     @classmethod
     def __setup__(cls):
@@ -232,6 +234,9 @@ class Payment:
             self.date = self.line.payment_date
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
     def process(cls, payments, group):
         pool = Pool()
         Event = pool.get('event')

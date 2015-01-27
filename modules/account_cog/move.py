@@ -1,5 +1,6 @@
 from trytond.pool import PoolMeta
 from trytond.model import fields
+from trytond.modules.cog_utils import export
 
 __metaclass__ = PoolMeta
 
@@ -8,7 +9,7 @@ __all__ = [
     ]
 
 
-class Line:
+class Line(export.ExportImportMixin):
     'Account Move Line'
     __name__ = 'account.move.line'
 
