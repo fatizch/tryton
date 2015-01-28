@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <tree string="Endorsements">
     <field name="contracts_name"/>
-    <field name="current_state"/>
     <button name="button_preview_changes" string="Preview Changes"/>
 </tree>
