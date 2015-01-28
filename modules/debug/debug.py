@@ -1,3 +1,4 @@
+from collections import defaultdict
 import pprint
 
 from trytond.wizard import Wizard, StateTransition, StateView, Button
@@ -219,84 +220,153 @@ class ModelInfo(ModelView):
         return infos
 
     @classmethod
-    def raw_model_infos(cls, models):
-        def extract_mro(Model, model_name):
-            result, methods, first_occurence = {}, {}, False
-            for elem in dir(Model):
-                if elem == 'on_change_with':
-                    # Particular case
-                    continue
-                if elem.startswith('__') and elem not in ('__register__',
-                        '__setup__'):
-                    continue
-                if not callable(getattr(Model, elem)):
-                    continue
-                for ftemplate in METHOD_TEMPLATES:
-                    if elem.startswith(ftemplate):
-                        methods[elem] = {
-                            'field': elem[len(ftemplate):],
-                            '_function': None,
-                            'mro': {},
-                            }
-                        break
-                else:
+    def extract_mro(cls, model_class, model_name):
+        result, methods, first_occurence = {}, {}, False
+        for elem in dir(model_class):
+            if elem == 'on_change_with':
+                # Particular case
+                continue
+            if elem.startswith('__') and elem not in ('__register__',
+                    '__setup__'):
+                continue
+            if not callable(getattr(model_class, elem)):
+                continue
+            for ftemplate in METHOD_TEMPLATES:
+                if elem.startswith(ftemplate):
                     methods[elem] = {
-                        'field': '',
+                        'field': elem[len(ftemplate):],
                         '_function': None,
                         'mro': {},
                         }
-            mro = Model.__mro__
-
-            model_name_dots = len(model_name.split('.'))
-            for line in mro[::-1][1:]:
-                full_name = str(line)[8:-2].split('.')
-                if full_name[1] == 'pool':
-                    continue
-                new_line = {
-                    'module': '',
-                    'override': 0,
-                    'initial': 0,
-                    'base_name': full_name[-1],
-                    'path': '.'.join(full_name[:-1]),
+                    break
+            else:
+                methods[elem] = {
+                    'field': '',
+                    '_function': None,
+                    'mro': {},
                     }
-                if full_name[1] == 'modules':
-                    new_line['module'] = full_name[2]
-                if str(line)[:-2].endswith(model_name):
-                    new_line['override'] = 1 if first_occurence else 0
-                    new_line['initial'] = 0 if first_occurence else 1
-                    new_line['base_name'] = model_name
-                    new_line['path'] = '.'.join(
-                        full_name[:-model_name_dots])
-                    first_occurence = True
-                result['% 3d' % (len(result) + 1)] = new_line
-                for mname, mvalues in methods.iteritems():
-                    cur_func = getattr(line, mname, None)
-                    if not cur_func:
-                        continue
-                    key = getattr(cur_func, 'im_func', cur_func)
-                    if key == mvalues['_function']:
-                        continue
-                    m_mro = dict(new_line)
-                    m_mro['initial'] = 0 if len(mvalues['mro']) else 1
-                    m_mro['override'] = 1 if len(mvalues['mro']) else 0
-                    mvalues['mro']['% 3d' % (
-                            len(mvalues['mro']) + 1)] = m_mro
-                    mvalues['_function'] = key
-            to_pop = []
-            for mname, mvalues in methods.iteritems():
-                if not mvalues['mro']:
-                    to_pop.append(mname)
-                    continue
-                if not mvalues['mro']['% 3d' % len(mvalues['mro'])]['module']:
-                    to_pop.append(mname)
-                    continue
-                mvalues.pop('_function')
-            for mname in to_pop:
-                methods.pop(mname)
-            return result, methods
+        mro = model_class.__mro__
 
+        model_name_dots = len(model_name.split('.'))
+        for line in mro[::-1][1:]:
+            full_name = str(line)[8:-2].split('.')
+            if full_name[1] == 'pool':
+                continue
+            new_line = {
+                'module': '',
+                'override': 0,
+                'initial': 0,
+                'base_name': full_name[-1],
+                'path': '.'.join(full_name[:-1]),
+                }
+            if full_name[1] == 'modules':
+                new_line['module'] = full_name[2]
+            if str(line)[:-2].endswith(model_name):
+                new_line['override'] = 1 if first_occurence else 0
+                new_line['initial'] = 0 if first_occurence else 1
+                new_line['base_name'] = model_name
+                new_line['path'] = '.'.join(
+                    full_name[:-model_name_dots])
+                first_occurence = True
+            result['% 3d' % (len(result) + 1)] = new_line
+            for mname, mvalues in methods.iteritems():
+                cur_func = getattr(line, mname, None)
+                if not cur_func:
+                    continue
+                key = getattr(cur_func, 'im_func', cur_func)
+                if key == mvalues['_function']:
+                    continue
+                m_mro = dict(new_line)
+                m_mro['initial'] = 0 if len(mvalues['mro']) else 1
+                m_mro['override'] = 1 if len(mvalues['mro']) else 0
+                mvalues['mro']['% 3d' % (
+                        len(mvalues['mro']) + 1)] = m_mro
+                mvalues['_function'] = key
+        to_pop = []
+        for mname, mvalues in methods.iteritems():
+            if not mvalues['mro']:
+                to_pop.append(mname)
+                continue
+            if not mvalues['mro']['% 3d' % len(mvalues['mro'])]['module']:
+                to_pop.append(mname)
+                continue
+            mvalues.pop('_function')
+        for mname in to_pop:
+            methods.pop(mname)
+        return result, methods
+
+    @classmethod
+    def extract_views(cls, model_class, model_name, model_data_cache):
+        pool = Pool()
+        View = pool.get('ir.ui.view')
+        views = {x.id: x for x in View.search([('model', '=', model_name)])}
+        master_views = {}
+        other_masters = defaultdict(list)
+        for view in views.itervalues():
+            if not view.inherit:
+                master_views[view.id] = {
+                    'module': view.module or '',
+                    'type': view.type or '',
+                    'priority': view.priority or '',
+                    'field_childs': view.field_childs or '',
+                    'name': view.name or '',
+                    'functional_id': model_data_cache.get(
+                        (view.module, view.id), view.name or ''),
+                    'inherit': [],
+                    }
+            else:
+                other_masters[view.inherit.id].append(view)
+
+        for view_id, children in other_masters.iteritems():
+            if view_id not in views:
+                continue
+            if view_id not in master_views:
+                view = views[view_id]
+                master_views[view.id] = {
+                    'module': view.module or '',
+                    'type': view.type or '',
+                    'priority': view.priority or '',
+                    'field_childs': view.field_childs or '',
+                    'name': view.name or '',
+                    'functional_id': model_data_cache[(view.module, view.id)],
+                    'inherit': [],
+                    }
+            for child in children:
+                master_views[view_id]['inherit'].append({
+                        'module': child.module or '',
+                        'type': child.type or '',
+                        'priority': child.priority or '',
+                        'field_childs': child.field_childs or '',
+                        'functional_id': model_data_cache[(child.module,
+                                child.id)],
+                        'name': child.name or master_views[view_id]['name'],
+                        })
+
+        def view_sort(x):
+            if x not in model_class._modules_list:
+                return len(model_class._modules_list)
+            return model_class._modules_list.index(x['module'])
+
+        master_views = {'% 3i' % idx: val
+            for idx, val in enumerate(sorted(master_views.values(),
+                key=view_sort))}
+
+        for view in master_views.itervalues():
+            if len(view['inherit']) == 0:
+                del view['inherit']
+                continue
+            view['inherit'].sort(key=view_sort)
+            view['inherit'] = {
+                '% 3i' % idx: val for idx, val in enumerate(view['inherit'])}
+        return master_views
+
+    @classmethod
+    def raw_model_infos(cls, models):
         pool = Pool()
         infos = {}
+        model_data = pool.get('ir.model.data').search([
+                ('model', '=', 'ir.ui.view')])
+        model_data_cache = {(x.module, x.db_id): x.fs_id for x in model_data}
         for model_name in models:
             Model = pool.get(model_name)
             try:
@@ -304,11 +374,13 @@ class ModelInfo(ModelView):
             except AttributeError:
                 # None type has no attribute splitlines
                 string = Model.__name__
-            mro, methods = extract_mro(Model, model_name)
+            mro, methods = cls.extract_mro(Model, model_name)
             infos[model_name] = {
                 'string': string,
                 'mro': mro,
                 'methods': methods,
+                'views': cls.extract_views(Model, model_name,
+                    model_data_cache),
                 }
         return infos
 
