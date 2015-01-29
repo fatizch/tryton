@@ -15,8 +15,9 @@ class Line:
     __name__ = 'account.statement.line'
 
     contract = fields.Many2One('contract', 'Contract',
-        domain=[
-            If(Bool(Eval('party')), [('subscriber', '=', Eval('party'))], [])],
+        domain=[('status', '!=', 'quote'),
+            If(Bool(Eval('party')),
+                [('subscriber', '=', Eval('party')), ], [])],
         depends=['party'])
 
     @classmethod
