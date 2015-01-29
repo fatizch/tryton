@@ -7,5 +7,7 @@
         <label name="product"/>
         <field name="product" colspan="3"/>
         <newline/>
+        <label name="party"/>
+        <field name="party" colspan="3"/>
     </xpath>
 </data>

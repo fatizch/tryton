@@ -1,5 +1,6 @@
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import fields
 from trytond.modules.process_cog import ProcessFinder, ProcessStart
@@ -38,6 +39,7 @@ class ContractSubscribeFindProcess(ProcessStart):
                 [('start_date', '=', None)],
                 ],
             ], depends=['effective_date'])
+    party = fields.Many2One('party.party', 'Party', states={'invisible': True})
 
     @classmethod
     def build_process_domain(cls):
@@ -58,6 +60,11 @@ class ContractSubscribeFindProcess(ProcessStart):
     def default_model(cls):
         Model = Pool().get('ir.model')
         return Model.search([('model', '=', 'contract')])[0].id
+
+    @staticmethod
+    def default_party():
+        if Transaction().context.get('active_model') == 'party.party':
+            return Transaction().context.get('active_id', None)
 
 
 class ContractSubscribe(ProcessFinder):
@@ -80,5 +87,7 @@ class ContractSubscribe(ProcessFinder):
         if res:
             res, err = obj.init_from_product(process_param.product,
                 process_param.effective_date)
+            if process_param.party:
+                obj.subscriber = process_param.party
             errs += err
         return res, errs

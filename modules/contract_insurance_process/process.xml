@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <record model="ir.ui.view" id="contract_subscribe_find_process_form">
-      <field name="model">contract.subscribe.find_process</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="process_cog.process_parameters_form"/>
-      <field name="name">contract_subscribe_find_process_form</field>
-    </record>
-    <record model="ir.action.wizard" id="subscription_process_launcher">
-      <field name="name">Start Subscription</field>
-      <field name="wiz_name">contract.subscribe</field>
-    </record>
-    <menuitem parent="contract.menu_contract" sequence="1" action="subscription_process_launcher" id="menu_start_subscription" icon="contract-action"/>
-    <record model="ir.action.act_window" id="act_contract_logs">
-      <field name="name">Logs</field>
-      <field name="res_model">process.log</field>
-      <field name="domain">[('task', '=', (Eval('active_model'),Eval('active_id')))]</field>
-    </record>
-    <record model="ir.action.keyword" id="act_contract_logs_keyword1">
-      <field name="keyword">form_relate</field>
-      <field name="model">contract,-1</field>
-      <field name="action" ref="act_contract_logs"/>
-    </record>
-    <!--################################################################ -->
-    <!-- Synthesis -->
-    <!--################################################################ -->
-    <record model="ir.action.keyword" id="act_menu_subscribe_contract">
-      <field name="keyword">form_action</field>
-      <field name="model">party.synthesis.menu,-1</field>
-      <field name="action" ref="contract_insurance_process.subscription_process_launcher"/>
-    </record>
-    <!-- ########################## -->
-    <!-- # Resume Process Keyword # -->
-    <!-- ########################## -->
-    <record model="ir.action.keyword" id="act_resume_contract_process_keyword">
-        <field name="keyword">form_action</field>
-        <field name="model">contract,-1</field>
-        <field name="action" ref="process_cog.act_resume_process"/>
-    </record>
-  </data>
+    <data>
+        <record model="ir.ui.view" id="contract_subscribe_find_process_form">
+            <field name="model">contract.subscribe.find_process</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="process_cog.process_parameters_form"/>
+            <field name="name">contract_subscribe_find_process_form</field>
+        </record>
+        <record model="ir.action.wizard" id="subscription_process_launcher">
+            <field name="name">Start Subscription</field>
+            <field name="wiz_name">contract.subscribe</field>
+        </record>
+        <menuitem parent="contract.menu_contract" sequence="1" action="subscription_process_launcher" id="menu_start_subscription" icon="contract-action"/>
+        <record model="ir.action.act_window" id="act_contract_logs">
+            <field name="name">Logs</field>
+            <field name="res_model">process.log</field>
+            <field name="domain">[('task', '=', (Eval('active_model'),Eval('active_id')))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_contract_logs_keyword1">
+            <field name="keyword">form_relate</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="act_contract_logs"/>
+        </record>
+        <!--################################################################-->
+        <!--Synthesis-->
+        <!--################################################################-->
+        <record model="ir.action.keyword" id="act_menu_subscribe_contract">
+            <field name="keyword">form_action</field>
+            <field name="model">party.synthesis.menu,-1</field>
+            <field name="action" ref="contract_insurance_process.subscription_process_launcher"/>
+        </record>
+        <!--##########################-->
+        <!--# Resume Process Keyword #-->
+        <!--##########################-->
+        <record model="ir.action.keyword" id="act_resume_contract_process_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">contract,-1</field>
+            <field name="action" ref="process_cog.act_resume_process"/>
+        </record>
+        <record model="ir.action.keyword" id="act_start_subscription">
+            <field name="keyword">form_action</field>
+            <field name="model">party.party,-1</field>
+            <field name="action" ref="subscription_process_launcher"/>
+        </record>
+    </data>
 </tryton>
