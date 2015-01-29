@@ -1,5 +1,4 @@
-import datetime
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
@@ -86,8 +85,6 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         domain=[('party', '=', Eval('party'))], depends=['party'],
         states={'invisible': Eval('media') != 'mail'}, ondelete='RESTRICT')
     user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
-    # in case the user is deleted, we also keep tracks of his name
-    user_name = fields.Char('User Name')
     contact_datetime = fields.DateTime('Date and Time')
     comment = fields.Text('Comment')
     attachment = fields.Many2One('ir.attachment', 'Attachment',
@@ -117,11 +114,5 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         return utils.convert_to_reference(self.for_object_ref)
 
     @staticmethod
-    def default_user_name():
-        User = Pool().get('res.user')
-        return User(Transaction().user).get_rec_name('name')
-
-    @staticmethod
     def default_contact_datetime():
-        # TODO: use functional date
-        return datetime.datetime.now()
+        return utils.today()

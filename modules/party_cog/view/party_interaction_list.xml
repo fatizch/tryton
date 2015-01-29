@@ -4,5 +4,5 @@
     <field name="contact_datetime"/>
     <field name="media"/>
     <field name="title"/>
-    <field name="user_name"/>
+    <field name="user"/>
 </tree>

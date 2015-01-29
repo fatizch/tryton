@@ -13,8 +13,6 @@
     <newline/>
     <label name="user"/>
     <field name="user"/>
-    <label name="user_name"/>
-    <field name="user_name"/>
     <label name="contact_mechanism"/>
     <field name="contact_mechanism"/>
     <newline/>
