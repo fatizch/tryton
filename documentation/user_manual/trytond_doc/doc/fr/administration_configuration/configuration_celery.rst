@@ -5,8 +5,21 @@ Configuration celery et celeryd
 
 .. _Celery: http://celery.readthedocs.org/en/latest/
 
-Fichier de coniguration celeryconfig.py
----------------------------------------
+Installation
+------------
+
+Procéder comme suit ::
+
+    pip install Celery
+    apt-get install rabbitmq-server
+
+Si pb d'host non joignable au démarrage du serveur cf ce post sur la `newslist
+RabbitMQ`_.
+
+.. _newslist RabbitMQ: http://permalink.gmane.org/gmane.comp.networking.rabbitmq.general/18295
+
+Fichier de configuration celeryconfig.py
+----------------------------------------
 
 Voir description des directives sur <http://celery.readthedocs.org/en/latest/configuration.html>.
 
@@ -14,7 +27,9 @@ Ce fichier est créé dans le répertoire *conf* par la commande
 ``coop configure``.
 
 Ci-dessous un exemple de fichier.
-Les valeurs des champs ne sont pas forcément à reprendre telles quelles mais la présence des champs dans le fichier est obligatoire au bon fonctionnement des batches ::
+Les valeurs des champs ne sont pas forcément à reprendre telles quelles mais
+ la présence des champs dans le fichier est obligatoire au bon fonctionnement
+  des batches ::
 
     BROKER_URL = 'amqp://guest:guest@localhost:5672//'
     CELERY_ACCEPT_CONTENT = ['pickle', 'json']
