@@ -73,6 +73,11 @@ class ContractBillingInformation:
                 "from contract_billing_information as b, "
                 "contract as c where b.contract = c.id")
 
+    @classmethod
+    def _export_light(cls):
+        return (super(ContractBillingInformation, cls)._export_light() |
+            set(['sepa_mandate']))
+
     def init_sepa_mandate(self):
         pool = Pool()
         Mandate = pool.get('account.payment.sepa.mandate')

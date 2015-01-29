@@ -51,6 +51,10 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         super(DistributionNetwork, cls).__setup__()
         cls._order.insert(0, ('code', 'ASC'))
 
+    @classmethod
+    def is_master_object(cls):
+        return True
+
     @fields.depends('code', 'name')
     def on_change_with_code(self):
         if self.code:

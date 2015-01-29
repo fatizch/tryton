@@ -38,7 +38,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     'Loan'
 
     __name__ = 'loan'
-    _rec_name = 'number'
+    _func_key = 'number'
 
     number = fields.Char('Number', required=True, readonly=True, select=True)
     company = fields.Many2One('company.company', 'Company', required=True,
@@ -195,6 +195,14 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
                     cls.raise_user_error('no_sequence')
                 vals['number'] = Sequence.get_id(sequence.id)
         return super(Loan, cls).create(vlist)
+
+    @classmethod
+    def _export_skips(cls):
+        return super(Loan, cls)._export_skips() | {'loan_shares'}
+
+    @classmethod
+    def _export_light(cls):
+        return super(Loan, cls)._export_light() | {'company', 'currency'}
 
     @staticmethod
     def default_company():
@@ -567,6 +575,7 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
     'Loan Payment'
 
     __name__ = 'loan.payment'
+    _func_key = 'number'
 
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', select=True,
         required=True)

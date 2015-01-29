@@ -21,6 +21,10 @@ class ContractClause(model.CoopSQL, model.CoopView):
             'readonly': ~Eval('customized_text'),
             }, depends=['customized_text'])
 
+    @classmethod
+    def _export_light(cls):
+        return super(ContractClause, cls)._export_light() | {'clause'}
+
     @fields.depends('clause')
     def on_change_with_customized_text(self, name=None):
         return self.clause.customizable if self.clause else True

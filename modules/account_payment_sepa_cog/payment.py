@@ -32,6 +32,7 @@ def remove_comment(stream):
 
 class Mandate(export.ExportImportMixin):
     __name__ = 'account.payment.sepa.mandate'
+    _func_key = 'identification'
 
     def get_rec_name(self, name):
         if self.identification is None or self.party is None:

@@ -44,6 +44,11 @@ class Contract:
         states=_STATES, depends=_DEPENDS + ['broker_party', 'product',
             'start_date'])
 
+    @classmethod
+    def _export_light(cls):
+        return (super(Contract, cls)._export_light() |
+            set(['agency', 'agent']))
+
     def get_invoice(self, start, end, billing_information):
         invoice = super(Contract, self).get_invoice(start, end,
             billing_information)

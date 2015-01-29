@@ -13,7 +13,6 @@ from trytond.pool import PoolMeta, Pool
 from trytond.tools import grouped_slice, reduce_ids
 from trytond.pyson import Eval, And, Or
 from trytond.transaction import Transaction
-from trytond.model import ModelSQL, ModelView
 
 from trytond.modules.cog_utils import fields, model
 
@@ -134,9 +133,14 @@ class Contract:
                 })
 
     @classmethod
+    def _export_skips(cls):
+        return super(Contract, cls)._export_skips() | {
+            'premium_amounts_per_period'}
+
+    @classmethod
     def functional_skips_for_duplicate(cls):
-        return (super(Contract, cls).functional_skips_for_duplicate() |
-            set(['premium_amounts', 'premium_amounts_per_period']))
+        return super(Contract, cls).functional_skips_for_duplicate() | {
+            'premium_amounts'}
 
     @classmethod
     def get_total_premium_amount(cls, contracts, name):
@@ -356,7 +360,7 @@ class Contract:
         return methods
 
 
-class PremiumAmount(ModelSQL, ModelView):
+class PremiumAmount(model.CoopSQL, model.CoopView):
     'Premium Amount'
     __name__ = 'contract.premium.amount'
     premium = fields.Many2One('contract.premium', 'Premium', select=True,
@@ -373,7 +377,7 @@ class PremiumAmount(ModelSQL, ModelView):
     tax_amount = fields.Numeric('Tax Amount')
 
 
-class PremiumAmountPerPeriod(ModelSQL, ModelView):
+class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
     'Premium Amount per Period'
     __name__ = 'contract.premium.amount.per_period'
     contract = fields.Many2One('contract', 'Contract')

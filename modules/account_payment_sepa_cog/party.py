@@ -25,6 +25,10 @@ class Party:
         cls.sepa_creditor_identifier.depends.append(
             'is_sepa_creditor_identifier_needed')
 
+    @classmethod
+    def _export_light(cls):
+        return super(Party, cls)._export_light() | {'sepa_mandates'}
+
     def get_is_sepa_creditor_identifier_needed(self, name):
         company_id = Transaction().context.get('company', None)
         if company_id is None:

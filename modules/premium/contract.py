@@ -219,6 +219,10 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
             depends=['fee_allow_override']),
         'on_change_with_accept_fee', 'set_accept_fee')
 
+    @classmethod
+    def _export_light(cls):
+        return super(ContractFee, cls)._export_light() | {'fee'}
+
     @fields.depends('fee')
     def on_change_fee(self):
         self.fee_type = self.fee.type if self.fee else None
