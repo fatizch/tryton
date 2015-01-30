@@ -429,6 +429,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(new_table.code, 'test_code_clone')
         self.assertEqual(self.Cell.get(new_table, 'bar', 30), 'chicken')
 
+        # Check original table is still there
+        test_table = self.Definition.search([('code', '=', 'test_code')])[0]
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
