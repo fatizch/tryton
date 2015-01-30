@@ -1,4 +1,4 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import export
 
@@ -23,9 +23,19 @@ class Template(export.ExportImportMixin):
     def _export_skips(cls):
         return (super(Template, cls)._export_skips() | set(['products']))
 
+    @staticmethod
+    def default_type():
+        return 'service'
+
+    @classmethod
+    def default_default_uom(cls):
+        UOM = Pool().get('product.uom')
+        uom, = UOM.search([('symbol', '=', 'u')])
+        return uom.id
+
 
 class Product(export.ExportImportMixin):
-    __name__ = "product.product"
+    __name__ = 'product.product'
     _func_key = 'code'
 
 

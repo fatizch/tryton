@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree" position="inside">
+        <field name="account_revenue"/>
+        <field name="account_expense"/>
+    </xpath>
+    <xpath expr="/tree/field[@name='list_price']" position="replace"/>
+    <xpath expr="/tree/field[@name='cost_price']" position="replace"/>
+    <xpath expr="/tree/field[@name='type']" position="replace"/>
+    <xpath expr="/tree/field[@name='category']" position="replace"/>
+    <xpath expr="/tree/field[@name='default_uom']" position="replace"/>
+</data>

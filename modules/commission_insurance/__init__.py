@@ -3,7 +3,6 @@ from .contract import *
 from .commission import *
 from .invoice import *
 from .party import *
-from .product import *
 
 
 def register():
@@ -18,9 +17,6 @@ def register():
         InvoiceLine,
         Party,
         Broker,
-        Product,
-        Template,
-        Uom,
         CreateAgentsParties,
         CreateAgentsAsk,
         module='commission_insurance', type_='model')
