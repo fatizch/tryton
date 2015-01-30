@@ -240,4 +240,14 @@
   <record model="rule_engine.context" id="default_context">
       <field name="name">Default Context</field>
   </record>
+  <record model="ir.action.act_window" id="act_rule_engine_log_relate_form">
+      <field name="name">Rule Engine Logs</field>
+      <field name="res_model">rule_engine.log</field>
+      <field name="domain">[('rule', '=', Eval('active_id'))]</field>
+  </record>
+  <record model="ir.action.keyword" id="act_rule_engine_log_relate_keyword">
+      <field name="keyword">form_relate</field>
+      <field name="model">rule_engine,-1</field>
+      <field name="action" ref="act_rule_engine_log_relate_form"/>
+  </record>
 </tryton>

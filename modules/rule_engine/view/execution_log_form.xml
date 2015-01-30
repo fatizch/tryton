@@ -4,6 +4,9 @@
   <field name="user"/>
   <label name="result"/>
   <field name="result"/>
+  <label name="calculation_date"/>
+  <field name="calculation_date"/>
+  <newline/>
   <group id="results" col="1" colspan="2" yexpand="1" yfill="1">
       <separator name="debug"/>
       <field name="debug"/>

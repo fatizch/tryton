@@ -295,6 +295,12 @@ class RuleExecutionLog(ModelSQL, ModelView):
     low_level_debug = fields.Text('Execution Trace', states={'readonly': True})
     result = fields.Char('Result', states={'readonly': True})
     calls = fields.Text('Calls', states={'readonly': True})
+    calculation_date = fields.Date('Calculation Date', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleExecutionLog, cls).__setup__()
+        cls._order.insert(0, ('calculation_date', 'DESC'))
 
     def init_from_rule_result(self, result):
         self.errors = '\n'.join(result.print_errors())
@@ -563,7 +569,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
-        depends=['debug_mode'], order=[('create_date', 'DESC')])
+        depends=['debug_mode'])
     execution_code = fields.Function(fields.Text('Execution Code'),
         'on_change_with_execution_code')
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
@@ -649,10 +655,6 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
 
     @classmethod
     def write(cls, rules, values):
-        if 'debug_mode' in values and not values['debug_mode']:
-            RuleExecutionLog = Pool().get('rule_engine.log')
-            RuleExecutionLog.delete(RuleExecutionLog.search([
-                ('rule', 'in', [x.id for x in rules])]))
         cls._prepare_context_cache.clear()
         super(RuleEngine, cls).write(rules, values)
 
@@ -900,24 +902,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
                     stack_info += '\n'
                     stack_info += str(exc)
                     the_result.low_level_debug.append(stack_info)
-                if self.debug_mode:
-                    with Transaction().new_cursor() as transaction:
-                        RuleExecution = Pool().get('rule_engine.log')
-                        rule_execution = RuleExecution()
-                        rule_execution.rule = self
-                        rule_execution.create_date = datetime.datetime.now()
-                        rule_execution.user = Transaction().user
-                        rule_execution.init_from_rule_result(the_result)
-                        rule_execution.errors += '\n' + (
-                            coop_string.slugify(self.name) +
-                            ' - ' + str(exc))
-                        rule_execution.save()
-                        DatabaseOperationalError = backend.get(
-                            'DatabaseOperationalError')
-                        try:
-                            transaction.cursor.commit()
-                        except DatabaseOperationalError:
-                            transaction.cursor.rollback()
+                self.add_debug_log(the_result,
+                    evaluation_context.get('date', None), exc)
                 if self.debug_mode:
                     the_result.result = str(exc)
                     return the_result
@@ -1027,16 +1013,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     def default_algorithm(cls):
         return 'return'
 
-    def execute(self, arguments, parameters=None):
-
-        # We cannot use lambda in a loop
-        def kwarg_function(value):
-            return lambda: value
-
-        parameters_as_func = {}
-        for k, v in (parameters or {}).iteritems():
-            parameters_as_func[k] = v if callable(v) else kwarg_function(v)
-        result = self.compute(arguments, parameters_as_func)
+    def add_debug_log(self, result, date, exc=None):
         if not self.id or not getattr(self, 'debug_mode', None):
             return result
         DatabaseOperationalError = backend.get('DatabaseOperationalError')
@@ -1047,11 +1024,27 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
             rule_execution.create_date = datetime.datetime.now()
             rule_execution.user = transaction.user
             rule_execution.init_from_rule_result(result)
+            rule_execution.calculation_date = date
+            if exc:
+                rule_execution.errors += '\n' + (
+                    coop_string.slugify(self.name) + ' - ' + str(exc))
             rule_execution.save()
             try:
                 transaction.cursor.commit()
             except DatabaseOperationalError:
                 transaction.cursor.rollback()
+
+    def execute(self, arguments, parameters=None):
+
+        # We cannot use lambda in a loop
+        def kwarg_function(value):
+            return lambda: value
+
+        parameters_as_func = {}
+        for k, v in (parameters or {}).iteritems():
+            parameters_as_func[k] = v if callable(v) else kwarg_function(v)
+        result = self.compute(arguments, parameters_as_func)
+        self.add_debug_log(result, arguments.get('date', None))
         return result
 
 
@@ -1370,7 +1363,7 @@ class TestCase(ModelView, ModelSQL):
             self.result_value = 'ERROR: {}'.format(exc)
             self.result_info = self.result_warnings = self.result_errors = ''
             self.debug = self.low_debug = ''
-            self.expected_result = self.result_values
+            self.expected_result = self.result_value
             return
         if test_result == {}:
             return
