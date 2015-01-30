@@ -31,13 +31,16 @@ class Contract:
     fees = fields.One2Many('contract.fee', 'contract', 'Fees', states=_STATES,
         depends=_DEPENDS)
     premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
+    show_premium = fields.Function(
+        fields.Boolean('Show Premium'), 'get_show_premium')
 
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
         cls._buttons.update({
                 'button_calculate_prices': {},
-                'button_display_premium': {},
+                'button_display_premium': {
+                    'invisible': ~Eval('show_premium')},
                 })
 
     @classmethod
@@ -50,9 +53,12 @@ class Contract:
         cls.calculate_prices(contracts)
 
     @classmethod
-    @model.CoopView.button_action('contract.premium.display')
+    @model.CoopView.button_action('premium.act_premium_display')
     def button_display_premium(cls, contracts):
         pass
+
+    def get_show_premium(self, name):
+        return self.status == 'active'
 
     @classmethod
     def force_calculate_prices(cls, contracts):

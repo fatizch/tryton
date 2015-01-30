@@ -36,3 +36,6 @@ Il est également possible de manipuler les frais renseignés sur les
 garanties pour les appliquer au contrat courant. Ces frais sont librement
 modifiables si leur configuration le permet. Les modifications sont prises en
 compte lors du calcul des primes du contrat.
+
+Ce module ajoute aussi un bouton permettant d'afficher les primes dans la vue
+forme d'un contrat. Ce bouton n'est visible que lorsque le contrat est actif.
