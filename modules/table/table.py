@@ -125,6 +125,8 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
                     (existing.name, existing.code))
             record.export_json(output=output)
             values = json.dumps(output[0])
+            values = values.replace('"_func_key": "%s"' % record.code,
+                '"_func_key": "%s_clone"' % record.code)
             values = values.replace('"code": "%s"' % record.code,
                 '"code": "%s_clone"' % record.code)
             values = values.replace(u'"name": "%s"' % record.name,
