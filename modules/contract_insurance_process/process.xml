@@ -12,16 +12,6 @@
             <field name="wiz_name">contract.subscribe</field>
         </record>
         <menuitem parent="contract.menu_contract" sequence="1" action="subscription_process_launcher" id="menu_start_subscription" icon="contract-action"/>
-        <record model="ir.action.act_window" id="act_contract_logs">
-            <field name="name">Logs</field>
-            <field name="res_model">process.log</field>
-            <field name="domain">[('task', '=', (Eval('active_model'),Eval('active_id')))]</field>
-        </record>
-        <record model="ir.action.keyword" id="act_contract_logs_keyword1">
-            <field name="keyword">form_relate</field>
-            <field name="model">contract,-1</field>
-            <field name="action" ref="act_contract_logs"/>
-        </record>
         <!--################################################################-->
         <!--Synthesis-->
         <!--################################################################-->
