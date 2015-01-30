@@ -99,11 +99,6 @@
         <field name="name">End Contract</field>
         <field name="wiz_name">contract.end</field>
     </record>
-    <record model="ir.action.keyword" id="act_end_keyword">
-        <field name="keyword">form_action</field>
-        <field name="model">contract,-1</field>
-        <field name="action" ref="act_end"/>
-    </record>
     <!-- ############################# -->
     <!-- # Contrat Select Start Date # -->
     <!-- ############################# -->
