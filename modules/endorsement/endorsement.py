@@ -925,7 +925,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     if item['__name__'] == 'endorsement':
                         endorsement = cls.import_json(item)
                         message.append({
-                            'endorsement_id': endorsement.id
+                            'number': endorsement.number
                             })
                     else:
                         cls.raise_user_error('invalid_format')
