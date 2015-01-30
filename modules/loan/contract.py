@@ -136,6 +136,11 @@ class Contract:
                     self.append_functional_error('no_loan_on_option',
                         (option.get_rec_name('')))
 
+    def get_show_premium(self, name):
+        if not self.is_loan:
+            return super(Contract, self).get_show_premium(name)
+        return False
+
 
 class ContractLoan(model.CoopSQL, model.CoopView):
     'Contract Loan'
