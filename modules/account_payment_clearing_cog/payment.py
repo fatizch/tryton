@@ -23,6 +23,8 @@ class Payment:
     __name__ = 'account.payment'
 
     def create_clearing_move(self, date=None):
+        if date is None:
+            date = self.date
         move = super(Payment, self).create_clearing_move(date)
         if move:
             move.description = self.journal.rec_name
