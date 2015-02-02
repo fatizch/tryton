@@ -94,7 +94,7 @@ class DistributionNetwork(model.CoopSQL, model.CoopView):
         return ''
 
     def get_full_name(self, name):
-        return self.party.rec_name if self.party else self.name
+        return self.party.name if self.party else self.name
 
     def get_parent_party(self, name):
         if self.party:

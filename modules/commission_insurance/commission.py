@@ -34,7 +34,7 @@ class Commission:
         fields.Many2One('party.party', 'Party'),
         'get_party', searcher='search_party')
     broker = fields.Function(
-        fields.Many2One('broker', 'Broker'),
+        fields.Many2One('distribution.network', 'Broker'),
         'get_broker', searcher='search_broker')
 
     @classmethod
@@ -56,8 +56,8 @@ class Commission:
         return self.agent.party.id if self.agent else None
 
     def get_broker(self, name):
-        return (self.agent.party.broker_role[0].id
-            if self.agent and self.agent.party.broker_role else None)
+        return (self.agent.party.network[0].id
+            if self.agent and self.agent.party.network else None)
 
     def _group_to_invoice_key(self):
         direction = {
@@ -95,7 +95,7 @@ class Commission:
 
     @classmethod
     def search_broker(cls, name, clause):
-        return [('agent.party.broker_role',) + tuple(clause[1:])],
+        return [('agent.party.network',) + tuple(clause[1:])],
 
 
 class Plan(export.ExportImportMixin, model.TaggedMixin):
@@ -315,8 +315,8 @@ class CreateAgents(Wizard):
                     'supplier_payment_term': payment_terms[0].id,
                     })
 
-        Broker = pool.get('broker')
-        brokers = []
+        Network = pool.get('distribution.network')
+        networks = []
         Address = pool.get('party.address')
         adresses_to_create = []
         adresses_to_write = []
@@ -326,12 +326,12 @@ class CreateAgents(Wizard):
                 adresses_to_create.append({'party': party.id, 'invoice': True})
             elif not address.invoice:
                 adresses_to_write.append(address)
-            if party.broker_role:
+            if party.network:
                 continue
-            brokers.append({'party': party.id})
+            networks.append({'party': party.id})
 
-        if brokers:
-            Broker.create(brokers)
+        if networks:
+            Network.create(networks)
         if adresses_to_create:
             Address.create(adresses_to_create)
         if adresses_to_write:
@@ -387,7 +387,7 @@ class CreateAgents(Wizard):
 
     def default_ask(self, name):
         return {
-            'brokers': [x.broker_role[0].id for x in self.parties.parties],
+            'brokers': [x.network[0].id for x in self.parties.parties],
             }
 
 
@@ -422,7 +422,8 @@ class CreateAgentsAsk(model.CoopView):
     __name__ = 'commission.create_agents.ask'
 
     company = fields.Many2One('company.company', 'Company', required=True)
-    brokers = fields.Many2Many('broker', None, None, 'Brokers', required=True)
+    brokers = fields.Many2Many('distribution.network', None, None, 'Brokers',
+        domain=[('party', '!=', None)], required=True)
     plans = fields.Many2Many('commission.plan', None, None, 'Plans',
         domain=[('type_', '=', 'agent')], required=True)
 

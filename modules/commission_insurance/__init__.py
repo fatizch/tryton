@@ -16,7 +16,6 @@ def register():
         Agent,
         InvoiceLine,
         Party,
-        Broker,
         CreateAgentsParties,
         CreateAgentsAsk,
         module='commission_insurance', type_='model')

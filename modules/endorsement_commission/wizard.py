@@ -28,10 +28,12 @@ class ChangeContractBroker(EndorsementWizardStepMixin, model.CoopView):
                 )
             ],
         depends=['broker_party', 'product'])
-    broker = fields.Many2One('broker', 'New Broker')
+    broker = fields.Many2One('distribution.network', 'New Broker',
+        domain=[('party.agents', '!=', None)])
     broker_party = fields.Many2One('party.party', 'New Broker Party',
         states={'invisible': True})
-    current_broker = fields.Many2One('broker', 'Current Broker', readonly=True)
+    current_broker = fields.Many2One('distribution.network', 'Current Broker',
+        readonly=True)
     current_agent = fields.Many2One('commission.agent', 'Current Agent',
         readonly=True)
     product = fields.Many2One('offered.product', 'Product', readonly=True,
@@ -117,7 +119,6 @@ class StartEndorsement:
                 default=True)])
     change_broker_previous = StateTransition()
     change_broker_next = StateTransition()
-
 
     def default_change_commission(self, name):
         ContractEndorsement = Pool().get('endorsement.contract')

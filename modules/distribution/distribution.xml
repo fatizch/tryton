@@ -30,7 +30,18 @@
         <record model="ir.action.act_window" id="act_dist_network_form">
             <field name="name">Distribution Networks</field>
             <field name="res_model">distribution.network</field>
+            <field name="domain" eval="None"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_dist_network_domain_parent">
+            <field name="name">Tree</field>
+            <field name="sequence" eval="10"/>
             <field name="domain">[('parent', '=', None)]</field>
+            <field name="act_window" ref="act_dist_network_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_dist_network_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="20"/>
+            <field name="act_window" ref="act_dist_network_form"/>
         </record>
         <record model="ir.action.act_window.view" id="act_dist_network_tree_view">
             <field name="sequence" eval="10"/>
@@ -58,6 +69,16 @@
         <record model="res.user-res.group" id="user_admin_group_distribution">
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_distribution"/>
+        </record>
+        <record model="ir.action.act_window" id="act_distribution_network_relate_form">
+            <field name="name">Childs</field>
+            <field name="res_model">distribution.network</field>
+            <field name="domain">[('parent', '=', Eval('active_id'))]</field>
+        </record>
+        <record model="ir.action.keyword" id="act_distribution_network_relate_keyword">
+            <field name="keyword">form_relate</field>
+            <field name="model">distribution.network,-1</field>
+            <field name="action" ref="act_distribution_network_relate_form"/>
         </record>
     </data>
 </tryton>

@@ -13,44 +13,15 @@
             <field name="inherit" ref="party.party_view_tree"/>
             <field name="name">party_tree</field>
         </record>
-
-        <record model="ir.ui.view" id="broker_view_form">
-            <field name="model">broker</field>
-            <field name="type">form</field>
-            <field name="name">broker_form</field>
-        </record>
-        <record model="ir.ui.view" id="broker_view_list">
-            <field name="model">broker</field>
-            <field name="type">tree</field>
-            <field name="name">broker_list</field>
-        </record>
-        <record model="ir.action.act_window" id="act_broker_form">
-            <field name="name">Brokers</field>
-            <field name="res_model">broker</field>
-        </record>
-        <record model="ir.action.act_window.view" id="act_broker_tree_view">
-            <field name="sequence" eval="10"/>
-            <field name="view" ref="broker_view_list"/>
-            <field name="act_window" ref="act_broker_form"/>
-        </record>
-        <record model="ir.action.act_window.view" id="act_broker_form_view">
-            <field name="sequence" eval="20"/>
-            <field name="view" ref="broker_view_form"/>
-            <field name="act_window" ref="act_broker_form"/>
-        </record>
-        <menuitem parent="commission.menu_commission" sequence="20" id="menu_broker_form"
-        icon="coog-broker" action="act_broker_form"/>
-
         <menuitem parent="commission.menu_commission" sequence="20" id="menu_commission_insurer_form" icon="insurer" action="offered_insurance.act_insurer_form"/>
-
         <record model="ir.action.act_window" id="act_broker_commissionned_contract_relate_form">
             <field name="name">Commissionned Contracts</field>
             <field name="res_model">contract</field>
-            <field name="domain">[('agent.party.broker_role', '=', Eval('active_id'))]</field>
+            <field name="domain">[('agent.party.network', '=', Eval('active_id'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_broker_commissioned_contract_relate_keyword">
             <field name="keyword">form_relate</field>
-            <field name="model">broker,-1</field>
+            <field name="model">distribution.network,-1</field>
             <field name="action" ref="act_broker_commissionned_contract_relate_form"/>
         </record>
         <record model="ir.action.act_window" id="act_commission_relate_form">
@@ -60,7 +31,7 @@
         </record>
         <record model="ir.action.keyword" id="act_commission_relate_keyword">
             <field name="keyword">form_relate</field>
-            <field name="model">broker,-1</field>
+            <field name="model">distribution.network,-1</field>
             <field name="action" ref="act_commission_relate_form"/>
         </record>
     </data>
