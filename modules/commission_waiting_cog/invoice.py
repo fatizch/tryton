@@ -19,9 +19,14 @@ class InvoiceLine:
         new_lines = []
         amounts = defaultdict(lambda: 0)
         for line in lines:
+            if 'party' not in line:
+                continue
             amounts[(line['account'], line['party'])] += (
                 line['debit'] - line['credit'])
         for line in lines:
+            if 'party' not in line:
+                new_lines.append(line)
+                continue
             if amounts[(line['account'], line['party'])] != 0:
                 new_lines.append(line)
         return new_lines
