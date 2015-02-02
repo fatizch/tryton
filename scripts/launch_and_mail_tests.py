@@ -7,7 +7,7 @@ in the home directory of the user launching the script.
 This auto_tests.conf file must contain the following:
 
 [tests]
-path_to_running = /path/to/a/directory
+path_to_running_file = /path/to/a/directory
 path_to_workspace = /path/to/tryton-workspace
 repo_url = https://url.to.repo/
 
@@ -63,7 +63,7 @@ except:
     print "Error while trying to read from your ~/auto_tests.conf"
     sys.exit(1)
 
-path_to_running = config.get('tests', 'running_file')
+path_to_running = config.get('tests', 'path_to_running_file')
 path_to_workspace = config.get('tests', 'workspace')
 repo_url = config.get('tests', 'repo_url')
 email = config.get('mailing', 'email')
@@ -101,7 +101,7 @@ try:
 
     # launch tests
 
-    tester = subprocess.Popen(['./script_launcher.py', 'test', '-k'])
+    tester = subprocess.Popen(['./script_launcher.py', 'test'])
     tester.communicate()
 
     os.chdir(os.path.join(path_to_workspace,
@@ -111,15 +111,27 @@ try:
     with open(files[-1], 'rb') as f:
         msg = MIMEText(f.read())
 
+    result = ''
+    with open(files[-1], 'r') as f:
+        result = f.readlines()[-1]
+
+    summary = ''
+    failures = result.split()[-2]
+    if failures == '0':
+        summary = 'OK'
+    else:
+        summary = 'KO (%s)' % failures
+
     smtpserver = smtplib.SMTP(smtp_server, smtp_port)
     smtpserver.ehlo()
     smtpserver.starttls()
     smtpserver.ehlo()
     smtpserver.login(email, password)
 
-    p = subprocess.Popen(['date', '+%c'], stdout=subprocess.PIPE)
+    p = subprocess.Popen(['date', '+%d/%m/%Y\ %H:%M:%S'],
+        stdout=subprocess.PIPE)
     date = p.communicate()[0]
-    msg['Subject'] = '[TEST] Test Run for %s' % date
+    msg['Subject'] = '[TEST] %s, %s' % (summary, date)
 
     smtpserver.sendmail(email, recipients, msg.as_string())
     smtpserver.close()
