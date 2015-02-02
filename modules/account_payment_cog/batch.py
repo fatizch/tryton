@@ -5,7 +5,7 @@ from sql.aggregate import Count
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch
+from trytond.modules.cog_utils import batch, coop_string
 
 
 __all__ = [
@@ -62,7 +62,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             keys.append(key)
             grouped_payments = list(_grouped_payments)
             cls.logger.info('processing group %s of %s' % (key,
-                batch.get_print_infos(grouped_payments, 'payment')))
+                coop_string.get_print_infos(grouped_payments, 'payment')))
             payments_group = Payment.process(list(grouped_payments), group)
             for sepa_msg in payments_group.sepa_messages:
                 filename = cls.generate_filepath(sepa_msg.filename)
@@ -75,7 +75,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             cls.logger.info("apply transition 'done' to %s" %
                 payments_group.sepa_messages)
         cls.logger.success('%s processed' %
-            batch.get_print_infos(keys, 'payments group'))
+            coop_string.get_print_infos(keys, 'payments group'))
 
 
 class PaymentCreationBatch(batch.BatchRoot):
@@ -121,4 +121,4 @@ class PaymentCreationBatch(batch.BatchRoot):
         MoveLine = pool.get('account.move.line')
         MoveLine.create_payments(objects)
         cls.logger.success('%s created' %
-            batch.get_print_infos([x.id for x in objects], 'payment'))
+            coop_string.get_print_infos([x.id for x in objects], 'payment'))

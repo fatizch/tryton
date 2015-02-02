@@ -7,7 +7,7 @@ from celery_tryton import TrytonTask
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.modules.cog_utils import batch
+from trytond.modules.cog_utils import batch, coop_string
 
 ##############################################################################
 # Celery Usage
@@ -80,7 +80,7 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None):
         else:
             chunking = chunks_size
         logger.info('Executing %s with %s' % (batch_name,
-            batch.get_print_infos(ids)))
+            coop_string.get_print_infos(ids)))
         job = group(generate.s(BatchModel.__name__, tmp_list, connexion_date,
             treatment_date)
             for tmp_list in chunking(ids, int(BatchModel.get_conf_item(
@@ -102,7 +102,7 @@ def generate(batch_name, ids, connexion_date, treatment_date):
         except Exception:
             logger = batch.get_logger(batch_name)
             logger.exception('Exception occured when processing %s',
-                batch.get_print_infos(ids))
+                coop_string.get_print_infos(ids))
             do_not_divide = BatchModel.get_conf_item('split_mode') == \
                 'divide' and BatchModel.get_conf_item('split_size') == 1
             if len(ids) < 2 or do_not_divide:

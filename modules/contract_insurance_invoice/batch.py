@@ -3,7 +3,7 @@ from sql.aggregate import Max
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import batch
+from trytond.modules.cog_utils import batch, coop_string
 
 
 __all__ = [
@@ -46,7 +46,7 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
     def execute(cls, objects, ids, treatment_date):
         invoices = Pool().get('contract').invoice(objects, treatment_date)
         cls.logger.success('%d invoices created for %s' %
-            (len(invoices), batch.get_print_infos(ids, 'contracts')))
+            (len(invoices), coop_string.get_print_infos(ids, 'contracts')))
 
 
 class PostInvoiceContractBatch(batch.BatchRoot):

@@ -189,3 +189,15 @@ def coerce_to_bool(s):
     if s.lower() in ['0', 'no', 'false', 'off']:
         return False
     raise ValueError('Not a boolean: %s' % s)
+
+
+def get_print_infos(lst, obj_name=None):
+    length = len(lst)
+    if length == 1:
+        min_max = ': %s' % lst
+    elif length > 1:
+        min_max = ': %d...%d' % (lst[0], lst[-1])
+    else:
+        min_max = ''
+    return '%d %s%s%s' % (length, obj_name or 'obj',
+        's' if length > 1 else '', min_max)
