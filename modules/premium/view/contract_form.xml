@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form/group[@id='subscriber']" position="after">
-        <field name="show_premium" invisible="1"/>
-        <group id="display_premium" col="99">
-            <button string="Display Premium" name="button_display_premium"/>
-        </group>
+    <xpath expr="/form/group[@id='button_change_start_date']" position="inside">
+        <button string="Display Premium" name="button_display_premium"/>
     </xpath>
 </data>
