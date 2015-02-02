@@ -390,13 +390,11 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                                                 LoanShareEndorsement) and
                                             future.action == 'remove'):
                                         selector['override_future'] = True
-                            else:
+                                break
+                            elif ((loan_share.start_date or datetime.date.min)
+                                    < effective_date):
                                 selector['previous_share'] = loan_share.share
-                            selectors.append(selector)
-                            break
-                        else:
-                            selector['previous_share'] = loan_share.share
-                            selectors.append(selector)
+                        selectors.append(selector)
         return {'loan_share_selectors': sorted(selectors, key=lambda x:
                 (x['covered_element'], x['loan'], x['option_name'])),
             'shares_per_loan': [{'loan': x.id} for x in all_loans]}

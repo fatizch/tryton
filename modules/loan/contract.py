@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import datetime
+from sql.conditionals import Coalesce
 
+from trytond import backend
+from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval, Bool
 
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.modules.cog_utils import fields, model, coop_string, coop_date
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -199,9 +202,6 @@ class ContractOption:
             res = {'id': share.id}
             if share.start_date or datetime.date.min < self.start_date:
                 res['start_date'] = self.start_date
-            if self.end_date and (not share.end_date or
-                    share.end_date > self.end_date):
-                res['end_date'] = self.end_date
             if len(res) > 1:
                 to_update.append(res)
         if to_update:
@@ -309,7 +309,9 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
         required=True, select=1, states=_STATES, depends=_DEPENDS)
     start_date = fields.Date('Start Date', states=_STATES, depends=_DEPENDS)
-    end_date = fields.Date('End Date', states=_STATES, depends=_DEPENDS)
+    end_date = fields.Function(
+        fields.Date('End Date'),
+        'get_end_date')
     loan = fields.Many2One('loan', 'Loan', ondelete='RESTRICT', required=True,
         domain=[('state', '=', 'calculated')], states=_STATES,
         depends=_DEPENDS)
@@ -325,13 +327,24 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         fields.Many2One('contract', 'Contract'),
         'get_contract', searcher='search_contract')
 
+    @classmethod
+    def __setup__(cls):
+        super(LoanShare, cls).__setup__()
+        cls._order = [('loan', 'ASC'), ('start_date', 'ASC')]
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(LoanShare, cls).__register__(module_name)
+        # Migration from 1.3: Drop end_date column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        share_table = TableHandler(cursor, cls)
+        if share_table.column_exist('end_date'):
+            share_table.drop_column('end_date')
+
     @staticmethod
     def default_share():
         return 1
-
-    @fields.depends('loan')
-    def on_change_loan(self):
-        self.end_date = self.loan.end_date if self.loan else None
 
     def on_change_with_icon(self, name=None):
         return 'loan-interest'
@@ -347,6 +360,27 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
 
     def get_contract(self, name):
         return self.option.covered_element.contract.id
+
+    def get_end_date(self, name):
+        for share in sorted(self.option.loan_shares, key=lambda x: (x.loan.id,
+                    x.start_date or datetime.date.min)):
+            if share == self:
+                continue
+            if self.loan.id != share.loan.id:
+                continue
+            if (self.start_date or datetime.date.min) > (share.start_date or
+                    datetime.date.min):
+                continue
+            # First loan share for the same loan but "older":
+            return min(self.option.end_date,
+                coop_date.add_day(share.start_date, -1))
+        else:
+            return min(self.option.end_date, self.loan.end_date)
+
+    @staticmethod
+    def order_start_date(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.start_date, datetime.date.min)]
 
     @classmethod
     def search_contract(cls, name, clause):

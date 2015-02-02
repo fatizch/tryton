@@ -43,6 +43,7 @@ Get Models::
     >>> ItemDescription = Model.get('offered.item.description')
     >>> Loan = Model.get('loan')
     >>> LoanAveragePremiumRule = Model.get('loan.average_premium_rule')
+    >>> LoanShare = Model.get('loan.share')
     >>> OptionDescription = Model.get('offered.option.description')
     >>> Party = Model.get('party.party')
     >>> PaymentTerm = Model.get('account.invoice.payment_term')
@@ -361,6 +362,24 @@ Create Test Contract::
     >>> contract.contract_number = '123456789'
     >>> contract.status = 'active'
     >>> contract.save()
+
+Test loan_share end_date calculation::
+
+    >>> new_share_date = datetime.date(2014, 9, 12)
+    >>> option = contract.covered_elements[0].options[0]
+    >>> loan_share_3 = LoanShare()
+    >>> loan_share_3.start_date = new_share_date
+    >>> loan_share_3.loan = loan_1
+    >>> loan_share_3.share = Decimal('0.5')
+    >>> loan_share_3.option = option
+    >>> loan_share_3.save()
+    >>> loan_share_1 = LoanShare(
+    ...     contract.covered_elements[0].options[0].loan_shares[0].id)
+    >>> loan_share_1.end_date == datetime.date(2014, 9, 11)
+    True
+    >>> loan_share_3.end_date == loan_1.end_date
+    True
+    >>> LoanShare.delete([loan_share_3])
 
 Create Premium Amounts::
 
