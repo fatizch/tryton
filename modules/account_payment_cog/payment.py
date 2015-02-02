@@ -237,6 +237,7 @@ class Payment(export.ExportImportMixin):
     def is_master_object(cls):
         return True
 
+    @classmethod
     def process(cls, payments, group):
         pool = Pool()
         Event = pool.get('event')
