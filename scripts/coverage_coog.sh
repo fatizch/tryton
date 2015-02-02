@@ -3,6 +3,7 @@ ACTIVATE="/path/to/virtual_env/bin/activate"
 COOG="/path/to/coopbusiness"
 SERVER="user@machine:/var/www/coverage/"
 RUNTESTS="/path/to/trytond/tests/run-tests.py"
+POSTGRESQL_PASSWORD="the_password"
 source $ACTIVATE
 cd $COOG
 
@@ -19,8 +20,11 @@ echo $(date) >> myglobalreport.txt
 echo '' >> myglobalreport.txt
 for module in $(ls modules)
     do echo $module
-    coverage run -a --source=modules/$module \
+    env DO_NOT_TEST_CASES=True coverage run -a --source=modules/$module \
         "$RUNTESTS" -m $module
+    for db in $(PGPASSWORD="$POSTGRESQL_PASSWORD" psql -U postgres -l | grep test | cut -f1 -d '|')
+        do PGPASSWORD="$POSTGRESQL_PASSWORD" dropdb -U postgres $db
+        done
 done
 coverage report >> myglobalreport.txt
 coverage html -d allreports/"$(date +'%Y_%m_%d')"
