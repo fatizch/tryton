@@ -226,6 +226,19 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
         'on_change_with_accept_fee', 'set_accept_fee')
 
     @classmethod
+    def default_accept_fee(cls):
+        # Workaround for bug https://bugs.tryton.org/issue4524
+        return True
+
+    @classmethod
+    def default_overriden_amount(cls):
+        return 0
+
+    @classmethod
+    def default_overriden_rate(cls):
+        return 0
+
+    @classmethod
     def _export_light(cls):
         return super(ContractFee, cls)._export_light() | {'fee'}
 
@@ -259,7 +272,7 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @fields.depends('fee_type', 'overriden_amount', 'overriden_rate')
     def on_change_with_accept_fee(self, name=None):
-        return not(self.overriden_rate == self.overriden_amount == 0)
+        return any([self.overriden_rate, self.overriden_amount])
 
     def get_currency(self):
         return self.contract.currency if self.contract else None
