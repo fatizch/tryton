@@ -48,8 +48,9 @@ def add_endorsement_step(wizard_class, step_class, step_name):
             cur_state = getattr(wizard, step_name, None)
             if not cur_state or isinstance(cur_state, StateView):
                 cur_state = Pool().get(step_class.__name__)()
-            return getattr(cur_state, 'step_' + kind)(wizard, step_name,
-                *args, **kwargs)
+            cur_state._wizard = wizard
+            cur_state._step_name = step_name
+            return getattr(cur_state, 'step_' + kind)(*args, **kwargs)
         return wizard_method
 
     setattr(wizard_class, step_name, step_class._get_state_view(step_name))
@@ -85,7 +86,15 @@ class EndorsementWizardStepMixin(object):
     def update_endorsement(self, endorsement, wizard):
         # Updates the current endorsement using the data provided in the
         # current instance of the wizard
-        return self.step_update(wizard)
+        return self.step_update()
+
+    @property
+    def step_name(self):
+        return self._step_name
+
+    @property
+    def wizard(self):
+        return self._wizard
 
     @classmethod
     def state_view_name(cls):
@@ -101,34 +110,34 @@ class EndorsementWizardStepMixin(object):
                 Button('Next', step_name + '_next', 'tryton-go-next',
                     default=True)])
 
-    def step_default(self, wizard, step_name, name):
-        self.endorsement_definition = wizard.definition
-        self.endorsement_part = wizard.get_endorsement_part_for_state(
-            step_name)
-        self.effective_date = wizard.select_endorsement.effective_date
+    def step_default(self):
+        self.endorsement_definition = self.wizard.definition
+        self.endorsement_part = self.wizard.get_endorsement_part_for_state(
+            self.step_name)
+        self.effective_date = self.wizard.select_endorsement.effective_date
         return {
             'endorsement_definition': self.endorsement_definition.id,
             'endorsement_part': self.endorsement_part.id,
             'effective_date': self.effective_date,
             }
 
-    def step_previous(self, wizard, step_name):
-        wizard.end_current_part(step_name)
-        return wizard.get_next_before(step_name)
+    def step_previous(self):
+        self.wizard.end_current_part(self.step_name)
+        return self.wizard.get_next_before(self.step_name)
 
-    def step_suspend(self, wizard, step_name):
+    def step_suspend(self):
         return 'end'
 
-    def step_next(self, wizard, step_name):
-        wizard.end_current_part(step_name)
-        return wizard.get_next_state(step_name)
+    def step_next(self):
+        self.wizard.end_current_part(self.step_name)
+        return self.wizard.get_next_state(self.step_name)
 
-    def step_update(self, wizard):
+    def step_update(self):
         raise NotImplementedError
 
-    def _get_contracts(self, wizard):
+    def _get_contracts(self):
         return {x.contract.id: x
-            for x in wizard.endorsement.contract_endorsements}
+            for x in self.wizard.endorsement.contract_endorsements}
 
     @classmethod
     def _update_values(cls, new_instance, base_instance, values, fnames):

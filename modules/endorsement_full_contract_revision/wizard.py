@@ -25,10 +25,9 @@ class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement_full_contract_revision.' + \
             'full_contract_revision_view_form'
 
-    def step_default(self, wizard, step_name, name):
-        defaults = super(StartFullContractRevision, self).step_default(wizard,
-            step_name, name)
-        contracts = self._get_contracts(wizard)
+    def step_default(self, name):
+        defaults = super(StartFullContractRevision, self).step_default()
+        contracts = self._get_contracts()
         if len(contracts) != 1:
             self.raise_user_error('only_one_contract')
         endorsement = contracts.values()[0]
@@ -37,15 +36,14 @@ class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
                 endorsement.contract, ['start_date']))
         return defaults
 
-    def step_next(self, wizard, step_name):
-        super(StartFullContractRevision, self).step_next(wizard,
-            step_name)
+    def step_next(self):
+        super(StartFullContractRevision, self).step_next()
 
         Contract = Pool().get('contract')
-        contracts = self._get_contracts(wizard)
+        contracts = self._get_contracts()
 
         # Create a snapshot to revert back to
-        wizard.endorsement.in_progress([wizard.endorsement])
+        self.wizard.endorsement.in_progress([self.wizard.endorsement])
 
         # Clean up contract
         contract = Contract(contracts.keys()[0])
@@ -58,8 +56,8 @@ class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
         # do_full_contract_revision_action
         return 'full_contract_revision_action'
 
-    def step_update(self, wizard):
-        contracts = self._get_contracts(wizard)
+    def step_update(self):
+        contracts = self._get_contracts()
         endorsement = contracts.values()[0]
         if self._update_values(self, endorsement.contract, endorsement.values,
                 ['start_date']):

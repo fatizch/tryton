@@ -114,10 +114,9 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
         displayer['new_option'][0]['rec_name'] = instance.rec_name
         return displayer
 
-    def step_default(self, wizard, step_name, name):
-        defaults = super(ManageBeneficiaries, self).step_default(wizard,
-            step_name, name)
-        contracts = self._get_contracts(wizard)
+    def step_default(self, name):
+        defaults = super(ManageBeneficiaries, self).step_default()
+        contracts = self._get_contracts()
         displayers, template = [], {}
         for contract_id, endorsement in contracts.iteritems():
             updated_struct = endorsement.updated_struct
@@ -132,8 +131,8 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
         defaults['options'] = displayers
         return defaults
 
-    def step_update(self, wizard):
-        contracts = self._get_contracts(wizard)
+    def step_update(self):
+        contracts = self._get_contracts()
         pool = Pool()
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
