@@ -608,6 +608,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
 
     __metaclass__ = PoolMeta
     __name__ = 'endorsement'
+    _func_key = 'number'
     _rec_name = 'number'
 
     number = fields.Char('Number', readonly=True, required=True)
