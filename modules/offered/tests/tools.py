@@ -2,7 +2,7 @@ import datetime
 from proteus import Model
 from trytond.modules.company.tests.tools import get_company
 
-__all__ = ['create_contract_generator', 'create_product', 'create_coverage']
+__all__ = ['create_contract_generator', 'init_product', 'init_coverage']
 
 
 def create_contract_generator(company=None):
@@ -25,7 +25,7 @@ def create_contract_generator(company=None):
     return contract_sequence
 
 
-def create_coverage(name=None, start_date=None, company=None):
+def init_coverage(name=None, start_date=None, company=None):
     OptionDescription = Model.get('offered.option.description')
 
     if not company:
@@ -43,7 +43,7 @@ def create_coverage(name=None, start_date=None, company=None):
         subscription_behaviour='mandatory')
 
 
-def create_product(name=None, start_date=None, company=None):
+def init_product(name=None, start_date=None, company=None):
     Product = Model.get('offered.product')
 
     if not company:
@@ -60,6 +60,6 @@ def create_product(name=None, start_date=None, company=None):
         company=company,
         contract_generator=contract_sequence,
         start_date=start_date)
-    coverage = create_coverage(start_date=start_date, company=company)
+    coverage = init_coverage(start_date=start_date, company=company)
     product.coverages.append(coverage)
     return product
