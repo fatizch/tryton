@@ -8,7 +8,7 @@ from trytond.transaction import Transaction
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 
-METHOD_TEMPLATES = ['default_', 'on_change_with_', 'on_change_']
+METHOD_TEMPLATES = ['default_', 'on_change_with_', 'on_change_', 'order_']
 
 __all__ = [
     'FieldInfo',
@@ -179,6 +179,11 @@ class ModelInfo(ModelView):
         result['is_function'] = False
         if isinstance(field, fields.Function):
             result['is_function'] = True
+            result['getter'] = field.getter
+            if field.setter:
+                result['setter'] = field.setter
+            if field.searcher:
+                result['searcher'] = field.searcher
             field = field._field
         result['kind'] = field.__class__.__name__
         if isinstance(field, (fields.Many2One, fields.One2Many)):
