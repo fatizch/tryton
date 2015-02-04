@@ -52,6 +52,12 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
                 ('canceled', 'Canceled'),
                 ('declined', 'Declined'),
                 ], 'State'), 'get_state')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+    contracts = fields.Function(
+        fields.One2Many('contract', None, 'Contracts'),
+        'get_contracts')
 
     @classmethod
     def __setup__(cls):
@@ -107,6 +113,12 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
         if (self.endorsements and
                 self.endorsements[0].contracts[0].contract_set):
             return self.endorsements[0].contracts[0].contract_set.id
+
+    def get_definition(self, name):
+        return self.endorsements[0].definition.id
+
+    def get_contracts(self, name):
+        return [x.id for x in self.contract_set.contracts]
 
     @classmethod
     def search_contract_set(cls, name, clause):
