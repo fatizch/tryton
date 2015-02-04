@@ -54,16 +54,19 @@ class NewCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         endorsement.save()
         vlist = []
         for i, covered_element in enumerate(self.covered_elements):
-            template = {'action': 'add', 'values': {}}
             for option in covered_element.options:
-                template['covered_element_endorsement'] = \
-                    endorsement.covered_elements[i]
+                template = {
+                    'action': 'add',
+                    'values': {},
+                    'covered_element_endorsement':
+                        endorsement.covered_elements[i],
+                }
                 for field in self.endorsement_part.option_fields:
                     new_value = getattr(option, field.name, None)
                     if isinstance(new_value, Model):
                         new_value = new_value.id
                     template['values'][field.name] = new_value
-            vlist.append(template)
+                vlist.append(template)
         EndorsementCoveredElementOption.create(vlist)
 
 
