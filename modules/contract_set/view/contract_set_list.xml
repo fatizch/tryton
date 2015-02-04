@@ -3,4 +3,5 @@
     <field name="number"/>
     <field name="subscribers"/>
     <field name="products"/>
+    <field name="status"/>
 </tree>

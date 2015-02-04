@@ -1,8 +1,11 @@
+from sql.aggregate import Max
+
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.contract import _STATES, _DEPENDS
+from trytond.modules.contract.contract import CONTRACTSTATUSES
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.modules.offered_insurance import Printable
 
@@ -31,6 +34,8 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         'get_products', searcher='search_products')
     contracts_declined = fields.Function(fields.Boolean('Contracts Declined'),
         'get_contracts_declined')
+    status = fields.Function(fields.Selection(CONTRACTSTATUSES, 'Status'),
+        'get_status', searcher='search_status')
 
     @classmethod
     def __setup__(cls):
@@ -85,6 +90,27 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
 
     def get_sender(self):
         return self.contracts[0].company.party
+
+    @classmethod
+    def get_status(cls, contract_sets, name):
+        pool = Pool()
+        contract = pool.get('contract').__table__()
+        cursor = Transaction().cursor
+        result = {x.id: None for x in contract_sets}
+
+        cursor.execute(*contract.select(
+                contract.contract_set, Max(contract.status),
+                where=(contract.contract_set.in_(
+                        [x.id for x in contract_sets])),
+                group_by=[contract.contract_set]))
+
+        for contract_set, status in cursor.fetchall():
+            result[contract_set] = status
+        return result
+
+    @classmethod
+    def search_status(cls, name, clause):
+        return [('contracts.status',) + tuple(clause[1:])]
 
 
 class Contract:
