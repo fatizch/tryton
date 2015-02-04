@@ -187,7 +187,7 @@ def set_update(entry_id, patchset):
     db.close()
 
 
-def send_comments(session, issue_id, patchset, comments):
+def send_comments(session, issue_id, patchset, comments, repo_dir):
     patchset_url = urlparse.urljoin(CODEREVIEW_URL,
         '/'.join(['api', str(issue_id), str(patchset)]))
     patchset_info = session.get(patchset_url)
@@ -205,7 +205,59 @@ def send_comments(session, issue_id, patchset, comments):
         comment['patchset'] = patchset
         comment['patch'] = patchset_info['files'][comment['filename']]['id']
         session.post(CODEREVIEW_URL + '/inline_draft', data=comment)
-    return commented
+    res = ''
+    warnings = []
+    for file_name in patchset_info['files']:
+        if not file_name.endswith('.py'):
+            continue
+        try:
+            with open(repo_dir + '/' + file_name) as f:
+                warns = check_on_delete(f.readlines())
+                for w in warns:
+                    w['filename'] = file_name
+                    w['snapshot'] = 'new'
+                    w['side'] = 'b'
+                    w['issue'] = issue_id
+                    w['patchset'] = patchset
+                    w['patch'] = patchset_info['files'][w['filename']]['id']
+        except Exception as e:
+            print e
+    if not commented:
+        res = 'flake8 OK'
+    if 'CHANGELOG' not in ''.join(patchset_info['files']):
+        warnings.append('no CHANGELOG')
+    if warnings:
+        return res + '\nWarnings:\n\t' + ',\n\t'.join(warnings)
+    else:
+        return res
+
+
+def check_on_delete(lines):
+    if 'fields.Many2One' not in ''.join(lines):
+        return []
+    warnings = []
+    for i, line in enumerate(lines):
+        if ('fields.Many2One' not in line or
+                ' = ' not in line or
+                'fields.Function' in lines[i - 1] or
+                'fields.Function' in line):
+            continue
+        if 'ondelete' in line:
+            continue
+        if i == (len(lines) - 1):
+            if 'ondelete' not in line:
+                warnings.append({'lineno': i + 1, 'text': 'ondelete not set'})
+        else:
+            got_ondelete = False
+            for line in lines[i + 1:]:
+                if 'fields.' in line and not got_ondelete:
+                    warnings.append({'lineno': i + 1,
+                            'text': 'ondelete not set'})
+                    break
+                else:
+                    if 'ondelete' in line:
+                        got_ondelete = True
+    return warnings
 
 
 def finalize_comments(session, issue_info, message):
@@ -262,11 +314,9 @@ def process_issue(session, issue_url, path_to_repo, email, password):
         return
     style_guide = get_style(repo_dir)
     report = style_guide.check_files([repo_dir])
-    if send_comments(session, issue_id, issue_info['patchsets'][-1],
-            report.errors):
-        finalize_comments(session, issue_info, '')
-    else:
-        finalize_comments(session, issue_info, 'flake8 OK')
+    final_message = send_comments(session, issue_id,
+        issue_info['patchsets'][-1], report.errors, repo_dir)
+    finalize_comments(session, issue_info, final_message)
     shutil.rmtree(repo_dir)
 
 
