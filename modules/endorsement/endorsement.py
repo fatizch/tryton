@@ -867,6 +867,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             cls.apply(endorsements)
 
     @classmethod
+    def apply_for_preview(cls, endorsements):
+        cls.apply(endorsements)
+
+    @classmethod
     @model.CoopView.button_action('endorsement.act_contract_open')
     def open_contract(cls, endorsements):
         pass
@@ -897,7 +901,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             # Apply endorsement in a sandboxed transaction
             with Transaction().new_cursor():
                 applied_self = self.__class__(self.id)
-                self.apply([applied_self])
+                self.apply_for_preview([applied_self])
                 for unitary_endorsement in applied_self.all_endorsements():
                     endorsed_record = unitary_endorsement.get_endorsed_record()
                     endorsed_model, endorsed_id = (endorsed_record.__name__,
