@@ -1,10 +1,11 @@
+from collections import defaultdict
 import datetime
 try:
     import simplejson as json
 except ImportError:
     import json
 from sql.conditionals import NullIf, Coalesce
-from sql.aggregate import Max, Min
+from sql.aggregate import Max
 
 from trytond import backend
 from trytond.tools import grouped_slice
@@ -78,6 +79,9 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
             ('start_date', '=', None),
             ('end_date', '>=', Eval('start_date', datetime.date.min))],
         depends=['start_date'])
+    termination_reason = fields.Many2One('contract.sub_status',
+        'Termination Reason', domain=[('status', '=', 'terminated')],
+        ondelete='RESTRICT')
 
     def get_func_key(self, name):
         return self.contract.quote_number
@@ -167,7 +171,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'on_change_with_current_policy_owner')
     end_date = fields.Function(
         fields.Date('End Date', states=_STATES, depends=_DEPENDS),
-        'getter_contract_date', 'setter_end_date',
+        'getter_activation_history', 'setter_end_date',
         searcher='search_contract_date')
     sub_status = fields.Many2One('contract.sub_status', 'Details on status',
         states={
@@ -191,10 +195,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     start_date = fields.Function(
         fields.Date('Start Date', states=_STATES, depends=_DEPENDS,
             required=True),
-        'getter_contract_date', 'setter_start_date',
+        'getter_activation_history', 'setter_start_date',
         searcher='search_contract_date')
     signature_date = fields.Date('Signature Date', states=_STATES,
         depends=_DEPENDS)
+    termination_reason = fields.Function(
+        fields.Many2One('contract.sub_status', 'Termination Reason',
+            domain=[('status', '=', 'terminated')]),
+        'getter_activation_history')
     subscriber_kind = fields.Function(
         fields.Selection(
             [x for x in offered.SUBSCRIBER_KIND if x != ('all', 'All')],
@@ -363,31 +371,48 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return 'person'
 
     @classmethod
-    def getter_contract_date(cls, contracts, name):
+    def getter_activation_history(cls, contracts, names):
         cursor = Transaction().cursor
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
         activation_history = ActivationHistory.__table__()
-        if name == 'end_date':
-            column = NullIf(Max(Coalesce(
-                        activation_history.end_date, datetime.date.max)),
-                datetime.date.max).as_('end_date')
-        elif name == 'start_date':
-            column = Min(activation_history.start_date).as_('start_date')
+        column_end = NullIf(Coalesce(activation_history.end_date,
+                datetime.date.max), datetime.date.max).as_('end_date')
+        column_start = activation_history.start_date.as_('start_date')
+        column_term_reason = activation_history.termination_reason
 
-        cursor.execute(*activation_history.select(
-                activation_history.contract.as_('id'), column,
-                where=(
-                    activation_history.contract.in_(
-                        [x.id for x in contracts])),
-                group_by=activation_history.contract))
+        def convert(value):
+            if value is not None:
+                return datetime.date(*map(int, value.split('-')))
 
-        values = dict([(id, value) for id, value in cursor.fetchall()])
+        values = {
+            'start_date': defaultdict(lambda: None),
+            'end_date': defaultdict(lambda: None),
+            'termination_reason': defaultdict(lambda: None),
+            }
+
+        for contract_slice in grouped_slice(contracts):
+            subquery = activation_history.select(activation_history.contract,
+                Max(activation_history.start_date).as_('start_date'),
+                group_by=activation_history.contract)
+
+            cursor.execute(*activation_history.join(subquery, condition=(
+                        (activation_history.contract == subquery.contract) &
+                        (activation_history.start_date == subquery.start_date))
+                    ).select(activation_history.contract.as_('id'),
+                    column_start, column_end, column_term_reason, where=(
+                        activation_history.contract.in_(
+                            [x.id for x in contract_slice]))))
+            for elem in cursor.dictfetchall():
+                values['start_date'][elem['id']] = elem['start_date']
+                values['end_date'][elem['id']] = elem['end_date']
+                values['termination_reason'][elem['id']] = elem[
+                    'termination_reason']
+
         if backend.name() == 'sqlite':
-            def convert(value):
-                if value is not None:
-                    return datetime.date(*map(int, value.split('-')))
-            values = {i: convert(v) for i, v in values.iteritems()}
+            for fname in ('start_date', 'end_date'):
+                values[fname] = {x: convert(y)
+                    for x, y in values[fname].iteritems()}
         return values
 
     @fields.depends('product', 'options', 'start_date', 'extra_datas',
@@ -881,7 +906,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def terminate(cls, contracts):
         pool = Pool()
         Event = pool.get('event')
-        cls.write(contracts, {'status': 'terminated'})
+        sub_status_contracts = defaultdict(list)
+        for contract in contracts:
+            sub_status_contracts[contract.termination_reason].append(contract)
+        to_write = []
+        for sub_status, contracts in sub_status_contracts.iteritems():
+            to_write += [contracts, {
+                    'status': 'terminated',
+                    'sub_status': sub_status,
+                    }]
+        cls.write(*to_write)
         Event.notify_events(contracts, 'terminate')
 
     @classmethod
@@ -1420,6 +1454,9 @@ class ContractSelectEndDate(model.CoopView):
     __name__ = 'contract.end.select_date'
 
     end_date = fields.Date('End date', required=True)
+    termination_reason = fields.Many2One('contract.sub_status',
+        'Termination Reason', domain=[('status', '=', 'terminated')],
+        required=True)
 
 
 class ContractEnd(Wizard):
@@ -1438,14 +1475,20 @@ class ContractEnd(Wizard):
         return {'end_date': utils.today()}
 
     def transition_apply(self):
-        Contract = Pool().get('contract')
-        contracts = []
-        for contract in Contract.browse(
-                Transaction().context.get('active_ids')):
+        pool = Pool()
+        Contract = pool.get('contract')
+        ActivationHistory = pool.get('contract.activation_history')
+        contracts = Contract.browse(Transaction().context.get('active_ids'))
+        to_write = []
+        for contract in contracts:
             contract.set_and_propagate_end_date(self.select_date.end_date)
-            contracts.append([contract])
-            contracts.append(contract._save_values)
-        Contract.write(*contracts)
+            to_write.append([contract])
+            to_write.append(contract._save_values)
+        Contract.write(*to_write)
+        activation_histories = [contract.activation_history[-1]
+            for contract in contracts]
+        ActivationHistory.write(activation_histories, {
+                'termination_reason': self.select_date.termination_reason})
         return 'end'
 
 

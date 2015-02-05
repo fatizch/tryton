@@ -30,12 +30,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'ContractChangeStartDate': 'contract.change_start_date',
             'Coverage': 'offered.option.description',
             'ContractExtraData': 'contract.extra_data',
+            'SubStatus': 'contract.sub_status',
             }
 
     @test_framework.prepare_test(
         'offered.test0030_testProductCoverageRelation',
         )
     def test0010_testContractCreation(self):
+        sub_status, = self.SubStatus.search([
+                ('code', '=', 'reached_end_date')])
         product, = self.Product.search([
                 ('code', '=', 'AAA'),
                 ])
@@ -58,11 +61,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(contract.start_date, start_date)
         self.assertEqual(len(contract.activation_history), 1)
         self.assertEqual(contract.activation_history[0].end_date, end_date)
+        contract.activation_history[0].termination_reason = sub_status
+        contract.activation_history = list(contract.activation_history)
+        contract.save()
+        self.assertEqual(contract.termination_reason, sub_status)
         contract.activate_contract()
         contract.finalize_contract()
         self.assertEqual(contract.status, 'active')
         self.assert_(contract.contract_number)
         self.assertEqual(contract.start_date, start_date)
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
+    def test0011_testContractTermination(self):
+        contract, = self.Contract.search([])
+        self.Contract.terminate([contract])
+        self.assertEqual(contract.status, 'terminated')
+        self.assertEqual(contract.sub_status, self.SubStatus.search(
+                [('code', '=', 'reached_end_date')])[0])
 
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
@@ -204,7 +221,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
         current_end = contract.end_date
         end_option1 = current_end - datetime.timedelta(weeks=2)
         end_option2 = current_end - datetime.timedelta(weeks=4)
-        end_option3 = current_end + datetime.timedelta(weeks=2)
 
         def get_options(option_end_dates):
             options = []
