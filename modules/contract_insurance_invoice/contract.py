@@ -1,8 +1,9 @@
 import datetime
+import calendar
 from collections import defaultdict
 from decimal import Decimal
 
-from dateutil.rrule import rrule, rruleset, YEARLY, MONTHLY, DAILY
+from dateutil.rrule import rrule, rruleset, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max, Count
 
@@ -741,8 +742,17 @@ class Premium:
                 'half_yearly': 6,
                 }.get(self.frequency)
         elif self.frequency == 'yearly':
-            freq = YEARLY
-            interval = 1
+            freq = DAILY
+            # Get current year contract start_date
+            rule_start = datetime.datetime.combine(
+                datetime.date(start.year - 1, start.month, start.day),
+                datetime.time())
+            rule = rrule(DAILY, bymonth=self.main_contract.start_date.month,
+                bymonthday=self.main_contract.start_date.day,
+                dtstart=rule_start)
+            year_start = rule.before(datetime.datetime.combine(start,
+                    datetime.time()), inc=True)
+            interval = 366 if calendar.isleap(year_start.year) else 365
         elif self.frequency == 'yearly_360':
             freq = DAILY
             interval = 360
@@ -779,9 +789,9 @@ class Premium:
                 return 0
         if next_date and (next_date - end).days > 1:
             if (next_date - last_date).days != 0:
-                ratio = (((end - last_date).days + 1.)
-                    / ((next_date - last_date).days))
-                amount += self.amount * Decimal(ratio)
+                ratio = (Decimal((end - last_date).days + 1)
+                    / Decimal((next_date - last_date).days))
+                amount += self.amount * ratio
         return amount
 
     def get_invoice_lines(self, start, end):

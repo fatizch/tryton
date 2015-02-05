@@ -29,9 +29,12 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
         'Test Premium.get_amount'
         Premium = POOL.get('contract.premium')
         with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            contract = POOL.get('contract')()
+            contract.start_date = date(2011, 10, 21)
             premium_monthly = Premium(
                 frequency='monthly',
                 amount=Decimal(100),
+                main_contract=contract,
                 )
 
             for period, amount in (
@@ -39,20 +42,36 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                     ((date(2014, 1, 1), date(2014, 2, 28)), Decimal(200)),
                     ((date(2014, 1, 1), date(2014, 3, 31)), Decimal(300)),
                     ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(1200)),
-                    ((date(2014, 1, 15), date(2014, 2, 23)),
-                        Decimal(100) + Decimal(100) * Decimal(9 / 28.)),
+                    ((date(2014, 1, 15), date(2014, 2, 23)), Decimal(100) +
+                        Decimal(100) * Decimal(9) / Decimal(28)),
                     ):
                 self.assertEqual(premium_monthly.get_amount(*period), amount)
 
             premium_yearly = Premium(
                 frequency='yearly',
                 amount=Decimal(100),
+                main_contract=contract,
                 )
             for period, amount in (
                     ((date(2014, 1, 1), date(2014, 12, 31)), Decimal(100)),
                     ((date(2014, 1, 1), date(2014, 1, 31)),
-                        Decimal(100) * Decimal(31 / 365.)),
+                        Decimal(100) * Decimal(31) / Decimal(365)),
                     ((date(2014, 1, 1), date(2015, 12, 31)), Decimal(200)),
+                    ):
+                self.assertEqual(premium_yearly.get_amount(*period), amount)
+
+            # Test leap years
+            for period, amount in (
+                    ((date(2015, 2, 1), date(2016, 1, 31)), Decimal(100)),
+                    # This particular case should not happen. It would mean
+                    # that the contract is invoiced annually at a different
+                    # date than its anniversary date.
+                    ((date(2015, 3, 1), date(2016, 2, 29)),
+                        Decimal(100) * Decimal(366) / Decimal(365)),
+                    ((date(2016, 1, 1), date(2016, 1, 31)),
+                        Decimal(100) * Decimal(31) / Decimal(365)),
+                    ((date(2017, 1, 1), date(2017, 1, 31)),
+                        Decimal(100) * Decimal(31) / Decimal(366)),
                     ):
                 self.assertEqual(premium_yearly.get_amount(*period), amount)
 
@@ -60,6 +79,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                 frequency='once_per_contract',
                 amount=Decimal(100),
                 start=date(2014, 1, 1),
+                main_contract=contract,
                 )
             for period, amount in (
                     ((date(2014, 1, 1), date(2014, 1, 31)), Decimal(100)),
@@ -151,7 +171,7 @@ class ContractInsuranceInvoiceTestCase(unittest.TestCase):
                         'quote_number_sequence': quote_sequence.id,
                         }])
             contract = Contract(company=company,
-                start_date=date(2014, 4,15),
+                start_date=date(2014, 4, 15),
                 product=product,
                 billing_informations=[
                     BillingInformation(date=None,
