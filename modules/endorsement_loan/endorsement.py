@@ -131,6 +131,22 @@ class Endorsement:
         result.insert(0, 'endorsement.loan')
         return result
 
+    @classmethod
+    @model.CoopView.button
+    def reset(cls, endorsements):
+        pool = Pool()
+        LoanEndorsement = pool.get('endorsement.loan')
+        for endorsement in endorsements:
+            tmp_loans = endorsement.loans
+            LoanEndorsement.delete(endorsement.loan_endorsements)
+            endorsement.loan_endorsements = None
+            endorsement.loan_endorsements = LoanEndorsement.create(
+                [{'loan': x, 'endorsement': endorsement}
+                    for x in tmp_loans])
+            endorsement.effective_date = None
+            endorsement.save()
+        super(Endorsement, cls).reset(endorsements)
+
 
 class EndorsementContract:
     __metaclass__ = PoolMeta

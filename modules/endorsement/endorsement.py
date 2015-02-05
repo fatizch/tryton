@@ -682,6 +682,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                 'decline': {
                     'invisible': ~Eval('state').in_(['draft']),
                     },
+                'reset': {
+                    'invisible': ~Eval('state').in_(['draft']),
+                    },
                 'open_contract': {
                     'invisible': ~Eval('state').in_(['applied']),
                     },
@@ -860,6 +863,21 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     method.execute(endorsement, instance)
                 instance.save()
         Event.notify_events(endorsements, 'apply_endorsement')
+
+    @classmethod
+    @model.CoopView.button
+    def reset(cls, endorsements):
+        pool = Pool()
+        ContractEndorsement = pool.get('endorsement.contract')
+        for endorsement in endorsements:
+            tmp_contracts = endorsement.contracts
+            ContractEndorsement.delete(endorsement.contract_endorsements)
+            endorsement.contract_endorsements = None
+            endorsement.contract_endorsements = ContractEndorsement.create(
+                [{'contract': x, 'endorsement': endorsement}
+                    for x in tmp_contracts])
+            endorsement.effective_date = None
+            endorsement.save()
 
     @classmethod
     def soft_apply(cls, endorsements):
