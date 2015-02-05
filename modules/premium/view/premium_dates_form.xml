@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<form string="Pricing Date Configuration">
-    <label name="yearly_on_start_date"/>
-    <field name="yearly_on_start_date"/>
-    <label name="yearly_on_new_eve"/>
-    <field name="yearly_on_new_eve"/>
-    <label name="yearly_custom_date"/>
-    <field name="yearly_custom_date"/>
-</form>

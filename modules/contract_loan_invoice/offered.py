@@ -13,7 +13,7 @@ __all__ = [
     'FeeRule',
     'OptionDescriptionPremiumRule',
     'OptionDescription',
-    'ProductPricingDates',
+    'ProductPremiumDate',
     ]
 FEE_ACTIONS = [
     ('do_not_use', 'Do not use fee'),
@@ -264,19 +264,20 @@ class OptionDescription:
         return result
 
 
-class ProductPricingDates:
-    __name__ = 'offered.product.premium_dates'
+class ProductPremiumDate:
+    __name__ = 'offered.product.premium_date'
 
-    every_loan_payment = fields.Boolean('Calculate each payment', states={
-            'invisible': ~Eval('_parent_product', {}).get('is_loan', False)})
+    @classmethod
+    def __setup__(cls):
+        super(ProductPremiumDate, cls).__setup__()
+        cls.type_.selection.append(
+            ('every_loan_payment', 'On Each Loan Payment'))
 
-    def get_dates_for_contract(self, contract):
-        dates = super(ProductPricingDates, self).get_dates_for_contract(
-            contract)
+    def get_rule_for_contract(self, contract):
+        res = super(ProductPremiumDate, self).get_rule_for_contract(contract)
         if not contract.is_loan:
-            return dates
-        if self.every_loan_payment:
-            for loan in contract.used_loans:
-                for payment in loan.payments:
-                    dates.append(payment.start_date)
-        return dates
+            return res
+        if self.type_ == 'every_loan_payment':
+            return [payment.start_date
+                for loan in contract.used_loans
+                for payment in loan.payments]

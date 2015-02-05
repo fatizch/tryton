@@ -9,7 +9,7 @@ from .rule_engine import *
 def register():
     Pool.register(
         Fee,
-        ProductPremiumDates,
+        ProductPremiumDate,
         Product,
         ProductFeeRelation,
         OptionDescriptionPremiumRule,

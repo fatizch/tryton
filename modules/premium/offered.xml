@@ -4,10 +4,10 @@
         <!-- ######################### -->
         <!-- # Product Premium Dates # -->
         <!-- ######################### -->
-        <record model="ir.ui.view" id="premium_dates_view_form">
-            <field name="model">offered.product.premium_dates</field>
-            <field name="type">form</field>
-            <field name="name">premium_dates_form</field>
+        <record model="ir.ui.view" id="premium_dates_view_list">
+            <field name="model">offered.product.premium_date</field>
+            <field name="type">tree</field>
+            <field name="name">premium_dates_list</field>
         </record>
         <!-- ########### -->
         <!-- # Product # -->

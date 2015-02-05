@@ -19,7 +19,7 @@ def register():
         FeeRule,
         OptionDescriptionPremiumRule,
         OptionDescription,
-        ProductPricingDates,
+        ProductPremiumDate,
         Product,
         InvoiceLineDetail,
         module='contract_loan_invoice', type_='model')

@@ -2,6 +2,7 @@ import datetime
 from dateutil import rrule
 
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval
 from trytond.model import MatchMixin
 
 from trytond.modules.cog_utils import fields, model, coop_date
@@ -22,7 +23,7 @@ PREMIUM_FREQUENCY = [
 
 __metaclass__ = PoolMeta
 __all__ = [
-    'ProductPremiumDates',
+    'ProductPremiumDate',
     'Product',
     'ProductFeeRelation',
     'OptionDescriptionPremiumRule',
@@ -32,43 +33,55 @@ __all__ = [
     ]
 
 
-class ProductPremiumDates(model.CoopSQL, model.CoopView):
+class ProductPremiumDate(model.CoopSQL, model.CoopView):
     'Product Premium Dates'
 
-    __name__ = 'offered.product.premium_dates'
+    __name__ = 'offered.product.premium_date'
 
     product = fields.Many2One('offered.product', 'Product',
         ondelete='CASCADE')
-    yearly_custom_date = fields.Date('Yearly, this day')
-    yearly_on_new_eve = fields.Boolean('Every first day of the year')
-    yearly_on_start_date = fields.Boolean('Yearly from the contract start')
+    type_ = fields.Selection([
+            ('yearly_on_start_date', 'Yearly, from the contract start date'),
+            ('yearly_custom_date', 'Yearly, at this date'),
+            ], 'Date rule')
+    custom_date = fields.Date('Custom Sync Date', states={
+            'required': Eval('type_', '') == 'yearly_custom_date',
+            'invisible': Eval('type_', '') != 'yearly_custom_date',
+            }, depends=['type_'])
 
     @classmethod
-    def default_yearly_on_new_eve(cls):
-        return True
+    def __setup__(cls):
+        super(ProductPremiumDate, cls).__setup__()
+        cls._sql_constraints += [
+            ('rule_uniq', 'UNIQUE(type_, custom_date, product)',
+                'Premium Calculation Rules must be unique')]
 
     @classmethod
-    def default_yearly_on_start_date(cls):
-        return True
+    def create(cls, values):
+        for value in values:
+            if value['type_'] != 'yearly_custom_date':
+                value['custom_date'] = None
+        return super(ProductPremiumDate, cls).create(values)
 
-    def get_dates_for_contract(self, contract):
+    @classmethod
+    def write(cls, *args):
+        actions = iter(args)
+        for instances, values in zip(actions, actions):
+            if values['type_'] != 'yearly_custom_date':
+                values['custom_date'] = None
+        super(ProductPremiumDate, cls).write(args)
+
+    def get_rule_for_contract(self, contract):
         max_date = contract.end_date or contract.next_renewal_date
         if not max_date:
-            return []
-        ruleset = rrule.rruleset()
-        if self.yearly_custom_date:
-            ruleset.rrule(rrule.rrule(rrule.YEARLY,
-                    dtstart=contract.start_date, until=max_date,
-                    bymonthday=self.yearly_custom_date.day,
-                    bymonth=self.yearly_custom_date.month))
-        if self.yearly_on_new_eve:
-            ruleset.rrule(rrule.rrule(rrule.YEARLY,
-                    dtstart=contract.start_date, until=max_date,
-                    bymonthday=1, bymonth=1))
-        if self.yearly_on_start_date:
-            ruleset.rrule(rrule.rrule(rrule.YEARLY,
-                    dtstart=contract.start_date, until=max_date))
-        return [x.date() for x in ruleset]
+            return
+        if self.type_ == 'yearly_custom_date':
+            return rrule.rrule(rrule.YEARLY, dtstart=contract.start_date,
+                until=max_date, bymonthday=self.custom_date.day,
+                bymonth=self.custom_date.month)
+        elif self.type_ == 'yearly_on_start_date':
+            return rrule.rrule(rrule.YEARLY, dtstart=contract.start_date,
+                until=max_date)
 
 
 class Product:
@@ -76,8 +89,8 @@ class Product:
 
     fees = fields.Many2Many('offered.product-account.fee', 'product', 'fee',
         'Fees')
-    premium_dates = fields.One2Many('offered.product.premium_dates',
-        'product', 'Premium Dates', size=1)
+    premium_dates = fields.One2Many('offered.product.premium_date', 'product',
+        'Premium Dates')
 
     def calculate_premiums(self, contract, dates):
         lines = {date: [] for date in dates}
@@ -103,6 +116,13 @@ class Product:
         for extra_data in contract.extra_datas:
             if extra_data.date:
                 dates.add(extra_data.date)
+        rule_set = rrule.rruleset()
+        for premium_date in self.premium_dates:
+            premium_date_rule = premium_date.get_rule_for_contract(contract)
+            if not premium_date_rule:
+                continue
+            rule_set.rrule(premium_date_rule)
+        dates.update([x.date() for x in rule_set])
         return dates
 
 

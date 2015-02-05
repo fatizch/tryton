@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<tree string="Premium Calculation Dates" editable="bottom">
+    <field name="type_"/>
+    <field name="custom_date"/>
+</tree>

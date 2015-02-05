@@ -16,31 +16,38 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'PremiumDates': 'offered.product.premium_dates',
+            'Product': 'offered.product',
+            'PremiumDate': 'offered.product.premium_date',
             }
 
     def test0011_premium_date_configuration(self):
-        premium_configuration = self.PremiumDates(
-            yearly_on_new_eve=False,
-            yearly_on_start_date=False,
-            yearly_custom_date=None,
-            yearly_each_covered_anniversary_date=True)
+        product = self.Product()
+        product.premium_dates = [
+            self.PremiumDate(type_='yearly_each_covered_anniversary_date'),
+            ]
+
         contract = Mock()
         contract.start_date = datetime.date(2014, 03, 01)
         contract.end_date = datetime.date(2016, 12, 31)
+        contract.next_renewal_date = None
+        contract.options = []
+        contract.extra_datas = []
 
         party = Mock()
         party.birth_date = datetime.date(1976, 10, 21)
         covered_element = Mock()
         covered_element.party = party
         covered_element.is_person = True
+        covered_element.options = []
+        covered_element.sub_covered_elements = []
         contract.covered_elements = []
         contract.covered_elements.append(covered_element)
 
-        dates = premium_configuration.get_dates_for_contract(contract)
+        dates = product.get_dates(contract)
         dates = sorted(list(set(dates)))
-        self.assertEqual(dates, [datetime.date(2014, 10, 21),
-             datetime.date(2015, 10, 21), datetime.date(2016, 10, 21)])
+        self.assertEqual(dates, [datetime.date(2014, 03, 01),
+                datetime.date(2014, 10, 21), datetime.date(2015, 10, 21),
+                datetime.date(2016, 10, 21)])
 
 
 def suite():

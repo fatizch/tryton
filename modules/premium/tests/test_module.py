@@ -16,19 +16,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @classmethod
     def get_models(cls):
         return {
-            'PremiumDates': 'offered.product.premium_dates',
+            'Product': 'offered.product',
+            'PremiumDate': 'offered.product.premium_date',
             }
 
     def test001_premium_date_configuration(self):
-        premium_configuration = self.PremiumDates(
-            yearly_on_new_eve=True,
-            yearly_on_start_date=True,
-            yearly_custom_date=None)
+        product = self.Product()
+        product.premium_dates = [
+            self.PremiumDate(type_='yearly_custom_date',
+                custom_date=datetime.date(2010, 1, 1)),
+            self.PremiumDate(type_='yearly_on_start_date'),
+            ]
+
         contract = Mock()
         contract.start_date = datetime.date(2014, 02, 12)
         contract.end_date = datetime.date(2015, 4, 25)
+        contract.options = []
+        contract.extra_datas = []
 
-        dates = premium_configuration.get_dates_for_contract(contract)
+        dates = product.get_dates(contract)
         dates = sorted(list(set(dates)))
         self.assertEqual(dates, [datetime.date(2014, 02, 12),
                 datetime.date(2015, 01, 01), datetime.date(2015, 02, 12)])
@@ -36,21 +42,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract = Mock()
         contract.start_date = datetime.date(2014, 03, 01)
         contract.end_date = datetime.date(2015, 12, 31)
+        contract.options = []
+        contract.extra_datas = []
 
-        dates = premium_configuration.get_dates_for_contract(contract)
+        dates = product.get_dates(contract)
         dates = sorted(list(set(dates)))
         self.assertEqual(dates, [datetime.date(2014, 03, 01),
                 datetime.date(2015, 01, 01), datetime.date(2015, 03, 01)])
 
-        premium_configuration2 = self.PremiumDates(
-            yearly_on_new_eve=False,
-            yearly_on_start_date=False,
-            yearly_custom_date=datetime.date(2014, 04, 26))
+        product.premium_dates = [
+            self.PremiumDate(type_='yearly_custom_date',
+                custom_date=datetime.date(2014, 04, 26))]
 
-        dates = premium_configuration2.get_dates_for_contract(contract)
+        dates = product.get_dates(contract)
         dates = sorted(list(set(dates)))
-        self.assertEqual(dates, [datetime.date(2014, 04, 26),
-                datetime.date(2015, 04, 26)])
+        self.assertEqual(dates, [datetime.date(2014, 03, 01),
+                datetime.date(2014, 04, 26), datetime.date(2015, 04, 26)])
 
 
 def suite():

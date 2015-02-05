@@ -49,10 +49,6 @@ class Product:
         dates = super(Product, self).get_dates(contract)
         for covered in contract.covered_elements:
             self.get_covered_element_dates(dates, covered)
-        if self.premium_dates:
-            premium_date_configuration = self.premium_dates[0]
-            dates.update(premium_date_configuration.get_dates_for_contract(
-                    contract))
         return dates
 
 

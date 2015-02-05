@@ -2,7 +2,8 @@ from trytond.pool import Pool
 
 from .offered import *
 
+
 def register():
     Pool.register(
-        ProductPremiumDates,
+        ProductPremiumDate,
         module='premium_life', type_='model')
