@@ -193,7 +193,9 @@ class Contract:
         for sub_contracts in grouped_slice(loan_contracts):
             premiums_to_delete.extend(PremiumAmount.search([
                         ('contract', 'in', sub_contracts),
-                        ('end', '>=', start or datetime.date.max)]))
+                        ['OR',
+                            ('end', '>=', start or datetime.date.max),
+                            ('contract.status', '=', 'void')]]))
         PremiumAmount.delete(premiums_to_delete)
         cls.generate_premium_amount(loan_contracts)
         return result
@@ -321,6 +323,8 @@ class Contract:
             if not contract.is_loan:
                 continue
             contract._clear_premium_aggregates_cache()
+            if contract.status == 'void':
+                continue
             assert contract.end_date
             generation_start = contract.start_date
             if contract.last_generated_premium_end:

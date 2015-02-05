@@ -238,7 +238,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # If the end dates of every options are below the contract
         # end date, the maximum end_date is the latest option end date.
         contract.options = get_options([end_option1, end_option2])
-        contract.calculate_end_date()
+        contract.calculate_activation_dates()
         self.assertEqual(contract.end_date, end_option1)
 
 

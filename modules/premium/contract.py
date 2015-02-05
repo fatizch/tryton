@@ -65,12 +65,25 @@ class Contract:
         return cls.calculate_prices(contracts, start=datetime.date.min)
 
     @classmethod
+    def delete_prices(cls, contracts, limit):
+        Premium = Pool().get('contract.premium')
+        Premium.delete(Premium.search([
+                    ('main_contract', 'in', [x.id for x in contracts]),
+                    ['OR',
+                        ('start', '>=', limit),
+                        ('main_contract.status', '=', 'void')],
+                    ]))
+
+    @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
         final_prices = defaultdict(list)
         for contract in contracts:
+            if contract.status == 'void':
+                continue
             prices = contract.calculate_prices_between_dates(start, end)
             for date, price in prices.iteritems():
                 final_prices[date].extend(price)
+        cls.delete_prices(contracts, start)
         cls.store_prices(final_prices)
         return True, ()
 
@@ -111,17 +124,6 @@ class Contract:
                     'keep': [],
                     'write': [],
                     }
-        contracts = set()
-        for x in parents_to_update.iterkeys():
-            if x.__name__ == 'contract':
-                contracts.add(x.id)
-            elif x.__name__ == 'contract.option':
-                contracts.add(x.parent_contract.id)
-            elif x.__name__ == 'contract.fee':
-                contracts.add(x.contract.id)
-        Premium.delete(Premium.search([
-                    ('main_contract', 'in', list(contracts)),
-                    ('start', '>=', dates[0])]))
         for elem in parents_to_update.iterkeys():
             existing = [x for x in getattr(elem, 'premiums', []) if x.id > 0]
             for premium in existing:

@@ -589,6 +589,10 @@ class Contract(CogProcessFramework):
 
     def calculate_after_endorsement(self, caller=None):
         self.calculate()
+        if caller.__name__ == 'endorsement.contract':
+            if 'end_date' in caller.values:
+                self.set_and_propagate_end_date(caller.values['end_date'])
+            self.save()
 
 
 class ContractOption(object):

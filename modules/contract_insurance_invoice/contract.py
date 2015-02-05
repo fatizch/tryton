@@ -272,6 +272,7 @@ class Contract:
             contract_invoices += ContractInvoice.search([
                     ('contract', 'in', [x.id for x in contract_slice]),
                     ['OR',
+                        ('contract.status', '=', 'void'),
                         ('start', '<=', to_date or datetime.date.min),
                         ('end', '>=', from_date or datetime.date.max)],
                     ])

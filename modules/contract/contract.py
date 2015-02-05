@@ -124,13 +124,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             'readonly': Eval('status') != 'quote',
             }, depends=['extra_datas', 'status'])
     product = fields.Many2One('offered.product', 'Product',
-        ondelete='RESTRICT', required=True, domain=[['OR',
-                [('end_date', '>=', Eval('start_date'))],
-                [('end_date', '=', None)],
-                ], ['OR',
-                [('start_date', '<=', Eval('start_date'))],
-                [('start_date', '=', None)],
-                ],
+        ondelete='RESTRICT', required=True, domain=[
+            If(~Eval('start_date', None),
+                [],
+                [
+                    ['OR', ('end_date', '>=', Eval('start_date')),
+                        ('end_date', '=', None)],
+                    ['OR', ('start_date', '<=', Eval('start_date')),
+                        ('start_date', '=', None)]]),
             ('company', '=', Eval('company')),
             ], states=_STATES, depends=['start_date', 'status', 'company'])
     options = fields.One2ManyDomain('contract.option', 'contract', 'Options',
@@ -193,8 +194,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         fields.Selection(offered.SUBSCRIBER_KIND, 'Product Subscriber Kind'),
         'get_product_subscriber_kind')
     start_date = fields.Function(
-        fields.Date('Start Date', states=_STATES, depends=_DEPENDS,
-            required=True),
+        fields.Date('Start Date', states={
+                'readonly': Eval('status') != 'quote',
+                'required': Eval('status') != 'void',
+                }, depends=['status']),
         'getter_activation_history', 'setter_start_date',
         searcher='search_contract_date')
     signature_date = fields.Date('Signature Date', states=_STATES,
@@ -300,7 +303,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         # by default a contract has no end date
         return None
 
-    def calculate_end_date(self):
+    def calculate_activation_dates(self):
+        if self.status == 'void':
+            self.start_date = None
+            self.end_date = None
+            Pool().get('contract.activation_history').delete(
+                list(self.activation_history))
+            return
         dates = [self.get_date_used_for_contract_end_date()]
         dates.append(self.get_maximum_end_date())
         dates = [x for x in dates if x] or [None]
@@ -308,7 +317,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def _calculate_methods(cls, product):
-        return ['calculate_end_date']
+        return ['calculate_activation_dates']
 
     def calculate(self):
         for option in self.options:
@@ -506,17 +515,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return self.product.subscriber_kind
 
     @classmethod
-    def setter_start_date(cls, contract_ids, name, value):
+    def setter_start_date(cls, contracts, name, value):
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
         to_create, to_write = [], []
-        for contract_slice in grouped_slice(contract_ids):
-            for contract_id in contract_slice:
+        for contract_slice in grouped_slice(contracts):
+            for contract in contract_slice:
+                if contract.status == 'void':
+                    continue
                 existing = ActivationHistory.search([
-                        ('contract', '=', contract_id)])
+                        ('contract', '=', contract.id)])
                 if not existing:
                     to_create.append({
-                            'contract': contract_id,
+                            'contract': contract.id,
                             'start_date': value,
                             })
                 elif len(existing) == 1:
@@ -537,6 +548,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         to_create, to_write, to_delete = [], [], []
         for contract_slice in grouped_slice(contracts):
             for contract in contract_slice:
+                if contract.status == 'void':
+                    continue
                 existing = ActivationHistory.search([
                         ('contract', '=', contract.id)])
                 if not existing:
