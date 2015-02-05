@@ -20,6 +20,14 @@
             <field name="perm_create" eval="False"/>
             <field name="perm_delete" eval="False"/>
         </record>
+        <record model="ir.ui.view" id="invoice_view_list">
+            <field name="model">account.invoice</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="account_invoice.invoice_view_tree"/>
+            <field name="name">invoice_list</field>
+        </record>
+        <menuitem id="account_invoice.menu_invoices" icon="invoice" name="Invoices"/>
+        <menuitem id="account_invoice.menu_invoice_out_invoice_form" icon="invoice" action="account_invoice.act_invoice_out_invoice_form"/>
     </data>
 </tryton>
 

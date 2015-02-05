@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -70,7 +70,7 @@ msgstr "Enregistrement des quittances"
 
 msgctxt "selection:account.invoice.logging,state:"
 msgid "Canceled"
-msgstr "Annulé"
+msgstr "Annulée"
 
 msgctxt "selection:account.invoice.logging,state:"
 msgid "Draft"

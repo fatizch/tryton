@@ -196,3 +196,11 @@ msgid ""
 msgstr ""
 "Vous ne pouvez changer la séquence de facture de l'année fiscale « %s » car "
 "elle contient déjà des factures postées."
+
+msgctxt "selection:account.invoice,state:account_invoice."
+msgid "Canceled"
+msgstr "Annulée"
+
+msgctxt "selection:account.invoice,state:account_invoice."
+msgid "Validated"
+msgstr "Validée"

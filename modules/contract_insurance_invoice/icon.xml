@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<tryton>
-    <data>
-        <record model="ir.ui.icon" id="invoice_icon">
-            <field name="name">invoice</field>
-            <field name="path">icons/invoice.svg</field>
-        </record>
-    </data>
-</tryton>

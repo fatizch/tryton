@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <data>
     <xpath expr="/tree" position="replace_attributes">
-        <tree colors="If(Eval('state') == 'paid', 'green', If(Eval('state') == 'posted', 'blue', 'black'))"/>
+        <tree colors="If(Eval('state') == 'paid', 'green', If(Eval('state') == 'cancel', 'grey', If(Eval('amount_to_pay_today', 0) > 0, 'red', If(Eval('state') == 'posted', 'blue', 'black'))))"/>
     </xpath>
 </data>

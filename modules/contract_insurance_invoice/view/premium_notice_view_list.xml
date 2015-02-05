@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<tree string="Premium Notices">
+<tree string="Premium Notices" colors="If(Eval('state') == 'paid', 'green', If(Eval('state') == 'cancel', 'grey', If(Eval('amount_to_pay_today', 0) > 0, 'red', If(Eval('state') == 'posted', 'blue', 'black'))))">
+    <field name="state" icon="icon"/>
     <field name="number"/>
     <field name="start"/>
     <field name="end"/>
-    <field name="state"/>
     <field name="total_amount" sum="Total Amount">
         <suffix name="currency_symbol"/>
     </field>

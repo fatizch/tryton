@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.icon" id="invoice_icon">
+            <field name="name">invoice</field>
+            <field name="path">icons/invoice.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="invoice_cancel_icon">
+            <field name="name">invoice_cancel</field>
+            <field name="path">icons/invoice_cancel.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="invoice_draft_icon">
+            <field name="name">invoice_draft</field>
+            <field name="path">icons/invoice_draft.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="invoice_paid_icon">
+            <field name="name">invoice_paid</field>
+            <field name="path">icons/invoice_paid.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="invoice_post_icon">
+            <field name="name">invoice_post</field>
+            <field name="path">icons/invoice_post.svg</field>
+        </record>
+        <record model="ir.ui.icon" id="invoice_unpaid_icon">
+            <field name="name">invoice_unpaid</field>
+            <field name="path">icons/invoice_unpaid.svg</field>
+        </record>
+    </data>
+</tryton>
