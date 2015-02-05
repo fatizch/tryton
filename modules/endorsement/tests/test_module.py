@@ -88,13 +88,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         test_wizard = FakeEndorsement()
         self.assertEqual(test_wizard.default_test_endorsement('foo'),
-            ('default', (test_wizard, 'test_endorsement', 'foo')))
+            ('default', ('foo',)))
         self.assertEqual(test_wizard.transition_test_endorsement_previous(),
-            ('previous', (test_wizard, 'test_endorsement')))
+            ('previous', ()))
         self.assertEqual(test_wizard.transition_test_endorsement_next(),
-            ('next', (test_wizard, 'test_endorsement')))
+            ('next', ()))
         self.assertEqual(test_wizard.transition_test_endorsement_suspend(),
-            ('suspend', (test_wizard, 'test_endorsement')))
+            ('suspend', ()))
 
     def test0001_check_possible_views(self):
         from trytond.pool import Pool
