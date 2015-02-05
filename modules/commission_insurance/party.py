@@ -77,7 +77,10 @@ class Party:
             return super(Party, self).get_rec_name(name)
 
     def get_icon(self, name=None):
-        return 'coopengo-broker'
+        if self.is_broker:
+            return 'coog-broker'
+        else:
+            return super(Party, self).get_icon(name)
 
     @classmethod
     def search_broker_code(cls, name, clause):
