@@ -294,17 +294,17 @@ class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
     __name__ = 'endorsement.contract.change_start_date'
 
     current_start_date = fields.Date('Current Start Date', readonly=True)
-    new_start_date = fields.Date('New Start Date')
+    new_start_date = fields.Date('New Start Date', readonly=True)
 
     def update_endorsement(self, base_endorsement, wizard):
-        base_endorsement.values = {'start_date': self.new_start_date}
+        base_endorsement.values = {
+            'start_date': wizard.endorsement.effective_date}
         base_endorsement.save()
 
     @classmethod
     def update_default_values(cls, wizard, base_endorsement, default_values):
         return {
-            'new_start_date': base_endorsement.values.get('start_date',
-                wizard.endorsement.effective_date),
+            'new_start_date': wizard.endorsement.effective_date,
             }
 
 
