@@ -171,6 +171,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         searcher='search_contract_date')
     sub_status = fields.Many2One('contract.sub_status', 'Details on status',
         states={
+            'readonly': Eval('status') != 'quote',
             'required': Bool(Eval('is_sub_status_required')),
             'invisible': ~Eval('is_sub_status_required')
             },
