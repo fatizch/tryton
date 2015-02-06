@@ -45,7 +45,13 @@ class EndorsementSet(CogProcessFramework):
             self.append_functional_error('no_effective_date')
 
     def get_endorsements_summary(self, name):
-        return '\n'.join([x.endorsement_summary for x in self.endorsements])
+        res = ''
+        for endorsement in self.endorsements:
+            res += ', '.join(
+                [x.contract_number + ', ' + x.subscriber.full_name
+                    for x in endorsement.contracts])
+            res += ':\n' + endorsement.endorsement_summary + '\n'
+        return res
 
     def get_endorsements_parts_union(self, name):
         # See table_query method on EndorsementPartUnion
