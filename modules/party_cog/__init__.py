@@ -14,15 +14,6 @@ PartyMenuTreeExpansion = expand_tree('party.synthesis.menu')
 def register():
     Pool.register(
         User,
-        SynthesisMenuActionCloseSynthesis,
-        SynthesisMenuActionRefreshSynthesis,
-        SynthesisMenuContact,
-        SynthesisMenuAddress,
-        SynthesisMenuPartyInteraction,
-        SynthesisMenuRelationship,
-        SynthesisMenu,
-        SynthesisMenuOpenState,
-        PartyMenuTreeExpansion,
         Party,
         PartyCategory,
         Address,
@@ -32,6 +23,15 @@ def register():
         RelationType,
         PartyRelation,
         PartyRelationAll,
+        SynthesisMenuActionCloseSynthesis,
+        SynthesisMenuActionRefreshSynthesis,
+        SynthesisMenuContact,
+        SynthesisMenuAddress,
+        SynthesisMenuPartyInteraction,
+        SynthesisMenuRelationship,
+        SynthesisMenu,
+        SynthesisMenuOpenState,
+        PartyMenuTreeExpansion,
         module='party_cog', type_='model')
     Pool.register(
         SynthesisMenuSet,

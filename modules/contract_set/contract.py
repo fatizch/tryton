@@ -93,7 +93,7 @@ class Contract:
         ondelete='SET NULL', states=_STATES, depends=_DEPENDS)
 
 
-class ContractSetSelectDeclineReason(model.CoopSQL, model.CoopView):
+class ContractSetSelectDeclineReason(model.CoopView):
     'Reason selector to decline contract set'
 
     __name__ = 'contract.set.decline.select_reason'

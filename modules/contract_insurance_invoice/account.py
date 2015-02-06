@@ -18,7 +18,7 @@ class Fee:
             ('default_uom', '=', Id('product', 'uom_unit')),
             ('template.type', '=', 'service'),
             ('template.default_uom', '=', Id('product', 'uom_unit')),
-            ])
+            ], ondelete='RESTRICT')
 
     def get_account_for_billing(self, line):
         return self.product.template.account_revenue_used

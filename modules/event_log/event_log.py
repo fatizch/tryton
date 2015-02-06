@@ -23,7 +23,8 @@ class EventLog(model.CoopSQL, model.CoopView):
     date = fields.DateTime('Date', readonly=True, required=True)
     user = fields.Many2One('res.user', 'User', readonly=True, required=True,
         ondelete='RESTRICT')
-    event_type = fields.Many2One('event.type', 'Event Type', required=True)
+    event_type = fields.Many2One('event.type', 'Event Type', required=True,
+        ondelete='RESTRICT')
 
     @staticmethod
     def models_get():

@@ -33,10 +33,10 @@ def register():
         PackageSelection,
         OptionsDisplayer,
         WizardOption,
-        SynthesisMenu,
-        SynthesisMenuContrat,
         ContactType,
         ContractContact,
+        SynthesisMenuContrat,
+        SynthesisMenu,
         ContractActivateConfirm,
         ContractSelectDeclineReason,
         module='contract', type_='model')

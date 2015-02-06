@@ -231,8 +231,8 @@ class PlanRelation(model.CoopSQL, model.CoopView):
     'Commission Plan - Commission Plan'
     __name__ = 'commission_plan-commission_plan'
 
-    from_ = fields.Many2One('commission.plan', 'Plan')
-    to = fields.Many2One('commission.plan', 'Plan')
+    from_ = fields.Many2One('commission.plan', 'Plan', ondelete='CASCADE')
+    to = fields.Many2One('commission.plan', 'Plan', ondelete='RESTRICT')
 
 
 class Agent(export.ExportImportMixin):

@@ -176,7 +176,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.loan'
 
-    loan = fields.Many2One('loan', 'Loan', required=True,
+    loan = fields.Many2One('loan', 'Loan', required=True, ondelete='CASCADE',
         states={'readonly': Eval('state') == 'applied'}, depends=['state'])
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
         ondelete='CASCADE')

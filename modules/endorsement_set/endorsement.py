@@ -226,7 +226,7 @@ class Endorsement:
         return super(Endorsement, cls).decline(endorsements, reason=reason)
 
 
-class EndorsementSetSelectDeclineReason(model.CoopSQL, model.CoopView):
+class EndorsementSetSelectDeclineReason(model.CoopView):
     'Reason selector to decline endorsement set'
 
     __name__ = 'endorsement.set.decline.select_reason'

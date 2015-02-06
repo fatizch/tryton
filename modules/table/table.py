@@ -1014,7 +1014,7 @@ class Table2D(ModelSQL, ModelView):
     @classmethod
     def table_query(cls):
         if not backend.name() == 'postgresql':
-            return True
+            return super(Table2D, cls).table_query()
         pool = Pool()
         TableCell = pool.get('table.cell')
         TableDefinition = pool.get('table')

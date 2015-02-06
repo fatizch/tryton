@@ -108,11 +108,10 @@ class SynthesisMenuContrat(model.CoopSQL):
     subscriber = fields.Many2One('party.party', 'Subscriber',
         ondelete='SET NULL')
 
-    @staticmethod
-    def table_query():
+    @classmethod
+    def table_query(cls):
         pool = Pool()
         Contract = pool.get('contract')
-        ContractSynthesis = pool.get('party.synthesis.menu.contract')
         party = pool.get('party.party').__table__()
         contract = Contract.__table__()
         query_table = party.join(contract, 'LEFT OUTER', condition=(
@@ -123,8 +122,7 @@ class SynthesisMenuContrat(model.CoopSQL):
             Max(contract.create_date).as_('create_date'),
             Max(contract.write_uid).as_('write_uid'),
             Max(contract.write_date).as_('write_date'),
-            Literal(coop_string.translate_label(ContractSynthesis, 'name')).
-            as_('name'),
+            Literal(coop_string.translate_label(cls, 'name')).as_('name'),
             party.id.as_('subscriber'),
             group_by=party.id)
 

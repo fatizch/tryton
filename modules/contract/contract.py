@@ -180,7 +180,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             'required': Bool(Eval('is_sub_status_required')),
             'invisible': ~Eval('is_sub_status_required')
             },
-        domain=[('status', '=', Eval('status'))],
+        domain=[('status', '=', Eval('status'))], ondelete='RESTRICT',
         depends=['status', 'is_sub_status_required'])
     is_sub_status_required = fields.Function(
         fields.Boolean('Is Sub Status Required', depends=['status']),

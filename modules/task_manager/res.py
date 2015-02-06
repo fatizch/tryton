@@ -51,7 +51,7 @@ class User:
 
         cursor.execute(*query_table.select(log.id,
             where=((priority.team.in_([team.id for team in self.teams]))
-                & (log.latest == True) & (log.locked == False)),
+                & (log.latest == True) & (log.locked == False)),  # NOQA
             order_by=(priority.value, log.start_time),
             limit=1))
 
@@ -155,7 +155,7 @@ class Team(model.CoopSQL, model.CoopView):
                 priority.process_step == log.to_state))
 
         cursor.execute(*query_table.select(log.id,
-            where=((priority.team == self.id) & (log.latest == True)),
+            where=((priority.team == self.id) & (log.latest == True)),  # NOQA
             order_by=(priority.value, log.start_time)))
         return [x[0] for x in cursor.fetchall()]
 
@@ -179,7 +179,7 @@ class Team(model.CoopSQL, model.CoopView):
                 priority.process_step == log.to_state))
 
         cursor.execute(*query_table.select(log.id,
-            where=((priority.team == self.id) & (log.latest == True)
+            where=((priority.team == self.id) & (log.latest == True)  # NOQA
                 & (log.locked == False)),
             order_by=(priority.value, log.start_time),
             limit=1))
@@ -194,8 +194,8 @@ class UserTeamRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'res.user-res.team'
 
-    user = fields.Many2One('res.user', 'User')
-    team = fields.Many2One('res.team', 'Team')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
+    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
     nb_tasks = fields.Function(
         fields.Integer('Number of Tasks'),
         'get_nb_tasks')

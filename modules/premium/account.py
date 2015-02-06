@@ -29,7 +29,7 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
         domain=[
             ('id', If(Eval('context', {}).contains('company'), '=', '!='),
                 Eval('context', {}).get('company', -1)),
-            ], select=True)
+            ], select=True, ondelete='RESTRICT')
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     frequency = fields.Selection(FEE_FREQUENCIES, 'Frequency', states={

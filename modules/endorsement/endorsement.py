@@ -46,7 +46,7 @@ def field_mixin(model):
                 ('ttype', 'in', ['boolean', 'integer', 'char', 'float',
                         'numeric', 'date', 'datetime', 'selection',
                         'many2one']),
-                ])
+                ], ondelete='CASCADE')
         definitions = fields.Function(
             fields.Many2Many('endorsement.definition', '', '', 'Definitions'),
             'get_definitions', searcher='search_definitions')
@@ -616,18 +616,19 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     _rec_name = 'number'
 
     number = fields.Char('Number', readonly=True, required=True)
-    applicant = fields.Many2One('party.party', 'Applicant')
+    applicant = fields.Many2One('party.party', 'Applicant',
+        ondelete='RESTRICT')
     application_date = fields.DateTime('Application Date', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
         depends=['state'])
     rollback_date = fields.Timestamp('Rollback Date', readonly=True)
     applied_by = fields.Many2One('res.user', 'Applied by', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
-        depends=['state'])
+        depends=['state'], ondelete='RESTRICT')
     contract_endorsements = fields.One2Many('endorsement.contract',
         'endorsement', 'Contract Endorsement')
     definition = fields.Many2One('endorsement.definition', 'Definition',
-        required=True)
+        required=True, ondelete='RESTRICT')
     effective_date = fields.Date('Effective Date')
     state = fields.Selection([
             ('draft', 'Draft'),
@@ -643,7 +644,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
             'invisible': ~Eval('sub_state_required')
             },
         domain=[('state', '=', Eval('state'))],
-        depends=['state', 'sub_state_required'])
+        depends=['state', 'sub_state_required'], ondelete='RESTRICT')
     sub_state_required = fields.Function(
         fields.Boolean('Sub State Required'),
         'on_change_with_sub_state_required')
@@ -990,7 +991,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         depends=['state', 'contract', 'definition'],
         context={'definition': Eval('definition')})
     contract = fields.Many2One('contract', 'Contract', required=True,
-        states={'readonly': Eval('state') == 'applied'}, depends=['state'])
+        states={'readonly': Eval('state') == 'applied'}, depends=['state'],
+        ondelete='CASCADE')
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
         ondelete='CASCADE')
     options = fields.One2Many('endorsement.contract.option',

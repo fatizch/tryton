@@ -11,7 +11,8 @@ __all__ = [
 class Insurer:
     __name__ = 'insurer'
 
-    waiting_account = fields.Many2One('account.account', 'Waiting Account')
+    waiting_account = fields.Many2One('account.account', 'Waiting Account',
+        ondelete='RESTRICT')
 
     @classmethod
     def _export_light(cls):
