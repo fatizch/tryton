@@ -146,6 +146,8 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
     @classmethod
     def __post_setup__(cls):
         super(CoopSQL, cls).__post_setup__()
+        if cls.table_query != ModelSQL.table_query:
+            return
         for field_name, field in cls._fields.iteritems():
             if not isinstance(field, fields.Many2One):
                 continue
