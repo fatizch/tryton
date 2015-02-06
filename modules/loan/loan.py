@@ -155,10 +155,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             ('calculated', 'Calculated'),
             ], 'State', readonly=True)
     state_string = state.translated('state')
-    is_used_on_active_contract = fields.Function(
-        fields.Boolean('Used on an active contract',
-            states={'invisible': True}),
-        'get_is_used_on_active_contract')
 
     @classmethod
     def __setup__(cls):
@@ -166,6 +162,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         cls._order.insert(0, ('number', 'ASC'))
         cls._error_messages.update({
                 'no_sequence': 'No loan sequence defined',
+                'used_on_non_project_contract': (
+                    'The loan "%(loan)s" is used on '
+                    'the contract(s) "%(contract)s". '
+                    'Are you sure you want to continue?'),
                 })
         cls._transitions |= set((
                 ('draft', 'calculated'),
@@ -174,7 +174,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         cls._buttons.update({
                 'draft': {
                     'invisible': Eval('state') != 'calculated',
-                    'readonly': Bool(Eval('is_used_on_active_contract')),
                     },
                 'calculate_loan': {
                     'invisible': Eval('state') != 'draft',
@@ -432,12 +431,6 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             'start_date')
         return increment.payment_amount if increment else None
 
-    def get_is_used_on_active_contract(self, name):
-        for share in self.loan_shares:
-            if share.contract.status == 'active':
-                return True
-        return False
-
     @fields.depends('currency')
     def on_change_with_currency_digits(self, name=None):
         return self.currency.digits if self.currency else 2
@@ -497,7 +490,17 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @model.CoopView.button
     @Workflow.transition('draft')
     def draft(cls, loans):
-        pass
+        for loan in loans:
+            contracts = set([(x.contract.rec_name, x.contract.status_string)
+                    for x in loan.loan_shares
+                    if x.contract.status in ['active', 'hold']])
+            if contracts:
+                cls.raise_user_warning(loan.rec_name,
+                    'used_on_non_project_contract', {
+                        'contract': ', '.join(
+                            ['%s (%s)' % (x[0], x[1]) for x in contracts]),
+                        'loan': loan.rec_name,
+                        })
 
     @classmethod
     @model.CoopView.button

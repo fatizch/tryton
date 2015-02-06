@@ -3,6 +3,9 @@
     <label name="loan"/>
     <field name="loan"/>
     <newline/>
+    <label name="option"/>
+    <field name="option"/>
+    <newline/>
     <label name="share"/>
     <group id="share">
       <field name="share" xexpand="0" factor="100"/>

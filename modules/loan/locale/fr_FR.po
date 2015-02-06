@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -310,10 +310,6 @@ msgstr "Personnes assurées"
 msgctxt "field:loan,insured_persons_name:"
 msgid "Insured Persons"
 msgstr "Personnes assurées"
-
-msgctxt "field:loan,is_used_on_active_contract:"
-msgid "Used on an active contract"
-msgstr "Utilisé sur un contrat actif"
 
 msgctxt "field:loan,kind:"
 msgid "Kind"
