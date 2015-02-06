@@ -341,7 +341,10 @@ class ContractOption:
 
     covered_element = fields.Many2One('contract.covered_element',
         'Covered Element', ondelete='CASCADE',
-        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+        states={
+            'readonly': Eval('contract_status') != 'quote',
+            'invisible': ~Eval('covered_element'),
+            }, depends=_CONTRACT_STATUS_DEPENDS)
     exclusions = fields.Many2Many('contract.option-exclusion.kind',
         'option', 'exclusion', 'Exclusions',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)

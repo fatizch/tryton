@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="option">
+<form string="Option">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
     <notebook colspan="4">
         <page string="Main Data" id="main_data">
             <label name="coverage"/>

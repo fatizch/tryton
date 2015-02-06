@@ -1111,7 +1111,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
+        states={'invisible': ~Eval('contract')})
     parent_contract = fields.Function(
         fields.Many2One('contract', 'Parent Contract'),
         'on_change_with_parent_contract', searcher='search_parent_contract')
