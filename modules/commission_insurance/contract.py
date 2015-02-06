@@ -1,8 +1,7 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, If, PYSONEncoder, PYSONDecoder
-from trytond.model.modelstorage import EvalEnvironment
+from trytond.pyson import Eval, If
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 from trytond.modules.contract import _STATES, _DEPENDS
 
 __all__ = [
@@ -112,13 +111,4 @@ class Contract:
 
     @fields.depends('broker_party')
     def on_change_with_agent(self):
-        pool = Pool()
-        Agent = pool.get('commission.agent')
-        domain_pyson = PYSONEncoder().encode(
-            self.__class__.agent.domain)
-        environment = EvalEnvironment(self, self.__class__)
-        real_domain = PYSONDecoder(environment).decode(domain_pyson)
-        agents = Agent.search(real_domain)
-        if len(agents) == 1:
-            return agents[0].id
-        return None
+        return utils.auto_complete_with_domain(self, 'agent')

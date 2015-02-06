@@ -930,7 +930,7 @@ class ProcessStart(model.CoopView):
         domain=[('is_workflow', '=', 'True')],
         states={'readonly': True, 'invisible': True})
     good_process = fields.Many2One('process', 'Good Process',
-        depends=['model'])
+        depends=['model'], states={'invisible': True}, required=True)
 
     @classmethod
     def __setup__(cls):
@@ -952,13 +952,7 @@ class ProcessStart(model.CoopView):
 
     @fields.depends('model')
     def on_change_with_good_process(self):
-        try:
-            good_process = utils.get_domain_instances(self, 'good_process')
-            if not good_process or len(good_process) > 1:
-                return None
-            return good_process[0].id
-        except Exception:
-            return None
+        return utils.auto_complete_with_domain(self, 'good_process')
 
 
 class ProcessFinder(Wizard):
@@ -984,15 +978,9 @@ class ProcessFinder(Wizard):
         super(ProcessFinder, cls).__setup__()
         cls.process_parameters.model_name = cls.get_parameters_model()
         cls.process_parameters.view = cls.get_parameters_view()
-        cls._error_messages.update({
-                'no_process_selected': 'Please pick a process from the '
-                'selection'})
 
     def do_action(self, action):
         Action = Pool().get('ir.action')
-        if not (hasattr(self.process_parameters, 'good_process') and
-                self.process_parameters.good_process):
-            self.raise_user_error('no_process_selected')
         good_action = self.process_parameters.good_process.get_act_window()
         good_values = Action.get_action_values(
             'ir.action.act_window', [good_action.id])
@@ -1002,8 +990,7 @@ class ProcessFinder(Wizard):
         if (hasattr(good_obj, 'current_state') and good_obj.current_state):
             good_obj.current_state.step.execute_before(good_obj)
         good_obj.save()
-        return good_values[0], {
-            'res_id': good_obj.id}
+        return good_values[0], {'res_id': good_obj.id}
 
     def search_main_object(self):
         return None

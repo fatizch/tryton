@@ -363,6 +363,12 @@ def get_domain_instances(record, field_name):
     return GoodModel.search(domain)
 
 
+def auto_complete_with_domain(record, field_name):
+    instances = get_domain_instances(record, field_name)
+    if len(instances) == 1:
+        return instances[0].id
+
+
 def convert_to_reference(target):
     return '%s,%s' % (target.__name__, target.id)
 

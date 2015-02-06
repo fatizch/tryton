@@ -28,7 +28,7 @@ class ContractSubscribeFindProcess(ProcessStart):
 
     __name__ = 'contract.subscribe.find_process'
 
-    effective_date = fields.Date('Effective Date')
+    effective_date = fields.Date('Effective Date', required=True)
     product = fields.Many2One('offered.product', 'Product', domain=[
             ['OR',
                 [('end_date', '>=', Eval('effective_date'))],
@@ -38,7 +38,7 @@ class ContractSubscribeFindProcess(ProcessStart):
                 [('start_date', '<=', Eval('effective_date'))],
                 [('start_date', '=', None)],
                 ],
-            ], depends=['effective_date'])
+            ], depends=['effective_date'], required=True)
     party = fields.Many2One('party.party', 'Party', states={'invisible': True})
 
     @classmethod
@@ -65,6 +65,11 @@ class ContractSubscribeFindProcess(ProcessStart):
     def default_party():
         if Transaction().context.get('active_model') == 'party.party':
             return Transaction().context.get('active_id', None)
+
+    @fields.depends('effective_date', 'product')
+    def on_change_with_good_process(self):
+        return super(ContractSubscribeFindProcess,
+            self).on_change_with_good_process()
 
 
 class ContractSubscribe(ProcessFinder):
