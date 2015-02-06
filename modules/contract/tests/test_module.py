@@ -76,7 +76,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         )
     def test0011_testContractTermination(self):
         contract, = self.Contract.search([])
-        self.Contract.do_terminate([contract])
+        self.Contract.terminate([contract])
         self.assertEqual(contract.status, 'terminated')
         self.assertEqual(contract.sub_status, self.SubStatus.search(
                 [('code', '=', 'reached_end_date')])[0])

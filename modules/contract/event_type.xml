@@ -9,17 +9,9 @@
             <field name="name">Decline Contract</field>
             <field name="code">decline_contract</field>
         </record>
-        <record model="event.type" id="event_plan_contract_termination">
-            <field name="name">Plan Contract Termination</field>
-            <field name="code">plan_contract_termination</field>
-        </record>
         <record model="event.type" id="event_terminate_contract">
             <field name="name">Terminate Contract</field>
             <field name="code">terminate_contract</field>
-        </record>
-        <record model="event.type" id="event_void_contract">
-            <field name="name">Void Contract</field>
-            <field name="code">void_contract</field>
         </record>
     </data>
     <data depends="event_log">

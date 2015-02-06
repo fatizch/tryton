@@ -594,35 +594,6 @@ class Contract(CogProcessFramework):
                 self.set_and_propagate_end_date(caller.values['end_date'])
             self.save()
 
-    @classmethod
-    def terminate(cls, contracts, at_date, termination_reason):
-        # Create endorsements for rollback points BEFORE super
-        pool = Pool()
-        ContractEndorsement = pool.get('endorsement.contract')
-        endorsement = ContractEndorsement.new_rollback_point(contracts,
-            at_date, {'values': {
-                    'status': 'terminated',
-                    'sub_status': termination_reason.id,
-                    'end_date': at_date,
-                    }})
-        endorsement.save()
-
-        super(Contract, cls).terminate(contracts, at_date, termination_reason)
-
-    @classmethod
-    def void(cls, contracts, void_reason):
-        # Create endorsements for rollback points BEFORE super
-        pool = Pool()
-        ContractEndorsement = pool.get('endorsement.contract')
-        endorsement = ContractEndorsement.new_rollback_point(contracts,
-            contracts[0].start_date, {'values': {
-                    'status': 'void',
-                    'sub_status': void_reason.id,
-                    }})
-        endorsement.save()
-
-        super(Contract, cls).void(contracts, void_reason)
-
 
 class ContractOption(object):
     __metaclass__ = PoolMeta
@@ -1265,28 +1236,6 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             values['_func_key'] = values['contract']['_func_key']
         else:
             values['_func_key'] = 0
-
-    @classmethod
-    def new_rollback_point(cls, contracts, at_date, init_dict=None):
-        pool = Pool()
-        Endorsement = pool.get('endorsement')
-        ContractEndorsement = pool.get('endorsement.contract')
-        Definition = pool.get('endorsement.definition')
-        init_dict = init_dict or {}
-        endorsement = Endorsement()
-        contract_endorsements = []
-        for contract in contracts:
-            contract_endorsements.append(ContractEndorsement(
-                    contract=contract, **init_dict))
-        endorsement.contract_endorsements = contract_endorsements
-        endorsement.effective_date = at_date
-        endorsement.state = 'applied'
-        endorsement.applied_by = Transaction().user
-        endorsement.rollback_date = Now()
-        endorsement.application_date = datetime.datetime.now()
-        endorsement.definition = Definition.search([
-                ('xml_id', '=', 'endorsement.stop_contract_definition')])[0]
-        return endorsement
 
 
 class EndorsementOption(relation_mixin(

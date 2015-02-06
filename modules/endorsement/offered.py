@@ -42,9 +42,6 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
     endorsement_parts = fields.Function(
         fields.Many2Many('endorsement.part', None, None, 'Endorsement Parts'),
         'get_endorsement_parts')
-    is_technical = fields.Function(
-        fields.Boolean('Is technical'),
-        'get_is_technical', searcher='search_is_technical')
 
     @classmethod
     def _export_skips(cls):
@@ -75,25 +72,6 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         for definition_id, part_id in cursor.fetchall():
             result[definition_id].append(part_id)
         return result
-
-    def get_is_technical(self, name):
-        return any([x.endorsement_part.view == 'dummy_step'
-                for x in self.ordered_endorsement_parts])
-
-    @classmethod
-    def search_is_technical(cls, name, clause):
-        if clause[1] == '=':
-            if clause[2]:
-                operator = '='
-            else:
-                operator = '!='
-        elif clause[2]:
-            operator = '!='
-        else:
-            operator = '='
-
-        return [('ordered_endorsement_parts.endorsement_part.view', operator,
-                'dummy_step')]
 
     @classmethod
     def get_preview_states(cls):

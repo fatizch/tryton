@@ -43,20 +43,5 @@
             <field name="type">form</field>
             <field name="name">select_decline_reason_form</field>
         </record>
-        <!-- ################################## -->
-        <!-- # Contract Stop Select Contracts # -->
-        <!-- ################################## -->
-        <record model="ir.ui.view" id="stop_select_contracts_view_form">
-            <field name="model">contract.stop.select_contracts</field>
-            <field name="type">form</field>
-            <field name="name">stop_select_contracts_form</field>
-        </record>
-        <!-- ################# -->
-        <!-- # Contract Stop # -->
-        <!-- ################# -->
-        <record model="ir.action.wizard" id="act_stop">
-            <field name="name">Stop Contract</field>
-            <field name="wiz_name">contract.stop</field>
-        </record>
     </data>
 </tryton>

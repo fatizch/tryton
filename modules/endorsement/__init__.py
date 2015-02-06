@@ -25,7 +25,6 @@ def register():
         EndorsementActivationHistory,
         EndorsementActivationHistoryField,
         SelectEndorsement,
-        DummyStep,
         ChangeContractStartDate,
         BasicPreview,
         module='endorsement', type_='model')

@@ -134,31 +134,5 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">1000</field>
         </record>
-        <!-- ################################## -->
-        <!-- # Stop Endorsement Configuration # -->
-        <!-- ################################## -->
-        <record model="endorsement.definition" id="stop_contract_definition">
-            <field name="code">stop_contract</field>
-            <field name="name">Stop Contract</field>
-        </record>
-        <record model="endorsement.part" id="stop_contract_revision_part">
-            <field name="code">stop_contract</field>
-            <field name="name">Stop Contract</field>
-            <field name="kind">contract</field>
-            <field name="view">dummy_step</field>
-        </record>
-        <record model="endorsement.definition-endorsement.part" id="stop_contract_relation">
-            <field name="definition" ref="stop_contract_definition"/>
-            <field name="endorsement_part" ref="stop_contract_revision_part"/>
-            <field name="order">1</field>
-        </record>
-        <record model="endorsement.contract.field" id="status_date_contract_field">
-            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'status')]"/>
-            <field name="endorsement_part" ref="stop_contract_revision_part"/>
-        </record>
-        <record model="endorsement.contract.field" id="sub_status_contract_field">
-            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'sub_status')]"/>
-            <field name="endorsement_part" ref="stop_contract_revision_part"/>
-        </record>
     </data>
 </tryton>
