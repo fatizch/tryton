@@ -24,6 +24,8 @@ def init_work_data(config):
             'parameters', 'runtime_dir'), 'tryton', 'bin', 'tryton')
     result['trytond_conf'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'), 'conf', 'trytond.conf')
+    result['trytond_log_conf'] = os.path.join(virtual_env_path, config.get(
+            'parameters', 'runtime_dir'), 'conf', 'logging.conf')
     result['tryton_conf'] = os.path.join(virtual_env_path, config.get(
             'parameters', 'runtime_dir'), 'conf', 'tryton.conf')
     result['tests_conf'] = os.path.join(virtual_env_path, config.get(
@@ -70,7 +72,8 @@ def start(arguments, config, work_data):
             print 'Server is already up and running !'
         else:
             base_line = [work_data['python_exec'], work_data['trytond_exec'],
-                '-c', work_data['trytond_conf']]
+                '-c', work_data['trytond_conf'], '--logconf',
+                work_data['trytond_log_conf']]
             if arguments.cron:
                 base_line += ['--cron']
             if arguments.mode == 'dev':
@@ -522,7 +525,7 @@ def configure(target_env):
                         'runtime_dir = tryton-workspace']))
     conf_files = [os.path.join(workspace, 'conf', cfg)
         for cfg in ['trytond.conf', 'tests.conf', 'celeryconfig.py',
-            'tryton.conf']]
+            'tryton.conf', 'logging.conf']]
     template_vals = dict(
         WORKSPACE=workspace,
         DATABASE=base_name,
