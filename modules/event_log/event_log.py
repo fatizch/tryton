@@ -17,7 +17,7 @@ class EventLog(model.CoopSQL, model.CoopView):
 
     __name__ = 'event.log'
 
-    description = fields.Text('Description', readonly=True)
+    description = fields.Char('Description', readonly=True)
     object_ = fields.Reference('Object', selection='models_get', readonly=True,
         required=True)
     date = fields.DateTime('Date', readonly=True, required=True)

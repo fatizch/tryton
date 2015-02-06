@@ -9,5 +9,5 @@
     <label name="object_"/>
     <field name="object_"/>
     <label name="description"/>
-    <field name="description"/>
+    <field name="description" colspan="3"/>
 </form>
