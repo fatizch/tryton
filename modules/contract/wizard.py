@@ -1,5 +1,5 @@
 from trytond.pool import Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Len
 from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.transaction import Transaction
 
@@ -16,6 +16,8 @@ __all__ = [
     'ContractActivate',
     'ContractSelectDeclineReason',
     'ContractDecline',
+    'ContractStopSelectContracts',
+    'ContractStop',
     ]
 
 
@@ -362,4 +364,56 @@ class ContractDecline(model.CoopWizard):
         active_id = Transaction().context.get('active_id')
         selected_contract = Contract(active_id)
         selected_contract.decline_contract(reason)
+        return 'end'
+
+
+class ContractStopSelectContracts(model.CoopView):
+    'Select Contract to stop'
+
+    __name__ = 'contract.stop.select_contracts'
+
+    status = fields.Selection([
+            ('terminated', 'Terminated'),
+            ('void', 'Void'),
+            ], 'Status', required=True)
+    at_date = fields.Date('At this date', states={
+            'invisible': Eval('status') != 'terminated',
+            'required': Eval('status') == 'terminated',
+            }, depends=['status'])
+    sub_status = fields.Many2One('contract.sub_status', 'Sub Status',
+        domain=[('status', '=', Eval('status'))], depends=['status'],
+        required=True)
+    contracts = fields.Many2Many('contract', None, None, 'Contracts to stop',
+        required=True, states={'invisible': Len(Eval('contracts', [])) >= 1})
+
+
+class ContractStop(model.CoopWizard):
+    'Stop Contract'
+
+    __name__ = 'contract.stop'
+
+    start_state = 'select_contracts'
+    select_contracts = StateView('contract.stop.select_contracts',
+        'contract.stop_select_contracts_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Ok', 'stop', 'tryton-go-next', default=True),
+            ])
+    stop = StateTransition()
+
+    def default_select_contracts(self, name):
+        if not Transaction().context.get('active_model') == 'contract':
+            return {}
+        return {
+            'contracts': Transaction().context.get('active_ids', []),
+            }
+
+    def transition_stop(self):
+        if self.select_contracts.status == 'void':
+            Pool().get('contract').void(list(self.select_contracts.contracts),
+                self.select_contracts.sub_status)
+        elif self.select_contracts.status == 'terminated':
+            Pool().get('contract').terminate(
+                list(self.select_contracts.contracts),
+                self.select_contracts.at_date,
+                self.select_contracts.sub_status)
         return 'end'

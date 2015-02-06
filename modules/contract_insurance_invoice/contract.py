@@ -480,6 +480,18 @@ class Contract:
                         billing_mode.allowed_payment_terms[0]
                     billing_information.save()
 
+    @classmethod
+    def terminate(cls, contracts, at_date, termination_reason):
+        super(Contract, cls).terminate(contracts, at_date, termination_reason)
+        for contract in contracts:
+            contract.rebill(at_date)
+
+    @classmethod
+    def void(cls, contracts, void_reason):
+        super(Contract, cls).void(contracts, void_reason)
+        for contract in contracts:
+            contract.rebill(datetime.date.min)
+
 
 class ContractFee:
     __name__ = 'contract.fee'
