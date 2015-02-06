@@ -241,8 +241,9 @@ class Payment(export.ExportImportMixin):
     def process(cls, payments, group):
         pool = Pool()
         Event = pool.get('event')
-        super(Payment, cls).process(payments, group)
+        group = super(Payment, cls).process(payments, group)
         Event.notify_events(payments, 'process_payment')
+        return group
 
     @classmethod
     def succeed(cls, payments):
