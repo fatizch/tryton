@@ -16,6 +16,4 @@ class MoveLine:
         if (self.origin and isinstance(self.origin, AccountInvoice) and
                 self.origin.sepa_mandate):
             res['sepa_mandate'] = self.origin.sepa_mandate
-            res['sepa_mandate_sequence_type'] = \
-                self.origin.sepa_mandate.sequence_type
         return res
