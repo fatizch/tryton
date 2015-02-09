@@ -75,6 +75,19 @@ class Group:
                         })
         super(Group, self).process_sepa()
 
+    def dump_sepa_messages(self, dirpath):
+        output_paths = []
+        sepa_messages_waiting = [x for x in self.sepa_messages
+            if x.state == 'waiting']
+        for sepa_msg in sepa_messages_waiting:
+            filepath = os.path.join(dirpath, sepa_msg.filename)
+            with open(filepath, 'w') as _file:
+                _file.write(sepa_msg.message.encode('utf-8'))
+            output_paths.append(filepath)
+        Message = Pool().get('account.payment.sepa.message')
+        Message.do(sepa_messages_waiting)
+        return output_paths
+
     @property
     def sepa_payments(self):
         Payment = namedtuple('Payment', [

@@ -1,5 +1,6 @@
 from trytond.pool import Pool
 
+from .batch import *
 from .payment import *
 from .bank import *
 from .test_case import *
@@ -10,6 +11,7 @@ from .party import *
 def register():
     Pool.register(
         Party,
+        PaymentTreatmentBatch,
         # from payment
         Payment,
         Mandate,

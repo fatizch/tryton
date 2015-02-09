@@ -52,7 +52,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         grouped_payments_list = groupby(payments, key=cls._group_payment_key)
         keys = []
         for key, _grouped_payments in grouped_payments_list:
-            def group():
+            def group_func():
                 pool = Pool()
                 Group = pool.get('account.payment.group')
                 group = Group(**dict(key))
@@ -63,19 +63,10 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             grouped_payments = list(_grouped_payments)
             cls.logger.info('processing group %s of %s' % (key,
                 coop_string.get_print_infos(grouped_payments, 'payment')))
-            payments_group = Payment.process(list(grouped_payments), group)
-            for sepa_msg in payments_group.sepa_messages:
-                filename = cls.generate_filepath(sepa_msg.filename)
-                with open(filename, 'w') as _file:
-                    _file.write(sepa_msg.message.encode('utf-8'))
-                    cls.logger.info('SEPA message written to %s' %
-                        filename)
-            Message = Pool().get('account.payment.sepa.message')
-            Message.do(payments_group.sepa_messages)
-            cls.logger.info("apply transition 'done' to %s" %
-                payments_group.sepa_messages)
+            Payment.process(grouped_payments, group_func)
         cls.logger.success('%s processed' %
-            coop_string.get_print_infos(keys, 'payments group'))
+            coop_string.get_print_infos(groups, 'payments group'))
+        return groups
 
 
 class PaymentCreationBatch(batch.BatchRoot):
