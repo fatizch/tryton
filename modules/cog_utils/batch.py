@@ -130,7 +130,7 @@ class BatchRoot(ModelView):
         return res
 
     @classmethod
-    def generate_filepath(cls, filename, makedirs=True):
+    def generate_filepath(cls, filename='', makedirs=True):
         filepath_template = cls.get_conf_item('filepath_template')
         filepath_template = filepath_template.\
             replace('%{FILENAME}', filename). \
