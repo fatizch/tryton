@@ -317,6 +317,8 @@ def values_mixin(value_model):
 
         def get_summary(self, model, base_object=None, indent=0, increment=2):
             pool = Pool()
+            Date = pool.get('ir.date')
+            lang = pool.get('res.user')(Transaction().user).language
             ValueModel = pool.get(model)
             vals = []
             if not self.values:
@@ -333,6 +335,14 @@ def values_mixin(value_model):
                     else:
                         vals.append((k, field,
                                 prev_value.rec_name if prev_value else '', ''))
+                elif isinstance(field, tryton_fields.Date) or \
+                    (isinstance(field, tryton_fields.Function) and (isinstance(
+                                field._field, tryton_fields.Date))):
+                    if prev_value:
+                        prev_value = Date.date_as_string(prev_value, lang)
+                    if v:
+                        v = Date.date_as_string(v, lang)
+                    vals.append((k, field, prev_value, v))
                 else:
                     vals.append((k, field, prev_value, v))
             return '\n'.join([' ' * indent + u'%s : %s → %s' % (
