@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<data>
-    <xpath expr="/tree/field[@name='definition']" position="after">
-        <button name="button_modify" string="Modify"/>
-    </xpath>
-</data>

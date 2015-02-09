@@ -8,7 +8,6 @@ def register():
     Pool.register(
         Process,
         Endorsement,
-        EndorsementContract,
         EndorsementFindProcess,
         EndorsementPartUnion,
         module='endorsement_process', type_='model')

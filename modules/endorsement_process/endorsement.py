@@ -4,13 +4,12 @@ from sql.operators import Mul
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.cog_utils import model, fields
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
 __all__ = [
     'Endorsement',
-    'EndorsementContract',
     'EndorsementPartUnion',
     ]
 
@@ -125,21 +124,4 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
     @model.CoopView.button_action(
         'endorsement.act_start_endorsement')
     def button_modify(cls, endorsement_part_unions):
-        pass
-
-
-class EndorsementContract:
-    __metaclass__ = PoolMeta
-    __name__ = 'endorsement.contract'
-
-    @classmethod
-    def __setup__(cls):
-        super(EndorsementContract, cls).__setup__()
-        cls._buttons.update({
-                'button_modify': {},
-                })
-
-    @classmethod
-    @model.CoopView.button_action('endorsement.act_resume_endorsement')
-    def button_modify(cls, endorsements):
         pass
