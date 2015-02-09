@@ -5,6 +5,5 @@
     <field name="amount" sum="amount">
         <suffix name="currency_symbol"/>
     </field>
-    <field name="option"/>
-    <field name="option_covered_element"/>
+    <field name="name"/>
 </tree>

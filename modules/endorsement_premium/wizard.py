@@ -44,21 +44,10 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
             new_premium = {x: getattr(premium, x)
                 for x in PremiumPreview.fields_to_extract()}
             new_premium['contract'] = instance.id
-            if (hasattr(premium, 'option') and
-                    premium.option):
-                new_premium['option'] = premium.option.rec_name
-            else:
-                new_premium['option'] = None
-            if (hasattr(premium.option, 'covered_element') and
-                    premium.option.covered_element):
-                new_premium['option_covered_element'] = \
-                    premium.option.covered_element.rec_name
-            else:
-                new_premium['option_covered_element'] = None
+            new_premium['name'] = premium.rec_name
             premiums.append(new_premium)
 
-        sorted_premiums = sorted(premiums, key=itemgetter(
-                'option_covered_element', 'option', 'start'))
+        sorted_premiums = sorted(premiums, key=itemgetter('name', 'start'))
 
         return {
             'id': instance.id,
@@ -115,8 +104,7 @@ class ContractPreviewPremium(model.CoopView):
 
     __name__ = 'endorsement.start.preview_contract_premiums.premium'
 
-    option = fields.Char('Option')
-    option_covered_element = fields.Char('Covered Element for Option')
+    name = fields.Char('Name')
     start = fields.Date('Start')
     end = fields.Date('End')
     amount = fields.Numeric('Amount', digits=(16, Eval('currency_digits', 2)),
@@ -126,7 +114,7 @@ class ContractPreviewPremium(model.CoopView):
 
     @classmethod
     def fields_to_extract(cls):
-        return ['contract', 'start', 'end', 'amount', 'option']
+        return ['contract', 'start', 'end', 'amount']
 
 
 class StartEndorsement:
