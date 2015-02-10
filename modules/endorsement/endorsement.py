@@ -665,6 +665,12 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         fields.Text('Endorsement Summary'),
         'get_endorsement_summary')
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments')
+    contracts_name = fields.Function(
+        fields.Char('Contracts Name'),
+        'get_contracts_name')
+    subscribers_name = fields.Function(
+        fields.Char('Subscribers Name'),
+        'get_subscribers_name')
 
     @classmethod
     def __setup__(cls):
@@ -734,6 +740,12 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     def default_state(cls):
         return 'draft'
+
+    def get_contracts_name(self, name):
+        return '\n'.join([x.rec_name for x in self.contracts])
+
+    def get_subscribers_name(self, name):
+        return '\n'.join([x.subscriber.rec_name for x in self.contracts])
 
     @fields.depends('state')
     def on_change_with_sub_state_required(self, name=None):

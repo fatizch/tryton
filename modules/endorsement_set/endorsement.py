@@ -141,8 +141,8 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
                 self.endorsements])
 
     def get_subscribers_summary(self, name):
-        return '\n'.join([endorsement.contracts[0].subscriber.rec_name for
-                endorsement in self.endorsements])
+        return '\n'.join([x.get_subscribers_name(None) for x in
+                self.endorsements])
 
     @classmethod
     def add_func_key(cls, values):
@@ -176,9 +176,6 @@ class Endorsement:
     contract_set = fields.Function(
             fields.Many2One('contract.set', 'Contract Set'),
             'get_contract_set')
-    contracts_name = fields.Function(
-        fields.Char('Contracts Name'),
-        'get_contracts_name')
 
     @classmethod
     def __setup__(cls):
@@ -190,8 +187,6 @@ class Endorsement:
                 ' must be declined together',
                 })
 
-    def get_contracts_name(self, name):
-        return '\n'.join([x.rec_name for x in self.contracts])
 
     def get_contract_set(self, name):
         return self.endorsement_set.contract_set.id

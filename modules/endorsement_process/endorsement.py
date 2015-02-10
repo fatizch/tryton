@@ -68,6 +68,9 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
     contracts_name = fields.Function(
             fields.Char('Contracts Names'),
             'get_contracts_name')
+    subscribers_name = fields.Function(
+            fields.Char('Subscribers Names'),
+            'get_subscribers_name')
 
     @classmethod
     def __setup__(cls):
@@ -78,6 +81,9 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
 
     def get_contracts_name(self, name):
         return '\n'.join([x.rec_name for x in self.endorsement.contracts])
+
+    def get_subscribers_name(self, name):
+        return self.endorsement.get_subscribers_name(None)
 
     @staticmethod
     def table_query():

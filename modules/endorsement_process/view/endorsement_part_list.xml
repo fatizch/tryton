@@ -2,5 +2,6 @@
 <tree string="Endorsement Parts">
     <field name="contracts_name"/>
     <field name="name"/>
+    <field name="subscribers_name"/>
     <button name="button_modify" string="Modify"/>
 </tree>
