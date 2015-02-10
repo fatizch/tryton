@@ -1001,16 +1001,15 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 ['party', 'person', 'company']):
             return self.item_desc.extra_data_def
 
-    def is_party_covered(self, party, at_date, option):
+    def is_party_covered(self, party, at_date):
         # TODO : Maybe this should go in contract_life / claim
         if party in self.get_covered_parties(at_date):
             for option in self.options:
-                if (utils.is_effective_at_date(option, at_date)
-                        and option.option == option):
+                if utils.is_effective_at_date(option, at_date):
                     return True
         if hasattr(self, 'sub_covered_elements'):
             for sub_elem in self.sub_covered_elements:
-                if sub_elem.is_party_covered(party, at_date, option):
+                if sub_elem.is_party_covered(party, at_date):
                     return True
         return False
 
@@ -1037,10 +1036,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         # TODO : To enhance with status control on contract and option linked
         domain = [
             ('party', '=', party.id),
-            ('option.start_date', '<=', at_date),
-            ['OR',
-                ['option.end_date', '=', None],
-                ['option.end_date', '>=', at_date]],
+            ('options.start_date', '<=', at_date),
+            # ['OR',
+            #     ['options.end_date', '=', None],
+            #     ['options.end_date', '>=', at_date]],
             ]
         if 'company' in Transaction().context:
             domain.append(

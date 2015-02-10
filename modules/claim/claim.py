@@ -305,14 +305,15 @@ class Loss(model.CoopSQL, model.CoopView):
             'required': Bool(Eval('with_end_date')),
             }, depends=['with_end_date'],)
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
-        ondelete='RESTRICT', domain=[
+        ondelete='RESTRICT',
+        domain=[
             If(~~Eval('_parent_claim', {}).get('main_contract'),
                 ('id', 'in', Eval('possible_loss_descs')), ())
             ],
         depends=['possible_loss_descs'])
     possible_loss_descs = fields.Function(
         fields.One2Many('benefit.loss.description', None,
-            'Possible Loss Descs'),
+            'Possible Loss Descs', states={'invisible': True}),
         'on_change_with_possible_loss_descs')
     event_desc = fields.Many2One('benefit.event.description', 'Event',
         domain=[('loss_descs', '=', Eval('loss_desc'))],
@@ -491,7 +492,7 @@ class DeliveredService:
         super(DeliveredService, cls).__setup__()
         utils.update_domain(cls, 'option',
             [If(~~Eval('_parent_loss', {}).get('loss_desc'),
-                ('offered.benefits.loss_descs', '=',
+                ('coverage.benefits.loss_descs', '=',
                     Eval('_parent_loss', {}).get('loss_desc')),
                 ())
             ])
@@ -514,6 +515,7 @@ class DeliveredService:
             return covered_data
 
     def init_dict_for_rule_engine(self, cur_dict):
+        super(DeliveredService, self).init_dict_for_rule_engine(cur_dict)
         cur_dict['service'] = self
         self.benefit.init_dict_for_rule_engine(cur_dict)
         self.loss.init_dict_for_rule_engine(cur_dict)
@@ -532,13 +534,15 @@ class DeliveredService:
             return None, errors
         Indemnification = Pool().get('claim.indemnification')
         indemnification = Indemnification()
-        self.indemnifications.append(indemnification)
+        indemnifications = list(self.indemnifications)
+        indemnifications.append(indemnification)
         indemnification.init_from_service(self)
         self.regularize_indemnification(indemnification, details_dict,
             cur_dict['currency'])
         indemnification.create_details_from_dict(details_dict, self,
             cur_dict['currency'])
-        return indemnification, errors
+        self.indemnifications = indemnifications
+        return self.indemnifications, errors
 
     def create_indemnifications(self, cur_dict):
         if not hasattr(self, 'indemnifications') or not self.indemnifications:
@@ -584,16 +588,18 @@ class DeliveredService:
         cur_dict = {}
         self.init_dict_for_rule_engine(cur_dict)
         # We first check the eligibility of the benefit
-        res, errs = self.benefit.get_result('eligibility', cur_dict)
+        # res, errs = self.benefit.get_result('eligibility', cur_dict)
         self.func_error = None
-        if res and not res.eligible:
-            self.status = 'not_eligible'
-            Error = Pool().get('functional_error')
-            func_err, other_errs = Error.get_functional_errors_from_errors(
-                res.details)
-            if func_err:
-                self.func_error = func_err[0]
-            return None, errs + other_errs
+        # if res and not res.eligible:
+        #     self.status = 'not_eligible'
+        #     Error = Pool().get('functional_error')
+        #     func_err, other_errs = Error.get_functional_errors_from_errors(
+        #         res.details)
+        #     if func_err:
+        #         self.func_error = func_err[0]
+        #     return None, errs + other_errs
+        res = True
+        errs = []
         currencies = self.get_local_currencies_used()
         for currency in currencies:
             cur_dict['currency'] = currency
@@ -743,19 +749,16 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
 
     def create_details_from_dict(self, details_dict, del_service, currency):
         Detail = Pool().get('claim.indemnification.detail')
-        if not getattr(self, 'details', None):
-            self.details = []
-        else:
-            self.details = list(self.details)
-            Detail.delete(self.details)
-            self.details[:] = []
+        details = []
+        if getattr(self, 'details', None):
+            Detail.delete(list(self.details))
         for key, fancy_name in INDEMNIFICATION_DETAIL_KIND:
             if key not in details_dict:
                 continue
             for detail_dict in details_dict[key]:
                 detail = Detail()
                 detail.init_from_indemnification(self)
-                self.details.append(detail)
+                details.append(detail)
                 detail.kind = key
                 for field_name, value in detail_dict.iteritems():
                     # TODO: Temporary Hack
@@ -769,6 +772,7 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
                         and (not getattr(self, 'start_date', None)
                             or detail.start_date < self.start_date)):
                     self.start_date = detail.start_date
+        self.details = details
         self.calculate_amount_and_end_date_from_details(del_service, currency)
 
     def calculate_amount_and_end_date_from_details(self, del_service,
@@ -893,7 +897,8 @@ class ClaimIndemnificationValidateDisplay(model.CoopView):
         'claim.indemnification', '', 'Indemnification',
         states={'readonly': True})
     indemnification = fields.Many2One('claim.indemnification',
-        'Indemnification', states={'invisible': True, 'readonly': True})
+        'Indemnification', states={'invisible': True, 'readonly': True},
+        ondelete='SET NULL')
     amount = fields.Numeric(
         'Amount',
         digits=(16, Eval('currency_digits', DEF_CUR_DIG)),
@@ -907,7 +912,7 @@ class ClaimIndemnificationValidateDisplay(model.CoopView):
     covered_element = fields.Char('Covered Element', states={'readonly': True})
     claim_number = fields.Char('Claim Number', states={'readonly': True})
     claim = fields.Many2One(
-        'claim', 'Claim', states={'readonly': True})
+        'claim', 'Claim', states={'readonly': True}, ondelete='SET NULL')
     claim_declaration_date = fields.Date('Claim Declaration Date')
 
 

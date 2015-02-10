@@ -1,4 +1,4 @@
-from trytond.pyson import If, Eval
+from trytond.pyson import If, Eval, Bool
 
 from trytond.modules.cog_utils import model, fields, coop_string
 
@@ -22,7 +22,10 @@ class ContractService(model.CoopView, model.CoopSQL):
     contract = fields.Many2One('contract', 'Contract', ondelete='RESTRICT')
     option = fields.Many2One(
         'contract.option', 'Coverage', ondelete='RESTRICT', domain=[
-            If(~~Eval('contract'), ('contract', '=', Eval('contract', {})), ())
+            If(
+                Bool(Eval('contract')),
+                ('parent_contract', '=', Eval('contract', {})),
+                ())
             ], depends=['contract'])
     func_error = fields.Many2One('functional_error', 'Error',
         ondelete='RESTRICT', states={
@@ -45,3 +48,6 @@ class ContractService(model.CoopView, model.CoopSQL):
 
     def get_contract(self):
         return self.contract
+
+    def init_dict_for_rule_engine(self, cur_dict):
+        self.option.init_dict_for_rule_engine(cur_dict)

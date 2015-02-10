@@ -4,6 +4,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
+from sql import Null
 from sql.conditionals import NullIf, Coalesce
 from sql.aggregate import Max
 
@@ -973,16 +974,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         query_table = contract.join(history, condition=(
                 (contract.id == history.contract)
                 & (contract.subscriber == party.id)
+                & (contract.status == 'active')
                 & (history.start_date <= at_date)
                 & (
-                    (history.end_date == None)
+                    (history.end_date == Null)
                     | (history.end_date >= at_date))
                 ))
         company_id = Transaction().context.get('company', None)
         cursor.execute(*query_table.select(contract.id,
                 where=(contract.company == company_id) if company_id else
                 None))
-        return cls.browse(cursor.fetchall())
+        return cls.browse([x['id'] for x in cursor.dictfetchall()])
 
     def get_contract_address(self, at_date=None):
         res = utils.get_good_versions_at_date(self, 'addresses', at_date)

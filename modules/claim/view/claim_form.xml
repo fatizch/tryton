@@ -18,6 +18,8 @@
   <newline/>
   <label name="claimant"/>
   <field name="claimant"/>
+  <label name="main_contract"/>
+  <field name="main_contract"/>
   <newline/>
   <notebook>
     <page string="Losses" id="losses">

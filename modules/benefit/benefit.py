@@ -241,6 +241,14 @@ class Benefit(model.CoopSQL, offered.Offered):
             possible_schemas, all_schemas, existing_data, args)
         return result, ()
 
+    def give_me_documents(self, args):
+        try:
+            res, errs = self.get_result('documents', args, kind='document')
+        except offered.NonExistingRuleKindException:
+            return [], []
+
+        return res, errs
+
 
 class InsuranceBenefit(product.Offered):
     'Insurance Benefit'

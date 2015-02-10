@@ -1,3 +1,4 @@
+import datetime
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.rpc import RPC
@@ -68,7 +69,9 @@ class Contract:
             contract = cov_elem.main_contract
             # TODO : Temporary Hack Date validation should be done with domain
             # and in get_possible_covered_elements
-            if contract and contract.is_active_at_date(at_date):
+            if (contract and contract.status == 'active'
+                    and contract.start_date <= at_date <= (
+                        contract.end_date or datetime.date.max)):
                 res.append(contract)
         return res
 

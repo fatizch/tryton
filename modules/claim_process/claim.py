@@ -75,7 +75,7 @@ class Claim(CogProcessFramework):
                 if not (hasattr(delivered, 'benefit') and delivered.benefit):
                     continue
                 contract = delivered.contract
-                product = contract.get_offered()
+                product = contract.product
                 if not product:
                     continue
                 benefit_docs, errs = delivered.benefit.get_result(
@@ -165,10 +165,11 @@ class Loss:
             contracts = self.claim.get_possible_contracts(
                 at_date=self.start_date)
         for contract in contracts:
-            for option in contract.options:
-                benefits = option.get_possible_benefits(self)
-                if benefits:
-                    res[option.id] = benefits
+            for covered_element in contract.covered_elements:
+                for option in covered_element.options:
+                    benefits = option.get_possible_benefits(self)
+                    if benefits:
+                        res[option.id] = benefits
         return res
 
     @fields.depends('loss_desc', 'event_desc', 'start_date', 'claim')
@@ -193,7 +194,7 @@ class Loss:
         pool = Pool()
         Service = pool.get('contract.service')
         if not self.services:
-            self.services = [Service()]
+            self.services = [Service(status='calculating')]
         elif not((len(self.services) == 1
                 and self.services[0].status == 'calculating')):
             return
@@ -214,10 +215,11 @@ class Loss:
             service.contract = contract
             if self.benefit_to_deliver:
                 options = []
-                for option in contract.options:
-                    if self.benefit_to_deliver in \
-                            option.get_possible_benefits(self):
-                        options.append(option)
+                for covered_element in contract.covered_elements:
+                    for option in covered_element.options:
+                        if self.benefit_to_deliver in \
+                                option.get_possible_benefits(self):
+                            options.append(option)
                 if len(set(options)) == 1:
                     service.option = options[0]
         self.services = self.services
@@ -245,9 +247,10 @@ class ClaimDeclareFindProcess(ProcessStart):
 
     __name__ = 'claim.declare.find_process'
 
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='SET NULL')
     claim = fields.Many2One('claim', 'Claim',
-        domain=[('id', 'in', Eval('claims'))], depends=['claims'])
+        domain=[('id', 'in', Eval('claims'))], depends=['claims'],
+        ondelete='SET NULL')
     claims = fields.Function(
         fields.One2Many('claim', None, 'Claims'),
         'on_change_with_claims')
@@ -298,7 +301,6 @@ class ClaimDeclare(ProcessFinder):
         res, errs = super(ClaimDeclare,
             self).init_main_object_from_process(obj, process_param)
         if res:
-            obj.declaration_date = process_param.date
             if process_param.party:
                 obj.claimant = process_param.party
         return res, errs

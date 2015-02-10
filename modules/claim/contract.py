@@ -14,8 +14,9 @@ class Contract:
 
     def get_possible_benefits(self, loss):
         res = []
-        for option in self.options:
-            res.extend(option.get_possible_benefits(loss))
+        for covered_element in self.covered_elements:
+            for option in covered_element.options:
+                res.extend(option.get_possible_benefits(loss))
         return list(set(res))
 
 
@@ -33,8 +34,8 @@ class Option:
         res = []
         if not self.is_item_covered(loss):
             return res
-        return self.offered.get_possible_benefits(loss.loss_desc,
+        return self.coverage.get_possible_benefits(loss.loss_desc,
             loss.event_desc, loss.start_date)
 
     def get_benefits_ids(self, name):
-        return [x.id for x in self.offered.benefits] if self.offered else []
+        return [x.id for x in self.coverage.benefits] if self.coverage else []

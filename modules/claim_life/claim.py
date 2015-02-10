@@ -72,10 +72,9 @@ class DeliveredService:
 
     def get_covered_data(self):
         party = self.get_covered_person()
-        for covered_data in self.option.covered_data:
-            sub_covered_data = covered_data.get_covered_data(party=party)
-            if sub_covered_data:
-                return sub_covered_data
+        for covered_element in self.contract.covered_elements:
+            if covered_element.party == party:
+                return covered_element
 
 
 class ClaimIndemnification:
