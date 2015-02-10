@@ -15,7 +15,8 @@ class Invoice:
 
     sepa_mandate = fields.Many2One('account.payment.sepa.mandate',
         'Sepa Mandate', states={'readonly': Eval('state') != 'draft'},
-        domain=[('party', '=', Eval('party'))], depends=['state', 'party'])
+        domain=[('party', '=', Eval('party'))], depends=['state', 'party'],
+        ondelete='RESTRICT')
 
     def update_invoice_before_post(self):
         invoice = super(Invoice, self).update_invoice_before_post()

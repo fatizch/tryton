@@ -384,7 +384,7 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
 class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
     'Premium Amount per Period'
     __name__ = 'contract.premium.amount.per_period'
-    contract = fields.Many2One('contract', 'Contract')
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
     amount = fields.Numeric('Amount')
     fees = fields.Numeric('Fees')
     untaxed_amount = fields.Numeric('Untaxed Amount')

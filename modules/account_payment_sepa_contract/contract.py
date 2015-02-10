@@ -48,7 +48,7 @@ class ContractBillingInformation:
                 (Eval('_parent_contract', {}).get('status', '') == 'active'))},
         domain=[
             ('account_number.account', '=', Eval('direct_debit_account'))],
-        depends=['direct_debit', 'direct_debit_account']
+        depends=['direct_debit', 'direct_debit_account'], ondelete='RESTRICT',
         )
 
     @classmethod

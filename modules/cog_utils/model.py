@@ -621,7 +621,8 @@ class MethodDefinition(CoopSQL, CoopView):
     description = fields.Text('Description')
     method_name = fields.Selection('get_possible_methods', 'Method Name',
         required=True)
-    model = fields.Many2One('ir.model', 'Model', required=True)
+    model = fields.Many2One('ir.model', 'Model', required=True,
+        ondelete='RESTRICT')
     name = fields.Char('Name')
     priority = fields.Integer('Priority', required=True)
     code_preview = fields.Function(

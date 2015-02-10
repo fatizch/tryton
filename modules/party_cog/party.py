@@ -510,7 +510,7 @@ class SynthesisMenuActionRefreshSynthesis(model.CoopSQL):
     __name__ = 'party.synthesis.menu.action_refresh'
 
     name = fields.Char('Refresh Synthesis')
-    party = fields.Many2One('party.party', 'Party')
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE')
 
     @staticmethod
     def table_query():

@@ -159,11 +159,14 @@ class LineAggregated(model.CoopSQL, model.CoopView):
     __name__ = 'account.move.line.aggregated'
 
     aggregated_move_id = fields.Char('Aggregated Move Id')
-    account = fields.Many2One('account.account', 'Account')
-    journal = fields.Many2One('account.journal', 'Journal')
+    account = fields.Many2One('account.account', 'Account',
+        ondelete='RESTRICT')
+    journal = fields.Many2One('account.journal', 'Journal',
+        ondelete='RESTRICT')
     date = fields.Date('Date')
     post_date = fields.Date('Post Date')
-    snapshot = fields.Many2One('account.move.snapshot', 'Snapshot')
+    snapshot = fields.Many2One('account.move.snapshot', 'Snapshot',
+        ondelete='RESTRICT')
     debit = fields.Numeric('Debit', digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits'])
     credit = fields.Numeric('Credit', digits=(16, Eval('currency_digits', 2)),
