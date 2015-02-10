@@ -1,9 +1,7 @@
-Résumé
-======
+Module account_payment_clearing_cog
+====================================
 
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module ajoute la description au mouvement comptable de compensation à partir
+du nom du journal.
+Il permet aussi de définir sur le journal de paiement si le mouvement de
+compensation doit être émis automatiquement à la validation d'un paiement.

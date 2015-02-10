@@ -1,9 +1,7 @@
 Résumé
 ======
 
-Ce module permet blah blah blah.
+Ce module permet de gérer la distribution d'un produit sur un réseau.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+- Gestion du produit commercial (marque blanche)
+- Cloisonnement d'un contrat sur un niveau du réseau de distribution

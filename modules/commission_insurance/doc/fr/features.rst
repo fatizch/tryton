@@ -1,17 +1,27 @@
 Fonctionnalités
 ===============
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+- **Plans de Commissionnement**
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+    - La *Méthode de commissionnement* permet de définir quand les commissions
+      sont dues *A l'émission* ou *Au Paiement* de la quittance
+    - Le *Type* de plan permet de différencier le plan de commissionnement de
+      l'assureur et le plan de commissionnement du courtier
+    - Le *Plan lié* permet d'associer à un plan de commissionnement courtier le
+      plan de commissionnement assureur
+    - Les *Lignes* permettent de définir pour un ensemble de garantie (qui
+      peuvent être liées à des produits différents) la formule de commission à
+      appliquer. Selon le paramétrage de la formule il est possible de calculer
+      une commission linéaire ou en escompte (taux variant au fil du temps).
 
-- **impression de documents:** envoie les documents dans le cloud.
+- Le **Protocole de commissionnement** est le lien entre un intermédiaire
+  d'assurance (un assureur ou un courtier) et un plan de commissionnement associé.
+  Le protocole peut avoir une date de début et une date de fin.
 
-  Les documents sont conservés éditables à tout moment.
+- L'**Assistant de création des protocoles de commissionnement** permet de
+  saisir en masse pour un ensemble de courtier toutes les informations
+  nécessaires pour calculer les différentes commissions
 
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- L'**Assistant de génération des bordereaux de commissions** permet de générer
+  les différents bordereaux des courtiers
+

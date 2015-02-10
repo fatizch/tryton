@@ -1,9 +1,13 @@
 Résumé
 ======
 
-Ce module permet blah blah blah.
+Ce module permet de gérer la notion générique de contrat de service.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+- Souscription de contrat
+- Gestion de données complémentaires
+- Déclinaison de garanties
+- Résiliation de contrat
+- Rénonciation de contrat
+- Gestion du Sans Effet
+- Changement de date d'effet
+- Assistant de saisie des options basé sur leur comportement à la souscription

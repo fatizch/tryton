@@ -1,9 +1,5 @@
 Résumé
-======
+==========================
 
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Le module offered_eligibility ajoute la possibilité d'employer le moteur de
+règles pour ajouter des conditions d'éligibilité à une garantie.

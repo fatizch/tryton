@@ -1,9 +1,10 @@
 Résumé
 ======
 
-Ce module permet blah blah blah.
+Ce module permet gérer le paramétrage des prestations
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+- Gestion des événements couverts
+- Gestion des descripteurs de préjudice
+- Règle de calcul des prestations
+- Gestion du versement d'un capital, d'une indemnité périodique ou d'une rente
+- Gestion des paliers temporels de remboursement pour les indemnités

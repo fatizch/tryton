@@ -1,17 +1,10 @@
 Fonctionnalités
 ===============
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+- La configuration par défaut ajoute une clause (définie dans le fichier
+  rule_template.xml) nommée Option Elgibility Rule qui fournit un algorithme pour
+  définir l'égilibilité d'une garantie en fonction de l'âge du prospect.
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
-
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- La règle permet de mesurer si l'âge du prospect (soit son âge réel, soit son
+  âge millésime par rapport à une date donnée, soit son âge à la fin du mois) est
+  bien inférieur à un âge maximal.

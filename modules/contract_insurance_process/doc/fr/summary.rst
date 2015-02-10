@@ -1,9 +1,8 @@
 Résumé
 ======
 
-Ce module permet blah blah blah.
+Ce module permet de gérer le processus de souscription d'un contrat d'assurance
+avec le moteur de processus.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+- Retrouve le bon déroulé d'écran en fonction du produit
+- Permet de lancer une souscription depuis un acteur
