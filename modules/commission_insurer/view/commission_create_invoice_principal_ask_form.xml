@@ -2,9 +2,12 @@
 <form string="Create Commission Invoice Principal">
     <label name="company"/>
     <field name="company"/>
-    <label name="party"/>
-    <field name="party"/>
     <label name="journal"/>
     <field name="journal"/>
-    <field name="description" colspan="4"/>
+    <newline/>
+    <label name="description"/>
+    <field name="description" yfill="0" yexpand="0"/>
+    <label name="post_invoices"/>
+    <field name="post_invoices"/>
+    <field name="insurers" colspan="4"/>
 </form>

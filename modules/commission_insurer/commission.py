@@ -6,7 +6,7 @@ from trytond.pool import Pool
 from trytond.pyson import PYSONEncoder
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, utils
 
 __all__ = ['CreateInvoicePrincipal', 'CreateInvoicePrincipalAsk']
 
@@ -31,18 +31,17 @@ class CreateInvoicePrincipal(Wizard):
                 [('origin.id', '!=', None, 'account.move')]
             ]]
 
-    def do_create_(self, action):
+    def create_insurer_notice(self, party):
         pool = Pool()
         Line = pool.get('account.move.line')
         Move = pool.get('account.move')
         Commission = pool.get('commission')
         Invoice = pool.get('account.invoice')
 
-        party = self.ask.party
         account = party.insurer_role[0].waiting_account
         if not account:
             return
-        commission_invoice = self.get_invoice()
+        commission_invoice = self.get_invoice(party)
         commission_invoice.save()
 
         lines = Line.search(self.get_domain(account))
@@ -90,17 +89,27 @@ class CreateInvoicePrincipal(Wizard):
                     })
 
         Invoice.update_taxes([commission_invoice])
+        return commission_invoice
 
+    def do_create_(self, action):
+        Invoice = Pool().get('account.invoice')
+        invoices = []
+        for insurer in self.ask.insurers:
+            commission_invoice = self.create_insurer_notice(insurer)
+            if commission_invoice:
+                invoices.append(commission_invoice)
+
+        if self.ask.post_invoices:
+            Invoice.post(invoices)
         encoder = PYSONEncoder()
         action['pyson_domain'] = encoder.encode(
-            [('id', '=', commission_invoice.id)])
+            [('id', 'in', [x.id for x in invoices])])
         action['pyson_search_value'] = encoder.encode([])
         return action, {}
 
-    def get_invoice(self):
+    def get_invoice(self, party):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        party = self.ask.party
         company = self.ask.company
         return Invoice(
             company=company,
@@ -111,6 +120,7 @@ class CreateInvoicePrincipal(Wizard):
             currency=company.currency,
             account=party.account_payable,
             payment_term=party.supplier_payment_term,
+            invoice_date=utils.today(),
             )
 
     def get_invoice_line(self, amount, account):
@@ -132,11 +142,28 @@ class CreateInvoicePrincipalAsk(ModelView):
     'Create Invoice Principal'
     __name__ = 'commission.create_invoice_principal.ask'
     company = fields.Many2One('company.company', 'Company', required=True)
-    party = fields.Many2One('party.party', 'Principal', required=True,
-        domain=[('is_insurer', '=', True)])
+    insurers = fields.Many2Many('party.party', None, None, 'Insurers',
+        required=True, domain=[('is_insurer', '=', True)])
     journal = fields.Many2One('account.journal', 'Journal', required=True)
     description = fields.Text('Description', required=True)
+    post_invoices = fields.Boolean('Post Invoices')
 
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
+
+    @staticmethod
+    def default_journal():
+        pool = Pool()
+        Journal = pool.get('account.journal')
+        journals = Journal.search([
+                ('type', '=', 'commission'),
+                ], limit=1)
+        if journals:
+            return journals[0].id
+
+    @staticmethod
+    def default_description():
+        Translation = Pool().get('ir.translation')
+        return Translation.get_source('received_premiums', 'error',
+            Transaction().language)
