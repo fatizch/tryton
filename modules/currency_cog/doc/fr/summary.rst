@@ -1,9 +1,3 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module sert d'interface avec le module tryton **currency**. Il permet
+également de définir la méthode d'arrondit par défaut. Enfin, il fournit des
+utilisataires pour les développeurs travaillant avec les monnaies.

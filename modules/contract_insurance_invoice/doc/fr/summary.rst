@@ -1,9 +1,3 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module permet de gérer le quittancement des contrats. Les primes calculées
+dans le module **premium** sont utilisées pour générer les quittances sur le
+contrat et brancher la comptabilité afférente.

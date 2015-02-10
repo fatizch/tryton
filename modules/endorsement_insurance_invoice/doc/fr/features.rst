@@ -1,17 +1,24 @@
-Fonctionnalités
-===============
+- **Avenant unitaire de manipulation des données de quittancement :** Permet de
+  modifier sur un contrat les paramètres de quittancement. Ces modifications
+  peuvent être prévues dans le futur, et porter sur la fréquence, le mode de
+  paiement, le compte à utiliser, etc...
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+- **Notion d'avenant tarifant :** Il est possible de marquer un avenant comme
+  *tarifant*. Cela signifie que :
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+ - L'application de l'avenant déclenchera un recalcul des tarifs sur le
+   contrats à partir de la date d'effet
 
-- **impression de documents:** envoie les documents dans le cloud.
+ - Ce recalcul sera suivi d'une suppression / annulation des quittances
+   antérieures à ou incluant la date d'effet de l'avenant, en fonction de leur
+   statut (les quittances en brouillon ou simplement validée seront supprimées,
+   celles émises ou payées seront annulées, et la comptabilité sera mise à jour
+   en fonction).
 
-  Les documents sont conservés éditables à tout moment.
+ - Les quittances seront ensuite recréées / émises pour prendre en compte les
+   nouveaux tarifs.
 
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+ - Tout ces comportement seront répliqués en cas d'annulation de l'avenant.
+
+ Il est important de noter que les avenants tarifants forcent la génération
+ d'une quittance débutant à leur date d'effet.

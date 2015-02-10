@@ -1,6 +1,3 @@
-Fonctionnalités
-===============
-
 - La configuration par défaut ajoute une clause (définie dans le fichier
   rule_template.xml) nommée Option Elgibility Rule qui fournit un algorithme pour
   définir l'égilibilité d'une garantie en fonction de l'âge du prospect.

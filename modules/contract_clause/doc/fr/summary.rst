@@ -1,9 +1,3 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module ajoute une liste de clauses sur les contrats. Ces clauses sont
+librement modifiables ou pas en fonction de leur configuration (cf module
+**clause**)

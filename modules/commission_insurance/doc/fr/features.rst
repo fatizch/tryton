@@ -1,6 +1,3 @@
-Fonctionnalités
-===============
-
 - **Plans de Commissionnement**
 
     - La *Méthode de commissionnement* permet de définir quand les commissions

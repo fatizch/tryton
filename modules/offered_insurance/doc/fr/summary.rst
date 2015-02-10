@@ -1,9 +1,4 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module complète le paramétrage produit pour gérer les contrats d'assurance.
+Cela passe par l'ajout du paramétrage des *Descripteurs de risque*,
+l'utilisation des données complémentaires, la gestion des exclusions,
+les différentes règles métier (terme, renouvellement, etc...).

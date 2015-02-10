@@ -1,6 +1,7 @@
 Module endorsement_set_process
 ===============================
 
+TODO
 Ce module permet de définir des processus sur des ensembles d'avenants.
 Il ajoute les principales fonctionnalités suivantes, utilisables
 dans des processus.
@@ -9,7 +10,7 @@ dans des processus.
 Méthodes:
 ---------
 
-- Génération des documents sur les contracts
+- Génération des documents sur les contrats
 
   .. code:: python
 
@@ -74,3 +75,19 @@ Champs:
   l'ensemble d'avenant (documents attachés à l'ensemble de contrat
   correspondant), et par les différents avenants (documents attachés aux
   contrats), au moment de l'application des avenants.
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

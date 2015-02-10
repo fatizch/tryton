@@ -1,6 +1,7 @@
 Module endorsement_set
 ======================
 
+TODO
 Ce module définit la notion d'ensemble d'avenants.
 Il ajoute les principales fonctionnalités suivantes:
 
@@ -24,3 +25,19 @@ Méthodes:
       decline_set
 
   Cette méthode décline tous les avenants de l'ensemble.
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

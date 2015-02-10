@@ -1,9 +1,3 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module ajoute des fonctionnalités transverses aux modules qui en dépendent.
+Tous les modules de **Coog** en dépendent, et tous les modules issus de tryton
+doivent également en dépendre (via les modules *_cog*).

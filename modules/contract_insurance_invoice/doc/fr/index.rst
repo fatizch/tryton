@@ -1,7 +1,25 @@
 Module contract_insurance_invoice
 =================================
 
-.. toctree::
-   :maxdepth: 2
+Résumé
+------
 
-   batch
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+Aide utilisateur
+----------------
+
+.. toctree::
+    user/batch.rst
+
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

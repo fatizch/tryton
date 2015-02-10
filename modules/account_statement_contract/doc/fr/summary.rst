@@ -1,6 +1,3 @@
-Résumé
-======
-
 Ce module permet blah blah blah.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.

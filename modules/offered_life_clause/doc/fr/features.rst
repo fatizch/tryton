@@ -1,17 +1,5 @@
-Fonctionnalités
-===============
-
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
-
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
-
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Paramétrage des clause bénéficiaires :** Permet d'ajouter sur chaque
+  garantie une liste de clauses bénéficiaires possibles, ainsi qu'une clause
+  bénéficiaire par défaut (optionnelle). Ces données sont utilisées dans
+  le module **contract_life_clause** pour permettre la saisie des clauses
+  bénéficiaires lors de la souscription des contrats utilisant la garantie.

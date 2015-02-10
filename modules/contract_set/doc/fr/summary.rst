@@ -1,9 +1,6 @@
-Résumé
-======
+Ce module permet de lier des contrats dans un 'Ensemble de contrats'.
+Il est ainsi possible d'utiliser les informations d'un ensemble de
+contrats pour paramétrer des règles métiers.
 
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Par exemple, une réduction tarifaire s'applique si un contrat prévoyance
+est souscrit en même temps qu'un contrat santé.

@@ -1,9 +1,3 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module enrichit le module **endorsement** pour gérer les spécificités de
+l'assurance. Il ajoute en particulier les avenants d'ajout / suppression de
+garanties / éléments couverts, et manipulation de surprimes.

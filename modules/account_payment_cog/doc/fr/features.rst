@@ -1,17 +1,8 @@
-Fonctionnalités
-===============
+- **Batch de création et de traitement des paiements**
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+- **Ajout des informations de paiement sur la synthèse acteur**
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+- **Gestion automatisée des rejets de paiement**
 
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+    - Paramétrage des raisons d'un rejet
+    - Paramétrage par raisons des actions à exécuter suite à un rejet

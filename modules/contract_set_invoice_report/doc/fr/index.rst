@@ -1,6 +1,7 @@
 Module contract_set_invoice_report
 ==================================
 
+TODO
 Le module contract_set_invoice_report permet de mettre à disposition
 d'un modèle de lettre les informations sur les quittances aggrégées d'un
 ensemble de contrat.  A l'intérieur d'un ensemble de contrat (contract.set),
@@ -12,7 +13,7 @@ d'échéance, pour le cas d'un paiement par chèque, sont sommées entre elles.
 
 Dans un modèle de lettre, il est alors possible d'afficher les montants des
 quittances aggrégées par groupes de contrats en itérant sur la fonction
-contract_groups_info avec un modèle de lettre de ce type : 
+contract_groups_info avec un modèle de lettre de ce type :
 
 <for each="contract_set in objects">
 <for each="group in contract_set.contract_groups_info()">
@@ -38,3 +39,20 @@ so :
 </for>
 </for>
 </for>
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

@@ -1,6 +1,3 @@
-Résumé
-======
-
 Ce module permet de générer les bordereaux assureurs. La génération se base
 sur le compte d'attente défini au niveau de l'assureur. Pour chaque ligne dans
 ce compte, la commission du gestionnaire est calculée. Un mouvement comptable

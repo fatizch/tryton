@@ -1,6 +1,3 @@
-Résumé
-======
-
 Ce module permet gérer les sinistres d'un contrat d'assurance
 
 - Ouverture de sinistre

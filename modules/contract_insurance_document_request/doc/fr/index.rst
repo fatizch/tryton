@@ -1,7 +1,18 @@
 Module contract_insurance_document_request
 ==========================================
 
-Permet de définir sur un produit et sur une garantie une liste de pièces nécessaires à la souscription d'un contrat.
+Résumé
+------
 
-Lors de la souscription, une demande de pièces sera créée pour chaque pièce
-paramétrée.
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

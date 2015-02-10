@@ -1,6 +1,3 @@
-Résumé
-======
-
 Ce module permet gérer le paramétrage des prestations
 
 - Gestion des événements couverts

@@ -1,9 +1,4 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module ajoute le nécessaire permettant de tarifer les produits / garanties
+paramétrées. Il permet de calculer les primes de base sur les contrats, de
+manipuler (activer / modifier / désactiver) les frais, et de visualiser les
+primes d'un contrat.

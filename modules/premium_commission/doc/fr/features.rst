@@ -1,17 +1,7 @@
-Fonctionnalités
-===============
+- **Frais sur des plans de commissionnement :** Permet de définir sur un plan
+  de commissionnement les frais qui seront automatiquement ajoutés au contrat
+  lors de la souscription. Ces frais seront ou pas dérogeables en fonction de
+  leur paramétrage.
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
-
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
-
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Frais sur l'apporteur :** Permet de définir sur un apporteur des frais à
+  ajouter automatiquement lors de la souscription.

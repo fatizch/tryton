@@ -1,17 +1,24 @@
-Fonctionnalités
-===============
+- **Paramétrage d'avenant :** Il est possible depuis l'interface de créé des
+  avenants en combinant des avenants basiques. Ces avenants peuvent être
+  rattachés à des produits, ou bien être disponibles quelque soit le produit.
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+- **Suspension de saisie :** La saisie d'un avenant peut se faire en plusieurs
+  fois sans perte. Les modifications demandées par l'avenant sont
+  sauvegardées sans aucun impact sur le contrat. Un avenant suspendu peut être
+  repris à n'importe quel moment.
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+- **Annulation d'avenant :** Un avenant appliqué peut être annulé sous
+  certaines conditions. Cette annulation restaure le contrat dans l'état où il
+  était juste avant l'application de l'avenant.
 
-- **impression de documents:** envoie les documents dans le cloud.
+- **Synthèse de l'avenant :** Avant et après application, il est possible de
+  consulter les modifications apportées par l'avenant sous la forme d'une
+  synthèse textuelle.
 
-  Les documents sont conservés éditables à tout moment.
+- **Prévisualisation de l'avenant :** Après la saisie (mais avant
+  l'application), il est possible d'afficher un écran avant / après, qui
+  permet de se rendre compte des modifications apportées par l'avenant en
+  termes par exemple de primes calculées sur le contrat.
 
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Outils de développement :** Un ensemble d'outils sont mis à disposition
+  des développeurs pour faciliter l'écriture de nouveaux avenants.

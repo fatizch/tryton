@@ -1,6 +1,7 @@
 Module endorsment_insurance_invoice
 ===================================
 
+TODO
 Le module endorsement_insurance_invoice permet d'intégrer les avenants avec la
 tarification et le quittancement des contrats d'assurance. Il permet de marquer
 certains avenants unitaires comme étant tarifants. Cela signifie que les
@@ -23,3 +24,19 @@ comme suit :
 
 Il est important de noter que les avenants tarifants forcent la génration
 d'une quittance débutant à leur date d'effet.
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

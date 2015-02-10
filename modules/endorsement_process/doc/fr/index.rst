@@ -1,6 +1,7 @@
 Module endorsement_process
 ==========================
 
+TODO
 Ce module permet de définir des processus sur des avenants.
 Il ajoute les principales fonctionnalités suivantes, utilisables
 dans des processus.
@@ -64,3 +65,19 @@ Champs:
 
   Ce champ permet d'afficher tous les documents qui ont été générés par
   l'avenant.
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

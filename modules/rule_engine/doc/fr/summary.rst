@@ -1,9 +1,6 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Le moteur de règle permet de définir des règles métiers complexes directement
+dans le paramétrage. Ces règles vont de points simples (définition de l'âge
+maximum d'éligibilité sur une garantie) aux règles de tarifications les plus
+évoluées. Il inclut des fonctionnalités avancées de tests, ainsi que des outils
+permettant de comprendre le comportement précis des règles les plus
+travaillées.

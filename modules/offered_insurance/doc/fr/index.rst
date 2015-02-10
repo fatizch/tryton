@@ -1,8 +1,29 @@
 Module offered_insurance
 ============================================
 
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+Aide utilisateur
+----------------
+
 .. toctree::
    :maxdepth: 2
 
-   creer_un_produit_tuto
-   imprimer_courrier
+   user/batch
+   user/creer_un_produit_tuto
+   user/imprimer_courrier
+
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

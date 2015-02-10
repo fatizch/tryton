@@ -1,17 +1,15 @@
-Fonctionnalités
-===============
+- **Enregistrement des évènements sur les objets métiers:** Un
+  enregistrement d'évènement contient un lien vers l'object métier, le
+  type d'évènement, le nom de l'utilisateur ayant effectué l'action,
+  la date précise de l'évènement, ainsi qu'une description.
+  Exemples d'évènements enregistrés:
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+  + Changement de statut d'un contrat
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+  + Génération d'une quittance
 
-- **impression de documents:** envoie les documents dans le cloud.
+  + Application d'un avenant
 
-  Les documents sont conservés éditables à tout moment.
+- **Configuration de déclencheurs pour l'enregistrement d'évènement**
 
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Visualisation des logs depuis l'application**

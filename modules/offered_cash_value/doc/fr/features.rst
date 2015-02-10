@@ -1,17 +1,5 @@
-Fonctionnalités
-===============
+- **Compte d'attente :** Permet de configurer sur un produit de
+  capitalisation le compte à utiliser pour les dépôts.
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
-
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
-
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Règle d'actualisation :** Règle de calcul à utiliser pour déterminer le
+  capital actualisé à un instant donné.

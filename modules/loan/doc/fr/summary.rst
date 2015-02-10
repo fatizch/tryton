@@ -1,6 +1,3 @@
-Résumé
-======
-
 Ce module permet des gérer les prêts et les contrats d'assurance emprunteur.
 
 - Gestion des prêts à taux fixe, à taux zéro, prêt relais, in fine, à palier

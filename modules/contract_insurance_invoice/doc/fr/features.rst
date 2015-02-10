@@ -1,17 +1,28 @@
-Fonctionnalités
-===============
+- **Paramétrage des paramètres de quittancement :** Il est possible de définir
+  par paramétrage un ensemble de règles de quittancement, ainsi que les
+  produits et / ou conditions sous lesquelles ces règles sont disponible.
+  Ces règles contiennent typiquement le moyen de paiement utilisé et la
+  fréquence de quittancement.
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+- **Gestion des paramètres de quittancement :** Les contrats nécessitent que
+  des paramètres de quittancement soient renseignés, afin que le système soit
+  capable de décider quand et comment générer les quittances. Ces paramétres
+  sont limités à ceux disponibles pour le produit sélectionné sur le contrat.
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+- **Branchement de la comptabilité :** A partir du moment où des quittances
+  sont générées, il est nécessaire de les comptabiliser. Les données de
+  paramétrage pur (Produits, Garanties offertes, Frais...) requièrent
+  maintenant de renseigner les comptes comptables à utiliser lors des
+  opérations de quittancement.
 
-- **impression de documents:** envoie les documents dans le cloud.
+- **Quittances d'assurance :** Les quittances d'assurance comportent des
+  informations supplémentaires par rapport aux quittances *standard*.
+  En particulier, elles sont rattachées à une période de couverture sur le
+  contrat qui les a générées. De plus, on introduit la séparation des montants
+  de frais.
 
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Détails de quittance :** Afin de comprendre précisément l'origine de
+  chaque ligne des quittances générées, les lignes des quittances générées
+  suite à une facturation de contrat ont des *détails* qui relie la ligne aux
+  données métier qui l'ont généré. Ceci permet également de faciliter les
+  extractions basées sur les primes.

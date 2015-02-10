@@ -1,4 +1,19 @@
-Module account_payment_sepa_cog
+account_payment_sepa_cog
 ============================================
 
-TODO
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

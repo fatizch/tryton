@@ -1,9 +1,4 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module permet de déclencher une Reprise Intégrale de Contrat via le
+processus d'avenant. Cet avenant particulier est réservé aux cas où le contrat
+est à reprendre en totalité. Afin de faciliter la saisie, il réutilise un
+processus similaire au processus de souscription.

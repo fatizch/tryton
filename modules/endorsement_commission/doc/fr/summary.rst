@@ -1,9 +1,4 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module ajoute deux vues et le type d'avenant unitaire "commissionnement".
+Ces vues permettent de modifier les caractéristiques de commissionnement du
+contrat. La distinction se fait entre la possibilité de changer de plan de
+commissionnement ou pas, cet élément étant généralement tarifant.

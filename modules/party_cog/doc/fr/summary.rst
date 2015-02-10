@@ -1,6 +1,3 @@
-Résumé
-======
-
 Ce module enrichit la gestion des acteurs.
 
 - Gestion des personnes morales et/ou personne physique

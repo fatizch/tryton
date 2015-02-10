@@ -1,17 +1,4 @@
-Fonctionnalités
-===============
-
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
-
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
-
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Souscripteur assuré :** Dans le cas des contrats prévoyance, il est
+  possible de faire du souscripteur un assuré par défaut si le paramétrage le
+  préconise. Cela permet de diminuer le temps de saisie dans ce cas particulier
+  relativement fréquent.

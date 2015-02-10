@@ -1,9 +1,6 @@
-Résumé
-======
-
-Ce module permet blah blah blah.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+Ce module complète le module **contract** pour le rendre compatible avec les
+spécificités des métiers de l'assurance. En particulier, il ajoute les notions
+d'élément couvert, de surprimes, et renforce les liens entre le paramétrage
+produit et le contrat.
+Il permet également de saisir les données complémentaires définies dans le
+paramétrage avec le module **offered_insurance**.

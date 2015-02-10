@@ -1,7 +1,18 @@
 Module Endorsement Commission
 =============================
 
-Ce module ajoute deux vues et le type d'avenant unitaire "commissionnement".
-Ces vues permettent de modifier les caractéristiques de commissionnement du
-contrat. La distinction se fait entre la possibilité de changer de plan de
-commissionnement ou pas, cet élément étant généralement tarifant.
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

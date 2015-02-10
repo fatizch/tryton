@@ -1,17 +1,28 @@
-Fonctionnalités
-===============
+- **Création de tables :** La création d'une table se fait en deux parties :
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+  - Saisie des données définissant la table (type de donnée, nombre de
+    dimensions, valeurs possibles pour chaque dimension...)
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+  - Saisie du contenu de la table. Cette saisie peut se faire :
 
-- **impression de documents:** envoie les documents dans le cloud.
+    - Via import / export de paramétrage **Coog**
 
-  Les documents sont conservés éditables à tout moment.
+    - Via import de fichier csv spécialement formaté
 
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+    - Via copier-coller des données
+
+    - Manuellement, cellule par cellule (à limiter aux tables de petite taille)
+
+- **Visualisation de tables :** Le contenu d'une table à plusieurs dimensions
+  (plus de 2) peut être difficile à visualiser. Le module **table** permet de
+  visualiser ces données de deux façons :
+
+  - Liste simple : chaque ligne de cette liste contient la valeur de chaque
+    dimension, ainsi que la valeur résultante.
+
+  - Tableau 2D : Affichage sour forme de tableau classique. Cette vue est utile
+    pour les tables à 2 dimensions, et peut également être utilisée pour des
+    tables à N dimensions en figeant les valeurs de N - 2 dimensions.
+
+- **Index :** Un index étant une table à une dimension, ce module permet de
+  les gérer correctement.

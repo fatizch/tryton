@@ -1,17 +1,11 @@
-Fonctionnalités
-===============
+- **Génération des documents:** Permet de générer des documents et de les
+  attacher aux contrats et à l'ensemble de contrats depuis un processus sur
+  un ensemble de contrats, par exemple, lors d'une transition entre étapes.
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
-
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
-
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Sous-processus sur les contrats:** Un processus sur un ensemble de contrats
+  peut inclure des sous-processus sur chacun des contrats de l'ensemble.
+  Il est par exemple possible de lancer, depuis un processus sur un ensemble
+  de contrats, un sous-processus de validation sur chacun des contrats d'un
+  ensemble. Une fois chaque contrat validé et donc chaque sous-processus
+  terminé, le processus principal permet d'activer tous les contrats
+  simultanément.

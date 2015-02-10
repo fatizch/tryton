@@ -1,6 +1,7 @@
-Module Premium
-==============
+Module Prime [premium]
+======================
 
+TODO
 Ce module ajoute le nécessaire permettant de tarifer les produits / garanties
 paramétrées. Il ajoute l'onglet "Données de tarification" sur ces entités. Cet
 onglet permet de renseigner les éléments suivants :
@@ -39,3 +40,20 @@ compte lors du calcul des primes du contrat.
 
 Ce module ajoute aussi un bouton permettant d'afficher les primes dans la vue
 forme d'un contrat. Ce bouton n'est visible que lorsque le contrat est actif.
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

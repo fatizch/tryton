@@ -1,6 +1,7 @@
-Module Processus Paramétrés Coog
-================================
+Module Processus Paramétrés Coog [process_cog]
+==============================================
 
+TODO
 Ce module permet d'améliorer les processus paramétrés en ajoutant les
 fonctionnalités suivantes :
 
@@ -13,3 +14,19 @@ fonctionnalités suivantes :
    processus tant que les conditions définies dans ce domaine ne sont pas
    remplies. Cela permet de définir "simplement" des contraintes sur le
    workflow.
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

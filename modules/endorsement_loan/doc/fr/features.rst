@@ -1,17 +1,18 @@
-Fonctionnalités
-===============
+- **Avenant unitaire de modification des paramètres du prêt :** Permet de
+  modifier les données du prêt. Ces modifications donnent lieu à une
+  prévisualisation de l'échéancier du prêt, et permettent ensuite de
+  sélectionner les contrats à impacter. Les contrats non impactés ne seront
+  pas recalculés, mais toute modification ultérieure prendra en compte les
+  nouvelles données du prêt.
 
-- **gestionnaire d'équipes:** organise les équipes en fonction du temps de
-  charge attribué à chaque pôle critique du domaine.
-  L'assignation des tâches se fait :
+- **Avenant unitaire de modification des quotités :** Permet de modifier les
+  quotités du ou des contrats rattachés au prêt. Ces modifications sont
+  versionnées et peuvent se faire dans le passé ou le futur. Il est également
+  possible de créer de nouvelles quotités si souhaité.
 
-    - par temps: à raison de 8h par jour
-    - par membre: les chefs et sous-chefs d'équipe ayant une priorité allant de
-      *Basse* à *Haute*.
+- **Modification des surprimes (gestion du pourmillage) :** Permet de gérer les
+  avenants portant sur des surprimes en pourmillage du capital du prêt.
 
-- **impression de documents:** envoie les documents dans le cloud.
-
-  Les documents sont conservés éditables à tout moment.
-
-- **installation en mode service:** notre solution se relance automatiquement
-  au redémarrage de votre serveur.
+- **Prévisualisation de l'échéancier de quittances :** Permet lors de l'étape
+  de prévisualisation de consulter l'échéancier des quittances qui sera
+  généré suite à l'application de l'avenant.

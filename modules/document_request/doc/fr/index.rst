@@ -1,10 +1,26 @@
 Module document_request
 =======================
 
-Permet de créer des demandes de pièces.
+Résumé
+------
 
-Il intègre un wizard qui permet de réceptionner les pièces et de les rapprocher
-à des demandes. La pièce reçue est stockée dans la GED.
+.. include:: summary.rst
 
-Un traitement automatisé (batch) permet de générer un courrier afin de
-demander les pièces non reçues.
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+Aide utilisateur
+----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   user/batch
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

@@ -1,18 +1,29 @@
 Module event_log
 ===================
 
-Le module event_log permet d'enregistrer des informations concernant des actions
+TODO
 effectuées dans coog.
-Pour qu'un event_log soit créé, il faut créer un déclencheur tryton
-en désignant Event Log comme modèle de l'action dans le déclencheur. Il faut
-également désigner la fonction create_event_logs comme "fonction de 
-l'action" dans le déclencheur.
-Les informations enregistrées sont : le type d'action, correspondant au nom
-du déclencheur, la date de de l'action, le nom de l'utilisateur ayant
-effectué l'action, l'objet tryton qui est la cible de l'action, et une
-description.
+également désigner la fonction create_event_logs comme "fonction de
 
-Par exemple pour créer un event_log lorsqu'un contrat est activé, il suffit
-de créer un déclencheur paramétré comme dans l'image ci-dessous:
+Par exemple, lorsque ce module est intallé, chaque activation d'un contrat
+donne lieu à l'enregistrement d'un évènement contenant un lien vers le
+contrat, le type d'évènement (activation du contrat), l'utilisateur ayant
+effectué l'action, ainsi que la date précise de l'évènement.
 
-.. image:: images/declencheur.png
+Il est aussi possible de configurer l'enregistrement d'évènement
+
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+    features.rst

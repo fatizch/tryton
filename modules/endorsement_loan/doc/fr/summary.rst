@@ -1,9 +1,8 @@
-Résumé
-======
+Ce module permet de gérer les modifications sur des prêts rattachés à des
+contrats actifs. Ces modifications incluent :
 
-Ce module permet blah blah blah.
+ - La modification des paramètres du prêt.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus.
-Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec
-consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-libero egestas mattis sit amet vitae augue.
+ - La modification des quotités sur les contrats rattachés.
+
+ - La mise à jour des dates de fins des contrats rattachés.

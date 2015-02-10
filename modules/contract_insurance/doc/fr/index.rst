@@ -1,12 +1,23 @@
 Module contract_insurance
 ============================================
 
-ce module permet de 
 
-- ... à compléter 
-- définir des surprimes et des réductions à appliquer sur un ensemble de garanties
+Résumé
+------
+
+.. include:: summary.rst
+
+
+Aide utilisateur
+----------------
 
 .. toctree::
    :maxdepth: 1
 
-   creer_une_surprime
+   user/creer_une_surprime
+
+.. toctree::
+    :hidden:
+
+    summary.rst
+
