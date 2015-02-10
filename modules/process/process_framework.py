@@ -2,9 +2,9 @@ from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
 from trytond.exceptions import UserError
-from trytond.model import ModelView, fields
+from trytond.model import ModelView
 
-from trytond.modules.cog_utils import coop_string, utils
+from trytond.modules.cog_utils import coop_string, utils, fields
 
 
 __all__ = [

@@ -1,7 +1,8 @@
 from trytond.pool import PoolMeta
-from trytond.model import fields
 from trytond.pyson import Eval, If, Bool
 from trytond.modules.company import CompanyReport
+
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 

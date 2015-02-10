@@ -8,11 +8,12 @@ from sql.functions import ToChar, Now
 from sql.operators import Concat
 
 from trytond.pool import PoolMeta, Pool
-from trytond.model import ModelSQL, ModelView, fields
 from trytond.pyson import Eval, PYSONEncoder
 from trytond.wizard import Wizard, StateView, StateTransition, StateAction, \
     Button
 from trytond.transaction import Transaction
+
+from trytond.modules.cog_utils import fields, model
 
 __all__ = ['Journal', 'Move', 'Line', 'Configuration', 'Snapshot',
     'TakeSnapshot', 'SnapshotStart', 'SnapshotDone',
@@ -46,7 +47,7 @@ class Move:
         cls._check_modify_exclude.append('snapshot')
 
     @classmethod
-    @ModelView.button
+    @model.CoopView.button
     def post(cls, moves):
         pool = Pool()
         Snapshot = pool.get('account.move.snapshot')
@@ -100,17 +101,17 @@ class TakeSnapshot(Wizard):
         return 'done'
 
 
-class SnapshotStart(ModelView):
+class SnapshotStart(model.CoopView):
     'Snapshot Moves'
     __name__ = 'account.move.snapshot.start'
 
 
-class SnapshotDone(ModelView):
+class SnapshotDone(model.CoopView):
     'Snapshot Moves'
     __name__ = 'account.move.snapshot.done'
 
 
-class Snapshot(ModelSQL, ModelView):
+class Snapshot(model.CoopSQL, model.CoopView):
     'Snapshot Move'
     __name__ = 'account.move.snapshot'
     name = fields.Char('Name', required=True)
@@ -153,7 +154,7 @@ class Snapshot(ModelSQL, ModelView):
         return snapshot.id
 
 
-class LineAggregated(ModelSQL, ModelView):
+class LineAggregated(model.CoopSQL, model.CoopView):
     'Account Move Line Aggregated'
     __name__ = 'account.move.line.aggregated'
 

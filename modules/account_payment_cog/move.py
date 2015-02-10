@@ -1,10 +1,9 @@
 from trytond.pool import PoolMeta, Pool
-from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.wizard import StateView, Button, StateTransition
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model
+from trytond.modules.cog_utils import fields, model
 
 __metaclass__ = PoolMeta
 

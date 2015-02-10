@@ -7,7 +7,6 @@ from dateutil.rrule import rrule, rruleset, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max, Count
 
-from trytond.model import ModelSQL, ModelView
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, And, Len, If, Bool
 from trytond import backend
@@ -824,7 +823,7 @@ class Premium:
                 )]
 
 
-class ContractInvoice(ModelSQL, ModelView):
+class ContractInvoice(model.CoopSQL, model.CoopView):
     'Contract Invoice'
     __name__ = 'contract.invoice'
     _rec_name = 'invoice'
@@ -893,7 +892,7 @@ class ContractInvoice(ModelSQL, ModelView):
                     & (invoice.state != 'cancel')))
 
     @classmethod
-    @ModelView.button
+    @model.CoopView.button
     def reinvoice(cls, contract_invoices):
         pool = Pool()
         Invoice = pool.get('account.invoice')
@@ -910,7 +909,7 @@ class ContractInvoice(ModelSQL, ModelView):
         Contract.invoice_periods(periods)
 
     @classmethod
-    @ModelView.button
+    @model.CoopView.button
     def cancel(cls, contract_invoices):
         pool = Pool()
         Reconciliation = pool.get('account.move.reconciliation')
@@ -939,7 +938,7 @@ class ContractInvoice(ModelSQL, ModelView):
         return 'cancel'
 
 
-class InvoiceContractStart(ModelView):
+class InvoiceContractStart(model.CoopView):
     'Invoice Contract'
     __name__ = 'contract.do_invoice.start'
     up_to_date = fields.Date('Up To Date', required=True)

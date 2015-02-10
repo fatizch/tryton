@@ -6,8 +6,7 @@ import genshi
 import genshi.template
 
 from trytond.pool import PoolMeta, Pool
-from trytond.model import fields
-from trytond.modules.cog_utils import export
+from trytond.modules.cog_utils import fields, export
 
 __metaclass__ = PoolMeta
 __all__ = [

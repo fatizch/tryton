@@ -1,5 +1,4 @@
 from trytond.pyson import Eval
-from trytond.model import ModelSQL, ModelView
 from trytond.pool import PoolMeta
 
 from trytond.modules.cog_utils import fields
@@ -20,7 +19,7 @@ class Bank:
         cls.bic.required = True
 
 
-class BankAccountNumber(ModelSQL, ModelView):
+class BankAccountNumber:
     'Bank Account Number'
     __name__ = 'bank.account.number'
 

@@ -1,6 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.model import fields
-from trytond.modules.cog_utils import export
+from trytond.modules.cog_utils import export, fields
 
 __metaclass__ = PoolMeta
 

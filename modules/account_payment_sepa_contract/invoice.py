@@ -1,9 +1,8 @@
 from trytond.pool import PoolMeta
-from trytond.model import fields
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import utils
+from trytond.modules.cog_utils import fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [

@@ -4,8 +4,8 @@ except ImportError:
     import json
 
 from trytond.pool import PoolMeta, Pool
-from trytond.model import fields
 from trytond.pyson import PYSONEncoder
+from trytond.modules.cog_utils import fields
 
 __all__ = ['User']
 __metaclass__ = PoolMeta

@@ -1,6 +1,8 @@
-from trytond.model import ModelView, fields
+from trytond.model import ModelView
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
+
+from trytond.modules.cog_utils import fields
 
 __all__ = [
     'Commission',

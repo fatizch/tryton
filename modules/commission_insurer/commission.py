@@ -1,10 +1,12 @@
 from itertools import groupby
 
 from trytond.wizard import Wizard, StateView, StateAction, Button
-from trytond.model import ModelView, fields
+from trytond.model import ModelView
 from trytond.pool import Pool
 from trytond.pyson import PYSONEncoder
 from trytond.transaction import Transaction
+
+from trytond.modules.cog_utils import fields
 
 __all__ = ['CreateInvoicePrincipal', 'CreateInvoicePrincipalAsk']
 

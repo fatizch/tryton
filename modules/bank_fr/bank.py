@@ -1,9 +1,8 @@
 import re
 
 from trytond.pool import PoolMeta
-from trytond.model import fields
 
-from trytond.modules.cog_utils import model
+from trytond.modules.cog_utils import fields, model
 
 __metaclass__ = PoolMeta
 __all__ = [
