@@ -389,8 +389,8 @@ class DocumentReceive(Wizard):
     def __setup__(cls):
         super(DocumentReceive, cls).__setup__()
         cls._error_messages.update({
-                'no_document_request_found': 'No document request found for \
-                this object'})
+                'no_document_request_found': 'No document request found for '
+                'this object'})
 
     def default_select_instance(self, name):
         if not(Transaction().context.get('active_model', 'z') in [

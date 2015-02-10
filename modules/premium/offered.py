@@ -54,7 +54,7 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
         super(ProductPremiumDate, cls).__setup__()
         cls._sql_constraints += [
             ('rule_uniq', 'UNIQUE(type_, custom_date, product)',
-                'Premium Calculation Rules must be unique')]
+                'Premium Date must be unique')]
 
     @classmethod
     def create(cls, values):
