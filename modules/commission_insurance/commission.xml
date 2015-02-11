@@ -80,5 +80,12 @@
         </record>
         <menuitem parent="commission.menu_commission" action="act_commission_create_agents"
             id="menu_commission_create_agents" sequence="30"/>
+        <record model="ir.ui.view"
+            id="commission_create_invoice_ask_view_form">
+            <field name="model">commission.create_invoice.ask</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="commission.commission_create_invoice_ask_view_form"/>
+            <field name="name">commission_create_invoice_ask_form</field>
+        </record>
     </data>
 </tryton>

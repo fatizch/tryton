@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form" position="inside">
+        <label name="post_invoices"/>
+        <field name="post_invoices"/>
+    </xpath>
+</data>

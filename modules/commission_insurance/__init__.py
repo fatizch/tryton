@@ -18,7 +18,9 @@ def register():
         Party,
         CreateAgentsParties,
         CreateAgentsAsk,
+        CreateInvoiceAsk,
         module='commission_insurance', type_='model')
     Pool.register(
+        CreateInvoice,
         CreateAgents,
         module='commission_insurance', type_='wizard')

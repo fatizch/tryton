@@ -6,7 +6,7 @@ from trytond.wizard import StateAction
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 
-from trytond.modules.cog_utils import fields, model, export, coop_string
+from trytond.modules.cog_utils import fields, model, export, coop_string, utils
 
 __all__ = [
     'PlanLines',
@@ -18,6 +18,8 @@ __all__ = [
     'CreateAgents',
     'CreateAgentsParties',
     'CreateAgentsAsk',
+    'CreateInvoice',
+    'CreateInvoiceAsk',
     ]
 __metaclass__ = PoolMeta
 
@@ -430,3 +432,38 @@ class CreateAgentsAsk(model.CoopView):
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
+
+
+class CreateInvoice:
+    __name__ = 'commission.create_invoice'
+
+    def do_create_(self, action):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        Commission = pool.get('commission')
+        commissions = Commission.search(self.get_domain(),
+            order=[('agent', 'DESC'), ('date', 'DESC')])
+        invoices = Commission.invoice(commissions)
+        if self.ask.post_invoices:
+            Invoice.write(invoices, {'invoice_date': utils.today()})
+            Invoice.post(invoices)
+        encoder = PYSONEncoder()
+        action['pyson_domain'] = encoder.encode(
+            [('id', 'in', [i.id for i in invoices])])
+        action['pyson_search_value'] = encoder.encode([])
+        return action, {}
+
+
+class CreateInvoiceAsk:
+    __name__ = 'commission.create_invoice.ask'
+
+    post_invoices = fields.Boolean('Post Invoices')
+
+    @classmethod
+    def __setup__(cls):
+        cls.type_.states = {'invisible': True}
+        super(CreateInvoiceAsk, cls).__setup__()
+
+    @staticmethod
+    def default_type_():
+        return 'out'
