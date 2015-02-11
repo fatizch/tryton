@@ -28,8 +28,8 @@ Ce fichier est créé dans le répertoire *conf* par la commande
 
 Ci-dessous un exemple de fichier.
 Les valeurs des champs ne sont pas forcément à reprendre telles quelles mais
- la présence des champs dans le fichier est obligatoire au bon fonctionnement
-  des batches ::
+la présence des champs dans le fichier est obligatoire au bon fonctionnement
+des batches ::
 
     BROKER_URL = 'amqp://guest:guest@localhost:5672//'
     CELERY_ACCEPT_CONTENT = ['pickle', 'json']
