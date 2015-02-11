@@ -97,10 +97,12 @@ def generate(batch_name, ids, connexion_date, treatment_date):
             User.get_preferences(context_only=True),
             client_defined_date=connexion_date):
         to_treat = BatchModel.convert_to_instances(ids)
+        logger = batch.get_logger(batch_name)
+
         try:
             BatchModel.execute(to_treat, ids, treatment_date)
+            logger.success('Processed %s', coop_string.get_print_infos(ids))
         except Exception:
-            logger = batch.get_logger(batch_name)
             logger.exception('Exception occured when processing %s',
                 coop_string.get_print_infos(ids))
             do_not_divide = BatchModel.get_conf_item('split_mode') == \

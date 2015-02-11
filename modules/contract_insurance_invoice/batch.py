@@ -45,7 +45,7 @@ class CreateInvoiceContractBatch(batch.BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date):
         invoices = Pool().get('contract').invoice(objects, treatment_date)
-        cls.logger.success('%d invoices created for %s' %
+        cls.logger.info('%d invoices created for %s' %
             (len(invoices), coop_string.get_print_infos(ids, 'contracts')))
 
 
@@ -85,4 +85,4 @@ class PostInvoiceContractBatch(batch.BatchRoot):
     @classmethod
     def execute(cls, objects, ids, treatment_date):
         Pool().get('account.invoice').post(objects)
-        cls.logger.success('%d invoices posted' % len(objects))
+        cls.logger.info('%d invoices posted' % len(objects))

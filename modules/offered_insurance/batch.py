@@ -32,4 +32,4 @@ class ProductValidationBatch(batch.BatchRoot):
         # reported
         Product = Pool().get('offered.product')
         Product._validate(objects)
-        cls.logger.success('Validated %d products' % len(objects))
+        cls.logger.info('Validated %d products' % len(objects))

@@ -64,7 +64,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
             cls.logger.info('processing group %s of %s' % (key,
                 coop_string.get_print_infos(grouped_payments, 'payment')))
             Payment.process(grouped_payments, group_func)
-        cls.logger.success('%s processed' %
+        cls.logger.info('%s processed' %
             coop_string.get_print_infos(groups, 'payments group'))
         return groups
 
@@ -111,5 +111,5 @@ class PaymentCreationBatch(batch.BatchRoot):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         MoveLine.create_payments(objects)
-        cls.logger.success('%s created' %
+        cls.logger.info('%s created' %
             coop_string.get_print_infos([x.id for x in objects], 'payment'))

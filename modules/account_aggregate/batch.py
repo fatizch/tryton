@@ -20,4 +20,4 @@ class SnapshotTakeBatch(batch.BatchRootNoSelect):
         pool = Pool()
         Snapshot = pool.get('account.move.snapshot')
         snap_id = Snapshot.take_snapshot()
-        cls.logger.success('snapshot %s taken' % snap_id)
+        cls.logger.info('snapshot %s taken' % snap_id)

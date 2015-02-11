@@ -59,5 +59,3 @@ class DocumentRequestBatch(batch.BatchRoot):
                 wizard.execute(wizard_id, {}, 'post_generation')
                 cls.logger.info('Processed document request for %s' %
                     cur_object.get_rec_name(None))
-        cls.logger.success('Processed documents requests on %d objects' %
-            len(objects))
