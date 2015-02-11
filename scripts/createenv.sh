@@ -45,7 +45,7 @@ else
     echo $SEP
     # Genshi 0.6 for relatorio compatibility
     pip install lxml polib genshi==0.6 relatorio python-ldap pywebdav vobject \
-    pydot ibanlib argcomplete python-stdnum python-sql raven Mock simpleeval \
+    pydot argcomplete python-stdnum python-sql raven Mock simpleeval \
     unidecode
     # Install celery-tryton without trytond dependency (others deps are already satisfied)
 
