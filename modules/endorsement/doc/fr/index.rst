@@ -1,4 +1,4 @@
-Module endorsement
+endorsement
 ============================================
 
 Résumé

@@ -1,4 +1,4 @@
-Module endorsement_set
+endorsement_set
 ======================
 
 TODO

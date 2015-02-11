@@ -1,4 +1,4 @@
-Module contract_set_insurance_invoice
+contract_set_insurance_invoice
 =====================================
 
 Résumé

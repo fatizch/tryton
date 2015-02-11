@@ -1,4 +1,4 @@
-Module endorsment_insurance_invoice
+endorsment_insurance_invoice
 ===================================
 
 TODO

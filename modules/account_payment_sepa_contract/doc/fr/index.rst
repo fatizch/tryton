@@ -1,5 +1,5 @@
-Gestion du SEPA pour les contrats [account_payment_sepa_contract]
-=================================================================
+Gestion du SEPA pour les contrats
+=================================
 
 Résumé
 ------

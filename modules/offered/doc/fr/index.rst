@@ -1,4 +1,4 @@
-Module Offre produit [offered]
+Offre produit [offered]
 ==============================
 
 Résumé

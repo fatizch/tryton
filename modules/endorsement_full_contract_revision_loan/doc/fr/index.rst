@@ -1,4 +1,4 @@
-Module Reprise Intégrale de Contrat (Pret)
+Reprise Intégrale de Contrat (Pret)
 ==========================================
 
 TODO

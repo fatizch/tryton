@@ -1,4 +1,4 @@
-Module Processus Paramétrés Coog [process_cog]
+Processus Paramétrés Coog [process_cog]
 ==============================================
 
 TODO

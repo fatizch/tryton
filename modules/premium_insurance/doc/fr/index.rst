@@ -1,4 +1,4 @@
-Module Premium Insurance
+Premium Insurance
 ========================
 
 TODO

@@ -1,4 +1,4 @@
-Module offered_insurance
+offered_insurance
 ============================================
 
 Résumé

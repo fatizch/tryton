@@ -1,5 +1,5 @@
-Agrégat comptable [account.aggregate]
-=====================================
+Agrégat comptable
+=================
 
 Résumé
 ------

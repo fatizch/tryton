@@ -1,5 +1,5 @@
-Module contract_group_process
-============================================
+Souscription de contrat collectif
+=================================
 
 Résumé
 ------

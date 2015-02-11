@@ -1,4 +1,4 @@
-Module offered_property_casualty
+offered_property_casualty
 ============================================
 
 Résumé

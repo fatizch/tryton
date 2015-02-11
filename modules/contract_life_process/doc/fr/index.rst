@@ -1,4 +1,4 @@
-Module contract_life_process
+contract_life_process
 ============================================
 
 Résumé

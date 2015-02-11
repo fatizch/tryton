@@ -1,18 +1,13 @@
-Gestion des relevés pour les contrats [account_statement_contract]
-==================================================================
+Gestion des relevés pour les contrats
+=====================================
 
 Résumé
 ------
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
-
-.. include:: features.rst
 
 .. toctree::
     :hidden:
 
     summary.rst
-    features.rst

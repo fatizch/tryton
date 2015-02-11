@@ -1,4 +1,4 @@
-Module country_cog
+country_cog
 ============================================
 
 Résumé

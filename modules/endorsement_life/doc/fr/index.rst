@@ -1,4 +1,4 @@
-Module Avenant Prévoyance
+Avenant Prévoyance
 =========================
 
 TODO

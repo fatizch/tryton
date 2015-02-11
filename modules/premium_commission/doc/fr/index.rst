@@ -1,4 +1,4 @@
-Module Frais d'apporteur [premium_commission]
+Frais d'apporteur [premium_commission]
 =============================================
 
 TODO

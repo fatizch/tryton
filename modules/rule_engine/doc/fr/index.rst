@@ -1,4 +1,4 @@
-Module Moteur de règles [rule_engine]
+Moteur de règles [rule_engine]
 =====================================
 
 Résumé

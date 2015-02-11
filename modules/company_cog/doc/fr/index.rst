@@ -1,4 +1,4 @@
-Module company_cog
+company_cog
 ============================================
 
 TODO

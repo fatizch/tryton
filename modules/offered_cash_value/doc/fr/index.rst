@@ -1,4 +1,4 @@
-Module offered_cash_value
+offered_cash_value
 =========================
 
 Résumé

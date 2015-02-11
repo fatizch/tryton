@@ -1,5 +1,5 @@
-Module claim_process
-============================================
+Processus de déclaration de sinistres
+=====================================
 
 Résumé
 ------

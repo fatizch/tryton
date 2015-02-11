@@ -1,4 +1,4 @@
-Module commission_waiting_cog
+commission_waiting_cog
 ==============================
 
 Ce module permet d'émettre automatiquement le mouvement comptable d'attente

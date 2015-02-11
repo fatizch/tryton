@@ -1,15 +1,10 @@
-account_payment_sepa_cog
-============================================
+SEPA
+====
 
 Résumé
 ------
 
 .. include:: summary.rst
-
-Fonctionnalités
----------------
-
-.. include:: features.rst
 
 
 .. toctree::

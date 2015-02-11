@@ -1,4 +1,4 @@
-Module Reprise Intégrale de Contrat
+Reprise Intégrale de Contrat
 ===================================
 
 TODO

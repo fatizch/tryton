@@ -1,5 +1,5 @@
-Banque FR [bank_fr]
-===================
+Banque françaises
+=================
 
 Résumé
 ------

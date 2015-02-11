@@ -1,5 +1,5 @@
-Module claim_credit
-===================
+Sinistres emprunteur
+====================
 
 Résumé
 ------

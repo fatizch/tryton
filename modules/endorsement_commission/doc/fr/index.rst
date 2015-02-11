@@ -1,4 +1,4 @@
-Module Endorsement Commission
+Endorsement Commission
 =============================
 
 Résumé

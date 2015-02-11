@@ -1,5 +1,5 @@
-Module contract_insurance_document_request
-==========================================
+Demande de pièce pour contrat d'assurance
+=========================================
 
 Résumé
 ------

@@ -1,5 +1,5 @@
-Module contract_insurance_invoice
-=================================
+Quittancement des contrats
+==========================
 
 Résumé
 ------

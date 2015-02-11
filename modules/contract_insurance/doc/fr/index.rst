@@ -1,5 +1,5 @@
-Module contract_insurance
-============================================
+Contrat d'assurance
+===================
 
 
 Résumé
@@ -7,6 +7,10 @@ Résumé
 
 .. include:: summary.rst
 
+Fonctionnalités
+---------------
+
+.. include:: features.rst
 
 Aide utilisateur
 ----------------
@@ -20,4 +24,5 @@ Aide utilisateur
     :hidden:
 
     summary.rst
+    features.rst
 

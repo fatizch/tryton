@@ -1,4 +1,4 @@
-Module distribution
+distribution
 ============================================
 
 Résumé

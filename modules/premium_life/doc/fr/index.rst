@@ -1,4 +1,4 @@
-Module Primes prévoyance [premium_life]
+Primes prévoyance [premium_life]
 =======================================
 
 TODO

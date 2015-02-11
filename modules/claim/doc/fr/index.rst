@@ -1,5 +1,5 @@
-Module claim
-============
+Sinistre
+========
 
 Résumé
 ------

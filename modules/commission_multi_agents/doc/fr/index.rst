@@ -1,5 +1,5 @@
-Module commission_multi_agents
-===============================
+Gestion des sur-apporteurs
+==========================
 
 Résumé
 ------

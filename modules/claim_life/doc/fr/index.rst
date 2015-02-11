@@ -1,5 +1,5 @@
-Module claim_life
-=================
+Sinistres prévoyance
+====================
 
 Résumé
 ------

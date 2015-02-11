@@ -1,4 +1,4 @@
-Module account_payment_clearing_cog
+account_payment_clearing_cog
 ====================================
 
 Résumé

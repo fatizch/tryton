@@ -1,4 +1,4 @@
-Module endorsement_process
+endorsement_process
 ==========================
 
 TODO

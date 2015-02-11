@@ -1,4 +1,4 @@
-Module test_module
+test_module
 ============================================
 
 Résumé

@@ -1,4 +1,4 @@
-Module currency_cog
+currency_cog
 ============================================
 
 Résumé

@@ -1,5 +1,5 @@
-account_insurance_fr [account_insurance_fr]
-===========================================
+Compatbilité Assurance (fr)
+===========================
 
 Résumé
 ------

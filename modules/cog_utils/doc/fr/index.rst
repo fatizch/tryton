@@ -1,5 +1,5 @@
-Module cog_utils
-================
+Outils dev coog
+===============
 
 Résumé
 ------

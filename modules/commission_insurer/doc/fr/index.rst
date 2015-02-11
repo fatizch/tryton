@@ -1,5 +1,5 @@
-Module commission_insurer
-==========================
+Gestion des bordereaux assureurs
+================================
 
 Résumé
 ------

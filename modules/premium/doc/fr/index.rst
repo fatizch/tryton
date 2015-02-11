@@ -1,4 +1,4 @@
-Module Prime [premium]
+Prime [premium]
 ======================
 
 TODO

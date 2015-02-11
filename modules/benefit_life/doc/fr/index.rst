@@ -1,5 +1,5 @@
-Module benefit_life
-============================================
+Prestation prévoyance
+=====================
 
 Résumé
 ------

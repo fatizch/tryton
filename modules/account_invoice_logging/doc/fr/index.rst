@@ -1,4 +1,4 @@
-Module Historisation des états de quittances [account_invoice_logging]
+Historisation des états de quittances [account_invoice_logging]
 ======================================================================
 
 Résumé

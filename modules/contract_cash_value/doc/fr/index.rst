@@ -1,5 +1,5 @@
-Module contract_cash_value
-============================================
+Contrat de capitalisation
+=========================
 
 Résumé
 ------

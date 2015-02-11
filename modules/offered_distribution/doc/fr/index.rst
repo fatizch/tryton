@@ -1,4 +1,4 @@
-Module offered_distribution
+offered_distribution
 ============================================
 
 Résumé

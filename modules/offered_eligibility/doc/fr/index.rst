@@ -1,4 +1,4 @@
-Module Conditions d'éligibilité [offered_eligibility]
+Conditions d'éligibilité [offered_eligibility]
 =====================================================
 
 TODO

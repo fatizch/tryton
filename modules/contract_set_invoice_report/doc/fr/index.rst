@@ -1,4 +1,4 @@
-Module contract_set_invoice_report
+contract_set_invoice_report
 ==================================
 
 TODO

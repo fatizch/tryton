@@ -1,4 +1,4 @@
-Module contract_set
+contract_set
 ===================
 
 TODO

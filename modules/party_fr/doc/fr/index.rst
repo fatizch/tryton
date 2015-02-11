@@ -1,4 +1,4 @@
-Module party_fr
+party_fr
 ===============
 
 Résumé

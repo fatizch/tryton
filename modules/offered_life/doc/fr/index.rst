@@ -1,4 +1,4 @@
-Module offered_life
+offered_life
 ============================================
 
 Résumé

@@ -1,4 +1,4 @@
-Module Santé [health]
+Santé [health]
 =====================
 
 Résumé
@@ -6,14 +6,9 @@ Résumé
 
 .. include:: summary.rst
 
-Fonctionnalités
----------------
-
-.. include:: features.rst
-
 
 .. toctree::
     :hidden:
 
     summary.rst
-    features.rst
+

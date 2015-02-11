@@ -1,4 +1,4 @@
-Module Prêt [loan]
+Prêt [loan]
 ==================
 
 Résumé
