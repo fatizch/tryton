@@ -1,6 +1,7 @@
 from itertools import groupby
 from sql.operators import Equal
 from sql.aggregate import Count
+from sql import Null
 
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -93,9 +94,10 @@ class PaymentCreationBatch(batch.BatchRoot):
 
         query_table = move_line.join(account, condition=(
                 (move_line.account == account.id)
-                & (account.kind == 'receivable'))
-                & (move_line.reconciliation == None)
-                & (move_line.payment_date <= treatment_date))
+                & ((account.kind == 'receivable') |
+                    (account.kind == 'payable'))
+                & (move_line.reconciliation == Null)
+                & (move_line.payment_date <= treatment_date)))
 
         cursor.execute(*query_table.select(move_line.id,
             where=Equal(
