@@ -13,13 +13,15 @@ class ContractClause(model.CoopSQL, model.CoopView):
     __name__ = 'contract.clause'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
-    clause = fields.Many2One('clause', 'Clause', ondelete='RESTRICT')
+    clause = fields.Many2One('clause', 'Clause', ondelete='RESTRICT',
+        states={'required': ~Eval('text')}, depends=['text'])
     customized_text = fields.Function(
         fields.Boolean('Customized Text', states={'invisible': True}),
         'on_change_with_customized_text')
     text = fields.Text('Text', states={
             'readonly': ~Eval('customized_text'),
-            }, depends=['customized_text'])
+            'required': ~Eval('clause'),
+            }, depends=['customized_text', 'clause'])
 
     @classmethod
     def _export_light(cls):
