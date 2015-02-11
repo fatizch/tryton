@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -635,7 +635,7 @@ msgstr "Réductions"
 
 msgctxt "field:contract.option,extra_premium_increases:"
 msgid "Increases"
-msgstr "Augmentations"
+msgstr "Surprimes"
 
 msgctxt "field:contract.option,extra_premiums:"
 msgid "Extra Premiums"
