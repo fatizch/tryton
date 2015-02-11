@@ -1,11 +1,6 @@
-# -*- coding:utf-8 -*-
-import datetime
-
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
-from trytond.modules.offered_insurance import offered
 
 
 __metaclass__ = PoolMeta
@@ -43,29 +38,3 @@ class OptionDescription:
 
     def get_is_loan_coverage(self, name):
         return self.family == 'loan'
-
-    def calculate_sub_elem_price(self, args, errs):
-        if not self.is_loan:
-            return super(OptionDescription, self).calculate_sub_elem_price(
-                args, errs)
-        lines = []
-        for covered, option in self.give_me_covered_elements_at_date(
-                args)[0]:
-            tmp_args = args.copy()
-            option.init_dict_for_rule_engine(tmp_args)
-            for share in option.loan_shares:
-                if not ((share.start_date or datetime.date.min) <= args['date']
-                        <= (share.end_date or datetime.date.max)):
-                    continue
-                share.init_dict_for_rule_engine(tmp_args)
-                try:
-                    sub_elem_lines, sub_elem_errs = self.get_result(
-                        'sub_elem_price', tmp_args, kind='premium')
-                except offered.NonExistingRuleKindException:
-                    sub_elem_lines = []
-                    sub_elem_errs = []
-                for line in sub_elem_lines:
-                    line['loan'] = share.loan
-                errs += sub_elem_errs
-                lines += sub_elem_lines
-        return lines
