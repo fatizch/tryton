@@ -1,5 +1,5 @@
-Endorsement Commission
-=============================
+Avenant - Commission
+====================
 
 Résumé
 ------

@@ -1,5 +1,5 @@
-Offre produit [offered]
-==============================
+Offre
+=====
 
 Résumé
 ------

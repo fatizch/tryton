@@ -1,5 +1,5 @@
-Primes prévoyance [premium_life]
-=======================================
+Primes - Prévoyance
+===================
 
 TODO
 Ce module ajoute la possibilité de forcer un recalcul des primes à la date de

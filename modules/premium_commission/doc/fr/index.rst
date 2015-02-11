@@ -1,5 +1,5 @@
-Frais d'apporteur [premium_commission]
-=============================================
+Primes - Frais d'apporteur
+==========================
 
 TODO
 Ce module permet d'ajouter des frais d'apporteurs sur les plans de

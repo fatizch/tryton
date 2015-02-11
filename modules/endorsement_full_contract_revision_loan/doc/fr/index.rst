@@ -1,5 +1,5 @@
-Reprise Intégrale de Contrat (Pret)
-==========================================
+Avenant - Reprise Intégrale de Contrat (Pret)
+=============================================
 
 TODO
 Ce module permet de déclencher à la Reprise Intégrale de Contrat de gérer

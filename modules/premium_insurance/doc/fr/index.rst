@@ -1,5 +1,5 @@
-Premium Insurance
-========================
+Primes - Assurance
+==================
 
 TODO
 Ce module permet de prendre en compte les données spécifiques aux contrats

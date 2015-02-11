@@ -1,5 +1,5 @@
-Conditions d'éligibilité [offered_eligibility]
-=====================================================
+Offre - Conditions d'éligibilité
+================================
 
 TODO
 But

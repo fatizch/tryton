@@ -1,5 +1,5 @@
-Reprise Intégrale de Contrat
-===================================
+Avenant - Reprise Intégrale de Contrat
+======================================
 
 TODO
 Ce module permet de déclencher une Reprise Intégrale de Contrat via le

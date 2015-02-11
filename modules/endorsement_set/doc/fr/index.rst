@@ -1,5 +1,5 @@
-endorsement_set
-======================
+Avenants - Ensemble de...
+=========================
 
 TODO
 Ce module définit la notion d'ensemble d'avenants.

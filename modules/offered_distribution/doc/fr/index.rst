@@ -1,5 +1,5 @@
-offered_distribution
-============================================
+Offre - Distribution
+====================
 
 Résumé
 ------

@@ -1,5 +1,5 @@
-event_log
-=========
+Logging d'évènements
+====================
 
 Résumé
 ------

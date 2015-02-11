@@ -1,5 +1,5 @@
-Moteur de règles [rule_engine]
-=====================================
+Moteur de règles
+================
 
 Résumé
 ------

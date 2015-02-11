@@ -1,5 +1,5 @@
-endorsement_process
-==========================
+Avenant - Souscription
+======================
 
 TODO
 Ce module permet de définir des processus sur des avenants.

@@ -1,5 +1,5 @@
-Prime [premium]
-======================
+Prime
+=====
 
 TODO
 Ce module ajoute le nécessaire permettant de tarifer les produits / garanties

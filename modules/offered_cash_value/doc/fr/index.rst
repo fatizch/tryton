@@ -1,5 +1,5 @@
-offered_cash_value
-=========================
+Offre - Capitalisation
+======================
 
 Résumé
 ------

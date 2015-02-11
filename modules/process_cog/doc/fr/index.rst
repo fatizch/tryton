@@ -1,5 +1,5 @@
-Processus Paramétrés Coog [process_cog]
-==============================================
+Processus - Paramétrage par étapes
+==================================
 
 TODO
 Ce module permet d'améliorer les processus paramétrés en ajoutant les

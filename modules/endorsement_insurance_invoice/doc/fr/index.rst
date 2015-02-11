@@ -1,5 +1,5 @@
-endorsment_insurance_invoice
-===================================
+Avenant - Quittancement
+=======================
 
 TODO
 Le module endorsement_insurance_invoice permet d'intégrer les avenants avec la

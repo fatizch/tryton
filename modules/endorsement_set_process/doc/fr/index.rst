@@ -1,4 +1,4 @@
-endorsement_set_process
+Ensemble d'avenants - Processus
 ===============================
 
 TODO
