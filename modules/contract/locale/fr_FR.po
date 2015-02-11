@@ -290,6 +290,10 @@ msgctxt "field:contract,current_policy_owner:"
 msgid "Current Policy Owner"
 msgstr "Responsable Courant de la Police"
 
+msgctxt "field:contract,declined_options:"
+msgid "Declined Options"
+msgstr "Options déclinées"
+
 msgctxt "field:contract,end_date:"
 msgid "End Date"
 msgstr "Date de fin"
@@ -370,6 +374,10 @@ msgctxt "field:contract,subscriber_kind:"
 msgid "Subscriber Kind"
 msgstr "Type de souscripteur"
 
+msgctxt "field:contract,termination_reason:"
+msgid "Termination Reason"
+msgstr "Motif de terminaison"
+
 msgctxt "field:contract,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -425,6 +433,10 @@ msgstr "Nom"
 msgctxt "field:contract.activation_history,start_date:"
 msgid "Start Date"
 msgstr "Date d'Effet"
+
+msgctxt "field:contract.activation_history,termination_reason:"
+msgid "Termination Reason"
+msgstr "Motif de terminaison"
 
 msgctxt "field:contract.activation_history,write_date:"
 msgid "Write Date"
@@ -597,6 +609,10 @@ msgstr "Date de Fin"
 msgctxt "field:contract.end.select_date,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract.end.select_date,termination_reason:"
+msgid "Termination Reason"
+msgstr "Motif de terminaison"
 
 msgctxt "field:contract.extra_data,contract:"
 msgid "Contract"
@@ -870,7 +886,7 @@ msgctxt "field:contract.sub_status,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:contract.termination.treatment,id:"
+msgctxt "field:contract.termination.process,id:"
 msgid "ID"
 msgstr "ID"
 
@@ -1073,9 +1089,9 @@ msgctxt "model:contract.sub_status,name:sub_status_reached_end_date"
 msgid "Reached end date"
 msgstr "Terme atteint"
 
-msgctxt "model:contract.termination.treatment,name:"
+msgctxt "model:contract.termination.process,name:"
 msgid "Contract end date termination batch"
-msgstr "Batch de résiliation"
+msgstr "Batch de terminaison de contrat"
 
 msgctxt "model:contract.wizard.option_subscription.options_displayer,name:"
 msgid "Select Covered Element"
@@ -1121,6 +1137,10 @@ msgstr "Décliner"
 msgctxt "model:ir.action,name:act_end"
 msgid "End Contract"
 msgstr "Terminer Contrat"
+
+msgctxt "model:ir.action,name:act_event_log_relate_form"
+msgid "Event Logs"
+msgstr "Logs d'événements"
 
 msgctxt "model:ir.action,name:act_sub_status_form"
 msgid "Sub-status"
@@ -1208,10 +1228,6 @@ msgid "Person"
 msgstr "Personne Physique"
 
 msgctxt "selection:contract,status:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:contract,status:"
 msgid "Active"
 msgstr "Active"
 
@@ -1242,10 +1258,6 @@ msgstr "Société"
 msgctxt "selection:contract,subscriber_kind:"
 msgid "Person"
 msgstr "Personne Physique"
-
-msgctxt "selection:contract.option,status:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:contract.option,status:"
 msgid "Active"
@@ -1290,10 +1302,6 @@ msgstr "Delivré"
 msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
-
-msgctxt "selection:contract.sub_status,status:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:contract.sub_status,status:"
 msgid "Active"
@@ -1394,8 +1402,12 @@ msgid "Main Data"
 msgstr "Données principales"
 
 msgctxt "view:contract.option:"
-msgid "option"
-msgstr "option"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "view:contract.option:"
+msgid "Options"
+msgstr "Options"
 
 msgctxt "view:contract.select_start_date:"
 msgid "Select Start Date"

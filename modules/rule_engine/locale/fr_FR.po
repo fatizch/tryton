@@ -658,6 +658,10 @@ msgctxt "field:rule_engine.function,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:rule_engine.log,calculation_date:"
+msgid "Calculation Date"
+msgstr "Date de calcul"
+
 msgctxt "field:rule_engine.log,calls:"
 msgid "Calls"
 msgstr "Appels"
@@ -1001,6 +1005,10 @@ msgstr "Erreur"
 msgctxt "model:ir.action,name:"
 msgid "Tags"
 msgstr "Labels"
+
+msgctxt "model:ir.action,name:act_rule_engine_log_relate_form"
+msgid "Rule Engine Logs"
+msgstr "Traces du moteur de règle"
 
 msgctxt "model:ir.action,name:act_test_case_init"
 msgid "Create Test Case"

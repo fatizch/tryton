@@ -152,6 +152,10 @@ msgctxt "field:endorsement.contract.billing_information,definition:"
 msgid "Definition"
 msgstr "Définition"
 
+msgctxt "field:endorsement.contract.billing_information,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:endorsement.contract.billing_information,id:"
 msgid "ID"
 msgstr "ID"
@@ -312,10 +316,11 @@ msgctxt ""
 msgid "Previous"
 msgstr "Précédent"
 
+msgctxt ""
+"wizard_button:endorsement.start,change_billing_information,change_billing_information_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
 msgctxt "wizard_button:endorsement.start,change_billing_information,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,change_billing_information,suspend:"
-msgid "Suspend"
-msgstr "Suspendre"

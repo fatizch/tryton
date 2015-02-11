@@ -1138,26 +1138,6 @@ msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
-msgctxt "selection:document.receive.request,kind:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:document.request,needed_by:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Option"
-msgstr "Option"
-
 msgctxt "selection:document.template,kind:"
 msgid "Contract Documents"
 msgstr "Documents du contrat"

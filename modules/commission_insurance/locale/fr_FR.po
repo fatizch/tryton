@@ -1,24 +1,6 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:broker:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:broker:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
 
 msgctxt "error:commission.agent:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -168,46 +150,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "field:broker,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:broker,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:broker,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:broker,icon:"
-msgid "Icon"
-msgstr "Icône"
-
-msgctxt "field:broker,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:broker,party:"
-msgid "Party"
-msgstr "Tiers"
-
-msgctxt "field:broker,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:broker,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:broker,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:broker,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:commission,broker:"
 msgid "Broker"
 msgstr "Courtier"
@@ -291,6 +233,14 @@ msgstr "Produits commissionés"
 msgctxt "field:commission.plan,insurer_plan:"
 msgid "Insurer Plan"
 msgstr "Plan lié"
+
+msgctxt "field:commission.plan,tags:"
+msgid "Tags"
+msgstr "Labels"
+
+msgctxt "field:commission.plan,tags_name:"
+msgid "Tags"
+msgstr "Labels"
 
 msgctxt "field:commission.plan,type_:"
 msgid "Type"
@@ -412,9 +362,9 @@ msgctxt "field:party.party,agents:"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
 
-msgctxt "field:party.party,broker_role:"
-msgid "Broker"
-msgstr "Courtier"
+msgctxt "field:party.party,broker_code:"
+msgid "Broker Code"
+msgstr "Code Courtier"
 
 msgctxt "field:party.party,is_broker:"
 msgid "Is Broker"
@@ -432,10 +382,6 @@ msgctxt "field:product.uom,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "model:broker,name:"
-msgid "Broker"
-msgstr "Courtier"
-
 msgctxt "model:commission.create_agents.ask,name:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -452,13 +398,13 @@ msgctxt "model:commission_plan-commission_plan,name:"
 msgid "Commission Plan - Commission Plan"
 msgstr "Lien entre plans de commissionnement"
 
+msgctxt "model:ir.action,name:"
+msgid "Brokers"
+msgstr "Courtiers"
+
 msgctxt "model:ir.action,name:act_broker_commissionned_contract_relate_form"
 msgid "Commissionned Contracts"
 msgstr "Contrats commissionnés"
-
-msgctxt "model:ir.action,name:act_broker_form"
-msgid "Brokers"
-msgstr "Courtiers"
 
 msgctxt "model:ir.action,name:act_commission_create_agents"
 msgid "Create Agents"
@@ -476,7 +422,7 @@ msgctxt "model:ir.action.act_window.domain,name:act_commission_domain_insurer"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "model:ir.ui.menu,name:menu_broker_form"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Brokers"
 msgstr "Courtiers"
 
@@ -496,14 +442,6 @@ msgctxt "selection:commission.plan,type_:"
 msgid "Insurer"
 msgstr "Assureur"
 
-msgctxt "view:broker:"
-msgid "Broker"
-msgstr "Courtier"
-
-msgctxt "view:broker:"
-msgid "Brokers"
-msgstr "Courtiers"
-
 msgctxt "view:commission.create_agents.ask:"
 msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
@@ -522,7 +460,7 @@ msgstr "Lignes"
 
 msgctxt "view:commission.plan:"
 msgid "Plan Relation"
-msgstr ""
+msgstr "Relation Plans de Commissionnement"
 
 msgctxt "view:commission:"
 msgid "Amount"

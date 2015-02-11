@@ -1,10 +1,6 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:ProcessFinder:"
-msgid "Please pick a process from the selection"
-msgstr "Choisir un processus de la sélection"
 
 msgctxt "error:ir.ui.view.description:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."

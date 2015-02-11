@@ -29,7 +29,7 @@ msgctxt "field:endorsement.contract.full_revision_start,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:endorsement.contract.full_revision_start,new_start_date:"
+msgctxt "field:endorsement.contract.full_revision_start,start_date:"
 msgid "New Start Date"
 msgstr "Nouvelle date de début"
 
@@ -75,6 +75,7 @@ msgctxt ""
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:endorsement.start,full_contract_revision,suspend:"
+msgctxt ""
+"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"

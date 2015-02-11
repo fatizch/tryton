@@ -1,6 +1,14 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:contract:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
 
 msgctxt "error:contract:"
 msgid "Everything is good !"
@@ -11,12 +19,26 @@ msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:contract:"
-msgid "The field '%s' is required"
-msgstr "Le champ '%s' est requis"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
-msgctxt "error:contract:"
-msgid "The field '%s' of '%s' is required"
-msgstr "Le champ '%s' de '%s' est requis"
+msgctxt "error:endorsement.configuration:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:endorsement.configuration:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
 
 msgctxt "error:endorsement.contract.activation_history.field:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -277,6 +299,28 @@ msgctxt "error:endorsement.start:"
 msgid "You cannot start an endorsement on a non-active contract !"
 msgstr "Vous ne pouvez démarrer un avenant sur un contrat non actif!"
 
+msgctxt "error:endorsement.sub_state:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:endorsement.sub_state:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:endorsement.sub_state:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
 msgctxt "error:endorsement:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
@@ -294,6 +338,18 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:endorsement:"
+msgid "Invalid file format"
+msgstr "Format de fichier non valide"
+
+msgctxt "error:endorsement:"
+msgid "No sequence defined in configuration"
+msgstr "Pas de séquence définie dans la configuration"
+
+msgctxt "error:endorsement:"
+msgid "The endorsement number must be unique."
+msgstr "Le numéro d'avenant doit être unique"
 
 msgctxt "field:contract,current_log:"
 msgid "Current Log"
@@ -367,6 +423,10 @@ msgctxt "field:endorsement,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement,number:"
+msgid "Number"
+msgstr "Numéro"
+
 msgctxt "field:endorsement,rec_name:"
 msgid "Name"
 msgstr "Nom"
@@ -379,6 +439,14 @@ msgctxt "field:endorsement,state:"
 msgid "State"
 msgstr "État"
 
+msgctxt "field:endorsement,sub_state:"
+msgid "Details on state"
+msgstr "Détails sur l'état"
+
+msgctxt "field:endorsement,sub_state_required:"
+msgid "Sub State Required"
+msgstr "Sous état requis"
+
 msgctxt "field:endorsement,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
@@ -388,6 +456,42 @@ msgid "Write User"
 msgstr "Mis à jour par"
 
 msgctxt "field:endorsement,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.configuration,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.configuration,endorsement_number_sequence:"
+msgid "Endorsement Number Sequence"
+msgstr "Séquence de numéro d'avenant"
+
+msgctxt "field:endorsement.configuration,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.configuration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.configuration,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.configuration,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.configuration,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -426,6 +530,10 @@ msgstr "Avenant"
 msgctxt "field:endorsement.contract,endorsement_summary:"
 msgid "Endorsement Summary"
 msgstr "Résumé de l'avenant"
+
+msgctxt "field:endorsement.contract,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:endorsement.contract,id:"
 msgid "ID"
@@ -490,6 +598,10 @@ msgstr "Créé par"
 msgctxt "field:endorsement.contract.activation_history,definition:"
 msgid "Definition"
 msgstr "Définition"
+
+msgctxt "field:endorsement.contract.activation_history,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:endorsement.contract.activation_history,id:"
 msgid "ID"
@@ -661,10 +773,6 @@ msgctxt "field:endorsement.contract.full_revision_start,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:endorsement.contract.full_revision_start,new_start_date:"
-msgid "New Start Date"
-msgstr "Nouvelle date de début"
-
 msgctxt "field:endorsement.contract.option,action:"
 msgid "Action"
 msgstr "Action"
@@ -696,6 +804,10 @@ msgstr "Créé par"
 msgctxt "field:endorsement.contract.option,definition:"
 msgid "Definition"
 msgstr "Définition"
+
+msgctxt "field:endorsement.contract.option,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:endorsement.contract.option,id:"
 msgid "ID"
@@ -1077,6 +1189,50 @@ msgctxt "field:endorsement.start.select_endorsement,product:"
 msgid "Product"
 msgstr "Produit"
 
+msgctxt "field:endorsement.sub_state,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:endorsement.sub_state,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.sub_state,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.sub_state,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.sub_state,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.sub_state,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.sub_state,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.sub_state,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:endorsement.sub_state,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.sub_state,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.sub_state,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:offered.product,endorsement_definitions:"
 msgid "Endorsement Definitions"
 msgstr "Définitions d'avenant"
@@ -1084,6 +1240,10 @@ msgstr "Définitions d'avenant"
 msgctxt "model:endorsement,name:"
 msgid "Endorsement"
 msgstr "Avenant"
+
+msgctxt "model:endorsement.configuration,name:"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
 
 msgctxt "model:endorsement.contract,name:"
 msgid "Endorsement Contract"
@@ -1145,9 +1305,17 @@ msgctxt "model:endorsement.start.select_endorsement,name:"
 msgid "Select Endorsement"
 msgstr "Sélection de l'avenant"
 
+msgctxt "model:endorsement.sub_state,name:"
+msgid "Endorsement SubState"
+msgstr "Sous état d'avenant"
+
 msgctxt "model:ir.action,name:"
 msgid "Endorsement Fields"
 msgstr "Modèle d'avenant"
+
+msgctxt "model:ir.action,name:act_configuration_form"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
 
 msgctxt "model:ir.action,name:act_contract_open"
 msgid "Open Contract"
@@ -1164,6 +1332,10 @@ msgstr "Définition d'avenant"
 msgctxt "model:ir.action,name:act_endorsement_part"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
+
+msgctxt "model:ir.action,name:act_endorsement_sub_state_form"
+msgid "Endorsement Sub-state"
+msgstr "Sous état d'avenant"
 
 msgctxt "model:ir.action,name:act_open_contract_at_date"
 msgid "Contract"
@@ -1191,13 +1363,25 @@ msgctxt ""
 msgid "Started"
 msgstr "Démarré"
 
+msgctxt "model:ir.sequence,name:sequence_number"
+msgid "Endorsement Number Sequence"
+msgstr "Séquence de numéro d'avenant"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_number"
+msgid "Endorsement Number"
+msgstr "Numéro d'avenant"
+
 msgctxt "model:ir.ui.menu,name:"
 msgid "Endorsement"
 msgstr "Avenant"
 
+msgctxt "model:ir.ui.menu,name:endorsement_sub_state_form"
+msgid "Endorsement Sub-state"
+msgstr "Sous état d'avenant"
+
 msgctxt "model:ir.ui.menu,name:menu_configuration"
 msgid "Endorsement Configuration"
-msgstr "Configuration"
+msgstr "Configuration d'avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_endorsement_definition"
 msgid "Endorsement Definition"
@@ -1206,6 +1390,14 @@ msgstr "Définition d'avenant"
 msgctxt "model:ir.ui.menu,name:menu_endorsement_part"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
+
+msgctxt "model:ir.ui.menu,name:menuitem_endorsement_configuration"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
+
+msgctxt "model:res.group,name:group_endorsement_admin"
+msgid "Endorsement Administration"
+msgstr "Administration des avenants"
 
 msgctxt "model:res.group,name:group_endorsement_super_user"
 msgid "Endorsement Super User"
@@ -1218,6 +1410,10 @@ msgstr "Appliqué"
 msgctxt "selection:endorsement,state:"
 msgid "Canceled"
 msgstr "Annulé"
+
+msgctxt "selection:endorsement,state:"
+msgid "Declined"
+msgstr "Décliné"
 
 msgctxt "selection:endorsement,state:"
 msgid "Draft"
@@ -1271,6 +1467,10 @@ msgctxt "selection:endorsement.part,kind:"
 msgid "Option"
 msgstr "Option"
 
+msgctxt "selection:endorsement.sub_state,state:"
+msgid "Declined"
+msgstr "Décliné"
+
 msgctxt "selection:process,kind:"
 msgid "Full Contract Revision"
 msgstr "Reprise intégrale de contrat"
@@ -1278,6 +1478,10 @@ msgstr "Reprise intégrale de contrat"
 msgctxt "view:contract:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
+
+msgctxt "view:endorsement.configuration:"
+msgid "Endorsement Configuration"
+msgstr "Configuration d'avenant"
 
 msgctxt "view:endorsement.contract.activation_history.field:"
 msgid "Endorsement Field"
@@ -1392,6 +1596,10 @@ msgstr ""
 "L'avenant ne pourra pas être appliqué / prévisualisé tant que ce processus "
 "n'est pas terminé."
 
+msgctxt "view:endorsement.sub_state:"
+msgid "Endorsement Sub-state"
+msgstr "Sous état d'avenant"
+
 msgctxt "view:endorsement:"
 msgid "Apply"
 msgstr "Appliquer"
@@ -1459,10 +1667,6 @@ msgctxt ""
 "wizard_button:endorsement.start,full_contract_revision,full_contract_revision_previous:"
 msgid "Previous"
 msgstr "Précédent"
-
-msgctxt "wizard_button:endorsement.start,full_contract_revision,suspend:"
-msgid "Suspend"
-msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,select_endorsement,cancel:"
 msgid "Cancel"

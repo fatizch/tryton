@@ -318,6 +318,10 @@ msgctxt "field:endorsement.contract.covered_element,definition:"
 msgid "Definition"
 msgstr "Définition"
 
+msgctxt "field:endorsement.contract.covered_element,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:endorsement.contract.covered_element,id:"
 msgid "ID"
 msgstr "ID"
@@ -498,6 +502,10 @@ msgstr "Définition"
 msgctxt "field:endorsement.contract.extra_premium,extra_premium:"
 msgid "Extra Premiums"
 msgstr "Surprimes"
+
+msgctxt "field:endorsement.contract.extra_premium,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:endorsement.contract.extra_premium,id:"
 msgid "ID"

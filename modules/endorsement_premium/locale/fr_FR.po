@@ -1,0 +1,119 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:endorsement.start.preview_contract_premiums,contract_previews:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:endorsement.start.preview_contract_premiums,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.start.preview_contract_premiums.contract,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt ""
+"field:endorsement.start.preview_contract_premiums.contract,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt ""
+"field:endorsement.start.preview_contract_premiums.contract,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:endorsement.start.preview_contract_premiums.contract,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt ""
+"field:endorsement.start.preview_contract_premiums.contract,new_contract_premiums:"
+msgid "New Contract Premiums"
+msgstr "Nouvelles primes du contrat"
+
+msgctxt ""
+"field:endorsement.start.preview_contract_premiums.contract,old_contract_premiums:"
+msgid "Current Contract Premiums"
+msgstr "Primes courantes du contrat"
+
+msgctxt "field:endorsement.start.preview_contract_premiums.premium,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt ""
+"field:endorsement.start.preview_contract_premiums.premium,currency_digits:"
+msgid "Currency Digits"
+msgstr "Précision"
+
+msgctxt ""
+"field:endorsement.start.preview_contract_premiums.premium,currency_symbol:"
+msgid "Currency Symbol"
+msgstr "Symbole de la Devise"
+
+msgctxt "field:endorsement.start.preview_contract_premiums.premium,end:"
+msgid "End"
+msgstr "Terminer"
+
+msgctxt "field:endorsement.start.preview_contract_premiums.premium,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.start.preview_contract_premiums.premium,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt ""
+"field:endorsement.start.preview_contract_premiums.premium,option_covered_element:"
+msgid "Covered Element for Option"
+msgstr "Elément couvert pour l'option"
+
+msgctxt "field:endorsement.start.preview_contract_premiums.premium,start:"
+msgid "Start"
+msgstr "Début"
+
+msgctxt "model:endorsement.start.preview_contract_premiums,name:"
+msgid "Preview Contract Premiums"
+msgstr "Prévisualisation des primes du contrat"
+
+msgctxt "model:endorsement.start.preview_contract_premiums.contract,name:"
+msgid "Contract Preview"
+msgstr "Prévisualisation du contrat"
+
+msgctxt "model:endorsement.start.preview_contract_premiums.premium,name:"
+msgid "Premium Preview"
+msgstr "Prévisualisation des primes"
+
+msgctxt "view:endorsement.start.preview_contract_premiums.contract:"
+msgid "Contract Premiums Preview"
+msgstr "Prévisualisation des primes du contrat"
+
+msgctxt "view:endorsement.start.preview_contract_premiums.contract:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "view:endorsement.start.preview_contract_premiums.premium:"
+msgid "Contract Premiums"
+msgstr "Primes du contrat"
+
+msgctxt "view:endorsement.start.preview_contract_premiums.premium:"
+msgid "amount"
+msgstr "Montant"
+
+msgctxt "view:endorsement.start.preview_contract_premiums:"
+msgid "Preview Contracts Premiums"
+msgstr "Prévisualisation des primes du contrat"
+
+msgctxt ""
+"wizard_button:endorsement.start,preview_contract_premiums,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_premiums,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_premiums,summary:"
+msgid "Summary"
+msgstr "Synthèse"

@@ -82,6 +82,10 @@ msgctxt "field:commission.agent-account.fee,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:commission.create_agents.ask,fees:"
+msgid "Fees"
+msgstr "Frais"
+
 msgctxt "field:commission.plan,fees:"
 msgid "Fees"
 msgstr "Frais"

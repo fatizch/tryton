@@ -20,9 +20,27 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "error:distribution.network:"
-msgid "The code must be unique!"
-msgstr "Le code doit être unique !"
+msgctxt "error:distribution_network-party.contact_mechanism:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:distribution_network-party.contact_mechanism:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:distribution.network,address:"
+msgid "Address"
+msgstr "Adresse"
 
 msgctxt "field:distribution.network,childs:"
 msgid "Sub Levels"
@@ -31,6 +49,10 @@ msgstr "Niveaux Inférieurs"
 msgctxt "field:distribution.network,code:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "field:distribution.network,contact_mechanisms:"
+msgid "Contact Mechanisms"
+msgstr "Moyens de contact"
 
 msgctxt "field:distribution.network,create_date:"
 msgid "Create Date"
@@ -44,6 +66,18 @@ msgctxt "field:distribution.network,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:distribution.network,email:"
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgctxt "field:distribution.network,fax:"
+msgid "Fax"
+msgstr "Fax"
+
+msgctxt "field:distribution.network,full_name:"
+msgid "Name"
+msgstr "Nom"
+
 msgctxt "field:distribution.network,id:"
 msgid "ID"
 msgstr "ID"
@@ -52,6 +86,10 @@ msgctxt "field:distribution.network,left:"
 msgid "Left"
 msgstr "Gauche"
 
+msgctxt "field:distribution.network,mobile:"
+msgid "Mobile"
+msgstr "Mobile"
+
 msgctxt "field:distribution.network,name:"
 msgid "Name"
 msgstr "Nom"
@@ -59,6 +97,22 @@ msgstr "Nom"
 msgctxt "field:distribution.network,parent:"
 msgid "Top Level"
 msgstr "Niveau Supérieur"
+
+msgctxt "field:distribution.network,parent_party:"
+msgid "Parent Party"
+msgstr "Acteur Parent"
+
+msgctxt "field:distribution.network,parents:"
+msgid "Parents"
+msgstr "Parents"
+
+msgctxt "field:distribution.network,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "field:distribution.network,phone:"
+msgid "Phone"
+msgstr "Téléphone"
 
 msgctxt "field:distribution.network,rec_name:"
 msgid "Name"
@@ -80,6 +134,52 @@ msgctxt "field:distribution.network,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt ""
+"field:distribution_network-party.contact_mechanism,contact_mechanism:"
+msgid "Contact Mechanism"
+msgstr "Moyen de contact"
+
+msgctxt "field:distribution_network-party.contact_mechanism,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:distribution_network-party.contact_mechanism,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:distribution_network-party.contact_mechanism,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt ""
+"field:distribution_network-party.contact_mechanism,distribution_network:"
+msgid "Distribution Network"
+msgstr "Réseau de Distribution"
+
+msgctxt "field:distribution_network-party.contact_mechanism,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:distribution_network-party.contact_mechanism,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:distribution_network-party.contact_mechanism,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:distribution_network-party.contact_mechanism,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:distribution_network-party.contact_mechanism,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:party.party,network:"
+msgid "Network"
+msgstr "Réseau"
+
 msgctxt "field:res.user,dist_network:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
@@ -88,9 +188,26 @@ msgctxt "model:distribution.network,name:"
 msgid "Distribution Network"
 msgstr "Réseau de Distribution"
 
+msgctxt "model:distribution_network-party.contact_mechanism,name:"
+msgid "Relation Distribution Network - Contact Mechanism"
+msgstr "Relation Réseau de distribution - Moyens de contact"
+
 msgctxt "model:ir.action,name:act_dist_network_form"
 msgid "Distribution Networks"
 msgstr "Réseaux de Distribution"
+
+msgctxt "model:ir.action,name:act_distribution_network_relate_form"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "model:ir.action.act_window.domain,name:act_dist_network_domain_all"
+msgid "All"
+msgstr "Tous"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_dist_network_domain_parent"
+msgid "Tree"
+msgstr "Arbre"
 
 msgctxt "model:ir.test_case.instance,name:distribution_network_test_case"
 msgid "Distribution Network Test Case"

@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.subscribe:"
-msgid "Please pick a process from the selection"
-msgstr "Choisir un processus de la sélection"
-
 msgctxt "error:contract:"
 msgid "At least an option must be selected"
 msgstr "Saisir une garantie"
@@ -42,10 +38,6 @@ msgctxt "field:contract,current_state:"
 msgid "Current State"
 msgstr "Etat courant"
 
-msgctxt "field:contract,doc_received:"
-msgid "All Document Received"
-msgstr "Tous les documents ont été reçus"
-
 msgctxt "field:contract,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -81,6 +73,10 @@ msgstr "ID"
 msgctxt "field:contract.subscribe.find_process,model:"
 msgid "Model"
 msgstr "Modèle"
+
+msgctxt "field:contract.subscribe.find_process,party:"
+msgid "Party"
+msgstr "Acteur"
 
 msgctxt "field:contract.subscribe.find_process,product:"
 msgid "Product"

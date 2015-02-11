@@ -1,0 +1,19 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:ir.action,name:act_product_form"
+msgid "Accounting Variants"
+msgstr "Variantes comptables"
+
+msgctxt "model:ir.action,name:act_template_form"
+msgid "Accounting Products"
+msgstr "Produits comptables"
+
+msgctxt "model:ir.ui.menu,name:menu_product"
+msgid "Accounting Variants"
+msgstr "Variantes comptables"
+
+msgctxt "model:ir.ui.menu,name:menu_template"
+msgid "Accounting Products"
+msgstr "Produits comptables"

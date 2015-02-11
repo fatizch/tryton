@@ -1,11 +1,97 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:bank:"
+msgctxt "error:bank.agency:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:bank.agency:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:bank.agency:"
 msgid "The bank code %s must contain 5 numeric chars."
 msgstr "Le code banque %s doit contenir 5 caractères numériques"
 
-msgctxt "field:bank,code_fr:"
+msgctxt "error:bank.agency:"
+msgid "The branch code %s must contain 5 numeric chars."
+msgstr "Le code guichet %s doit contenir 5 caractères numériques"
+
+msgctxt "field:bank,agencies:"
+msgid "Agencies"
+msgstr "Agences"
+
+msgctxt "field:bank.agency,bank:"
+msgid "Bank"
+msgstr "Banque"
+
+msgctxt "field:bank.agency,bank_code:"
 msgid "Bank Code"
 msgstr "Code Banque"
+
+msgctxt "field:bank.agency,branch_code:"
+msgid "Branch Code"
+msgstr "Code Guichet"
+
+msgctxt "field:bank.agency,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:bank.agency,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:bank.agency,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:bank.agency,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:bank.agency,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:bank.agency,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:bank.agency,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:bank.agency,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:bank.agency,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:bank.agency,name:"
+msgid "Agency"
+msgstr "Agence"
+
+msgctxt "model:ir.action,name:act_agency_relate_form"
+msgid "Agencies"
+msgstr "Agences"
+
+msgctxt "view:bank.agency:"
+msgid "Agencies"
+msgstr "Agences"
+
+msgctxt "view:bank.agency:"
+msgid "Agency"
+msgstr "Agence"

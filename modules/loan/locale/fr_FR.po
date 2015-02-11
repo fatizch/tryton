@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -108,6 +108,14 @@ msgstr ""
 msgctxt "error:loan:"
 msgid "No loan sequence defined"
 msgstr "Pas de séquence de prêt définie"
+
+msgctxt "error:loan:"
+msgid ""
+"The loan \"%(loan)s\" is used on the contract(s) \"%(contract)s\". Are you "
+"sure you want to continue?"
+msgstr ""
+"Le prêt \"%(loan)s\" est utilisé sur le(s) contrat(s) \"%(contract)s\". Etes"
+" vous sûr de vouloir continuer?"
 
 msgctxt "error:party.synthesis.menu.loan:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."

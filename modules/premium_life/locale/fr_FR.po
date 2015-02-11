@@ -2,7 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt ""
-"field:offered.product.premium_dates,yearly_each_covered_anniversary_date:"
+msgctxt "selection:offered.product.premium_date,type_:"
 msgid "Yearly Each Covered Anniversary Date"
-msgstr ""
+msgstr "Annuellement à l'anniversaire de l'assuré"

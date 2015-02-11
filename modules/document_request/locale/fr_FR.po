@@ -2,9 +2,141 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:document.receive.attach:"
+msgid "Duplicate name on attachments : %s"
+msgstr "Nom similiare sur les pièces jointes : %s"
+
 msgctxt "error:document.receive:"
 msgid "No document request found for this object"
-msgstr "Pas de demande de documents trouvée pour cet objet"
+msgstr "Pas de demande de document trouvé pour cet objet"
+
+msgctxt "error:document.request.line:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:document.request.line:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:document.request:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:document.request:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "field:document.receive.attach,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:document.receive.attach,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.receive.attach,resource:"
+msgid "Resource"
+msgstr "Ressource"
+
+msgctxt "field:document.receive.request,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.receive.request,kind:"
+msgid "Kind"
+msgstr "Type de donnée"
+
+msgctxt "field:document.receive.request,request:"
+msgid "Request"
+msgstr "Demander"
+
+msgctxt "field:document.receive.request,value:"
+msgid "Value"
+msgstr "Valeur"
+
+msgctxt "field:document.receive.set_requests,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:document.receive.set_requests,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.request,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.request,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.request,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.request,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:document.request,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.request,is_complete:"
+msgid "Is Complete"
+msgstr "Reçu"
+
+msgctxt "field:document.request,needed_by:"
+msgid "Requested for"
+msgstr "Requis pour"
+
+msgctxt "field:document.request,needed_by_str:"
+msgid "Master as String"
+msgstr "Objet maitre"
+
+msgctxt "field:document.request,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.request,request_description:"
+msgid "Request Description"
+msgstr "Description de la demande"
+
+msgctxt "field:document.request,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.request,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.request,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:document.request.line,attachment:"
+msgid "Attachment"
+msgstr "Pièce jointe"
 
 msgctxt "field:document.request.line,attachment_data:"
 msgid "Data"
@@ -14,9 +146,89 @@ msgctxt "field:document.request.line,attachment_name:"
 msgid "Attachment Name"
 msgstr "Nom de la pièce jointe"
 
+msgctxt "field:document.request.line,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.request.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.request.line,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.request.line,document_desc:"
+msgid "Document Definition"
+msgstr "Définition des documents"
+
+msgctxt "field:document.request.line,for_object:"
+msgid "Needed For"
+msgstr "Requis pour"
+
+msgctxt "field:document.request.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.request.line,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.request.line,received:"
+msgid "Received"
+msgstr "Reçus"
+
+msgctxt "field:document.request.line,reception_date:"
+msgid "Reception Date"
+msgstr "Date de réception"
+
+msgctxt "field:document.request.line,request:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "field:document.request.line,request_date:"
+msgid "Request Date"
+msgstr "Date de la demande"
+
+msgctxt "field:document.request.line,send_date:"
+msgid "Send Date"
+msgstr "Date d'envoi"
+
+msgctxt "field:document.request.line,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.request.line,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.request.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:document.request.process,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "model:document.receive.attach,name:"
+msgid "Document Receive Attach"
+msgstr "Réception de documents"
+
+msgctxt "model:document.receive.request,name:"
+msgid "Document Receive Request"
+msgstr "Demande de documents"
+
+msgctxt "model:document.receive.set_requests,name:"
+msgid "Document Receive Set Requests"
+msgstr "Demande de documents"
+
+msgctxt "model:document.request,name:"
+msgid "Document Request"
+msgstr "Demande de Documents"
+
+msgctxt "model:document.request.line,name:"
+msgid "Document Request Line"
+msgstr "Ligne de demande de documents"
 
 msgctxt "model:document.request.process,name:"
 msgid "Document Request Batch Definition"
@@ -61,3 +273,27 @@ msgstr "Demandes"
 msgctxt "view:document.request:"
 msgid "Send Request"
 msgstr "Envoyer la demande"
+
+msgctxt "wizard_button:document.receive,attachment_setter,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:document.receive,attachment_setter,only_store:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:document.receive,input_document,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:document.receive,input_document,notify_request:"
+msgid "Complete"
+msgstr "Terminer"
+
+msgctxt "wizard_button:document.receive,select_instance,attachment_setter:"
+msgid "Continue"
+msgstr "Continuer"
+
+msgctxt "wizard_button:document.receive,select_instance,end:"
+msgid "Cancel"
+msgstr "Annuler"

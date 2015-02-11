@@ -114,46 +114,6 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
-msgctxt "error:document.rule-document.description:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:document.rule-document.description:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:document.rule:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:document.rule:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:document.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
-
 msgctxt "error:document.template-offered.product:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
@@ -900,122 +860,6 @@ msgctxt "field:document.request.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:document.rule,config_kind:"
-msgid "Conf. kind"
-msgstr "Type de Conf."
-
-msgctxt "field:document.rule,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:document.rule,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:document.rule,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.rule,documents:"
-msgid "Documents"
-msgstr "Documents"
-
-msgctxt "field:document.rule,end_date:"
-msgid "To Date"
-msgstr "Date de Fin"
-
-msgctxt "field:document.rule,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.rule,kind:"
-msgid "Kind"
-msgstr "Type de donnée"
-
-msgctxt "field:document.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
-
-msgctxt "field:document.rule,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.rule,rule:"
-msgid "Rule Engine"
-msgstr "Moteur de Règle"
-
-msgctxt "field:document.rule,rule_extra_data:"
-msgid "Rule Extra Data"
-msgstr "Paramètres de Rêgle"
-
-msgctxt "field:document.rule,start_date:"
-msgid "From Date"
-msgstr "Date de Début"
-
-msgctxt "field:document.rule,template:"
-msgid "Template"
-msgstr "Modèle"
-
-msgctxt "field:document.rule,template_behaviour:"
-msgid "Template Behaviour"
-msgstr "Comportement du Modèle"
-
-msgctxt "field:document.rule,view_rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.rule,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.rule,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.rule,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
-msgctxt "field:document.rule-document.description,create_date:"
-msgid "Create Date"
-msgstr "Date de Création"
-
-msgctxt "field:document.rule-document.description,create_date_:"
-msgid "Creation date"
-msgstr "Date de Création"
-
-msgctxt "field:document.rule-document.description,create_uid:"
-msgid "Create User"
-msgstr "Créé par"
-
-msgctxt "field:document.rule-document.description,document:"
-msgid "Document"
-msgstr "Document"
-
-msgctxt "field:document.rule-document.description,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:document.rule-document.description,rec_name:"
-msgid "Name"
-msgstr "Nom"
-
-msgctxt "field:document.rule-document.description,rule:"
-msgid "Rule"
-msgstr "Règle"
-
-msgctxt "field:document.rule-document.description,write_date:"
-msgid "Write Date"
-msgstr "Date de mise à jour"
-
-msgctxt "field:document.rule-document.description,write_uid:"
-msgid "Write User"
-msgstr "Mis à jour par"
-
-msgctxt "field:document.rule-document.description,xml_id:"
-msgid "XML Id"
-msgstr "Identifiant XML"
-
 msgctxt "field:document.template,code:"
 msgid "Code"
 msgstr "Code"
@@ -1512,10 +1356,6 @@ msgctxt "field:offered,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:offered,document_rules:"
-msgid "Document Rules"
-msgstr "Règles des document requis"
-
 msgctxt "field:offered,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -1535,10 +1375,6 @@ msgstr "Nom"
 msgctxt "field:offered,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:offered,sub_document_rules:"
-msgid "Sub Document Rules"
-msgstr "Sous règles des documents requis"
 
 msgctxt "field:offered,summary:"
 msgid "Summary"
@@ -1900,10 +1736,6 @@ msgctxt "field:offered.option.description,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:offered.option.description,document_rules:"
-msgid "Document Rules"
-msgstr "Règles des documents requis"
-
 msgctxt "field:offered.option.description,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -1955,10 +1787,6 @@ msgstr "Nom"
 msgctxt "field:offered.option.description,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:offered.option.description,sub_document_rules:"
-msgid "Sub Document Rules"
-msgstr "Sous règles des documents requis"
 
 msgctxt "field:offered.option.description,summary:"
 msgid "Summary"
@@ -2072,10 +1900,6 @@ msgctxt "field:offered.product,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:offered.product,document_rules:"
-msgid "Document Rules"
-msgstr "Règles des document requis"
-
 msgctxt "field:offered.product,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -2115,10 +1939,6 @@ msgstr "Nom"
 msgctxt "field:offered.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:offered.product,sub_document_rules:"
-msgid "Sub Document Rules"
-msgstr "Sous règles des documents requis"
 
 msgctxt "field:offered.product,summary:"
 msgid "Summary"
@@ -2448,14 +2268,6 @@ msgctxt "model:document.request.line,name:"
 msgid "Document Request Line"
 msgstr "Ligne de demande de documents"
 
-msgctxt "model:document.rule,name:"
-msgid "Document Managing Rule"
-msgstr "Règles de gestion des documents"
-
-msgctxt "model:document.rule-document.description,name:"
-msgid "Rule to Document Description Relation"
-msgstr "Relation descripteur de document règles"
-
 msgctxt "model:document.template,name:"
 msgid "Document Template"
 msgstr "Modèle de Lettre"
@@ -2729,7 +2541,8 @@ msgstr ""
 msgctxt "model:rule_engine.rule_parameter,selection:option_age_kind"
 msgid ""
 "real : Real\n"
-"at_given_day_of_year : At Given Day of Year"
+"at_given_day_of_year : At Given Day of Year\n"
+"at_end_of_month : At End of Month"
 msgstr ""
 "real: Réel\n"
 "at_given_day_of_year: A un jour donné\n"
@@ -2762,50 +2575,6 @@ msgstr " "
 msgctxt "selection:document.request.line,for_object:"
 msgid ""
 msgstr " "
-
-msgctxt "selection:document.rule,config_kind:"
-msgid "Advanced"
-msgstr "Avancé"
-
-msgctxt "selection:document.rule,config_kind:"
-msgid "Simple"
-msgstr "Simple"
-
-msgctxt "selection:document.rule,kind:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:document.rule,kind:"
-msgid "Loss"
-msgstr "Préjudice"
-
-msgctxt "selection:document.rule,kind:"
-msgid "Main"
-msgstr "Principale"
-
-msgctxt "selection:document.rule,kind:"
-msgid "Sub Elem"
-msgstr "Sous élément"
-
-msgctxt "selection:document.rule,offered:"
-msgid "Option Description"
-msgstr "Garantie"
-
-msgctxt "selection:document.rule,offered:"
-msgid "Product"
-msgstr "Produit"
-
-msgctxt "selection:document.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:document.rule,template_behaviour:"
-msgid "Add"
-msgstr "Ajouter"
-
-msgctxt "selection:document.rule,template_behaviour:"
-msgid "Remove"
-msgstr "Remplacer"
 
 msgctxt "selection:document.template,kind:"
 msgid ""
@@ -3134,10 +2903,6 @@ msgstr "Demandes"
 msgctxt "view:document.request:"
 msgid "Send Request"
 msgstr "Envoyer la demande"
-
-msgctxt "view:document.rule:"
-msgid "Document Rule"
-msgstr "Règle de gestion des documents"
 
 msgctxt "view:document.template.version:"
 msgid "Document Template Version"

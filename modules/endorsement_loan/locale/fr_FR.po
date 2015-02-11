@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -277,6 +277,10 @@ msgctxt "field:endorsement,loans:"
 msgid "Loans"
 msgstr "Prêts"
 
+msgctxt "field:endorsement.contract.covered_element.option,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:endorsement.contract.covered_element.option,loan_shares:"
 msgid "Loan Shares"
 msgstr "Quotités"
@@ -501,6 +505,10 @@ msgctxt "field:endorsement.loan.increment,definition:"
 msgid "Definition"
 msgstr "Définition"
 
+msgctxt "field:endorsement.loan.increment,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:endorsement.loan.increment,id:"
 msgid "ID"
 msgstr "ID"
@@ -648,6 +656,10 @@ msgstr "Créé par"
 msgctxt "field:endorsement.loan.share,definition:"
 msgid "Definition"
 msgstr "Définition"
+
+msgctxt "field:endorsement.loan.share,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:endorsement.loan.share,id:"
 msgid "ID"

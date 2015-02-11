@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -589,6 +589,10 @@ msgstr "ID"
 msgctxt "field:contract.option,premiums:"
 msgid "Premiums"
 msgstr "Primes"
+
+msgctxt "field:contract.option.extra_premium,active:"
+msgid "Active"
+msgstr "Active"
 
 msgctxt "field:contract.option.extra_premium,premiums:"
 msgid "Premiums"

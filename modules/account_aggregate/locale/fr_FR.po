@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.move.snapshot:"
+msgid "No sequence defined in configuration"
+msgstr "Pas de séquence définie dans la configuration"
+
 msgctxt "field:account.configuration,snapshot_sequence:"
 msgid "Snapshot Sequence"
 msgstr "Sequence des instantanés"
@@ -45,6 +49,10 @@ msgstr "Crédit"
 msgctxt "field:account.move.line.aggregated,currency_digits:"
 msgid "Currency Digits"
 msgstr "Précision"
+
+msgctxt "field:account.move.line.aggregated,date:"
+msgid "Date"
+msgstr "Date"
 
 msgctxt "field:account.move.line.aggregated,debit:"
 msgid "Debit"
@@ -118,6 +126,10 @@ msgctxt "field:account.move.snapshot.start,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:account.move.snapshot.take,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "model:account.move.line.aggregated,name:"
 msgid "Account Move Line Aggregated"
 msgstr "Agrégat comptable"
@@ -133,6 +145,10 @@ msgstr "Instantanés"
 msgctxt "model:account.move.snapshot.start,name:"
 msgid "Snapshot Moves"
 msgstr "Instantanés"
+
+msgctxt "model:account.move.snapshot.take,name:"
+msgid "Snapshot Moves Take batch"
+msgstr "Batch de saisie de l'instantanné"
 
 msgctxt "model:ir.action,name:act_move_line_aggregated_form"
 msgid "Account Move Lines Aggregated"

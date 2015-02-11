@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -449,10 +449,6 @@ msgstr "Titre"
 msgctxt "field:party.interaction,user:"
 msgid "User"
 msgstr "Utilisateur"
-
-msgctxt "field:party.interaction,user_name:"
-msgid "User Name"
-msgstr "Gestionnaire"
 
 msgctxt "field:party.interaction,write_date:"
 msgid "Write Date"
