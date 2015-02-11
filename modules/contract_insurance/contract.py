@@ -78,8 +78,10 @@ class Contract(Printable):
 
     def calculate(self):
         super(Contract, self).calculate()
-        for covered_element in self.covered_elements:
+        covered_elements = self.covered_elements
+        for covered_element in covered_elements:
             covered_element.calculate()
+        self.covered_elements = covered_elements
 
     @fields.depends('product')
     def on_change_product(self):
@@ -684,8 +686,10 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         return []
 
     def calculate(self):
+        options = self.options
         for option in self.options:
             option.calculate()
+        self.options = options
         for method_name in self._calculate_methods(self.item_desc):
             method = getattr(self.__class__, method_name)
             if not hasattr(method, 'im_self') or method.im_self:

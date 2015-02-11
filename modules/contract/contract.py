@@ -321,14 +321,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return ['calculate_activation_dates']
 
     def calculate(self):
-        for option in self.options:
+        options = self.options
+        for option in options:
             option.calculate()
+        self.options = options
         for method_name in self._calculate_methods(self.product):
             method = getattr(self.__class__, method_name)
             if not hasattr(method, 'im_self') or method.im_self:
                 method([self])
             else:
                 method(self)
+        self.save()
 
     @classmethod
     def update_contract_after_import(cls, contracts):
@@ -1387,7 +1390,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 method([self])
             else:
                 method(self)
-        self.save()
 
     @classmethod
     def search_parent_contract(cls, name, clause):
