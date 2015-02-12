@@ -3,16 +3,28 @@ from sql.aggregate import Max
 from sql import Literal
 
 from trytond.modules.cog_utils import UnionMixin
-from trytond.pool import Pool
+from trytond.pool import Pool, PoolMeta
 from trytond.wizard import Wizard
 from trytond.pyson import PYSONEncoder
 from trytond.modules.cog_utils import model, fields, coop_string, utils
 
+__metaclass__ = PoolMeta
 __all__ = [
+    'Party',
     'SynthesisMenuPayment',
     'SynthesisMenu',
     'SynthesisMenuOpen',
     ]
+
+
+class Party:
+    __name__ = 'party.party'
+
+    block_payable_payments = fields.Boolean('Block Payments')
+
+    @staticmethod
+    def default_block_payable_payments():
+        return False
 
 
 class SynthesisMenuPayment(model.CoopSQL):

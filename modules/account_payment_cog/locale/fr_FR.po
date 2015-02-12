@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -44,7 +44,7 @@ msgstr "Journal de prélèvement"
 
 msgctxt "field:account.move.line,payment_date:"
 msgid "Payment Date"
-msgstr "Date de prélèvement"
+msgstr "Date de paiement"
 
 msgctxt "field:account.payment.creation,id:"
 msgid "ID"

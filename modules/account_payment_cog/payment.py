@@ -166,6 +166,7 @@ class Payment(export.ExportImportMixin):
         super(Payment, cls).__setup__()
         cls._error_messages.update({
                 'action_not_found': 'Action "%s" not found for payment %s',
+                'payments_blocked_for_party': 'Payments blocked for party %s',
                 })
 
     def get_icon(self, name=None):
@@ -236,6 +237,15 @@ class Payment(export.ExportImportMixin):
     @classmethod
     def is_master_object(cls):
         return True
+
+    @classmethod
+    def approve(cls, payments):
+        for payment in payments:
+            if (payment.kind == 'payable'
+                    and payment.party.block_payable_payments):
+                cls.raise_user_error(
+                    'payments_blocked_for_party', payment.party.rec_name)
+        super(Payment, cls).approve(payments)
 
     @classmethod
     def process(cls, payments, group):

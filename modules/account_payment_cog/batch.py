@@ -91,11 +91,15 @@ class PaymentCreationBatch(batch.BatchRoot):
         payment = pool.get('account.payment').__table__()
         move_line = pool.get('account.move.line').__table__()
         account = pool.get('account.account').__table__()
+        party = pool.get('party.party').__table__()
 
-        query_table = move_line.join(account, condition=(
+        query_table = move_line.join(party,
+            condition=(move_line.party == party.id)
+            ).join(account, condition=(
                 (move_line.account == account.id)
                 & ((account.kind == 'receivable') |
-                    (account.kind == 'payable'))
+                    ((account.kind == 'payable') &
+                        (party.block_payable_payments == False)))
                 & (move_line.reconciliation == Null)
                 & (move_line.payment_date <= treatment_date)))
 

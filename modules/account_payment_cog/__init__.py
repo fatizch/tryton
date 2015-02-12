@@ -22,6 +22,7 @@ def register():
         PaymentCreationBatch,
         Configuration,
         Group,
+        Party,
         module='account_payment_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,
