@@ -13,8 +13,9 @@ class StartFullContractRevision:
         super(StartFullContractRevision, self).update_endorsement(
             base_endorsement, wizard)
         LoanEndorsement = Pool().get('endorsement.loan')
-        for loan in base_endorsement.contract.used_loans:
-            loan_endorsement = LoanEndorsement()
-            loan_endorsement.endorsement = base_endorsement.endorsement
-            loan_endorsement.loan = loan
-            loan_endorsement.save()
+        if not base_endorsement.endorsement.loan_endorsements:
+            for loan in base_endorsement.contract.used_loans:
+                loan_endorsement = LoanEndorsement()
+                loan_endorsement.endorsement = base_endorsement.endorsement
+                loan_endorsement.loan = loan
+                loan_endorsement.save()
