@@ -2,6 +2,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 from trytond.model import Workflow
+from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import model, fields
 
@@ -68,6 +69,8 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
         ]
         cls._buttons.update({
                 'button_decline_set': {},
+                'reset': {
+                    'invisible': ~Eval('state').in_(['draft'])},
                 })
         cls._error_messages.update({
             'effective_date_already_set': 'The effective date is already set.',
@@ -94,6 +97,14 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
     @model.CoopView.button_action('endorsement_set.act_decline_set')
     def button_decline_set(cls, endorsements):
         pass
+
+    @classmethod
+    @model.CoopView.button
+    def reset(cls, endorsement_sets):
+        pool = Pool()
+        Endorsement = pool.get('endorsement')
+        Endorsement.reset([endorsement for endorsement_set in endorsement_sets
+                for endorsement in endorsement_set.endorsements])
 
     @classmethod
     def apply_set(cls, endorsement_sets):
