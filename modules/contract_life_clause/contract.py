@@ -172,6 +172,10 @@ class Beneficiary(model.CoopSQL, model.CoopView):
             })
     share = fields.Numeric('Share', digits=(4, 4))
 
+    @staticmethod
+    def default_accepting():
+        return True
+
     @fields.depends('party', 'reference')
     def on_change_with_rec_name(self, name=None):
         return self.get_rec_name(name)
