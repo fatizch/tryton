@@ -1,5 +1,5 @@
-Paiement des contrats
-=====================
+Paiement - Contrats
+===================
 
 Résumé
 ------

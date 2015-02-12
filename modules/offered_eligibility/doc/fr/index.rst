@@ -1,5 +1,5 @@
-Offre - Conditions d'éligibilité
-================================
+Produit - Conditions d'éligibilité
+==================================
 
 TODO
 But

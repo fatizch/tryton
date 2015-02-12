@@ -1,5 +1,5 @@
-Avenants - Ensemble de...
-=========================
+Avenant - Ensemble de...
+========================
 
 TODO
 Ce module définit la notion d'ensemble d'avenants.

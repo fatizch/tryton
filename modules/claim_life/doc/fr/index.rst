@@ -1,5 +1,5 @@
-Sinistres prévoyance
-====================
+Sinistre - Prévoyance
+=====================
 
 Résumé
 ------

@@ -1,7 +1,8 @@
-contract_set_invoice_report
-==================================
+Ensemble de contrats - Informations sur quittances aggrégées
+============================================================
 
-TODO
+TODO: deplacer texte dans summary.rst|features.rst|user/*.rst
+
 Le module contract_set_invoice_report permet de mettre à disposition
 d'un modèle de lettre les informations sur les quittances aggrégées d'un
 ensemble de contrat.  A l'intérieur d'un ensemble de contrat (contract.set),

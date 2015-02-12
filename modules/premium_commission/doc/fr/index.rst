@@ -1,4 +1,4 @@
-Primes - Frais d'apporteur
+Prime - Frais d'apporteur
 ==========================
 
 TODO

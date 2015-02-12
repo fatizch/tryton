@@ -1,5 +1,5 @@
-Offre - Capitalisation
-======================
+Produit - Capitalisation
+========================
 
 Résumé
 ------

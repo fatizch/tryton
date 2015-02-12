@@ -1,5 +1,5 @@
-commission_waiting_cog
-==============================
+Mouvement comptable d'attente (surcouche coog)
+==============================================
 
 Ce module permet d'émettre automatiquement le mouvement comptable d'attente
 lors de sa création.

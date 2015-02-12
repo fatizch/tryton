@@ -1,5 +1,5 @@
-account_payment_clearing_cog
-====================================
+Mouvement comptable de compensation (surcouche coog)
+====================================================
 
 Résumé
 ------

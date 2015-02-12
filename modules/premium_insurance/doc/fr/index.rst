@@ -1,4 +1,4 @@
-Primes - Assurance
+Prime - Assurance
 ==================
 
 TODO

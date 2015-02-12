@@ -1,5 +1,5 @@
-bank_cog
-========
+Banque (surcouche coog)
+=======================
 
 Résumé
 ------

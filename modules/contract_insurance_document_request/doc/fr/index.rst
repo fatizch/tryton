@@ -1,4 +1,4 @@
-Demande de pièce pour contrat d'assurance
+Demande de pièce - Assurance
 =========================================
 
 Résumé

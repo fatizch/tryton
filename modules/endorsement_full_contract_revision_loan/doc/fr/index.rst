@@ -1,7 +1,8 @@
 Avenant - Reprise Intégrale de Contrat (Pret)
 =============================================
 
-TODO
+TODO: deplacer texte dans summary.rst|features.rst|user/*.rst
+
 Ce module permet de déclencher à la Reprise Intégrale de Contrat de gérer
 proprement le cas d'un contrat emprunteur.
 

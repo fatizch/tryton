@@ -1,5 +1,5 @@
-Banque françaises
-=================
+Banque française
+================
 
 Résumé
 ------

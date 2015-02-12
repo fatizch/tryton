@@ -1,5 +1,5 @@
-Sinistres emprunteur
-====================
+Sinistre - Emprunteur
+=====================
 
 Résumé
 ------

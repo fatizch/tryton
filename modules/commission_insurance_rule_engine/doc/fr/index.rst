@@ -1,5 +1,5 @@
-Moteur de règles pour les commissions
-=====================================
+Moteur de règles - Commissions
+==============================
 
 Résumé
 ------

@@ -1,5 +1,5 @@
-Offre - Distribution
-====================
+Produit - Distribution sur réseau
+=================================
 
 Résumé
 ------

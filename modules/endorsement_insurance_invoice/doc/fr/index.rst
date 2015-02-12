@@ -1,7 +1,8 @@
 Avenant - Quittancement
 =======================
 
-TODO
+TODO deplacer texte dans summary.rst|features.rst|user/*.rst
+
 Le module endorsement_insurance_invoice permet d'intégrer les avenants avec la
 tarification et le quittancement des contrats d'assurance. Il permet de marquer
 certains avenants unitaires comme étant tarifants. Cela signifie que les

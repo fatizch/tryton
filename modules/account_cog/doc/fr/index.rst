@@ -1,7 +1,7 @@
-Module account_cog
-==================
+Compte (surcouche coog)
+=======================
 
-TODO
+TODO: summary.rst boilerplate
 
 .. toctree::
     :hidden:

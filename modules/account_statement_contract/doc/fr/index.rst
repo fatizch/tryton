@@ -1,5 +1,5 @@
-Gestion des relevés pour les contrats
-=====================================
+Gestion des relevés contrats
+============================
 
 Résumé
 ------

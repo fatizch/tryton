@@ -1,7 +1,8 @@
-contract_set
-===================
+Ensemble de contrats
+====================
 
-TODO
+TODO: deplacer texte dans summary.rst|features.rst|user/*.rst
+
 Le module contract_set permet de définir un lien entre plusieurs contrats via
 l'objet 'Ensemble de contrats'. L'objet 'Ensemble de contrat' contient un
 identifiant unique.

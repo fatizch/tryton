@@ -1,10 +1,13 @@
-company_cog
-============================================
+Société (surcouche coog)
+========================
 
-TODO
+Résumé
+------
+
+.. include:: summary.rst
+
 
 .. toctree::
     :hidden:
 
     summary.rst
-    features.rst

@@ -1,5 +1,5 @@
-Offre - Prévoyance
-==================
+Produit - Prévoyance
+====================
 
 Résumé
 ------

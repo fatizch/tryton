@@ -1,4 +1,4 @@
-Primes - Prévoyance
+Prime - Prévoyance
 ===================
 
 TODO

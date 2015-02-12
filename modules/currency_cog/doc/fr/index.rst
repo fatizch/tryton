@@ -1,5 +1,5 @@
-Monnaie
-=======
+Monnaie (surcouche coog)
+========================
 
 Résumé
 ------

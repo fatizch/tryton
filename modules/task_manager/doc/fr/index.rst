@@ -1,5 +1,5 @@
-Gestion de tâches [task_manager]
-================================
+Gestion de tâches
+=================
 
 TODO
 Ce module permet de gérer les tâches issues des processus en cours.

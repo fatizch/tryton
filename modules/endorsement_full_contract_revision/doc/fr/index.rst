@@ -1,7 +1,8 @@
 Avenant - Reprise Intégrale de Contrat
 ======================================
 
-TODO
+TODO: deplacer texte dans summary.rst|features.rst|user/*.rst
+
 Ce module permet de déclencher une Reprise Intégrale de Contrat via le
 processus d'avenant. Cet avenant particlier utilise l'état ``en cours`` des
 avenants pour placer le contrat dans un état instable (``devis``), de sorte

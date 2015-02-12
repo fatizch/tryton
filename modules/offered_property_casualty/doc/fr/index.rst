@@ -1,5 +1,5 @@
-offered_property_casualty
-============================================
+Produit - IARD
+==============
 
 Résumé
 ------

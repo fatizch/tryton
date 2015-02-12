@@ -1,5 +1,5 @@
-Distribution
-============
+Réseau de distribution
+======================
 
 Résumé
 ------

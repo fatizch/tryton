@@ -1,5 +1,5 @@
-contract
-===============
+Paiement (surcouche coog)
+=========================
 
 Résumé
 ------

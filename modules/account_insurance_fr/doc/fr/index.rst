@@ -1,4 +1,4 @@
-Compatbilité Assurance (fr)
+Comptabilité Assurance (fr)
 ===========================
 
 Résumé
