@@ -479,17 +479,7 @@ class StartEndorsement(Wizard):
     def transition_start_endorsement(self):
         if not self.endorsement:
             endorsement = Pool().get('endorsement')()
-            endorsement.effective_date = \
-                self.select_endorsement.effective_date
-            endorsement.definition = self.definition
-            if self.select_endorsement.applicant:
-                endorsement.applicant = self.select_endorsement.applicant
-            if self.select_endorsement.contract:
-                endorsement.contract_endorsements = [{
-                        'contract': self.select_endorsement.contract.id,
-                        'values': {},
-                        }]
-            endorsement.save()
+            endorsement.initialize([endorsement], wizard=self)
             self.select_endorsement.endorsement = endorsement.id
         return self.definition.endorsement_parts[0].view
 
