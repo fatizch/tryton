@@ -254,6 +254,7 @@ option.has_beneficiary_clause is True
 # #Res# #True
 option.beneficiary_clause = clause1
 beneficiary = option.beneficiaries.new()
+beneficiary.accepting = False
 beneficiary.reference = 'The girl next door'
 contract.end_date = datetime.date(2030, 12, 1)
 contract.save()
