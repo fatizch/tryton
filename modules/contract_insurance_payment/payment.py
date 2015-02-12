@@ -73,7 +73,7 @@ class Payment:
                 break
             with Transaction().set_context(
                     contract_revision_date=contract_invoice.start):
-                res = invoice.udpate_move_line_from_billing_information(
+                res = invoice.update_move_line_from_billing_information(
                     payment.line,
                     contract_invoice.contract.billing_information)
                 for field_name, field_value in res.iteritems():

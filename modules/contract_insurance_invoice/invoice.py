@@ -185,7 +185,7 @@ class Invoice:
         if self.reconciled:
             return 'coopengo-reconciliation'
 
-    def udpate_move_line_from_billing_information(self, line,
+    def update_move_line_from_billing_information(self, line,
             billing_information):
         return {'payment_date':
             billing_information.get_direct_debit_planned_date(line)}
@@ -198,7 +198,7 @@ class Invoice:
             utils.today())
         with Transaction().set_context(
                 contract_revision_date=contract_revision_date):
-            res = self.udpate_move_line_from_billing_information(
+            res = self.update_move_line_from_billing_information(
                 line, self.contract.billing_information)
             line.update(res)
             return line

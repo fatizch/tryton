@@ -12,7 +12,7 @@ class TestCaseModel:
     __name__ = 'ir.test_case'
 
     @classmethod
-    def udpate_check_journal(cls):
+    def update_check_journal(cls):
         pool = Pool()
         StatementJournal = pool.get('account.journal')
         Account = pool.get('account.account')
@@ -81,5 +81,5 @@ class TestCaseModel:
     @classmethod
     def configure_accounting_test_case(cls):
         super(TestCaseModel, cls).configure_accounting_test_case()
-        cls.udpate_check_journal()
+        cls.update_check_journal()
         cls.update_SEPA_journal()
