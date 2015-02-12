@@ -1,23 +1,22 @@
-Avenant - Souscription
-======================
+Configuration
+=============
 
-Les fonctionnalités suivantes sont disponibles
-pour les processus:
+Les fonctionnalités suivantes sont disponibles pour les processus.
 
-Boutons:
---------
+Boutons
+-------
 
-- Prévisualisation des changements
+- Prévisualisation des changements ::
 
   .. code:: xml
 
         <button name="button_preview_changes"/>
 
   Ce bouton, utilisé dans la vue d'une étape, permet de lancer
-  l'assitant de prévisualisation des changements.
+  l'assistant de prévisualisation des changements.
 
-Méthodes:
----------
+Méthodes
+--------
 
 - Génération des documents
 
@@ -26,17 +25,16 @@ Méthodes:
       generate_and_attach_reports_in_endorsement
 
   Cette méthode permet de générer et d'attacher des documents sur les
-  contrats de l'avenant. Les paramètres doivent être définis ainsi:
-
+  contrats de l'avenant. Les paramètres doivent être définis ainsi ::
 
   .. code:: python
 
       [['modele1', 'modele2']]
 
-  Où modele1 et modele2 sont des codes de modèles de lettre.
+  Où ``modele1`` et ``modele2`` sont des codes de modèles de lettre.
 
-Champs:
--------
+Champs
+------
 
 - Avenants Unitaires
 

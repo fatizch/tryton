@@ -1,11 +1,10 @@
-Ensemble d'avenants - Processus
-===============================
+Configuration
+=============
 
-Les fonctionnalités suivantes sont disponibles pour les
-processus:
+Les fonctionnalités suivantes sont disponibles pour les processus:
 
-Méthodes:
----------
+Méthodes
+--------
 
 - Génération des documents sur les contrats
 
@@ -21,7 +20,7 @@ Méthodes:
 
       [['modele1', 'modele2']]
 
-  Où modele1 et modele2 sont des codes de modèles de lettre.
+  Où ``modele1`` et ``modele2`` sont des codes de modèles de lettre.
 
 
 - Génération des documents sur l'ensemble de contrat
@@ -32,16 +31,16 @@ Méthodes:
 
   Cette méthode permet de générer et d'attacher des documents sur l'ensemble
   de contrats correspondant à l'ensemble d'avenants. Les paramètres doivent
-  être définis ainsi:
+  être définis ainsi ::
 
   .. code:: python
 
       [['modele1', 'modele2']]
 
-  Où modele1 et modele2 sont des codes de modèles de lettre.
+  Où ``modele1`` et ``modele2`` sont des codes de modèles de lettre.
 
-Champs:
--------
+Champs
+------
 
 - Avenants Unitaires
 
@@ -72,5 +71,3 @@ Champs:
   l'ensemble d'avenant (documents attachés à l'ensemble de contrat
   correspondant), et par les différents avenants (documents attachés aux
   contrats), au moment de l'application des avenants.
-
-
