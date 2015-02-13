@@ -447,12 +447,11 @@ def relation_mixin(value_model, field, model, name):
             return super(Mixin, cls)._import_json(values, main_object)
 
         def export_json(self, skip_fields=None, already_exported=None,
-                output=None, main_object=None):
-
+                output=None, main_object=None, configuration=None):
             pool = Pool()
             the_model = pool.get(model)
             values = super(Mixin, self).export_json(skip_fields,
-                already_exported, output, main_object)
+                already_exported, output, main_object, configuration)
             if 'values' in values:
                 values_field = values['values']
                 if values_field:
@@ -468,7 +467,6 @@ def relation_mixin(value_model, field, model, name):
                         else:
                             new_values_field[key] = value
                     values['values'] = new_values_field
-
             return values
 
         def apply_values(self):

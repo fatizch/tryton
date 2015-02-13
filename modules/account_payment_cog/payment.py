@@ -274,10 +274,12 @@ class Configuration:
             domain=[('type', '=', 'write-off')]))
 
     def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None):
+            output=None, main_object=None, configuration=None):
         values = super(Configuration, self).export_json(skip_fields,
-            already_exported, output, main_object)
+            already_exported, output, main_object, configuration)
 
+        if 'direct_debit_journal' not in values:
+            return values
         field_value = getattr(self, 'direct_debit_journal')
         values['direct_debit_journal'] = {'_func_key': getattr(
             field_value, field_value._func_key)}

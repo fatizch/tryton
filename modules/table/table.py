@@ -140,14 +140,13 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         return True
 
     def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None):
+            output=None, main_object=None, configuration=None):
         if skip_fields:
             skip_fields.add('cells')
         else:
             skip_fields = set(['cells'])
-        result = super(TableDefinition, self).export_json(
-            skip_fields=skip_fields, already_exported=already_exported,
-            output=output, main_object=main_object)
+        result = super(TableDefinition, self).export_json(skip_fields,
+            already_exported, output, main_object, configuration)
         pool = Pool()
         Cell = pool.get('table.cell')
         DimensionValue = pool.get('table.dimension.value')

@@ -152,11 +152,13 @@ class Configuration(export.ExportImportMixin):
     _func_key = 'id'
 
     def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None):
+            output=None, main_object=None, configuration=None):
         values = super(Configuration, self).export_json(skip_fields,
-            already_exported, output, main_object)
+            already_exported, output, main_object, configuration)
 
         for fname in ['default_account_receivable', 'default_account_payable']:
+            if fname not in values:
+                continue
             field_value = getattr(self, fname)
             values[fname] = {'_func_key': getattr(
                 field_value, field_value._func_key)}

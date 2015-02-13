@@ -56,10 +56,11 @@ class Attachment(export.ExportImportMixin):
         return super(Attachment, cls)._import_json(values, main_object)
 
     def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None):
+            output=None, main_object=None, configuration=None):
         new_values = super(Attachment, self).export_json(skip_fields,
-            already_exported, output, main_object)
-        new_values['data'] = base64.b64encode(self.data)
+            already_exported, output, main_object, configuration)
+        if 'data' in new_values:
+            new_values['data'] = base64.b64encode(self.data)
         return new_values
 
     @classmethod
