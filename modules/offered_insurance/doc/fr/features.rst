@@ -37,4 +37,4 @@
 - **Lien avec l'assureur :** Permet de rattacher une garantie à un assureur
 
 - **Sélection des processus :** Permet d'indiquer les processus (ajoutés par le
-  module **process**) rattachés au produit.
+  module ``process``) rattachés au produit.

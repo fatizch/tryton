@@ -1,5 +1,5 @@
-Contrat Assurance - Souscription
-================================
+Contrat d'Assurance - Souscription
+==================================
 
 Résumé
 ------

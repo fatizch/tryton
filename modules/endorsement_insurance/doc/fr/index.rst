@@ -1,5 +1,5 @@
-endorsement_insurance
-=====================
+Avenant - Assurance
+===================
 
 Résumé
 ------

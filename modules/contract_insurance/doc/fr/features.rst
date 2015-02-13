@@ -23,4 +23,4 @@
 
 - **Données complémentaires :** Les garanties souscrites peuvent maintenant
   renseigner les données complémentaires définies dans le paramétrage des
-  garanties offertes associées via le module **offered_insurance**.
+  garanties offertes associées via le module ``offered_insurance``.

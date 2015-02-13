@@ -1,5 +1,5 @@
-product_cog
-===========
+Produit comptable (surcouche coog)
+==================================
 
 Résumé
 ------

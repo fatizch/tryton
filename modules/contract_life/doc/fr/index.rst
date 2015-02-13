@@ -1,4 +1,4 @@
-Contrat Prévoyance
+Contrat de Prévoyance
 ==================
 
 Résumé

@@ -1,5 +1,5 @@
-offered_clause
-==============
+Produit de Prévoyance - Clause
+==============================
 
 Résumé
 ------

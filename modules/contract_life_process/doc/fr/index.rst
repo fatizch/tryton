@@ -1,4 +1,4 @@
-Contrat Prévoyance - Souscription
+Contrat de Prévoyance - Souscription
 ==================================
 
 Résumé

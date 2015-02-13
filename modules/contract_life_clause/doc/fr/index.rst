@@ -1,5 +1,5 @@
-Contract_life_clause
-====================
+Contrat de Prévoyance - Clause bénéficiaire
+===========================================
 
 Résumé
 ------

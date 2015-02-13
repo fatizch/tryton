@@ -1,5 +1,5 @@
-offered_life_clause
-===================
+Produit de Prévoyance - Clause
+==============================
 
 Résumé
 ------

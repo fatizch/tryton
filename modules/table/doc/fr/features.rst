@@ -1,3 +1,9 @@
+La saisie des tables se fait en général via un import depuis un fichier csv,
+ou bien par copier / coller. Pour les tables à plusieurs dimensions, il
+est possible d'afficher les données sous forme d'un tableau à deux
+dimensions, en fixant les valeurs des autres dimensions.
+
+
 - **Création de tables :** La création d'une table se fait en deux parties :
 
   - Saisie des données définissant la table (type de donnée, nombre de
@@ -14,7 +20,7 @@
     - Manuellement, cellule par cellule (à limiter aux tables de petite taille)
 
 - **Visualisation de tables :** Le contenu d'une table à plusieurs dimensions
-  (plus de 2) peut être difficile à visualiser. Le module **table** permet de
+  (plus de 2) peut être difficile à visualiser. Le module ``table`` permet de
   visualiser ces données de deux façons :
 
   - Liste simple : chaque ligne de cette liste contient la valeur de chaque
