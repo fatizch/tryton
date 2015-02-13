@@ -997,50 +997,6 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     def start_endorsement(cls, endorsements):
         pass
 
-    @classmethod
-    def initialize(cls, endorsements, wizard=None):
-        pool = Pool()
-        StartEndorsement = pool.get('endorsement.start', type='wizard')
-        if not wizard:
-            wizard_id, _, _ = StartEndorsement.create()
-            wizard = StartEndorsement(wizard_id)
-        else:
-            for endorsement in endorsements:
-                endorsement.effective_date = \
-                    wizard.select_endorsement.effective_date
-                endorsement.definition = wizard.definition
-                if wizard.select_endorsement.applicant:
-                    endorsement.applicant = wizard.select_endorsement.applicant
-                if wizard.select_endorsement.contract:
-                    endorsement.contract_endorsements = [{
-                            'contract': wizard.select_endorsement.contract.id,
-                            'values': {},
-                            }]
-                endorsement.save()
-        for endorsement in endorsements:
-            wizard.select_endorsement.endorsement = endorsement.id
-            wizard.select_endorsement.effective_date =\
-                endorsement.effective_date
-            wizard.select_endorsement.endorsement_definition =\
-                endorsement.definition
-            views = [part.view for part in
-                endorsement.definition.endorsement_parts]
-            for contract_endorsement in endorsement.contract_endorsements:
-                wizard.select_endorsement.contract =\
-                    contract_endorsement.contract
-                wizard.select_endorsement.product =\
-                    contract_endorsement.contract.product
-                for view in views:
-                    state = getattr(wizard, view)
-                    state.endorsement_part =\
-                        wizard.get_endorsement_part_for_state(view)
-                    method = getattr(wizard, 'default_' + view)
-                    default_values = method(view)
-                    for k, v in default_values.iteritems():
-                        setattr(state, k, v)
-                    state.update_endorsement(contract_endorsement, wizard)
-                    endorsement.save()
-
 
 class EndorsementContract(values_mixin('endorsement.contract.field'),
         model.CoopSQL, model.CoopView):

@@ -178,14 +178,6 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
                 {'effective_date': value}]
         Endorsement.write(*to_write)
 
-    @classmethod
-    def initialize(cls, endorsement_sets):
-        pool = Pool()
-        Endorsement = pool.get('endorsement')
-        Endorsement.initialize(
-            [endorsement for endorsement_set in endorsement_sets
-                for endorsement in endorsement_set.endorsements])
-
 
 class Endorsement:
     __name__ = 'endorsement'
