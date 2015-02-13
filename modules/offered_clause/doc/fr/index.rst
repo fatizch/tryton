@@ -1,5 +1,5 @@
-Produit de Prévoyance - Clause
-==============================
+Produit - Clause
+================
 
 Résumé
 ------
