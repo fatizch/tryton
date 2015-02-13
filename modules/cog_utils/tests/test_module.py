@@ -591,11 +591,23 @@ class ModuleTestCase(test_framework.CoopTestCase):
             code='export_test', model=model,
             model_name='cog_utils.export_test')
         model_configuration.save()
+        model_slave = self.Model.search(
+            [('model', '=', 'cog_utils.export_test_target_slave')])[0]
+        model_configuration_slave = self.ExportModelConfiguration(
+            name='Export Test Slave', code='export_test_slave',
+            model=model_slave,
+            model_name='cog_utils.export_test_target_slave')
+        model_configuration_slave.save()
         field_configuration = self.ExportFieldConfiguration(field_name='char',
-            model=model_configuration, export_light_strategy=True)
+            model=model_configuration, export_light_strategy=False)
+        field_configuration.save()
+        field_configuration = self.ExportFieldConfiguration(field_name='char',
+            model=model_configuration_slave, export_light_strategy=False)
         field_configuration.save()
         conf = self.ExportConfiguration(name='MyConf', code='my_conf',
-            models_configuration=[model_configuration])
+            models_configuration=[model_configuration,
+                model_configuration_slave])
+
         target = self.ExportTestTargetSlave(char='key')
         target.save()
         to_export = self.ExportTest(char='otherkey', valid_one2many=[target])
@@ -612,14 +624,14 @@ class ModuleTestCase(test_framework.CoopTestCase):
         output = []
         conf._configuration = None
         to_export.export_json(output=output, configuration=conf)
-        self.assertEqual(len(output[0]['valid_one2many']), 1)
+        self.assertEqual(output[0]['valid_one2many'][0]['char'], 'key')
 
         field_configuration.export_light_strategy = True
         field_configuration.save()
         output = []
         conf._configuration = None
         to_export.export_json(output=output, configuration=conf)
-        self.assertEqual(output[0]['valid_one2many'][0]['char'], 'key')
+        self.assertEqual(len(output[0]['valid_one2many']), 1)
 
     def test_string_replace(self):
         s = u'café-THÉ:20$'
