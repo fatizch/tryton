@@ -59,6 +59,10 @@ class RuleEngineRuntime:
             return address.zip
 
     @classmethod
+    def _re_contract_signature_date(cls, args):
+        return args['contract'].signature_date
+
+    @classmethod
     def get_person(cls, args):
         if 'person' in args:
             return args['person']

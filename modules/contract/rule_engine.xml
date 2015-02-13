@@ -1,64 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data noupdate="1">
-    <record model="rule_engine.function" id="te_contract">
-      <field name="description">Contrat</field>
-      <field name="type">folder</field>
-      <field name="language" ref="ir.lang_fr"/>
-      <field name="translated_technical_name">contrat</field>
-    </record>
-    <record model="rule_engine.context-function" id="def_context-te_contract">
-      <field name="context" ref="rule_engine.default_context"/>
-      <field name="tree_element" ref="te_contract"/>
-    </record>
-  </data>
-  <data>
-    <record model="rule_engine.function" id="date_debut_contrat">
-      <field name="translated_technical_name">date_debut_contrat</field>
-      <field name="description">Date d'effet du Contrat</field>
-      <field name="type">function</field>
-      <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_get_contract_effective_date</field>
-      <field name="parent" ref="te_contract"/>
-    </record>
-    <record model="rule_engine.function" id="te_contract_extra_data">
-      <field name="description">Donnée Complémentaire</field>
-      <field name="name">_re_extra_data</field>
-      <field name="namespace">rule_engine.runtime</field>
-      <field name="type">function</field>
-      <field name="parent" ref="te_contract"/>
-      <field name="translated_technical_name">donnee_compl</field>
-      <field name="language" ref="ir.lang_fr"/>
-    </record>
-    <record model="rule_engine.function" id="te_contract_conditions_date">
-      <field name="description">Date de Conditions</field>
-      <field name="name">_re_contract_conditions_date</field>
-      <field name="namespace">rule_engine.runtime</field>
-      <field name="type">function</field>
-      <field name="parent" ref="te_contract"/>
-      <field name="translated_technical_name">date_de_conditions</field>
-      <field name="language" ref="ir.lang_fr"/>
-    </record>
-    <record model="rule_engine.function" id="code_postal_du_contrat">
-      <field name="translated_technical_name">code_postal_du_contrat</field>
-      <field name="description">Code postal du contrat</field>
-      <field name="type">function</field>
-      <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_contract_address_zip</field>
-      <field name="long_description">Code postal de l'adresse associée au contrat</field>
-      <field name="parent" ref="te_contract"/>
-    </record>
-    <record model="rule_engine.function" id="pays_du_contrat">
-      <field name="translated_technical_name">pays_du_contrat</field>
-      <field name="description">Pays du contrat</field>
-      <field name="type">function</field>
-      <field name="language" ref="ir.lang_fr"/>
-      <field name="namespace">rule_engine.runtime</field>
-      <field name="name">_re_contract_address_country</field>
-      <field name="long_description">Pays de l'adresse associée au contrat</field>
-      <field name="parent" ref="te_contract"/>
-    </record>
-  </data>
+    <data noupdate="1">
+        <record model="rule_engine.function" id="te_contract">
+            <field name="description">Contrat</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="translated_technical_name">contrat</field>
+        </record>
+            <record model="rule_engine.context-function" id="def_context-te_contract">
+            <field name="context" ref="rule_engine.default_context"/>
+            <field name="tree_element" ref="te_contract"/>
+        </record>
+    </data>
+    <data>
+        <record model="rule_engine.function" id="date_debut_contrat">
+            <field name="translated_technical_name">date_debut_contrat</field>
+            <field name="description">Date d'effet du Contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_effective_date</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+        <record model="rule_engine.function" id="te_contract_extra_data">
+            <field name="description">Donnée Complémentaire</field>
+            <field name="name">_re_extra_data</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="te_contract"/>
+            <field name="translated_technical_name">donnee_compl</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+        <record model="rule_engine.function" id="te_contract_conditions_date">
+            <field name="description">Date de Conditions</field>
+            <field name="name">_re_contract_conditions_date</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="te_contract"/>
+            <field name="translated_technical_name">date_de_conditions</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+        <record model="rule_engine.function" id="te_contract_signature_date">
+            <field name="description">Date de Signature</field>
+            <field name="name">_re_contract_signature_date</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="te_contract"/>
+            <field name="translated_technical_name">date_de_signature</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+        <record model="rule_engine.function" id="code_postal_du_contrat">
+            <field name="translated_technical_name">code_postal_du_contrat</field>
+            <field name="description">Code postal du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_contract_address_zip</field>
+            <field name="long_description">Code postal de l'adresse associée au contrat</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+        <record model="rule_engine.function" id="pays_du_contrat">
+            <field name="translated_technical_name">pays_du_contrat</field>
+            <field name="description">Pays du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_contract_address_country</field>
+            <field name="long_description">Pays de l'adresse associée au contrat</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+    </data>
 </tryton>
