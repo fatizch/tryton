@@ -1,3 +1,3 @@
 - **Définition des frais**
 - **Ajout des informations comptables à la synthèse acteur**
-- **Configuration des exports/imports de paramétrage comptable
+- **Configuration des exports/imports de paramétrage comptable**
