@@ -1,4 +1,4 @@
-Banque (surcouche coog)
+Banque - Assurance
 =======================
 
 Résumé

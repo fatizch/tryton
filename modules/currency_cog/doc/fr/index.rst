@@ -1,4 +1,4 @@
-Monnaie (surcouche coog)
+Monnaie - Assurance
 ========================
 
 Résumé

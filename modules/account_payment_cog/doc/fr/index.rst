@@ -1,4 +1,4 @@
-Paiement (surcouche coog)
+Paiement - Assurance
 =========================
 
 Résumé

@@ -1,4 +1,4 @@
-Gestion des relevés (surcouche Coog)
+Gestion des relevés - Assurance
 =====================================
 
 Résumé

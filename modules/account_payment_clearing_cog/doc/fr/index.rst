@@ -1,4 +1,4 @@
-Mouvement comptable de compensation (surcouche coog)
+Mouvement comptable de compensation - Assurance
 ====================================================
 
 Résumé

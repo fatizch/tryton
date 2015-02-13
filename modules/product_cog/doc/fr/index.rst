@@ -1,4 +1,4 @@
-Produit comptable (surcouche coog)
+Produit comptable - Assurance
 ==================================
 
 Résumé

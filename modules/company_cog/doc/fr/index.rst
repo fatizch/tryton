@@ -1,4 +1,4 @@
-Société (surcouche coog)
+Société - Assurance
 ========================
 
 Résumé

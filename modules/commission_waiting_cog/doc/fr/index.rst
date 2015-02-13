@@ -1,4 +1,4 @@
-Mouvement comptable d'attente (surcouche coog)
+Mouvement comptable d'attente - Assurance
 ==============================================
 
 Ce module permet d'émettre automatiquement le mouvement comptable d'attente

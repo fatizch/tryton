@@ -1,4 +1,4 @@
-Compte (surcouche coog)
+Compte - Assurance
 =======================
 
 Résumé
