@@ -1,7 +1,15 @@
 Compte (surcouche coog)
 =======================
 
-TODO: summary.rst boilerplate
+Résumé
+------
+
+.. include:: summary.rst
+
+Fonctionnalités
+---------------
+
+.. include:: features.rst
 
 .. toctree::
     :hidden:
