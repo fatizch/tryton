@@ -97,13 +97,14 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                         old_beneficiaries.remove(beneficiary.beneficiary)
                     else:
                         old_beneficiaries.remove(beneficiary.beneficiary)
-                        instance.beneficiaries.append(
-                            beneficiary.beneficiary)
+                        instance.beneficiaries = list(instance.beneficiaries) +\
+                            [beneficiary.beneficiary]
                         for k, v in beneficiary.values.iteritems():
                             setattr(beneficiary.beneficiary, k, v)
         else:
             instance = option
             displayer['current_option'] = [option.id]
+            displayer['option_endorsement'] = None
         if not instance.on_change_with_has_beneficiary_clause():
             return
         displayer['option_name'] = instance.get_rec_name(None)
@@ -184,7 +185,7 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                     new_options[cur_option.id])
             option_endorsement.values.update(new_values)
             if cur_option is None:
-                option_endorsement.benficiaries = [
+                option_endorsement.beneficiaries = [
                     BeneficiaryEndorsement(**benef_values)
                     for benef_values in beneficiary_values.itervalues()]
             else:
@@ -203,7 +204,7 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
                     for x in created]
                 for party_id in modified:
                     beneficiary_instance = current_beneficiaries[party_id]
-                    for k, v in beneficiary_values[party_id]:
+                    for k, v in beneficiary_values[party_id].iteritems():
                         setattr(beneficiary_instance, k, v)
                     update_values = beneficiary_instance._save_values
                     if update_values:
