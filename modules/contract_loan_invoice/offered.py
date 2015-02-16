@@ -275,9 +275,12 @@ class ProductPremiumDate:
 
     def get_rule_for_contract(self, contract):
         res = super(ProductPremiumDate, self).get_rule_for_contract(contract)
+        if res:
+            return res
         if not contract.is_loan:
             return res
         if self.type_ == 'every_loan_payment':
-            return [payment.start_date
+            return [datetime.datetime.combine(
+                    payment.start_date, datetime.time())
                 for loan in contract.used_loans
                 for payment in loan.payments]
