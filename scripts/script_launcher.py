@@ -4,9 +4,13 @@
 import datetime
 import glob
 import os
+import re
 import shutil
 import subprocess
 import time
+import codecs
+
+from unidecode import unidecode
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -465,15 +469,28 @@ def doc(arguments=None, config=None, work_data=None, override_values=None):
     # Clean up previous build
     if os.path.exists(doc_files):
         shutil.rmtree(doc_files)
+
+    def filter_ignore_files(_dir, filenames):
+        # return files to NOT copy: any file that is outside of the doc
+        # directory of target langage
+        lst = [x for x in filenames if
+            (not os.path.isdir(os.path.join(_dir, x))
+                and os.path.join('doc', language) not in _dir)]
+        return lst
     shutil.copytree(documentation_dir, doc_files)
 
-    # Populate build folder
-    for module_doc_dir in glob.glob(os.path.join(modules,
-                '*', 'doc', language)):
-        module_name = os.path.basename(os.path.dirname(os.path.dirname(
-                    module_doc_dir)))
-        sym_link = os.path.join(doc_files, module_name)
-        os.symlink(module_doc_dir, sym_link)
+    modules_doc_dir = os.path.join(doc_files, 'modules')
+    shutil.copytree(modules, modules_doc_dir, ignore=filter_ignore_files)
+    for module in os.listdir(modules_doc_dir):
+        try:
+            with codecs.open(os.path.join(modules_doc_dir, module, 'doc',
+                        language, 'index.rst'), encoding='utf-8') as index:
+                module_translated = re.sub(r'[^\w\-]+', '_',
+                    unidecode(index.readline().strip()))
+        except IOError:
+            module_translated = module
+        os.rename(os.path.join(modules_doc_dir, module),
+            os.path.join(modules_doc_dir, module_translated))
     shutil.copyfile(os.path.join(doc_files, 'index_%s.rst' % language),
         os.path.join(doc_files, 'index.rst'))
 
