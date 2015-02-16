@@ -9,4 +9,4 @@ Modules inclus dans ce manuel
    :maxdepth: 1
    :glob:
 
-   ./../../../*/index
+   ./../../../modules/*/doc/fr/index
