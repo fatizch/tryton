@@ -217,6 +217,7 @@ class HealthPartyComplement:
         super(HealthPartyComplement, cls).__setup__()
         cls._error_messages.update({
             'wrong_insurance_fund_number': 'Wrong Insurance Fund Number: %s',
+            'hc_system_not_defined': 'HC system must be defined'
             })
 
     @classmethod
@@ -273,6 +274,10 @@ class HealthPartyComplement:
             set(['hc_system', 'insurance_fund']))
 
     def check_insurance_fund_number(self):
+        if not self.insurance_fund_number:
+            return
+        if not self.hc_system and self.insurance_fund_number:
+            self.raise_user_error('hc_system_not_defined')
         if (not re.match('%s[0-9]{7}' % self.hc_system.code,
                 self.insurance_fund_number) or not self.insurance_fund):
             self.raise_user_error('wrong_insurance_fund_number',
