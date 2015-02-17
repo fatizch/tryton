@@ -1,17 +1,10 @@
 Ce module personnalise le module ``account_invoice`` pour les besoins du
-métier de l'assurance. Le module ``account_invoice`` de tryton offre les
-fonctionnalités suivantes :
+métier de l'assurance.
 
-- Création de quittance client / fournisseur
-
-- Vie de la quittance (création, validation, émission, paiement, annulation)
-
-- Comptabilisation de la quittance, lettrage
-
-- Lien avec les tiers concernés (client / fournisseur)
-
-- Rapports sur les quittances
-
-La surcouche ``coog`` complète ces fonctionnalités :
-
+- ``[Tryton]`` Création de quittance client / fournisseur
+- ``[Tryton]`` Vie de la quittance (création, validation, émission, paiement,
+  annulation)
+- ``[Tryton]`` Comptabilisation de la quittance, lettrage
+- ``[Tryton]`` Lien avec les tiers concernés (client / fournisseur)
+- ``[Tryton]`` Rapports sur les quittances
 - Ajout du groupe de droits 'Consultation de quittances'

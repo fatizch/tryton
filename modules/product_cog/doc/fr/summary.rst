@@ -1,7 +1,4 @@
-Ce module personnalise le module ``product`` pour les besoins du métier de
-l'assurance. Le module ``product`` de tryton offre les fonctionnalités
-suivantes:
+Ce module introduit le concept de produit comptable.
 
-- Paramétrage des produits comptables
-
-- Paramétrage des types de produit comptables
+- ``[Tryton]`` Paramétrage des produits comptables
+- ``[Tryton]``  Paramétrage des types de produit comptables

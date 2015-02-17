@@ -1,9 +1,5 @@
-Ce module personnalise le module ``currency`` pour les besoins du métier de
-l'assurance. Le module ``currency`` de tryton offre les fonctionnalités
-suivantes:
+Ce module introduit les concepts de "monnaie" et de "taux".
 
-- Paramétrage des monnaies
-
-- Configuration des taux de conversion
-
-- Configuration des symboles et de la précision à utiliser
+- ``[Tryton]`` Paramétrage des monnaies
+- ``[Tryton]`` Configuration des taux de conversion
+- ``[Tryton]`` Configuration des symboles et de la précision à utiliser
