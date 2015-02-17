@@ -137,6 +137,13 @@ class Contract(Printable):
                     (covered.get_rec_name('')))
 
     @classmethod
+    def check_option_end_dates(cls, contracts):
+        super(Contract, cls).check_option_end_dates(contracts)
+        Pool().get('contract.option').check_end_date([option
+                for contract in contracts
+                for option in contract.covered_element_options])
+
+    @classmethod
     def get_coverages(cls, product):
         return [x.coverage for x in product.ordered_coverages
             if x.coverage.is_service]
@@ -266,10 +273,7 @@ class Contract(Printable):
         super(Contract, self).set_and_propagate_end_date(end_date)
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                if not option.end_date:
-                    option.end_date = end_date
-                    # Need to force reload of contract end_date without saving
-                    option.parent_contract.end_date = end_date
+                option.end_date = end_date
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 

@@ -12,6 +12,7 @@ from trytond.modules.cog_utils import model, fields
 __metaclass__ = PoolMeta
 __all__ = [
     'add_endorsement_step',
+    'DummyStep',
     'SelectEndorsement',
     'BasicPreview',
     'StartEndorsement',
@@ -176,6 +177,12 @@ class EndorsementWizardStepMixin(object):
         return result
 
 
+class DummyStep(EndorsementWizardStepMixin, model.CoopView):
+    'Dummy Step'
+
+    __name__ = 'endorsement.start.dummy_step'
+
+
 class EndorsementWizardStepBasicObjectMixin(EndorsementWizardStepMixin):
     '''
         Mixin used for modifying an object. It displays the current instance
@@ -320,11 +327,13 @@ class SelectEndorsement(model.CoopView):
     endorsement = fields.Many2One('endorsement', 'Endorsement',
         states={'invisible': True})
     endorsement_definition = fields.Many2One('endorsement.definition',
-        'Endorsement', domain=['OR',
-            If(Bool(Eval('product', False)),
-                [('products', '=', Eval('product'))],
-                []),
-            [('products', '=', None)]],
+        'Endorsement', domain=[
+            [('is_technical', '=', False)],
+            ['OR', [
+                    If(Bool(Eval('product', False)),
+                        [('products', '=', Eval('product'))],
+                        [])],
+                [('products', '=', None)]]],
         depends=['product'])
     endorsement_summary = fields.Text('Endorsement Summary')
     product = fields.Many2One('offered.product', 'Product', readonly=True)
@@ -394,6 +403,7 @@ class StartEndorsement(Wizard):
     apply_endorsement = StateTransition()
     summary_previous = StateTransition()
     preview_changes = StateTransition()
+    dummy_step = StateView('endorsement.start.dummy_step', '', [])
     basic_preview = StateView('endorsement.start.preview_changes',
         'endorsement.preview_changes_view_form', [
             Button('Summary', 'summary', 'tryton-go-previous'),
@@ -748,6 +758,7 @@ class OpenContractAtApplicationDate(Wizard):
         action['pyson_context'] = PYSONEncoder().encode({
                 'contracts': [x.contract.id
                     for x in endorsement.contract_endorsements],
-                '_datetime': endorsement.contract_endorsements[0].applied_on,
+                '_datetime': endorsement.rollback_date,
+                '_datetime_exclude': True,
                 })
         return action, {}

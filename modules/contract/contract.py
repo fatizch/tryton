@@ -12,7 +12,7 @@ from trytond import backend
 from trytond.tools import grouped_slice
 from trytond.rpc import RPC
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval, If, Bool, And
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
 from trytond.wizard import Wizard, StateView, StateTransition, Button
@@ -235,6 +235,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     'invisible': Eval('status') != 'quote'},
                 'button_decline': {
                     'invisible': Eval('status') != 'quote'},
+                'button_stop': {
+                    'invisible': And(
+                        Eval('status') != 'active',
+                        Eval('status') != 'quote',
+                        )},
                 })
         cls._error_messages.update({
                 'inactive_product_at_date':
@@ -602,10 +607,17 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return [('subscriber.id',) + tuple(clause[1:])]
 
     @classmethod
-    def validate(cls, contract):
-        super(Contract, cls).validate(contract)
-        for contract in contract:
+    def validate(cls, contracts):
+        super(Contract, cls).validate(contracts)
+        for contract in contracts:
             contract.check_activation_dates()
+        cls.check_option_end_dates(contracts)
+
+    @classmethod
+    def check_option_end_dates(cls, contracts):
+        Pool().get('contract.option').check_end_date([option
+                for contract in contracts
+                for option in contract.options])
 
     def on_change_with_is_sub_status_required(self, name=None):
         return self.status in _STATUSES_WITH_SUBSTATUS
@@ -640,10 +652,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         for option in options:
             if option.end_date and option.end_date <= end_date:
                 continue
-            if not option.end_date:
-                option.end_date = end_date
-                # Need to force reload of contract end_date without saving
-                option.parent_contract.end_date = end_date
+            option.end_date = end_date
         self.options = options
 
     def get_maximum_end_date(self):
@@ -920,7 +929,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cls.write(*to_write)
 
     @classmethod
-    def terminate(cls, contracts):
+    def do_terminate(cls, contracts):
         pool = Pool()
         Event = pool.get('event')
         sub_status_contracts = defaultdict(list)
@@ -933,7 +942,38 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     'sub_status': sub_status,
                     }]
         cls.write(*to_write)
-        Event.notify_events(contracts, 'terminate')
+        Event.notify_events(contracts, 'terminate_contract')
+
+    @classmethod
+    def terminate(cls, contracts, at_date, termination_reason):
+        pool = Pool()
+        ActivationHistory = pool.get('contract.activation_history')
+        Date = pool.get('ir.date')
+        Event = pool.get('event')
+        activation_histories = []
+        cls.write(contracts, {'end_date': at_date})
+        for contract in contracts:
+            contract.set_and_propagate_end_date(at_date)
+            contract.save()
+            activation_histories.append(contract.activation_history[-1])
+        ActivationHistory.write(activation_histories, {
+                'termination_reason': termination_reason})
+        Event.notify_events(contracts, 'plan_contract_termination')
+        if at_date < Date.today():
+            cls.do_terminate(contracts)
+
+    @classmethod
+    def void(cls, contracts, void_reason):
+        pool = Pool()
+        Event = pool.get('event')
+        ActivationHistory = pool.get('contract.activation_history')
+        ActivationHistory.delete(ActivationHistory.search([
+                    ('contract', 'in', [x.id for x in contracts])]))
+        cls.write(contracts, {
+                'status': 'void',
+                'sub_status': void_reason,
+                })
+        Event.notify_events(contracts, 'void_contract')
 
     @classmethod
     def get_coverages(cls, product):
@@ -1063,6 +1103,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     @model.CoopView.button_action('contract.act_decline')
     def button_decline(cls, contracts):
+        pass
+
+    @classmethod
+    @model.CoopView.button_action('contract.act_stop')
+    def button_stop(cls, contracts):
         pass
 
     def get_all_extra_data(self, at_date):
@@ -1287,6 +1332,32 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         if hasattr(self, 'coverage') and self.coverage:
             return self.coverage.currency
 
+    @classmethod
+    def check_end_date(cls, options):
+        Date = Pool().get('ir.date')
+        for option in options:
+            end_date = option.manual_end_date
+            if not end_date:
+                continue
+            if end_date > option.start_date:
+                if not option.parent_contract:
+                    continue
+                if (not option.parent_contract.end_date
+                        or end_date <= option.parent_contract.end_date):
+                    if (end_date and option.automatic_end_date and
+                            option.automatic_end_date < end_date):
+                        cls.raise_user_error(
+                            'end_date_posterior_to_automatic_end_date',
+                            Date.date_as_string(option.automatic_end_date),
+                            )
+                else:
+                    cls.raise_user_error('end_date_posterior_to_contract',
+                        Date.date_as_string(
+                            option.parent_contract.end_date))
+            else:
+                cls.raise_user_error('end_date_anterior_to_start_date',
+                    Date.date_as_string(option.start_date))
+
     def clean_up_versions(self, contract):
         pass
 
@@ -1323,32 +1394,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     @classmethod
     def set_end_date(cls, options, name, end_date):
-        Date = Pool().get('ir.date')
-        to_write = []
-        for option in options:
-            if not end_date or end_date > option.start_date:
-                if not option.parent_contract:
-                    continue
-                if (not option.parent_contract.end_date
-                        or end_date <= option.parent_contract.end_date):
-                    if not end_date or (not option.automatic_end_date
-                            or option.automatic_end_date >= end_date):
-                        if end_date:
-                            to_write.append(option)
-                    else:
-                        cls.raise_user_error(
-                            'end_date_posterior_to_automatic_end_date',
-                            Date.date_as_string(option.automatic_end_date),
-                            )
-                else:
-                    cls.raise_user_error('end_date_posterior_to_contract',
-                        Date.date_as_string(
-                            option.parent_contract.end_date))
-            else:
-                cls.raise_user_error('end_date_anterior_to_start_date',
-                    Date.date_as_string(option.start_date))
-        if to_write:
-            cls.write(to_write, {'manual_end_date': end_date})
+        cls.write(options, {'manual_end_date': end_date})
 
     def get_possible_end_date(self):
         dates = {}

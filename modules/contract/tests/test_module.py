@@ -2,7 +2,6 @@ import unittest
 import datetime
 
 import trytond.tests.test_tryton
-import mock
 
 from trytond.modules.cog_utils import test_framework
 from trytond.transaction import Transaction
@@ -76,7 +75,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         )
     def test0011_testContractTermination(self):
         contract, = self.Contract.search([])
-        self.Contract.terminate([contract])
+        self.Contract.do_terminate([contract])
         self.assertEqual(contract.status, 'terminated')
         self.assertEqual(contract.sub_status, self.SubStatus.search(
                 [('code', '=', 'reached_end_date')])[0])
@@ -177,20 +176,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
             option.parent_contract = option.contract
             option.contract.end_date = contract_end_date
             self.assertEqual(option.get_end_date('end_date'), expected)
+            option.contract.options = [option]
+            option.manual_end_date = to_set
 
-            # test setter
-            with mock.patch.object(self.Option, 'write') as write:
-                if should_raise:
-                    self.assertRaises(UserError, self.Option.set_end_date,
-                        [option], 'end_date', to_set)
-                else:
-                    self.Option.set_end_date([option], 'end_date', to_set)
-                    if should_set:
-                        write.assert_called_with([option],
-                            {'manual_end_date': to_set})
-                    else:
-                        write.assert_called_with([],
-                            {'manual_end_date': to_set})
+            # test check
+            if should_raise:
+                self.assertRaises(UserError,
+                    self.Contract.check_option_end_dates, [option.contract])
+            else:
+                self.Contract.check_option_end_dates([option.contract])
 
         # option with auto date
         test_option(automatic_end_date=auto_date, expected=auto_date,

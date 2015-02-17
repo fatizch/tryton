@@ -2,4 +2,5 @@
 <tree string="Endorsement Definitions">
     <field name="code"/>
     <field name="name"/>
+    <field name="is_technical"/>
 </tree>

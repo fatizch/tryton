@@ -168,7 +168,6 @@ class Contract:
         self.fees = sorted(contract_fees.values(), key=lambda x: x.fee)
         if to_delete:
             ContractFee.delete(to_delete)
-        self.save()
 
     def get_dates(self):
         return self.product.get_dates(self)

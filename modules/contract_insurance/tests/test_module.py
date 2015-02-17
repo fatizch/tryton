@@ -4,7 +4,6 @@ import unittest
 from decimal import Decimal
 
 import trytond.tests.test_tryton
-import mock
 
 from trytond.modules.cog_utils import test_framework
 from trytond.transaction import Transaction
@@ -342,20 +341,17 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 covered_element=self.CoveredElement(),
                 )
             self.assertEqual(option.get_end_date('end_date'), expected)
+            option.parent_contract.options = [option]
+            option.parent_contract.covered_element_options = [option]
+            option.manual_end_date = to_set
 
-            # test setter
-            with mock.patch.object(self.Option, 'write') as write:
-                if should_raise:
-                    self.assertRaises(UserError, self.Option.set_end_date,
-                        [option], 'end_date', to_set)
-                else:
-                    self.Option.set_end_date([option], 'end_date', to_set)
-                    if should_set:
-                        write.assert_called_with([option],
-                            {'manual_end_date': to_set})
-                    else:
-                        write.assert_called_with([],
-                            {'manual_end_date': to_set})
+            # test check
+            if should_raise:
+                self.assertRaises(UserError,
+                    self.Contract.check_option_end_dates,
+                    [option.parent_contract])
+            else:
+                self.Contract.check_option_end_dates([option.parent_contract])
 
         # option with auto date
         test_option(automatic_end_date=date2, expected=date2,
