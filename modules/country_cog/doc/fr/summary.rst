@@ -1,3 +1,5 @@
-Ce module sert d'interface avec le module ``country`` de tryton. Il ajoute
-également la notion de code postal, et est fournit avec un jeu d'essai
-permettant de remplir la base de données avec les codes postaux français.
+Ce module personnalise le module ``country`` pour les besoins du métier de
+l'assurance. Le module ``country`` de tryton offre les fonctionnalités
+suivantes:
+
+- Base de données des pays et de leurs subdivisions administratives
