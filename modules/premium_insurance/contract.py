@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If
 
 from trytond.modules.cog_utils import fields
 
@@ -47,14 +47,17 @@ class ExtraPremium:
     flat_amount_frequency = fields.Selection(EXTRA_PREMIUM_FREQUENCIES,
         'Amount frequency', states={
             'invisible': Eval('calculation_kind', '') != 'flat',
-            'required': Eval('calculation_kind', '') == 'flat',
-            })
+            'required': Eval('calculation_kind', '') == 'flat'},
+            depends=['calculation_kind'],
+            domain=[If(Eval('calculation_kind') == 'rate',
+                ('flat_amount_frequency', '=', ''),
+                ('flat_amount_frequency', '!=', ''))])
     premiums = fields.One2Many('contract.premium', 'extra_premium',
         'Premiums')
 
-    @classmethod
-    def default_flat_amount_frequency(cls):
-        return 'yearly'
+    @fields.depends('calculation_kind')
+    def on_change_with_flat_amount_frequency(self):
+        return '' if self.calculation_kind == 'rate' else 'yearly'
 
 
 class Premium:
