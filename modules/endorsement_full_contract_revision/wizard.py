@@ -18,7 +18,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
     __name__ = 'endorsement.contract.full_revision_start'
 
     current_start_date = fields.Date('Current Start Date', readonly=True)
-    start_date = fields.Date('New Start Date')
+    start_date = fields.Date('New Start Date', readonly=True)
 
     @classmethod
     def state_view_name(cls):
@@ -32,8 +32,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
             self.raise_user_error('only_one_contract')
         endorsement = contracts.values()[0]
         defaults['current_start_date'] = endorsement.contract.start_date
-        defaults.update(self._get_default_values(endorsement.values,
-                endorsement.contract, ['start_date']))
+        defaults['start_date'] = self.effective_date
         return defaults
 
     def step_next(self):

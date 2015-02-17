@@ -185,9 +185,8 @@ Start Endorsement::
     >>> new_endorsement.execute('start_endorsement')
     >>> new_endorsement.form.current_start_date == contract_start_date
     True
-    >>> new_endorsement.form.start_date == contract_start_date
+    >>> new_endorsement.form.start_date == new_contract_start_date
     True
-    >>> new_endorsement.form.start_date = new_contract_start_date
     >>> new_endorsement.execute('full_contract_revision_next')
 
 Modify Contract::
@@ -229,7 +228,8 @@ Restart Endorsement (Same as before)::
     >>> new_endorsement.execute('start_endorsement')
     >>> new_endorsement.form.current_start_date == contract_start_date
     True
-    >>> new_endorsement.form.start_date = new_contract_start_date
+    >>> new_endorsement.form.start_date == new_contract_start_date
+    True
     >>> new_endorsement.execute('full_contract_revision_next')
 
 Modify Contract::
