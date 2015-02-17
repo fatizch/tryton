@@ -2,15 +2,14 @@
 # encoding: utf-8
 # PYTHON_ARGCOMPLETE_OK
 import datetime
-import glob
 import os
 import re
 import shutil
 import subprocess
 import time
 import codecs
+import unicodedata
 
-from unidecode import unidecode
 
 DIR = os.path.abspath(os.path.join(os.path.normpath(__file__), '..'))
 
@@ -426,32 +425,6 @@ def export(arguments, config, work_data):
         process.communicate()
 
 
-def create_symlinks(modules_path, lang, root, remove=True):
-    # TODO : called symlinks.py available in trydoc
-    if remove:
-        # Removing existing symlinks
-        for root_file in os.listdir(root):
-            if os.path.islink(root_file):
-                print "removing %s" % root_file
-                os.remove(root_file)
-
-    for module_doc_dir in glob.glob('%s/*/doc/%s' % (modules_path, lang)):
-        print "symlink to %s" % module_doc_dir
-        module_name_dir = os.path.dirname(os.path.dirname(module_doc_dir))
-        module_name = os.path.basename(module_name_dir)
-        print "module name %s" % module_name
-        symlink = os.path.join(root, module_name)
-        if not os.path.exists(symlink):
-            os.symlink(module_doc_dir, symlink)
-
-    rootIndex = os.path.join(root, 'index.rst')
-    if os.path.exists(rootIndex):
-        os.remove(rootIndex)
-    indexFileName = os.path.join(modules_path, 'index_' + lang + '.rst')
-    if os.path.exists(indexFileName):
-        os.symlink(indexFileName, rootIndex)
-
-
 def doc(arguments=None, config=None, work_data=None, override_values=None):
     override_values = override_values or {}
     doc_files = override_values.get('doc_files', None) or (
@@ -477,6 +450,11 @@ def doc(arguments=None, config=None, work_data=None, override_values=None):
             (not os.path.isdir(os.path.join(_dir, x))
                 and os.path.join('doc', language) not in _dir)]
         return lst
+
+    def strip_accents(s):
+        return ''.join(c for c in unicodedata.normalize('NFD', s)
+            if unicodedata.category(c) != 'Mn')
+
     shutil.copytree(documentation_dir, doc_files)
 
     modules_doc_dir = os.path.join(doc_files, 'modules')
@@ -486,7 +464,7 @@ def doc(arguments=None, config=None, work_data=None, override_values=None):
             with codecs.open(os.path.join(modules_doc_dir, module, 'doc',
                         language, 'index.rst'), encoding='utf-8') as index:
                 module_translated = re.sub(r'[^\w\-]+', '_',
-                    unidecode(index.readline().strip()))
+                    strip_accents(index.readline().strip()))
         except IOError:
             module_translated = module
         os.rename(os.path.join(modules_doc_dir, module),
