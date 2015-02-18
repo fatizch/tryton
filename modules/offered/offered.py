@@ -1,5 +1,3 @@
-import copy
-
 from trytond.pool import Pool
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
@@ -222,15 +220,6 @@ class Offered(model.CoopView, GetResult, Templated, model.TaggedMixin):
         for se in good_se:
             res[se.name] = se.get_default_value(None)
         return res
-
-    @fields.depends('extra_data')
-    def on_change_with_extra_data(self):
-        ExtraData = Pool().get('extra_data')
-        schemas = ExtraData.search(['name', 'in', self.extra_data.keys()])
-        result = copy.copy(self.extra_data)
-        for schema in schemas:
-            schema.update_field_value(result)
-        return result
 
     def get_good_rule_at_date(self, data, kind):
         # First we got to check that the fields that we will need to calculate
