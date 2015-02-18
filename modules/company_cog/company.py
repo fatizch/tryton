@@ -23,6 +23,9 @@ class Company(export.ExportImportMixin):
         result = self.party.get_publishing_values()
         return result
 
+    def get_rec_name(self, name):
+        return self.party.name
+
     def get_func_key(self, name):
         return self.party.code
 
