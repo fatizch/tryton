@@ -1,5 +1,5 @@
-Outils dev coog
-===============
+Fonctionnalités transverses coog
+================================
 
 Résumé
 ------

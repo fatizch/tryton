@@ -47,10 +47,6 @@ Editique (publipostage)
 
 TODO
 
-Gestion des CRE
----------------
-
-TODO
 
 Fonctionnalités des modules
 ===========================
