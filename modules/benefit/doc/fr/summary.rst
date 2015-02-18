@@ -1,4 +1,4 @@
-Ce module permet gérer le paramétrage des prestations
+Ce module permet de gérer le paramétrage des prestations
 
 - Gestion des événements couverts
 - Gestion des descripteurs de préjudice

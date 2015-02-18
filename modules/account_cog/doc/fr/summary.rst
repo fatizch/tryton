@@ -6,7 +6,7 @@ comptabilité (type de compte, journal, mouvement, taxe, etc.).
   compatbles)
 - ``[Tryton]`` Configuration des comptes comptables
 - ``[Tryton]`` Configuration des journaux comptables
-- ``[Tryton]`` Saisie et gestion des mouvements comptables, réconciliation
+- ``[Tryton]`` Saisie et gestion des mouvements comptables, lettrage
 - ``[Tryton]`` Paramétrage et comptabilisation des taxes
 - ``[Tryton]`` Gestion des plans comptables
 - Définition des frais

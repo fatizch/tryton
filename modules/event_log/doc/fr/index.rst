@@ -1,5 +1,5 @@
-Logging d'évènements
-====================
+Compte rendu d'évenements (CRE)
+================================
 
 Résumé
 ------

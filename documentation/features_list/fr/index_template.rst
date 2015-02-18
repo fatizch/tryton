@@ -17,38 +17,33 @@ mesure pour les besoins des métiers de l'Assurance.
 
 .. _Tryton: http://www.tryton.org/
 
+.. image:: _static/archi.png
 
 Fonctionnalités Tryton, hors modules
 ====================================
 
-Architecture 3 tiers
---------------------
+- Architecture 3 tiers
+    Server et client écrits en Python et multiplate-forme (Linux, Windows et
+    OS X), tout service est un webservice. Plusieurs bases de données
+    supportées : PostgreSQL, MySQL ou SQLite.
 
-TODO: phrase description
+- Gestion des utilisateurs
+    Authentification, paramétrage fin d'habilitations et groupes 
+    d'utilisateurs. Accès concurrents aux ressources.
 
-- tout service est un webservice
+- Gestion électronique de documents
+    Sans limite de taille de fichiers, génération de rapports .odt WYSIWYG,
+    intégration de clients mail.
 
-Gestion des utilisateurs
-------------------------
-
-TODO: phrase description
-
-- authentification
-- habilitations
-- accès concurrents aux ressources
-
-GED
----
-
-TODO
-
-Editique (publipostage)
------------------------
-
-TODO
-
+- Et aussi
+    Plus de 60 modules standards, mises à jour automatiques, historisation 
+    des écritures, etc.
 
 Fonctionnalités des modules
 ===========================
 
-.. note:: Les fonctionnalités héritées du framework Tryton sont précédées de la mention ``[Tryton]`` pour les différencier de celles apportées par la surcouche coog.
+.. note:: Les fonctionnalités héritées du framework Tryton sont précédées de
+  la mention ``[Tryton]`` pour les différencier de celles apportées par la
+  surcouche coog.
+
+
