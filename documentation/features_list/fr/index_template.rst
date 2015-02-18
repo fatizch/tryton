@@ -12,8 +12,8 @@ Il constitue ainsi une plate-forme applicative qui peut être utilisée dans un
 large éventail de situations.
 
 Coopengo a développé un ensemble de modules venant enrichir la base existante
-des modules Tryton, afin d'obtenir **coog**, une solution applicative sur mesure
-pour les besoins des métiers de l'Assurance.
+des modules Tryton, afin d'obtenir **coog**, une solution applicative sur 
+mesure pour les besoins des métiers de l'Assurance.
 
 .. _Tryton: http://www.tryton.org/
 
