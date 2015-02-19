@@ -181,8 +181,12 @@ htmlhelp_basename = 'ListedefonctionnalitsCoogdoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
+PREAMBLE = """
+\\frenchbsetup{ItemLabels=\\textbullet}
+"""
 latex_elements = {'classoptions': ',openany,oneside', 'papersize': 'a4paper',
-    'babel': '\\usepackage[french]{babel}'}
+    'babel': '\\usepackage[french]{babel}',
+    'preamble': PREAMBLE}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
