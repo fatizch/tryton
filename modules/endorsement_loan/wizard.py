@@ -245,13 +245,12 @@ class LoanContractDisplayer(model.CoopView):
     current_end_date = fields.Date('Current End Date', readonly=True)
     current_start_date = fields.Date('Current Start Date', readonly=True)
     new_end_date = fields.Date('New End Date', readonly=True)
-    new_start_date = fields.Date('New Start Date', states={
-            'readonly': ~Eval('to_update', False)})
+    new_start_date = fields.Date('New Start Date', readonly=True)
     to_update = fields.Boolean('To Update')
 
     @fields.depends('to_update', 'new_start_date', 'new_end_date', 'contract',
         'endorsement')
-    def _on_change(self):
+    def on_change_to_update(self):
         if not self.to_update:
             self.new_start_date = None
             self.new_end_date = None
@@ -290,9 +289,6 @@ class LoanContractDisplayer(model.CoopView):
                 Transaction().cursor.rollback()
 
         self.new_end_date = new_end_date
-
-    on_change_to_update = _on_change
-    on_change_new_start_date = _on_change
 
 
 class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
