@@ -18,13 +18,12 @@ class InvoiceLine:
         cls.account.domain.pop(1)
 
     def _get_commission_amount(self, amount, plan, pattern=None):
-        coverage = getattr(self.details[0], 'coverage', None)
-        option = getattr(self.details[0], 'option', None)
-        if coverage and option:
+        option = self.details[0].get_option()
+        if option:
             delta = relativedelta(self.coverage_start,
                 option.start_date)
             pattern = {
-                'option': coverage,
+                'option': option.coverage,
                 'nb_years': delta.years
                 }
         commission_amount = plan.compute(amount, self.product, pattern)

@@ -45,14 +45,16 @@ class Commission:
         cls.type_.searcher = 'search_type_'
 
     def get_commissionned_option(self, name):
-        if (self.origin and self.origin.details[0] and
-                getattr(self.origin.details[0], 'option', None)):
-            return self.origin.details[0].option.id
+        if self.origin and self.origin.details[0]:
+            option = self.origin.details[0].get_option()
+            if option:
+                return option.id
 
     def get_commissionned_contract(self, name):
-        if (self.origin and self.origin.details[0] and
-                getattr(self.origin.details[0], 'option', None)):
-            return self.origin.details[0].option.parent_contract.id
+        if self.origin and self.origin.details[0]:
+            option = self.origin.details[0].get_option()
+            if option:
+                return option.parent_contract.id
 
     def get_party(self, name):
         return self.agent.party.id if self.agent else None

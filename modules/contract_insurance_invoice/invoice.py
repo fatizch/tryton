@@ -425,3 +425,9 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
         new_detail.taxes = ', '.join([x.name for x in premium.taxes])
         new_detail.premium = premium
         return new_detail
+
+    def get_option(self):
+        if getattr(self, 'option', None):
+            return self.option
+        if getattr(self, 'extra_premium', None):
+            return self.extra_premium.option
