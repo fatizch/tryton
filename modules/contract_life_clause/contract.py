@@ -105,16 +105,25 @@ class ContractOption:
                 coverage.default_beneficiary_clause.content
         return new_option
 
-    @fields.depends('coverage', 'beneficiary_clause')
-    def on_change_with_beneficiary_clause(self, name=None):
-        if not self.coverage:
-            return None
-        if self.beneficiary_clause and (self.beneficiary_clause in
+    @fields.depends('beneficiary_clause')
+    def on_change_coverage(self):
+        super(ContractOption, self).on_change_coverage()
+        if not self.coverage or not self.coverage.beneficiaries_clauses:
+            self.beneficiary_clause = None
+            self.customized_beneficiary_clause = ''
+            self.has_beneficiary_clause = False
+            return
+        self.has_beneficiary_clause = True
+        if (self.beneficiary_clause and self.beneficiary_clause not in
                 self.coverage.beneficiaries_clauses):
-            return self.beneficiary_clause.id
-        if self.coverage.default_beneficiary_clause:
-            return self.coverage.default_beneficiary_clause.id
-        return None
+            self.beneficiary_clause = self.coverage.default_beneficiary_clause
+        else:
+            self.beneficiary_clause = None
+        if self.beneficiary_clause:
+            self.customized_beneficiary_clause = \
+                self.beneficiary_clause.content
+        else:
+            self.customized_beneficiary_clause = ''
 
     @fields.depends('coverage')
     def on_change_with_has_beneficiary_clause(self, name=None):
