@@ -124,7 +124,7 @@ class EndorsementWizardStepMixin(object):
 
     def step_previous(self):
         self.wizard.end_current_part(self.step_name)
-        return self.wizard.get_next_before(self.step_name)
+        return self.wizard.get_state_before(self.step_name)
 
     def step_suspend(self):
         return 'end'
