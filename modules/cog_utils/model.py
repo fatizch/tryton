@@ -155,6 +155,20 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
                 logging.getLogger('modules').warning('Ondelete not set for '
                     'field %s on model %s' % (field_name, cls.__name__))
 
+    @property
+    def _save_values(self):
+        values = super(CoopSQL, self)._save_values
+        for fname, fvalues in values.iteritems():
+            field = self._fields[fname]
+            if not isinstance(field, fields.One2Many):
+                continue
+            if not field._delete_missing:
+                continue
+            for idx, action in enumerate(fvalues):
+                if action[0] == 'remove':
+                    fvalues[idx] = ('delete', action[1])
+        return values
+
     @classmethod
     def delete(cls, instances):
         # Do not remove, needed to avoid infinite recursion in case a model

@@ -14,6 +14,8 @@ __all__ = [
     'ExportTestTargetSlave2',
     'ExportTest',
     'ExportTestRelation',
+    'O2MDeletionMaster',
+    'O2MDeletionChild',
     ]
 
 
@@ -108,3 +110,20 @@ class ExportTestRelation(model.CoopSQL, export.ExportImportMixin):
     __name__ = 'cog_utils.export_test_relation'
     many2many = fields.Many2One('cog_utils.export_test', 'Export Data')
     target = fields.Many2One('cog_utils.export_test_target', 'Target')
+
+
+class O2MDeletionMaster(model.CoopSQL):
+    'O2M Deletion Master'
+
+    __name__ = 'cog_utils.o2m_deletion_master_test'
+
+    test_one2many = fields.One2Many('cog_utils.o2m_deletion_child_test',
+        'master', 'Test One2Many', delete_missing=True)
+
+
+class O2MDeletionChild(model.CoopSQL):
+    'O2M Deletion Child'
+
+    __name__ = 'cog_utils.o2m_deletion_child_test'
+
+    master = fields.Many2One('cog_utils.o2m_deletion_master_test', 'Master')

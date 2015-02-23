@@ -30,6 +30,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'ExportTestTarget': 'cog_utils.export_test_target',
             'ExportTestTargetSlave': 'cog_utils.export_test_target_slave',
             'ExportTestRelation': 'cog_utils.export_test_relation',
+            'O2MMaster': 'cog_utils.o2m_deletion_master_test',
+            'O2MChild': 'cog_utils.o2m_deletion_child_test',
             'ExportModelConfiguration': 'ir.export.configuration.model',
             'ExportConfiguration': 'ir.export.configuration',
             'ExportFieldConfiguration': 'ir.export.configuration.field',
@@ -632,6 +634,24 @@ class ModuleTestCase(test_framework.CoopTestCase):
         conf._configuration = None
         to_export.export_json(output=output, configuration=conf)
         self.assertEqual(len(output[0]['valid_one2many']), 1)
+
+    def test0070_o2m_deletion(self):
+        master = self.O2MMaster(test_one2many=[self.O2MChild(),
+                self.O2MChild(), self.O2MChild()])
+        master.save()
+        self.assertEqual(len(self.O2MChild.search([
+                        ('master', '=', master)])), 3)
+        self.assertEqual(len(self.O2MChild.search([
+                        ('master', '=', None)])), 0)
+        last_elem = master.test_one2many[2]
+        master.test_one2many = master.test_one2many[:2]
+        self.assertEqual(master._save_values, {
+                'test_one2many': [('delete', [last_elem.id])]})
+        master.save()
+        self.assertEqual(len(self.O2MChild.search([
+                        ('master', '=', master)])), 2)
+        self.assertEqual(len(self.O2MChild.search([
+                        ('master', '=', None)])), 0)
 
     def test_string_replace(self):
         s = u'café-THÉ:20$'

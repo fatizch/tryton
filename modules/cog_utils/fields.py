@@ -82,7 +82,9 @@ class Many2One(tryton_fields.Many2One):
 
 
 class One2Many(tryton_fields.One2Many):
-    pass
+    def __init__(self, *args, **kwargs):
+        self._delete_missing = kwargs.pop('delete_missing', False)
+        super(One2Many, self).__init__(*args, **kwargs)
 
 
 class One2ManyDomain(One2Many):

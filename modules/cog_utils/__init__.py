@@ -73,6 +73,8 @@ def register():
             ExportTestTarget2,
             ExportTestTargetSlave2,
             ExportTestRelation,
+            O2MDeletionMaster,
+            O2MDeletionChild,
             module='cog_utils', type_='model')
     Pool.register(
         ImportWizard,
