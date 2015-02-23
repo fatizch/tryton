@@ -159,12 +159,13 @@ class ExtraPremiumDisplay(model.CoopView):
         return ", ".join([x.rec_name for x in option.extra_premiums])
 
     @fields.depends('covered_element', 'extra_premiums', 'coverages',
-            'options', 'option', 'extra_premium')
+        'options', 'option', 'extra_premium')
     def on_change_covered_element(self):
         pool = Pool()
         Extra = pool.get('contract.manage_extra_premium.select.extra')
         Option = pool.get('contract.manage_extra_premium.select.option')
         if self.covered_element:
+            new_extra_premiums = list(self.extra_premiums)
             for option in self.covered_element.options:
                 if self.option and self.option != option:
                     continue
@@ -172,26 +173,27 @@ class ExtraPremiumDisplay(model.CoopView):
                     if (self.extra_premium and
                             self.extra_premium != extra_premium):
                         continue
-                    self.extra_premiums.append(Extra({
+                    new_extra_premiums.append(Extra(**{
                             'selected': (self.extra_premium
                                 and self.extra_premium == extra_premium),
                             'extra_premium': extra_premium.id,
                             'extra_premium_name': self.get_extra_premium_name(
                                 extra_premium),
                             }))
-            self.extra_premiums = self.extra_premiums
+            self.extra_premiums = new_extra_premiums
 
+            new_options = list(self.options)
             for option in self.covered_element.options:
                 if not self.option or self.option == option:
                     continue
-                self.options.append(Option({
+                new_options.append(Option(**{
                             'selected': False,
                             'option': option.id,
                             'option_name': self.get_option_name(option),
                             'extra_premiums': self.get_extra_premiums(option),
                             }))
 
-            self.options = self.options
+            self.options = new_options
 
 
 class ManageExtraPremium(Wizard):
