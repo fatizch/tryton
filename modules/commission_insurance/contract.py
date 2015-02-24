@@ -23,7 +23,10 @@ class Contract:
         'on_change_with_broker_party')
     agency = fields.Many2One('distribution.network', 'Agency',
         domain=[('parents', '=', Eval('broker'))],
-        states=_STATES, depends=_DEPENDS + ['broker'], ondelete='RESTRICT')
+        states={
+            'readonly': ((Eval('status') != 'quote') | ~Eval('broker', None)),
+            },
+        depends=_DEPENDS + ['broker'], ondelete='RESTRICT')
     agent = fields.Many2One('commission.agent', 'Agent', ondelete='RESTRICT',
         domain=[
             ('type_', '=', 'agent'),
