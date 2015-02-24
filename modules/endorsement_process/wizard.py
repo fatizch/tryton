@@ -123,9 +123,7 @@ class StartEndorsement:
             return 'preview_changes'
         else:
             active_model = Transaction().context.get('active_model')
-            if active_model == 'endorsement':
-                return super(StartEndorsement, self).transition_start()
-            elif active_model == 'endorsement.part.union':
+            if active_model == 'endorsement.part.union':
                 endorsement = EndorsementPartUnion(
                         Transaction().context.get('active_id')).endorsement
             elif active_model == 'endorsement.contract':
@@ -134,7 +132,9 @@ class StartEndorsement:
                 # in endorsement_process/endorsement.py
                 endorsement = Endorsement(
                     Transaction().context.get('active_id') / 100000)
-            elif endorsement.state == 'applied':
+            else:
+                return super(StartEndorsement, self).transition_start()
+            if endorsement.state == 'applied':
                 self.raise_user_error('cannot_resume_applied')
             self.select_endorsement.endorsement = endorsement
             if endorsement.contracts:
@@ -149,6 +149,9 @@ class StartEndorsement:
     def transition_start_endorsement(self):
         pool = Pool()
         EndorsementPart = pool.get('endorsement.part')
+        if Transaction().context.get(
+                'active_model') != 'endorsement.part.union':
+            return super(StartEndorsement, self).transition_start_endorsement()
         if not self.endorsement:
             endorsement = Pool().get('endorsement')()
             endorsement.effective_date = \

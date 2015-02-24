@@ -85,8 +85,8 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
     def get_subscribers_name(self, name):
         return self.endorsement.get_subscribers_name(None)
 
-    @staticmethod
-    def table_query():
+    @classmethod
+    def table_query(cls):
         """ This object is only used to display endorsement part
         and launch the endorsement wizard in the right state
         according to the endorsement part. To insure a unique id
@@ -96,25 +96,31 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
         ctx_endorsement = Transaction().context.get('endorsement', None)
         active_model = Transaction().context.get('active_model', None)
 
-        if active_model == 'endorsement.part.union':
-            good_endorsements = [
-                Transaction().context.get('active_ids')[0] / 100000]
-        elif ctx_endorsement:
-            good_endorsements = ctx_endorsement
-        else:
-            return
-
         endorsement = pool.get('endorsement').__table__()
         endorsement_part = pool.get('endorsement.part').__table__()
         endorsement_def_part_rel = pool.get(
             'endorsement.definition-endorsement.part').__table__()
+
+        good_endorsements = None
+        active_ids = Transaction().context.get('active_ids')
+        if active_model == 'endorsement.part.union':
+            good_endorsements = [x / 100000 for x in active_ids]
+        elif ctx_endorsement:
+            good_endorsements = ctx_endorsement
+        elif active_model == 'endorsement':
+            good_endorsements = active_ids
+        if good_endorsements:
+            join_condition = ((endorsement.state == 'draft') &
+                endorsement.id.in_(good_endorsements))
+        else:
+            join_condition = (endorsement.state == 'draft')
 
         return endorsement_part.join(endorsement_def_part_rel, condition=(
                 endorsement_def_part_rel.endorsement_part ==
                 endorsement_part.id)
             ).join(endorsement, condition=(
                 (endorsement.definition == endorsement_def_part_rel.definition)
-                & (endorsement.id.in_(good_endorsements)))
+                & join_condition)
             ).select(
                 (endorsement_part.id + Mul(100000,
                         endorsement.id)).as_('id'),
