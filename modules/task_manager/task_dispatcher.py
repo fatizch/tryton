@@ -179,13 +179,51 @@ class LaunchTask(Wizard):
 
     __name__ = 'task.launch'
 
-    start_state = 'calculate_action'
-    calculate_action = StateAction('process_cog.act_resume_process')
+    start_state = 'find_action'
+    find_action = StateTransition()
+    view_task = model.VoidStateAction()
+    resume_process_action = StateAction('process_cog.act_resume_process')
 
-    def do_calculate_action(self, action):
+    @property
+    def current_log(self):
         active_id = Transaction().context.get('active_id')
         active_model = Transaction().context.get('active_model')
-        log = Pool().get(active_model)(active_id)
+        assert active_model == 'process.log'
+        return Pool().get('process.log')(active_id)
+
+    def transition_find_action(self):
+        if self.current_log.user.id in (Transaction().user, 0, 1):
+            # Users 0 is root (technical) and user 1 is admin. Those should not
+            # interfere with the process
+            return 'resume_process_action'
+        return 'view_task'
+
+    def do_view_task(self, action):
+        pool = Pool()
+        log = self.current_log
+        Action = pool.get('ir.action')
+        ActWindow = pool.get('ir.action.act_window')
+        possible_actions = ActWindow.search([
+                ('res_model', '=', log.task.__name__)])
+        good_action = possible_actions[0]
+        action = Action.get_action_values(
+            'ir.action.act_window', [good_action.id])[0]
+
+        views = action['views']
+        if len(views) > 1:
+            for view in views:
+                if view[1] == 'form':
+                    action['views'] = [view]
+                    break
+        return (action, {
+                'id': log.task.id,
+                'model': log.task.__name__,
+                'res_id': log.task.id,
+                'res_model': log.task.__name__,
+                })
+
+    def do_resume_process_action(self, action):
+        log = self.current_log
 
         return (action, {
                 'id': log.task.id,
