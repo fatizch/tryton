@@ -364,9 +364,11 @@ class CreateExtraPremiumOptionSelector(model.CoopView):
                 continue
             to_create.append({
                     'option': option.id,
-                    'selected': True,
+                    'selected': False,
                     'option_name': self.get_option_name(option),
                     })
+        if len(to_create) == 1:
+            to_create[0]['selected'] = True
         result = {'add': [(-1, x) for x in to_create]}
         if existing_options:
             result['remove'] = [x.id for x in existing_options.itervalues()]
