@@ -39,6 +39,7 @@ import hgreview
 
 TITLE_FORMAT = re.compile('^([A-Za-z_][\w\.-]+)+ ?:')
 CODEREVIEW_URL = 'http://rietveld.coopengo.com'
+REDMINE_URL = 'https://redmine.coopengo.com'
 DB_PATH = os.path.expanduser('~/review_bot/.reviewbot.db')  # Adapt to config
 
 
@@ -65,11 +66,11 @@ def get_session(url, email, password):
     return session
 
 
-class RietveltStyle(flake8.engine.StyleGuide):
+class RietveldStyle(flake8.engine.StyleGuide):
 
     def __init__(self, basename, *args, **kwargs):
         self.basename = basename
-        super(RietveltStyle, self).__init__()
+        super(RietveldStyle, self).__init__()
         self.options.max_complexity = -1  # do not check code complexity
         self.options.builtins = []  # use the default builtins
         self.options.ignore = (
@@ -88,19 +89,19 @@ class RietveltStyle(flake8.engine.StyleGuide):
         self.options.doctests = None
 
     def init_report(self, reporter=None):
-        self.options.report = RietveltReport(self.basename, self.options)
+        self.options.report = RietveldReport(self.basename, self.options)
         return self.options.report
 
 
-class RietveltReport(pep8.BaseReport):
+class RietveldReport(pep8.BaseReport):
 
     def __init__(self, basename, options):
-        super(RietveltReport, self).__init__(options)
+        super(RietveldReport, self).__init__(options)
         self.basename_prefix = len(basename)
         self.errors = []
 
     def error(self, line_number, offset, text, check):
-        code = super(RietveltReport, self).error(line_number, offset, text,
+        code = super(RietveldReport, self).error(line_number, offset, text,
             check)
         if not code:
             return
@@ -114,7 +115,7 @@ class RietveltReport(pep8.BaseReport):
 def get_style(repository):
     # This is the way to initialize the pyflake checker
     parser, option_hooks = flake8.engine.get_parser()
-    styleguide = RietveltStyle(repository, parser=parser)
+    styleguide = RietveldStyle(repository, parser=parser)
     options = styleguide.options
     for hook in option_hooks:
         hook(options)
@@ -183,8 +184,10 @@ def has_update(entry_id, patchset):
 
 def set_update(entry_id, patchset):
     db = anydbm.open(DB_PATH, 'c')
+    new_entry = entry_id not in db
     db[entry_id] = str(patchset)
     db.close()
+    return new_entry
 
 
 def send_comments(session, issue_id, patchset, comments, repo_dir):
@@ -271,7 +274,29 @@ def finalize_comments(session, issue_info, message):
             })
 
 
-def process_issue(session, issue_url, path_to_repo, email, password):
+def update_redmine_issue_status(issue_id, description, redmine_api_key):
+    pattern = r"(close|closes|fix|fixes|ref) #([0-9]+)"
+    redmine_values = {'status_review': 7, 'field_review': 2}
+    notes = 'Review at %s/%s' % (CODEREVIEW_URL, issue_id)
+    matches = re.findall(re.compile(pattern, re.IGNORECASE), description)
+    for m in matches:
+        redmine_id = m[1]
+        url = '%s/issues/%s.json' % (REDMINE_URL, redmine_id)
+        issue_changes = {
+                'status_id': redmine_values['status_review'],
+                'notes': notes,
+                'custom_fields': [{
+                        'value': issue_id,
+                        'id': redmine_values['field_review']
+                        }]
+                }
+        requests.put(url, auth=(redmine_api_key, ''),
+            data=json.dumps({'issue': issue_changes}),
+            verify=False, headers={'content-type': 'application/json'})
+
+
+def process_issue(session, issue_url, path_to_repo, email, password,
+        redmine_api_key):
     issue_id = urlparse.urlparse(issue_url).path.split('/')[1]
     issue_info = session.get(CODEREVIEW_URL
         + '/'.join(['', 'api', str(issue_id)]))
@@ -284,7 +309,10 @@ def process_issue(session, issue_url, path_to_repo, email, password):
     patchset = issue_info['patchsets'][-1]
     if not has_update(issue_id, patchset):
         return
-    set_update(issue_id, patchset)
+    is_new = set_update(issue_id, patchset)
+    if is_new:
+        update_redmine_issue_status(issue_info['issue'],
+            issue_info['description'], redmine_api_key)
 
     match = TITLE_FORMAT.match(issue_info['subject'])
     if not match:
@@ -342,8 +370,8 @@ if __name__ == '__main__':
 
     email = config.get('credentials', 'email')
     password = config.get('credentials', 'password')
+    redmine_api_key = config.get('credentials', 'redmine_api_key')
     path_to_repo = config.get('repositories', 'repositories_url')
-
     session = ReviewSession(CODEREVIEW_URL, email, password)
     most_ancient = datetime.date.today() - datetime.timedelta(days=7)
 
@@ -352,4 +380,5 @@ if __name__ == '__main__':
         '&closed=0&format=json', session)
 
     for issue_url in issues_urls:
-        process_issue(session, issue_url, path_to_repo, email, password)
+        process_issue(session, issue_url, path_to_repo, email, password,
+            redmine_api_key)
