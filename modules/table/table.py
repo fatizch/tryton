@@ -11,6 +11,7 @@ from lxml import etree
 from sql import Column, Literal
 from sql.functions import Function, Now
 
+from trytond.protocols.jsonrpc import JSONEncoder, JSONDecoder
 from trytond.config import config
 from trytond import backend
 from trytond.cache import Cache
@@ -124,14 +125,15 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
                 cls.raise_user_error('existing_clone',
                     (existing.name, existing.code))
             record.export_json(output=output)
-            values = json.dumps(output[0])
+            values = json.dumps(output[0], cls=JSONEncoder)
             values = values.replace('"_func_key": "%s"' % record.code,
                 '"_func_key": "%s_clone"' % record.code)
             values = values.replace('"code": "%s"' % record.code,
                 '"code": "%s_clone"' % record.code)
             values = values.replace(u'"name": "%s"' % record.name,
                 u'"name": "%s Clone"' % record.name)
-            tmp = record.import_json(json.loads(values))
+            tmp = record.import_json(json.loads(values,
+                    object_hook=JSONDecoder()))
             result.append(tmp)
         return result
 
@@ -168,6 +170,10 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
 
         result['cells'] = cursor.fetchall()
         return result
+
+    @classmethod
+    def _export_light(cls):
+        return super(TableDefinition, cls)._export_light() | {'tags'}
 
     @classmethod
     def import_json(cls, values):
