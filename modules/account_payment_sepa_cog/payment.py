@@ -61,18 +61,47 @@ class Group:
             )
 
     def process_sepa(self):
+        # This methods does not call super (defined in account_payment_sepa
+        # => payment.py
+        #
+        # The reason is that the sepa_mandate_sequence_type is set whatever the
+        # existing value is, and right before the call to generate_message. So
+        # the only way to properly set the sequence_type (that is, use the
+        # same sequence_type for all the payments of a given merged group) is
+        # to do so in this method.
+        #
+        # The first part of the code is more or less a copy of the original
+        # code, while the second part properly set both the merged_id and the
+        # sepa sequence type.
+        #
+        # See https://redmine.coopengo.com/issues/1443
         pool = Pool()
         Payment = pool.get('account.payment')
         Sequence = pool.get('ir.sequence')
+        mandate_type = {}
+        to_write = []
         if self.kind == 'receivable':
+            mandates = Payment.get_sepa_mandates(self.payments)
+            for payment, mandate in zip(self.payments, mandates):
+                if not mandate:
+                    self.raise_user_error('no_mandate', payment.rec_name)
+                to_write += [[payment], {'sepa_mandate': mandate}]
+                if mandate.id not in mandate_type:
+                    mandate_type[mandate.id] = mandate.sequence_type
+            Payment.write(*to_write)
             keyfunc = self.sepa_merge_payment_key
             payments = sorted(self.payments, key=keyfunc)
+            to_write = []
             for key, merged_payments in groupby(payments, key=keyfunc):
-                Payment.write(list(merged_payments), {
-                        'sepa_merged_id':
-                        Sequence.get('account.payment.merged'),
-                        })
-        super(Group, self).process_sepa()
+                payments = list(merged_payments)
+                to_write += [payments, {
+                        'sepa_merged_id': Sequence.get(
+                            'account.payment.merged'),
+                        'sepa_mandate_sequence_type': mandate_type[
+                            payments[0].sepa_mandate.id],
+                        }]
+            Payment.write(*to_write)
+        self.generate_message(_save=False)
 
     def dump_sepa_messages(self, dirpath):
         output_paths = []
