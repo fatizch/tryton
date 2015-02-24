@@ -1,6 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
-from trytond.pyson import Eval, Len
+from trytond.pyson import Eval, Len, Bool
 from trytond.model import Model
 
 from trytond.modules.cog_utils import model, fields
@@ -13,6 +13,8 @@ __all__ = [
     'NewOptionOnCoveredElement',
     'ExtraPremiumDisplayer',
     'ManageExtraPremium',
+    'RemoveOptionSelector',
+    'RemoveOption',
     'OptionSelector',
     'CoveredElementSelector',
     'NewExtraPremium',
@@ -68,6 +70,217 @@ class NewCoveredElement(model.CoopView, EndorsementWizardStepMixin):
                     template['values'][field.name] = new_value
                 vlist.append(template)
         EndorsementCoveredElementOption.create(vlist)
+
+
+class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
+
+    'Remove Option'
+
+    __name__ = 'contract.covered_element.option.remove'
+
+    @classmethod
+    def __setup__(cls):
+        super(RemoveOption, cls).__setup__()
+        cls._error_messages.update({
+                'must_end_all_options': 'All options on a covered element must'
+                ' be removed if a mandatory option is removed',
+                })
+
+    options = fields.One2Many(
+        'contract.covered_element.option.remove.option_selector', None,
+        'Options To Remove')
+
+    @classmethod
+    def update_default_values(cls, wizard, base_endorsement, default_values):
+        if not base_endorsement.id:
+            all_endorsements = [base_endorsement]
+        else:
+            all_endorsements = list(wizard.endorsement.contract_endorsements)
+        effective_date = wizard.select_endorsement.effective_date
+        selectors = []
+        for endorsement in all_endorsements:
+            template = {
+                'contract': endorsement.contract.id,
+                'to_remove': False,
+                'covered_element_endorsement': None,
+                'option_endorsement': None,
+                'covered_element_option_endorsement': None}
+            updated_struct = endorsement.updated_struct
+            for covered_element, values in (
+                    updated_struct['covered_elements'].iteritems()):
+                for option in values['options']:
+                    selector = template.copy()
+                    if not option.__name__ ==\
+                            'endorsement.contract.covered_element.option':
+                        selector.update({
+                                'covered_element': option.covered_element.id,
+                                'option': option.id,
+                                'start_date': option.start_date,
+                                'end_date': option.end_date,
+                                })
+                    else:
+                        real_option = option.option
+                        selector.update({
+                                'covered_element':
+                                        covered_element.relation,
+                                'option': option.relation,
+                                'start_date': real_option.start_date,
+                                'end_date': option.values['end_date'],
+                                'covered_element_endorsement':
+                                    option.covered_element_endorsement.id,
+                                'to_remove': option.values['end_date'] ==
+                                    effective_date,
+                                'covered_element_option_endorsement':
+                                    option.id,
+                                })
+                    selectors.append(selector)
+            for option in updated_struct['options']:
+                selector = None
+                if not hasattr(option, 'get_endorsed_record'):
+                    if option.coverage.subscription_behaviour != 'mandatory':
+                        selector = template.copy()
+                        selector.update({'covered_element': None,
+                                'option': option.id,
+                                'start_date': option.start_date,
+                                'end_date': option.end_date,
+                                })
+                else:
+                    selector = template.copy()
+                    real_option = option.option
+                    selector.update({'covered_element': None,
+                            'option': option.relation,
+                            'start_date': real_option.start_date,
+                            'end_date': option.values['end_date'],
+                            'to_remove': True,
+                            'option_endorsement': option.id,
+                            })
+                if selector:
+                    selectors.append(selector)
+
+        return {'options': selectors, 'effective_date': effective_date}
+
+    def update_endorsement(self, base_endorsement, wizard):
+        effective_date = wizard.select_endorsement.effective_date
+        if not base_endorsement.id:
+            all_endorsements = {base_endorsement.contract.id:
+                base_endorsement}
+        else:
+            all_endorsements = {x.contract.id: x
+                for x in wizard.endorsement.contract_endorsements}
+        pool = Pool()
+        CoveredElement = pool.get('contract.covered_element')
+        OptionEndorsement = pool.get('endorsement.contract.option')
+        CovOptionEndorsement = pool.get(
+            'endorsement.contract.covered_element.option')
+        CoveredElementEndorsement = pool.get(
+            'endorsement.contract.covered_element')
+        for endorsement in all_endorsements.values():
+            op_endorsement_to_delete = []
+            cov_endorsement_to_delete = []
+            updated_struct = endorsement.updated_struct
+            ce_endorsements = {x.relation: x for x in
+                updated_struct['covered_elements'] if hasattr(x, 'relation')}
+            for option in self.options:
+                covered_element = option.covered_element
+
+                if option.covered_element and option.to_remove and not \
+                        option.covered_element_endorsement:
+                    if option.covered_element.id not in ce_endorsements:
+                        ce_endorsements[covered_element.id] = \
+                            CoveredElementEndorsement(
+                                contract_endorsement=endorsement,
+                                action='update', options=[],
+                                relation=covered_element.id)
+                        option.covered_element_endorsement = \
+                            ce_endorsements[covered_element.id]
+                        ce_endorsements[covered_element.id].save()
+
+                if option.covered_element and not option.to_remove and \
+                        option.covered_element_option_endorsement:
+                    CovOptionEndorsement.delete(
+                        [option.covered_element_option_endorsement])
+                    if len(CoveredElementEndorsement(
+                            option.covered_element_endorsement).options) == 0:
+                        cov_endorsement_to_delete.append(
+                            option.covered_element_endorsement)
+
+                if not option.covered_element and not option.to_remove and \
+                        option.option_endorsement:
+                    op_endorsement_to_delete.append(option.option_endorsement)
+
+                if not option.covered_element and option.to_remove and \
+                        option.option_endorsement:
+                    # This is a temporary measure to get around the clean_up
+                    # method deleting the OptionEndorsement
+                    OptionEndorsement.delete([option.option_endorsement])
+                    OptionEndorsement.create([{
+                            'relation': option.option.id,
+                            'values': {'end_date': effective_date},
+                            'action': 'update',
+                            'definition': self.endorsement_definition,
+                            'contract_endorsement': endorsement.id,
+                            }])
+
+            vlist_cov_opt = [{
+                    'covered_element_endorsement': ce_endorsements[
+                        x.covered_element.id],
+                    'relation': x.option.id,
+                    'definition': self.endorsement_definition,
+                    'values': {'end_date': effective_date},
+                    'action': 'update'}
+                for x in self.options if (x.to_remove and not
+                    x.covered_element_option_endorsement and
+                    x.covered_element)]
+            vlist_opt = [{
+                    'relation': x.option.id,
+                    'definition': self.endorsement_definition,
+                    'contract_endorsement': endorsement,
+                    'values': {'end_date': effective_date},
+                    'action': 'update'}
+                for x in self.options if (x.to_remove and not
+                    x.option_endorsement and not
+                    x.covered_element)]
+
+            OptionEndorsement.create(vlist_opt)
+            CovOptionEndorsement.create(vlist_cov_opt)
+            OptionEndorsement.delete(op_endorsement_to_delete)
+            CoveredElementEndorsement.delete(cov_endorsement_to_delete)
+
+            # Only end mandatory option if all options on covered_element
+            # are also ended
+            for ce_id, ce_endorsement in ce_endorsements.iteritems():
+                if [x for x in ce_endorsement.options if
+                        (x.option.coverage.subscription_behaviour ==
+                            'mandatory')]:
+                    if (set([x.option for x in ce_endorsement.options]) !=
+                            set(CoveredElement(ce_id).options)):
+                        self.raise_user_error('must_end_all_options')
+
+        base_endorsement.save()
+
+
+class RemoveOptionSelector(model.CoopView):
+    'Remove Option Selector'
+
+    __name__ = 'contract.covered_element.option.remove.option_selector'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    option = fields.Many2One('contract.option', 'Option', readonly=True)
+    covered_element_option_endorsement = fields.Many2One(
+        'endorsement.contract.covered_element.option',
+        'Covered Element Option Endorsement', readonly=True)
+    option_endorsement = fields.Many2One(
+        'endorsement.contract.option', 'Option Endorsement', readonly=True)
+    covered_element = fields.Many2One('contract.covered_element',
+        'Covered Element', readonly=True)
+    covered_element_endorsement = fields.Many2One(
+        'endorsement.contract.covered_element', 'Covered Element',
+        readonly=True)
+    to_remove = fields.Boolean('To Remove')
+    start_date = fields.Date('Start Date', readonly=True)
+    end_date = fields.Date('End Date',
+        states={'required': Bool(Eval('to_remove'))},
+        depends=['to_remove'], readonly=True)
 
 
 class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
@@ -577,6 +790,16 @@ class StartEndorsement:
                 default=True)])
     add_extra_premium = StateTransition()
     manage_extra_premium_next = StateTransition()
+    remove_option = StateView('contract.covered_element.option.remove',
+        'endorsement_insurance.remove_option_view_form', [
+            Button('Previous', 'remove_option_previous',
+                'tryton-go-previous'),
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Suspend', 'remove_option_suspend', 'tryton-save'),
+            Button('Next', 'remove_option_next', 'tryton-go-next')])
+    remove_option_previous = StateTransition()
+    remove_option_next = StateTransition()
+    remove_option_suspend = StateTransition()
 
     def set_main_object(self, endorsement):
         super(StartEndorsement, self).set_main_object(endorsement)
@@ -727,3 +950,41 @@ class StartEndorsement:
     def transition_manage_extra_premium_next(self):
         self.end_current_part('manage_extra_premium')
         return self.get_next_state('manage_extra_premium')
+
+    def default_remove_option(self, name):
+        pool = Pool()
+        ContractEndorsement = pool.get('endorsement.contract')
+        endorsement_part = self.get_endorsement_part_for_state(
+            'remove_option')
+        contract = self.get_endorsed_object(endorsement_part)
+        result = {
+            'contract': contract.id,
+            'endorsement_part': endorsement_part.id,
+            'endorsement_definition': self.definition.id,
+            }
+        endorsements = self.get_endorsements_for_state('remove_option')
+        if not endorsements:
+            if self.select_endorsement.contract:
+                endorsements = [ContractEndorsement(definition=self.definition,
+                        endorsement=self.endorsement,
+                        contract=self.select_endorsement.contract)]
+            else:
+                return result
+        result['options'] = []
+        RemoveOption = pool.get(
+            'contract.covered_element.option.remove')
+        result.update(RemoveOption.update_default_values(self,
+                endorsements[0], result))
+        return result
+
+    def transition_remove_option_suspend(self):
+        self.end_current_part('remove_option')
+        return 'end'
+
+    def transition_remove_option_next(self):
+        self.end_current_part('remove_option')
+        return self.get_next_state('remove_option')
+
+    def transition_remove_option_previous(self):
+        self.end_current_part('remove_option')
+        return self.get_state_before('remove_option')

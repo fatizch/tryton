@@ -17,6 +17,8 @@ def register():
         EndorsementExtraPremiumField,
         EndorsementPart,
         NewCoveredElement,
+        RemoveOptionSelector,
+        RemoveOption,
         NewOptionOnCoveredElement,
         ExtraPremiumDisplayer,
         ManageExtraPremium,

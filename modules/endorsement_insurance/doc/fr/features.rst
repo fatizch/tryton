@@ -7,3 +7,7 @@
 - **Avenant unitaire d'ajout / modification de surprime :** Permet de manipuler
   les données de surprime : ajout / suppression / modification sur une ou
   plusieurs garanties, sur un ou plusieurs éléments couverts.
+
+- **Avenant de suppression de garanties d'un élément couvert :** Permet de
+  supprimer des garanties d'un élément couvert. Cet avenant permet
+  aussi de supprimer des options du contrat.

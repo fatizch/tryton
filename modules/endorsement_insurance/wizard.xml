@@ -9,6 +9,22 @@
             <field name="type">form</field>
             <field name="name">new_covered_element_form</field>
         </record>
+        <!-- ############### -->
+        <!-- # Remove Option  # -->
+        <!-- ############### -->
+        <record model="ir.ui.view" id="remove_option_view_form">
+            <field name="model">contract.covered_element.option.remove</field>
+            <field name="type">form</field>
+            <field name="name">remove_option_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Remove Option Selector # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="remove_option_selector_view_list">
+            <field name="model">contract.covered_element.option.remove.option_selector</field>
+            <field name="type">tree</field>
+            <field name="name">remove_option_selector_list</field>
+        </record>
         <!-- ################################# -->
         <!-- # New Option On Covered Element # -->
         <!-- ################################# -->

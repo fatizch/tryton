@@ -1111,7 +1111,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             result += contract_summary
             result += '\n\n'
         option_summary = '\n'.join([option.get_summary('contract.option',
-                    indent=4)
+                    option, indent=4)
                 for option in self.options])
         if option_summary:
             result += '  Option modifications :\n'
