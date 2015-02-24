@@ -28,7 +28,8 @@ class Contract:
     __name__ = 'contract'
 
     all_premiums = fields.One2Many('contract.premium', 'main_contract',
-        'All Premiums', readonly=True, order=[('start', 'ASC')])
+        'All Premiums', readonly=True, order=[('start', 'ASC'),
+            ('rated_entity', 'ASC')])
     fees = fields.One2Many('contract.fee', 'contract', 'Fees', states=_STATES,
         depends=_DEPENDS)
     premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
