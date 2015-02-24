@@ -455,7 +455,7 @@ class ExportImportMixin(Model):
                     main_object, configuration)
             else:
                 values[field_name] = getattr(self, field_name)
-        if self.is_master_object() or main_object == self:
+        if output and (self.is_master_object() or main_object == self):
             output.append(values)
         return values
 
