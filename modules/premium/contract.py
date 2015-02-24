@@ -84,6 +84,7 @@ class Contract:
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
+        cls.save(contracts)
         final_prices = defaultdict(list)
         for contract in contracts:
             if contract.status == 'void':
