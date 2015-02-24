@@ -61,7 +61,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         'on_change_with_currency_symbol')
     number_of_payments = fields.Function(
         fields.Integer('Number of Payments', required=True, states=_STATES,
-            depends=_DEPENDS),
+            depends=_DEPENDS, help='Deferal included'),
         'get_number_of_payments', 'setter_void')
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
         'Payment Frequency', sort=False, required=True,
