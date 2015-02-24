@@ -106,10 +106,12 @@ class Contract:
     def on_change_with_broker_party(self, name=None):
         return self.broker.party.id if self.broker else None
 
-    @fields.depends('broker', 'agent')
+    @fields.depends('broker', 'agent', 'agency')
     def on_change_broker(self):
         self.broker_party = self.on_change_with_broker_party()
         self.agent = self.on_change_with_agent()
+        if not self.broker:
+            self.agency = None
 
     @fields.depends('broker_party')
     def on_change_with_agent(self):
