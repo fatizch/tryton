@@ -67,6 +67,7 @@ class Contract:
 
     @classmethod
     def delete_prices(cls, contracts, limit):
+        limit = limit or datetime.date.min
         Premium = Pool().get('contract.premium')
         if limit > datetime.date.min:
             Premium.write(Premium.search([
