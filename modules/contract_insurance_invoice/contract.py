@@ -403,6 +403,8 @@ class Contract:
     def compute_invoice_lines(self, start, end):
         lines = []
         for premium in self.all_premiums:
+            if end < (premium.start or datetime.date.max):
+                break
             lines.extend(premium.get_invoice_lines(start, end))
         return lines
 

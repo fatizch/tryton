@@ -1,6 +1,7 @@
 import datetime
 from collections import defaultdict
 from sql import Column
+from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
@@ -27,7 +28,7 @@ class Contract:
     __name__ = 'contract'
 
     all_premiums = fields.One2Many('contract.premium', 'main_contract',
-        'All Premiums', readonly=True)
+        'All Premiums', readonly=True, order=[('start', 'ASC')])
     fees = fields.One2Many('contract.fee', 'contract', 'Fees', states=_STATES,
         depends=_DEPENDS)
     premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
@@ -422,6 +423,11 @@ class Premium(model.CoopSQL, model.CoopView):
             ('option.parent_contract',) + tuple(clause[1:]),
             ('fee.contract',) + tuple(clause[1:]),
             ]
+
+    @staticmethod
+    def order_start(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.start, datetime.date.min)]
 
     @classmethod
     def new_line(cls, line, start_date, end_date):
