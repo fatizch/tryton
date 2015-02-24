@@ -24,11 +24,13 @@ __all__ = [
     'relation_mixin',
     'Contract',
     'ContractOption',
+    'ContractExtraData',
     'ContractActivationHistory',
     'Endorsement',
     'EndorsementContract',
     'EndorsementOption',
     'EndorsementActivationHistory',
+    'EndorsementExtraData',
     'Configuration',
     ]
 
@@ -644,6 +646,12 @@ class ContractActivationHistory(object):
     __name__ = 'contract.activation_history'
 
 
+class ContractExtraData(object):
+    __metaclass__ = PoolMeta
+    _history = True
+    __name__ = 'contract.extra_data'
+
+
 class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     'Endorsement'
 
@@ -796,14 +804,14 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     def find_parts(self, endorsement_part):
         # Finds the effective endorsement depending on the provided
         # endorsement part
-        if endorsement_part.kind in ('contract', 'option'):
+        if endorsement_part.kind in ('contract', 'option', 'extra_data'):
             return self.contract_endorsements
 
     def new_endorsement(self, endorsement_part):
         # Return a new endorsement instantiation depending on the endorsement
         # part
         if endorsement_part.kind in ('contract', 'option',
-                'activation_history'):
+                'activation_history', 'extra_data'):
             return Pool().get('endorsement.contract')(endorsement=self)
 
     @classmethod
@@ -1039,6 +1047,12 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             },
         depends=['state', 'contract', 'definition'],
         context={'definition': Eval('definition')})
+    extra_datas = fields.One2Many('endorsement.contract.extra_data',
+        'contract_endorsement', 'Extra Datas', states={
+            'readonly': Eval('state') == 'applied',
+            },
+        depends=['state', 'definition'],
+        context={'definition': Eval('definition')})
     contract = fields.Many2One('contract', 'Contract', required=True,
         states={'readonly': Eval('state') == 'applied'}, depends=['state'],
         ondelete='CASCADE')
@@ -1124,6 +1138,14 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             result += '  Activation modifications :\n'
             result += activation_summary
             result += '\n\n'
+        extra_data_summary = '\n'.join([extra_data.get_summary(
+                    'contract.extra_data', extra_data,
+                    indent=4)
+                for extra_data in self.extra_datas])
+        if extra_data_summary:
+            result += '  Extra Data modifications :\n'
+            result += extra_data_summary
+            result += '\n\n'
         return result
 
     def get_state(self, name):
@@ -1135,7 +1157,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 
     @classmethod
     def _get_restore_history_order(cls):
-        return ['contract', 'contract.activation_history', 'contract.option']
+        return ['contract', 'contract.activation_history', 'contract.option',
+            'contract.extra_data']
 
     def do_restore_history(self):
         pool = Pool()
@@ -1158,6 +1181,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             instances['contract.option'] += contract.options
             instances['contract.activation_history'] += \
                 contract.activation_history
+            instances['contract.extra_data'] += \
+                contract.extra_datas
 
     @classmethod
     def draft(cls, contract_endorsements):
@@ -1220,7 +1245,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
 
     def apply_values(self):
         values = (self.values if self.values else {}).copy()
-        options, activation_history = [], []
+        options, activation_history, extra_datas = [], [], []
         for option in self.options:
             options.append(option.apply_values())
         if options:
@@ -1229,6 +1254,10 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             activation_history.append(activation_entry.apply_values())
         if activation_history:
             values['activation_history'] = activation_history
+        for extra_data in self.extra_datas:
+            extra_datas.append(extra_data.apply_values())
+        if extra_datas:
+            values['extra_datas'] = extra_datas
         return values
 
     @property
@@ -1258,17 +1287,35 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         return elems
 
     @property
+    def new_extra_datas(self):
+        elems = set([x for x in self.contract.extra_datas])
+        for elem in getattr(self, 'extra_datas', []):
+            if elem.action == 'add':
+                elems.add(elem)
+            elif elem.action == 'remove':
+                elems.remove(elem.extra_data)
+            else:
+                elems.remove(elem.extra_data)
+                elems.add(elem)
+        return elems
+
+    @property
     def updated_struct(self):
         EndorsementOption = Pool().get('endorsement.contract.option')
-        options, activation_history = {}, {}
+        EndorsementExtraData = Pool().get('endorsement.contract.extra_data')
+        options, activation_history, extra_datas = {}, {}, {}
         for option in self.new_options:
             options[option] = EndorsementOption.updated_struct(option)
         for activation_entry in self.new_activation_history:
             activation_history[activation_entry] = \
                 EndorsementActivationHistory.updated_struct(activation_entry)
+        for extra_data in self.new_extra_datas:
+            extra_datas[extra_data] = EndorsementExtraData.updated_struct(
+                extra_data)
         return {
             'activation_history': activation_history,
             'options': options,
+            'extra_datas': extra_datas,
             }
 
     def get_endorsed_record(self):
@@ -1382,6 +1429,86 @@ class EndorsementActivationHistory(relation_mixin(
     @classmethod
     def updated_struct(cls, activation_history):
         return {}
+
+
+class EndorsementExtraData(relation_mixin(
+            'endorsement.contract.extra_data.field', 'extra_data',
+            'contract.extra_data', 'Extra Datas'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Extra Data'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.extra_data'
+
+    contract_endorsement = fields.Many2One('endorsement.contract',
+        'Endorsement', required=True, select=True, ondelete='CASCADE')
+    definition = fields.Function(
+        fields.Many2One('endorsement.definition', 'Definition'),
+        'get_definition')
+    new_extra_data_values = fields.Dict('extra_data', 'Extra Data Values')
+    new_extra_data_values_string = new_extra_data_values.translated(
+        'extra_data_values')
+
+    @classmethod
+    def __setup__(cls):
+        super(EndorsementExtraData, cls).__setup__()
+        cls._error_messages.update({
+                'new_extra_data': 'New Extra Data',
+                })
+
+    @classmethod
+    def default_definition(cls):
+        return Transaction().context.get('definition', None)
+
+    def get_definition(self, name):
+        return self.contract_endorsement.definition.id
+
+    def get_rec_name(self, name):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        lang = pool.get('res.user')(Transaction().user).language
+        if self.extra_data:
+            if self.extra_data.date:
+                return Date.date_as_string(self.extra_data.date, lang)
+            return ''
+        else:
+            return self.raise_user_error('new_extra_data',
+                raise_exception=False)
+
+    @classmethod
+    def updated_struct(cls, extra_data):
+        return {}
+
+    def apply_values(self):
+        apply_values = super(EndorsementExtraData, self).apply_values()
+        if self.action == 'add':
+            values = apply_values[1][0]
+            values['extra_data_values'] = dict(self.new_extra_data_values)
+            apply_values = ('create', [values])
+        elif self.action == 'update':
+            values = apply_values[2]
+            values['extra_data_values'] = dict(self.new_extra_data_values)
+            apply_values = ('write', apply_values[1], values)
+        return apply_values
+
+    def get_summary(self, model, base_object=None, indent=0, increment=2):
+        res = super(EndorsementExtraData, self).get_summary(model, base_object,
+            indent, increment) + '\n'
+        indent += 2
+        new_data_values = self.new_extra_data_values
+        if self.extra_data and self.extra_data.extra_data_values:
+            cur_data_values = self.extra_data.extra_data_values
+        else:
+            cur_data_values = None
+
+        if cur_data_values:
+            for k, v in cur_data_values.iteritems():
+                if new_data_values[k] != v:
+                    res += ' ' * indent + k + ': ' + str(v) + u' → ' + str(
+                        new_data_values[k]) + '\n'
+        else:
+            for k, v in new_data_values.iteritems():
+                res += ' ' * indent + k + ': ' + u' → ' + str(v) + '\n'
+        return res
 
 
 class Configuration(ModelSingleton, model.CoopSQL, model.CoopView):

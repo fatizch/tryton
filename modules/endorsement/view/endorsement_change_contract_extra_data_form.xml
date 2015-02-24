@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<form string="Change Contract Extra Data">
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <label name="endorsement_part"/>
+    <field name="endorsement_part"/>
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition"/>
+    <newline/>
+    <label name="current_extra_data_date"/>
+    <field name="current_extra_data_date" readonly="1"/>
+    <field name="current_extra_data" readonly="1" colspan="4" no_command="1"/>
+    <newline/>
+    <label name="new_extra_data_date"/>
+    <field name="new_extra_data_date" readonly="1"/>
+    <field name="new_extra_data" colspan="4" no_command="1"/>
+</form>

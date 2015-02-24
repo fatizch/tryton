@@ -7,7 +7,7 @@ from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
 from trytond.pyson import Eval, Bool, And, Not, Len, If, PYSONEncoder
 
-from trytond.modules.cog_utils import model, fields
+from trytond.modules.cog_utils import model, fields, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -18,6 +18,7 @@ __all__ = [
     'StartEndorsement',
     'OpenContractAtApplicationDate',
     'ChangeContractStartDate',
+    'ChangeContractExtraData',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
@@ -313,6 +314,83 @@ class ChangeContractStartDate(EndorsementWizardStepMixin, model.CoopView):
         return {
             'new_start_date': wizard.endorsement.effective_date,
             }
+
+
+class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
+    'Change contract extra data'
+
+    __name__ = 'endorsement.contract.change_extra_data'
+
+    current_extra_data_date = fields.Date('Date of Current Extra Data')
+    current_extra_data = fields.Dict(
+        'extra_data', 'Current Extra Data')
+    new_extra_data_date = fields.Date('Date of New Extra Data')
+    new_extra_data = fields.Dict(
+        'extra_data', 'New Extra Data')
+
+    def step_default(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        defaults = super(ChangeContractExtraData, self).step_default()
+        contracts = self._get_contracts()
+        for contract_id, endorsement in contracts.iteritems():
+            contract = Contract(contract_id)
+            effective_date = self.wizard.endorsement.effective_date
+            extra_data_at_date = utils.get_value_at_date(contract.extra_datas,
+                effective_date)
+            extra_data_values = extra_data_at_date.extra_data_values
+            defaults['current_extra_data_date'] = extra_data_at_date.date
+            defaults['new_extra_data_date'] = effective_date
+            defaults['current_extra_data'] = extra_data_values
+
+            if endorsement.extra_datas:
+                defaults['new_extra_data'] = \
+                    endorsement.extra_datas[-1].new_extra_data_values
+            else:
+                defaults['new_extra_data'] = extra_data_values
+
+        return defaults
+
+    def step_update(self):
+        pool = Pool()
+        EndorsementExtraData = pool.get(
+            'endorsement.contract.extra_data')
+        Contract = pool.get('contract')
+        contracts = self._get_contracts()
+
+        for contract_id, endorsement in contracts.iteritems():
+            EndorsementExtraData.delete(endorsement.extra_datas)
+            contract = Contract(contract_id)
+
+            if self.new_extra_data == self.current_extra_data:
+                continue
+            elif self.effective_date == self.current_extra_data_date \
+                    or self.effective_date == contract.start_date:
+                extra_data_at_date = utils.get_value_at_date(
+                    contract.extra_datas, self.effective_date)
+                extra_data_endorsement = EndorsementExtraData(
+                    action='update',
+                    contract_endorsement=endorsement,
+                    extra_data=extra_data_at_date,
+                    relation=extra_data_at_date.id,
+                    definition=self.endorsement_definition,
+                    values={'date': self.effective_date},
+                    new_extra_data_values=self.new_extra_data,
+                    )
+            else:
+                extra_data_endorsement = EndorsementExtraData(
+                    action='add',
+                    contract_endorsement=endorsement,
+                    definition=self.endorsement_definition,
+                    values={'date': self.new_extra_data_date},
+                    new_extra_data_values=self.new_extra_data,
+                    )
+            extra_data_endorsement.save()
+            endorsement.save()
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.endorsement_change_contract_extra_data_view_form'
 
 
 class SelectEndorsement(model.CoopView):
@@ -733,6 +811,9 @@ class StartEndorsement(Wizard):
                 endorsement, endorsed_field_name)
         result['new_value'][0]['date'] = endorsement_date
         return result
+
+add_endorsement_step(StartEndorsement, ChangeContractExtraData,
+    'change_contract_extra_data')
 
 
 class OpenContractAtApplicationDate(Wizard):

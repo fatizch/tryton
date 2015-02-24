@@ -9,6 +9,14 @@
             <field name="type">form</field>
             <field name="name">endorsement_change_contract_start_date_form</field>
         </record>
+        <!-- ############################## -->
+        <!-- # Change Contract Extra Data  -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="endorsement_change_contract_extra_data_view_form">
+            <field name="model">endorsement.contract.change_extra_data</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_change_contract_extra_data_form</field>
+        </record>
         <!-- ###################### -->
         <!-- # Select Endorsement # -->
         <!-- ###################### -->

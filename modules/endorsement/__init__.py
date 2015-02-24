@@ -17,6 +17,7 @@ def register():
         Contract,
         ContractOption,
         ContractActivationHistory,
+        ContractExtraData,
         Endorsement,
         EndorsementContract,
         EndorsementContractField,
@@ -24,9 +25,12 @@ def register():
         EndorsementOptionField,
         EndorsementActivationHistory,
         EndorsementActivationHistoryField,
+        EndorsementExtraData,
+        EndorsementExtraDataField,
         SelectEndorsement,
         DummyStep,
         ChangeContractStartDate,
+        ChangeContractExtraData,
         BasicPreview,
         module='endorsement', type_='model')
 

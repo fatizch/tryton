@@ -18,6 +18,7 @@ __all__ = [
     'EndorsementContractField',
     'EndorsementOptionField',
     'EndorsementActivationHistoryField',
+    'EndorsementExtraDataField',
     'Product',
     'EndorsementDefinitionProductRelation',
     'EndorsementSubState',
@@ -148,6 +149,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
             ('contract', 'Contract'),
             ('option', 'Option'),
             ('activation_history', 'Activation Dates'),
+            ('extra_data', 'Extra Data'),
             ], 'Kind')
     kind_string = kind.translated('kind')
     option_fields = fields.One2Many('endorsement.contract.option.field',
@@ -262,6 +264,14 @@ class EndorsementActivationHistoryField(
     'Endorsement Activation History Field'
     __metaclass__ = PoolMeta
     __name__ = 'endorsement.contract.activation_history.field'
+
+
+class EndorsementExtraDataField(
+        field_mixin('contract.extra_data'),
+        model.CoopSQL, model.CoopView):
+    'Endorsement Extra Data Field'
+    __metaclass__ = PoolMeta
+    __name__ = 'endorsement.contract.extra_data.field'
 
 
 class Product:
