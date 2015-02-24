@@ -105,6 +105,7 @@ def generate(batch_name, ids, connexion_date, treatment_date):
         except Exception:
             logger.exception('Exception occured when processing %s',
                 coop_string.get_print_infos(ids))
+            Transaction().cursor.rollback()
             do_not_divide = BatchModel.get_conf_item('split_mode') == \
                 'divide' and BatchModel.get_conf_item('split_size') == 1
             if len(ids) < 2 or do_not_divide:
