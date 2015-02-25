@@ -273,7 +273,10 @@ class Contract(Printable):
         super(Contract, self).set_and_propagate_end_date(end_date)
         for covered_element in self.covered_elements:
             for option in covered_element.options:
-                option.end_date = end_date
+                if (option.automatic_end_date and option.automatic_end_date <=
+                        end_date):
+                    continue
+                option.manual_end_date = end_date
             covered_element.options = covered_element.options
         self.covered_elements = self.covered_elements
 

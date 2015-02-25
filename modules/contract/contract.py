@@ -650,9 +650,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         self.end_date = end_date
         options = list(self.options)
         for option in options:
-            if option.end_date and option.end_date <= end_date:
+            if (option.automatic_end_date and option.automatic_end_date <=
+                    end_date):
                 continue
-            option.end_date = end_date
+            option.manual_end_date = end_date
         self.options = options
 
     def get_maximum_end_date(self):
