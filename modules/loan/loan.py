@@ -203,6 +203,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def _export_light(cls):
         return super(Loan, cls)._export_light() | {'company', 'currency'}
 
+    @classmethod
+    def add_func_key(cls, values):
+        values['_func_key'] = values['number']
+
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
@@ -516,6 +520,8 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
 
     __name__ = 'loan.increment'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     number = fields.Integer('Number')
     begin_balance = fields.Numeric('Begin Balance',
         digits=(16, Eval('currency_digits', 2)), depends=['currency_digits'])
@@ -543,6 +549,28 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     def __setup__(cls):
         super(LoanIncrement, cls).__setup__()
         cls._order.insert(0, ('number', 'ASC'))
+
+    def get_func_key(self, name):
+        return '|'.join([self.loan.number, str(self.number)])
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                loan_number, increment_number = operands
+                return [
+                    ('loan.number', '=', loan_number),
+                    ('number', '=', int(increment_number)),
+                    ]
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('loan.number',) + tuple(clause[1:])],
+                [('number', clause[1], str(clause[2]))],
+                ]
 
     def get_currency(self):
         return self.loan.currency

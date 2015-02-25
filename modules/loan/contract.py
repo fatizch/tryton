@@ -150,6 +150,8 @@ class ContractLoan(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract-loan'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     contract = fields.Many2One('contract', 'Contract', required=True,
         ondelete='CASCADE')
     loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE',
@@ -163,6 +165,30 @@ class ContractLoan(model.CoopSQL, model.CoopView):
     def __setup__(cls):
         super(ContractLoan, cls).__setup__()
         cls._order.insert(0, ('number', 'ASC'))
+
+    def get_func_key(self, name):
+        return '|'.join([self.contract.contract_number, str(self.number)])
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                contract_number, loan_order = operands
+                if contract_number == 'None':
+                    contract_number = None
+                return [
+                    ('contract.contract_number', '=', contract_number),
+                    ('number', '=', int(loan_order)),
+                    ]
+            else:
+                return [('id', '=', None)]
+        else:
+            return ['OR',
+                [('contract.contract_number',) + tuple(clause[1:])],
+                [('number', clause[1], str(clause[2]))],
+                ]
 
     @fields.depends('loan')
     def on_change_with_loan_state(self, name=None):
@@ -306,6 +332,8 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
 
     __name__ = 'loan.share'
 
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
         required=True, select=1, states=_STATES, depends=_DEPENDS)
     start_date = fields.Date('Start Date', states=_STATES, depends=_DEPENDS)
@@ -341,6 +369,30 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
         share_table = TableHandler(cursor, cls)
         if share_table.column_exist('end_date'):
             share_table.drop_column('end_date')
+
+    def get_func_key(self, name):
+        return '|'.join([self.loan.number, str(self.start_date)])
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                loan_number, share_date = operands
+                if share_date == 'None':
+                    share_date = None
+                else:
+                    share_date = datetime.datetime.strptime(share_date,
+                        '%y-%m-%d').date()
+                return [
+                    ('loan.number', '=', loan_number),
+                    ('start_date', '=', share_date),
+                    ]
+            else:
+                return [('id', '=', None)]
+        else:
+            raise NotImplementedError
 
     @staticmethod
     def default_share():

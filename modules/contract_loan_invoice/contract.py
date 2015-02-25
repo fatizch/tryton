@@ -396,6 +396,11 @@ class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
         fields.One2Many('contract.premium.amount', None, 'Premium Amounts'),
         'get_premium_amounts')
 
+    @classmethod
+    def _export_light(cls):
+        return super(PremiumAmountPerPeriod, cls)._export_light() | {
+            'contract'}
+
     @staticmethod
     def table_query():
         pool = Pool()
