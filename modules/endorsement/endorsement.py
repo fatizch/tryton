@@ -8,7 +8,7 @@ from trytond.rpc import RPC
 from trytond.pool import PoolMeta
 from trytond.model import Workflow, Model, fields as tryton_fields, \
     ModelSingleton
-from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool
+from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
@@ -742,7 +742,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     'invisible': ~Eval('state').in_(['draft']),
                     },
                 'open_contract': {
-                    'invisible': ~Eval('state').in_(['applied']),
+                    'invisible': Or(~Eval('state').in_(['applied']),
+                        Len(Eval('contract_endorsements', [])) == Len([])),
                     },
                 })
         cls._order = [('application_date', 'DESC'), ('create_date', 'DESC')]
