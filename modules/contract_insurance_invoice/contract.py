@@ -378,6 +378,7 @@ class Contract:
     def get_invoice(self, start, end, billing_information):
         pool = Pool()
         Invoice = pool.get('account.invoice')
+        lang = self.company.party.lang
         return Invoice(
             company=self.company,
             type='out_invoice',
@@ -388,7 +389,10 @@ class Contract:
             account=self.subscriber.account_receivable,
             payment_term=billing_information.payment_term,
             state='validated',
-            description=self.rec_name,
+            description='%s (%s - %s)' % (
+                self.rec_name,
+                lang.strftime(start, lang.code, lang.date),
+                lang.strftime(end, lang.code, lang.date)),
             )
 
     def finalize_invoices_lines(self, lines):
