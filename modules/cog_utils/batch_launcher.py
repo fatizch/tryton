@@ -98,7 +98,6 @@ def generate(batch_name, ids, connexion_date, treatment_date):
             client_defined_date=connexion_date):
         to_treat = BatchModel.convert_to_instances(ids)
         logger = batch.get_logger(batch_name)
-
         try:
             BatchModel.execute(to_treat, ids, treatment_date)
             logger.success('Processed %s', coop_string.get_print_infos(ids))
@@ -107,7 +106,7 @@ def generate(batch_name, ids, connexion_date, treatment_date):
                 coop_string.get_print_infos(ids))
             Transaction().cursor.rollback()
             do_not_divide = BatchModel.get_conf_item('split_mode') == \
-                'divide' and BatchModel.get_conf_item('split_size') == 1
+                'divide' and int(BatchModel.get_conf_item('split_size')) == 1
             if len(ids) < 2 or do_not_divide:
                 logger.failure('Task cannot be divided, aborting.')
                 return 1
