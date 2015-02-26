@@ -549,10 +549,6 @@ class DocumentCreate(Wizard):
         if email:
             result['email'] = email[0].value
         output = printable_inst.get_document_filename()
-        if len(result['reports']) == 1:
-            model_name = os.path.splitext(
-                result['reports'][0]['file_basename'])[0]
-            output = '%s-%s' % (output, model_name)
         result['output_report_name'] = coop_string.slugify(output, lower=False)
         result['party'] = self.select_model.party.id
         return result
