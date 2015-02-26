@@ -174,6 +174,7 @@ class EndorsementCoveredElement(relation_mixin(
     def get_summary(self, model, base_object=None, indent=0, increment=2):
         result = super(EndorsementCoveredElement, self).get_summary(model,
             base_object, indent, increment)
+        indent += increment
         if self.action == 'remove':
             return result
         option_summary = '\n'.join([x.get_summary(
@@ -181,7 +182,7 @@ class EndorsementCoveredElement(relation_mixin(
                     indent=indent + increment, increment=increment)
                 for x in self.options])
         if option_summary:
-            result += '%s%s :\n' % (' ' * indent, self.raise_user_error(
+            result += '\n%s%s :\n' % (' ' * indent, self.raise_user_error(
                     'mes_option_modifications', raise_exception=False))
             result += option_summary
             result += '\n\n'
