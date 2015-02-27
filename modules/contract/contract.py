@@ -1415,6 +1415,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
 
     def set_automatic_end_date(self):
         self.automatic_end_date = self.calculate_automatic_end_date()
+        if (self.manual_end_date and self.automatic_end_date and
+                self.automatic_end_date <= self.manual_end_date):
+            self.manual_end_date = None
 
     def calculate_automatic_end_date(self):
         exec_context = {'date': self.start_date}
