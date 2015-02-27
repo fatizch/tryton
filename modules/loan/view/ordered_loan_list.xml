@@ -7,6 +7,7 @@
         <suffix string="%"/>
     </field>
     <field name="number_of_payments"/>
+    <field name="payment_frequency"/>
     <field name="amount">
         <suffix name="currency_symbol"/>
     </field>

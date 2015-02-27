@@ -11,3 +11,5 @@ Ce module permet des gérer les prêts et les contrats d'assurance emprunteur.
   à l'ensemble des options et de saisir option par option les prêts à assurer.
 - Assistant de calcul de l'encours d'un acteur à une date donnée par assureur
   et par type de garantie
+- Possibilité de saisir la durée du prêt en mois ou années indépendamment de la
+  fréquence de remboursement des échéances

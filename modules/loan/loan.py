@@ -61,8 +61,17 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         'on_change_with_currency_symbol')
     number_of_payments = fields.Function(
         fields.Integer('Number of Payments', required=True, states=_STATES,
+            depends=_DEPENDS),
+        'get_number_of_payments')
+    duration = fields.Function(
+        fields.Integer('Duration', required=True, states=_STATES,
             depends=_DEPENDS, help='Deferal included'),
-        'get_number_of_payments', 'setter_void')
+        'get_duration', 'setter_void')
+    duration_unit = fields.Function(
+        fields.Selection([('month', 'Month'), ('year', 'Year')], 'Unit',
+            sort=False, required=True, states=_STATES, depends=_DEPENDS),
+        'get_duration_unit', 'setter_void')
+    duration_unit_string = duration_unit.translated('duration_unit')
     payment_frequency = fields.Selection(coop_date.DAILY_DURATION,
         'Payment Frequency', sort=False, required=True,
         domain=[('payment_frequency', 'in',
@@ -239,6 +248,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return Transaction().context.get('start_date', None)
 
     @staticmethod
+    def default_duration_unit():
+        return 'month'
+
+    @staticmethod
     def calculate_rate(annual_rate, payment_frequency):
         if not annual_rate:
             annual_rate = Decimal(0)
@@ -363,9 +376,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         contract_id = Transaction().context.get('contract', None)
         if not contract_id:
             return []
-        return [x.id for x in Pool().get('loan.share').search([
-                    ('loan', '=', self.id),
-                    ('contract', '=', contract_id)])]
+        return [x.id for x in self.loan_shares if x.contract.id == contract_id]
 
     def get_rec_name(self, name):
         name = []
@@ -446,6 +457,13 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     def get_number_of_payments(self, name):
         return sum([x.number_of_payments for x in self.increments])
 
+    def get_duration(self, name):
+        return self.number_of_payments / coop_date.convert_frequency(
+            self.payment_frequency, self.duration_unit)
+
+    def get_duration_unit(self, name):
+        return 'month'
+
     @fields.depends('payment_frequency', 'funds_release_date')
     def on_change_with_first_payment_date(self):
         if self.funds_release_date and self.payment_frequency:
@@ -460,10 +478,11 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             return Decimal(0)
         return self.rate
 
-    @fields.depends('kind', 'deferal', 'number_of_payments',
-            'deferal_duration', 'increments', 'rate')
+    @fields.depends('kind', 'deferal', 'duration', 'duration_unit',
+            'deferal_duration', 'increments', 'rate', 'payment_frequency')
     def on_change_with_increments(self):
         previous_increments = self.increments
+        self.number_of_payments = self.on_change_with_number_of_payments()
         self.init_increments()
         if self.kind != 'graduated':
             return {
@@ -474,6 +493,12 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     @fields.depends('insured_persons')
     def on_change_with_insured_persons_name(self, name=None):
         return ', '.join([x.rec_name for x in self.insured_persons])
+
+    @fields.depends('duration', 'duration_unit', 'payment_frequency')
+    def on_change_with_number_of_payments(self):
+        if self.duration and self.duration_unit and self.payment_frequency:
+            return Decimal(self.duration / coop_date.convert_frequency(
+                self.duration_unit, self.payment_frequency))
 
     @classmethod
     def search_insured_persons(cls, name, clause):
