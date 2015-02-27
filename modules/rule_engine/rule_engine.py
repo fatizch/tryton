@@ -549,7 +549,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     __name__ = 'rule_engine'
     _func_key = 'short_name'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, translate=True)
     context = fields.Many2One('rule_engine.context', 'Context',
         ondelete='RESTRICT')
     short_name = fields.Char('Code', required=True)
