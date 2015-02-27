@@ -935,6 +935,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def do_terminate(cls, contracts):
+        if not contracts:
+            return
         pool = Pool()
         Event = pool.get('event')
         sub_status_contracts = defaultdict(list)
@@ -951,6 +953,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
+        if not contracts:
+            return
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
         Date = pool.get('ir.date')
