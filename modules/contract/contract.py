@@ -769,40 +769,44 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def ws_subscribe_contracts(cls, contract_dict):
         'This method is a standard API for webservice use'
-        pool = Pool()
-        Party = pool.get('party.party')
-        contracts = []
-        messages = {}
+        return_values = {}
         for ext_id, objects in contract_dict.iteritems():
-            message = []
-            messages[ext_id] = {'return': True, 'messages': message}
+            new_message = []
+            return_values[ext_id] = {'return': True, 'messages': new_message}
             try:
                 for item in objects:
-                    if item['__name__'] == 'party.party':
-                        party = Party.import_json(item)
-                        message.append({
-                                'party_code': party.code
-                                })
-                    elif item['__name__'] == 'contract':
-                        contract = cls.import_json(item)
-                        contracts.append(contract)
-                        message.append({
-                                'contract_number': contract.contract_number,
-                                'quote_number': contract.quote_number,
-                                'status': contract.status
-                                })
-                        cls.update_contract_after_import([contract])
-                        contract.calculate()
-                    else:
-                        cls.raise_user_error('invalid_format')
+                    new_message += cls.ws_import_entity(item)
             except UserError as exc:
                 Transaction().cursor.rollback()
-                message.append({'error': exc.message})
+                new_message.append({'error': exc.message})
                 return {ext_id: {
                         'return': False,
-                        'messages': message,
+                        'messages': new_message,
                         }}
-        return messages
+        return return_values
+
+    @classmethod
+    def ws_import_entity(cls, item):
+        pool = Pool()
+        Party = pool.get('party.party')
+        return_values = []
+        if item['__name__'] == 'party.party':
+            entity = Party.import_json(item)
+            return_values.append({
+                    'party_code': entity.code
+                    })
+        elif item['__name__'] == 'contract':
+            contract = cls.import_json(item)
+            return_values.append({
+                    'contract_number': contract.contract_number,
+                    'quote_number': contract.quote_number,
+                    'status': contract.status
+                    })
+            cls.update_contract_after_import([contract])
+            contract.calculate()
+        else:
+            cls.raise_user_error('invalid_format')
+        return return_values
 
     def init_from_product(self, product, start_date=None, end_date=None):
         if not start_date:
