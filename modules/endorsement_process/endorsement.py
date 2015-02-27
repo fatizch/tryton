@@ -110,8 +110,7 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
         elif active_model == 'endorsement':
             good_endorsements = active_ids
         if good_endorsements:
-            join_condition = ((endorsement.state == 'draft') &
-                endorsement.id.in_(good_endorsements))
+            join_condition = (endorsement.id.in_(good_endorsements))
         else:
             join_condition = (endorsement.state == 'draft')
 
