@@ -78,6 +78,10 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
+msgctxt "error:offered.product.premium_date:"
+msgid "Premium Date must be unique"
+msgstr "La date de tarif doit être unique"
+
 msgctxt "field:account.invoice.line.detail,loan:"
 msgid "Loan"
 msgstr "Prêt"

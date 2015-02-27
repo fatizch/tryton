@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract.covered_element.option.remove:"
+msgid ""
+"All options on a covered element must be removed if a mandatory option is "
+"removed"
+msgstr ""
+"Toutes les options d'un élément couvert doivent être supprimées si une "
+"garantie obligatoire est supprimée"
+
 msgctxt "error:endorsement.contract.covered_element.field:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
@@ -282,9 +290,81 @@ msgctxt "field:contract.covered_element.new,start_date:"
 msgid "Start Date"
 msgstr "Date d'Effet"
 
+msgctxt "field:contract.covered_element.option.remove,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.covered_element.option.remove,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.covered_element.option.remove,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.covered_element.option.remove,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.covered_element.option.remove,options:"
+msgid "Options To Remove"
+msgstr ""
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,covered_element:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,covered_element_endorsement:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,covered_element_option_endorsement:"
+msgid "Covered Element Option Endorsement"
+msgstr ""
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,end_date:"
+msgid "End Date"
+msgstr "Date de Fin"
+
+msgctxt "field:contract.covered_element.option.remove.option_selector,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.covered_element.option.remove.option_selector,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,option_endorsement:"
+msgid "Option Endorsement"
+msgstr "Modification de garantie souscrite"
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,start_date:"
+msgid "Start Date"
+msgstr "Date d'Effet"
+
+msgctxt ""
+"field:contract.covered_element.option.remove.option_selector,to_remove:"
+msgid "To Remove"
+msgstr ""
+
 msgctxt "field:endorsement.contract,covered_elements:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
+
+msgctxt "field:endorsement.contract,extra_datas:"
+msgid "Extra Datas"
+msgstr "Données complémentaires"
 
 msgctxt "field:endorsement.contract.covered_element,action:"
 msgid "Action"
@@ -753,6 +833,14 @@ msgctxt "model:contract.covered_element.new,name:"
 msgid "New Covered Element"
 msgstr "Nouvel élément couvert"
 
+msgctxt "model:contract.covered_element.option.remove,name:"
+msgid "Remove Option"
+msgstr ""
+
+msgctxt "model:contract.covered_element.option.remove.option_selector,name:"
+msgid "Remove Option Selector"
+msgstr ""
+
 msgctxt "model:endorsement.contract.covered_element,name:"
 msgid "Endorsement Covered Element"
 msgstr "Modification des éléments couverts"
@@ -834,6 +922,10 @@ msgid "Covered Element"
 msgstr "Risque Couvert"
 
 msgctxt "selection:endorsement.part,kind:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "selection:endorsement.part,kind:"
 msgid "Extra Premium"
 msgstr "Surprime"
 
@@ -844,6 +936,14 @@ msgstr "Souscrire une garantie"
 msgctxt "view:contract.covered_element.new:"
 msgid "New Covered Element"
 msgstr "Nouvel élément couvert"
+
+msgctxt "view:contract.covered_element.option.remove.option_selector:"
+msgid "Options"
+msgstr "Options"
+
+msgctxt "view:contract.covered_element.option.remove:"
+msgid "Remove Covered Element"
+msgstr ""
 
 msgctxt "view:endorsement.contract.covered_element.field:"
 msgid "Endorsement Field"
@@ -904,6 +1004,25 @@ msgstr "Risques Couverts"
 msgctxt "view:endorsement.option.selector:"
 msgid "Options"
 msgstr "Options"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_contract_extra_data,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:endorsement.start,manage_extra_premium,end:"
 msgid "Cancel"
@@ -971,5 +1090,22 @@ msgid "Previous"
 msgstr "Précédent"
 
 msgctxt "wizard_button:endorsement.start,new_option_covered_element,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,remove_option,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,remove_option,remove_option_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,remove_option,remove_option_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,remove_option,remove_option_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"

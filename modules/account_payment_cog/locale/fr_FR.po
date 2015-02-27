@@ -1,6 +1,54 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.payment.journal.failure_action:"
+msgid "Action must be unique for a journal and a reject reason"
+msgstr "Action doit être unique pour un journal et un motif de rejet donnés"
+
+msgctxt "error:account.payment.journal.failure_action:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:account.payment.journal.failure_action:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:account.payment.journal.failure_action:"
+msgid "Unknown reject code : %s"
+msgstr "Motif de rejet inconnu : %s"
+
+msgctxt "error:account.payment.journal.reject_reason:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:account.payment.journal.reject_reason:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:account.payment.journal.reject_reason:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
 
 msgctxt "error:account.payment.journal:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -19,6 +67,32 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:account.payment:"
+msgid "Action \"%s\" not found for payment %s"
+msgstr "Action \"%s\" non trouvé pour le paiement %s"
+
+msgctxt "error:account.payment:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:account.payment:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:account.payment:"
+msgid "Payments blocked for party %s"
+msgstr "Paiements bloqués pour l'acteur %s"
 
 msgctxt "error:party.synthesis.menu.payment:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -42,19 +116,143 @@ msgctxt "field:account.configuration,direct_debit_journal:"
 msgid "Direct Debit Journal"
 msgstr "Journal de prélèvement"
 
+msgctxt "field:account.configuration,reject_fee_journal:"
+msgid "Reject Fee Journal"
+msgstr "Journal des frais de rejet"
+
 msgctxt "field:account.move.line,payment_date:"
 msgid "Payment Date"
 msgstr "Date de paiement"
 
-msgctxt "field:account.payment.creation,id:"
+msgctxt "field:account.payment,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.payment.create,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:account.payment.group,has_processing_payment:"
+msgid "Has Processing Payment"
+msgstr "A des paiements en cours"
+
+msgctxt "field:account.payment.group,processing_payments:"
+msgid "Processing Payments"
+msgstr "Traitement des paiements"
+
+msgctxt "field:account.payment.journal,default_reject_fee:"
+msgid "Default Fee"
+msgstr "Frais par défaut"
+
+msgctxt "field:account.payment.journal,failure_actions:"
+msgid "Failure Actions"
+msgstr "Actions en cas de rejet"
 
 msgctxt "field:account.payment.journal,sepa_bank_account_number:"
 msgid "Bank Account"
 msgstr "Compte Bancaire"
 
 msgctxt "field:account.payment.journal,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.payment.journal.failure_action,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:account.payment.journal.failure_action,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.journal.failure_action,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.journal.failure_action,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.payment.journal.failure_action,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:account.payment.journal.failure_action,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.journal.failure_action,is_fee_required:"
+msgid "Fee Required"
+msgstr "Frais requis"
+
+msgctxt "field:account.payment.journal.failure_action,journal:"
+msgid "Journal"
+msgstr "Journal"
+
+msgctxt "field:account.payment.journal.failure_action,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.payment.journal.failure_action,reject_reason:"
+msgid "Reject Reason"
+msgstr "Motif de rejet"
+
+msgctxt "field:account.payment.journal.failure_action,rejected_payment_fee:"
+msgid "Fee"
+msgstr "Frais"
+
+msgctxt "field:account.payment.journal.failure_action,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.payment.journal.failure_action,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.payment.journal.failure_action,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.payment.journal.reject_reason,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:account.payment.journal.reject_reason,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.journal.reject_reason,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:account.payment.journal.reject_reason,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:account.payment.journal.reject_reason,description:"
+msgid "Description"
+msgstr "Description"
+
+msgctxt "field:account.payment.journal.reject_reason,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.payment.journal.reject_reason,process_method:"
+msgid "Process method"
+msgstr "Méthode de traitement"
+
+msgctxt "field:account.payment.journal.reject_reason,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.payment.journal.reject_reason,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:account.payment.journal.reject_reason,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:account.payment.journal.reject_reason,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -70,9 +268,13 @@ msgctxt "field:account.payment.payment_information_selection,new_date:"
 msgid "New Payment Date"
 msgstr "Nouvelle date de prélèvement"
 
-msgctxt "field:account.payment.treatment,id:"
+msgctxt "field:account.payment.process,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:party.party,block_payable_payments:"
+msgid "Block Payments"
+msgstr "Bloquer les paiements"
 
 msgctxt "field:party.synthesis.menu.payment,create_date:"
 msgid "Create Date"
@@ -114,21 +316,33 @@ msgctxt "field:party.synthesis.menu.payment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "model:account.payment.creation,name:"
+msgctxt "model:account.payment.create,name:"
 msgid "Payment Creation Batch"
 msgstr "Batch de création des paiements"
+
+msgctxt "model:account.payment.journal.failure_action,name:"
+msgid "Payment Journal Failure Action"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,name:"
+msgid "Payment Journal Reject Reason"
+msgstr ""
 
 msgctxt "model:account.payment.payment_information_selection,name:"
 msgid "Payment Information Selection"
 msgstr "Sélection des informations de prélèvement"
 
-msgctxt "model:account.payment.treatment,name:"
+msgctxt "model:account.payment.process,name:"
 msgid "Payment Treatment Batch"
 msgstr "Batch de traitement des paiements"
 
 msgctxt "model:ir.action,name:"
 msgid "Receivable Payments"
 msgstr "Paiements à recevoir"
+
+msgctxt "model:ir.action,name:act_reject_reason_form"
+msgid "Reject reasons"
+msgstr "Motifs de rejet"
 
 msgctxt "model:ir.action,name:modify_payment_information_wizard"
 msgid "Modify Payment Information"
@@ -138,13 +352,45 @@ msgctxt "model:ir.ui.menu,name:"
 msgid "Create Receivable Payment"
 msgstr "Créer Paiement"
 
+msgctxt "model:ir.ui.menu,name:menu_reject_reason_form"
+msgid "Reject reasons"
+msgstr "Motifs de rejet"
+
 msgctxt "model:party.synthesis.menu.payment,name:"
 msgid "Party Synthesis Menu payment"
 msgstr "Synthèse acteur - Paiement"
 
+msgctxt "selection:account.payment.journal.failure_action,action:"
+msgid "Manual"
+msgstr "Manuelle"
+
+msgctxt "selection:account.payment.journal.failure_action,action:"
+msgid "Retry"
+msgstr ""
+
 msgctxt "view:account.move.line:"
 msgid "Payments"
 msgstr "Paiements"
+
+msgctxt "view:account.payment.group:"
+msgid "Acknowledge"
+msgstr ""
+
+msgctxt "view:account.payment.journal.failure_action:"
+msgid "Payment Journal Failure Action"
+msgstr ""
+
+msgctxt "view:account.payment.journal.failure_action:"
+msgid "Payment Journal Failure Actions"
+msgstr ""
+
+msgctxt "view:account.payment.journal.reject_reason:"
+msgid "Payment Journal Reject Code"
+msgstr ""
+
+msgctxt "view:account.payment.journal.reject_reason:"
+msgid "Payment Journal Reject Reasons"
+msgstr "Motifs de rejet"
 
 msgctxt "view:account.payment.payment_information_selection:"
 msgid "Payment Date Modification"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -367,7 +367,7 @@ msgstr "Symbole de la Devise"
 
 msgctxt "field:contract.covered_element,declined_options:"
 msgid "Declined Options"
-msgstr ""
+msgstr "Options déclinées"
 
 msgctxt "field:contract.covered_element,extra_data:"
 msgid "Contract Extra Data"

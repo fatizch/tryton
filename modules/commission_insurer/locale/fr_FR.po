@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -22,13 +22,17 @@ msgctxt "field:commission.create_invoice_principal.ask,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:commission.create_invoice_principal.ask,insurers:"
+msgid "Insurers"
+msgstr "Assureurs"
+
 msgctxt "field:commission.create_invoice_principal.ask,journal:"
 msgid "Journal"
 msgstr "Journal"
 
-msgctxt "field:commission.create_invoice_principal.ask,insurers:"
-msgid "Insurers"
-msgstr "Assureurs"
+msgctxt "field:commission.create_invoice_principal.ask,post_invoices:"
+msgid "Post Invoices"
+msgstr "Emettre les bordereaux"
 
 msgctxt "field:insurer,waiting_account:"
 msgid "Waiting Account"
@@ -57,7 +61,3 @@ msgstr "OK"
 msgctxt "wizard_button:commission.create_invoice_principal,ask,end:"
 msgid "Cancel"
 msgstr "Annuler"
-
-msgctxt "error:received_premiums:"
-msgid "Received Premium"
-msgstr "Primes Reçues"

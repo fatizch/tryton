@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -85,6 +85,58 @@ msgid "Remove version of"
 msgstr "Suppression de la version"
 
 msgctxt "error:endorsement.contract.activation_history:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.extra_data.field:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:endorsement.contract.extra_data.field:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:endorsement.contract.extra_data:"
+msgid "Cannot import : no object %s with functional key: \"%s\" were found."
+msgstr ""
+"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
+"\"%s\"."
+
+msgctxt "error:endorsement.contract.extra_data:"
+msgid ""
+"Cannot import : the following objects:\n"
+"%s\n"
+"share the same functional key:\n"
+"\"%s\"."
+msgstr ""
+"Impossible d'importer : Les objets suivants :\n"
+"%s\n"
+"partagent la même clé fonctionnelle :\n"
+"\"%s\"."
+
+msgctxt "error:endorsement.contract.extra_data:"
+msgid "New Extra Data"
+msgstr ""
+
+msgctxt "error:endorsement.contract.extra_data:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.contract.extra_data:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.contract.extra_data:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
 
@@ -680,6 +732,39 @@ msgctxt "field:endorsement.contract.activation_history.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.contract.change_extra_data,current_extra_data:"
+msgid "Current Extra Data"
+msgstr ""
+
+msgctxt ""
+"field:endorsement.contract.change_extra_data,current_extra_data_date:"
+msgid "Date of Current Extra Data"
+msgstr ""
+
+msgctxt "field:endorsement.contract.change_extra_data,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.change_extra_data,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.change_extra_data,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.change_extra_data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.change_extra_data,new_extra_data:"
+msgid "New Extra Data"
+msgstr ""
+
+msgctxt "field:endorsement.contract.change_extra_data,new_extra_data_date:"
+msgid "Date of New Extra Data"
+msgstr ""
+
 msgctxt "field:endorsement.contract.change_start_date,current_start_date:"
 msgid "Current Start Date"
 msgstr "Date de fin actuelle"
@@ -703,6 +788,122 @@ msgstr "ID"
 msgctxt "field:endorsement.contract.change_start_date,new_start_date:"
 msgid "New Start Date"
 msgstr "Nouvelle date de début"
+
+msgctxt "field:endorsement.contract.extra_data,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.contract.extra_data,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.contract.extra_data,contract_endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'Avenant"
+
+msgctxt "field:endorsement.contract.extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.extra_data,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.contract.extra_data,extra_data:"
+msgid "Extra Datas"
+msgstr "Données complémentaires"
+
+msgctxt "field:endorsement.contract.extra_data,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.contract.extra_data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.extra_data,new_extra_data_values:"
+msgid "Extra Data Values"
+msgstr ""
+
+msgctxt "field:endorsement.contract.extra_data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.extra_data,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.contract.extra_data,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.contract.extra_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.extra_data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.extra_data,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.contract.extra_data.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_data.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.contract.extra_data.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.contract.extra_data.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.contract.extra_data.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.extra_data.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.contract.extra_data.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.extra_data.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.extra_data.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.contract.extra_data.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.contract.extra_data.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.contract.extra_data.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:endorsement.contract.field,create_date:"
 msgid "Create Date"
@@ -889,6 +1090,18 @@ msgctxt "field:endorsement.contract.option.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.decline.select_reason,endorsements:"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "field:endorsement.decline.select_reason,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.decline.select_reason,reason:"
+msgid "Reason"
+msgstr "Raison"
+
 msgctxt "field:endorsement.definition,code:"
 msgid "Code"
 msgstr "Code"
@@ -912,6 +1125,10 @@ msgstr "Avenants unitaires"
 msgctxt "field:endorsement.definition,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.definition,is_technical:"
+msgid "Is technical"
+msgstr ""
 
 msgctxt "field:endorsement.definition,name:"
 msgid "Name"
@@ -1145,6 +1362,22 @@ msgctxt "field:endorsement.part-method,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.start.dummy_step,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.start.dummy_step,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.start.dummy_step,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.start.dummy_step,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:endorsement.start.preview_changes,id:"
 msgid "ID"
 msgstr "ID"
@@ -1257,9 +1490,21 @@ msgctxt "model:endorsement.contract.activation_history.field,name:"
 msgid "Endorsement Activation History Field"
 msgstr "Modification des périodes d'activation"
 
+msgctxt "model:endorsement.contract.change_extra_data,name:"
+msgid "Change contract extra data"
+msgstr ""
+
 msgctxt "model:endorsement.contract.change_start_date,name:"
 msgid "Change contract start date"
 msgstr "Modifier la date d'effet du contrat"
+
+msgctxt "model:endorsement.contract.extra_data,name:"
+msgid "Endorsement Extra Data"
+msgstr ""
+
+msgctxt "model:endorsement.contract.extra_data.field,name:"
+msgid "Endorsement Extra Data Field"
+msgstr ""
 
 msgctxt "model:endorsement.contract.field,name:"
 msgid "Endorsement Contract Field"
@@ -1277,9 +1522,17 @@ msgctxt "model:endorsement.contract.option.field,name:"
 msgid "Endorsement Option Field"
 msgstr "Champs de la garantie souscrite"
 
+msgctxt "model:endorsement.decline.select_reason,name:"
+msgid "Reason selector to decline endorsement"
+msgstr ""
+
 msgctxt "model:endorsement.definition,name:"
 msgid "Endorsement Definition"
 msgstr "Définition d'avenant"
+
+msgctxt "model:endorsement.definition,name:stop_contract_definition"
+msgid "Stop Contract"
+msgstr ""
 
 msgctxt "model:endorsement.definition-endorsement.part,name:"
 msgid "Endorsement Definition Part Relation"
@@ -1293,9 +1546,17 @@ msgctxt "model:endorsement.part,name:"
 msgid "Endorsement Part"
 msgstr "Avenant unitaire"
 
+msgctxt "model:endorsement.part,name:stop_contract_revision_part"
+msgid "Stop Contract"
+msgstr ""
+
 msgctxt "model:endorsement.part-method,name:"
 msgid "Endorsement Part Method Relation"
 msgstr "Relation avenant unitaire - Méthods"
+
+msgctxt "model:endorsement.start.dummy_step,name:"
+msgid "Dummy Step"
+msgstr ""
 
 msgctxt "model:endorsement.start.preview_changes,name:"
 msgid "Basic Preview State View"
@@ -1320,6 +1581,10 @@ msgstr "Configuration d'avenant"
 msgctxt "model:ir.action,name:act_contract_open"
 msgid "Open Contract"
 msgstr "Ouvrir le Contrat"
+
+msgctxt "model:ir.action,name:act_decline_endorsement"
+msgid "Decline Endorsement"
+msgstr ""
 
 msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsement"
@@ -1443,6 +1708,18 @@ msgctxt "selection:endorsement.contract.activation_history,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "selection:endorsement.contract.extra_data,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.contract.extra_data,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.contract.extra_data,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "selection:endorsement.contract.option,action:"
 msgid "Add"
 msgstr "Ajouter"
@@ -1499,6 +1776,10 @@ msgctxt "view:endorsement.contract.activation_history:"
 msgid "Endorsement Options"
 msgstr "Modifications de la garantie souscrite"
 
+msgctxt "view:endorsement.contract.change_extra_data:"
+msgid "Change Contract Extra Data"
+msgstr ""
+
 msgctxt "view:endorsement.contract.change_start_date:"
 msgid "Change Contract Start Date"
 msgstr "Modifier la date d'effet du contrat"
@@ -1546,6 +1827,10 @@ msgstr "Avenants"
 msgctxt "view:endorsement.contract:"
 msgid "Options"
 msgstr "Options"
+
+msgctxt "view:endorsement.decline.select_reason:"
+msgid "Select Declination Reason"
+msgstr "Choisir le motif pour décliner"
 
 msgctxt "view:endorsement.definition-endorsement.part:"
 msgid "Endorsement Parts"
@@ -1623,6 +1908,14 @@ msgstr "Ouvrir le Contrat"
 msgctxt "view:offered.product:"
 msgid "Endorsements"
 msgstr "Avenants"
+
+msgctxt "wizard_button:endorsement.decline,select_reason,decline:"
+msgid "Decline"
+msgstr "Décliner"
+
+msgctxt "wizard_button:endorsement.decline,select_reason,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
 msgid "Apply"

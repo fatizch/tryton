@@ -60,14 +60,9 @@ msgctxt "field:endorsement.start.preview_contract_premiums.premium,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:endorsement.start.preview_contract_premiums.premium,option:"
-msgid "Option"
-msgstr "Option"
-
-msgctxt ""
-"field:endorsement.start.preview_contract_premiums.premium,option_covered_element:"
-msgid "Covered Element for Option"
-msgstr "Elément couvert pour l'option"
+msgctxt "field:endorsement.start.preview_contract_premiums.premium,name:"
+msgid "Name"
+msgstr "Nom"
 
 msgctxt "field:endorsement.start.preview_contract_premiums.premium,start:"
 msgid "Start"

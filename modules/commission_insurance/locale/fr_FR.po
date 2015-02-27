@@ -214,6 +214,10 @@ msgctxt "field:commission.create_agents.parties,parties:"
 msgid "Parties"
 msgstr "Tiers"
 
+msgctxt "field:commission.create_invoice.ask,post_invoices:"
+msgid "Post Invoices"
+msgstr "Emettre les bordereaux"
+
 msgctxt "field:commission.plan,broker_plan:"
 msgid "Broker Plan"
 msgstr "Plan Courtier"

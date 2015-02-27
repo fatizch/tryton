@@ -842,6 +842,26 @@ msgctxt "field:contract.service,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.stop.select_contracts,at_date:"
+msgid "At this date"
+msgstr "A cette date"
+
+msgctxt "field:contract.stop.select_contracts,contracts:"
+msgid "Contracts to stop"
+msgstr "Contrats à terminer"
+
+msgctxt "field:contract.stop.select_contracts,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.stop.select_contracts,status:"
+msgid "Status"
+msgstr "Statut"
+
+msgctxt "field:contract.stop.select_contracts,sub_status:"
+msgid "Sub Status"
+msgstr "Sous Statut"
+
 msgctxt "field:contract.sub_status,code:"
 msgid "Code"
 msgstr "Code"
@@ -1073,6 +1093,10 @@ msgctxt "model:contract.service,name:"
 msgid "Contract Service"
 msgstr "Service délivré"
 
+msgctxt "model:contract.stop.select_contracts,name:"
+msgid "Select Contract to stop"
+msgstr "Sélectionner le contrat à terminer"
+
 msgctxt "model:contract.sub_status,name:"
 msgid "Contract SubStatus"
 msgstr "Sous statut de contrat"
@@ -1141,6 +1165,10 @@ msgstr "Terminer Contrat"
 msgctxt "model:ir.action,name:act_event_log_relate_form"
 msgid "Event Logs"
 msgstr "Logs d'événements"
+
+msgctxt "model:ir.action,name:act_stop"
+msgid "Stop Contract"
+msgstr "Terminer contrat"
 
 msgctxt "model:ir.action,name:act_sub_status_form"
 msgid "Sub-status"
@@ -1303,6 +1331,14 @@ msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
+msgctxt "selection:contract.stop.select_contracts,status:"
+msgid "Terminated"
+msgstr "Terminé"
+
+msgctxt "selection:contract.stop.select_contracts,status:"
+msgid "Void"
+msgstr "Sans Effet"
+
 msgctxt "selection:contract.sub_status,status:"
 msgid "Active"
 msgstr "Active"
@@ -1417,6 +1453,18 @@ msgctxt "view:contract.service:"
 msgid "Contract Service"
 msgstr "Prestation Fournie"
 
+msgctxt "view:contract.stop.select_contracts:"
+msgid "Select contracts to stop"
+msgstr "Sélectionner les contrats à terminer"
+
+msgctxt "view:contract.stop.select_contracts:"
+msgid ""
+"The selected contracts will be voided, it will be as though they never "
+"happened"
+msgstr ""
+"Les contrats sélectionnés seront sans effet comme si ils n'avaient jamais "
+"été en vigueur"
+
 msgctxt "view:contract.sub_status:"
 msgid "Substatus"
 msgstr "Sous statut"
@@ -1465,6 +1513,10 @@ msgctxt "view:contract:"
 msgid "Options"
 msgstr "Options"
 
+msgctxt "view:contract:"
+msgid "Stop Contract"
+msgstr "Terminer contrat"
+
 msgctxt "view:party.party:"
 msgid "+"
 msgstr "+"
@@ -1500,6 +1552,14 @@ msgstr "Appliquer"
 msgctxt "wizard_button:contract.end,select_date,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:contract.stop,select_contracts,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.stop,select_contracts,stop:"
+msgid "Ok"
+msgstr "Ok"
 
 msgctxt ""
 "wizard_button:contract.wizard.option_subscription,options_displayer,end:"
