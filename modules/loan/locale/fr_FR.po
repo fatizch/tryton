@@ -815,7 +815,7 @@ msgstr "In Fine"
 
 msgctxt "selection:loan,kind:"
 msgid "Fixed Rate"
-msgstr "Taux Fixe"
+msgstr "Amortissable"
 
 msgctxt "selection:loan,kind:"
 msgid "Graduated"
@@ -827,7 +827,7 @@ msgstr "Taux Zéro"
 
 msgctxt "selection:loan,kind:"
 msgid "Intermediate"
-msgstr "Prêt Relais"
+msgstr "Relais"
 
 msgctxt "selection:loan,payment_frequency:"
 msgid ""
