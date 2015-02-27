@@ -26,3 +26,6 @@
   suite à une facturation de contrat ont des *détails* qui relie la ligne aux
   données métier qui l'ont généré. Ceci permet également de faciliter les
   extractions basées sur les primes.
+
+- **API de tarification :** Il est possible d'obtenir via un appel RPC
+  les tarifs pour un contrat potentiel. Rien n'est sauvegardé en base.

@@ -9,6 +9,7 @@ from sql.aggregate import Max, Count
 
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, And, Len, If, Bool
+from trytond.error import UserError
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import reduce_ids, grouped_slice
@@ -97,6 +98,7 @@ class Contract:
     @classmethod
     def __setup__(cls):
         super(Contract, cls).__setup__()
+        cls.__rpc__.update({'ws_rate_contracts': RPC(readonly=False)})
         cls._buttons.update({
                 'first_invoice': {},
                 })
@@ -484,6 +486,44 @@ class Contract:
                     billing_information.payment_term = billing_information.\
                         billing_mode.allowed_payment_terms[0]
                     billing_information.save()
+
+    @classmethod
+    def ws_rate_contracts(cls, contract_dict):
+        '''
+            This methods uses the ws_subscribe_contracts methods to create a
+            contract, rate it, extract data to return, then rollback
+            everything.
+        '''
+        with Transaction().new_cursor():
+            try:
+                messages = cls.ws_subscribe_contracts(contract_dict)
+                if len(messages) == 1 and not messages.values()[0]['return']:
+                    # ws_subscribe_contracts failed, forward the message
+                    return messages
+                quote_numbers = [message['quote_number']
+                    for root_message in messages.itervalues()
+                    for message in root_message['messages']
+                    if root_message['return'] and 'quote_number' in message]
+                new_contracts = cls.search([
+                        ('quote_number', 'in', quote_numbers)])
+                rating_message = {
+                    'return': True,
+                    'messages': cls.ws_extract_rating_message(new_contracts),
+                    }
+            except UserError as exc:
+                rating_message = {
+                    'return': False,
+                    'messages': [{'error': str(exc)}],
+                    }
+            finally:
+                Transaction().cursor.rollback()
+            return {contract_dict.keys()[0]: rating_message}
+
+    @classmethod
+    def ws_extract_rating_message(cls, contracts):
+        # TODO : Complete with the actual ratings
+        return {contract.quote_number: {'name': contract.rec_name}
+            for contract in contracts}
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
