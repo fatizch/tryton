@@ -660,6 +660,9 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
     possible_payment_terms = fields.Function(fields.One2Many(
             'account.invoice.payment_term', None, 'Possible Payment Term'),
             'on_change_with_possible_payment_terms')
+    is_once_per_contract = fields.Function(
+        fields.Boolean('Once Per Contract?'),
+        'on_change_with_is_once_per_contract')
 
     @classmethod
     def _export_light(cls):
@@ -748,6 +751,11 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
             self.direct_debit_day = None
             return
         self.direct_debit_day = int(self.direct_debit_day_selector)
+
+    @fields.depends('billing_mode')
+    def on_change_with_is_once_per_contract(self, name=None):
+        return (self.billing_mode.frequency == 'once_per_contract'
+            if self.billing_mode else False)
 
     def get_direct_debit_planned_date(self, line):
         if not (self.direct_debit and self.direct_debit_day):
