@@ -148,12 +148,19 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
         super(CoopSQL, cls).__post_setup__()
         if cls.table_query != ModelSQL.table_query:
             return
+        pool = Pool()
         for field_name, field in cls._fields.iteritems():
-            if not isinstance(field, fields.Many2One):
-                continue
-            if getattr(field, '_on_delete_not_set', None):
-                logging.getLogger('modules').warning('Ondelete not set for '
-                    'field %s on model %s' % (field_name, cls.__name__))
+            if isinstance(field, fields.Many2One):
+                if getattr(field, '_on_delete_not_set', None):
+                    logging.getLogger('modules').warning('Ondelete not set for'
+                        ' field %s on model %s' % (field_name, cls.__name__))
+            elif isinstance(field, fields.One2Many):
+                target_field = getattr(pool.get(field.model_name), field.field)
+                if target_field.required and not field._delete_missing:
+                    logging.getLogger('modules').warning(
+                        'Field %s of %s ' % (field_name, cls.__name__) +
+                        'should probably have "delete_missing" set since ' +
+                        'target field is required')
 
     @property
     def _save_values(self):
