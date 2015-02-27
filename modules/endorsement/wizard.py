@@ -23,6 +23,8 @@ __all__ = [
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
     'EndorsementWizardPreviewMixin',
+    'EndorsementSelectDeclineReason',
+    'EndorsementDecline',
     ]
 
 
@@ -843,3 +845,44 @@ class OpenContractAtApplicationDate(Wizard):
                 '_datetime_exclude': True,
                 })
         return action, {}
+
+
+class EndorsementSelectDeclineReason(model.CoopView):
+    'Reason selector to decline endorsement'
+
+    __name__ = 'endorsement.decline.select_reason'
+
+    endorsements = fields.One2Many('endorsement', None, 'Endorsements',
+        readonly=True)
+    reason = fields.Many2One('endorsement.sub_state', 'Reason', required=True,
+        domain=[('state', '=', 'declined')])
+
+
+class EndorsementDecline(model.CoopWizard):
+    'Decline Endorsement Wizard'
+
+    __name__ = 'endorsement.decline'
+    start_state = 'select_reason'
+    select_reason = StateView(
+        'endorsement.decline.select_reason',
+        'endorsement.select_endorsement_decline_reason_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Decline', 'decline', 'tryton-go-next', default=True),
+            ])
+    decline = StateTransition()
+
+    def default_select_reason(self, name):
+        assert Transaction().context.get('active_model') == 'endorsement'
+        active_ids = Transaction().context.get('active_ids')
+        return {
+            'endorsements': active_ids,
+            }
+
+    def transition_decline(self):
+        pool = Pool()
+        Endorsement = pool.get('endorsement')
+        reason = self.select_reason.reason
+        active_ids = Transaction().context.get('active_ids')
+        selected_endorsements = Endorsement.search([('id', 'in', active_ids)])
+        Endorsement.decline(selected_endorsements, reason=reason)
+        return 'end'

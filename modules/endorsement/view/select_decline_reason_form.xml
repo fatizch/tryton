@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Select Declination Reason">
+    <label name="reason"/>
+    <field name="reason" widget="selection"/>
+    <newline/>
+    <field name="endorsements" colspan="4" expand_toolbar="0"/>
+</form>

@@ -32,9 +32,11 @@ def register():
         ChangeContractStartDate,
         ChangeContractExtraData,
         BasicPreview,
+        EndorsementSelectDeclineReason,
         module='endorsement', type_='model')
 
     Pool.register(
         StartEndorsement,
         OpenContractAtApplicationDate,
+        EndorsementDecline,
         module='endorsement', type_='wizard')

@@ -745,6 +745,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     'invisible': Or(~Eval('state').in_(['applied']),
                         Len(Eval('contract_endorsements', [])) == Len([])),
                     },
+                'button_decline_endorsement': {
+                    'invisible': ~Eval('state').in_(['draft'])
+                    },
                 })
         cls._order = [('application_date', 'DESC'), ('create_date', 'DESC')]
         cls.__rpc__.update({'ws_create_endorsements': RPC(readonly=False)})
@@ -941,6 +944,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     for x in tmp_contracts])
             endorsement.effective_date = None
             endorsement.save()
+
+    @classmethod
+    @model.CoopView.button_action('endorsement.act_decline_endorsement')
+    def button_decline_endorsement(cls, endorsements):
+        pass
 
     @classmethod
     def soft_apply(cls, endorsements):
