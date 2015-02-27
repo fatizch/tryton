@@ -400,6 +400,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 option = self.Option(
                         start_date=contract.start_date,
                         end_date=end_date,
+                        automatic_end_date=None,
                         parent_contract=contract,
                         covered_element=covered_element
                         )
