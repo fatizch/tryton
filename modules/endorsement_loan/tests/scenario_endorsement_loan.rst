@@ -308,7 +308,7 @@ Create Loan::
     >>> loan.first_payment_date = loan_payment_date
     >>> loan.rate = Decimal('0.045')
     >>> loan.amount = Decimal('250000')
-    >>> loan.number_of_payments = 200
+    >>> loan.duration = 200
     >>> loan.save()
     >>> Loan.calculate_loan([loan.id], {})
     >>> loan.state == 'calculated'
