@@ -23,6 +23,10 @@ msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
 msgctxt "error:endorsement.configuration:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.configuration:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -41,6 +45,10 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:endorsement.contract.activation_history.field:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.contract.activation_history.field:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -57,6 +65,10 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:endorsement.contract.activation_history:"
+msgid "Can't find configuration for code %s"
+msgstr ""
 
 msgctxt "error:endorsement.contract.activation_history:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -89,6 +101,10 @@ msgid "Update %s"
 msgstr "Mise à jour de %s"
 
 msgctxt "error:endorsement.contract.extra_data.field:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.contract.extra_data.field:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -105,6 +121,10 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:endorsement.contract.extra_data:"
+msgid "Can't find configuration for code %s"
+msgstr ""
 
 msgctxt "error:endorsement.contract.extra_data:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -126,7 +146,7 @@ msgstr ""
 
 msgctxt "error:endorsement.contract.extra_data:"
 msgid "New Extra Data"
-msgstr ""
+msgstr "Nouvelles données complémentaires"
 
 msgctxt "error:endorsement.contract.extra_data:"
 msgid "New version"
@@ -139,6 +159,10 @@ msgstr "Suppression de la version"
 msgctxt "error:endorsement.contract.extra_data:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.field:"
+msgid "Can't find configuration for code %s"
+msgstr ""
 
 msgctxt "error:endorsement.contract.field:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -163,6 +187,10 @@ msgid "Endorsement is not yet applied"
 msgstr "L'avenant n'est pas encore appliqué"
 
 msgctxt "error:endorsement.contract.option.field:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.contract.option.field:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -179,6 +207,10 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:endorsement.contract.option:"
+msgid "Can't find configuration for code %s"
+msgstr ""
 
 msgctxt "error:endorsement.contract.option:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -215,6 +247,10 @@ msgid "Update %s"
 msgstr "Mise à jour de %s"
 
 msgctxt "error:endorsement.contract:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.contract:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -248,6 +284,10 @@ msgstr ""
 "donné."
 
 msgctxt "error:endorsement.definition-endorsement.part:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.definition-endorsement.part:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -266,6 +306,10 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:endorsement.definition-product:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.definition-product:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -284,6 +328,10 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:endorsement.definition:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.definition:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -302,6 +350,10 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:endorsement.part-method:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.part-method:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -318,6 +370,10 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
+
+msgctxt "error:endorsement.part:"
+msgid "Can't find configuration for code %s"
+msgstr ""
 
 msgctxt "error:endorsement.part:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -352,6 +408,10 @@ msgid "You cannot start an endorsement on a non-active contract !"
 msgstr "Vous ne pouvez démarrer un avenant sur un contrat non actif!"
 
 msgctxt "error:endorsement.sub_state:"
+msgid "Can't find configuration for code %s"
+msgstr ""
+
+msgctxt "error:endorsement.sub_state:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -372,6 +432,10 @@ msgstr ""
 msgctxt "error:endorsement.sub_state:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
+
+msgctxt "error:endorsement:"
+msgid "Can't find configuration for code %s"
+msgstr ""
 
 msgctxt "error:endorsement:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -447,6 +511,10 @@ msgctxt "field:endorsement,contracts:"
 msgid "Contracts"
 msgstr "Contrats"
 
+msgctxt "field:endorsement,contracts_name:"
+msgid "Contracts Name"
+msgstr ""
+
 msgctxt "field:endorsement,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
@@ -498,6 +566,10 @@ msgstr "Détails sur l'état"
 msgctxt "field:endorsement,sub_state_required:"
 msgid "Sub State Required"
 msgstr "Sous état requis"
+
+msgctxt "field:endorsement,subscribers_name:"
+msgid "Subscribers Name"
+msgstr ""
 
 msgctxt "field:endorsement,write_date:"
 msgid "Write Date"
@@ -582,6 +654,10 @@ msgstr "Avenant"
 msgctxt "field:endorsement.contract,endorsement_summary:"
 msgid "Endorsement Summary"
 msgstr "Résumé de l'avenant"
+
+msgctxt "field:endorsement.contract,extra_datas:"
+msgid "Extra Datas"
+msgstr "Données complémentaires"
 
 msgctxt "field:endorsement.contract,func_key:"
 msgid "Functional Key"
@@ -734,12 +810,12 @@ msgstr "Identifiant XML"
 
 msgctxt "field:endorsement.contract.change_extra_data,current_extra_data:"
 msgid "Current Extra Data"
-msgstr ""
+msgstr "Données complémentaires courantes"
 
 msgctxt ""
 "field:endorsement.contract.change_extra_data,current_extra_data_date:"
 msgid "Date of Current Extra Data"
-msgstr ""
+msgstr "Date d'effet des données complémentaires"
 
 msgctxt "field:endorsement.contract.change_extra_data,effective_date:"
 msgid "Effective Date"
@@ -759,11 +835,11 @@ msgstr "ID"
 
 msgctxt "field:endorsement.contract.change_extra_data,new_extra_data:"
 msgid "New Extra Data"
-msgstr ""
+msgstr "Nouvelles données complémentaires"
 
 msgctxt "field:endorsement.contract.change_extra_data,new_extra_data_date:"
 msgid "Date of New Extra Data"
-msgstr ""
+msgstr "Date d'effet des nouvelles données complémentaires"
 
 msgctxt "field:endorsement.contract.change_start_date,current_start_date:"
 msgid "Current Start Date"
@@ -831,7 +907,7 @@ msgstr "ID"
 
 msgctxt "field:endorsement.contract.extra_data,new_extra_data_values:"
 msgid "Extra Data Values"
-msgstr ""
+msgstr "Valeurs de données complémentaires"
 
 msgctxt "field:endorsement.contract.extra_data,rec_name:"
 msgid "Name"
@@ -1128,7 +1204,7 @@ msgstr "ID"
 
 msgctxt "field:endorsement.definition,is_technical:"
 msgid "Is technical"
-msgstr ""
+msgstr "Est technique"
 
 msgctxt "field:endorsement.definition,name:"
 msgid "Name"
@@ -1492,7 +1568,7 @@ msgstr "Modification des périodes d'activation"
 
 msgctxt "model:endorsement.contract.change_extra_data,name:"
 msgid "Change contract extra data"
-msgstr ""
+msgstr "Modification des données complémentaires"
 
 msgctxt "model:endorsement.contract.change_start_date,name:"
 msgid "Change contract start date"
@@ -1500,11 +1576,11 @@ msgstr "Modifier la date d'effet du contrat"
 
 msgctxt "model:endorsement.contract.extra_data,name:"
 msgid "Endorsement Extra Data"
-msgstr ""
+msgstr "Avenant de modification des données complémentaires"
 
 msgctxt "model:endorsement.contract.extra_data.field,name:"
 msgid "Endorsement Extra Data Field"
-msgstr ""
+msgstr "Champ des données complémentaires à modifier"
 
 msgctxt "model:endorsement.contract.field,name:"
 msgid "Endorsement Contract Field"
@@ -1524,7 +1600,7 @@ msgstr "Champs de la garantie souscrite"
 
 msgctxt "model:endorsement.decline.select_reason,name:"
 msgid "Reason selector to decline endorsement"
-msgstr ""
+msgstr "Motif d'abandon de l'avenant"
 
 msgctxt "model:endorsement.definition,name:"
 msgid "Endorsement Definition"
@@ -1532,7 +1608,7 @@ msgstr "Définition d'avenant"
 
 msgctxt "model:endorsement.definition,name:stop_contract_definition"
 msgid "Stop Contract"
-msgstr ""
+msgstr "Terminer contrat"
 
 msgctxt "model:endorsement.definition-endorsement.part,name:"
 msgid "Endorsement Definition Part Relation"
@@ -1548,7 +1624,7 @@ msgstr "Avenant unitaire"
 
 msgctxt "model:endorsement.part,name:stop_contract_revision_part"
 msgid "Stop Contract"
-msgstr ""
+msgstr "Terminer contrat"
 
 msgctxt "model:endorsement.part-method,name:"
 msgid "Endorsement Part Method Relation"
@@ -1556,7 +1632,7 @@ msgstr "Relation avenant unitaire - Méthods"
 
 msgctxt "model:endorsement.start.dummy_step,name:"
 msgid "Dummy Step"
-msgstr ""
+msgstr "Etape technique"
 
 msgctxt "model:endorsement.start.preview_changes,name:"
 msgid "Basic Preview State View"
@@ -1584,7 +1660,7 @@ msgstr "Ouvrir le Contrat"
 
 msgctxt "model:ir.action,name:act_decline_endorsement"
 msgid "Decline Endorsement"
-msgstr ""
+msgstr "Abandonner l'avenant"
 
 msgctxt "model:ir.action,name:act_endorsement"
 msgid "Endorsement"
@@ -1741,6 +1817,10 @@ msgid "Contract"
 msgstr "Contrat"
 
 msgctxt "selection:endorsement.part,kind:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "selection:endorsement.part,kind:"
 msgid "Option"
 msgstr "Option"
 
@@ -1778,7 +1858,7 @@ msgstr "Modifications de la garantie souscrite"
 
 msgctxt "view:endorsement.contract.change_extra_data:"
 msgid "Change Contract Extra Data"
-msgstr ""
+msgstr "Modifier les données complémentaires"
 
 msgctxt "view:endorsement.contract.change_start_date:"
 msgid "Change Contract Start Date"
@@ -1928,6 +2008,25 @@ msgstr "Annuler"
 msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
 msgid "Summary"
 msgstr "Synthèse"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_contract_extra_data,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:endorsement.start,change_start_date,change_start_date_next:"
