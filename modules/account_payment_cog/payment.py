@@ -42,7 +42,7 @@ class Journal(export.ExportImportMixin):
 
 
 class JournalFailureAction(model.CoopSQL, model.CoopView):
-    'Payment Journal Failure Action'
+    'Journal Failure Action'
 
     __name__ = 'account.payment.journal.failure_action'
     _rec_name = 'reject_reason'
