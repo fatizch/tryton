@@ -16,7 +16,7 @@ class SnapshotTakeBatch(batch.BatchRootNoSelect):
     logger = batch.get_logger(__name__)
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         pool = Pool()
         Snapshot = pool.get('account.move.snapshot')
         snap_id = Snapshot.take_snapshot()

@@ -24,7 +24,7 @@ class ProductValidationBatch(batch.BatchRoot):
         return 'offered.product'
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         # TODO : explode ModelStorage._validate in smaller functions that could
         # be individually called.
         # That would permit to see every test that failed, whereas as of the

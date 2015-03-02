@@ -11,9 +11,9 @@ class PaymentTreatmentBatch:
     __name__ = 'account.payment.process'
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         groups = super(PaymentTreatmentBatch, cls).execute(
-            objects, ids, treatment_date)
+            objects, ids, treatment_date, extra_args)
         dirpath = cls.generate_filepath()
         for payments_group in groups:
             out_filepaths = payments_group.dump_sepa_messages(dirpath)

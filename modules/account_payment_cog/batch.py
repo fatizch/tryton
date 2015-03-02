@@ -46,7 +46,7 @@ class PaymentTreatmentBatch(batch.BatchRoot):
         return (('journal', payment.journal.id), ('kind', payment.kind))
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         groups = []
         Payment = Pool().get('account.payment')
         payments = sorted(objects, key=cls._group_payment_key)
@@ -113,7 +113,7 @@ class PaymentCreationBatch(batch.BatchRoot):
         return cursor.fetchall()
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         pool = Pool()
         MoveLine = pool.get('account.move.line')
         MoveLine.create_payments(objects)

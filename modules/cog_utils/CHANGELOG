@@ -1,3 +1,4 @@
+* Batches can now make use of command line extra arguments  
 * Allow to automatically delete removed records of a O2M field
 * Allow to configure required data for an export
 * Allow to call ir.model.methods with lists

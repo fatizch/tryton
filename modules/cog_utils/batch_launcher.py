@@ -57,7 +57,8 @@ def chunks_size(l, n):
 
 
 @celery.task(base=TrytonTask)
-def generate_all(batch_name, connexion_date=None, treatment_date=None):
+def generate_all(batch_name, connexion_date=None, treatment_date=None,
+        extra_args=None):
     if not connexion_date:
         connexion_date = datetime.date.today()
     else:
@@ -82,14 +83,14 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None):
         logger.info('Executing %s with %s' % (batch_name,
             coop_string.get_print_infos(ids)))
         job = group(generate.s(BatchModel.__name__, tmp_list, connexion_date,
-            treatment_date)
+            treatment_date, extra_args)
             for tmp_list in chunking(ids, int(BatchModel.get_conf_item(
                 'split_size'))))()
     return job
 
 
 @celery.task(base=TrytonTask)
-def generate(batch_name, ids, connexion_date, treatment_date):
+def generate(batch_name, ids, connexion_date, treatment_date, extra_args):
     User = Pool().get('res.user')
     admin, = User.search([('login', '=', 'admin')])
     BatchModel = Pool().get(batch_name)
@@ -99,7 +100,7 @@ def generate(batch_name, ids, connexion_date, treatment_date):
         to_treat = BatchModel.convert_to_instances(ids)
         logger = batch.get_logger(batch_name)
         try:
-            BatchModel.execute(to_treat, ids, treatment_date)
+            BatchModel.execute(to_treat, ids, treatment_date, extra_args)
             logger.success('Processed %s', coop_string.get_print_infos(ids))
         except Exception:
             logger.exception('Exception occured when processing %s',

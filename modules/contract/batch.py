@@ -27,7 +27,7 @@ class ContractEndDateTerminationBatch(batch.BatchRoot):
             ('end_date', '<=', treatment_date)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         Contract = Pool().get('contract')
         Contract.do_terminate(objects)
         cls.logger.info('Terminated %d contracts.' % len(objects))

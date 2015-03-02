@@ -80,7 +80,7 @@ class BatchRoot(ModelView):
         return item
 
     @classmethod
-    def execute(cls, objects, ids):
+    def execute(cls, objects, ids, extra_args=None):
         raise NotImplementedError
 
     @classmethod
@@ -207,7 +207,7 @@ class ViewValidationBatch(BatchRoot):
         return [('module', 'in', coop_modules)]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         logger = get_logger(cls.__name__)
         for view in objects:
             full_xml_id = view.xml_id

@@ -394,7 +394,8 @@ def batch(arguments, config, work_data):
             return 1
         else:
             status = batch_launcher.generate_all.delay(arguments.name,
-                arguments.connexion_date, arguments.treatment_date)
+                arguments.connexion_date, arguments.treatment_date,
+                arguments.extra)
             for s in status.collect():
                 if isinstance(s[0], (GroupResult, tuple)):
                     result, vals = s
@@ -700,7 +701,8 @@ monitor: starts celery flower server on http://localhost:5555"""
         'generation : html, ...', default='html')
 
     argcomplete.autocomplete(parser)
-    arguments = parser.parse_args()
+    arguments, extra_args = parser.parse_known_args()
+    arguments.extra = dict(zip(extra_args[0::2], extra_args[1::2]))
 
     if arguments.command == 'configure':
         configure(arguments.env)

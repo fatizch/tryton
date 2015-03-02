@@ -41,7 +41,7 @@ class DocumentRequestBatch(batch.BatchRoot):
                 ('send_date', '<=', coop_date.add_month(treatment_date, -3))]]
 
     @classmethod
-    def execute(cls, objects, ids, treatment_date):
+    def execute(cls, objects, ids, treatment_date, extra_args):
         DocumentCreate = Pool().get(
             'document.create', type='wizard')
         for cur_object in objects:
