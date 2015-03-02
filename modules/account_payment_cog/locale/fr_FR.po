@@ -366,7 +366,7 @@ msgstr "Manuelle"
 
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Retry"
-msgstr ""
+msgstr "Réessayer"
 
 msgctxt "view:account.move.line:"
 msgid "Payments"

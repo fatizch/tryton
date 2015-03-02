@@ -179,7 +179,7 @@ msgstr "Pas de modèle de lettre trouvé pour le %s et la langue %s"
 
 msgctxt "error:document.template:"
 msgid "The document template code must be unique"
-msgstr ""
+msgstr "Le code du modèle de lettre doit être unique"
 
 msgctxt "error:expense.kind:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -2434,7 +2434,7 @@ msgstr "Règle de Terme - Renouvellement"
 
 msgctxt "model:offered.validate,name:"
 msgid "Product Validation Batch"
-msgstr ""
+msgstr "Batch de validation produit"
 
 msgctxt "model:process-offered.product,name:"
 msgid "Process Product Relation"
@@ -2564,22 +2564,6 @@ msgctxt "model:rule_engine.rule_parameter,string:option_max_age"
 msgid "Maximum age for option (age included)"
 msgstr "Age maximum pour l'option (age inclu)"
 
-msgctxt "selection:document.receive.request,kind:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:document.request,needed_by:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:document.request.line,for_object:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:document.template,kind:"
-msgid ""
-msgstr " "
-
 msgctxt "selection:document.template,kind:"
 msgid "Document Request"
 msgstr "Demande de Documents"
@@ -2677,10 +2661,6 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "selection:offered.business_rule_root,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.business_rule_root,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
@@ -2717,20 +2697,12 @@ msgid "Product"
 msgstr "Produit"
 
 msgctxt "selection:offered.coverage_amount.rule,template_behaviour:"
-msgid ""
-msgstr " "
-
-msgctxt "selection:offered.coverage_amount.rule,template_behaviour:"
 msgid "Add"
 msgstr "Compléter"
 
 msgctxt "selection:offered.coverage_amount.rule,template_behaviour:"
 msgid "Remove"
 msgstr "Remplacer"
-
-msgctxt "selection:offered.item.description,kind:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:offered.item.description,kind:"
 msgid "Company"
@@ -2751,10 +2723,6 @@ msgstr "Générique"
 msgctxt "selection:offered.option.description,family:"
 msgid "Life"
 msgstr "Prévoyance"
-
-msgctxt "selection:offered.option.description,insurance_kind:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:offered.option.description,subscription_behaviour:"
 msgid "Defaulted"
@@ -2819,10 +2787,6 @@ msgstr "Garantie"
 msgctxt "selection:offered.term.rule,offered:"
 msgid "Product"
 msgstr "Produit"
-
-msgctxt "selection:offered.term.rule,template_behaviour:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:offered.term.rule,template_behaviour:"
 msgid "Add"
@@ -3023,10 +2987,6 @@ msgstr "Annuler"
 msgctxt "wizard_button:document.create,attach,post_generation:"
 msgid "Attach"
 msgstr "Attacher"
-
-msgctxt "wizard_button:document.create,attach,post_generation:"
-msgid "Complete"
-msgstr "Terminer"
 
 msgctxt "wizard_button:document.create,preview_document,end:"
 msgid "Cancel"

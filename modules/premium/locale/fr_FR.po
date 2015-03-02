@@ -436,7 +436,7 @@ msgstr "Créé par"
 
 msgctxt "field:offered.option.description.premium_rule,frequency:"
 msgid "Rate Frequency"
-msgstr ""
+msgstr "Périodicité du tarif"
 
 msgctxt "field:offered.option.description.premium_rule,id:"
 msgid "ID"
@@ -605,10 +605,6 @@ msgstr "Dates de calcul des primes"
 msgctxt "model:rule_engine.rule_parameter,string:premium_amount"
 msgid "Premium Amount"
 msgstr "Montant de la prime"
-
-msgctxt "selection:account.fee,frequency:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:account.fee,frequency:"
 msgid "At contract signature"

@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -20,6 +20,14 @@ msgstr ""
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
 
+msgctxt "error:account.payment:"
+msgid "Unknown amount invoice line : %s %s"
+msgstr "Montant de ligne de quittance inconnu : %s %s"
+
+msgctxt "field:account.payment,sepa_merged_id:"
+msgid "SEPA Merged ID"
+msgstr "ID regroupement SEPA"
+
 msgctxt "field:account.payment.sepa.mandate,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -31,3 +39,155 @@ msgstr "Mandats SEPA"
 msgctxt "field:party.party,is_sepa_creditor_identifier_needed:"
 msgid "Need SEPA Creditor Identifier"
 msgstr "SEPA Creditor Identifier nécessaire"
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AC01"
+msgid "Account identifier incorrect"
+msgstr "Identifiant du compte incorrect"
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AC04"
+msgid "Account closed"
+msgstr "Compte fermé"
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AC06"
+msgid "Account blocked"
+msgstr "Compte bloqué"
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AC13"
+msgid "Debtor account is a consumer account"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AG01"
+msgid "Transaction forbidden"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AG02"
+msgid "Invalid bank operation code"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AM04"
+msgid "Insufficient funds"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_AM05"
+msgid "Duplication"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_ARDT"
+msgid "The transaction has already been returned"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_BE04"
+msgid "Account address invalid"
+msgstr "Adresse du compte invalide"
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_BE05"
+msgid "Unrecognised initiating party"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_BE06"
+msgid "Unknown customer"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_CUST"
+msgid "Cancellation requested by customer"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_DUPL"
+msgid "Duplicate sending"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_ED01"
+msgid "Correspondant bank not possible"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_FF01"
+msgid "Invalid file format"
+msgstr "Format de fichier non valide"
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_FF05"
+msgid "Incorrect direct debit type"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_FOCR"
+msgid "Positive answer to the recall"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_FRAD"
+msgid "Fraudulent originated credit transfer"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_LEGL"
+msgid "Legal reason"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_MD01"
+msgid "No mandate"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_MD02"
+msgid "No valid mandate"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_MD06"
+msgid "Refund request by end customer"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_MD07"
+msgid "End customer deceased"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_MS02"
+msgid "Refusal by debtor"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_MS03"
+msgid "Not specified reason"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_NOAS"
+msgid "No response from beneficiary"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_NOOR"
+msgid "Original credit transfer never received"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_RC01"
+msgid "Incorrect bank identifier"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_RR01"
+msgid "Missing debtor account or identification"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_RR02"
+msgid "Missing debtor name or address"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_RR03"
+msgid "Missing creditor name or address"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_RR04"
+msgid "Regulatory reason"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_SL01"
+msgid "Specific service by debtor agent"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_TECH"
+msgid "Technical problems resulting in erroneous SCTs"
+msgstr ""
+
+msgctxt "model:account.payment.journal.reject_reason,description:sepa_TM01"
+msgid "File receive after Cut-off time"
+msgstr ""
+
+msgctxt "model:ir.sequence,name:sequence_account_payment_merged"
+msgid "Default Account Payment Merged"
+msgstr "Regroupement de paiement par défaut"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_account_payment_merged"
+msgid "Account Payment Merged"
+msgstr "Regroupement de paiement"

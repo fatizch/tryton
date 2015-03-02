@@ -161,7 +161,7 @@ msgstr ""
 
 msgctxt "error:contract:"
 msgid "Errors occured during renewal date calculation : %s"
-msgstr ""
+msgstr "Erreurs lors du calcul des dates de renouvellements : %s"
 
 msgctxt "error:contract:"
 msgid "Invalid file format"
@@ -1109,10 +1109,6 @@ msgstr "Refusé"
 msgctxt "selection:contract.option,status:"
 msgid "Terminated"
 msgstr "Terminé"
-
-msgctxt "selection:contract.option.extra_premium,duration_unit:"
-msgid ""
-msgstr " "
 
 msgctxt "selection:contract.option.extra_premium,duration_unit:"
 msgid "Month"
