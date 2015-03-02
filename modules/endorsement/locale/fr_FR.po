@@ -513,7 +513,7 @@ msgstr "Contrats"
 
 msgctxt "field:endorsement,contracts_name:"
 msgid "Contracts Name"
-msgstr ""
+msgstr "Contrats"
 
 msgctxt "field:endorsement,create_date:"
 msgid "Create Date"
@@ -569,7 +569,7 @@ msgstr "Sous état requis"
 
 msgctxt "field:endorsement,subscribers_name:"
 msgid "Subscribers Name"
-msgstr ""
+msgstr "Souscripteurs"
 
 msgctxt "field:endorsement,write_date:"
 msgid "Write Date"
