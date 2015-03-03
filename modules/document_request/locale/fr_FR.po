@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,42 +9,6 @@ msgstr "Nom similiare sur les pièces jointes : %s"
 msgctxt "error:document.receive:"
 msgid "No document request found for this object"
 msgstr "Pas de demande de document trouvé pour cet objet"
-
-msgctxt "error:document.request.line:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:document.request.line:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
-msgctxt "error:document.request:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:document.request:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
 
 msgctxt "field:document.receive.attach,attachments:"
 msgid "Attachments"

@@ -2,28 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:account.payment.sepa.mandate:"
-msgid "Can't find configuration for code %s"
-msgstr "Pas de configuration pour le code %s"
-
-msgctxt "error:account.payment.sepa.mandate:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
-"Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
-"\"%s\"."
-
-msgctxt "error:account.payment.sepa.mandate:"
-msgid ""
-"Cannot import : the following objects:\n"
-"%s\n"
-"share the same functional key:\n"
-"\"%s\"."
-msgstr ""
-"Impossible d'importer : Les objets suivants :\n"
-"%s\n"
-"partagent la même clé fonctionnelle :\n"
-"\"%s\"."
-
 msgctxt "error:account.payment:"
 msgid "Unknown amount invoice line : %s %s"
 msgstr "Montant de ligne de quittance inconnu : %s %s"

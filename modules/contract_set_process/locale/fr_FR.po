@@ -2,10 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:contract.set.validate:"
-msgid "Please pick a process from the selection"
-msgstr "Choisir un processus de la sélection"
-
 msgctxt "error:contract.set:"
 msgid "Enter a value for field '%s' of '%s'"
 msgstr "Entrez  une valeur pour le champ '%s' de '%s'"

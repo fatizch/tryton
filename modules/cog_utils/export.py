@@ -73,14 +73,6 @@ class ExportImportMixin(Model):
         cls.__rpc__['multiple_import_json'] = RPC(readonly=False,
             result=lambda r: None)
         cls.__rpc__['ws_consult'] = RPC(readonly=True)
-        cls._error_messages.update({
-                'not_found': 'Cannot import : no object %s with functional '
-                'key: "%s" were found.',
-                'not_unique': 'Cannot import : the following objects:\n%s\n'
-                'share the same functional key:\n"%s".',
-                'missing_export_configuration': "Can't find configuration "
-                "for code %s",
-                })
 
     @classmethod
     def get_xml_id(cls, objects, name):
@@ -286,7 +278,8 @@ class ExportImportMixin(Model):
                 cls.raise_user_error('not_unique',
                     ('\n'.join([(x.__name__ + ' with id ' + str(x.id))
                                 for x in records]),
-                        values['_func_key']))
+                        values['_func_key']),
+                    error_description='export_not_unique')
             record = (records or [None])[0]
         new_values = cls._import_json(values, record)
 
@@ -296,7 +289,8 @@ class ExportImportMixin(Model):
                 return record
             else:
                 cls.raise_user_error('not_found', (cls.__name__,
-                        values['_func_key']))
+                        values['_func_key']),
+                    error_description='export_not_found')
 
         if record:
             cls.write([record], new_values)
@@ -452,7 +446,8 @@ class ExportImportMixin(Model):
                 conf = configurations[0]
             else:
                 cls.raise_user_error('missing_export_configuration',
-                    configuration_code)
+                    configuration_code,
+                    error_description='missing_export_configuration')
         for ext_id, values in objects.iteritems():
             try:
                 possible_objects = cls.search_for_export_import(values)
