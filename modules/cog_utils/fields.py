@@ -84,6 +84,8 @@ class Many2One(tryton_fields.Many2One):
 class One2Many(tryton_fields.One2Many):
     def __init__(self, *args, **kwargs):
         self._delete_missing = kwargs.pop('delete_missing', False)
+        self._ignore_required_warning = kwargs.pop('ignore_required_warning',
+            False)
         super(One2Many, self).__init__(*args, **kwargs)
 
 

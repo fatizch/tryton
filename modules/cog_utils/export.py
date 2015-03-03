@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import copy
 import datetime
 import collections
 try:
@@ -82,26 +81,6 @@ class ExportImportMixin(Model):
                 'missing_export_configuration': "Can't find configuration "
                 "for code %s",
                 })
-
-    @classmethod
-    def __post_setup__(cls):
-        super(ExportImportMixin, cls).__post_setup__()
-        if not hasattr(cls, '_fields'):
-            return
-        for field_name, field in cls._fields.iteritems():
-            if not field.required:
-                continue
-            tmp_field = copy.copy(field)
-            tmp_field.required = False
-            if not tmp_field.states:
-                tmp_field.states = {}
-            if ('required' in tmp_field.states and
-                    tmp_field.states['required'] and tmp_field.required):
-                raise Exception('\'required\' attribute defined both in field '
-                    'definition and states for field %s in model %s' % (
-                        field_name, cls.__name__))
-            tmp_field.states['required'] = True
-            setattr(cls, field_name, tmp_field)
 
     @classmethod
     def get_xml_id(cls, objects, name):
