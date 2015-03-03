@@ -63,6 +63,9 @@ class ModelInfo(ModelView):
             'invisible': ~Bool(Eval('id_to_calculate', False))},
         readonly=True, depends=['id_to_calculate'])
     must_raise_exception = fields.Boolean('Must Raise Exception')
+    previous_runs = fields.Text('Previous runs', states={
+            'invisible': ~Bool(Eval('id_to_calculate', False))},
+        readonly=True, depends=['id_to_calculate'])
 
     @classmethod
     def __setup__(cls):
@@ -134,20 +137,33 @@ class ModelInfo(ModelView):
         self.recalculate_field_infos()
 
     @fields.depends('model_name', 'id_to_calculate', 'to_evaluate',
-        'must_raise_exception')
-    def on_change_with_evaluation_result(self):
-        if (not self.id_to_calculate or not self.to_evaluate or not
-                self.model_name):
-            return ''
+        'must_raise_exception', 'previous_runs')
+    def on_change_to_evaluate(self):
+        if not self.to_evaluate:
+            self.evaluation_result = ''
+            return
+        if not self.id_to_calculate or not self.model_name:
+            self.evaluation_result = ''
+            self.previous_runs = ''
+            return
+        if self.previous_runs:
+            previous_runs = self.previous_runs[1:].split(
+                '\n\n' + '#' * 20 + '\n\n')
+        else:
+            previous_runs = ['']
+        if previous_runs[0] != self.to_evaluate:
+            self.previous_runs = '\n' + ('\n\n' + '#' * 20 + '\n\n').join(
+                [self.to_evaluate] + [x for x in previous_runs if x])
         try:
             context = {
                 'instance': Pool().get(self.model_name)(self.id_to_calculate),
                 }
-            return pprint.pformat(eval(self.to_evaluate, context))
+            self.evaluation_result = pprint.pformat(
+                eval(self.to_evaluate, context))
         except Exception, exc:
             if self.must_raise_exception:
                 raise
-            return 'ERROR: %s' % str(exc)
+            self.evaluation_result = 'ERROR: %s' % str(exc)
 
     def recalculate_field_infos(self):
         self.field_infos = []

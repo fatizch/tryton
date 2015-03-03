@@ -14,5 +14,6 @@
   <newline/>
   <label name="to_evaluate"/>
   <field name="to_evaluate" colspan="5"/>
-  <field name="evaluation_result" colspan="6"/>
+  <field name="evaluation_result" colspan="3"/>
+  <field name="previous_runs" colspan="3"/>
 </form>
