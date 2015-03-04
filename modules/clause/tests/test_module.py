@@ -12,9 +12,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Clause': 'clause',
             }
 
-    @classmethod
-    def get_module_name(cls):
-        return 'clause'
+    module = 'clause'
 
 
 def suite():

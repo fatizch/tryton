@@ -11,9 +11,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
-    @classmethod
-    def get_module_name(cls):
-        return 'country_cog'
+    module = 'country_cog'
 
     def test_replace_city_name(self):
         # tests zip code

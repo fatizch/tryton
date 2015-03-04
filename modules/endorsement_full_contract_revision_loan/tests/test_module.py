@@ -12,9 +12,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
-    @classmethod
-    def get_module_name(cls):
-        return 'endorsement_full_contract_revision_loan'
+    module = 'endorsement_full_contract_revision_loan'
 
 
 def suite():

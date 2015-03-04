@@ -1,6 +1,4 @@
-#-*- coding:utf-8 -*-
-import unittest
-
+# -*- coding:utf-8 -*-
 import trytond.tests.test_tryton
 
 from trytond.modules.cog_utils import test_framework
@@ -10,10 +8,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
-
-    @classmethod
-    def get_module_name(cls):
-        return 'contract_cash_value'
+    module = 'contract_cash_value'
 
 
 def suite():

@@ -7,9 +7,7 @@ from trytond.modules.cog_utils import test_framework
 class ModuleTestCase(test_framework.CoopTestCase):
     'Module Test Case'
 
-    @classmethod
-    def get_module_name(cls):
-        return 'endorsement_premium'
+    module = 'endorsement_premium'
 
 
 def suite():

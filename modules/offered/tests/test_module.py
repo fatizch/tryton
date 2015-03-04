@@ -11,9 +11,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Offered Module
     '''
-    @classmethod
-    def get_module_name(cls):
-        return 'offered'
+    module = 'offered'
 
     @classmethod
     def depending_modules(cls):

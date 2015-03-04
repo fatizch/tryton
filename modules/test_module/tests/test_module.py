@@ -23,9 +23,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
-    @classmethod
-    def get_module_name(cls):
-        return 'test_module'
+    module = 'test_module'
 
     def test9999_launch_test_cases(self):
         pass

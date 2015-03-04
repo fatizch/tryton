@@ -65,6 +65,13 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_loan_user">
+            <field name="model" search="[('model', '=', 'loan')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.sequence.type" id="sequence_type_loan">
             <field name="name">Loan</field>
             <field name="code">loan</field>
@@ -139,6 +146,13 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="access_loan_payment_user">
+            <field name="model" search="[('model', '=', 'loan.payment')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.action.act_window" id="act_loan_payment_relate_form">
           <field name="name">Loan Payments</field>

@@ -9,9 +9,7 @@ from trytond.exceptions import UserError
 class ModuleTestCase(test_framework.CoopTestCase):
     'Module Test Case'
 
-    @classmethod
-    def get_module_name(cls):
-        return 'endorsement_set'
+    module = 'endorsement_set'
 
     @classmethod
     def depending_modules(cls):

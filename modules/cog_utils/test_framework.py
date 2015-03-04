@@ -1,9 +1,9 @@
 import functools
 import os
 import imp
-import unittest
 
 from trytond.transaction import Transaction
+from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT, ModuleTestCase
 
 
 __all__ = [
@@ -32,9 +32,6 @@ def launch_function(module_name, method_name):
 
 
 def prepare_test(*_args):
-    # Do not set this import file-wide, it breaks things
-    from trytond.tests.test_tryton import DB_NAME, USER, CONTEXT
-
     for arg in _args:
         if not isinstance(arg, str) or isinstance(arg, unicode):
             raise Exception('Parameters must be strings, not %s' % type(arg))
@@ -71,12 +68,8 @@ def prepare_test(*_args):
     return decorator
 
 
-class CoopTestCase(unittest.TestCase):
+class CoopTestCase(ModuleTestCase):
     'Coop Test Case'
-
-    @classmethod
-    def get_module_name(cls):
-        raise NotImplementedError
 
     @classmethod
     def depending_modules(cls):
@@ -89,13 +82,14 @@ class CoopTestCase(unittest.TestCase):
     @classmethod
     def install_module(cls):
         import trytond.tests.test_tryton
-        trytond.tests.test_tryton.install_module(cls.get_module_name())
+        trytond.tests.test_tryton.install_module(cls.module)
 
     def run(self, result=None):
         test_function = getattr(self, self._testMethodName)
         if not (hasattr(test_function, '_is_ready') and
                 test_function._is_ready) and not (self._testMethodName in (
-                        'test0005views', 'test0006depends')):
+                        'test_view', 'test_depends', 'test_menu_action',
+                        'test_model_access', 'test9999_launch_test_cases')):
             good_function = functools.partial(
                 prepare_test()(test_function, True), self)
             setattr(self, self._testMethodName, good_function)
@@ -107,7 +101,7 @@ class CoopTestCase(unittest.TestCase):
 
     @classmethod
     def get_all_modules(cls, modules):
-        for module in cls.depending_modules() + [cls.get_module_name()]:
+        for module in cls.depending_modules() + [cls.module]:
             if module in modules:
                 continue
             the_module = get_module_test_case(module)
@@ -144,26 +138,6 @@ class CoopTestCase(unittest.TestCase):
                             getattr(self.TestCaseModel, x)
                             for x in self.get_test_cases_to_run()])
                     Transaction().cursor.commit()
-
-    def test0005views(self):
-        '''
-        Test views.
-        '''
-        import trytond.tests.test_tryton
-        try:
-            trytond.tests.test_tryton.test_view(self.get_module_name())
-        except AssertionError, e:
-            # TODO : Cleaner detection
-            if not e.args[0].startswith('No views for '):
-                raise
-            pass
-
-    def test0006depends(self):
-        '''
-        Test depends.
-        '''
-        import trytond.tests.test_tryton
-        trytond.tests.test_tryton.test_depends()
 
     def test9999_launch_test_cases(self):
         if os.environ.get('DO_NOT_TEST_CASES'):

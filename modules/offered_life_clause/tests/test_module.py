@@ -10,9 +10,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def depending_modules(cls):
         return ['clause']
 
-    @classmethod
-    def get_module_name(cls):
-        return 'offered_life_clause'
+    module = 'offered_life_clause'
 
     def test0001_testBeneficiaryClauseCreation(self):
         # Clause

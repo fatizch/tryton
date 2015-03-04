@@ -74,7 +74,6 @@
     <!-- Rights -->
     <record model="ir.model.access" id="access_commercial_product">
       <field name="model" search="[('model', '=', 'distribution.commercial_product')]"/>
-      <field name="group" ref="contract.group_contract"/>
       <field name="perm_read" eval="True"/>
       <field name="perm_write" eval="False"/>
       <field name="perm_create" eval="False"/>

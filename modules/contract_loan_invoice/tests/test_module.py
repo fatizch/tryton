@@ -10,9 +10,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
-    @classmethod
-    def get_module_name(cls):
-        return 'contract_loan_invoice'
+    module = 'contract_loan_invoice'
 
 
 def suite():

@@ -6,9 +6,7 @@ from trytond.modules.cog_utils import test_framework
 
 
 class ModuleTestCase(test_framework.CoopTestCase):
-    @classmethod
-    def get_module_name(cls):
-        return 'offered_clause'
+    module = 'offered_clause'
 
 
 def suite():

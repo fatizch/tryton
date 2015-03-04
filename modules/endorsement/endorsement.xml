@@ -140,6 +140,13 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="endorsement_sub_state_access_user">
+            <field name="model" search="[('model', '=', 'endorsement.sub_state')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="ir.model.access" id="endorsement_configuration_access">
             <field name="model" search="[('model', '=', 'endorsement.configuration')]"/>
             <field name="group" ref="group_endorsement_admin"/>
@@ -147,6 +154,13 @@
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.model.access" id="endorsement_configuration_access_user">
+            <field name="model" search="[('model', '=', 'endorsement.configuration')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
         </record>
         <!-- ############################################################ -->
         <!-- SubState -->

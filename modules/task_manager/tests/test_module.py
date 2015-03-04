@@ -9,9 +9,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     '''
     Test Coop module.
     '''
-    @classmethod
-    def get_module_name(cls):
-        return 'task_manager'
+    module = 'task_manager'
 
     @classmethod
     def get_models(cls):

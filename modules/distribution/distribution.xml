@@ -66,6 +66,13 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
+        <record model="ir.model.access" id="access_distribution_network_user">
+            <field name="model" search="[('model', '=', 'distribution.network')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
         <record model="res.user-res.group" id="user_admin_group_distribution">
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_distribution"/>
