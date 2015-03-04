@@ -84,8 +84,9 @@ class Endorsement:
             if x.definition.requires_contract_rebill]
         if to_rebill:
             Pool().get('contract').rebill_after_endorsement(sum(
-                    [list(x.contract) for x in to_rebill], []),
-                caller=sum([x.contract_endorsements for x in to_rebill], []))
+                    [list(x.contracts) for x in to_rebill], []),
+                caller=sum([list(x.contract_endorsements)
+                        for x in to_rebill], []))
 
     def find_parts(self, endorsement_part):
         if endorsement_part.kind in 'billing_information':
