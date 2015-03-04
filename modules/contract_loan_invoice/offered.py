@@ -73,7 +73,7 @@ class LoanAveragePremiumRule(model.CoopSQL, model.CoopView):
         depends=['use_default_rule'])
     fee_rules = fields.One2Many('loan.average_premium_rule.fee_rule', 'rule',
         'Fee Rules', states={'invisible': ~Eval('use_default_rule')},
-        depends=['use_default_rule'])
+        depends=['use_default_rule'], delete_missing=True)
 
     @classmethod
     def default_default_fee_action(cls):

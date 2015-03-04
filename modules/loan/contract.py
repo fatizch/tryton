@@ -56,7 +56,7 @@ class Contract:
                 | ~Eval('show_ordered_loans')),
             'readonly': Eval('status') != 'quote',
             },
-        depends=['is_loan', 'status'])
+        depends=['is_loan', 'status'], delete_missing=True)
     used_loans = fields.Function(
         fields.Many2Many('loan', None, None, 'Used Loans',
             context={'contract': Eval('id')}, depends=['id']),
@@ -202,7 +202,8 @@ class ContractOption:
         states={
             'invisible': Eval('coverage_family', '') != 'loan',
             },
-        depends=['coverage_family', 'contract_status'], readonly=True)
+        depends=['coverage_family', 'contract_status'], readonly=True,
+        delete_missing=True)
     latest_loan_shares = fields.Function(
         fields.One2Many('loan.share', 'option', 'Loan Shares', states={
             'invisible': Eval('coverage_family', '') != 'loan',

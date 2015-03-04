@@ -31,7 +31,7 @@ class Contract:
         'All Premiums', readonly=True, order=[('start', 'ASC'),
             ('rated_entity', 'ASC')])
     fees = fields.One2Many('contract.fee', 'contract', 'Fees', states=_STATES,
-        depends=_DEPENDS)
+        depends=_DEPENDS, delete_missing=True)
     premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
     show_premium = fields.Function(
         fields.Boolean('Show Premium'), 'get_show_premium')

@@ -74,7 +74,7 @@ class ContractOption:
             },
         depends=['has_beneficiary_clause', 'contract_status'])
     beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
-        'Beneficiaries',
+        'Beneficiaries', delete_missing=True,
         states={
             'invisible': ~Eval('has_beneficiary_clause'),
             'readonly': Eval('contract_status') != 'quote',

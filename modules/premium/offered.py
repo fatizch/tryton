@@ -90,7 +90,7 @@ class Product:
     fees = fields.Many2Many('offered.product-account.fee', 'product', 'fee',
         'Fees')
     premium_dates = fields.One2Many('offered.product.premium_date', 'product',
-        'Premium Dates')
+        'Premium Dates', delete_missing=True)
 
     def calculate_premiums(self, contract, dates):
         lines = {date: [] for date in dates}
@@ -244,7 +244,7 @@ class OptionDescription:
     fees = fields.Many2Many('offered.option.description-account.fee',
         'coverage', 'fee', 'Fees')
     premium_rules = fields.One2Many('offered.option.description.premium_rule',
-        'coverage', 'Premium Rules')
+        'coverage', 'Premium Rules', delete_missing=True)
     taxes = fields.Many2Many('offered.option.description-account.tax',
         'coverage', 'tax', 'Taxes')
 

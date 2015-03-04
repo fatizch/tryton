@@ -89,7 +89,8 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     first_payment_date = fields.Date('First Payment Date', required=True,
         states=_STATES, depends=_DEPENDS)
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares',
-        readonly=True, states={'invisible': ~Eval('loan_shares')})
+        readonly=True, states={'invisible': ~Eval('loan_shares')},
+        delete_missing=True)
     insured_persons = fields.Function(
         fields.Many2Many('party.party', None, None, 'Insured Persons',
             states={'invisible': ~Eval('insured_persons')}),
@@ -114,7 +115,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
     payments = fields.One2Many('loan.payment', 'loan', 'Payments',
         # We force the order to make sure bisect will work properly
         order=[('start_date', 'ASC')],
-        readonly=True)
+        readonly=True, delete_missing=True)
     increments = fields.One2Many('loan.increment', 'loan', 'Increments',
         context={
             'rate': Eval('rate'),
@@ -124,7 +125,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
             'readonly': (
                 Eval('kind') != 'graduated') | (Eval('state') != 'draft'),
             },
-        depends=['rate'])
+        depends=['rate'], delete_missing=True)
     deferal = fields.Function(
         fields.Selection(DEFERALS, 'Deferal',
             states={

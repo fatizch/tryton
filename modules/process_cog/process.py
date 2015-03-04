@@ -204,7 +204,7 @@ class ProcessLog(model.CoopSQL, model.CoopView):
 class CogProcessFramework(ProcessFramework, model.CoopView):
     'Cog Process Framework'
 
-    logs = fields.One2Many('process.log', 'task', 'Task')
+    logs = fields.One2Many('process.log', 'task', 'Task', delete_missing=True)
     current_log = fields.Function(
         fields.Many2One('process.log', 'Current Log'),
         'get_current_log')

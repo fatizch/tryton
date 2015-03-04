@@ -102,7 +102,7 @@ class EndorsementContract:
         'contract_endorsement', 'Billing Informations', states={
             'readonly': Eval('state') == 'applied',
             },
-        depends=['state', 'definition'],
+        depends=['state', 'definition'], delete_missing=True,
         context={'definition': Eval('definition')})
 
     @classmethod

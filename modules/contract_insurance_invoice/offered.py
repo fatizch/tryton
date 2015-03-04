@@ -77,7 +77,7 @@ class BillingMode(model.CoopSQL, model.CoopView):
     ordered_payment_terms = fields.One2Many(
         'offered.billing.mode-account.invoice.payment_term',
         'billing_mode', 'Ordered Payment Terms',
-        order=[('order', 'ASC')],
+        order=[('order', 'ASC')], delete_missing=True,
         states={'invisible': ~Eval('change_payment_terms_order')})
     sync_day = fields.Selection([('', '')] + [(str(x), str(x))
             for x in xrange(1, 29)], 'Sync Day', states={
@@ -205,12 +205,13 @@ class Product:
     ordered_billing_modes = fields.One2Many(
         'offered.product-offered.billing_mode', 'product',
         'Ordered Billing Mode', order=[('order', 'ASC')],
-        states={'invisible': ~Eval('change_billing_modes_order')})
+        states={'invisible': ~Eval('change_billing_modes_order')},
+        delete_missing=True)
 
     @classmethod
     def _export_light(cls):
-        return (super(Product, cls)._export_light()
-            | set(['account_for_billing']))
+        return (super(Product, cls)._export_light() |
+            set(['account_for_billing']))
 
     def get_change_billing_modes_order(self, name):
         return False
@@ -303,8 +304,8 @@ class OptionDescription:
 
     @classmethod
     def _export_light(cls):
-        return (super(OptionDescription, cls)._export_light()
-            | set(['account_for_billing']))
+        return (super(OptionDescription, cls)._export_light() |
+            set(['account_for_billing']))
 
     def get_account_for_billing(self, line):
         return self.account_for_billing
@@ -369,8 +370,8 @@ class FeeDesc:
 
     @classmethod
     def _export_light(cls):
-        return (super(FeeDesc, cls)._export_light()
-            | set(['account_for_billing']))
+        return (super(FeeDesc, cls)._export_light() |
+            set(['account_for_billing']))
 
 
 class TaxDesc:

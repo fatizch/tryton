@@ -74,7 +74,8 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
     type_ = fields.Selection(TYPE, 'Type', required=True, sort=False)
     type_string = type_.translated('type_')
     kind = fields.Function(fields.Char('Kind'), 'get_kind')
-    cells = fields.One2Many('table.cell', 'definition', 'Cells')
+    cells = fields.One2Many('table.cell', 'definition', 'Cells',
+        delete_missing=True)
     number_of_digits = fields.Integer('Number of Digits', states={
             'invisible': Eval('type_', '') != 'numeric'})
     number_of_dimensions = fields.Function(
@@ -334,7 +335,8 @@ for i in range(1, DIMENSION_MAX + 1):
 
     setattr(TableDefinition, 'dimension%s' % i,
         fields.One2ManyDomain('table.dimension.value', 'definition',
-            'Dimension %s' % i, domain=[('type', '=', 'dimension%s' % i)]))
+            'Dimension %s' % i, domain=[('type', '=', 'dimension%s' % i)],
+            delete_missing=True))
 
 
 def dimension_state(kind):

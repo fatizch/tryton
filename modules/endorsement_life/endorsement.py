@@ -50,7 +50,8 @@ class EndorsementCoveredElementOption:
     __name__ = 'endorsement.contract.covered_element.option'
 
     beneficiaries = fields.One2Many('endorsement.contract.beneficiary',
-        'covered_option_endorsement', 'Beneficiary Endorsement')
+        'covered_option_endorsement', 'Beneficiary Endorsement',
+        delete_missing=True)
 
     @classmethod
     def __setup__(cls):

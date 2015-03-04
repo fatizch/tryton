@@ -559,7 +559,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         'on_change_with_data_tree')
     test_cases = fields.One2Many('rule_engine.test_case', 'rule', 'Test Cases',
         states={'invisible': Eval('id', 0) <= 0},
-        context={'rule_id': Eval('id')})
+        context={'rule_id': Eval('id')}, delete_missing=True)
     status = fields.Selection([
             ('draft', 'Draft'),
             ('validated', 'Validated')],
@@ -573,7 +573,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     execution_code = fields.Function(fields.Text('Execution Code'),
         'on_change_with_execution_code')
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
-        'Parameters', states={'invisible': Or(
+        'Parameters', delete_missing=True, states={'invisible': Or(
                 Eval('extra_data_kind') != 'parameter',
                 ~Eval('extra_data'),
                 )
@@ -1314,7 +1314,7 @@ class TestCase(ModelView, ModelSQL):
         ondelete='CASCADE')
     expected_result = fields.Char('Expected Result')
     test_values = fields.One2Many('rule_engine.test_case.value', 'test_case',
-        'Values', depends=['rule'],
+        'Values', depends=['rule'], delete_missing=True,
         context={'rule_id': Eval('rule')})
     result_value = fields.Char('Result Value')
     result_warnings = fields.Text('Result Warnings')

@@ -53,7 +53,7 @@ class EndorsementContract:
         'contract_endorsement', 'Covered Elements', states={
             'readonly': Eval('state') == 'applied',
             },
-        depends=['state', 'definition'],
+        depends=['state', 'definition'], delete_missing=True,
         context={'definition': Eval('definition')})
 
     @classmethod
@@ -143,7 +143,7 @@ class EndorsementCoveredElement(relation_mixin(
     contract_endorsement = fields.Many2One('endorsement.contract',
         'Endorsement', required=True, select=True, ondelete='CASCADE')
     options = fields.One2Many('endorsement.contract.covered_element.option',
-        'covered_element_endorsement', 'Options')
+        'covered_element_endorsement', 'Options', delete_missing=True)
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
@@ -240,7 +240,8 @@ class EndorsementCoveredElementOption(relation_mixin(
         'endorsement.contract.covered_element', 'Covered Element Endorsement',
         required=True, select=True, ondelete='CASCADE')
     extra_premiums = fields.One2Many('endorsement.contract.extra_premium',
-        'covered_option_endorsement', 'Extra Premium Endorsement')
+        'covered_option_endorsement', 'Extra Premium Endorsement',
+        delete_missing=True)
     coverage = fields.Function(
         fields.Many2One('offered.option.description', 'Coverage'),
         'on_change_with_coverage')

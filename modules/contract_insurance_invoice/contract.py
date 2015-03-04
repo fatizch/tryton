@@ -46,7 +46,9 @@ FREQUENCIES = [
 
 class Contract:
     __name__ = 'contract'
-    invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices')
+
+    invoices = fields.One2Many('contract.invoice', 'contract', 'Invoices',
+        delete_missing=True)
     due_invoices = fields.Function(
         fields.One2Many('contract.invoice', None, 'Due Invoices'),
         'get_due_invoices')
@@ -78,7 +80,7 @@ class Contract:
                     ('direct_debit', '=', False),
                     ('direct_debit_account', '!=', None)],
                 [])
-        ],
+        ], delete_missing=True,
         states=_STATES, depends=['product', 'subscriber', 'status'])
     last_invoice_start = fields.Function(
         fields.Date('Last Invoice Start Date'), 'get_last_invoice',

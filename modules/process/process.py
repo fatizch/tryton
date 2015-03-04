@@ -114,7 +114,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             ('model', '!=', 'process.process_framework')],
         required=True, ondelete='RESTRICT')
     all_steps = fields.One2Many('process-process.step', 'process', 'All Steps',
-        order=[('order', 'ASC')], states={
+        order=[('order', 'ASC')], delete_missing=True, states={
             'invisible': Bool(Eval('display_steps_without_status'))})
     display_steps_without_status = fields.Function(
         fields.Boolean('Display Steps Without Status'),
@@ -123,7 +123,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         'step', 'Steps', states={
             'invisible': Bool(~Eval('display_steps_without_status'))})
     transitions = fields.One2Many('process.transition', 'on_process',
-        'Transitions')
+        'Transitions', delete_missing=True)
     xml_header = fields.Text('Header XML')
     xml_footer = fields.Text('Footer XML')
     xml_tree = fields.Text('Tree View XML', required=True)
@@ -686,8 +686,8 @@ class Code(ModelSQL, ModelView):
         if self.parent_step and self.parent_step.main_model:
             # TODO : to change from process module to coop_process
             return self.parent_step.main_model.id
-        elif (self.parent_transition and self.parent_transition.on_process
-                and self.parent_transition.on_process.on_model):
+        elif (self.parent_transition and self.parent_transition.on_process and
+                self.parent_transition.on_process.on_model):
             return self.parent_transition.on_process.on_model.id
 
 

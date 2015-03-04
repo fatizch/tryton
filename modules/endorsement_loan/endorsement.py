@@ -84,7 +84,7 @@ class Endorsement:
     __name__ = 'endorsement'
 
     loan_endorsements = fields.One2Many('endorsement.loan', 'endorsement',
-        'Loan Endorsement')
+        'Loan Endorsement', delete_missing=True)
     loans = fields.Function(
         fields.Many2Many('loan', '', '', 'Loans'),
         'get_loans', searcher='search_loans')
@@ -181,7 +181,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
         ondelete='CASCADE')
     increments = fields.One2Many('endorsement.loan.increment',
-        'loan_endorsement', 'Loan Increments')
+        'loan_endorsement', 'Loan Increments', delete_missing=True)
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
@@ -351,7 +351,7 @@ class EndorsementCoveredElementOption:
     __name__ = 'endorsement.contract.covered_element.option'
 
     loan_shares = fields.One2Many('endorsement.loan.share',
-        'option_endorsement', 'Loan Shares')
+        'option_endorsement', 'Loan Shares', delete_missing=True)
 
     @classmethod
     def __setup__(cls):

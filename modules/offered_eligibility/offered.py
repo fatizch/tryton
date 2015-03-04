@@ -15,7 +15,7 @@ class OptionDescription:
 
     eligibility_rule = fields.One2Many(
         'offered.option.description.eligibility_rule', 'coverage',
-        'Eligibility Rule')
+        'Eligibility Rule', delete_missing=True)
 
     def check_eligibility(self, exec_context):
         # TODO : Manage multiple eligibility rules

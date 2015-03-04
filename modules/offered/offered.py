@@ -548,7 +548,7 @@ class OptionDescription(model.CoopSQL, Offered):
         fields.Boolean('Is a Service'),
         'on_change_with_is_service')
     ending_rule = fields.One2Many('offered.option.description.ending_rule',
-        'coverage', 'Ending Rule', size=1)
+        'coverage', 'Ending Rule', size=1, delete_missing=True)
 
     def calculate_end_date(self, exec_context):
         if self.ending_rule:

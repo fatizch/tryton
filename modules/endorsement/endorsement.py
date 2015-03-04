@@ -671,7 +671,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
         states={'invisible': Eval('state', '') == 'draft'},
         depends=['state'], ondelete='RESTRICT')
     contract_endorsements = fields.One2Many('endorsement.contract',
-        'endorsement', 'Contract Endorsement')
+        'endorsement', 'Contract Endorsement', delete_missing=True)
     definition = fields.Many2One('endorsement.definition', 'Definition',
         required=True, ondelete='RESTRICT')
     effective_date = fields.Date('Effective Date')
@@ -1054,13 +1054,13 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         'Activation Historry', states={
             'readonly': Eval('state') == 'applied',
             },
-        depends=['state', 'contract', 'definition'],
+        depends=['state', 'contract', 'definition'], delete_missing=True,
         context={'definition': Eval('definition')})
     extra_datas = fields.One2Many('endorsement.contract.extra_data',
         'contract_endorsement', 'Extra Datas', states={
             'readonly': Eval('state') == 'applied',
             },
-        depends=['state', 'definition'],
+        depends=['state', 'definition'], delete_missing=True,
         context={'definition': Eval('definition')})
     contract = fields.Many2One('contract', 'Contract', required=True,
         states={'readonly': Eval('state') == 'applied'}, depends=['state'],
@@ -1071,7 +1071,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         'contract_endorsement', 'Options', states={
             'readonly': Eval('state') == 'applied',
             },
-        depends=['state', 'contract', 'definition'],
+        depends=['state', 'contract', 'definition'], delete_missing=True,
         context={'definition': Eval('definition')})
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),

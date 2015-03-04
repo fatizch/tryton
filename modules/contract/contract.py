@@ -103,7 +103,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         'get_func_key', searcher='search_func_key')
     activation_history = fields.One2Many('contract.activation_history',
         'contract', 'Activation History', order=[('start_date', 'ASC')],
-        states=_STATES, depends=_DEPENDS)
+        states=_STATES, depends=_DEPENDS, delete_missing=True)
     addresses = fields.One2Many('contract.address', 'contract',
         'Addresses', context={
             'policy_owner': Eval('current_policy_owner'),
@@ -120,7 +120,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             'required': Eval('status') == 'active',
             }, depends=_DEPENDS, readonly=True)
     extra_datas = fields.One2Many('contract.extra_data', 'contract',
-        'Extra Data', states={
+        'Extra Data', delete_missing=True, states={
             'invisible': ~Eval('extra_datas'),
             'readonly': Eval('status') != 'quote',
             }, depends=['extra_datas', 'status'])
