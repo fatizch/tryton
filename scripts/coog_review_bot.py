@@ -2,20 +2,31 @@
 # -*- coding: utf-8 -*-
 
 """
-This script will review the pep8 for python file uploaded to rietveld.
-It shoud be launched by a cron job regularly.
+This script ...
+- review python file uploaded to rietveld for pep8 and others rules that
+  apply to coog code.
+- change related redmine issues to 'review' (use the "fix #XXX" keyword in your
+  review title)
+- close issues if called with the '-c' switch
 
-You  need to create a rietveld.conf file in the home directory
+Usage:
+For reviewing purpose, it should be launched by a cron job regularly.
+For closing purpose, you need to add the following in your repo .hg/hgrc :
+     [hooks]
+     incoming = hg log -vr $HG_NODE | python /path/to/coog_review_bot.py -c
+
+Configuration:
+You  need to create a coog.conf file in the home directory
 of the user lauching the script
 The rietveld.conf file should contain the following:
 
 [credentials]
 email = youremail
 password = yourpassword
+redmine_api_key = admin_api_key
 
 [repositories]
 repositories = /path/to/your/repos/directories
-
 """
 
 import re
@@ -28,6 +39,8 @@ import anydbm
 import datetime
 import ConfigParser
 import sys
+import fileinput
+import argparse
 
 import pep8
 import flake8.engine
@@ -37,9 +50,11 @@ from mercurial import ui, hg
 from mercurial import commands
 import hgreview
 
+CONF_FILE = '~/coog.conf'
 TITLE_FORMAT = re.compile('^([A-Za-z_][\w\.-]+)+ ?:')
 CODEREVIEW_URL = 'http://rietveld.coopengo.com'
 REDMINE_URL = 'https://redmine.coopengo.com'
+ISSUE_REGEXP = re.compile('(rietveld.coopengo.com/)([0-9]+)')
 DB_PATH = os.path.expanduser('~/review_bot/.reviewbot.db')  # Adapt to config
 
 
@@ -274,10 +289,12 @@ def finalize_comments(session, issue_info, message):
             })
 
 
-def update_redmine_issue_status(issue_id, description, redmine_api_key):
-    pattern = r"(close|closes|fix|fixes|ref) #([0-9]+)"
+def update_redmine_issue_status(issue_id, description, user, patchset,
+        redmine_api_key):
+    pattern = r"(close|closes|fix|fixes) #([0-9]+)"
     redmine_values = {'status_review': 7, 'field_review': 2}
-    notes = 'Review at %s/%s' % (CODEREVIEW_URL, issue_id)
+    notes = 'Review updated at http://rietveld.coopengo.com/%s/#ps%s' % \
+        (issue_id, patchset)
     matches = re.findall(re.compile(pattern, re.IGNORECASE), description)
     for m in matches:
         redmine_id = m[1]
@@ -292,7 +309,10 @@ def update_redmine_issue_status(issue_id, description, redmine_api_key):
                 }
         requests.put(url, auth=(redmine_api_key, ''),
             data=json.dumps({'issue': issue_changes}),
-            verify=False, headers={'content-type': 'application/json'})
+            verify=False,
+            headers={'content-type': 'application/json',
+                'X-Redmine-Switch-User': user,
+                })
 
 
 def process_issue(session, issue_url, path_to_repo, email, password,
@@ -309,10 +329,13 @@ def process_issue(session, issue_url, path_to_repo, email, password,
     patchset = issue_info['patchsets'][-1]
     if not has_update(issue_id, patchset):
         return
-    is_new = set_update(issue_id, patchset)
-    if is_new:
-        update_redmine_issue_status(issue_info['issue'],
-            issue_info['description'], redmine_api_key)
+    set_update(issue_id, patchset)
+
+    update_redmine_issue_status(issue_info['issue'],
+        issue_info['subject'],
+        issue_info["owner_email"].split('@')[0],
+        patchset,
+        redmine_api_key)
 
     match = TITLE_FORMAT.match(issue_info['subject'])
     if not match:
@@ -358,14 +381,25 @@ def fetch_issues(url, session):
     return issues_urls
 
 
+def close_issue(session, issue_number):
+    url = (session.url
+        + '/'.join(['', str(issue_number), 'close']))
+    r = session.post(url)
+    print r.text
+
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Rietveld bot')
+    parser.add_argument('--close', '-c', help='Close issues found in stdin',
+        action='store_true')
+    arguments = parser.parse_args()
 
     config = ConfigParser.ConfigParser()
     try:
-        with open(os.path.expanduser('~/rietveld.conf'), 'r') as fconf:
+        with open(os.path.expanduser(CONF_FILE), 'r') as fconf:
                 config.readfp(fconf)
     except:
-        print "Error while trying to read from rietveld.conf file"
+        print "Error while trying to read from %s file" % CONF_FILE
         sys.exit(1)
 
     email = config.get('credentials', 'email')
@@ -375,10 +409,15 @@ if __name__ == '__main__':
     session = ReviewSession(CODEREVIEW_URL, email, password)
     most_ancient = datetime.date.today() - datetime.timedelta(days=7)
 
-    issues_urls = fetch_issues(CODEREVIEW_URL +
-        '/search?modified_after=' + str(most_ancient) +
-        '&closed=0&format=json', session)
-
-    for issue_url in issues_urls:
-        process_issue(session, issue_url, path_to_repo, email, password,
-            redmine_api_key)
+    if arguments.close:
+        for line in fileinput.input('-'):
+            mymatch = ISSUE_REGEXP.search(line)
+            if mymatch:
+                close_issue(session, mymatch.groups()[1])
+    else:
+        issues_urls = fetch_issues(CODEREVIEW_URL +
+            '/search?modified_after=' + str(most_ancient) +
+            '&closed=0&format=json', session)
+        for issue_url in issues_urls:
+            process_issue(session, issue_url, path_to_repo, email, password,
+                redmine_api_key)
