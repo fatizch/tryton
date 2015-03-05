@@ -775,7 +775,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             return_values[ext_id] = {'return': True, 'messages': new_message}
             try:
                 for item in objects:
-                    new_message += cls.ws_import_entity(item)
+                    new_message += cls._ws_import_entity(item)
             except UserError as exc:
                 Transaction().cursor.rollback()
                 new_message.append({'error': exc.message})
@@ -786,7 +786,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return return_values
 
     @classmethod
-    def ws_import_entity(cls, item):
+    def _ws_import_entity(cls, item):
         pool = Pool()
         Party = pool.get('party.party')
         return_values = []

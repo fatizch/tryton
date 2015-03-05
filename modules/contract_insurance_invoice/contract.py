@@ -510,7 +510,7 @@ class Contract:
                         ('quote_number', 'in', quote_numbers)])
                 rating_message = {
                     'return': True,
-                    'messages': cls.ws_extract_rating_message(new_contracts),
+                    'messages': cls._ws_extract_rating_message(new_contracts),
                     }
             except UserError as exc:
                 rating_message = {
@@ -522,7 +522,7 @@ class Contract:
             return {contract_dict.keys()[0]: rating_message}
 
     @classmethod
-    def ws_extract_rating_message(cls, contracts):
+    def _ws_extract_rating_message(cls, contracts):
         # TODO : Complete with the actual ratings
         return {contract.quote_number: {'name': contract.rec_name}
             for contract in contracts}

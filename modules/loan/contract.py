@@ -119,6 +119,15 @@ class Contract:
     def setter_void(cls, objects, name, values):
         pass
 
+    @classmethod
+    def _ws_import_entity(cls, item):
+        if item['__name__'] == 'loan':
+            loan = Pool().get('loan').import_json(item)
+            loan.calculate()
+            loan.save()
+            return [{'loan_number': loan.number}]
+        return super(Contract, cls)._ws_import_entity(item)
+
     @staticmethod
     def default_show_ordered_loans():
         return False

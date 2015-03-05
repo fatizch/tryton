@@ -143,6 +143,22 @@ class Contract:
             'premium_amounts'}
 
     @classmethod
+    def ws_subscribe_contracts(cls, contract_dict):
+        with Transaction().set_context(_force_calculate_prices=True):
+            return super(Contract, cls).ws_subscribe_contracts(contract_dict)
+
+    @classmethod
+    def _ws_extract_rating_message(cls, contracts):
+        message = super(Contract, cls)._ws_extract_rating_message(contracts)
+        PremiumPerPeriod = Pool().get('contract.premium.amount.per_period')
+        for contract in contracts:
+            if contract.is_loan:
+                message[contract.quote_number] = [
+                    PremiumPerPeriod.export_json(x)
+                    for x in contract.premium_amounts_per_period]
+        return message
+
+    @classmethod
     def get_total_premium_amount(cls, contracts, name):
         cursor = Transaction().cursor
         pool = Pool()
@@ -359,7 +375,8 @@ class Contract:
     @classmethod
     def _calculate_methods(cls, product):
         methods = super(Contract, cls)._calculate_methods(product)
-        if product.is_loan:
+        if product.is_loan and not Transaction().context.get(
+                '_force_calculate_prices', None):
             methods.remove('calculate_prices')
         return methods
 
