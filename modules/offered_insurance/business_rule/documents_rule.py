@@ -78,8 +78,8 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     def get_selected_version(self, date, language):
         for version in self.versions:
-            if (not version.language == language
-                    and not version.language.code == language):
+            if (not version.language == language and
+                    not version.language.code == language):
                 continue
             if version.start_date > date:
                 continue
@@ -297,46 +297,57 @@ class DocumentGenerateReport(Report):
         filename = '%s - %s - %s' % (selected_letter.name,
             selected_obj.get_rec_name(''),
             Date.date_as_string(utils.today(), selected_party.lang))
-        type, data = cls.parse(action_report, records, data, {})
-        return (type, buffer(data), action_report.direct_print, filename)
+        report_context = cls.get_context(records, data)
+        oext, content = cls.convert(action_report,
+            cls.render(action_report, report_context))
+        return (oext, buffer(content), action_report.direct_print, filename)
 
     @classmethod
-    def parse(cls, report, records, data, localcontext):
+    def get_context(cls, records, data):
+        report_context = super(DocumentGenerateReport, cls).get_context(
+            records, data)
         pool = Pool()
-        localcontext['Party'] = pool.get('party.party')(data['party'])
-        localcontext['Address'] = pool.get('party.address')(data['address'])
+        report_context['Party'] = pool.get('party.party')(data['party'])
+        report_context['Address'] = pool.get('party.address')(data['address'])
         try:
-            localcontext['Lang'] = localcontext['Party'].lang.code
+            report_context['Lang'] = report_context['Party'].lang.code
         except AttributeError:
-            localcontext['Lang'] = pool.get('ir.lang').search([
+            report_context['Lang'] = pool.get('ir.lang').search([
                     ('code', '=', 'en_US')])[0]
         if data['sender']:
-            localcontext['Sender'] = pool.get('party.party')(data['sender'])
+            report_context['Sender'] = pool.get('party.party')(data['sender'])
         else:
-            localcontext['Sender'] = None
+            report_context['Sender'] = None
         if data['sender_address']:
-            localcontext['SenderAddress'] = pool.get(
+            report_context['SenderAddress'] = pool.get(
                 'party.address')(data['sender_address'])
         else:
-            localcontext['SenderAddress'] = None
+            report_context['SenderAddress'] = None
 
         def format_date(value, lang=None):
             if lang is None:
-                lang = localcontext['Party'].lang
+                lang = report_context['Party'].lang
             return pool.get('ir.lang').strftime(value, lang.code, lang.date)
 
-        localcontext['Date'] = pool.get('ir.date').today()
-        localcontext['FDate'] = format_date
-        # localcontext['Logo'] = data['logo']
+        report_context['Date'] = pool.get('ir.date').today()
+        report_context['FDate'] = format_date
+        # report_context['Logo'] = data['logo']
         SelectedModel = pool.get(data['model'])
         selected_obj = SelectedModel(data['id'])
-        localcontext.update(selected_obj.get_publishing_context(localcontext))
-        selected_letter = data['doc_template'][0]
+        report_context.update(selected_obj.get_publishing_context(
+                report_context))
+        return report_context
+
+    @classmethod
+    def render(cls, report, report_context):
+        SelectedModel = Pool().get(report_context['data']['model'])
+        selected_obj = SelectedModel(report_context['data']['id'])
+        selected_letter = report_context['data']['doc_template'][0]
         report.report_content = selected_letter.get_selected_version(
             utils.today(), selected_obj.get_lang()).data
         try:
-            return super(DocumentGenerateReport, cls).parse(
-                report, records, data, localcontext)
+            return super(DocumentGenerateReport, cls).render(
+                report, report_context)
         except Exception, exc:
             # Try to extract the relevant information to display to the user.
             # That would be the part of the genshi template being evaluated and
@@ -349,7 +360,8 @@ class DocumentGenerateReport(Report):
                     if (frame[0] != '<string>' and not
                             frame[0].endswith('.odt')):
                         continue
-                    DocumentCreate = pool.get('document.create', type='wizard')
+                    DocumentCreate = Pool().get('document.create',
+                        type='wizard')
                     DocumentCreate.raise_user_error('parsing_error', (
                             frame[2][14:-2], str(exc)))
                 else:
