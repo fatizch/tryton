@@ -1,8 +1,9 @@
 import pydot
 import datetime
 
-from trytond.model import fields as tryton_fields
+from sql.conditionals import Coalesce
 
+from trytond.model import fields as tryton_fields
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
 from trytond.pyson import Eval, Not, And, Bool
@@ -159,8 +160,14 @@ class ProcessLog(model.CoopSQL, model.CoopView):
         ondelete='SET NULL')
     to_state = fields.Many2One('process-process.step', 'To State', select=True,
         ondelete='SET NULL')
-    start_time = fields.DateTime('Start Time')
-    end_time = fields.DateTime('End Time')
+    start_time = fields.DateTime('Start Time', readonly=True)
+    start_time_str = fields.Function(
+        fields.Char('Start Time'),
+        'on_change_with_start_time_str')
+    end_time = fields.DateTime('End Time', readonly=True)
+    end_time_str = fields.Function(
+        fields.Char('End Time'),
+        'on_change_with_end_time_str')
     description = fields.Text('Description')
     task = fields.Reference(
         'Task', 'get_task_models', select=True, required=True)
@@ -171,6 +178,24 @@ class ProcessLog(model.CoopSQL, model.CoopView):
     @classmethod
     def default_latest(cls):
         return True
+
+    @fields.depends('end_date')
+    def on_change_with_end_time_str(self, name=None):
+        return Pool().get('ir.date').datetime_as_string(self.end_time)
+
+    @fields.depends('start_date')
+    def on_change_with_start_time_str(self, name=None):
+        return Pool().get('ir.date').datetime_as_string(self.start_time)
+
+    @staticmethod
+    def order_end_time_str(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.start_time, datetime.date.max)]
+
+    @staticmethod
+    def order_start_time_str(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.end_time, datetime.date.min)]
 
     @classmethod
     def create(cls, values):

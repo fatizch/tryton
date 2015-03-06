@@ -111,6 +111,27 @@ class DateClass:
             lang = utils.get_user_language()
         return Lang.strftime(date, lang.code, lang.date)
 
+    @classmethod
+    def datetime_as_string(cls, date, lang=None):
+        if date is None:
+            return ''
+        pool = Pool()
+        Lang = pool.get('ir.lang')
+        User = pool.get('res.user')
+        context = Transaction().context
+        lang = lang if lang else Transaction().language
+        if 'locale' in context and 'date' in context['locale']:
+            date_format = context['locale']['date']
+        else:
+            user = User(Transaction().user)
+            if user.language:
+                date_format = User(Transaction().user).language.date
+            else:
+                date_format = '%m/%d/%Y'
+
+        date_format += ' %H:%M:%S'
+        return Lang.strftime(date, lang, date_format)
+
 
 class View(ExportImportMixin):
     __name__ = 'ir.ui.view'
@@ -210,12 +231,12 @@ class Action(ExportImportMixin):
         for table in action_tables:
             if condition is None:
                 condition = (
-                    (table.action == action_table.id)
-                    & (data_table.db_id == table.id))
+                    (table.action == action_table.id) &
+                    (data_table.db_id == table.id))
             else:
                 condition = condition | (
-                    (table.action == action_table.id)
-                    & (data_table.db_id == table.id))
+                    (table.action == action_table.id) &
+                    (data_table.db_id == table.id))
 
         cursor.execute(*query_table.select(action_table.id,
                 Concat(data_table.module, Concat('.', data_table.fs_id)),
@@ -249,18 +270,18 @@ class Action(ExportImportMixin):
         for table in action_tables:
             if condition is None:
                 condition = (
-                    (table.action == action_table.id)
-                    & (data_table.db_id == table.id))
+                    (table.action == action_table.id) &
+                    (data_table.db_id == table.id))
             else:
                 condition = condition | (
-                    (table.action == action_table.id)
-                    & (data_table.db_id == table.id))
+                    (table.action == action_table.id) &
+                    (data_table.db_id == table.id))
 
         cursor.execute(*query_table.select(action_table.id,
-                where=(condition)
-                    & Operator(Concat(data_table.module,
-                            Concat('.', data_table.fs_id)),
-                        getattr(cls, name).sql_format(value))))
+                where=(condition) &
+                Operator(Concat(data_table.module,
+                        Concat('.', data_table.fs_id)),
+                    getattr(cls, name).sql_format(value))))
         return [('id', 'in', [x[0] for x in cursor.fetchall()])]
 
     @classmethod

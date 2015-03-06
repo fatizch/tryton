@@ -2,6 +2,7 @@
 import copy
 import datetime
 from sql.functions import Now
+from sql.conditionals import Coalesce
 
 from trytond.error import UserError
 from trytond.rpc import RPC
@@ -194,8 +195,8 @@ def values_mixin(value_model):
                                     False),
                                 }),
                         'datetime_field': 'applied_on',
-                        'depends': (['values', 'applied_on']
-                            + cls.values.depends),
+                        'depends': (['values', 'applied_on'] +
+                            cls.values.depends),
                         }
                     used_ids.append(vfield.field.id)
             return fields
@@ -392,9 +393,8 @@ def relation_mixin(value_model, field, model, name):
         def read(cls, ids, fields_names=None):
             BaseModel = Pool().get(model)
             relation_fields_to_read = [fname for fname in fields_names
-                if isinstance(cls._fields[fname], tryton_fields.Function)
-                and fname in BaseModel._fields and
-                not cls._fields[fname].getter]
+                if isinstance(cls._fields[fname], tryton_fields.Function) and
+                fname in BaseModel._fields and not cls._fields[fname].getter]
             if relation_fields_to_read:
                 result = super(Mixin, cls).read(ids, list(set(fields_names) -
                         set(relation_fields_to_read)) + ['relation', 'values'])
@@ -666,6 +666,9 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     application_date = fields.DateTime('Application Date', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
         depends=['state'])
+    application_date_str = fields.Function(
+        fields.Char('Application Date'),
+        'on_change_with_application_date_str')
     rollback_date = fields.Timestamp('Rollback Date', readonly=True)
     applied_by = fields.Many2One('res.user', 'Applied by', readonly=True,
         states={'invisible': Eval('state', '') == 'draft'},
@@ -786,6 +789,10 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     def get_subscribers_name(self, name):
         return '\n'.join([x.subscriber.rec_name for x in self.contracts])
 
+    @fields.depends('application_date')
+    def on_change_with_application_date_str(self, name=None):
+        return Pool().get('ir.date').datetime_as_string(self.application_date)
+
     @fields.depends('state')
     def on_change_with_sub_state_required(self, name=None):
         return self.state in _STATES_WITH_SUBSTATES
@@ -801,6 +808,11 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     @classmethod
     def search_contracts(cls, name, clause):
         return [('contract_endorsements.contract',) + tuple(clause[1:])]
+
+    @staticmethod
+    def order_application_date_str(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.application_date, datetime.date.min)]
 
     def all_endorsements(self):
         return self.contract_endorsements
@@ -1231,8 +1243,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                 contract_endorsement.set_applied_on(
                     contract_endorsement.endorsement.rollback_date)
             else:
-                contract_endorsement.set_applied_on(contract.write_date
-                    or contract.create_date)
+                contract_endorsement.set_applied_on(contract.write_date or
+                    contract.create_date)
             values = contract_endorsement.apply_values()
             Contract.write([contract], values)
             contract_endorsement.save()

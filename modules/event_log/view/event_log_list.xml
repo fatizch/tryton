@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree>
-    <field name="date"/>
+    <field name="date_str"/>
     <field name="user"/>
     <field name="event_type"/>
     <field name="object_"/>

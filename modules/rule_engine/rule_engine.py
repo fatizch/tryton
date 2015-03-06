@@ -7,16 +7,18 @@ import tokenize
 import functools
 import json
 import datetime
+import pyflakes.messages
+
 from StringIO import StringIO
 from decimal import Decimal
 from pyflakes.checker import Checker
-import pyflakes.messages
 from sql.aggregate import Count
+from sql.conditionals import Coalesce
 
-from trytond.rpc import RPC
 from trytond import backend
+from trytond.rpc import RPC
 from trytond.cache import Cache
-from trytond.model import ModelView as TrytonModelView
+from trytond.model import DictSchemaMixin, ModelView as TrytonModelView
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
@@ -24,11 +26,10 @@ from trytond.tools.misc import _compile_source, memoize
 from trytond.pyson import Eval, Or, Bool, Not
 
 from trytond.modules.cog_utils import (coop_date, coop_string, fields,
-                                       model, utils)
+    model, utils)
 from trytond.modules.cog_utils.model import CoopSQL as ModelSQL
 from trytond.modules.cog_utils.model import CoopView as ModelView
 from trytond.modules.table import table
-from trytond.model import DictSchemaMixin
 
 __all__ = [
     'debug_wrapper',
@@ -339,16 +340,16 @@ class RuleTools(ModelView):
 
     @classmethod
     def _re_years_between(cls, args, date1, date2):
-        if (not isinstance(date1, datetime.date)
-                or not isinstance(date2, datetime.date)):
+        if (not isinstance(date1, datetime.date) or
+                not isinstance(date2, datetime.date)):
             args['errors'].append('years_between needs datetime types')
             raise CatchedRuleEngineError
         return coop_date.number_of_years_between(date1, date2)
 
     @classmethod
     def _re_days_between(cls, args, date1, date2):
-        if (not isinstance(date1, datetime.date)
-                or not isinstance(date2, datetime.date)):
+        if (not isinstance(date1, datetime.date) or
+                not isinstance(date2, datetime.date)):
             args['errors'].append('days_between needs datetime types')
             raise CatchedRuleEngineError
         return coop_date.number_of_days_between(date1, date2)
@@ -418,8 +419,8 @@ class FunctionFinder(ast.NodeVisitor):
         self.allowed_names = allowed_names
 
     def visit(self, node):
-        if (isinstance(node, ast.Call)
-                and isinstance(node.func, ast.Name)):
+        if (isinstance(node, ast.Call) and
+                isinstance(node.func, ast.Name)):
             if node.func.id not in self.allowed_names:
                 if node.func.id not in ('int', 'round', 'max', 'min'):
                     raise LookupError(node.func.id)
@@ -718,8 +719,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
         test_case = Pool().get('rule_engine.test_case').__table__()
 
         cursor.execute(*rule.join(test_case, 'LEFT OUTER', condition=(
-                    (test_case.rule == rule.id)
-                    & (test_case.last_passing_date == None))
+                    (test_case.rule == rule.id) &
+                    (test_case.last_passing_date == None))
                 ).select(rule.id, Count(test_case.id),
                 where=(rule.id.in_([x.id for x in instances])),
                 group_by=rule.id))
@@ -756,8 +757,8 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     def filter_errors(self, error):
         if isinstance(error, WARNINGS):
             return False
-        elif (isinstance(error, pyflakes.messages.UndefinedName)
-                and error.message_args[0] in self.allowed_functions()):
+        elif (isinstance(error, pyflakes.messages.UndefinedName) and
+                error.message_args[0] in self.allowed_functions()):
             return False
         else:
             return True
@@ -1323,6 +1324,9 @@ class TestCase(ModelView, ModelSQL):
     debug = fields.Text('Debug Info')
     low_debug = fields.Text('Low Level Debug Info')
     last_passing_date = fields.DateTime('Last passing run date')
+    last_passing_date_str = fields.Function(
+        fields.Char('Last Passing run date'),
+        'on_change_with_last_passing_date_str')
     rule_text = fields.Function(
         fields.Text('Rule Text', states={'readonly': True}),
         'get_rule_text')
@@ -1375,6 +1379,15 @@ class TestCase(ModelView, ModelSQL):
         self.low_debug = '\n'.join(test_result.print_low_level_debug())
         self.expected_result = str(test_result)
 
+    @fields.depends('last_passing_date')
+    def on_change_with_last_passing_date_str(self, name=None):
+        return Pool().get('ir.date').datetime_as_string(self.last_passing_date)
+
+    @staticmethod
+    def order_last_passing_date_str(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.last_passing_date, datetime.date.min)]
+
     @classmethod
     @TrytonModelView.button
     def recalculate(cls, instances):
@@ -1425,8 +1438,8 @@ class TestCase(ModelView, ModelSQL):
         result = []
         allowed_functions = the_rule.allowed_functions()
         for error in errors:
-            if (isinstance(error, pyflakes.messages.UndefinedName)
-                    and error.message_args[0] in allowed_functions):
+            if (isinstance(error, pyflakes.messages.UndefinedName) and
+                    error.message_args[0] in allowed_functions):
                 element_name = error.message_args[0]
                 result.append({
                         'name': element_name,

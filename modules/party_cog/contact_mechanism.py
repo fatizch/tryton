@@ -1,4 +1,8 @@
-from trytond.pool import PoolMeta
+import datetime
+
+from sql.conditionals import Coalesce
+
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
@@ -86,6 +90,9 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         states={'invisible': Eval('media') != 'mail'}, ondelete='RESTRICT')
     user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
     contact_datetime = fields.DateTime('Date and Time')
+    contact_datetime_str = fields.Function(
+        fields.Char('Date and Time'),
+        'on_change_with_contact_datetime_str')
     comment = fields.Text('Comment')
     attachment = fields.Many2One('ir.attachment', 'Attachment',
         domain=[('resource', '=', Eval('for_object'))], depends=['for_object'],
@@ -97,8 +104,16 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         states={'readonly': True})
 
     @staticmethod
+    def default_contact_datetime():
+        return utils.today()
+
+    @staticmethod
     def default_user():
         return Transaction().user
+
+    @fields.depends('contact_datetime')
+    def on_change_with_contact_datetime_str(self, name=None):
+        return Pool().get('ir.date').datetime_as_string(self.contact_datetime)
 
     @fields.depends('party', 'for_object_ref')
     def on_change_with_for_object_ref(self):
@@ -114,5 +129,6 @@ class PartyInteraction(model.CoopSQL, model.CoopView):
         return utils.convert_to_reference(self.for_object_ref)
 
     @staticmethod
-    def default_contact_datetime():
-        return utils.today()
+    def order_contact_datetime_str(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.contact_datetime, datetime.date.min)]

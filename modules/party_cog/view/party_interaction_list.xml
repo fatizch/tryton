@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree>
     <field name="party"/>
-    <field name="contact_datetime"/>
+    <field name="contact_datetime_str"/>
     <field name="media"/>
     <field name="title"/>
     <field name="user"/>

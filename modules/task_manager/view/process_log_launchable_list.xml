@@ -2,7 +2,7 @@
 <tree string="Current Tasks" keyword_open="1"
     colors="If(Bool(Eval('locked')), 'red', If(Bool(Eval('is_current_user')), 'blue', 'black'))">
   <field name="user"/>
-  <field name="start_time"/>
+  <field name="start_time_str"/>
   <field name="to_state"/>
   <field name="task"/>
   <field name="locked" tree_invisible="1"/>

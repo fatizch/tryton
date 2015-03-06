@@ -1,4 +1,5 @@
 import datetime
+from sql.conditionals import Coalesce
 
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
@@ -21,10 +22,22 @@ class EventLog(model.CoopSQL, model.CoopView):
     object_ = fields.Reference('Object', selection='models_get', readonly=True,
         required=True)
     date = fields.DateTime('Date', readonly=True, required=True)
+    date_str = fields.Function(
+        fields.Date('Date'),
+        'on_change_with_date_str')
     user = fields.Many2One('res.user', 'User', readonly=True, required=True,
         ondelete='RESTRICT')
     event_type = fields.Many2One('event.type', 'Event Type', required=True,
         ondelete='RESTRICT')
+
+    @fields.depends('date')
+    def on_change_with_date_str(self, name=None):
+        return Pool().get('ir.date').datetime_as_string(self.date)
+
+    @staticmethod
+    def order_date_str(tables):
+        table, _ = tables[None]
+        return [Coalesce(table.date, datetime.date.min)]
 
     @staticmethod
     def models_get():
