@@ -77,7 +77,8 @@ class Commission:
     def invoice(cls, commissions):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        invoices = super(Commission, cls).invoice(commissions)
+        super(Commission, cls).invoice(commissions)
+        invoices = list(set([c.invoice_line.invoice for c in commissions]))
         in_credit_note_invoice = [invoice for invoice in invoices
             if (invoice.total_amount < 0 and invoice.type == 'in_invoice')]
         out_credit_note_invoice = [invoice for invoice in invoices
@@ -86,7 +87,6 @@ class Commission:
             Invoice.write(in_credit_note_invoice, {'type': 'in_credit_note'})
         if out_credit_note_invoice:
             Invoice.write(in_credit_note_invoice, {'type': 'out_credit_note'})
-        return invoices
 
     @classmethod
     def search_type_(cls, name, clause):
@@ -445,7 +445,8 @@ class CreateInvoice:
         Commission = pool.get('commission')
         commissions = Commission.search(self.get_domain(),
             order=[('agent', 'DESC'), ('date', 'DESC')])
-        invoices = Commission.invoice(commissions)
+        Commission.invoice(commissions)
+        invoices = list(set([c.invoice_line.invoice for c in commissions]))
         if self.ask.post_invoices:
             Invoice.write(invoices, {'invoice_date': utils.today()})
             Invoice.post(invoices)
