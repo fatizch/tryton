@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from dateutil.relativedelta import relativedelta
 
 
@@ -113,9 +114,29 @@ def number_of_days_between(start_date, end_date):
     return end_date.toordinal() - start_date.toordinal() + 1
 
 
-def number_of_years_between(date1, date2):
+def prorata_365(date1, date2):
+    nb_days = (date2 - date1).days
+    return nb_days / Decimal(365)
+
+
+def number_of_years_between(date1, date2, prorata_method=None):
+    if date1 > date2:
+        return number_of_years_between(date2, date1, prorata_method)
     date2 = add_day(date2, 1)
-    return relativedelta(date2, date1).years
+    nb_years = relativedelta(date2, date1).years
+    if prorata_method is None:
+        return nb_years
+    try:
+        new_date_1 = datetime.date(date1.year + nb_years, date1.month,
+            date1.day)
+    except ValueError:
+        # Careful for leap years
+        if date1.day == 29 and date1.month == 2:
+            new_date_1 = datetime.date(date1.year + nb_years, date1.month,
+                date1.day - 1)
+        else:
+            raise
+    return nb_years + prorata_method(new_date_1, date2)
 
 
 def number_of_months_between(date1, date2):
@@ -194,14 +215,14 @@ def convert_frequency(from_frequency, to_frequency):
             return 6
         elif freq in ['year', 'yearly']:
             return 12
-    return (convert_frequency_to_month(to_frequency)
-        / float(convert_frequency_to_month(from_frequency)))
+    return (convert_frequency_to_month(to_frequency) /
+        float(convert_frequency_to_month(from_frequency)))
 
 
 def calculate_date_interval(age_min, age_max):
     start_date = datetime.date.today()
-    start_date = start_date.replace(year=start_date.year
-        - int(age_max)).toordinal()
+    start_date = start_date.replace(year=start_date.year -
+        int(age_max)).toordinal()
     end_date = datetime.date.today()
     end_date = end_date.replace(year=end_date.year - int(age_min)).toordinal()
     return [start_date, end_date]
