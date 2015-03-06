@@ -72,14 +72,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # Test leap years
         for period, amount in (
                 ((date(2015, 2, 1), date(2016, 1, 31)), Decimal(100)),
-                # This particular case should not happen. It would mean
-                # that the contract is invoiced annually at a different
-                # date than its anniversary date.
-                ((date(2015, 3, 1), date(2016, 2, 29)),
-                    Decimal(100) * Decimal(366) / Decimal(365)),
+                ((date(2015, 3, 1), date(2016, 2, 29)), Decimal(100)),
                 ((date(2016, 1, 1), date(2016, 1, 31)),
                     Decimal(100) * Decimal(31) / Decimal(365)),
                 ((date(2017, 1, 1), date(2017, 1, 31)),
+                    Decimal(100) * Decimal(31) / Decimal(366)),
+                ((date(2016, 1, 1), date(2017, 1, 31)),
+                    Decimal(100) +
                     Decimal(100) * Decimal(31) / Decimal(366)),
                 ):
             self.assertEqual(premium_yearly.get_amount(*period), amount)

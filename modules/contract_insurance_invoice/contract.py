@@ -836,10 +836,25 @@ class Premium:
     def get_amount(self, start, end):
         if self.frequency in ('once_per_invoice'):
             return self.amount
+        # For yearly frequencies, only use the date to calculate the prorata on
+        # the remaining days, after taking the full years out.
+        #
+        # This is necessary since the yearly frequency is translated in a
+        # daily rule because the number of days may vary.
+        occurences = []
+        if self.frequency.startswith('yearly'):
+            nb_years = coop_date.number_of_years_between(start, end)
+            if nb_years:
+                occurences = [None] * (nb_years - 1) + [
+                    coop_date.add_year(start, nb_years)]
+                start = occurences[-1]
+                occurences[-1] = datetime.datetime.combine(occurences[-1],
+                    datetime.time())
         rrule = self._get_rrule(start)
         start = datetime.datetime.combine(start, datetime.time())
         end = datetime.datetime.combine(end, datetime.time())
-        occurences = rrule.between(start, end + datetime.timedelta(2))
+        if not occurences:
+            occurences = rrule.between(start, end + datetime.timedelta(2))
         amount = len(occurences) * self.amount
         try:
             last_date = occurences[-1]
