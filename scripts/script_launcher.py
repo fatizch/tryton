@@ -149,9 +149,11 @@ def database(arguments, config, work_data):
         cmd = 'sudo su postgres -c "dropdb %s"' % arguments.database
     elif arguments.action == 'install':
         cmd = [work_data['trytond_exec'], '-d', arguments.database,
+            '--logconf', work_data['trytond_log_conf'],
             '-c', work_data['trytond_conf'], '--init', arguments.module]
     elif arguments.action == 'update':
         cmd = [work_data['trytond_exec'], '-d', arguments.database,
+            '--logconf', work_data['trytond_log_conf'],
             '-c', work_data['trytond_conf'], '--update', arguments.module]
     elif arguments.action == 'test_case':
         cmd = [work_data['python_exec'], work_data['tryton_script_launcher'],
@@ -197,8 +199,8 @@ def test(arguments, config, work_data):
         return log_dir
 
     def test_module(module, module_dir, log_folder, base_command_line):
-        if not (os.path.isdir(os.path.join(module_dir, module))
-                and os.path.isfile(os.path.join(module_dir, module,
+        if not (os.path.isdir(os.path.join(module_dir, module)) and
+                os.path.isfile(os.path.join(module_dir, module,
                         'tryton.cfg'))):
             return
         if os.path.isdir(os.path.join(module_dir, module, 'tests')):
@@ -448,8 +450,8 @@ def doc(arguments=None, config=None, work_data=None, override_values=None):
         # return files to NOT copy: any file that is outside of the doc
         # directory of target langage
         lst = [x for x in filenames if
-            (not os.path.isdir(os.path.join(_dir, x))
-                and os.path.join('doc', language) not in _dir)]
+            (not os.path.isdir(os.path.join(_dir, x)) and
+                os.path.join('doc', language) not in _dir)]
         return lst
 
     def strip_accents(s):
