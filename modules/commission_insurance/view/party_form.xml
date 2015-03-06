@@ -12,6 +12,10 @@
             <field name="agents" colspan="4"/>
         </page>
     </xpath>
+    <xpath expr="/form/notebook/page[@id='accounting']/field[@name='supplier_payment_term']" position="after">
+        <label name="automatic_wire_transfer"/>
+        <field name="automatic_wire_transfer"/>
+    </xpath>
     <xpath expr="/form/notebook/page[@id='role']/notebook/page[@id='insurer']/field[@name='insurer_role']" position="after">
         <field name="agents" colspan="4"/>
     </xpath>

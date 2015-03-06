@@ -6,9 +6,17 @@ msgctxt "error:commission.plan:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
-msgctxt "error:commission_plan-commission_plan:"
-msgid "Cannot import : no object %s with functional key: \"%s\" were found."
-msgstr ""
+msgctxt "field:account.configuration,broker_bank_transfer_journal:"
+msgid "Broker Bank Transfer Journal"
+msgstr "Journal de virement des courtiers"
+
+msgctxt "field:account.configuration,broker_check_journal:"
+msgid "Broker Check Journal"
+msgstr "Journal de paiement par chèque des courtiers"
+
+msgctxt "field:account.invoice,is_commission_invoice:"
+msgid "Is Commission Invoice"
+msgstr "Est un bordereau de commissionnement"
 
 msgctxt "field:commission,broker:"
 msgid "Broker"
@@ -225,6 +233,10 @@ msgstr "Tiers du courtier"
 msgctxt "field:party.party,agents:"
 msgid "Agents"
 msgstr "Protocoles de commissionnement"
+
+msgctxt "field:party.party,automatic_wire_transfer:"
+msgid "Automatic Wire Transfer"
+msgstr "Virement automatique"
 
 msgctxt "field:party.party,broker_code:"
 msgid "Broker Code"

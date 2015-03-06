@@ -3,6 +3,7 @@ from .contract import *
 from .commission import *
 from .invoice import *
 from .party import *
+from .payment import *
 
 
 def register():
@@ -15,10 +16,12 @@ def register():
         PlanLinesCoverageRelation,
         Agent,
         InvoiceLine,
+        Invoice,
         Party,
         CreateAgentsParties,
         CreateAgentsAsk,
         CreateInvoiceAsk,
+        Configuration,
         module='commission_insurance', type_='model')
     Pool.register(
         CreateInvoice,

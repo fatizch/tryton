@@ -28,6 +28,8 @@ class Party:
                 [('type_', '=', 'agent')], []),
             If(Bool(Eval('is_insurer')),
                 [('type_', '=', 'principal')], [])])
+    automatic_wire_transfer = fields.Boolean('Automatic Wire Transfer',
+        depends=['is_broker'], states={'invisible': ~Eval('is_broker')})
 
     @classmethod
     def __register__(cls, module_name):
@@ -85,3 +87,7 @@ class Party:
     @classmethod
     def search_broker_code(cls, name, clause):
         return [('network.code',) + tuple(clause[1:])]
+
+    @staticmethod
+    def default_automatic_wire_transfer():
+        return True
