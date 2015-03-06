@@ -10,7 +10,7 @@ __all__ = [
 class MoveLine:
     __name__ = 'account.move.line'
 
-    def init_payment(self, journal):
+    def init_payment(self, journal=None):
         AccountInvoice = Pool().get('account.invoice')
         res = super(MoveLine, self).init_payment(journal)
         if (self.origin and isinstance(self.origin, AccountInvoice) and

@@ -27,7 +27,10 @@ class MoveLine:
         super(MoveLine, cls).__setup__()
         cls._check_modify_exclude.add('payment_date')
 
-    def init_payment(self, journal):
+    def init_payment(self, journal=None):
+        payment_journal = journal or self.get_payment_journal()
+        if not payment_journal:
+            return None
         if self.debit > 0:
             kind = 'receivable'
             payment_amount = self.debit
@@ -39,7 +42,7 @@ class MoveLine:
         return {
             'company': self.account.company.id,
             'kind': kind,
-            'journal': journal.id,
+            'journal': payment_journal.id,
             'party': self.party.id,
             'amount': payment_amount,
             'line': self.id,
@@ -47,20 +50,19 @@ class MoveLine:
             'state': 'approved',
             }
 
+    def get_payment_journal(self):
+        pool = Pool()
+        AccountConfiguration = pool.get('account.configuration')
+        account_configuration = AccountConfiguration(1)
+        return account_configuration.get_payment_journal(self)
+
     @classmethod
     def create_payments(cls, lines):
         pool = Pool()
         Payment = pool.get('account.payment')
-        AccountConfiguration = pool.get('account.configuration')
-
         payments = []
-        account_configuration = AccountConfiguration(1)
-        journal = account_configuration.direct_debit_journal
-        if journal is None:
-            return None
-
         for line in lines:
-            payment = line.init_payment(journal)
+            payment = line.init_payment()
             if not payment:
                 continue
             payments.append(payment)

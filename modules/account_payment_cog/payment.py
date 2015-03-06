@@ -285,6 +285,9 @@ class Configuration:
             field_value, field_value._func_key)}
         return values
 
+    def get_payment_journal(self, line):
+        return self.direct_debit_journal
+
 
 class Group:
     __name__ = 'account.payment.group'
