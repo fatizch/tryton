@@ -55,22 +55,6 @@ fiscalyear.click('create_period')
 _ = create_chart(company)
 accounts = get_accounts(company)
 
-# #Comment# #Create prepayment accounts
-AccountKind = Model.get('account.account.type')
-prepayment_account_kind = AccountKind()
-prepayment_account_kind.name = 'Prepayment Account Kind'
-prepayment_account_kind.company = company
-prepayment_account_kind.save()
-Account = Model.get('account.account')
-prepayment_account = Account()
-prepayment_account.name = 'Product Account'
-prepayment_account.code = 'prepayment_account'
-prepayment_account.kind = 'deposit'
-prepayment_account.type = prepayment_account_kind
-prepayment_account.company = company
-prepayment_account.save()
-accounts['prepayment'] = prepayment_account
-
 # #Comment# #Create Product
 product = init_product()
 product = add_quote_number_generator(product)
@@ -104,7 +88,6 @@ broker_plan = Plan(name='Broker Plan')
 broker_plan.commission_product = commission_product
 broker_plan.commission_method = 'posting'
 broker_plan.type_ = 'agent'
-broker_plan.prepayment_account = accounts['prepayment']
 line = broker_plan.lines.new()
 coverage = product.coverages[0].id
 line.options.append(Coverage(coverage))
