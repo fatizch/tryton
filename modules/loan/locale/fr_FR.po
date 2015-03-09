@@ -1,10 +1,6 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:contract-loan:"
-msgid "Can't find configuration for code %s"
-msgstr ""
 
 msgctxt "error:contract-loan:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -38,10 +34,6 @@ msgid "There must be at least one loan"
 msgstr "Il doit y avoir au moins un prêt"
 
 msgctxt "error:loan.increment:"
-msgid "Can't find configuration for code %s"
-msgstr ""
-
-msgctxt "error:loan.increment:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -60,10 +52,6 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:loan.payment:"
-msgid "Can't find configuration for code %s"
-msgstr ""
-
-msgctxt "error:loan.payment:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -82,10 +70,6 @@ msgstr ""
 "\"%s\"."
 
 msgctxt "error:loan.share:"
-msgid "Can't find configuration for code %s"
-msgstr ""
-
-msgctxt "error:loan.share:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
 msgstr ""
 "Impossible d'importer : aucun objet trouvé %s avec la clé fonctionnelle : "
@@ -102,10 +86,6 @@ msgstr ""
 "%s\n"
 "partagent la même clé fonctionnelle :\n"
 "\"%s\"."
-
-msgctxt "error:loan:"
-msgid "Can't find configuration for code %s"
-msgstr ""
 
 msgctxt "error:loan:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -136,10 +116,6 @@ msgid ""
 msgstr ""
 "Le prêt \"%(loan)s\" est utilisé sur le(s) contrat(s) \"%(contract)s\". Etes"
 " vous sûr de vouloir continuer?"
-
-msgctxt "error:party.synthesis.menu.loan:"
-msgid "Can't find configuration for code %s"
-msgstr ""
 
 msgctxt "error:party.synthesis.menu.loan:"
 msgid "Cannot import : no object %s with functional key: \"%s\" were found."
@@ -315,15 +291,6 @@ msgctxt "field:loan,deferal_duration:"
 msgid "Deferal Duration"
 msgstr "Durée du Différé"
 
-msgctxt "field:loan,duration:"
-msgid "Duration"
-msgstr "Durée"
-
-#, fuzzy
-msgctxt "field:loan,duration_unit:"
-msgid "Unit"
-msgstr "Unité"
-
 msgctxt "field:loan,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
@@ -366,7 +333,7 @@ msgstr "Numéro"
 
 msgctxt "field:loan,number_of_payments:"
 msgid "Number of Payments"
-msgstr "Nombre d'Echéances"
+msgstr "Nombre d'Echéance"
 
 msgctxt "field:loan,order:"
 msgid "Order"
@@ -378,7 +345,7 @@ msgstr "Capital restant dû"
 
 msgctxt "field:loan,payment_frequency:"
 msgid "Payment Frequency"
-msgstr "Fréquence de remboursement"
+msgstr "Périodicité"
 
 msgctxt "field:loan,payments:"
 msgid "Payments"
@@ -753,10 +720,6 @@ msgctxt "field:party.synthesis.menu.loan,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "help:loan,duration:"
-msgid "Deferal included"
-msgstr "Dont différé"
-
 msgctxt "model:contract-loan,name:"
 msgid "Contract Loan"
 msgstr "Prêt du contrat"
@@ -845,14 +808,6 @@ msgstr "Différé Total"
 msgctxt "selection:loan,deferal:"
 msgid "Partially Deferred"
 msgstr "Différé Partiel"
-
-msgctxt "selection:loan,duration_unit:"
-msgid "Month"
-msgstr "Mois"
-
-msgctxt "selection:loan,duration_unit:"
-msgid "Year"
-msgstr "Année"
 
 msgctxt "selection:loan,kind:"
 msgid "Balloon"

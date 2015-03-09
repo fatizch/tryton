@@ -22,15 +22,10 @@
         <field name="currency"/>
         <newline/>
         <newline/>
-        <label name="duration"/>
-        <group id="duration">
-            <field name="duration" xexpand="0"/>
-            <field name="duration_unit" xexpand="0" xalign="0"/>
-        </group>
         <label name="number_of_payments"/>
-        <group id="number_of_payments">
-            <field name="number_of_payments" xexpand="0"/>
-            <field name="payment_frequency" xexpand="0" xalign="0"/>
+        <group id="frequency">
+            <field name="number_of_payments"/>
+            <field name="payment_frequency"/>
         </group>
         <newline/>
         <label name="funds_release_date"/>

@@ -148,10 +148,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             loan.funds_release_date, loan.payment_frequency,
             stick_to_end_of_month=True)
         self.assertEqual(loan.first_payment_date, datetime.date(2014, 6, 5))
-        loan.duration = 14
-        loan.duration_unit = 'year'
-        loan.number_of_payments = loan.on_change_with_number_of_payments()
-        self.assertEqual(loan.number_of_payments, 56)
+        loan.number_of_payments = 56
         loan.amount = Decimal(134566)
         loan.deferal = 'fully'
         loan.deferal_duration = 8
