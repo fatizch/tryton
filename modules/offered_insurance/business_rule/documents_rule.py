@@ -8,6 +8,8 @@ import StringIO
 import shutil
 import tempfile
 
+from time import sleep
+
 from trytond.config import config
 from trytond.model import Model
 from trytond.pool import Pool
@@ -424,12 +426,17 @@ class DocumentFromFilename(Report):
     def unoconv(cls, filepaths, input_format, output_format):
         from trytond.report import FORMAT2EXT
         oext = FORMAT2EXT.get(output_format, output_format)
-        cmd = ['unoconv',
-            '--connection=%s' % config.get('report', 'unoconv'),
+        cmd = ['unoconv', '--connection=%s' % config.get('report', 'unoconv'),
             '-f', oext] + filepaths
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        stdoutdata, stderrdata = proc.communicate()
-        if proc.wait() != 0:
+        for num_try in range(3):
+            # unoconv crashes randomly, re-running it usually suffices to
+            # resolve the problem
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+            stdoutdata, stderrdata = proc.communicate()
+            if proc.wait() == 0:
+                break
+            sleep(.5)
+        else:
             raise Exception(stderrdata)
         output_paths = [os.path.splitext(f)[0] + '.' + output_format for
             f in filepaths]
