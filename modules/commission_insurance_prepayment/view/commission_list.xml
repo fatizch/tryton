@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/tree/field[@name='invoice_state']" position="after">
+        <field name="is_prepayment"/>
+        <field name="redeemed_prepayment"/>
+    </xpath>
+</data>

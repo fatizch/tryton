@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='invoice_state']" position="after">
+        <label name="is_prepayment"/>
+        <field name="is_prepayment"/>
+        <label name="redeemed_prepayment"/>
+        <field name="redeemed_prepayment"/>
+    </xpath>
+</data>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form/field[@name='formula']" position="after">
+        <label name="prepayment_formula"/>
+        <field name="prepayment_formula" colspan="3"/>
+    </xpath>
+</data>

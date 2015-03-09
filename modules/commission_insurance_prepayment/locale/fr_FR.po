@@ -1,0 +1,29 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:commission,is_prepayment:"
+msgid "Is Prepayment"
+msgstr "Précompte"
+
+msgctxt "field:commission,redeemed_prepayment:"
+msgid "Redeemed Prepayment"
+msgstr "Amortissement du précompte"
+
+msgctxt "field:commission.plan,adjust_prepayment:"
+msgid "Adjust Prepayment"
+msgstr "Ajustement du précompte"
+
+msgctxt "field:commission.plan.line,prepayment_formula:"
+msgid "Prepayment Formula"
+msgstr "Formule de calcul du précompte"
+
+msgctxt "field:contract.option,first_year_premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "help:commission.plan.line,prepayment_formula:"
+msgid ""
+"Python expression that will be evaluated with:\n"
+"- amount: the original amount"
+msgstr "Expression python qui va être évalué avec :"

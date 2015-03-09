@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/field[@name='broker_plan']" position="after">
+        <newline/>
+        <label name="adjust_prepayment"/>
+        <field name="adjust_prepayment"/>
+    </xpath>
+</data>
