@@ -94,7 +94,10 @@ class ContractSet(CogProcessFramework):
                             'sender': None,
                             'sender_address': None,
                             })
-            data = Report.unoconv(filedata, 'odt', 'pdf')
+            report = Report()
+            report.template_extension = 'odt'
+            report.extension = 'pdf'
+            _, data = Report.convert(report, filedata)
 
             attachment = Attachment()
             attachment.resource = 'contract.set,%s' % self.id
