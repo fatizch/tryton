@@ -704,8 +704,14 @@ monitor: starts celery flower server on http://localhost:5555"""
 
     argcomplete.autocomplete(parser)
     arguments, extra_args = parser.parse_known_args()
-    arguments.extra = dict(zip(extra_args[0::2], extra_args[1::2]))
 
+    def parse_extra_args(extra_args):
+        extra_args = [x.split('=', 1) for x in extra_args]
+        extra_args = [x for sublist in extra_args for x in sublist]
+        return dict(zip([x.lstrip('-') for x in extra_args[0::2]],
+            extra_args[1::2]))
+
+    arguments.extra = parse_extra_args(extra_args)
     if arguments.command == 'configure':
         configure(arguments.env)
     else:
