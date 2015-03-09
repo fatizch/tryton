@@ -1,17 +1,20 @@
 <?xml version="1.0"?>
 <form string="Change Contract Extra Data">
-    <label name="effective_date"/>
-    <field name="effective_date"/>
-    <label name="endorsement_part"/>
-    <field name="endorsement_part"/>
-    <label name="endorsement_definition"/>
-    <field name="endorsement_definition"/>
+    <label name="effective_date" invisible="1"/>
+    <field name="effective_date" invisible="1"/>
+    <label name="endorsement_part" invisible="1"/>
+    <field name="endorsement_part" invisible="1"/>
+    <label name="endorsement_definition" invisible="1"/>
+    <field name="endorsement_definition" invisible="1"/>
     <newline/>
-    <label name="current_extra_data_date"/>
-    <field name="current_extra_data_date" readonly="1"/>
-    <field name="current_extra_data" readonly="1" colspan="4" no_command="1"/>
-    <newline/>
-    <label name="new_extra_data_date"/>
-    <field name="new_extra_data_date" readonly="1"/>
-    <field name="new_extra_data" colspan="4" no_command="1"/>
+    <group id="current_data" colspan="2">
+        <label name="current_extra_data_date"/>
+        <field name="current_extra_data_date" readonly="1"/>
+        <field name="current_extra_data" readonly="1" colspan="4" no_command="1"/>
+    </group>
+    <group id="new_data" colspan="2">
+        <label name="new_extra_data_date"/>
+        <field name="new_extra_data_date" readonly="1"/>
+        <field name="new_extra_data" colspan="4" no_command="1"/>
+    </group>
 </form>
