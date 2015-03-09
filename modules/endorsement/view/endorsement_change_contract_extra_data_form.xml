@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <form string="Change Contract Extra Data">
-    <label name="effective_date" invisible="1"/>
     <field name="effective_date" invisible="1"/>
-    <label name="endorsement_part" invisible="1"/>
     <field name="endorsement_part" invisible="1"/>
-    <label name="endorsement_definition" invisible="1"/>
     <field name="endorsement_definition" invisible="1"/>
-    <newline/>
     <group id="current_data" colspan="2">
         <label name="current_extra_data_date"/>
         <field name="current_extra_data_date" readonly="1"/>
