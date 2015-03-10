@@ -5,7 +5,7 @@
     <!-- # Document Creation - Select # -->
     <!-- ############################## -->
     <record model="ir.ui.view" id="document_create_select_form">
-      <field name="model">document.create.select</field>
+      <field name="model">report.create.select_template</field>
       <field name="type">form</field>
       <field name="name">document_create_select_form</field>
     </record>
@@ -13,7 +13,7 @@
     <!-- # Document Creation - Preview # -->
     <!-- ############################### -->
     <record model="ir.ui.view" id="document_create_preview_form">
-      <field name="model">document.create.preview</field>
+      <field name="model">report.create.preview</field>
       <field name="type">form</field>
       <field name="name">document_create_preview_form</field>
     </record>
@@ -21,7 +21,7 @@
     <!-- # Document Creation - Report Preview # -->
     <!-- ###################################### -->
     <record model="ir.ui.view" id="document_create_preview_report_list">
-        <field name="model">document.create.preview.report</field>
+        <field name="model">report.create.preview.line</field>
         <field name="type">tree</field>
         <field name="name">document_create_preview_report_list</field>
     </record>
@@ -29,7 +29,7 @@
     <!-- # Document Creation - Attach # -->
     <!-- ############################## -->
     <record model="ir.ui.view" id="document_create_attach_form">
-      <field name="model">document.create.attach</field>
+      <field name="model">report.create.attach</field>
       <field name="type">form</field>
       <field name="name">document_create_attach_form</field>
     </record>
@@ -38,63 +38,63 @@
     <!-- ############################ -->
     <record model="ir.action.wizard" id="letter_generation_wizard">
         <field name="name">Letter Generation</field>
-        <field name="wiz_name">document.create</field>
+        <field name="wiz_name">report.create</field>
     </record>
     <!-- ############################ -->
     <!-- # Document Filename Report # -->
     <!-- ############################ -->
     <record model="ir.action.report" id="generate_file_report">
       <field name="name">Document From Filename</field>
-      <field name="report_name">document.generate.file_report</field>
+      <field name="report_name">report.generate_from_file</field>
     </record>
     <!-- ############################ -->
     <!-- # Letter Generation Report # -->
     <!-- ############################ -->
     <record model="ir.action.report" id="letter_generation_report">
       <field name="name">Letter Report</field>
-      <field name="report_name">document.generate.report</field>
+      <field name="report_name">report.generate</field>
     </record>
     <!-- ##################### -->
-    <!-- # Document Template # -->
+    <!-- # Report Template   # -->
     <!-- ##################### -->
-    <record model="ir.ui.view" id="document_template_form">
-      <field name="model">document.template</field>
+    <record model="ir.ui.view" id="report_template_form">
+      <field name="model">report.template</field>
       <field name="type">form</field>
-      <field name="name">document_template_form</field>
+      <field name="name">report_template_form</field>
     </record>
-    <record model="ir.ui.view" id="document_template_list">
-      <field name="model">document.template</field>
+    <record model="ir.ui.view" id="report_template_list">
+      <field name="model">report.template</field>
       <field name="type">tree</field>
-      <field name="name">document_template_list</field>
+      <field name="name">report_template_list</field>
     </record>
     <record model="ir.action.act_window" id="act_doc_template">
       <field name="name">Document Templates</field>
-      <field name="res_model">document.template</field>
+      <field name="res_model">report.template</field>
     </record>
     <record model="ir.action.act_window.view" id="act_doc_template_view1">
       <field name="sequence" eval="16"/>
-      <field name="view" ref="document_template_list"/>
+      <field name="view" ref="report_template_list"/>
       <field name="act_window" ref="act_doc_template"/>
     </record>
     <record model="ir.action.act_window.view" id="act_doc_template_view2">
       <field name="sequence" eval="16"/>
-      <field name="view" ref="document_template_form"/>
+      <field name="view" ref="report_template_form"/>
       <field name="act_window" ref="act_doc_template"/>
     </record>
     <menuitem parent="offered.menu_product_configuration" sequence="30"
       action="act_doc_template" id="menu_doc_template"/>
     <!-- ############################# -->
-    <!-- # Document Template Version # -->
+    <!-- # Report Template Version   # -->
     <!-- ############################# -->
-    <record model="ir.ui.view" id="document_template_version_form">
-      <field name="model">document.template.version</field>
+    <record model="ir.ui.view" id="report_template_version_form">
+      <field name="model">report.template.version</field>
       <field name="type">form</field>
-      <field name="name">document_template_version_form</field>
+      <field name="name">report_template_version_form</field>
     </record>
-    <record model="ir.ui.view" id="document_template_version_list">
-      <field name="model">document.template.version</field>
+    <record model="ir.ui.view" id="report_template_version_list">
+      <field name="model">report.template.version</field>
       <field name="type">tree</field>
-      <field name="name">document_template_version_list</field>
+      <field name="name">report_template_version_list</field>
     </record>
   </data>
 </tryton>

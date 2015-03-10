@@ -42,13 +42,13 @@ class DocumentRequestBatch(batch.BatchRoot):
 
     @classmethod
     def execute(cls, objects, ids, treatment_date, extra_args):
-        DocumentCreate = Pool().get(
-            'document.create', type='wizard')
+        ReportCreate = Pool().get(
+            'report.create', type='wizard')
         for cur_object in objects:
             with Transaction().set_context(
                     active_model=cur_object.__name__, active_id=cur_object.id):
-                wizard_id, _, _ = DocumentCreate.create()
-                wizard = DocumentCreate(wizard_id)
+                wizard_id, _, _ = ReportCreate.create()
+                wizard = ReportCreate(wizard_id)
                 data = wizard.execute(wizard_id, {}, 'select_model')
                 data = wizard.execute(wizard_id, {
                     'select_model': data['view']['defaults']}, 'generate')
@@ -57,5 +57,5 @@ class DocumentRequestBatch(batch.BatchRoot):
                 ext, _buffer, _, name = Report.execute([data['id']], data)
                 cls.write_batch_output(_buffer, '%s.%s' % (name, ext))
                 wizard.execute(wizard_id, {}, 'post_generation')
-                cls.logger.info('Processed document request for %s' %
+                cls.logger.info('Processed report request for %s' %
                     cur_object.get_rec_name(None))

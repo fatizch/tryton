@@ -990,7 +990,7 @@ msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
-msgctxt "selection:document.template,kind:"
+msgctxt "selection:report.template,kind:"
 msgid "Contract Documents"
 msgstr "Documents du contrat"
 

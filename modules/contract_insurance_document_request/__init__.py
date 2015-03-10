@@ -2,12 +2,13 @@ from trytond.pool import Pool
 from .offered import *
 from .contract import *
 from .document import *
+from .report_engine import *
 
 
 def register():
     Pool.register(
         DocumentRule,
-        DocumentTemplate,
+        ReportTemplate,
         RuleDocumentDescriptionRelation,
         Offered,
         OfferedProduct,

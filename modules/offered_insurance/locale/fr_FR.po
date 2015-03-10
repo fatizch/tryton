@@ -1,8 +1,8 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:document.create:"
+msgctxt "error:report.create:"
 msgid ""
 "Error while generating the letter:\n"
 "\n"
@@ -28,16 +28,15 @@ msgctxt "error:document.rule:"
 msgid "You can not have 2 business rules that overlaps!"
 msgstr "2 règles se chevauchent!"
 
-msgctxt "error:document.template.version:"
+msgctxt "error:report.template.version:"
 msgid "The  names of attachments must be unique by resource!"
-msgstr ""
-"Le nom des pièces jointes doivent être unique pour une même ressource !"
+msgstr "Le nom des pièces jointes doivent être unique pour une même ressource !"
 
-msgctxt "error:document.template:"
+msgctxt "error:report.template:"
 msgid "No letter model found for date %s and language %s"
 msgstr "Pas de modèle de lettre trouvé pour le %s et la langue %s"
 
-msgctxt "error:document.template:"
+msgctxt "error:report.template:"
 msgid "The document template code must be unique"
 msgstr ""
 
@@ -48,6 +47,10 @@ msgstr "Le code doit être unique"
 msgctxt "error:extra_premium.kind:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique"
+
+msgctxt "error:ir.attachment:"
+msgid "Can't decode attachment in base 64"
+msgstr "Impossible de décoder la pièce jointe en base 64"
 
 msgctxt "error:offered.business_rule_root:"
 msgid "You can not have 2 business rules that overlaps!"
@@ -132,75 +135,75 @@ msgctxt "field:clause,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:document.create.attach,attachment:"
+msgctxt "field:report.create.attach,attachment:"
 msgid "Data File"
 msgstr "Fichier"
 
-msgctxt "field:document.create.attach,id:"
+msgctxt "field:report.create.attach,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.create.attach,name:"
+msgctxt "field:report.create.attach,name:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
-msgctxt "field:document.create.preview,email:"
+msgctxt "field:report.create.preview,email:"
 msgid "eMail"
 msgstr "Courrier Electronique"
 
-msgctxt "field:document.create.preview,id:"
+msgctxt "field:report.create.preview,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.create.preview,output_report_filepath:"
+msgctxt "field:report.create.preview,output_report_filepath:"
 msgid "Output Report Filepath"
 msgstr "Chemin du rapport généré"
 
-msgctxt "field:document.create.preview,output_report_name:"
+msgctxt "field:report.create.preview,output_report_name:"
 msgid "Output Report Name"
 msgstr "Nom du rapport"
 
-msgctxt "field:document.create.preview,party:"
+msgctxt "field:report.create.preview,party:"
 msgid "Party"
 msgstr "Acteur"
 
-msgctxt "field:document.create.preview,reports:"
+msgctxt "field:report.create.preview,reports:"
 msgid "Reports"
 msgstr "Rapports"
 
-msgctxt "field:document.create.preview.report,file_basename:"
+msgctxt "field:report.create.preview.line,file_basename:"
 msgid "Filename"
 msgstr "Nom du Fichier"
 
-msgctxt "field:document.create.preview.report,generated_report:"
+msgctxt "field:report.create.preview.line,generated_report:"
 msgid "Link"
 msgstr "Lien"
 
-msgctxt "field:document.create.preview.report,id:"
+msgctxt "field:report.create.preview.line,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.create.preview.report,server_filepath:"
+msgctxt "field:report.create.preview.line,server_filepath:"
 msgid "Server Filename"
 msgstr "Nom du fichier serveur"
 
-msgctxt "field:document.create.select,available_models:"
+msgctxt "field:report.create.select_template,available_models:"
 msgid "Available Models"
 msgstr "Modèles disponibles"
 
-msgctxt "field:document.create.select,good_address:"
+msgctxt "field:report.create.select_template,good_address:"
 msgid "Mail Address"
 msgstr "Adresse du courrier"
 
-msgctxt "field:document.create.select,id:"
+msgctxt "field:report.create.select_template,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.create.select,models:"
+msgctxt "field:report.create.select_template,models:"
 msgid "Models"
 msgstr "Modèles"
 
-msgctxt "field:document.create.select,party:"
+msgctxt "field:report.create.select_template,party:"
 msgid "Party"
 msgstr "Acteur"
 
@@ -512,211 +515,207 @@ msgctxt "field:document.rule-document.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:document.template,code:"
-msgid "Code"
-msgstr "Code"
-
-msgctxt "field:document.template,create_date:"
+msgctxt "field:report.template,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:document.template,create_date_:"
+msgctxt "field:report.template,create_date_:"
 msgid "Creation date"
 msgstr "Creation date"
 
-msgctxt "field:document.template,create_uid:"
+msgctxt "field:report.template,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:document.template,document_desc:"
+msgctxt "field:report.template,document_desc:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
 
-msgctxt "field:document.template,id:"
+msgctxt "field:report.template,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.template,internal_edm:"
+msgctxt "field:report.template,internal_edm:"
 msgid "Use Internal EDM"
 msgstr "Utiliser la ged interne"
 
-msgctxt "field:document.template,kind:"
+msgctxt "field:report.template,kind:"
 msgid "Kind"
 msgstr "Type"
 
-msgctxt "field:document.template,mail_body:"
+msgctxt "field:report.template,mail_body:"
 msgid "eMail Body"
 msgstr "Corps du courrier électronique"
 
-msgctxt "field:document.template,mail_subject:"
+msgctxt "field:report.template,mail_subject:"
 msgid "eMail Subject"
 msgstr "Sujet du courrier électronique"
 
-msgctxt "field:document.template,name:"
+msgctxt "field:report.template,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:document.template,on_model:"
+msgctxt "field:report.template,on_model:"
 msgid "Model"
 msgstr "Modèle"
 
-msgctxt "field:document.template,products:"
+msgctxt "field:report.template,products:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "field:document.template,rec_name:"
+msgctxt "field:report.template,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:document.template,tags:"
+msgctxt "field:report.template,tags:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "field:document.template,tags_name:"
+msgctxt "field:report.template,tags_name:"
 msgid "Tags"
 msgstr "Labels"
 
-msgctxt "field:document.template,versions:"
+msgctxt "field:report.template,versions:"
 msgid "Versions"
 msgstr "Versions"
 
-msgctxt "field:document.template,write_date:"
+msgctxt "field:report.template,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:document.template,write_uid:"
+msgctxt "field:report.template,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:document.template,xml_id:"
+msgctxt "field:report.template,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:document.template-offered.product,create_date:"
+msgctxt "field:report.template-offered.product,create_date:"
 msgid "Create Date"
 msgstr "Date de Création"
 
-msgctxt "field:document.template-offered.product,create_date_:"
+msgctxt "field:report.template-offered.product,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
-msgctxt "field:document.template-offered.product,create_uid:"
+msgctxt "field:report.template-offered.product,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:document.template-offered.product,document_template:"
+msgctxt "field:report.template-offered.product,document_template:"
 msgid "Document"
 msgstr "Document"
 
-msgctxt "field:document.template-offered.product,id:"
+msgctxt "field:report.template-offered.product,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.template-offered.product,product:"
+msgctxt "field:report.template-offered.product,product:"
 msgid "Product"
 msgstr "Produit"
 
-msgctxt "field:document.template-offered.product,rec_name:"
+msgctxt "field:report.template-offered.product,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:document.template-offered.product,write_date:"
+msgctxt "field:report.template-offered.product,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:document.template-offered.product,write_uid:"
+msgctxt "field:report.template-offered.product,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:document.template-offered.product,xml_id:"
+msgctxt "field:report.template-offered.product,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:document.template.version,collision:"
+msgctxt "field:report.template.version,collision:"
 msgid "Collision"
 msgstr "Collision"
 
-msgctxt "field:document.template.version,create_date:"
+msgctxt "field:report.template.version,create_date:"
 msgid "Create Date"
 msgstr "Date de création"
 
-msgctxt "field:document.template.version,create_uid:"
+msgctxt "field:report.template.version,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:document.template.version,data:"
+msgctxt "field:report.template.version,data:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "field:document.template.version,data_size:"
+msgctxt "field:report.template.version,data_size:"
 msgid "Data size"
 msgstr "Taille des données"
 
-msgctxt "field:document.template.version,description:"
+msgctxt "field:report.template.version,description:"
 msgid "Description"
 msgstr "Description"
 
-msgctxt "field:document.template.version,digest:"
+msgctxt "field:report.template.version,digest:"
 msgid "Digest"
 msgstr "Empreinte"
 
-msgctxt "field:document.template.version,end_date:"
+msgctxt "field:report.template.version,end_date:"
 msgid "End date"
 msgstr "Date de Fin"
 
-msgctxt "field:document.template.version,id:"
+msgctxt "field:report.template.version,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.template.version,language:"
+msgctxt "field:report.template.version,language:"
 msgid "Language"
 msgstr "Langues"
 
-msgctxt "field:document.template.version,last_modification:"
+msgctxt "field:report.template.version,last_modification:"
 msgid "Last Modification"
 msgstr "Dernière modification"
 
-msgctxt "field:document.template.version,last_user:"
+msgctxt "field:report.template.version,last_user:"
 msgid "Last User"
 msgstr "Dernier utilisateur"
 
-msgctxt "field:document.template.version,link:"
+msgctxt "field:report.template.version,link:"
 msgid "Link"
 msgstr "Lien"
 
-msgctxt "field:document.template.version,name:"
+msgctxt "field:report.template.version,name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:document.template.version,rec_name:"
+msgctxt "field:report.template.version,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
-msgctxt "field:document.template.version,resource:"
+msgctxt "field:report.template.version,resource:"
 msgid "Resource"
 msgstr "Ressource"
 
-msgctxt "field:document.template.version,start_date:"
+msgctxt "field:report.template.version,start_date:"
 msgid "Start date"
 msgstr "Date de Début"
 
-msgctxt "field:document.template.version,summary:"
+msgctxt "field:report.template.version,summary:"
 msgid "Summary"
 msgstr "Synthèse"
 
-msgctxt "field:document.template.version,type:"
+msgctxt "field:report.template.version,type:"
 msgid "Type"
 msgstr "Type"
 
-msgctxt "field:document.template.version,write_date:"
+msgctxt "field:report.template.version,write_date:"
 msgid "Write Date"
 msgstr "Date de mise à jour"
 
-msgctxt "field:document.template.version,write_uid:"
+msgctxt "field:report.template.version,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
 
-msgctxt "field:document.template.version,xml_id:"
+msgctxt "field:report.template.version,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -1880,19 +1879,19 @@ msgctxt "model:clause,name:"
 msgid "Clause"
 msgstr "Clause"
 
-msgctxt "model:document.create.attach,name:"
+msgctxt "model:report.create.attach,name:"
 msgid "Document Create Attach"
 msgstr "Création de l'attachment"
 
-msgctxt "model:document.create.preview,name:"
+msgctxt "model:report.create.preview,name:"
 msgid "Document Create Preview"
 msgstr "Prévisualisation du document"
 
-msgctxt "model:document.create.preview.report,name:"
+msgctxt "model:report.create.preview.line,name:"
 msgid "Document Create Preview Report"
 msgstr "Rapport de prévisualisation du document"
 
-msgctxt "model:document.create.select,name:"
+msgctxt "model:report.create.select_template,name:"
 msgid "Document Create Select"
 msgstr "Sélection du modèle de Lettre"
 
@@ -1920,15 +1919,15 @@ msgctxt "model:document.request.line,name:"
 msgid "Document Request Line"
 msgstr "Ligne de demande de documents"
 
-msgctxt "model:document.template,name:"
+msgctxt "model:report.template,name:"
 msgid "Document Template"
 msgstr "Modèle de Lettre"
 
-msgctxt "model:document.template-offered.product,name:"
+msgctxt "model:report.template-offered.product,name:"
 msgid "Document template to Product relation"
 msgstr "Relation Modèle de Document - Produit"
 
-msgctxt "model:document.template.version,name:"
+msgctxt "model:report.template.version,name:"
 msgid "Document Template Version"
 msgstr "Version de Lettre"
 
@@ -1956,10 +1955,6 @@ msgctxt "model:ir.action,name:"
 msgid "Clauses"
 msgstr "Clauses"
 
-msgctxt "model:ir.action,name:act_doc_template"
-msgid "Document Templates"
-msgstr "Modèles de Lettre"
-
 msgctxt "model:ir.action,name:act_exclusion_kind"
 msgid "Exclusion Kind"
 msgstr "Type d'exclusion"
@@ -1980,18 +1975,6 @@ msgctxt "model:ir.action,name:act_model_expense_kind"
 msgid "Expenses Kind"
 msgstr "Type de Frais"
 
-msgctxt "model:ir.action,name:generate_file_report"
-msgid "Document From Filename"
-msgstr "Document à partir d'un fichier"
-
-msgctxt "model:ir.action,name:letter_generation_report"
-msgid "Letter Report"
-msgstr "Rapport de courrier"
-
-msgctxt "model:ir.action,name:letter_generation_wizard"
-msgid "Impression du Courrier"
-msgstr "Impression du Courrier"
-
 msgctxt "model:ir.test_case.instance,name:extra_premium_kind_test_case"
 msgid "Extra Premium Kind Test Case"
 msgstr "Jeux d'essai : types de surprime"
@@ -2003,10 +1986,6 @@ msgstr "Jeux d'essai : assureurs"
 msgctxt "model:ir.ui.menu,name:"
 msgid "Clauses"
 msgstr "Clauses"
-
-msgctxt "model:ir.ui.menu,name:menu_doc_template"
-msgid "Document Templates"
-msgstr "Modèles de Lettre"
 
 msgctxt "model:ir.ui.menu,name:menu_exclusion_kind"
 msgid "Exclusion Kind"
@@ -2216,19 +2195,19 @@ msgctxt "model:rule_engine.rule_parameter,string:option_max_age"
 msgid "Maximum age for option (age included)"
 msgstr "Age maximum pour l'option (age inclu)"
 
-msgctxt "selection:document.template,kind:"
+msgctxt "selection:report.template,kind:"
 msgid "Document Request"
 msgstr "Demande de Documents"
 
-msgctxt "selection:document.template.version,resource:"
+msgctxt "selection:report.template.version,resource:"
 msgid "Document Template"
 msgstr "Modèle de Lettre"
 
-msgctxt "selection:document.template.version,type:"
+msgctxt "selection:report.template.version,type:"
 msgid "Data"
 msgstr "Données"
 
-msgctxt "selection:document.template.version,type:"
+msgctxt "selection:report.template.version,type:"
 msgid "Link"
 msgstr "Lien"
 
@@ -2464,19 +2443,19 @@ msgctxt "view:clause:"
 msgid "Clause"
 msgstr "Clause"
 
-msgctxt "view:document.create.attach:"
+msgctxt "view:report.create.attach:"
 msgid "Attachment"
 msgstr "Pièce jointe"
 
-msgctxt "view:document.create.preview.report:"
+msgctxt "view:report.create.preview.line:"
 msgid "Document Preview"
 msgstr "Prévisualisation du document"
 
-msgctxt "view:document.create.preview:"
+msgctxt "view:report.create.preview:"
 msgid "Documents"
 msgstr "Documents"
 
-msgctxt "view:document.create.select:"
+msgctxt "view:report.create.select_template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
@@ -2520,31 +2499,31 @@ msgctxt "view:document.request:"
 msgid "Send Request"
 msgstr "Envoyer la demande"
 
-msgctxt "view:document.template.version:"
+msgctxt "view:report.template.version:"
 msgid "Document Template Version"
 msgstr "Version de Lettre"
 
-msgctxt "view:document.template.version:"
+msgctxt "view:report.template.version:"
 msgid "Document Template Versions"
 msgstr "Versions de Lettre"
 
-msgctxt "view:document.template:"
+msgctxt "view:report.template:"
 msgid "Document Template"
 msgstr "Modèle de Lettre"
 
-msgctxt "view:document.template:"
+msgctxt "view:report.template:"
 msgid "Document Templates"
 msgstr "Modèles de Lettre"
 
-msgctxt "view:document.template:"
+msgctxt "view:report.template:"
 msgid "Mail"
 msgstr "Courrier Electronique"
 
-msgctxt "view:document.template:"
+msgctxt "view:report.template:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "view:document.template:"
+msgctxt "view:report.template:"
 msgid "Versions"
 msgstr "Versions"
 
@@ -2632,31 +2611,31 @@ msgctxt "view:process:"
 msgid "Products"
 msgstr "Produits"
 
-msgctxt "wizard_button:document.create,attach,end:"
+msgctxt "wizard_button:report.create,attach,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:document.create,attach,post_generation:"
+msgctxt "wizard_button:report.create,attach,post_generation:"
 msgid "Attach"
 msgstr "Attacher"
 
-msgctxt "wizard_button:document.create,preview_document,end:"
+msgctxt "wizard_button:report.create,preview_document,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:document.create,preview_document,mail:"
+msgctxt "wizard_button:report.create,preview_document,mail:"
 msgid "Mail"
 msgstr "Courrier Electronique"
 
-msgctxt "wizard_button:document.create,preview_document,select_model:"
+msgctxt "wizard_button:report.create,preview_document,select_model:"
 msgid "Previous"
 msgstr "Précédent"
 
-msgctxt "wizard_button:document.create,select_model,end:"
+msgctxt "wizard_button:report.create,select_model,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:document.create,select_model,preview_document:"
+msgctxt "wizard_button:report.create,select_model,preview_document:"
 msgid "Preview"
 msgstr "Prévisualiser"
 

@@ -115,9 +115,9 @@ class Contract(CogProcessFramework):
         i.e : 'template1', 'template2', etc.
         """
         pool = Pool()
-        Template = pool.get('document.template')
+        Template = pool.get('report.template')
         Attachment = pool.get('ir.attachment')
-        Report = pool.get('document.generate.report', type='report')
+        Report = pool.get('report.generate', type='report')
         Date = pool.get('ir.date')
 
         template_instances = Template.search([('code', 'in', template_codes),

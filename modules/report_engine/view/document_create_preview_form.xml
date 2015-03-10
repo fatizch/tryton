@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form string="Documents">
+<form string="Reports">
     <field name="reports" colspan="4"/>
     <label name="output_report_name"/>
     <field name="output_report_name" colspan="3"/>

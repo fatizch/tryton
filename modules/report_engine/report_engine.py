@@ -10,51 +10,48 @@ import tempfile
 
 from time import sleep
 
+from trytond import backend
+from trytond.pool import Pool
 from trytond.config import config
 from trytond.model import Model
-from trytond.pool import Pool
 from trytond.wizard import Wizard, StateAction, StateView, Button
 from trytond.wizard import StateTransition
 from trytond.report import Report
 from trytond.ir import Attachment
 from trytond.exceptions import UserError
-
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
+
 from trytond.modules.cog_utils import fields, model, utils, coop_string, export
 
 
 __all__ = [
-    'DocumentProductRelation',
-    'DocumentTemplate',
-    'DocumentTemplateVersion',
+    'ReportTemplate',
+    'ReportTemplateVersion',
     'Printable',
-    'DocumentCreateSelect',
-    'DocumentCreatePreview',
-    'DocumentCreatePreviewReport',
-    'DocumentCreateAttach',
-    'DocumentGenerateReport',
-    'DocumentFromFilename',
-    'DocumentCreate',
-    'DocumentCreateAttach',
+    'ReportCreateSelectTemplate',
+    'ReportCreatePreview',
+    'ReportCreatePreviewLine',
+    'ReportGenerate',
+    'ReportGenerateFromFile',
+    'ReportCreate',
+    'ReportCreateAttach',
     ]
 
 
-class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
-    'Document Template'
+class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
+    'Report Template'
 
-    __name__ = 'document.template'
+    __name__ = 'report.template'
     _func_key = 'code'
 
     name = fields.Char('Name', required=True, translate=True)
     on_model = fields.Many2One('ir.model', 'Model',
         domain=[('printable', '=', True)], required=True, ondelete='RESTRICT')
     code = fields.Char('Code', required=True)
-    versions = fields.One2Many('document.template.version', 'resource',
+    versions = fields.One2Many('report.template.version', 'resource',
         'Versions')
     kind = fields.Selection('get_possible_kinds', 'Kind')
-    products = fields.Many2Many('document.template-offered.product',
-        'document_template', 'product', 'Products')
     mail_subject = fields.Char('eMail Subject')
     mail_body = fields.Text('eMail Body')
     internal_edm = fields.Boolean('Use Internal EDM')
@@ -63,7 +60,7 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
 
     @classmethod
     def __setup__(cls):
-        super(DocumentTemplate, cls).__setup__()
+        super(ReportTemplate, cls).__setup__()
         cls._sql_constraints = [
             ('code_unique', 'UNIQUE(code)',
                 'The document template code must be unique'),
@@ -74,8 +71,18 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                 })
 
     @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.3: rename 'document_template' => 'report_template'
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        if TableHandler.table_exist(cursor, 'document_template'):
+            TableHandler.table_rename(cursor, 'document_template',
+                'report_template')
+        super(ReportTemplate, cls).__register__(module_name)
+
+    @classmethod
     def _export_light(cls):
-        return super(DocumentTemplate, cls)._export_light() | {'products',
+        return super(ReportTemplate, cls)._export_light() | {'products',
             'document_desc', 'on_model'}
 
     def get_selected_version(self, date, language):
@@ -102,20 +109,10 @@ class DocumentTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         return coop_string.slugify(self.name)
 
 
-class DocumentProductRelation(model.CoopSQL):
-    'Document template to Product relation'
+class ReportTemplateVersion(Attachment, export.ExportImportMixin):
+    'Report Template Version'
 
-    __name__ = 'document.template-offered.product'
-
-    document_template = fields.Many2One('document.template', 'Document',
-        ondelete='CASCADE')
-    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
-
-
-class DocumentTemplateVersion(Attachment, export.ExportImportMixin):
-    'Document Template Version'
-
-    __name__ = 'document.template.version'
+    __name__ = 'report.template.version'
     _table = None
 
     start_date = fields.Date('Start date', required=True)
@@ -124,10 +121,22 @@ class DocumentTemplateVersion(Attachment, export.ExportImportMixin):
         ondelete='RESTRICT')
 
     @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.3: rename 'document_template' => 'report_template'
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        if TableHandler.table_exist(cursor, 'document_template_version'):
+            TableHandler.table_rename(cursor,
+                'document_template_version', 'report_template_version')
+            cursor.execute("UPDATE report_template_version "
+                "SET resource = REPLACE(resource, 'document.', 'report.')")
+        super(ReportTemplateVersion, cls).__register__(module_name)
+
+    @classmethod
     def __setup__(cls):
-        super(DocumentTemplateVersion, cls).__setup__()
+        super(ReportTemplateVersion, cls).__setup__()
         cls.type.states = {'readonly': True}
-        cls.resource.selection = [('document.template', 'Document Template')]
+        cls.resource.selection = [('report.template', 'Document Template')]
 
     @classmethod
     def default_type(cls):
@@ -135,19 +144,19 @@ class DocumentTemplateVersion(Attachment, export.ExportImportMixin):
 
     @classmethod
     def _export_light(cls):
-        return (super(DocumentTemplateVersion, cls)._export_light() |
+        return (super(ReportTemplateVersion, cls)._export_light() |
             set(['resource', 'language']))
 
     @classmethod
     def _export_skips(cls):
-        return (super(DocumentTemplateVersion, cls)._export_skips() |
+        return (super(ReportTemplateVersion, cls)._export_skips() |
             set(['digest', 'collision']))
 
     @classmethod
     def _import_json(cls, values, main_object=None):
         if 'data' in values:
             values['data'] = base64.b64decode(values['data'])
-        return super(DocumentTemplateVersion, cls)._import_json(values,
+        return super(ReportTemplateVersion, cls)._import_json(values,
             main_object)
 
     def export_json(self, skip_fields=None, already_exported=None,
@@ -173,7 +182,7 @@ class Printable(Model):
         good_model.save()
 
     @classmethod
-    @model.CoopView.button_action('offered_insurance.letter_generation_wizard')
+    @model.CoopView.button_action('report_engine.letter_generation_wizard')
     def generic_send_letter(cls, objs):
         pass
 
@@ -197,7 +206,7 @@ class Printable(Model):
         return address.full_address
 
     def get_available_doc_templates(self, kind=None):
-        DocumentTemplate = Pool().get('document.template')
+        DocumentTemplate = Pool().get('report.template')
 
         if kind:
             domain_kind = ('kind', '=', kind)
@@ -259,15 +268,15 @@ class Printable(Model):
         return self.rec_name
 
 
-class DocumentCreateSelect(model.CoopView):
-    'Document Create Select'
+class ReportCreateSelectTemplate(model.CoopView):
+    'Report Create Select Template'
 
-    __name__ = 'document.create.select'
+    __name__ = 'report.create.select_template'
 
-    models = fields.Many2Many('document.template', None, None, 'Models',
+    models = fields.Many2Many('report.template', None, None, 'Models',
         domain=[('id', 'in', Eval('available_models'))],
         depends=['available_models'])
-    available_models = fields.Many2Many('document.template', None, None,
+    available_models = fields.Many2Many('report.template', None, None,
         'Available Models', states={'readonly': True, 'invisible': True})
     good_address = fields.Many2One('party.address', 'Mail Address',
         domain=[('party', '=', Eval('party'))], depends=['party'],
@@ -276,8 +285,8 @@ class DocumentCreateSelect(model.CoopView):
         states={'invisible': True})
 
 
-class DocumentGenerateReport(Report):
-    __name__ = 'document.generate.report'
+class ReportGenerate(Report):
+    __name__ = 'report.generate'
 
     @classmethod
     def execute(cls, ids, data):
@@ -306,7 +315,7 @@ class DocumentGenerateReport(Report):
 
     @classmethod
     def get_context(cls, records, data):
-        report_context = super(DocumentGenerateReport, cls).get_context(
+        report_context = super(ReportGenerate, cls).get_context(
             records, data)
         pool = Pool()
         report_context['Party'] = pool.get('party.party')(data['party'])
@@ -342,13 +351,14 @@ class DocumentGenerateReport(Report):
 
     @classmethod
     def render(cls, report, report_context):
-        SelectedModel = Pool().get(report_context['data']['model'])
+        pool = Pool()
+        SelectedModel = pool.get(report_context['data']['model'])
         selected_obj = SelectedModel(report_context['data']['id'])
         selected_letter = report_context['data']['doc_template'][0]
         report.report_content = selected_letter.get_selected_version(
             utils.today(), selected_obj.get_lang()).data
         try:
-            return super(DocumentGenerateReport, cls).render(
+            return super(ReportGenerate, cls).render(
                 report, report_context)
         except Exception, exc:
             # Try to extract the relevant information to display to the user.
@@ -362,9 +372,8 @@ class DocumentGenerateReport(Report):
                     if (frame[0] != '<string>' and not
                             frame[0].endswith('.odt')):
                         continue
-                    DocumentCreate = Pool().get('document.create',
-                        type='wizard')
-                    DocumentCreate.raise_user_error('parsing_error', (
+                    ReportCreate = pool.get('report.create', type='wizard')
+                    ReportCreate.raise_user_error('parsing_error', (
                             frame[2][14:-2], str(exc)))
                 else:
                     raise exc
@@ -396,8 +405,8 @@ class DocumentGenerateReport(Report):
             return(client_filepath, server_filepath)
 
 
-class DocumentFromFilename(Report):
-    __name__ = 'document.generate.file_report'
+class ReportGenerateFromFile(Report):
+    __name__ = 'report.generate_from_file'
 
     @classmethod
     def execute(cls, ids, data):
@@ -443,10 +452,10 @@ class DocumentFromFilename(Report):
         return output_paths
 
 
-class DocumentCreatePreviewReport(model.CoopView):
-    'Document Create Preview Report'
+class ReportCreatePreviewLine(model.CoopView):
+    'Report Create Preview Line'
 
-    __name__ = 'document.create.preview.report'
+    __name__ = 'report.create.preview.line'
 
     generated_report = fields.Char('Link')
     server_filepath = fields.Char('Server Filename',
@@ -454,14 +463,14 @@ class DocumentCreatePreviewReport(model.CoopView):
     file_basename = fields.Char('Filename')
 
 
-class DocumentCreatePreview(model.CoopView):
-    'Document Create Preview'
+class ReportCreatePreview(model.CoopView):
+    'Report Create Preview'
 
-    __name__ = 'document.create.preview'
+    __name__ = 'report.create.preview'
 
     party = fields.Many2One('party.party', 'Party',
         states={'invisible': True})
-    reports = fields.One2Many('document.create.preview.report', None,
+    reports = fields.One2Many('report.create.preview.line', None,
         'Reports', states={'readonly': True})
     output_report_name = fields.Char('Output Report Name')
     email = fields.Char('eMail')
@@ -475,42 +484,42 @@ class DocumentCreatePreview(model.CoopView):
             coop_string.slugify(self.output_report_name, lower=False) + '.pdf')
 
 
-class DocumentCreateAttach(model.CoopView):
-    'Document Create Attach'
+class ReportCreateAttach(model.CoopView):
+    'Report Create Attach'
 
-    __name__ = 'document.create.attach'
+    __name__ = 'report.create.attach'
 
     attachment = fields.Binary('Data File', filename='name')
     name = fields.Char('Filename')
 
 
-class DocumentCreate(Wizard):
-    __name__ = 'document.create'
+class ReportCreate(Wizard):
+    __name__ = 'report.create'
 
     start_state = 'select_model'
     post_generation = StateTransition()
-    select_model = StateView('document.create.select',
-        'offered_insurance.document_create_select_form', [
+    select_model = StateView('report.create.select_template',
+        'report_engine.document_create_select_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Preview', 'preview_document', 'tryton-go-next',
                 states={'readonly': ~Eval('models')}, default=True),
             ])
-    preview_document = StateView('document.create.preview',
-        'offered_insurance.document_create_preview_form', [
+    preview_document = StateView('report.create.preview',
+        'report_engine.document_create_preview_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Previous', 'select_model', 'tryton-go-previous'),
             Button('Mail', 'mail', 'tryton-go-next', default=True)
             ])
-    mail = StateAction('offered_insurance.generate_file_report')
-    attach = StateView('document.create.attach',
-        'offered_insurance.document_create_attach_form', [
+    mail = StateAction('report_engine.generate_file_report')
+    attach = StateView('report.create.attach',
+        'report_engine.document_create_attach_form', [
             Button('Cancel', 'end', 'tryton-cancel'),
             Button('Complete', 'post_generation', 'tryton-ok', default=True)])
     attach_to_contact = StateTransition()
 
     @classmethod
     def __setup__(cls):
-        super(DocumentCreate, cls).__setup__()
+        super(ReportCreate, cls).__setup__()
         cls._error_messages.update({
                 'parsing_error': 'Error while generating the letter:\n\n'
                 '  Expression:\n%s\n\n  Error:\n%s',
@@ -534,7 +543,7 @@ class DocumentCreate(Wizard):
     def default_preview_document(self, fields):
         self.remove_EDM_temp_files()
         pool = Pool()
-        ReportModel = pool.get('document.generate.report', type='report')
+        ReportModel = pool.get('report.generate', type='report')
         ContactMechanism = pool.get('party.contact_mechanism')
         ActiveModel = pool.get(Transaction().context.get('active_model'))
         printable_inst = ActiveModel(Transaction().context.get('active_id'))
@@ -574,7 +583,7 @@ class DocumentCreate(Wizard):
 
     def do_mail(self, action):
         pool = Pool()
-        Report = pool.get('document.generate.file_report', type='report')
+        Report = pool.get('report.generate_from_file', type='report')
         Report.generate_single_attachment(
             [d.server_filepath for d in self.preview_document.reports],
             self.preview_document.output_report_filepath)

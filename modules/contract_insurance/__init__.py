@@ -1,7 +1,7 @@
 from trytond.pool import Pool
 from .contract import *
 from .party import *
-from .document import *
+from .report_engine import *
 from .renewal import *
 from .wizard import *
 from .service import *
@@ -22,7 +22,7 @@ def register():
         ExtraPremium,
         OptionExclusionKindRelation,
         OptionTreeExpansion,
-        DocumentTemplate,
+        ReportTemplate,
         ContractService,
         Expense,
         RenewalStart,

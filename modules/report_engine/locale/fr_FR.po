@@ -1,0 +1,67 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:ir.action,name:act_doc_template"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
+msgctxt "model:ir.action,name:generate_file_report"
+msgid "Document From Filename"
+msgstr "Document à partir d'un fichier"
+
+msgctxt "model:ir.action,name:letter_generation_report"
+msgid "Letter Report"
+msgstr "Rapport de courrier"
+
+msgctxt "model:ir.action,name:letter_generation_wizard"
+msgid "Letter Generation"
+msgstr "Impression du Courrier"
+
+msgctxt "model:ir.ui.menu,name:menu_doc_template"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:report.create.attach:"
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+msgctxt "view:report.create.preview.line:"
+msgid "Document Preview"
+msgstr "Prévisualisation du document"
+
+msgctxt "view:report.create.preview:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "view:report.create.select_template:"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:report.template.version:"
+msgid "Document Template Version"
+msgstr "Version de Lettre"
+
+msgctxt "view:report.template.version:"
+msgid "Document Template Versions"
+msgstr "Versions de Lettre"
+
+msgctxt "view:report.template:"
+msgid "Document Template"
+msgstr "Modèle de Lettre"
+
+msgctxt "view:report.template:"
+msgid "Document Templates"
+msgstr "Modèles de Lettre"
+
+msgctxt "view:report.template:"
+msgid "Mail"
+msgstr "Courrier Electronique"
+
+msgctxt "view:report.template:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "view:report.template:"
+msgid "Versions"
+msgstr "Versions"

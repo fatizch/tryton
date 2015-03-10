@@ -38,13 +38,6 @@ def register():
         Model,
         Attachment,
         # From business_rule.documents_rule
-        DocumentTemplate,
-        DocumentProductRelation,
-        DocumentTemplateVersion,
-        DocumentCreateSelect,
-        DocumentCreatePreview,
-        DocumentCreatePreviewReport,
-        DocumentCreateAttach,
         CoverageAmountRule,
         TermRule,
         # From business_rule.exclusion
@@ -61,12 +54,3 @@ def register():
         # From test_case
         TestCaseModel,
         module='offered_insurance', type_='model')
-    Pool.register(
-        # From business_rule.documents_rule
-        DocumentGenerateReport,
-        DocumentFromFilename,
-        module='offered_insurance', type_='report')
-    Pool.register(
-        # From business_rule.documents_rule
-        DocumentCreate,
-        module='offered_insurance', type_='wizard')

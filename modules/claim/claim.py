@@ -12,7 +12,7 @@ from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.benefit.benefit import INDEMNIFICATION_DETAIL_KIND
 from trytond.modules.benefit.benefit import INDEMNIFICATION_KIND
-from trytond.modules.offered_insurance import Printable
+from trytond.modules.report_engine import Printable
 from trytond.modules.currency_cog.currency import DEF_CUR_DIG
 
 

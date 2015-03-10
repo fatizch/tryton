@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 
 from trytond.modules.cog_utils import fields, model, utils
-from trytond.modules.offered_insurance import Printable
+from trytond.modules.report_engine import Printable
 
 __all__ = [
     'DocumentRequestLine',

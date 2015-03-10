@@ -9,7 +9,7 @@ from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import _STATES, _DEPENDS, _CONTRACT_STATUS_STATES
 from trytond.modules.contract import _CONTRACT_STATUS_DEPENDS
-from trytond.modules.offered_insurance import Printable
+from trytond.modules.report_engine import Printable
 
 
 IS_PARTY = Eval('item_kind').in_(['person', 'company', 'party'])

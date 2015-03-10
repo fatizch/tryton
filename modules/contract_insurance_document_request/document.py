@@ -5,7 +5,6 @@ __all__ = [
     'DocumentRequestLine',
     'DocumentRequest',
     'DocumentReceiveRequest',
-    'DocumentTemplate',
     ]
 
 
@@ -41,14 +40,4 @@ class DocumentReceiveRequest:
     def allowed_values(cls):
         result = super(DocumentReceiveRequest, cls).allowed_values()
         result.update({'contract': ('Contract', 'contract_number')})
-        return result
-
-
-class DocumentTemplate:
-    __name__ = 'document.template'
-
-    def get_possible_kinds(self):
-        result = super(DocumentTemplate, self).get_possible_kinds()
-        if self.on_model and self.on_model.model == 'document.request':
-            result.append(('doc_request', 'Document Request'))
         return result
