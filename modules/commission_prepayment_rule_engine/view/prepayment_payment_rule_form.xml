@@ -4,7 +4,7 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
-    <label string="Schedule rule (must return the schedule with the format [(date, percentage), (date2, percentage2)])"/>
+    <label id="Shedule Rule" string="Schedule rule (must return the schedule with the format [(date, percentage), (date2, percentage2)])"/>
     <field name="rule"/>
     <field name="rule_extra_data" no_command="1" colspan="4"/>
 </form>
