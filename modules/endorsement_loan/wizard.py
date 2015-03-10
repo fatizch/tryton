@@ -459,7 +459,7 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
                     # We just want to update the existing loan_share, no need
                     # to create another one
                     loan_share = LoanShareEndorsement(action='update',
-                        relation=existing_shares[0].id,
+                        relation=existing_shares[0].id, loan=None,
                         values={'share': elem.new_share})
                 else:
                     loan_share = LoanShareEndorsement(action='add', values={
