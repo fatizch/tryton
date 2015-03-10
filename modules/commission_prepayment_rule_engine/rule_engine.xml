@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="rule_engine.context" id="commission_context">
+            <field name="name">Commission Context</field>
+        </record>
+        <record model="rule_engine.context-function" id="def_context_commission-te_contract">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="contract.te_contract"/>
+        </record>
+        <record model="rule_engine.context-function" id="cte_commission_coverage">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="offered_insurance.dossier_garantie"/>
+        </record>
+        <record model="rule_engine.context-function" id="cte_commission_tools">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="rule_engine.cte_default_dossier_outils"/>
+        </record>
+    </data>
+</tryton>

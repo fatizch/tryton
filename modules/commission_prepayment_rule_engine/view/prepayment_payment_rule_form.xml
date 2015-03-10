@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<form string="Prepayment Payment Date Rule">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="code"/>
+    <field name="code"/>
+    <label string="Schedule rule (must return the schedule with the format [(date, percentage), (date2, percentage2)])"/>
+    <field name="rule"/>
+    <field name="rule_extra_data" no_command="1" colspan="4"/>
+</form>
