@@ -942,7 +942,7 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
                     return result
             result = origin.execute_after(target)
         result = self.execute_before(target) if not result else result
-        target.set_state(self)
+        target.set_state(self, target.current_state.process.technical_name)
         return result
 
 
