@@ -1,19 +1,10 @@
 from trytond.pool import PoolMeta
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields
-
 __metaclass__ = PoolMeta
 __all__ = [
-    'Model',
     'Attachment',
     ]
-
-
-class Model:
-    __name__ = 'ir.model'
-
-    printable = fields.Boolean('Printable')
 
 
 class Attachment:

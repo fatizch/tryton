@@ -2,6 +2,7 @@ from trytond.pool import Pool
 
 from .batch import *
 from .document import *
+from .ir import *
 
 
 def register():
@@ -12,6 +13,7 @@ def register():
         DocumentReceiveAttach,
         DocumentReceiveSetRequests,
         DocumentRequestBatch,
+        Attachment,
         module='document_request', type_='model')
     Pool.register(
         DocumentReceive,
