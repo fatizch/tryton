@@ -2,4 +2,5 @@
 <tree string="Endorsements">
   <field name="code"/>
   <field name="name"/>
+  <field name="kind"/>
 </tree>
