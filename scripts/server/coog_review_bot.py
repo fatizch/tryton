@@ -36,7 +36,6 @@ import urlparse
 import shutil
 import json
 import anydbm
-import datetime
 import ConfigParser
 import sys
 import fileinput
@@ -49,6 +48,8 @@ import mercurial
 from mercurial import ui, hg
 from mercurial import commands
 import hgreview
+
+from datetime import date, datetime, timedelta
 
 CONF_FILE = '~/coog.conf'
 TITLE_FORMAT = re.compile('^([A-Za-z_][\w\.-]+)+ ?:')
@@ -292,21 +293,41 @@ def finalize_comments(session, issue_info, message):
 def update_redmine_issue_status(issue_id, description, user, patchset,
         redmine_api_key):
     pattern = r"(close|closes|fix|fixes) #([0-9]+)"
-    redmine_values = {'status_review': 7, 'field_review': 2}
+
+    rm_issue_status = {'status_review': 7}
+    rm_custom_fields = {'review_cf': 2}
+
     notes = 'Review updated at http://rietveld.coopengo.com/%s/#ps%s' % \
         (issue_id, patchset)
     matches = re.findall(re.compile(pattern, re.IGNORECASE), description)
     for m in matches:
         redmine_id = m[1]
         url = '%s/issues/%s.json' % (REDMINE_URL, redmine_id)
+        r = requests.get(url, auth=(redmine_api_key, ''), verify=False)
+        issue_json = json.loads(r.text)['issue']
+        next_version = None
+        if 'fixed_version' not in issue_json:
+            url_proj = '%s/projects/%d/versions.json' % (REDMINE_URL,
+                issue_json['project']['id'])
+            r = requests.get(url_proj, auth=(redmine_api_key, ''),
+                headers={'content-type': 'application/json'}, verify=False)
+            versions = json.loads(r.text)['versions']
+            versions = [v for v in versions
+                if (('due_date' in v) and
+                    datetime.strptime(v['due_date'], '%Y-%m-%d').date() >=
+                    date.today() and v['status'] != 'closed')]
+            if versions:
+                next_version = sorted(versions,
+                    key=lambda x: x['due_date'])[0]['id']
+
         issue_changes = {
-                'status_id': redmine_values['status_review'],
+                'status_id': rm_issue_status['status_review'],
                 'notes': notes,
-                'custom_fields': [{
-                        'value': issue_id,
-                        'id': redmine_values['field_review']
-                        }]
-                }
+                'custom_fields': [
+                    {'id': rm_custom_fields['review_cf'], 'value': issue_id},
+                ]}
+        if next_version:
+            issue_changes['fixed_version_id'] = next_version
         requests.put(url, auth=(redmine_api_key, ''),
             data=json.dumps({'issue': issue_changes}),
             verify=False,
@@ -407,7 +428,7 @@ if __name__ == '__main__':
     redmine_api_key = config.get('credentials', 'redmine_api_key')
     path_to_repo = config.get('repositories', 'repositories_url')
     session = ReviewSession(CODEREVIEW_URL, email, password)
-    most_ancient = datetime.date.today() - datetime.timedelta(days=7)
+    most_ancient = date.today() - timedelta(days=7)
 
     if arguments.close:
         for line in fileinput.input('-'):
