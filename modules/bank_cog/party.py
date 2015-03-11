@@ -97,6 +97,23 @@ class Party:
             BankAccount.create([cur_bank_account, ])
             return res
 
+    def get_icon(self, name=None):
+        if self.is_bank:
+            return'bank'
+        return super(Party, self).get_icon(name)
+
+    @classmethod
+    def search_global(cls, text):
+        for record, rec_name, icon in super(Party, cls).search_global(text):
+            if record.is_bank:
+                continue
+            yield record, rec_name, record.get_icon()
+
+    def get_rec_name(self, name):
+        if self.is_bank:
+            return self.full_name
+        return super(Party, self).get_rec_name(name)
+
 
 class SynthesisMenuBankAccoount(model.CoopSQL):
     'Party Synthesis Menu Bank Account'

@@ -282,7 +282,14 @@ class Party(export.ExportImportMixin):
         return res
 
     def get_icon(self, name=None):
+        if self.is_company:
+            return 'coopengo-company'
         return 'coopengo-party'
+
+    @classmethod
+    def search_global(cls, text):
+        for record, rec_name, icon in super(Party, cls).search_global(text):
+            yield record, rec_name, record.get_icon()
 
     def get_relation_with(self, target, at_date=None):
         if not at_date:
@@ -412,12 +419,6 @@ class Party(export.ExportImportMixin):
             pass
         result['logo'] = StringIO.StringIO(str(self.logo)) if self.logo else ''
         return result
-
-    @classmethod
-    def search_global(cls, text):
-        for id_, rec_name, icon in super(Party, cls).search_global(text):
-            icon = icon or 'coopengo-party'
-            yield id_, rec_name, icon
 
     @classmethod
     def update_create_person_dict(cls, person_dict):

@@ -261,6 +261,14 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
         else:
             return super(CoopSQL, cls).copy(objects, default=default)
 
+    def get_icon(self, name=None):
+        return None
+
+    @classmethod
+    def search_global(cls, text):
+        for record, rec_name, icon in super(CoopSQL, cls).search_global(text):
+            yield record, rec_name, record.get_icon()
+
     @classmethod
     def setter_void(cls, objects, name, values):
         pass

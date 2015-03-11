@@ -711,12 +711,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         return result
 
     @classmethod
-    def search_global(cls, text):
-        for id_, rec_name, icon in super(Contract, cls).search_global(text):
-            icon = icon or 'contract'
-            yield id_, rec_name, icon
-
-    @classmethod
     def search_rec_name(cls, name, clause):
         return ['OR', [
                 ('contract_number',) + tuple(clause[1:]),
