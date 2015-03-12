@@ -74,6 +74,14 @@ class Commission:
             )
 
     @classmethod
+    def invoice(cls, commissions):
+        pool = Pool()
+        Fee = pool.get('account.fee')
+        super(Commission, cls).invoice(commissions)
+        invoices = list(set([c.invoice_line.invoice for c in commissions]))
+        Fee.add_broker_fees_to_invoice(invoices)
+
+    @classmethod
     def search_type_(cls, name, clause):
         clause[2] = {'out': 'agent', 'in': 'principal'}.get(clause[2], '')
         return [('agent.type_',) + tuple(clause[1:])],

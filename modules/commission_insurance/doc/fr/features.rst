@@ -12,7 +12,8 @@
       une commission linéaire ou en escompte (taux variant au fil du temps).
 
 - Le **Protocole de commissionnement** est le lien entre un intermédiaire
-  d'assurance (un assureur ou un courtier) et un plan de commissionnement associé.
+  d'assurance (un assureur ou un courtier) et un plan de commissionnement
+  associé.
   Le protocole peut avoir une date de début et une date de fin.
 
 - L'**Assistant de création des protocoles de commissionnement** permet de
@@ -22,3 +23,8 @@
 - L'**Assistant de génération des bordereaux de commissions** permet de générer
   les différents bordereaux des courtiers
 
+- **Gestion des frais d'apporteur**: Un frais peut être typé frais d'apporteur.
+  Le quittancement de ce frais va générer un credit dans le compte défini au
+  niveau du frais. A la génération du bordereaux de l'apporteur, une ligne dans
+  le bordereau sera généré pour tous les frais dont les quittances ont été
+  payées.

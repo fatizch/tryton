@@ -4,6 +4,7 @@ from .commission import *
 from .invoice import *
 from .party import *
 from .payment import *
+from .account import *
 
 
 def register():
@@ -22,6 +23,8 @@ def register():
         CreateAgentsAsk,
         CreateInvoiceAsk,
         Configuration,
+        Fee,
+        MoveLine,
         module='commission_insurance', type_='model')
     Pool.register(
         CreateInvoice,

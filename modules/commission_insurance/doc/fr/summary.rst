@@ -11,3 +11,4 @@ l'assurance.
 - Amélioration de l'ergonomie de la création de courtiers et de protocoles de
   commissionnement
 - Génération simplifiée des bordereaux des courtiers
+- Gestion des frais d'apporteur

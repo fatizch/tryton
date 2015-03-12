@@ -2,6 +2,16 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:account.fee:"
+msgid "Broker Fee"
+msgstr "Frais d'apporteur"
+
+msgctxt "error:account.invoice.line:"
+msgid "No broker define on contract %s for broker fee %s"
+msgstr ""
+"Pas de courtier défini sur le contrat %s pour facturer le frais d'apporteur "
+"%s"
+
 msgctxt "error:commission.plan:"
 msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
@@ -14,9 +24,21 @@ msgctxt "field:account.configuration,broker_check_journal:"
 msgid "Broker Check Journal"
 msgstr "Journal de paiement par chèque des courtiers"
 
+msgctxt "field:account.fee,broker_fee:"
+msgid "Broker Fee"
+msgstr "Frais d'apporteur"
+
 msgctxt "field:account.invoice,is_commission_invoice:"
 msgid "Is Commission Invoice"
 msgstr "Est un bordereau de commissionnement"
+
+msgctxt "field:account.invoice.line,broker_fee_lines:"
+msgid "Broker Fee Lines"
+msgstr "Lignes de frais d'apporteur"
+
+msgctxt "field:account.move.line,broker_fee_invoice_line:"
+msgid "Broker Fee Invoice Line"
+msgstr "Lignes de frais d'apporteur"
 
 msgctxt "field:commission,broker:"
 msgid "Broker"
