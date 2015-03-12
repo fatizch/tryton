@@ -1111,6 +1111,12 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                     'process %s.'),
                 'only_one_endorsement_in_progress': 'There may only be one '
                 'endorsement in_progress at a given time per contract',
+                'mes_option_modifications':
+                'Options Modifications',
+                'mes_activation_history_modifications':
+                'Activation History Modifications',
+                'mes_extra_data_modifications':
+                'Extra Datas Modifications',
                 })
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
@@ -1149,14 +1155,16 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                     option, indent=4)
                 for option in self.options])
         if option_summary:
-            result += '  Option modifications :\n'
+            result += '  %s :\n' % self.raise_user_error(
+                'mes_option_modifications', raise_exception=False)
             result += option_summary
             result += '\n\n'
         activation_summary = '\n'.join([activation_history.get_summary(
                     'contract.activation_history', indent=4)
                 for activation_history in self.activation_history])
         if activation_summary:
-            result += '  Activation modifications :\n'
+            result += '  %s :\n' % self.raise_user_error(
+                'mes_activation_history_modifications', raise_exception=False)
             result += activation_summary
             result += '\n\n'
         extra_data_summary = '\n'.join([extra_data.get_summary(
@@ -1164,7 +1172,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
                     indent=4)
                 for extra_data in self.extra_datas])
         if extra_data_summary:
-            result += '  Extra Data modifications :\n'
+            result += '  %s :\n' % self.raise_user_error(
+                'mes_extra_data_modifications', raise_exception=False)
             result += extra_data_summary
             result += '\n\n'
         return result
