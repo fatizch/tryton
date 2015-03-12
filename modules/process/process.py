@@ -734,7 +734,8 @@ class ProcessTransition(ModelSQL, ModelView):
             result = (self.to_step.execute_before(target)
                 if not result else result)
         if not self.kind == 'complete':
-            target.set_state(self.to_step)
+            target.set_state(
+                self.to_step, target.current_state.process.technical_name)
         else:
             target.set_state(None)
             result = 'close'
