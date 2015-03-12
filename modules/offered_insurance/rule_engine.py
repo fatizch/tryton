@@ -300,3 +300,33 @@ class RuleEngineRuntime:
     @check_args('option')
     def _re_option_code(cls, args):
         return args['option'].coverage.code
+
+    @classmethod
+    @check_args('contract')
+    def _re_number_of_covered_elements(cls, args):
+        contract = args['contract']
+        return len(getattr(contract, 'covered_elements', []))
+
+    @classmethod
+    @check_args('elem', 'contract', 'coverage')
+    def _re_covered_element_rank(cls, args):
+        elem = args['elem']
+        contract = args['contract']
+        i = 0
+        for cov_elem in getattr(contract, 'covered_elements', []):
+            for option in cov_elem.options:
+                if option.coverage == args['coverage']:
+                    i += 1
+            if cov_elem == elem:
+                return i
+
+    @classmethod
+    @check_args('contract', 'coverage')
+    def _re_number_of_covered_elements_for_coverage(cls, args):
+        contract = args['contract']
+        i = 0
+        for cov_elem in getattr(contract, 'covered_elements', []):
+            for option in cov_elem.options:
+                if option.coverage == args['coverage']:
+                    i += 1
+        return i
