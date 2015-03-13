@@ -106,7 +106,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(coop_date.number_of_years_between(start_date,
                 end_date), 1)
         self.assertEqual(coop_date.number_of_years_between(end_date,
-                start_date), 1)
+                start_date), -1)
         self.assertEqual(coop_date.number_of_years_between(start_date,
                 end_date, prorata_method=coop_date.prorata_365),
             1 + Decimal(28) / Decimal(365))
@@ -117,6 +117,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(coop_date.number_of_years_between(start_date,
                 end_date, prorata_method=coop_date.prorata_365),
             1 + Decimal(28) / Decimal(365))
+        # Test negative
+        self.assertEqual(coop_date.number_of_years_between(end_date,
+                start_date, prorata_method=coop_date.prorata_365),
+            -1 - Decimal(28) / Decimal(365))
 
     def test0035_functional_error(self):
         class PatchedView(self.View, model.FunctionalErrorMixIn):

@@ -121,7 +121,7 @@ def prorata_365(date1, date2):
 
 def number_of_years_between(date1, date2, prorata_method=None):
     if date1 > date2:
-        return number_of_years_between(date2, date1, prorata_method)
+        return -number_of_years_between(date2, date1, prorata_method)
     date2 = add_day(date2, 1)
     nb_years = relativedelta(date2, date1).years
     if prorata_method is None:
