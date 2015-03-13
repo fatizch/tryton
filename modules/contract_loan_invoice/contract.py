@@ -483,7 +483,7 @@ class Loan:
             if contract_id:
                 contract = Pool().get('contract')(contract_id)
             else:
-                return {name: {x.id for x in loans} for name in names}
+                return {name: {x.id: None for x in loans} for name in names}
         field_values = {'average_premium_rate': {}, 'base_premium_amount': {}}
         rule = contract.product.average_loan_premium_rule
         for loan in loans:

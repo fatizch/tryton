@@ -331,12 +331,13 @@ Create Test Contract::
     >>> loan_share.loan = loan
     >>> loan_share.share = Decimal('0.95')
     >>> contract.end_date = datetime.date(2030, 12, 1)
+    >>> contract.loans.append(loan)
     >>> contract.save()
 
 New Endorsement::
 
-    >>> new_payment_date = datetime.date(2014, 7, 1)
-    >>> new_end_date = datetime.date(2031, 2, 1)
+    >>> new_payment_date = datetime.date(2014, 4, 30)
+    >>> new_end_date = datetime.date(2030, 11, 30)
     >>> new_endorsement = Wizard('endorsement.start')
     >>> new_endorsement.form.contract = contract
     >>> new_endorsement.form.endorsement_definition = change_first_payment_date
@@ -360,8 +361,10 @@ New Endorsement::
     True
     >>> contract_displayer.new_start_date == contract.start_date
     True
+    >>> contract_displayer.new_end_date == new_end_date
+    True
     >>> contract_displayer.to_update = False
-    >>> contract_displayer.current_end_date == contract.end_date
+    >>> contract_displayer.new_end_date == None
     True
     >>> contract_displayer.to_update = True
     >>> contract_displayer.new_start_date == contract.start_date
@@ -373,7 +376,7 @@ New Endorsement::
 
 Test result::
 
-    >>> new_loan_end_date = datetime.date(2031, 2, 1)
+    >>> new_loan_end_date = datetime.date(2030, 11, 30)
     >>> contract = Contract(contract.id)
     >>> loan = Loan(loan.id)
     >>> contract.end_date == new_end_date

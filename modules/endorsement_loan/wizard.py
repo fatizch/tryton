@@ -280,7 +280,7 @@ class LoanContractDisplayer(model.CoopView):
                     if x.contract.id == contract_id][0]
                 _contract_endorsement.values.pop('end_date', None)
                 _contract_endorsement.values['start_date'] = \
-                    self.new_start_date or self.contract.start_date
+                    self.new_start_date
                 Endorsement.soft_apply([_endorsement])
                 _contract = Contract(contract_id)
                 _contract.calculate()
