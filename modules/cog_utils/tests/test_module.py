@@ -672,6 +672,39 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(len(self.O2MChild.search([
                         ('master', '=', None)])), 0)
 
+    def test0080_apply_dict(self):
+        target = self.ExportTestTarget(char='target')
+        target.save()
+        child1 = self.ExportTestTarget(char='child1')
+        child1.save()
+        child2 = self.ExportTestTarget(char='child2')
+        child2.save()
+        parent = self.ExportTest(char='parent', many2one=target,
+            one2many=[child1, child2])
+        parent.save()
+        utils.apply_dict(parent, {'many2one': child1.id})
+        self.assertEqual(parent.many2one.char, 'child1')
+
+        parent = self.ExportTest(parent.id)
+        self.assertEqual(parent.many2one.char, 'target')
+        utils.apply_dict(parent, {'char': 'foo'})
+        self.assertEqual(parent.char, 'foo')
+        utils.apply_dict(parent, {'one2many':
+                [('delete', [child1.id, child2.id])]})
+        self.assertEqual(len(parent.one2many), 0)
+        utils.apply_dict(parent, {'one2many':
+                [('add', [child1.id, child2.id])]})
+        self.assertEqual(len(parent.one2many), 2)
+        utils.apply_dict(parent, {'one2many':
+                [('create', [{'char': 'bar', 'many2one': target.id}])]})
+        self.assertEqual(len(parent.one2many), 3)
+        utils.apply_dict(parent, {'one2many':
+                [('write', [child2.id], {'char': 'child2_tainted'})]})
+        self.assertEqual(parent.one2many[1].char, 'child2_tainted')
+
+        parent = self.ExportTest(parent.id)
+        self.assertEqual(len(parent.one2many), 2)
+
     def test_string_replace(self):
         s = u'café-THÉ:20$'
 

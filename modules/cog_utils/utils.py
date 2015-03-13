@@ -7,7 +7,7 @@ import random
 from collections import defaultdict
 
 from trytond.pool import Pool
-from trytond.model import Model
+from trytond.model import Model, fields as tryton_fields
 from trytond.transaction import Transaction
 from trytond.model import fields
 
@@ -592,3 +592,54 @@ class ProxyListWithGetter(object):
 def get_history_instance(model_name, instance_id, at_date):
     with Transaction().set_context(_datetime=at_date):
         return Pool().get(model_name)(instance_id)
+
+
+def apply_dict(instance, data_dict):
+    pool = Pool()
+    Model = pool.get(instance.__name__)
+    for k, v in data_dict.iteritems():
+        field = Model._fields[k]
+        value = getattr(instance, k, None)
+        if not v and not value:
+            continue
+        if isinstance(field, tryton_fields.Many2One):
+            if value and value.id == v:
+                continue
+            setattr(instance, k, pool.get(field.model_name)(v))
+        elif isinstance(field, tryton_fields.Reference):
+            model_name, value_id = v.split(',')
+            if model_name == value.__name__ and value_id == value.id:
+                continue
+            setattr(instance, k, pool.get(model_name)(value_id))
+        elif isinstance(field, (tryton_fields.One2Many,
+                    tryton_fields.Many2Many)):
+            to_keep = {x.id: x for x in (value or [])}
+            prev_order = [x.id for x in (value or [])]
+            new_values = []
+            for action_data in v:
+                if action_data[0] == 'delete':
+                    for id_to_del in action_data[1]:
+                        del to_keep[id_to_del]
+                elif action_data[0] == 'write':
+                    for id_to_update in action_data[1]:
+                        apply_dict(to_keep[id_to_update], action_data[2])
+                elif action_data[0] == 'add':
+                    for id_to_add in action_data[1]:
+                        if id_to_add not in to_keep:
+                            new_values.append(pool.get(field.model_name)(
+                                    id_to_add))
+                elif action_data[0] == 'create':
+                    for data_dict in action_data[1]:
+                        new_instance = pool.get(field.model_name)()
+                        apply_dict(new_instance, data_dict)
+                        new_values.append(new_instance)
+                elif action_data[0] == 'remove' and isinstance(field,
+                        tryton_fields.Many2Many):
+                    for id_to_remove in action_data[1]:
+                        del to_keep[id_to_remove]
+                else:
+                    raise Exception('unsupported operation')
+            clean_list = [to_keep[x] for x in prev_order if x in to_keep]
+            setattr(instance, k, clean_list + new_values)
+        else:
+            setattr(instance, k, v)
