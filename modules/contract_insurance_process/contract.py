@@ -1,5 +1,6 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.rpc import RPC
+from trytond.pyson import Eval, Or, Bool
 from trytond.transaction import Transaction
 from trytond.modules.cog_utils import fields, utils
 
@@ -36,6 +37,12 @@ class Contract(CogProcessFramework):
                 'have an address',
                 })
         cls.__rpc__.update({'get_allowed_payment_methods': RPC(instantiate=0)})
+        cls._buttons['button_activate']['invisible'] = Or(
+            cls._buttons['button_activate']['invisible'],
+            Bool(Eval('current_state', False)))
+        cls._buttons['button_decline']['invisible'] = Or(
+            cls._buttons['button_decline']['invisible'],
+            Bool(Eval('current_state', False)))
 
     @classmethod
     def copy(cls, contracts, default=None):
