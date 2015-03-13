@@ -138,34 +138,6 @@
             <field name="fct_args">Code donnee complementaire</field>
             <field name="parent" ref="dossier_donnees_couverture"/>
         </record>
-        <record model="rule_engine.function" id="number_of_covered_elements">
-            <field name="translated_technical_name">nombre_elements_couverts</field>
-            <field name="description">Nombre élements couverts</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_number_of_covered_elements</field>
-            <field name="parent" ref="contract.te_contract"/>
-        </record>
-        <record model="rule_engine.function" id="_re_covered_element_rank">
-            <field name="translated_technical_name">rang_element_couvert</field>
-            <field name="description">Rang élement couvert</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_covered_element_rank</field>
-            <field name="long_description">Retourne le rang de l'élement couvert courant pour la garantie courante à partir de 1.</field>
-            <field name="parent" ref="dossier_garantie"/>
-        </record>
-        <record model="rule_engine.function" id="number_of_covered_elements_for_coverage">
-            <field name="translated_technical_name">nombre_elements_couverts_pour_garantie</field>
-            <field name="description">Nombre élements couverts pour la garantie</field>
-            <field name="type">function</field>
-            <field name="language" ref="ir.lang_fr"/>
-            <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_number_of_covered_elements_for_coverage</field>
-            <field name="parent" ref="dossier_garantie"/>
-        </record>
         <record model="rule_engine.function" id="dossier_rule_combination">
             <field name="translated_technical_name">dossier_rule_combination</field>
             <field name="description">Combinaison de règles</field>

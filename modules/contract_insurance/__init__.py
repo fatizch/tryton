@@ -5,6 +5,7 @@ from .report_engine import *
 from .renewal import *
 from .wizard import *
 from .service import *
+from .rule_engine import *
 
 from trytond.modules.cog_utils import expand_tree
 CoveredElementTreeExpansion = expand_tree('contract.covered_element')
@@ -35,6 +36,7 @@ def register():
         ExtraPremiumDisplay,
         ExclusionSelector,
         ExclusionDisplay,
+        RuleEngineRuntime,
         module='contract_insurance', type_='model')
 
     Pool.register(
