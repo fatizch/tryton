@@ -43,7 +43,7 @@ _CONTRACT_STATUS_STATES = {
     'readonly': Eval('contract_status') != 'quote',
     }
 _CONTRACT_STATUS_DEPENDS = ['contract_status']
-_STATUSES_WITH_SUBSTATUS = ['void', 'terminated', 'declined']
+_STATUSES_WITH_SUBSTATUS = ['void', 'terminated', 'declined', 'hold']
 
 
 __all__ = [
@@ -56,6 +56,8 @@ __all__ = [
     'ContractEnd',
     'ContractSelectStartDate',
     'ContractChangeStartDate',
+    'ContractSelectHoldReason',
+    'ContractHold',
     'ContractSubStatus',
     '_STATES',
     '_DEPENDS',
@@ -232,12 +234,18 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'button_change_start_date': {
                     'invisible': Eval('status') != 'quote'},
                 'button_activate': {
-                    'invisible': Eval('status') != 'quote'},
+                    'invisible': And(
+                        Eval('status') != 'quote',
+                        Eval('status') != 'hold'
+                        )},
                 'button_decline': {
                     'invisible': Eval('status') != 'quote'},
+                'button_hold': {
+                    'invisible': Eval('status') != 'active'},
                 'button_stop': {
                     'invisible': And(
                         Eval('status') != 'active',
+                        Eval('status') != 'hold',
                         Eval('status') != 'quote',
                         )},
                 })
@@ -859,6 +867,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def finalize_contract(self):
         if not getattr(self, 'contract_number', None):
             self.contract_number = self.get_new_contract_number()
+        # if contract was hold remove sub status reason
+        self.sub_status = None
         self.save()
 
     def get_policy_owner(self, at_date=None):
@@ -977,6 +987,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'sub_status': void_reason,
                 })
         Event.notify_events(contracts, 'void_contract')
+
+    @classmethod
+    def hold(cls, contracts, hold_reason):
+        pool = Pool()
+        Event = pool.get('event')
+        cls.write(contracts, {
+                'status': 'hold',
+                'sub_status': hold_reason,
+                })
+        Event.notify_events(contracts, 'hold_contract')
 
     @classmethod
     def get_coverages(cls, product):
@@ -1106,6 +1126,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     @model.CoopView.button_action('contract.act_decline')
     def button_decline(cls, contracts):
+        pass
+
+    @classmethod
+    @model.CoopView.button_action('contract.act_hold_contract')
+    def button_hold(cls, contracts):
         pass
 
     @classmethod
@@ -1559,6 +1584,41 @@ class ContractEnd(Wizard):
             for contract in contracts]
         ActivationHistory.write(activation_histories, {
                 'termination_reason': self.select_date.termination_reason})
+        return 'end'
+
+
+class ContractSelectHoldReason(model.CoopView):
+    'End date selector for contract'
+
+    __name__ = 'contract.hold.select_hold_status'
+
+    hold_reason = fields.Many2One('contract.sub_status',
+        'Hold Reason', domain=[('status', '=', 'hold')],
+        required=True)
+
+
+class ContractHold(Wizard):
+    'Hold Contract wizard'
+
+    __name__ = 'contract.hold'
+
+    start_state = 'select_hold_status'
+    select_hold_status = StateView('contract.hold.select_hold_status',
+        'contract.contract_select_hold_status_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Apply', 'apply', 'tryton-go-next')])
+    apply = StateTransition()
+
+    def transition_apply(self):
+        pool = Pool()
+        Contract = pool.get('contract')
+        contracts = Contract.browse(Transaction().context.get('active_ids'))
+        contracts_to_hold = [contract for contract in contracts
+            if contract.status == 'active']
+        Contract.write(contracts_to_hold, {
+            'status': 'hold',
+            'sub_status': self.select_hold_status.hold_reason
+            })
         return 'end'
 
 

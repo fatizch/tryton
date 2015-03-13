@@ -55,6 +55,7 @@
         <button name="button_change_start_date" string="Change start date"/>
         <button name="button_activate" string="Activate Contract"/>
         <button name="button_decline" string="Decline Contract"/>
+        <button name="button_hold" string="Hold Contract"/>
         <button name="button_stop" string="Stop Contract"/>
     </group>
 </form>

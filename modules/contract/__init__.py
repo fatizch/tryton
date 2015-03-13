@@ -40,6 +40,7 @@ def register():
         ContractActivateConfirm,
         ContractSelectDeclineReason,
         ContractStopSelectContracts,
+        ContractSelectHoldReason,
         module='contract', type_='model')
     Pool.register(
         OptionSubscription,
@@ -50,4 +51,5 @@ def register():
         ContractActivate,
         ContractDecline,
         ContractStop,
+        ContractHold,
         module='contract', type_='wizard')
