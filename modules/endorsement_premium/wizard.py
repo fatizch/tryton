@@ -1,5 +1,6 @@
 from operator import itemgetter
 from collections import defaultdict
+import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, Button
@@ -38,9 +39,12 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
             return {}
         premiums = []
         for premium in Premium.search([('main_contract', '=', instance.id),
-                    ('start', '<=', endorsement.effective_date),
-                    ['OR', ('end', '=', None),
-                        ('end', '>=', endorsement.effective_date)]]):
+                ['OR', [('start', '>=', instance.start_date),
+                        ('start', '<=', instance.end_date or
+                            datetime.date.max)],
+                    [('start', '<', instance.start_date),
+                        ('end', '>=', endorsement.effective_date or
+                            datetime.date.max)]]]):
             new_premium = {x: getattr(premium, x)
                 for x in PremiumPreview.fields_to_extract()}
             new_premium['contract'] = instance.id
