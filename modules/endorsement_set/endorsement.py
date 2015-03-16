@@ -208,7 +208,8 @@ class Endorsement:
     def apply(cls, endorsements):
         to_apply = set(endorsements)
         for endorsement in endorsements:
-            if not set(endorsement.endorsement_set.endorsements
+            if endorsement.endorsement_set and \
+                    not set(endorsement.endorsement_set.endorsements
                     ).issubset(to_apply):
                 cls.raise_user_error('must_apply_all')
         return super(Endorsement, cls).apply(endorsements)
@@ -226,7 +227,8 @@ class Endorsement:
     def decline(cls, endorsements, reason=None):
         to_decline = set(endorsements)
         for endorsement in endorsements:
-            if not set(endorsement.endorsement_set.endorsements
+            if endorsement.endorsement_set and \
+                    not set(endorsement.endorsement_set.endorsements
                     ).issubset(to_decline):
                 cls.raise_user_error('must_decline_all')
         return super(Endorsement, cls).decline(endorsements, reason=reason)
