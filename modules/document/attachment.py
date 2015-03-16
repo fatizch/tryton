@@ -59,7 +59,7 @@ class Attachment(export.ExportImportMixin):
             output=None, main_object=None, configuration=None):
         new_values = super(Attachment, self).export_json(skip_fields,
             already_exported, output, main_object, configuration)
-        if 'data' in new_values:
+        if not configuration or 'data' in new_values:
             new_values['data'] = base64.b64encode(self.data)
         return new_values
 
