@@ -58,5 +58,20 @@
             <field name="name">Stop Contract</field>
             <field name="wiz_name">contract.stop</field>
         </record>
+        <!-- ####################################### -->
+        <!-- # Contract Reactivate Check Contracts # -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="reactivate_check_contracts_view_form">
+            <field name="model">contract.reactivate.check_contracts</field>
+            <field name="type">form</field>
+            <field name="name">reactivate_check_contracts_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Contract Reactivate # -->
+        <!-- ####################### -->
+        <record model="ir.action.wizard" id="act_reactivate">
+            <field name="name">Reactivate Contract</field>
+            <field name="wiz_name">contract.reactivate</field>
+        </record>
     </data>
 </tryton>

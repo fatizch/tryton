@@ -3,7 +3,7 @@ from trytond.pyson import Eval, Len
 from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, coop_string
+from trytond.modules.cog_utils import model, fields, coop_string, utils
 from trytond.modules.offered import offered
 
 __all__ = [
@@ -18,6 +18,8 @@ __all__ = [
     'ContractDecline',
     'ContractStopSelectContracts',
     'ContractStop',
+    'ContractReactivateCheck',
+    'ContractReactivate',
     ]
 
 
@@ -417,4 +419,59 @@ class ContractStop(model.CoopWizard):
                 list(self.select_contracts.contracts),
                 self.select_contracts.at_date,
                 self.select_contracts.sub_status)
+        return 'end'
+
+
+class ContractReactivateCheck(model.CoopView):
+    'Contract Reactivate Check'
+
+    __name__ = 'contract.reactivate.check_contracts'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    previous_end_date = fields.Date('Previous End Date', readonly=True)
+    new_end_date = fields.Date('New End Date', readonly=True)
+    termination_reason = fields.Many2One('contract.sub_status',
+        'Termination Reason', readonly=True)
+    will_be_terminated = fields.Boolean('Will be terminated', readonly=True,
+        states={'invisible': True})
+
+
+class ContractReactivate(model.CoopWizard):
+    'Reactivate Contract'
+
+    __name__ = 'contract.reactivate'
+
+    start_state = 'validate_reactivation'
+    validate_reactivation = StateView('contract.reactivate.check_contracts',
+        'contract.reactivate_check_contracts_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Ok', 'reactivate', 'tryton-go-next', default=True),
+            ])
+    reactivate = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(ContractReactivate, cls).__setup__()
+        cls._error_messages.update({
+                'need_contract': 'No contract found',
+                })
+
+    def default_validate_reactivation(self, name):
+        Contract = Pool().get('contract')
+        if Transaction().context.get('active_model') != 'contract':
+            self.raise_user_error('need_contract')
+        contract = Contract(Transaction().context.get('active_id'))
+        new_end_date = contract.get_reactivation_end_date()
+        result = {
+            'contract': contract.id,
+            'previous_end_date': contract.end_date,
+            'new_end_date': new_end_date,
+            'termination_reason': contract.sub_status.id,
+            'will_be_terminated': new_end_date < utils.today(),
+            }
+        return result
+
+    def transition_reactivate(self):
+        Pool().get('contract').reactivate(
+            [self.validate_reactivation.contract])
         return 'end'

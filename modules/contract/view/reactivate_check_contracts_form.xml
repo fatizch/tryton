@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<form string="Reactivate Contract">
+    <label name="contract"/>
+    <field name="contract"/>
+    <label name="termination_reason"/>
+    <field name="termination_reason"/>
+    <label name="previous_end_date"/>
+    <field name="previous_end_date"/>
+    <label name="new_end_date"/>
+    <field name="new_end_date"/>
+    <newline/>
+    <group id="void_group" string="" yexpand="1" yfill="1" colspan="4">
+    </group>
+    <group id="check_today" string="" colspan="4" col="2" states="{'invisible': ~Eval('will_be_terminated')}">
+        <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+        <label string="Contract will still be terminated as of today after validation" id="check_will_be_terminated_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
+        <field name="will_be_terminated"/>
+    </group>
+</form>

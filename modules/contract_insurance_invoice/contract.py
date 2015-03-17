@@ -534,6 +534,14 @@ class Contract:
             contract.rebill(at_date)
 
     @classmethod
+    def reactivate(cls, contracts):
+        previous_dates = {x.id: x.end_date for x in contracts}
+        super(Contract, cls).reactivate(contracts)
+        for contract in contracts:
+            contract.rebill(previous_dates[contract.id])
+        cls.invoice(contracts, utils.today())
+
+    @classmethod
     def void(cls, contracts, void_reason):
         super(Contract, cls).void(contracts, void_reason)
         for contract in contracts:

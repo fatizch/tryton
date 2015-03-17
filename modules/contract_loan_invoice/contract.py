@@ -159,6 +159,11 @@ class Contract:
         return message
 
     @classmethod
+    def reactivate(cls, contracts):
+        with Transaction().set_context(_force_calculate_prices=True):
+            super(Contract, cls).reactivate(contracts)
+
+    @classmethod
     def get_total_premium_amount(cls, contracts, name):
         cursor = Transaction().cursor
         pool = Pool()

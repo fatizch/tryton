@@ -242,6 +242,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                     'invisible': Eval('status') != 'quote'},
                 'button_hold': {
                     'invisible': Eval('status') != 'active'},
+                'button_reactivate': {
+                    'invisible': Eval('status') != 'terminated'},
                 'button_stop': {
                     'invisible': And(
                         Eval('status') != 'active',
@@ -260,6 +262,12 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'missing_values': 'Cannot add functional key : both quote'
                 'number and contract_number are missing from values',
                 'invalid_format': 'Invalid file format',
+                'cannot_reactivate_end_reached': 'Cannot reactivate contract, '
+                'end reached',
+                'cannot_reactivate_max_end_date': 'Cannot reactivate contract,'
+                ' max end date reached',
+                'cannot_reactivate_non_terminated': 'Cannot reactivate a not '
+                'yet terminated contract',
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
 
@@ -960,17 +968,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if not contracts:
             return
         pool = Pool()
-        ActivationHistory = pool.get('contract.activation_history')
         Date = pool.get('ir.date')
         Event = pool.get('event')
-        activation_histories = []
-        cls.write(contracts, {'end_date': at_date})
         for contract in contracts:
             contract.set_and_propagate_end_date(at_date)
+            contract.activation_history[-1].termination_reason = \
+                termination_reason
+            contract.activation_history = list(contract.activation_history)
             contract.save()
-            activation_histories.append(contract.activation_history[-1])
-        ActivationHistory.write(activation_histories, {
-                'termination_reason': termination_reason})
         Event.notify_events(contracts, 'plan_contract_termination')
         if at_date < Date.today():
             cls.do_terminate(contracts)
@@ -997,6 +1002,16 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'sub_status': hold_reason,
                 })
         Event.notify_events(contracts, 'hold_contract')
+
+    @classmethod
+    def reactivate(cls, contracts):
+        for contract in contracts:
+            contract.set_and_propagate_end_date(None)
+            contract.sub_status = None
+            contract.status = 'active'
+            contract.save()
+            contract.before_activate()
+            contract.activate_contract()
 
     @classmethod
     def get_coverages(cls, product):
@@ -1129,13 +1144,18 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         pass
 
     @classmethod
+    @model.CoopView.button_action('contract.act_stop')
+    def button_stop(cls, contracts):
+        pass
+
+    @classmethod
     @model.CoopView.button_action('contract.act_hold_contract')
     def button_hold(cls, contracts):
         pass
 
     @classmethod
-    @model.CoopView.button_action('contract.act_stop')
-    def button_stop(cls, contracts):
+    @model.CoopView.button_action('contract.act_reactivate')
+    def button_reactivate(cls, contracts):
         pass
 
     def get_all_extra_data(self, at_date):
@@ -1177,6 +1197,30 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             values['_func_key'] = '%s|None' % values['quote_number']
         else:
             values['_func_key'] = 'None'  # We are creating a new contract
+
+    def get_reactivation_end_date(self):
+        if self.status != 'terminated':
+            self.append_functional_error('cannot_reactivate_non_terminated')
+            return None
+        if self.sub_status.code == 'reached_end_date':
+            self.append_functional_error('cannot_reactivate_end_reached')
+            return None
+        # Get new end_date
+        with Transaction().new_cursor() as transaction:
+            try:
+                contract = self.__class__(self.id)
+                previous_end_date = contract.end_date
+                contract.set_and_propagate_end_date(None)
+                contract.save()
+                dates = [contract.get_date_used_for_contract_end_date()]
+                dates.append(contract.get_maximum_end_date())
+                new_end_date = min([x for x in dates if x] or [None])
+            finally:
+                transaction.cursor.rollback()
+        if new_end_date != None and new_end_date <= previous_end_date:
+            self.append_functional_error('cannot_reactivate_max_end_date')
+            return None
+        return new_end_date
 
 
 class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,

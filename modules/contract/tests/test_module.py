@@ -208,7 +208,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     @test_framework.prepare_test(
         'contract.test0010_testContractCreation',
         )
-    def test_maximum_end_date(self):
+    def test0040_maximum_end_date(self):
         contract, = self.Contract.search([])
         current_end = contract.end_date
         end_option1 = current_end - datetime.timedelta(weeks=2)

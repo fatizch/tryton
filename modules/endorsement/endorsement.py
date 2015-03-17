@@ -1,6 +1,8 @@
 # encoding: utf-8
 import copy
 import datetime
+from itertools import groupby
+
 from sql.functions import Now
 from sql.conditionals import Coalesce
 
@@ -13,7 +15,8 @@ from trytond.pyson import Eval, PYSONEncoder, PYSON, Bool, Len, Or
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import model, fields, coop_string, utils
+from trytond.modules.cog_utils import model, fields, coop_string, utils, \
+    coop_date
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
 
@@ -610,7 +613,7 @@ class Contract(CogProcessFramework):
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
         endorsement = ContractEndorsement.new_rollback_point(contracts,
-            at_date, {'values': {
+            at_date, 'endorsement.stop_contract_definition', {'values': {
                     'status': 'terminated',
                     'sub_status': termination_reason.id,
                     'end_date': at_date,
@@ -625,13 +628,36 @@ class Contract(CogProcessFramework):
         pool = Pool()
         ContractEndorsement = pool.get('endorsement.contract')
         endorsement = ContractEndorsement.new_rollback_point(contracts,
-            contracts[0].start_date, {'values': {
+            contracts[0].start_date, 'endorsement.void_contract_definition',
+            {'values': {
                     'status': 'void',
                     'sub_status': void_reason.id,
                     }})
         endorsement.save()
 
         super(Contract, cls).void(contracts, void_reason)
+
+    @classmethod
+    def reactivate(cls, contracts):
+        pool = Pool()
+        Endorsement = pool.get('endorsement')
+        ContractEndorsement = pool.get('endorsement.contract')
+        previous_dates = {contract.id: contract.end_date
+            for contract in contracts}
+        super(Contract, cls).reactivate(contracts)
+        new_dates = {contract.id: contract.end_date for contract in contracts}
+        endorsements = []
+        for dates, contract_group in groupby(contracts,
+                lambda x: (previous_dates[x.id], new_dates[x.id])):
+            endorsements.append(ContractEndorsement.new_rollback_point(
+                    list(contract_group), coop_date.add_day(dates[0], 1),
+                    'endorsement.reactivate_contract_definition',
+                    {'values': {
+                            'status': 'active',
+                            'end_date': dates[1],
+                            'sub_status': None,
+                            }}))
+        Endorsement.save(endorsements)
 
 
 class ContractOption(object):
@@ -1364,11 +1390,14 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             values['_func_key'] = 0
 
     @classmethod
-    def new_rollback_point(cls, contracts, at_date, init_dict=None):
+    def new_rollback_point(cls, contracts, at_date, definition,
+            init_dict=None):
         pool = Pool()
         Endorsement = pool.get('endorsement')
         ContractEndorsement = pool.get('endorsement.contract')
-        Definition = pool.get('endorsement.definition')
+        if isinstance(definition, basestring):
+            Definition = pool.get('endorsement.definition')
+            definition = Definition.search([('xml_id', '=', definition)])[0]
         init_dict = init_dict or {}
         endorsement = Endorsement()
         contract_endorsements = []
@@ -1381,8 +1410,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         endorsement.applied_by = Transaction().user
         endorsement.rollback_date = Now()
         endorsement.application_date = datetime.datetime.now()
-        endorsement.definition = Definition.search([
-                ('xml_id', '=', 'endorsement.stop_contract_definition')])[0]
+        endorsement.definition = definition
         return endorsement
 
 

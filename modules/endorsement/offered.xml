@@ -152,13 +152,73 @@
             <field name="endorsement_part" ref="stop_contract_revision_part"/>
             <field name="order">1</field>
         </record>
-        <record model="endorsement.contract.field" id="status_date_contract_field">
+        <record model="endorsement.contract.field" id="status_date_contract_stop_field">
             <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'status')]"/>
             <field name="endorsement_part" ref="stop_contract_revision_part"/>
         </record>
-        <record model="endorsement.contract.field" id="sub_status_contract_field">
+        <record model="endorsement.contract.field" id="sub_status_contract_stop_field">
             <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'sub_status')]"/>
             <field name="endorsement_part" ref="stop_contract_revision_part"/>
+        </record>
+        <record model="endorsement.contract.field" id="end_date_contract_stop_field">
+            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'end_date')]"/>
+            <field name="endorsement_part" ref="stop_contract_revision_part"/>
+        </record>
+        <!-- ################################## -->
+        <!-- # Void Endorsement Configuration # -->
+        <!-- ################################## -->
+        <record model="endorsement.definition" id="void_contract_definition">
+            <field name="code">void_contract</field>
+            <field name="name">void Contract</field>
+        </record>
+        <record model="endorsement.part" id="void_contract_revision_part">
+            <field name="code">void_contract</field>
+            <field name="name">void Contract</field>
+            <field name="kind">contract</field>
+            <field name="view">dummy_step</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="void_contract_relation">
+            <field name="definition" ref="void_contract_definition"/>
+            <field name="endorsement_part" ref="void_contract_revision_part"/>
+            <field name="order">1</field>
+        </record>
+        <record model="endorsement.contract.field" id="status_date_contract_void_field">
+            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'status')]"/>
+            <field name="endorsement_part" ref="void_contract_revision_part"/>
+        </record>
+        <record model="endorsement.contract.field" id="sub_status_contract_void_field">
+            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'sub_status')]"/>
+            <field name="endorsement_part" ref="void_contract_revision_part"/>
+        </record>
+        <!-- ######################################## -->
+        <!-- # Reactivate Endorsement Configuration # -->
+        <!-- ######################################## -->
+        <record model="endorsement.definition" id="reactivate_contract_definition">
+            <field name="code">reactivate_contract</field>
+            <field name="name">reactivate Contract</field>
+        </record>
+        <record model="endorsement.part" id="reactivate_contract_revision_part">
+            <field name="code">reactivate_contract</field>
+            <field name="name">reactivate Contract</field>
+            <field name="kind">contract</field>
+            <field name="view">dummy_step</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="reactivate_contract_relation">
+            <field name="definition" ref="reactivate_contract_definition"/>
+            <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
+            <field name="order">1</field>
+        </record>
+        <record model="endorsement.contract.field" id="status_date_contract_reactivate_field">
+            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'status')]"/>
+            <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
+        </record>
+        <record model="endorsement.contract.field" id="sub_status_contract_reactivate_field">
+            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'sub_status')]"/>
+            <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
+        </record>
+        <record model="endorsement.contract.field" id="end_date_contract_reactivate_field">
+            <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'end_date')]"/>
+            <field name="endorsement_part" ref="reactivate_contract_revision_part"/>
         </record>
     </data>
 </tryton>
