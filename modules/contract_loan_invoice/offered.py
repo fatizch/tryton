@@ -244,6 +244,8 @@ class OptionDescriptionPremiumRule:
                 rated_instance.option, date) and (
                 (rated_instance.start_date or datetime.date.min) <=
                 date <= (rated_instance.end_date or datetime.date.max))
+        return super(OptionDescriptionPremiumRule, self).must_be_rated(
+            rated_instance, date)
 
 
 class OptionDescription:
