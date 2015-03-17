@@ -167,7 +167,7 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
                 if target_model.table_query != ModelSQL.table_query:
                     continue
                 if (not target_field.required and not
-                        field._ignore_required_warning):
+                        field._target_not_required):
                     logging.getLogger('fields').warning(
                         'Field %s of %s ' % (field.field, field.model_name) +
                         'should be required since it is used as a reverse ' +
