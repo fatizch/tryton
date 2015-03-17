@@ -242,8 +242,14 @@ first_invoice.invoice.total_amount
 first_invoice.invoice.state
 # #Res# #u'validated'
 [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
-    for x in first_invoice.invoice.lines]
-# #Res# #[(u'Test Coverage - Test Coverage', Decimal('100.00'), datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)), (u'123456789 - Test Product', Decimal('180.00'), datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)), (u'123456789 - Test Coverage', Decimal('17.81'), datetime.date(2014, 5, 20), datetime.date(2015, 4, 9))]
+    for x in first_invoice.invoice.lines] == [
+    (u'Test Coverage - Test Coverage', Decimal('100.00'),
+        datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
+    (u'123456789 - Test Product', Decimal('180.00'),
+        datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
+    (u'123456789 - Test Coverage', Decimal('17.81'),
+        datetime.date(2014, 5, 20), datetime.date(2015, 4, 9))]
+# #Res# #True
 Contract.first_invoice([contract.id], config.context)
 second_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
 AccountInvoice.post([second_invoice.invoice.id], config.context)
