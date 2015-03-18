@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
@@ -187,6 +189,10 @@ class Endorsement:
     contract_set = fields.Function(
             fields.Many2One('contract.set', 'Contract Set'),
             'get_contract_set')
+    generated_endorsement_sets = fields.Function(
+        fields.One2Many('endorsement.set', None, 'Generated Endorsements'),
+        'get_generated_endorsement_sets',
+        setter='setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -198,9 +204,14 @@ class Endorsement:
                 ' must be declined together',
                 })
 
-
     def get_contract_set(self, name):
         return self.endorsement_set.contract_set.id
+
+    def get_generated_endorsement_sets(self, name):
+        pool = Pool()
+        EndorsementSet = pool.get('endorsement.set')
+        return [x.id for x in EndorsementSet.search(
+            [('endorsements.generated_by', '=', self)])]
 
     @classmethod
     @model.CoopView.button
@@ -232,6 +243,33 @@ class Endorsement:
                     ).issubset(to_decline):
                 cls.raise_user_error('must_decline_all')
         return super(Endorsement, cls).decline(endorsements, reason=reason)
+
+    @classmethod
+    def endorse_contracts(cls, contracts, endorsement_definition, origin=None):
+        pool = Pool()
+        EndorsementSet = pool.get('endorsement.set')
+        all_contracts = list(contracts)
+        contract_sets = defaultdict(list)
+        for contract in contracts:
+            if contract.contract_set:
+                all_contracts.extend(contract.contract_set.contracts)
+        all_contracts = list(set(all_contracts))
+        endorsements = super(Endorsement, cls).endorse_contracts(
+            all_contracts, endorsement_definition, origin)
+
+        for endorsement in endorsements:
+            contract_set = \
+                endorsement.contract_endorsements[0].contract.contract_set
+            if contract_set:
+                contract_sets[contract_set].append(endorsement)
+
+        for grouped_endorsements in contract_sets.values():
+            endorsement_set = EndorsementSet()
+            for endorsement in grouped_endorsements:
+                endorsement.endorsement_set = endorsement_set
+
+        cls.save(endorsements)
+        return endorsements
 
 
 class EndorsementSetSelectDeclineReason(model.CoopView):

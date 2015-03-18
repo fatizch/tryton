@@ -1,15 +1,42 @@
 from trytond.pool import PoolMeta, Pool
 from trytond.modules.process_cog import CogProcessFramework
 from trytond.modules.process import ClassAttr
-from trytond.modules.cog_utils import fields
+from trytond.modules.cog_utils import fields, model
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'Endorsement',
     'EndorsementPartUnion',
     'EndorsementSet',
     ]
+
+
+class Endorsement:
+    __name__ = 'endorsement'
+
+    @classmethod
+    def endorse_contracts(cls, contracts, endorsement_definition, origin=None):
+        pool = Pool()
+        Process = pool.get('process')
+        EndorsementSet = pool.get('endorsement.set')
+        endorsements = super(Endorsement, cls).endorse_contracts(
+            contracts, endorsement_definition, origin)
+        endorsement_sets = list(set([x.endorsement_set for x in endorsements if
+            hasattr(x, 'endorsement_set') and x.endorsement_set]))
+        processes = Process.search([('on_model.model', '=',
+                    'endorsement.set')])
+        if processes:
+            process = processes[0]
+            state = process.all_steps[0]
+            for end_set in endorsement_sets:
+                end_set.current_state = state
+            EndorsementSet.save(endorsement_sets)
+        for endorsement in endorsements:
+            endorsement.current_state = None
+        cls.save(endorsements)
+        return endorsements
 
 
 class EndorsementSet(CogProcessFramework):
@@ -39,6 +66,14 @@ class EndorsementSet(CogProcessFramework):
         cls._error_messages.update({
                 'no_effective_date': 'Effective date is not defined',
                 })
+        cls._buttons.update({
+                'button_resume_process': {},
+                })
+
+    @classmethod
+    @model.CoopView.button_action('process_cog.act_resume_process')
+    def button_resume_process(cls, endorsement_sets):
+        pass
 
     def check_endorsements_effective_date(self):
         if not self.effective_date:

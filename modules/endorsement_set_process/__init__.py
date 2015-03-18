@@ -6,6 +6,7 @@ from .endorsement import *
 
 def register():
     Pool.register(
+        Endorsement,
         EndorsementPartUnion,
         EndorsementSet,
         Process,

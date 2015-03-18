@@ -32,7 +32,7 @@ class Endorsement(CogProcessFramework):
     def __setup__(cls):
         super(Endorsement, cls).__setup__()
         cls._buttons.update({
-                'button_preview_changes': {}
+                'button_preview_changes': {},
                 })
 
     @classmethod
@@ -45,6 +45,22 @@ class Endorsement(CogProcessFramework):
         Attachment = pool.get('ir.attachment')
         return [x.id for x in Attachment.search([('origin', '=', '%s,%s'
                         % (self.__name__, self.id))])]
+
+    @classmethod
+    def endorse_contracts(cls, contracts, endorsement_definition, origin=None):
+        pool = Pool()
+        Process = pool.get('process')
+        endorsements = super(Endorsement, cls).endorse_contracts(
+            contracts, endorsement_definition, origin)
+
+        processes = Process.search([('on_model.model', '=', 'endorsement')])
+        if processes:
+            process = processes[0]
+            state = process.first_step()
+            for endorsement in endorsements:
+                endorsement.current_state = state
+        cls.save(endorsements)
+        return endorsements
 
     @classmethod
     @model.CoopView.button_action(
