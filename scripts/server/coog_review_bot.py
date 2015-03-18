@@ -290,36 +290,55 @@ def finalize_comments(session, issue_info, message):
             })
 
 
-def update_redmine_issue_status(issue_id, description, user, patchset,
-        redmine_api_key):
-    pattern = r"(close|closes|fix|fixes) #([0-9]+)"
+def get_rm_issue_next_version(issue_url, force=False):
+    r = requests.get(issue_url, auth=(redmine_api_key, ''), verify=False)
+    issue_json = json.loads(r.text)['issue']
+    if force or 'fixed_version' not in issue_json:
+        url_proj = '%s/projects/%d/versions.json' % (REDMINE_URL,
+            issue_json['project']['id'])
+        r = requests.get(url_proj, auth=(redmine_api_key, ''),
+            headers={'content-type': 'application/json'}, verify=False)
+        versions = json.loads(r.text)['versions']
+        versions = [v for v in versions
+            if (('due_date' in v) and
+                datetime.strptime(v['due_date'], '%Y-%m-%d').date() >=
+                date.today() and v['status'] != 'closed')]
+        if versions:
+            return sorted(versions, key=lambda x: x['due_date'])[0]['id']
 
+
+def extract_rm_issues_urls(description):
+    pattern = r"(close|closes|fix|fixes) #([0-9]+)"
+    matches = re.findall(re.compile(pattern, re.IGNORECASE), description)
+    redmine_issue_url_root = '%s/issues/' % REDMINE_URL
+    return ['%s/%s.json' % (redmine_issue_url_root, m[1]) for m in matches]
+
+
+def put_rm_issue(url, payload, user, redmine_api_key):
+    requests.put(url, auth=(redmine_api_key, ''),
+        data=json.dumps({'issue': payload}),
+        verify=False,
+        headers={'content-type': 'application/json',
+            'X-Redmine-Switch-User': user,
+            })
+
+
+def update_rm_issue_on_close(issue_id, description, user, redmine_api_key):
+    for url in extract_rm_issues_urls(description):
+        next_version = get_rm_issue_next_version(url, force=True)
+        if next_version:
+            issue_changes = {'fixed_version_id': next_version}
+            put_rm_issue(url, issue_changes, user, redmine_api_key)
+
+
+def update_rm_issue_on_review(issue_id, description, user, patchset,
+        redmine_api_key):
     rm_issue_status = {'status_review': 7}
     rm_custom_fields = {'review_cf': 2}
-
     notes = 'Review updated at http://rietveld.coopengo.com/%s/#ps%s' % \
         (issue_id, patchset)
-    matches = re.findall(re.compile(pattern, re.IGNORECASE), description)
-    for m in matches:
-        redmine_id = m[1]
-        url = '%s/issues/%s.json' % (REDMINE_URL, redmine_id)
-        r = requests.get(url, auth=(redmine_api_key, ''), verify=False)
-        issue_json = json.loads(r.text)['issue']
-        next_version = None
-        if 'fixed_version' not in issue_json:
-            url_proj = '%s/projects/%d/versions.json' % (REDMINE_URL,
-                issue_json['project']['id'])
-            r = requests.get(url_proj, auth=(redmine_api_key, ''),
-                headers={'content-type': 'application/json'}, verify=False)
-            versions = json.loads(r.text)['versions']
-            versions = [v for v in versions
-                if (('due_date' in v) and
-                    datetime.strptime(v['due_date'], '%Y-%m-%d').date() >=
-                    date.today() and v['status'] != 'closed')]
-            if versions:
-                next_version = sorted(versions,
-                    key=lambda x: x['due_date'])[0]['id']
-
+    for url in extract_rm_issues_urls(description):
+        next_version = get_rm_issue_next_version(url)
         issue_changes = {
                 'status_id': rm_issue_status['status_review'],
                 'notes': notes,
@@ -328,36 +347,10 @@ def update_redmine_issue_status(issue_id, description, user, patchset,
                 ]}
         if next_version:
             issue_changes['fixed_version_id'] = next_version
-        requests.put(url, auth=(redmine_api_key, ''),
-            data=json.dumps({'issue': issue_changes}),
-            verify=False,
-            headers={'content-type': 'application/json',
-                'X-Redmine-Switch-User': user,
-                })
+        put_rm_issue(url, issue_changes, user, redmine_api_key)
 
 
-def process_issue(session, issue_url, path_to_repo, email, password,
-        redmine_api_key):
-    issue_id = urlparse.urlparse(issue_url).path.split('/')[1]
-    issue_info = session.get(CODEREVIEW_URL
-        + '/'.join(['', 'api', str(issue_id)]))
-    if issue_info.status_code != 200:
-        return
-    else:
-        issue_info = json.loads(issue_info.text)
-
-    # Test only last patchset has changed
-    patchset = issue_info['patchsets'][-1]
-    if not has_update(issue_id, patchset):
-        return
-    set_update(issue_id, patchset)
-
-    update_redmine_issue_status(issue_info['issue'],
-        issue_info['subject'],
-        issue_info["owner_email"].split('@')[0],
-        patchset,
-        redmine_api_key)
-
+def check_style(session, issue_url, path_to_repo, email, password):
     match = TITLE_FORMAT.match(issue_info['subject'])
     if not match:
         finalize_comments(session, issue_info,
@@ -429,16 +422,32 @@ if __name__ == '__main__':
     path_to_repo = config.get('repositories', 'repositories_url')
     session = ReviewSession(CODEREVIEW_URL, email, password)
     most_ancient = date.today() - timedelta(days=7)
+    issues_urls = fetch_issues(CODEREVIEW_URL +
+        '/search?modified_after=' + str(most_ancient) +
+        '&closed=0&format=json', session)
 
     if arguments.close:
         for line in fileinput.input('-'):
             mymatch = ISSUE_REGEXP.search(line)
             if mymatch:
                 close_issue(session, mymatch.groups()[1])
-    else:
-        issues_urls = fetch_issues(CODEREVIEW_URL +
-            '/search?modified_after=' + str(most_ancient) +
-            '&closed=0&format=json', session)
-        for issue_url in issues_urls:
-            process_issue(session, issue_url, path_to_repo, email, password,
-                redmine_api_key)
+    for issue_url in issues_urls:
+        issue_id = urlparse.urlparse(issue_url).path.split('/')[1]
+        issue_info = session.get('%s%s' % (CODEREVIEW_URL,
+            '/'.join(['', 'api', str(issue_id)])))
+        if issue_info.status_code != 200:
+            continue
+        issue_info = json.loads(issue_info.text)
+        # Test only last patchset has changed
+        patchset = issue_info['patchsets'][-1]
+        if not has_update(issue_id, patchset):
+            continue
+        email = issue_info["owner_email"].split('@')[0]
+        if arguments.close:
+            update_rm_issue_on_close(issue_info['issue'],
+                issue_info['subject'], email, redmine_api_key)
+        else:
+            set_update(issue_id, patchset)
+            check_style(session, issue_url, path_to_repo, email, password)
+            update_rm_issue_on_review(issue_info['issue'],
+                issue_info['subject'], email, patchset, redmine_api_key)
