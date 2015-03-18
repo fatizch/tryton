@@ -1,3 +1,4 @@
+from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval, Len, Bool
@@ -84,6 +85,11 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
         cls._error_messages.update({
                 'must_end_all_options': 'All options on a covered element must'
                 ' be removed if a mandatory option is removed',
+                'cannot_end_all_covered_elements': 'You cannot remove all'
+                ' options on all covered elements of a contract. You may want'
+                ' to end the contract instead.',
+                'end_date_anterior_to_start_date': 'You are setting an end'
+                ' date anterior to start date for option : "%s"',
                 })
 
     options = fields.One2Many(
@@ -174,6 +180,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
             'endorsement.contract.covered_element.option')
         CoveredElementEndorsement = pool.get(
             'endorsement.contract.covered_element')
+        endorsed_cov_options_per_contract = defaultdict(list)
         for endorsement in all_endorsements.values():
             op_endorsement_to_delete = []
             cov_endorsement_to_delete = []
@@ -255,6 +262,24 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     if (set([x.option for x in ce_endorsement.options]) !=
                             set(CoveredElement(ce_id).options)):
                         self.raise_user_error('must_end_all_options')
+                if ce_endorsement.options:
+                    endorsed_cov_options_per_contract[
+                        ce_endorsement.contract_endorsement.contract].extend(
+                        [x.option for x in ce_endorsement.options])
+
+        cov_options_per_contract = defaultdict(list)
+        for contract_endorsement in all_endorsements.values():
+            for covered_elem in contract_endorsement.contract.covered_elements:
+                cov_options_per_contract[contract_endorsement.contract].extend(
+                    covered_elem.options)
+
+        for contract, options in endorsed_cov_options_per_contract.iteritems():
+            if set(cov_options_per_contract[contract]) == set(options):
+                self.raise_user_error('cannot_end_all_covered_elements')
+            for option in options:
+                if option.start_date > effective_date:
+                    self.raise_user_error('end_date_anterior_to_start_date',
+                        (option.rec_name))
 
         base_endorsement.save()
 
