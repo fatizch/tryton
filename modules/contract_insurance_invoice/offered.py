@@ -355,6 +355,8 @@ class OptionDescriptionPremiumRule:
         for line in lines:
             factor = self.convert_premium_frequency(line.frequency,
                 new_frequency)
+            if factor is None:
+                continue
             line.frequency = new_frequency
             line.amount = line.amount / factor
 
