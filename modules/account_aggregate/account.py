@@ -47,6 +47,12 @@ class Move:
         cls._check_modify_exclude.append('snapshot')
 
     @classmethod
+    def copy(cls, lines, default=None):
+        default = {} if default is None else default.copy()
+        default.setdefault('snapshot', None)
+        return super(Move, cls).copy(lines, default=default)
+
+    @classmethod
     @model.CoopView.button
     def post(cls, moves):
         pool = Pool()
