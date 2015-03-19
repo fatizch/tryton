@@ -981,9 +981,7 @@ class StartEndorsement:
         ContractEndorsement = pool.get('endorsement.contract')
         endorsement_part = self.get_endorsement_part_for_state(
             'remove_option')
-        contract = self.get_endorsed_object(endorsement_part)
         result = {
-            'contract': contract.id,
             'endorsement_part': endorsement_part.id,
             'endorsement_definition': self.definition.id,
             }
