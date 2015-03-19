@@ -67,7 +67,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         'Payment Frequency', sort=False, required=True,
         domain=[('payment_frequency', 'in',
                 ['month', 'quarter', 'half_year', 'year'])],
-        states=_STATES, depends=_DEPENDS)
+        states=_STATES, depends=_DEPENDS, loading='eager')
     payment_frequency_string = payment_frequency.translated(
         'payment_frequency')
     amount = fields.Numeric('Amount',
@@ -324,23 +324,10 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         self.increments = self.increments
         self.payments = payments
 
-    def simulate(self):
-        # Simulate is different from calculate as it is reversible, no change
-        # in db is done
+    def calculate(self):
         self.init_increments()
         self.update_increments_and_calculate_payments()
         self.state = 'calculated'
-
-    def calculate(self):
-        pool = Pool()
-        Increment = pool.get('loan.increment')
-        Payment = pool.get('loan.payment')
-        previous_increments = getattr(self, 'increments', [])
-        previous_payments = getattr(self, 'payments', [])
-        self.simulate()
-        if self.kind != 'graduated':
-            Increment.delete([x for x in previous_increments if x.id])
-        Payment.delete([x for x in previous_payments if x.id])
 
     def create_increment(self, duration=None, payment_amount=None,
             deferal=None):

@@ -824,8 +824,9 @@ class StartEndorsement:
         default_values = []
         for endorsement in self.endorsement.loan_endorsements:
             old_loan = endorsement.loan
-            new_loan = endorsement.update_loan()
-            new_loan.simulate()
+            new_loan = old_loan.__class__(old_loan.id)
+            utils.apply_dict(new_loan, endorsement.apply_values())
+            new_loan.calculate()
             default_values.append({
                     'loan_id': old_loan.id,
                     'loan_rec_name': new_loan.rec_name,

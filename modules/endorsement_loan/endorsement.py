@@ -5,7 +5,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Eval
 
-from trytond.modules.cog_utils import fields, model, coop_date
+from trytond.modules.cog_utils import fields, model, coop_date, utils
 from trytond.modules.endorsement import values_mixin, relation_mixin
 
 
@@ -301,12 +301,15 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
                 loan_endorsement.set_applied_on(
                     loan_endorsement.endorsement.rollback_date)
             else:
-                loan_endorsement.set_applied_on(loan.write_date
-                    or loan.create_date)
-            new_loan = loan_endorsement.update_loan(delete_increments=True)
-            new_loan.calculate()
-            new_loan.save()
+                loan_endorsement.set_applied_on(loan.write_date or
+                    loan.create_date)
+            loan = loan_endorsement.loan
+            utils.apply_dict(loan_endorsement.loan,
+                loan_endorsement.apply_values())
+            loan_endorsement.loan.calculate()
+            loan_endorsement.loan.save()
             loan_endorsement.save()
+            loan = loan_endorsement.loan
 
     def set_applied_on(self, at_datetime):
         self.applied_on = at_datetime
@@ -322,28 +325,6 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
 
     def get_endorsed_record(self):
         return self.loan
-
-    def update_loan(self, delete_increments=False):
-        pool = Pool()
-        Loan = pool.get('loan')
-        Increment = pool.get('loan.increment')
-        if not self.values:
-            return Loan(self.loan.id)
-        base_loan = Loan(self.loan.id)
-        for k, v in self.values.iteritems():
-            if k not in ('payments', 'increments', 'loan_shares'):
-                setattr(base_loan, k, v)
-        if delete_increments:
-            # Horrible : if number_of_payments are not read before deleting
-            # Increments, it will fail
-            base_loan.number_of_payments = base_loan.number_of_payments
-            Increment.delete(base_loan.increments)
-        base_loan.increments = []
-        for increment in self.increments:
-            if increment.action != 'add':
-                continue
-            base_loan.increments.append(Increment(**increment.values))
-        return base_loan
 
 
 class EndorsementCoveredElementOption:

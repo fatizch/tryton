@@ -598,6 +598,8 @@ def apply_dict(instance, data_dict):
     pool = Pool()
     Model = pool.get(instance.__name__)
     for k, v in data_dict.iteritems():
+        if k in ('create_date', 'create_uid', 'write_date', 'write_uid'):
+            continue
         field = Model._fields[k]
         value = getattr(instance, k, None)
         if not v and not value:
