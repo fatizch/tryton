@@ -59,8 +59,9 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             })
     claimant = fields.Many2One('party.party', 'Claimant', ondelete='RESTRICT')
     losses = fields.One2Many('claim.loss', 'claim', 'Losses',
-        states={'readonly': Eval('status') == 'closed'})
-    documents = fields.One2Many('document.request', 'needed_by', 'Documents')
+        states={'readonly': Eval('status') == 'closed'}, delete_missing=True)
+    documents = fields.One2Many('document.request', 'needed_by', 'Documents',
+        delete_missing=True)
     company = fields.Many2One('company.company', 'Company',
         ondelete='RESTRICT')
     # The Main contract is only used to ease the declaration process for 80%
@@ -298,14 +299,15 @@ class Loss(model.CoopSQL, model.CoopView):
 
     __name__ = 'claim.loss'
 
-    claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE')
+    claim = fields.Many2One('claim', 'Claim', ondelete='CASCADE',
+        required=True)
     start_date = fields.Date('Loss Date')
     end_date = fields.Date('End Date', states={
             'invisible': Bool(~Eval('with_end_date')),
             'required': Bool(Eval('with_end_date')),
             }, depends=['with_end_date'],)
     loss_desc = fields.Many2One('benefit.loss.description', 'Loss Descriptor',
-        ondelete='RESTRICT',
+        ondelete='RESTRICT', required=True,
         domain=[
             If(~~Eval('_parent_claim', {}).get('main_contract'),
                 ('id', 'in', Eval('possible_loss_descs')), ())
@@ -318,7 +320,7 @@ class Loss(model.CoopSQL, model.CoopView):
     event_desc = fields.Many2One('benefit.event.description', 'Event',
         domain=[('loss_descs', '=', Eval('loss_desc'))],
         states={'invisible': Bool(Eval('main_loss'))},
-        depends=['loss_desc'], ondelete='RESTRICT')
+        depends=['loss_desc'], ondelete='RESTRICT', required=True)
     services = fields.One2Many(
         'contract.service', 'loss', 'Delivered Services',
         domain=[
@@ -326,14 +328,15 @@ class Loss(model.CoopSQL, model.CoopView):
                 Eval('_parent_claim', {}).get('possible_contracts'))
             ],)
     multi_level_view = fields.One2Many('contract.service',
-        'loss', 'Delivered Services')
+        'loss', 'Delivered Services', target_not_required=True)
     main_loss = fields.Many2One('claim.loss', 'Main Loss',
         domain=[('claim', '=', Eval('claim')), ('id', '!=', Eval('id'))],
         depends=['claim', 'id'], ondelete='CASCADE',
         states={
             'invisible': Eval('_parent_claim', {}).get('reopened_reason')
             != 'relapse'})
-    sub_losses = fields.One2Many('claim.loss', 'main_loss', 'Sub Losses')
+    sub_losses = fields.One2Many('claim.loss', 'main_loss', 'Sub Losses',
+        target_not_required=True)
     with_end_date = fields.Function(
         fields.Boolean('With End Date'),
         'get_with_end_date')
@@ -711,7 +714,8 @@ class Indemnification(model.CoopView, model.CoopSQL, ModelCurrency):
         'on_change_with_local_currency_digits')
     details = fields.One2Many('claim.indemnification.detail',
         'indemnification', 'Details',
-        states={'readonly': Or(~Eval('manual'), Eval('status') == 'paid')})
+        states={'readonly': Or(~Eval('manual'), Eval('status') == 'paid')},
+        delete_missing=True)
     manual = fields.Boolean('Manual Calculation',
         states={'readonly': Eval('status') == 'paid'})
 
@@ -849,7 +853,7 @@ class IndemnificationDetail(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'claim.indemnification.detail'
 
     indemnification = fields.Many2One('claim.indemnification',
-        'Indemnification', ondelete='CASCADE')
+        'Indemnification', ondelete='CASCADE', required=True)
     start_date = fields.Date('Start Date', states={
             'invisible':
             Eval('_parent_indemnification', {}).get('kind') != 'period'

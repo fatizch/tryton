@@ -41,7 +41,7 @@ class EndorsementPart:
         'endorsement.contract.billing_information.field', 'endorsement_part',
         'Billing Information Fields', states={
             'invisible': Eval('kind', '') != 'billing_information'},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
     requires_contract_rebill = fields.Boolean('Requires Contract Rebill')
 
     @classmethod

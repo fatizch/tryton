@@ -33,7 +33,7 @@ class CoveredElement:
     __name__ = 'contract.covered_element'
 
     premiums = fields.One2Many('contract.premium', 'covered_element',
-        'Premiums')
+        'Premiums', delete_missing=True, target_not_required=True)
 
     @classmethod
     def functional_skips_for_duplicate(cls):
@@ -53,7 +53,7 @@ class ExtraPremium:
                 ('flat_amount_frequency', '=', ''),
                 ('flat_amount_frequency', '!=', ''))])
     premiums = fields.One2Many('contract.premium', 'extra_premium',
-        'Premiums')
+        'Premiums', delete_missing=True, target_not_required=True)
 
     @fields.depends('calculation_kind')
     def on_change_with_flat_amount_frequency(self):

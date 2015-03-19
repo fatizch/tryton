@@ -33,7 +33,7 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
 
     number = fields.Char('Number', readonly=True)
     endorsements = fields.One2Many('endorsement', 'endorsement_set',
-        'Endorsements')
+        'Endorsements', target_not_required=True)
     contract_set = fields.Function(
         fields.Many2One('contract.set', 'Contract Set'),
         'get_contract_set', searcher='search_contract_set')

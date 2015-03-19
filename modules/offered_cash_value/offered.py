@@ -59,7 +59,7 @@ class OptionDescription:
         fields.Boolean('Is Cash Value', states={'invisible': True}),
         'get_is_cash_value_coverage')
     cash_value_rules = fields.One2Many('cash_value.cash_value_rule', 'offered',
-        'Cash Value Rules')
+        'Cash Value Rules', delete_missing=True)
 
     @classmethod
     def __setup__(cls):

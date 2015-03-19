@@ -67,7 +67,8 @@ class Priority(model.CoopSQL, model.CoopView):
 
     process_step = fields.Many2One('process-process.step', 'Process Step',
         required=True, ondelete='CASCADE')
-    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE',
+        required=True)
     value = fields.Integer('Value')
     nb_tasks = fields.Function(
         fields.Integer('Number of Tasks'),
@@ -97,8 +98,10 @@ class TeamGroupRelation(model.CoopSQL):
 
     __name__ = 'res.team-res.group'
 
-    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
-    group = fields.Many2One('res.group', 'Group', ondelete='CASCADE')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE',
+        required=True)
+    group = fields.Many2One('res.group', 'Group', ondelete='CASCADE',
+        required=True)
 
 
 class Team(model.CoopSQL, model.CoopView):
@@ -109,9 +112,10 @@ class Team(model.CoopSQL, model.CoopView):
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     users = fields.Many2Many('res.user-res.team', 'team', 'user', 'Users')
-    users_links = fields.One2Many('res.user-res.team', 'team', 'Users')
+    users_links = fields.One2Many('res.user-res.team', 'team', 'Users',
+        delete_missing=True)
     priorities = fields.One2Many('res.team.priority', 'team', 'Priorities',
-        order=[('value', 'ASC')])
+        order=[('value', 'ASC')], delete_missing=True)
     tasks_team = fields.Function(
         fields.One2Many('process.log', None, 'Team Tasks',
             states={'readonly': True}),
@@ -194,8 +198,10 @@ class UserTeamRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'res.user-res.team'
 
-    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE')
-    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT')
+    team = fields.Many2One('res.team', 'Team', ondelete='CASCADE',
+        required=True)
+    user = fields.Many2One('res.user', 'User', ondelete='RESTRICT',
+        required=True)
     nb_tasks = fields.Function(
         fields.Integer('Number of Tasks'),
         'get_nb_tasks')

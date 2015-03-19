@@ -62,7 +62,7 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         'indemnification_calc_unit')
     rule_stages = fields.One2Many('benefit.rule.stage',
         'benefit_rule', 'Benefit Rule Stages',
-        states={'invisible': ~STATES_AMOUNT_EVOLVES})
+        states={'invisible': ~STATES_AMOUNT_EVOLVES}, delete_missing=True)
     use_monthly_period = fields.Boolean('Monthly Period',
         help='Split periods at the end of the month', states={
             'invisible': Or(
@@ -325,7 +325,7 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'benefit.rule.stage'
 
     benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
-        ondelete='CASCADE')
+        ondelete='CASCADE', required=True)
     config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
     config_kind_string = config_kind.translated('config_kind')
     rule = fields.Many2One('rule_engine', 'Amount', ondelete='RESTRICT',

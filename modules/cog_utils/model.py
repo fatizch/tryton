@@ -362,7 +362,8 @@ class VersionedObject(CoopView):
 
     __name__ = 'utils.versionned_object'
 
-    versions = fields.One2Many(None, 'main_elem', 'Versions')
+    versions = fields.One2Many(None, 'main_elem', 'Versions',
+        delete_missing=True)
     current_rec_name = fields.Function(
         fields.Char('Current Value'),
         'get_current_rec_name')
@@ -413,7 +414,8 @@ class VersionObject(CoopView):
 
     __name__ = 'utils.version_object'
 
-    main_elem = fields.Many2One(None, 'Descriptor', ondelete='CASCADE')
+    main_elem = fields.Many2One(None, 'Descriptor', ondelete='CASCADE',
+        required=True)
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
 

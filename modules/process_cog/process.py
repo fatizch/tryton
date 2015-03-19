@@ -887,7 +887,8 @@ class ProcessStep(model.CoopSQL, model.TaggedMixin):
     button_domain = fields.Char('Button Domain')
     custom_views = fields.One2Many('ir.ui.view.description', 'for_step',
         'Custom Views', context={'for_step_name': Eval('technical_name', '')},
-        states={'readonly': ~Eval('technical_name')})
+        states={'readonly': ~Eval('technical_name')},
+        target_not_required=True)
     main_model = fields.Many2One('ir.model', 'Main Model', domain=[
             ('is_workflow', '=', True),
             ('model', '!=', 'process.process_framework'),

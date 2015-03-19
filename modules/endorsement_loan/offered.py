@@ -33,11 +33,11 @@ class EndorsementPart:
     loan_fields = fields.One2Many(
         'endorsement.loan.field', 'endorsement_part', 'Loan Fields', states={
             'invisible': Eval('kind', '') != 'loan'},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
     loan_share_fields = fields.One2Many('endorsement.loan.share.field',
         'endorsement_part', 'Endorsement Loan Share Fields', states={
             'invisible': Eval('kind', '') != 'loan_share'},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
     loan_increment_fields_ = fields.Many2Many(
         'endorsement.loan.increment.field', 'endorsement_part', 'field',
         'Endorsement Loan Increment Field', states={
@@ -46,7 +46,7 @@ class EndorsementPart:
     loan_increment_fields = fields.One2Many('endorsement.loan.increment.field',
         'endorsement_part', 'Endorsement Loan Increment Field', states={
             'invisible': Eval('kind', '') != 'loan'},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
 
     @classmethod
     def __setup__(cls):

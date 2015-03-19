@@ -18,7 +18,8 @@ class EndorsementPart:
     beneficiary_fields = fields.One2Many(
         'endorsement.contract.beneficiary.field', 'endorsement_part',
         'Beneficiary Fields', states={
-            'invisible': Eval('kind', '') != 'option'}, depends=['kind'])
+            'invisible': Eval('kind', '') != 'option'}, depends=['kind'],
+        delete_missing=True)
 
     def clean_up(self, endorsement):
         if self.kind == 'option':

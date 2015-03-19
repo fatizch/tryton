@@ -61,7 +61,8 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
             ], 'Kind', required=True)
     sub_datas = fields.One2Many('extra_data-sub_extra_data', 'master',
         'Sub Data', context={'kind': Eval('extra_data_kind')},
-        states={'invisible': Eval('sub_data_config_kind') != 'simple'})
+        states={'invisible': Eval('sub_data_config_kind') != 'simple'},
+        target_not_required=True)
     sub_data_config_kind = fields.Selection(CONFIG_KIND,
         'Sub Data Config Kind')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='RESTRICT',

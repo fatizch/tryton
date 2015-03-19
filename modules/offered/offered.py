@@ -294,7 +294,8 @@ class Product(model.CoopSQL, Offered):
         'get_change_coverages_order', 'setter_void')
     ordered_coverages = fields.One2Many('offered.product-option.description',
         'product', 'Ordered Coverages', order=[('order', 'ASC')],
-        states={'invisible': ~Eval('change_coverages_order')})
+        states={'invisible': ~Eval('change_coverages_order')},
+        delete_missing=True)
     packages = fields.Many2Many('offered.product-package', 'product',
         'package', 'Packages')
     currency = fields.Many2One('currency.currency', 'Currency', required=True,
@@ -667,9 +668,10 @@ class ProductOptionDescriptionRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'offered.product-option.description'
 
-    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
+        required=True)
     coverage = fields.Many2One('offered.option.description',
-        'Option Description', ondelete='RESTRICT')
+        'Option Description', ondelete='RESTRICT', required=True)
     order = fields.Integer('Order')
 
 

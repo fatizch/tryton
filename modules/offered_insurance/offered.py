@@ -39,7 +39,7 @@ class Product:
     __name__ = 'offered.product'
 
     term_renewal_rules = fields.One2Many('offered.term.rule', 'offered',
-        'Term - Renewal')
+        'Term - Renewal', delete_missing=True)
     item_descriptors = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Item Descriptions'),
@@ -172,7 +172,7 @@ class ItemDescription(model.CoopSQL, model.CoopView, model.TaggedMixin):
         'item_desc', 'sub_item_desc', 'Sub Item Descriptions',
         states={'invisible': Eval('kind') == 'person'})
     coverages = fields.One2Many('offered.option.description', 'item_desc',
-        'Coverages')
+        'Coverages', target_not_required=True)
 
     @fields.depends('name', 'code')
     def on_change_with_code(self):

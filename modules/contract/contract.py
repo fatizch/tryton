@@ -111,7 +111,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             'policy_owner': Eval('current_policy_owner'),
             'start_date': Eval('start_date'),
             }, depends=['current_policy_owner', 'status'],
-            states=_STATES)
+            states=_STATES, delete_missing=True)
     appliable_conditions_date = fields.Date('Appliable Conditions Date',
         states=_STATES, depends=_DEPENDS)
     company = fields.Many2One('company.company', 'Company', required=True,
@@ -147,10 +147,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             ('status', '!=', 'declined'),
             ],
         states=_STATES, depends=['status', 'start_date', 'product',
-            'extra_data_values'])
+            'extra_data_values'], target_not_required=True)
     declined_options = fields.One2ManyDomain('contract.option', 'contract',
         'Declined Options', states=_STATES, depends=['status'],
-        domain=[('status', '=', 'declined')])
+        domain=[('status', '=', 'declined')], target_not_required=True)
     start_management_date = fields.Date('Management Date', states=_STATES,
         depends=_DEPENDS)
     status = fields.Selection(CONTRACTSTATUSES, 'Status', states=_STATES,
@@ -220,7 +220,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             depends=['status', 'product_subscriber_kind']),
         'on_change_with_subscriber_kind', 'setter_void')
     contacts = fields.One2Many('contract.contact', 'contract', 'Contacts',
-        states=_STATES, depends=_DEPENDS)
+        states=_STATES, depends=_DEPENDS, delete_missing=True)
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
 
@@ -1558,7 +1558,8 @@ class ContractAddress(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract.address'
 
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
+        required=True)
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     address = fields.Many2One('party.address', 'Address', ondelete='RESTRICT',

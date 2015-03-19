@@ -17,6 +17,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'User': 'res.user',
             'Team': 'res.team',
             'Process': 'process',
+            'ProcessStep': 'process.step',
             'ProcessStepRelation': 'process-process.step',
             'ProcessLog': 'process.log',
             'Priority': 'res.team.priority',
@@ -53,12 +54,28 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'fancy_name': 'process',
                     'on_model': process_model.id,
                     }])
+        step_a, step_b, step_c = self.ProcessStep.create([{
+                    'main_model': process_model.id,
+                    'technical_name': 'step_a',
+                    'fancy_name': 'Step A',
+                    }, {
+                    'main_model': process_model.id,
+                    'technical_name': 'step_b',
+                    'fancy_name': 'Step B',
+                    }, {
+                    'main_model': process_model.id,
+                    'technical_name': 'step_c',
+                    'fancy_name': 'Step C',
+                    }])
         step1, step2, step3 = self.ProcessStepRelation.create([{
                     'process': process.id,
+                    'step': step_a.id,
                     }, {
                     'process': process.id,
+                    'step': step_b.id,
                     }, {
                     'process': process.id,
+                    'step': step_c.id,
                     }])
         log1, log2, log3, log4, log5 = self.ProcessLog.create([{
                     'user': user1.id,

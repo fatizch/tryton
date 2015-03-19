@@ -15,7 +15,8 @@ __metaclass__ = PoolMeta
 class Contract:
     __name__ = 'contract'
 
-    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments')
+    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
+        delete_missing=False, target_not_required=True)
     doc_received = fields.Function(
         fields.Boolean('All Document Received',
             depends=['document_request_lines']),
@@ -23,7 +24,7 @@ class Contract:
     document_request_lines = fields.One2Many('document.request.line',
         'for_object', 'Documents',
         states={'readonly': Eval('status') != 'quote'},
-        depends=['status'])
+        depends=['status'], delete_missing=True)
 
     @classmethod
     def __setup__(cls):

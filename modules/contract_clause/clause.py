@@ -12,7 +12,8 @@ class ContractClause(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract.clause'
 
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
+        required=True)
     clause = fields.Many2One('clause', 'Clause', ondelete='RESTRICT',
         states={'required': ~Eval('text')}, depends=['text'])
     customized_text = fields.Function(

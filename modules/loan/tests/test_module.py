@@ -298,6 +298,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         company, = self.Company().search([], limit=1)
         currency, = self.Currency.search([], limit=1)
 
+        item_desc = self.ItemDescription(name='Test Item Desc', kind='person',
+            code='test_item_desc')
+        item_desc.save()
+
         def create_insurer(name):
             party = self.Party(name=name)
             party.save()
@@ -325,6 +329,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 code=code,
                 name=name,
                 company=company,
+                item_descr=item_desc,
                 start_date=start_date,
                 account_for_billing=account,
                 insurer=insurer,
@@ -426,10 +431,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract2 = create_contract(account_contract, product, john)
         covered_element1 = self.CoveredElement()
         covered_element1.contract = contract1
+        covered_element1.item_desc = item_desc
         covered_element1.party = john
         covered_element1.save()
         covered_element2 = self.CoveredElement()
         covered_element2.contract = contract2
+        covered_element2.item_desc = item_desc
         covered_element2.party = john
         covered_element2.save()
 

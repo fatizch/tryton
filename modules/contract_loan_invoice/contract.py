@@ -112,7 +112,7 @@ class Contract:
     __name__ = 'contract'
 
     premium_amounts = fields.One2Many('contract.premium.amount', 'contract',
-        'Premium Amounts', readonly=True)
+        'Premium Amounts', readonly=True, delete_missing=True)
     premium_amounts_per_period = fields.One2Many(
         'contract.premium.amount.per_period', 'contract',
         'Premium amounts per period', readonly=True)
@@ -394,7 +394,7 @@ class PremiumAmount(model.CoopSQL, model.CoopView):
     # XXX duplicate with premium but it is not possible with current design to
     # search via premium
     contract = fields.Many2One('contract', 'Contract', select=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', required=True)
     period_start = fields.Date('Period Start', select=True)
     period_end = fields.Date('Period End', select=True)
     start = fields.Date('Start')

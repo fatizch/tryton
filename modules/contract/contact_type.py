@@ -27,7 +27,8 @@ class ContractContact(model.CoopSQL, model.CoopView):
 
     __name__ = 'contract.contact'
 
-    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE')
+    contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
+        required=True)
     type = fields.Many2One('contract.contact.type', 'Type',
         ondelete='RESTRICT', required=True)
     party = fields.Many2One('party.party', 'Party', ondelete='RESTRICT',

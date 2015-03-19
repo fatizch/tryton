@@ -69,10 +69,10 @@ class Offered:
 
     document_rules = fields.One2ManyDomain('document.rule', 'offered',
         'Document Rules', context={'doc_rule_kind': 'main'},
-        domain=[('kind', '=', 'main')])
+        domain=[('kind', '=', 'main')], delete_missing=True)
     sub_document_rules = fields.One2ManyDomain('document.rule', 'offered',
         'Sub Document Rules', context={'doc_rule_kind': 'sub'},
-        domain=[('kind', '=', 'sub')])
+        domain=[('kind', '=', 'sub')], delete_missing=True)
 
     def give_me_documents(self, args):
         try:

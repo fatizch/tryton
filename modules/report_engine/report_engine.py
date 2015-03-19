@@ -50,7 +50,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         domain=[('printable', '=', True)], required=True, ondelete='RESTRICT')
     code = fields.Char('Code', required=True)
     versions = fields.One2Many('report.template.version', 'resource',
-        'Versions')
+        'Versions', delete_missing=True)
     kind = fields.Selection('get_possible_kinds', 'Kind')
     mail_subject = fields.Char('eMail Subject')
     mail_body = fields.Text('eMail Body')
@@ -137,6 +137,7 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
         super(ReportTemplateVersion, cls).__setup__()
         cls.type.states = {'readonly': True}
         cls.resource.selection = [('report.template', 'Document Template')]
+        cls.resource.required = True
 
     @classmethod
     def default_type(cls):

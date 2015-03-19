@@ -37,7 +37,7 @@ class Status(ModelSQL, ModelView):
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     relations = fields.One2Many('process-process.step', 'status', 'Relations',
-        states={'readonly': True})
+        states={'readonly': True}, target_not_required=True)
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
@@ -52,8 +52,10 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
     __name__ = 'process-process.step'
     _func_key = 'technical_step_name'
 
-    process = fields.Many2One('process', 'Process', ondelete='CASCADE')
-    step = fields.Many2One('process.step', 'Step', ondelete='RESTRICT')
+    process = fields.Many2One('process', 'Process', ondelete='CASCADE',
+        required=True)
+    step = fields.Many2One('process.step', 'Step', ondelete='RESTRICT',
+        required=True)
     status = fields.Many2One('process.status', 'Status', ondelete='RESTRICT')
     order = fields.Integer('Order')
     technical_step_name = fields.Function(fields.Char('Technical Step Name'),
@@ -134,7 +136,7 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
     menu_icon = fields.Selection('list_icons', 'Menu Icon')
     menu_name = fields.Char('Menu name')
     action_windows = fields.One2Many('process.process-act_window',
-        'process', 'Action Windows')
+        'process', 'Action Windows', delete_missing=True)
     end_step_name = fields.Char('End Step Name')
 
     @classmethod
@@ -712,7 +714,7 @@ class ProcessTransition(ModelSQL, ModelView):
     pyson = fields.Char('Pyson Constraint')
     methods = fields.One2ManyDomain('process.action', 'parent_transition',
         'Methods', domain=[('technical_kind', '=', 'transition')],
-        order=[('sequence', 'ASC')])
+        order=[('sequence', 'ASC')], target_not_required=True)
     method_kind = fields.Selection([
             ('replace', 'Replace Step Methods'),
             ('add', 'Executed between steps')],
@@ -819,12 +821,13 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
     code_before = fields.One2ManyDomain('process.action', 'parent_step',
         'Executed Before Step', domain=[
             ('technical_kind', '=', 'step_before')],
-        order=[('sequence', 'ASC')])
+        order=[('sequence', 'ASC')], target_not_required=True)
     code_after = fields.One2ManyDomain('process.action', 'parent_step',
         'Executed After Step', domain=[('technical_kind', '=', 'step_after')],
-        order=[('sequence', 'ASC')])
+        order=[('sequence', 'ASC')], target_not_required=True)
     colspan = fields.Integer('View columns', required=True)
-    processes = fields.One2Many('process-process.step', 'step', 'Transitions')
+    processes = fields.One2Many('process-process.step', 'step', 'Transitions',
+        delete_missing=True)
     entering_wizard = fields.Many2One('ir.action', 'Entering Wizard', domain=[
             ('type', '=', 'ir.action.wizard')], ondelete='RESTRICT')
     exiting_wizard = fields.Many2One('ir.action', 'Exiting Wizard', domain=[
@@ -1010,7 +1013,8 @@ class ProcessActWindow(model.CoopSQL):
 
     __name__ = 'process.process-act_window'
 
-    process = fields.Many2One('process', 'Process', ondelete='CASCADE')
+    process = fields.Many2One('process', 'Process', ondelete='CASCADE',
+        required=True)
     action_window = fields.Many2One('ir.action.act_window', 'Action Window',
-        ondelete='CASCADE')
+        ondelete='CASCADE', required=True)
     language = fields.Many2One('ir.lang', 'Language', ondelete='RESTRICT')

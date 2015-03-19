@@ -20,7 +20,7 @@ class EndorsementPart:
         'endorsement.contract.covered_element.field', 'endorsement_part',
         'Covered Element Fields', states={
             'invisible': Eval('kind', '') != 'covered_element'},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
     extra_premium_fields_ = fields.Many2Many(
         'endorsement.contract.extra_premium.field', 'endorsement_part',
         'field', 'Extra Premium Fields', states={
@@ -30,7 +30,7 @@ class EndorsementPart:
         'endorsement.contract.extra_premium.field', 'endorsement_part',
         'Extra Premium Fields', states={
             'invisible': Eval('kind', '') != 'extra_premium'},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
 
     @classmethod
     def __setup__(cls):

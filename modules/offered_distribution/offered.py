@@ -12,7 +12,7 @@ class Product:
     __name__ = 'offered.product'
 
     com_products = fields.One2Many('distribution.commercial_product',
-        'product', 'Commercial Products')
+        'product', 'Commercial Products', delete_missing=True)
 
     @classmethod
     def copy(cls, products, default=None):

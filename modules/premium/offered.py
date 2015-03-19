@@ -38,8 +38,8 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
 
     __name__ = 'offered.product.premium_date'
 
-    product = fields.Many2One('offered.product', 'Product',
-        ondelete='CASCADE')
+    product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
+        required=True)
     type_ = fields.Selection([
             ('yearly_on_start_date', 'Yearly, from the contract start date'),
             ('yearly_custom_date', 'Yearly, at this date'),

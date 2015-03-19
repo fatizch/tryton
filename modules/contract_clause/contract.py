@@ -20,4 +20,4 @@ class Contract:
             [('clause.products', '=', Eval('product'))],
             ],
         states={'readonly': Eval('status') != 'quote'},
-        depends=['product', 'status'])
+        depends=['product', 'status'], delete_missing=True)

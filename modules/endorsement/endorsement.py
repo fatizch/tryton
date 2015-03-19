@@ -46,7 +46,7 @@ def field_mixin(model):
             searcher='search_name')
         endorsement_part = fields.Many2One('endorsement.part',
             'Endorsement Part', states={'invisible': True},
-            ondelete='CASCADE')
+            ondelete='CASCADE', required=True)
         field = fields.Many2One('ir.model.field', 'Field', domain=[
                 ('model.model', '=', model),
                 ('ttype', 'in', ['boolean', 'integer', 'char', 'float',
@@ -730,7 +730,8 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
     endorsement_summary = fields.Function(
         fields.Text('Endorsement Summary'),
         'get_endorsement_summary')
-    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments')
+    attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
+        target_not_required=True)
     contracts_name = fields.Function(
         fields.Char('Contracts Name'),
         'get_contracts_name')

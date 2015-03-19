@@ -135,12 +135,12 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
         'endorsement.contract.activation_history.field',
         'endorsement_part', 'ActivationHistory fields', states={
             'invisible': Eval('kind', '') != 'activation_history',
-            }, depends=['kind'])
+            }, depends=['kind'], delete_missing=True)
     code = fields.Char('Code')
     contract_fields = fields.One2Many('endorsement.contract.field',
         'endorsement_part', 'Contract fields', states={
             'invisible': (Eval('kind', '') != 'contract')},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
     definitions = fields.Many2Many('endorsement.definition-endorsement.part',
         'endorsement_part', 'definition', 'Used by')
     name = fields.Char('Name', translate=True)
@@ -155,7 +155,7 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
     option_fields = fields.One2Many('endorsement.contract.option.field',
         'endorsement_part', 'Option fields', states={
             'invisible': Eval('kind', '') != 'option',
-            }, depends=['kind'])
+            }, depends=['kind'], delete_missing=True)
     view = fields.Selection('get_possible_views', 'View')
     post_apply_actions = fields.Many2Many('endorsement.part-method',
         'endorsement_part', 'method', 'Post Apply Actions',

@@ -137,9 +137,10 @@ class Benefit(model.CoopSQL, offered.Offered):
 
     __name__ = 'benefit'
 
-    benefit_rules = fields.One2Many('benefit.rule', 'offered', 'Benefit Rules')
+    benefit_rules = fields.One2Many('benefit.rule', 'offered', 'Benefit Rules',
+        delete_missing=True)
     reserve_rules = fields.One2Many('benefit.reserve.rule', 'offered',
-        'Reserve Rules')
+        'Reserve Rules', delete_missing=True)
     indemnification_kind = fields.Selection(INDEMNIFICATION_KIND,
         'Indemnification Kind', sort=False, required=True)
     indemnification_kind_string = indemnification_kind.translated(

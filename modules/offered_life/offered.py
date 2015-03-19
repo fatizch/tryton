@@ -18,7 +18,7 @@ class OptionDescription:
 
     coverage_amount_rules = fields.One2Many('offered.coverage_amount.rule',
         'offered', 'Coverage Amount Rules',
-        states={'invisible': Eval('family') != 'life'})
+        states={'invisible': Eval('family') != 'life'}, delete_missing=True)
     is_coverage_amount_needed = fields.Function(
         fields.Boolean('Coverage Amount Needed', states={'invisible': True}),
         'get_is_coverage_amount_needed')

@@ -288,7 +288,7 @@ class RuleExecutionLog(ModelSQL, ModelView):
 
     user = fields.Many2One('res.user', 'User', ondelete='SET NULL')
     rule = fields.Many2One('rule_engine', 'Rule', ondelete='CASCADE',
-        select=True)
+        select=True, required=True)
     errors = fields.Text('Errors', states={'readonly': True})
     warnings = fields.Text('Warnings', states={'readonly': True})
     info = fields.Text('Info', states={'readonly': True})
@@ -570,7 +570,7 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     debug_mode = fields.Boolean('Debug Mode')
     exec_logs = fields.One2Many('rule_engine.log', 'rule', 'Execution Logs',
         states={'readonly': True, 'invisible': ~Eval('debug_mode')},
-        depends=['debug_mode'])
+        depends=['debug_mode'], delete_missing=True)
     execution_code = fields.Function(fields.Text('Execution Code'),
         'on_change_with_execution_code')
     parameters = fields.One2Many('rule_engine.rule_parameter', 'parent_rule',
@@ -1128,7 +1128,8 @@ class RuleFunction(ModelView, ModelSQL):
     type_string = type.translated('type')
     parent = fields.Many2One('rule_engine.function', 'Parent',
         ondelete='SET NULL')
-    children = fields.One2Many('rule_engine.function', 'parent', 'Children')
+    children = fields.One2Many('rule_engine.function', 'parent', 'Children',
+        target_not_required=True)
     translated_technical_name = fields.Char('Translated technical name',
         states={
             'invisible': ~Eval('type').in_(['function', 'rule', 'table']),

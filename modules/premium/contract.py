@@ -32,7 +32,8 @@ class Contract:
             ('rated_entity', 'ASC')])
     fees = fields.One2Many('contract.fee', 'contract', 'Fees', states=_STATES,
         depends=_DEPENDS, delete_missing=True)
-    premiums = fields.One2Many('contract.premium', 'contract', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'contract', 'Premiums',
+        delete_missing=True, target_not_required=True)
     show_premium = fields.Function(
         fields.Boolean('Show Premium'), 'get_show_premium')
 
@@ -190,7 +191,8 @@ class Contract:
 class ContractOption:
     __name__ = 'contract.option'
 
-    premiums = fields.One2Many('contract.premium', 'option', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'option', 'Premiums',
+        delete_missing=True, target_not_required=True)
 
     @classmethod
     def functional_skips_for_duplicate(cls):
@@ -207,7 +209,8 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
         ondelete='CASCADE')
     fee = fields.Many2One('account.fee', 'Fee', required=True,
         ondelete='RESTRICT')
-    premiums = fields.One2Many('contract.premium', 'fee', 'Premiums')
+    premiums = fields.One2Many('contract.premium', 'fee', 'Premiums',
+        delete_missing=True, target_not_required=True)
     overriden_amount = fields.Numeric('Amount', states={
             'readonly': ~Eval('fee_allow_override', False),
             'invisible': Eval('fee_type', '') != 'fixed'},

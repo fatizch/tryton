@@ -48,7 +48,7 @@ class Contract(Printable):
             'invisible': Len(Eval('possible_item_desc', [])) <= 0,
             },
         depends=['status', 'id', 'product', 'start_date', 'extra_data_values',
-            'possible_item_desc'])
+            'possible_item_desc'], target_not_required=True)
     last_renewed = fields.Date('Last Renewed', states=_STATES,
         depends=_DEPENDS)
     next_renewal_date = fields.Date('Next Renewal Date', states=_STATES,
@@ -366,15 +366,18 @@ class ContractOption:
     extra_data_string = extra_data.translated('extra_data')
     extra_premiums = fields.One2Many('contract.option.extra_premium',
         'option', 'Extra Premiums',
-        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
+        delete_missing=True)
     extra_premium_discounts = fields.One2ManyDomain(
         'contract.option.extra_premium', 'option', 'Discounts',
         domain=[('motive.is_discount', '=', True)],
-        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
+        delete_missing=True)
     extra_premium_increases = fields.One2ManyDomain(
         'contract.option.extra_premium', 'option', 'Increases',
         domain=[('motive.is_discount', '=', False)],
-        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
+        states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS,
+        delete_missing=True)
     all_extra_datas = fields.Function(
         fields.Dict('extra_data', 'All Extra Datas'),
         'on_change_with_all_extra_data')
@@ -597,7 +600,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         states={'invisible': ~Eval('extra_data')})
     extra_data_string = extra_data.translated('extra_data')
     item_desc = fields.Many2One('offered.item.description', 'Item Desc',
-        depends=['product', 'options', 'extra_data'], ondelete='RESTRICT')
+        depends=['product', 'options', 'extra_data'], ondelete='RESTRICT',
+        required=True)
     name = fields.Char('Name', states={'invisible': IS_PARTY})
     options = fields.One2ManyDomain('contract.option', 'covered_element',
         'Options', domain=[
@@ -610,10 +614,11 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             'item_desc': Eval('item_desc'),
             'all_extra_datas': Eval('all_extra_datas'),
             },
-        depends=['id', 'item_desc', 'all_extra_datas', 'product'])
+        depends=['id', 'item_desc', 'all_extra_datas', 'product'],
+        target_not_required=True)
     declined_options = fields.One2ManyDomain('contract.option',
         'covered_element', 'Declined Options',
-        domain=[('status', '=', 'declined')])
+        domain=[('status', '=', 'declined')], target_not_required=True)
     parent = fields.Many2One('contract.covered_element', 'Parent',
         ondelete='CASCADE')
     party = fields.Many2One('party.party', 'Actor', domain=[
@@ -636,7 +641,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         states={'invisible': Eval('item_kind') == 'person'},
         depends=['contract', 'item_kind', 'id'],
         # TODO : Check usage of _master_covered, rename to 'covered' ?
-        context={'_master_covered': Eval('id')})
+        context={'_master_covered': Eval('id')}, target_not_required=True)
     covered_name = fields.Function(
         fields.Char('Name'),
         'on_change_with_covered_name')
@@ -1155,7 +1160,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     motive = fields.Many2One('extra_premium.kind', 'Motive',
         ondelete='RESTRICT', required=True)
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
-        states={'invisible': ~Eval('option')})
+        states={'invisible': ~Eval('option')}, required=True)
     rate = fields.Numeric('Rate on Premium', states={
             'invisible': Eval('calculation_kind', '') != 'rate',
             'required': Eval('calculation_kind', '') == 'rate'},
