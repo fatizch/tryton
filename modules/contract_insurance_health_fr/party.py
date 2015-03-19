@@ -243,7 +243,8 @@ class HealthPartyComplement:
 
         outstanding_codes = {}
         for complement in complements:
-            if result[x.id] is None:
+            if (result[complement.id] is None and
+                    complement.insurance_fund_number):
                 outstanding_codes[complement.insurance_fund_number[0:5] +
                     '0000'] = complement.insurance_fund_number
         if not outstanding_codes:
