@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree/field[@name='number']" position="after">
+        <button name="button_resume_process" string="Resume Current Process"/>
+    </xpath>
+</data>
