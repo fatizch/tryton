@@ -12,6 +12,7 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
     'Extra Premium Kind'
     __name__ = 'extra_premium.kind'
 
+    active = fields.Boolean('Active')
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     is_discount = fields.Boolean('Is Discount')
@@ -26,6 +27,10 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
+
+    @staticmethod
+    def default_active():
+        return True
 
     def get_currency(self):
         if Transaction().context.get('company'):

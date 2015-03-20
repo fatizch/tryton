@@ -4,6 +4,8 @@
     <field name="name"/>
     <label name="code"/>
     <field name="code"/>
+    <label name="active"/>
+    <field name="active"/>
     <label name="is_discount"/>
     <field name="is_discount"/>
     <newline/>
