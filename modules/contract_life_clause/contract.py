@@ -61,18 +61,23 @@ class ContractOption:
     beneficiary_clause = fields.Many2One('clause', 'Beneficiary Clause',
         domain=[('coverages', '=', Eval('coverage'))], states={
             'invisible': ~Eval('has_beneficiary_clause'),
-            'required': Bool(Eval('has_beneficiary_clause')),
+            'required': (Bool(Eval('has_beneficiary_clause'))
+                & ~Eval('customized_beneficiary_clause')),
             'readonly': Eval('contract_status') != 'quote',
             },
-        depends=['coverage', 'has_beneficiary_clause', 'contract_status'],
+        depends=['coverage', 'has_beneficiary_clause', 'contract_status',
+            'customized_beneficiary_clause'],
         ondelete='RESTRICT')
     customized_beneficiary_clause = fields.Text(
         'Customized Beneficiary Clause',
         states={
             'invisible': ~Eval('has_beneficiary_clause'),
+            'required': (Eval('has_beneficiary_clause')
+                & ~Eval('beneficiary_clause')),
             'readonly': Eval('contract_status') != 'quote',
             },
-        depends=['has_beneficiary_clause', 'contract_status'])
+        depends=['has_beneficiary_clause', 'contract_status',
+            'beneficiary_clause'])
     beneficiaries = fields.One2Many('contract.option.beneficiary', 'option',
         'Beneficiaries', delete_missing=True,
         states={
