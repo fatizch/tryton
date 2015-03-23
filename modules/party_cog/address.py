@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from collections import OrderedDict
 from trytond.pool import Pool, PoolMeta
 from trytond.modules.cog_utils import utils
 from trytond.modules.cog_utils import coop_string, fields, export
@@ -124,37 +125,31 @@ class Address(export.ExportImportMixin):
     def set_zip_and_city(cls, addresses, name, vals):
         pass
 
+    @fields.depends('street', 'streetbis', 'zip', 'city', 'subdivision',
+        'country')
     def get_address_as_char(self, name, with_return_carriage=False):
-        full_address = ''
-        if self.street:
-            if full_address:
-                full_address += '\n'
-            full_address += self.street
-        if self.streetbis:
-            if full_address:
-                full_address += '\n'
-            full_address += self.streetbis
-        if self.zip or self.city:
-            if full_address:
-                full_address += '\n'
-            if self.zip:
-                full_address += self.zip
-            if self.city:
-                if full_address[-1:] != '\n':
-                    full_address += ' '
-                full_address += self.city
-        if self.country or self.subdivision:
-            if full_address:
-                full_address += '\n'
-            if self.subdivision:
-                full_address += self.subdivision.name
-            if self.country:
-                if full_address[-1:] != '\n':
-                    full_address += ' '
-                full_address += self.country.name
-        if not with_return_carriage:
-            full_address = full_address.replace('\n', ' ')
-        return full_address
+        full_address = OrderedDict()
+        for k in ['street', 'streetbis', 'zip', 'city']:
+            full_address[k] = getattr(self, k)
+        for k in ['subdivision', 'country']:
+            value = getattr(self, k)
+            if value:
+                full_address[k] = value.name
+            else:
+                full_address[k] = ''
+
+        full_address['zip_and_city'] = ' '.join(x for x in (full_address[k] for
+                k in ['zip', 'city'] if full_address[k]))
+        full_address['sub_and_country'] = ' '.join(x for x in (full_address[k]
+                for k in ['subdivision', 'country'] if full_address[k]))
+
+        full_address.pop('city')
+        full_address.pop('zip')
+        full_address.pop('subdivision')
+        full_address.pop('country')
+
+        sep = '\n' if with_return_carriage else ' '
+        return sep.join(x for x in full_address.values() if x)
 
     @classmethod
     def get_var_names_for_full_extract(cls):
