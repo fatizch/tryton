@@ -56,7 +56,6 @@ TITLE_FORMAT = re.compile('^([A-Za-z_][\w\.-]+)+ ?:')
 CODEREVIEW_URL = 'http://rietveld.coopengo.com'
 REDMINE_URL = 'https://redmine.coopengo.com'
 ISSUE_REGEXP = re.compile('(rietveld.coopengo.com/)([0-9]+)')
-DB_PATH = os.path.expanduser('~/review_bot/.reviewbot.db')  # Adapt to config
 
 
 def get_session(url, email, password):
@@ -188,8 +187,8 @@ def patch_repository(repo_dir, issue_id, email, password):
     return issue_id
 
 
-def has_update(entry_id, patchset):
-    db = anydbm.open(DB_PATH, 'c')
+def has_update(rietveld_db_path, entry_id, patchset):
+    db = anydbm.open(rietveld_db_path, 'c')
     if entry_id not in db:
         update_p = True
     else:
@@ -198,8 +197,8 @@ def has_update(entry_id, patchset):
     return update_p
 
 
-def set_update(entry_id, patchset):
-    db = anydbm.open(DB_PATH, 'c')
+def set_update(rietveld_db_path, entry_id, patchset):
+    db = anydbm.open(rietveld_db_path, 'c')
     new_entry = entry_id not in db
     db[entry_id] = str(patchset)
     db.close()
@@ -350,7 +349,7 @@ def update_rm_issue_on_review(issue_id, description, user, patchset,
         put_rm_issue(url, issue_changes, user, redmine_api_key)
 
 
-def check_style(session, issue_url, path_to_repo, email, password):
+def check_style(session, issue_url, repo_path, email, password):
     match = TITLE_FORMAT.match(issue_info['subject'])
     if not match:
         finalize_comments(session, issue_info,
@@ -360,13 +359,13 @@ def check_style(session, issue_url, path_to_repo, email, password):
     prefix = match.groups()[0]
     branch = None
     if prefix in ('tryton', 'trytond'):
-        repository_url = path_to_repo + prefix
+        repository_url = repo_path + prefix
         if prefix == 'trytond':
             branch = ['dev']
         else:
             branch = ['coopengo']
     else:
-        repository_url = path_to_repo + 'coopbusiness'
+        repository_url = repo_path + 'coopbusiness'
         branch = ['default']
 
     repo_dir = install_repository(repository_url, branch)
@@ -412,14 +411,15 @@ if __name__ == '__main__':
     try:
         with open(os.path.expanduser(CONF_FILE), 'r') as fconf:
                 config.readfp(fconf)
-    except:
-        print "Error while trying to read from %s file" % CONF_FILE
+    except Exception as e:
+        print "Error while trying to read from %s file: %s" % (CONF_FILE, e)
         sys.exit(1)
 
     email = config.get('credentials', 'email')
     password = config.get('credentials', 'password')
     redmine_api_key = config.get('credentials', 'redmine_api_key')
-    path_to_repo = config.get('repositories', 'repositories_url')
+    repo_path = config.get('paths', 'repositories_url')
+    rietveld_db_path = config.get('paths', 'rietveld_db')
     session = ReviewSession(CODEREVIEW_URL, email, password)
     most_ancient = date.today() - timedelta(days=7)
     issues_urls = fetch_issues(CODEREVIEW_URL +
@@ -440,14 +440,14 @@ if __name__ == '__main__':
         issue_info = json.loads(issue_info.text)
         # Test only last patchset has changed
         patchset = issue_info['patchsets'][-1]
-        if not has_update(issue_id, patchset):
+        if not has_update(rietveld_db_path, issue_id, patchset):
             continue
         email = issue_info["owner_email"].split('@')[0]
         if arguments.close:
             update_rm_issue_on_close(issue_info['issue'],
                 issue_info['subject'], email, redmine_api_key)
         else:
-            set_update(issue_id, patchset)
-            check_style(session, issue_url, path_to_repo, email, password)
+            set_update(rietveld_db_path, issue_id, patchset)
+            check_style(session, issue_url, repo_path, email, password)
             update_rm_issue_on_review(issue_info['issue'],
                 issue_info['subject'], email, patchset, redmine_api_key)
