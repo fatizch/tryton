@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<form string="Change Party SSN">
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <label name="endorsement_part"/>
+    <field name="endorsement_part"/>
+    <label name="endorsement_definition"/>
+    <field name="endorsement_definition"/>
+    <newline/>
+    <label name="current_ssn"/>
+    <field name="current_ssn" readonly="1"/>
+    <label name="new_ssn"/>
+    <field name="new_ssn"/>
+</form>

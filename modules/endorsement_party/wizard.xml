@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ########################### -->
+        <!-- # Change Party Birth Date # -->
+        <!-- ########################### -->
+        <record model="ir.ui.view" id="party_change_birth_date_view_form">
+            <field name="model">endorsement.party.change_birth_date</field>
+            <field name="type">form</field>
+            <field name="name">party_change_birth_date_form</field>
+        </record>
+        <!-- ######################### -->
+        <!-- # Change Party Address  # -->
+        <!-- ######################### -->
+        <record model="ir.ui.view" id="party_change_address_displayer_view_tree">
+            <field name="model">endorsement.party.change_address_displayer</field>
+            <field name="type">tree</field>
+            <field name="name">party_change_address_displayer_tree</field>
+        </record>
+        <record model="ir.ui.view" id="party_change_address_displayer_view_form">
+            <field name="model">endorsement.party.change_address_displayer</field>
+            <field name="type">form</field>
+            <field name="name">party_change_address_displayer_form</field>
+        </record>
+        <record model="ir.ui.view" id="party_change_address_view_form">
+            <field name="model">endorsement.party.change_address</field>
+            <field name="type">form</field>
+            <field name="name">party_change_address_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Change Party SSN # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="party_change_ssn_view_form">
+            <field name="model">endorsement.party.change_ssn</field>
+            <field name="type">form</field>
+            <field name="name">party_change_ssn_form</field>
+        </record>
+        <!-- #################### -->
+        <!-- # Change Party SSN # -->
+        <!-- #################### -->
+        <record model="ir.ui.view" id="party_change_name_view_form">
+            <field name="model">endorsement.party.change_name</field>
+            <field name="type">form</field>
+            <field name="name">party_change_name_form</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Select Endorsement # -->
+        <!-- ###################### -->
+        <record model="ir.ui.view" id="select_endorsement_view_form">
+            <field name="model">endorsement.start.select_endorsement</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement.select_endorsement_view_form"/>
+            <field name="name">select_endorsement_form</field>
+        </record>
+    </data>
+</tryton>

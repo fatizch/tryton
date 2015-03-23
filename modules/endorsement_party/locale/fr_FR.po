@@ -1,0 +1,614 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.party.address:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.party.address:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.party.address:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.party:"
+msgid ""
+"There may only be one endorsement in_progress at a given time per party"
+msgstr ""
+"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un tiers"
+
+msgctxt "field:endorsement,parties:"
+msgid "Parties"
+msgstr "Tiers"
+
+msgctxt "field:endorsement,party_endorsements:"
+msgid "Party Endorsement"
+msgstr "Avenant sur tiers"
+
+msgctxt "field:endorsement.definition,definition_for_contracts:"
+msgid "Endorsement Definition For Contracts"
+msgstr "Définition d'avenant pour les contrats"
+
+msgctxt "field:endorsement.definition,generate_contract_endorsements:"
+msgid "Generate Contract Endorsements"
+msgstr "Générer les avenants aux contrats"
+
+msgctxt "field:endorsement.definition,is_party:"
+msgid "Is Party"
+msgstr "Est tiers"
+
+msgctxt "field:endorsement.definition,is_technical:"
+msgid "Is technical"
+msgstr "Est technique"
+
+msgctxt "field:endorsement.part,generate_contract_endorsements:"
+msgid "Generate Contract Endorsements"
+msgstr "Générer les avenants aux contrats"
+
+msgctxt "field:endorsement.part,is_party:"
+msgid "Is Party"
+msgstr "Est tiers"
+
+msgctxt "field:endorsement.part,party_fields:"
+msgid "Party Fields"
+msgstr "Champs sur tiers"
+
+msgctxt "field:endorsement.party,addresses:"
+msgid "Addresses"
+msgstr "Adresses"
+
+msgctxt "field:endorsement.party,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.party,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.party,endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'avenant"
+
+msgctxt "field:endorsement.party,endorsement_summary:"
+msgid "Endorsement Summary"
+msgstr "Résumé de l'avenant"
+
+msgctxt "field:endorsement.party,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.party,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "field:endorsement.party,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:endorsement.party,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.party,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.party.address,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.party.address,address:"
+msgid "Addresses"
+msgstr "Adresses"
+
+msgctxt "field:endorsement.party.address,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.party.address,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.address,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.address,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.address,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.party.address,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.party.address,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.address,party_endorsement:"
+msgid "Party Endorsement"
+msgstr "Avenant sur tiers"
+
+msgctxt "field:endorsement.party.address,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.address,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.party.address,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.party.address,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.address,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.address,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.party.address.field,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.address.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.address.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.address.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.party.address.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.address.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.party.address.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.address.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.address.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.address.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.address.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.address.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.party.change_address,displayers:"
+msgid "Addresses"
+msgstr "Adresses"
+
+msgctxt "field:endorsement.party.change_address,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.party.change_address,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.party.change_address,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.change_address,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_address_displayer,date:"
+msgid "Date"
+msgstr "Date"
+
+msgctxt ""
+"field:endorsement.party.change_address_displayer,enable_modification:"
+msgid "Enable Modification"
+msgstr "Autoriser la modification"
+
+msgctxt "field:endorsement.party.change_address_displayer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_address_displayer,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.change_address_displayer,new_address:"
+msgid "New Address"
+msgstr "Nouvelle adresse"
+
+msgctxt "field:endorsement.party.change_address_displayer,previous_address:"
+msgid "Current Address"
+msgstr "Adresse actuelle"
+
+msgctxt "field:endorsement.party.change_birth_date,current_birth_date:"
+msgid "Current Birth Date"
+msgstr "Date de naissance actuelle"
+
+msgctxt "field:endorsement.party.change_birth_date,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.party.change_birth_date,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.party.change_birth_date,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.change_birth_date,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_birth_date,new_birth_date:"
+msgid "New Birth Date"
+msgstr "Nouvelle date de naissance"
+
+msgctxt "field:endorsement.party.change_name,current_birth_name:"
+msgid "Current Birth Name"
+msgstr "Date de naissance actuelle"
+
+msgctxt "field:endorsement.party.change_name,current_first_name:"
+msgid "Current First Name"
+msgstr "Prénom actuel"
+
+msgctxt "field:endorsement.party.change_name,current_name:"
+msgid "Current Name"
+msgstr "Nom actuel"
+
+msgctxt "field:endorsement.party.change_name,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.party.change_name,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.party.change_name,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.change_name,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_name,new_birth_name:"
+msgid "New Birth Name"
+msgstr "Nouveau nom de naissance"
+
+msgctxt "field:endorsement.party.change_name,new_first_name:"
+msgid "New First Name"
+msgstr "Nouveau prénom"
+
+msgctxt "field:endorsement.party.change_name,new_name:"
+msgid "New Name"
+msgstr "Nouveau nom"
+
+msgctxt "field:endorsement.party.change_ssn,current_ssn:"
+msgid "Current SSN"
+msgstr "Numéro de sécurité sociale actuel"
+
+msgctxt "field:endorsement.party.change_ssn,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.party.change_ssn,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.party.change_ssn,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.change_ssn,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.change_ssn,new_ssn:"
+msgid "New SSN"
+msgstr "Nouveau numéro de sécurité sociale"
+
+msgctxt "field:endorsement.party.field,create_date:"
+msgid "Create Date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de création"
+
+msgctxt "field:endorsement.party.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.party.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.party.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.start.select_endorsement,party:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "help:endorsement.party.change_address_displayer,enable_modification:"
+msgid ""
+"If you enable modification, the current address will be modified. Otherwise,"
+" you will create a new address entry"
+msgstr ""
+"Si vous activez la modification, l'adresse actuelle sera changée. Autrement,"
+" vous créerez une nouvelle adresse. "
+
+msgctxt "model:endorsement.party,name:"
+msgid "Endorsement Party"
+msgstr "Avenant sur tiers"
+
+msgctxt "model:endorsement.party.address,name:"
+msgid "Endorsement Address"
+msgstr "Avenant sur adresse"
+
+msgctxt "model:endorsement.party.address.field,name:"
+msgid "Endorsement Address Field"
+msgstr "Champ d'avenant sur adresse"
+
+msgctxt "model:endorsement.party.change_address,name:"
+msgid "Change Party Address"
+msgstr "Changement d'adresse"
+
+msgctxt "model:endorsement.party.change_address_displayer,name:"
+msgid "Address Displayer"
+msgstr "Afficheur d'adresse"
+
+msgctxt "model:endorsement.party.change_birth_date,name:"
+msgid "Change Party Birth Date"
+msgstr "Changement de date de naissance"
+
+msgctxt "model:endorsement.party.change_name,name:"
+msgid "Change Party Name"
+msgstr "Changement de nom de tiers"
+
+msgctxt "model:endorsement.party.change_ssn,name:"
+msgid "Change Party SSN"
+msgstr "Changement de numéro de sécurité Sociale"
+
+msgctxt "model:endorsement.party.field,name:"
+msgid "Endorsement Party Field"
+msgstr "Champ d'avenant sur tiers"
+
+msgctxt "model:ir.action,name:act_endorsement"
+msgid "Endorsement"
+msgstr "Modèle d'avenant"
+
+msgctxt "selection:endorsement.part,kind:"
+msgid "Party"
+msgstr "Tiers"
+
+msgctxt "selection:endorsement.party,state:"
+msgid "Applied"
+msgstr "Appliqué"
+
+msgctxt "selection:endorsement.party,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:endorsement.party.address,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.party.address,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.party.address,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
+msgctxt "view:endorsement.party.change_address:"
+msgid "Change Party Addresses"
+msgstr "Changer les adresses d'un tiers"
+
+msgctxt "view:endorsement.party.change_address_displayer:"
+msgid "Addresses"
+msgstr "Adresses"
+
+msgctxt "view:endorsement.party.change_address_displayer:"
+msgid "Change Party Addresses"
+msgstr "Changement d'adresses"
+
+msgctxt "view:endorsement.party.change_birth_date:"
+msgid "Change Party Birth Date"
+msgstr "Changement de date de naissance"
+
+msgctxt "view:endorsement.party.change_name:"
+msgid "Change Party Name"
+msgstr "Changement de nom de tiers"
+
+msgctxt "view:endorsement.party.change_ssn:"
+msgid "Change Party SSN"
+msgstr "Changement de numéro de sécurité Sociale"
+
+msgctxt "view:endorsement.party.field:"
+msgid "Endorsement Field"
+msgstr "Champ de l'avenant"
+
+msgctxt "view:endorsement.party.field:"
+msgid "Endorsement Fields"
+msgstr "Champs de l'avenant"
+
+msgctxt "view:endorsement.party:"
+msgid "Party Endorsement"
+msgstr "Avenant sur tiers"
+
+msgctxt "view:endorsement.party:"
+msgid "Party Endorsements"
+msgstr "Avenants sur tiers"
+
+msgctxt "view:party.party:"
+msgid "Start Endorsement"
+msgstr "Nouvel avenant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_address,change_party_address_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_address,change_party_address_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_address,change_party_address_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_party_address,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_birth_date,change_party_birth_date_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_birth_date,change_party_birth_date_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_birth_date,change_party_birth_date_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_party_birth_date,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_name,change_party_name_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_name,change_party_name_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_name,change_party_name_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_party_name,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_ssn,change_party_ssn_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_ssn,change_party_ssn_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_party_ssn,change_party_ssn_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_party_ssn,end:"
+msgid "Cancel"
+msgstr "Annuler"

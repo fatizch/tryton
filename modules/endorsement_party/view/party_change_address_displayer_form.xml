@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<form string="Change Party Addresses">
+    <field name="previous_address" mode='form' expand_toolbar="0"/>
+    <field name="is_new" invisible="1"/>
+    <field name="address_endorsement" invisible="1"/>
+    <field name="new_address" mode='form' expand_toolbar="0"/>
+</form>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<form string="Party Endorsement">
+    <label name="party"/>
+    <field name="party"/>
+    <field name="values" colspan="4"/>
+    <label name="state"/>
+    <field name="state"/>
+</form>

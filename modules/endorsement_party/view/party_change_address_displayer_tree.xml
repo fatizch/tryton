@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tree string="Addresses">
+    <field name="date"/>
+    <field name="name" expand="1"/>
+    <field name="party" expand="1"/>
+    <field name="is_new" tree_invisible="1"/>
+    <field name="address_endorsement" tree_invisible="1"/>
+</tree>
