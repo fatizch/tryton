@@ -25,23 +25,6 @@ class Address(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Address, cls).__setup__()
-        if not cls.city.on_change_with:
-            cls.city.on_change_with = []
-        utils.extend_inexisting(cls.city.on_change_with,
-            ['zip', 'country', 'city'])
-        if not cls.city.autocomplete:
-            cls.city.autocomplete = []
-        utils.extend_inexisting(cls.city.autocomplete,
-            ['zip', 'country'])
-
-        if not cls.zip.on_change_with:
-            cls.zip.on_change_with = []
-        utils.extend_inexisting(cls.zip.on_change_with,
-            ['zip', 'country', 'city'])
-        if not cls.zip.autocomplete:
-            cls.zip.autocomplete = []
-        utils.extend_inexisting(cls.zip.autocomplete,
-            ['city', 'country'])
 
         if not cls.city.states:
             cls.city.states = {}
@@ -82,22 +65,29 @@ class Address(export.ExportImportMixin):
         domain.append(('country', '=', country))
         return utils.get_those_objects('country.zipcode', domain)
 
-    def on_change_with_city(self):
-        if self.zip and self.country:
+    @fields.depends('zip', 'country', 'zip_and_city')
+    def on_change_zip(self):
+        if self.zip_and_city and self.zip_and_city.zip == self.zip:
+            self.city = self.zip_and_city.city
+        elif self.country and self.zip:
             cities = self.get_cities_from_zip(self.zip, self.country)
             if cities:
-                return cities[0].city
+                self.city = cities[0].city
             else:
-                return self.city
+                self.city = None
 
-    def on_change_with_zip(self):
-        if self.city and self.country:
+    @fields.depends('city', 'country', 'zip_and_city')
+    def on_change_city(self):
+        if self.zip_and_city and self.zip_and_city.city == self.city:
+            self.zip = self.zip_and_city.zip
+        elif self.country and self.city:
             zips = self.get_zips_from_city(self.city, self.country)
             if zips:
-                return zips[0].zip
+                self.zip = zips[0].zip
             else:
-                return self.zip
+                self.zip = None
 
+    @fields.depends('zip', 'country')
     def autocomplete_city(self):
         if self.zip and self.country:
             cities = self.get_cities_from_zip(self.zip, self.country)
@@ -105,6 +95,7 @@ class Address(export.ExportImportMixin):
         else:
             return ['']
 
+    @fields.depends('city', 'country')
     def autocomplete_zip(self):
         if self.city and self.country:
             zips = self.get_zips_from_city(self.city, self.country)
