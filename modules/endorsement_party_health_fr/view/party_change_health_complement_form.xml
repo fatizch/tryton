@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<form string="Change Party Health Complement">
+    <group id="endorsement_info" colspan="2">
+        <label name="effective_date"/>
+        <field name="effective_date"/>
+        <label name="endorsement_part"/>
+        <field name="endorsement_part"/>
+        <label name="endorsement_definition"/>
+        <field name="endorsement_definition"/>
+    </group>
+    <newline/>
+    <field name="current_health_complement" mode="form" readonly="1" expand_toolbar="0"/>
+    <field name="new_health_complement" mode="form" no_command="1" expand_toolbar="0"/>
+</form>

@@ -1,0 +1,7 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "view:endorsement.party.change_health_complement:"
+msgid "Change Party Health Complement"
+msgstr "Changement de Complément Santé"
