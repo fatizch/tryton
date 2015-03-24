@@ -71,13 +71,15 @@ class Contract:
     def delete_prices(cls, contracts, limit):
         limit = limit or datetime.date.min
         Premium = Pool().get('contract.premium')
+        ids = [x.id for x in contracts]
         if limit > datetime.date.min:
             Premium.write(Premium.search([
                         ('end', '>=', limit),
-                        ('start', '<', limit)]),
+                        ('start', '<', limit),
+                        ('main_contract', 'in', ids)]),
                 {'end': limit + datetime.timedelta(days=-1)})
         Premium.delete(Premium.search([
-                    ('main_contract', 'in', [x.id for x in contracts]),
+                    ('main_contract', 'in', ids),
                     ['OR',
                         ('start', '>=', limit),
                         ('main_contract.status', '=', 'void')],
