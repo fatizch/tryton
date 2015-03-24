@@ -432,9 +432,12 @@ class Contract:
                 ], order=[('start', 'DESC')], limit=1)
         return last_posted[0].start if last_posted else datetime.date.min
 
-    def rebill(self, at_date):
+    def rebill(self, at_date=None):
         pool = Pool()
         Invoice = pool.get('account.invoice')
+
+        if at_date is None:
+            at_date = datetime.date.min
 
         # Recalculate prices
         self.calculate_prices([self], at_date)
@@ -459,7 +462,7 @@ class Contract:
         invoices_to_post = Invoice.search([
                 ('contract', '=', self.id),
                 ('start', '<=', post_end),
-                ('state', '=', 'validated')])
+                ('state', '=', 'validated')], order=[('start', 'ASC')])
         if invoices_to_post:
             Invoice.post(invoices_to_post)
         self.reconcile()
