@@ -953,7 +953,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         Event = pool.get('event')
         sub_status_contracts = defaultdict(list)
         for contract in contracts:
-            sub_status_contracts[contract.termination_reason].append(contract)
+            sub_status_contracts[contract.activation_history[-1].
+                termination_reason].append(contract)
         to_write = []
         for sub_status, contracts in sub_status_contracts.iteritems():
             to_write += [contracts, {
