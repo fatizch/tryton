@@ -190,7 +190,7 @@ class Address(export.ExportImportMixin):
         return 'coopengo-address'
 
     def get_func_key(self, values):
-        return '|'.join((self.zip, self.street))
+        return '|'.join((self.zip or '', self.street or ''))
 
     @classmethod
     def search_func_key(cls, name, clause):
@@ -213,4 +213,5 @@ class Address(export.ExportImportMixin):
 
     @classmethod
     def add_func_key(cls, values):
-        values['_func_key'] = '|'.join((values['zip'], values['street']))
+        values['_func_key'] = '|'.join((values['zip'] or '',
+                values['street'] or ''))
