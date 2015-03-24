@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max, Count
 
 from trytond.pool import Pool, PoolMeta
+from trytond.model import dualmethod
 from trytond.pyson import Eval, And, Len, If, Bool, PYSONEncoder
 from trytond.error import UserError
 from trytond import backend
@@ -350,8 +351,8 @@ class Contract:
             journal = None
 
         invoices = defaultdict(list)
-        for period, contracts in periods.iteritems():
-            for contract in contracts:
+        for period in sorted(periods.iterkeys(), key=lambda x: x[0]):
+            for contract in periods[period]:
                 invoice = contract.get_invoice(*period)
                 if not invoice.journal:
                     invoice.journal = journal
@@ -461,6 +462,100 @@ class Contract:
                 ('state', '=', 'validated')])
         if invoices_to_post:
             Invoice.post(invoices_to_post)
+        self.reconcile()
+
+    @classmethod
+    def get_lines_to_reconcile(cls, contracts):
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+        # Find all not reconciled lines
+        subscribers = defaultdict(list)
+        for contract in contracts:
+            subscribers[contract.subscriber].append(contract)
+        clause = [
+            ('reconciliation', '=', None),
+            ('date', '<=', utils.today()),
+            ('move_state', 'not in', ('draft', 'validated'))]
+        subscriber_clause = ['OR']
+        for subscriber, contract_group in subscribers.iteritems():
+            subscriber_clause.append([
+                    ('party', '=', subscriber.id),
+                    ('account', '=', subscriber.account_receivable.id),
+                    ('contract', 'in', [x.id for x in contract_group]),
+                    ])
+        clause.append(subscriber_clause)
+        may_be_reconciled = MoveLine.search(clause,
+            order=[('contract', 'ASC'), ('date', 'ASC')])
+
+        per_contract = defaultdict(list)
+        for line in may_be_reconciled:
+            per_contract[line.contract].append(line)
+
+        reconciliations = {}
+
+        for contract, possible_lines in per_contract.iteritems():
+            # Split lines in available amount / amount to pay
+            available, to_pay, total_available = [], [], Decimal(0)
+            for line in possible_lines:
+                if line.credit > 0 or line.debit < 0:
+                    available.append(line)
+                    total_available += line.credit - line.debit
+                else:
+                    to_pay.append(line)
+            if not to_pay or not available:
+                continue
+
+            # Do reconciliation. Lines are ordered by date
+            to_reconcile, total_to_reconcile = [], Decimal(0)
+            for line in to_pay:
+                if line.debit - line.credit > total_available:
+                    break
+                to_reconcile.append(line)
+                total_available -= line.debit - line.credit
+                total_to_reconcile += line.debit - line.credit
+            if not to_reconcile:
+                continue
+
+            # Select lines for payment in date order
+            for line in available:
+                if total_to_reconcile <= 0:
+                    break
+                total_to_reconcile -= line.credit - line.debit
+                to_reconcile.append(line)
+
+            reconciliations[contract] = (to_reconcile, max(0,
+                    -total_to_reconcile))
+
+        # Split lines if necessary
+        splits = MoveLine.split_lines([(lines[-1], split_amount)
+                for _, (lines, split_amount) in reconciliations.iteritems()
+                if split_amount != 0])
+
+        reconciliation_lines = []
+        for contract, (lines, split_amount) in reconciliations.iteritems():
+            reconciliation_lines.append(lines)
+            if split_amount == 0:
+                continue
+
+            # If a line was split, add the matching line to the reconciliation
+            _, remaining, compensation = splits[lines[-1]]
+            lines += [remaining, compensation]
+
+        return reconciliation_lines
+
+    @dualmethod
+    def reconcile(cls, contracts):
+        pool = Pool()
+        Reconciliation = pool.get('account.move.reconciliation')
+        lines_to_reconcile, reconciliations = [], []
+        lines_to_reconcile = cls.get_lines_to_reconcile(contracts)
+        for reconciliation_lines in lines_to_reconcile:
+            if not reconciliation_lines:
+                continue
+            reconciliations.append(Reconciliation(lines=reconciliation_lines))
+        if reconciliations:
+            Reconciliation.save(reconciliations)
+        return reconciliations
 
     def init_from_product(self, product, start_date=None, end_date=None):
         pool = Pool()
