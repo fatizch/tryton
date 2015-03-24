@@ -42,4 +42,5 @@ def register():
         InvoiceContract,
         SynthesisMenuOpen,
         DisplayContractPremium,
+        ContractBalance,
         module='contract_insurance_invoice', type_='wizard')

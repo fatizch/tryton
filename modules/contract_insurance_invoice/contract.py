@@ -8,12 +8,13 @@ from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max, Count
 
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, And, Len, If, Bool
+from trytond.pyson import Eval, And, Len, If, Bool, PYSONEncoder
 from trytond.error import UserError
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.tools import reduce_ids, grouped_slice
-from trytond.wizard import Wizard, StateView, StateTransition, Button
+from trytond.wizard import Wizard, StateView, StateTransition, Button, \
+    StateAction
 from trytond.rpc import RPC
 from trytond.cache import Cache
 
@@ -33,6 +34,7 @@ __all__ = [
     'InvoiceContract',
     'InvoiceContractStart',
     'DisplayContractPremium',
+    'ContractBalance',
     ]
 
 FREQUENCIES = [
@@ -1063,3 +1065,35 @@ class DisplayContractPremium:
         children['contract.covered_element'] = ['options']
         children['options'].append('extra_premiums')
         return children
+
+
+class ContractBalance(Wizard):
+    'Display contract balance'
+
+    __name__ = 'contract.balance'
+
+    start_state = 'open_balance'
+    open_balance = StateAction('account.act_move_line_form')
+
+    def do_open_balance(self, action):
+        pool = Pool()
+        Contract = pool.get('contract')
+
+        active_model = Transaction().context.get('active_model')
+        active_id = Transaction().context.get('active_id')
+        if active_model != 'contract':
+            self.raise_user_error('no_contract_selected')
+
+        contract = Contract(active_id)
+
+        action['pyson_domain'] = [
+            ('contract', '=', contract.id),
+            ('account', '=', contract.subscriber.account_receivable.id),
+            ('move.state', '=', 'posted'),
+            ]
+        action['pyson_domain'] = PYSONEncoder().encode(action['pyson_domain'])
+        action['pyson_order'] = PYSONEncoder().encode([
+                ('reconciliation', 'DESC'), ('date', 'DESC'), ('id', 'DESC')])
+        action['domain'] = PYSONEncoder().encode(
+            [('reconciliation', '=', None)])
+        return action, {}
