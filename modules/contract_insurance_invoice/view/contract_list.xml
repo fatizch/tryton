@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree" position="inside">
+        <button string="Change Bank Account" name="button_change_bank_account" tree_invisible="1"/>
+    </xpath>
+</data>

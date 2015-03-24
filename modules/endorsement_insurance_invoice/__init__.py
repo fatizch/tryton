@@ -2,6 +2,7 @@ from trytond.pool import Pool
 from .endorsement import *
 from .offered import *
 from .wizard import *
+from .contract import *
 
 
 def register():
@@ -20,4 +21,5 @@ def register():
 
     Pool.register(
         StartEndorsement,
+        ChangeBillingAccount,
         module='endorsement_insurance_invoice', type_='wizard')

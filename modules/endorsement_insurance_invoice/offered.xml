@@ -47,5 +47,49 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">2000</field>
         </record>
+        <!-- #################################################### -->
+        <!-- # Change Bank Account Endorsement Configuration # -->
+        <!-- #################################################### -->
+        <record model="endorsement.definition" id="change_bank_account_definition">
+            <field name="code">change_bank_account</field>
+            <field name="name">Change Bank Account</field>
+        </record>
+        <record model="endorsement.part" id="change_bank_account_endorsement_part">
+            <field name="code">change_bank_account</field>
+            <field name="name">Change Bank Account</field>
+            <field name="kind">billing_information</field>
+            <field name="view">dummy_step</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="change_bank_account_relation">
+            <field name="definition" ref="change_bank_account_definition"/>
+            <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
+            <field name="order">1</field>
+        </record>
+        <record model="endorsement.contract.billing_information.field" id="payment_term_field">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'payment_term')]"/>
+            <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
+        </record>
+        <record model="endorsement.contract.billing_information.field" id="direct_debit_day_field">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'direct_debit_day')]"/>
+            <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
+        </record>
+        <record model="endorsement.contract.billing_information.field" id="billing_mode_field">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'billing_mode')]"/>
+            <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
+        </record>
+        <record model="endorsement.contract.billing_information.field" id="direct_debit_account_field">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'direct_debit_account')]"/>
+            <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
+        </record>
+        <record model="endorsement.contract.billing_information.field" id="billing_information_date_field">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'date')]"/>
+            <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
+        </record>
+    </data>
+    <data depends="account_payment_sepa_contract">
+        <record model="endorsement.contract.billing_information.field" id="sepa_mandate_field">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'sepa_mandate')]"/>
+            <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
+        </record>
     </data>
 </tryton>

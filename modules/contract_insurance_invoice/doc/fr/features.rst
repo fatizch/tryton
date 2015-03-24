@@ -27,5 +27,9 @@
   données métier qui l'ont généré. Ceci permet également de faciliter les
   extractions basées sur les primes.
 
+- **Modification de compte bancaire :** Permet de modifier le compte bancaire
+  à utiliser pour le quittancement sur un contrat, et de le propager aux
+  contrats qui utilisaient le même compte.
+
 - **API de tarification :** Il est possible d'obtenir via un appel RPC
   les tarifs pour un contrat potentiel. Rien n'est sauvegardé en base.

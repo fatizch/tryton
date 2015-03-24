@@ -36,6 +36,8 @@ __all__ = [
     'InvoiceContractStart',
     'DisplayContractPremium',
     'ContractBalance',
+    'ChangeBankAccount',
+    'ChangeBankAccountSelect',
     ]
 
 FREQUENCIES = [
@@ -106,6 +108,7 @@ class Contract:
         cls.__rpc__.update({'ws_rate_contracts': RPC(readonly=False)})
         cls._buttons.update({
                 'first_invoice': {},
+                'button_change_bank_account': {},
                 })
 
     def invoices_report(self):
@@ -646,6 +649,12 @@ class Contract:
         super(Contract, cls).void(contracts, void_reason)
         for contract in contracts:
             contract.rebill(datetime.date.min)
+
+    @classmethod
+    @model.CoopView.button_action(
+        'contract_insurance_invoice.act_change_contract_bank_account')
+    def button_change_bank_account(cls, contracts):
+        pass
 
 
 class ContractFee:
@@ -1195,3 +1204,119 @@ class ContractBalance(Wizard):
         action['domain'] = PYSONEncoder().encode(
             [('reconciliation', '=', None)])
         return action, {}
+
+
+class ChangeBankAccount(model.CoopWizard):
+    'Change a contract bank account'
+
+    __name__ = 'contract.bank_account.change'
+
+    start_state = 'select_new_account'
+    select_new_account = StateView('contract.bank_account.change.select',
+        'contract_insurance_invoice.bank_account_change_select_view_form', [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Change Account', 'change_account', 'tryton-go-next'),
+            ])
+    change_account = StateTransition()
+
+    @classmethod
+    def __setup__(cls):
+        super(ChangeBankAccount, cls).__setup__()
+        cls._error_messages.update({
+                'contract_expected': 'This action is only possible on a '
+                'contract',
+                'not_direct_debit': 'The contract is not using a direct debit '
+                'billing mode',
+                })
+
+    def default_select_new_account(self, name):
+        if Transaction().context.get('active_model') != 'contract':
+            self.raise_user_error('contract_expected')
+        values = {
+            'effective_date': utils.today(),
+            'contract': Transaction().context.get('active_id'),
+            }
+        pool = Pool()
+        contract = pool.get('contract')(values['contract'])
+        if not contract.billing_information.direct_debit:
+            self.raise_user_error('not_direct_debit', (contract.rec_name))
+        return values
+
+    def update_bank_account(self):
+        data = self.select_new_account
+        if data.subscriber not in data.new_bank_account.owners:
+            data.new_bank_account.owners = [data.subscriber] + list(
+                data.new_bank_account.owners)
+            data.new_bank_account.save()
+
+    def update_contract(self):
+        data = self.select_new_account
+        pool = Pool()
+        BillingInformation = pool.get('contract.billing_information')
+        for contract in list(data.other_contracts) + [data.contract]:
+            new_billing_informations = [x
+                for x in contract.billing_informations
+                if (x.date or datetime.date.min) <= data.effective_date]
+            if new_billing_informations[-1].date == data.effective_date:
+                new_billing_informations[-1].bank_account = \
+                    data.new_bank_account
+            else:
+                prev_value = new_billing_informations[-1]
+                new_value = BillingInformation()
+                for fname in ('billing_mode', 'payment_term',
+                        'direct_debit_day'):
+                    setattr(new_value, fname, getattr(prev_value, fname))
+                    new_value.date = data.effective_date
+                new_value.direct_debit_account = data.new_bank_account
+                new_billing_informations.append(new_value)
+            contract.billing_informations = new_billing_informations
+
+    def save_contracts(self):
+        Pool().get('contract').save([self.select_new_account.contract] +
+            list(self.select_new_account.other_contracts))
+
+    def transition_change_account(self):
+        self.update_bank_account()
+        self.update_contract()
+        self.save_contracts()
+        return 'end'
+
+
+class ChangeBankAccountSelect(model.CoopView):
+    'Select new bank account to use'
+
+    __name__ = 'contract.bank_account.change.select'
+
+    effective_date = fields.Date('Effective Date', domain=[
+            ('effective_date', '>=', Eval('contract_start_date'))],
+        depends=['contract_start_date'])
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    contract_start_date = fields.Date('Contract Start Date', readonly=True)
+    subscriber = fields.Many2One('party.party', 'Subscriber', readonly=True,
+        states={'invisible': True})
+    previous_bank_account = fields.Many2One('bank.account',
+        'Previous Bank Account', readonly=True)
+    new_bank_account = fields.Many2One('bank.account', 'New Bank Account',
+        required=True)
+    other_contracts = fields.Many2Many('contract', None, None,
+        'Other Contracts', domain=[('id', 'in', Eval('possible_contracts'))],
+        depends=['possible_contracts'])
+    possible_contracts = fields.Many2Many('contract', None, None,
+        'Possible Contracts', readonly=True, states={'invisible': True})
+
+    @fields.depends('effective_date', 'contract', 'subscriber',
+        'previous_bank_account', 'contract_start_date', 'possible_contracts',
+        'other_contracts')
+    def on_change_effective_date(self):
+        self.contract_start_date = self.contract.start_date
+        self.subscriber = self.contract.subscriber
+        self.previous_bank_account = utils.get_value_at_date(
+            self.contract.billing_informations,
+            self.effective_date).direct_debit_account
+        self.possible_contracts = Pool().get('contract').search([
+                ('subscriber', '=', self.subscriber.id),
+                ('id', '!=', self.contract.id),
+                ('billing_informations.direct_debit_account', '=',
+                    self.previous_bank_account.id),
+                ('status', 'in', ('active', 'hold'))])
+        self.other_contracts = []

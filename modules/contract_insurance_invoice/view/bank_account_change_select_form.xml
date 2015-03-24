@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<form string="Select New Bank Account">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="effective_date"/>
+    <field name="effective_date"/>
+    <newline/>
+    <label name="previous_bank_account"/>
+    <field name="previous_bank_account"/>
+    <label name="new_bank_account"/>
+    <field name="new_bank_account"/>
+    <newline/>
+    <field name="other_contracts" widget="many2many_selection" colspan="4"/>
+    <newline/>
+    <field name="subscriber"/>
+    <field name="possible_contracts"/>
+</form>

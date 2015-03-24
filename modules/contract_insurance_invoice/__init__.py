@@ -37,10 +37,12 @@ def register():
         PaymentTermLine,
         SynthesisMenuInvoice,
         SynthesisMenu,
+        ChangeBankAccountSelect,
         module='contract_insurance_invoice', type_='model')
     Pool.register(
         InvoiceContract,
         SynthesisMenuOpen,
         DisplayContractPremium,
         ContractBalance,
+        ChangeBankAccount,
         module='contract_insurance_invoice', type_='wizard')
