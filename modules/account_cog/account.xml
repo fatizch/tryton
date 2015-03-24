@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ################ -->
+        <!-- # Journal Type # -->
+        <!-- ################ -->
+        <record model="account.journal.type" id="journal_type_split">
+            <field name="name">Split</field>
+            <field name="code">split</field>
+        </record>
+    </data>
+    <data noupdate="1">
+        <!-- ########### -->
+        <!-- # Journal # -->
+        <!-- ########### -->
+        <record model="account.journal" id="journal_split">
+            <field name="name">Move Line splitting</field>
+            <field name="code">SPLIT</field>
+            <field name="type">split</field>
+            <field name="sequence" ref="account.sequence_account_journal"/>
+        </record>
+    </data>
+</tryton>
