@@ -59,6 +59,16 @@ class Line:
             else:
                 self.party = self.contract.subscriber
 
+    def get_move_line(self):
+        result = super(Line, self).get_move_line()
+        contract = self.contract
+        if not contract and self.invoice:
+            contract = self.invoice.contract
+        if not contract:
+            return result
+        result.contract = contract
+        return result
+
 
 class BankDepositTicketReport(CompanyReport):
     __name__ = 'account.statement.bank_deposit_ticket_report'

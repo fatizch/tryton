@@ -19,6 +19,7 @@ def register():
         Invoice,
         InvoiceLine,
         Fee,
+        MoveLine,
         Contract,
         ContractFee,
         ContractOption,

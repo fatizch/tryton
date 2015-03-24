@@ -190,10 +190,27 @@ class Invoice:
         return {'payment_date':
             billing_information.get_direct_debit_planned_date(line)}
 
+    def _get_move_line_invoice_line(self):
+        res = super(Invoice, self)._get_move_line_invoice_line()
+        if not self.contract:
+            return res
+        for line in res:
+            line['contract'] = self.contract
+        return res
+
+    def _get_move_line_invoice_tax(self):
+        res = super(Invoice, self)._get_move_line_invoice_tax()
+        if not self.contract:
+            return res
+        for line in res:
+            line['contract'] = self.contract
+        return res
+
     def _get_move_line(self, date, amount):
         line = super(Invoice, self)._get_move_line(date, amount)
         if not self.contract or not self.contract_invoice or not line:
             return line
+        line['contract'] = self.contract.id
         contract_revision_date = max(line['maturity_date'],
             utils.today())
         with Transaction().set_context(

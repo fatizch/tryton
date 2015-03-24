@@ -1,5 +1,6 @@
 import unittest
 import doctest
+import mock
 
 from decimal import Decimal
 from datetime import date
@@ -33,6 +34,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'BillingInformation': 'contract.billing_information',
             'BillingMode': 'offered.billing_mode',
             'Company': 'company.company',
+            'MoveLine': 'account.move.line',
             'User': 'res.user',
             }
 
@@ -232,6 +234,78 @@ class ModuleTestCase(test_framework.CoopTestCase):
             self.assertEqual(
                 billing_information.get_direct_debit_planned_date(line),
                 date(2014, 10, 5))
+
+    def test0050_propagate_contract_move_line(self):
+        from trytond.modules.account.move import Line as SuperLine
+        with mock.patch.object(SuperLine, 'write') as super_write:
+            lines = [mock.Mock()]
+            values = {'reconciliation': 16}
+            self.MoveLine.write(lines, values)
+            super_write.assert_called_with(lines, {
+                    'reconciliation': 16})
+
+        with mock.patch.object(SuperLine, 'write') as super_write:
+            lines = [mock.Mock()]
+            lines[0].contract = 10
+            values = {'reconciliation': 16}
+            self.MoveLine.write(lines, values)
+            super_write.assert_called_with(lines, {
+                    'reconciliation': 16})
+
+        with mock.patch.object(SuperLine, 'write') as super_write:
+            lines = [mock.Mock(), mock.Mock()]
+            lines[0].contract = 10
+            lines[1].contract = None
+            values = {'reconciliation': 16}
+            self.MoveLine.write(lines, values)
+            super_write.assert_called_with(lines, {
+                    'reconciliation': 16,
+                    'contract': 10})
+
+        with mock.patch.object(SuperLine, 'write') as super_write:
+            lines = [mock.Mock(), mock.Mock(), mock.Mock()]
+            lines[0].contract = 10
+            lines[1].contract = 11
+            lines[2].contract = None
+            values = {'reconciliation': 16}
+            self.MoveLine.write(lines, values)
+            super_write.assert_called_with(lines, {
+                    'reconciliation': 16})
+
+        with mock.patch.object(SuperLine, 'write') as super_write:
+            lines = [mock.Mock(), mock.Mock(), mock.Mock()]
+            lines[0].contract = 10
+            lines[1].contract = 10
+            lines[2].contract = None
+            values = {'reconciliation': 16}
+            self.MoveLine.write(lines, values)
+            super_write.assert_called_with(lines, {
+                    'reconciliation': 16,
+                    'contract': 10})
+
+        with mock.patch.object(SuperLine, 'write') as super_write:
+            lines_1 = [mock.Mock(), mock.Mock(), mock.Mock()]
+            lines_1[0].contract = 10
+            lines_1[1].contract = 10
+            lines_1[2].contract = None
+            values_1 = {'reconciliation': 16}
+            lines_2 = [mock.Mock(), mock.Mock()]
+            lines_2[0].contract = None
+            lines_2[1].contract = 5
+            values_2 = {'something': 10}
+            lines_3 = [mock.Mock(), mock.Mock(), mock.Mock()]
+            lines_3[0].contract = None
+            lines_3[1].contract = 4
+            lines_3[2].contract = None
+            values_3 = {'reconciliation': 4, 'something': 31}
+            self.MoveLine.write(lines_1, values_1, lines_2, values_2, lines_3,
+                values_3)
+            super_write.assert_called_with(lines_1, {
+                    'reconciliation': 16,
+                    'contract': 10}, lines_2, values_2, lines_3, {
+                    'reconciliation': 4,
+                    'something': 31,
+                    'contract': 4})
 
 
 def suite():
