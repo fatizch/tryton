@@ -123,7 +123,7 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
                 for x in endorsement_set.endorsements], reason=reason)
 
     def get_contract_set(self, name):
-        if (self.endorsements and
+        if (self.endorsements and self.endorsements[0].contracts and
                 self.endorsements[0].contracts[0].contract_set):
             return self.endorsements[0].contracts[0].contract_set.id
 
