@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or
 
 from trytond.modules.cog_utils import fields, model
 
@@ -171,7 +171,6 @@ class Beneficiary(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     accepting = fields.Boolean('Accepting')
     party = fields.Many2One('party.party', 'Party', states={
-            'invisible': ~Eval('accepting'),
             'required': Bool(Eval('accepting')),
             }, depends=['accepting'],
         ondelete='RESTRICT')
@@ -181,9 +180,9 @@ class Beneficiary(model.CoopSQL, model.CoopView):
             'required': Bool(Eval('accepting')),
             }, depends=['party', 'accepting'], ondelete='RESTRICT')
     reference = fields.Char('Reference', states={
-            'invisible': Bool(Eval('accepting')),
-            'required': ~Eval('accepting'),
-            })
+            'invisible': Or(Bool(Eval('party')), Bool(Eval('accepting'))),
+            'required': ~Eval('party'),
+            }, depends=['party', 'accepting'])
     share = fields.Numeric('Share', digits=(4, 4))
 
     @staticmethod
