@@ -833,12 +833,10 @@ class StartEndorsement:
     def update_default_covered_element_from_endorsement(self, endorsements,
             default_values):
         for endorsement in endorsements:
-            default_covered_element = default_values['covered_elements'][0]
-            # TODO : improve for multiple covered_elements
-            for covered_element in endorsement.covered_elements:
+            default_covered_elements = default_values['covered_elements']
+            for i, covered_element in enumerate(endorsement.covered_elements):
                 if covered_element.action == 'add':
-                    default_covered_element.update(covered_element.values)
-                    break
+                    default_covered_elements[i].update(covered_element.values)
 
     def default_new_covered_element(self, name):
         endorsement_part = self.get_endorsement_part_for_state(
@@ -853,17 +851,23 @@ class StartEndorsement:
             'possible_item_desc': [x.id for x in contract.possible_item_desc],
             'extra_datas': [x.id for x in contract.extra_datas],
             }
+        num_covered_elements = 1
+        if (self.endorsement.contract_endorsements and
+                self.endorsement.contract_endorsements[0].covered_elements):
+            num_covered_elements = len(
+                self.endorsement.contract_endorsements[0].covered_elements)
         result['covered_elements'] = [{
                 'start_date': endorsement_date,
                 'item_desc': (result['possible_item_desc'] or [None])[0],
                 'main_contract': contract.id,
                 'product': result['product'],
-                }]
-        new_covered_element = Pool().get('contract.covered_element')(
-            **result['covered_elements'][0])
-        new_covered_element.on_change_item_desc()
-        result['covered_elements'][0].update(
-            new_covered_element._default_values)
+                } for _ in xrange(num_covered_elements)]
+        for covered_elem in result['covered_elements']:
+            new_covered_element = Pool().get('contract.covered_element')(
+                **covered_elem)
+            new_covered_element.on_change_item_desc()
+            covered_elem.update(
+                new_covered_element._default_values)
         endorsements = self.get_endorsements_for_state('new_covered_element')
         if endorsements:
             self.update_default_covered_element_from_endorsement(endorsements,

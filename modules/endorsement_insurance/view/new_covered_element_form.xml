@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <form string="New Covered Element">
-    <field name="covered_elements" mode="form" colspan="4"/>
+    <field name="covered_elements" mode="form,tree" colspan="4"/>
     <field name="extra_data" invisible="1"/>
     <field name="contract" invisible="1"/>
     <field name="possible_item_desc" invisible="1"/>
