@@ -1,7 +1,9 @@
 import datetime
 from dateutil import rrule
 
+from trytond import backend
 from trytond.pool import PoolMeta, Pool
+from trytond.transaction import Transaction
 from trytond.pyson import Eval
 from trytond.model import MatchMixin
 
@@ -50,11 +52,15 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
             }, depends=['type_'])
 
     @classmethod
-    def __setup__(cls):
-        super(ProductPremiumDate, cls).__setup__()
-        cls._sql_constraints += [
-            ('rule_uniq', 'UNIQUE(type_, custom_date, product)',
-                'Premium Date must be unique')]
+    def __register__(cls, module_name):
+        super(ProductPremiumDate, cls).__register__(module_name)
+
+        # Migration from 1.3 : Remove constraint on triplet product / type_ /
+        # custom_date
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        TableHandler(cursor, cls, module_name).drop_constraint(
+            'offered_product_premium_date_rule_uniq')
 
     @classmethod
     def create(cls, values):
