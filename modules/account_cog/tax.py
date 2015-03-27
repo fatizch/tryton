@@ -105,6 +105,10 @@ class TaxDescriptionVersion(model.CoopSQL, model.VersionObject):
 class Tax(export.ExportImportMixin):
     __name__ = 'account.tax'
 
+    @classmethod
+    def is_master_object(cls):
+        return True
+
 
 class TaxTemplate(export.ExportImportMixin):
     __name__ = 'account.tax.template'

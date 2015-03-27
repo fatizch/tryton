@@ -85,6 +85,10 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                 '%s',
                 })
 
+    @classmethod
+    def is_master_object(cls):
+        return True
+
     @staticmethod
     def default_type_():
         return ''

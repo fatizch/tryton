@@ -119,6 +119,10 @@ class BillingMode(model.CoopSQL, model.CoopView):
                 'frequency, sync_day, sync_month, frequency, frequency from '
                 'offered_invoice_frequency')
 
+    @classmethod
+    def is_master_object(cls):
+        return True
+
     def get_allowed_direct_debit_days(self):
         if not self.direct_debit:
             return [('', '')]

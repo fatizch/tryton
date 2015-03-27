@@ -67,6 +67,10 @@ class Account(export.ExportImportMixin):
     _func_key = 'code'
 
     @classmethod
+    def is_master_object(cls):
+        return True
+
+    @classmethod
     def _export_skips(cls):
         res = super(Account, cls)._export_skips()
         res.add('left')
