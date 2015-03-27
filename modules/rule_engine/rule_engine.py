@@ -8,6 +8,7 @@ import functools
 import json
 import datetime
 import pyflakes.messages
+import logging
 
 from StringIO import StringIO
 from decimal import Decimal
@@ -766,11 +767,12 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     def check_code(self):
         if Transaction().user == 0:
             return True
-        result = not bool(filter(
-            lambda m: self.filter_errors(m),
-            check_code(self.execution_code)))
-        if result:
+        errors = filter(lambda m: self.filter_errors(m),
+            check_code(self.execution_code))
+        if not errors:
             return True
+        logging.getLogger('rule_engine').warning([
+                x.message_args for x in errors])
         self.raise_user_error('invalid_code')
 
     def get_extra_data_for_on_change(self, existing_values):
