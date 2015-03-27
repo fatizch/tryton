@@ -1,6 +1,6 @@
 from decimal import Decimal
 from simpleeval import simple_eval
-from sql import Column
+from sql import Column, Null
 from sql.operators import Or, Concat
 from sql.aggregate import Sum
 
@@ -217,7 +217,8 @@ class Agent:
         # sum of redeemed prepayment
         cursor.execute(*query_table.select(commission.agent, details.option,
                 Sum(commission.redeemed_prepayment),
-                where=where_redeemed,
+                where=(where_redeemed and
+                    commission.redeemed_prepayment != Null),
                 group_by=[commission.agent, details.option]))
         for agent, option, amount in cursor.fetchall():
             result[(agent, option)] = -amount

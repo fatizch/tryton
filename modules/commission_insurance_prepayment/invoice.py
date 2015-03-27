@@ -48,6 +48,8 @@ class Invoice:
             agent_options.keys())
         for k, v in agent_options.iteritems():
             for commission in v:
+                if k not in outstanding_prepayment:
+                    continue
                 prepayment_used = min(outstanding_prepayment[k],
                     commission.amount)
                 commission.amount -= prepayment_used
