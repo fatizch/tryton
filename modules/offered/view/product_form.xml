@@ -29,4 +29,9 @@
         <label name="subscriber_kind"/>
         <field name="subscriber_kind"/>
     </xpath>
+    <xpath expr="/form/notebook/page[@id='admin']" position="before">
+        <page string="Report Templates" id="report_templates">
+            <field name="report_templates" colspan="4"/>
+        </page>
+    </xpath>
 </data>

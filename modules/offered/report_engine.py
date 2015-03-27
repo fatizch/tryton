@@ -8,22 +8,19 @@ from trytond.modules.cog_utils import fields, model
 __metaclass__ = PoolMeta
 __all__ = [
     'ReportProductRelation',
-    'ReportTemplateOffered'
+    'ReportTemplate',
     ]
 
 
-class ReportTemplateOffered:
-    """
-        We would like to make offered.product an extras_depend but having
-        ReportProductRelation with its product column prevents that.
-        This part of the ReportTemplate model has been isolated in this file
-        to facilitate later refactoring when we'll know how to circumvent this
-        "extras_depend with M2M" situation.
-    """
+class ReportTemplate:
     __name__ = 'report.template'
 
     products = fields.Many2Many('report.template-offered.product',
         'report_template', 'product', 'Products')
+
+    @classmethod
+    def _export_light(cls):
+        return super(ReportTemplate, cls)._export_light() | {'products'}
 
 
 class ReportProductRelation(model.CoopSQL):
@@ -32,7 +29,7 @@ class ReportProductRelation(model.CoopSQL):
     __name__ = 'report.template-offered.product'
 
     report_template = fields.Many2One('report.template', 'Document',
-        ondelete='CASCADE')
+        ondelete='RESTRICT')
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE')
 
     @classmethod

@@ -6,6 +6,7 @@ from .extra_data import *
 from .test_case import *
 from .configuration import *
 from .package import *
+from .report_engine import *
 
 
 def register():
@@ -27,4 +28,6 @@ def register():
         RuleEngine,
         OptionDescriptionEndingRule,
         TestCaseModel,
+        ReportProductRelation,
+        ReportTemplate,
         module='offered', type_='model')

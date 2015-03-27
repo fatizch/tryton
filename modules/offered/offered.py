@@ -308,6 +308,8 @@ class Product(model.CoopSQL, Offered):
         'product', 'extra_data_def', 'Extra Data',
         domain=[('kind', 'in', ['contract', 'option'])])
     subscriber_kind = fields.Selection(SUBSCRIBER_KIND, 'Subscriber Kind')
+    report_templates = fields.Many2Many('report.template-offered.product',
+        'product', 'report_template', 'Report Templates')
 
     @classmethod
     def __setup__(cls):

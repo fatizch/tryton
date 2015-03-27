@@ -16,9 +16,6 @@
         <page string="Versions" id="versions">
             <field name="versions"/>
         </page>
-        <page string="Products" id="products">
-            <field name="products"/>
-        </page>
         <page string="Mail" id="Mail" col="2">
             <label name="mail_subject"/>
             <field name="mail_subject"/>
