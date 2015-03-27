@@ -385,6 +385,14 @@ class Contract:
             methods.remove('calculate_prices')
         return methods
 
+    def get_rebill_end_date(self, start_date):
+        date = super(Contract, self).get_rebill_end_date(start_date)
+        if self.is_loan and self.last_invoice_end:
+            return min(date, self.last_invoice_end)
+        elif self.is_loan:
+            return start_date
+        return date
+
 
 class PremiumAmount(model.CoopSQL, model.CoopView):
     'Premium Amount'

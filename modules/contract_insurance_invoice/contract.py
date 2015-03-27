@@ -423,8 +423,7 @@ class Contract:
         return lines
 
     def get_rebill_end_date(self, start_date):
-        return min(self.end_date or datetime.date.max,
-            self.last_invoice_end or start_date)
+        return self.end_date or start_date
 
     def get_rebill_post_end(self, start_date):
         ContractInvoice = Pool().get('contract.invoice')
