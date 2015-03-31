@@ -1,0 +1,147 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:endorsement:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:endorsement:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
+msgctxt "field:endorsement,created_attachments:"
+msgid "Created Attachments"
+msgstr "Pièces jointes créées"
+
+msgctxt "field:endorsement,endorsement_parts_union:"
+msgid "Endorsement Parts"
+msgstr "Avenants unitaires"
+
+msgctxt "field:endorsement.part.union,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:endorsement.part.union,contracts_name:"
+msgid "Contracts Names"
+msgstr "Numéros des contrats"
+
+msgctxt "field:endorsement.part.union,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.part.union,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.part.union,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.part.union,endorsement:"
+msgid "Endorsement"
+msgstr "Modèle d'Avenant"
+
+msgctxt "field:endorsement.part.union,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.part.union,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.part.union,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.part.union,subscribers_name:"
+msgid "Subscribers Names"
+msgstr "Souscripteurs"
+
+msgctxt "field:endorsement.part.union,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.part.union,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.part.union,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.start.find_process,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:endorsement.start.find_process,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.start.find_process,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.start.find_process,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:endorsement.start.find_process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.start.find_process,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "model:endorsement.part.union,name:"
+msgid "Endorsement Part Display"
+msgstr "Avenant unitaire"
+
+msgctxt "model:endorsement.start.find_process,name:"
+msgid "Endorsement Process Finder"
+msgstr "Choix du processus d'avenant"
+
+msgctxt "model:ir.action,name:act_preview_changes"
+msgid "Preview Changes"
+msgstr "Prévisualiser les modifications"
+
+msgctxt "model:ir.action,name:endorsement_process_launcher"
+msgid "Start Endorsement Process"
+msgstr "Démarrer le processus d'avenant"
+
+msgctxt "model:ir.ui.menu,name:menu_start_endorsement_process"
+msgid "Start Endorsement Process"
+msgstr "Démarrer le processus d'avenant"
+
+msgctxt "view:endorsement.contract:"
+msgid "Modify"
+msgstr "Modifier"
+
+msgctxt "view:endorsement.part.union:"
+msgid "Endorsement Parts"
+msgstr "Avenants unitaires"
+
+msgctxt "view:endorsement.part.union:"
+msgid "Modify"
+msgstr "Modifier"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:endorsement.start,preview_contract_premiums,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:endorsement.start_process,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr "Démarrer le processus (_k)"
+
+msgctxt "wizard_button:endorsement.start_process,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
