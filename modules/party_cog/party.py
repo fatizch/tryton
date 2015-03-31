@@ -141,8 +141,7 @@ class Party(export.ExportImportMixin):
                     field_name)
 
     @classmethod
-    def validate(cls, parties):
-        super(Party, cls).validate(parties)
+    def check_duplicates(cls, parties):
         cursor = Transaction().cursor
         in_max = cursor.IN_MAX
         for i in range(0, len(parties), in_max):
@@ -175,6 +174,11 @@ class Party(export.ExportImportMixin):
                     message += '%s %s\n' % (party.name, party.short_name)
             if message:
                 cls.raise_user_warning(message, 'duplicate_party', message)
+
+    @classmethod
+    def validate(cls, parties):
+        super(Party, cls).validate(parties)
+        cls.check_duplicates(parties)
 
     @classmethod
     def copy(cls, parties, default=None):
