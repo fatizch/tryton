@@ -42,7 +42,8 @@ class AddressDisplayer(model.CoopView):
     @classmethod
     def default_new_address(cls):
         good_id = Transaction().context.get('good_party')
-        return [{'party': good_id}]
+        effective_date = Transaction().context.get('effective_date')
+        return [{'party': good_id, 'start_date': effective_date}]
 
     @fields.depends('new_address', 'is_new')
     def on_change_new_address(self):
@@ -60,7 +61,8 @@ class ChangePartyAddress(EndorsementWizardStepMixin, model.CoopView):
     displayers = fields.One2Many('endorsement.party.change_address_displayer',
         None, 'Addresses',
         depends=['party_id'],
-        context={'good_party': Eval('party_id')})
+        context={'good_party': Eval('party_id'),
+            'effective_date': Eval('effective_date')})
     party_id = fields.Integer('party_id')
 
     @classmethod
