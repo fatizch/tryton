@@ -11,6 +11,7 @@ __all__ = [
 class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
     'Extra Premium Kind'
     __name__ = 'extra_premium.kind'
+    _func_key = 'code'
 
     active = fields.Boolean('Active')
     name = fields.Char('Name', required=True)
