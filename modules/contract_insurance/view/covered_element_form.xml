@@ -16,11 +16,8 @@
     <field name="covered_name" invisible="1"/>
     <newline/>
     <notebook>
-        <page id="data" string="Extra Data">
-            <field name="extra_data" colspan="2" no_command="1"/>
-            <newline/>
-        </page>
-        <page id="options" string="Options">
+        <page id="details" string="Details">
+            <field name="extra_data" colspan="4" no_command="1"/>
             <field name="options" colspan="4"/>
         </page>
         <page id="covered_relations" string="Covered Relations"
