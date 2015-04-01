@@ -364,6 +364,38 @@ class RuleTools(ModelView):
         return coop_date.convert_frequency(from_frequency, to_frequency)
 
     @classmethod
+    def _re_add_days(cls, args, date, duration=1):
+        return coop_date.add_duration(date, 'day', duration)
+
+    @classmethod
+    def _re_add_weeks(cls, args, date, duration=1):
+        return coop_date.add_duration(date, 'week', duration)
+
+    @classmethod
+    def _re_add_months(cls, args, date, duration=1,
+            stick_to_end_of_month=False):
+        return coop_date.add_duration(date, 'month', duration,
+            stick_to_end_of_month)
+
+    @classmethod
+    def _re_add_years(cls, args, date, duration=1,
+            stick_to_end_of_month=False):
+        return coop_date.add_duration(date, 'year', duration,
+            stick_to_end_of_month)
+
+    @classmethod
+    def _re_add_quarters(cls, args, date, duration=1,
+            stick_to_end_of_month=False):
+        return coop_date.add_duration(date, 'quarter', duration,
+            stick_to_end_of_month)
+
+    @classmethod
+    def _re_add_half_years(cls, args, date, duration=1,
+            stick_to_end_of_month=False):
+        return coop_date.add_duration(date, 'half_year', duration,
+            stick_to_end_of_month)
+
+    @classmethod
     def add_error(cls, args, error_code, custom=False, lvl=None):
         RuleError = Pool().get('functional_error')
         if custom:

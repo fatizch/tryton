@@ -66,6 +66,72 @@
       <field name="fct_args">de_frequence, a_frequence</field>
       <field name="parent" ref="dossier_outils"/>
     </record>
+    <record model="rule_engine.function" id="ajouter_jours">
+      <field name="translated_technical_name">ajouter_jours</field>
+      <field name="description">Ajouter Jours</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_add_days</field>
+      <field name="fct_args">Date, nombre de jours</field>
+      <field name="long_description">Ajouter des jours à une date.</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.function" id="ajouter_semaines">
+          <field name="translated_technical_name">ajouter_semaines</field>
+          <field name="description">Ajouter Semaines</field>
+          <field name="type">function</field>
+          <field name="language" ref="ir.lang_fr"/>
+          <field name="namespace">rule_engine.runtime</field>
+          <field name="name">_re_add_weeks</field>
+          <field name="fct_args">Date, nombre de semaines</field>
+          <field name="long_description">Ajouter des semaines à une date.</field>
+          <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.function" id="ajouter_mois">
+      <field name="translated_technical_name">ajouter_mois</field>
+      <field name="description">Ajouter Mois</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_add_months</field>
+      <field name="fct_args">Date, nombre de mois, rester a la fin du mois.</field>
+      <field name="long_description">Ajouter des mois à une date.</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.function" id="ajouter_annees">
+      <field name="translated_technical_name">ajouter_annees</field>
+      <field name="description">Ajouter Annees</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_add_years</field>
+      <field name="fct_args">Date, nombre de annees, rester a la fin du mois.</field>
+      <field name="long_description">Ajouter des années à une date.</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.function" id="ajouter_trimestre">
+      <field name="translated_technical_name">ajouter_trimestre</field>
+      <field name="description">Ajouter Trimestres</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_add_quarters</field>
+      <field name="fct_args">Date, nombre de trimestres, rester a la fin du mois.</field>
+      <field name="long_description">Ajouter des trimestres à une date.</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
+    <record model="rule_engine.function" id="ajouter_semestres">
+      <field name="translated_technical_name">ajouter_semestres</field>
+      <field name="description">Ajouter Semestres</field>
+      <field name="type">function</field>
+      <field name="language" ref="ir.lang_fr"/>
+      <field name="namespace">rule_engine.runtime</field>
+      <field name="name">_re_add_half_years</field>
+      <field name="fct_args">Date, nombre de semestres, rester a la fin du mois.</field>
+      <field name="long_description">Ajouter des semestres à une date.</field>
+      <field name="parent" ref="dossier_outils"/>
+    </record>
     <record model="rule_engine.function" id="ajouter_erreur">
       <field name="translated_technical_name">ajouter_erreur</field>
       <field name="description">Ajouter Erreur</field>
