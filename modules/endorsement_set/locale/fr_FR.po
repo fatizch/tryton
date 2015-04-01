@@ -1,0 +1,195 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.set:"
+msgid "No sequence defined in configuration"
+msgstr "Pas de séquence définie dans la configuration"
+
+msgctxt "error:endorsement.set:"
+msgid "The effective date is already set."
+msgstr "La date d'effet est déjà définie"
+
+msgctxt "error:endorsement.set:"
+msgid "The endorsement set number must be unique."
+msgstr "Le numéro d'ensemble d'avenant doit être unique"
+
+msgctxt "error:endorsement:"
+msgid "All endorsements on endorsement set must be applied together"
+msgstr "Tous les avenants de l'ensemble doivent être appliqués ensemble"
+
+msgctxt "error:endorsement:"
+msgid "All endorsements on endorsement set must be declined together"
+msgstr "Tous les avenants de l'ensemble doivent être déclinés ensemble"
+
+msgctxt "field:endorsement,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:endorsement,contract_set:"
+msgid "Contract Set"
+msgstr "Ensemble de contrats"
+
+msgctxt "field:endorsement,endorsement_set:"
+msgid "Endorsement Set"
+msgstr "Ensemble d'avenants"
+
+msgctxt "field:endorsement,generated_endorsement_sets:"
+msgid "Generated Endorsements"
+msgstr "Avenants générés"
+
+msgctxt "field:endorsement,subscribers_name:"
+msgid "Subscribers Name"
+msgstr "Souscripteurs"
+
+msgctxt "field:endorsement.configuration,endorsement_set_number_sequence:"
+msgid "Endorsement Set Number Sequence"
+msgstr "Séquence du numéro d'ensemble d'avenants"
+
+msgctxt "field:endorsement.set,contract_set:"
+msgid "Contract Set"
+msgstr "Ensemble de contrats"
+
+msgctxt "field:endorsement.set,contracts:"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt "field:endorsement.set,contracts_endorsements_summary:"
+msgid "Endorsements Summary"
+msgstr "Résumé des avenants"
+
+msgctxt "field:endorsement.set,contracts_summary:"
+msgid "Contracts Summary"
+msgstr "Résumé des contrats"
+
+msgctxt "field:endorsement.set,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.set,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.set,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.set,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.set,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.set,endorsements:"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "field:endorsement.set,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.set,number:"
+msgid "Number"
+msgstr "Numéro"
+
+msgctxt "field:endorsement.set,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.set,state:"
+msgid "State"
+msgstr "État"
+
+msgctxt "field:endorsement.set,subscribers_summary:"
+msgid "Subcribers Summary"
+msgstr "Résumé des souscripteurs"
+
+msgctxt "field:endorsement.set,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.set,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.set,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.set.decline.select_reason,endorsement_set:"
+msgid "endorsement Set"
+msgstr "Ensemble d'avenant"
+
+msgctxt "field:endorsement.set.decline.select_reason,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.set.decline.select_reason,reason:"
+msgid "Reason"
+msgstr "Raison"
+
+msgctxt "model:endorsement.set,name:"
+msgid "Endorsement Set"
+msgstr "Ensemble d'avenants"
+
+msgctxt "model:endorsement.set.decline.select_reason,name:"
+msgid "Reason selector to decline endorsement set"
+msgstr "Sélection de la raison de déclinaison de l'ensemble d'avenants"
+
+msgctxt "model:ir.action,name:act_decline_set"
+msgid "Decline Set"
+msgstr "Décliner l'ensemble d'avenants"
+
+msgctxt "model:ir.action,name:act_endorsement_set_form"
+msgid "Endorsements Sets"
+msgstr "Ensembles d'avenants"
+
+msgctxt "model:ir.sequence,name:sequence_number"
+msgid "Endorsement Set Number Sequence"
+msgstr "Séquence du numéro d'ensemble d'avenant"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_number"
+msgid "Endorsement Set Number"
+msgstr "Numéro d'ensemble d'avenants"
+
+msgctxt "model:ir.ui.menu,name:menu_endorsement_set"
+msgid "Endorsements Sets"
+msgstr "Ensembles d'avenants"
+
+msgctxt "selection:endorsement.set,state:"
+msgid "Applied"
+msgstr "Appliqué"
+
+msgctxt "selection:endorsement.set,state:"
+msgid "Canceled"
+msgstr "Annulée"
+
+msgctxt "selection:endorsement.set,state:"
+msgid "Declined"
+msgstr "Décliné"
+
+msgctxt "selection:endorsement.set,state:"
+msgid "Draft"
+msgstr "Brouillon"
+
+msgctxt "selection:endorsement.set,state:"
+msgid "In Progress"
+msgstr "En cours"
+
+msgctxt "view:endorsement.set.decline.select_reason:"
+msgid "Select Declination Reason"
+msgstr "Choisir le motif pour décliner"
+
+msgctxt "view:endorsement.set:"
+msgid "Endorsement Set"
+msgstr "Ensemble d'avenants"
+
+msgctxt "wizard_button:endorsement.set.decline,select_reason,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.set.decline,select_reason,end:"
+msgid "Cancel"
+msgstr "Annuler"
