@@ -49,6 +49,13 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
                 'button_decline_set': {},
                 })
 
+    def get_dates(self):
+        dates = []
+        with Transaction().set_context(contract_set_get_dates=True):
+            for contract in self.contracts:
+                dates.extend(contract.get_dates())
+        return dates
+
     @classmethod
     @model.CoopView.button_action('contract_set.act_decline_set')
     def button_decline_set(cls, contracts):
@@ -118,6 +125,12 @@ class Contract:
     __name__ = 'contract'
     contract_set = fields.Many2One('contract.set', 'Contract Set',
         ondelete='SET NULL', states=_STATES, depends=_DEPENDS)
+
+    def get_dates(self):
+        if self.contract_set and not Transaction().context.get(
+                'contract_set_get_dates', False):
+            return self.contract_set.get_dates()
+        return super(Contract, self).get_dates()
 
 
 class ContractSetSelectDeclineReason(model.CoopView):
