@@ -204,7 +204,7 @@ class HealthPartyComplement:
 
     department = fields.Function(
         fields.Char('Department'),
-        'get_department', 'set_void')
+        'get_department')
     hc_system = fields.Many2One('health.care_system', 'Health Care System',
         ondelete='RESTRICT')
     insurance_fund = fields.Function(fields.Many2One('health.insurance_fund',
@@ -264,10 +264,6 @@ class HealthPartyComplement:
     def get_department(self, name):
         address = self.party.address_get() if self.party else None
         return address.get_department() if address else None
-
-    @classmethod
-    def set_void(cls, instances, vals, name):
-        pass
 
     @classmethod
     def _export_light(cls):

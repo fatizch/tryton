@@ -29,7 +29,7 @@ class ChangePartyHealthComplement(EndorsementWizardStepMixin, model.CoopView):
     @classmethod
     def _health_complement_fields_to_extract(cls):
         return ['hc_system', 'insurance_fund_number', 'party',
-            'department', 'insurance_fund']
+            'insurance_fund']
 
     def _get_parties(self):
         return {x.party.id: x
