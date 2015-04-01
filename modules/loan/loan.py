@@ -304,11 +304,12 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         for i, increment in enumerate(self.increments, 1):
             increment.number = i
             increment.begin_balance = begin_balance
-            if increment.begin_balance and not increment.payment_amount:
+            if increment.begin_balance and increment.payment_amount is None:
                 increment.payment_amount = Loan.calculate_payment_amount(
                     increment.rate, increment.number_of_payments,
                     increment.begin_balance, self.currency,
-                    self.payment_frequency, increment.deferal)
+                    self.payment_frequency, getattr(increment, 'deferal', None)
+                    )
             if not begin_balance:
                 continue
             for j in range(increment.number_of_payments):
