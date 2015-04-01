@@ -108,6 +108,86 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             return self.code
         return coop_string.slugify(self.name)
 
+    def print_reports(self, reports):
+        """ Reports is a list of tuple with:
+            object_instance, report type, data, report name"""
+        pass
+
+    def _create_attachment_from_report(self, report):
+        """ Report is a dictionnary with:
+            object_instance, report type, data, report name"""
+
+        attachment = Attachment()
+        attachment.resource = report['object'].get_reference_object_for_edm(
+            self)
+        attachment.data = report['data']
+        attachment.name = report['report_name']
+        return attachment
+
+    def save_reports_in_edm(self, reports):
+        """ Reports is a list of dictionnary with:
+            object_instance, report type, data, report name"""
+        pool = Pool()
+        Attachment = pool.get('ir.attachment')
+        attachments = []
+        for report in reports:
+            attachments.append(self._create_attachment_from_report(report))
+        Attachment.save(attachments)
+
+    def _generate_reports(self, objects):
+        """ Return a list of dictionnary with:
+            object, report_type, data, report_name"""
+        pool = Pool()
+        ReportModel = pool.get('report.generate', type='report')
+        if not objects:
+            return
+        reports = []
+        for cur_obj in objects:
+            report_type, data, _, report_name = ReportModel.execute(
+                [cur_obj.id], {
+                    'id': cur_obj.id,
+                    'ids': [cur_obj.id],
+                    'model': cur_obj.__name__,
+                    'doc_template': [self],
+                    'party': cur_obj.get_contact(),
+                    'address': cur_obj.get_address(),
+                    'sender': cur_obj.get_sender(),
+                    'sender_address': cur_obj.get_sender_address(),
+                    })
+            report = Report()
+            report.template_extension = 'odt'
+            report.extension = 'pdf'
+            _, data = Report.convert(report, data)
+            reports.append({
+                    'object': cur_obj,
+                    'report_type': report_type,
+                    'data': data,
+                    'report_name': report_name
+                    })
+        return reports
+
+    def produce_reports(self, objects, direct_print=False):
+        reports = self._generate_reports(objects)
+        if direct_print:
+            self.print_reports(reports)
+        if self.internal_edm:
+            self.save_reports_in_edm(reports)
+        return reports
+
+    @classmethod
+    def find_templates_for_objects_and_kind(cls, objects, model_name, kind):
+        """ Return a dictionnary with template instance as key
+        and a list of objects as value"""
+        pool = Pool()
+        Model = pool.get('ir.model')
+        model, = Model.search([('model', '=', model_name)])
+        templates = cls.search([('kind', '=', kind),
+                ('on_model', '=', model.id)])
+        res = {}
+        for template in templates:
+            res[template] = objects
+        return res
+
 
 class ReportTemplateVersion(Attachment, export.ExportImportMixin):
     'Report Template Version'
@@ -204,7 +284,7 @@ class Printable(Model):
             address = [adr for adr in contact.addresses if adr.kind == kind][0]
         else:
             address = contact.addresses[0]
-        return address.full_address
+        return address
 
     def get_available_doc_templates(self, kind=None):
         DocumentTemplate = Pool().get('report.template')
@@ -229,6 +309,9 @@ class Printable(Model):
 
     def get_doc_template_kind(self):
         return None
+
+    def get_reference_object_for_edm(self, template):
+        return self
 
     def post_generation(self):
         pass
@@ -267,6 +350,17 @@ class Printable(Model):
 
     def get_document_filename(self):
         return self.rec_name
+
+    @classmethod
+    def produce_reports(cls, objects, template_kind, direct_print=False):
+        pool = Pool()
+        Template = pool.get('report.template')
+        if not template_kind:
+            return
+        templates = Template.find_templates_for_objects_and_kind(objects,
+            cls.__name__, template_kind)
+        for template, group_objects in templates.iteritems():
+            template.produce_reports(objects, direct_print)
 
 
 class ReportCreateSelectTemplate(model.CoopView):
