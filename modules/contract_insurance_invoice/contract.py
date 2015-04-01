@@ -6,6 +6,7 @@ from decimal import Decimal
 from dateutil.rrule import rrule, rruleset, MONTHLY, DAILY
 from dateutil.relativedelta import relativedelta
 from sql.aggregate import Max, Count
+from sql import Column
 
 from trytond.pool import Pool, PoolMeta
 from trytond.model import dualmethod
@@ -93,6 +94,12 @@ class Contract:
     last_invoice_end = fields.Function(
         fields.Date('Last Invoice End Date'), 'get_last_invoice',
         searcher='search_last_invoice')
+    last_posted_invoice_end = fields.Function(
+        fields.Date('Last Post Invoice End Date'), 'get_last_invoice',
+        searcher='search_last_invoice')
+    last_paid_invoice_end = fields.Function(
+        fields.Date('Last Paid Invoice End Date'), 'get_last_invoice',
+        searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
     _invoices_cache = Cache('invoices_report')
@@ -159,8 +166,25 @@ class Contract:
         contract_invoice = ContractInvoice.__table__()
         invoice = Invoice.__table__()
         values = dict.fromkeys((c.id for c in contracts))
-        column = name[len('last_invoice_'):]
         in_max = cursor.IN_MAX
+        state_column = Column(invoice, 'state')
+
+        if name == 'last_invoice_start':
+            column = 'start'
+            where_clause = (state_column != 'cancel')
+        elif name == 'last_invoice_end':
+            column = 'end'
+            where_clause = (state_column != 'cancel')
+        elif name == 'last_posted_invoice_end':
+            column = 'end'
+            where_clause = (state_column == 'posted') | \
+                (state_column == 'paid')
+        elif name == 'last_paid_invoice_end':
+            column = 'end'
+            where_clause = (state_column == 'paid')
+        else:
+            raise NotImplementedError
+
         for i in range(0, len(contracts), in_max):
             sub_ids = [c.id for c in contracts[i:i + in_max]]
             where_id = reduce_ids(table.id, sub_ids)
@@ -169,7 +193,7 @@ class Contract:
                     ).join(invoice, 'LEFT',
                     invoice.id == contract_invoice.invoice
                     ).select(table.id, Max(getattr(contract_invoice, column)),
-                    where=where_id & (invoice.state != 'cancel'),
+                    where=where_id & where_clause,
                     group_by=table.id))
             values.update(dict(cursor.fetchall()))
         return values
