@@ -230,7 +230,7 @@ class Endorsement:
         to_apply = []
         for endorsement in endorsements:
             to_apply.extend(endorsement.endorsement_set.endorsements)
-        cls.apply(list(set(to_apply)))
+        super(Endorsement, cls).apply_for_preview(list(set(to_apply)))
 
     @classmethod
     @model.CoopView.button
