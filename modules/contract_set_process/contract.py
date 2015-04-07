@@ -133,3 +133,9 @@ class ContractSet(CogProcessFramework):
                 [('resource', 'in', operand)])])
 
         return attachments
+
+    def decline_set(self, reason):
+        pool = Pool()
+        Contract = pool.get('contract')
+        super(ContractSet, self).decline_set(reason)
+        Contract.write(list(self.contracts), {'current_state': None})
