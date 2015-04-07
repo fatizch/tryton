@@ -74,7 +74,7 @@ def generate_all(batch_name, connexion_date=None, treatment_date=None,
     BatchModel = Pool().get(batch_name)
     with Transaction().set_user(admin.id), Transaction().set_context(
             User.get_preferences(context_only=True),
-            client_defined_date=connexion_date):
+            client_defined_date=connexion_date, batch_extra_args=extra_args):
         ids = [x[0] for x in BatchModel.select_ids(treatment_date)]
         if BatchModel.get_conf_item('split_mode') == 'number':
             chunking = chunks_number
@@ -113,6 +113,7 @@ def generate(batch_name, ids, connexion_date, treatment_date, extra_args):
                 return 1
             logger.info('Splitting task in subtasks and retrying.')
             half_idx = len(ids) / 2
-            group(generate.s(batch_name, _ids, connexion_date, treatment_date)
+            group(generate.s(batch_name, _ids, connexion_date, treatment_date,
+                    extra_args)
                 for _ids in (ids[:half_idx], ids[half_idx:]))()
     return 0

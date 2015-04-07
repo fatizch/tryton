@@ -196,7 +196,7 @@ def get_print_infos(lst, obj_name=None):
     if length == 1:
         min_max = ': %s' % lst
     elif length > 1:
-        min_max = ': %d...%d' % (lst[0], lst[-1])
+        min_max = ': %s...%s' % (str(lst[0]), str(lst[-1]))
     else:
         min_max = ''
     return '%d %s%s%s' % (length, obj_name or 'obj',
