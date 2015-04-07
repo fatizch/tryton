@@ -646,7 +646,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         fields.Char('Name'),
         'on_change_with_covered_name')
     extra_data_summary = fields.Function(
-        fields.Char('Extra Data'),
+        fields.Text('Extra Data'),
         'on_change_with_extra_data_summary')
     icon = fields.Function(
         fields.Char('Icon'),

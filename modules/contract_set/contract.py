@@ -29,7 +29,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
     number = fields.Char('Number', required=True)
     contracts = fields.One2Many('contract', 'contract_set', 'Contracts',
         target_not_required=True)
-    subscribers = fields.Function(fields.Char('Subscribers'),
+    subscribers = fields.Function(fields.Text('Subscribers'),
         'get_subscribers', searcher='search_subscribers')
     products = fields.Function(fields.Char('Products'),
         'get_products', searcher='search_products')
