@@ -938,8 +938,7 @@ class Premium:
         return new_line
 
     def get_description(self):
-        return '%s - %s' % (self.parent.rec_name,
-            self.rated_entity.rec_name)
+        return getattr(self.parent, 'full_name', self.parent.rec_name)
 
     def _get_rrule(self, start):
         if self.frequency in ('monthly', 'quarterly', 'half_yearly'):

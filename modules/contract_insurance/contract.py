@@ -396,6 +396,12 @@ class ContractOption:
                 'propagate_exclusions': _CONTRACT_STATUS_STATES,
                 })
 
+    def get_full_name(self, name):
+        if self.covered_element:
+            return self.covered_element.rec_name + ' - ' + super(
+                ContractOption, self).get_full_name(name)
+        return super(ContractOption, self).get_full_name(name)
+
     @classmethod
     def _export_skips(cls):
         return (super(ContractOption, cls)._export_skips() |

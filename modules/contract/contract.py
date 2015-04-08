@@ -1274,6 +1274,11 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     contract_status = fields.Function(
         fields.Char('Contract Status'),
         'on_change_with_contract_status')
+    full_name = fields.Function(
+        fields.Char('Full Name'), 'get_full_name')
+
+    def get_full_name(self, name):
+        return self.rec_name
 
     def get_func_key(self, name):
         if self.contract:
