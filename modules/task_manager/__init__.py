@@ -12,7 +12,6 @@ def register():
         Session,
         User,
         ProcessLog,
-        TaskSelector,
         UserTeamRelation,
         module='task_manager', type_='model')
     Pool.register(

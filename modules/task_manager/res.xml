@@ -106,14 +106,6 @@
         </record>
         <menuitem parent="menu_task" sequence="100" action="act_task_dispatcher" id="menu_task_dispatcher"/>
         <!-- ############################################################ -->
-        <!-- Task Selector -->
-        <!-- ############################################################ -->
-        <record model="ir.ui.view" id="task_selector_view_form">
-            <field name="model">task.select.available_tasks</field>
-            <field name="type">form</field>
-            <field name="name">task_select_available_tasks_form</field>
-        </record>
-        <!-- ############################################################ -->
         <!-- Process Log -->
         <!-- ############################################################ -->
         <record model="ir.ui.view" id="process_log_launchable_view_list">

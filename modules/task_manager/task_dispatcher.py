@@ -1,7 +1,7 @@
 import datetime
 
 from trytond.wizard import Wizard, StateAction
-from trytond.wizard import StateView, Button, StateTransition
+from trytond.wizard import StateTransition
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
@@ -12,7 +12,6 @@ __metaclass__ = PoolMeta
 __all__ = [
     'ProcessLog',
     'TaskDispatcher',
-    'TaskSelector',
     'LaunchTask',
     ]
 
@@ -61,26 +60,6 @@ class ProcessLog:
         return 1
 
 
-class TaskSelector(model.CoopView):
-    'Task Selector'
-
-    __name__ = 'task.select.available_tasks'
-
-    user = fields.Many2One('res.user', 'User')
-    selected_task = fields.Many2One('process.log', 'Selected Task',
-        states={'readonly': True})
-    selected_task_presenter = fields.Function(
-        fields.One2Many('process.log', None, 'Seleteted Task', readonly=True,
-            depends=['selected_task'], size=1),
-        'on_change_with_selected_task_presenter')
-
-    @fields.depends('selected_task')
-    def on_change_with_selected_task_presenter(self, name=None):
-        if self.selected_task:
-            return [self.selected_task.id]
-        return []
-
-
 class TaskDispatcher(Wizard):
     'Task Dispatcher'
 
@@ -96,11 +75,6 @@ class TaskDispatcher(Wizard):
             return None
 
     remove_locks = StateTransition()
-    select_context = StateView('task.select.available_tasks',
-        'task_manager.task_selector_view_form', [
-            Button('Cancel', 'end', 'tryton-cancel'),
-            Button('Compute Task', 'calculate_action', 'tryton-ok'),
-            ])
     calculate_action = VoidStateAction()
 
     @classmethod
@@ -111,17 +85,6 @@ class TaskDispatcher(Wizard):
                 'no_task_found': 'No task found'
                 })
 
-    def default_select_context(self, name):
-        Selector = Pool().get('task.select.available_tasks')
-        User = Pool().get('res.user')
-        user = User(Transaction().user)
-        selector = Selector()
-        selector.user = user
-        task = user.search_next_priority_task()
-        if not task:
-            self.raise_user_error('no_task_found')
-        return {'user': user.id, 'selected_task': task.id}
-
     def transition_remove_locks(self):
         Log = Pool().get('process.log')
         locked = Log.search([
@@ -129,15 +92,17 @@ class TaskDispatcher(Wizard):
             ('user', '=', Transaction().user)])
         if locked:
             Log.write(locked, {'locked': False})
-        return 'select_context'
+        return 'calculate_action'
 
     def do_calculate_action(self, action):
+        User = Pool().get('res.user')
         Log = Pool().get('process.log')
-        if self.select_context.selected_task:
-            good_task = self.select_context.selected_task
-            good_id = good_task.task.id
-            good_model = good_task.task.__name__
-            act = good_task.to_state.process.get_act_window()
+        user = User(Transaction().user)
+        task = user.search_next_priority_task()
+        if task:
+            good_id = task.task.id
+            good_model = task.task.__name__
+            act = task.to_state.process.get_act_window()
         else:
             self.raise_user_error('no_task_selected')
 

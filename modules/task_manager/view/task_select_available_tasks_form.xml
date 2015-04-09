@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<form string="Task Selector" col="2">
-    <field name="selected_task_presenter" mode="tree,form" no_command="1"/>
-</form>
