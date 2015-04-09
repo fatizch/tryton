@@ -977,9 +977,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 termination_reason
             contract.activation_history = list(contract.activation_history)
             contract.save()
-        Event.notify_events(contracts, 'plan_contract_termination')
         if at_date < Date.today():
             cls.do_terminate(contracts)
+        else:
+            # generate event only if termination is not processed
+            Event.notify_events(contracts, 'plan_contract_termination')
 
     @classmethod
     def void(cls, contracts, void_reason):
