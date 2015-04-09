@@ -5,4 +5,5 @@
     <field name="is_fee_required"/>
     <field name="rejected_payment_fee"/>
     <field name="action"/>
+    <field name="reject_number"/>
 </tree>

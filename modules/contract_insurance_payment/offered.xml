@@ -6,5 +6,10 @@
             <field name="inherit" ref="offered.product_view_form"/>
             <field name="name">product_form</field>
         </record>
+        <record model="ir.ui.view" id="offered_billing_mode_view_form">
+            <field name="model">offered.billing_mode</field>
+            <field name="inherit" ref="contract_insurance_invoice.offered_billing_mode_view_form"/>
+            <field name="name">offered_billing_mode_form</field>
+        </record>
     </data>
 </tryton>

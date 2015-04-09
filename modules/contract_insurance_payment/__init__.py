@@ -11,4 +11,6 @@ def register():
         Journal,
         Configuration,
         Product,
+        JournalFailureAction,
+        BillingMode,
         module='contract_insurance_payment', type_='model')

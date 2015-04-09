@@ -1,9 +1,12 @@
 # -*- coding:utf-8 -*-
+from collections import defaultdict
+from itertools import groupby
+
+from trytond import backend
 from trytond.transaction import Transaction
 from trytond.model import ModelView
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
-from collections import defaultdict
 
 from trytond.modules.cog_utils import coop_string, export, fields, model
 
@@ -30,10 +33,22 @@ class Journal(export.ExportImportMixin):
     default_reject_fee = fields.Many2One('account.fee',
         'Default Fee', ondelete='RESTRICT')
 
-    def get_action(self, code):
-        for action in self.failure_actions:
-            if action.reject_reason.code == code:
+    def get_fail_action(self, payments):
+        """
+            Payments is a list of payments processed in the same payment
+            transaction
+        """
+        reject_code = payments[0].fail_code
+        payment_reject_number = max(len(payment.line.payments) for payment in
+            payments)
+        possible_actions = [action for action in self.failure_actions
+            if action.reject_reason.code == reject_code]
+        possible_actions.sort(key=lambda x: x.reject_number, reverse=True)
+        for action in possible_actions:
+            if (not action.reject_number or
+                    action.reject_number == payment_reject_number):
                 return action.action
+        return ('manual')
 
     @classmethod
     def _export_light(cls):
@@ -60,25 +75,32 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
         'Fee', ondelete='RESTRICT')
     is_fee_required = fields.Function(fields.Boolean('Fee Required'),
         'on_change_with_is_fee_required', setter='setter_void')
+    reject_number = fields.Integer('Reject Number', help='Filter the action '
+        'according to the number of reject for a given payment. If empty, '
+        'action will be used for all rejects')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
+
+    @classmethod
+    def __register__(cls, module_name):
+        # Migration from 1.3: Drop code_unique constraint
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        table = TableHandler(cursor, cls, module_name)
+        table.drop_constraint('code_unique')
+        super(JournalFailureAction, cls).__register__(module_name)
+
+    @classmethod
+    def __setup__(cls):
+        super(JournalFailureAction, cls).__setup__()
+        cls._error_messages.update({
+                'unknown_reject_reason_code': 'Unknown reject code : %s',
+                })
 
     @classmethod
     def _export_light(cls):
         return super(JournalFailureAction, cls)._export_light() | {
             'reject_reason', 'rejected_payment_fee'}
-
-    @classmethod
-    def __setup__(cls):
-        super(JournalFailureAction, cls).__setup__()
-        cls._sql_constraints += [
-            ('code_unique', 'UNIQUE(journal, reject_reason)',
-                'Action must be unique for a journal and a reject reason'),
-            ]
-        cls._error_messages.update({
-                'unknown_reject_reason_code':
-                'Unknown reject code : %s',
-                })
 
     @classmethod
     def get_rejected_payment_fee(cls, code):
@@ -105,17 +127,19 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
                 'default_fee_id', None)
 
     def get_func_key(self, name):
-        return '%s|%s' % ((self.journal.name, self.reject_reason.code))
+        return '%s|%s|%s' % (self.journal.name, self.reject_reason.code,
+            self.reject_number)
 
     @classmethod
     def search_func_key(cls, name, clause):
         assert clause[1] == '='
         if '|' in clause[2]:
             operands = clause[2].split('|')
-            if len(operands) == 2:
-                journal_name, reject_reason_code = clause[2].split('|')
+            if len(operands) == 3:
+                journal_name, reject_reason_code, number = clause[2].split('|')
                 return [('journal.name', clause[1], journal_name),
-                    ('reject_reason.code', clause[1], reject_reason_code)]
+                    ('reject_reason.code', clause[1], reject_reason_code),
+                    ('reject_number', clause[1], number)]
             else:
                 return [('id', '=', None)]
         else:
@@ -161,11 +185,17 @@ class Payment(export.ExportImportMixin):
     __name__ = 'account.payment'
     _func_key = 'id'
 
+    manual_fail_status = fields.Selection([
+        ('', ''),
+        ('pending', 'Pending'),
+        ('done', 'Done')
+        ], 'Manual Fail Status')
+
     @classmethod
     def __setup__(cls):
         super(Payment, cls).__setup__()
         cls._error_messages.update({
-                'action_not_found': 'Action "%s" not found for payment %s',
+                'action_not_found': 'Action "%s" not found for payments %s',
                 'payments_blocked_for_party': 'Payments blocked for party %s',
                 })
 
@@ -189,6 +219,13 @@ class Payment(export.ExportImportMixin):
                 self.currency.amount_as_string(self.amount),
                 coop_string.translate_value(self, 'state'))
 
+    def _get_transaction_key(self):
+        """
+            Return the key to identify payments processed in one transaction
+            Overriden in account_payment_sepa_cog
+        """
+        return (self, self.journal)
+
     @property
     def fail_code(self):
         pass
@@ -196,33 +233,37 @@ class Payment(export.ExportImportMixin):
     @classmethod
     def fail(cls, payments):
         pool = Pool()
+        Line = pool.get('account.move.line')
         Event = pool.get('event')
         super(Payment, cls).fail(payments)
         Event.notify_events(payments, 'fail_payment')
 
+        # Remove payment_date on payment line
+        lines = [payment.line for payment in payments
+            if payment.line is not None]
+        Line.write(lines, {'payment_date': None})
+
         actions = defaultdict(list)
-        for payment in payments:
-            if not payment.line:
-                continue
-
-            if len(payment.line.payments) == 1:
-                action = payment.journal.get_action(payment.fail_code)
-
-                if action:
-                    actions['fail_%s' % action].append(payment)
-                else:
-                    cls.raise_user_error('action_not_found', (
-                        payment.fail_code, payment.rec_name))
-
+        payments_keys = [(x._get_transaction_key(), x) for x in payments]
+        payments_keys = sorted(payments_keys, key=lambda x: x[0])
+        for key, payments in groupby(payments_keys, key=lambda x: x[0]):
+            payments_list = [payment[1] for payment in payments]
+            action = key[1].get_fail_action(payments_list)
+            if action:
+                actions['fail_%s' % action].extend(payments_list)
             else:
-                actions['fail_manual'].append(payment)
+                cls.raise_user_error('action_not_found', (
+                    payments_list[0].fail_code, ', '.join(payment.rec_name
+                        for payment in payments_list)))
 
         for action, payments in actions.iteritems():
             getattr(cls, action)(payments)
 
     @classmethod
     def fail_manual(cls, payments):
-        pass
+        cls.write(payments, {
+                'manual_fail_status': 'pending',
+                })
 
     @classmethod
     def fail_retry(cls, payments):

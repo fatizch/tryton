@@ -6,6 +6,8 @@
     <field name="reject_reason"/>
     <label name="action"/>
     <field name="action"/>
+    <label name="reject_number"/>
+    <field name="reject_number"/>
     <label name="is_fee_required"/>
     <field name="is_fee_required"/>
     <label name="rejected_payment_fee"/>

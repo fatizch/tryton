@@ -41,7 +41,6 @@
             <field name="type">tree</field>
             <field name="name">payment_journal_reject_reason_list</field>
         </record>
-
         <record model="ir.action.act_window" id="act_reject_reason_form">
             <field name="name">Reject reasons</field>
             <field name="res_model">account.payment.journal.reject_reason</field>
@@ -57,7 +56,35 @@
             <field name="act_window" ref="act_reject_reason_form"/>
         </record>
         <menuitem parent="account_payment.menu_payment_configuration" sequence="20"
-            action="act_reject_reason_form" id="menu_reject_reason_form"/>
+           action="act_reject_reason_form" id="menu_reject_reason_form"/>
+        <!-- ####################################### -->
+        <!-- ########### Rejected Payment########### -->
+        <!-- ####################################### -->
+        <record model="ir.ui.view" id="payment_fail_status_view_list">
+            <field name="model">account.payment</field>
+            <field name="type">tree</field>
+            <field name="name">payment_fail_status_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_payment_fail_status_form">
+            <field name="name">Payments Rejected</field>
+            <field name="res_model">account.payment</field>
+            <field name="domain">[('manual_fail_status', '!=', '')]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_payment_fail_status_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="payment_fail_status_view_list"/>
+            <field name="act_window" ref="act_payment_fail_status_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_payment_fail_status_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_payment.payment_view_form"/>
+            <field name="act_window" ref="act_payment_fail_status_form"/>
+        </record>
+        <menuitem parent="account_payment.menu_payments" sequence="20"
+            action="act_payment_fail_status_form" id="menu_fail_payment_status_form"/>
+        <!-- ############################################################ -->
+        <!-- ########### Event Type ########### -->
+        <!-- ############################################################ -->
         <record model="event.type" id="event_process_payment">
             <field name="name">Process Payment</field>
             <field name="code">process_payment</field>

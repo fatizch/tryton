@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
+from itertools import groupby
+from dateutil.relativedelta import relativedelta
+
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
-from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import fields
 
@@ -10,6 +12,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Payment',
     'Journal',
+    'JournalFailureAction',
     ]
 
 
@@ -17,47 +20,76 @@ class Journal:
     __name__ = 'account.payment.journal'
 
     failure_billing_mode = fields.Many2One('offered.billing_mode',
-        'Failure Billing Mode',
+        'Failure Billing Mode', ondelete='RESTRICT',
         domain=[('direct_debit', '=', False)],
-        states={
-            'required': Eval('process_method').in_(['sepa']),
-            },
         depends=['process_method'])
+
+
+class JournalFailureAction:
+    __name__ = 'account.payment.journal.failure_action'
+
+    @classmethod
+    def __setup__(cls):
+        super(JournalFailureAction, cls).__setup__()
+        manual_payment = ('move_to_manual_payment', 'Move to manual payment')
+        cls.action.selection.append(manual_payment)
 
 
 class Payment:
     __name__ = 'account.payment'
 
     @classmethod
-    def fail_manual(cls, payments):
-        super(Payment, cls).fail_manual(payments)
+    def _group_per_contract_key(cls, payment):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        ContractBillingInformation = pool.get('contract.billing_information')
-        Date = pool.get('ir.date')
+        if not isinstance(payment.line.move.origin, Invoice):
+            return None
+        return payment.line.move.origin.contract
 
-        for payment in payments:
-            if not isinstance(payment.line.move.origin, Invoice):
-                break
-            contract = payment.line.move.origin.contract
-            if not contract:
-                break
-            failure_billing_mode = payment.journal.failure_billing_mode
+    @classmethod
+    def fail_move_to_manual_payment(cls, payments):
+        pool = Pool()
+        ContractBillingInformation = pool.get('contract.billing_information')
+        Contract = pool.get('contract')
+        Invoice = pool.get('account.invoice')
+        Date = pool.get('ir.date')
+        invoices = []
+        payments = sorted(payments, key=cls._group_per_contract_key)
+        for contract, _grouped_payments in groupby(payments,
+                key=cls._group_per_contract_key):
+            if contract is None:
+                continue
+            grouped_payments = list(_grouped_payments)
+            current_billing_mode = contract.billing_information.billing_mode
+            if not current_billing_mode.direct_debit:
+                continue
+            failure_billing_mode = current_billing_mode.failure_billing_mode \
+                if current_billing_mode.failure_billing_mode \
+                else grouped_payments[0].journal.failure_billing_mode
             if not failure_billing_mode:
                 raise Exception('no failure_billing_mode on journal %s'
-                    % (payment.journal.rec_name))
+                    % (grouped_payments[0].journal.rec_name))
 
-            ContractBillingInformation.copy([
-                contract.billing_information], {
-                'date': Date.today(),
-                'billing_mode': failure_billing_mode,
-                'payment_term':
-                    contract.product.billing_modes[0].allowed_payment_terms[0],
-                })
+            next_invoice_date = max(payment.line.move.origin.end
+                for payment in grouped_payments)
+            next_invoice_date += relativedelta(days=1)
+
+            new_billing_information = ContractBillingInformation(
+                date=max(Date.today(), next_invoice_date),
+                billing_mode=failure_billing_mode,
+                payment_term=failure_billing_mode.allowed_payment_terms[0])
+            contract.billing_informations = contract.billing_informations + \
+                (new_billing_information,)
+            contract.save()
+
+            invoices.extend(Contract.invoice([contract],
+                up_to_date=next_invoice_date))
+        Invoice.post([contract_invoice.invoice
+                for contract_invoice in invoices])
 
     @classmethod
     def fail_retry(cls, payments):
-        super(Payment, cls).fail_retry()
+        super(Payment, cls).fail_retry(payments)
         pool = Pool()
         Invoice = pool.get('account.invoice')
         MoveLine = pool.get('account.move.line')
@@ -65,12 +97,12 @@ class Payment:
         payment_line_to_modify = []
         for payment in payments:
             if not isinstance(payment.line.move.origin, Invoice):
-                break
+                continue
             contract_invoice = payment.line.move.origin.contract_invoice
             invoice = payment.line.move.origin
 
             if not contract_invoice:
-                break
+                continue
             with Transaction().set_context(
                     contract_revision_date=contract_invoice.start):
                 res = invoice.update_move_line_from_billing_information(

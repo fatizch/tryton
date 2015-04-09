@@ -170,6 +170,11 @@ class Payment:
                 'Unknown amount invoice line : %s %s',
                 })
 
+    def _get_transaction_key(self):
+        if self.sepa_end_to_end_id:
+            return (self.sepa_end_to_end_id, self.journal)
+        return super(Payment, self)._get_transaction_key()
+
     @classmethod
     def search_end_to_end_id(cls, name, domain):
         result = super(Payment, cls).search_end_to_end_id(name, domain)
@@ -203,11 +208,12 @@ class Payment:
         super(Payment, cls).fail(payments)
 
         invoices_to_create = []
-        keyfunc = lambda c: c.sepa_end_to_end_id
-        payments = sorted(payments, key=keyfunc)
-        for k, payments_iterator in groupby(payments, keyfunc):
-            payments = list(payments_iterator)
-            payment = payments[0]
+        payments_keys = [(x._get_transaction_key(), x) for x in payments]
+        payments_keys = sorted(payments_keys, key=lambda x: x[0])
+        for key, payments in groupby(payments_keys, key=lambda x: x[0]):
+            for payment_key in payments:
+                payment = payment_key[1]
+                break
             # one reject invoice per different end_to_end_id only
             reject_fee = JournalFailureAction.get_rejected_payment_fee(
                 payment.sepa_return_reason_code)
