@@ -38,11 +38,11 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
         fields.Many2One('contract.set', 'Contract Set'),
         'get_contract_set', searcher='search_contract_set')
     contracts_summary = fields.Function(
-        fields.Char('Contracts Summary'), 'get_contracts_summary')
+        fields.Text('Contracts Summary'), 'get_contracts_summary')
     subscribers_summary = fields.Function(
-        fields.Char('Subcribers Summary'), 'get_subscribers_summary')
+        fields.Text('Subcribers Summary'), 'get_subscribers_summary')
     contracts_endorsements_summary = fields.Function(
-        fields.Char('Endorsements Summary'),
+        fields.Text('Endorsements Summary'),
         'get_contracts_endorsements_summary')
     effective_date = fields.Function(
         fields.Date('Effective Date'),
