@@ -102,6 +102,10 @@ class Contract:
         searcher='search_last_invoice')
     account_invoices = fields.Many2Many('contract.invoice', 'contract',
         'invoice', 'Invoices', order=[('start', 'ASC')], readonly=True)
+    current_term_invoices = fields.Function(
+        fields.One2Many('contract.invoice', None, 'Current Term Invoices'),
+        'get_current_term_invoices')
+
     _invoices_cache = Cache('invoices_report')
 
     @classmethod
@@ -118,19 +122,23 @@ class Contract:
                 'button_change_bank_account': {},
                 })
 
-    def invoices_report(self):
+    def get_current_term_invoices(self, name):
         pool = Pool()
         ContractInvoice = pool.get('contract.invoice')
-        invoices = ContractInvoice.search([
-                ('contract', '=', self),
-                ('invoice.state', '!=', 'cancel'),
-                ])
+        return [x.id for x in ContractInvoice.search([
+                    ('contract', '=', self),
+                    ('invoice.state', '!=', 'cancel'),
+                    ('start', '>=', self.start_date),
+                    ('end', '<=', self.end_date or datetime.date.max),
+                    ])]
+
+    def invoices_report(self):
         invoices = [{
                 'start': x.invoice.start,
                 'end': x.invoice.end,
                 'total_amount': x.invoice.total_amount,
                 'planned_payment_date': x.planned_payment_date}
-                for x in invoices]
+                for x in self.current_term_invoices]
         # we want chronological order
         return [invoices[::-1],
             sum([x['total_amount'] for x in invoices])]
