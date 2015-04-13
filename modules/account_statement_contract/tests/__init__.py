@@ -1,3 +1,3 @@
-from .test_account_statement_contract import suite
+from .test_module import suite
 
 __all__ = ['suite']

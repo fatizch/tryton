@@ -1,3 +1,3 @@
-from .test_account_aggregate import suite
+from .test_module import suite
 
 __all__ = ['suite']
