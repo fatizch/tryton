@@ -392,7 +392,7 @@ class ModelInfo(ModelView):
             Model = pool.get(model_name)
             try:
                 string = Model._get_name()
-            except AttributeError:
+            except AssertionError:
                 # None type has no attribute splitlines
                 string = Model.__name__
             mro, methods = cls.extract_mro(Model, model_name)
