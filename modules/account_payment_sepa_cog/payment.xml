@@ -29,5 +29,22 @@
             <field name="name">Default Account Payment Merged</field>
             <field name="code">account.payment.merged</field>
         </record>
+        <record model="ir.action.act_window" id="act_message_form">
+            <field name="name">SEPA Reject Messages</field>
+            <field name="res_model">account.payment.sepa.message</field>
+            <field name="domain">[('type', '=', 'in')]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_message_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="account_payment_sepa.message_view_list"/>
+            <field name="act_window" ref="act_message_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_message_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="account_payment_sepa.message_view_form"/>
+            <field name="act_window" ref="act_message_form"/>
+        </record>
+        <menuitem parent="account_payment.menu_payments" sequence="50"
+            action="act_message_form" id="menu_reject_message_form"  icon="tryton-list"/>
     </data>
 </tryton>
