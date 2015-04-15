@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### contract sub status ########### -->
+        <!-- ############################################################ -->
+        <record model="contract.sub_status" id="sub_status_terminated_unpaid_premium">
+            <field name="name">Unpaid Premium Termination</field>
+            <field name="code">unpaid_premium_termination</field>
+            <field name="status">terminated</field>
+        </record>
+        <record model="contract.sub_status" id="sub_status_hold_unpaid_premium">
+            <field name="name">Unpaid Premium Hold</field>
+            <field name="code">unpaid_premium_hold</field>
+            <field name="status">hold</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Contract form ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="contract.contract_view_form"/>
+            <field name="name">contract_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Contract dunning view list Name ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="contract_view_dunning_list">
+            <field name="model">contract</field>
+            <field name="type">tree</field>
+            <field name="name">contract_dunning_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_contract_dunning_form">
+            <field name="name">Contracts</field>
+            <field name="res_model">contract</field>
+            <field name="domain">[('company', '=', Eval('context', {}).get('company', -1))]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_view_dunning_list"/>
+            <field name="act_window" ref="act_contract_dunning_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract.contract_view_form"/>
+            <field name="act_window" ref="act_contract_dunning_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_terminated">
+            <field name="name">Dunning</field>
+            <field name="sequence" eval="31"/>
+            <field name="domain">[('dunning_status', '!=', '')]</field>
+            <field name="act_window" ref="contract.act_contract_form"/>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,96 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.dunning,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:account.dunning.create,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:account.dunning.level,contract_action:"
+msgid "Contract Action"
+msgstr "Action sur le contrat"
+
+msgctxt "field:account.dunning.level,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.dunning.level,termination_mode:"
+msgid "Termination Mode"
+msgstr "Mode de résiliation"
+
+msgctxt "field:account.dunning.treat,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract,current_dunning:"
+msgid "Current Dunning"
+msgstr "Relance courante"
+
+msgctxt "field:contract,dunning_status:"
+msgid "Dunning Status"
+msgstr "Statut de la relance"
+
+msgctxt "field:contract,last_paid_invoice_end:"
+msgid "Last Paid Invoice End Date"
+msgstr "Date de fin de la dernière quittance payée"
+
+msgctxt "field:contract,last_posted_invoice_end:"
+msgid "Last Post Invoice End Date"
+msgstr "Date de fin de la dernière quittance postée"
+
+msgctxt "field:offered.product,dunning_procedure:"
+msgid "Dunning Procedure"
+msgstr "Procédure de relance"
+
+msgctxt "model:account.dunning.create,name:"
+msgid "Dunning Creation Batch"
+msgstr "Batch de création des relances "
+
+msgctxt "model:account.dunning.treat,name:"
+msgid "Process Dunning Batch"
+msgstr "Batch de traitement des relances"
+
+msgctxt "model:contract.sub_status,name:sub_status_hold_unpaid_premium"
+msgid "Unpaid Premium Hold"
+msgstr "Suspension contentieuse"
+
+msgctxt "model:contract.sub_status,name:sub_status_terminated_unpaid_premium"
+msgid "Unpaid Premium Termination"
+msgstr "Résiliation contentieuse"
+
+msgctxt "model:ir.action,name:act_contract_dunning_form"
+msgid "Contracts"
+msgstr "Contrats"
+
+msgctxt ""
+"model:ir.action.act_window.domain,name:act_contract_domain_terminated"
+msgid "Dunning"
+msgstr "Relance"
+
+msgctxt "selection:account.dunning.level,contract_action:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:account.dunning.level,contract_action:"
+msgid "Hold Contract"
+msgstr "Suspendre le contrat"
+
+msgctxt "selection:account.dunning.level,contract_action:"
+msgid "Terminate Contract"
+msgstr "Résilier contentieux le contrat"
+
+msgctxt "selection:account.dunning.level,termination_mode:"
+msgid "At Last Paid Invoice"
+msgstr "A la dernière quittance payée"
+
+msgctxt "selection:account.dunning.level,termination_mode:"
+msgid "At Last Posted Invoice"
+msgstr "A la dernière quittance postée"
+
+msgctxt "view:contract:"
+msgid "Contract"
+msgstr "Contrat"
