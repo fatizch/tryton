@@ -599,15 +599,11 @@ class Contract(CogProcessFramework):
             return
         if not caller.values.get('start_date', None):
             return
-        self.set_start_date(caller.values['start_date'])
+        self.start_date = caller.values['start_date']
         self.save()
 
     def calculate_after_endorsement(self, caller=None):
         self.calculate()
-        if caller.__name__ == 'endorsement.contract':
-            if 'end_date' in caller.values:
-                self.set_and_propagate_end_date(caller.values['end_date'])
-            self.save()
 
     @classmethod
     def terminate(cls, contracts, at_date, termination_reason):

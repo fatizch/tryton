@@ -47,7 +47,7 @@ class StartFullContractRevision(EndorsementWizardStepMixin, model.CoopView):
         # Clean up contract
         contract = Contract(contracts.keys()[0])
         if self.start_date and (self.start_date != self.current_start_date):
-            contract.set_start_date(self.start_date)
+            contract.start_date = self.start_date
             contract.save()
         Contract.revert_to_project([contract])
 

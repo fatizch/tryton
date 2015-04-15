@@ -69,6 +69,8 @@ class NewCoveredElement(model.CoopView, EndorsementWizardStepMixin):
                     if isinstance(new_value, Model):
                         new_value = new_value.id
                     template['values'][field.name] = new_value
+                    template['values']['manual_start_date'] = \
+                        wizard.endorsement.effective_date
                 vlist.append(template)
         EndorsementCoveredElementOption.create(vlist)
 
@@ -131,11 +133,12 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                                         covered_element.relation,
                                 'option': option.relation,
                                 'start_date': real_option.start_date,
-                                'end_date': option.values['end_date'],
+                                'end_date': option.values['manual_end_date'],
                                 'covered_element_endorsement':
                                     option.covered_element_endorsement.id,
-                                'to_remove': option.values['end_date'] ==
-                                    effective_date,
+                                'to_remove':
+                                    option.values['manual_end_date'] ==
+                                        effective_date,
                                 'covered_element_option_endorsement':
                                     option.id,
                                 })
@@ -156,7 +159,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     selector.update({'covered_element': None,
                             'option': option.relation,
                             'start_date': real_option.start_date,
-                            'end_date': option.values['end_date'],
+                            'end_date': option.values['manual_end_date'],
                             'to_remove': True,
                             'option_endorsement': option.id,
                             })
@@ -222,7 +225,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     OptionEndorsement.delete([option.option_endorsement])
                     OptionEndorsement.create([{
                             'relation': option.option.id,
-                            'values': {'end_date': effective_date},
+                            'values': {'manual_end_date': effective_date},
                             'action': 'update',
                             'definition': self.endorsement_definition,
                             'contract_endorsement': endorsement.id,
@@ -233,7 +236,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                         x.covered_element.id],
                     'relation': x.option.id,
                     'definition': self.endorsement_definition,
-                    'values': {'end_date': effective_date},
+                    'values': {'manual_end_date': effective_date},
                     'action': 'update'}
                 for x in self.options if (x.to_remove and not
                     x.covered_element_option_endorsement and
@@ -242,7 +245,7 @@ class RemoveOption(model.CoopView, EndorsementWizardStepMixin):
                     'relation': x.option.id,
                     'definition': self.endorsement_definition,
                     'contract_endorsement': endorsement,
-                    'values': {'end_date': effective_date},
+                    'values': {'manual_end_date': effective_date},
                     'action': 'update'}
                 for x in self.options if (x.to_remove and not
                     x.option_endorsement and not
@@ -478,7 +481,7 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
             'end_date', 'flat_amount', 'is_discount', 'max_rate',
             'max_value', 'motive', 'option', 'rate', 'start_date',
-            'time_limited', 'flat_amount_frequency']
+            'flat_amount_frequency']
 
     @classmethod
     def create_displayer(cls, extra_premium, template):
@@ -561,7 +564,8 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
             elif elem.to_add:
                 ex_endorsement = ExtraPremiumEndorsement(action='add',
                     values=elem.extra_premium[0]._save_values)
-                ex_endorsement.values['start_date'] = self.effective_date
+                ex_endorsement.values['manual_start_date'] = \
+                    self.effective_date
             else:
                 base_instance = ExtraPremium(elem.extra_premium_id)
                 update_values = {
@@ -703,7 +707,7 @@ class NewExtraPremium(model.CoopView):
             'currency_digits', 'currency_symbol', 'duration', 'duration_unit',
             'end_date', 'flat_amount', 'is_discount', 'is_loan', 'max_rate',
             'max_value', 'motive', 'option', 'rate', 'start_date',
-            'time_limited', 'flat_amount_frequency']
+            'flat_amount_frequency']
 
     def update_endorsement(self, wizard):
         all_endorsements = {x.contract.id: x

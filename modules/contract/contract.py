@@ -6,7 +6,7 @@ except ImportError:
     import json
 from sql import Null
 from sql.conditionals import NullIf, Coalesce
-from sql.aggregate import Max
+from sql.aggregate import Max, Min
 
 from trytond import backend
 from trytond.tools import grouped_slice
@@ -223,6 +223,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states=_STATES, depends=_DEPENDS, delete_missing=True)
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
+    initial_start_date = fields.Function(fields.Date('Initial Start_date'),
+        'get_initial_start_date')
 
     @classmethod
     def __setup__(cls):
@@ -259,6 +261,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 'no_quote_sequence': 'No quote sequence defined',
                 'start_date_multiple_activation_history': 'Cannot change '
                 'start date, multiple activation period detected',
+                'end_date_anterior_to_start_date': 'Cannot set end date '
+                'anterior to start date',
                 'missing_values': 'Cannot add functional key : both quote'
                 'number and contract_number are missing from values',
                 'invalid_format': 'Invalid file format',
@@ -278,6 +282,10 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def get_func_key(self, name):
         return '%s|%s' % ((self.quote_number, self.contract_number))
+
+    def get_initial_start_date(self, name):
+        if self.activation_history:
+            return self.activation_history[0].start_date
 
     @classmethod
     def copy(cls, contracts, default=None):
@@ -335,7 +343,19 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         dates = [self.get_date_used_for_contract_end_date()]
         dates.append(self.get_maximum_end_date())
         dates = [x for x in dates if x] or [None]
-        self.set_and_propagate_end_date(min(dates))
+        if self.activation_history:
+            self.activation_history[-1].end_date = min(dates)
+            self.activation_history = self.activation_history
+
+    def notify_end_date_change(self, value):
+        for option in self.options:
+            option.notify_contract_end_date_change(value)
+        self.options = self.options
+
+    def notify_start_date_change(self, value):
+        for option in self.options:
+            option.notify_contract_start_date_change(value)
+        self.options = self.options
 
     @classmethod
     def _calculate_methods(cls, product):
@@ -425,10 +445,23 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             'termination_reason': defaultdict(lambda: None),
             }
 
+        today = utils.today()
         for contract_slice in grouped_slice(contracts):
-            subquery = activation_history.select(activation_history.contract,
-                Max(activation_history.start_date).as_('start_date'),
+            min_start_date_query = activation_history.select(
+                activation_history.contract,
+                Min(activation_history.start_date).as_('start_date'),
                 group_by=activation_history.contract)
+
+            subquery = activation_history.join(min_start_date_query,
+                condition=(
+                    (activation_history.contract ==
+                        min_start_date_query.contract) &
+                    ((activation_history.start_date <= today) |
+                        (activation_history.start_date ==
+                            min_start_date_query.start_date)))
+                ).select(activation_history.contract,
+                    Max(activation_history.start_date).as_('start_date'),
+                    group_by=activation_history.contract)
 
             cursor.execute(*activation_history.join(subquery, condition=(
                         (activation_history.contract == subquery.contract) &
@@ -543,59 +576,50 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def setter_start_date(cls, contracts, name, value):
         pool = Pool()
         ActivationHistory = pool.get('contract.activation_history')
-        to_create, to_write = [], []
+
         for contract_slice in grouped_slice(contracts):
+            to_save = []
             for contract in contract_slice:
-                if contract.status == 'void':
-                    continue
-                existing = ActivationHistory.search([
-                        ('contract', '=', contract.id)])
-                if not existing:
-                    to_create.append({
-                            'contract': contract.id,
-                            'start_date': value,
-                            })
-                elif len(existing) == 1:
-                    if existing[0].start_date != value:
-                        to_write += [[existing[0]], {'start_date': value}]
-                else:
+                to_save.append(contract)
+                contract.notify_start_date_change(value)
+                if not contract.activation_history:
+                    contract.activation_history = [ActivationHistory(
+                            contract=contract, start_date=value)]
+                elif len(contract.activation_history) > 1:
                     cls.raise_user_error(
                         'start_date_multiple_activation_history')
-        if to_create:
-            ActivationHistory.create(to_create)
-        if to_write:
-            ActivationHistory.write(*to_write)
+                else:
+                    existing = contract.activation_history[0]
+                    if existing.start_date != value:
+                        if existing.end_date and existing.end_date < value:
+                            existing.end_date = None
+                        existing.start_date = value
+                        contract.activation_history = [existing]
+            cls.save(to_save)
 
     @classmethod
     def setter_end_date(cls, contracts, name, value):
-        pool = Pool()
-        ActivationHistory = pool.get('contract.activation_history')
-        to_create, to_write, to_delete = [], [], []
         for contract_slice in grouped_slice(contracts):
+            to_save = []
             for contract in contract_slice:
+                to_save.append(contract)
                 if contract.status == 'void':
                     continue
-                existing = ActivationHistory.search([
-                        ('contract', '=', contract.id)])
+                contract.notify_end_date_change(value)
+                existing = contract.activation_history
                 if not existing:
-                    to_create.append({
-                            'contract': contract.id,
-                            'end_date': value,
-                            })
+                    contract.activation_history = [ActivationHistory(
+                            contract=contract, end_date=value)]
                 else:
-                    for elem in reversed(existing):
-                        if value and elem.start_date > value:
-                            to_delete.append(elem)
-                        elif elem.end_date != value:
-                            to_write += [[elem], {'end_date': value}]
-                        else:
-                            break
-        if to_delete:
-            ActivationHistory.delete(to_delete)
-        if to_create:
-            ActivationHistory.create(to_create)
-        if to_write:
-            ActivationHistory.write(*to_write)
+                    good_activation_history = [x for x in existing
+                        if x.start_date < value]
+                    if not good_activation_history:
+                        cls.raise_user_error(
+                            'end_date_anterior_to_start_date')
+                    if good_activation_history[-1].end_date != value:
+                        good_activation_history[-1].end_date = value
+                        contract.activation_history = good_activation_history
+            cls.save(to_save)
 
     @classmethod
     def search_contract_date(cls, name, clause):
@@ -660,34 +684,18 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         })
             previous_period = period
 
-    def set_and_propagate_end_date(self, end_date):
-        # Allows to set the contract's end_date and cascading the change in the
-        # contract's one2manys (options, history, etc...)
-        self.end_date = end_date
-        options = list(self.options)
-        for option in options:
-            if (option.automatic_end_date and option.automatic_end_date <=
-                    end_date):
-                continue
-            option.manual_end_date = end_date
-        self.options = options
-
     def get_maximum_end_date(self):
-        all_end_dates = [option.end_date for option in self.options]
+        all_end_dates = [option.manual_end_date for option in self.options if
+            option.manual_end_date]
+        all_end_dates.extend([option.automatic_end_date for option in
+                self.options if option.automatic_end_date])
+        if not all_end_dates:
+            all_end_dates.extend([option.end_date for option in
+                    self.options if option.end_date])
         if all_end_dates:
             return max(all_end_dates)
         else:
             return None
-
-    def set_start_date(self, start_date):
-        previous_start_date = self.start_date
-        self.start_date = start_date
-        self.update_from_start_date(previous_start_date)
-
-    def update_from_start_date(self, previous_start_date):
-        for option in self.options:
-            option.set_start_date(self.start_date, previous_start_date)
-        self.options = self.options
 
     def set_appliable_conditions_date(self, new_date):
         self.appliable_conditions_date = new_date
@@ -972,7 +980,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         Date = pool.get('ir.date')
         Event = pool.get('event')
         for contract in contracts:
-            contract.set_and_propagate_end_date(at_date)
+            contract.end_date = at_date
             contract.activation_history[-1].termination_reason = \
                 termination_reason
             contract.activation_history = list(contract.activation_history)
@@ -1009,7 +1017,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     def reactivate(cls, contracts):
         for contract in contracts:
-            contract.set_and_propagate_end_date(None)
+            contract.end_date = None
             contract.sub_status = None
             contract.status = 'active'
             contract.save()
@@ -1213,7 +1221,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             try:
                 contract = self.__class__(self.id)
                 previous_end_date = contract.end_date
-                contract.set_and_propagate_end_date(None)
+                contract.end_date = None
                 contract.save()
                 dates = [contract.get_date_used_for_contract_end_date()]
                 dates.append(contract.get_maximum_end_date())
@@ -1253,7 +1261,11 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         'get_end_date', setter='set_end_date')
     automatic_end_date = fields.Date('Automatic End Date', readonly=True)
     manual_end_date = fields.Date('Manual End Date', readonly=True)
-    start_date = fields.Date('Start Date', required=True,
+    start_date = fields.Function(
+        fields.Date('Start Date', states=_CONTRACT_STATUS_STATES,
+            depends=_CONTRACT_STATUS_DEPENDS),
+        'get_start_date', searcher="searcher_start_date")
+    manual_start_date = fields.Date('Manual Start Date',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
     status = fields.Selection(OPTIONSTATUS, 'Status',
         states=_CONTRACT_STATUS_STATES, depends=_CONTRACT_STATUS_DEPENDS)
@@ -1278,6 +1290,12 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         'on_change_with_contract_status')
     full_name = fields.Function(
         fields.Char('Full Name'), 'get_full_name')
+    initial_start_date = fields.Function(fields.Date('Initial Start_date'),
+        'get_initial_start_date')
+
+    def get_initial_start_date(self, name):
+        return max(self.manual_start_date or datetime.date.min,
+            self.parent_contract.initial_start_date)
 
     def get_full_name(self, name):
         return self.rec_name
@@ -1333,6 +1351,35 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 'end_date_posterior_to_automatic_end_date': 'End date should '
                 'be anterior to option automatic end date : %s',
                 })
+
+    @classmethod
+    def get_start_date(cls, options, names):
+        values = {
+            'start_date': defaultdict(lambda: None),
+            }
+        for option in options:
+            values['start_date'][option.id] = max(option.manual_start_date or
+                datetime.date.min, option.parent_contract.start_date)
+        return values
+
+    @classmethod
+    def searcher_start_date(cls, name, clause):
+        return ['OR',
+            [('manual_start_date',) + tuple(clause[1:])],
+            [
+                ('contract.start_date',) + tuple(clause[1:]),
+                ('manual_start_date', '=', None)
+            ]
+        ]
+
+    def notify_contract_end_date_change(self, new_end_date):
+        if self.manual_end_date and self.manual_end_date > new_end_date:
+            self.manual_end_date = None
+
+    def notify_contract_start_date_change(self, new_start_date):
+        if self.automatic_end_date and \
+                self.automatic_end_date < new_start_date:
+            self.automatic_end_date = None
 
     @classmethod
     def copy(cls, options, default=None):
@@ -1503,11 +1550,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         self.init_dict_for_rule_engine(exec_context)
         return self.coverage.calculate_end_date(exec_context)
 
-    def set_start_date(self, new_start_date, previous_start_date):
-        if self.start_date and (self.start_date == previous_start_date
-                or self.start_date < new_start_date):
-            self.start_date = new_start_date
-
     @classmethod
     def _calculate_methods(cls, coverage):
         return ['set_automatic_end_date']
@@ -1629,7 +1671,7 @@ class ContractEnd(Wizard):
         contracts = Contract.browse(Transaction().context.get('active_ids'))
         to_write = []
         for contract in contracts:
-            contract.set_and_propagate_end_date(self.select_date.end_date)
+            contract.end_date = self.select_date.end_date
             to_write.append([contract])
             to_write.append(contract._save_values)
         Contract.write(*to_write)
@@ -1728,7 +1770,7 @@ class ContractChangeStartDate(Wizard):
         selected_contract.set_appliable_conditions_date(
                 self.change_date.new_appliable_conditions_date
                 )
-        selected_contract.set_start_date(new_date)
+        selected_contract.start_date = new_date
         selected_contract.save()
         return 'end'
 

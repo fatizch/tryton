@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from dateutil.relativedelta import relativedelta
 import datetime
 import unittest
 from decimal import Decimal
@@ -92,7 +93,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract.save()
         self.assertEqual(contract.status, 'quote')
         self.assertEqual(contract.start_date, start_date)
-        contract.set_and_propagate_end_date(end_date)
+        contract.end_date = end_date
         contract.save()
         self.assertEqual(contract.end_date, end_date)
         self.assertEqual(contract.start_date, start_date)
@@ -121,12 +122,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     self.Option.delete([option])
             option_cov_ant = self.Option()
             option_cov_ant.coverage = coverage.id
-            option_cov_ant.start_date = ant_date
+            option_cov_ant.manual_start_date = ant_date
             option_cov_ant.save()
 
             option_cov_post = self.Option()
             option_cov_post.coverage = coverage.id
-            option_cov_post.start_date = post_date
+            option_cov_post.manual_start_date = post_date
             option_cov_post.save()
 
             covered_element = self.CoveredElement()
@@ -163,7 +164,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 contract.covered_elements[0].options[1].start_date, post_date)
 
         # case 2 : new date anterior to start_date
-        contract.set_start_date(start_date)
+        contract.start_date = start_date
         contract.save()
         new_date = start_date - datetime.timedelta(weeks=2)
         ant_date = new_date - datetime.timedelta(weeks=1)
@@ -187,8 +188,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
         coverage = self.Coverage.search([])[0]
         contract, = self.Contract.search([])
         start_date = contract.start_date
+        """
+        When we postpone the contract start date, the extra_premiums
+        with manually set start_dates should stay where they were,
+        except when they would be anterior to new contract start_date.
+        """
 
-        def set_test_case(new_date, ant_date, post_date):
+        def set_test_case(new_date, fixed_date):
 
             if (contract.covered_elements and
                     contract.covered_elements[0].options):
@@ -199,67 +205,74 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 for option in contract.options:
                     self.Option.delete([option])
 
-            option_cov = self.Option()
-            option_cov.coverage = coverage.id
-            option_cov.start_date = ant_date
-            extra_premium_ant = self.ExtraPremium()
-            extra_premium_ant.calculation_kind = 'rate'
-            extra_premium_ant.rate = Decimal('-0.05')
-            extra_premium_kind, = self.ExtraPremiumKind.search([
-                ('code', '=', 'reduc_no_limit'), ])
-            extra_premium_ant.motive = extra_premium_kind
-            extra_premium_ant.option = option_cov
-            extra_premium_ant.start_date = ant_date
-            extra_premium_ant.save()
-
-            extra_premium_post = self.ExtraPremium()
-            extra_premium_post.calculation_kind = 'rate'
-            extra_premium_post.rate = Decimal('-0.05')
-            extra_premium_post.motive = extra_premium_kind
-            extra_premium_post.option = option_cov
-            extra_premium_post.start_date = post_date
-            extra_premium_post.save()
-
-            option_cov.extra_premiums = [
-                    extra_premium_ant.id, extra_premium_post.id
-                    ]
-            option_cov.save()
-
             covered_element = self.CoveredElement()
-            covered_element.options = [option_cov.id]
-            covered_element.item_desc = coverage.item_desc
             covered_element.contract = contract
+            covered_element.item_desc = coverage.item_desc
             covered_element.product = covered_element.on_change_with_product()
             party = self.Party.search([('is_person', '=', True)])[0]
             covered_element.party = party
             covered_element.save()
-
             contract.covered_elements = [covered_element.id]
+
+            option_cov = self.Option()
+            option_cov.coverage = coverage.id
+            option_cov.covered_element = covered_element
+            option_cov.save()
+            contract.save()
+
+            extra_premium = self.ExtraPremium()
+            extra_premium.calculation_kind = 'rate'
+            extra_premium.rate = Decimal('-0.05')
+            extra_premium_kind, = self.ExtraPremiumKind.search([
+                ('code', '=', 'reduc_no_limit'), ])
+            extra_premium.motive = extra_premium_kind
+            extra_premium.option = option_cov
+            extra_premium.duration_unit = 'month'
+            extra_premium.duration = 6
+            extra_premium.save()
+
+            extra_premium_manual = self.ExtraPremium()
+            extra_premium_manual.calculation_kind = 'rate'
+            extra_premium_manual.rate = Decimal('-0.05')
+            extra_premium_manual.motive = extra_premium_kind
+            extra_premium_manual.option = option_cov
+            extra_premium_manual.manual_start_date = fixed_date
+            extra_premium_manual.duration_unit = 'month'
+            extra_premium_manual.duration = 6
+            extra_premium_manual.save()
+
+            option_cov.extra_premiums = [
+                    extra_premium.id, extra_premium_manual.id
+                    ]
+            option_cov.save()
 
             option_contract = self.Option()
             option_contract.coverage = coverage.id
-            option_contract.start_date = ant_date
-            extra_premium_contract_ant = self.ExtraPremium()
-            extra_premium_contract_ant.calculation_kind = 'rate'
-            extra_premium_contract_ant.rate = Decimal('-0.05')
+            option_contract.contract = contract
+            extra_premium_contract = self.ExtraPremium()
+            extra_premium_contract.calculation_kind = 'rate'
+            extra_premium_contract.rate = Decimal('-0.05')
             extra_premium_contract_kind, = self.ExtraPremiumKind.search([
                 ('code', '=', 'reduc_no_limit'), ])
-            extra_premium_contract_ant.motive = extra_premium_kind
-            extra_premium_contract_ant.option = option_cov
-            extra_premium_contract_ant.start_date = ant_date
-            extra_premium_contract_ant.save()
+            extra_premium_contract.motive = extra_premium_kind
+            extra_premium_contract.option = option_cov
+            extra_premium_contract.duration_unit = 'month'
+            extra_premium_contract.duration = 6
+            extra_premium_contract.save()
 
-            extra_premium_contract_post = self.ExtraPremium()
-            extra_premium_contract_post.calculation_kind = 'rate'
-            extra_premium_contract_post.rate = Decimal('-0.05')
-            extra_premium_contract_post.motive = extra_premium_kind
-            extra_premium_contract_post.option = option_cov
-            extra_premium_contract_post.start_date = post_date
-            extra_premium_contract_post.save()
+            extra_premium_contract_manual = self.ExtraPremium()
+            extra_premium_contract_manual.calculation_kind = 'rate'
+            extra_premium_contract_manual.rate = Decimal('-0.05')
+            extra_premium_contract_manual.motive = extra_premium_kind
+            extra_premium_contract_manual.option = option_cov
+            extra_premium_contract_manual.manual_start_date = fixed_date
+            extra_premium_contract_manual.duration_unit = 'month'
+            extra_premium_contract_manual.duration = 6
+            extra_premium_contract_manual.save()
 
             option_contract.extra_premiums = [
-                    extra_premium_contract_ant.id,
-                    extra_premium_contract_post.id,
+                    extra_premium_contract.id,
+                    extra_premium_contract_manual.id,
                     ]
             option_contract.save()
             contract.options = [option_contract.id]
@@ -274,12 +287,13 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 wizard.change_date.on_change_new_start_date()
                 wizard._execute('apply')
 
-        # test case 1 : new_date posterior to start_date
+        # test case 1 : We will change the contract start date
+        # to a posterior date. ExtraPremium start dates should stick
+        # to new start date if not manually set
         new_date = start_date + datetime.timedelta(weeks=2)
-        ant_date = new_date - datetime.timedelta(weeks=1)
-        post_date = new_date + datetime.timedelta(weeks=1)
+        fixed_date = start_date + datetime.timedelta(weeks=1)
 
-        set_test_case(new_date, ant_date, post_date)
+        set_test_case(new_date, fixed_date)
 
         contract_cov_opt = contract.covered_elements[0].options[0]
         self.assertEqual(new_date, contract.start_date)
@@ -289,20 +303,35 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(
                 contract_cov_opt.extra_premiums[0].start_date, new_date)
         self.assertEqual(
-                contract_cov_opt.extra_premiums[1].start_date, post_date)
+                contract_cov_opt.extra_premiums[1].start_date, fixed_date)
         self.assertEqual(
                 contract.options[0].extra_premiums[0].start_date, new_date)
         self.assertEqual(
-                contract.options[0].extra_premiums[1].start_date, post_date)
+                contract.options[0].extra_premiums[1].start_date, fixed_date)
 
-        # test case 2 : new_date posterior to start_date
-        contract.set_start_date(start_date)
+        # test end_dates
+        self.assertEqual(
+                contract_cov_opt.extra_premiums[0].end_date, new_date +
+                relativedelta(months=6, days=-1))
+        self.assertEqual(
+                contract_cov_opt.extra_premiums[1].end_date, fixed_date +
+                relativedelta(months=6, days=-1))
+        self.assertEqual(
+                contract.options[0].extra_premiums[0].end_date, new_date +
+                relativedelta(months=6, days=-1))
+        self.assertEqual(
+                contract.options[0].extra_premiums[1].end_date, fixed_date +
+                relativedelta(months=6, days=-1))
+
+        # test case 2 : we will change the contract start date
+        # to an anterior date. ExtraPremium start dates should stick
+        # to new start date if not manually set
+        contract.start_date = start_date
         contract.save()
         new_date = start_date - datetime.timedelta(weeks=2)
-        ant_date = new_date - datetime.timedelta(weeks=1)
-        post_date = new_date + datetime.timedelta(weeks=1)
+        fixed_date = start_date + datetime.timedelta(weeks=1)
 
-        set_test_case(new_date, ant_date, post_date)
+        set_test_case(new_date, fixed_date)
 
         contract_cov_opt = contract.covered_elements[0].options[0]
         self.assertEqual(new_date, contract.start_date)
@@ -312,33 +341,60 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(
                 contract_cov_opt.extra_premiums[0].start_date, new_date)
         self.assertEqual(
-                contract_cov_opt.extra_premiums[1].start_date, post_date)
+                contract_cov_opt.extra_premiums[1].start_date, fixed_date)
         self.assertEqual(
                 contract.options[0].extra_premiums[0].start_date, new_date)
         self.assertEqual(
-                contract.options[0].extra_premiums[1].start_date, post_date)
+                contract.options[0].extra_premiums[1].start_date, fixed_date)
 
+        # test end_dates
+        self.assertEqual(
+                contract_cov_opt.extra_premiums[0].end_date, new_date +
+                relativedelta(months=6, days=-1))
+        self.assertEqual(
+                contract_cov_opt.extra_premiums[1].end_date, fixed_date +
+                relativedelta(months=6, days=-1))
+        self.assertEqual(
+                contract.options[0].extra_premiums[0].end_date, new_date +
+                relativedelta(months=6, days=-1))
+        self.assertEqual(
+                contract.options[0].extra_premiums[1].end_date, fixed_date +
+                relativedelta(months=6, days=-1))
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0014_testChangeStartDateWizardOptionsPremiums',
+    )
     def test0015_testOptionEndDate(self):
-        start_date = datetime.date(2012, 2, 15)
+        contract = self.Contract.search([])[0]
+        coverage = self.Coverage.search([])[0]
+        covered_element = self.CoveredElement.search([])[0]
+        covered_element.contract = contract
+        covered_element.save()
+        start_date = contract.start_date
         date1 = start_date + datetime.timedelta(weeks=30)
         date2 = start_date + datetime.timedelta(weeks=50)
         date3 = start_date + datetime.timedelta(weeks=60)
         contract_end_date = start_date + datetime.timedelta(weeks=70)
         early_date = start_date - datetime.timedelta(weeks=1)
         late_date = contract_end_date + datetime.timedelta(weeks=1)
+        contract.options = []
+        contract.covered_elements[0].options = []
+        contract.end_date = contract_end_date
+        contract.save()
 
         def test_option(automatic_end_date=None, manual_end_date=None,
                         start_date=start_date, expected=None,
                         should_raise=False,
                         to_set=None, should_set=True):
             option = self.Option(
-                start_date=start_date,
+                manual_start_date=start_date,
                 automatic_end_date=automatic_end_date,
                 manual_end_date=manual_end_date,
-                parent_contract=self.Contract(end_date=contract_end_date),
-                covered_element=self.CoveredElement(),
+                covered_element=covered_element,
+                coverage=coverage,
                 )
-            self.assertEqual(option.get_end_date('end_date'), expected)
+            option.save()
+            self.assertEqual(option.end_date, expected)
             option.parent_contract.options = [option]
             option.parent_contract.covered_element_options = [option]
             option.manual_end_date = to_set
@@ -351,11 +407,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
             else:
                 self.Contract.check_option_end_dates([option.parent_contract])
 
-        # option with auto date
+        # option with auto end date
         test_option(automatic_end_date=date2, expected=date2,
             to_set=date1, should_set=True)
 
-        # option with manual date
+        # option with manual end date
         test_option(automatic_end_date=date2, manual_end_date=date3,
             expected=min(date3, date2), to_set=date1,
             should_set=True)
@@ -387,26 +443,37 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # The ending date of a contract should be capped by
         # the max ending date of covered elements options
         contract, = self.Contract.search([])
+        coverage = self.Coverage.search([])[0]
         current_end = contract.end_date
         end_option1 = current_end - datetime.timedelta(weeks=2)
         end_option2 = current_end - datetime.timedelta(weeks=4)
 
         def add_covered_element_with_options(option_end_dates):
             covered_element = self.CoveredElement()
+            covered_element.item_desc = coverage.item_desc
+            covered_element.contract = contract
+            covered_element.product = covered_element.on_change_with_product()
+            party = self.Party.search([('is_person', '=', True)])[0]
+            covered_element.party = party
+            covered_element.save()
             options = []
             for end_date in option_end_dates:
                 option = self.Option(
                         start_date=contract.start_date,
-                        end_date=end_date,
+                        manual_end_date=end_date,
                         automatic_end_date=None,
+                        covered_element=covered_element,
+                        coverage=coverage,
                         parent_contract=contract,
-                        covered_element=covered_element
                         )
+                option.save()
                 options.append(option)
             covered_element.options = options
+            covered_element.save()
             return covered_element
 
         def build_contract_covered_elements(end_date1, end_date2):
+            self.CoveredElement.delete(contract.covered_elements)
             contract.covered_elements = [add_covered_element_with_options(
                     [end_date1, end_date2]),
                 add_covered_element_with_options(
@@ -415,16 +482,84 @@ class ModuleTestCase(test_framework.CoopTestCase):
         contract.options = []
         build_contract_covered_elements(end_option1, end_option2)
         contract.calculate_activation_dates()
+        contract.save()
         self.assertEqual(contract.end_date, max(end_option1, end_option2))
 
         # Of course, this cap should not be effective
         # if the options ends after the contract
-        contract, = self.Contract.search([])
         end_option1 = current_end + datetime.timedelta(weeks=2)
         end_option2 = current_end + datetime.timedelta(weeks=4)
         build_contract_covered_elements(end_option1, end_option2)
         contract.calculate_activation_dates()
+        contract.save()
         self.assertEqual(contract.end_date, max(end_option1, end_option2))
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0012_testContractCreation',
+        'contract_insurance.test0001_testPersonCreation',
+    )
+    def test_0030_search_start_date(self):
+        contract, = self.Contract.search([])
+        coverage = self.Coverage.search([])[0]
+
+        covered_element = self.CoveredElement()
+        covered_element.item_desc = coverage.item_desc
+        covered_element.contract = contract
+        covered_element.product = covered_element.on_change_with_product()
+        party = self.Party.search([('is_person', '=', True)])[0]
+        covered_element.party = party
+        covered_element.save()
+        contract.covered_element = [covered_element]
+        contract.save()
+
+        def make_option(manual_offset=None):
+            if manual_offset:
+                my_offset = relativedelta(weeks=manual_offset)
+                option = self.Option(
+                        manual_start_date=contract.start_date + my_offset,
+                        covered_element=covered_element,
+                        parent_contract=contract,
+                        coverage=coverage,
+                        )
+                option.save()
+            else:
+                option = self.Option(
+                        covered_element=covered_element,
+                        parent_contract=contract,
+                        coverage=coverage,
+                        )
+                option.save()
+            return option
+
+        option_no_offset = make_option()
+        option_one_week = make_option(manual_offset=1)
+        option_three_weeks = make_option(manual_offset=3)
+
+        res = self.Option.search([('start_date', '=', contract.start_date)])
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0], option_no_offset)
+
+        res = self.Option.search([('start_date', '=', contract.start_date +
+                    relativedelta(weeks=1))])
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0], option_one_week)
+
+        res = self.Option.search([('start_date', '>=', contract.start_date)])
+        self.assertEqual(len(res), 3)
+
+        res = self.Option.search([('start_date', '>=', contract.start_date +
+                    relativedelta(weeks=1))])
+        self.assertEqual(len(res), 2)
+        self.assertEqual(set(res), set([option_one_week, option_three_weeks]))
+
+        res = self.Option.search([('start_date', '>', contract.start_date +
+                    relativedelta(weeks=1))])
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0], option_three_weeks)
+
+        res = self.Option.search([('start_date', '<', contract.start_date +
+                    relativedelta(weeks=4))])
+        self.assertEqual(len(res), 3)
 
 
 def suite():

@@ -229,10 +229,8 @@ covered_element.party = subscriber
 covered_element.item_desc = item_description
 option = covered_element.options.new()
 option.coverage = coverage
-option.start_date = contract_start_date
 option2 = covered_element.options.new()
 option2.coverage = coverage
-option2.start_date = contract_start_date
 contract.subscriber = subscriber
 contract.save()
 

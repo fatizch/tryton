@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval, If, Or, Bool, Len
 from trytond.transaction import Transaction
@@ -136,6 +138,22 @@ class Contract(Printable):
                 self.append_functional_error('need_option',
                     (covered.get_rec_name('')))
 
+    def notify_end_date_change(self, value):
+        super(Contract, self).notify_end_date_change(value)
+        for element in self.covered_elements:
+            for option in element.options:
+                option.notify_contract_end_date_change(value)
+            element.options = element.options
+        self.covered_elements = self.covered_elements
+
+    def notify_start_date_change(self, value):
+        super(Contract, self).notify_start_date_change(value)
+        for element in self.covered_elements:
+            for option in element.options:
+                option.notify_contract_start_date_change(value)
+            element.options = element.options
+        self.covered_elements = self.covered_elements
+
     @classmethod
     def check_option_end_dates(cls, contracts):
         super(Contract, cls).check_option_end_dates(contracts)
@@ -269,24 +287,22 @@ class Contract(Printable):
             kinds.append('active_contract')
         return kinds
 
-    def set_and_propagate_end_date(self, end_date):
-        super(Contract, self).set_and_propagate_end_date(end_date)
-        for covered_element in self.covered_elements:
-            for option in covered_element.options:
-                if (end_date and option.automatic_end_date and
-                        option.automatic_end_date <= end_date):
-                    continue
-                option.manual_end_date = end_date
-            covered_element.options = covered_element.options
-        self.covered_elements = self.covered_elements
-
     def get_maximum_end_date(self):
         contract_maximum = super(Contract, self).get_maximum_end_date()
-        all_end_dates = [option.end_date
+        all_end_dates = [option.manual_end_date
             for covered_elements in self.covered_elements
-            for option in covered_elements.options if option.end_date]
+            for option in covered_elements.options if option.manual_end_date]
+        all_end_dates.extend([option.automatic_end_date
+            for covered_elements in self.covered_elements
+            for option in covered_elements.options if
+                option.automatic_end_date])
         if contract_maximum is not None:
             all_end_dates.append(contract_maximum)
+        if not all_end_dates:
+            all_end_dates.extend([option.end_date
+                for covered_elements in self.covered_elements
+                for option in covered_elements.options if
+                    option.end_date])
         if all_end_dates:
             return max(all_end_dates)
         else:
@@ -302,11 +318,6 @@ class Contract(Printable):
         errors = self.init_next_renewal_date()
         if errors:
             self.raise_user_error('error_in_renewal_date_calculation')
-        for covered_element in self.covered_elements:
-            for option in covered_element.options:
-                option.set_start_date(self.start_date, previous_start_date)
-            covered_element.options = covered_element.options
-        self.covered_elements = self.covered_elements
 
     def activate_contract(self):
         super(Contract, self).activate_contract()
@@ -504,6 +515,22 @@ class ContractOption:
             ]
 
     @classmethod
+    def searcher_start_date(cls, name, clause):
+        return ['OR',
+            [('manual_start_date',) + tuple(clause[1:])],
+            [
+                ('manual_start_date', '=', None),
+                ('contract', '!=', None),
+                ('contract.start_date',) + tuple(clause[1:]),
+            ],
+            [
+                ('manual_start_date', '=', None),
+                ('covered_element', '!=', None),
+                ('covered_element.contract.start_date',) + tuple(clause[1:]),
+            ],
+        ]
+
+    @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')
     def propagate_extra_premiums(cls, options):
         pass
@@ -571,11 +598,18 @@ class ContractOption:
         result['offered'] = self.coverage
         return result
 
-    def set_start_date(self, start_date, previous_start_date):
-        super(ContractOption, self).set_start_date(start_date,
-                previous_start_date)
-        for extra_premium in self.extra_premiums:
-            extra_premium.set_start_date(start_date, previous_start_date)
+    def notify_contract_end_date_change(self, new_end_date):
+        super(ContractOption, self).notify_contract_start_date_change(
+            new_end_date)
+        for extra_prem in self.extra_premiums:
+            extra_prem.notify_contract_end_date_change(new_end_date)
+        self.extra_premiums = self.extra_premiums
+
+    def notify_contract_start_date_change(self, new_start_date):
+        super(ContractOption, self).notify_contract_start_date_change(
+            new_start_date)
+        for extra_prem in self.extra_premiums:
+            extra_prem.notify_contract_start_date_change(new_start_date)
         self.extra_premiums = self.extra_premiums
 
 
@@ -1143,8 +1177,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     calculation_kind = fields.Selection('get_possible_extra_premiums_kind',
         'Calculation Kind')
     calculation_kind_string = calculation_kind.translated('calculation_kind')
-    end_date = fields.Date('End date', states={
-            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
+    end_date = fields.Function(fields.Date('End date'), 'get_end_date')
+    manual_end_date = fields.Date('Manual End Date')
     flat_amount = fields.Numeric('Flat amount', states={
             'invisible': Eval('calculation_kind', '') != 'flat',
             'required': Eval('calculation_kind', '') == 'flat',
@@ -1193,23 +1227,14 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     max_rate = fields.Function(
         fields.Numeric('Max Rate'),
         'on_change_with_max_rate', searcher='search_max_rate')
-    start_date = fields.Date('Start date', states={
-        'required': True,
-        'invisible': ~Eval('time_limited'),
-        }, depends=['time_limited'])
-    duration = fields.Function(
-        fields.Integer('Duration',
-            states={'invisible': ~Eval('time_limited')}),
-        'get_duration', 'setter_void')
-    duration_unit = fields.Function(
-        fields.Selection([('', ''), ('month', 'Month'), ('year', 'Year')],
-            'Duration Unit', sort=False,
-            states={'invisible': ~Eval('time_limited')}),
-        'on_change_with_duration_unit', 'setter_void')
+    start_date = fields.Function(
+        fields.Date('Start Date'), 'get_start_date')
+    manual_start_date = fields.Date('Manual Start date')
+    duration = fields.Integer('Duration', required=True)
+    duration_unit = fields.Selection(
+        [('month', 'Month'), ('year', 'Year')],
+        'Duration Unit', sort=False, required=True)
     duration_unit_string = duration_unit.translated('duration_unit')
-    time_limited = fields.Function(
-        fields.Boolean('Time Limited'),
-        'on_change_with_time_limited', 'setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -1245,25 +1270,6 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             self.rate = None
         elif self.calculation_kind == 'rate':
             self.flat_amount = None
-
-    @fields.depends('start_date', 'end_date')
-    def on_change_with_duration_unit(self, name=None):
-        res = (coop_date.duration_between_and_is_it_exact(
-                self.start_date, self.end_date, 'month')
-            if self.start_date and self.end_date else (None, False))
-        if res[0] is not None and res[1]:
-            return 'month'
-
-    @fields.depends('start_date', 'end_date', 'duration', 'duration_unit')
-    def on_change_with_end_date(self):
-        if not self.duration or not self.duration_unit:
-            return
-        return coop_date.get_end_of_period(self.start_date, self.duration_unit,
-            self.duration)
-
-    @fields.depends('end_date')
-    def on_change_with_time_limited(self, name=None):
-        return self.end_date is not None
 
     @fields.depends('motive')
     def on_change_with_is_discount(self, name=None):
@@ -1329,18 +1335,29 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             return base * self.rate
         return 0
 
-    def get_duration(self, name):
-        res = (coop_date.duration_between_and_is_it_exact(self.start_date,
-                self.end_date, 'month')
-            if self.start_date and self.end_date else (None, False))
-        if res[0] is None or not res[1]:
-            return None
-        return res[0]
+    def get_start_date(self, name):
+        return self.manual_start_date or self.option.initial_start_date
 
-    def set_start_date(self, new_start_date, previous_start_date):
-        if self.start_date and (self.start_date == previous_start_date
-                or self.start_date < new_start_date):
-            self.start_date = new_start_date
+    def get_end_date(self, name):
+        if self.manual_end_date:
+            return min(self.manual_end_date, self.calculate_end_date())
+        return self.calculate_end_date()
+
+    def notify_contract_end_date_change(self, new_end_date):
+        if self.manual_end_date and self.manual_end_date > new_end_date:
+            self.manual_end_date = None
+
+    def notify_contract_start_date_change(self, new_start_date):
+        pass
+
+    def calculate_end_date(self):
+        months = years = 0
+        if self.duration_unit == 'month':
+            months = self.duration
+        elif self.duration_unit == 'year':
+            years = self.duration
+        return self.start_date + relativedelta(months=months,
+            years=years, days=-1)
 
 
 class OptionExclusionKindRelation(model.CoopSQL):

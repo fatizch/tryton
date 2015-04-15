@@ -1,5 +1,6 @@
 import unittest
 import datetime
+from dateutil.relativedelta import relativedelta
 
 import trytond.tests.test_tryton
 
@@ -52,7 +53,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(len(contract.activation_history), 1)
         self.assertEqual(contract.activation_history[0].start_date, start_date)
         self.assertEqual(contract.start_date, start_date)
-        contract.set_and_propagate_end_date(end_date)
+        contract.end_date = end_date
         contract.save()
         self.assertEqual(contract.end_date, end_date)
         self.assertEqual(contract.start_date, start_date)
@@ -110,11 +111,11 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 for option in contract.options:
                     self.Option.delete([option])
             option_ant = self.Option()
-            option_ant.start_date = ant_date
+            option_ant.manual_start_date = ant_date
             option_ant.coverage = coverage.id
             option_ant.save()
             option_post = self.Option()
-            option_post.start_date = post_date
+            option_post.manual_start_date = post_date
             option_post.coverage = coverage.id
             option_post.save()
             contract.options = [option_ant.id, option_post.id]
@@ -126,33 +127,37 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 wizard.change_date.new_start_date = new_date
                 wizard.change_date.on_change_new_start_date()
                 wizard._execute('apply')
+            return [option_ant, option_post]
 
         # case 1 : new date posterior to start_date
         new_date = start_date + datetime.timedelta(weeks=2)
         ant_date = new_date - datetime.timedelta(weeks=1)
         post_date = new_date + datetime.timedelta(weeks=1)
 
-        set_test_case(new_date, ant_date, post_date)
+        option_ant, option_post = set_test_case(new_date, ant_date, post_date)
 
         self.assertEqual(new_date, contract.start_date)
         self.assertEqual(new_date, contract.appliable_conditions_date)
-        self.assertEqual(contract.options[0].start_date, new_date)
-        self.assertEqual(contract.options[1].start_date, post_date)
+        self.assertEqual(option_ant.start_date, new_date)
+        self.assertEqual(option_post.start_date, post_date)
 
         # case 2 : new date anterior to start_date
-        contract.set_start_date(start_date)
+        contract.start_date = start_date
         contract.save()
         new_date = start_date - datetime.timedelta(weeks=2)
         ant_date = new_date - datetime.timedelta(weeks=1)
         post_date = new_date + datetime.timedelta(weeks=1)
 
-        set_test_case(new_date, ant_date, post_date)
+        option_ant, option_post = set_test_case(new_date, ant_date, post_date)
 
         self.assertEqual(new_date, contract.start_date)
         self.assertEqual(new_date, contract.appliable_conditions_date)
-        self.assertEqual(contract.options[0].start_date, new_date)
-        self.assertEqual(contract.options[1].start_date, post_date)
+        self.assertEqual(option_ant.start_date, new_date)
+        self.assertEqual(option_post.start_date, post_date)
 
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
     def test0030_testOptionEndDate(self):
         start_date = datetime.date(2012, 2, 15)
         auto_date = start_date + datetime.timedelta(weeks=50)
@@ -162,20 +167,28 @@ class ModuleTestCase(test_framework.CoopTestCase):
         early_date = start_date - datetime.timedelta(weeks=1)
         late_date = contract_end_date + datetime.timedelta(weeks=1)
 
+        contract = self.Contract(
+                    product=self.Contract.search([])[0].product,
+                    company=self.Contract.search([])[0].company,
+                    start_date=start_date)
+        contract.save()
+        contract.end_date = contract_end_date
+        contract.save()
+
         def test_option(automatic_end_date=None, manual_end_date=None,
-                start_date=start_date, expected=None, should_raise=False,
+                expected=None, should_raise=False,
                 to_set=None, should_set=True):
             option = self.Option(
-                start_date=start_date,
                 automatic_end_date=automatic_end_date,
                 manual_end_date=manual_end_date,
-                contract=self.Contract(end_date=contract_end_date),
+                contract=contract,
                 )
             option.parent_contract = option.contract
             option.contract.end_date = contract_end_date
             self.assertEqual(option.get_end_date('end_date'), expected)
             option.contract.options = [option]
             option.manual_end_date = to_set
+            option.save()
 
             # test check
             if should_raise:
@@ -211,6 +224,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test0040_maximum_end_date(self):
         contract, = self.Contract.search([])
         current_end = contract.end_date
+        coverage, = self.Coverage.search([])
         end_option1 = current_end - datetime.timedelta(weeks=2)
         end_option2 = current_end - datetime.timedelta(weeks=4)
 
@@ -222,7 +236,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
                         automatic_end_date=end_date,
                         manual_end_date=end_date,
                         end_date=end_date,
+                        contract=contract,
                         parent_contract=contract,
+                        coverage=coverage,
                         )
                 options.append(option)
             return options
@@ -231,7 +247,64 @@ class ModuleTestCase(test_framework.CoopTestCase):
         # end date, the maximum end_date is the latest option end date.
         contract.options = get_options([end_option1, end_option2])
         contract.calculate_activation_dates()
+        contract.save()
         self.assertEqual(contract.end_date, end_option1)
+
+    @test_framework.prepare_test(
+        'contract.test0010_testContractCreation',
+        )
+    def test0050_searcher_start_date(self):
+        contract, = self.Contract.search([])
+        coverage, = self.Coverage.search([])
+
+        def make_option(manual_offset=None):
+            if manual_offset:
+                my_offset = relativedelta(weeks=manual_offset)
+                option = self.Option(
+                        manual_start_date=contract.start_date + my_offset,
+                        contract=contract,
+                        parent_contract=contract,
+                        coverage=coverage,
+                        )
+                option.save()
+            else:
+                option = self.Option(
+                        contract=contract,
+                        parent_contract=contract,
+                        coverage=coverage,
+                        )
+                option.save()
+            return option
+
+        option_no_offset = make_option()
+        option_one_week = make_option(manual_offset=1)
+        option_three_weeks = make_option(manual_offset=3)
+
+        res = self.Option.search([('start_date', '=', contract.start_date)])
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0], option_no_offset)
+
+        res = self.Option.search([('start_date', '=', contract.start_date +
+                    relativedelta(weeks=1))])
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0], option_one_week)
+
+        res = self.Option.search([('start_date', '>=', contract.start_date)])
+        self.assertEqual(len(res), 3)
+
+        res = self.Option.search([('start_date', '>=', contract.start_date +
+                    relativedelta(weeks=1))])
+        self.assertEqual(len(res), 2)
+        self.assertEqual(set(res), set([option_one_week, option_three_weeks]))
+
+        res = self.Option.search([('start_date', '>', contract.start_date +
+                    relativedelta(weeks=1))])
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0], option_three_weeks)
+
+        res = self.Option.search([('start_date', '<', contract.start_date +
+                    relativedelta(weeks=4))])
+        self.assertEqual(len(res), 3)
 
 
 def suite():
