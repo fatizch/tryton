@@ -1,0 +1,41 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:account.dunning.procedure:"
+msgid "The code must be unique"
+msgstr "Le code doit être unique"
+
+msgctxt "field:account.dunning,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:account.dunning,last_process_date:"
+msgid "Last Process Date"
+msgstr "Dernière date d'exécution"
+
+msgctxt "field:account.dunning,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.dunning.level,days_from_previous_step:"
+msgid "Days Defined From Previous Step"
+msgstr "Jours définis par rapport au précédent niveau"
+
+msgctxt "field:account.dunning.level,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.dunning.procedure,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:account.dunning.procedure,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "help:account.dunning.level,days_from_previous_step:"
+msgid "Days are defined based on the previous level execution date"
+msgstr ""
+"Le nombre de jours est défini par rapport à la date d'exécution du niveau "
+"précédent"

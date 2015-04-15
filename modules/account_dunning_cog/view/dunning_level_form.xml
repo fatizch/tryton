@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/form/field[@name='procedure']" position="after">
+        <label name="name"/>
+        <field name="name"/>
+    </xpath>
+    <xpath expr="/form/field[@name='days']" position="after">
+        <label name="days_from_previous_step"/>
+        <field name="days_from_previous_step"/>
+        <label name="not_mandatory"/>
+        <field name="not_mandatory"/>
+        <label name="event_log_type"/>
+        <field name="event_log_type"/>
+    </xpath>
+</data>
