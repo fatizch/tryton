@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<data>
+    <xpath expr="/tree/field[@name='days']" position="after">
+        <field name="report_template"/>
+    </xpath>
+</data>

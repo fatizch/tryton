@@ -1,0 +1,19 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.dunning.level,event_log_type:"
+msgid "Event Log Type"
+msgstr "Type d'évènements"
+
+msgctxt "field:account.dunning.level,not_mandatory:"
+msgid "Level Not Mandatory"
+msgstr ""
+
+msgctxt "field:account.dunning.level,report_template:"
+msgid "Report Template"
+msgstr "Modèle de courrier"
+
+msgctxt "help:account.dunning.level,not_mandatory:"
+msgid "If higher level can be processed, this step will be skipped"
+msgstr ""
