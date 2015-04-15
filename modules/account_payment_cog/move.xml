@@ -16,21 +16,39 @@
             <field name="inherit" ref="account.move_line_view_form"/>
             <field name="name">move_line_form</field>
         </record>
-
-        <!-- Wizard for bank transfer date modification -->
+        <!-- ############################################################ -->
+        <!-- ########### Wizard for bank transfer date modification ##### -->
+        <!-- ############################################################ -->
         <record model="ir.ui.view" id="payment_information_modification_view_form">
             <field name="model">account.payment.payment_information_selection</field>
             <field name="type">form</field>
             <field name="name">payment_information_modification_form</field>
         </record>
         <record model="ir.action.wizard" id="modify_payment_information_wizard">
-          <field name="name">Modify Payment Information</field>
-          <field name="wiz_name">account.payment.payment_information_modification</field>
+            <field name="name">Modify Payment Information</field>
+            <field name="wiz_name">account.payment.payment_information_modification</field>
         </record>
         <record model="ir.action.keyword" id="act_modify_payment_information_keyword">
-          <field name="keyword">form_action</field>
-          <field name="model">account.move.line,-1</field>
-          <field name="action" ref="modify_payment_information_wizard"/>
+            <field name="keyword">form_action</field>
+            <field name="model">account.move.line,-1</field>
+            <field name="action" ref="modify_payment_information_wizard"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Wizard for payment creation          ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="payment_creation_start_view_form">
+            <field name="model">account.payment.payment_creation.start</field>
+            <field name="type">form</field>
+            <field name="name">payment_creation_start_form</field>
+        </record>
+        <record model="ir.action.wizard" id="create_payments_wizard">
+            <field name="name">Create Payments</field>
+            <field name="wiz_name">account.payment.creation</field>
+        </record>
+        <record model="ir.action.keyword" id="act_create_payments_keyword">
+            <field name="keyword">form_action</field>
+            <field name="model">account.move.line,-1</field>
+            <field name="action" ref="create_payments_wizard"/>
         </record>
     </data>
 </tryton>

@@ -10,10 +10,15 @@ __all__ = [
 class MoveLine:
     __name__ = 'account.move.line'
 
-    def init_payment(self, journal=None):
-        AccountInvoice = Pool().get('account.invoice')
-        res = super(MoveLine, self).init_payment(journal)
-        if (self.origin and isinstance(self.origin, AccountInvoice) and
-                self.origin.sepa_mandate):
-            res['sepa_mandate'] = self.origin.sepa_mandate
-        return res
+    @classmethod
+    def init_payments(cls, lines, journal):
+        pool = Pool()
+        Invoice = pool.get('account.invoice')
+        Line = pool.get('account.move.line')
+        payments = super(MoveLine, cls).init_payments(lines, journal)
+        for payment in payments:
+            line = Line(payment['line'])
+            if (line.origin and isinstance(line.origin, Invoice) and
+                    line.origin.sepa_mandate):
+                payment['sepa_mandate'] = line.origin.sepa_mandate.id
+        return payments

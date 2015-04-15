@@ -23,8 +23,10 @@ def register():
         Configuration,
         Group,
         Party,
+        PaymentCreationStart,
         module='account_payment_cog', type_='model')
     Pool.register(
         SynthesisMenuOpen,
         PaymentInformationModification,
+        PaymentCreation,
         module='account_payment_cog', type_='wizard')

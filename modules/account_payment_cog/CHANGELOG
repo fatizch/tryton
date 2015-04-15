@@ -1,3 +1,4 @@
+* Add payments creation wizard
 * Manage manual reject payment processus
 * Allow to configure payment fail action accoding number of retry
 * Allow to block payments for a party

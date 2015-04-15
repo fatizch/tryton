@@ -1,5 +1,7 @@
 import unittest
+from mock import Mock
 import datetime
+from decimal import Decimal
 
 import trytond.tests.test_tryton
 
@@ -16,42 +18,217 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Company': 'company.company',
+            'User': 'res.user',
+            'Currency': 'currency.currency',
             'MoveLine': 'account.move.line',
+            'Journal': 'account.journal',
+            'JournalType': 'account.journal.type',
             'PaymentJournal': 'account.payment.journal',
             'Payment': 'account.payment',
             'Party': 'party.party',
-            'Account': 'account.account'
+            'Account': 'account.account',
+            'AccountType': 'account.account.type',
+            'FiscalYear': 'account.fiscalyear',
+            'Move': 'account.move',
+            'MoveLine': 'account.move.line',
+            'Sequence': 'ir.sequence',
             }
 
+    @test_framework.prepare_test('company_cog.test0001_testCompanyCreation')
     def test0010_test_init_payment(self):
-        journal = self.PaymentJournal(id=1)
-        company = self.Company(id=2)
-        account = self.Account(company=company)
-        party = self.Party(id=3)
-        move_line = self.MoveLine(
-            id=4,
-            account=account,
-            party=party,
-            payment_date=datetime.date(2014, 1, 1))
+        company = self.Company(1)
+        today = datetime.date.today()
+        sequence, sequence_journal = self.Sequence.create([{
+                    'name': '%s' % today.year,
+                    'code': 'account.move',
+                    'company': company.id,
+                    }, {
+                    'name': '%s' % today.year,
+                    'code': 'account.journal',
+                    'company': company.id,
+                    }])
+        fiscalyear, = self.FiscalYear.create([{
+                    'name': '%s' % today.year,
+                    'start_date': today.replace(month=1, day=1),
+                    'end_date': today.replace(month=12, day=31),
+                    'company': company.id,
+                    'post_move_sequence': sequence.id,
+                    }])
+        self.FiscalYear.create_period([fiscalyear])
+        journal_type, = self.JournalType.create([{
+                    'name': 'Revenue',
+                    'code': 'REV',
+                    }])
+        journal_revenue, = self.Journal.create([{
+                    'name': 'Revenue',
+                    'type': 'REV',
+                    'sequence': sequence_journal.id,
+                    }])
+        account_kind_receivable, = self.AccountType.create([{
+                    'name': 'Receivable',
+                    'company': company.id,
+                    }])
+        account_kind_payable, = self.AccountType.create([{
+                    'name': 'Payable',
+                    'company': company.id,
+                    }])
+        account_kind_revenue, = self.AccountType.create([{
+                    'name': 'Revenue',
+                    'company': company.id,
+                    }])
+        account_receivable, account_payable= self.Account.create([{
+                    'name': 'Receivable',
+                    'company': company.id,
+                    'type': account_kind_receivable.id,
+                    'kind': 'receivable',
+                    'party_required': True,
+                    }, {
+                    'name': 'Payable',
+                    'company': company.id,
+                    'type': account_kind_payable.id,
+                    'kind': 'payable',
+                    'party_required': True,
+                    }])
+        account_revenue, = self.Account.create([{
+                    'name': 'Revenu',
+                    'company': company.id,
+                    'type': account_kind_revenue.id,
+                    'kind': 'revenue',
+                    }])
+        payment_journal, = self.PaymentJournal.create([{
+                    'name': 'Manual',
+                    'process_method': 'manual',
+                    'company': company.id,
+                    'currency': company.currency.id,
+                    }])
+        period = fiscalyear.periods[0]
+        customer, = self.Party.create([{
+                    'name': 'Customer',
+                    }])
+        # create first move
+        move, = self.Move.create([{
+                    'period': period.id,
+                    'journal': journal_revenue.id,
+                    'date': period.start_date,
+                    'company': company.id,
+                    }])
+        move_line, move_line_receivable = self.MoveLine.create([{
+                    'account': account_revenue.id,
+                    'credit': Decimal(50),
+                    'move': move.id
+                    }, {
+                    'account': account_receivable.id,
+                    'debit': Decimal(50),
+                    'move': move.id,
+                    'party': customer.id,
+                    'maturity_date': period.start_date,
+                    'payment_date': period.start_date,
+                    }])
+        self.Move.post([move])
+        lines_to_pay = [move_line_receivable]
+        move_line_receivable.get_payment_journal = Mock(
+            return_value=payment_journal)
+        payments = self.MoveLine.create_payments(lines_to_pay)
+        self.assertTrue(len(payments) == 1)
+        self.assertTrue(payments[0].amount == Decimal(50))
+        self.assertTrue(payments[0].kind == 'receivable')
+        payments[0].state = 'draft'
+        payments[0].save()
+        self.Payment.delete(payments)
 
-        move_line.debit = 45
-        move_line.credit = 0
-        payment = move_line.init_payment(journal)
-        self.assertEqual(payment, {
-            'company': 2,
-            'kind': 'receivable',
-            'journal': 1,
-            'party': 3,
-            'amount': 45,
-            'line': 4,
-            'date': move_line.payment_date,
-            'state': 'approved'})
+        # create credit receivable
+        move, = self.Move.create([{
+                    'period': period.id,
+                    'journal': journal_revenue.id,
+                    'date': period.start_date,
+                    'company': company.id,
+                    }])
+        move_line, move_line_receivable = self.MoveLine.create([{
+                    'account': account_revenue.id,
+                    'debit': Decimal(20),
+                    'move': move.id
+                    }, {
+                    'account': account_receivable.id,
+                    'credit': Decimal(20),
+                    'move': move.id,
+                    'party': customer.id,
+                    'maturity_date': period.start_date,
+                    }])
+        self.Move.post([move])
+        move_line_receivable.get_payment_journal = Mock(
+            return_value=payment_journal)
+        payments = self.MoveLine.create_payments(lines_to_pay)
+        self.assertTrue(len(payments) == 1)
+        self.assertTrue(payments[0].amount == Decimal(30))
+        self.assertTrue(payments[0].kind == 'receivable')
+        payments[0].state = 'draft'
+        payments[0].save()
+        self.Payment.delete(payments)
 
-        move_line.debit = 0
-        move_line.credit = 15
-        payment = move_line.init_payment(journal)
-        self.assertEqual(payment['amount'], 15)
-        self.assertEqual(payment['kind'], 'payable')
+        # mark credit receivable with payment_date
+        move_line_receivable.payment_date = period.start_date
+        move_line_receivable.save()
+        lines_to_pay.append(move_line_receivable)
+        payments = self.MoveLine.create_payments(lines_to_pay)
+        self.assertTrue(len(payments) == 2)
+        self.assertTrue(payments[0].amount == Decimal(50))
+        self.assertTrue(payments[0].kind == 'receivable')
+        self.assertTrue(payments[1].amount == Decimal(20))
+        self.assertTrue(payments[1].kind == 'payable')
+        for payment in payments:
+            payment.state = 'draft'
+        self.Payment.delete(payments)
+
+        # create payable move
+        move, = self.Move.create([{
+                    'period': period.id,
+                    'journal': journal_revenue.id,
+                    'date': period.start_date,
+                    'company': company.id,
+                    }])
+        move_line, move_line_payable = self.MoveLine.create([{
+                    'account': account_revenue.id,
+                    'debit': Decimal(50),
+                    'move': move.id
+                    }, {
+                    'account': account_payable.id,
+                    'credit': Decimal(50),
+                    'move': move.id,
+                    'party': customer.id,
+                    'maturity_date': period.start_date,
+                    'payment_date': period.start_date,
+                    }])
+        move_line_payable.get_payment_journal = Mock(
+            return_value=payment_journal)
+        lines_to_pay.append(move_line_payable)
+        move2, = self.Move.create([{
+                    'period': period.id,
+                    'journal': journal_revenue.id,
+                    'date': period.start_date,
+                    'company': company.id,
+                    }])
+        move_line, move_line_payable = self.MoveLine.create([{
+                    'account': account_revenue.id,
+                    'credit': Decimal(10),
+                    'move': move2.id
+                    }, {
+                    'account': account_payable.id,
+                    'debit': Decimal(10),
+                    'move': move2.id,
+                    'party': customer.id,
+                    'maturity_date': period.start_date,
+                    }])
+        self.Move.post([move, move2])
+        move_line_payable.get_payment_journal = Mock(
+            return_value=payment_journal)
+        payments = self.MoveLine.create_payments(lines_to_pay)
+        self.assertTrue(len(payments) == 3)
+        self.assertTrue(payments[0].amount == Decimal(40))
+        self.assertTrue(payments[0].kind == 'payable')
+        self.assertTrue(payments[1].amount == Decimal(50))
+        self.assertTrue(payments[1].kind == 'receivable')
+        self.assertTrue(payments[2].amount == Decimal(20))
+        self.assertTrue(payments[2].kind == 'payable')
 
 
 def suite():
