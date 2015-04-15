@@ -20,5 +20,5 @@ class MoveLine:
 
     @classmethod
     def _process_payment_key(cls, line):
-        return super(MoveLine, line)._process_payment_key(cls, line) + \
-            (line.contact, )
+        return super(MoveLine, cls)._process_payment_key(line) + \
+            (line.contract, )
