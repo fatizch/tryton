@@ -9,6 +9,7 @@ except ImportError:
 
 from sql.aggregate import Max
 from sql import Literal, Cast
+from sql.operators import Concat
 from sql.conditionals import Coalesce
 
 from trytond.pyson import Eval, Bool
@@ -122,6 +123,7 @@ class Party(export.ExportImportMixin):
             contact_field.readonly = False
         cls.vat_number.states = {'invisible': True}
         cls.vat_country.states = {'invisible': True}
+        cls.full_name.searcher = 'search_full_name'
 
     @classmethod
     def add_func_key(cls, values):
@@ -341,6 +343,16 @@ class Party(export.ExportImportMixin):
             ('name',) + tuple(clause[1:]),
             ('code',) + tuple(clause[1:]),
         ]
+
+    @classmethod
+    def search_full_name(cls, name, clause):
+        table = cls.__table__()
+        _, operator, value = clause
+        Operator = fields.SQL_OPERATORS[operator]
+        query = table.select(table.id,
+            where=Operator(Concat(table.name, Concat(' ', table.first_name)),
+                value))
+        return [('id', 'in', query)]
 
     def get_person(self):
         if self.is_person:
