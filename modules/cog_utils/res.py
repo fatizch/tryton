@@ -1,4 +1,6 @@
 from trytond.pool import PoolMeta
+from trytond.config import config
+from trytond.transaction import Transaction
 
 from export import ExportImportMixin
 
@@ -36,6 +38,14 @@ class User(ExportImportMixin):
         result = super(User, cls)._export_skips()
         result.add('salt')
         return result
+
+    def get_status_bar(self, name):
+        status = super(User, self).get_status_bar(name)
+        env = config.get('database', 'env_name', '')
+        if env:
+            env = env.replace('%{DB}', Transaction().cursor.dbname)
+            status += ' - %s' % env
+        return status
 
 
 class ResUserWarning(ExportImportMixin):
