@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
+        <record model="ir.ui.view" id="endorsement_set_apply_find_process_form">
+            <field name="model">endorsement.set.apply.find_process</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="process_cog.process_parameters_form"/>
+            <field name="name">endorsement_set_apply_find_process_form</field>
+        </record>
         <record model="ir.action.wizard" id="endorsement_set_process_launcher">
             <field name="name">Endorsement Set Application</field>
             <field name="wiz_name">endorsement.set.apply</field>
