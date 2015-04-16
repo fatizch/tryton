@@ -16,7 +16,16 @@ __all__ = [
     'ContractSetDecline',
     'ContractSetSelectDeclineReason',
     'ReportTemplate',
+    'Configuration',
     ]
+
+
+class Configuration:
+    __name__ = 'offered.configuration'
+
+    contract_set_number_sequence = fields.Property(
+        fields.Many2One('ir.sequence', 'Contract Set Number Sequence',
+            domain=[('code', '=', 'contract_set_number')]))
 
 
 class ContractSet(model.CoopSQL, model.CoopView, Printable):
@@ -26,7 +35,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
     _func_key = 'number'
     _rec_name = 'number'
 
-    number = fields.Char('Number', required=True)
+    number = fields.Char('Number', readonly=True)
     contracts = fields.One2Many('contract', 'contract_set', 'Contracts',
         target_not_required=True)
     subscribers = fields.Function(fields.Text('Subscribers'),
@@ -48,6 +57,25 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         cls._buttons.update({
                 'button_decline_set': {},
                 })
+        cls._error_messages.update({
+            'no_sequence_defined': 'No sequence for defined in configuration '
+            'for contract set number',
+            })
+
+    @classmethod
+    def create(cls, vlist):
+        pool = Pool()
+        Sequence = pool.get('ir.sequence')
+        Configuration = pool.get('offered.configuration')
+        config = Configuration(1)
+        if not config.contract_set_number_sequence:
+            cls.raise_user_error('no_sequence_defined')
+        vlist = [v.copy() for v in vlist]
+        for values in vlist:
+            if not values.get('number'):
+                values['number'] = Sequence.get_id(
+                    config.contract_set_number_sequence.id)
+        return super(ContractSet, cls).create(vlist)
 
     def get_dates(self):
         dates = []
