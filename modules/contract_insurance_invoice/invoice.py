@@ -231,6 +231,8 @@ class Invoice:
     @classmethod
     def post(cls, invoices):
         for invoice in invoices:
+            if invoice.state in ('posted', 'paid'):
+                continue
             if invoice.contract and invoice.contract.status not in ('active'
                     'terminated'):
                 cls.raise_user_error(
