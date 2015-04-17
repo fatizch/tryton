@@ -89,7 +89,7 @@ def migrate_dates():
     with Transaction().start(dbname, user_id, context=CONTEXT) as transaction:
         try:
             transaction.cursor.execute('alter table contract_option '
-                    'drop column end_date')
+                    'drop column start_date')
         except Exception as e:
             transaction.cursor.rollback()
             raise e
