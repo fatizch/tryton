@@ -283,7 +283,7 @@ class ExportImportMixin(Model):
             ValueModel = pool.get(value['__name__'])
             existing = ValueModel.search_for_export_import(value)
             if len(existing) > 1:
-                cls.raise_user_error('not_unique',
+                cls.raise_user_error('export_not_unique',
                     ('\n'.join([(x.__name__ + ' with id ' + str(x.id))
                                 for x in existing]),
                         value['_func_key']))
@@ -312,8 +312,9 @@ class ExportImportMixin(Model):
             if record:
                 return record
             else:
-                cls.raise_user_error('not_found', (cls.__name__,
+                cls.raise_user_error('export_not_found', (cls.__name__,
                         value['data']['_func_key']))
+
         if record:
             cls.write([record], new_values)
         else:
