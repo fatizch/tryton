@@ -599,6 +599,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def setter_end_date(cls, contracts, name, value):
+        pool = Pool()
+        ActivationHistory = pool.get('contract.activation_history')
         for contract_slice in grouped_slice(contracts):
             to_save = []
             for contract in contract_slice:
