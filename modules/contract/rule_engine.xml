@@ -69,5 +69,15 @@
             <field name="long_description">Pays de l'adresse associée au contrat</field>
             <field name="parent" ref="te_contract"/>
         </record>
+        <record model="rule_engine.function" id="number_of_activation_periods">
+            <field name="translated_technical_name">nombre_de_periodes_d_activation</field>
+            <field name="description">Nombre de periodes d'activation</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_number_of_activation_periods</field>
+            <field name="long_description">Nombre de périodes d'activation</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
     </data>
 </tryton>

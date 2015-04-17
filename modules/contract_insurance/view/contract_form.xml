@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <xpath expr="//page[@id='admin']/group[@id='left']" position="inside">
-    <label name="last_renewed"/>
-    <field name="last_renewed"/>
-    <label name="next_renewal_date"/>
-    <field name="next_renewal_date"/>
-  </xpath>
   <xpath expr="/form/notebook/page[@id='options']" position="before">
       <page string="Covered Elements" id="cov_elements">
           <hpaned id="covered_element" position="200">

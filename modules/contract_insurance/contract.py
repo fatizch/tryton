@@ -53,8 +53,6 @@ class Contract(Printable):
             'possible_item_desc'], target_not_required=True)
     last_renewed = fields.Date('Last Renewed', states=_STATES,
         depends=_DEPENDS)
-    next_renewal_date = fields.Date('Next Renewal Date', states=_STATES,
-        depends=_DEPENDS)
     possible_item_desc = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Possible Item Desc', states={'invisible': True}),
@@ -114,24 +112,6 @@ class Contract(Printable):
             if to_write:
                 CoveredElement.write(*to_write)
 
-    def init_next_renewal_date(self):
-        self.last_renewed = self.start_date
-        self.next_renewal_date = None
-        self.next_renewal_date, errors = self.product.get_result(
-            'next_renewal_date', {
-                'date': self.start_date,
-                'appliable_conditions_date': self.appliable_conditions_date,
-                'contract': self})
-        if len(errors) == 1 and errors[0][0] == 'no_renewal_rule_configured':
-            errors = []
-        return errors
-
-    def init_from_product(self, product, start_date=None, end_date=None):
-        super(Contract, self).init_from_product(product,
-            start_date, end_date)
-        errors = self.init_next_renewal_date()
-        return (not errors, errors)
-
     def check_at_least_one_covered(self):
         for covered in self.covered_elements:
             if not covered.check_at_least_one_covered():
@@ -178,26 +158,6 @@ class Contract(Printable):
                 ('subscriber', '=', subscriber),
                 ('start_date', '<=', at_date)])
 
-    def get_next_renewal_date(self):
-        # TODO : make it better than just "yearly"
-        return coop_date.add_frequency('yearly', self.start_date)
-
-    def renew(self):
-        renewal_date = self.next_renewal_date
-        self.next_renewal_date, errors = self.product.get_result(
-            'next_renewal_date', {
-                'date': self.start_date,
-                'appliable_conditions_date': self.appliable_conditions_date,
-                'contract': self})
-        self.last_renewed = renewal_date
-        if errors:
-            return False
-        prices_update, errs = self.calculate_prices_between_dates(renewal_date)
-        if errors:
-            return False
-        self.store_prices(prices_update)
-        return True
-
     def check_contract_extra_data(self):
         final_res, final_errs = True, []
         for extra_data in self.extra_datas:
@@ -243,9 +203,6 @@ class Contract(Printable):
         super(Contract, cls).update_contract_after_import(contracts)
         for contract in contracts:
             contract.init_covered_elements()
-            errors = contract.init_next_renewal_date()
-            if errors:
-                cls.raise_user_error('error_in_renewal_date_calculation')
             contract.save()
 
     @classmethod
@@ -312,12 +269,6 @@ class Contract(Printable):
         parties = super(Contract, self).get_parties(name)
         parties += [x.party.id for x in self.covered_elements if x.person]
         return parties
-
-    def update_from_start_date(self, previous_start_date):
-        super(Contract, self).update_from_start_date(previous_start_date)
-        errors = self.init_next_renewal_date()
-        if errors:
-            self.raise_user_error('error_in_renewal_date_calculation')
 
     def activate_contract(self):
         super(Contract, self).activate_contract()
@@ -1257,12 +1208,6 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     @staticmethod
     def default_duration_unit():
         return 'month'
-
-    @classmethod
-    def default_start_date(cls):
-        if 'start_date' in Transaction().context:
-            return Transaction().context.get('start_date')
-        return utils.today()
 
     @fields.depends('calculation_kind')
     def on_change_calculation_kind(self):

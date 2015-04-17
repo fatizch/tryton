@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.action.wizard" id="act_renew">
+            <field name="name">Renew Contract</field>
+            <field name="wiz_name">contract_term_renewal.renew</field>
+        </record>
+        <record model="ir.action.wizard" id="act_decline_renewal">
+            <field name="name">Decline Contract Renewal</field>
+            <field name="wiz_name">contract_term_renewal.decline_renewal</field>
+        </record>
+        <record model="ir.ui.view" id="select_decline_renewal_reason_view_form">
+            <field name="model">contract_term_renewal.decline_renewal.select_reason</field>
+            <field name="type">form</field>
+            <field name="name">select_decline_renewal_reason_form</field>
+        </record>
+        <record model="ir.ui.view" id="activation_history_view_form">
+          <field name="model">contract.activation_history</field>
+          <field name="type">form</field>
+          <field name="inherit" ref="contract.activation_history_view_form"/>
+          <field name="name">activation_history_form</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_form">
+          <field name="model">contract</field>
+          <field name="type">form</field>
+          <field name="inherit" ref="contract.contract_view_form"/>
+          <field name="name">contract_form</field>
+        </record>
+    </data>
+</tryton>

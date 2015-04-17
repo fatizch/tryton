@@ -618,7 +618,8 @@ class Contract(CogProcessFramework):
                     }})
         endorsement.save()
 
-        super(Contract, cls).terminate(contracts, at_date, termination_reason)
+        return super(Contract, cls).terminate(contracts, at_date,
+            termination_reason)
 
     @classmethod
     def void(cls, contracts, void_reason):

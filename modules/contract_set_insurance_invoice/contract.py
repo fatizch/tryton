@@ -75,9 +75,9 @@ class DisplayContractSetPremium(Wizard):
 class ContractSet:
     __name__ = 'contract.set'
 
-    def invoice_contracts_till_next_renewal_date(self):
+    def invoice_contracts_to_end_date(self):
         for contract in self.contracts:
-            contract.invoice_till_next_renewal_date()
+            contract.invoice_to_end_date()
 
     def contract_groups_info(self):
 

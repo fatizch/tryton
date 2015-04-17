@@ -38,8 +38,6 @@ class Offered:
 class Product:
     __name__ = 'offered.product'
 
-    term_renewal_rules = fields.One2Many('offered.term.rule', 'offered',
-        'Term - Renewal', delete_missing=True)
     item_descriptors = fields.Function(
         fields.Many2Many('offered.item.description', None, None,
             'Item Descriptions'),
@@ -51,7 +49,6 @@ class Product:
         cls.extra_data_def.domain = [
             ('kind', 'in', ['contract', 'covered_element', 'option'])]
         cls._error_messages.update({
-                'no_renewal_rule_configured': 'No renewal rule configured',
                 'missing_covered_element_extra_data': 'The following covered '
                 'element extra data should be set on the product: %s',
                 })
@@ -121,13 +118,6 @@ class Product:
         if 'elem' in args and args['level'] == 'option':
             return ''
         return super(Product, self).get_cmpl_data_looking_for_what(args)
-
-    def give_me_next_renewal_date(self, args):
-        try:
-            return self.get_result('next_renewal_date', args,
-                kind='term_renewal')
-        except NonExistingRuleKindException:
-            return None, [('no_renewal_rule_configured', ())]
 
     @classmethod
     def get_var_names_for_full_extract(cls):

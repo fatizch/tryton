@@ -114,6 +114,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
 
     def activate_set(self):
         for contract in self.contracts:
+            contract.before_activate()
             contract.activate_contract()
             contract.finalize_contract()
 

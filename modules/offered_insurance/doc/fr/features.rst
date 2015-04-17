@@ -17,10 +17,6 @@
   Les descripteur de risque permet de décrire cette information, et est utilisé
   comme base lors de la souscription pour la saisie des données de risque.
 
-- **Règle de terminaison :** Permet sur un produit de définir la politique de
-  renouvellement : renouvellement possible, automatique, durée des contrats,
-  etc...
-
 - **Gestion des exclusions :** Ajoute la possibilité sur les garanties de
   définir des règles d'exclusion : telle garantie ne peut pas être souscrite en
   même temps que telle autre.

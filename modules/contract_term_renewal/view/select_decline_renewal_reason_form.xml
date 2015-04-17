@@ -1,0 +1,7 @@
+<form string="Select Renewal Declination Reason">
+    <label name="contract"/>
+    <field name="contract"/>
+    <newline/>
+    <label name="reason"/>
+    <field name="reason"/>
+</form>

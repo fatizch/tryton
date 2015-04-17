@@ -5,9 +5,4 @@
             <field name="item_descriptors"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
-        <page string="Term - Renewal" id="term_renewal">
-            <field name="term_renewal_rules" colspan="4"/>
-        </page>
-    </xpath>
 </data>

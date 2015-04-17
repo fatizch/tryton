@@ -69,3 +69,8 @@ class RuleEngineRuntime:
         elif 'elem' in args:
             return args['elem'].party
         cls.append_error(args, 'Cannot find a person to get')
+
+    @classmethod
+    @check_args('contract')
+    def _re_number_of_activation_periods(cls, args):
+        return len(args['contract'].activation_history)

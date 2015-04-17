@@ -143,9 +143,8 @@ class Contract:
         return [invoices[::-1],
             sum([x['total_amount'] for x in invoices])]
 
-    def invoice_till_next_renewal_date(self):
-        Contract.invoice([self],
-            self.next_renewal_date - relativedelta(days=1))
+    def invoice_to_end_date(self):
+        Contract.invoice([self], self.end_date)
 
     def check_billing_information(self):
         for billing in self.billing_informations:

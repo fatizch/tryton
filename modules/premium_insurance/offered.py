@@ -16,19 +16,6 @@ __all__ = [
 class Product:
     __name__ = 'offered.product'
 
-    def get_contract_dates(self, dates, contract):
-        super(Product, self).get_contract_dates(dates, contract)
-        if contract.next_renewal_date:
-            dates.add(contract.next_renewal_date)
-            if not contract.end_date:
-                return
-            # Calculate every anniversary date until contrat termination
-            cur_date = contract.next_renewal_date
-            while cur_date <= contract.end_date:
-                dates.add(cur_date)
-                cur_date = coop_date.add_year(cur_date, 1)
-        return dates
-
     def get_option_dates(self, dates, option):
         super(Product, self).get_option_dates(dates, option)
         if (hasattr(option, 'extra_premiums') and

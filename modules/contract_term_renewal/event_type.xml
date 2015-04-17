@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="event.type" id="event_renew_contract">
+            <field name="name">Renew Contract</field>
+            <field name="code">renew_contract</field>
+        </record>
+        <record model="event.type" id="event_decline_contract_renewal">
+            <field name="name">Decline Contract Renewal</field>
+            <field name="code">decline_contract_renewal</field>
+        </record>
+    </data>
+</tryton>

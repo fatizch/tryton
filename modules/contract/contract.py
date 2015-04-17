@@ -1085,10 +1085,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if res:
             return res[0].address
 
-    def get_next_renewal_date(self):
-        # TODO : Do not hardcode yearly here
-        return coop_date.add_frequency('yearly', self.start_date)
-
     def init_default_address(self):
         if getattr(self, 'addresses', None):
             return True
@@ -1360,8 +1356,16 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             'start_date': defaultdict(lambda: None),
             }
         for option in options:
-            values['start_date'][option.id] = max(option.manual_start_date or
-                datetime.date.min, option.parent_contract.start_date)
+            ended_previously = False
+            if option.manual_end_date or option.automatic_end_date:
+                ending_date = min(option.manual_end_date or datetime.date.max,
+                    option.automatic_end_date or datetime.date.max)
+                if ending_date < option.parent_contract.start_date:
+                    ended_previously = True
+                    values['start_date'][option.id] = option.initial_start_date
+            if not ended_previously:
+                values['start_date'][option.id] = max(option.manual_start_date
+                    or datetime.date.min, option.parent_contract.start_date)
         return values
 
     @classmethod

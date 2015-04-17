@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ########### -->
+        <!-- # Product # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Product Term Renewal Rule # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="contract_term_renewal_rule_view_form">
+            <field name="model">offered.product.term_renewal_rule</field>
+            <field name="type">form</field>
+            <field name="name">term_renewal_rule_form</field>
+        </record>
+    </data>
+</tryton>

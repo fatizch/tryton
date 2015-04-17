@@ -23,7 +23,7 @@ class ProductPremiumDate:
         res = super(ProductPremiumDate, self).get_rule_for_contract(contract)
         if res:
             return res
-        max_date = contract.end_date or contract.next_renewal_date
+        max_date = contract.end_date
         if not max_date:
             return res
         if self.type_ == 'yearly_each_covered_anniversary_date':

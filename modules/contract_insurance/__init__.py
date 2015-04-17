@@ -2,7 +2,6 @@ from trytond.pool import Pool
 from .contract import *
 from .party import *
 from .report_engine import *
-from .renewal import *
 from .wizard import *
 from .service import *
 from .rule_engine import *
@@ -26,8 +25,6 @@ def register():
         ReportTemplate,
         ContractService,
         Expense,
-        RenewalStart,
-        RenewalResult,
         OptionsDisplayer,
         WizardOption,
         ExtraPremiumSelector,
@@ -40,7 +37,6 @@ def register():
         module='contract_insurance', type_='model')
 
     Pool.register(
-        RenewalWizard,
         OptionSubscription,
         ManageExtraPremium,
         ManageExclusion,

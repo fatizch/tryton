@@ -27,8 +27,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
             ]
 
         contract = Mock()
+        period = Mock()
         contract.start_date = datetime.date(2014, 02, 12)
         contract.end_date = datetime.date(2015, 4, 25)
+        period.start_date = datetime.date(2014, 02, 12)
+        period.end_date = datetime.date(2015, 4, 25)
+        contract.activation_history = [period]
         contract.options = []
         contract.extra_datas = []
 
@@ -38,8 +42,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 datetime.date(2015, 01, 01), datetime.date(2015, 02, 12)])
 
         contract = Mock()
+        period = Mock()
         contract.start_date = datetime.date(2014, 03, 01)
         contract.end_date = datetime.date(2015, 12, 31)
+        period.start_date = datetime.date(2014, 03, 01)
+        period.end_date = datetime.date(2015, 12, 31)
+        contract.activation_history = [period]
         contract.options = []
         contract.extra_datas = []
 

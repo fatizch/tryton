@@ -78,7 +78,7 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
         super(ProductPremiumDate, cls).write(args)
 
     def get_rule_for_contract(self, contract):
-        max_date = contract.end_date or contract.next_renewal_date
+        max_date = contract.end_date
         if not max_date:
             return
         if self.type_ == 'yearly_custom_date':

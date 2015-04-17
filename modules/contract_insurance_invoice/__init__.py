@@ -6,6 +6,7 @@ from .party import *
 from .offered import *
 from .contract import *
 from .account import *
+from .wizard import *
 
 
 def register():
@@ -45,4 +46,5 @@ def register():
         DisplayContractPremium,
         ContractBalance,
         ChangeBankAccount,
+        Renew,
         module='contract_insurance_invoice', type_='wizard')

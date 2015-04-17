@@ -35,7 +35,6 @@ def register():
         BusinessRuleRoot,
         # From business_rule.documents_rule
         CoverageAmountRule,
-        TermRule,
         # From business_rule.exclusion
         ExclusionKind,
         # From business_rule.extra_premium
