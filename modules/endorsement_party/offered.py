@@ -41,8 +41,13 @@ class EndorsementDefinition:
 
     @fields.depends('ordered_endorsement_parts')
     def on_change_with_generate_contract_endorsements(self, name=None):
-        return any([x.generate_contract_endorsements
-                for x in self.endorsement_parts])
+        ordered_parts = self.ordered_endorsement_parts
+        parts = []
+        for ordered in ordered_parts:
+            if ordered.endorsement_part:
+                parts.append(ordered.endorsement_part)
+        return any([x.generate_contract_endorsements is True
+                for x in parts])
 
     @classmethod
     def search_is_party(cls, name, clause):
