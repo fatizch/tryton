@@ -13,11 +13,31 @@ __all__ = [
 
 class Attachment(export.ExportImportMixin):
     __name__ = 'ir.attachment'
+    _func_key = 'func_key'
 
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
     origin = fields.Reference('Origin',
         selection='get_possible_origin', select=True)
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    def get_func_key(self, name):
+        return '%s|%s' % (self.name, self.resource)
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        if '|' in clause[2]:
+            operands = clause[2].split('|')
+            if len(operands) == 2:
+                name, resource = clause[2].split('|')
+                return [('name', clause[1], name),
+                    ('resource', clause[1], resource)]
+            else:
+                return [('id', '=', None)]
+        else:
+            return [('id', '=', None)]
 
     @classmethod
     def get_possible_origin(cls):
