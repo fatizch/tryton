@@ -70,11 +70,12 @@ def migrate_dates():
                 delta = relativedelta(dates[1], dates[0])
                 months = delta.months + 12 * delta.years
                 extra_premium.duration_unit = 'month'
-                extra_premium.duration = months + 1
+                if months:
+                    extra_premium.duration = months + 1
                 start_date = extra_premium.option.parent_contract.start_date
                 if dates[0] != start_date:
                     extra_premium.manual_start_date = dates[0]
-                if (dates[0] + relativedelta(months=months + 1,
+                if months and (dates[0] + relativedelta(months=months + 1,
                             days=-1)) != dates[1]:
                     extra_premium.manual_end_date = dates[1]
                     extra_premium.duration = months + 2

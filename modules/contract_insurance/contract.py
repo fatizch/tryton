@@ -6,7 +6,7 @@ from trytond.transaction import Transaction
 from trytond.model import ModelView
 
 from trytond.modules.cog_utils import model, fields
-from trytond.modules.cog_utils import utils, coop_date
+from trytond.modules.cog_utils import utils
 from trytond.modules.cog_utils import coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.modules.contract import _STATES, _DEPENDS, _CONTRACT_STATUS_STATES
@@ -1296,6 +1296,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         pass
 
     def calculate_end_date(self):
+        if not self.duration:
+            return self.option.end_date
         months = years = 0
         if self.duration_unit == 'month':
             months = self.duration
