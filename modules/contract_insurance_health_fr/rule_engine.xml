@@ -22,6 +22,15 @@
             <field name="translated_technical_name">code_hc_system</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
+        <record model="rule_engine.function" id="te_health_subscriber_hc_system">
+            <field name="description">Code régime du souscripteur</field>
+            <field name="name">_re_health_subscriber_hc_system</field>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="type">function</field>
+            <field name="parent" ref="te_health"/>
+            <field name="translated_technical_name">code_regime_souscripteur</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
         <record model="rule_engine.function" id="te_health_department">
             <field name="description">Département</field>
             <field name="name">_re_health_department</field>
