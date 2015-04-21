@@ -20,11 +20,12 @@ class Contract:
 
     @classmethod
     def calculate_prices(cls, contracts, start=None, end=None):
-        new_contracts = []
+        new_contracts = set(contracts)
         for contract in contracts:
-            new_contracts += contract.contract_set.contracts \
-                if contract.contract_set else [contract]
-        new_contracts = list(set(new_contracts))
+            if contract.contract_set:
+                new_contracts = new_contracts | set(
+                    contract.contract_set.contracts)
+        new_contracts = list(new_contracts)
         return super(Contract, cls).calculate_prices(new_contracts,
             start, end)
 
