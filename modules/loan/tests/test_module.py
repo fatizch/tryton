@@ -1,9 +1,11 @@
 # -*- coding:utf-8 -*-
 from decimal import Decimal
 import unittest
+import doctest
 import datetime
 
 import trytond.tests.test_tryton
+from trytond.tests.test_tryton import doctest_setup, doctest_teardown
 
 from trytond.modules.cog_utils import test_framework, coop_date
 from trytond.transaction import Transaction
@@ -550,4 +552,8 @@ def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
         ModuleTestCase))
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_contract_loan.rst',
+            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

@@ -264,6 +264,14 @@ class ContractOption:
             dates['loan'] = max([x.loan.end_date for x in self.loan_shares])
         return dates
 
+    def calculate_automatic_end_date(self):
+        calculated_date = super(ContractOption,
+            self).calculate_automatic_end_date()
+        if not self.loan_shares:
+            return calculated_date
+        max_loan = max([x.loan.end_date for x in self.loan_shares])
+        return min(calculated_date, max_loan) if calculated_date else max_loan
+
     @classmethod
     def set_end_date(cls, options, name, end_date):
         super(ContractOption, cls).set_end_date(options, name, end_date)
