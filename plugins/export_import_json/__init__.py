@@ -30,7 +30,7 @@ def import_json(data):
         with open(filename, 'rb') as fp:
             values = fp.read()
         try:
-            RPCExecute('model', model, 'multiple_import_json', values)
+            RPCExecute('model', model, 'import_json', values)
         except RPCException:
             return
 

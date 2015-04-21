@@ -348,14 +348,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
         file_name, result, _ = test_table.export_json_to_file()
         self.assertEqual(file_name, '[%s][table]test_code.json' %
             datetime.date.today().strftime('%Y-%m-%d'))
+        result[0]['cells'] = set(result[0]['cells'])
         self.assertEqual(result, [
                 {'__name__': 'table',
                     '_func_key': u'test_code',
-                    'cells': [(u'bar', u'[1.0 - 10.0[', u'spam'),
+                    'cells': set([(u'bar', u'[1.0 - 10.0[', u'spam'),
                         (u'foo', u'[1.0 - 10.0[', u'ham'),
                         (u'bar', u'[20.0 - 42.0[', u'chicken'),
                         (u'foo', u'[20.0 - 42.0[', u'egg'),
-                        ],
+                        ]),
                     'code': u'test_code',
                     'dimension1': [{'__name__': 'table.dimension.value',
                             '_func_key': u'bar',

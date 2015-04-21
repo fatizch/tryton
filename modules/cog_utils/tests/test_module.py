@@ -398,7 +398,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertDictEqual(values, output[0])
         output[0]['text'] = 'someothertext'
         values['text'] = 'someothertext'
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         output = []
         to_export.export_json(output=output)
 
@@ -417,7 +417,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         output[0]['integer'] = 12
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(12, to_export.many2one.integer)
 
     def test_0053_export_import_many2many(self):
@@ -430,7 +430,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         output = []
         to_export.export_json(output=output)
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(to_export.many2many, former)
 
     def test_0054_export_import_many2many_update(self):
@@ -448,7 +448,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         self.ExportTestTarget.delete([target])
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(to_export.many2many[0].char, former_char)
 
     def test_00542_export_import_many2many_remove(self):
@@ -462,23 +462,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         to_export.export_json(output=output)
         output[1]['many2many'] = []
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual((), to_export.many2many)
-
-    def test0055_export_import_recursion(self):
-        target = self.ExportTestTarget(char='key')
-        target.save()
-        to_export = self.ExportTest(char='otherkey', many2one=target)
-        to_export.save()
-        target.many2one = to_export
-        target.save()
-        output = []
-        to_export.export_json(output=output)
-        output[0]['integer'] = 12
-
-        self.ExportTest.multiple_import_json(output)
-        self.assertEqual(12, to_export.many2one.integer)
-        self.assertEqual(to_export, to_export.many2one.many2one)
 
     def test0056_export_import_reference_field(self):
         target = self.ExportTestTarget(char='key', integer=12)
@@ -489,7 +474,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         to_export.export_json(output=output)
         output[0]['reference']['integer'] = 3
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(3, to_export.reference.integer)
 
     def test_0057_export_import_one2many(self):
@@ -502,7 +487,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         output = []
         to_export.export_json(output=output)
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(to_export.one2many, former)
 
     def test_00571_export_import_one2many_update(self):
@@ -518,7 +503,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         to_export.save()
         self.ExportTestTargetSlave.delete([target])
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(to_export.valid_one2many[0].char, 'key')
 
     def test_00572_export_import_one2many_no_update(self):
@@ -535,7 +520,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         to_export.save()
         self.ExportTestTarget.delete([target])
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual((), to_export.one2many)
 
     def test_00573_export_import_one2many_delete(self):
@@ -548,7 +533,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         output[1]['one2many'] = []
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual((), to_export.one2many)
         self.assertEqual([], self.ExportTestTarget.search(
                 [('id', '!=', 0)]))
@@ -566,7 +551,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         output[0]['integer'] = 12
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(12, to_export.property_m2o.integer)
 
     def test_0059_export_import_property_numeric(self):
@@ -578,7 +563,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(output[0]['property_numeric'], Decimal('1.5'))
         output[0]['property_numeric'] = Decimal('3.2')
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual(Decimal('3.2'), to_export.property_numeric)
 
     def test_0060_export_import_property_char(self):
@@ -590,7 +575,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(output[0]['property_char'], 'Hello')
 
         output[0]['property_char'] = 'hi'
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual('hi', to_export.property_char)
 
     def test_0062_export_import_property_selection(self):
@@ -603,7 +588,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(output[0]['property_selection'], 'select1')
         output[0]['property_selection'] = 'select2'
 
-        self.ExportTest.multiple_import_json(output)
+        self.ExportTest.import_json(output)
         self.assertEqual('select2', to_export.property_selection)
 
     def test_0063_export_import_configuration(self):

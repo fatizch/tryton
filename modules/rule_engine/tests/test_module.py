@@ -526,7 +526,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         output = []
         rule.export_json(output=output)
         output[1]['short_name'] = 'test_rule_advanced'
-        rule.multiple_import_json(output)
+        rule.import_json(output)
         rule_1, = self.RuleEngine.search([
                 ('short_name', '=', 'test_rule_advanced')])
 

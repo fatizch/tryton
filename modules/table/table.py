@@ -177,18 +177,21 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
         return super(TableDefinition, cls)._export_light() | {'tags'}
 
     @classmethod
-    def import_json(cls, values):
-        if "cells" not in values:
-            return super(TableDefinition, cls).import_json(values)
+    def do_import(cls, value):
+        if value['imported']:
+            return value['record']
+        values = value['data']
+        if 'cells' not in values:
+            return super(TableDefinition, cls).do_import(value)
         pool = Pool()
         Cell = pool.get('table.cell')
-        cells = values.pop("cells")
+        cells = values.pop('cells')
         tables = cls.search_for_export_import(values)
         if len(tables) > 1:
             cls.raise_user_error('multiple_tables')
         if tables:
             Cell.delete(Cell.search([('definition', '=', tables[0].id)]))
-        table = super(TableDefinition, cls).import_json(values)
+        table = super(TableDefinition, cls).do_import(value)
         dimension_matcher = {}
         for i in range(1, DIMENSION_MAX + 1):
             dimension_values = getattr(table, 'dimension%s' % i)
@@ -202,6 +205,7 @@ class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):
                     [('value', elem[-1])] +
                     [('definition', table.id)]))
         Cell.create(to_create)
+        value['record'] = table
         return table
 
     @classmethod

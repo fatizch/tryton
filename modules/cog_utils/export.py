@@ -5,6 +5,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
+import logging
 
 from sql.operators import Concat
 
@@ -70,8 +71,6 @@ class ExportImportMixin(Model):
         cls.__rpc__['import_json'] = RPC(readonly=False, result=lambda r: None)
         cls.__rpc__['export_json_to_file'] = RPC(instantiate=0,
             readonly=True, result=lambda r: cls._export_format_result(r))
-        cls.__rpc__['multiple_import_json'] = RPC(readonly=False,
-            result=lambda r: None)
         cls.__rpc__['ws_consult'] = RPC(readonly=True)
 
     @classmethod
@@ -171,6 +170,8 @@ class ExportImportMixin(Model):
 
     @classmethod
     def _import_json(cls, values, main_object=None):
+        logging.getLogger('import').debug('Importing [%s] %s' % (
+                cls.__name__, values['_func_key']))
         pool = Pool()
         new_values = {}
         lines = {}
@@ -230,10 +231,8 @@ class ExportImportMixin(Model):
                 else:
                     if isinstance(field, tryton_fields.Many2Many):
                         # One2many to master object are not managed
-                        if Target.search_for_export_import(line):
-                            target = Target.import_json(line)
-                            to_add.append(target.id)
-                            continue
+                        to_add.append(Target.import_json(line))
+                        continue
                     obj_to_create = Target._import_json(line, None)
                     if obj_to_create:
                         to_create.append(obj_to_create)
@@ -256,47 +255,71 @@ class ExportImportMixin(Model):
             if to_add:
                 new_values[field_name].append(('add', to_add))
 
+        logging.getLogger('import').debug(' -> done [%s] %s' % (
+                cls.__name__, values['_func_key']))
         return new_values
 
     @classmethod
-    def multiple_import_json(cls, objects):
-        pool = Pool()
-        if isinstance(objects, basestring):
-            objects = json.loads(objects, object_hook=JSONDecoder())
-        for obj in objects:
-            Target = pool.get(obj['__name__'])
-            Target.import_json(obj)
-
-    @classmethod
     def import_json(cls, values):
+        import_data = Transaction().context.get('_import_data', None)
+        if import_data is None:
+            import_data = {}
+            with Transaction().set_context(_import_data=import_data):
+                return cls.import_json(values)
+
+        pool = Pool()
+        was_list = True
         if isinstance(values, basestring):
             values = json.loads(values, object_hook=JSONDecoder())
-        records = cls.search_for_export_import(values)
-        record = None
-        if records:
-            if len(records) > 1:
+        if isinstance(values, dict):
+            was_list = False
+            values['__name__'] = cls.__name__
+            values = [values]
+
+        for value in values:
+            if (value.get('_func_key', None) and
+                    (value['__name__'], value['_func_key']) in import_data):
+                continue
+            ValueModel = pool.get(value['__name__'])
+            existing = ValueModel.search_for_export_import(value)
+            if len(existing) > 1:
                 cls.raise_user_error('not_unique',
                     ('\n'.join([(x.__name__ + ' with id ' + str(x.id))
-                                for x in records]),
-                        values['_func_key']),
-                    error_description='export_not_unique')
-            record = (records or [None])[0]
-        new_values = cls._import_json(values, record)
+                                for x in existing]),
+                        value['_func_key']))
+            import_data[(value['__name__'], value['_func_key'])] = {
+                'imported': False,
+                'record': existing[0] if existing else None,
+                'data': value,
+                }
 
+        results = []
+        for value in values:
+            data = import_data[(value['__name__'], value['_func_key'])]
+            results.append(pool.get(value['__name__']).do_import(data))
+
+        return results if was_list else results[0]
+
+    @classmethod
+    def do_import(cls, value):
+        if value['imported']:
+            return value['record']
+        record = value['record']
+        new_values = cls._import_json(value['data'], record)
+        value['imported'] = True
         if not new_values:
             # The export is light
             if record:
                 return record
             else:
                 cls.raise_user_error('not_found', (cls.__name__,
-                        values['_func_key']),
-                    error_description='export_not_found')
-
+                        value['data']['_func_key']))
         if record:
             cls.write([record], new_values)
         else:
             records = cls.create([new_values])
             record = records[0]
+            value['record'] = record
         return record
 
     def export_master(self, skip_fields=None, already_exported=None,
@@ -365,7 +388,8 @@ class ExportImportMixin(Model):
             already_exported = set([self])
         else:
             already_exported.add(self)
-
+        logging.getLogger('export').debug('Importing [%s] %s' % (
+                self.__name__, values['_func_key']))
         light_exports = self._export_light()
 
         if configuration:
@@ -431,6 +455,8 @@ class ExportImportMixin(Model):
         if output is not None and (
                 self.is_master_object() or main_object == self):
             output.append(values)
+        logging.getLogger('export').debug(' -> done [%s] %s' % (
+                self.__name__, values['_func_key']))
         return values
 
     @classmethod
@@ -520,7 +546,7 @@ class ImportWizard(Wizard):
             self.raise_user_error('no_file_selected')
         file_buffer = self.file_selector.selected_file
         values = str(file_buffer)
-        ExportImportMixin.multiple_import_json(values)
+        ExportImportMixin.import_json(values)
         return 'end'
 
 
