@@ -52,6 +52,10 @@
             <field name="name">Contract Set Number Sequence</field>
             <field name="code">contract_set_number</field>
         </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_number_group_admin">
+            <field name="sequence_type" ref="sequence_type_number"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
         <record model="ir.ui.view" id="configuration_view_form">
             <field name="model">offered.configuration</field>
             <field name="type">form</field>
