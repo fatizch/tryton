@@ -1,0 +1,241 @@
+=========================================
+Contract Extra Data Endorsement Scenario
+=========================================
+
+Imports::
+
+    >>> import datetime
+    >>> from proteus import config, Model, Wizard
+    >>> from dateutil.relativedelta import relativedelta
+    >>> from decimal import Decimal
+
+Init Database::
+
+    >>> config = config.set_trytond()
+    >>> config.pool.test = True
+
+Install Modules::
+
+    >>> Module = Model.get('ir.module.module')
+    >>> endorsement_module = Module.find([('name', '=', 'endorsement')])[0]
+    >>> Module.install([endorsement_module.id], config.context)
+    >>> wizard = Wizard('ir.module.module.install_upgrade')
+    >>> wizard.execute('upgrade')
+
+Get Models::
+
+    >>> Company = Model.get('company.company')
+    >>> Contract = Model.get('contract')
+    >>> Country = Model.get('country.country')
+    >>> Currency = Model.get('currency.currency')
+    >>> CurrencyRate = Model.get('currency.currency.rate')
+    >>> Endorsement = Model.get('endorsement')
+    >>> EndorsementContract = Model.get('endorsement.contract')
+    >>> EndorsementContractField = Model.get('endorsement.contract.field')
+    >>> EndorsementDefinition = Model.get('endorsement.definition')
+    >>> EndorsementDefinitionPartRelation = Model.get(
+    ...     'endorsement.definition-endorsement.part')
+    >>> EndorsementPart = Model.get('endorsement.part')
+    >>> Field = Model.get('ir.model.field')
+    >>> MethodDefinition = Model.get('ir.model.method')
+    >>> Option = Model.get('contract.option')
+    >>> ContractExtraData = Model.get('contract.extra_data')
+    >>> ExtraData = Model.get('extra_data')
+    >>> OptionDescription = Model.get('offered.option.description')
+    >>> Party = Model.get('party.party')
+    >>> Product = Model.get('offered.product')
+    >>> Sequence = Model.get('ir.sequence')
+    >>> SequenceType = Model.get('ir.sequence.type')
+    >>> User = Model.get('res.user')
+
+Constants::
+
+    >>> today = datetime.date.today()
+    >>> product_start_date = datetime.date(2014, 1, 1)
+    >>> contract_start_date = datetime.date(2014, 4, 10)
+    >>> effective_date = datetime.date(2014, 10, 21)
+
+Create or fetch Currency::
+
+    >>> currencies = Currency.find([('code', '=', 'USD')])
+    >>> if not currencies:
+    ...     currency = Currency(name='US Dollar', symbol=u'$', code='USD',
+    ...         rounding=Decimal('0.01'), mon_grouping='[]',
+    ...         mon_decimal_point='.')
+    ...     currency.save()
+    ...     CurrencyRate(date=today + relativedelta(month=1, day=1),
+    ...         rate=Decimal('1.0'), currency=currency).save()
+    ... else:
+    ...     currency, = currencies
+
+Create or fetch Country::
+
+    >>> countries = Country.find([('code', '=', 'FR')])
+    >>> if not countries:
+    ...     country = Country(name='France', code='FR')
+    ...     country.save()
+    ... else:
+    ...     country, = countries
+
+Create Company::
+
+    >>> company_config = Wizard('company.company.config')
+    >>> company_config.execute('company')
+    >>> company = company_config.form
+    >>> party = Party(name='World Company')
+    >>> party.save()
+    >>> company.party = party
+    >>> company.currency = currency
+    >>> company_config.execute('add')
+    >>> company, = Company.find([])
+    >>> user = User(1)
+    >>> user.main_company = company
+    >>> user.company = company
+    >>> user.save()
+
+Reload the context::
+
+    >>> config._context = User.get_preferences(True, config.context)
+    >>> config._context['company'] = company.id
+
+Create Test ExtraData::
+
+    >>> extra_data = ExtraData()
+    >>> extra_data.start_date = contract_start_date
+    >>> extra_data.name = 'formula'
+    >>> extra_data.code = 'formula'
+    >>> extra_data.type_ = 'integer'
+    >>> extra_data.string = 'formula'
+    >>> extra_data.kind = 'contract'
+    >>> extra_data.save()
+
+Create Product::
+
+    >>> sequence_code = SequenceType()
+    >>> sequence_code.name = 'Product sequence'
+    >>> sequence_code.code = 'contract'
+    >>> sequence_code.company = company
+    >>> sequence_code.save()
+    >>> contract_sequence = Sequence()
+    >>> contract_sequence.name = 'Contract Sequence'
+    >>> contract_sequence.code = sequence_code.code
+    >>> contract_sequence.company = company
+    >>> contract_sequence.save()
+    >>> quote_sequence_code = SequenceType()
+    >>> quote_sequence_code.name = 'Product sequence'
+    >>> quote_sequence_code.code = 'quote'
+    >>> quote_sequence_code.company = company
+    >>> quote_sequence_code.save()
+    >>> quote_sequence = Sequence()
+    >>> quote_sequence.name = 'Quote Sequence'
+    >>> quote_sequence.code = quote_sequence_code.code
+    >>> quote_sequence.company = company
+    >>> quote_sequence.save()
+    >>> coverage = OptionDescription()
+    >>> coverage.company = company
+    >>> coverage.name = 'Test Coverage'
+    >>> coverage.code = 'test_coverage'
+    >>> coverage.start_date = product_start_date
+    >>> coverage.save()
+    >>> product = Product()
+    >>> product.company = company
+    >>> product.name = 'Test Product'
+    >>> product.code = 'test_product'
+    >>> product.contract_generator = contract_sequence
+    >>> product.quote_number_sequence = quote_sequence
+    >>> product.start_date = product_start_date
+    >>> product.coverages.append(coverage)
+    >>> product.extra_data_def.append(extra_data)
+    >>> product.save()
+
+Create Change Extra Data Endorsement::
+
+    >>> change_extra_data_part = EndorsementPart()
+    >>> change_extra_data_part.name = 'Change Extra Data'
+    >>> change_extra_data_part.code = 'change_extra_data'
+    >>> change_extra_data_part.kind = 'extra_data'
+    >>> change_extra_data_part.view = 'change_contract_extra_data'
+    >>> change_extra_data_part.save()
+    >>> change_extra_data = EndorsementDefinition()
+    >>> change_extra_data.name = 'Change Extra Data'
+    >>> change_extra_data.code = 'change_extra_data'
+    >>> change_extra_data.ordered_endorsement_parts.append(
+    ...     EndorsementDefinitionPartRelation(endorsement_part=change_extra_data_part))
+    >>> change_extra_data.save()
+
+Create Test Contract::
+
+    >>> contract = Contract()
+    >>> contract.company = company
+    >>> contract.start_date = contract_start_date
+    >>> contract.product = product
+    >>> contract.save()
+    >>> contract.extra_datas[0].extra_data_values = {'formula': 1}
+    >>> contract.extra_datas[0].date = contract_start_date
+    >>> contract.extra_datas[0].save()
+    >>> len(contract.extra_datas) == 1
+    True
+    >>> contract.extra_datas[0].extra_data_values == {'formula': 1}
+    True
+
+New Endorsement::
+
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.contract = contract
+    >>> new_endorsement.form.endorsement_definition = change_extra_data
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = effective_date
+    >>> new_endorsement.execute('start_endorsement')
+    >>> new_endorsement.form.current_extra_data_date == contract_start_date
+    True
+    >>> new_endorsement.form.new_extra_data_date == effective_date
+    True
+    >>> new_endorsement.form.new_extra_data = {'formula': 2}
+    >>> new_endorsement.execute('change_contract_extra_data_next')
+    >>> new_endorsement.execute('apply_endorsement')
+    >>> contract.save()
+    >>> len(contract.extra_datas) == 2
+    True
+    >>> contract.extra_datas[0].extra_data_values == {'formula': 1}
+    True
+    >>> contract.extra_datas[0].date == contract_start_date
+    True
+    >>> contract.extra_datas[1].extra_data_values == {'formula': 2}
+    True
+    >>> contract.extra_datas[1].date == effective_date
+    True
+    >>> good_endorsement, = Endorsement.find([
+    ...         ('contracts', '=', contract.id)])
+    >>> Endorsement.cancel([good_endorsement.id], config._context)
+    >>> contract.save()
+    >>> len(contract.extra_datas) == 1
+    True
+    >>> contract.extra_datas[0].extra_data_values == {'formula': 1}
+    True
+    >>> contract.extra_datas[0].date == contract_start_date
+    True
+
+New Endorsement::
+
+    >>> new_endorsement = Wizard('endorsement.start')
+    >>> new_endorsement.form.contract = contract
+    >>> new_endorsement.form.endorsement_definition = change_extra_data
+    >>> new_endorsement.form.endorsement = None
+    >>> new_endorsement.form.applicant = None
+    >>> new_endorsement.form.effective_date = contract_start_date
+    >>> new_endorsement.execute('start_endorsement')
+    >>> new_endorsement.form.current_extra_data_date == contract_start_date
+    True
+    >>> new_endorsement.form.new_extra_data_date == contract_start_date
+    True
+    >>> new_endorsement.form.new_extra_data = {'formula': 3}
+    >>> new_endorsement.execute('change_contract_extra_data_next')
+    >>> new_endorsement.execute('apply_endorsement')
+    >>> contract.save()
+    >>> len(contract.extra_datas) == 1
+    True
+    >>> contract.extra_datas[0].extra_data_values == {'formula': 3}
+    True
+    >>> contract.extra_datas[0].date == contract_start_date
+    True
