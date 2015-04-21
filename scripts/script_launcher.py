@@ -373,10 +373,8 @@ def batch(arguments, config, work_data):
     APPNAME = 'trytond.modules.cog_utils.batch_launcher'
     PING_ATTEMPTS_DELAY = (10, .3)
     if arguments.action == 'init':
-        workers = find_matching_processes('celery')
-        if workers:
-            subprocess.call(['kill', '-9'] + workers)
-            print 'Running workers killed.'
+        subprocess.call(['pkill', 'celery'])
+        print 'Running workers killed.'
         cmd = ['celery', 'worker', '-l', 'info',
             '--config=celeryconfig', '--app=%s' % APPNAME,
             '--logfile=%s' % log_path]
