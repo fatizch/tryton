@@ -67,10 +67,6 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique'),
             ]
 
-    @classmethod
-    def _export_light(cls):
-        return super(Fee, cls)._export_light() | {'company'}
-
     @staticmethod
     def default_company():
         return Transaction().context.get('company')
