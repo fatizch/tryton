@@ -73,9 +73,9 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
     def write(cls, *args):
         actions = iter(args)
         for instances, values in zip(actions, actions):
-            if values['type_'] != 'yearly_custom_date':
+            if 'type_' in values and values['type_'] != 'yearly_custom_date':
                 values['custom_date'] = None
-        super(ProductPremiumDate, cls).write(args)
+        super(ProductPremiumDate, cls).write(*args)
 
     def get_rule_for_contract(self, contract):
         max_date = contract.end_date
