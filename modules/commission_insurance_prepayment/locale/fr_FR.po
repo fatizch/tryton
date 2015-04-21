@@ -2,6 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:commission:"
+msgid "Prepayment"
+msgstr "Précompte"
+
+msgctxt "error:commission:"
+msgid "Prepayment Amortization"
+msgstr "Amortissement du précompte"
+
 msgctxt "field:commission,is_prepayment:"
 msgid "Is Prepayment"
 msgstr "Précompte"

@@ -50,7 +50,7 @@ class Level(export.ExportImportMixin):
     days_from_previous_step = fields.Boolean('Days Defined From Previous Step',
         help='Days are defined based on the previous level execution date')
     not_mandatory = fields.Boolean('Level Not Mandatory',
-        help='If higher level can be processed, this step will be skipped')
+        help='If an higher level can be processed, this step will be skipped')
 
     def get_rec_name(self, name):
         return '%s@%s' % (self.name, self.procedure.rec_name)

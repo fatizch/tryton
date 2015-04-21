@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -14,19 +14,38 @@ msgctxt "error:endorsement.party.address:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
 
+msgctxt "error:endorsement.party.change_address:"
+msgid "Only one new address can be added"
+msgstr "Seulement une seule nouvelle adresse peut être ajoutée"
+
+msgctxt "error:endorsement.party.health_complement:"
+msgid "New version"
+msgstr "Nouvelle version"
+
+msgctxt "error:endorsement.party.health_complement:"
+msgid "Remove version of"
+msgstr "Suppression de la version"
+
+msgctxt "error:endorsement.party.health_complement:"
+msgid "Update %s"
+msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.party:"
+msgid "Addresses Modifications"
+msgstr "Modifications des adresses"
+
 msgctxt "error:endorsement.party:"
 msgid ""
 "There may only be one endorsement in_progress at a given time per party"
-msgstr ""
-"Il ne peut y avoir qu'un seul avenant en cours de saisie sur un tiers"
+msgstr "Il ne peut y avoir qu'un seul avenant en cours de saisie sur un acteur"
 
 msgctxt "field:endorsement,parties:"
 msgid "Parties"
-msgstr "Tiers"
+msgstr "Acteurs"
 
 msgctxt "field:endorsement,party_endorsements:"
 msgid "Party Endorsement"
-msgstr "Avenant sur tiers"
+msgstr "Avenant sur un acteur"
 
 msgctxt "field:endorsement.definition,definition_for_contracts:"
 msgid "Endorsement Definition For Contracts"
@@ -38,7 +57,7 @@ msgstr "Générer les avenants aux contrats"
 
 msgctxt "field:endorsement.definition,is_party:"
 msgid "Is Party"
-msgstr "Est tiers"
+msgstr "Est un avenant de type acteur"
 
 msgctxt "field:endorsement.definition,is_technical:"
 msgid "Is technical"
@@ -50,11 +69,11 @@ msgstr "Générer les avenants aux contrats"
 
 msgctxt "field:endorsement.part,is_party:"
 msgid "Is Party"
-msgstr "Est tiers"
+msgstr "Est un avenant de type acteur"
 
 msgctxt "field:endorsement.part,party_fields:"
 msgid "Party Fields"
-msgstr "Champs sur tiers"
+msgstr "Champs sur acteur"
 
 msgctxt "field:endorsement.party,addresses:"
 msgid "Addresses"
@@ -256,18 +275,26 @@ msgctxt "field:endorsement.party.change_address,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:endorsement.party.change_address,party_id:"
+msgid "party_id"
+msgstr "Id du tiers"
+
+msgctxt ""
+"field:endorsement.party.change_address_displayer,address_endorsement:"
+msgid "Address Endorsement"
+msgstr "Avenant de modifications d'adresse"
+
 msgctxt "field:endorsement.party.change_address_displayer,date:"
 msgid "Date"
 msgstr "Date"
 
-msgctxt ""
-"field:endorsement.party.change_address_displayer,enable_modification:"
-msgid "Enable Modification"
-msgstr "Autoriser la modification"
-
 msgctxt "field:endorsement.party.change_address_displayer,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:endorsement.party.change_address_displayer,is_new:"
+msgid "Is New"
+msgstr "Est nouveau"
 
 msgctxt "field:endorsement.party.change_address_displayer,name:"
 msgid "Name"
@@ -276,6 +303,10 @@ msgstr "Nom"
 msgctxt "field:endorsement.party.change_address_displayer,new_address:"
 msgid "New Address"
 msgstr "Nouvelle adresse"
+
+msgctxt "field:endorsement.party.change_address_displayer,party:"
+msgid "Party"
+msgstr "Tiers"
 
 msgctxt "field:endorsement.party.change_address_displayer,previous_address:"
 msgid "Current Address"
@@ -304,6 +335,23 @@ msgstr "ID"
 msgctxt "field:endorsement.party.change_birth_date,new_birth_date:"
 msgid "New Birth Date"
 msgstr "Nouvelle date de naissance"
+
+msgctxt "field:endorsement.party.change_health_complement,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt ""
+"field:endorsement.party.change_health_complement,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.party.change_health_complement,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.change_health_complement,id:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "field:endorsement.party.change_name,current_birth_name:"
 msgid "Current Birth Name"
@@ -417,17 +465,117 @@ msgctxt "field:endorsement.party.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.party.health_complement,action:"
+msgid "Action"
+msgstr "Action"
+
+msgctxt "field:endorsement.party.health_complement,applied_on:"
+msgid "Applied On"
+msgstr "Appliqué le"
+
+msgctxt "field:endorsement.party.health_complement,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.health_complement,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.health_complement,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.health_complement,definition:"
+msgid "Definition"
+msgstr "Définition"
+
+msgctxt "field:endorsement.party.health_complement,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:endorsement.party.health_complement,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.health_complement,party_endorsement:"
+msgid "Party Endorsement"
+msgstr "Avenant sur tiers"
+
+msgctxt "field:endorsement.party.health_complement,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.health_complement,relation:"
+msgid "Relation"
+msgstr "Relation"
+
+msgctxt "field:endorsement.party.health_complement,values:"
+msgid "Values"
+msgstr "Valeurs"
+
+msgctxt "field:endorsement.party.health_complement,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.health_complement,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.health_complement,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:endorsement.party.health_complement.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.health_complement.field,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:endorsement.party.health_complement.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:endorsement.party.health_complement.field,definitions:"
+msgid "Definitions"
+msgstr "Définitions"
+
+msgctxt "field:endorsement.party.health_complement.field,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.party.health_complement.field,field:"
+msgid "Field"
+msgstr "Champ"
+
+msgctxt "field:endorsement.party.health_complement.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.party.health_complement.field,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.health_complement.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:endorsement.party.health_complement.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:endorsement.party.health_complement.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:endorsement.party.health_complement.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "field:endorsement.start.select_endorsement,party:"
 msgid "Party"
 msgstr "Tiers"
-
-msgctxt "help:endorsement.party.change_address_displayer,enable_modification:"
-msgid ""
-"If you enable modification, the current address will be modified. Otherwise,"
-" you will create a new address entry"
-msgstr ""
-"Si vous activez la modification, l'adresse actuelle sera changée. Autrement,"
-" vous créerez une nouvelle adresse. "
 
 msgctxt "model:endorsement.party,name:"
 msgid "Endorsement Party"
@@ -493,9 +641,21 @@ msgctxt "selection:endorsement.party.address,action:"
 msgid "Update"
 msgstr "Mise à jour"
 
+msgctxt "selection:endorsement.party.health_complement,action:"
+msgid "Add"
+msgstr "Compléter"
+
+msgctxt "selection:endorsement.party.health_complement,action:"
+msgid "Remove"
+msgstr "Supprimer"
+
+msgctxt "selection:endorsement.party.health_complement,action:"
+msgid "Update"
+msgstr "Mise à jour"
+
 msgctxt "view:endorsement.party.change_address:"
 msgid "Change Party Addresses"
-msgstr "Changer les adresses d'un tiers"
+msgstr "Changer les adresses d'un acteur"
 
 msgctxt "view:endorsement.party.change_address_displayer:"
 msgid "Addresses"
@@ -511,7 +671,7 @@ msgstr "Changement de date de naissance"
 
 msgctxt "view:endorsement.party.change_name:"
 msgid "Change Party Name"
-msgstr "Changement de nom de tiers"
+msgstr "Changement de nom d'un acteur"
 
 msgctxt "view:endorsement.party.change_ssn:"
 msgid "Change Party SSN"
@@ -527,15 +687,34 @@ msgstr "Champs de l'avenant"
 
 msgctxt "view:endorsement.party:"
 msgid "Party Endorsement"
-msgstr "Avenant sur tiers"
+msgstr "Avenant sur acteur"
 
 msgctxt "view:endorsement.party:"
 msgid "Party Endorsements"
-msgstr "Avenants sur tiers"
+msgstr "Avenants sur acteur"
 
 msgctxt "view:party.party:"
 msgid "Start Endorsement"
 msgstr "Nouvel avenant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_health_complement,change_health_complement_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_health_complement,change_health_complement_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_health_complement,change_health_complement_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_health_complement,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:endorsement.start,change_party_address,change_party_address_next:"

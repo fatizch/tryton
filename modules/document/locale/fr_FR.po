@@ -54,6 +54,10 @@ msgctxt "field:ir.attachment,document_desc:"
 msgid "Document Description"
 msgstr "Descripteur de Document"
 
+msgctxt "field:ir.attachment,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:ir.attachment,origin:"
 msgid "Origin"
 msgstr "Origine"

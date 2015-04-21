@@ -640,6 +640,10 @@ msgctxt "field:rule_engine.test_case,last_passing_date:"
 msgid "Last passing run date"
 msgstr "Date du dernier cas passant"
 
+msgctxt "field:rule_engine.test_case,last_passing_date_str:"
+msgid "Last Passing run date"
+msgstr "Dernière date d'exécution"
+
 msgctxt "field:rule_engine.test_case,low_debug:"
 msgid "Low Level Debug Info"
 msgstr "Niveau bas de debug"

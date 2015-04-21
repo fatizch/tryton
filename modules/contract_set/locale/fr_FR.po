@@ -1,6 +1,12 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.set:"
+msgid "No sequence defined in configuration for contract set number"
+msgstr ""
+"Pas de séquence définie dans la configuration pour le numéro d'ensemble de "
+"contrats"
 
 msgctxt "error:contract.set:"
 msgid "The contract set number must be unique."
@@ -78,6 +84,10 @@ msgctxt "field:contract.set.decline.select_reason,reason:"
 msgid "Reason"
 msgstr "Raison"
 
+msgctxt "field:offered.configuration,contract_set_number_sequence:"
+msgid "Contract Set Number Sequence"
+msgstr "Séquence du numéro d'ensemble de contrats"
+
 msgctxt "model:contract.set,name:"
 msgid "Contract Set"
 msgstr "Ensemble de contrats"
@@ -93,6 +103,14 @@ msgstr "Ensembles de contrats"
 msgctxt "model:ir.action,name:act_decline_set"
 msgid "Decline Set"
 msgstr "Décliner l'ensemble de contrats"
+
+msgctxt "model:ir.sequence,name:sequence_number"
+msgid "Contract Set Number Sequence"
+msgstr "Séquence du numéro d'ensemble de contrats"
+
+msgctxt "model:ir.sequence.type,name:sequence_type_number"
+msgid "Contract Set Number"
+msgstr "Numéro d'ensemble de contrats"
 
 msgctxt "model:ir.ui.menu,name:menu_contract_set"
 msgid "Contract Sets"

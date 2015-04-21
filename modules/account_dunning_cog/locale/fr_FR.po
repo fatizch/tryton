@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -18,9 +18,25 @@ msgctxt "field:account.dunning,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.dunning.create,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:account.dunning.level,days_from_previous_step:"
 msgid "Days Defined From Previous Step"
 msgstr "Jours définis par rapport au précédent niveau"
+
+msgctxt "field:account.dunning.level,event_log_type:"
+msgid "Event Log Type"
+msgstr "Type d'évènements"
+
+msgctxt "field:account.dunning.level,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:account.dunning.level,not_mandatory:"
+msgid "Level Not Mandatory"
+msgstr "Niveau non obligatoire"
 
 msgctxt "field:account.dunning.level,xml_id:"
 msgid "XML Id"
@@ -34,8 +50,25 @@ msgctxt "field:account.dunning.procedure,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.dunning.treat,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "help:account.dunning.level,days_from_previous_step:"
 msgid "Days are defined based on the previous level execution date"
 msgstr ""
 "Le nombre de jours est défini par rapport à la date d'exécution du niveau "
 "précédent"
+
+msgctxt "help:account.dunning.level,not_mandatory:"
+msgid "If an higher level can be processed, this step will be skipped"
+msgstr ""
+"Si un niveau supérieur peut être executé, cette étape ne sera pas exécutée."
+
+msgctxt "model:account.dunning.create,name:"
+msgid "Dunning Creation Batch"
+msgstr "Batch de création des relances "
+
+msgctxt "model:account.dunning.treat,name:"
+msgid "Process Dunning Batch"
+msgstr "Batch de traitement des relances"

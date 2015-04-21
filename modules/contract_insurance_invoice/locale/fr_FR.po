@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,6 +9,14 @@ msgid ""
 msgstr ""
 "Impossible d'émettre la quittance \"%(invoice)s\" pour contract "
 "\"%(contract)s\" au statut \"%(status)s\""
+
+msgctxt "error:contract.bank_account.change:"
+msgid "The contract is not using a direct debit billing mode"
+msgstr "Le contrat n'utilise pas un mode de quittancement de type prélèvement"
+
+msgctxt "error:contract.bank_account.change:"
+msgid "This action is only possible on a contract"
+msgstr "Cette action est seulement disponible sur un contrat"
 
 msgctxt "error:contract.premium.display:"
 msgid "No contract found in context"
@@ -186,6 +194,10 @@ msgctxt "field:account.invoice.payment_term.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.move.line,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
 msgctxt "field:account.tax.description,tax:"
 msgid "Tax"
 msgstr "Taxe"
@@ -210,6 +222,10 @@ msgctxt "field:contract,billing_mode:"
 msgid "Billing Mode"
 msgstr "Mode de quittancement"
 
+msgctxt "field:contract,current_term_invoices:"
+msgid "Current Term Invoices"
+msgstr "Quittances du terme courant"
+
 msgctxt "field:contract,due_invoices:"
 msgid "Due Invoices"
 msgstr "Quittances dues"
@@ -226,6 +242,14 @@ msgctxt "field:contract,last_invoice_start:"
 msgid "Last Invoice Start Date"
 msgstr "Date de début de la dernière quittance"
 
+msgctxt "field:contract,last_paid_invoice_end:"
+msgid "Last Paid Invoice End Date"
+msgstr "Date de fin de la dernière quittance payée"
+
+msgctxt "field:contract,last_posted_invoice_end:"
+msgid "Last Post Invoice End Date"
+msgstr "Date de fin de la dernière quittance émise"
+
 msgctxt "field:contract,payment_term:"
 msgid "Payment Term"
 msgstr "Conditions de paiement"
@@ -237,6 +261,42 @@ msgstr "Primes"
 msgctxt "field:contract,receivable_today:"
 msgid "Receivable Today"
 msgstr "À recevoir aujourd'hui"
+
+msgctxt "field:contract.bank_account.change.select,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.bank_account.change.select,contract_start_date:"
+msgid "Contract Start Date"
+msgstr "Date d'effet du contrat"
+
+msgctxt "field:contract.bank_account.change.select,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.bank_account.change.select,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.bank_account.change.select,new_bank_account:"
+msgid "New Bank Account"
+msgstr "Nouveau compte bancaire"
+
+msgctxt "field:contract.bank_account.change.select,other_contracts:"
+msgid "Other Contracts"
+msgstr "Autres contrats"
+
+msgctxt "field:contract.bank_account.change.select,possible_contracts:"
+msgid "Possible Contracts"
+msgstr "Contrats possibles"
+
+msgctxt "field:contract.bank_account.change.select,previous_bank_account:"
+msgid "Previous Bank Account"
+msgstr "Compte bancaire précédent"
+
+msgctxt "field:contract.bank_account.change.select,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
 
 msgctxt "field:contract.billing_information,billing_mode:"
 msgid "Billing Mode"
@@ -800,6 +860,10 @@ msgctxt "model:account.invoice.line.detail,name:"
 msgid "Invoice Line Detail"
 msgstr "Détail de ligne de quittance"
 
+msgctxt "model:contract.bank_account.change.select,name:"
+msgid "Select new bank account to use"
+msgstr "Selectionner le nouveau compte bancaire à utiliser"
+
 msgctxt "model:contract.billing_information,name:"
 msgid "Contract Billing Information"
 msgstr "Quittancement"
@@ -839,6 +903,14 @@ msgstr "Ecran d'affichage des primes du contrat par ligne"
 msgctxt "model:ir.action,name:"
 msgid "Invoice Frequencies"
 msgstr "Fréquences de quittancement"
+
+msgctxt "model:ir.action,name:act_balance"
+msgid "Contract Balance"
+msgstr "Balance du contrat"
+
+msgctxt "model:ir.action,name:act_change_contract_bank_account"
+msgid "Change Bank Account for Billing"
+msgstr "Changement du compte bancaire"
 
 msgctxt "model:ir.action,name:act_invoice"
 msgid "Invoice Contracts"
@@ -1056,6 +1128,10 @@ msgctxt "view:account.invoice:"
 msgid "Total Amount"
 msgstr "Montant total"
 
+msgctxt "view:contract.bank_account.change.select:"
+msgid "Select New Bank Account"
+msgstr "Selectionner le nouveau compte bancaire"
+
 msgctxt "view:contract.billing_information:"
 msgid "Contract Billing Information"
 msgstr "Quittancement"
@@ -1113,8 +1189,8 @@ msgid "Premiums"
 msgstr "Primes"
 
 msgctxt "view:contract:"
-msgid "Invoicing"
-msgstr "Quittancement"
+msgid "Change Bank Account"
+msgstr "Changement du compte bancaire"
 
 msgctxt "view:offered.billing.mode-account.invoice.payment_term:"
 msgid "Payment Term"
@@ -1131,6 +1207,15 @@ msgstr "Mode de quittancement"
 msgctxt "view:offered.product:"
 msgid "Billing Modes"
 msgstr "Modes de quittancement"
+
+msgctxt ""
+"wizard_button:contract.bank_account.change,select_new_account,change_account:"
+msgid "Change Account"
+msgstr "Changement du compte bancaire"
+
+msgctxt "wizard_button:contract.bank_account.change,select_new_account,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:contract.do_invoice,start,end:"
 msgid "Cancel"

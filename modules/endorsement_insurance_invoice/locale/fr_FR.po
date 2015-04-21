@@ -220,6 +220,14 @@ msgctxt "model:endorsement.contract.billing_information.field,name:"
 msgid "Endorsement Billing Information Field"
 msgstr "Champs des paramètres de quittancement"
 
+msgctxt "model:endorsement.definition,name:change_bank_account_definition"
+msgid "Change Bank Account"
+msgstr "Changement du compte bancaire"
+
+msgctxt "model:endorsement.part,name:change_bank_account_endorsement_part"
+msgid "Change Bank Account"
+msgstr "Changement du compte bancaire"
+
 msgctxt "selection:endorsement.contract.billing_information,action:"
 msgid "Add"
 msgstr "Compléter"

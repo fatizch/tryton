@@ -25,7 +25,7 @@ class Plan:
         super(Plan, cls).__setup__()
         cls._error_messages.update({
                 'invalid_rule_result': 'Prepayment payment rule result %s is '
-                'not matching the expect format [(date, percentage)]',
+                'not matching the expected format [(date, percentage)]',
                 })
 
     def compute_prepayment_schedule(self, option):

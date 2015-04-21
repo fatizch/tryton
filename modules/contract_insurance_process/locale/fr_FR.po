@@ -38,6 +38,10 @@ msgctxt "field:contract,current_state:"
 msgid "Current State"
 msgstr "Etat courant"
 
+msgctxt "field:contract,doc_received:"
+msgid "All Documents Received"
+msgstr "Tous les documents sont reçus"
+
 msgctxt "field:contract,logs:"
 msgid "Task"
 msgstr "Tâche"
@@ -94,7 +98,7 @@ msgctxt "model:contract.subscribe.find_process,name:"
 msgid "ContractSubscribe Find Process"
 msgstr "Paramètres du Processus de Souscription"
 
-msgctxt "model:ir.action,name:act_contract_logs"
+msgctxt "model:ir.action,name:"
 msgid "Logs"
 msgstr "Traces"
 

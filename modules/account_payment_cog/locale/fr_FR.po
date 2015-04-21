@@ -1,10 +1,6 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
-
-msgctxt "error:account.payment.journal.failure_action:"
-msgid "Action must be unique for a journal and a reject reason"
-msgstr "Action doit être unique pour un journal et un motif de rejet donnés"
 
 msgctxt "error:account.payment.journal.failure_action:"
 msgid "Unknown reject code : %s"
@@ -15,8 +11,8 @@ msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
 msgctxt "error:account.payment:"
-msgid "Action \"%s\" not found for payment %s"
-msgstr "Action \"%s\" non trouvé pour le paiement %s"
+msgid "Action \"%s\" not found for payments %s"
+msgstr "L'action \"%s\" n'a pas été trouvée pour les paiements %s"
 
 msgctxt "error:account.payment:"
 msgid "Payments blocked for party %s"
@@ -37,6 +33,10 @@ msgstr "Date de paiement"
 msgctxt "field:account.move.line,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:account.payment,manual_fail_status:"
+msgid "Manual Fail Status"
+msgstr "Statut du rejet manuel"
 
 msgctxt "field:account.payment,xml_id:"
 msgid "XML Id"
@@ -106,6 +106,10 @@ msgctxt "field:account.payment.journal.failure_action,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:account.payment.journal.failure_action,reject_number:"
+msgid "Reject Number"
+msgstr "Numéro de rejets"
+
 msgctxt "field:account.payment.journal.failure_action,reject_reason:"
 msgid "Reject Reason"
 msgstr "Motif de rejet"
@@ -170,6 +174,10 @@ msgctxt "field:account.payment.journal.reject_reason,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.payment.payment_creation.start,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:account.payment.payment_information_selection,id:"
 msgid "ID"
 msgstr "ID"
@@ -230,17 +238,29 @@ msgctxt "field:party.synthesis.menu.payment,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "help:account.payment.journal.failure_action,reject_number:"
+msgid ""
+"Filter the action according to the number of rejects for a given payment. If "
+"empty, action will be used for all rejects"
+msgstr ""
+"Filtre l'action en fonction du nombre de rejets pour un paiement donné. Si "
+"vide, l'action sera utilisée pour tous les rejets"
+
 msgctxt "model:account.payment.create,name:"
 msgid "Payment Creation Batch"
 msgstr "Batch de création des paiements"
 
 msgctxt "model:account.payment.journal.failure_action,name:"
-msgid "Payment Journal Failure Action"
+msgid "Journal Failure Action"
 msgstr ""
 
 msgctxt "model:account.payment.journal.reject_reason,name:"
 msgid "Payment Journal Reject Reason"
 msgstr ""
+
+msgctxt "model:account.payment.payment_creation.start,name:"
+msgid "Payment Creation Start"
+msgstr "Création des paiements"
 
 msgctxt "model:account.payment.payment_information_selection,name:"
 msgid "Payment Information Selection"
@@ -254,9 +274,17 @@ msgctxt "model:ir.action,name:"
 msgid "Receivable Payments"
 msgstr "Paiements à recevoir"
 
+msgctxt "model:ir.action,name:act_payment_fail_status_form"
+msgid "Payments Rejected"
+msgstr "Paiements rejetés"
+
 msgctxt "model:ir.action,name:act_reject_reason_form"
 msgid "Reject reasons"
 msgstr "Motifs de rejet"
+
+msgctxt "model:ir.action,name:create_payments_wizard"
+msgid "Create Payments"
+msgstr "Créer les paiements"
 
 msgctxt "model:ir.action,name:modify_payment_information_wizard"
 msgid "Modify Payment Information"
@@ -264,7 +292,11 @@ msgstr "Modifier les informations de prélèvement"
 
 msgctxt "model:ir.ui.menu,name:"
 msgid "Create Receivable Payment"
-msgstr "Créer Paiement"
+msgstr "Créer les prélèvements"
+
+msgctxt "model:ir.ui.menu,name:menu_fail_payment_status_form"
+msgid "Payments Rejected"
+msgstr "Paiements rejetés"
 
 msgctxt "model:ir.ui.menu,name:menu_reject_reason_form"
 msgid "Reject reasons"
@@ -273,6 +305,18 @@ msgstr "Motifs de rejet"
 msgctxt "model:party.synthesis.menu.payment,name:"
 msgid "Party Synthesis Menu payment"
 msgstr "Synthèse acteur - Paiement"
+
+msgctxt "selection:account.payment,manual_fail_status:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:account.payment,manual_fail_status:"
+msgid "Done"
+msgstr "Fait"
+
+msgctxt "selection:account.payment,manual_fail_status:"
+msgid "Pending"
+msgstr "En cours"
 
 msgctxt "selection:account.payment.journal.failure_action,action:"
 msgid "Manual"
@@ -299,20 +343,40 @@ msgid "Payment Journal Failure Actions"
 msgstr ""
 
 msgctxt "view:account.payment.journal.reject_reason:"
-msgid "Payment Journal Reject Code"
-msgstr ""
-
-msgctxt "view:account.payment.journal.reject_reason:"
 msgid "Payment Journal Reject Reasons"
 msgstr "Motifs de rejet"
 
+msgctxt "view:account.payment.journal.reject_reason:"
+msgid "Reject Reason"
+msgstr "Motif de rejet"
+
+msgctxt "view:account.payment.payment_creation.start:"
+msgid "Create Payments"
+msgstr "Créer les paiements"
+
+msgctxt "view:account.payment.payment_creation.start:"
+msgid "Payments will be created for selected lines"
+msgstr "Les paiements seront créés pour les lignes sélectionnées"
+
 msgctxt "view:account.payment.payment_information_selection:"
 msgid "Payment Date Modification"
-msgstr "Modification de la date de prélèvement"
+msgstr "Modification de la date de paiement"
+
+msgctxt "view:account.payment:"
+msgid "Failed Payments"
+msgstr "Paiements rejetés"
 
 msgctxt "view:contract:"
 msgid "As of today"
 msgstr "A aujourd'hui"
+
+msgctxt "wizard_button:account.payment.creation,start,create_payments:"
+msgid "Create Payments"
+msgstr "Créer les paiements"
+
+msgctxt "wizard_button:account.payment.creation,start,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt ""
 "wizard_button:account.payment.payment_information_modification,payment_information_selection,end:"

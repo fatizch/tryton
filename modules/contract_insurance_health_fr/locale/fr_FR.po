@@ -130,6 +130,10 @@ msgctxt "field:health.party_complement,insurance_fund:"
 msgid "Insurance Fund"
 msgstr "Caisse d'Affiliation"
 
+msgctxt "field:health.party_complement,insurance_fund_number:"
+msgid "Health Care System Number"
+msgstr "Numéro d'organisme d'affiliation"
+
 msgctxt "field:party.party,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"

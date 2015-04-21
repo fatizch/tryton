@@ -5,7 +5,7 @@
             <label name="sepa_mandate_date"/>
             <field name="sepa_mandate_date" xexpand="0" xfill="0"/>
             <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
-            <label string="Warning : a new sepa mandate will be created !" id="new_mandate_warning" xalign="0" xexpand="1" xfill="1"/>
+            <label string="Warning : a new sepa mandate will be created!" id="new_mandate_warning" xalign="0" xexpand="1" xfill="1"/>
         </group>
     </xpath>
     <xpath expr="/form/field[@name='subscriber']" position="after">

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -6,6 +6,26 @@ msgctxt "field:account.invoice,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
 
+msgctxt "field:contract.bank_account.change.select,max_signature_date:"
+msgid "Max Signature Date"
+msgstr "Date de signature maximale"
+
+msgctxt "field:contract.bank_account.change.select,need_new_sepa_mandate:"
+msgid "Need new Sepa Mandate"
+msgstr "Requiert un nouveau mandat SEPA"
+
+msgctxt "field:contract.bank_account.change.select,new_sepa_mandate:"
+msgid "New Sepa Mandate"
+msgstr "Nouveau mandat SEPA"
+
+msgctxt "field:contract.bank_account.change.select,sepa_mandate_date:"
+msgid "Sepa Mandate Signature Date"
+msgstr "Date de signature du mandat SEPA"
+
 msgctxt "field:contract.billing_information,sepa_mandate:"
 msgid "Sepa Mandate"
 msgstr "Mandat SEPA"
+
+msgctxt "view:contract.bank_account.change.select:"
+msgid "Warning : a new sepa mandate will be created!"
+msgstr "Avertissement: un nouveau mandat SEPA sera créé !"

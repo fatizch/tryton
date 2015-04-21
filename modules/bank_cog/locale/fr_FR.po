@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -21,6 +21,10 @@ msgstr "Adresse Principale"
 msgctxt "field:bank,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:bank.account,active:"
+msgid "Active"
+msgstr "Actif"
 
 msgctxt "field:bank.account,end_date:"
 msgid "End Date"

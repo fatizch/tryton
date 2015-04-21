@@ -59,7 +59,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
                 })
         cls._error_messages.update({
             'no_sequence_defined': 'No sequence defined in configuration '
-            'for contract set number',
+            'for contracts set number',
             })
 
     @classmethod

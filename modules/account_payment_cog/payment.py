@@ -76,7 +76,7 @@ class JournalFailureAction(model.CoopSQL, model.CoopView):
     is_fee_required = fields.Function(fields.Boolean('Fee Required'),
         'on_change_with_is_fee_required', setter='setter_void')
     reject_number = fields.Integer('Reject Number', help='Filter the action '
-        'according to the number of reject for a given payment. If empty, '
+        'according to the number of rejects for a given payment. If empty, '
         'action will be used for all rejects')
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')

@@ -6,6 +6,10 @@ msgctxt "field:account.payment.journal,failure_billing_mode:"
 msgid "Failure Billing Mode"
 msgstr "Mode de quittancement en cas d'échec"
 
+msgctxt "field:offered.billing_mode,failure_billing_mode:"
+msgid "Failure Billing Mode"
+msgstr "Mode de quittancement en cas d'échec"
+
 msgctxt "field:offered.product,payment_journal:"
 msgid "Payment Journal"
 msgstr "Journal de prélèvement"
@@ -13,3 +17,7 @@ msgstr "Journal de prélèvement"
 msgctxt "help:offered.product,payment_journal:"
 msgid "If no journal defined the global configuration will be used"
 msgstr "Si aucun journal n'est défini, la configuration gloable sera utilisée"
+
+msgctxt "selection:account.payment.journal.failure_action,action:"
+msgid "Move to manual payment"
+msgstr "Basculer en paiement manuel"

@@ -6,10 +6,6 @@ msgctxt "error:account.fee:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
 
-msgctxt "error:offered.product.premium_date:"
-msgid "Premium Date must be unique"
-msgstr ""
-
 msgctxt "field:account.fee,allow_override:"
 msgid "Allow Override"
 msgstr "Permettre la surcharge"
@@ -467,6 +463,10 @@ msgid "Premium Amount"
 msgstr "Montant de la prime"
 
 msgctxt "selection:account.fee,frequency:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:account.fee,frequency:"
 msgid "At contract signature"
 msgstr "A la signature du contrat"
 
@@ -605,6 +605,10 @@ msgstr "Règles de Cotisation"
 msgctxt "view:contract:"
 msgid "Display Premium"
 msgstr "Afficher les primes"
+
+msgctxt "view:contract:"
+msgid "Invoicing"
+msgstr "Quittancement"
 
 msgctxt "view:offered.option.description.premium_rule:"
 msgid "Premium Rule"

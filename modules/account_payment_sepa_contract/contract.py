@@ -164,7 +164,7 @@ class ChangeBankAccountSelect:
     max_signature_date = fields.Date('Max Signature Date',
         states={'invisible': True})
     new_sepa_mandate = fields.Many2One('account.payment.sepa.mandate',
-        'New Sepa Mandat', states={'invisible': True})
+        'New Sepa Mandate', states={'invisible': True})
 
     @fields.depends('effective_date', 'max_signature_date',
         'need_new_sepa_mandate', 'new_bank_account', 'new_sepa_mandate',

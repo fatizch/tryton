@@ -18,7 +18,7 @@ class Contract:
     attachments = fields.One2Many('ir.attachment', 'resource', 'Attachments',
         delete_missing=False, target_not_required=True)
     doc_received = fields.Function(
-        fields.Boolean('All Document Received',
+        fields.Boolean('All Documents Received',
             depends=['document_request_lines']),
         'on_change_with_doc_received')
     document_request_lines = fields.One2Many('document.request.line',

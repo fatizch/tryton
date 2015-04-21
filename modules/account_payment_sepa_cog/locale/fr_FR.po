@@ -166,6 +166,10 @@ msgctxt "model:account.payment.journal.reject_reason,description:sepa_TM01"
 msgid "File receive after Cut-off time"
 msgstr "Heure limite dépassée"
 
+msgctxt "model:ir.action,name:act_message_form"
+msgid "SEPA Reject Messages"
+msgstr "Messages de rejet SEPA"
+
 msgctxt "model:ir.sequence,name:sequence_account_payment_merged"
 msgid "Default Account Payment Merged"
 msgstr "Regroupement de paiement par défaut"
@@ -173,3 +177,7 @@ msgstr "Regroupement de paiement par défaut"
 msgctxt "model:ir.sequence.type,name:sequence_type_account_payment_merged"
 msgid "Account Payment Merged"
 msgstr "Regroupement de paiement"
+
+msgctxt "model:ir.ui.menu,name:menu_reject_message_form"
+msgid "SEPA Reject Messages"
+msgstr "Messages de rejet SEPA"

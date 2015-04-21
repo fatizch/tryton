@@ -182,6 +182,10 @@ msgctxt "field:process.log,end_time:"
 msgid "End Time"
 msgstr "Fin"
 
+msgctxt "field:process.log,end_time_str:"
+msgid "End Time"
+msgstr "Fin"
+
 msgctxt "field:process.log,from_state:"
 msgid "From State"
 msgstr "Etat de Départ"
@@ -207,6 +211,10 @@ msgid "Session"
 msgstr "Session"
 
 msgctxt "field:process.log,start_time:"
+msgid "Start Time"
+msgstr "Début"
+
+msgctxt "field:process.log,start_time_str:"
 msgid "Start Time"
 msgstr "Début"
 

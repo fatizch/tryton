@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -97,10 +97,6 @@ msgctxt "field:contract,multi_mixed_view:"
 msgid "Covered Elements"
 msgstr "Risques Couverts"
 
-msgctxt "field:contract,next_renewal_date:"
-msgid "Next Renewal Date"
-msgstr "Prochain renouvellement"
-
 msgctxt "field:contract,options:"
 msgid "Options"
 msgstr "Garanties"
@@ -128,6 +124,10 @@ msgstr "Statut"
 msgctxt "field:contract,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
+
+msgctxt "field:contract,termination_reason:"
+msgid "Termination Reason"
+msgstr "Motif de terminaison"
 
 msgctxt "field:contract,write_date:"
 msgid "Write Date"
@@ -629,6 +629,14 @@ msgctxt "field:contract.option.extra_premium,is_discount:"
 msgid "Is Discount"
 msgstr "Est une réduction"
 
+msgctxt "field:contract.option.extra_premium,manual_end_date:"
+msgid "Manual End Date"
+msgstr "Date de fin manuelle"
+
+msgctxt "field:contract.option.extra_premium,manual_start_date:"
+msgid "Manual Start date"
+msgstr "Date de début manuelle"
+
 msgctxt "field:contract.option.extra_premium,max_rate:"
 msgid "Max Rate"
 msgstr "Taux maximum"
@@ -654,12 +662,8 @@ msgid "Name"
 msgstr "Nom"
 
 msgctxt "field:contract.option.extra_premium,start_date:"
-msgid "Start date"
+msgid "Start Date"
 msgstr "Date de Début"
-
-msgctxt "field:contract.option.extra_premium,time_limited:"
-msgid "Time Limited"
-msgstr "Limitée dans le temps"
 
 msgctxt "field:contract.option.extra_premium,write_date:"
 msgid "Write Date"
@@ -694,38 +698,6 @@ msgstr "ID"
 msgctxt "field:contract.option.extra_premium.create.option_selector,options:"
 msgid "Options"
 msgstr "Options"
-
-msgctxt "field:contract.renew.parameters,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.renew.parameters,renew_what:"
-msgid "All contracts"
-msgstr "Tous les contrats"
-
-msgctxt "field:contract.renew.parameters,renewal_date:"
-msgid "Renewal Date"
-msgstr "Date de renouvellement"
-
-msgctxt "field:contract.renew.parameters,this_contract:"
-msgid "Renew this contract"
-msgstr "Seulement ce contrat"
-
-msgctxt "field:contract.renew.parameters,will_be_renewed:"
-msgid "Will be renewed"
-msgstr "A renouveler"
-
-msgctxt "field:contract.renew.report,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:contract.renew.report,renewal_log_failure:"
-msgid "Failed"
-msgstr "Ont échoués"
-
-msgctxt "field:contract.renew.report,renewal_log_success:"
-msgid "Succeeded"
-msgstr "Ont réussit"
 
 msgctxt "field:contract.service,expenses:"
 msgid "Expenses"
@@ -870,14 +842,6 @@ msgctxt "model:contract.option.extra_premium.create.option_selector,name:"
 msgid "Create Extra Premium Option Selector"
 msgstr "Selecteur d'option pour la création des surprimes"
 
-msgctxt "model:contract.renew.parameters,name:"
-msgid "Renewal Start"
-msgstr "Paramètres du Renouvellement"
-
-msgctxt "model:contract.renew.report,name:"
-msgid "Renewal Result"
-msgstr "Résultat du Renouvellement"
-
 msgctxt "model:contract.service,name:"
 msgid "Contract Service"
 msgstr "Prestation Fournie"
@@ -906,17 +870,9 @@ msgctxt "model:ir.action,name:act_manage_extra_premium"
 msgid "Manage Extra Premium"
 msgstr "Gérer les surprimes"
 
-msgctxt "model:ir.action,name:act_renewal_wizard"
-msgid "Renew Contracts"
-msgstr "Renouvellement"
-
 msgctxt "model:ir.action,name:manage_options"
 msgid "Manage Options"
 msgstr "Gérer les Options"
-
-msgctxt "model:ir.ui.menu,name:menu_contract_renewal"
-msgid "Renew Contracts"
-msgstr "Renouvellement"
 
 msgctxt "selection:contract,status:"
 msgid "Active"
@@ -990,6 +946,26 @@ msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
 
+msgctxt "selection:document.receive.request,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request,needed_by:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Option"
+msgstr "Option"
+
 msgctxt "selection:report.template,kind:"
 msgid "Contract Documents"
 msgstr "Documents du contrat"
@@ -1011,12 +987,8 @@ msgid "Covered Relations"
 msgstr "Relations Couvertes"
 
 msgctxt "view:contract.covered_element:"
-msgid "Extra Data"
-msgstr "Données Complémentaires"
-
-msgctxt "view:contract.covered_element:"
-msgid "Options"
-msgstr "Options"
+msgid "Details"
+msgstr "Détails"
 
 msgctxt "view:contract.covered_element:"
 msgid "Sub Covered Elements"
@@ -1065,14 +1037,6 @@ msgstr "Option"
 msgctxt "view:contract.option:"
 msgid "Propagate"
 msgstr "Propager"
-
-msgctxt "view:contract.renew.parameters:"
-msgid "Renewal Start"
-msgstr "Paramètres du Renouvellement"
-
-msgctxt "view:contract.renew.report:"
-msgid "Renewal Result"
-msgstr "Résultat du Renouvellement"
 
 msgctxt "view:contract.service:"
 msgid "Contract Service"
@@ -1140,18 +1104,6 @@ msgctxt ""
 "wizard_button:contract.option.extra_premium.create,select_options,extra_premium_data:"
 msgid "Modify Extra Premium"
 msgstr "Modifier les surprimes"
-
-msgctxt "wizard_button:contract.renew,renewal_result,end:"
-msgid "End"
-msgstr "Terminer"
-
-msgctxt "wizard_button:contract.renew,renewal_start,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:contract.renew,renewal_start,renewal_result:"
-msgid "Start"
-msgstr "Commencer"
 
 msgctxt ""
 "wizard_button:contract.wizard.option_subscription,select_package,end:"

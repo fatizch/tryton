@@ -49,7 +49,7 @@ class BusinessRuleRoot(model.CoopView, GetResult, Templated):
         if hasattr(cls, '_error_messages'):
             cls._error_messages.update({
                 'businessrule_overlaps':
-                'You can not have 2 business rules that overlaps!'})
+                'You can not have 2 business rules that overlap!'})
 
     def get_rule_result(self, args):
         if self.rule:

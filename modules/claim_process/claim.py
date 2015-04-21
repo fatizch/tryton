@@ -24,7 +24,7 @@ class Claim(CogProcessFramework):
     __name__ = 'claim'
 
     doc_received = fields.Function(
-        fields.Boolean('All Document Received', depends=['documents']),
+        fields.Boolean('All Documents Received', depends=['documents']),
         'on_change_with_doc_received')
     indemnifications = fields.Function(
         fields.One2Many('claim.indemnification', None, 'Indemnifications'),

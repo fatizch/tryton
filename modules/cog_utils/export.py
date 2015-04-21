@@ -739,7 +739,7 @@ class ExportFieldConfiguration(ModelSQL, ModelView, ExportImportMixin):
     model = fields.Many2One('ir.export.configuration.model',
         'Model Configuration', required=True, ondelete='CASCADE')
     field_model = fields.Function(
-        fields.Many2One('ir.model.field', 'Field Model', required=True),
+        fields.Many2One('ir.model.field', 'Model Field', required=True),
         'get_field_model')
     field_name = fields.Char('Field Name')
     is_relation_field = fields.Function(
@@ -785,11 +785,11 @@ class ExportSelectFields(ModelView):
     'Select Export Fields'
     __name__ = 'export.fields.select'
 
-    possible_fields = fields.One2Many('ir.model.field', None,
-        'Possible Fields')
+    available_fields = fields.One2Many('ir.model.field', None,
+        'Available Fields')
     selected_fields = fields.Many2Many('ir.model.field', None, None,
-        'Selected Fields', domain=[('id', 'in', Eval('possible_fields'))],
-        depends=['possible_fields'])
+        'Selected Fields', domain=[('id', 'in', Eval('available_fields'))],
+        depends=['available_fields'])
 
 
 class ExportFieldsSelection(Wizard):
@@ -814,7 +814,7 @@ class ExportFieldsSelection(Wizard):
         ExportModel = pool.get(export_model.model.model)
         skips = ExportModel._export_skips()
         return {
-            'possible_fields': [x.id for x in export_model.model.fields
+            'available_fields': [x.id for x in export_model.model.fields
                 if x.name not in skips]
             }
 

@@ -1,6 +1,10 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.dunning,current_attachment:"
+msgid "Current Report"
+msgstr "Courrier courant"
 
 msgctxt "field:account.dunning.level,event_log_type:"
 msgid "Event Log Type"

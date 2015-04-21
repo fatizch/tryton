@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -40,7 +40,7 @@ msgstr "Date de fin de la dernière quittance payée"
 
 msgctxt "field:contract,last_posted_invoice_end:"
 msgid "Last Post Invoice End Date"
-msgstr "Date de fin de la dernière quittance postée"
+msgstr "Date de fin de la dernière quittance émise"
 
 msgctxt "field:offered.product,dunning_procedure:"
 msgid "Dunning Procedure"

@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -8,15 +8,17 @@ msgstr "Le code doit être unique !"
 
 msgctxt "error:export_not_found:"
 msgid "Cannot import : no object %s with functionnal key : \"%s\" were found."
-msgstr "Import impossible: pas d'objet trouvé %s avec la clé fonctionnelle \"%s\""
+msgstr ""
+"Import impossible: aucun objet %s avec la clé fonctionnelle %s n'a été "
+"trouvé"
 
 msgctxt "error:export_not_unique:"
 msgid ""
 "Cannot import : the following objects:\\n%s\\n share the same functional "
 "key:\\n\"%s\"."
 msgstr ""
-"Import impossible: les objets suivants:\\n%s\\n partagent la même clé "
-"fonctionnelle;\\n\"%s\"."
+"Import impossible: les objets suivants: \\n%s\\n partagent la même clé "
+"fonctionnelle:\\n \"%s\"."
 
 msgctxt "error:ir.export.configuration.field:"
 msgid "Field %s is not defined in model %s"
@@ -40,7 +42,7 @@ msgstr "Impossible de charger le jeu d'essai du fichier %s"
 
 msgctxt "error:missing_export_configuration:"
 msgid "Can't find configuration for code %s."
-msgstr "Impossible de trouvé la configuration avec le code %s."
+msgstr "Impossible de trouver une configuration pour le code %s."
 
 msgctxt "field:account.account,id:"
 msgid ""
@@ -106,6 +108,42 @@ msgctxt "field:event.type,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:export.export_configuration_selection,configuration:"
+msgid "Configuration"
+msgstr "Configuration"
+
+msgctxt "field:export.export_configuration_selection,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:export.export_summary,file:"
+msgid "Export File"
+msgstr "Fichier d'export"
+
+msgctxt "field:export.export_summary,file_name:"
+msgid "File Name"
+msgstr "Nom du fichier"
+
+msgctxt "field:export.export_summary,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:export.export_summary,summary:"
+msgid "Export Summary"
+msgstr "Résumé de l'export"
+
+msgctxt "field:export.fields.select,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:export.fields.select,possible_fields:"
+msgid "Available Fields"
+msgstr "Champs disponibles"
+
+msgctxt "field:export.fields.select,selected_fields:"
+msgid "Selected Fields"
+msgstr "Champs sélectionnés"
+
 msgctxt "field:ir.action,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
@@ -113,6 +151,174 @@ msgstr "Identifiant XML"
 msgctxt "field:ir.action.keyword,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:ir.export.configuration,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ir.export.configuration,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.export.configuration,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.export.configuration,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.export.configuration,models_configuration:"
+msgid "Models Configuration"
+msgstr "Configurations de l'export des modèles"
+
+msgctxt "field:ir.export.configuration,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.export.configuration,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.export.configuration,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ir.export.configuration,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ir.export.configuration,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:ir.export.configuration.field,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.export.configuration.field,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.export.configuration.field,export_light_strategy:"
+msgid "Export Light"
+msgstr "Export simple"
+
+msgctxt "field:ir.export.configuration.field,field_model:"
+msgid "Model Field"
+msgstr "Champs du modèle"
+
+msgctxt "field:ir.export.configuration.field,field_name:"
+msgid "Field Name"
+msgstr "Nom du champ"
+
+msgctxt "field:ir.export.configuration.field,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.export.configuration.field,is_relation_field:"
+msgid "Is A Relation Field"
+msgstr "Est un champ relation"
+
+msgctxt "field:ir.export.configuration.field,model:"
+msgid "Model Configuration"
+msgstr "Configuration de l'export des modèles"
+
+msgctxt "field:ir.export.configuration.field,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.export.configuration.field,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ir.export.configuration.field,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ir.export.configuration.field,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:ir.export.configuration.model,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:ir.export.configuration.model,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.export.configuration.model,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.export.configuration.model,fields_configuration:"
+msgid "Model Configuration"
+msgstr "Configuration de l'export des modèles"
+
+msgctxt "field:ir.export.configuration.model,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.export.configuration.model,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:ir.export.configuration.model,model_name:"
+msgid "Model Name"
+msgstr "Nom du modèle"
+
+msgctxt "field:ir.export.configuration.model,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.export.configuration.model,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.export.configuration.model,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ir.export.configuration.model,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:ir.export.configuration.model,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:ir.export_configuration-export_model,configuration:"
+msgid "Export Configuration"
+msgstr "Configuration de l'export"
+
+msgctxt "field:ir.export_configuration-export_model,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:ir.export_configuration-export_model,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:ir.export_configuration-export_model,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:ir.export_configuration-export_model,model:"
+msgid "Export Model"
+msgstr "Définition de l'export des modèles"
+
+msgctxt "field:ir.export_configuration-export_model,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ir.export_configuration-export_model,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:ir.export_configuration-export_model,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
 
 msgctxt "field:ir.export_package,code:"
 msgid "Code"
@@ -701,9 +907,29 @@ msgctxt "model:event.type,name:"
 msgid "Event Type"
 msgstr "Type d'événement"
 
+msgctxt "model:export.export_configuration_selection,name:"
+msgid "Export Configuration Selection"
+msgstr "Sélection de la configuration de lexport"
+
+msgctxt "model:export.export_summary,name:"
+msgid "Export Summary"
+msgstr "Résumé de l'export"
+
+msgctxt "model:export.fields.select,name:"
+msgid "Select Export Fields"
+msgstr "Sélectionner les champs pour l'export"
+
 msgctxt "model:ir.action,name:act_event_type_form"
 msgid "Event Types"
 msgstr "Types d'événement"
+
+msgctxt "model:ir.action,name:act_export_configuration"
+msgid "Export Configurations"
+msgstr "Configurations des exports"
+
+msgctxt "model:ir.action,name:act_export_configuration_model"
+msgid "Model Configurations"
+msgstr "Configurations de l'export des modèles"
 
 msgctxt "model:ir.action,name:act_export_package"
 msgid "Export Package"
@@ -721,13 +947,37 @@ msgctxt "model:ir.action,name:act_test_case_wizard"
 msgid "Test Case Launcher"
 msgstr "Gestionnaire de jeux d'essai"
 
+msgctxt "model:ir.action,name:export_fields_selection"
+msgid "Add Fields"
+msgstr "Ajouter des champs"
+
 msgctxt "model:ir.action,name:export_package_wizard"
 msgid "Select Export Package"
 msgstr "Sélectionner un paquet d'export"
 
+msgctxt "model:ir.action,name:export_to_file"
+msgid "Export To File"
+msgstr "Exporter dans un fichier"
+
 msgctxt "model:ir.action,name:import_wizard"
 msgid "Import File"
 msgstr "Importer le Fichier"
+
+msgctxt "model:ir.export.configuration,name:"
+msgid "Export Configuration"
+msgstr "Configuration de l'export"
+
+msgctxt "model:ir.export.configuration.field,name:"
+msgid "Export Field Configuration"
+msgstr "Configuration des champs à exporter"
+
+msgctxt "model:ir.export.configuration.model,name:"
+msgid "Export Model Configuration"
+msgstr "Configuration de l'export des modèles"
+
+msgctxt "model:ir.export_configuration-export_model,name:"
+msgid "Relation between export configuration and export model"
+msgstr "Relation entre la configuration de l'export et les modèles"
 
 msgctxt "model:ir.export_package,name:"
 msgid "Export Package"
@@ -788,6 +1038,18 @@ msgstr "Type d'événement"
 msgctxt "model:ir.ui.menu,name:menu_event"
 msgid "Event"
 msgstr "Evénement"
+
+msgctxt "model:ir.ui.menu,name:menu_export_configuration"
+msgid "Export Configuration"
+msgstr "Configuration de l'export"
+
+msgctxt "model:ir.ui.menu,name:menu_export_configuration__model"
+msgid "Model Configurations"
+msgstr "Configurations de l'export des modèles"
+
+msgctxt "model:ir.ui.menu,name:menu_export_configuration_definition"
+msgid "Export Configurations"
+msgstr "Configurations des exports"
 
 msgctxt "model:ir.ui.menu,name:menu_export_import"
 msgid "Export Import"
@@ -860,6 +1122,34 @@ msgstr "Type d'événement"
 msgctxt "view:event.type:"
 msgid "Event Types"
 msgstr "Types d'événement"
+
+msgctxt "view:export.export_configuration_selection:"
+msgid "Export Configuration"
+msgstr "Configuration de l'export"
+
+msgctxt "view:export.export_summary:"
+msgid "Export Summary"
+msgstr "Résumé de l'export"
+
+msgctxt "view:export.fields.select:"
+msgid "Export Fields Selection"
+msgstr "Sélection des champs à exporter"
+
+msgctxt "view:ir.export.configuration.field:"
+msgid "Export Field Configuration"
+msgstr "Configuration des champs à exporter"
+
+msgctxt "view:ir.export.configuration.model:"
+msgid "Add Fields"
+msgstr "Ajouter des champs"
+
+msgctxt "view:ir.export.configuration.model:"
+msgid "Export Model Configuration"
+msgstr "Configuration de l'export des modèles"
+
+msgctxt "view:ir.export.configuration:"
+msgid "Export Configuration"
+msgstr "Configuration de l'export"
 
 msgctxt "view:ir.export_package.add_records.start:"
 msgid "Select An Export Package"
@@ -936,6 +1226,30 @@ msgstr "Version d'Objet"
 msgctxt "view:utils.versionned_object:"
 msgid "Versionned Object"
 msgstr "Objet Versionné"
+
+msgctxt "wizard_button:export.export_to_file,conf_selection,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:export.export_to_file,conf_selection,export:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt "wizard_button:export.export_to_file,export_summary,conf_selection:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:export.export_to_file,export_summary,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:export.fields.selection,fields_selection,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:export.fields.selection,fields_selection,end:"
+msgid "Cancel"
+msgstr "Annuler"
 
 msgctxt "wizard_button:ir.export_package.add_records,start,add:"
 msgid "Add"

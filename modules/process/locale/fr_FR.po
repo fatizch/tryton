@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -45,6 +45,10 @@ msgstr "Le nom technique doit être unique"
 msgctxt "field:ir.model,is_workflow:"
 msgid "Is Workflow"
 msgstr "Processus"
+
+msgctxt "field:process,action_windows:"
+msgid "Action Windows"
+msgstr "Action Windows"
 
 msgctxt "field:process,all_steps:"
 msgid "All Steps"
@@ -265,6 +269,50 @@ msgstr "Date de mise à jour"
 msgctxt "field:process.action,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:process.process-act_window,action_window:"
+msgid "Action Window"
+msgstr "Action Window"
+
+msgctxt "field:process.process-act_window,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:process.process-act_window,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:process.process-act_window,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:process.process-act_window,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:process.process-act_window,language:"
+msgid "Language"
+msgstr "Langues"
+
+msgctxt "field:process.process-act_window,process:"
+msgid "Process"
+msgstr "Traiter"
+
+msgctxt "field:process.process-act_window,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:process.process-act_window,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:process.process-act_window,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:process.process-act_window,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:process.process_framework,current_state:"
 msgid "Current State"
@@ -602,6 +650,10 @@ msgctxt "model:process.transition-group,name:"
 msgid "Transition Authorization"
 msgstr "Autorisations pour les Transitions"
 
+msgctxt "model:res.group,name:group_process_admin"
+msgid "Process Administration"
+msgstr "Administration des processus"
+
 msgctxt "selection:process,step_button_group_position:"
 msgid "Bottom"
 msgstr "Bas"
@@ -805,6 +857,10 @@ msgstr "Validation RIC"
 msgctxt "view:contract:"
 msgid "Validation du contrat"
 msgstr "Validation du contrat"
+
+msgctxt "view:endorsement:"
+msgid "The current record completed the current process, please go ahead"
+msgstr "Processus Terminé. Commencez une nouvelle tâche"
 
 msgctxt "view:process-process.step:"
 msgid "Process Relation"

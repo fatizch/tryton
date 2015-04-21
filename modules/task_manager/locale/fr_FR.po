@@ -230,22 +230,6 @@ msgctxt "field:res.user-res.team,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:task.select.available_tasks,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:task.select.available_tasks,selected_task:"
-msgid "Selected Task"
-msgstr "Tâche Sélectionnée"
-
-msgctxt "field:task.select.available_tasks,selected_task_presenter:"
-msgid "Seleteted Task"
-msgstr "Tâche séléctionnée"
-
-msgctxt "field:task.select.available_tasks,user:"
-msgid "User"
-msgstr "Utilisateur"
-
 msgctxt "model:ir.action,name:act_launch_task_wizard"
 msgid "Launch Task"
 msgstr "Lancer un Tâche"
@@ -314,10 +298,6 @@ msgctxt "model:res.user-res.team,name:"
 msgid "Relation between User and Team"
 msgstr "Relation entre l'utilisateur et l'équipe"
 
-msgctxt "model:task.select.available_tasks,name:"
-msgid "Task Selector"
-msgstr "Sélectionneur de Tâche"
-
 msgctxt "view:process.log:"
 msgid "Current Tasks"
 msgstr "Tâche courante"
@@ -369,15 +349,3 @@ msgstr "Répartition des tâches"
 msgctxt "view:res.user:"
 msgid "Team management"
 msgstr "Gestion de l'Equipe"
-
-msgctxt "view:task.select.available_tasks:"
-msgid "Task Selector"
-msgstr "Sélectionneur de Tâche"
-
-msgctxt "wizard_button:task.select,select_context,calculate_action:"
-msgid "Compute Task"
-msgstr "Réaliser la Tâche"
-
-msgctxt "wizard_button:task.select,select_context,end:"
-msgid "Cancel"
-msgstr "Annuler"

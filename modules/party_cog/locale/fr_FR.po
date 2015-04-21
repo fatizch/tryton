@@ -132,6 +132,10 @@ msgctxt "field:party.interaction,contact_datetime:"
 msgid "Date and Time"
 msgstr "Date et Heure"
 
+msgctxt "field:party.interaction,contact_datetime_str:"
+msgid "Date and Time"
+msgstr "Date et Heure"
+
 msgctxt "field:party.interaction,contact_mechanism:"
 msgid "Contact Mechanism"
 msgstr "Moyen de contact"

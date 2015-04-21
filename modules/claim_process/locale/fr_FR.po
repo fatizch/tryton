@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -27,7 +27,7 @@ msgid "Current State"
 msgstr "Etat Courant"
 
 msgctxt "field:claim,doc_received:"
-msgid "All Document Received"
+msgid "All Documents Received"
 msgstr "Documents Reçus"
 
 msgctxt "field:claim,indemnifications:"

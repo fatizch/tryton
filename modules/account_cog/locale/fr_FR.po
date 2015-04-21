@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -374,6 +374,14 @@ msgstr "Descripteur de Frais"
 msgctxt "model:account.fee.description.version,name:"
 msgid "Fee Description Version"
 msgstr "Version de Frais"
+
+msgctxt "model:account.journal,name:journal_split"
+msgid "Move Line Reconciliation Split Journal"
+msgstr "Journal des mouvements de découpage des lettrages"
+
+msgctxt "model:account.journal.type,name:journal_type_split"
+msgid "Split"
+msgstr "Découpage"
 
 msgctxt "model:account.tax.description,name:"
 msgid "Tax Description"

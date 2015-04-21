@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -712,6 +712,10 @@ msgctxt "field:offered.product,rec_name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:offered.product,report_templates:"
+msgid "Report Templates"
+msgstr "Modèles de courrier"
+
 msgctxt "field:offered.product,start_date:"
 msgid "Start Date"
 msgstr "Date de Début"
@@ -1219,6 +1223,10 @@ msgstr "Produit"
 msgctxt "view:offered.product:"
 msgid "Products"
 msgstr "Produits"
+
+msgctxt "view:offered.product:"
+msgid "Report Templates"
+msgstr "Modèles de courrier"
 
 msgctxt "view:offered:"
 msgid "Administration"

@@ -1,0 +1,127 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:endorsement.set:"
+msgid "Effective date is not defined"
+msgstr "La date d'effet n'est pas définie"
+
+msgctxt "error:endorsement.set:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:endorsement.set:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
+
+msgctxt "error:endorsement.set:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:endorsement.set:"
+msgid "Object %s is currently locked by user %s"
+msgstr "L'objet %s est verrouillé par l'utilisateur %s"
+
+msgctxt "error:endorsement.set:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
+msgctxt "field:endorsement,contracts_name:"
+msgid "Contracts Name"
+msgstr "Numéros des contrats"
+
+msgctxt "field:endorsement.set,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:endorsement.set,created_attachments:"
+msgid "Created Attachments"
+msgstr "Pièces jointes créées"
+
+msgctxt "field:endorsement.set,current_log:"
+msgid "Current Log"
+msgstr "Trace Courante"
+
+msgctxt "field:endorsement.set,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:endorsement.set,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
+msgctxt "field:endorsement.set,endorsements_parts_union:"
+msgid "Endorsement Parts"
+msgstr "Avenants unitaires"
+
+msgctxt "field:endorsement.set,endorsements_summary:"
+msgid "Endorsements Summary"
+msgstr "Résumé des avenants"
+
+msgctxt "field:endorsement.set,logs:"
+msgid "Task"
+msgstr "Tâche"
+
+msgctxt "field:endorsement.set.apply.find_process,contract_set:"
+msgid "Contract Set"
+msgstr "Ensemble de contrats"
+
+msgctxt "field:endorsement.set.apply.find_process,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.set.apply.find_process,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.set.apply.find_process,endorsement_set:"
+msgid "Endorsement Set"
+msgstr "Ensemble d'avenants"
+
+msgctxt "field:endorsement.set.apply.find_process,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:endorsement.set.apply.find_process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.set.apply.find_process,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "model:endorsement.set.apply.find_process,name:"
+msgid "EndorsementSetApply Find Process"
+msgstr ""
+
+msgctxt "model:ir.action,name:endorsement_set_process_launcher"
+msgid "Endorsement Set Application"
+msgstr "Appliquer l'ensemble d'avenants"
+
+msgctxt "model:ir.ui.menu,name:menu_start_endorsement_set_process"
+msgid "Endorsement Set Application"
+msgstr "Application de l'ensemble d'avenants"
+
+msgctxt "selection:process,kind:"
+msgid "Endorsement Set Application"
+msgstr "Application de l'ensemble d'avenants"
+
+msgctxt "view:endorsement.set:"
+msgid "Resume Current Process"
+msgstr "Relancer le processus courant"
+
+msgctxt "view:endorsement:"
+msgid "Endorsements"
+msgstr "Avenants"
+
+msgctxt "view:endorsement:"
+msgid "Preview Changes"
+msgstr "Prévisualiser les changements"
+
+msgctxt "wizard_button:endorsement.set.apply,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr "Démarrer le processus (_k)"
+
+msgctxt "wizard_button:endorsement.set.apply,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"

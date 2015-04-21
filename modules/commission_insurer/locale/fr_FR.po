@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:received_premiums:"
+msgid "Received Premium"
+msgstr "Primes reçues"
+
 msgctxt "field:account.invoice.line,principal_lines:"
 msgid "Principal Lines"
 msgstr "Lignes "

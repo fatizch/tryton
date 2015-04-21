@@ -1,10 +1,11 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.activate:"
-msgid "You cannot activate a contract that is not in quote status !"
-msgstr "Impossible d'activer un contrat qui n'est pas à l'état devis"
+msgid "You cannot activate a contract that is not in quote or hold status !"
+msgstr ""
+"Vous ne pouvez pas activer un contrat qui est à l'état devis ou suspendu"
 
 msgctxt "error:contract.option:"
 msgid "Coverage %s is inactive at date %s"
@@ -28,6 +29,10 @@ msgctxt "error:contract.option:"
 msgid "No end date defined"
 msgstr "Pas de date de fin défini"
 
+msgctxt "error:contract.reactivate:"
+msgid "No contract found"
+msgstr "Pas de contrat trouvé"
+
 msgctxt "error:contract:"
 msgid "Activation Periods \"%(first)s\" and \"%(second)s\" overlap."
 msgstr "Les périodes \"%(première)s\" et \"%(seconde)s\" se chevauchent"
@@ -45,6 +50,22 @@ msgid "Cannot change start date, multiple activation period detected"
 msgstr ""
 "Impossible de changer la date de début, il existe plusieurs période "
 "d'activation"
+
+msgctxt "error:contract:"
+msgid "Cannot reactivate a not yet terminated contract"
+msgstr "Réactivation impossible car le contrat n'est pas encore terminé"
+
+msgctxt "error:contract:"
+msgid "Cannot reactivate contract, end reached"
+msgstr "Réactivation impossible car le terme est atteint"
+
+msgctxt "error:contract:"
+msgid "Cannot reactivate contract, max end date reached"
+msgstr "Réactivation impossible car la date de fin maximale est atteinte"
+
+msgctxt "error:contract:"
+msgid "Cannot set end date anterior to start date"
+msgstr "La date de fin ne peut être antérieure à la date de début"
 
 msgctxt "error:contract:"
 msgid "Invalid file format"
@@ -133,6 +154,10 @@ msgstr "Clé fonctionnelle"
 msgctxt "field:contract,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:contract,initial_start_date:"
+msgid "Initial Start Date"
+msgstr "Date d'effet initiale"
 
 msgctxt "field:contract,is_sub_status_required:"
 msgid "Is Sub Status Required"
@@ -482,6 +507,14 @@ msgctxt "field:contract.extra_data,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.hold.select_hold_status,hold_reason:"
+msgid "Hold Reason"
+msgstr "Raison de suspension"
+
+msgctxt "field:contract.hold.select_hold_status,id:"
+msgid "ID"
+msgstr "ID"
+
 msgctxt "field:contract.option,appliable_conditions_date:"
 msgid "Appliable Conditions Date"
 msgstr "Date de Conditions"
@@ -542,6 +575,10 @@ msgctxt "field:contract.option,end_date:"
 msgid "End Date"
 msgstr "Date de Fin"
 
+msgctxt "field:contract.option,full_name:"
+msgid "Full Name"
+msgstr "Nom complet"
+
 msgctxt "field:contract.option,func_key:"
 msgid "Functional Key"
 msgstr "Clé fonctionnelle"
@@ -550,9 +587,17 @@ msgctxt "field:contract.option,id:"
 msgid "ID"
 msgstr "ID"
 
+msgctxt "field:contract.option,initial_start_date:"
+msgid "Initial Start Date"
+msgstr "Date d'effet initiale"
+
 msgctxt "field:contract.option,manual_end_date:"
 msgid "Manual End Date"
 msgstr "Date de fin manuelle"
+
+msgctxt "field:contract.option,manual_start_date:"
+msgid "Manual Start Date"
+msgstr "Date de début manuelle"
 
 msgctxt "field:contract.option,must_expand_tree:"
 msgid "Must Expand Tree"
@@ -589,6 +634,30 @@ msgstr "Mis à jour par"
 msgctxt "field:contract.option,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "field:contract.reactivate.check_contracts,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.reactivate.check_contracts,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.reactivate.check_contracts,new_end_date:"
+msgid "New End Date"
+msgstr "Nouvelle date de fin"
+
+msgctxt "field:contract.reactivate.check_contracts,previous_end_date:"
+msgid "Previous End Date"
+msgstr "Date de fin précédente"
+
+msgctxt "field:contract.reactivate.check_contracts,termination_reason:"
+msgid "Termination Reason"
+msgstr "Motif de terminaison"
+
+msgctxt "field:contract.reactivate.check_contracts,will_be_terminated:"
+msgid "Will be terminated"
+msgstr "Sera terminé"
 
 msgctxt "field:contract.select_start_date,contract:"
 msgid "Contract"
@@ -901,9 +970,17 @@ msgctxt "model:contract.extra_data,name:"
 msgid "Contract Extra Data"
 msgstr "Données Complémentaires"
 
+msgctxt "model:contract.hold.select_hold_status,name:"
+msgid "End date selector for contract"
+msgstr "Choix de la date de fin pour le contrat"
+
 msgctxt "model:contract.option,name:"
 msgid "Contract Option"
 msgstr "Garantie"
+
+msgctxt "model:contract.reactivate.check_contracts,name:"
+msgid "Contract Reactivate Check"
+msgstr "Validation de la réactivation du contrat"
 
 msgctxt "model:contract.select_start_date,name:"
 msgid "Start date selector for contract"
@@ -985,6 +1062,14 @@ msgstr "Terminer Contrat"
 msgctxt "model:ir.action,name:act_event_log_relate_form"
 msgid "Event Logs"
 msgstr "Logs d'événements"
+
+msgctxt "model:ir.action,name:act_hold_contract"
+msgid "Hold Contract"
+msgstr "Suspendre le contrat"
+
+msgctxt "model:ir.action,name:act_reactivate"
+msgid "Reactivate Contract"
+msgstr "Réactiver le contrat"
 
 msgctxt "model:ir.action,name:act_stop"
 msgid "Stop Contract"
@@ -1253,6 +1338,10 @@ msgctxt "view:contract.extra_data:"
 msgid "Extra Datas"
 msgstr "Données complémentaires"
 
+msgctxt "view:contract.hold.select_hold_status:"
+msgid "Select Hold Reason"
+msgstr "Selectionner la raison de suspension"
+
 msgctxt "view:contract.option:"
 msgid "Main Data"
 msgstr "Données principales"
@@ -1264,6 +1353,14 @@ msgstr "Option"
 msgctxt "view:contract.option:"
 msgid "Options"
 msgstr "Options"
+
+msgctxt "view:contract.reactivate.check_contracts:"
+msgid "Contract will still be terminated as of today after validation"
+msgstr "Le contrat sera toujours résilié à aujourd'hui après la validation"
+
+msgctxt "view:contract.reactivate.check_contracts:"
+msgid "Reactivate Contract"
+msgstr "Réactiver le contrat"
 
 msgctxt "view:contract.select_start_date:"
 msgid "Select Start Date"
@@ -1330,8 +1427,16 @@ msgid "Decline Contract"
 msgstr "Décliner le contrat"
 
 msgctxt "view:contract:"
+msgid "Hold Contract"
+msgstr "Suspendre le contrat"
+
+msgctxt "view:contract:"
 msgid "Options"
 msgstr "Options"
+
+msgctxt "view:contract:"
+msgid "Reactivate Contract"
+msgstr "Réactiver le contrat"
 
 msgctxt "view:contract:"
 msgid "Stop Contract"
@@ -1372,6 +1477,22 @@ msgstr "Appliquer"
 msgctxt "wizard_button:contract.end,select_date,end:"
 msgid "Cancel"
 msgstr "Annuler"
+
+msgctxt "wizard_button:contract.hold,select_hold_status,apply:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:contract.hold,select_hold_status,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.reactivate,validate_reactivation,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:contract.reactivate,validate_reactivation,reactivate:"
+msgid "Ok"
+msgstr "Ok"
 
 msgctxt "wizard_button:contract.stop,select_contracts,end:"
 msgid "Cancel"
