@@ -351,7 +351,7 @@ class Party(export.ExportImportMixin):
         Operator = fields.SQL_OPERATORS[operator]
         query = table.select(table.id,
             where=Operator(Concat(table.name, Concat(' ', table.first_name)),
-                value))
+                value) | (Operator(table.name, value)))
         return [('id', 'in', query)]
 
     def get_person(self):
