@@ -223,7 +223,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         states=_STATES, depends=_DEPENDS, delete_missing=True)
     last_modification = fields.Function(fields.DateTime('Last Modification'),
         'get_last_modification')
-    initial_start_date = fields.Function(fields.Date('Initial Start_date'),
+    initial_start_date = fields.Function(fields.Date('Initial Start Date'),
         'get_initial_start_date')
 
     @classmethod
@@ -1288,7 +1288,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         'on_change_with_contract_status')
     full_name = fields.Function(
         fields.Char('Full Name'), 'get_full_name')
-    initial_start_date = fields.Function(fields.Date('Initial Start_date'),
+    initial_start_date = fields.Function(fields.Date('Initial Start Date'),
         'get_initial_start_date')
 
     def get_initial_start_date(self, name):
