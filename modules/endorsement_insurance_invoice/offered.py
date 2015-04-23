@@ -33,6 +33,21 @@ class EndorsementDefinition:
         return any((endorsement_part.requires_contract_rebill
                 for endorsement_part in self.endorsement_parts))
 
+    def get_rebill_date_from_parts(self, contract_endorsement):
+        pool = Pool()
+        StartEndorsement = pool.get('endorsement.start', type='wizard')
+        dates = []
+        for view in [x.view for x in self.endorsement_parts]:
+            step_mixin_name = getattr(StartEndorsement, view).model_name
+            StepMixin = pool.get(step_mixin_name)
+            if hasattr(StepMixin, 'get_date_for_rebill'):
+                rebill_date = StepMixin.get_date_for_rebill(
+                    contract_endorsement)
+                if rebill_date:
+                    dates.append(rebill_date)
+        if dates:
+            return min(dates)
+
 
 class EndorsementPart:
     __name__ = 'endorsement.part'

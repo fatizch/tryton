@@ -17,6 +17,7 @@ def register():
         EndorsementPart,
         ChangeBillingInformation,
         BasicPreview,
+        RemoveOption,
         module='endorsement_insurance_invoice', type_='model')
 
     Pool.register(

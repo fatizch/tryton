@@ -51,19 +51,32 @@ class Contract:
             return
         rebill_dict = {}
         for endorsement in caller:
+            definition = endorsement.endorsement.definition
+            rebill_date = definition.get_rebill_date_from_parts(endorsement)
             if endorsement.contract not in contracts:
                 continue
-            if (endorsement.endorsement.effective_date ==
-                    endorsement.contract.start_date):
-                # The endorsement (maybe) changed the start_date, we should
-                # recalculate everything
-                base_date = datetime.date.min
+            if not rebill_date:
+                if endorsement.values:
+                    if (endorsement.endorsement.effective_date ==
+                            endorsement.contract.start_date):
+                        # The endorsement (maybe) changed the start_date,
+                        # we should recalculate everything
+                        base_date = datetime.date.min
+                    else:
+                        base_date = endorsement.endorsement.effective_date
+                    rebill_dict[endorsement.contract] = min(
+                        rebill_dict.get(endorsement.contract,
+                            endorsement.endorsement.effective_date),
+                        base_date)
+                else:
+                    # Rebilling after an endorsement with no values
+                    # We are doing a recalculation of the contract
+                    rebill_dict[endorsement.contract] = min(
+                        rebill_dict.get(endorsement.contract,
+                            endorsement.endorsement.effective_date),
+                        endorsement.contract.start_date)
             else:
-                base_date = endorsement.endorsement.effective_date
-            rebill_dict[endorsement.contract] = min(
-                rebill_dict.get(endorsement.contract,
-                    endorsement.endorsement.effective_date),
-                base_date)
+                rebill_dict[endorsement.contract] = rebill_date
         for contract, date in rebill_dict.iteritems():
             contract.rebill(date)
 

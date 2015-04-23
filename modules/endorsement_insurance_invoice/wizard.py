@@ -1,3 +1,4 @@
+import datetime
 from trytond.pool import PoolMeta
 from trytond.wizard import StateView, StateTransition, Button
 from trytond.pyson import Eval
@@ -11,7 +12,30 @@ __all__ = [
     'BasicPreview',
     'ChangeBillingInformation',
     'StartEndorsement',
+    'RemoveOption',
     ]
+
+
+class RemoveOption:
+
+    __name__ = 'contract.covered_element.option.remove'
+
+    @classmethod
+    def get_date_for_rebill(cls, contract_endorsement):
+        end_dates = []
+        for option in contract_endorsement.options:
+            end_date = option.values.get('manual_end_date',
+                None)
+            if end_date:
+                end_dates.append(end_date)
+        for covered_element in contract_endorsement.covered_elements:
+            for option in covered_element.options:
+                end_date = option.values.get('manual_end_date',
+                    None)
+                if end_date:
+                    end_dates.append(end_date)
+        if end_dates:
+            return min(end_dates) + datetime.timedelta(days=1)
 
 
 class BasicPreview:
