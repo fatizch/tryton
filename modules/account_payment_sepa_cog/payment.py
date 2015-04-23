@@ -207,17 +207,21 @@ class Payment:
             'account.payment.journal.failure_action')
         Invoice = pool.get('account.invoice')
         Configuration = pool.get('account.configuration')
+        MoveLine = pool.get('account.move.line')
         config = Configuration(1)
 
         super(Payment, cls).fail(payments)
 
         invoices_to_create = []
+        payment_date_to_update = []
         payments_keys = [(x._get_transaction_key(), x) for x in payments]
         payments_keys = sorted(payments_keys, key=lambda x: x[0])
         for key, payments in groupby(payments_keys, key=lambda x: x[0]):
-            for payment_key in payments:
-                payment = payment_key[1]
-                break
+            payments_list = [payment[1] for payment in payments]
+            payment = payments_list[0]
+            sepa_mandate = None
+            payment_date = None
+            action = key[1].get_fail_action(payments_list)
             # one reject invoice per different end_to_end_id only
             reject_fee = JournalFailureAction.get_rejected_payment_fee(
                 payment.sepa_return_reason_code)
@@ -226,18 +230,27 @@ class Payment:
             fee_amount = reject_fee.amount
             if fee_amount == 0:
                 continue
+            if action == 'retry':
+                sepa_mandate = payment.sepa_mandate
+                payment_date = payment.journal.get_next_possible_payment_date(
+                        payment.line, payment.date.day)
             journal = config.reject_fee_journal
             account = reject_fee.product.template.account_revenue_used
             name_for_billing = reject_fee.name
             invoices_to_create.append(payment.create_fee_invoice(
-                    fee_amount, journal, account, name_for_billing))
+                    fee_amount, journal, account, name_for_billing,
+                    sepa_mandate))
+            payment_date_to_update.append({'payment_date': payment_date})
 
-        new_invoices = Invoice.create([i._save_values
-            for i in invoices_to_create])
-        Invoice.validate_invoice(new_invoices)
+        Invoice.save(invoices_to_create)
+        Invoice.post(invoices_to_create)
+        lines_to_write = []
+        for i, p in zip(invoices_to_create, payment_date_to_update):
+            lines_to_write += [list(i.lines_to_pay), p]
+        MoveLine.write(*lines_to_write)
 
     def create_fee_invoice(self, fee_amount, journal, account_for_billing,
-            name_for_billing):
+            name_for_billing, sepa_mandate):
         pool = Pool()
         Invoice = pool.get('account.invoice')
         # create invoice
@@ -251,6 +264,7 @@ class Payment:
             account=self.party.account_receivable,
             state='draft',
             description=name_for_billing,
+            sepa_mandate=sepa_mandate,
             )
         # create invoice line
         invoice.lines = self.get_fee_invoice_lines(fee_amount,
