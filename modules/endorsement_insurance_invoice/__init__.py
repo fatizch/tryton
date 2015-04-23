@@ -3,6 +3,7 @@ from .endorsement import *
 from .offered import *
 from .wizard import *
 from .contract import *
+from .configuration import *
 
 
 def register():
@@ -18,6 +19,7 @@ def register():
         ChangeBillingInformation,
         BasicPreview,
         RemoveOption,
+        Configuration,
         module='endorsement_insurance_invoice', type_='model')
 
     Pool.register(

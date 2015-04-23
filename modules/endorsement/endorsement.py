@@ -956,6 +956,7 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
                     'applied_by': Transaction().user,
                     'application_date': datetime.datetime.now(),
                     })
+        cls.write(endorsements, {'state': 'applied'})
 
         # Force reload endorsement list
         for idx, endorsement in enumerate(cls.browse(

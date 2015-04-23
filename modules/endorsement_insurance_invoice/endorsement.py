@@ -27,9 +27,14 @@ class Contract:
     __name__ = 'contract'
 
     def _get_invoice_rrule_and_billing_information(self, start):
+        pool = Pool()
+        Configuration = pool.get('offered.configuration')
+        Endorsement = pool.get('endorsement')
+        config = Configuration(1)
         invoice_rrule = super(Contract,
             self)._get_invoice_rrule_and_billing_information(start)
-        Endorsement = Pool().get('endorsement')
+        if not config.split_invoices_on_endorsement_dates:
+            return invoice_rrule
         endorsement_dates = [datetime.datetime.combine(
                 endorsement.effective_date, datetime.time()) or
             endorsement.application_date
