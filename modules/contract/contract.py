@@ -1378,8 +1378,12 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                     ended_previously = True
                     values['start_date'][option.id] = option.initial_start_date
             if not ended_previously:
-                values['start_date'][option.id] = max(option.manual_start_date
-                    or datetime.date.min, option.parent_contract.start_date)
+                if option.parent_contract.start_date:
+                    values['start_date'][option.id] = max(
+                        option.manual_start_date or datetime.date.min,
+                        option.parent_contract.start_date)
+                else:
+                    values['start_date'][option.id] = None
         return values
 
     @classmethod
