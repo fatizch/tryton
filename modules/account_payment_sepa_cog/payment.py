@@ -1,12 +1,14 @@
 import os
+import datetime
 from itertools import groupby
 from collections import namedtuple
+from dateutil.relativedelta import relativedelta
 
 import genshi
 import genshi.template
 
 from trytond.pool import PoolMeta, Pool
-from trytond.modules.cog_utils import fields, export
+from trytond.modules.cog_utils import fields, export, coop_date, utils
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -14,6 +16,8 @@ __all__ = [
     'Group',
     'Payment',
     'InvoiceLine',
+    'Journal',
+    'MoveLine',
     ]
 
 
@@ -278,3 +282,42 @@ class InvoiceLine:
     def _get_origin(cls):
         return super(InvoiceLine, cls)._get_origin() + [
             'account.payment']
+
+
+class Journal:
+    __name__ = 'account.payment.journal'
+
+    last_sepa_receivable_payment_creation_date = fields.Date(
+        'Last Receivable Payment SEPA Creation')
+
+    def get_next_possible_payment_date(self, line, day):
+        if self.process_method != 'sepa':
+            return super(Journal, self).get_next_possible_payment_date(line,
+                day)
+        if self.last_sepa_receivable_payment_creation_date:
+            sync_date = max(line['maturity_date'], utils.today(),
+                self.last_sepa_receivable_payment_creation_date +
+                relativedelta(days=1))
+        else:
+            sync_date = max(line['maturity_date'], utils.today())
+        return coop_date.get_next_date_in_sync_with(sync_date, day)
+
+
+class MoveLine:
+    __name__ = 'account.move.line'
+
+    @classmethod
+    def create_payments(cls, lines):
+        payments = super(MoveLine, cls).create_payments(lines)
+        _payments_sort = sorted(payments, key=lambda x: x.journal)
+        for journal, payments_group in groupby(_payments_sort,
+                key=lambda x: x.journal):
+            if journal.process_method != 'sepa':
+                return payments
+            journal.last_sepa_receivable_payment_creation_date = max(
+                journal.last_sepa_receivable_payment_creation_date
+                or datetime.date.min,
+                max([payment['date'] for payment in payments_group
+                    if payment['kind'] == 'receivable']))
+            journal.save()
+        return payments

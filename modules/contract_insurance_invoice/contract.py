@@ -907,10 +907,13 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
             if self.billing_mode else False)
 
     def get_direct_debit_planned_date(self, line):
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
         if not (self.direct_debit and self.direct_debit_day):
             return None
-        return coop_date.get_next_date_in_sync_with(
-            max(line['maturity_date'], utils.today()),
+        curline = MoveLine(**line)
+        payment_journal = curline.get_payment_journal()
+        return payment_journal.get_next_possible_payment_date(line,
             self.direct_debit_day)
 
     @classmethod

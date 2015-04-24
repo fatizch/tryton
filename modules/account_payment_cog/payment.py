@@ -9,6 +9,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 
 from trytond.modules.cog_utils import coop_string, export, fields, model
+from trytond.modules.cog_utils import coop_date, utils
 
 __metaclass__ = PoolMeta
 
@@ -54,6 +55,10 @@ class Journal(export.ExportImportMixin):
     def _export_light(cls):
         return super(Journal, cls)._export_light() | {'currency', 'company',
             'default_reject_fee'}
+
+    def get_next_possible_payment_date(self, line, day):
+        return coop_date.get_next_date_in_sync_with(
+            max(line['maturity_date'], utils.today()), day)
 
 
 class JournalFailureAction(model.CoopSQL, model.CoopView):

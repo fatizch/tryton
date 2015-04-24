@@ -21,7 +21,7 @@ class Configuration:
     def get_payment_journal(self, line):
         pool = Pool()
         Invoice = pool.get('account.invoice')
-        if not isinstance(line.origin, Invoice):
+        if not isinstance(getattr(line, 'origin', None), Invoice):
             return super(Configuration, self).get_payment_journal(line)
         if not line.origin.is_commission_invoice:
             return super(Configuration, self).get_payment_journal(line)
