@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+  <data>
+    <record model="ir.action.wizard" id="endorsement_party_process_launcher">
+        <field name="name">Start Party Endorsement Process</field>
+        <field name="wiz_name">endorsement_party.start_process</field>
+    </record>
+    <menuitem parent="contract.menu_contract" sequence="1" action="endorsement_party_process_launcher" id="menu_start_party_endorsement_process"/>
+    <record model="ir.ui.view" id="endorsement_party_start_process_find_process_view_form">
+      <field name="model">endorsement_party.start.find_process</field>
+      <field name="type">form</field>
+      <field name="inherit" ref="process_cog.process_parameters_form"/>
+      <field name="name">endorsement_party_find_process_form</field>
+    </record>
+  </data>
+</tryton>

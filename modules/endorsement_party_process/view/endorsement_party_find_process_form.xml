@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+    <xpath expr="/form/label[@name='good_process']" position="before">
+        <label name="effective_date"/>
+        <field name="effective_date"/>
+        <newline/>
+        <label name="definition"/>
+        <field name="definition"/>
+        <newline/>
+        <label name="party"/>
+        <field name="party"/>
+    </xpath>
+</data>

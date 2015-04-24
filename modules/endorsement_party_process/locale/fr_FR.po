@@ -1,0 +1,53 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:endorsement_party.start.find_process,definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement_party.start.find_process,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement_party.start.find_process,good_process:"
+msgid "Good Process"
+msgstr "Processus"
+
+msgctxt "field:endorsement_party.start.find_process,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement_party.start.find_process,model:"
+msgid "Model"
+msgstr "Modèle"
+
+msgctxt "field:endorsement_party.start.find_process,party:"
+msgid "Party"
+msgstr "Acteur"
+
+msgctxt "model:endorsement_party.start.find_process,name:"
+msgid "Endorsement Party Process Finder"
+msgstr "Sélecteur d'avenant sur acteur"
+
+msgctxt "model:ir.action,name:endorsement_party_process_launcher"
+msgid "Start Party Endorsement Process"
+msgstr "Démarrer le processus d'avenant sur acteur"
+
+msgctxt "model:ir.ui.menu,name:menu_start_party_endorsement_process"
+msgid "Start Party Endorsement Process"
+msgstr "Démarrer le processus d'avenant sur acteur"
+
+msgctxt "selection:process,kind:"
+msgid "Party Endorsement"
+msgstr "Avenant sur acteur"
+
+msgctxt ""
+"wizard_button:endorsement_party.start_process,process_parameters,action:"
+msgid "Start Process (_k)"
+msgstr "Démarrer le processus (_k)"
+
+msgctxt ""
+"wizard_button:endorsement_party.start_process,process_parameters,end:"
+msgid "Cancel"
+msgstr "Annuler"
