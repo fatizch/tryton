@@ -26,16 +26,16 @@ class RuleEngineRuntime:
             return cls._re_relation_number_order_by_age(args, relation_name)
         person = cls.get_person(args)
         parties = []
+        date = args['date']
         res = 0
         for contract in contract_set.contracts:
-            parties.extend([x.party for x in utils.get_good_versions_at_date(
-                        contract, 'covered_elements', args['date'])])
+            parties.extend([x.party for x in contract.covered_elements
+            if x.party and x.is_covered_at_date(date)])
         parties.sort(key=lambda x: x.birth_date)
         relation_number = collections.defaultdict(int)
         for party in parties:
             relations = [rel for rel in
-                utils.get_good_versions_at_date(party, 'relations',
-                    args['date'])]
+                utils.get_good_versions_at_date(party, 'relations', date)]
             for relation in relations:
                 if (relation.to in parties and
                         relation.type.code == relation_name):
@@ -57,13 +57,14 @@ class RuleEngineRuntime:
         if not contract_set:
             return cls._re_number_of_covered_with_relation(args, relation_name)
         parties = []
+        date = args['date']
         number_of_covered = 0
         for contract in contract_set.contracts:
-            parties.extend([x.party for x in utils.get_good_versions_at_date(
-                contract, 'covered_elements', args['date'])])
+            parties.extend([x.party for x in contract.covered_elements
+            if x.party and x.is_covered_at_date(date)])
         for party in parties:
             for relation in utils.get_good_versions_at_date(party, 'relations',
-                    args['date']):
+                    date):
                 if (relation.to in parties and
                         relation.type.code == relation_name):
                     number_of_covered += 1

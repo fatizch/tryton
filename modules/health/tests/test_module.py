@@ -53,9 +53,31 @@ class ModuleTestCase(test_framework.CoopTestCase):
         party_child2.save()
 
         contract = self.Contract(subscriber=party_father,
-            covered_elements=[{'party': party_father},
-                    {'party': party_mother}, {'party': party_child1},
-                    {'party': party_child2}])
+            covered_elements=[{
+                    'party': party_father,
+                    'options': [{
+                            'start_date': datetime.date(2014, 1, 1)
+                            }],
+                    'sub_covered_elements': [],
+                    }, {
+                    'party': party_mother,
+                    'options': [{
+                            'start_date': datetime.date(2014, 1, 1)
+                            }],
+                    'sub_covered_elements': [],
+                    }, {
+                    'party': party_child1,
+                    'options': [{
+                            'start_date': datetime.date(2014, 1, 1)
+                            }],
+                    'sub_covered_elements': [],
+                    }, {
+                    'party': party_child2,
+                    'options': [{
+                            'start_date': datetime.date(2014, 1, 1),
+                            'end_date': datetime.date(2014, 1, 31)}],
+                    'sub_covered_elements': [],
+                    }])
         args = {'contract': contract, 'person': party_child1,
             'date': datetime.date(2014, 1, 1)}
         # test _re_relation_number
@@ -67,10 +89,25 @@ class ModuleTestCase(test_framework.CoopTestCase):
         self.assertEqual(
             self.RuleEngineRuntime._re_relation_number_order_by_age(args,
                 'child'), 1)
+        args = {'contract': contract, 'person': party_child2,
+            'date': datetime.date(2014, 2, 1)}
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age(args,
+                'child'), 1)
+        args = {'contract': contract, 'person': party_child2,
+            'date': datetime.date(2014, 1, 1)}
+        self.assertEqual(
+            self.RuleEngineRuntime._re_relation_number_order_by_age(args,
+                'child'), 1)
         # test _re_number_of_covered_with_relation
         args = {'contract': contract, 'date': datetime.date(2014, 1, 1)}
         self.assertEqual(self.RuleEngineRuntime.
             _re_number_of_covered_with_relation(args, 'child'), 2)
+        self.assertEqual(self.RuleEngineRuntime.
+            _re_number_of_covered_with_relation(args, 'spouse'), 2)
+        args = {'contract': contract, 'date': datetime.date(2014, 2, 1)}
+        self.assertEqual(self.RuleEngineRuntime.
+            _re_number_of_covered_with_relation(args, 'child'), 1)
         self.assertEqual(self.RuleEngineRuntime.
             _re_number_of_covered_with_relation(args, 'spouse'), 2)
 

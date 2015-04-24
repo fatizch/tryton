@@ -1008,6 +1008,15 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
                 ['party', 'person', 'company']):
             return self.item_desc.extra_data_def
 
+    def is_covered_at_date(self, at_date, coverage=None):
+        for option in self.options:
+            if ((not coverage or option.coverage == coverage) and
+                    utils.is_effective_at_date(option, at_date)):
+                return True
+        for sub_elem in self.sub_covered_elements:
+            if sub_elem.is_covered_at_date(at_date, coverage):
+                return True
+
     def is_party_covered(self, party, at_date):
         # TODO : Maybe this should go in contract_life / claim
         if party in self.get_covered_parties(at_date):
