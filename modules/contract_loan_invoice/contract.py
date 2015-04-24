@@ -204,20 +204,27 @@ class Contract:
         return values
 
     @classmethod
-    def calculate_prices(cls, contracts, start=None, end=None):
-        result = super(Contract, cls).calculate_prices(contracts, start, end)
+    def delete_prices(cls, contracts, limit):
+        super(Contract, cls).delete_prices(contracts, limit)
         loan_contracts = [x for x in contracts if x.is_loan]
         if not loan_contracts:
-            return result
+            return
         PremiumAmount = Pool().get('contract.premium.amount')
         premiums_to_delete = []
         for sub_contracts in grouped_slice(loan_contracts):
             premiums_to_delete.extend(PremiumAmount.search([
                         ('contract', 'in', sub_contracts),
                         ['OR',
-                            ('end', '>=', start or datetime.date.max),
+                            ('end', '>=', limit or datetime.date.max),
                             ('contract.status', '=', 'void')]]))
         PremiumAmount.delete(premiums_to_delete)
+
+    @classmethod
+    def calculate_prices(cls, contracts, start=None, end=None):
+        result = super(Contract, cls).calculate_prices(contracts, start, end)
+        loan_contracts = [x for x in contracts if x.is_loan]
+        if not loan_contracts:
+            return result
         cls.generate_premium_amount(loan_contracts)
         return result
 
