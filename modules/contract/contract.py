@@ -386,7 +386,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     @classmethod
     @model.CoopView.button
     def button_calculate(cls, contracts):
-        cls.do_calculate(contracts)
+        cls.calculate(contracts)
 
     @classmethod
     def update_contract_after_import(cls, contracts):
