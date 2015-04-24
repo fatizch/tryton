@@ -1181,7 +1181,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     start_date = fields.Function(
         fields.Date('Start Date'), 'get_start_date')
     manual_start_date = fields.Date('Manual Start date')
-    duration = fields.Integer('Duration', required=True)
+    duration = fields.Integer('Duration')
     duration_unit = fields.Selection(
         [('month', 'Month'), ('year', 'Year')],
         'Duration Unit', sort=False, required=True)
