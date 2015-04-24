@@ -23,12 +23,17 @@ class EventLog(model.CoopSQL, model.CoopView):
         required=True)
     date = fields.DateTime('Date', readonly=True, required=True)
     date_str = fields.Function(
-        fields.Date('Date'),
+        fields.Char('Date'),
         'on_change_with_date_str')
     user = fields.Many2One('res.user', 'User', readonly=True, required=True,
         ondelete='RESTRICT')
     event_type = fields.Many2One('event.type', 'Event Type', required=True,
         ondelete='RESTRICT')
+
+    @classmethod
+    def __setup__(cls):
+        super(EventLog, cls).__setup__()
+        cls._order.insert(0, ('date', 'DESC'))
 
     @fields.depends('date')
     def on_change_with_date_str(self, name=None):
