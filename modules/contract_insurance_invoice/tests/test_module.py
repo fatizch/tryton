@@ -36,6 +36,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Company': 'company.company',
             'MoveLine': 'account.move.line',
             'User': 'res.user',
+            'Configuration': 'account.configuration',
+            'PaymentJournal': 'account.payment.journal'
             }
 
     def test_premium_get_amount(self):
@@ -215,24 +217,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def test_get_direct_debit_day(self):
         current_date = date(2014, 9, 1)
         with Transaction().set_context(client_defined_date=current_date):
-            billing_information = self.BillingInformation(
-                direct_debit_day=5,
-                direct_debit=True)
-            line = {'maturity_date': date(2014, 9, 1)}
+            payment_journal = self.PaymentJournal()
+            line = self.MoveLine(maturity_date=date(2014, 9, 1))
             self.assertEqual(
-                billing_information.get_direct_debit_planned_date(line),
+                payment_journal.get_next_possible_payment_date(line, 5),
                 date(2014, 9, 5))
-            line = {'maturity_date': date(2014, 9, 5)}
+            line = self.MoveLine(maturity_date=date(2014, 9, 5))
             self.assertEqual(
-                billing_information.get_direct_debit_planned_date(line),
+                payment_journal.get_next_possible_payment_date(line, 5),
                 date(2014, 9, 5))
-            line = {'maturity_date': date(2014, 8, 5)}
+            line = self.MoveLine(maturity_date=date(2014, 8, 5))
             self.assertEqual(
-                billing_information.get_direct_debit_planned_date(line),
+                payment_journal.get_next_possible_payment_date(line, 5),
                 date(2014, 9, 5))
-            line = {'maturity_date': date(2014, 9, 30)}
+            line = self.MoveLine(maturity_date=date(2014, 9, 30))
             self.assertEqual(
-                billing_information.get_direct_debit_planned_date(line),
+                payment_journal.get_next_possible_payment_date(line, 5),
                 date(2014, 10, 5))
 
     def test0050_propagate_contract_move_line(self):

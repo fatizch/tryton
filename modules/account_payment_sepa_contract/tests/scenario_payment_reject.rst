@@ -107,6 +107,10 @@ Create Payment Journal::
     >>> journal_SEPA.failure_billing_mode, = BillingMode.find([('code', '=',
     ...     'quarterly')])
     >>> journal_SEPA.save()
+    >>> Configuration = Model.get('account.configuration')
+    >>> configuration = Configuration(1)
+    >>> configuration.direct_debit_journal = journal_SEPA
+    >>> configuration.save()
     >>> FailureAction = Model.get('account.payment.journal.failure_action')
     >>> RejectReason = Model.get('account.payment.journal.reject_reason')
     >>> insufficient_fund_reject_1 = FailureAction()

@@ -911,7 +911,10 @@ class ContractBillingInformation(model._RevisionMixin, model.CoopSQL,
         MoveLine = pool.get('account.move.line')
         if not (self.direct_debit and self.direct_debit_day):
             return None
-        curline = MoveLine(**line)
+        if type(line) == dict:
+            curline = MoveLine(**line)
+        else:
+            curline = line
         payment_journal = curline.get_payment_journal()
         return payment_journal.get_next_possible_payment_date(line,
             self.direct_debit_day)
