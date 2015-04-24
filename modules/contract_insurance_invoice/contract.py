@@ -595,11 +595,10 @@ class Contract:
 
     def init_from_product(self, product, start_date=None, end_date=None):
         pool = Pool()
-        res, errs = super(Contract, self).init_from_product(product,
-            start_date, end_date)
+        super(Contract, self).init_from_product(product, start_date, end_date)
         BillingInformation = pool.get('contract.billing_information')
         if not product.billing_modes:
-            return res, errs
+            return
         default_billing_mode = product.billing_modes[0]
         if default_billing_mode.direct_debit:
             days = default_billing_mode.get_allowed_direct_debit_days()
@@ -610,7 +609,6 @@ class Contract:
             billing_mode=default_billing_mode,
             payment_term=default_billing_mode.allowed_payment_terms[0],
             direct_debit_day=direct_debit_day)]
-        return res, errs
 
     @classmethod
     def update_contract_after_import(cls, contracts):
