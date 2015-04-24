@@ -939,6 +939,10 @@ class Premium:
     def _export_light(cls):
         return super(Premium, cls)._export_light() | {'account'}
 
+    def same_value(self, other):
+        result = super(Premium, self).same_value(other)
+        return result and self.account == other.account
+
     @classmethod
     def new_line(cls, line, start_date, end_date):
         new_line = super(Premium, cls).new_line(line, start_date, end_date)

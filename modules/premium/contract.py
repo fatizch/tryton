@@ -7,6 +7,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
+from trytond.model import dualmethod
 
 from trytond.modules.cog_utils import model, fields, utils, coop_date
 from trytond.modules.currency_cog import ModelCurrency
@@ -108,54 +109,76 @@ class Contract:
 
     @classmethod
     def store_prices(cls, prices):
+        '''
+            This methods takes as input a dictionnary with :
+                - dates as keys
+                - lists of prices as values. Those prices are the result of
+                premiums calculations, i.e instances of the PremiumResult class
+                of OptionDescriptionPremiumRule.get_premium_result_class.
+
+            Its goal is to generate proper premiums from those prices, clean
+            them up (by removing duplicates), then store them in the
+            database.
+        '''
         if not prices:
             return
         pool = Pool()
         Premium = pool.get('contract.premium')
-        dates = list(prices.iterkeys())
-        dates.sort()
-        to_save = []
-        parents_to_update = {}
-        for date, price_list in prices.iteritems():
-            date_pos = dates.index(date)
-            if date_pos < len(dates) - 1:
-                end_date = dates[date_pos + 1] + datetime.timedelta(days=-1)
-            else:
-                end_date = None
-            for price in price_list:
-                prices = cls.store_price(price, start_date=date,
-                    end_date=end_date)
-                to_save += prices
-        for premium in to_save:
-            if premium.parent in parents_to_update:
-                parents_to_update[premium.parent]['save'].append(premium)
-            else:
-                parents_to_update[premium.parent] = {
-                    'save': [premium],
-                    'delete': [],
-                    'keep': [],
-                    'write': [],
-                    }
-        for elem in parents_to_update.iterkeys():
-            existing = [x for x in getattr(elem, 'premiums', []) if x.id > 0]
-            for premium in existing:
-                if premium.start >= dates[0]:
-                    parents_to_update[elem]['delete'].append(premium)
-                elif (premium.start or datetime.date.min) < dates[0] <= (
-                        premium.end or datetime.date.max):
-                    premium.end = coop_date.add_day(dates[0], -1)
-                    parents_to_update[elem]['write'].append(premium)
-                else:
-                    parents_to_update[elem]['keep'].append(premium)
-            Premium.remove_duplicates(elem, parents_to_update[elem])
 
-        for elem in parents_to_update.iterkeys():
-            if not elem._values:
-                continue
-            elem.save()
+        # Create premiums from calculated prices
+        to_save = []
+        for date, price_list in prices.iteritems():
+            for price in price_list:
+                to_save += cls.new_premium_from_price(price, date, None)
+
+        # Group premiums per parent
+        per_parent = defaultdict(list)
+        for premium in to_save:
+            per_parent[premium.parent].append(premium)
+
+        # Clean up premiums
+        to_save = []
+        for parent, premiums in per_parent.iteritems():
+            # Create the full list of premiums, and order it (so that
+            # successive elements concerns the same rated_entity, with
+            # an ascending start date)
+
+            new_list = sorted(list(parent.premiums) + premiums,
+                key=lambda x: x._get_key())
+            final_list, prev_value, cur_end = [], None, None
+            for elem in new_list:
+                cur_end = elem.end
+                if elem.same_value(prev_value):
+                    # The current element is considered equal to the
+                    # previous one, so we can discard it
+                    continue
+                if prev_value:
+                    if prev_value._get_key(no_date=True) == elem._get_key(
+                            no_date=True):
+                        # If the previous element concerns the same
+                        # rated_entity, we update its end to match
+                        # the new one
+                        prev_value.end = coop_date.add_day(elem.start, -1)
+                        to_save.append(prev_value)
+                    else:
+                        if getattr(prev_value, 'id', -1) < 0:
+                            prev_value.end = cur_end
+                            to_save.append(prev_value)
+                    final_list.append(prev_value)
+                prev_value = elem if elem.amount else None
+            if prev_value and prev_value.amount:
+                # Do not forget the last iteration !
+                prev_value.end = cur_end
+                to_save.append(prev_value)
+                final_list.append(prev_value)
+            parent.premiums = final_list
+
+        if to_save:
+            Premium.save(to_save)
+        return
 
     @classmethod
-    def store_price(cls, price, start_date, end_date):
+    def new_premium_from_price(cls, price, start_date, end_date):
         Premium = Pool().get('contract.premium')
         new_premium = Premium.new_line(price, start_date, end_date)
         return [new_premium] if new_premium else []
@@ -356,6 +379,16 @@ class Premium(model.CoopSQL, model.CoopView):
         cls._order = [('rated_entity', 'ASC'), ('start', 'ASC')]
         cls.__rpc__.update({'get_parent_models': RPC()})
 
+    @dualmethod
+    def save(cls, records):
+        if not records:
+            return super(Premium, cls).save(records)
+        # Manually clean up context for premiums
+        context = records[0]._context
+        for record in records:
+            record._context = context
+        return super(Premium, cls).save(records)
+
     @classmethod
     def _export_light(cls):
         return super(Premium, cls)._export_light() | {'rated_entity', 'taxes'}
@@ -469,38 +502,20 @@ class Premium(model.CoopSQL, model.CoopView):
     def duplicate_sort_key(self):
         return utils.convert_to_reference(self.rated_entity), self.start
 
-    @classmethod
-    def remove_duplicates(cls, parent, actions):
-        new_list = []
-        for act_name in ['keep', 'write', 'save']:
-            new_list += [(act_name, elem) for elem in actions[act_name]]
-
-        new_list.sort(key=lambda x: x[1].duplicate_sort_key())
-        final_list = []
-        prev_action, prev_premium = None, None
-        for elem in new_list:
-            action, premium = elem
-            if not prev_action:
-                prev_action, prev_premium = action, premium
-            elif prev_premium.same_value(premium):
-                prev_premium.end = premium.end
-            else:
-                final_list.append(prev_premium)
-                prev_action, prev_premium = action, premium
-
-        # Do not forget the final element :)
-        final_list.append(prev_premium)
-        setattr(parent, 'premiums', final_list)
-
     def same_value(self, other):
-        ident_fields = ('parent', 'amount', 'frequency', 'rated_entity',
-            'account')
+        if other is None:
+            return False
+        ident_fields = ('parent', 'amount', 'frequency', 'rated_entity')
         for elem in ident_fields:
             if getattr(self, elem) != getattr(other, elem):
                 return False
         if set(self.taxes) != set(other.taxes):
             return False
         return True
+
+    def _get_key(self, no_date=False):
+        return tuple(getattr(self, key) for key, _ in self.__class__._order
+            if not no_date or key != 'start')
 
 
 class PremiumTax(model.CoopSQL):

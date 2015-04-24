@@ -427,6 +427,11 @@ class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
         'get_premium_amounts')
 
     @classmethod
+    def __setup__(cls):
+        super(PremiumAmountPerPeriod, cls).__setup__()
+        cls._order = [('contract', 'ASC'), ('period_start', 'ASC')]
+
+    @classmethod
     def _export_light(cls):
         return super(PremiumAmountPerPeriod, cls)._export_light() | {
             'contract'}

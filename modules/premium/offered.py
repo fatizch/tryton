@@ -231,13 +231,14 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
         dict_len = len(rule_dict_template)
         all_lines = []
         for date in lines.iterkeys():
-            if not self.must_be_rated(rated_instance, date):
-                continue
             if len(rule_dict_template) == dict_len:
                 rated_instance.init_dict_for_rule_engine(rule_dict_template)
             rule_dict = rule_dict_template.copy()
             rule_dict['date'] = date
-            new_lines = self.do_calculate(rule_dict)
+            if self.must_be_rated(rated_instance, date):
+                new_lines = self.do_calculate(rule_dict)
+            else:
+                new_lines = [self._premium_result_class(0, rule_dict)]
             self.set_line_frequencies(new_lines, rated_instance, date)
             all_lines += new_lines
             lines[date] += new_lines
