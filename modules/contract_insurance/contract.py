@@ -77,7 +77,7 @@ class Contract(Printable):
                 })
 
     def do_calculate(self):
-        super(Contract, self).calculate()
+        super(Contract, self).do_calculate()
         covered_elements = self.covered_elements
         for covered_element in covered_elements:
             covered_element.calculate()
