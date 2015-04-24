@@ -5,6 +5,7 @@ from trytond.modules.rule_engine import check_args
 __metaclass__ = PoolMeta
 __all__ = [
     'RuleEngineRuntime',
+    'RuleEngine',
     ]
 
 
@@ -17,3 +18,29 @@ class RuleEngineRuntime:
         contract = args['contract']
         if contract.agent:
             return contract.agent.plan.rule_engine_key
+
+    @classmethod
+    @check_args('amount')
+    def _re_invoice_line_amount(cls, args):
+        return args['amount']
+
+    @classmethod
+    @check_args('invoice_line')
+    def _re_invoice_line_start_date(cls, args):
+        if args['invoice_line']:
+            return args['invoice_line'].coverage_start
+
+    @classmethod
+    @check_args('invoice_line')
+    def _re_invoice_line_end_date(cls, args):
+        if args['invoice_line']:
+            return args['invoice_line'].coverage_end
+
+
+class RuleEngine:
+    __name__ = 'rule_engine'
+
+    @classmethod
+    def __setup__(cls):
+        super(RuleEngine, cls).__setup__()
+        cls.type_.selection.append(('commission', 'Commission'))

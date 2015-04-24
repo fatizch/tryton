@@ -64,6 +64,7 @@ class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
             ]
+        cls.rule.domain = [('type_', '=', 'commission')]
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):

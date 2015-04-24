@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/tree/field[@name='formula']" position="replace">
+        <field name="formula_description"/>
+    </xpath>
+</data>

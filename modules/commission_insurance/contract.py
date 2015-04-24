@@ -77,7 +77,7 @@ class Contract:
         if not coverage and line:
             coverage = getattr(line.details[0], 'rated_entity', None)
         if coverage:
-            pattern['option'] = coverage
+            pattern['coverage'] = coverage
             if coverage.insurer:
                 pattern['party'] = coverage.insurer.party
         return pattern

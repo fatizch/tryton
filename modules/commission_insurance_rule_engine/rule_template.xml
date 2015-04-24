@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Commission Escompte ########### -->
+        <!-- ############################################################ -->
+        <record model="rule_engine" id="commission_escompte">
+            <field name="name">Commission en escompte</field>
+            <field name="short_name">commission_escompte</field>
+            <field name="algorithm">nb_annee = annees_entre(date_debut_contrat(), date_debut_ligne_quittance())
+if nb_annee == 0:
+    return param_pourcentage_1ere_annee() * 0.01 * montant_ligne_quittance()
+elif nb_annee == 1:
+    return param_pourcentage_2eme_annee() * 0.01 * montant_ligne_quittance()
+else:
+    return param_pourcentage_annees_suivantes() * 0.01 * montant_ligne_quittance()</field>
+            <field name="status">validated</field>
+            <field name="type_">commission</field>
+            <field name="context" ref="commission_insurance_rule_engine.commission_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="escompte_premiere_annee">
+            <field name="name">pourcentage_1ere_annee</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+            <field name="string">Pourcentage 1ere année</field>
+            <field name="parent_rule" ref="commission_escompte"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="escompte_deuxieme_annee">
+            <field name="name">pourcentage_2eme_annee</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+            <field name="string">Pourcentage 2eme année</field>
+            <field name="parent_rule" ref="commission_escompte"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="escompte_annee_suivante">
+            <field name="name">pourcentage_annees_suivantes</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+            <field name="string">Pourcentage années suivantes</field>
+            <field name="parent_rule" ref="commission_escompte"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### commission lineaire ########### -->
+        <!-- ############################################################ -->
+        <record model="rule_engine" id="commission_lineaire">
+            <field name="name">Commission linéaire</field>
+            <field name="short_name">commission_lineaire</field>
+            <field name="algorithm">return param_pourcentage_commission() * 0.01 * montant_ligne_quittance()</field>
+            <field name="status">validated</field>
+            <field name="type_">commission</field>
+            <field name="context" ref="commission_insurance_rule_engine.commission_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="lineaire_pourcentage_commission">
+            <field name="name">pourcentage_commission</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+            <field name="string">Pourcentage de commission</field>
+            <field name="parent_rule" ref="commission_lineaire"/>
+        </record>
+    </data>
+</tryton>

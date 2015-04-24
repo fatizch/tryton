@@ -156,6 +156,8 @@ class Plan(export.ExportImportMixin, model.TaggedMixin):
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product)
         context['names']['nb_years'] = (pattern or {}).get('nb_years', 0)
+        context['names']['invoice_line'] = (pattern or {}).get('invoice_line',
+            None)
         return context
 
     def compute(self, amount, product, pattern=None):
@@ -203,8 +205,8 @@ class PlanLines(export.ExportImportMixin):
         'get_options_extract')
 
     def match(self, pattern):
-        if 'option' in pattern:
-            return pattern['option'] in self.options
+        if 'coverage' in pattern:
+            return pattern['coverage'] in self.options
 
     def get_options_extract(self, name):
         return ' \n'.join((option.name for option in self.options))

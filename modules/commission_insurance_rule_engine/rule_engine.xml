@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
+    <data>
+        <record model="rule_engine.context" id="commission_context">
+            <field name="name">Commission Context</field>
+        </record>
+        <record model="rule_engine.context-function" id="def_context_commission-te_contract">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="contract.te_contract"/>
+        </record>
+        <record model="rule_engine.context-function" id="cte_commission_coverage">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="offered_insurance.dossier_garantie"/>
+        </record>
+        <record model="rule_engine.context-function" id="cte_commission_tools">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="rule_engine.cte_default_dossier_outils"/>
+        </record>
+        <record model="rule_engine.function" id="dossier_commission">
+            <field name="translated_technical_name">dossier_commission</field>
+            <field name="description">Commission</field>
+            <field name="type">folder</field>
+            <field name="language" ref="ir.lang_fr"/>
+        </record>
+        <record model="rule_engine.function" id="montant_ligne_quittance">
+            <field name="translated_technical_name">montant_ligne_quittance</field>
+            <field name="description">Montant de la ligne de la quittance</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_invoice_line_amount</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="date_debut_ligne_quittance">
+            <field name="translated_technical_name">date_debut_ligne_quittance</field>
+            <field name="description">Date de debut de la ligne de la quittance</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_invoice_line_start_date</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.function" id="date_fin_ligne_quittance">
+            <field name="translated_technical_name">date_fin_ligne_quittance</field>
+            <field name="description">Date de fin de la ligne de la quittance</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_invoice_line_start_date</field>
+            <field name="parent" ref="dossier_commission"/>
+        </record>
+        <record model="rule_engine.context-function" id="cte_commission_data">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="dossier_commission"/>
+        </record>
+    </data>
     <data noupdate="1">
         <record model="rule_engine.function" id="plan_commissionnement">
             <field name="translated_technical_name">plan_commssionnement</field>

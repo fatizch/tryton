@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -6,7 +6,52 @@ msgctxt "field:commission.plan,rule_engine_key:"
 msgid "Rule Engine Key"
 msgstr "Clé du moteur de règle"
 
+msgctxt "field:commission.plan.line,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan.line,formula_description:"
+msgid "Formula"
+msgstr "Formule"
+
+msgctxt "field:commission.plan.line,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:commission.plan.line,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:commission.plan.line,use_rule_engine:"
+msgid "Use Rule Engine"
+msgstr "Utiliser le moteur de règle"
+
 msgctxt "help:commission.plan,rule_engine_key:"
 msgid "key to retrieve the commission plan in rule engine algorithm"
 msgstr ""
 "Clé pour retrouver la plan de commissionnement au sein du moteur de règle"
+
+msgctxt "model:rule_engine,name:commission_lineaire"
+msgid "Commission linéaire"
+msgstr "Commission linéaire"
+
+msgctxt "model:rule_engine.rule_parameter,string:escompte_annee_suivante"
+msgid "Pourcentage années suivantes"
+msgstr "Pourcentage années suivantes"
+
+msgctxt "model:rule_engine.rule_parameter,string:escompte_deuxieme_annee"
+msgid "Pourcentage 2eme année"
+msgstr "Pourcentage 2eme année"
+
+msgctxt "model:rule_engine.rule_parameter,string:escompte_premiere_annee"
+msgid "Pourcentage 1ere année"
+msgstr "Pourcentage 1ere année"
+
+msgctxt ""
+"model:rule_engine.rule_parameter,string:lineaire_pourcentage_commission"
+msgid "Pourcentage de commission"
+msgstr "Pourcentage de commission"
+
+msgctxt "selection:rule_engine,type_:"
+msgid "Commission"
+msgstr "Commission"

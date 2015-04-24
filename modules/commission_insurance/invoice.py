@@ -30,15 +30,18 @@ class InvoiceLine:
                 })
 
     def _get_commission_amount(self, amount, plan, pattern=None):
+        pattern = {}
         if getattr(self, 'details', None):
             option = self.details[0].get_option()
             if option:
                 delta = relativedelta(self.coverage_start,
                     option.start_date)
                 pattern = {
-                    'option': option.coverage,
+                    'coverage': option.coverage,
+                    'option': option,
                     'nb_years': delta.years
                     }
+        pattern['invoice_line'] = self
         commission_amount = plan.compute(amount, self.product, pattern)
         if commission_amount:
             return commission_amount.quantize(

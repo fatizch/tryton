@@ -73,7 +73,7 @@ class ContractOption:
     def _get_prepayment_amount(self, agent, plan, pattern=None):
         pattern = {
             'first_year_premium': self.first_year_premium,
-            'option': self.coverage,
+            'coverage': self.coverage,
             }
         return plan.compute_prepayment(self.product, pattern=pattern)
 

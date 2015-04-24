@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form/label[@name='plan']" position="after">
+        <newline/>
+        <label name="use_rule_engine"/>
+        <field name="use_rule_engine"/>
+    </xpath>
+    <xpath expr="/form/field[@name='formula']" position="after">
+        <newline/>
+        <label name="rule"/>
+        <field name="rule" colspan="3"/>
+        <field name="rule_extra_data" no_command="1" colspan="3"/>
+        <newline/>
+    </xpath>
+</data>
