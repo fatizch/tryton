@@ -76,7 +76,7 @@ class Contract(Printable):
                 'need_option': 'Select at least one option for %s',
                 })
 
-    def calculate(self):
+    def do_calculate(self):
         super(Contract, self).calculate()
         covered_elements = self.covered_elements
         for covered_element in covered_elements:

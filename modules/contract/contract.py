@@ -15,6 +15,7 @@ from trytond.transaction import Transaction
 from trytond.pyson import Eval, If, Bool, And
 from trytond.protocols.jsonrpc import JSONDecoder
 from trytond.pool import Pool
+from trytond.model import dualmethod
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 
 from trytond.modules.cog_utils import utils, model, fields, coop_date
@@ -240,6 +241,9 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                         Eval('status') != 'quote',
                         Eval('status') != 'hold'
                         )},
+                'button_calculate': {
+                    'invisible': True,
+                    },
                 'button_decline': {
                     'invisible': Eval('status') != 'quote'},
                 'button_hold': {
@@ -361,7 +365,13 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     def _calculate_methods(cls, product):
         return ['calculate_activation_dates']
 
-    def calculate(self):
+    @dualmethod
+    def calculate(cls, contracts):
+        for contract in contracts:
+            contract.do_calculate()
+        cls.save(contracts)
+
+    def do_calculate(self):
         options = self.options
         for option in options:
             option.calculate()
@@ -372,7 +382,11 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 method([self])
             else:
                 method(self)
-        self.save()
+
+    @classmethod
+    @model.CoopView.button
+    def button_calculate(cls, contracts):
+        cls.do_calculate(contracts)
 
     @classmethod
     def update_contract_after_import(cls, contracts):
