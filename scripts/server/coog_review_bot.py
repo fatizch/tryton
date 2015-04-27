@@ -49,7 +49,7 @@ from mercurial import ui, hg
 from mercurial import commands
 import hgreview
 
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 CONF_FILE = '~/coog.conf'
 TITLE_FORMAT = re.compile('^([A-Za-z_][\w\.-]+)+ ?:')
@@ -298,12 +298,12 @@ def get_rm_issue_next_version(issue_url, force=False):
         r = requests.get(url_proj, auth=(redmine_api_key, ''),
             headers={'content-type': 'application/json'}, verify=False)
         versions = json.loads(r.text)['versions']
-        versions = [v for v in versions
-            if (('due_date' in v) and
-                datetime.strptime(v['due_date'], '%Y-%m-%d').date() >=
-                date.today() and v['status'] != 'closed')]
-        if versions:
-            return sorted(versions, key=lambda x: x['due_date'])[0]['id']
+        for v in versions:
+            if 'custom_fields' in v:
+                for cf in v['custom_fields']:
+                    if cf['id'] == 8 and 'value' in cf and \
+                            int(cf['value']):
+                        return v['id']
 
 
 def extract_rm_issues_urls(description):
