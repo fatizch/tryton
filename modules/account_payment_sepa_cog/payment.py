@@ -247,7 +247,8 @@ class Payment:
         lines_to_write = []
         for i, p in zip(invoices_to_create, payment_date_to_update):
             lines_to_write += [list(i.lines_to_pay), p]
-        MoveLine.write(*lines_to_write)
+        if lines_to_write:
+            MoveLine.write(*lines_to_write)
 
     def create_fee_invoice(self, fee_amount, journal, account_for_billing,
             name_for_billing, sepa_mandate):
