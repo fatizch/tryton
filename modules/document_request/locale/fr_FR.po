@@ -206,6 +206,18 @@ msgctxt "model:ir.ui.menu,name:menu_receive_documents"
 msgid "Receive Documents"
 msgstr "Documents reçus"
 
+msgctxt "selection:document.receive.request,kind:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.request,needed_by:"
+msgid ""
+msgstr " "
+
+msgctxt "selection:document.request.line,for_object:"
+msgid ""
+msgstr " "
+
 msgctxt "view:document.receive.attach:"
 msgid "Attachments"
 msgstr "Pièces jointes"

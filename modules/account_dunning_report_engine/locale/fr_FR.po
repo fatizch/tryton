@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -12,7 +12,7 @@ msgstr "Type d'évènements"
 
 msgctxt "field:account.dunning.level,not_mandatory:"
 msgid "Level Not Mandatory"
-msgstr ""
+msgstr "Niveau non obligatoire"
 
 msgctxt "field:account.dunning.level,report_template:"
 msgid "Report Template"

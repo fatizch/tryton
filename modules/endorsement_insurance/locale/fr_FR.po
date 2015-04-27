@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -81,8 +81,20 @@ msgid "Update %s"
 msgstr "Mise à jour de %s"
 
 msgctxt "error:endorsement.contract:"
+msgid "Activation History Modifications"
+msgstr "Modifications des historiques d'activation"
+
+msgctxt "error:endorsement.contract:"
 msgid "Covered Elements Modification"
 msgstr "Modification des éléments couverts"
+
+msgctxt "error:endorsement.contract:"
+msgid "Extra Datas Modifications"
+msgstr "Modifications des données complémentaires"
+
+msgctxt "error:endorsement.contract:"
+msgid "Options Modifications"
+msgstr "Modifications des options"
 
 msgctxt "field:contract.covered_element.add_option,covered_element:"
 msgid "Covered Element"

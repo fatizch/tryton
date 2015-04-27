@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -339,19 +339,19 @@ msgstr "Rapports/Courriers"
 
 msgctxt "model:report.create.attach,name:"
 msgid "Report Create Attach"
-msgstr ""
+msgstr "Création de l'attachement"
 
 msgctxt "model:report.create.preview,name:"
 msgid "Report Create Preview"
-msgstr ""
+msgstr "Prévisualisation des rapports"
 
 msgctxt "model:report.create.preview.line,name:"
 msgid "Report Create Preview Line"
-msgstr ""
+msgstr "Prévisualisation du rapport"
 
 msgctxt "model:report.create.select_template,name:"
 msgid "Report Create Select Template"
-msgstr ""
+msgstr "Sélection du modèle"
 
 msgctxt "model:report.template,name:"
 msgid "Report Template"
@@ -359,7 +359,7 @@ msgstr "Modèle de courrier"
 
 msgctxt "model:report.template-offered.product,name:"
 msgid "Report template to Product relation"
-msgstr ""
+msgstr "Relation Modèle - Produit"
 
 msgctxt "model:report.template.version,name:"
 msgid "Report Template Version"

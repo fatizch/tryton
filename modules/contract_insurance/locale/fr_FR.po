@@ -35,7 +35,7 @@ msgstr ""
 
 msgctxt "error:contract:"
 msgid "Errors occured during renewal date calculation : %s"
-msgstr ""
+msgstr "Erreurs lors du calcul de la date de renouvellement : %s"
 
 msgctxt "error:contract:"
 msgid "Invalid file format"
@@ -945,26 +945,6 @@ msgstr "Delivré"
 msgctxt "selection:contract.service,status:"
 msgid "Not Eligible"
 msgstr "Non Eligible"
-
-msgctxt "selection:document.receive.request,kind:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:document.request,needed_by:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Contract"
-msgstr "Contrat"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Covered Element"
-msgstr "Risque Couvert"
-
-msgctxt "selection:document.request.line,for_object:"
-msgid "Option"
-msgstr "Option"
 
 msgctxt "selection:report.template,kind:"
 msgid "Contract Documents"

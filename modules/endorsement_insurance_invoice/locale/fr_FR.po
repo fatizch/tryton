@@ -62,6 +62,14 @@ msgctxt "field:contract.billing_information.change,subscriber:"
 msgid "Subscriber"
 msgstr "Souscripteur"
 
+msgctxt "field:endorsement,contracts_name:"
+msgid "Contracts Name"
+msgstr "Contrats"
+
+msgctxt "field:endorsement,subscribers_name:"
+msgid "Subscribers Name"
+msgstr "Souscripteurs"
+
 msgctxt "field:endorsement.contract,billing_informations:"
 msgid "Billing Informations"
 msgstr "Paramètres de quittancement"
@@ -207,6 +215,10 @@ msgctxt ""
 "field:endorsement.start.preview_changes,previous_total_invoice_amount:"
 msgid "Previous total invoice amount"
 msgstr "Total de prime précédent"
+
+msgctxt "field:offered.configuration,split_invoices_on_endorsement_dates:"
+msgid "Split Invoices on Endorsement Dates"
+msgstr "Découper les quittances aux dates des avenants"
 
 msgctxt "model:contract.billing_information.change,name:"
 msgid "Change Billing Information"

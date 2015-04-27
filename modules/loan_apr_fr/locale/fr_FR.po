@@ -1,0 +1,11 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:loan,bank_fees:"
+msgid "Bank Fees"
+msgstr "Frais bancaire"
+
+msgctxt "field:loan,taea:"
+msgid "TAEA"
+msgstr "TAEA"

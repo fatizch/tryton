@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -110,20 +110,12 @@ msgid "The code must be unique!"
 msgstr "Le code doit être unique !"
 
 msgctxt "error:endorsement:"
-msgid "Everything is good !"
-msgstr "Tout est bon!"
-
-msgctxt "error:endorsement:"
 msgid "Invalid file format"
 msgstr "Format de fichier non valide"
 
 msgctxt "error:endorsement:"
 msgid "No sequence defined in configuration"
 msgstr "Pas de séquence définie dans la configuration"
-
-msgctxt "error:endorsement:"
-msgid "Object %s is currently locked by user %s"
-msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 
 msgctxt "error:endorsement:"
 msgid "The endorsement number must be unique."
@@ -154,6 +146,10 @@ msgid "Applicant"
 msgstr "Demandeur"
 
 msgctxt "field:endorsement,application_date:"
+msgid "Application Date"
+msgstr "Date d'application"
+
+msgctxt "field:endorsement,application_date_str:"
 msgid "Application Date"
 msgstr "Date d'application"
 
@@ -189,18 +185,6 @@ msgctxt "field:endorsement,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
-msgctxt "field:endorsement,current_log:"
-msgid "Current Log"
-msgstr "Trace Courante"
-
-msgctxt "field:endorsement,current_state:"
-msgid "Current State"
-msgstr "Etat Courant"
-
-msgctxt "field:endorsement,current_state_name:"
-msgid "Current State In Process"
-msgstr "Etat courant au sein du processus"
-
 msgctxt "field:endorsement,definition:"
 msgid "Definition"
 msgstr "Définition"
@@ -224,10 +208,6 @@ msgstr "Avenants générés"
 msgctxt "field:endorsement,id:"
 msgid "ID"
 msgstr "ID"
-
-msgctxt "field:endorsement,logs:"
-msgid "Task"
-msgstr "Tâche"
 
 msgctxt "field:endorsement,number:"
 msgid "Number"
@@ -1402,7 +1382,7 @@ msgid "Endorsement Sub-state"
 msgstr "Sous état d'avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_configuration"
-msgid "Configuration"
+msgid "Endorsement Configuration"
 msgstr "Configuration d'avenant"
 
 msgctxt "model:ir.ui.menu,name:menu_endorsement_definition"
@@ -1508,10 +1488,6 @@ msgstr "Option"
 msgctxt "selection:endorsement.sub_state,state:"
 msgid "Declined"
 msgstr "Décliné"
-
-msgctxt "selection:process,kind:"
-msgid "Contract Endorsement"
-msgstr "Avenant au contrat"
 
 msgctxt "view:contract:"
 msgid "Start Endorsement"
@@ -1678,6 +1654,18 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
+msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
+msgid "Summary"
+msgstr "Synthèse"
+
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -1692,20 +1680,6 @@ msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
-
-msgctxt "wizard_button:endorsement.start,full_contract_revision,end:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt ""
-"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_next:"
-msgid "Next"
-msgstr "Suivant"
-
-msgctxt ""
-"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_previous:"
-msgid "Previous"
-msgstr "Précédent"
 
 msgctxt "wizard_button:endorsement.start,change_contract_extra_data,end:"
 msgid "Cancel"
@@ -1729,6 +1703,20 @@ msgctxt "wizard_button:endorsement.start,change_start_date,suspend:"
 msgid "Suspend"
 msgstr "Suspendre"
 
+msgctxt "wizard_button:endorsement.start,full_contract_revision,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,full_contract_revision,full_contract_revision_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
 msgctxt "wizard_button:endorsement.start,select_endorsement,cancel:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -1737,6 +1725,10 @@ msgctxt ""
 "wizard_button:endorsement.start,select_endorsement,start_endorsement:"
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
+
+msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
+msgid "Apply"
+msgstr "Appliquer"
 
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"
