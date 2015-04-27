@@ -20,20 +20,16 @@ class EndorsementFindProcess(ProcessStart):
     __name__ = 'endorsement.start.find_process'
 
     effective_date = fields.Date('Effective Date', required=True)
-    definition = fields.Many2One('endorsement.definition', 'Definition')
+    definition = fields.Many2One('endorsement.definition',
+        'Endorsement Definition', required=True)
     contracts = fields.Many2Many('contract', None, None,
-        'Contracts')
+        'Contracts', required=True, domain=[('status', '=', 'active')])
 
     @classmethod
     def default_model(cls):
-        Model = Pool().get('ir.model')
+        pool = Pool()
+        Model = pool.get('ir.model')
         return Model.search([('model', '=', 'endorsement')])[0].id
-
-    @classmethod
-    def build_process_domain(cls):
-        result = super(
-            EndorsementFindProcess, cls).build_process_domain()
-        return result
 
 
 class EndorsementStartProcess(ProcessFinder):
@@ -52,18 +48,13 @@ class EndorsementStartProcess(ProcessFinder):
 
     def init_main_object_from_process(self, obj, process_param):
         pool = Pool()
-        EndorsementContract = pool.get('endorsement.contract')
+        ContractEndorsement = pool.get('endorsement.contract')
         res, errs = super(EndorsementStartProcess,
             self).init_main_object_from_process(obj, process_param)
-        obj.definition = process_param.definition
-        obj.save()
-        contract_endorsements = []
-        contract_endorsements = EndorsementContract.create([{
-                    'contract': contract.id,
-                    'endorsement': obj.id,
-                    } for contract in process_param.contracts])
-        obj.contract_endorsements = contract_endorsements
         obj.effective_date = process_param.effective_date
+        obj.definition = process_param.definition
+        obj.contract_endorsements = [ContractEndorsement(contract=contract)
+            for contract in process_param.contracts]
         return res, errs
 
 

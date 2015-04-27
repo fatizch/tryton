@@ -10,9 +10,9 @@ def register():
         EndorsementPartUnion,
         EndorsementSet,
         Process,
-        EndorsementSetApplyFindProcess,
+        EndorsementFindProcess,
         module='endorsement_set_process', type_='model')
 
     Pool.register(
-        EndorsementSetApply,
+        EndorsementStartProcess,
         module='endorsement_set_process', type_='wizard')

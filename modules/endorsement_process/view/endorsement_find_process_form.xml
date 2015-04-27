@@ -4,8 +4,6 @@
         <label name="effective_date"/>
         <field name="effective_date"/>
         <newline/>
-    </xpath>
-    <xpath expr="/form/field[@name='good_process']" position="after">
         <label name="definition"/>
         <field name="definition"/>
         <newline/>

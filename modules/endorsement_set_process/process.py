@@ -1,14 +1,13 @@
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.process_cog import ProcessFinder, ProcessStart
 from trytond.modules.cog_utils import fields
 
 
 __metaclass__ = PoolMeta
 __all__ = [
     'Process',
-    'EndorsementSetApplyFindProcess',
-    'EndorsementSetApply',
+    'EndorsementFindProcess',
+    'EndorsementStartProcess',
     ]
 
 
@@ -18,51 +17,60 @@ class Process:
     @classmethod
     def __setup__(cls):
         super(Process, cls).__setup__()
-        cls.kind.selection.append(('endorsement_set_application',
-                'Endorsement Set Application'))
+        cls.kind.selection.append(('endorsement_set',
+                'Endorsement Set'))
 
 
-class EndorsementSetApplyFindProcess(ProcessStart):
-    'EndorsementSetApply Find Process'
+class EndorsementFindProcess:
+    __name__ = 'endorsement.start.find_process'
 
-    __name__ = 'endorsement.set.apply.find_process'
+    @fields.depends('contracts', 'model', 'good_process')
+    def on_change_contracts(self):
+        pool = Pool()
+        Model = pool.get('ir.model')
+        endorsement_set_model = Model.search([('model', '=',
+                    'endorsement.set')])[0].id
+        endorsement_model = Model.search([('model', '=',
+                    'endorsement')])[0].id
 
-    effective_date = fields.Date('Effective Date', required=True)
-    contract_set = fields.Many2One('contract.set', 'Contract Set',
-        required=True)
-    endorsement_set = fields.Many2One('endorsement.set', 'Endorsement Set')
-    endorsement_definition = fields.Many2One('endorsement.definition',
-        'Endorsement Definition', required=True)
+        if not self.contracts:
+                self.model = endorsement_model
+        else:
+            if any([c.contract_set for c in self.contracts]):
+                self.model = endorsement_set_model
+            else:
+                self.model = endorsement_model
+
+        self.good_process = self.on_change_with_good_process()
+
+
+class EndorsementStartProcess:
+    __name__ = 'endorsement.start_process'
 
     @classmethod
-    def default_model(cls):
-        Model = Pool().get('ir.model')
-        return Model.search([('model', '=', 'endorsement.set')])[0].id
-
-
-class EndorsementSetApply(ProcessFinder):
-    'Endorsement Set Apply'
-
-    __name__ = 'endorsement.set.apply'
-
-    @classmethod
-    def get_parameters_model(cls):
-        return 'endorsement.set.apply.find_process'
-
-    @classmethod
-    def get_parameters_view(cls):
-        return \
-            'endorsement_set_process.endorsement_set_apply_find_process_form'
+    def __setup__(cls):
+        super(EndorsementStartProcess, cls).__setup__()
+        cls._error_messages.update({
+                'same_set_for_all': 'The selected contracts must belong to '
+                'the same contract set.',
+                })
 
     def init_main_object_from_process(self, obj, process_param):
         pool = Pool()
         Endorsement = pool.get('endorsement')
         ContractEndorsement = pool.get('endorsement.contract')
-        res, errs = super(EndorsementSetApply,
+        if obj.__name__ == 'endorsement.set':
+            if len(set(x.contract_set for x in process_param.contracts)) != 1:
+                self.raise_user_error('same_set_for_all')
+            obj.endorsements = [Endorsement(
+                    effective_date=process_param.effective_date,
+                    definition=process_param.definition,
+                    state='draft',
+                    contract_endorsements=[ContractEndorsement(
+                            contract=contract)])
+                    for contract in
+                    process_param.contracts[0].contract_set.contracts]
+            obj.effective_date = process_param.effective_date
+            return True, []
+        return super(EndorsementStartProcess,
             self).init_main_object_from_process(obj, process_param)
-        obj.endorsements = [Endorsement(
-                effective_date=process_param.effective_date,
-                definition=process_param.endorsement_definition,
-                contract_endorsements=[ContractEndorsement(contract=contract)])
-                for contract in process_param.contract_set.contracts]
-        return res, errs
