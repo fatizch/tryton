@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Rule Executions">
-    <field name="create_date_"/>
+    <field name="create_date_" widget="date"/>
+    <field name="create_date_" widget="time" string=""/>
     <field name="calculation_date"/>
     <field name="user"/>
     <field name="result"/>
