@@ -46,12 +46,15 @@ class PlanLines(RuleMixin, model.CoopSQL, model.CoopView):
     def __setup__(cls):
         super(PlanLines, cls).__setup__()
         cls.rule.domain = [('type_', '=', 'commission')]
+        cls.rule.required = False
         cls.rule.states['invisible'] = Not(Eval('use_rule_engine', True))
+        cls.rule.states['required'] = Eval('use_rule_engine', True)
+        cls.rule.depends.append('use_rule_engine')
+
         cls.rule_extra_data.depends.append('use_rule_engine')
         cls.rule_extra_data.states['invisible'] = Or(
             cls.rule_extra_data.states['invisible'],
             Not(Eval('use_rule_engine', True)))
-        cls.rule.depends.append('use_rule_engine')
         cls.formula.states['invisible'] = Eval('use_rule_engine', True)
         cls.formula.depends.append('use_rule_engine')
 
