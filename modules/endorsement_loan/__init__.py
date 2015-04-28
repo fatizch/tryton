@@ -11,7 +11,6 @@ def register():
         EndorsementLoanShareField,
         EndorsementLoanIncrementField,
         EndorsementPart,
-        Contract,
         Loan,
         LoanIncrement,
         LoanPayment,
