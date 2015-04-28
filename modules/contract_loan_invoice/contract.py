@@ -451,6 +451,11 @@ class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
         Premium = pool.get('contract.premium')
         premium = Premium.__table__()
 
+        where_clause = None
+        if 'contracts' in Transaction().context:
+            where_clause = (premium_amount.contract.in_(
+                    Transaction().context.get('contracts')))
+
         return premium_amount.join(premium, 'LEFT',
             condition=premium_amount.premium == premium.id
             ).select(
@@ -474,11 +479,25 @@ class PremiumAmountPerPeriod(model.CoopSQL, model.CoopView):
                     2).as_('total'),
                 premium_amount.period_start.as_('period_start'),
                 premium_amount.period_end.as_('period_end'),
+                where=where_clause,
                 group_by=[
                     premium_amount.contract,
                     premium_amount.period_start,
                     premium_amount.period_end,
                     ])
+
+    @classmethod
+    def read(cls, ids, fields_names=None):
+        if 'contracts' not in Transaction().context and ids:
+            cursor = Transaction().cursor
+            premium = Pool().get('contract.premium.amount').__table__()
+            cursor.execute(*premium.select(premium.contract,
+                    where=premium.id.in_(ids), order_by=[premium.contract]))
+            contracts = list(set(cursor.fetchall()))
+            with Transaction().set_context(contracts=contracts):
+                return super(PremiumAmountPerPeriod, cls).read(ids,
+                    fields_names)
+        return super(PremiumAmountPerPeriod, cls).read(ids, fields_names)
 
     def get_premium_amounts(self, name):
         pool = Pool()
