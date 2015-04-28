@@ -199,7 +199,8 @@ class TestCaseModel:
         FiscalYear = Pool().get('account.fiscalyear')
         fiscal_years = []
         for x in range(0, cls.get_instance().fiscal_year_number):
-            date = datetime.date(datetime.date.today().year + x,
+            date = datetime.date(
+                cls.get_instance().fiscal_year_sync_date.year + x,
                 cls.get_instance().fiscal_year_sync_date.month,
                 cls.get_instance().fiscal_year_sync_date.day)
             if FiscalYear.search([('start_date', '=', date)]):
@@ -211,5 +212,5 @@ class TestCaseModel:
 
     @classmethod
     def fiscal_year_test_case_test_method(cls):
-        FY = Pool().get('account.fiscal_year')
-        return FY.search_count([]) >= cls.get_instance().fiscal_year_number
+        FY = Pool().get('account.fiscalyear')
+        return FY.search_count([]) < cls.get_instance().fiscal_year_number

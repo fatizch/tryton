@@ -34,6 +34,7 @@
     <record model="ir.test_case.instance" id="fiscal_year_test_case">
         <field name="name">Fiscal Year Test Case</field>
         <field name="method_name">fiscal_year_test_case</field>
+        <field name="test_method_name">fiscal_year_test_case_test_method</field>
     </record>
     <record model="ir.test_case.instance" id="journal_test_case">
         <field name="name">Journal Creation</field>
