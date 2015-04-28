@@ -550,7 +550,7 @@ class ContractOption:
         return result
 
     def notify_contract_end_date_change(self, new_end_date):
-        super(ContractOption, self).notify_contract_start_date_change(
+        super(ContractOption, self).notify_contract_end_date_change(
             new_end_date)
         for extra_prem in self.extra_premiums:
             extra_prem.notify_contract_end_date_change(new_end_date)
