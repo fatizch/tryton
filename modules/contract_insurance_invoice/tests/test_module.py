@@ -166,7 +166,6 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     'billing_modes': [
                         ('add', [freq_month.id, freq_quart.id,
                                 freq_once.id])],
-                    'account_for_billing': account.id,
                     'contract_generator': sequence.id,
                     'quote_number_sequence': quote_sequence.id,
                     }])

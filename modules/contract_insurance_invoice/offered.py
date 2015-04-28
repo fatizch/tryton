@@ -195,11 +195,6 @@ class PaymentTermLine(export.ExportImportMixin):
 class Product:
     __name__ = 'offered.product'
 
-    account_for_billing = fields.Many2One('account.account',
-        'Account for billing', required=True, depends=['company'],
-        domain=[['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]],
-            ('company', '=', Eval('company'))],
-        ondelete='RESTRICT')
     billing_modes = fields.Many2Many('offered.product-offered.billing_mode',
         'product', 'billing_mode', 'Billing Modes', order=[('order', 'ASC')],
         states={'invisible': Bool(Eval('change_billing_modes_order'))})
@@ -213,15 +208,17 @@ class Product:
         delete_missing=True)
 
     @classmethod
-    def _export_light(cls):
-        return (super(Product, cls)._export_light() |
-            set(['account_for_billing']))
+    def __register__(cls, module_name):
+        super(Product, cls).__register__(module_name)
+        # Migration from 1.3: Drop account_for_billing column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        product = TableHandler(cursor, cls)
+        if product.column_exist('account_for_billing'):
+            product.drop_column('account_for_billing')
 
     def get_change_billing_modes_order(self, name):
         return False
-
-    def get_account_for_billing(self, line):
-        return self.account_for_billing
 
 
 class ProductBillingModeRelation(model.CoopSQL, model.CoopView):

@@ -364,8 +364,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 name='Awesome Alternative Allowance',
                 contract_generator=ng,
                 company=company,
-                start_date=base_date,
-                account_for_billing=account)
+                start_date=base_date)
             product.save()
             return product
 

@@ -9,8 +9,4 @@
             <field name="ordered_billing_modes" colspan="4" mode="tree"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']/field[@name='currency']" position="after">
-        <label name="account_for_billing"/>
-        <field name="account_for_billing"/>
-    </xpath>
 </data>

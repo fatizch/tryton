@@ -47,7 +47,6 @@ def add_invoice_configuration(product, accounts):
     product.billing_modes.append(freq_quarterly)
     product.billing_modes.append(freq_monthly_direct_debit)
 
-    product.account_for_billing = accounts['revenue']
     for coverage in product.coverages:
         coverage.account_for_billing = accounts['revenue']
     return product

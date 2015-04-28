@@ -742,10 +742,6 @@ msgctxt ""
 msgid "Match Contract Frequency"
 msgstr "Synchroniser avec la fréquence du contrat"
 
-msgctxt "field:offered.product,account_for_billing:"
-msgid "Account for billing"
-msgstr "Compte pour le quittancement"
-
 msgctxt "field:offered.product,billing_modes:"
 msgid "Billing Modes"
 msgstr "Modes de quittancement"
