@@ -1,13 +1,14 @@
 # -*- coding:utf-8 -*-
 import copy
 
+from trytond import backend
 from trytond.pool import PoolMeta
 from trytond.rpc import RPC
 from trytond.model import DictSchemaMixin
 from trytond.pyson import Eval, Bool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils, coop_string
+from trytond.modules.cog_utils import fields, model, coop_string
 from trytond.modules.offered.offered import CONFIG_KIND
 
 __metaclass__ = PoolMeta
@@ -25,8 +26,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     __name__ = 'extra_data'
     _func_key = 'name'
 
-    start_date = fields.Date('Start Date')
-    end_date = fields.Date('End Date')
     with_default_value = fields.Boolean('Default Value')
     default_value_boolean = fields.Function(
         fields.Boolean('Default Value',
@@ -69,6 +68,18 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
         states={'invisible': Eval('sub_data_config_kind') != 'advanced'})
 
     @classmethod
+    def __register__(cls, module_name):
+        super(ExtraData, cls).__register__(module_name)
+        # Migration from 1.3: Drop start_date, end_date column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        extra_data = TableHandler(cursor, cls)
+        if extra_data.column_exist('start_date'):
+            extra_data.drop_column('start_date')
+        if extra_data.column_exist('end_date'):
+            extra_data.drop_column('end_date')
+
+    @classmethod
     def __setup__(cls):
         super(ExtraData, cls).__setup__()
         cls.name.string = 'Code'
@@ -102,10 +113,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
     @staticmethod
     def default_default_value_selection():
         return ''
-
-    @staticmethod
-    def default_start_date():
-        return utils.today()
 
     @staticmethod
     def default_sub_data_config_kind():
@@ -213,15 +220,6 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
                         instance.get_rec_name(None)))
         return res, errs
 
-    def valid_at_date(self, at_date):
-        if at_date and hasattr(self, 'start_date') and self.start_date:
-            if self.start_date > at_date:
-                return False
-        if at_date and hasattr(self, 'end_date') and self.end_date:
-            if self.end_date < at_date:
-                return False
-        return True
-
     @classmethod
     def calculate_value_set(cls, possible_schemas, all_schemas, values):
         working_value_set = copy.copy(values)
@@ -284,8 +282,7 @@ class ExtraData(DictSchemaMixin, model.CoopSQL, model.CoopView,
 
     @classmethod
     def get_extra_data_definitions(cls, instance, field_name, type_, date):
-        all_schemas = set([x for x in getattr(instance, field_name)
-                if x.valid_at_date(date)])
+        all_schemas = set(getattr(instance, field_name))
         possible_schemas = set([x for x in all_schemas
                 if x.kind == type_])
         return all_schemas, possible_schemas

@@ -96,7 +96,6 @@ config._context['company'] = company.id
 
 # #Comment# #Create Test ExtraData
 extra_data = ExtraData()
-extra_data.start_date = contract_start_date
 extra_data.name = 'formula'
 extra_data.code = 'formula'
 extra_data.type_ = 'integer'
