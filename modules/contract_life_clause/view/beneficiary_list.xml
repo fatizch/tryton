@@ -2,4 +2,5 @@
 <tree string="Beneficiaries">
     <field name="accepting"/>
     <field name="rec_name"/>
+    <field name="address"/>
 </tree>
