@@ -547,6 +547,10 @@ class OptionDescription(model.CoopSQL, Offered):
             ('currency', '=', Eval('currency')),
             ('company', '=', Eval('company')),
             ], depends=['currency', 'company'])
+    products_name = fields.Function(
+        fields.Char('Products'),
+        'on_change_with_products_name', searcher='search_products')
+
     is_service = fields.Function(
         fields.Boolean('Is a Service'),
         'on_change_with_is_service')
@@ -607,6 +611,13 @@ class OptionDescription(model.CoopSQL, Offered):
             [(u'code',) + tuple(clause[1:])]
             ]
 
+    @classmethod
+    def search_products(cls, name, clause):
+        return ['OR',
+            ('products.code',) + tuple(clause[1:]),
+            ('products.name',) + tuple(clause[1:])
+            ]
+
     def is_valid(self):
         if self.template_behaviour == 'remove':
             return False
@@ -648,6 +659,10 @@ class OptionDescription(model.CoopSQL, Offered):
 
     def on_change_with_is_service(self, name=None):
         return True
+
+    @fields.depends('products')
+    def on_change_with_products_name(self, name=None):
+        return ', '.join([x.name for x in self.products])
 
     @staticmethod
     def default_is_service():

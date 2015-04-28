@@ -2,6 +2,7 @@
 <tree string="Coverages">
     <field name="name"/>
     <field name="code"/>
+    <field name="products_name"/>
     <field name="start_date"/>
     <field name="end_date"/>
     <field name="tags_name"/>
