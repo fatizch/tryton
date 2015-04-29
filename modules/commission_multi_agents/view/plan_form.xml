@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/notebook/page[@id='admin']/field[@name='tags']" position="before">
-        <field name="commissionned_agents" colspan="2"/>
+    <xpath expr="/form/notebook" position="inside">
+        <page string="Commissioned Agents" id="commissioned_agents" states="{'invisible': Eval('type_') != 'agent'}">
+            <field name="commissionned_agents" colspan="4"/>
+        </page>
     </xpath>
 </data>
 
