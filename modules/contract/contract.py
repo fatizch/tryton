@@ -993,7 +993,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         if not contracts:
             return
         pool = Pool()
-        Date = pool.get('ir.date')
         Event = pool.get('event')
         for contract in contracts:
             contract.end_date = at_date
@@ -1001,7 +1000,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 termination_reason
             contract.activation_history = list(contract.activation_history)
             contract.save()
-        if at_date < Date.today():
+        if at_date < utils.today():
             cls.do_terminate(contracts)
         else:
             # generate event only if termination is not processed
