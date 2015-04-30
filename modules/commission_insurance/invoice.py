@@ -1,8 +1,9 @@
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.transaction import Transaction
 
 from trytond.modules.cog_utils import utils, fields
 
@@ -29,7 +30,45 @@ class InvoiceLine:
                 'contract %s for broker fee %s'
                 })
 
-    def _get_commission_amount(self, amount, plan, pattern=None):
+    def get_commissions(self):
+        # Total override of tryton method just to add the agent parameter to
+        # _get_commission_amount
+        pool = Pool()
+        Commission = pool.get('commission')
+        Currency = pool.get('currency.currency')
+        Date = pool.get('ir.date')
+
+        if self.type != 'line':
+            return []
+
+        today = Date.today()
+        commissions = []
+        for agent, plan in self.agent_plans_used:
+            if not plan:
+                continue
+            with Transaction().set_context(date=self.invoice.currency_date):
+                amount = Currency.compute(self.invoice.currency,
+                    self.amount, agent.currency, round=False)
+            if self.invoice.type == 'out_credit_note':
+                amount *= -1
+            amount = self._get_commission_amount(amount, plan, agent=agent)
+            if amount:
+                digits = Commission.amount.digits
+                amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
+            if not amount:
+                continue
+
+            commission = Commission()
+            commission.origin = self
+            if plan.commission_method == 'posting':
+                commission.date = today
+            commission.agent = agent
+            commission.product = plan.commission_product
+            commission.amount = amount
+            commissions.append(commission)
+        return commissions
+
+    def _get_commission_amount(self, amount, plan, pattern=None, agent=None):
         pattern = {}
         if getattr(self, 'details', None):
             option = self.details[0].get_option()
@@ -39,7 +78,9 @@ class InvoiceLine:
                 pattern = {
                     'coverage': option.coverage,
                     'option': option,
-                    'nb_years': delta.years
+                    'nb_years': delta.years,
+                    'agent': agent,
+                    'plan': plan,
                     }
         pattern['invoice_line'] = self
         commission_amount = plan.compute(amount, self.product, pattern)

@@ -11,7 +11,7 @@
                 <field name="commissioned_products"/>
             </page>
             <page id="admin" string="Administration">
-                <field name="tags"/>
+                <field name="tags" colspan="2"/>
             </page>
         </notebook>
     </xpath>

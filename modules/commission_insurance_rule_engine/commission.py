@@ -10,6 +10,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Plan',
     'PlanLines',
+    'Agent',
     ]
 
 
@@ -20,12 +21,17 @@ class Plan:
         states={'invisible': Eval('type_') != 'agent'},
         help='key to retrieve the commission plan in rule engine algorithm',
         depends=['type_'])
+    extra_data_def = fields.Many2Many('commission-plan-extra_data',
+        'plan', 'extra_data_def', 'Extra Data',
+        domain=[('kind', '=', 'agent')])
 
     def get_context_formula(self, amount, product, pattern=None):
         context = super(Plan, self).get_context_formula(amount, product,
             pattern)
         if pattern and 'option' in pattern:
             context['names']['option'] = pattern['option']
+        if pattern and 'agent' in pattern:
+            context['names']['extra_data'] = pattern['agent'].extra_data or {}
         return context
 
 
@@ -61,16 +67,36 @@ class PlanLines(RuleMixin, model.CoopSQL, model.CoopView):
     def get_amount(self, **context):
         if not self.use_rule_engine:
             return super(PlanLines, self).get_amount(**context)
-        args = {}
+        args = context['names']
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
-        else:
-            args = context['names']
         if 'invoice_line' in context['names']:
-            args['invoice_line'] = context['names']['invoice_line']
             args['date'] = context['names']['invoice_line'].coverage_start
-        args['amount'] = context['names']['amount']
         return Decimal(self.calculate(args))
 
     def check_formula(self):
         return True
+
+
+class Agent:
+    __name__ = 'commission.agent'
+
+    extra_data = fields.Dict('extra_data', 'Extra Data')
+    extra_data_string = extra_data.translated('extra_data')
+
+    @fields.depends('plan')
+    def on_change_with_extra_data(self):
+        res = {}
+        if not self.plan:
+            return res
+        self.extra_data = getattr(self, 'extra_data', {}) or {}
+        for extra_data_def in self.plan.extra_data_def:
+            if extra_data_def.name in self.extra_data:
+                res[extra_data_def.name] = self.extra_data[extra_data_def.name]
+            else:
+                res[extra_data_def.name] = extra_data_def.get_default_value(
+                    None)
+        return res
+
+    def get_all_extra_data(self, at_date):
+        return self.extra_data if getattr(self, 'extra_data', None) else {}

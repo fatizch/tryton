@@ -128,9 +128,15 @@ class RuleEngine:
         pool = Pool()
         OfferedSet = pool.get('rule_engine.runtime')
         ExtraData = pool.get('extra_data')
+        extra_data = ExtraData(elem_id)
+        if extra_data.name in args.get('extra_data', {}):
+            # If extra_data are set in args, it means we can't find the
+            # value from the key as several objects could have the same key
+            # so the value is set directly in the args
+            return args['extra_data'][extra_data.name]
         from_object = OfferedSet.get_lowest_level_object(args)
         res = ExtraData.get_extra_data_value(from_object,
-            ExtraData(elem_id).name, args['date'])
+            extra_data.name, args['date'])
         return res
 
     def as_context(self, elem, kind, base_context):
