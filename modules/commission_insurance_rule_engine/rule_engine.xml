@@ -16,6 +16,10 @@
             <field name="context" ref="commission_context"/>
             <field name="tree_element" ref="rule_engine.cte_default_dossier_outils"/>
         </record>
+        <record model="rule_engine.context-function" id="cte_commission_coverage_data">
+            <field name="context" ref="commission_context"/>
+            <field name="tree_element" ref="offered_insurance.dossier_donnees_couverture"/>
+        </record>
         <record model="rule_engine.function" id="dossier_commission">
             <field name="translated_technical_name">dossier_commission</field>
             <field name="description">Commission</field>
