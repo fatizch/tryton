@@ -466,39 +466,40 @@ class Contract:
         return last_posted[0].start if last_posted else datetime.date.min
 
     def rebill(self, at_date=None):
-        pool = Pool()
-        Invoice = pool.get('account.invoice')
+        with Transaction().set_user(0, set_context=True):
+            pool = Pool()
+            Invoice = pool.get('account.invoice')
 
-        if at_date is None:
-            at_date = datetime.date.min
+            if at_date is None:
+                at_date = datetime.date.min
 
-        # Recalculate prices
-        self.calculate_prices([self], at_date)
+            # Recalculate prices
+            self.calculate_prices([self], at_date)
 
-        # Store the end date of the last invoice to be able to know up til when
-        # we should rebill
-        rebill_end = self.get_rebill_end_date(at_date)
+            # Store the end date of the last invoice to be able to know up til
+            # when we should rebill
+            rebill_end = self.get_rebill_end_date(at_date)
 
-        # Calculate the date until which we will repost invoices
-        post_end = self.get_rebill_post_end(at_date)
+            # Calculate the date until which we will repost invoices
+            post_end = self.get_rebill_post_end(at_date)
 
-        # Delete or cancel overlapping invoices
-        self.clean_up_contract_invoices([self], from_date=at_date)
+            # Delete or cancel overlapping invoices
+            self.clean_up_contract_invoices([self], from_date=at_date)
 
-        # Rebill
-        if rebill_end:
-            self.invoice([self], rebill_end)
+            # Rebill
+            if rebill_end:
+                self.invoice([self], rebill_end)
 
-        # Post
-        if post_end < at_date:
-            return
-        invoices_to_post = Invoice.search([
-                ('contract', '=', self.id),
-                ('start', '<=', post_end),
-                ('state', '=', 'validated')], order=[('start', 'ASC')])
-        if invoices_to_post:
-            Invoice.post(invoices_to_post)
-        self.reconcile()
+            # Post
+            if post_end < at_date:
+                return
+            invoices_to_post = Invoice.search([
+                    ('contract', '=', self.id),
+                    ('start', '<=', post_end),
+                    ('state', '=', 'validated')], order=[('start', 'ASC')])
+            if invoices_to_post:
+                Invoice.post(invoices_to_post)
+            self.reconcile()
 
     @classmethod
     def get_lines_to_reconcile(cls, contracts):
