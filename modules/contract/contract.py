@@ -628,7 +628,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                             contract=contract, end_date=value)]
                 else:
                     good_activation_history = [x for x in existing
-                        if x.start_date < value]
+                        if x.start_date <= (value or datetime.date.max)]
                     if not good_activation_history:
                         cls.raise_user_error(
                             'end_date_anterior_to_start_date')
