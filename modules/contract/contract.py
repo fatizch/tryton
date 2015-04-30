@@ -705,9 +705,6 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             option.manual_end_date]
         all_end_dates.extend([option.automatic_end_date for option in
                 self.options if option.automatic_end_date])
-        if not all_end_dates:
-            all_end_dates.extend([option.end_date for option in
-                    self.options if option.end_date])
         if all_end_dates:
             return max(all_end_dates)
         else:

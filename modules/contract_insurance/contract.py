@@ -255,11 +255,6 @@ class Contract(Printable):
                 option.automatic_end_date])
         if contract_maximum is not None:
             all_end_dates.append(contract_maximum)
-        if not all_end_dates:
-            all_end_dates.extend([option.end_date
-                for covered_elements in self.covered_elements
-                for option in covered_elements.options if
-                    option.end_date])
         if all_end_dates:
             return max(all_end_dates)
         else:
