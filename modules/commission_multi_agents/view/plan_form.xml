@@ -3,5 +3,9 @@
     <xpath expr="/form/notebook/page[@id='admin']/field[@name='tags']" position="before">
         <field name="commissionned_agents" colspan="2"/>
     </xpath>
+    <xpath expr="/form/field[@name='type_']" position="after">
+        <label name="second_level_commission"/>
+        <field name="second_level_commission"/>
+    </xpath>
 </data>
 

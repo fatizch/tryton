@@ -1,12 +1,15 @@
 from trytond.pool import Pool
 from .commission import *
 from .invoice import *
+from .contract import *
 
 
 def register():
     Pool.register(
         Agent,
+        AgentAgentRelation,
         Plan,
         PlanAgentRelation,
         InvoiceLine,
+        Contract,
         module='commission_multi_agents', type_='model')

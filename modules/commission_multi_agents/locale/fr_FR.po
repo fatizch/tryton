@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -6,13 +6,57 @@ msgctxt "field:commission.agent,commissioned_agents:"
 msgid "Commissioned Agent"
 msgstr "Protocoles de commission liés"
 
-msgctxt "field:commission.agent,commissioned_with_agent:"
-msgid "Commissioned With Agent"
-msgstr "Commissionné avec"
+msgctxt "field:commission.agent,second_level_commission:"
+msgid "Second level commission"
+msgstr "Sur-apporteur"
+
+msgctxt "field:commission.agent-agent,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.agent-agent,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.agent-agent,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.agent-agent,from_agent:"
+msgid "From Agent"
+msgstr "Entre le protocole"
+
+msgctxt "field:commission.agent-agent,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.agent-agent,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission.agent-agent,to_second_level_agent:"
+msgid "To Second Level Agent"
+msgstr "Et le protocole de second niveau"
+
+msgctxt "field:commission.agent-agent,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.agent-agent,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.agent-agent,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:commission.plan,commissionned_agents:"
 msgid "Commissioned Agents"
 msgstr "Protocoles de commissionnement liés"
+
+msgctxt "field:commission.plan,second_level_commission:"
+msgid "Second level commission"
+msgstr "Sur-apporteur"
 
 msgctxt "field:commission_plan-agent,agent:"
 msgid "Agent"
@@ -53,6 +97,10 @@ msgstr "Mis à jour par"
 msgctxt "field:commission_plan-agent,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
+
+msgctxt "model:commission.agent-agent,name:"
+msgid "Multi Agent Relation"
+msgstr "Relation entre protocoles"
 
 msgctxt "model:commission_plan-agent,name:"
 msgid "Commission Plan - Agent"

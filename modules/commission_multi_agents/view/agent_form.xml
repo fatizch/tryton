@@ -2,8 +2,8 @@
 <data>
     <xpath expr="/form" position="inside">
         <newline/>
-        <label name="commissioned_with_agent"/>
-        <field name="commissioned_with_agent" colspan="3"/>
+        <label name="second_level_commission"/>
+        <field name="second_level_commission"/>
         <field name="commissioned_agents" colspan="4"/>
     </xpath>
 </data>
