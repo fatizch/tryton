@@ -41,6 +41,10 @@ class Plan:
         states={'invisible': Eval('type_') != 'agent'},
         depends=['type_'])
 
+    @classmethod
+    def _export_light(cls):
+        return super(Plan, cls)._export_light() | {'commissionned_agents'}
+
 
 class PlanAgentRelation(model.CoopSQL, model.CoopView):
     'Commission Plan - Agent'
