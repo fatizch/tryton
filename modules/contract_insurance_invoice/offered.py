@@ -206,6 +206,8 @@ class Product:
         'Ordered Billing Mode', order=[('order', 'ASC')],
         states={'invisible': ~Eval('change_billing_modes_order')},
         delete_missing=True)
+    days_offset_for_subscription_payments = fields.Integer(
+        'Days Offset For Subscription Payments')
 
     @classmethod
     def __register__(cls, module_name):

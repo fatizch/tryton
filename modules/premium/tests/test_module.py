@@ -1,3 +1,4 @@
+from collections import defaultdict
 import unittest
 import datetime
 import mock
@@ -19,6 +20,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
             'Contract': 'contract',
             'Option': 'contract.option',
             'Premium': 'contract.premium',
+            'Fee': 'account.fee',
+            'ContractFee': 'contract.fee',
             }
 
     def test001_premium_date_configuration(self):
@@ -75,6 +78,8 @@ class ModuleTestCase(test_framework.CoopTestCase):
         rated_entity_1.id = 10
         rated_entity_2 = self.Product()
         rated_entity_2.id = 20
+        rated_entity_3 = self.Fee()
+        rated_entity_3.id = 30
 
         parent_1 = self.Contract()
         parent_1.id = 100
@@ -93,6 +98,10 @@ class ModuleTestCase(test_framework.CoopTestCase):
         parent_2.id = 200
         parent_2.end_date = datetime.date(2002, 4, 16)
         parent_2.premiums = []
+
+        parent_3 = self.ContractFee()
+        parent_3.id = 200
+        parent_3.premiums = []
 
         new_line_1 = mock.Mock()
         new_line_1.rated_entity = rated_entity_1
@@ -143,7 +152,22 @@ class ModuleTestCase(test_framework.CoopTestCase):
         new_line_7.frequency = 'monthly'
         new_line_7.taxes = []
 
+        new_line_8 = mock.Mock()
+        new_line_8.rated_entity = rated_entity_3
+        new_line_8.rated_instance = parent_3
+        new_line_8.amount = 25
+        new_line_8.frequency = 'at_contract_signature'
+        new_line_8.taxes = []
+
+        new_line_9 = mock.Mock()
+        new_line_9.rated_entity = rated_entity_1
+        new_line_9.rated_instance = parent_1
+        new_line_9.amount = 50
+        new_line_9.frequency = 'at_contract_signature'
+        new_line_9.taxes = []
+
         test_data = {
+            None: [new_line_8, new_line_9],
             datetime.date(2000, 4, 5): [new_line_1, new_line_6, new_line_7],
             datetime.date(2000, 3, 4): [new_line_2, new_line_4],
             datetime.date(2001, 6, 12): [new_line_5, new_line_3],
@@ -151,13 +175,35 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         with mock.patch.object(self.Premium, 'save') as patched_save:
             self.Contract.store_prices(test_data)
-            # Filter on x.parent.__name__ to regroup by parent
-            save_args = sorted(patched_save.call_args[0][0],
-                key=lambda x: (x.parent.__name__,) + x._get_key())
+
+            save_args = patched_save.call_args[0][0]
+
+            # Group saved premiums per parent
+            saved_premiums_by_parents = {}
+            saved_premiums_by_parents = defaultdict(list)
+            for premium in save_args:
+                saved_premiums_by_parents[premium.parent.__name__].append(
+                    premium)
+
+            def premium_matches(premium, input_line):
+                for fname in ['rated_entity', 'amount', 'frequency']:
+                    if getattr(premium, fname) != getattr(input_line, fname):
+                        return False
+                return True
+
+            def get_matching_premium(line):
+                good_premiums = saved_premiums_by_parents[
+                    line.rated_instance.__name__]
+                res, = [x for x in good_premiums if premium_matches(x, line)]
+                return res
+
+            def test_matching_premium(line, expected_end=None):
+                premium = get_matching_premium(line)
+                self.assertEqual(premium.end, expected_end)
 
             # Test explanations :
-            #   There are 8 input lines (7 new lines and the already existing
-            #   line on parent_1). Only 6 of those are saved because :
+            #   There are 10 input lines (9 new lines and the already existing
+            #   line on parent_1). Only 8 of those are saved because :
             #     - new_line_2 is a duplicate of some_previous_line
             #     - new_line_7 amount is 0
             #
@@ -166,26 +212,33 @@ class ModuleTestCase(test_framework.CoopTestCase):
             #     - new_line_4 to new_line_7.start - 1 (because new_line_7
             #       is null)
             #     - new_line_5/6 to parent_2.end_date
-            self.assertEqual(len(save_args), 6)
-            self.assertEqual(save_args[0], some_previous_line)
-            for premium_line, price_line in [
-                    (save_args[1], new_line_1),
-                    (save_args[2], new_line_3),
-                    (save_args[3], new_line_4),
-                    (save_args[4], new_line_5),
-                    (save_args[5], new_line_6)]:
-                self.assertIn(getattr(premium_line, 'contract', None), (
-                        None, parent_1))
-                self.assertIn(getattr(premium_line, 'option', None), (
-                        None, parent_2))
-                self.assertIsNotNone(premium_line.parent)
-                for fname in ['rated_entity', 'amount', 'frequency']:
-                    self.assertEqual(getattr(premium_line, fname),
-                        getattr(price_line, fname))
-            self.assertEqual(save_args[0].end, datetime.date(2000, 4, 4))
-            self.assertEqual(save_args[3].end, datetime.date(2000, 4, 4))
-            self.assertEqual(save_args[4].end, datetime.date(2002, 4, 16))
-            self.assertEqual(save_args[5].end, datetime.date(2002, 4, 16))
+
+            self.assertEqual(len(save_args), 8)
+
+            saved_premiums = saved_premiums_by_parents['contract']
+            self.assertEqual(len(saved_premiums), 4)
+
+            saved_premiums = saved_premiums_by_parents[
+                'contract.option']
+            self.assertEqual(len(saved_premiums), 3)
+
+            saved_premiums = saved_premiums_by_parents['contract.fee']
+            self.assertEqual(len(saved_premiums), 1)
+
+            # Test end dates
+            test_matching_premium(new_line_1, expected_end=None)
+            test_matching_premium(new_line_2,
+                expected_end=datetime.date(2000, 4, 4))
+            test_matching_premium(new_line_3, expected_end=None)
+            test_matching_premium(new_line_4,
+                expected_end=datetime.date(2000, 4, 4))
+            test_matching_premium(new_line_5,
+                expected_end=datetime.date(2002, 4, 16))
+            test_matching_premium(new_line_6,
+                expected_end=datetime.date(2002, 4, 16))
+            self.assertRaises(ValueError, get_matching_premium, new_line_7)
+            test_matching_premium(new_line_8, expected_end=None)
+            test_matching_premium(new_line_9, expected_end=None)
 
 
 def suite():

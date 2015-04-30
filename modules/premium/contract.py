@@ -94,6 +94,8 @@ class Contract:
             if contract.status == 'void':
                 continue
             prices = contract.calculate_prices_between_dates(start, end)
+            if start is None:
+                prices.update(contract.calculate_non_periodic_prices(start))
             for date, price in prices.iteritems():
                 final_prices[date].extend(price)
         cls.delete_prices(contracts, start)
@@ -106,6 +108,9 @@ class Contract:
         dates = utils.limit_dates(self.get_dates(), start)
         lines = self.product.calculate_premiums(self, dates)
         return lines
+
+    def calculate_non_periodic_prices(self, start=None):
+        return self.product.calculate_premiums(self, [None])
 
     @classmethod
     def store_prices(cls, prices):
@@ -157,8 +162,9 @@ class Contract:
                             no_date=True):
                         # If the previous element concerns the same
                         # rated_entity, we update its end to match
-                        # the new one
-                        prev_value.end = coop_date.add_day(elem.start, -1)
+                        # the new one if it is a dated premium
+                        if prev_value.start:
+                            prev_value.end = coop_date.add_day(elem.start, -1)
                         to_save.append(prev_value)
                     else:
                         if getattr(prev_value, 'id', -1) < 0:
@@ -514,8 +520,10 @@ class Premium(model.CoopSQL, model.CoopView):
         return True
 
     def _get_key(self, no_date=False):
-        return tuple(getattr(self, key) for key, _ in self.__class__._order
-            if not no_date or key != 'start')
+        if no_date:
+            return (self.rated_entity,)
+        else:
+            return (self.rated_entity, self.start or datetime.date.min)
 
 
 class PremiumTax(model.CoopSQL):

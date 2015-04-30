@@ -217,7 +217,14 @@ contract.company = company
 contract.subscriber = subscriber
 contract.start_date = contract_start_date
 contract.product = product
-contract.status = 'active'
+contract.status = 'quote'
+contract.billing_informations.append(BillingInformation(date=None,
+        billing_mode=freq_yearly, payment_term=payment_term))
+contract.options[0].premiums.append(ContractPremium(start=None,
+        amount=Decimal('800'), frequency='at_contract_signature',
+        account=product_account, rated_entity=coverage))
+contract.save()
+Wizard('contract.activate', models=[contract]).execute('apply')
 contract.options[0].premiums.append(ContractPremium(start=contract_start_date,
         amount=Decimal('100'), frequency='once_per_contract',
         account=product_account, rated_entity=coverage))
@@ -228,37 +235,50 @@ contract.premiums.append(ContractPremium(
         start=contract_start_date + datetime.timedelta(days=40),
         amount=Decimal('20'), frequency='yearly', account=product_account,
         rated_entity=coverage))
-contract.billing_informations.append(BillingInformation(date=None,
-        billing_mode=freq_yearly, payment_term=payment_term))
-contract.contract_number = '123456789'
 contract.save()
+
+all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
+len(all_invoices)
+# #Res# #1
+all_invoices[0].invoice.state
+# #Res# #u'posted'
 
 # #Comment# #Test invoicing
 Contract.first_invoice([contract.id], config.context)
-first_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
+all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
+len(all_invoices)
+# #Res# #2
+
+first_invoice, = ContractInvoice.find([('contract', '=', contract.id),
+        ('invoice.state', '=', 'validated')])
 first_invoice.invoice.total_amount
 # #Res# #Decimal('297.81')
-first_invoice.invoice.state
-# #Res# #u'validated'
 [(x.rec_name, x.unit_price, x.coverage_start, x.coverage_end)
     for x in first_invoice.invoice.lines] == [
     (u'Test Coverage', Decimal('100.00'),
         datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
-    (u'123456789', Decimal('180.00'),
+    (u'1', Decimal('180.00'),
         datetime.date(2014, 4, 10), datetime.date(2015, 4, 9)),
-    (u'123456789', Decimal('17.81'),
+    (u'1', Decimal('17.81'),
         datetime.date(2014, 5, 20), datetime.date(2015, 4, 9))]
 # #Res# #True
 Contract.first_invoice([contract.id], config.context)
-second_invoice, = ContractInvoice.find([('contract', '=', contract.id)])
+second_invoice, = ContractInvoice.find([('contract', '=', contract.id),
+            ('invoice.state', '=', 'validated')])
 AccountInvoice.post([second_invoice.invoice.id], config.context)
 second_invoice.invoice.state
 # #Res# #u'posted'
 Contract.first_invoice([contract.id], config.context)
 all_invoices = ContractInvoice.find([('contract', '=', contract.id)])
+len(all_invoices) == 3
+# #Res# #True
+all_invoices[0].invoice.total_amount
+# #Res# #Decimal('800.00')
 all_invoices[0].invoice.state
-# #Res# #u'cancel'
+# #Res# #u'posted'
 all_invoices[1].invoice.state
+# #Res# #u'cancel'
+all_invoices[2].invoice.state
 # #Res# #u'validated'
 
 # #Comment# #Test option declined

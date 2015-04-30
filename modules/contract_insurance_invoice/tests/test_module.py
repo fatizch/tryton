@@ -100,6 +100,18 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ):
             self.assertEqual(premium_one.get_amount(*period), amount)
 
+        premium_signature = self.Premium(
+            frequency='at_contract_signature',
+            amount=Decimal(900),
+            main_contract=contract,
+            )
+        for period, amount in (
+                ((None, None), Decimal(900)),
+                ((date(2014, 1, 1), date(2015, 12, 31)), Decimal(0)),
+                ((date(2014, 2, 1), date(2014, 2, 28)), Decimal(0)),
+                ):
+            self.assertEqual(premium_signature.get_amount(*period), amount)
+
     def test_contract_get_invoice_periods(self):
         'Test Contract get_invoice_periods'
 

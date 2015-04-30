@@ -105,7 +105,7 @@ class Fee(model.CoopSQL, model.CoopView, ModelCurrency):
             }
 
     def must_be_rated(self, rated_instance, date):
-        return True
+        return (self.frequency == 'at_contract_signature') == (not date)
 
     def get_base_amount_from_line(self, line):
         if self not in getattr(line.rated_entity, 'fees', []):

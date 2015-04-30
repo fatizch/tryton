@@ -107,6 +107,9 @@ class Premium:
             return description
         return '[%s] %s' % (self.loan.number, description)
 
+    def _get_key(self, no_date=False):
+        key = super(Premium, self)._get_key(no_date=no_date)
+        return (self.loan,) + key
 
 class Contract:
     __name__ = 'contract'

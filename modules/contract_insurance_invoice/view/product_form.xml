@@ -5,6 +5,9 @@
             <label name="change_billing_modes_order"/>
             <field name="change_billing_modes_order"/>
             <newline/>
+            <label name="days_offset_for_subscription_payments"/>
+            <field name="days_offset_for_subscription_payments"/>
+            <newline/>
             <field name="billing_modes" colspan="4"/>
             <field name="ordered_billing_modes" colspan="4" mode="tree"/>
         </page>

@@ -221,7 +221,8 @@ class Invoice:
             return line
 
     def update_invoice_before_post(self):
-        self.invoice_date = self.contract_invoice.start
+        if not self.invoice_date:
+            self.invoice_date = self.contract_invoice.start
         self.accounting_date = max(self.invoice_date, utils.today())
         return {
             'invoice_date': self.invoice_date,

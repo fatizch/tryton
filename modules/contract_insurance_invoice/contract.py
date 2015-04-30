@@ -133,18 +133,80 @@ class Contract:
                     ])]
 
     def invoices_report(self):
+        pool = Pool()
+        ContractInvoice = pool.get('contract.invoice')
+        non_periodic_invoices = ContractInvoice.search([
+                ('contract', '=', self),
+                ('non_periodic', '=', True)])
+        all_good_invoices = list(set(self.current_term_invoices) |
+            set(non_periodic_invoices))
         invoices = [{
                 'start': x.invoice.start,
                 'end': x.invoice.end,
                 'total_amount': x.invoice.total_amount,
                 'planned_payment_date': x.planned_payment_date}
-                for x in self.current_term_invoices]
+            for x in all_good_invoices]
         # we want chronological order
         return [invoices[::-1],
             sum([x['total_amount'] for x in invoices])]
 
     def invoice_to_end_date(self):
         Contract.invoice([self], self.end_date)
+
+    def finalize_contract(self):
+        super(Contract, self).finalize_contract()
+        self.invoice_non_periodic_premiums('at_contract_signature')
+
+    @dualmethod
+    def invoice_non_periodic_premiums(cls, contracts, frequency):
+        if not contracts:
+            return []
+        pool = Pool()
+        ContractInvoice = pool.get('contract.invoice')
+        AccountInvoice = pool.get('account.invoice')
+        MoveLine = pool.get('account.move.line')
+        Journal = pool.get('account.journal')
+        journal, = Journal.search([
+                ('type', '=', 'revenue'),
+                ], limit=1)
+
+        invoices_to_save = []
+        payment_dates = []
+
+        for contract in contracts:
+            premiums = [p for p in contract.all_premiums if
+                p.frequency == frequency]
+            if not premiums:
+                continue
+            payment_date = utils.today() + relativedelta(
+                days=contract.product.days_offset_for_subscription_payments
+                or 0)
+            __, __, billing_info = \
+                contract._get_invoice_rrule_and_billing_information(
+                    payment_date)
+            new_invoice = contract.get_invoice(None, None, billing_info)
+            new_invoice.journal = journal
+            if not new_invoice.invoice_address:
+                new_invoice.invoice_address = contract.subscriber.addresses[0]
+            new_invoice.invoice_date = utils.today()
+            lines = []
+            for premium in premiums:
+                lines.extend(premium.get_invoice_lines(None, None))
+            new_invoice.lines = lines
+            contract_invoice = ContractInvoice(non_periodic=True,
+                invoice=new_invoice, contract=contract)
+            invoices_to_save.append(contract_invoice)
+            payment_dates.append({'payment_date': payment_date})
+
+        AccountInvoice.save([x.invoice for x in invoices_to_save])
+        ContractInvoice.save(invoices_to_save)
+        AccountInvoice.post([x.invoice for x in invoices_to_save])
+        lines_to_write = []
+        for i, p in zip([x.invoice for x in invoices_to_save], payment_dates):
+            lines_to_write += [list(i.lines_to_pay), p]
+        if lines_to_write:
+            MoveLine.write(*lines_to_write)
+        return invoices_to_save
 
     def check_billing_information(self):
         for billing in self.billing_informations:
@@ -367,6 +429,7 @@ class Contract:
             for period in contract.get_invoice_periods(min(up_to_date,
                         contract.end_date or datetime.date.max)):
                 periods[period].append(contract)
+
         return cls.invoice_periods(periods)
 
     @classmethod
@@ -432,8 +495,8 @@ class Contract:
             state='validated',
             description='%s (%s - %s)' % (
                 self.rec_name,
-                lang.strftime(start, lang.code, lang.date),
-                lang.strftime(end, lang.code, lang.date)),
+                lang.strftime(start, lang.code, lang.date) if start else '',
+                lang.strftime(end, lang.code, lang.date)) if end else '',
             )
 
     def finalize_invoices_lines(self, lines):
@@ -448,7 +511,7 @@ class Contract:
     def compute_invoice_lines(self, start, end):
         lines = []
         for premium in self.all_premiums:
-            if end < (premium.start or datetime.date.max):
+            if end < (premium.start or datetime.date.min):
                 break
             lines.extend(premium.get_invoice_lines(start, end))
         return lines
@@ -989,8 +1052,13 @@ class Premium:
         return rrule(freq, interval=interval, dtstart=start)
 
     def get_amount(self, start, end):
-        if self.frequency in ('once_per_invoice'):
+        if self.frequency == 'once_per_invoice':
             return self.amount
+        if start is None:
+            return self.amount if self.frequency == 'at_contract_signature' \
+                else 0
+        elif self.frequency == 'at_contract_signature':
+            return 0
         # For yearly frequencies, only use the date to calculate the prorata on
         # the remaining days, after taking the full years out.
         #
@@ -1036,12 +1104,13 @@ class Premium:
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
         InvoiceLineDetail = pool.get('account.invoice.line.detail')
-        if ((self.start or datetime.date.min) > end
-                or (self.end or datetime.date.max) < start):
-            return []
-        start = (start if start > (self.start or datetime.date.min)
-            else self.start)
-        end = end if end < (self.end or datetime.date.max) else self.end
+        if start is not None and end is not None:
+            if ((self.start or datetime.date.min) > end
+                    or (self.end or datetime.date.max) < start):
+                return []
+            start = (start if start > (self.start or datetime.date.min)
+                else self.start)
+            end = end if end < (self.end or datetime.date.max) else self.end
         amount = self.get_amount(start, end)
         if not amount:
             return []
@@ -1073,10 +1142,13 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
     invoice_state = fields.Function(
         fields.Char('Invoice State'),
         'get_invoice_state', searcher='search_invoice_state')
-    start = fields.Date('Start Date', required=True)
-    end = fields.Date('End Date', required=True)
+    start = fields.Date('Start Date', depends=['non_periodic'], states={
+            'required': ~Eval('non_periodic')})
+    end = fields.Date('End Date', depends=['non_periodic'], states={
+            'required': ~Eval('non_periodic')})
     planned_payment_date = fields.Function(fields.Date('Planned Payment Date'),
         'get_planned_payment_date')
+    non_periodic = fields.Boolean('Non Periodic')
 
     @classmethod
     def __setup__(cls):
@@ -1091,15 +1163,25 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
                     },
                 })
 
+    @classmethod
+    def default_non_periodic(cls):
+        return False
+
     def get_invoice_state(self, name):
         return self.invoice.state
 
     def get_planned_payment_date(self, name):
+        if self.invoice_state in ['posted', 'paid']:
+            date = self.invoice.lines_to_pay[0].payment_date
+            assert all([(x.payment_date == date for x in
+                    self.invoice.lines_to_pay)])
+            return date
         with Transaction().set_context({'contract_revision_date':
                     self.invoice.start}):
             billing_info = self.contract.billing_information
-            return billing_info.get_direct_debit_planned_date({'maturity_date':
-                    self.invoice.start})
+            return billing_info.get_direct_debit_planned_date({
+                    'maturity_date': self.invoice.start or datetime.date.min,
+                    'contract': self.contract})
 
     @classmethod
     def search_invoice_state(cls, name, domain):

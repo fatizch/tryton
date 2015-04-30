@@ -199,6 +199,8 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
 
     def must_be_rated(self, rated_instance, date):
         Option = Pool().get('contract.option')
+        if date is None:
+            return False
         if isinstance(rated_instance, Option):
             return ((rated_instance.start_date or datetime.date.min) <=
                 date <= (rated_instance.end_date or datetime.date.max))
