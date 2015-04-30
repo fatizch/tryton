@@ -245,18 +245,16 @@ class Contract(Printable):
         return kinds
 
     def get_maximum_end_date(self):
-        contract_maximum = super(Contract, self).get_maximum_end_date()
-        all_end_dates = [option.manual_end_date
-            for covered_elements in self.covered_elements
-            for option in covered_elements.options if option.manual_end_date]
-        all_end_dates.extend([option.automatic_end_date
-            for covered_elements in self.covered_elements
-            for option in covered_elements.options if
-                option.automatic_end_date])
-        if contract_maximum is not None:
-            all_end_dates.append(contract_maximum)
-        if all_end_dates:
-            return max(all_end_dates)
+        dates = super(Contract, self).get_maximum_end_date()
+        if not dates:
+            dates = []
+        for element in self.covered_elements:
+            for option in element.options:
+                possible_end_dates = option.get_possible_end_date()
+                if possible_end_dates:
+                    dates.append(max(possible_end_dates.values()))
+        if dates:
+            return max(dates)
         else:
             return None
 

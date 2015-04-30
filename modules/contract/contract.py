@@ -701,14 +701,14 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
             previous_period = period
 
     def get_maximum_end_date(self):
-        all_end_dates = [option.manual_end_date for option in self.options if
-            option.manual_end_date]
-        all_end_dates.extend([option.automatic_end_date for option in
-                self.options if option.automatic_end_date])
-        if all_end_dates:
-            return max(all_end_dates)
-        else:
-            return None
+        dates = []
+        for option in self.options:
+            possible_end_dates = option.get_possible_end_date()
+            if possible_end_dates:
+                dates.append(max(possible_end_dates.values()))
+        if dates:
+            return max(dates)
+        return None
 
     def set_appliable_conditions_date(self, new_date):
         self.appliable_conditions_date = new_date
@@ -1551,12 +1551,12 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             # If automatic end date is prior start date, we will have a date
             # before the start date, whisch is strange but not wrong
             dates['automatic_end_date'] = self.automatic_end_date
-        if self.parent_contract and self.parent_contract.end_date:
-            dates['contract_end_date'] = self.parent_contract.end_date
         return dates
 
     def get_end_date(self, name):
         dates = [x for x in self.get_possible_end_date().itervalues()]
+        if self.parent_contract.end_date:
+            dates.append(self.parent_contract.end_date)
         return min(dates) if dates else None
 
     def set_automatic_end_date(self):
