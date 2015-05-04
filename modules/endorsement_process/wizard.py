@@ -122,7 +122,7 @@ class StartEndorsement:
                 # endorsement.part.union model
                 # in endorsement_process/endorsement.py
                 endorsement = Endorsement(
-                    Transaction().context.get('active_id') / 100000)
+                    Transaction().context.get('active_id') / 100)
             else:
                 return super(StartEndorsement, self).transition_start()
             if endorsement.state == 'applied':
@@ -155,4 +155,4 @@ class StartEndorsement:
         # See the explanation in the table_query method on
         # endorsement.part.union model in endorsement_process/endorsement.py
         return EndorsementPart(Transaction().context.get(
-                'active_id') % 100000).view
+                'active_id') % 100).view

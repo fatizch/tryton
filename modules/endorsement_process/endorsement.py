@@ -120,7 +120,7 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
         good_endorsements = None
         active_ids = Transaction().context.get('active_ids')
         if active_model == 'endorsement.part.union':
-            good_endorsements = [x / 100000 for x in active_ids]
+            good_endorsements = [x / 100 for x in active_ids]
         elif ctx_endorsement:
             good_endorsements = ctx_endorsement
         elif active_model == 'endorsement':
@@ -137,7 +137,7 @@ class EndorsementPartUnion(model.CoopSQL, model.CoopView):
                 (endorsement.definition == endorsement_def_part_rel.definition)
                 & join_condition)
             ).select(
-                (endorsement_part.id + Mul(100000,
+                (endorsement_part.id + Mul(100,
                         endorsement.id)).as_('id'),
                 Literal(0).as_('create_uid'),
                 Literal(0).as_('create_date'),

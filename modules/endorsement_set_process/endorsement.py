@@ -94,7 +94,7 @@ class EndorsementSet(CogProcessFramework):
         res = []
         for endorsement in self.endorsements:
             for part in endorsement.definition.endorsement_parts:
-                res.append(part.id + 100000 * endorsement.id)
+                res.append(part.id + 100 * endorsement.id)
         return res
 
     def generate_and_attach_reports_on_contracts(self, template_codes):
