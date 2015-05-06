@@ -32,6 +32,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
     def get_models(cls):
         return {
             'Loan': 'loan',
+            'LoanIncrement': 'loan.increment',
             'Currency': 'currency.currency',
             'Date': 'ir.date',
             'Account': 'account.account',
@@ -288,6 +289,49 @@ class ModuleTestCase(test_framework.CoopTestCase):
             datetime.date(2014, 4, 30))
         self.assertEqual(loan.payments[11].start_date,
             datetime.date(2014, 11, 30))
+
+    @test_framework.prepare_test(
+        'contract_insurance.test0001_testPersonCreation',
+        'loan.test0010loan_basic_data',
+        )
+    def test0039intermediate_loan_last_payment(self):
+        '''
+        Test intermediate loan
+        '''
+        currency, = self.Currency.search([], limit=1)
+        company, = self.Company().search([], limit=1)
+
+        loan = self.Loan(
+            kind='graduated',
+            funds_release_date=datetime.date(2013, 3, 22),
+            first_payment_date=datetime.date(2015, 04, 22),
+            rate=Decimal('0.0395'),
+            amount=Decimal(101948),
+            number_of_payments=360,
+            payment_frequency='month',
+            currency=currency,
+            company=company)
+        increment_1 = self.LoanIncrement(
+            number=1,
+            number_of_payments=180,
+            payment_amount=Decimal('435.00'),
+            rate=Decimal('0.0395'))
+        increment_2 = self.LoanIncrement(
+            number=2,
+            number_of_payments=96,
+            payment_amount=Decimal('536.86'),
+            rate=Decimal('0.0395'))
+        increment_3 = self.LoanIncrement(
+            number=3,
+            number_of_payments=84,
+            payment_amount=Decimal('625.82'),
+            rate=Decimal('0.0395'))
+        loan.increments = [increment_1, increment_2, increment_3]
+        loan.calculate()
+        loan.save()
+        self.assert_payment(loan, datetime.date(2045, 3, 22), 360,
+            Decimal('623.72'), Decimal('625.77'), Decimal('623.72'),
+            Decimal('2.05'), Decimal('0.00'))
 
     @test_framework.prepare_test(
         'loan.test0010loan_basic_data',

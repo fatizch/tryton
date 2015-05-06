@@ -647,24 +647,22 @@ class LoanPayment(model.CoopSQL, model.CoopView, ModelCurrency):
             begin_balance=begin_balance,
             interest=(currency.round(begin_balance * rate) if rate else None),
             )
+        interest = payment.interest or Decimal(0)
         if getattr(increment, 'deferal', None):
             if increment.deferal == 'partially':
                 payment.principal = Decimal(0)
                 payment.interest = payment.amount
             elif increment.deferal == 'fully':
-                payment.principal = (-payment.interest
-                    if payment.interest else Decimal(0))
+                payment.principal = (-interest)
         else:
             if (payment.begin_balance > payment.amount
                     and number < total_number_of_payments):
                 payment.principal = payment.amount
-                if payment.interest:
-                    payment.principal -= payment.interest
+                payment.principal -= interest
             else:
                 payment.principal = payment.begin_balance
-                if (getattr(payment, 'principal', None)
-                        and getattr(payment, 'interest', None)):
-                    payment.amount = payment.principal + payment.interest
+                payment.amount = payment.principal
+                payment.amount += interest
         payment.outstanding_balance = (payment.begin_balance
             - payment.principal)
         return payment
