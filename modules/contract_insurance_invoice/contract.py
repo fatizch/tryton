@@ -192,6 +192,7 @@ class Contract:
             lines = []
             for premium in premiums:
                 lines.extend(premium.get_invoice_lines(None, None))
+            contract.finalize_invoices_lines(lines)
             new_invoice.lines = lines
             contract_invoice = ContractInvoice(non_periodic=True,
                 invoice=new_invoice, contract=contract)
