@@ -215,6 +215,7 @@ class RuleMixin(object):
     'Rule Mixin'
 
     __name__ = 'rule_engine.rule_mixin'
+    _func_key = 'func_key'
 
     rule = fields.Many2One('rule_engine', 'Rule Engine', required=True,
         ondelete='RESTRICT')
@@ -222,6 +223,15 @@ class RuleMixin(object):
         'Rule Extra Data', states={
             'invisible': Not(Bool(Eval('rule_extra_data', False)))})
     rule_extra_data_string = rule_extra_data.translated('rule_extra_data')
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    def get_func_key(self, name):
+        return self.rule.short_name
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        return [('rule.short_name',) + tuple(clause[1:])]
 
     def calculate(self, args):
         return self.rule.execute(args, self.rule_extra_data).result
