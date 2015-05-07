@@ -305,6 +305,8 @@ class ExportImportMixin(Model):
         if value['imported']:
             return value['record']
         record = value['record']
+        if record and not cls.check_xml_record([record], None):
+            return record
         new_values = cls._import_json(value['data'], record)
         value['imported'] = True
         if not new_values:

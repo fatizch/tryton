@@ -337,7 +337,7 @@ class Product(model.CoopSQL, Offered):
     @classmethod
     def _export_light(cls):
         return super(Product, cls)._export_light() | {'contract_generator',
-            'company', 'currency', 'tags'}
+            'company', 'currency'}
 
     @classmethod
     def _export_skips(cls):
