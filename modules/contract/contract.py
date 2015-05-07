@@ -1370,7 +1370,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
             if option.manual_end_date or option.automatic_end_date:
                 ending_date = min(option.manual_end_date or datetime.date.max,
                     option.automatic_end_date or datetime.date.max)
-                if ending_date < option.parent_contract.start_date:
+                if ending_date < (option.parent_contract.start_date or
+                        datetime.date.min):
                     ended_previously = True
                     values['start_date'][option.id] = option.initial_start_date
             if not ended_previously:
@@ -1484,7 +1485,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         Date = Pool().get('ir.date')
         for option in options:
             end_date = option.manual_end_date
-            if not end_date:
+            if not end_date or not option.start_date:
                 continue
             if end_date > option.start_date:
                 if not option.parent_contract:
