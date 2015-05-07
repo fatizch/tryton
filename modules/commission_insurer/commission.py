@@ -26,6 +26,7 @@ class CreateInvoicePrincipal(Wizard):
         return [
             ('account', '=', account.id),
             ('principal_invoice_line', '=', None),
+            ('journal.type', '!=', 'commission'),
             ['OR',
                 [('origin.id', '!=', None, 'account.invoice')],
                 [('origin.id', '!=', None, 'account.move')]
