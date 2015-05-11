@@ -1,3 +1,4 @@
+import datetime
 from collections import defaultdict
 
 from trytond.pool import Pool, PoolMeta
@@ -19,6 +20,7 @@ __all__ = [
     'OpenContractAtApplicationDate',
     'ChangeContractStartDate',
     'ChangeContractExtraData',
+    'TerminateContract',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
@@ -393,6 +395,133 @@ class ChangeContractExtraData(EndorsementWizardStepMixin, model.CoopView):
     @classmethod
     def state_view_name(cls):
         return 'endorsement.endorsement_change_contract_extra_data_view_form'
+
+
+class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
+    'Terminate Contract'
+
+    __name__ = 'endorsement.contract.terminate'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    current_end_date = fields.Date('Current End Date', readonly=True)
+    termination_date = fields.Date('Termination Date', required=True,
+        readonly=True)
+    termination_reason = fields.Many2One('contract.sub_status',
+        'Termination Reason', required=True, domain=[('code', 'in',
+                ['reached_end_date', 'unpaid_premium_termination'])])
+
+    @classmethod
+    def __setup__(cls):
+        super(TerminateContract, cls).__setup__()
+        cls._error_messages.update({
+                'termination_date_must_be_anterior': 'The termination date'
+                'must be anterior to the end date of the modified period: %s',
+                'termination_date_must_be_posterior': 'The termination date'
+                'must be posterior to the contract start date: %s',
+                })
+
+    def step_default(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        defaults = super(TerminateContract, self).step_default()
+        contracts = self._get_contracts()
+        for contract_id, endorsement in contracts.iteritems():
+            if endorsement.values and 'end_date' in endorsement.values:
+                defaults['termination_date'] = endorsement.values['end_date']
+            else:
+                defaults['termination_date'] = \
+                    self.wizard.endorsement.effective_date
+            defaults['contract'] = contract_id
+            defaults['current_end_date'] = Contract(contract_id).end_date
+        return defaults
+
+    def step_update(self):
+        pool = Pool()
+        Date = pool.get('ir.date')
+        lang = pool.get('res.user')(Transaction().user).language
+        EndorsementActivationHistory = pool.get(
+            'endorsement.contract.activation_history')
+        ActivationHistory = pool.get('contract.activation_history')
+        Contract = pool.get('contract')
+        contracts = self._get_contracts()
+
+        for contract_id, endorsement in contracts.iteritems():
+            EndorsementActivationHistory.delete(endorsement.activation_history)
+            contract = Contract(contract_id)
+            last_period = contract.activation_history[-1]
+            endorsement.values = {'end_date': self.termination_date}
+
+            if self.termination_date < contract.start_date:
+                self.raise_user_error('termination_date_must_be_posterior',
+                    Date.date_as_string(contract.start_date, lang))
+
+            # first case : we are terminating a contract after its current
+            # term
+            if self.termination_date > contract.end_date:
+                if last_period.end_date == contract.end_date or \
+                        self.termination_date > last_period.end_date:
+                    self.raise_user_error('termination_date_must_be_anterior',
+                        Date.date_as_string(last_period.end_date, lang))
+                activation_history_endorsement = EndorsementActivationHistory(
+                    action='update',
+                    contract_endorsement=endorsement,
+                    activation_history=last_period,
+                    relation=last_period.id,
+                    definition=self.endorsement_definition,
+                    values={'termination_reason': self.termination_reason.id,
+                        'final_renewal': True})
+                activation_history_endorsement.save()
+            # second case : we are terminating a contract during its current
+            # term
+            else:
+                # No next period
+                if contract.end_date == last_period.end_date:
+                    last_period_endorsement = \
+                        EndorsementActivationHistory(
+                            action='update',
+                            contract_endorsement=endorsement,
+                            activation_history=last_period,
+                            relation=last_period.id,
+                            definition=self.endorsement_definition,
+                            values={'termination_reason':
+                                    self.termination_reason.id,
+                                'final_renewal': True})
+                    last_period_endorsement.save()
+                # We have a next period, we must remove it,
+                # And update the current term period
+                else:
+                    if self.termination_date > last_period.end_date:
+                        self.raise_user_error(
+                            'termination_date_must_be_anterior',
+                            Date.date_as_string(last_period.end_date, lang))
+                    last_period_endorsement = EndorsementActivationHistory(
+                            action='remove',
+                            contract_endorsement=endorsement,
+                            activation_history=last_period,
+                            relation=last_period.id,
+                            definition=self.endorsement_definition)
+                    last_period_endorsement.save()
+
+                    current_activation_history, = ActivationHistory.search([
+                            ('contract', '=', contract),
+                            ('end_date', '=', contract.end_date)])
+
+                    current_activation_history_endorsement = \
+                        EndorsementActivationHistory(
+                            action='update',
+                            contract_endorsement=endorsement,
+                            activation_history=current_activation_history,
+                            relation=current_activation_history.id,
+                            definition=self.endorsement_definition,
+                            values={'termination_reason':
+                                    self.termination_reason.id,
+                                'final_renewal': True})
+                    current_activation_history_endorsement.save()
+            endorsement.save()
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.endorsement_terminate_contract_view_form'
 
 
 class SelectEndorsement(model.CoopView):
@@ -816,6 +945,9 @@ class StartEndorsement(Wizard):
 
 add_endorsement_step(StartEndorsement, ChangeContractExtraData,
     'change_contract_extra_data')
+
+add_endorsement_step(StartEndorsement, TerminateContract,
+    'terminate_contract')
 
 
 class OpenContractAtApplicationDate(Wizard):

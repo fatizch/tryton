@@ -31,6 +31,7 @@ def register():
         DummyStep,
         ChangeContractStartDate,
         ChangeContractExtraData,
+        TerminateContract,
         BasicPreview,
         EndorsementSelectDeclineReason,
         module='endorsement', type_='model')

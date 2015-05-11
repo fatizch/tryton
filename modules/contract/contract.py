@@ -986,22 +986,27 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         Event.notify_events(contracts, 'terminate_contract')
 
     @classmethod
+    def plan_termination_or_terminate(cls, contracts, caller=None):
+        pool = Pool()
+        Event = pool.get('event')
+        to_terminate_now = [c for c in contracts if c.end_date < utils.today()]
+        to_terminate_later = [c for c in contracts if
+            c.end_date >= utils.today()]
+        cls.do_terminate(to_terminate_now)
+        # generate event only if termination is not processed
+        Event.notify_events(to_terminate_later, 'plan_contract_termination')
+
+    @classmethod
     def terminate(cls, contracts, at_date, termination_reason):
         if not contracts:
             return
-        pool = Pool()
-        Event = pool.get('event')
         for contract in contracts:
             contract.end_date = at_date
             contract.activation_history[-1].termination_reason = \
                 termination_reason
             contract.activation_history = list(contract.activation_history)
             contract.save()
-        if at_date < utils.today():
-            cls.do_terminate(contracts)
-        else:
-            # generate event only if termination is not processed
-            Event.notify_events(contracts, 'plan_contract_termination')
+        cls.plan_termination_or_terminate(contracts)
 
     @classmethod
     def void(cls, contracts, void_reason):

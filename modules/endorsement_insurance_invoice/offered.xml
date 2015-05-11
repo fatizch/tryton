@@ -85,6 +85,12 @@
             <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'date')]"/>
             <field name="endorsement_part" ref="change_bank_account_endorsement_part"/>
         </record>
+        <!-- #################################################### -->
+        <!-- # Stop Contract Endorsement Configuration # -->
+        <!-- #################################################### -->
+        <record model="endorsement.part" id="endorsement.stop_contract_revision_part">
+            <field name="requires_contract_rebill">True</field>
+        </record>
     </data>
     <data depends="account_payment_sepa_contract">
         <record model="endorsement.contract.billing_information.field" id="sepa_mandate_field">

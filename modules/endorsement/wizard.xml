@@ -17,6 +17,14 @@
             <field name="type">form</field>
             <field name="name">endorsement_change_contract_extra_data_form</field>
         </record>
+        <!-- ####################### -->
+        <!-- # Terminate Contract    -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="endorsement_terminate_contract_view_form">
+            <field name="model">endorsement.contract.terminate</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_terminate_contract_form</field>
+        </record>
         <!-- ###################### -->
         <!-- # Select Endorsement # -->
         <!-- ###################### -->

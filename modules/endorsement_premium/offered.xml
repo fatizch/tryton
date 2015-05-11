@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- #################################################### -->
+        <!-- # Stop Contract Endorsement Configuration # -->
+        <!-- #################################################### -->
+        <record model="endorsement.definition" id="endorsement.stop_contract_definition">
+            <field name="preview_state">preview_contract_premiums</field>
+        </record>
+    </data>
+</tryton>

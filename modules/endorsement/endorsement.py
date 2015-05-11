@@ -1211,7 +1211,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
             result += option_summary
             result += '\n\n'
         activation_summary = '\n'.join([activation_history.get_summary(
-                    'contract.activation_history', indent=4)
+                    'contract.activation_history', activation_history,
+                    indent=4)
                 for activation_history in self.activation_history])
         if activation_summary:
             result += '  %s :\n' % self.raise_user_error(

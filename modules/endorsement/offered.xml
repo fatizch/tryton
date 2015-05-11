@@ -134,6 +134,12 @@
             <field name="model" search="[('model', '=', 'contract')]"/>
             <field name="priority">1000</field>
         </record>
+        <record model="ir.model.method" id="contract_plan_termination">
+            <field name="method_name">plan_termination_or_terminate</field>
+            <field name="name">Plan Termination</field>
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="priority">2</field>
+        </record>
         <!-- ################################## -->
         <!-- # Stop Endorsement Configuration # -->
         <!-- ################################## -->
@@ -145,12 +151,16 @@
             <field name="code">stop_contract</field>
             <field name="name">Stop Contract</field>
             <field name="kind">contract</field>
-            <field name="view">dummy_step</field>
+            <field name="view">terminate_contract</field>
         </record>
         <record model="endorsement.definition-endorsement.part" id="stop_contract_relation">
             <field name="definition" ref="stop_contract_definition"/>
             <field name="endorsement_part" ref="stop_contract_revision_part"/>
             <field name="order">1</field>
+        </record>
+        <record model="endorsement.part-method" id="terminate_contract_to_plan_termination">
+            <field name="method" ref="contract_plan_termination"/>
+            <field name="endorsement_part" ref="stop_contract_revision_part"/>
         </record>
         <record model="endorsement.contract.field" id="status_date_contract_stop_field">
             <field name="field" search="[('model.model', '=', 'contract'), ('name', '=', 'status')]"/>
