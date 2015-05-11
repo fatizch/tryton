@@ -24,6 +24,7 @@ __all__ = [
     'TaxDesc',
     'PaymentTerm',
     'PaymentTermLine',
+    'PaymentTermLineRelativeDelta',
     ]
 
 MONTHS = [
@@ -190,6 +191,54 @@ class PaymentTerm(export.ExportImportMixin):
 
 class PaymentTermLine(export.ExportImportMixin):
     __name__ = 'account.invoice.payment_term.line'
+    _func_key = 'func_key'
+
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    def get_func_key(self, name):
+        return '|'.join((self.payment.name, str(self.sequence)))
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        operands = clause[2].split('|')
+        if len(operands) == 2:
+            payment_name, sequence = operands
+            res = []
+            if payment_name != 'None':
+                res.append(('payment.name', clause[1], payment_name))
+            if sequence != 'None':
+                res.append(('sequence', clause[1], sequence))
+            return res
+        else:
+            return [('id', '=', None)]
+
+
+class PaymentTermLineRelativeDelta(export.ExportImportMixin):
+    __name__ = 'account.invoice.payment_term.line.relativedelta'
+    _func_key = 'func_key'
+
+    func_key = fields.Function(fields.Char('Functional Key'),
+        'get_func_key', searcher='search_func_key')
+
+    def get_func_key(self, name):
+        return '|'.join((self.line.payment.name, str(self.line.sequence),
+                str(self.sequence)))
+
+    @classmethod
+    def search_func_key(cls, name, clause):
+        assert clause[1] == '='
+        operands = clause[3].split('|')
+        if len(operands) == 3:
+            line_payment_name, line_sequence, sequence = operands
+            res = []
+            res.append(('line.payment.name', clause[1], line_payment_name))
+            res.append(('line.sequence', clause[1], line_sequence))
+            res.append(('sequence', clause[1], sequence))
+            return res
+        else:
+            return [('id', '=', None)]
 
 
 class Product:

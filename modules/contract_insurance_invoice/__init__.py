@@ -36,6 +36,7 @@ def register():
         PostInvoiceContractBatch,
         PaymentTerm,
         PaymentTermLine,
+        PaymentTermLineRelativeDelta,
         SynthesisMenuInvoice,
         SynthesisMenu,
         ChangeBankAccountSelect,
