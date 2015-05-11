@@ -112,10 +112,6 @@ class Product:
         res.extend(['item_descriptors'])
         return res
 
-    @classmethod
-    def _re_get_option_start_date(cls, args):
-        return cls.get_option(args).start_date
-
 
 class OfferedProduct(Offered):
     'Offered Product'

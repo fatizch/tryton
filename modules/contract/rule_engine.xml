@@ -13,13 +13,22 @@
         </record>
     </data>
     <data>
-        <record model="rule_engine.function" id="date_debut_contrat">
-            <field name="translated_technical_name">date_debut_contrat</field>
-            <field name="description">Date d'effet du Contrat</field>
+        <record model="rule_engine.function" id="date_effet_initiale_contrat">
+            <field name="translated_technical_name">date_effet_initiale_contrat</field>
+            <field name="description">Date d'effet initiale du contrat</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_get_contract_effective_date</field>
+            <field name="name">_re_get_contract_initial_start_date</field>
+            <field name="parent" ref="te_contract"/>
+        </record>
+        <record model="rule_engine.function" id="date_debut_terme_courant_contrat">
+            <field name="translated_technical_name">date_debut_terme_courant_contrat</field>
+            <field name="description">Date de début du terme courant du contrat</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_contract_start_date</field>
             <field name="parent" ref="te_contract"/>
         </record>
         <record model="rule_engine.function" id="te_contract_extra_data">

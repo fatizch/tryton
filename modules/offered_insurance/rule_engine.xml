@@ -110,22 +110,31 @@
             <field name="type">folder</field>
             <field name="language" ref="ir.lang_fr"/>
         </record>
-        <record model="rule_engine.function" id="date_debut_souscription">
-            <field name="translated_technical_name">date_debut_souscription</field>
-            <field name="description">Date d'effet de la Garantie</field>
+        <record model="rule_engine.function" id="date_effet_initiale_option">
+            <field name="translated_technical_name">date_effet_initiale_option</field>
+            <field name="description">Date d'effet initiale de la garantie</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_get_option_initial_start_date</field>
+            <field name="parent" ref="dossier_donnees_couverture"/>
+        </record>
+        <record model="rule_engine.function" id="date_debut_terme_courant_option">
+            <field name="translated_technical_name">date_debut_terme_courant_option</field>
+            <field name="description">Date de début du terme courant de la garantie</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
             <field name="name">_re_get_option_start_date</field>
             <field name="parent" ref="dossier_donnees_couverture"/>
         </record>
-        <record model="rule_engine.function" id="date_fin_souscription">
-            <field name="translated_technical_name">date_fin_souscription</field>
-            <field name="description">Date de fin du contrat</field>
+        <record model="rule_engine.function" id="date_fin_garantie">
+            <field name="translated_technical_name">date_fin_garantie</field>
+            <field name="description">Date de fin de la garantie</field>
             <field name="type">function</field>
             <field name="language" ref="ir.lang_fr"/>
             <field name="namespace">rule_engine.runtime</field>
-            <field name="name">_re_get_subscription_end_date</field>
+            <field name="name">_re_get_option_end_date</field>
             <field name="parent" ref="dossier_donnees_couverture"/>
         </record>
         <record model="rule_engine.function" id="donnee_compl_element_couvert">

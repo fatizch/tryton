@@ -5,18 +5,18 @@
             <field name="name">Option Eligibility Rule</field>
             <field name="short_name">option_age_eligibility</field>
             <field name="algorithm">birth_year = date_de_naissance().timetuple()[0]
-age = 0 
+age = 0
 if param_age_kind() == 'real':
-    age = relativedelta(date_debut_souscription(), date_de_naissance()).years
+    age = relativedelta(date_effet_initiale_option(), date_de_naissance()).years
 elif param_age_kind() == 'at_end_of_month':
     birthday_month_after = date_de_naissance() + relativedelta(months=1)
     year, month, _ = birthday_month_after.timetuple()[0:3]
-    first_day_following_month = datetime.date(year, month, 1)  
-    age = relativedelta(date_debut_souscription(), first_day_following_month).years
+    first_day_following_month = datetime.date(year, month, 1)
+    age = relativedelta(date_effet_initiale_option(), first_day_following_month).years
 elif param_age_kind() == 'at_given_day_of_year':
     given_date_in_birth_year = datetime.date(birth_year,
         int(param_given_month()), int(param_given_day()))
-    age = relativedelta(date_debut_souscription(), given_date_in_birth_year).years
+    age = relativedelta(date_effet_initiale_option(), given_date_in_birth_year).years
 return param_max_age_for_option() > age</field>
             <field name="status">validated</field>
             <field name="type_">eligibility</field>
