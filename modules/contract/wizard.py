@@ -1,3 +1,5 @@
+import datetime
+
 from trytond.pool import Pool
 from trytond.pyson import Eval, Len
 from trytond.wizard import StateTransition, StateView, Button, StateAction
@@ -467,7 +469,8 @@ class ContractReactivate(model.CoopWizard):
             'previous_end_date': contract.end_date,
             'new_end_date': new_end_date,
             'termination_reason': contract.sub_status.id,
-            'will_be_terminated': new_end_date < utils.today(),
+            'will_be_terminated': ((new_end_date or datetime.date.max)
+                < utils.today()),
             }
         return result
 
