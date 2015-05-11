@@ -61,6 +61,9 @@ class ContractOption:
         return used
 
     def get_first_year_premium(self, name):
+        if not self.start_date:
+            # when a contract is void for example
+            return 0
         end_first_year = min(self.start_date + relativedelta(years=1) -
             relativedelta(days=1), self.end_date or datetime.date.max)
         lines = []
