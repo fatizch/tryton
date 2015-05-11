@@ -1,3 +1,4 @@
+* Make endorsement printable
 * Add terminate_contract endorsement
 * Add extra_data endorsement
 * Add endorsement number

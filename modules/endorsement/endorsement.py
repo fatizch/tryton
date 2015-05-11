@@ -19,6 +19,7 @@ from trytond.modules.cog_utils import model, fields, coop_string, utils, \
     coop_date
 from trytond.modules.process import ClassAttr
 from trytond.modules.process_cog import CogProcessFramework
+from trytond.modules.report_engine import Printable
 
 _STATES_WITH_SUBSTATES = ['declined']
 
@@ -36,6 +37,7 @@ __all__ = [
     'EndorsementActivationHistory',
     'EndorsementExtraData',
     'Configuration',
+    'ReportTemplate',
     ]
 
 
@@ -677,7 +679,7 @@ class ContractExtraData(object):
     __name__ = 'contract.extra_data'
 
 
-class Endorsement(Workflow, model.CoopSQL, model.CoopView):
+class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     'Endorsement'
 
     __metaclass__ = PoolMeta
@@ -818,6 +820,15 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView):
 
     def get_subscribers_name(self, name):
         return '\n'.join([x.subscriber.rec_name for x in self.contracts])
+
+    def get_object_for_contact(self):
+        return self.contracts[0]
+
+    def get_contact(self):
+        return self.contracts[0].get_contact()
+
+    def get_sender(self):
+        return self.contracts[0].company.party
 
     @fields.depends('application_date')
     def on_change_with_application_date_str(self, name=None):
@@ -1601,3 +1612,14 @@ class Configuration(ModelSingleton, model.CoopSQL, model.CoopView):
 
     endorsement_number_sequence = fields.Property(
         fields.Many2One('ir.sequence', 'Endorsement Number Sequence'))
+
+
+class ReportTemplate:
+    __name__ = 'report.template'
+    __metaclass__ = PoolMeta
+
+    def get_possible_kinds(self):
+        result = super(ReportTemplate, self).get_possible_kinds()
+        if self.on_model and self.on_model.model == 'endorsement':
+            result.append(('endorsement', 'Endorsement'))
+        return result

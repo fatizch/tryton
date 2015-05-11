@@ -34,6 +34,7 @@ def register():
         TerminateContract,
         BasicPreview,
         EndorsementSelectDeclineReason,
+        ReportTemplate,
         module='endorsement', type_='model')
 
     Pool.register(

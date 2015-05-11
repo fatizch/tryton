@@ -103,6 +103,12 @@ class EndorsementSet(CogProcessFramework):
                 contract.generate_and_attach_reports(template_codes,
                     creator=endorsement)
 
+    def generate_and_attach_reports_on_endorsements(self):
+        pool = Pool()
+        Endorsement = pool.get('endorsement')
+        Endorsement.produce_reports(self.endorsements, 'endorsement',
+            origin=self)
+
     def generate_and_attach_reports_on_contract_set(self, template_codes):
         first_contract = self.endorsements[0].contracts[0]
         if not first_contract.contract_set:

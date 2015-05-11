@@ -117,11 +117,15 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
         """ Report is a dictionnary with:
             object_instance, report type, data, report name"""
 
+        pool = Pool()
+        Attachment = pool.get('ir.attachment')
         attachment = Attachment()
         attachment.resource = report['object'].get_reference_object_for_edm(
             self)
         attachment.data = report['data']
         attachment.name = report['report_name']
+        attachment.document_desc = self.document_desc
+        attachment.origin = report['origin']
         return attachment
 
     def save_reports_in_edm(self, reports):
@@ -134,7 +138,7 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
             attachments.append(self._create_attachment_from_report(report))
         Attachment.save(attachments)
 
-    def _generate_reports(self, objects):
+    def _generate_reports(self, objects, origin=None):
         """ Return a list of dictionnary with:
             object, report_type, data, report_name"""
         pool = Pool()
@@ -162,12 +166,13 @@ class ReportTemplate(model.CoopSQL, model.CoopView, model.TaggedMixin):
                     'object': cur_obj,
                     'report_type': report_type,
                     'data': data,
-                    'report_name': report_name
+                    'report_name': report_name,
+                    'origin': origin
                     })
         return reports
 
-    def produce_reports(self, objects, direct_print=False):
-        reports = self._generate_reports(objects)
+    def produce_reports(self, objects, direct_print=False, origin=None):
+        reports = self._generate_reports(objects, origin=origin)
         if direct_print:
             self.print_reports(reports)
         if self.internal_edm:
@@ -353,7 +358,8 @@ class Printable(Model):
         return self.rec_name
 
     @classmethod
-    def produce_reports(cls, objects, template_kind, direct_print=False):
+    def produce_reports(cls, objects, template_kind, direct_print=False,
+            origin=None):
         pool = Pool()
         Template = pool.get('report.template')
         if not template_kind:
@@ -361,7 +367,7 @@ class Printable(Model):
         templates = Template.find_templates_for_objects_and_kind(objects,
             cls.__name__, template_kind)
         for template, group_objects in templates.iteritems():
-            template.produce_reports(objects, direct_print)
+            template.produce_reports(objects, direct_print, origin=origin)
 
 
 class ReportCreateSelectTemplate(model.CoopView):
