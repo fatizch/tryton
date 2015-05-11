@@ -1,3 +1,5 @@
+.. custom_tryton_coog
+
 SEPA
 ====
 

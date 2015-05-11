@@ -1,3 +1,5 @@
+.. commission
+
 Avenant - Commission
 ====================
 

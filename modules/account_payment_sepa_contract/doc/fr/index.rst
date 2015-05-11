@@ -1,3 +1,5 @@
+.. contract
+
 Gestion du SEPA pour les contrats
 =================================
 

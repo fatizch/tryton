@@ -1,3 +1,5 @@
+.. contract
+
 Contrat d'Assurance - Souscription
 ==================================
 

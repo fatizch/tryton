@@ -1,3 +1,5 @@
+.. contract
+
 Gestion des relevés contrats
 ============================
 

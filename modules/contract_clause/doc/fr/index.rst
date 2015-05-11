@@ -1,3 +1,5 @@
+.. contract
+
 Clause sur contrat
 ==================
 

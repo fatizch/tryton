@@ -1,3 +1,5 @@
+.. capital
+
 Contrat de capitalisation
 =========================
 

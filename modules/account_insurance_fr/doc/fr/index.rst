@@ -1,3 +1,5 @@
+.. custom_tryton_coog
+
 Comptabilité Assurance (fr)
 ===========================
 

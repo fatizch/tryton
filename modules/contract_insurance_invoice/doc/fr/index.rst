@@ -1,3 +1,5 @@
+.. contract
+
 Quittancement des contrats
 ==========================
 

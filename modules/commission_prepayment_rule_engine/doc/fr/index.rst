@@ -1,3 +1,5 @@
+.. commission
+
 Commission précompte - moteur de règles
 ========================================
 

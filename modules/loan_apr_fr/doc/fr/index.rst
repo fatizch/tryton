@@ -1,3 +1,5 @@
+.. credit
+
 Calcul du TAEA
 ==============
 

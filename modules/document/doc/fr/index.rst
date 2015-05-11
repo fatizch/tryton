@@ -1,3 +1,5 @@
+.. transversal
+
 Gestion de documents
 ====================
 

@@ -1,3 +1,5 @@
+.. core_coog
+
 Tests
 =====
 

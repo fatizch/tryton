@@ -1,3 +1,5 @@
+.. contract
+
 Souscription de contrat collectif
 =================================
 

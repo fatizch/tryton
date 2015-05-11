@@ -1,3 +1,5 @@
+.. transversal
+
 Paramétrage - Tables à N dimensions
 ===================================
 

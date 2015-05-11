@@ -3,6 +3,32 @@
 
 import os
 
+from collections import OrderedDict
+from itertools import groupby
+
+SECTIONS = OrderedDict([
+        ('core_coog', 'Noyau Coog\n'),
+        ('custom_tryton_coog', 'Personnalisation Coog des modules Tryton\n'),
+        ('transversal', 'Fonctionnalités transverses Coog\n'),
+        ('laboratory', 'Laboratoire Produit\n'),
+        ('contract', 'Coog transverse Assurance : Contrat\n'),
+        ('endorsement', 'Avenant\n'),
+        ('commission', 'Commission\n'),
+        ('life', 'Prévoyance\n'),
+        ('claim', 'Coog transverse Assurance : Sinistre\n'),
+        ('credit', 'Coog transverse Assurance : Emprunteur\n'),
+        ('health', 'Santé\n'),
+        ('capital', 'Capitalisation\n'),
+        ('pnc', 'IARD\n'),
+        ('none', None),
+])
+
+
+def next_line(text):
+    while True:
+        line = text.readline()
+        if line.strip('\n'):
+            return line
 
 if __name__ == '__main__':
     modules_dir = '../../../../coopbusiness/modules/'
@@ -17,7 +43,13 @@ if __name__ == '__main__':
         try:
             with open(os.path.join(module_dir, 'summary.rst'), 'r') as summ, \
                     open(os.path.join(module_dir, 'index.rst'), 'r') as index:
-                data.append((index.readline(), summ.readlines()))
+                section = SECTIONS[next_line(index).strip('\n').strip('.. ')]
+                if section:
+                    module_data = (section, next_line(index), summ.readlines())
+                    data.append(module_data)
+        except KeyError:
+            print('Bad section comment in %s/index.rst' % module_dir)
+            continue
         except IOError:
             continue
 
@@ -25,6 +57,11 @@ if __name__ == '__main__':
             open('index_template.rst', 'r') as template:
         output.write(template.read())
 
-        for (title, summary) in sorted(data):
-            output.writelines([title, '-' * len(title), '\n'])
-            output.writelines(summary + ['\n'])
+        # Process sections in same order than they are declared above here
+        for section, modules in groupby(sorted(data,
+                    key=lambda x: (SECTIONS.values().index(x[0]), x[1])),
+                key=lambda x: x[0]):
+            output.writelines([section, '-' * len(section), '\n\n'])
+            for module in modules:
+                output.writelines([module[1], '^' * len(module[1]), '\n\n'])
+                output.writelines(module[2] + ['\n'])

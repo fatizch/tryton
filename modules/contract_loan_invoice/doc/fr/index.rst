@@ -1,3 +1,5 @@
+.. credit
+
 Contrat d'Assurance Emprunteur - Quittancement
 ==============================================
 

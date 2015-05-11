@@ -1,3 +1,5 @@
+.. contract
+
 Réseau de distribution
 ======================
 

@@ -1,5 +1,7 @@
-Fonctionnalités transverses coog
-================================
+.. transversal
+
+Utilitaires
+===========
 
 Résumé
 ------

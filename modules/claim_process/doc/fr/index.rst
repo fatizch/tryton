@@ -1,3 +1,5 @@
+.. claim
+
 Processus de déclaration de sinistres
 =====================================
 

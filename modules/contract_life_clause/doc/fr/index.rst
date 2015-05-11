@@ -1,3 +1,5 @@
+.. life
+
 Contrat de Prévoyance - Clause bénéficiaire
 ===========================================
 

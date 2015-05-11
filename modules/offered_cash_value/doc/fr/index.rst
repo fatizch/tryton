@@ -1,3 +1,5 @@
+.. capital
+
 Produit - Capitalisation
 ========================
 

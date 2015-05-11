@@ -1,3 +1,5 @@
+.. commission
+
 Commission d'assurance
 ======================
 

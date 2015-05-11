@@ -1,3 +1,5 @@
+.. endorsement
+
 Avenant - Restauration des frais
 ================================
 

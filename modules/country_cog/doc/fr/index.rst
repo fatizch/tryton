@@ -1,5 +1,7 @@
+.. custom_tryton_coog
+
 Pays - Assurance
-=====================
+================
 
 Résumé
 ------

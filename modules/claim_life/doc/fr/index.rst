@@ -1,3 +1,5 @@
+.. life
+
 Sinistre - Prévoyance
 =====================
 

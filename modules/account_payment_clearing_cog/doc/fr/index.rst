@@ -1,3 +1,5 @@
+.. contract
+
 Mouvement comptable de compensation - Assurance
 ====================================================
 

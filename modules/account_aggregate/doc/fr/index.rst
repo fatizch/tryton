@@ -1,3 +1,5 @@
+.. transversal
+
 Agrégat comptable
 =================
 

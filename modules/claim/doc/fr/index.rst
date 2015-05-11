@@ -1,3 +1,5 @@
+.. claim
+
 Sinistre
 ========
 

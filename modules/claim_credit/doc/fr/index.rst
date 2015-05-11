@@ -1,3 +1,5 @@
+.. credit
+
 Sinistre - Emprunteur
 =====================
 

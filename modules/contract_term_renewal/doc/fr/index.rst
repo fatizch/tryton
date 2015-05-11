@@ -1,3 +1,5 @@
+.. contract
+
 Contrat - Règles de renouvellement
 ==================================
 

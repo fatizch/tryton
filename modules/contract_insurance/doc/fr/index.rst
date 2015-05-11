@@ -1,6 +1,7 @@
+.. contract
+
 Contrat d'assurance
 ===================
-
 
 Résumé
 ------

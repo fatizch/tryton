@@ -1,5 +1,8 @@
+.. custom_tryton_coog
+
+
 Monnaie - Assurance
-========================
+===================
 
 Résumé
 ------

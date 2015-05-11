@@ -1,3 +1,5 @@
+.. contract
+
 Collectif
 =========
 

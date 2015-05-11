@@ -1,3 +1,5 @@
+.. contract
+
 Gestion des courriers de relances
 =================================
 

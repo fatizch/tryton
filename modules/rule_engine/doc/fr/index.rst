@@ -1,3 +1,5 @@
+.. transversal
+
 Moteur de règles
 ================
 

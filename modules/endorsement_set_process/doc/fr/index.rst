@@ -1,3 +1,5 @@
+.. endorsement
+
 Ensemble d'avenants - Processus
 ===============================
 

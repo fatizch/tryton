@@ -1,3 +1,5 @@
+.. life
+
 Prestation prévoyance
 =====================
 

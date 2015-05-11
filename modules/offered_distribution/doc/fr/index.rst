@@ -1,3 +1,5 @@
+.. laboratory
+
 Produit - Distribution sur réseau
 =================================
 

@@ -1,3 +1,5 @@
+.. contract
+
 Historisation des états de quittances
 =====================================
 

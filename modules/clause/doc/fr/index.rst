@@ -1,3 +1,5 @@
+.. transversal
+
 Clausier
 ========
 
@@ -17,4 +19,5 @@ Fonctionnalités
 
     summary.rst
     features.rst
+
 

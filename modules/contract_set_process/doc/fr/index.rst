@@ -1,3 +1,5 @@
+.. contract
+
 Ensemble de contrats - Processus
 ================================
 

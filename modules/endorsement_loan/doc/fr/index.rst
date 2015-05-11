@@ -1,3 +1,5 @@
+.. credit
+
 Avenant - Modification de prêt
 ==============================
 

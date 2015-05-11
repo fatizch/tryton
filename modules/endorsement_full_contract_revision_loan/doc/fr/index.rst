@@ -1,3 +1,5 @@
+.. credit
+
 Avenant - Reprise Intégrale de Contrat (Pret)
 =============================================
 

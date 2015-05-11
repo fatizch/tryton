@@ -1,7 +1,8 @@
-Tiers - Assurance
-======================
+.. custom_tryton_coog
 
-TODO
+Tiers - Assurance
+=================
+
 
 .. toctree::
     :hidden:

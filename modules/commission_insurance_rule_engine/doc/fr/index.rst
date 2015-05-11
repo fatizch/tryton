@@ -1,3 +1,5 @@
+.. commission
+
 Moteur de règles - Commissions
 ==============================
 

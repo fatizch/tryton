@@ -1,5 +1,7 @@
+.. custom_tryton_coog
+
 Banque - Assurance
-=======================
+==================
 
 Résumé
 ------
