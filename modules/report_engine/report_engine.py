@@ -235,18 +235,19 @@ class ReportTemplateVersion(Attachment, export.ExportImportMixin):
 
     @classmethod
     def _import_json(cls, values, main_object=None):
-        if 'data' in values:
-            values['data'] = base64.b64decode(values['data'])
+        pool = Pool()
+        Attachment = pool.get('ir.attachment')
+        Attachment.decode_binary_data(values)
         return super(ReportTemplateVersion, cls)._import_json(values,
             main_object)
 
     def export_json(self, skip_fields=None, already_exported=None,
             output=None, main_object=None, configuration=None):
-        new_values = super(Attachment, self).export_json(skip_fields,
-            already_exported, output, main_object, configuration)
-        if 'data' in new_values:
-            new_values['data'] = base64.b64encode(self.data) \
-                if self.data else ''
+        pool = Pool()
+        Attachment = pool.get('ir.attachment')
+        new_values = super(ReportTemplateVersion, self).export_json(
+            skip_fields, already_exported, output, main_object, configuration)
+        Attachment.encode_binary_data(new_values, configuration, self)
         return new_values
 
 

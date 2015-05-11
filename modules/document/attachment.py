@@ -1,8 +1,6 @@
-import base64
-
 from trytond.pool import PoolMeta, Pool
 
-from trytond.modules.cog_utils import fields, export
+from trytond.modules.cog_utils import fields
 
 __metaclass__ = PoolMeta
 
@@ -11,81 +9,17 @@ __all__ = [
     ]
 
 
-class Attachment(export.ExportImportMixin):
+class Attachment:
     __name__ = 'ir.attachment'
-    _func_key = 'func_key'
 
     document_desc = fields.Many2One('document.description',
         'Document Description', ondelete='SET NULL')
-    origin = fields.Reference('Origin',
-        selection='get_possible_origin', select=True)
-    func_key = fields.Function(fields.Char('Functional Key'),
-        'get_func_key', searcher='search_func_key')
-
-    def get_func_key(self, name):
-        return '%s|%s' % (self.name, self.resource)
-
-    @classmethod
-    def search_func_key(cls, name, clause):
-        assert clause[1] == '='
-        if '|' in clause[2]:
-            operands = clause[2].split('|')
-            if len(operands) == 2:
-                name, resource = clause[2].split('|')
-                return [('name', clause[1], name),
-                    ('resource', clause[1], resource)]
-            else:
-                return [('id', '=', None)]
-        else:
-            return [('id', '=', None)]
-
-    @classmethod
-    def get_possible_origin(cls):
-        res = cls.models_get()
-        res.append(('', ''))
-        return res
-
-    @classmethod
-    def __setup__(cls):
-        super(Attachment, cls).__setup__()
-        cls._error_messages.update({
-                'can_t_decode_base64': "Can't decode attachment in base 64"
-                })
-
-    @classmethod
-    def add_func_key(cls, values):
-        values['_func_key'] = values['name']
-
-    @classmethod
-    def _export_light(cls):
-        return (super(Attachment, cls)._export_light() |
-            set(['resource', 'document_desc', 'origin']))
-
-    @classmethod
-    def _export_skips(cls):
-        return (super(Attachment, cls)._export_skips() |
-            set(['digest', 'collision']))
-
-    @classmethod
-    def _import_json(cls, values, main_object=None):
-        if 'data' in values:
-            try:
-                values['data'] = base64.b64decode(values['data'])
-            except Exception:
-                cls.raise_user_error('can_t_decode_base64')
-        return super(Attachment, cls)._import_json(values, main_object)
-
-    def export_json(self, skip_fields=None, already_exported=None,
-            output=None, main_object=None, configuration=None):
-        new_values = super(Attachment, self).export_json(skip_fields,
-            already_exported, output, main_object, configuration)
-        if not configuration or 'data' in new_values:
-            new_values['data'] = base64.b64encode(self.data)
-        return new_values
 
     @classmethod
     def search_for_export_import(cls, values):
         pool = Pool()
+        if '_func_key' in values:
+            return super(Attachment, cls).search_for_export_import(values)
 
         def domain_by_attribute_name(attribute_name):
             attribute_present = (attribute_name in values and

@@ -15,6 +15,7 @@ from .test_case_framework import *
 from .models_for_tests import *
 from .tag import *
 from .event import *
+from .attachment import *
 
 
 def register():
@@ -63,6 +64,7 @@ def register():
         EventType,
         ExportSummary,
         ExportConfigurationSelection,
+        Attachment,
         module='cog_utils', type_='model')
     if config.get('env', 'testing') == 'True':
         Pool.register(
