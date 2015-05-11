@@ -60,6 +60,8 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
         cls._error_messages.update({
             'no_sequence_defined': 'No sequence defined in configuration '
             'for contracts set number',
+            'same_contract_in_set': 'the contract %s is already defined in the'
+            ' contract set %s'
             })
 
     @classmethod
@@ -149,6 +151,23 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
     def search_status(cls, name, clause):
         return [('contracts.status',) + tuple(clause[1:])]
 
+    @classmethod
+    def check_contracts_unicity(cls, contracts_sets):
+        for contract_set in contracts_sets:
+            contract_keys = []
+            for contract in contract_set.contracts:
+                key = (contract.subscriber, contract.product,
+                    contract.start_date)
+                if key in contract_keys:
+                    cls.raise_user_error('same_contract_in_set', (
+                            contract.rec_name, contract_set.number))
+                contract_keys.append(key)
+
+    @classmethod
+    def validate(cls, contracts_sets):
+        super(ContractSet, cls).validate(contracts_sets)
+        cls.check_contracts_unicity(contracts_sets)
+
 
 class Contract:
     __name__ = 'contract'
@@ -160,6 +179,15 @@ class Contract:
                 'contract_set_get_dates', False):
             return self.contract_set.get_dates()
         return super(Contract, self).get_dates()
+
+    @classmethod
+    def validate(cls, contracts):
+        pool = Pool()
+        ContractSet = pool.get('contract.set')
+        super(Contract, cls).validate(contracts)
+        contract_sets = [contract.contract_set for contract in contracts
+            if contract.contract_set]
+        ContractSet.check_contracts_unicity(set(contract_sets))
 
 
 class ContractSetSelectDeclineReason(model.CoopView):
