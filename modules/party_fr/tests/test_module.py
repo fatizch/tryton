@@ -48,10 +48,15 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 ('145067512312355', False),
                 ('145065C12312307', False),
                 ('14511661231233', False),
-                ('279086507612053', True)
+                ('279086507612053', True),
+                ('176209939705448', True)
         )
         for i, (value, test) in enumerate(values):
-            birth_date = date(int('19' + value[1:3]), int(value[3:5]), 1)
+            if int(value[3:5]) not in range(1, 13):
+                month = '1'
+            else:
+                month = value[3:5]
+            birth_date = date(int('19' + value[1:3]), int(month), 1)
             gender = 'male'
             if value[0:1] == '2':
                 gender = 'female'
