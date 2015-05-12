@@ -10,6 +10,7 @@ def register():
         CreateInvoicePrincipalAsk,
         MoveLine,
         InvoiceLine,
+        Invoice,
         Insurer,
         module='commission_insurer', type_='model')
     Pool.register(

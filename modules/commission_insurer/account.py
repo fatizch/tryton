@@ -1,10 +1,16 @@
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
+from trytond.tools import grouped_slice
+from trytond.model import ModelView, Workflow
 
 from trytond.modules.cog_utils import fields
 
-__all__ = ['MoveLine', 'InvoiceLine']
 __metaclass__ = PoolMeta
+__all__ = [
+    'MoveLine',
+    'InvoiceLine',
+    'Invoice',
+    ]
 
 
 class MoveLine:
@@ -29,3 +35,24 @@ class InvoiceLine:
     principal_lines = fields.One2Many('account.move.line',
         'principal_invoice_line', 'Principal Lines', readonly=True,
         states={'invisible': ~Eval('principal_lines')})
+
+
+class Invoice:
+    __name__ = 'account.invoice'
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('cancel')
+    def cancel(cls, invoices):
+        pool = Pool()
+        MoveLine = pool.get('account.move.line')
+
+        super(Invoice, cls).cancel(invoices)
+
+        # remove link to principal_invoice_line for move
+        for sub_invoices in grouped_slice(invoices):
+            ids = [i.id for i in sub_invoices]
+            move_lines = MoveLine.search([
+                ('principal_invoice_line.invoice', 'in', ids)
+                ])
+            MoveLine.write(move_lines, {'principal_invoice_line': None})
