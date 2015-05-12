@@ -1282,7 +1282,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         for contract_endorsement in contract_endorsements:
             latest_applied, = cls.search([
                     ('contract', '=', contract_endorsement.contract.id),
-                    ('state', '!=', 'draft'),
+                    ('state', 'in', ('applied', 'in_progress')),
                     ], order=[('applied_on', 'DESC')], limit=1)
             if latest_applied != contract_endorsement:
                 cls.raise_user_error('not_latest_applied',
