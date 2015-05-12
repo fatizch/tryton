@@ -211,10 +211,15 @@ set([(x.amount, x.agent.party.name) for x in line.commissions]) == set([
     (Decimal('10'), u'Broker'), (Decimal('60'), u'Insurer')])
 # #Res# #True
 
-# #Comment# #Credit invoice
-credit = Wizard('account.invoice.credit', [first_invoice.invoice])
-credit.form.with_refund = True
-credit.execute('credit')
+# #Comment# #Pay invoice
+Account = Model.get('account.account')
+Journal = Model.get('account.journal')
+cash_journal, = Journal.find([('type', '=', 'cash')])
+cash_journal.debit_account, = Account.find(['name', '=', 'Main Cash'])
+cash_journal.save()
+pay = Wizard('account.invoice.pay', [first_invoice.invoice])
+pay.form.journal = cash_journal
+pay.execute('choice')
 
 # #Comment# #Create commission invoice
 Invoice = Model.get('account.invoice')
@@ -229,6 +234,24 @@ invoice.total_amount == Decimal('30')
 # #Res# #True
 len(invoice.lines[1].broker_fee_lines)
 # #Res# #1
+
+# #Comment# #Cancel commission invoice
+invoice.click('cancel')
+[x.invoice_line for x in line.commissions] == [None, None]
+# #Res# #True
+
+# #Comment# #Recreate commission invoice
+Invoice = Model.get('account.invoice')
+create_invoice = Wizard('commission.create_invoice')
+create_invoice.form.from_ = None
+create_invoice.form.to = None
+create_invoice.execute('create_')
+invoice, = Invoice.find([('type', '=', 'in_invoice'),
+        ('state', '!=', 'cancel')])
+invoice.description = 'first'
+invoice.save()
+invoice.total_amount == Decimal('30')
+# #Res# #True
 
 # #Comment# #Cancel Invoice
 Contract.first_invoice([contract.id], config.context)

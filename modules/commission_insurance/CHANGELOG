@@ -1,3 +1,4 @@
+* Allow to cancel commission invoice
 * Add broker fee management
 * Automatic payment generation for broker based on configuration
 

@@ -4,6 +4,8 @@ from decimal import Decimal
 from trytond.pool import PoolMeta, Pool
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
+from trytond.model import ModelView, Workflow
+from trytond.tools import grouped_slice
 
 from trytond.modules.cog_utils import utils, fields
 
@@ -118,3 +120,26 @@ class Invoice:
 
     def get_is_commission_invoice(self, name):
         return self.party.is_broker and self.type == 'in_invoice'
+
+    @classmethod
+    @ModelView.button
+    @Workflow.transition('cancel')
+    def cancel(cls, invoices):
+        pool = Pool()
+        Commission = pool.get('commission')
+        MoveLine = pool.get('account.move.line')
+
+        super(Invoice, cls).cancel(invoices)
+
+        for sub_invoices in grouped_slice(invoices):
+            # Remove link to invoice_line in commission for cancelled invoice
+            ids = [i.id for i in sub_invoices]
+            commissions = Commission.search([
+                    ('invoice_line.invoice', 'in', ids)
+                    ])
+            Commission.write(commissions, {'invoice_line': None})
+            # Remove link to invoice_line in move link to a broker fee
+            move_lines = MoveLine.search([
+                    ('broker_fee_invoice_line.invoice', 'in', ids)
+                    ])
+            MoveLine.write(move_lines, {'broker_fee_invoice_line': None})
