@@ -1440,7 +1440,8 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         contract_endorsements = []
         for contract in contracts:
             contract_endorsements.append(ContractEndorsement(
-                    contract=contract, **init_dict))
+                    contract=contract, applied_on=datetime.datetime.now(),
+                    **init_dict))
         endorsement.contract_endorsements = contract_endorsements
         endorsement.effective_date = at_date
         endorsement.state = 'applied'
