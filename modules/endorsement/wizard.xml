@@ -25,6 +25,14 @@
             <field name="type">form</field>
             <field name="name">endorsement_terminate_contract_form</field>
         </record>
+        <!-- ################# -->
+        <!-- # Void Contract # -->
+        <!-- ################# -->
+        <record model="ir.ui.view" id="endorsement_void_contract_view_form">
+            <field name="model">endorsement.contract.void</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_void_contract_form</field>
+        </record>
         <!-- ###################### -->
         <!-- # Select Endorsement # -->
         <!-- ###################### -->

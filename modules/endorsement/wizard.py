@@ -1,4 +1,3 @@
-import datetime
 from collections import defaultdict
 
 from trytond.pool import Pool, PoolMeta
@@ -21,6 +20,7 @@ __all__ = [
     'ChangeContractStartDate',
     'ChangeContractExtraData',
     'TerminateContract',
+    'VoidContract',
     'EndorsementWizardStepMixin',
     'EndorsementWizardStepBasicObjectMixin',
     'EndorsementWizardStepVersionedObjectMixin',
@@ -524,6 +524,51 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
         return 'endorsement.endorsement_terminate_contract_view_form'
 
 
+class VoidContract(EndorsementWizardStepMixin, model.CoopView):
+    'Void Contract'
+
+    __name__ = 'endorsement.contract.void'
+
+    contract = fields.Many2One('contract', 'Contract', readonly=True)
+    void_reason = fields.Many2One('contract.sub_status', 'Void Reason',
+        required=True, domain=[('code', 'in', ['error',
+                    'cancelled_by_customer'])])
+    current_end_date = fields.Date('Current End Date', readonly=True)
+
+    def step_default(self, name):
+        pool = Pool()
+        Contract = pool.get('contract')
+        defaults = super(VoidContract, self).step_default()
+        contracts = self._get_contracts()
+        for contract_id, endorsement in contracts.iteritems():
+            defaults['contract'] = contract_id
+            defaults['current_end_date'] = Contract(contract_id).end_date
+        return defaults
+
+    def step_update(self):
+        pool = Pool()
+        EndorsementActivationHistory = pool.get(
+            'endorsement.contract.activation_history')
+        Contract = pool.get('contract')
+        contract_id, endorsement = self._get_contracts().items()[0]
+
+        contract = Contract(contract_id)
+        endorsement.values = {'status': 'void', 'sub_status':
+            self.void_reason.id}
+        endorsement.activation_history = [EndorsementActivationHistory(
+                action='remove',
+                contract_endorsement=endorsement,
+                activation_history=activation_history,
+                relation=activation_history.id,
+                definition=self.endorsement_definition)
+            for activation_history in contract.activation_history]
+        endorsement.save()
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement.endorsement_void_contract_view_form'
+
+
 class SelectEndorsement(model.CoopView):
     'Select Endorsement'
 
@@ -948,6 +993,9 @@ add_endorsement_step(StartEndorsement, ChangeContractExtraData,
 
 add_endorsement_step(StartEndorsement, TerminateContract,
     'terminate_contract')
+
+add_endorsement_step(StartEndorsement, VoidContract,
+    'void_contract')
 
 
 class OpenContractAtApplicationDate(Wizard):

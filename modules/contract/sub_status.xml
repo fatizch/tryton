@@ -7,7 +7,7 @@
     </record>
     <record model="contract.sub_status" id="cooling_off_cancelled">
         <field name="name">Cancelled by customer</field>
-        <field name="code">Cancelled_by_customer</field>
+        <field name="code">cancelled_by_customer</field>
         <field name="status">void</field>
     </record>
     <record model="contract.sub_status" id="sub_status_reached_end_date">

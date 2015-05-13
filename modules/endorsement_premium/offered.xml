@@ -7,5 +7,11 @@
         <record model="endorsement.definition" id="endorsement.stop_contract_definition">
             <field name="preview_state">preview_contract_premiums</field>
         </record>
+        <!-- ########################################### -->
+        <!-- # Void Contract Endorsement Configuration # -->
+        <!-- ########################################### -->
+        <record model="endorsement.definition" id="endorsement.void_contract_definition">
+            <field name="preview_state">preview_contract_premiums</field>
+        </record>
     </data>
 </tryton>

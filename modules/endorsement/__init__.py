@@ -32,6 +32,7 @@ def register():
         ChangeContractStartDate,
         ChangeContractExtraData,
         TerminateContract,
+        VoidContract,
         BasicPreview,
         EndorsementSelectDeclineReason,
         ReportTemplate,

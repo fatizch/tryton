@@ -185,7 +185,7 @@
             <field name="code">void_contract</field>
             <field name="name">void Contract</field>
             <field name="kind">contract</field>
-            <field name="view">dummy_step</field>
+            <field name="view">void_contract</field>
         </record>
         <record model="endorsement.definition-endorsement.part" id="void_contract_relation">
             <field name="definition" ref="void_contract_definition"/>

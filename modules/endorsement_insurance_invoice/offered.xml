@@ -91,6 +91,12 @@
         <record model="endorsement.part" id="endorsement.stop_contract_revision_part">
             <field name="requires_contract_rebill">True</field>
         </record>
+        <!-- ########################################### -->
+        <!-- # Void Contract Endorsement Configuration # -->
+        <!-- ########################################### -->
+        <record model="endorsement.part" id="endorsement.void_contract_revision_part">
+            <field name="requires_contract_rebill">True</field>
+        </record>
     </data>
     <data depends="account_payment_sepa_contract">
         <record model="endorsement.contract.billing_information.field" id="sepa_mandate_field">
