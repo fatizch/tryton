@@ -1,57 +1,82 @@
-from trytond.pool import PoolMeta
+from trytond import backend
+from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, model, utils
-from trytond.modules.offered_insurance.business_rule.business_rule import \
-    BusinessRuleRoot, STATE_ADVANCED
-from trytond.modules.offered import NonExistingRuleKindException
+from trytond.modules.cog_utils import fields, model
+from trytond.modules.rule_engine import RuleMixin
 
 
 __all__ = [
     'DocumentRule',
     'RuleDocumentDescriptionRelation',
-    'Offered',
-    'OfferedProduct',
-    'OfferedOptionDescription',
+    'Product',
+    'OptionDescription',
     ]
 
 __metaclass__ = PoolMeta
 
 
-class DocumentRule(BusinessRuleRoot, model.CoopSQL):
+class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
     'Document Managing Rule'
 
     __name__ = 'document.rule'
 
-    kind = fields.Selection([
-            ('', ''),
-            ('main', 'Main'),
-            ('sub', 'Sub Elem'),
-            ('loss', 'Loss'),
-            ], 'Kind')
+    product = fields.Many2One('offered.product', 'Product',
+        ondelete='CASCADE')
+    option = fields.Many2One('offered.option.description',
+        'Option Description', ondelete='CASCADE')
     documents = fields.Many2Many('document.rule-document.description', 'rule',
-        'document', 'Documents', states={'invisible': STATE_ADVANCED})
-
-    def give_me_documents(self, args):
-        if self.config_kind == 'simple':
-            return self.documents, []
-        if not self.rule:
-            return [], []
-        try:
-            rule_result = self.get_rule_result(args)
-        except Exception:
-            return [], ['Invalid rule']
-        try:
-            result = utils.get_those_objects(
-                'document.request.line', [
-                    ('code', 'in', rule_result.result)])
-            return result, []
-        except:
-            return [], ['Invalid documents']
+        'document', 'Documents')
 
     @classmethod
-    def default_kind(cls):
-        return Transaction().context.get('doc_rule_kind', None)
+    def __register__(cls, module_name):
+        cursor = Transaction().cursor
+        super(DocumentRule, cls).__register__(module_name)
+        # Migration from 1.3: Drop sub_document_rules column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        document_rule = TableHandler(cursor, cls)
+        if document_rule.column_exist('start_date'):
+            document_rule.drop_column('start_date')
+        if document_rule.column_exist('end_date'):
+            document_rule.drop_column('end_date')
+        if document_rule.column_exist('config_kind'):
+            document_rule.drop_column('config_kind')
+        if document_rule.column_exist('template'):
+            document_rule.drop_column('template')
+        if document_rule.column_exist('offered'):
+            cursor.execute('update document_rule '
+                'set product=CAST(substr(offered,17) as integer) '
+                "where offered like 'offered.product,%'")
+            cursor.execute('update document_rule '
+                'set option=CAST(substr(offered,28) as integer) '
+                "where offered like 'offered.option.description,%'")
+            document_rule.drop_column('offered')
+
+    @classmethod
+    def __setup__(cls):
+        super(DocumentRule, cls).__setup__()
+        cls._error_messages.update({
+                'wrong_documents_rule': 'The return of the document rule must '
+                'be a list with required document code.',
+                })
+        cls.rule.required = False
+        cls.rule.help = 'The rule must return a list of documents code.'
+
+    def calculate_required_documents(self, args):
+        pool = Pool()
+        DocumentDescription = pool.get('document.description')
+        if not self.rule:
+            return list(self.documents)
+        documents_in_rules = []
+        documents_code = self.calculate(args)
+        if type(documents_code) == list:
+            if documents_code:
+                documents_in_rules = DocumentDescription.search(
+                    [('code', 'in', documents_code)])
+        else:
+            self.raise_user_error('wrong_documents_rule')
+        return list(set(documents_in_rules + list(self.documents)))
 
 
 class RuleDocumentDescriptionRelation(model.CoopSQL):
@@ -64,34 +89,45 @@ class RuleDocumentDescriptionRelation(model.CoopSQL):
         ondelete='RESTRICT')
 
 
-class Offered:
-    __name__ = 'offered'
-
-    document_rules = fields.One2ManyDomain('document.rule', 'offered',
-        'Document Rules', context={'doc_rule_kind': 'main'},
-        domain=[('kind', '=', 'main')], delete_missing=True)
-    sub_document_rules = fields.One2ManyDomain('document.rule', 'offered',
-        'Sub Document Rules', context={'doc_rule_kind': 'sub'},
-        domain=[('kind', '=', 'sub')], delete_missing=True)
-
-    def give_me_documents(self, args):
-        try:
-            return self.get_result('documents', args, kind='document')
-        except NonExistingRuleKindException:
-            return [], ()
-
-
-class OfferedProduct(Offered):
-    'Offered Product'
-
+class Product:
     __name__ = 'offered.product'
-    # This empty override is necessary to have in the product, the fields added
-    # in the override of offered
+
+    document_rules = fields.One2Many('document.rule', 'product',
+        'Document Rules', delete_missing=True, size=1)
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(Product, cls).__register__(module_name)
+        # Migration from 1.3: Drop sub_document_rules column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        product = TableHandler(cursor, cls)
+        if product.column_exist('sub_document_rules'):
+            product.drop_column('sub_document_rules')
+
+    def calculate_required_documents(self, args):
+        if not self.document_rules:
+            return []
+        return self.document_rules[0].calculate_required_documents(args)
 
 
-class OfferedOptionDescription(Offered):
-    'OptionDescription'
-
+class OptionDescription:
     __name__ = 'offered.option.description'
-    # This empty override is necessary to have in the coverage the fields added
-    # in the override of offered
+
+    document_rules = fields.One2Many('document.rule', 'option',
+        'Document Rules', delete_missing=True, size=1)
+
+    @classmethod
+    def __register__(cls, module_name):
+        super(OptionDescription, cls).__register__(module_name)
+        # Migration from 1.3: Drop sub_document_rules column
+        TableHandler = backend.get('TableHandler')
+        cursor = Transaction().cursor
+        option = TableHandler(cursor, cls)
+        if option.column_exist('sub_document_rules'):
+            option.drop_column('sub_document_rules')
+
+    def calculate_required_documents(self, args):
+        if not self.document_rules:
+            return []
+        return self.document_rules[0].calculate_required_documents(args)

@@ -2,8 +2,7 @@
 <data>
     <xpath expr="/form/notebook/page/notebook" position="inside">
         <page string="Documents" id="documents">
-            <field name="document_rules"/>
-            <field name="sub_document_rules"/>
+            <field name="document_rules" mode="form"/>
         </page>
     </xpath>
 </data>

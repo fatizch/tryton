@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -6,13 +6,176 @@ msgctxt "error:contract:"
 msgid "Some required documents are missing."
 msgstr "Des documents requis sont manquants."
 
+msgctxt "error:document.rule:"
+msgid ""
+"The return of the document rule must be a list with required document code."
+msgstr ""
+"Le retour de la règle doit être une liste avec les codes des documents "
+"requis"
+
+msgctxt "field:contract,attachments:"
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgctxt "field:contract,doc_received:"
+msgid "All Documents Received"
+msgstr "Tous les documents requis sont reçus"
+
 msgctxt "field:contract,document_request_lines:"
 msgid "Documents"
 msgstr "Documents"
 
+msgctxt "field:document.receive.request,tmp_0:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:document.rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.rule,documents:"
+msgid "Documents"
+msgstr "Documents"
+
+msgctxt "field:document.rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.rule,offered:"
+msgid "Offered"
+msgstr "Offre"
+
+msgctxt "field:document.rule,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:document.rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:document.rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de règle"
+
+msgctxt "field:document.rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:document.rule-document.description,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:document.rule-document.description,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:document.rule-document.description,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:document.rule-document.description,document:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "field:document.rule-document.description,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:document.rule-document.description,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:document.rule-document.description,rule:"
+msgid "Rule"
+msgstr "Règle"
+
+msgctxt "field:document.rule-document.description,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:document.rule-document.description,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:document.rule-document.description,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:offered,document_rules:"
+msgid "Document Rules"
+msgstr "Règles de gestion des documents"
+
+msgctxt "field:offered.option.description,document_rules:"
+msgid "Document Rules"
+msgstr "Règles de gestion des documents"
+
+msgctxt "field:offered.product,document_rules:"
+msgid "Document Rules"
+msgstr "Règles de gestion des documents"
+
+msgctxt "help:document.rule,rule:"
+msgid "The rule must return a list of documents code."
+msgstr "Le retour de la règle doit être une liste de codes document"
+
+msgctxt "model:document.rule,name:"
+msgid "Document Managing Rule"
+msgstr "Règles de gestion des documents"
+
+msgctxt "model:document.rule-document.description,name:"
+msgid "Rule to Document Description Relation"
+msgstr "Relation règles descripteur des documents"
+
+msgctxt "selection:document.receive.request,kind:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request,needed_by:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Covered Element"
+msgstr "Risque Couvert"
+
+msgctxt "selection:document.request.line,for_object:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "selection:document.rule,offered:"
+msgid "Option Description"
+msgstr "Garantie"
+
+msgctxt "selection:document.rule,offered:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "view:contract:"
+msgid "Documents"
+msgstr "Documents"
+
 msgctxt "view:document.rule:"
-msgid "Document Rule"
-msgstr "Règle des gestion des documents"
+msgid "Required Documents Rule"
+msgstr "Règles des documents requis"
 
 msgctxt "view:offered.option.description:"
 msgid "Documents"

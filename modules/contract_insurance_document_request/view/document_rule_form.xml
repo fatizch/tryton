@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data>
-    <xpath expr="/form" position="replace_attributes">
-        <form string="Document Rule"/>
-    </xpath>
-    <xpath expr="/form/label[@name='rule']" position="before">
-        <newline/>
-        <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>
-        <field name="kind" invisible="1"/>
-        <newline/>
-    </xpath>
-</data>
+<?xml version="1.0"?>
+<form string="Required Documents Rule">
+    <field name="documents" colspan="4"/>
+    <label name="rule"/>
+    <field name="rule"/>
+    <newline/>
+    <field name="rule_extra_data" no_command="1" colspan="2"/>
+</form>

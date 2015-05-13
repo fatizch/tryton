@@ -102,18 +102,6 @@ class OptionDescription:
         except offered.NonExistingRuleKindException:
             return [], []
 
-    def give_me_documents(self, args):
-        try:
-            if 'kind' in args and args['kind'] == 'sub':
-                res, errs = self.get_result(
-                    'documents', args, kind='sub_document')
-            else:
-                res, errs = self.get_result('documents', args, kind='document')
-        except offered.NonExistingRuleKindException:
-            return [], []
-
-        return res, errs
-
     def give_me_must_have_coverage_amount(self, args):
         result = self.get_good_rule_at_date(args, 'coverage_amount')
 

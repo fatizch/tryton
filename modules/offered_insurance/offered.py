@@ -93,19 +93,6 @@ class Product:
             result.append(coverage.family)
         return (result, errors)
 
-    def give_me_documents(self, args):
-        if 'option' in args:
-            for coverage in self.coverages:
-                if coverage.code == args['option']:
-                    return coverage.give_me_documents(args)
-        else:
-            try:
-                return self.get_result(
-                    'documents', args, kind='document')
-            except NonExistingRuleKindException:
-                return [], ()
-        return [], ()
-
     @fields.depends('coverages')
     def on_change_with_item_descriptors(self, name=None):
         res = set()

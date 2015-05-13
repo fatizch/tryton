@@ -50,47 +50,28 @@ class Contract:
         pool = Pool()
         DocumentRequestLine = pool.get('document.request.line')
         documents = []
-        product_docs, errs = self.product.get_result(
-            'documents', {
-                'contract': self,
-                'date': self.start_date,
-                'appliable_conditions_date': self.appliable_conditions_date})
-        if errs:
-            return False, errs
-        if product_docs:
-            documents.extend(product_docs)
+        main_args = {
+            'date': self.start_date,
+            'appliable_conditions_date': self.appliable_conditions_date
+            }
+        args = main_args.copy()
+        self.init_dict_for_rule_engine(args)
+        product_docs = self.product.calculate_required_documents(args)
+        documents.extend(product_docs)
         for option in self.options:
             if not option.status == 'active':
                 continue
-            option_docs, errs = option.coverage.get_result(
-                'documents', {
-                    'contract': self,
-                    'option': option.coverage.code,
-                    'appliable_conditions_date':
-                    self.appliable_conditions_date,
-                    'date': self.start_date})
-            if errs:
-                return False, errs
-            if not option_docs:
-                continue
+            args = main_args.copy()
+            option.init_dict_for_rule_engine(args)
+            option_docs = option.coverage.calculate_required_documents(args)
             documents.extend(option_docs)
         for elem in self.covered_elements:
             for option in elem.options:
                 if not option.status == 'active':
                     continue
-                sub_docs, errs = option.coverage.get_result(
-                    'documents', {
-                        'contract': self,
-                        'option': option.coverage.code,
-                        'date': self.start_date,
-                        'appliable_conditions_date':
-                        self.appliable_conditions_date,
-                        'kind': 'sub',
-                        'sub_elem': elem})
-                if errs:
-                    return False, errs
-                if not sub_docs:
-                    continue
+                args = main_args.copy()
+                elem.init_dict_for_rule_engine(args)
+                sub_docs = option.coverage.calculate_required_documents(args)
                 documents.extend(sub_docs)
         existing_document_desc = [request.document_desc
             for request in self.document_request_lines]
@@ -127,7 +108,10 @@ class Contract:
             contract.init_subscription_document_request()
             contract.link_attachments_to_requests()
 
-    def before_activate(self, contract_dict=None):
+    def check_required_documents(self):
         if not self.doc_received:
             self.raise_user_error('missing_required_document')
+
+    def before_activate(self, contract_dict=None):
+        self.check_required_documents()
         super(Contract, self).before_activate()
