@@ -6,7 +6,7 @@ from trytond.pool import Pool
 from trytond.pyson import PYSONEncoder
 from trytond.transaction import Transaction
 
-from trytond.modules.cog_utils import fields, utils
+from trytond.modules.cog_utils import fields, utils, coop_date
 
 __all__ = ['CreateInvoicePrincipal', 'CreateInvoicePrincipalAsk']
 
@@ -23,7 +23,7 @@ class CreateInvoicePrincipal(Wizard):
     create_ = StateAction('account_invoice.act_invoice_form')
 
     def get_domain(self, account):
-        return [
+        domain = [
             ('account', '=', account.id),
             ('principal_invoice_line', '=', None),
             ('journal.type', '!=', 'commission'),
@@ -31,6 +31,9 @@ class CreateInvoicePrincipal(Wizard):
                 [('origin.id', '!=', None, 'account.invoice')],
                 [('origin.id', '!=', None, 'account.move')]
             ]]
+        if self.ask.until_date:
+            domain.append(('date', '<=', self.ask.until_date))
+        return domain
 
     def create_insurer_notice(self, party):
         pool = Pool()
@@ -59,12 +62,17 @@ class CreateInvoicePrincipal(Wizard):
                 invoice = line.origin
             if invoice.state != 'paid' and invoice.state != 'cancel':
                 continue
+            skip_line = False
             for i_line in invoice.lines:
-                for commission in i_line.commissions:
-                    if (commission.agent.party == party
-                            and not commission.invoice_line):
+                for commission in [x for x in i_line.commissions
+                        if (x.agent.party == party and not x.invoice_line)]:
+                    if (not self.ask.until_date
+                            or commission.date <= self.ask.until_date):
                         commissions.append(commission)
-            selected.append(line)
+                    else:
+                        skip_line = True
+            if not skip_line:
+                selected.append(line)
         commissions = list(set(commissions))
 
         amount = sum(l.credit - l.debit for l in selected)
@@ -148,6 +156,7 @@ class CreateInvoicePrincipalAsk(ModelView):
     journal = fields.Many2One('account.journal', 'Journal', required=True)
     description = fields.Text('Description', required=True)
     post_invoices = fields.Boolean('Post Invoices')
+    until_date = fields.Date('Until Date')
 
     @staticmethod
     def default_company():
@@ -168,3 +177,7 @@ class CreateInvoicePrincipalAsk(ModelView):
         Translation = Pool().get('ir.translation')
         return Translation.get_source('received_premiums', 'error',
             Transaction().language)
+
+    @staticmethod
+    def default_until_date():
+        return coop_date.get_last_day_of_last_month(utils.today())

@@ -122,6 +122,9 @@ class ModuleTestCase(test_framework.CoopTestCase):
                 start_date, prorata_method=coop_date.prorata_365),
             -1 - Decimal(28) / Decimal(365))
 
+        self.assertEqual(coop_date.get_last_day_of_last_month(
+            datetime.date(2016, 3, 15)), datetime.date(2016, 2, 29))
+
     def test0035_functional_error(self):
         class PatchedView(self.View, model.FunctionalErrorMixIn):
             @classmethod

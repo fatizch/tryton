@@ -9,5 +9,7 @@
     <field name="description" yfill="0" yexpand="0"/>
     <label name="post_invoices"/>
     <field name="post_invoices"/>
+    <label name="until_date"/>
+    <field name="until_date"/>
     <field name="insurers" colspan="4"/>
 </form>

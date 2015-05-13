@@ -90,6 +90,14 @@ def get_end_of_month(date):
     return date + relativedelta(day=31)
 
 
+def get_begin_of_month(date):
+    return datetime.date(date.year, date.month, 1)
+
+
+def get_last_day_of_last_month(date):
+    return add_day(get_begin_of_month(date), -1)
+
+
 def get_end_of_period(date, duration_unit, duration=1):
     '''
     Returns the last day of period
