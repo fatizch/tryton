@@ -21,6 +21,13 @@ class Party:
         Contract = Pool().get('contract')
         return Contract.search(['subscriber', '=', self.id])
 
+    def get_all_contracts(self):
+        Contract = Pool().get('contract')
+        return Contract.search([('status', 'not in', ('terminated', 'void')),
+                ['OR',
+                    ('subscriber', '=', self),
+                    ('covered_elements.party', '=', self)]])
+
     @staticmethod
     def default_extra_data():
         return {}

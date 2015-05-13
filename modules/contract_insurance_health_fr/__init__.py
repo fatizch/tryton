@@ -14,6 +14,7 @@ def register():
         InsuranceFund,
         HealthPartyComplement,
         CoveredElement,
+        Contract,
         RuleEngineRuntime,
         TestCaseModel,
         module='contract_insurance_health_fr', type_='model')
