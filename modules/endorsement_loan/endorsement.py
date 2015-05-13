@@ -217,11 +217,10 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
         return self.endorsement.definition.id if self.endorsement else None
 
     def get_endorsement_summary(self, name):
-        result = self.definition.name + ':\n'
-        loan_summary = self.get_summary('loan', self.base_instance, 2)
+        result = ['definition_section', self.definition.name, []]
+        loan_summary = self.get_summary('loan', self.base_instance)
         if loan_summary:
-            result += loan_summary
-            result += '\n\n'
+            result[2] += ['loan_change_section', loan_summary]
         return result
 
     def get_state(self, name):
@@ -328,20 +327,17 @@ class EndorsementCoveredElementOption:
                 'mes_loan_share_modifications': 'Loan Share Modifications',
                 })
 
-    def get_summary(self, model, base_object=None, indent=0, increment=2):
+    def get_summary(self, model, base_object=None):
         result = super(EndorsementCoveredElementOption, self).get_summary(
-            model, base_object, indent, increment)
+            model, base_object)
         if self.action == 'remove':
             return result
-        loan_shares_summary = '\n'.join([x.get_summary('loan.share',
-                    x.loan_share, indent=indent + 2 * increment,
-                    increment=increment)
-                for x in self.loan_shares])
+        loan_shares_summary = [x.get_summary('loan.share', x.loan_share)
+            for x in self.loan_shares]
         if loan_shares_summary:
-            result += '\n%s%s :\n' % (' ' * (indent + increment),
-                self.raise_user_error('mes_loan_share_modifications',
-                    raise_exception=False))
-            result += loan_shares_summary
+            result += ['loan_share_change_section', '%s :'
+                % (self.raise_user_error('mes_loan_share_modifications',
+                        raise_exception=False)), loan_shares_summary]
         return result
 
     @property

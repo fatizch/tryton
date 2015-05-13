@@ -44,9 +44,6 @@ class EndorsementSet(CogProcessFramework):
     __name__ = 'endorsement.set'
     __metaclass__ = ClassAttr
 
-    endorsements_summary = fields.Function(
-        fields.Text('Endorsements Summary'),
-        'get_endorsements_summary')
     endorsements_parts_union = fields.Function(
         fields.One2Many('endorsement.part.union',
             None, 'Endorsement Parts',
@@ -78,15 +75,6 @@ class EndorsementSet(CogProcessFramework):
     def check_endorsements_effective_date(self):
         if not self.effective_date:
             self.append_functional_error('no_effective_date')
-
-    def get_endorsements_summary(self, name):
-        res = ''
-        for endorsement in self.endorsements:
-            res += ', '.join(
-                [x.contract_number + ', ' + x.subscriber.full_name
-                    for x in endorsement.contracts])
-            res += ':\n' + endorsement.endorsement_summary + '\n'
-        return res
 
     def get_endorsements_parts_union(self, name):
         # See table_query method on EndorsementPartUnion

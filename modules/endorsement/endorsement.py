@@ -323,7 +323,7 @@ def values_mixin(value_model):
         def get_endorsed_record(self):
             raise NotImplementedError
 
-        def get_summary(self, model, base_object=None, indent=0, increment=2):
+        def get_summary(self, model, base_object=None):
             pool = Pool()
             Date = pool.get('ir.date')
             lang = pool.get('res.user')(Transaction().user).language
@@ -355,11 +355,9 @@ def values_mixin(value_model):
                     vals.append((k, field, prev_value, v))
                 else:
                     vals.append((k, field, prev_value, v))
-            return '\n'.join([' ' * indent + u'%s : %s → %s' % (
-                        coop_string.translate(
-                            ValueModel, fname, ffield.string, 'field'),
-                        old, new) for fname, ffield, old, new in vals
-                    if old != new])
+            return [u'%s : %s → %s' % (coop_string.translate(
+                        ValueModel, fname, ffield.string, 'field'), old, new)
+                for fname, ffield, old, new in vals if old != new]
 
     return Mixin
 
@@ -494,26 +492,23 @@ def relation_mixin(value_model, field, model, name):
             return utils.get_history_instance(model, self.relation,
                 self.applied_on)
 
-        def get_summary(self, model, base_object=None, indent=0, increment=2):
+        def get_summary(self, model, base_object=None):
             if self.action == 'remove':
-                return ' ' * indent + '%s %s' % (self.raise_user_error(
+                return ['remove_section', '%s %s' % (self.raise_user_error(
                         'mes_remove_version', raise_exception=False),
-                    self.base_instance.rec_name)
+                    self.base_instance.rec_name)]
             elif self.action == 'add':
-                result = ' ' * indent + '%s:\n' % self.raise_user_error(
-                    'mes_new_version', raise_exception=False)
-                result += super(Mixin, self).get_summary(model, base_object,
-                    indent + increment, increment)
+                result = ['new_section', '%s:' % self.raise_user_error(
+                    'mes_new_version', raise_exception=False)]
+                result += [super(Mixin, self).get_summary(model, base_object)]
                 return result
             elif self.action == 'update':
-                result = ' ' * indent + '%s:\n' % self.raise_user_error(
+                result = ['update_section', '%s: ' % self.raise_user_error(
                     'mes_update_version', (base_object.rec_name),
-                    raise_exception=False)
-                result += super(Mixin, self).get_summary(model, base_object,
-                    indent + increment, increment)
+                    raise_exception=False)]
+                result += [super(Mixin, self).get_summary(model, base_object)]
                 return result
-            return super(Mixin, self).get_summary(model, base_object, indent,
-                increment)
+            return super(Mixin, self).get_summary(model, base_object)
 
         def get_func_key(self, name):
             return getattr(self, field).func_key if getattr(self, field) \
@@ -841,10 +836,74 @@ class Endorsement(Workflow, model.CoopSQL, model.CoopView, Printable):
     def get_contracts(self, name):
         return [x.contract.id for x in self.contract_endorsements]
 
+    @classmethod
+    def format_summary(cls, summary, indent=0, style=None):
+        inc = 2
+        res = ''
+        if type(summary) in (str, unicode):
+            if summary.endswith('section'):
+                return '\n'
+            elif u'→' in summary:
+                elems = summary.split(u'→')
+                return ' ' * indent + elems[0] + u'→' + "<b>" + elems[1] +\
+                    "</b>" + '\n'
+            elif not style:
+                style = 'italic'
+
+            if style == 'italic':
+                pre, post = '<i>', '</i>'
+            elif style == 'bold':
+                pre, post = '<b>', '</b>'
+            elif style == 'underline':
+                pre, post = '<u>', '</u>'
+            elif style == 'center':
+                pre, post = "<p align='center'> <span size='12'> <b>", \
+                    "</b> </span> </p>"
+            else:
+                pre = post = ''
+            res += ' ' * indent + pre + summary + post + '\n'
+        else:
+            for i, item in enumerate(summary):
+                if i == 1 and summary[0] == 'definition_section':
+                    res += cls.format_summary(item, indent, style='underline')
+                elif i == 1 and summary[0] == 'title_section':
+                    res += cls.format_summary(item, indent, style='center')
+                else:
+                    res += cls.format_summary(item, indent=indent + inc)
+        return res
+
+    def raw_endorsement_summary(self):
+        return [x.get_endorsement_summary(None)
+            for x in self.all_endorsements()]
+
     def get_endorsement_summary(self, name):
-        result = '\n\n'.join([x.get_endorsement_summary(name)
-                for x in self.all_endorsements()])
-        return result
+        """The get_endorsement_summary method of all objects returned by
+        self.all_endorsements returns a list structured like so:
+
+        [
+            'definition_section',
+            u'some_endorsement_definition_name',
+            [
+                'some_element_change_section',
+                u'Some Elements Modifications: ',
+                [
+                    [
+                        'new_section',
+                        u'New Version: ',
+                        [
+                            u'bar:  → spam',
+                            u'foo: → spam'
+                        ]]]]]
+
+        Optionnaly, such structure can be included in a higer level
+        title section like so : ['title_section, 'Some Title', the_structure]
+        The list of such structures is then parsed recursively by
+        format_summary to produce an indented and formatted text,
+        according to the names of the sections.
+        """
+        result = [x.get_endorsement_summary(name)
+                for x in self.all_endorsements()]
+        return self.format_summary(result)
 
     @classmethod
     def search_contracts(cls, name, clause):
@@ -1208,37 +1267,37 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         return self.endorsement.definition.id if self.endorsement else None
 
     def get_endorsement_summary(self, name):
-        result = self.definition.name + ':\n'
-        contract_summary = self.get_summary('contract', self.base_instance, 2)
+        result = ['definition_section', self.definition.name, []]
+        contract_summary = self.get_summary('contract', self.base_instance)
+
         if contract_summary:
-            result += contract_summary
-            result += '\n\n'
-        option_summary = '\n'.join([option.get_summary('contract.option',
-                    option, indent=4)
-                for option in self.options])
+            result[2] += ['contract_change_section', contract_summary]
+
+        option_summary = [option.get_summary('contract.option', option)
+            for option in self.options]
         if option_summary:
-            result += '  %s :\n' % self.raise_user_error(
-                'mes_option_modifications', raise_exception=False)
-            result += option_summary
-            result += '\n\n'
-        activation_summary = '\n'.join([activation_history.get_summary(
-                    'contract.activation_history', activation_history,
-                    indent=4)
-                for activation_history in self.activation_history])
+            result[2] += ['option_change_section',
+                '%s :' % self.raise_user_error(
+                    'mes_option_modifications', raise_exception=False),
+                option_summary]
+
+        activation_summary = [activation_history.get_summary(
+                'contract.activation_history') for activation_history in
+            self.activation_history]
         if activation_summary:
-            result += '  %s :\n' % self.raise_user_error(
-                'mes_activation_history_modifications', raise_exception=False)
-            result += activation_summary
-            result += '\n\n'
-        extra_data_summary = '\n'.join([extra_data.get_summary(
-                    'contract.extra_data', extra_data,
-                    indent=4)
-                for extra_data in self.extra_datas])
+            result[2] += ['activation_change_section',
+                '%s :' % self.raise_user_error(
+                    'mes_activation_history_modifications',
+                    raise_exception=False), activation_summary]
+
+        extra_data_summary = [extra_data.get_summary('contract.extra_data',
+                extra_data) for extra_data in self.extra_datas]
         if extra_data_summary:
-            result += '  %s :\n' % self.raise_user_error(
-                'mes_extra_data_modifications', raise_exception=False)
-            result += extra_data_summary
-            result += '\n\n'
+            result[2] += ['extra_data_change_section',
+                '%s :' % self.raise_user_error(
+                    'mes_extra_data_modifications', raise_exception=False),
+                extra_data_summary]
+
         return result
 
     def get_state(self, name):
@@ -1586,10 +1645,8 @@ class EndorsementExtraData(relation_mixin(
             apply_values = ('write', apply_values[1], values)
         return apply_values
 
-    def get_summary(self, model, base_object=None, indent=0, increment=2):
-        res = super(EndorsementExtraData, self).get_summary(model, base_object,
-            indent, increment) + '\n'
-        indent += 2
+    def get_summary(self, model, base_object=None):
+        res = super(EndorsementExtraData, self).get_summary(model, base_object)
         new_data_values = self.new_extra_data_values
         if self.extra_data and self.extra_data.extra_data_values:
             cur_data_values = self.extra_data.extra_data_values
@@ -1599,11 +1656,11 @@ class EndorsementExtraData(relation_mixin(
         if cur_data_values:
             for k, v in cur_data_values.iteritems():
                 if new_data_values[k] != v:
-                    res += ' ' * indent + k + ': ' + str(v) + u' → ' + str(
-                        new_data_values[k]) + '\n'
+                    res[2].append(k + ': ' + str(v) + u' → ' + str(
+                            new_data_values[k]))
         else:
             for k, v in new_data_values.iteritems():
-                res += ' ' * indent + k + ': ' + u' → ' + str(v) + '\n'
+                res[2].append(k + ': ' + u' → ' + str(v))
         return res
 
 

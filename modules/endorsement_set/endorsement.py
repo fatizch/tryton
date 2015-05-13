@@ -61,6 +61,9 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
     contracts = fields.Function(
         fields.One2Many('contract', None, 'Contracts'),
         'get_contracts')
+    endorsements_summary = fields.Function(
+        fields.Text('Endorsements Summary'),
+        'get_endorsements_summary')
 
     @classmethod
     def __setup__(cls):
@@ -107,6 +110,19 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
         Endorsement = pool.get('endorsement')
         Endorsement.reset([endorsement for endorsement_set in endorsement_sets
                 for endorsement in endorsement_set.endorsements])
+
+    def get_endorsements_summary(self, name):
+        summaries = []
+        for endorsement in self.endorsements:
+            summary = "<p align='center'> <span size='12'> <b>" + \
+                    '\n'.join([x.contract_number + ', ' +
+                        x.subscriber.full_name
+                            for x in endorsement.contracts]) + \
+                    "</b> </span> </p>\n\n" + endorsement.endorsement_summary
+            summaries.append(summary)
+
+        return ('\n\n' + "<p align='center'>" + ' - ' * 30 + '</p>' +
+            '\n\n').join(summaries)
 
     @classmethod
     def apply_set(cls, endorsement_sets):

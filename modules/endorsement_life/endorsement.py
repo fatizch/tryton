@@ -60,20 +60,17 @@ class EndorsementCoveredElementOption:
                 'msg_beneficiary_modifications': 'Beneficiaries Modification',
                 })
 
-    def get_summary(self, model, base_object=None, indent=0, increment=2):
+    def get_summary(self, model, base_object=None):
         result = super(EndorsementCoveredElementOption, self).get_summary(
-            model, base_object, indent, increment)
+            model, base_object)
         if self.action == 'remove':
             return result
-        beneficiary_summary = '\n'.join([x.get_summary(
-                    'contract.option.beneficiary', x.beneficiary,
-                    indent=indent + increment, increment=increment)
-                for x in self.beneficiaries])
+        beneficiary_summary = [x.get_summary('contract.option.beneficiary',
+                x.beneficiary) for x in self.beneficiaries]
         if beneficiary_summary:
-            result += '\n%s%s :\n' % (' ' * indent, self.raise_user_error(
-                    'msg_beneficiary_modifications', raise_exception=False))
-            result += beneficiary_summary
-            result += '\n\n'
+            result += ['beneficiary_change_section', '%s :'
+                % (self.raise_user_error('msg_beneficiary_modifications',
+                        raise_exception=False)), beneficiary_summary]
         return result
 
     def apply_values(self):

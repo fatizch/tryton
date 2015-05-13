@@ -14,7 +14,7 @@
     <group id="endorsements" colspan="2" yexpand="1" yfill="1">
         <field name="contract_endorsements"/>
     </group>
-    <field name="endorsement_summary" colspan="2"/>
+    <field name="endorsement_summary" colspan="2" widget="richtext"/>
     <newline/>
     <group id="application" colspan="4">
         <group id="application_buttons" yfill="1">

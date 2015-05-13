@@ -201,20 +201,18 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             return Pool().get('party.party')(self.party.id)
 
     def get_endorsement_summary(self, name):
-        result = self.party.rec_name + '\n' + self.definition.name + ':\n'
-        party_summary = self.get_summary('party.party', self.base_instance, 2)
+        result = ['definition_section', self.definition.name, []]
+        party_summary = self.get_summary('party.party', self.base_instance)
         if party_summary:
-            result += party_summary
-            result += '\n\n'
-        address_summary = '\n'.join([address.get_summary('party.address',
-                    address.address, indent=4)
-                for address in self.addresses])
+            result[2].append('party_change_section', party_summary)
+
+        address_summary = [address.get_summary('party.address',
+                address.address) for address in self.addresses]
         if address_summary:
-            result += '  %s :\n' % self.raise_user_error(
-                'msg_address_modifications', raise_exception=False)
-            result += address_summary
-            result += '\n\n'
-        return result
+            result[2].append(['address_change_section',
+                '%s :' % self.raise_user_error('msg_address_modifications',
+                    raise_exception=False), address_summary])
+        return ['title_section', self.party.full_name, result]
 
     def get_definition(self, name):
         return self.endorsement.definition.id if self.endorsement else None

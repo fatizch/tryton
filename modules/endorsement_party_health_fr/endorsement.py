@@ -85,15 +85,13 @@ class EndorsementParty:
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementParty, self).get_endorsement_summary(name)
-        health_complement_summary = '\n'.join([health_complement.get_summary(
-            'health.party_complement', health_complement.health_complement,
-            indent=4)
-                for health_complement in self.health_complement])
+        health_complement_summary = [health_complement.get_summary(
+            'health.party_complement', health_complement.health_complement)
+                for health_complement in self.health_complement]
         if health_complement_summary:
-            result += '  %s :\n' % self.raise_user_error(
-                'msg_hc_modifications', raise_exception=False)
-            result += health_complement_summary
-            result += '\n\n'
+            result[2] += ['party_complement_change_section',
+                '%s :' % self.raise_user_error('msg_hc_modifications',
+                    raise_exception=False), health_complement_summary]
         return result
 
     @property

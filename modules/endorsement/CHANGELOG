@@ -1,3 +1,4 @@
+* Use rich text format for endorsement summary
 * Add void endorsement
 * Make endorsement printable
 * Add terminate_contract endorsement

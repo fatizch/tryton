@@ -88,15 +88,12 @@ class EndorsementContract:
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementContract, self).get_endorsement_summary(name)
-        covered_element_summary = '\n'.join([x.get_summary(
-                    'contract.covered_element', x.covered_element,
-                    indent=4, increment=2)
-                for x in self.covered_elements])
+        covered_element_summary = [x.get_summary('contract.covered_element',
+                x.covered_element) for x in self.covered_elements]
         if covered_element_summary:
-            result += ' %s :\n' % self.raise_user_error(
-                'mes_covered_element_modifications', raise_exception=False)
-            result += covered_element_summary
-            result += '\n\n'
+            result[2] += ['cov_change_section', '%s :' % self.raise_user_error(
+                    'mes_covered_element_modifications',
+                    raise_exception=False), covered_element_summary]
         return result
 
     def apply_values(self):
@@ -171,21 +168,17 @@ class EndorsementCoveredElement(relation_mixin(
         return self.raise_user_error('new_covered_element',
             raise_exception=False)
 
-    def get_summary(self, model, base_object=None, indent=0, increment=2):
+    def get_summary(self, model, base_object=None):
         result = super(EndorsementCoveredElement, self).get_summary(model,
-            base_object, indent, increment)
-        indent += increment
+            base_object)
         if self.action == 'remove':
             return result
-        option_summary = '\n'.join([x.get_summary(
-                    'contract.option', x.option,
-                    indent=indent + increment, increment=increment)
-                for x in self.options])
+        option_summary = [x.get_summary('contract.option', x.option)
+            for x in self.options]
         if option_summary:
-            result += '\n%s%s :\n' % (' ' * indent, self.raise_user_error(
-                    'mes_option_modifications', raise_exception=False))
-            result += option_summary
-            result += '\n\n'
+            result.append(['option_change_section', '%s :' % (
+                        self.raise_user_error('mes_option_modifications',
+                            raise_exception=False)), option_summary])
         return result
 
     def apply_values(self):
@@ -281,20 +274,17 @@ class EndorsementCoveredElementOption(relation_mixin(
         return self.raise_user_error('new_coverage', (self.coverage.rec_name),
             raise_exception=False)
 
-    def get_summary(self, model, base_object=None, indent=0, increment=2):
+    def get_summary(self, model, base_object=None):
         result = super(EndorsementCoveredElementOption, self).get_summary(
-            model, base_object, indent, increment)
+            model, base_object)
         if self.action == 'remove':
             return result
-        extra_premium_summary = '\n'.join([x.get_summary(
-                    'contract.option.extra_premium', x.extra_premium,
-                    indent=indent + increment, increment=increment)
-                for x in self.extra_premiums])
+        extra_premium_summary = [x.get_summary('contract.option.extra_premium',
+                x.extra_premium) for x in self.extra_premiums]
         if extra_premium_summary:
-            result += '%s%s :\n' % (' ' * indent, self.raise_user_error(
-                    'mes_extra_premium_modifications', raise_exception=False))
-            result += extra_premium_summary
-            result += '\n\n'
+            result += ['extra_premium_change_section', '%s :' % (
+                    self.raise_user_error('mes_extra_premium_modifications',
+                        raise_exception=False)), extra_premium_summary]
         return result
 
     def apply_values(self):
