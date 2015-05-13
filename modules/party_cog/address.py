@@ -49,10 +49,6 @@ class Address(export.ExportImportMixin):
         return res
 
     @staticmethod
-    def default_start_date():
-        return utils.today()
-
-    @staticmethod
     def get_cities_from_zip(zipcode, country):
         domain = []
         domain.append(('zip', '=', zipcode))
