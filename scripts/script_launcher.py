@@ -375,7 +375,7 @@ def batch(arguments, config, work_data):
     if arguments.action == 'init':
         subprocess.call(['pkill', 'celery'])
         print 'Running workers killed.'
-        cmd = ['celery', 'worker', '-l', 'info',
+        cmd = ['celery', 'worker', '-l', arguments.log_level,
             '--config=celeryconfig', '--app=%s' % APPNAME,
             '--logfile=%s' % log_path]
         with open(os.devnull, 'w') as fnull:
@@ -625,6 +625,8 @@ monitor: starts celery flower server on http://localhost:5555"""
         epilog=usage_str, formatter_class=RawTextHelpFormatter)
     parser_batch.add_argument('action', choices=['init', 'execute', 'monitor'],
         help=action_str)
+    parser_batch.add_argument('--log-level', '-l', choices=['critical',
+            'error', 'warning', 'info', 'debug'], default='info')
     parser_batch.add_argument('--name', type=str, help='Name of the batch to'
         'launch', choices=sorted(get_batch_names(work_data['modules'])),
          metavar='BATCH_NAME')
