@@ -26,6 +26,10 @@ class ActivationHistory:
     def default_final_renewal(cls):
         return False
 
+    def clean_before_reactivate(self):
+        super(ActivationHistory, self).clean_before_reactivate()
+        self.final_renewal = False
+
 
 class Contract:
     __name__ = 'contract'

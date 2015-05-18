@@ -94,6 +94,10 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     def search_func_key(cls, name, clause):
         return [('contract.quote_number',) + tuple(clause[1:])]
 
+    def clean_before_reactivate(self):
+        self.termination_reason = None
+        self.end_date = None
+
 
 class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
     'Contract'
@@ -1032,12 +1036,20 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         Event.notify_events(contracts, 'hold_contract')
 
     @classmethod
-    def reactivate(cls, contracts):
+    def clean_before_reactivate(cls, contracts):
         for contract in contracts:
-            contract.end_date = None
+            if contract.activation_history:
+                contract.activation_history[-1].clean_before_reactivate()
+                contract.activation_history = contract.activation_history
+        for contract in contracts:
             contract.sub_status = None
             contract.status = 'active'
-            contract.save()
+
+    @classmethod
+    def reactivate(cls, contracts):
+        cls.clean_before_reactivate(contracts)
+        cls.save(contracts)
+        for contract in contracts:
             contract.before_activate()
             contract.activate_contract()
 
