@@ -2,8 +2,18 @@ from trytond.pool import PoolMeta
 
 __metaclass__ = PoolMeta
 __all__ = [
+    'Contract',
     'ContractOption'
 ]
+
+
+class Contract:
+    __name__ = 'contract'
+
+    @classmethod
+    def _calculate_methods(cls, product):
+        return super(Contract, cls)._calculate_methods(product) + [('options',
+                'check_eligibility')]
 
 
 class ContractOption:
@@ -24,8 +34,3 @@ class ContractOption:
                 (self.coverage.name))
             return False
         return True
-
-    @classmethod
-    def _calculate_methods(cls, coverage):
-        return super(ContractOption, cls)._calculate_methods(coverage) + \
-            ['check_eligibility']

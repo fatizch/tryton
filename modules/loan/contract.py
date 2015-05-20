@@ -132,6 +132,11 @@ class Contract:
     def default_show_ordered_loans():
         return False
 
+    @classmethod
+    def _calculate_methods(cls, product):
+        return [('options', 'remove_unneeded_loan_share')] + super(Contract,
+            cls)._calculate_methods(product)
+
     def check_contract_loans(self):
         if not self.loans:
             self.append_functional_error('no_loan_on_contract')
@@ -289,11 +294,6 @@ class ContractOption:
         loan_shares_to_delete = [x for x in self.loan_shares
             if x.loan not in self.parent_contract.loans]
         LoanShare.delete(loan_shares_to_delete)
-
-    @classmethod
-    def _calculate_methods(cls, coverage):
-        return ['remove_unneeded_loan_share'] + \
-            super(ContractOption, cls)._calculate_methods(coverage)
 
     def check_at_least_one_loan(self):
         return True if self.loan_shares else False

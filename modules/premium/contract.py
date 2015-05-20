@@ -215,8 +215,9 @@ class Contract:
 
     @classmethod
     def _calculate_methods(cls, product):
-        return super(Contract, cls)._calculate_methods(product) + \
-            ['pre_calculate_fees', 'calculate_prices']
+        return super(Contract, cls)._calculate_methods(product) + [
+            ('contract', 'pre_calculate_fees'),
+            ('contract', 'calculate_prices')]
 
 
 class ContractOption:

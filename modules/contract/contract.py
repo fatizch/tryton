@@ -367,7 +367,8 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def _calculate_methods(cls, product):
-        return ['calculate_activation_dates']
+        return [('options', 'set_automatic_end_date'),
+            ('contract', 'calculate_activation_dates')]
 
     @dualmethod
     def calculate(cls, contracts):
@@ -376,16 +377,23 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         cls.save(contracts)
 
     def do_calculate(self):
-        options = self.options
-        for option in options:
-            option.calculate()
-        self.options = options
-        for method_name in self._calculate_methods(self.product):
-            method = getattr(self.__class__, method_name)
+        for model_type, method_name in self._calculate_methods(self.product):
+            instances = self._get_calculate_targets(model_type)
+            if not instances:
+                continue
+            method = getattr(instances[0].__class__, method_name)
             if not hasattr(method, 'im_self') or method.im_self:
-                method([self])
+                method(instances)
             else:
-                method(self)
+                for instance in instances:
+                    method(instance)
+
+    def _get_calculate_targets(self, model_type):
+        if model_type == 'contract':
+            return [self]
+        elif model_type == 'contract_options':
+            self.options = self.options
+            return list(self.options)
 
     @classmethod
     @model.CoopView.button
@@ -1587,18 +1595,6 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         exec_context = {'date': self.start_date}
         self.init_dict_for_rule_engine(exec_context)
         return self.coverage.calculate_end_date(exec_context)
-
-    @classmethod
-    def _calculate_methods(cls, coverage):
-        return ['set_automatic_end_date']
-
-    def calculate(self):
-        for method_name in self._calculate_methods(self.coverage):
-            method = getattr(self.__class__, method_name)
-            if not hasattr(method, 'im_self') or method.im_self:
-                method([self])
-            else:
-                method(self)
 
     @classmethod
     def search_parent_contract(cls, name, clause):

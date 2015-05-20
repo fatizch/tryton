@@ -76,12 +76,17 @@ class Contract(Printable):
                 'need_option': 'Select at least one option for %s',
                 })
 
-    def do_calculate(self):
-        super(Contract, self).do_calculate()
-        covered_elements = self.covered_elements
-        for covered_element in covered_elements:
-            covered_element.calculate()
-        self.covered_elements = covered_elements
+    def _get_calculate_targets(self, model_type):
+        if model_type == 'covered_elements':
+            self.covered_elements = self.covered_elements
+            return list(self.covered_elements)
+        instances = super(Contract, self)._get_calculate_targets(model_type)
+        if model_type in ('options', 'covered_element_options'):
+            self.covered_elements = self.covered_elements
+            for covered_element in self.covered_elements:
+                instances += list(covered_element.options)
+                covered_element.options = covered_element.options
+        return instances
 
     @fields.depends('product')
     def on_change_product(self):
@@ -676,22 +681,6 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     @classmethod
     def functional_skips_for_duplicate(cls):
         return set([])
-
-    @classmethod
-    def _calculate_methods(cls, item_desc):
-        return []
-
-    def calculate(self):
-        options = self.options
-        for option in self.options:
-            option.calculate()
-        self.options = options
-        for method_name in self._calculate_methods(self.item_desc):
-            method = getattr(self.__class__, method_name)
-            if not hasattr(method, 'im_self') or method.im_self:
-                method([self])
-            else:
-                method(self)
 
     def get_party_code(self, name):
         return self.party.code

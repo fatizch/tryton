@@ -111,6 +111,7 @@ class Premium:
         key = super(Premium, self)._get_key(no_date=no_date)
         return (self.loan,) + key
 
+
 class Contract:
     __name__ = 'contract'
 
@@ -392,7 +393,7 @@ class Contract:
         methods = super(Contract, cls)._calculate_methods(product)
         if product.is_loan and not Transaction().context.get(
                 '_force_calculate_prices', None):
-            methods.remove('calculate_prices')
+            methods.remove(('contract', 'calculate_prices'))
         return methods
 
     def get_rebill_end_date(self, start_date):
