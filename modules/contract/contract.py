@@ -394,6 +394,7 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
         elif model_type == 'contract_options':
             self.options = self.options
             return list(self.options)
+        return []
 
     @classmethod
     @model.CoopView.button
