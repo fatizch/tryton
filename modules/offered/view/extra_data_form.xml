@@ -5,7 +5,7 @@
     <label name="name"/>
     <field name="name"/>
     <notebook>
-        <page id='main' string='Main'>
+        <page id="main" string="Main">
             <label name="kind"/>
             <field name="kind"/>
             <newline/>
@@ -24,7 +24,7 @@
                 <field name="default_value_selection"/>
             </group>
         </page>
-        <page id='sub_data' string='Sub Data'>
+        <page id="sub_data" string="Sub Data">
             <label name="sub_data_config_kind"/>
             <field name="sub_data_config_kind"/>
             <label name="rule"/>

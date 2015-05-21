@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form" position="replace_attributes">
-    <form string="Cash Value Rule"/>
-  </xpath>
-  <xpath expr="/form/field[@name='rule_extra_data']" position="after">
-    <label name="saving_account"/>
-    <field name="saving_account" colspan="3"/>
-  </xpath>
+    <xpath expr="/form" position="replace_attributes">
+        <form string="Cash Value Rule"/>
+    </xpath>
+    <xpath expr="/form/field[@name='rule_extra_data']" position="after">
+        <label name="saving_account"/>
+        <field name="saving_account" colspan="3"/>
+    </xpath>
 </data>

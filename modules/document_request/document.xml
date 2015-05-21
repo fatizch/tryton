@@ -59,7 +59,6 @@
             <field name="model">document.request,-1</field>
             <field name="action" ref="receive_documents_wizard"/>
         </record>
-        <menuitem name="Receive Documents" id="menu_receive_documents" sequence="15"
-            parent="document.menu_document" action="receive_documents_wizard"/>
+        <menuitem name="Receive Documents" id="menu_receive_documents" sequence="15" parent="document.menu_document" action="receive_documents_wizard"/>
     </data>
 </tryton>

@@ -16,7 +16,7 @@
             <field name="display_steps_without_status"/>
             <newline/>
             <group id="steps" colspan="2" yfill="1" yexpand="1">
-                <field name="all_steps" />
+                <field name="all_steps"/>
                 <field name="steps_to_display"/>
             </group>
             <field name="transitions" yfill="1" colspan="2"/>

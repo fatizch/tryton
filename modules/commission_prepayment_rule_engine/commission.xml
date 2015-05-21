@@ -27,20 +27,17 @@
             <field name="name">Prepayment Payment Date Rules</field>
             <field name="res_model">commission.plan.prepayment.payment_rule</field>
         </record>
-        <record model="ir.action.act_window.view"
-            id="act_prepayment_payment_rule_form_view1">
+        <record model="ir.action.act_window.view" id="act_prepayment_payment_rule_form_view1">
             <field name="sequence" eval="10"/>
             <field name="view" ref="prepayment_payment_rule_view_list"/>
             <field name="act_window" ref="act_prepayment_payment_rule_form"/>
         </record>
-        <record model="ir.action.act_window.view"
-            id="act_prepayment_payment_rule_form_view2">
+        <record model="ir.action.act_window.view" id="act_prepayment_payment_rule_form_view2">
             <field name="sequence" eval="20"/>
             <field name="view" ref="prepayment_payment_rule_view_form"/>
             <field name="act_window" ref="act_prepayment_payment_rule_form"/>
         </record>
-        <menuitem parent="commission.menu_configuration" action="act_prepayment_payment_rule_form" sequence="10"
-            id="menu_prepayment_payment_rule_form"/>
+        <menuitem parent="commission.menu_configuration" action="act_prepayment_payment_rule_form" sequence="10" id="menu_prepayment_payment_rule_form"/>
         <!-- ############################################################ -->
         <!-- ########### Payment Rule right ########### -->
         <!-- ############################################################ -->

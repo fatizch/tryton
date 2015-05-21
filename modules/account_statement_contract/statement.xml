@@ -19,7 +19,6 @@
             <field name="inherit" ref="account_statement.statement_line_view_tree_editable"/>
             <field name="name">statement_line_tree_editable</field>
         </record>
-
         <record model="ir.action.report" id="report_bank_deposit_ticket">
             <field name="name">Bank Deposit Ticket</field>
             <field name="model">account.statement</field>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form" position="inside">
-    <label name="cash_value_journal"/>
-    <field name="cash_value_journal"/>
-  </xpath>
+    <xpath expr="/form" position="inside">
+        <label name="cash_value_journal"/>
+        <field name="cash_value_journal"/>
+    </xpath>
 </data>

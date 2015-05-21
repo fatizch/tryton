@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Execution Log" col="4">
-  <label name="user"/>
-  <field name="user"/>
-  <label name="result"/>
-  <field name="result"/>
-  <label name="calculation_date"/>
-  <field name="calculation_date"/>
-  <newline/>
-  <group id="results" col="1" colspan="2" yexpand="1" yfill="1">
-      <separator name="debug"/>
-      <field name="debug"/>
-      <separator name="info"/>
-      <field name="info"/>
-      <separator name="warnings"/>
-      <field name="warnings"/>
-      <separator name="errors"/>
-      <field name="errors"/>
-  </group>
-  <group id="debug" colspan="2" yexpand="1" yfill="1">
-    <field name="low_level_debug"/>
-  </group>
+    <label name="user"/>
+    <field name="user"/>
+    <label name="result"/>
+    <field name="result"/>
+    <label name="calculation_date"/>
+    <field name="calculation_date"/>
+    <newline/>
+    <group id="results" col="1" colspan="2" yexpand="1" yfill="1">
+        <separator name="debug"/>
+        <field name="debug"/>
+        <separator name="info"/>
+        <field name="info"/>
+        <separator name="warnings"/>
+        <field name="warnings"/>
+        <separator name="errors"/>
+        <field name="errors"/>
+    </group>
+    <group id="debug" colspan="2" yexpand="1" yfill="1">
+        <field name="low_level_debug"/>
+    </group>
 </form>

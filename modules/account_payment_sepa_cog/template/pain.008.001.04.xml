@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.04"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:py="http://genshi.edgewall.org/">
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.001.04" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:py="http://genshi.edgewall.org/">
     <py:def function="PartyIdentification(party)">
         <Nm>${party.name[:140]}</Nm>
         <py:with vars="address = party.address_get()">
@@ -86,7 +83,8 @@
             <!-- ChrgsAcct -->
             <!-- ChrgsAcctAgt -->
             <!-- CdtrSchmeId -->
-            <DrctDbtTxInf> <!-- Only one per payment -->
+            <DrctDbtTxInf>
+                <!-- Only one per payment -->
                 <PmtId>
                     <!-- InstrId -->
                     <EndToEndId>${payment.sepa_end_to_end_id}</EndToEndId>

@@ -2,4 +2,3 @@
 <data>
     <xpath expr="/tree/button[@name='apply']" position="replace"/>
 </data>
-

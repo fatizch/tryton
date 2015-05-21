@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
     <data>
-        <record model="ir.action.act_window"
-            id="offered.act_product_form">
+        <record model="ir.action.act_window" id="offered.act_product_form">
             <field name="domain">[('is_group', '=', False), ('company', '=', Eval('context', {}).get('company', False))]</field>
         </record>
-        <record model="ir.action.act_window"
-            id="offered.act_coverage_form">
+        <record model="ir.action.act_window" id="offered.act_coverage_form">
             <field name="domain">[('is_group', '=', False), ('company', '=', Eval('context', {}).get('company', False))]</field>
         </record>
     </data>

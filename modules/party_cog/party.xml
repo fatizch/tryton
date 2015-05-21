@@ -2,9 +2,7 @@
 <tryton>
     <data>
         <!-- Move configuration to end of the menu -->
-        <menuitem name="Configuration" id="party.menu_configuration"
-            sequence="100"/>
-
+        <menuitem name="Configuration" id="party.menu_configuration" sequence="100"/>
         <!-- *******************************************
             ******** Party **********
             ******************************************* -->
@@ -86,9 +84,7 @@
             <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
             <field name="act_window" ref="act_person_form"/>
         </record>
-        <menuitem parent="party.menu_party" sequence="0" id="menu_person_form"
-            icon="coopengo-party" action="act_person_form"/>
-
+        <menuitem parent="party.menu_party" sequence="0" id="menu_person_form" icon="coopengo-party" action="act_person_form"/>
         <!-- *******************************************
             ******** Company **********
             ******************************************* -->
@@ -129,16 +125,13 @@
             <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
             <field name="act_window" ref="act_company_form"/>
         </record>
-        <menuitem parent="party.menu_party" sequence="0" id="menu_company_form"
-            icon="coopengo-company" action="act_company_form"/>
-
+        <menuitem parent="party.menu_party" sequence="0" id="menu_company_form" icon="coopengo-company" action="act_company_form"/>
         <record model="ir.ui.view" id="company_view_tree_hierarchical">
             <field name="model">party.party</field>
             <field name="type">tree</field>
             <field name="field_childs">children</field>
             <field name="name">company_tree_hierarchical</field>
         </record>
-
         <!-- *******************************************
             ******** Parent childreen relationship ******
             ******************************************* -->
@@ -154,7 +147,6 @@
         <record model="party.relation.type" id="child_relation_type" update="1">
             <field name="reverse" ref="party_cog.parent_relation_type"/>
         </record>
-
         <!-- *******************************************
             ******** Synthesis **********
             ******************************************* -->
@@ -165,20 +157,17 @@
             <field name="priority" eval="20"/>
             <field name="name">menu_tree</field>
         </record>
-
         <record model="ir.ui.view" id="menu_view_list">
             <field name="model">party.synthesis.menu</field>
             <field name="type">tree</field>
             <field name="priority" eval="10"/>
             <field name="name">menu_list</field>
         </record>
-
         <record model="ir.ui.view" id="menu_view_form">
             <field name="model">party.synthesis.menu</field>
             <field name="type">form</field>
             <field name="name">menu_form</field>
         </record>
-
         <record model="ir.action.act_window" id="act_menu_form">
             <field name="name">Synthesis</field>
             <field name="window_name" eval="False"/>
@@ -190,7 +179,6 @@
             <field name="view" ref="menu_view_tree"/>
             <field name="act_window" ref="act_menu_form"/>
         </record>
-
         <record model="ir.action.wizard" id="start_synthesis_menu">
             <field name="name">Synthesis</field>
             <field name="wiz_name">party.synthesis.menu.set</field>
@@ -206,7 +194,6 @@
             <field name="model">party.party,-1</field>
             <field name="action" ref="start_synthesis_menu"/>
         </record>
-
         <record model="ir.action.wizard" id="wizard_open">
             <field name="name">Open Party Synthesis Menu</field>
             <field name="wiz_name">party.synthesis.menu.open</field>

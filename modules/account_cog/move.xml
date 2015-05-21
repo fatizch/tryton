@@ -12,7 +12,6 @@
             <field name="type">tree</field>
             <field name="name">move_line_synthesis_tree</field>
         </record>
-
         <record model="ir.ui.view" id="move_line_to_pay_view_list">
             <field name="model">account.move.line</field>
             <field name="type">tree</field>

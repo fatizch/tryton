@@ -169,7 +169,7 @@
             <field name="model">endorsement.sub_state</field>
             <field name="type">tree</field>
             <field name="name">endorsement_sub_state_list</field>
-            </record>
+        </record>
         <record model="ir.ui.view" id="endorsement_sub_state_view_form">
             <field name="model">endorsement.sub_state</field>
             <field name="type">form</field>

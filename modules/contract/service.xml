@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
-  <data>
-    <record model="ir.ui.view" id="service_view_form">
-        <field name="model">contract.service</field>
-        <field name="type">form</field>
-        <field name="name">service_form</field>
-    </record>
-    <record model="ir.ui.view" id="service_view_tree">
-        <field name="model">contract.service</field>
-        <field name="type">tree</field>
-        <field name="name">service_list</field>
-    </record>
-  </data>
+    <data>
+        <record model="ir.ui.view" id="service_view_form">
+            <field name="model">contract.service</field>
+            <field name="type">form</field>
+            <field name="name">service_form</field>
+        </record>
+        <record model="ir.ui.view" id="service_view_tree">
+            <field name="model">contract.service</field>
+            <field name="type">tree</field>
+            <field name="name">service_list</field>
+        </record>
+    </data>
 </tryton>

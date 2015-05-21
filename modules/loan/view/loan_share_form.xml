@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <form string="Loan Share">
     <label name="loan"/>
     <field name="loan"/>
@@ -8,8 +8,8 @@
     <newline/>
     <label name="share"/>
     <group id="share">
-      <field name="share" xexpand="0" factor="100"/>
-      <label string="%" id="share" xexpand="0" xalign="0"/>
+        <field name="share" xexpand="0" factor="100"/>
+        <label string="%" id="share" xexpand="0" xalign="0"/>
     </group>
     <label name="person"/>
     <field name="person"/>

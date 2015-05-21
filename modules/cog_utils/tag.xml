@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ############################################################ -->
-    <!-- Tag -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="tag_view_form">
-      <field name="model">tag</field>
-      <field name="type">form</field>
-      <field name="name">tag_form</field>
-    </record>
-    <record model="ir.ui.view" id="tag_view_tree">
-      <field name="model">tag</field>
-      <field name="type">tree</field>
-      <field name="name">tag_tree</field>
-      <field name="field_childs">childs</field>
-    </record>
-    <record model="ir.ui.view" id="tag-object_view_form">
-        <field name="model">tag-object</field>
-        <field name="type">form</field>
-        <field name="name">tag-object_form</field>
-    </record>
-    <record model="ir.ui.view" id="tag-object_view_list">
-        <field name="model">tag-object</field>
-        <field name="type">tree</field>
-        <field name="name">tag-object_list</field>
-    </record>
-    <!-- Entry Point -->
-    <record model="ir.action.act_window" id="act_tag_form">
-      <field name="name">Tags</field>
-      <field name="res_model">tag</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_tag_form_view_tree">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="tag_view_tree"/>
-      <field name="act_window" ref="act_tag_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_tag_form_view_form">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="tag_view_form"/>
-      <field name="act_window" ref="act_tag_form"/>
-    </record>
-    <menuitem parent="ir.menu_administration" id="menu_tag_form" icon="tag" action="act_tag_form"/>
-  </data>
+    <data>
+        <!-- ############################################################ -->
+        <!-- Tag -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="tag_view_form">
+            <field name="model">tag</field>
+            <field name="type">form</field>
+            <field name="name">tag_form</field>
+        </record>
+        <record model="ir.ui.view" id="tag_view_tree">
+            <field name="model">tag</field>
+            <field name="type">tree</field>
+            <field name="name">tag_tree</field>
+            <field name="field_childs">childs</field>
+        </record>
+        <record model="ir.ui.view" id="tag-object_view_form">
+            <field name="model">tag-object</field>
+            <field name="type">form</field>
+            <field name="name">tag-object_form</field>
+        </record>
+        <record model="ir.ui.view" id="tag-object_view_list">
+            <field name="model">tag-object</field>
+            <field name="type">tree</field>
+            <field name="name">tag-object_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_tag_form">
+            <field name="name">Tags</field>
+            <field name="res_model">tag</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_tag_form_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="tag_view_tree"/>
+            <field name="act_window" ref="act_tag_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_tag_form_view_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="tag_view_form"/>
+            <field name="act_window" ref="act_tag_form"/>
+        </record>
+        <menuitem parent="ir.menu_administration" id="menu_tag_form" icon="tag" action="act_tag_form"/>
+    </data>
 </tryton>

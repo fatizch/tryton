@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form" position="inside">
-    <label name="main_company_name"/>
-    <field name="main_company_name"/>
-  </xpath>
+    <xpath expr="/form" position="inside">
+        <label name="main_company_name"/>
+        <field name="main_company_name"/>
+    </xpath>
 </data>

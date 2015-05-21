@@ -4,10 +4,10 @@
         <!-- ############################################################ -->
         <!-- ########### Loan ########### -->
         <!-- ############################################################ -->
-        <record model = "res.group" id = "group_loan_read">
+        <record model="res.group" id="group_loan_read">
             <field name="name">Loan consultation</field>
         </record>
-        <record model = "res.group" id = "group_loan_admin">
+        <record model="res.group" id="group_loan_admin">
             <field name="name">Loan administration</field>
         </record>
         <record model="ir.ui.view" id="loan_view_form">
@@ -76,12 +76,10 @@
             <field name="name">Loan</field>
             <field name="code">loan</field>
         </record>
-        <record model="ir.sequence.type-res.group"
-            id="sequence_type_loan_group_admin">
+        <record model="ir.sequence.type-res.group" id="sequence_type_loan_group_admin">
             <field name="sequence_type" ref="sequence_type_loan"/>
             <field name="group" ref="res.group_admin"/>
         </record>
-
         <!-- ############################################################ -->
         <!-- ########### Loan Share ########### -->
         <!-- ############################################################ -->
@@ -155,14 +153,14 @@
             <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.action.act_window" id="act_loan_payment_relate_form">
-          <field name="name">Loan Payments</field>
-          <field name="res_model">loan.payment</field>
-          <field name="domain">[('loan', '=', Eval('active_id'))]</field>
+            <field name="name">Loan Payments</field>
+            <field name="res_model">loan.payment</field>
+            <field name="domain">[('loan', '=', Eval('active_id'))]</field>
         </record>
         <record model="ir.action.keyword" id="act_loan_payment_relate_keyword">
-          <field name="keyword">form_relate</field>
-          <field name="model">loan,-1</field>
-          <field name="action" ref="act_loan_payment_relate_form"/>
+            <field name="keyword">form_relate</field>
+            <field name="model">loan,-1</field>
+            <field name="action" ref="act_loan_payment_relate_form"/>
         </record>
     </data>
 </tryton>

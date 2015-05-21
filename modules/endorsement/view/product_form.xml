@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/notebook/page[@id='admin']" position="before">
-      <page name="endorsement_definitions">
-        <field name="endorsement_definitions"/>
-      </page>
-  </xpath>
+        <page name="endorsement_definitions">
+            <field name="endorsement_definitions"/>
+        </page>
+    </xpath>
 </data>

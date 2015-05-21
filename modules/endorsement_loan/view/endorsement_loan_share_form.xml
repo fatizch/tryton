@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <form string="Loan Endorsement">
-  <label name="loan"/>
-  <field name="loan"/>
-  <field name="values" colspan="4"/>
+    <label name="loan"/>
+    <field name="loan"/>
+    <field name="values" colspan="4"/>
 </form>

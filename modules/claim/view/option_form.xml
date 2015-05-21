@@ -2,6 +2,5 @@
 <data>
     <xpath expr="/form/notebook/page[@id='covered_data']/field[@id='covered_data']" position="before">
             <field name="benefits"/>
-        </page>
     </xpath>
 </data>

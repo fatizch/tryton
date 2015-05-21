@@ -16,16 +16,16 @@
             <field name="name">Loss Desc Test Case</field>
             <field name="method_name">loss_desc_test_case</field>
         </record>
-    <!-- ######################### -->
-    <!-- # Test Case Requirement # -->
-    <!-- ######################### -->
-    <record model="ir.test_case.instance-ir.test_case.instance" id="loss_desc_document_desc_requirement">
-        <field name="child" ref="document_desc_test_case"/>
-        <field name="parent" ref="loss_desc_test_case"/>
-    </record>
-    <record model="ir.test_case.instance-ir.test_case.instance" id="loss_desc_event_desc_requirement">
-        <field name="child" ref="event_desc_test_case"/>
-        <field name="parent" ref="loss_desc_test_case"/>
-    </record>
+        <!-- ######################### -->
+        <!-- # Test Case Requirement # -->
+        <!-- ######################### -->
+        <record model="ir.test_case.instance-ir.test_case.instance" id="loss_desc_document_desc_requirement">
+            <field name="child" ref="document_desc_test_case"/>
+            <field name="parent" ref="loss_desc_test_case"/>
+        </record>
+        <record model="ir.test_case.instance-ir.test_case.instance" id="loss_desc_event_desc_requirement">
+            <field name="child" ref="event_desc_test_case"/>
+            <field name="parent" ref="loss_desc_test_case"/>
+        </record>
     </data>
 </tryton>

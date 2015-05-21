@@ -5,8 +5,8 @@
     <field name="endorsement_definition" invisible="1"/>
     <newline/>
     <group id="current_data" colspan="4">
-    <label name="contract"/>
-    <field name="contract"/>
+        <label name="contract"/>
+        <field name="contract"/>
     </group>
     <group id="current_data" colspan="2">
         <label name="current_end_date"/>

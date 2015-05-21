@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form/notebook/page[@name='tax_lines']" position="after">
-    <page string="Payments" id="payments">
-      <field name="payments"/>
-    </page>
-  </xpath>
+    <xpath expr="/form/notebook/page[@name='tax_lines']" position="after">
+        <page string="Payments" id="payments">
+            <field name="payments"/>
+        </page>
+    </xpath>
 </data>

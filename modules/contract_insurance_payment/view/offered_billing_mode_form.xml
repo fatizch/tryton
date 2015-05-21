@@ -2,6 +2,6 @@
 <data>
     <xpath expr="/form/field[@name='allowed_direct_debit_days']" position="after">
         <label name="failure_billing_mode"/>
-        <field name="failure_billing_mode" />
+        <field name="failure_billing_mode"/>
     </xpath>
 </data>

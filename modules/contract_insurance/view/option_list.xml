@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Option">
-  <field name="status"/>
-  <field name="coverage"/>
-  <field name="covered_element"/>
+    <field name="status"/>
+    <field name="coverage"/>
+    <field name="covered_element"/>
 </tree>

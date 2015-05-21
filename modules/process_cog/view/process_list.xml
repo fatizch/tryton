@@ -2,5 +2,5 @@
 <data>
     <xpath expr="/tree/field[@name='on_model']" position="after">
         <field name="kind"/>
-  </xpath>
+    </xpath>
 </data>

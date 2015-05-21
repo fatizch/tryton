@@ -22,7 +22,7 @@
             <field name="name">coopengo-phone</field>
             <field name="path">icons/coopengo-phone.svg</field>
         </record>
-		<record model="ir.ui.icon" id="coopengo-email_icon">
+        <record model="ir.ui.icon" id="coopengo-email_icon">
             <field name="name">coopengo-email</field>
             <field name="path">icons/coopengo-email.svg</field>
         </record>

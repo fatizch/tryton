@@ -13,7 +13,7 @@
         <label name="zip_and_city"/>
         <field name="zip_and_city"/>
     </xpath>
-<!--     <xpath expr="/form/label[@name='streetbis']" position="before">
+    <!--     <xpath expr="/form/label[@name='streetbis']" position="before">
         <newline/>
     </xpath> -->
 </data>

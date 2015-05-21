@@ -14,16 +14,16 @@
         <!-- # Clause # -->
         <!-- ########## -->
         <record model="ir.action.act_window.domain" id="act_model_clause_domain_default">
-          <field name="name">Standard Clauses</field>
-          <field name="sequence">10</field>
-          <field name="domain">[('kind', '!=', 'beneficiary')]</field>
-          <field name="act_window" ref="clause.act_model_clause"/>
+            <field name="name">Standard Clauses</field>
+            <field name="sequence">10</field>
+            <field name="domain">[('kind', '!=', 'beneficiary')]</field>
+            <field name="act_window" ref="clause.act_model_clause"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_model_clause_domain_beneficiary">
-          <field name="name">Beneficiary Clauses</field>
-          <field name="sequence">20</field>
-          <field name="domain">[('kind', '=', 'beneficiary')]</field>
-          <field name="act_window" ref="clause.act_model_clause"/>
+            <field name="name">Beneficiary Clauses</field>
+            <field name="sequence">20</field>
+            <field name="domain">[('kind', '=', 'beneficiary')]</field>
+            <field name="act_window" ref="clause.act_model_clause"/>
         </record>
     </data>
 </tryton>

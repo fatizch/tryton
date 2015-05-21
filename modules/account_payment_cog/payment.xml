@@ -55,8 +55,7 @@
             <field name="view" ref="payment_journal_reject_reason_view_form"/>
             <field name="act_window" ref="act_reject_reason_form"/>
         </record>
-        <menuitem parent="account_payment.menu_payment_configuration" sequence="20"
-           action="act_reject_reason_form" id="menu_reject_reason_form"/>
+        <menuitem parent="account_payment.menu_payment_configuration" sequence="20" action="act_reject_reason_form" id="menu_reject_reason_form"/>
         <!-- ####################################### -->
         <!-- ########### Rejected Payment########### -->
         <!-- ####################################### -->
@@ -80,8 +79,7 @@
             <field name="view" ref="account_payment.payment_view_form"/>
             <field name="act_window" ref="act_payment_fail_status_form"/>
         </record>
-        <menuitem parent="account_payment.menu_payments" sequence="20"
-            action="act_payment_fail_status_form" id="menu_fail_payment_status_form"/>
+        <menuitem parent="account_payment.menu_payments" sequence="20" action="act_payment_fail_status_form" id="menu_fail_payment_status_form"/>
         <!-- ############################################################ -->
         <!-- ########### Event Type ########### -->
         <!-- ############################################################ -->

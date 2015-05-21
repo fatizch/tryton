@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/tree/field[@name='product']" position="replace">
-    <field name="options_extract"/>
-  </xpath>
+    <xpath expr="/tree/field[@name='product']" position="replace">
+        <field name="options_extract"/>
+    </xpath>
 </data>

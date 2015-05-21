@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Process Steps" sequence="order">
-  <field name="order" tree_invisible="1"/>
-  <field name="process"/>
-  <field name="step"/>
-  <field name="status"/>
+    <field name="order" tree_invisible="1"/>
+    <field name="process"/>
+    <field name="step"/>
+    <field name="status"/>
 </tree>

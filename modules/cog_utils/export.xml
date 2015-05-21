@@ -63,7 +63,6 @@
             <field name="act_window" ref="act_export_package"/>
         </record>
         <menuitem parent="menu_export_import" sequence="10" action="act_export_package" id="menu_export_package"/>
-
         <record model="ir.ui.view" id="ir_export_package_add_records_start">
             <field name="model">ir.export_package.add_records.start</field>
             <field name="type">form</field>

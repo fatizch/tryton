@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <tree string="Billing Informations">
-  <field name="action"/>
-  <field name="relation"/>
+    <field name="action"/>
+    <field name="relation"/>
 </tree>

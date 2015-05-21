@@ -2,10 +2,10 @@
 <tryton>
     <data>
         <record model="ir.ui.view" id="user_form">
-          <field name="model">res.user</field>
-          <field name="type">form</field>
-          <field name="inherit" ref="res.user_view_form"/>
-          <field name="name">user_form</field>
-      </record>
-  </data>
+            <field name="model">res.user</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="res.user_view_form"/>
+            <field name="name">user_form</field>
+        </record>
+    </data>
 </tryton>

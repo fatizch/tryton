@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Export instances">
-  <field name="to_export"/>
+    <field name="to_export"/>
 </tree>

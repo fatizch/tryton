@@ -26,7 +26,6 @@
             <field name="view" ref="package_view_form"/>
             <field name="act_window" ref="act_package"/>
         </record>
-        <menuitem parent="menu_product" sequence="4" id="menu_package_form"
-            icon="tryton-list" action="act_package"/>
+        <menuitem parent="menu_product" sequence="4" id="menu_package_form" icon="tryton-list" action="act_package"/>
     </data>
 </tryton>

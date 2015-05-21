@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Manage Exclusions">
-  <field name="exclusions" expand_toolbar="0"/>
-  <field name="options" expand_toolbar="0"/>
+    <field name="exclusions" expand_toolbar="0"/>
+    <field name="options" expand_toolbar="0"/>
 </form>

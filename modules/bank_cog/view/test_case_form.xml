@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form" position="inside">
-    <label name="number_of_banks"/>
-    <field name="number_of_banks"/>
-  </xpath>
+    <xpath expr="/form" position="inside">
+        <label name="number_of_banks"/>
+        <field name="number_of_banks"/>
+    </xpath>
 </data>

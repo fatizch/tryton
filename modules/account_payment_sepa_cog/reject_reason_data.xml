@@ -150,7 +150,7 @@
             <field name="code">RR01</field>
             <field name="description">Missing debtor account or identification</field>
             <field name="process_method">sepa</field>
-        </record>        
+        </record>
         <record model="account.payment.journal.reject_reason" id="sepa_RR02">
             <field name="code">RR02</field>
             <field name="description">Missing debtor name or address</field>
@@ -160,7 +160,7 @@
             <field name="code">RR03</field>
             <field name="description">Missing creditor name or address</field>
             <field name="process_method">sepa</field>
-        </record>    
+        </record>
         <record model="account.payment.journal.reject_reason" id="sepa_RR04">
             <field name="code">RR04</field>
             <field name="description">Regulatory reason</field>
@@ -176,7 +176,7 @@
             <field name="description">Technical problems resulting in erroneous SCTs</field>
             <field name="process_method">sepa</field>
         </record>
-       <record model="account.payment.journal.reject_reason" id="sepa_TM01">
+        <record model="account.payment.journal.reject_reason" id="sepa_TM01">
             <field name="code">TM01</field>
             <field name="description">File receive after Cut-off time</field>
             <field name="process_method">sepa</field>

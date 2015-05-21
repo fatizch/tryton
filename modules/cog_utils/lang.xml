@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ########### -->
-    <!-- # Lang Fr # -->
-    <!-- ########### -->
-    <record model="ir.lang" id="ir.lang_fr">
-      <field name="date">%d/%m/%Y</field>
-    </record>
-  </data>
+    <data>
+        <!-- ########### -->
+        <!-- # Lang Fr # -->
+        <!-- ########### -->
+        <record model="ir.lang" id="ir.lang_fr">
+            <field name="date">%d/%m/%Y</field>
+        </record>
+    </data>
 </tryton>

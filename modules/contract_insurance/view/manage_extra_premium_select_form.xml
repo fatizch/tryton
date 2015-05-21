@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Manage Extra Premium">
-  <label name="covered_element"/>
-  <field name="covered_element" colspan="3" widget="selection"/>
-  <field name="extra_premiums" colspan="2" expand_toolbar="0" mode="tree"/>
-  <field name="options" colspan="2" expand_toolbar="0" mode="tree"/>
-  <field name="contract" invisible="1"/>
-  <field name="option" invisible="1"/>
-  <field name="kind" invisible="1"/>
-  <field name="extra_premium" invisible="1"/>
+    <label name="covered_element"/>
+    <field name="covered_element" colspan="3" widget="selection"/>
+    <field name="extra_premiums" colspan="2" expand_toolbar="0" mode="tree"/>
+    <field name="options" colspan="2" expand_toolbar="0" mode="tree"/>
+    <field name="contract" invisible="1"/>
+    <field name="option" invisible="1"/>
+    <field name="kind" invisible="1"/>
+    <field name="extra_premium" invisible="1"/>
 </form>

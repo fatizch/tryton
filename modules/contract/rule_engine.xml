@@ -7,7 +7,7 @@
             <field name="language" ref="ir.lang_fr"/>
             <field name="translated_technical_name">contrat</field>
         </record>
-            <record model="rule_engine.context-function" id="def_context-te_contract">
+        <record model="rule_engine.context-function" id="def_context-te_contract">
             <field name="context" ref="rule_engine.default_context"/>
             <field name="tree_element" ref="te_contract"/>
         </record>

@@ -18,8 +18,7 @@
             <field name="packages" colspan="4"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
-        position="inside">
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <label name="contract_generator"/>
         <field name="contract_generator"/>
         <newline/>

@@ -1,50 +1,49 @@
 <?xml version="1.0"?>
 <tryton>
-  <data>
-    <!-- ########## -->
-    <!-- # Clause # -->
-    <!-- ########## -->
-    <record model="ir.ui.view" id="clause_view_list">
-      <field name="model">clause</field>
-      <field name="type">tree</field>
-      <field name="name">clause_list</field>
-    </record>
-    <record model="ir.ui.view" id="clause_view_form">
-      <field name="model">clause</field>
-      <field name="type">form</field>
-      <field name="name">clause_form</field>
-    </record>
-    <record model="ir.action.act_window" id="act_model_clause">
-      <field name="name">Clauses</field>
-      <field name="res_model">clause</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_model_clause_tree">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="clause_view_list"/>
-      <field name="act_window" ref="act_model_clause"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_model_clause_form">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="clause_view_form"/>
-      <field name="act_window" ref="act_model_clause"/>
-    </record>
-    <menuitem name="Clause" parent="offered.menu_contract_configuration" id="menu_root_clause" icon="clause"/>
-    <menuitem parent="menu_root_clause" action="act_model_clause" id="menu_model_clause" icon="clause"/>
-
-    <record model="ir.model.access" id="access_clause">
-        <field name="model" search="[('model', '=', 'clause')]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_delete" eval="False"/>
-    </record>
-    <record model="ir.model.access" id="access_clause_admin">
-        <field name="model" search="[('model', '=', 'clause')]"/>
-        <field name="group" ref="offered.group_offered_admin"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_delete" eval="True"/>
-    </record>
-  </data>
+    <data>
+        <!-- ########## -->
+        <!-- # Clause # -->
+        <!-- ########## -->
+        <record model="ir.ui.view" id="clause_view_list">
+            <field name="model">clause</field>
+            <field name="type">tree</field>
+            <field name="name">clause_list</field>
+        </record>
+        <record model="ir.ui.view" id="clause_view_form">
+            <field name="model">clause</field>
+            <field name="type">form</field>
+            <field name="name">clause_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_model_clause">
+            <field name="name">Clauses</field>
+            <field name="res_model">clause</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_clause_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="clause_view_list"/>
+            <field name="act_window" ref="act_model_clause"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_model_clause_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="clause_view_form"/>
+            <field name="act_window" ref="act_model_clause"/>
+        </record>
+        <menuitem name="Clause" parent="offered.menu_contract_configuration" id="menu_root_clause" icon="clause"/>
+        <menuitem parent="menu_root_clause" action="act_model_clause" id="menu_model_clause" icon="clause"/>
+        <record model="ir.model.access" id="access_clause">
+            <field name="model" search="[('model', '=', 'clause')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_clause_admin">
+            <field name="model" search="[('model', '=', 'clause')]"/>
+            <field name="group" ref="offered.group_offered_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
 </tryton>

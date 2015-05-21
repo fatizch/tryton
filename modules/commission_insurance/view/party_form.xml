@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']"
-        position="inside">
+    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']" position="inside">
         <label name="is_broker"/>
         <field name="is_broker" xexpand="0" width="25"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='role']/notebook"
-        position="inside">
-        <page id='broker' string="Broker Agents"
-            states="{'invisible': Bool(~Eval('is_broker'))}">
+    <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
+        <page id="broker" string="Broker Agents" states="{'invisible': Bool(~Eval('is_broker'))}">
             <field name="agents" colspan="4"/>
         </page>
     </xpath>

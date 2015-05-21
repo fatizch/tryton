@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Process Steps">
-	<field name="fancy_name"/>
-	<field name="technical_name"/>
+    <field name="fancy_name"/>
+    <field name="technical_name"/>
     <field name="tags_name"/>
 </tree>

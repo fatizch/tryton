@@ -12,5 +12,5 @@
     <field name="direct_debit_account"/>
     <newline/>
     <label name="payment_term"/>
-    <field name="payment_term" widget="selection" />
+    <field name="payment_term" widget="selection"/>
 </form>

@@ -9,5 +9,5 @@
         <field name="endorsement_definition"/>
     </group>
     <newline/>
-    <field name="displayers" mode='tree,form'/>
+    <field name="displayers" mode="tree,form"/>
 </form>

@@ -4,7 +4,6 @@
         <!--################################################################ -->
         <!-- Life Loss -->
         <!--################################################################ -->
-
         <record model="ir.ui.view" id="life_loss_view_tree">
             <field name="model">claim.loss</field>
             <field name="type">tree</field>

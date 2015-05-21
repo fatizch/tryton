@@ -50,6 +50,5 @@
             <field name="model">party.party,-1</field>
             <field name="action" ref="act_loan_relate_form"/>
         </record>
-        relate
     </data>
 </tryton>

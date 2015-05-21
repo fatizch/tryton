@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <!-- <xpath expr="/form/notebook/page[@id='accounting']/label[@name='receivable_today']" position="replace"/>
+    <!-- <xpath expr="/form/notebook/page[@id='accounting']/label[@name='receivable_today']" position="replace"/>
   <xpath expr="/form/notebook/page[@id='accounting']/field[@name='receivable_today']" position="replace">
     <group id='today' string="As of today" col="6" colspan="2">
       <label name="receivable_today"/>

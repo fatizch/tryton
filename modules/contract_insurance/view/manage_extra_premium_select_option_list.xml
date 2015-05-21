@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tree string="Select Option" editable="bottom">
-  <field name="selected"/>
-  <field name="option_name"/>
-  <field name="extra_premiums"/>
+    <field name="selected"/>
+    <field name="option_name"/>
+    <field name="extra_premiums"/>
 </tree>

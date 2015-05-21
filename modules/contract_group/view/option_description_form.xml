@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<xpath expr="//page[@id='admin']/group[@id='left']" position="inside">
-			<label name="is_group"/>
-			<field name="is_group"/>
-	</xpath>
+    <xpath expr="//page[@id='admin']/group[@id='left']" position="inside">
+        <label name="is_group"/>
+        <field name="is_group"/>
+    </xpath>
 </data>

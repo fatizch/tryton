@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-<xpath expr="/form/notebook/page[@id='summary']" position="after">
+    <xpath expr="/form/notebook/page[@id='summary']" position="after">
         <page string="Extra Data" id="extra_data">
             <field name="extra_data_def" colspan="4"/>
         </page>
@@ -20,8 +20,7 @@
             <newline/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
-        position="inside">
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <label name="currency"/>
         <field name="currency"/>
         <newline/>

@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <form string="Party Synthesis" col="6">
-     <group id="person" colspan="6" col="6"
-            states="{'invisible':Bool(~Eval('is_person'))}">
+    <group id="person" colspan="6" col="6" states="{'invisible':Bool(~Eval('is_person'))}">
         <label name="gender"/>
         <field name="gender" widget="selection" xexpand="0"/>
         <label name="name"/>
@@ -17,8 +16,7 @@
         <label name="lang"/>
         <field name="lang"/>
     </group>
-    <group id="company" colspan="6" col="6"
-        states="{'invisible':Bool(~Eval('is_company'))}">
+    <group id="company" colspan="6" col="6" states="{'invisible':Bool(~Eval('is_company'))}">
         <label name="short_name"/>
         <field name="short_name"/>
         <label name="name"/>

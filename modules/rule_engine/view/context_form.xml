@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form string="Context">
-  <label name="name"/>
-  <field name="name"/>
-  <field name="allowed_elements" colspan="4"/>
-  <field name="tags" colspan="4"/>
+    <label name="name"/>
+    <field name="name"/>
+    <field name="allowed_elements" colspan="4"/>
+    <field name="tags" colspan="4"/>
 </form>

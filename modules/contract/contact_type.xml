@@ -15,7 +15,6 @@
             <field name="name">Contact Type</field>
             <field name="res_model">contract.contact.type</field>
         </record>
-
         <record model="ir.action.act_window.view" id="act_contact_type_form_view_list">
             <field name="sequence" eval="10"/>
             <field name="view" ref="contact_type_view_list"/>
@@ -26,10 +25,7 @@
             <field name="view" ref="contact_type_view_form"/>
             <field name="act_window" ref="act_contact_type_form"/>
         </record>
-
-        <menuitem parent="offered.menu_contract_configuration" id="menu_contact_type_form"
-            icon="tryton-tree" action="act_contact_type_form"/>
-
+        <menuitem parent="offered.menu_contract_configuration" id="menu_contact_type_form" icon="tryton-tree" action="act_contact_type_form"/>
         <record model="ir.ui.view" id="contract_contact_view_form">
             <field name="model">contract.contact</field>
             <field name="type">form</field>
@@ -55,6 +51,5 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="True"/>
         </record>
-
     </data>
 </tryton>

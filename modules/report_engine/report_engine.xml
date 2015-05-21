@@ -82,8 +82,7 @@
             <field name="view" ref="report_template_form"/>
             <field name="act_window" ref="act_doc_template"/>
         </record>
-        <menuitem parent="menu_report" sequence="30"
-        action="act_doc_template" id="menu_doc_template"/>
+        <menuitem parent="menu_report" sequence="30" action="act_doc_template" id="menu_doc_template"/>
         <!-- ################################ -->
         <!-- # Report Template Access Right # -->
         <!-- ################################ -->

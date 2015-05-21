@@ -13,13 +13,11 @@
     <group id="flat_amounts" col="99" xexpand="0" xfill="0">
         <group id="flat_amount_discount" states="{'invisible': ~Eval('is_discount')}">
             <field name="max_value" xexpand="0" factor="-1"/>
-            <label name="currency_symbol" string="" xexpand="0"
-                xalign="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
         </group>
         <group id="flat_amount" states="{'invisible': Bool(Eval('is_discount'))}">
             <field name="max_value" xexpand="0"/>
-            <label name="currency_symbol" string="" xexpand="0"
-                xalign="0"/>
+            <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
         </group>
     </group>
     <newline/>

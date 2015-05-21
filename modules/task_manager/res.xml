@@ -61,7 +61,6 @@
             <field name="act_window" ref="act_team"/>
         </record>
         <menuitem parent="menu_task" sequence="100" action="act_team" id="menu_team" icon="task"/>
-
         <record model="ir.action.act_window" id="act_management_team">
             <field name="name">Team Management</field>
             <field name="res_model">res.team</field>

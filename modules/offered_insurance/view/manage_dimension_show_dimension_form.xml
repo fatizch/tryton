@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-  <xpath expr="/form/field[@name='date_format']" position="after">
-    <label name="extra_data"/>
-    <field name="extra_data" colspan="3"/>
-  </xpath>
+    <xpath expr="/form/field[@name='date_format']" position="after">
+        <label name="extra_data"/>
+        <field name="extra_data" colspan="3"/>
+    </xpath>
 </data>

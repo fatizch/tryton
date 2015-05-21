@@ -2,8 +2,7 @@
 <tryton>
     <data>
         <menuitem name="Health" id="menu_health" sequence="15"/>
-        <menuitem name="Configuration" parent="menu_health"
-            id="menu_health_configuration" sequence="100" icon="tryton-preferences"/>
+        <menuitem name="Configuration" parent="menu_health" id="menu_health_configuration" sequence="100" icon="tryton-preferences"/>
         <!-- Group Access to Menu -->
         <record model="res.group" id="group_health_admin">
             <field name="name">Health Administration</field>
@@ -20,16 +19,16 @@
             <field name="group" ref="group_health"/>
         </record>
         <record model="ir.ui.menu-res.group" id="group_health_admin_menu_health_configuration">
-           <field name="group" ref="group_health_admin"/>
-           <field name="menu" ref="menu_health_configuration"/>
+            <field name="group" ref="group_health_admin"/>
+            <field name="menu" ref="menu_health_configuration"/>
         </record>
         <record model="ir.ui.menu-res.group" id="group_health_admin_menu_health">
-           <field name="group" ref="group_health_admin"/>
-           <field name="menu" ref="menu_health"/>
+            <field name="group" ref="group_health_admin"/>
+            <field name="menu" ref="menu_health"/>
         </record>
         <record model="ir.ui.menu-res.group" id="group_health_menu_health">
-           <field name="group" ref="group_health"/>
-           <field name="menu" ref="menu_health"/>
+            <field name="group" ref="group_health"/>
+            <field name="menu" ref="menu_health"/>
         </record>
     </data>
 </tryton>

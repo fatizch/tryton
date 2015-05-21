@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']"
-        position="inside">
+    <xpath expr="/form/notebook/page[@id='role']/group[@id='role_group']" position="inside">
         <label name="is_insurer"/>
         <field name="is_insurer" xexpand="0" width="25"/>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='role']/notebook"
-        position="inside">
-        <page id="insurer" string="Insurer"
-            states="{'invisible': Bool(~Eval('is_insurer'))}">
+    <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
+        <page id="insurer" string="Insurer" states="{'invisible': Bool(~Eval('is_insurer'))}">
             <field name="insurer_role" mode="form"/>
         </page>
-        </xpath>
-    </data>
+    </xpath>
+</data>

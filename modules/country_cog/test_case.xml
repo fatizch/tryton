@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ############################################################ -->
-    <!-- Test Case Model -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="test_case_form">
-      <field name="model">ir.test_case</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="cog_utils.test_case_form"/>
-      <field name="name">test_case_form</field>
-    </record>
-    <!-- Data -->
-    <record model="ir.test_case" id="cog_utils.test_case_configuration">
-      <field name="load_all_zipcodes">True</field>
-      <field name="main_zip">75</field>
-    </record>
-    <!-- ###################### -->
-    <!-- # Test Case Instance # -->
-    <!-- ###################### -->
-    <record model="ir.test_case.instance" id="zip_code_test_case">
-        <field name="name">Zip Code Test Case</field>
-        <field name="method_name">zip_code_test_case</field>
-    </record>
-  </data>
+    <data>
+        <!-- ############################################################ -->
+        <!-- Test Case Model -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="test_case_form">
+            <field name="model">ir.test_case</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="cog_utils.test_case_form"/>
+            <field name="name">test_case_form</field>
+        </record>
+        <!-- Data -->
+        <record model="ir.test_case" id="cog_utils.test_case_configuration">
+            <field name="load_all_zipcodes">True</field>
+            <field name="main_zip">75</field>
+        </record>
+        <!-- ###################### -->
+        <!-- # Test Case Instance # -->
+        <!-- ###################### -->
+        <record model="ir.test_case.instance" id="zip_code_test_case">
+            <field name="name">Zip Code Test Case</field>
+            <field name="method_name">zip_code_test_case</field>
+        </record>
+    </data>
 </tryton>

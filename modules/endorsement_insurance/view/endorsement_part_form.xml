@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <data>
-  <xpath expr="/form/notebook/page[@id='definition']/notebook/page[@name='contract_fields']" position="after">
-    <page name="covered_elements_fields">
-      <field name="covered_elements_fields"/>
-    </page>
-    <page name="extra_premium_fields_">
-      <field name="extra_premium_fields_"/>
-    </page>
-  </xpath>
+    <xpath expr="/form/notebook/page[@id='definition']/notebook/page[@name='contract_fields']" position="after">
+        <page name="covered_elements_fields">
+            <field name="covered_elements_fields"/>
+        </page>
+        <page name="extra_premium_fields_">
+            <field name="extra_premium_fields_"/>
+        </page>
+    </xpath>
 </data>

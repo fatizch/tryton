@@ -4,6 +4,6 @@
         <field name="task_start_date"/>
     </x>
     <y>
-       <field name="task_nb"/>
+        <field name="task_nb"/>
     </y>
 </graph>

@@ -5,12 +5,12 @@
     <label name="code"/>
     <field name="code"/>
     <notebook>
-        <page id='tree' string='Tree'>
+        <page id="tree" string="Tree">
             <label name="parent"/>
             <field name="parent"/>
             <field name="childs" colspan="4"/>
         </page>
-        <page name='tagged_objects'>
+        <page name="tagged_objects">
             <field name="tagged_objects" colspan="4"/>
         </page>
     </notebook>

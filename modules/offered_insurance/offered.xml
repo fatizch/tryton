@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ########### -->
-    <!-- # Product # -->
-    <!-- ########### -->
-    <record model="ir.ui.view" id="product_view_form">
-      <field name="model">offered.product</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="offered.product_view_form"/>
-      <field name="name">product_form</field>
-    </record>
-    <record model="ir.ui.view" id="product_view_tree">
-      <field name="model">offered.product</field>
-      <field name="type">tree</field>
-      <field name="inherit" ref="offered.product_view_tree"/>
-      <field name="arch" type="xml"/>
-    </record>
-    <menuitem parent="offered.menu_product" sequence="3" id="offered.menu_product_form" icon="family" action="offered.act_product_form"/>
-    <menuitem parent="offered.menu_product" sequence="2" id="offered.menu_coverage_form" icon="umbrella-blue" action="offered.act_coverage_form"/>
-    <!--################################################################ -->
-    <!-- Item Description -->
-    <!--################################################################ -->
-    <record model="ir.ui.view" id="item_desc_view_form">
-      <field name="model">offered.item.description</field>
-      <field name="type">form</field>
-      <field name="name">item_description_form</field>
-    </record>
-    <record model="ir.ui.view" id="item_desc_view_tree">
-      <field name="model">offered.item.description</field>
-      <field name="type">tree</field>
-      <field name="name">item_description_list</field>
-    </record>
-    <record model="ir.action.act_window" id="act_item_desc_form">
-      <field name="name">Item Descriptions</field>
-      <field name="res_model">offered.item.description</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_item_desc_view_tree">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="item_desc_view_tree"/>
-      <field name="act_window" ref="act_item_desc_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_item_desc_viem_tree">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="item_desc_view_form"/>
-      <field name="act_window" ref="act_item_desc_form"/>
-    </record>
-    <menuitem parent="offered.menu_product_configuration" sequence="1" id="menu_item_desc_form" icon="tryton-list" action="act_item_desc_form"/>
-  </data>
+    <data>
+        <!-- ########### -->
+        <!-- # Product # -->
+        <!-- ########### -->
+        <record model="ir.ui.view" id="product_view_form">
+            <field name="model">offered.product</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="offered.product_view_form"/>
+            <field name="name">product_form</field>
+        </record>
+        <record model="ir.ui.view" id="product_view_tree">
+            <field name="model">offered.product</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="offered.product_view_tree"/>
+            <field name="arch" type="xml"/>
+        </record>
+        <menuitem parent="offered.menu_product" sequence="3" id="offered.menu_product_form" icon="family" action="offered.act_product_form"/>
+        <menuitem parent="offered.menu_product" sequence="2" id="offered.menu_coverage_form" icon="umbrella-blue" action="offered.act_coverage_form"/>
+        <!--################################################################ -->
+        <!-- Item Description -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="item_desc_view_form">
+            <field name="model">offered.item.description</field>
+            <field name="type">form</field>
+            <field name="name">item_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="item_desc_view_tree">
+            <field name="model">offered.item.description</field>
+            <field name="type">tree</field>
+            <field name="name">item_description_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_item_desc_form">
+            <field name="name">Item Descriptions</field>
+            <field name="res_model">offered.item.description</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_item_desc_view_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="item_desc_view_tree"/>
+            <field name="act_window" ref="act_item_desc_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_item_desc_viem_tree">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="item_desc_view_form"/>
+            <field name="act_window" ref="act_item_desc_form"/>
+        </record>
+        <menuitem parent="offered.menu_product_configuration" sequence="1" id="menu_item_desc_form" icon="tryton-list" action="act_item_desc_form"/>
+    </data>
 </tryton>

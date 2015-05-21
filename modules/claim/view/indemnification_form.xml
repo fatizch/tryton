@@ -3,7 +3,7 @@
     <label name="service"/>
     <field name="service"/>
     <newline/>
-<!--     <button name="validate_indemnification" string="Validate"/>
+    <!--     <button name="validate_indemnification" string="Validate"/>
     <button name="reject_indemnification" string="Reject"/>
     <newline/> -->
     <label name="status"/>
@@ -34,7 +34,6 @@
         <field name="local_currency_amount"/>
         <field name="local_currency"/>
     </group>
-
     <field name="details" colspan="4"/>
     <field name="kind"/>
 </form>

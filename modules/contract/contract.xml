@@ -1,252 +1,252 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tryton>
-  <data>
-    <!--################################################################ -->
-    <!-- Activation History -->
-    <!--################################################################ -->
-    <record model="ir.ui.view" id="activation_history_view_form">
-      <field name="model">contract.activation_history</field>
-      <field name="type">form</field>
-      <field name="name">activation_history_form</field>
-    </record>
-    <record model="ir.ui.view" id="activation_history_view_tree">
-      <field name="model">contract.activation_history</field>
-      <field name="type">tree</field>
-      <field name="name">activation_history_list</field>
-    </record>
-    <!--################################################################ -->
-    <!-- Contract Screens -->
-    <!--################################################################ -->
-    <record model="ir.ui.view" id="contract_view_tree">
-      <field name="model">contract</field>
-      <field name="type">tree</field>
-      <field name="name">contract_tree</field>
-    </record>
-    <record model="ir.ui.view" id="contract_view_form">
-      <field name="model">contract</field>
-      <field name="type">form</field>
-      <field name="name">contract_form</field>
-    </record>
-    <!-- Read / Write rule -->
-    <record model="ir.rule.group" id="rule_group_contract">
-      <field name="model" search="[('model', '=', 'contract')]"/>
-      <field name="global_p" eval="True"/>
-    </record>
-    <record model="ir.rule" id="rule_contract_1">
-      <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
-      <field name="rule_group" ref="rule_group_contract"/>
-    </record>
-    <!-- ############################################################ -->
-    <!-- ########### Contract ########### -->
-    <!-- ############################################################ -->
-    <record model="ir.action.act_window" id="act_contract_form">
-      <field name="name">Contracts</field>
-      <field name="res_model">contract</field>
-      <field name="domain">[('company', '=', Eval('context', {}).get('company', -1))]</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_contract_form_view1">
-      <field name="sequence" eval="10"/>
-      <field name="view" ref="contract_view_tree"/>
-      <field name="act_window" ref="act_contract_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_contract_form_view2">
-      <field name="sequence" eval="20"/>
-      <field name="view" ref="contract_view_form"/>
-      <field name="act_window" ref="act_contract_form"/>
-    </record>
-    <record model="ir.action.act_window.domain" id="act_contract_domain_quote">
-        <field name="name">Quote</field>
-        <field name="sequence" eval="10"/>
-        <field name="domain">[('status', '=', 'quote')]</field>
-        <field name="act_window" ref="act_contract_form"/>
-    </record>
-    <record model="ir.action.act_window.domain" id="act_contract_domain_active">
-        <field name="name">Active</field>
-        <field name="sequence" eval="20"/>
-        <field name="domain">[('status', '=', 'active')]</field>
-        <field name="act_window" ref="act_contract_form"/>
-    </record>
-    <record model="ir.action.act_window.domain" id="act_contract_domain_terminated">
-        <field name="name">Terminated</field>
-        <field name="sequence" eval="30"/>
-        <field name="domain">['OR', ('status', '=', 'terminated'), ('status', '=', 'void')]</field>
-        <field name="act_window" ref="act_contract_form"/>
-    </record>
-    <record model="ir.action.act_window.domain" id="act_contract_domain_all">
-        <field name="name">All</field>
-        <field name="sequence" eval="40"/>
-        <field name="domain">[]</field>
-        <field name="act_window" ref="act_contract_form"/>
-    </record>
-    <record model="ir.action.act_window.domain" id="act_contract_domain_recent">
-        <field name="name">Recent</field>
-        <field name="sequence" eval="50"/>
-        <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
-        <field name="act_window" ref="act_contract_form"/>
-    </record>
-    <!-- ############################ -->
-    <!-- # Contract Select End Date # -->
-    <!-- ############################ -->
-    <record model="ir.ui.view" id="contract_end_select_date_view_form">
-        <field name="model">contract.end.select_date</field>
-        <field name="type">form</field>
-        <field name="name">contract_end_select_date_form</field>
-    </record>
-    <!-- ####################### -->
-    <!-- # Contract End Wizard # -->
-    <!-- ####################### -->
-    <record model="ir.action.wizard" id="act_end">
-        <field name="name">End Contract</field>
-        <field name="wiz_name">contract.end</field>
-    </record>
-    <!-- ############################ -->
-    <!-- # Hold contract            # -->
-    <!-- ############################ -->
-    <record model="ir.ui.view" id="contract_select_hold_status_view_form">
-        <field name="model">contract.hold.select_hold_status</field>
-        <field name="type">form</field>
-        <field name="name">contract_select_hold_status_form</field>
-    </record>
-    <!-- ####################### -->
-    <!-- # Hold Contract Wizard # -->
-    <!-- ####################### -->
-    <record model="ir.action.wizard" id="act_hold_contract">
-        <field name="name">Hold Contract</field>
-        <field name="wiz_name">contract.hold</field>
-    </record>
-    <!-- ############################# -->
-    <!-- # Contrat Select Start Date # -->
-    <!-- ############################# -->
-    <record model="ir.ui.view" id="select_start_date_view_form">
-        <field name="model">contract.select_start_date</field>
-        <field name="type">form</field>
-        <field name="name">select_start_date_form</field>
-    </record>
-    <!-- ##################################### -->
-    <!-- # Contract Change Start Date Wizard # -->
-    <!-- ##################################### -->
-    <record model="ir.action.wizard" id="act_change_start_date">
-        <field name="name">Change Start Date</field>
-        <field name="wiz_name">contract.change_start_date</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- ########### Menu ########### -->
-    <!-- ############################################################ -->
-    <menuitem name="Contract" id="menu_contract" sequence="10" icon="contract"/>
-    <menuitem parent="menu_contract" sequence="20" id="menu_contract_form" icon="contract" action="act_contract_form"/>
-    <menuitem name="Batch" parent="menu_contract" sequence="99" id="menu_contract_batch" icon="batch"/>
-    <!--################################################################ -->
-    <!-- Options Screens -->
-    <!--################################################################ -->
-    <record model="ir.ui.view" id="option_view_list">
-        <field name="model">contract.option</field>
-        <field name="type">tree</field>
-        <field name="name">option_list</field>
-    </record>
-    <record model="ir.ui.view" id="option_view_form">
-        <field name="model">contract.option</field>
-        <field name="type">form</field>
-        <field name="name">option_form</field>
-    </record>
-    <!--################################################################ -->
-    <!-- Contract Address -->
-    <!--################################################################ -->
-    <record model="ir.ui.view" id="contract_address_view_tree">
-        <field name="model">contract.address</field>
-        <field name="type">tree</field>
-        <field name="name">contract_address_tree</field>
-    </record>
-    <record model="ir.ui.view" id="contract_address_view_form">
-        <field name="model">contract.address</field>
-        <field name="type">form</field>
-        <field name="name">contract_address_form</field>
-    </record>
-    <!--#################### -->
-    <!-- Contract Extra Data -->
-    <!--#################### -->
-    <record model="ir.ui.view" id="contract_extra_data_view_list">
-        <field name="model">contract.extra_data</field>
-        <field name="type">tree</field>
-        <field name="name">contract_extra_data_list</field>
-    </record>
-    <record model="ir.ui.view" id="contract_extra_data_view_form">
-        <field name="model">contract.extra_data</field>
-        <field name="type">form</field>
-        <field name="name">contract_extra_data_form</field>
-    </record>
-    <!-- ############################################################ -->
-    <!-- ########### Rights ########### -->
-    <!-- ############################################################ -->
-    <record model="res.group" id="group_contract">
-        <field name="name">Contract</field>
-    </record>
-    <record model="ir.model.access" id="access_party_synthesis">
-        <field name="model" search="[('model', '=', 'res.user')]"/>
-        <field name="group" ref="contract.group_contract"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_delete" eval="False"/>
-    </record>
-    <record model="res.group" id="group_contract_admin">
-        <field name="name">Contract Administration</field>
-    </record>
-    <record model="res.user-res.group" id="user_admin_group_contract">
-        <field name="user" ref="res.user_admin"/>
-        <field name="group" ref="group_contract"/>
-    </record>
-    <record model="res.user-res.group" id="user_admin_group_contract_admin">
-        <field name="user" ref="res.user_admin"/>
-        <field name="group" ref="group_contract_admin"/>
-    </record>
-    <record model="ir.ui.menu-res.group" id="group_contract_menu_contract">
-       <field name="group" ref="group_contract"/>
-       <field name="menu" ref="menu_contract"/>
-    </record>
-    <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract">
-       <field name="group" ref="group_contract_admin"/>
-       <field name="menu" ref="menu_contract"/>
-    </record>
-    <record model="ir.sequence.type" id="sequence_type_quote">
-        <field name="name">Quote</field>
-        <field name="code">quote</field>
-    </record>
-    <record model="ir.sequence.type-res.group" id="sequence_type_quote_group_admin">
-        <field name="sequence_type" ref="sequence_type_quote"/>
-        <field name="group" ref="res.group_admin"/>
-    </record>
-    <!-- ############################################################ -->
-    <!-- Substatus -->
-    <!-- ############################################################ -->
-    <record model="ir.ui.view" id="sub_status_view_list">
-        <field name="model">contract.sub_status</field>
-        <field name="type">tree</field>
-        <field name="name">sub_status_list</field>
+    <data>
+        <!--################################################################ -->
+        <!-- Activation History -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="activation_history_view_form">
+            <field name="model">contract.activation_history</field>
+            <field name="type">form</field>
+            <field name="name">activation_history_form</field>
         </record>
-    <record model="ir.ui.view" id="sub_status_view_form">
-        <field name="model">contract.sub_status</field>
-        <field name="type">form</field>
-        <field name="name">sub_status_form</field>
-    </record>
-    <record model="ir.action.act_window" id="act_sub_status_form">
-        <field name="name">Sub-status</field>
-        <field name="res_model">contract.sub_status</field>
-    </record>
-    <record model="ir.action.act_window.view" id="act_sub_status_view_list">
-        <field name="sequence" eval="10"/>
-        <field name="view" ref="sub_status_view_list"/>
-        <field name="act_window" ref="act_sub_status_form"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_sub_status_form_view">
-        <field name="sequence" eval="20"/>
-        <field name="view" ref="sub_status_view_form"/>
-        <field name="act_window" ref="act_sub_status_form"/>
-    </record>
-    <menuitem parent="offered.menu_contract_configuration" id="sub_status_form" icon="tryton-tree" action="act_sub_status_form"/>
-    <!-- Group Access to Menu -->
-    <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract_configuration">
-       <field name="group" ref="group_contract_admin"/>
-       <field name="menu" ref="offered.menu_contract_configuration"/>
-    </record>
-  </data>
+        <record model="ir.ui.view" id="activation_history_view_tree">
+            <field name="model">contract.activation_history</field>
+            <field name="type">tree</field>
+            <field name="name">activation_history_list</field>
+        </record>
+        <!--################################################################ -->
+        <!-- Contract Screens -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="contract_view_tree">
+            <field name="model">contract</field>
+            <field name="type">tree</field>
+            <field name="name">contract_tree</field>
+        </record>
+        <record model="ir.ui.view" id="contract_view_form">
+            <field name="model">contract</field>
+            <field name="type">form</field>
+            <field name="name">contract_form</field>
+        </record>
+        <!-- Read / Write rule -->
+        <record model="ir.rule.group" id="rule_group_contract">
+            <field name="model" search="[('model', '=', 'contract')]"/>
+            <field name="global_p" eval="True"/>
+        </record>
+        <record model="ir.rule" id="rule_contract_1">
+            <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+            <field name="rule_group" ref="rule_group_contract"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Contract ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.action.act_window" id="act_contract_form">
+            <field name="name">Contracts</field>
+            <field name="res_model">contract</field>
+            <field name="domain">[('company', '=', Eval('context', {}).get('company', -1))]</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="contract_view_tree"/>
+            <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_contract_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="contract_view_form"/>
+            <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_quote">
+            <field name="name">Quote</field>
+            <field name="sequence" eval="10"/>
+            <field name="domain">[('status', '=', 'quote')]</field>
+            <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_active">
+            <field name="name">Active</field>
+            <field name="sequence" eval="20"/>
+            <field name="domain">[('status', '=', 'active')]</field>
+            <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_terminated">
+            <field name="name">Terminated</field>
+            <field name="sequence" eval="30"/>
+            <field name="domain">['OR', ('status', '=', 'terminated'), ('status', '=', 'void')]</field>
+            <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_all">
+            <field name="name">All</field>
+            <field name="sequence" eval="40"/>
+            <field name="domain">[]</field>
+            <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <record model="ir.action.act_window.domain" id="act_contract_domain_recent">
+            <field name="name">Recent</field>
+            <field name="sequence" eval="50"/>
+            <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
+            <field name="act_window" ref="act_contract_form"/>
+        </record>
+        <!-- ############################ -->
+        <!-- # Contract Select End Date # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="contract_end_select_date_view_form">
+            <field name="model">contract.end.select_date</field>
+            <field name="type">form</field>
+            <field name="name">contract_end_select_date_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Contract End Wizard # -->
+        <!-- ####################### -->
+        <record model="ir.action.wizard" id="act_end">
+            <field name="name">End Contract</field>
+            <field name="wiz_name">contract.end</field>
+        </record>
+        <!-- ############################ -->
+        <!-- # Hold contract            # -->
+        <!-- ############################ -->
+        <record model="ir.ui.view" id="contract_select_hold_status_view_form">
+            <field name="model">contract.hold.select_hold_status</field>
+            <field name="type">form</field>
+            <field name="name">contract_select_hold_status_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Hold Contract Wizard # -->
+        <!-- ####################### -->
+        <record model="ir.action.wizard" id="act_hold_contract">
+            <field name="name">Hold Contract</field>
+            <field name="wiz_name">contract.hold</field>
+        </record>
+        <!-- ############################# -->
+        <!-- # Contrat Select Start Date # -->
+        <!-- ############################# -->
+        <record model="ir.ui.view" id="select_start_date_view_form">
+            <field name="model">contract.select_start_date</field>
+            <field name="type">form</field>
+            <field name="name">select_start_date_form</field>
+        </record>
+        <!-- ##################################### -->
+        <!-- # Contract Change Start Date Wizard # -->
+        <!-- ##################################### -->
+        <record model="ir.action.wizard" id="act_change_start_date">
+            <field name="name">Change Start Date</field>
+            <field name="wiz_name">contract.change_start_date</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Menu ########### -->
+        <!-- ############################################################ -->
+        <menuitem name="Contract" id="menu_contract" sequence="10" icon="contract"/>
+        <menuitem parent="menu_contract" sequence="20" id="menu_contract_form" icon="contract" action="act_contract_form"/>
+        <menuitem name="Batch" parent="menu_contract" sequence="99" id="menu_contract_batch" icon="batch"/>
+        <!--################################################################ -->
+        <!-- Options Screens -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="option_view_list">
+            <field name="model">contract.option</field>
+            <field name="type">tree</field>
+            <field name="name">option_list</field>
+        </record>
+        <record model="ir.ui.view" id="option_view_form">
+            <field name="model">contract.option</field>
+            <field name="type">form</field>
+            <field name="name">option_form</field>
+        </record>
+        <!--################################################################ -->
+        <!-- Contract Address -->
+        <!--################################################################ -->
+        <record model="ir.ui.view" id="contract_address_view_tree">
+            <field name="model">contract.address</field>
+            <field name="type">tree</field>
+            <field name="name">contract_address_tree</field>
+        </record>
+        <record model="ir.ui.view" id="contract_address_view_form">
+            <field name="model">contract.address</field>
+            <field name="type">form</field>
+            <field name="name">contract_address_form</field>
+        </record>
+        <!--#################### -->
+        <!-- Contract Extra Data -->
+        <!--#################### -->
+        <record model="ir.ui.view" id="contract_extra_data_view_list">
+            <field name="model">contract.extra_data</field>
+            <field name="type">tree</field>
+            <field name="name">contract_extra_data_list</field>
+        </record>
+        <record model="ir.ui.view" id="contract_extra_data_view_form">
+            <field name="model">contract.extra_data</field>
+            <field name="type">form</field>
+            <field name="name">contract_extra_data_form</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Rights ########### -->
+        <!-- ############################################################ -->
+        <record model="res.group" id="group_contract">
+            <field name="name">Contract</field>
+        </record>
+        <record model="ir.model.access" id="access_party_synthesis">
+            <field name="model" search="[('model', '=', 'res.user')]"/>
+            <field name="group" ref="contract.group_contract"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="res.group" id="group_contract_admin">
+            <field name="name">Contract Administration</field>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_contract">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_contract"/>
+        </record>
+        <record model="res.user-res.group" id="user_admin_group_contract_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_contract_admin"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_contract_menu_contract">
+            <field name="group" ref="group_contract"/>
+            <field name="menu" ref="menu_contract"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract">
+            <field name="group" ref="group_contract_admin"/>
+            <field name="menu" ref="menu_contract"/>
+        </record>
+        <record model="ir.sequence.type" id="sequence_type_quote">
+            <field name="name">Quote</field>
+            <field name="code">quote</field>
+        </record>
+        <record model="ir.sequence.type-res.group" id="sequence_type_quote_group_admin">
+            <field name="sequence_type" ref="sequence_type_quote"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- Substatus -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="sub_status_view_list">
+            <field name="model">contract.sub_status</field>
+            <field name="type">tree</field>
+            <field name="name">sub_status_list</field>
+        </record>
+        <record model="ir.ui.view" id="sub_status_view_form">
+            <field name="model">contract.sub_status</field>
+            <field name="type">form</field>
+            <field name="name">sub_status_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_sub_status_form">
+            <field name="name">Sub-status</field>
+            <field name="res_model">contract.sub_status</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_sub_status_view_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="sub_status_view_list"/>
+            <field name="act_window" ref="act_sub_status_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_sub_status_form_view">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="sub_status_view_form"/>
+            <field name="act_window" ref="act_sub_status_form"/>
+        </record>
+        <menuitem parent="offered.menu_contract_configuration" id="sub_status_form" icon="tryton-tree" action="act_sub_status_form"/>
+        <!-- Group Access to Menu -->
+        <record model="ir.ui.menu-res.group" id="group_contract_admin_menu_contract_configuration">
+            <field name="group" ref="group_contract_admin"/>
+            <field name="menu" ref="offered.menu_contract_configuration"/>
+        </record>
+    </data>
 </tryton>

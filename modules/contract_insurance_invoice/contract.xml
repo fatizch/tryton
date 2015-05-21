@@ -68,7 +68,6 @@
             <field name="type">form</field>
             <field name="name">contract_invoice_form</field>
         </record>
-
         <record model="ir.action.act_window" id="act_premium_notice_form">
             <field name="name">Premium Notices</field>
             <field name="res_model">account.invoice</field>
@@ -106,22 +105,19 @@
         <record model="ir.action.act_window.domain" id="act_invoice_domain_all">
             <field name="name">All</field>
             <field name="sequence" eval="99"/>
-            <field name="domain"></field>
+            <field name="domain"/>
             <field name="act_window" ref="act_premium_notice_form"/>
         </record>
-
         <record model="ir.action.keyword" id="act_premium_notice_form_keyword1">
             <field name="keyword">form_relate</field>
             <field name="model">contract,-1</field>
             <field name="action" ref="act_premium_notice_form"/>
         </record>
-
         <record model="ir.ui.view" id="invoice_start_view_form">
             <field name="model">contract.do_invoice.start</field>
             <field name="type">form</field>
             <field name="name">invoice_start_form</field>
         </record>
-
         <record model="ir.action.wizard" id="act_invoice">
             <field name="name">Invoice Contracts</field>
             <field name="wiz_name">contract.do_invoice</field>

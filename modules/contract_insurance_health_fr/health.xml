@@ -16,7 +16,6 @@
             <field name="name">Health Care Systems</field>
             <field name="res_model">health.care_system</field>
         </record>
-
         <record model="ir.action.act_window.view" id="act_hc_system_form_view_tree">
             <field name="sequence" eval="10"/>
             <field name="view" ref="hc_system_view_tree"/>
@@ -27,9 +26,7 @@
             <field name="view" ref="hc_system_view_form"/>
             <field name="act_window" ref="act_hc_system_form"/>
         </record>
-        <menuitem parent="health.menu_health_configuration" sequence="1" id="menu_hc_system_form"
-            icon="tryton-list" action="act_hc_system_form"/>
-
+        <menuitem parent="health.menu_health_configuration" sequence="1" id="menu_hc_system_form" icon="tryton-list" action="act_hc_system_form"/>
         <!-- Insurance Fund -->
         <record model="ir.ui.view" id="insurance_fund_view_form">
             <field name="model">health.insurance_fund</field>
@@ -41,68 +38,60 @@
             <field name="type">tree</field>
             <field name="name">insurance_fund_tree</field>
         </record>
-
         <record model="ir.action.act_window" id="act_insurance_fund_form">
             <field name="name">Insurance Funds</field>
             <field name="res_model">health.insurance_fund</field>
         </record>
-
         <record model="ir.action.act_window.view" id="act_insurance_fund_form_view_tree">
             <field name="sequence" eval="10"/>
             <field name="view" ref="insurance_fund_view_tree"/>
             <field name="act_window" ref="act_insurance_fund_form"/>
         </record>
-
         <record model="ir.action.act_window.view" id="act_insurance_fund_form_view_form">
             <field name="sequence" eval="20"/>
             <field name="view" ref="insurance_fund_view_form"/>
             <field name="act_window" ref="act_insurance_fund_form"/>
         </record>
-
-        <menuitem parent="health.menu_health_configuration" sequence="2" id="menu_insurance_fund_form"
-            icon="tryton-list" action="act_insurance_fund_form"/>
-
-        </data>
-        <data skiptest="1">
-
-            <record model="health.care_system" id="rsi">
-                <field name="name">REGIME SOCIAL DES INDEPENDANTS</field>
-                <field name="code">03</field>
-                <field name="short_name">RSI</field>
-            </record>
-        </data>
-
-        <!-- Model Access-->
-        <record model="ir.model.access" id="hc_system_health_admin_access">
-            <field name="group" ref="health.group_health_admin"/>
-            <field name="model" search="[('model', '=', 'health.care_system')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
+        <menuitem parent="health.menu_health_configuration" sequence="2" id="menu_insurance_fund_form" icon="tryton-list" action="act_insurance_fund_form"/>
+    </data>
+    <data skiptest="1">
+        <record model="health.care_system" id="rsi">
+            <field name="name">REGIME SOCIAL DES INDEPENDANTS</field>
+            <field name="code">03</field>
+            <field name="short_name">RSI</field>
         </record>
-        <record model="ir.model.access" id="hc_system_health_access">
-            <field name="group" ref="health.group_health"/>
-            <field name="model" search="[('model', '=', 'health.care_system')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-        <record model="ir.model.access" id="insurance_fund_health_admin_access">
-            <field name="group" ref="health.group_health_admin"/>
-            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="True"/>
-        </record>
-        <record model="ir.model.access" id="insurance_fund_health_access">
-            <field name="group" ref="health.group_health"/>
-            <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
+    </data>
+    <!-- Model Access-->
+    <record model="ir.model.access" id="hc_system_health_admin_access">
+        <field name="group" ref="health.group_health_admin"/>
+        <field name="model" search="[('model', '=', 'health.care_system')]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_delete" eval="True"/>
+    </record>
+    <record model="ir.model.access" id="hc_system_health_access">
+        <field name="group" ref="health.group_health"/>
+        <field name="model" search="[('model', '=', 'health.care_system')]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_delete" eval="False"/>
+    </record>
+    <record model="ir.model.access" id="insurance_fund_health_admin_access">
+        <field name="group" ref="health.group_health_admin"/>
+        <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_delete" eval="True"/>
+    </record>
+    <record model="ir.model.access" id="insurance_fund_health_access">
+        <field name="group" ref="health.group_health"/>
+        <field name="model" search="[('model', '=', 'health.insurance_fund')]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_delete" eval="False"/>
+    </record>
 </tryton>

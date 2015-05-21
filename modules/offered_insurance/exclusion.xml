@@ -1,51 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-    <!-- ################## -->
-    <!-- # Exclusion Kind # -->
-    <!-- ################## -->
-    <record model="ir.ui.view" id="exclusion_kind_view_form">
-      <field name="model">offered.exclusion</field>
-      <field name="type">form</field>
-      <field name="name">exclusion_kind_form</field>
-    </record>
-    <record model="ir.ui.view" id="exclusion_kind_view_list">
-      <field name="model">offered.exclusion</field>
-      <field name="type">tree</field>
-      <field name="name">exclusion_kind_list</field>
-    </record>
-    <!-- Entry Point -->
-    <record model="ir.action.act_window" id="act_exclusion_kind">
-      <field name="name">Exclusion Kind</field>
-      <field name="res_model">offered.exclusion</field>
-    </record>
-    <!-- Default to view only -->
-    <record model="ir.model.access" id="exclusion_default_access">
-        <field name="model" search="[('model', '=', 'offered.exclusion')]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_delete" eval="False"/>
-    </record>
-    <record model="ir.model.access" id="exclusion_product_admin_access">
-        <field name="group" ref="offered.group_offered_admin"/>
-        <field name="model" search="[('model', '=', 'offered.exclusion')]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_delete" eval="True"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_exclusion_kind_view1">
-      <field name="sequence" eval="15"/>
-      <field name="view" ref="exclusion_kind_view_list"/>
-      <field name="act_window" ref="act_exclusion_kind"/>
-    </record>
-    <record model="ir.action.act_window.view" id="act_exclusion_kind_view2">
-      <field name="sequence" eval="15"/>
-      <field name="view" ref="exclusion_kind_view_form"/>
-      <field name="act_window" ref="act_exclusion_kind"/>
-    </record>
-    <menuitem parent="offered.menu_product_configuration" sequence="16"
-      action="act_exclusion_kind" id="menu_exclusion_kind"/>
-  </data>
+    <data>
+        <!-- ################## -->
+        <!-- # Exclusion Kind # -->
+        <!-- ################## -->
+        <record model="ir.ui.view" id="exclusion_kind_view_form">
+            <field name="model">offered.exclusion</field>
+            <field name="type">form</field>
+            <field name="name">exclusion_kind_form</field>
+        </record>
+        <record model="ir.ui.view" id="exclusion_kind_view_list">
+            <field name="model">offered.exclusion</field>
+            <field name="type">tree</field>
+            <field name="name">exclusion_kind_list</field>
+        </record>
+        <!-- Entry Point -->
+        <record model="ir.action.act_window" id="act_exclusion_kind">
+            <field name="name">Exclusion Kind</field>
+            <field name="res_model">offered.exclusion</field>
+        </record>
+        <!-- Default to view only -->
+        <record model="ir.model.access" id="exclusion_default_access">
+            <field name="model" search="[('model', '=', 'offered.exclusion')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="exclusion_product_admin_access">
+            <field name="group" ref="offered.group_offered_admin"/>
+            <field name="model" search="[('model', '=', 'offered.exclusion')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_exclusion_kind_view1">
+            <field name="sequence" eval="15"/>
+            <field name="view" ref="exclusion_kind_view_list"/>
+            <field name="act_window" ref="act_exclusion_kind"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_exclusion_kind_view2">
+            <field name="sequence" eval="15"/>
+            <field name="view" ref="exclusion_kind_view_form"/>
+            <field name="act_window" ref="act_exclusion_kind"/>
+        </record>
+        <menuitem parent="offered.menu_product_configuration" sequence="16" action="act_exclusion_kind" id="menu_exclusion_kind"/>
+    </data>
 </tryton>

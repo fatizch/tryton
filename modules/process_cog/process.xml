@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <tryton>
-  <data>
-      <!-- Transition Override -->
-    <record model="ir.ui.view" id="transition_form">
-      <field name="model">process.transition</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="process.transition_form"/>
-      <field name="name">transition_form</field>
-    </record>
-    <!-- Process Override -->
-    <record model="ir.ui.view" id="process_form">
-      <field name="model">process</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="process.process_form"/>
-      <field name="name">process_form</field>
-    </record>
-    <record model="ir.ui.view" id="process_list">
-      <field name="model">process</field>
-      <field name="type">tree</field>
-      <field name="inherit" ref="process.process_list"/>
-      <field name="name">process_list</field>
-    </record>
-    <!-- Step Override -->
-    <record model="ir.ui.view" id="step_form">
-      <field name="model">process.step</field>
-      <field name="type">form</field>
-      <field name="inherit" ref="process.step_form"/>
-      <field name="name">step_form</field>
-    </record>
-    <record model="ir.ui.view" id="step_list">
-      <field name="model">process.step</field>
-      <field name="type">tree</field>
-      <field name="inherit" ref="process.step_list"/>
-      <field name="name">step_list</field>
-    </record>
-    <!-- XML View Desc -->
-    <record model="ir.ui.view" id="view_description_form">
-      <field name="model">ir.ui.view.description</field>
-      <field name="type">form</field>
-      <field name="name">view_description_form</field>
-    </record>
-    <record model="ir.ui.view" id="view_description_list">
-      <field name="model">ir.ui.view.description</field>
-      <field name="type">tree</field>
-      <field name="name">view_description_list</field>
-    </record>
-    <!-- Process Start -->
-    <record model="ir.ui.view" id="process_parameters_form">
-      <field name="model">process.start</field>
-      <field name="type">form</field>
-      <field name="name">process_parameters_form</field>
-    </record>
-    <!-- Process Log -->
-    <record model="ir.ui.view" id="process_log_form">
-      <field name="model">process.log</field>
-      <field name="type">form</field>
-      <field name="name">process_log_form</field>
-    </record>
-    <record model="ir.ui.view" id="process_log_tree">
-      <field name="model">process.log</field>
-      <field name="type">tree</field>
-      <field name="name">process_log_tree</field>
-    </record>
-    <!-- ############### -->
-    <!-- # Process End # -->
-    <!-- ############### -->
-    <record model="ir.action.wizard" id="act_end_process">
-      <field name="name">End Process</field>
-      <field name="wiz_name">process.end</field>
-    </record>j
-    <!-- ################## -->
-    <!-- # Process Resume # -->
-    <!-- ################## -->
-    <record model="ir.action.wizard" id="act_resume_process">
-        <field name="name">Resume Current Process</field>
-        <field name="wiz_name">process.resume</field>
-    </record>
-  </data>
+    <data>
+        <!-- Transition Override -->
+        <record model="ir.ui.view" id="transition_form">
+            <field name="model">process.transition</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="process.transition_form"/>
+            <field name="name">transition_form</field>
+        </record>
+        <!-- Process Override -->
+        <record model="ir.ui.view" id="process_form">
+            <field name="model">process</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="process.process_form"/>
+            <field name="name">process_form</field>
+        </record>
+        <record model="ir.ui.view" id="process_list">
+            <field name="model">process</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="process.process_list"/>
+            <field name="name">process_list</field>
+        </record>
+        <!-- Step Override -->
+        <record model="ir.ui.view" id="step_form">
+            <field name="model">process.step</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="process.step_form"/>
+            <field name="name">step_form</field>
+        </record>
+        <record model="ir.ui.view" id="step_list">
+            <field name="model">process.step</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="process.step_list"/>
+            <field name="name">step_list</field>
+        </record>
+        <!-- XML View Desc -->
+        <record model="ir.ui.view" id="view_description_form">
+            <field name="model">ir.ui.view.description</field>
+            <field name="type">form</field>
+            <field name="name">view_description_form</field>
+        </record>
+        <record model="ir.ui.view" id="view_description_list">
+            <field name="model">ir.ui.view.description</field>
+            <field name="type">tree</field>
+            <field name="name">view_description_list</field>
+        </record>
+        <!-- Process Start -->
+        <record model="ir.ui.view" id="process_parameters_form">
+            <field name="model">process.start</field>
+            <field name="type">form</field>
+            <field name="name">process_parameters_form</field>
+        </record>
+        <!-- Process Log -->
+        <record model="ir.ui.view" id="process_log_form">
+            <field name="model">process.log</field>
+            <field name="type">form</field>
+            <field name="name">process_log_form</field>
+        </record>
+        <record model="ir.ui.view" id="process_log_tree">
+            <field name="model">process.log</field>
+            <field name="type">tree</field>
+            <field name="name">process_log_tree</field>
+        </record>
+        <!-- ############### -->
+        <!-- # Process End # -->
+        <!-- ############### -->
+        <record model="ir.action.wizard" id="act_end_process">
+            <field name="name">End Process</field>
+            <field name="wiz_name">process.end</field>
+        </record>j
+        <!-- ################## -->
+        <!-- # Process Resume # -->
+        <!-- ################## -->
+        <record model="ir.action.wizard" id="act_resume_process">
+            <field name="name">Resume Current Process</field>
+            <field name="wiz_name">process.resume</field>
+        </record>
+    </data>
 </tryton>

@@ -3,9 +3,7 @@
     <xpath expr="/form" position="replace_attributes">
         <form string="Benefit"/>
     </xpath>
-    <xpath
-        expr="/form/notebook/page[@id='managers']/notebook"
-        position="inside">
+    <xpath expr="/form/notebook/page[@id='managers']/notebook" position="inside">
         <page string="Benefit" id="benefit">
             <field name="benefit_rules" colspan="4"/>
         </page>
@@ -13,8 +11,7 @@
             <field name="reserve_rules" colspan="4"/>
         </page>
     </xpath>
-    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']"
-        position="inside">
+    <xpath expr="/form/notebook/page[@id='admin']/group[@id='left']" position="inside">
         <label name="indemnification_kind"/>
         <field name="indemnification_kind"/>
         <label name="beneficiary_kind"/>

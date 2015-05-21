@@ -4,6 +4,6 @@
         <field name="user"/>
     </x>
     <y>
-       <field name="nb_tasks"/>
+        <field name="nb_tasks"/>
     </y>
 </graph>

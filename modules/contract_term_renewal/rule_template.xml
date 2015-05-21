@@ -13,7 +13,6 @@ return start_date + relativedelta(years=1, days=-1)</field>
             <field name="type_">renewal</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
-
         <!-- ################################### -->
         <!-- # Renewal in sync with given date # -->
         <!-- ################################### -->
@@ -31,7 +30,6 @@ else:
             <field name="type_">renewal</field>
             <field name="context" ref="rule_engine.default_context"/>
         </record>
-
         <record model="rule_engine.rule_parameter" id="given_day">
             <field name="name">given_day</field>
             <field name="type_">selection</field>

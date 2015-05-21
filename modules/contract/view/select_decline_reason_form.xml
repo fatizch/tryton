@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <form string="Select Declination Reason">
     <label name="contract"/>
     <field name="contract"/>

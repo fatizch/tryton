@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <data>
-    <xpath expr="/form/field[@name='reject_fee_journal']"
-        position="after">
+    <xpath expr="/form/field[@name='reject_fee_journal']" position="after">
         <newline/>
         <label name="broker_bank_transfer_journal"/>
         <field name="broker_bank_transfer_journal"/>

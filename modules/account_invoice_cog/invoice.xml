@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <tryton>
     <data>
-        <record model = "res.group" id = "group_invoice_read">
+        <record model="res.group" id="group_invoice_read">
             <field name="name">Invoice consultation</field>
         </record>
         <record model="ir.model.access" id="access_invoice_read">
@@ -30,4 +30,3 @@
         <menuitem id="account_invoice.menu_invoice_out_invoice_form" icon="invoice" action="account_invoice.act_invoice_out_invoice_form"/>
     </data>
 </tryton>
-
