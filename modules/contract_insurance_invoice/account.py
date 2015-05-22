@@ -139,6 +139,6 @@ WHERE
     def split(self, amount_to_split, journal=None):
         split_move = super(MoveLine, self).split(amount_to_split, journal)
         if self.contract:
-            for line in split_move:
+            for line in split_move.lines:
                 line.contract = self.contract
         return split_move
