@@ -1252,12 +1252,11 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     @classmethod
     def validate(cls, extra_premiums):
-        # TODO : rewrite once start_date is properly defined on option
-        for extra_premium in extra_premiums:
-            if not extra_premium.start_date >= extra_premium.option.start_date:
-                extra_premium.raise_user_error('bad_start_date',
-                    (extra_premium.motive.name, extra_premium.start_date,
-                        extra_premium.option.start_date))
+        for extra in extra_premiums:
+            if (extra.manual_start_date and extra.manual_start_date <
+                    extra.option.start_date):
+                extra.raise_user_error('bad_start_date', (extra.motive.name,
+                        extra.start_date, extra.option.start_date))
 
     @classmethod
     @ModelView.button_action('contract_insurance.act_manage_extra_premium')

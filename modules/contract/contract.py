@@ -1328,8 +1328,9 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         'get_initial_start_date')
 
     def get_initial_start_date(self, name):
-        return max(self.manual_start_date or datetime.date.min,
-            self.parent_contract.initial_start_date)
+        if self.parent_contract.initial_start_date:
+            return max(self.manual_start_date or datetime.date.min,
+                self.parent_contract.initial_start_date)
 
     def get_full_name(self, name):
         return self.rec_name
