@@ -1421,7 +1421,8 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         ]
 
     def notify_contract_end_date_change(self, new_end_date):
-        if self.manual_end_date and self.manual_end_date > new_end_date:
+        if (new_end_date and self.manual_end_date and
+                self.manual_end_date > new_end_date):
             self.manual_end_date = None
 
     def notify_contract_start_date_change(self, new_start_date):

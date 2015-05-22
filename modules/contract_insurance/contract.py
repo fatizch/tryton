@@ -250,9 +250,8 @@ class Contract(Printable):
         return kinds
 
     def get_maximum_end_date(self):
-        dates = super(Contract, self).get_maximum_end_date()
-        if not dates:
-            dates = []
+        date = super(Contract, self).get_maximum_end_date()
+        dates = [date] if date else []
         for element in self.covered_elements:
             for option in element.options:
                 possible_end_dates = option.get_possible_end_date()
@@ -1279,7 +1278,8 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return self.calculate_end_date()
 
     def notify_contract_end_date_change(self, new_end_date):
-        if self.manual_end_date and self.manual_end_date > new_end_date:
+        if (new_end_date and self.manual_end_date and
+                self.manual_end_date > new_end_date):
             self.manual_end_date = None
 
     def notify_contract_start_date_change(self, new_start_date):
