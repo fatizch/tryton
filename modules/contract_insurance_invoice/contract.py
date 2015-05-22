@@ -424,7 +424,7 @@ class Contract:
         'Invoice contracts up to the date'
         periods = defaultdict(list)
         for contract in contracts:
-            if contract.status not in ('active', 'quote'):
+            if contract.status not in ('active', 'quote', 'terminated'):
                 continue
             cls._invoices_cache.set(contract.id, None)
             for period in contract.get_invoice_periods(min(up_to_date,
