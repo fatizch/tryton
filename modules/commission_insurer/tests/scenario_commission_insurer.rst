@@ -193,6 +193,7 @@ Create insurer commission invoice::
     >>> Invoice = Model.get('account.invoice')
     >>> create_invoice = Wizard('commission.create_invoice_principal')
     >>> create_invoice.form.insurers.append(agent.party)
+    >>> create_invoice.form.until_date = None
     >>> create_invoice.execute('create_')
     >>> invoice, = Invoice.find([('type', '=', 'in_invoice')])
     >>> invoice.total_amount == Decimal('40')
@@ -212,6 +213,7 @@ Recreate insurer commission invoice::
     >>> Invoice = Model.get('account.invoice')
     >>> create_invoice = Wizard('commission.create_invoice_principal')
     >>> create_invoice.form.insurers.append(agent.party)
+    >>> create_invoice.form.until_date = None
     >>> create_invoice.execute('create_')
     >>> invoice, = Invoice.find([('type', '=', 'in_invoice'),
     ...         ('state', '!=', 'cancel')])
@@ -231,6 +233,7 @@ Create commission invoice::
     >>> Invoice = Model.get('account.invoice')
     >>> create_invoice = Wizard('commission.create_invoice_principal')
     >>> create_invoice.form.insurers.append(agent.party)
+    >>> create_invoice.form.until_date = None
     >>> create_invoice.execute('create_')
     >>> invoice = Invoice.find([('type', '=', 'in_invoice'),
     ...         ('state', '!=', 'cancel')])[0]
