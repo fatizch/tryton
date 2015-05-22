@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <record model="ir.ui.view" id="plan_view_form">
+            <field name="model">commission.plan</field>
+            <field name="type">form</field>
+            <field name="name">plan_form</field>
+            <field name="inherit" ref="commission.plan_view_form"/>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Commission ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="commission_view_form">
+            <field name="model">commission</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="commission.commission_view_form"/>
+            <field name="name">commission_form</field>
+        </record>
+        <record model="ir.ui.view" id="commission_view_list">
+            <field name="model">commission</field>
+            <field name="type">tree</field>
+            <field name="inherit" ref="commission.commission_view_list"/>
+            <field name="name">commission_list</field>
+        </record>
+        <!-- ############################################################ -->
+        <!-- ########### Recovery Rule ########### -->
+        <!-- ############################################################ -->
+        <record model="ir.ui.view" id="recovery_rule_view_form">
+            <field name="model">commission.plan.recovery_rule</field>
+            <field name="type">form</field>
+            <field name="name">recovery_rule_form</field>
+        </record>
+        <record model="ir.ui.view" id="recovery_rule_view_list">
+            <field name="model">commission.plan.recovery_rule</field>
+            <field name="type">tree</field>
+            <field name="name">recovery_rule_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_recovery_rule_form">
+            <field name="name">Recovery Rules</field>
+            <field name="res_model">commission.plan.recovery_rule</field>
+        </record>
+        <record model="ir.action.act_window.view"
+            id="act_recovery_rule_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="recovery_rule_view_list"/>
+            <field name="act_window" ref="act_recovery_rule_form"/>
+        </record>
+        <record model="ir.action.act_window.view"
+            id="act_recovery_rule_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="recovery_rule_view_form"/>
+            <field name="act_window" ref="act_recovery_rule_form"/>
+        </record>
+        <menuitem parent="commission.menu_configuration" action="act_recovery_rule_form" sequence="10"
+            id="menu_recovery_rule_form"/>
+        <record model="ir.model.access" id="access_recovery_rule">
+            <field name="model" search="[('model', '=', 'commission.plan.recovery_rule')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_recovery_rule_admin">
+            <field name="model" search="[('model', '=', 'commission.plan.recovery_rule')]"/>
+            <field name="group" ref="commission.group_commission_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="commission_sum_for_option">
+            <field name="translated_technical_name">somme_commissions_pour_option</field>
+            <field name="description">Somme des commissions générées pour l'option</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">re_commission_sum_for_option</field>
+            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+        </record>
+    </data>
+</tryton>

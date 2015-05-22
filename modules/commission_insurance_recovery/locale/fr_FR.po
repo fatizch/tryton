@@ -1,0 +1,83 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:commission.plan.recovery_rule:"
+msgid "The code must be unique!"
+msgstr "Le code doit être unique !"
+
+msgctxt "field:commission,is_recovery:"
+msgid "Is Recovery Commission"
+msgstr "Est une commission de reprise"
+
+msgctxt "field:commission.plan,commission_recovery:"
+msgid "Recovery Rule"
+msgstr "Règle de reprise de commissions"
+
+msgctxt "field:commission.plan.recovery_rule,code:"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "field:commission.plan.recovery_rule,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan.recovery_rule,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission.plan.recovery_rule,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission.plan.recovery_rule,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission.plan.recovery_rule,name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:commission.plan.recovery_rule,rec_name:"
+msgid "Name"
+msgstr "Numéro"
+
+msgctxt "field:commission.plan.recovery_rule,rule:"
+msgid "Rule Engine"
+msgstr "Moteur de Règle"
+
+msgctxt "field:commission.plan.recovery_rule,rule_extra_data:"
+msgid "Rule Extra Data"
+msgstr "Paramètres de Rêgle"
+
+msgctxt "field:commission.plan.recovery_rule,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission.plan.recovery_rule,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission.plan.recovery_rule,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "model:commission.plan.recovery_rule,name:"
+msgid "Recovery Rule"
+msgstr "Règle de reprise de commissions"
+
+msgctxt "model:ir.action,name:act_recovery_rule_form"
+msgid "Recovery Rules"
+msgstr "Règles de reprise de commissions"
+
+msgctxt "model:ir.ui.menu,name:menu_recovery_rule_form"
+msgid "Recovery Rules"
+msgstr "Règles de reprise de commissions"
+
+msgctxt "view:commission.plan.recovery_rule:"
+msgid "Recovery Rule"
+msgstr "Règle de reprise de commissions"
+
+msgctxt "view:commission.plan.recovery_rule:"
+msgid "Recovery Rules"
+msgstr "Règles de reprise de commissions"
