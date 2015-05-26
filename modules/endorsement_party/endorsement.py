@@ -204,7 +204,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
         result = ['definition_section', self.definition.name, []]
         party_summary = self.get_summary('party.party', self.base_instance)
         if party_summary:
-            result[2].append('party_change_section', party_summary)
+            result[2] += ['party_change_section', party_summary]
 
         address_summary = [address.get_summary('party.address',
                 address.address) for address in self.addresses]
