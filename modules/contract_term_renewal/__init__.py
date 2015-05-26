@@ -4,6 +4,7 @@ from .offered import *
 from .contract import *
 from .batch import *
 from .report_engine import *
+from .wizard import *
 
 
 def register():
@@ -16,6 +17,7 @@ def register():
         SelectDeclineRenewalReason,
         RenewContracts,
         ReportTemplate,
+        TerminateContract,
         module='contract_term_renewal', type_='model')
     Pool.register(
         DeclineRenewal,

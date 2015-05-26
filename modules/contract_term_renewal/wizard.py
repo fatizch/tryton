@@ -1,0 +1,15 @@
+from trytond.pool import PoolMeta
+
+__metaclass__ = PoolMeta
+__all__ = [
+    'TerminateContract',
+    ]
+
+
+class TerminateContract:
+    __name__ = 'endorsement.contract.terminate'
+
+    def endorsement_values(self):
+        values = super(TerminateContract, self).endorsement_values()
+        values['final_renewal'] = True
+        return values

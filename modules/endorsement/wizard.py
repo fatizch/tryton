@@ -420,6 +420,9 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
                 'must be posterior to the contract start date: %s',
                 })
 
+    def endorsement_values(self):
+        return {'termination_reason': self.termination_reason.id}
+
     def step_default(self, name):
         pool = Pool()
         Contract = pool.get('contract')
@@ -443,80 +446,65 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
             'endorsement.contract.activation_history')
         ActivationHistory = pool.get('contract.activation_history')
         Contract = pool.get('contract')
-        contracts = self._get_contracts()
+        contract_id, endorsement = self._get_contracts().items()[0]
 
-        for contract_id, endorsement in contracts.iteritems():
-            EndorsementActivationHistory.delete(endorsement.activation_history)
-            contract = Contract(contract_id)
-            last_period = contract.activation_history[-1]
-            endorsement.values = {'end_date': self.termination_date}
+        contract = Contract(contract_id)
+        last_period = contract.activation_history[-1]
+        endorsement.values = {'end_date': self.termination_date}
 
-            if self.termination_date < contract.start_date:
-                self.raise_user_error('termination_date_must_be_posterior',
-                    Date.date_as_string(contract.start_date, lang))
+        if self.termination_date < contract.start_date:
+            self.raise_user_error('termination_date_must_be_posterior',
+                Date.date_as_string(contract.start_date, lang))
 
-            # first case : we are terminating a contract after its current
-            # term
-            if self.termination_date > contract.end_date:
-                if last_period.end_date == contract.end_date or \
-                        self.termination_date > last_period.end_date:
-                    self.raise_user_error('termination_date_must_be_anterior',
-                        Date.date_as_string(last_period.end_date, lang))
-                activation_history_endorsement = EndorsementActivationHistory(
+        # first case : we are terminating a contract after its current
+        # term
+        if self.termination_date > contract.end_date:
+            if last_period.end_date == contract.end_date or \
+                    self.termination_date > last_period.end_date:
+                self.raise_user_error('termination_date_must_be_anterior',
+                    Date.date_as_string(last_period.end_date, lang))
+            endorsement.activation_history = [EndorsementActivationHistory(
                     action='update',
                     contract_endorsement=endorsement,
                     activation_history=last_period,
-                    relation=last_period.id,
                     definition=self.endorsement_definition,
-                    values={'termination_reason': self.termination_reason.id,
-                        'final_renewal': True})
-                activation_history_endorsement.save()
-            # second case : we are terminating a contract during its current
-            # term
+                    values=self.endorsement_values)]
+        # second case : we are terminating a contract during its current
+        # term
+        else:
+            # No next period
+            if contract.end_date == last_period.end_date:
+                endorsement.activation_history = [EndorsementActivationHistory(
+                        action='update',
+                        contract_endorsement=endorsement,
+                        activation_history=last_period,
+                        definition=self.endorsement_definition,
+                        values=self.endorsement_values)]
+            # We have a next period, we must remove it,
+            # And update the current term period
             else:
-                # No next period
-                if contract.end_date == last_period.end_date:
-                    last_period_endorsement = \
-                        EndorsementActivationHistory(
-                            action='update',
-                            contract_endorsement=endorsement,
-                            activation_history=last_period,
-                            relation=last_period.id,
-                            definition=self.endorsement_definition,
-                            values={'termination_reason':
-                                    self.termination_reason.id,
-                                'final_renewal': True})
-                    last_period_endorsement.save()
-                # We have a next period, we must remove it,
-                # And update the current term period
-                else:
-                    if self.termination_date > last_period.end_date:
-                        self.raise_user_error(
-                            'termination_date_must_be_anterior',
-                            Date.date_as_string(last_period.end_date, lang))
-                    last_period_endorsement = EndorsementActivationHistory(
-                            action='remove',
-                            contract_endorsement=endorsement,
-                            activation_history=last_period,
-                            relation=last_period.id,
-                            definition=self.endorsement_definition)
-                    last_period_endorsement.save()
+                if self.termination_date > last_period.end_date:
+                    self.raise_user_error(
+                        'termination_date_must_be_anterior',
+                        Date.date_as_string(last_period.end_date, lang))
+                history_endorsements = []
+                history_endorsements.append(EndorsementActivationHistory(
+                        action='remove',
+                        contract_endorsement=endorsement,
+                        activation_history=last_period,
+                        definition=self.endorsement_definition))
 
-                    current_activation_history, = ActivationHistory.search([
-                            ('contract', '=', contract),
-                            ('end_date', '=', contract.end_date)])
+                current_activation_history, = ActivationHistory.search([
+                        ('contract', '=', contract),
+                        ('end_date', '=', contract.end_date)])
 
-                    current_activation_history_endorsement = \
-                        EndorsementActivationHistory(
-                            action='update',
-                            contract_endorsement=endorsement,
-                            activation_history=current_activation_history,
-                            relation=current_activation_history.id,
-                            definition=self.endorsement_definition,
-                            values={'termination_reason':
-                                    self.termination_reason.id,
-                                'final_renewal': True})
-                    current_activation_history_endorsement.save()
+                history_endorsements.append(EndorsementActivationHistory(
+                        action='update',
+                        contract_endorsement=endorsement,
+                        activation_history=current_activation_history,
+                        definition=self.endorsement_definition,
+                        values=self.endorsement_values))
+                endorsement.activation_history = history_endorsements
             endorsement.save()
 
     @classmethod
