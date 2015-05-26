@@ -30,7 +30,7 @@ class Dunning(export.ExportImportMixin):
         dunnings.sort(key=key)
         group_dunnings = groupby(dunnings, key)
         for level, current_dunnings in group_dunnings:
-            level.process_dunnings(current_dunnings)
+            level.process_dunnings(list(current_dunnings))
 
     @classmethod
     def process(cls, dunnings):
@@ -63,10 +63,14 @@ class Level(export.ExportImportMixin):
         Event.notify_events(dunnings, self.event_log_type.code)
 
     def test(self, line, date):
-        if (self.days_from_previous_step and self.days is not None and
-                line.dunnings):
-            res = (date - line.dunnings[-1].last_process_date).days >= \
-                self.days
+        if self.days_from_previous_step and self.days is not None:
+            res = False
+            if line.dunnings:
+                level_rank = self.procedure.levels.index(self)
+                previous_level = self.procedure.levels[level_rank - 1]
+                if line.dunnings[-1].level == previous_level:
+                    res = (date - line.dunnings[-1].last_process_date).days >= \
+                        self.days
         else:
             res = super(Level, self).test(line, date)
         if not res or not self.not_mandatory:

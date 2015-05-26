@@ -53,6 +53,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
         line.dunnings = []
         line.maturity_date = datetime.date.today()
 
+        self.assertFalse(level3.test(line, today + relativedelta(days=19)))
         self.assertFalse(level1.test(line, today + relativedelta(days=19)))
         self.assertTrue(level1.test(line, today + relativedelta(days=20)))
         self.assertFalse(level1.test(line, today + relativedelta(days=60)))
@@ -62,6 +63,7 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
         dunning = self.Dunning()
         dunning.last_process_date = today + relativedelta(days=60)
+        dunning.level = level2
         line.dunnings = (dunning,)
 
         self.assertFalse(level3.test(line, today + relativedelta(days=69)))
