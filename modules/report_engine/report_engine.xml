@@ -96,6 +96,14 @@
             <field name="user" ref="res.user_admin"/>
             <field name="group" ref="group_report_admin"/>
         </record>
+        <record model="ir.ui.menu-res.group" id="group_report_menu_report">
+            <field name="group" ref="group_report"/>
+            <field name="menu" ref="menu_report"/>
+        </record>
+        <record model="ir.ui.menu-res.group" id="group_report_admin_menu_report">
+            <field name="group" ref="group_report_admin"/>
+            <field name="menu" ref="menu_report"/>
+        </record>
         <record model="ir.model.access" id="default_report_template">
             <field name="model" search="[('model', '=', 'report.template')]"/>
             <field name="perm_read" eval="True"/>
