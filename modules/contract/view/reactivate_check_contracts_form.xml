@@ -11,7 +11,7 @@
     <newline/>
     <group id="void_group" string="" yexpand="1" yfill="1" colspan="4">
     </group>
-    <group id="check_today" string="" colspan="4" col="2" states="{'invisible': ~Eval('will_be_terminated')}">
+    <group id="check_today" string="" colspan="4" col="2">
         <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
         <label string="Contract will still be terminated as of today after validation" id="check_will_be_terminated_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
         <field name="will_be_terminated"/>

@@ -723,6 +723,13 @@ class ProcessTransition(ModelSQL, ModelView):
         'group', 'Authorizations')
     priority = fields.Integer('Priority')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(ProcessTransition, cls).view_attributes() + [
+            ('group[@id="methods"]', 'states',
+                {'invisible': Eval('kind') != 'standard'}),
+            ]
+
     def execute(self, target):
         result = None
         if (self.kind == 'standard' and self.is_forward() or

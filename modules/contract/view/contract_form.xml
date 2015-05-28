@@ -19,15 +19,15 @@
     <label name="subscriber"/>
     <group id="subscriber" col="99">
         <field name="subscriber_kind"/>
-        <group id="person" states="{'invisible': Eval('subscriber_kind') != 'person'}" colspan="40">
+        <group id="person" colspan="40">
             <field name="subscriber" view_ids="party_cog.person_view_tree"/>
         </group>
-        <group id="company" states="{'invisible': Eval('subscriber_kind')== 'person'}" colspan="40">
+        <group id="company" colspan="40">
             <field name="subscriber"/>
         </group>
     </group>
     <notebook colspan="4">
-        <page string="Options" id="options" states="{'invisible': ~Eval('options')}">
+        <page string="Options" id="options">
             <field name="options" colspan="4"/>
         </page>
         <page string="Data" id="data">
@@ -51,7 +51,7 @@
         </page>
     </notebook>
     <newline/>
-    <group id="button_change_start_date" states="{'invisible': True}">
+    <group id="button_change_start_date">
         <button name="button_change_start_date" string="Change start date"/>
         <button name="button_activate" string="Activate Contract"/>
         <button name="button_decline" string="Decline Contract"/>

@@ -20,10 +20,10 @@
             <field name="extra_data" colspan="4" no_command="1"/>
             <field name="options" colspan="4"/>
         </page>
-        <page id="covered_relations" string="Covered Relations" states="{'invisible': ~Eval('item_kind').in_(['person', 'company', 'party'])}">
+        <page id="covered_relations" string="Covered Relations">
             <field name="covered_relations" colspan="4"/>
         </page>
-        <page id="sub_elements" string="Sub Covered Elements" states="{'invisible': Eval('item_kind') == 'person'}">
+        <page id="sub_elements" string="Sub Covered Elements">
             <field name="sub_covered_elements" colspan="4"/>
         </page>
     </notebook>

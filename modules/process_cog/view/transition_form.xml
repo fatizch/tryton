@@ -13,7 +13,7 @@
         <field name="choice_if_false"/>
     </xpath>
     <xpath expr="/form/group[@id='methods']" position="replace_attributes">
-        <group id="methods" colspan="2" xexpand="1" xfill="1" yexpand="1" yfill="1" states="{'invisible': Eval('kind') == 'choice'}"/>
+        <group id="methods" colspan="2" xexpand="1" xfill="1" yexpand="1" yfill="1"/>
     </xpath>
     <xpath expr="/form/field[@name='authorizations']" position="replace_attributes">
         <field name="authorizations" xexpand="1" xfill="1" yexpand="1" yfill="1" colspan="4"/>

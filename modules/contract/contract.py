@@ -283,6 +283,26 @@ class Contract(model.CoopSQL, model.CoopView, ModelCurrency):
                 })
         cls._order.insert(0, ('last_modification', 'DESC'))
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Contract, cls).view_attributes() + [(
+                '/form/group[@id="subscriber"]/group[@id="person"]',
+                'states',
+                {'invisible': Eval('subscriber_kind') != 'person'}
+                ), (
+                '/form/group[@id="subscriber"]/group[@id="company"]',
+                'states',
+                {'invisible': Eval('subscriber_kind') == 'person'}
+                ), (
+                '/form/notebook/page[@id="options"]',
+                'states',
+                {'invisible': ~Eval('options')}
+                ), (
+                '/form/group[@id="button_change_start_date"]',
+                'states',
+                {'invisible': True}
+                )]
+
     @staticmethod
     def order_last_modification(tables):
         table, _ = tables[None]

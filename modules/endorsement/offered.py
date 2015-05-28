@@ -165,6 +165,15 @@ class EndorsementPart(model.CoopSQL, model.CoopView):
         fields.Many2One('ir.model', 'Endorsed Model'),
         'on_change_with_endorsed_model')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(EndorsementPart, cls).view_attributes() + [(
+                '/form/notebook/page[@id="definition"]',
+                'states',
+                {'invisible': ~Eval('kind')}
+                )]
+
+    @classmethod
     def _export_skips(cls):
         return (super(EndorsementPart, cls)._export_skips() |
             set(['definitions']))

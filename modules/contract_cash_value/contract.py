@@ -89,5 +89,13 @@ class Contract:
     is_cash_value = fields.Function(fields.Boolean('Is Cash Value'),
         'get_is_cash_value')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Contract, cls).view_attributes() + [(
+                '/form/notebook/page[@id="cash_value_collections"]',
+                'states',
+                {'invisible': ~Eval('is_cash_value')}
+                )]
+
     def get_is_cash_value(self, name):
         return self.offered.is_cash_value

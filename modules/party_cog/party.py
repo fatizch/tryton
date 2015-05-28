@@ -126,6 +126,17 @@ class Party(export.ExportImportMixin):
         cls.full_name.searcher = 'search_full_name'
 
     @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [
+            ('/form/group[@id="person"]', 'states',
+                {'invisible': Bool(~Eval('is_person'))}),
+            ('/form/group[@id="company"]', 'states',
+                {'invisible': Bool(~Eval('is_company'))}),
+            ('/form/notebook/page[@id="tree"]', 'states',
+                {'invisible': ~Eval('is_company')}),
+            ]
+
+    @classmethod
     def add_func_key(cls, values):
         values['_func_key'] = values['code']
 

@@ -9,7 +9,7 @@
     <newline/>
     <field name="contracts" colspan="4"/>
     <newline/>
-    <group id="warning_void" string="" colspan="4" states="{'invisible': Eval('status') != 'void'}">
+    <group id="warning_void" string="" colspan="4">
         <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
         <label string="The selected contracts will be voided, it will be as though they never happened" id="void_contract_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
     </group>

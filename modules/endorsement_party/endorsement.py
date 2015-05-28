@@ -70,6 +70,13 @@ class Party:
                 })
 
     @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [
+            ('/form/group[@id="endorsement_buttons"]', 'states',
+                {'invisible': True}),
+        ]
+
+    @classmethod
     @model.CoopView.button_action('endorsement.act_start_endorsement')
     def start_endorsement(cls, parties):
         pass

@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, And
+from trytond.pyson import Eval, And, Not, In
 from trytond.modules.cog_utils import fields, model
 from trytond.modules.offered_insurance import BusinessRuleRoot
 
@@ -60,6 +60,15 @@ class OptionDescription:
         'get_is_cash_value_coverage')
     cash_value_rules = fields.One2Many('cash_value.cash_value_rule', 'offered',
         'Cash Value Rules', delete_missing=True)
+
+    @classmethod
+    def view_attributes(cls):
+        return [('/form/notebook/page/notebook/string[@id="cash_value"]',
+                'states', {'invisible': Eval('family') != 'cash_value'}),
+            ('/form/notebook/page/notebook/page[@id="coverage_amount"]',
+                'states', {'invisible': Not(In(Eval('family'),
+                    ['cash_value', 'life']))})
+            ]
 
     @classmethod
     def __setup__(cls):

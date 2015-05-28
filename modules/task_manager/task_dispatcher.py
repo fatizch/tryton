@@ -1,5 +1,6 @@
 import datetime
 
+from trytond.pyson import Eval, Bool, If
 from trytond.wizard import Wizard, StateAction
 from trytond.wizard import StateTransition
 from trytond.transaction import Transaction
@@ -31,6 +32,13 @@ class ProcessLog:
     task_nb = fields.Function(
         fields.Integer('Task Number'),
         'get_task_nb')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ProcessLog, cls).view_attributes() + [
+            ('/tree', 'colors', If(Bool(Eval('locked')), 'red',
+                    If(Bool(Eval('is_current_user')), 'blue', 'black'))),
+            ]
 
     @fields.depends('task')
     def on_change_with_task_start(self, name=None):

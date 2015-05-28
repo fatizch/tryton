@@ -14,7 +14,7 @@
             <field name="existing_options" widget="one2many"/>
         </page>
     </notebook>
-    <group id="hidden" states="{'invisible': True}">
+    <group id="hidden">
         <field name="possible_coverages"/>
         <field name="possible_covered_elements"/>
         <field name="endorsement_part"/>

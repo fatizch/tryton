@@ -11,7 +11,6 @@ import pyflakes.messages
 import logging
 
 from StringIO import StringIO
-from decimal import Decimal
 from pyflakes.checker import Checker
 from sql.aggregate import Count
 from sql.conditionals import Coalesce
@@ -24,7 +23,7 @@ from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
 from trytond.tools.misc import memoize
-from trytond.pyson import Eval, Or, Bool, Not
+from trytond.pyson import Eval, Or, Bool, Not, If
 
 from trytond.modules.cog_utils import (coop_date, coop_string, fields,
     model, utils)
@@ -678,6 +677,13 @@ class RuleEngine(ModelView, ModelSQL, model.TaggedMixin):
     def write(cls, rules, values):
         cls._prepare_context_cache.clear()
         super(RuleEngine, cls).write(rules, values)
+
+    @classmethod
+    def view_attributes(cls):
+        return super(RuleEngine, cls).view_attributes() + [
+            ('/tree', 'colors', If(~Eval('passing_test_cases', False) |
+                    Bool(Eval('debug_mode')), 'red', 'black')),
+            ]
 
     @classmethod
     def is_master_object(cls):
@@ -1357,6 +1363,13 @@ class TestCase(ModelView, ModelSQL):
     def __setup__(cls):
         super(TestCase, cls).__setup__()
         cls._buttons.update({'recalculate': {}})
+
+    @classmethod
+    def view_attributes(cls):
+        return super(TestCase, cls).view_attributes() + [
+            ('/tree', 'colors', If(~Bool(Eval('last_passing_date_str', False)),
+                    'red', 'green')),
+            ]
 
     @classmethod
     def default_rule_text(cls):

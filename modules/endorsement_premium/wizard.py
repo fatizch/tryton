@@ -4,7 +4,7 @@ import datetime
 
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, Button
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Len
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
@@ -27,6 +27,15 @@ class PreviewContractPremiums(EndorsementWizardPreviewMixin,
     contract_previews = fields.One2Many(
         'endorsement.start.preview_contract_premiums.contract', None,
         'Contracts', readonly=True)
+
+    @classmethod
+    def view_attributes(cls):
+        return [
+            ('/form/group[@id="one_contract"]', 'states',
+                {'invisible': Len(Eval('contract_previews', [])) != Len([0])}),
+            ('/form/group[@id="multiple_contract"]', 'states',
+                {'invisible': Len(Eval('contract_previews', [])) == Len([0])}),
+            ]
 
     @classmethod
     def extract_endorsement_preview(cls, instance, endorsement=None):

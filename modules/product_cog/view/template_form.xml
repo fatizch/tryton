@@ -6,7 +6,4 @@
         <label name="account_expense"/>
         <field name="account_expense"/>
     </xpath>
-    <xpath expr="/form/notebook" position="replace_attributes">
-        <notebook states="{'invisible': True}"/>
-    </xpath>
 </data>

@@ -72,7 +72,7 @@
             <field name="name">Premium Notices</field>
             <field name="res_model">account.invoice</field>
             <field name="domain" eval="[('contract', 'in', Eval('active_ids'))]" pyson="1"/>
-            <field name="order">[('start', 'DESC')]</field>
+            <field name="order" eval="[('start', 'DESC')]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_view1">
             <field name="sequence" eval="10"/>

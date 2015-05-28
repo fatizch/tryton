@@ -1,4 +1,5 @@
 from trytond.pool import PoolMeta, Pool
+from trytond.pyson import Eval, Bool
 
 from trytond.modules.cog_utils import fields
 
@@ -16,6 +17,14 @@ class Party:
     extra_data_string = extra_data.translated('extra_data')
     covered_elements = fields.One2Many('contract.covered_element', 'party',
         'Covered Elements')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [(
+                '/form/group[@id="party_extra_data"]',
+                'states',
+                {'invisible': ~Bool(Eval('extra_data', None))}
+                )]
 
     def get_subscribed_contracts(self):
         Contract = Pool().get('contract')

@@ -36,5 +36,13 @@ class OptionDescription:
                 ('death', 'Death'),
                 ])
 
+    @classmethod
+    def view_attributes(cls):
+        return super(OptionDescription, cls).view_attributes() + [
+            ('/form/notebook/page[@id="managers"]/notebook'
+                '/page[@id="coverage_amount"]',
+                'states', {'invisible': Eval('family') != 'life'}),
+            ]
+
     def get_is_coverage_amount_needed(self, name=None):
         return self.family == 'life'

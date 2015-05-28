@@ -1,3 +1,5 @@
+from trytond.pyson import Eval, Bool
+
 from trytond.modules.cog_utils import model, fields, coop_string
 from trytond.modules.currency_cog import ModelCurrency
 from trytond.transaction import Transaction
@@ -27,6 +29,22 @@ class ExtraPremiumKind(model.CoopSQL, model.CoopView, ModelCurrency):
         super(ExtraPremiumKind, cls).__setup__()
         cls._sql_constraints += [
             ('code_uniq', 'UNIQUE(code)', 'The code must be unique!'),
+            ]
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ExtraPremiumKind, cls).view_attributes() + [
+            ('/form/group[@id="flat_amounts"]/'
+                'group[@id="flat_amount_discount"]',
+                'states', {'invisible': ~Eval('is_discount')}),
+            ('/form/group[@id="flat_amounts"]/group[@id="flat_amount"]',
+                'states', {'invisible': Bool(Eval('is_discount'))}),
+            ('/form/group[@id="rates"]/group[@id="rate_discount"]',
+                'states', {'invisible': ~Eval('is_discount')}),
+            ('/form/group[@id="rates"]/group[@id="rate"]',
+                'states', {'invisible': Bool(Eval('is_discount'))}),
+            ('/form/group[@id="invisible"]',
+                'states', {'invisible': True}),
             ]
 
     @staticmethod

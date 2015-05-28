@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <form string="Extra Premium">
     <field name="extra_premium" mode="form" colspan="4" expand_toolbar="0"/>
-    <group id="invisible" states="{'invisible': True}">
+    <group id="invisible">
         <field name="contract"/>
         <field name="covered_element_name"/>
         <field name="option_name"/>

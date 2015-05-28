@@ -11,11 +11,11 @@
     <newline/>
     <label name="max_value"/>
     <group id="flat_amounts" col="99" xexpand="0" xfill="0">
-        <group id="flat_amount_discount" states="{'invisible': ~Eval('is_discount')}">
+        <group id="flat_amount_discount">
             <field name="max_value" xexpand="0" factor="-1"/>
             <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
         </group>
-        <group id="flat_amount" states="{'invisible': Bool(Eval('is_discount'))}">
+        <group id="flat_amount">
             <field name="max_value" xexpand="0"/>
             <label name="currency_symbol" string="" xexpand="0" xalign="0"/>
         </group>
@@ -23,16 +23,16 @@
     <newline/>
     <label name="max_rate"/>
     <group id="rates" col="99" xexpand="0" xfill="0">
-        <group id="rate_discount" states="{'invisible':  ~Eval('is_discount') }">
+        <group id="rate_discount">
             <field name="max_rate" xexpand="0" factor="-100"/>
             <label string="%" id="rate" xexpand="0" xalign="0"/>
         </group>
-        <group id="rate" states="{'invisible': Bool(Eval('is_discount'))}">
+        <group id="rate">
             <field name="max_rate" xexpand="0" factor="100"/>
             <label string="%" id="rate" xexpand="0" xalign="0"/>
         </group>
     </group>
-    <group id="invisible" states="{'invisible': True}">
+    <group id="invisible">
         <field name="currency"/>
     </group>
 </form>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <form string="Manage Beneficiaries">
-    <group id="one_option" yexpand="1" yfill="1" states="{'invisible': Len(Eval('options', [])) != Len([0])}">
+    <group id="one_option" yexpand="1" yfill="1">
         <field name="options" expand_toolbar="0" mode="form"/>
     </group>
-    <group id="multiple_options" yexpand="1" yfill="1" states="{'invisible': Len(Eval('options', [])) == Len([0])}">
+    <group id="multiple_options" yexpand="1" yfill="1">
         <field name="options" mode="tree,form"/>
     </group>
     <field name="endorsement_part"/>

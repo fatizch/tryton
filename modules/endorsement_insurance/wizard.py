@@ -1,7 +1,7 @@
 from collections import defaultdict
 from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateView, StateTransition, Button
-from trytond.pyson import Eval, Len, Bool
+from trytond.pyson import Eval, Len, Bool, If
 from trytond.model import Model
 
 from trytond.modules.cog_utils import model, fields
@@ -310,6 +310,13 @@ class RemoveOptionSelector(model.CoopView):
         states={'required': Bool(Eval('to_remove'))},
         depends=['to_remove'], readonly=True)
 
+    @classmethod
+    def view_attributes(cls):
+        return super(RemoveOptionSelector, cls).view_attributes() + [
+            ('/tree', 'colors', If(Eval('to_remove', False),
+                    'red', 'black')),
+            ]
+
 
 class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
     'New Covered Element Option'
@@ -365,6 +372,12 @@ class NewOptionOnCoveredElement(model.CoopView, EndorsementWizardStepMixin):
         for elem in self.new_options:
             self.update_option(elem)
         self.new_options = self.new_options
+
+    @classmethod
+    def view_attributes(cls):
+        return super(NewOptionOnCoveredElement, cls).view_attributes() + [
+            ('/form/group[@id="hidden"]', 'states', {'invisible': True}),
+        ]
 
     @classmethod
     def update_default_values(cls, wizard, endorsement, default_values):
@@ -455,6 +468,16 @@ class ExtraPremiumDisplayer(model.CoopView):
     to_add = fields.Boolean('To Add')
     to_update = fields.Boolean('To Update')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(ExtraPremiumDisplayer, cls).view_attributes() + [
+            ('/form/group[@id="invisible"]', 'states',
+                {'invisible': True}),
+            ('/tree', 'colors', If(Eval('to_delete', False), 'red',
+                    If(Eval('to_add', False), 'green',
+                        If(Eval('to_update', False), 'blue', 'grey'))))
+            ]
+
 
 class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
     'Manage Extra Premium'
@@ -463,6 +486,12 @@ class ManageExtraPremium(model.CoopView, EndorsementWizardStepMixin):
 
     extra_premiums = fields.One2Many(
         'endorsement.contract.extra_premium.displayer', None, 'Extra Premiums')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ManageExtraPremium, cls).view_attributes() + [
+            ('/form/group[@id="invisible"]', 'states', {'invisible': True}),
+        ]
 
     @staticmethod
     def update_dict(to_update, key, value):
@@ -700,6 +729,15 @@ class NewExtraPremium(model.CoopView):
         for covered_element in self.covered_elements:
             covered_element.selected = False
         self.covered_elements = self.covered_elements
+
+    @classmethod
+    def view_attributes(cls):
+        return super(NewExtraPremium, cls).view_attributes() + [
+            ('/form/group[@id="one_covered"]', 'states',
+                {'invisible': Len(Eval('covered_elements', [])) != Len([0])}),
+            ('/form/group[@id="multiple_covered"]', 'states',
+                {'invisible': Len(Eval('covered_elements', [])) == Len([0])}),
+            ]
 
     @classmethod
     def _extra_premium_fields_to_extract(cls):

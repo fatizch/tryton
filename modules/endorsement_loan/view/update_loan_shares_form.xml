@@ -3,7 +3,7 @@
     <field name="loan_share_selectors" mode="tree" expand_toolbar="0"/>
     <newline/>
     <field name="shares_per_loan" mode="tree" expand_toolbar="0"/>
-    <group id="hidden" states="{'invisible': True}" string="">
+    <group id="hidden" string="">
         <field name="endorsement_part"/>
         <field name="effective_date"/>
         <field name="endorsement_definition"/>

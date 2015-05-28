@@ -12,7 +12,7 @@
         <page string="Description" id="description">
             <field name="description"/>
         </page>
-        <page string="Definition" id="definition" states="{'invisible': ~Eval('kind')}">
+        <page string="Definition" id="definition">
             <notebook>
                 <page name="contract_fields">
                     <field name="contract_fields"/>

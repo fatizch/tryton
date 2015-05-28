@@ -197,6 +197,11 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         return super(Loan, cls).create(vlist)
 
     @classmethod
+    def view_attributes(cls):
+        return [('/form/notebook/page[@id="quote_share"]', 'states',
+                {'invisible': ~Eval('loan_shares')})]
+
+    @classmethod
     def _export_skips(cls):
         return super(Loan, cls)._export_skips() | {'loan_shares'}
 

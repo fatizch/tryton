@@ -4,7 +4,7 @@ from sql.aggregate import Max
 from sql import Literal
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, PYSONEncoder, Not
+from trytond.pyson import Eval, PYSONEncoder, Not, Bool
 
 from trytond.modules.cog_utils import coop_string, fields, utils, model
 from trytond.modules.cog_utils import UnionMixin
@@ -33,6 +33,14 @@ class Party:
         fields.Boolean('Is Bank',
             states={'invisible': Not(STATES_COMPANY)}),
         'get_is_actor', setter='set_is_actor', searcher='search_is_actor')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [(
+                '/form/notebook/page[@id="role"]/notebook/page[@id="bank"]',
+                'states',
+                {'invisible': Bool(~Eval('is_bank'))}
+                )]
 
     @fields.depends('is_bank')
     def on_change_is_bank(self):

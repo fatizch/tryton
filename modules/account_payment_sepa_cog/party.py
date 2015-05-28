@@ -27,6 +27,14 @@ class Party:
             'is_sepa_creditor_identifier_needed')
 
     @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [(
+                '/form/notebook/page[@id="accounting"]/separator[@id="sepa"]',
+                'states',
+                {'invisible': ~Eval('is_sepa_creditor_identifier_needed')}
+                )]
+
+    @classmethod
     def _export_light(cls):
         return super(Party, cls)._export_light() | {'sepa_mandates'}
 

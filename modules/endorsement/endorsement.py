@@ -545,6 +545,14 @@ class Contract(CogProcessFramework):
                     }
                 })
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Contract, cls).view_attributes() + [(
+                '/form/group[@id="endorsement_buttons"]',
+                'states',
+                {'invisible': True}
+                )]
+
     def get_latest_endorsement(self, name):
         Endorsement = Pool().get('endorsement')
         endorsement = Endorsement.search([

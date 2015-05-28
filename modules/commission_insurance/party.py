@@ -40,6 +40,14 @@ class Party:
         if TableHandler.table_exist(cursor, 'broker'):
             TableHandler.drop_table(cursor, 'broker', 'broker', True)
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [(
+                '/form/notebook/page[@id="role"]/notebook/page[@id="broker"]',
+                'states',
+                {'invisible': Bool(~Eval('is_broker'))}
+                )]
+
     @fields.depends('broker_code')
     def get_is_broker(self, name=None):
         return self.broker_code is not None

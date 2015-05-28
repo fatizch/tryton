@@ -97,6 +97,14 @@ class ContractOption:
                 })
 
     @classmethod
+    def view_attributes(cls):
+        return super(ContractOption, cls).view_attributes() + [(
+                '/form/notebook/page[@name="beneficiary_clause"]',
+                'states',
+                {'invisible': ~Eval('has_beneficiary_clause')}
+                )]
+
+    @classmethod
     def new_option_from_coverage(cls, coverage, product, start_date,
             end_date=None, item_desc=None):
         new_option = super(ContractOption, cls).new_option_from_coverage(

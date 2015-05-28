@@ -92,6 +92,14 @@ class Claim(model.CoopSQL, model.CoopView, Printable):
             super(Claim, cls).write([claim], {'sub_status': claim.sub_status})
         super(Claim, cls).write(claims, values)
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Claim, cls).view_attributes() + [(
+                '/form/group[@id="contracts"]',
+                'states',
+                {'invisible': True}
+                )]
+
     def get_rec_name(self, name):
         res = super(Claim, self).get_rec_name(name)
         if self.claimant:

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Options" colors="If(Eval('to_remove', False), 'red', 'black')">
+<tree string="Options">
     <field name="to_remove"/>
     <field name="option"/>
     <field name="covered_element"/>

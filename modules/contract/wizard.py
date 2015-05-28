@@ -1,7 +1,7 @@
 import datetime
 
 from trytond.pool import Pool
-from trytond.pyson import Eval, Len
+from trytond.pyson import Eval, Len, If
 from trytond.wizard import StateTransition, StateView, Button, StateAction
 from trytond.transaction import Transaction
 
@@ -231,6 +231,12 @@ class WizardOption(model.CoopView):
             ], 'Selection')
     option = fields.Many2One('contract.option', 'Option')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(WizardOption, cls).view_attributes() + [
+            ('/tree', 'colors', If(~Eval('loan'), 'black', 'blue')),
+            ]
+
     @fields.depends('coverage', 'coverage_behaviour')
     def on_change_with_name(self, name=None):
         if self.coverage:
@@ -391,6 +397,14 @@ class ContractStopSelectContracts(model.CoopView):
     contracts = fields.Many2Many('contract', None, None, 'Contracts to stop',
         required=True, states={'invisible': Len(Eval('contracts', [])) >= 1})
 
+    @classmethod
+    def view_attributes(cls):
+        return super(ContractStopSelectContracts, cls).view_attributes() + [(
+                '/form/group[@id="warning_void"]',
+                'states',
+                {'invisible': Eval('status') != 'void'}
+                )]
+
 
 class ContractStop(model.CoopWizard):
     'Stop Contract'
@@ -436,6 +450,14 @@ class ContractReactivateCheck(model.CoopView):
         'Termination Reason', readonly=True)
     will_be_terminated = fields.Boolean('Will be terminated', readonly=True,
         states={'invisible': True})
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ContractReactivateCheck, cls).view_attributes() + [(
+                '/form/group[@id="check_today"]',
+                'states',
+                {'invisible': ~Eval('will_be_terminated')}
+                )]
 
 
 class ContractReactivate(model.CoopWizard):

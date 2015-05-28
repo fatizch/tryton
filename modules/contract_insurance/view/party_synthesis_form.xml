@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
     <xpath expr="/form/field[@name='email']" position="after">
-        <group id="party_extra_data" colspan="6" states="{'invisible': ~Bool(Eval('extra_data', None))}">
+        <group id="party_extra_data" colspan="6">
             <field name="extra_data" no_command="1"/>
         </group>
         <newline/>

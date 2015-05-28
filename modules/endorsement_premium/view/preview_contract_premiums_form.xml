@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <form string="Preview Contracts Premiums">
-    <group id="one_contract" string="" states="{'invisible': Len(Eval('contract_previews', [])) != Len([0])}" yexpand="1" yfill="1">
+    <group id="one_contract" string="">
         <field name="contract_previews" mode="form" expand_toolbar="0"/>
     </group>
-    <group id="multiple_contract" string="" states="{'invisible': Len(Eval('contract_previews', [])) == Len([0])}" yexpand="1" yfill="1">
+    <group id="multiple_contract" string="">
         <field name="contract_previews" mode="tree,form"/>
     </group>
 </form>

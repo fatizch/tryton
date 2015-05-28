@@ -7,7 +7,7 @@
         <page id="table" string="Amortization Table">
             <field name="payments" colspan="4" mode="tree"/>
         </page>
-        <page id="quota_share" string="Quota share" states="{'invisible': ~Eval('loan_shares')}">
+        <page id="quota_share" string="Quota share">
             <field name="loan_shares" colspan="4" mode="tree,form" view_ids="loan.loan_share_view_tree_editable,loan.loan_share_view_form"/>
         </page>
     </notebook>

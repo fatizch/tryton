@@ -132,6 +132,16 @@ class BenefitRule(BusinessRuleRoot, model.CoopSQL, ModelCurrency):
         # TODO : Remove this once we use M2O rather than a Reference field
         utils.update_selection(cls, 'offered', (('benefit', 'Benefit'),))
 
+    @classmethod
+    def view_attributes(cls):
+        return super(BenefitRule, cls).view_attributes() + [(
+                '/form/group[@id="coef_coverage_amount"]/label[@id="percent"]',
+                'states',
+                {'invisible': Or(Eval('config_kind') != 'simple',
+                    Eval('amount_kind') != 'cov_amount',
+                    Bool(Eval('amount_evolves_over_time')))}
+                )]
+
     def get_currency(self):
         if self.offered:
             return self.offered.currency
@@ -345,6 +355,18 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     duration_unit = fields.Selection(coop_date.DAILY_DURATION, 'Duration Unit',
         sort=False, states={'invisible': Bool(~Eval('limited_duration'))})
     duration_unit_string = duration_unit.translated('duration_unit')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(BenefitRuleStage, cls).view_attributes() + [(
+                '/form/group[@id="rule"]',
+                'states',
+                {'invisible': Eval('config_kind') != 'advanced'}
+                ), (
+                '/form/group[@id="amount"]',
+                'states',
+                {'invisible': Eval('config_kind') != 'simple'}
+                )]
 
     @fields.depends('rule', 'rule_extra_data')
     def on_change_with_rule_extra_data(self):

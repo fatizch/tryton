@@ -98,6 +98,13 @@ class ProcessTransition(model.CoopSQL):
             ]
 
     @classmethod
+    def view_attributes(cls):
+        return super(ProcessTransition, cls).view_attributes() + [
+            ('/form/group[@id="methods"]', 'states',
+                {'invisible': Eval('kind') == 'choice'}),
+            ]
+
+    @classmethod
     def _export_light(cls):
         return set(
             ['choice_if_true', 'choice_if_false', 'from_step', 'to_step'])

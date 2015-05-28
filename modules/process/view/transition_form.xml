@@ -11,7 +11,7 @@
     <label name="pyson"/>
     <field name="pyson"/>
     <newline/>
-    <group id="methods" xexpand="1" xfill="1" yexpand="1" yfill="1" states="{'invisible': Eval('kind') != 'standard'}">
+    <group id="methods" xexpand="1" xfill="1" yexpand="1" yfill="1">
         <label name="method_kind"/>
         <field name="method_kind" colspan="3" xexpand="1" xfill="1"/>
         <newline/>

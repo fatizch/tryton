@@ -5,7 +5,7 @@ from sql.conditionals import Coalesce
 from trytond import backend
 from trytond.transaction import Transaction
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, If
 
 from trytond.modules.cog_utils import fields, model, coop_string, coop_date
 
@@ -310,6 +310,13 @@ class ExtraPremium:
         fields.Boolean('Is Loan'),
         'on_change_with_is_loan')
 
+    @classmethod
+    def view_attributes(cls):
+        return [
+            ('/form/group[@id="capital_per_mil"]'
+                '/string[@id="capital_per_mil_rate"]', 'states',
+                {'invisible': Eval('calculation_kind') != 'capital_per_mil'})]
+
     @fields.depends('option')
     def on_change_with_is_loan(self, name=None):
         return self.option.coverage.family == 'loan'
@@ -551,6 +558,12 @@ class WizardOption:
         states={'readonly': ~Eval('loan')})
     loan = fields.Many2One('loan', 'Loan')
     order = fields.Integer('Order')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(WizardOption, cls).view_attributes() + [
+            ('/tree', 'colors', If(~Eval('loan'), 'black', 'blue')),
+            ]
 
     @fields.depends('loan', 'order')
     def on_change_with_name(self, name=None):

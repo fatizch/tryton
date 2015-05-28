@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tree string="Extra Premiums" editable="bottom" colors="If(Eval('to_delete', False), 'red', If(Eval('to_add', False), 'green', If(Eval('to_update', False), 'blue', 'grey')))">
+<tree string="Extra Premiums" editable="bottom">
     <field name="to_delete"/>
     <field name="contract"/>
     <field name="covered_element_name"/>

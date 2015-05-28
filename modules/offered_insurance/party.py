@@ -1,5 +1,5 @@
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Not
+from trytond.pyson import Eval, Not, Bool
 
 from trytond.modules.cog_utils import model, fields, coop_string
 from trytond.modules.party_cog.party import STATES_COMPANY
@@ -22,6 +22,13 @@ class Party:
         fields.Boolean('Is Insurer',
             states={'invisible': Not(STATES_COMPANY)}),
         'get_is_actor', setter='set_is_actor', searcher='search_is_actor')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(Party, cls).view_attributes() + [
+            ('/form/notebook/page[@id="role"]/notebook/page[@id="insurer"]',
+                'states', {'invisible': Bool(~Eval('is_insurer'))}),
+            ]
 
     @fields.depends('is_insurer')
     def on_change_is_insurer(self):

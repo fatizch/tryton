@@ -21,6 +21,20 @@ class Line:
 class Statement:
     __name__ = 'account.statement'
 
+    @classmethod
+    def view_attributes(cls):
+        return super(Statement, cls).view_attributes() + [(
+                '/form/notebook/page[@id="statement_lines"]/'
+                'group[@id="lines_without_bank"]',
+                'states',
+                {"invisible": Eval("in_bank_deposit_ticket", False)}
+                ), (
+                '/form/notebook/page[@id="statement_lines"]/'
+                'group[@id="lines_with_bank"]',
+                'states',
+                {"invisible": ~Eval("in_bank_deposit_ticket", True)})
+            ]
+
     def _get_grouped_line(self):
         Line = super(Statement, self)._get_grouped_line()
 

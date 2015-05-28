@@ -4,7 +4,7 @@ from sql import Column
 from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, If, Not
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.model import dualmethod
@@ -269,6 +269,13 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
             'readonly': ~Eval('fee_allow_override', False)},
             depends=['fee_allow_override']),
         'on_change_with_accept_fee', 'set_accept_fee')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ContractFee, cls).view_attributes() + [
+            ('/tree', 'colors', If(Eval('accept_fee', False), 'black',
+                    'grey')),
+            ]
 
     @classmethod
     def default_accept_fee(cls):

@@ -32,7 +32,7 @@
             <field name="documents" xexpand="1" xfill="1" yexpand="1" yfill="1" mode="form"/>
         </page>
     </notebook>
-    <group id="contracts" states="{'invisible': True}">
+    <group id="contracts">
         <field name="possible_contracts"/>
     </group>
 </form>

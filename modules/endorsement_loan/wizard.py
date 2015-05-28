@@ -4,7 +4,7 @@ import datetime
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.wizard import StateView, Button, StateTransition
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Len, If, Not
 
 from trytond.modules.cog_utils import fields, model, utils
 from trytond.modules.endorsement import EndorsementWizardPreviewMixin
@@ -115,6 +115,15 @@ class ChangeLoan(EndorsementWizardStepMixin, model.CoopView):
     loan_count = fields.Integer('Loan Count', states={'invisible': True})
 
     @classmethod
+    def view_attributes(cls):
+        return super(ChangeLoan, cls).view_attributes() + [
+            ('/form/group[@id="one_loan"]', 'states',
+                {'invisible': Len(Eval('loan_count', [])) != Len([0])}),
+            ('/form/group[@id="multiple_loan"]', 'states',
+                {'invisible': Len(Eval('loan_count', [])) == Len([0])}),
+            ]
+
+    @classmethod
     def _loan_fields_to_extract(cls):
         return {
             'loan': ['currency', 'rate', 'payment_frequency', 'order',
@@ -220,6 +229,15 @@ class LoanDisplayUpdatedPayments(model.CoopView):
 
     __name__ = 'endorsement.loan.display_updated_payments'
 
+    @classmethod
+    def view_attributes(cls):
+        return [
+            ('/form/group[@id="one_loan"]', 'states',
+                {'invisible': Len(Eval('loans', [])) != Len([0])}),
+            ('/form/group[@id="multiple_loan"]', 'states',
+                {'invisible': Len(Eval('loans', [])) == Len([0])}),
+            ]
+
     loans = fields.One2Many('endorsement.loan.change.updated_payments', None,
         'Loan Payments')
 
@@ -302,6 +320,10 @@ class SelectLoanShares(EndorsementWizardStepMixin, model.CoopView):
     shares_per_loan = fields.One2Many(
         'contract.covered_element.add_option.share_per_loan', None,
         'Shares per loan')
+
+    @classmethod
+    def view_attributes(cls):
+        return [('/form/group[@id="hidden"]', 'states', {'invisible': True})]
 
     @fields.depends('shares_per_loan', 'loan_share_selectors')
     def on_change_shares_per_loan(self):
@@ -516,6 +538,13 @@ class LoanShareSelector(model.CoopView):
         readonly=True)
     terminate_loan = fields.Boolean('Terminate Loan')
 
+    @classmethod
+    def view_attributes(cls):
+        return super(LoanShareSelector, cls).view_attributes() + [
+            ('/tree', 'colors', If(Bool(Eval('new_share', False)), 'green',
+                    If(Not(Bool(Eval('previous_share', False))), 'blue',
+                        'grey'))),
+            ]
 
 class SharePerLoan(model.CoopView):
     'Share per Loan'
@@ -599,6 +628,15 @@ class PreviewContractPayments(EndorsementWizardPreviewMixin,
     contract_previews = fields.One2Many(
         'endorsement.start.preview_contract_payments.contract', None,
         'Contracts', readonly=True)
+
+    @classmethod
+    def view_attributes(cls):
+        return [
+            ('/form/group[@id="one_contract"]', 'states',
+                {'invisible': Len(Eval('contract_previews', [])) != Len([0])}),
+            ('/form/group[@id="multiple_contract"]', 'states',
+                {'invisible': Len(Eval('contract_previews', [])) == Len([0])}),
+            ]
 
     @classmethod
     def extract_endorsement_preview(cls, instance):

@@ -17,7 +17,7 @@
     <newline/>
     <group id="filler" string="" colspan="4" yexpand="1" yfill="1">
     </group>
-    <group id="warnings" string="" colspan="4" states="{'invisible': Not(Eval('contract_in_process', False))}">
+    <group id="warnings" string="" colspan="4">
         <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
         <label string="Selected Contract is currently in a process. You will not be able to apply / preview the endorsement while it's not completed" id="contrct_in_process_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
         <newline/>

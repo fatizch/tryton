@@ -584,6 +584,14 @@ class SelectEndorsement(model.CoopView):
     contract_in_process = fields.Boolean('Contract in Progress',
         states={'invisible': True})
 
+    @classmethod
+    def view_attributes(cls):
+        return super(SelectEndorsement, cls).view_attributes() + [(
+                '/form/group[@id="warnings"]',
+                'states',
+                {'invisible': Not(Eval('contract_in_process', False))}
+                )]
+
     @fields.depends('contract')
     def on_change_contract(self):
         if self.contract:

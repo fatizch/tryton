@@ -1,3 +1,4 @@
+from trytond.pyson import Eval, Len, Bool
 from trytond.pool import PoolMeta, Pool
 
 from trytond.modules.cog_utils import model, fields
@@ -41,6 +42,15 @@ class ManageBeneficiaries(model.CoopView, EndorsementWizardStepMixin):
 
     options = fields.One2Many('endorsement.contract.beneficiary.manage.option',
         None, 'Options with Beneficiaries')
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ManageBeneficiaries, cls).view_attributes() + [
+            ('/form/group[@id="one_option"]', 'states',
+                {'invisible': Len(Eval('options', [])) != Len([0])}),
+            ('/form/group[@id="multiple_options"]', 'states',
+                {'invisible': Len(Eval('options', [])) == Len([0])}),
+            ]
 
     @classmethod
     def state_view_name(cls):

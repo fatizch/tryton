@@ -681,6 +681,19 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     def functional_skips_for_duplicate(cls):
         return set([])
 
+    @classmethod
+    def view_attributes(cls):
+        return super(CoveredElement, cls).view_attributes() + [(
+                '/form/notebook/page[@id="covered_relations"]',
+                'states',
+                {'invisible': ~Eval('item_kind').in_(
+                        ['person', 'company', 'party'])}
+                ), (
+                '/form/notebook/page[@id="sub_elements"]',
+                'states',
+                {'invisible': Eval('item_kind') == 'person'}
+                )]
+
     def get_party_code(self, name):
         return self.party.code
 
@@ -1184,6 +1197,35 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                 'bad_start_date': 'Extra premium %s start date (%s) should be '
                 'greater than the coverage\'s (%s)'})
         cls._buttons.update({'propagate': {}})
+
+    @classmethod
+    def view_attributes(cls):
+        return super(ExtraPremium, cls).view_attributes() + [(
+                '/form/group[@id="flat_amounts"]/'
+                'group[@id="flat_amount_discount"]',
+                'states',
+                {'invisible': Or(Eval('calculation_kind') != 'flat',
+                        ~Eval('is_discount'))}
+                ), (
+                '/form/group[@id="flat_amounts"]/group[@id="flat_amount"]',
+                'states',
+                {'invisible': Or(Eval('calculation_kind') != 'flat',
+                        Bool(Eval('is_discount')))}
+                ), (
+                '/form/group[@id="rates"]/group[@id="rate_discount"]',
+                'states',
+                {'invisible': Or(Eval('calculation_kind') != 'rate',
+                        ~Eval('is_discount'))}
+                ), (
+                '/form/group[@id="rates"]/group[@id="rate"]',
+                'states',
+                {'invisible': Or(Eval('calculation_kind') != 'rate',
+                        Bool(Eval('is_discount')))}
+                ), (
+                '/form/group[@id="invisible"]',
+                'states',
+                {'invisible': True}
+                )]
 
     @classmethod
     def default_calculation_kind(cls):

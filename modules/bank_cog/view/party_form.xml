@@ -5,7 +5,7 @@
         <field name="is_bank" xexpand="0" width="25"/>
     </xpath>
     <xpath expr="/form/notebook/page[@id='role']/notebook" position="inside">
-        <page id="bank" string="Bank" states="{'invisible': Bool(~Eval('is_bank'))}">
+        <page id="bank" string="Bank">
             <field name="bank_role" mode="form"/>
         </page>
     </xpath>

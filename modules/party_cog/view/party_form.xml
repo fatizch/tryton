@@ -14,7 +14,7 @@
         <field name="is_company" xexpand="0"/>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <group id="person" colspan="6" col="6" states="{'invisible':Bool(~Eval('is_person'))}">
+        <group id="person" colspan="6" col="6">
             <label name="gender"/>
             <field name="gender" widget="selection" xexpand="0"/>
             <label name="name"/>
@@ -30,7 +30,7 @@
         </group>
     </xpath>
     <xpath expr="/form/group[@id='checkboxes']" position="after">
-        <group id="company" colspan="6" col="6" states="{'invisible':Bool(~Eval('is_company'))}">
+        <group id="company" colspan="6" col="6">
             <label name="short_name"/>
             <field name="short_name"/>
             <label name="name"/>
@@ -70,7 +70,7 @@
     </xpath>
     <!-- Add Company and Role pages-->
     <xpath expr="/form/notebook" position="inside">
-        <page string="Company" id="tree" states="{'invisible': ~Eval('is_company')}">
+        <page string="Company" id="tree">
             <label name="parent"/>
             <field name="parent"/>
             <newline/>
