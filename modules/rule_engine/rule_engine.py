@@ -23,7 +23,7 @@ from trytond.model import DictSchemaMixin, ModelView as TrytonModelView
 from trytond.wizard import Wizard, StateView, Button, StateTransition
 from trytond.pool import Pool
 from trytond.transaction import Transaction
-from trytond.tools.misc import _compile_source, memoize
+from trytond.tools.misc import memoize
 from trytond.pyson import Eval, Or, Bool, Not
 
 from trytond.modules.cog_utils import (coop_date, coop_string, fields,
@@ -158,29 +158,6 @@ def debug_wrapper(base_context, func, name):
             '\tresult = %s' % str(result))
         return result
     return wrapper_func
-
-
-def safe_eval(source, data=None):
-    if '__subclasses__' in source:
-        raise ValueError('__subclasses__ not allowed')
-
-    comp = _compile_source(source)
-    return eval(comp, {
-            '__builtins__': {
-                'True': True,
-                'False': False,
-                'str': str,
-                'globals': locals,
-                'locals': locals,
-                'bool': bool,
-                'dict': dict,
-                'round': round,
-                'Decimal': Decimal,
-                'datetime': datetime,
-                'int': int,
-                'max': max,
-                'min': min,
-                }}, data)
 
 
 def noargs_func(name, values):
@@ -1396,7 +1373,7 @@ class TestCase(ModelView, ModelSQL):
         for value in self.test_values:
             if not value.override_value:
                 continue
-            val = safe_eval(value.value if value.value != '' else "''")
+            val = eval(value.value if value.value != '' else "''")
             test_context.setdefault(value.name, []).append(val)
         test_context = {
             key: noargs_func(key, value)

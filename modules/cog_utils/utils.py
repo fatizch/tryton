@@ -14,7 +14,6 @@ from trytond.model import fields
 
 # Needed for Pyson evaluation
 from trytond.pyson import PYSONDecoder, PYSONEncoder, CONTEXT, Eval, Or, And
-from trytond.tools import safe_eval
 from trytond.model.modelstorage import EvalEnvironment
 
 
@@ -311,7 +310,7 @@ def format_data(data, prefix='', prefix_inc='    ', is_init=True):
 def pyson_result(pyson_expr, target):
     encoder = PYSONEncoder()
     if isinstance(pyson_expr, str):
-        the_pyson = encoder.encode(safe_eval(pyson_expr, CONTEXT))
+        the_pyson = encoder.encode(eval(pyson_expr, CONTEXT))
     else:
         the_pyson = encoder.encode(pyson_expr)
     if the_pyson is True:
@@ -332,7 +331,7 @@ def pyson_result(pyson_expr, target):
 
 def pyson_encode(pyson_expr, do_eval=False):
     encoder = PYSONEncoder()
-    res = encoder.encode(safe_eval(pyson_expr, CONTEXT))
+    res = encoder.encode(eval(pyson_expr, CONTEXT))
     # TODO : Make this safer
     res = res.replace('true', 'True')
     res = res.replace('false', 'False')
