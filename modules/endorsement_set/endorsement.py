@@ -4,7 +4,7 @@ from trytond.pool import PoolMeta, Pool
 from trytond.wizard import StateTransition, StateView, Button
 from trytond.transaction import Transaction
 from trytond.model import Workflow
-from trytond.pyson import Eval
+from trytond.pyson import Eval, Bool, Equal
 
 from trytond.modules.cog_utils import model, fields
 
@@ -73,9 +73,10 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
                 'The endorsement set number must be unique.')
         ]
         cls._buttons.update({
-                'button_decline_set': {},
+                'button_decline_set': {
+                    "invisible": Bool(Equal(Eval('state'), 'declined'))},
                 'reset': {
-                    'invisible': ~Eval('state').in_(['draft'])},
+                    "invisible": ~Eval('state').in_(['draft'])},
                 })
         cls._error_messages.update({
             'effective_date_already_set': 'The effective date is already set.',

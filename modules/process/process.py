@@ -6,10 +6,10 @@ from trytond.model import ModelView, ModelSQL
 from trytond.wizard import Wizard, StateAction
 from trytond.report import Report
 from trytond.transaction import Transaction
-from trytond.pyson import Eval, Bool
+from trytond.pyson import Eval, Bool, Or, And, Not
 from trytond.pool import Pool, PoolMeta
 
-from trytond.modules.cog_utils import coop_string
+from trytond.modules.cog_utils import coop_string, utils
 from trytond.modules.cog_utils import fields, model, export
 
 __metaclass__ = PoolMeta
@@ -273,9 +273,9 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
             good_action = ActWin()
         good_action.name = self.fancy_name
         good_action.res_model = self.on_model.model
-        good_action.context = "{'running_process': '%s'}" % (
+        good_action.context = '{"running_process": "%s"}' % (
             self.technical_name)
-        good_action.domain = "[('current_state', 'in', [%s])]" % (
+        good_action.domain = '[["current_state", "in", [%s]]]' % (
             ','.join(map(lambda x: str(x.id), self.all_steps)))
         good_action.sequence = 10
         good_action.save()
@@ -320,11 +320,14 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         else:
             xml += ' yfill="0" yexpand="0" '
         xml += 'states="{'
-        xml += "'invisible': "
+        xml += "&quot;invisible&quot;: "
         if auth_pyson:
-            xml += 'Not(And(%s, %s))' % (step_pyson, auth_pyson)
+            pyson = Not(And(step_pyson, Not(auth_pyson)))
+            invisible_def = utils.get_json_from_pyson(pyson)
         else:
-            xml += 'Not(%s)' % step_pyson
+            pyson = Not(step_pyson)
+            invisible_def = utils.get_json_from_pyson(pyson)
+        xml += '%s' % invisible_def
         xml += '}" col="%s"' % col
         if string:
             xml += ' string="%s"' % string
@@ -335,13 +338,15 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         step = step_relation.step
         step_pyson, auth_pyson = step.get_pyson_for_display(step_relation)
 
+        pyson = Not(And(step_pyson, Not(auth_pyson or Bool(True))))
+        invisible_def = utils.get_json_from_pyson(pyson)
+
         xml = ''
         if auth_pyson:
             xml += '<group id="group_%s_noauth" ' % step.technical_name
             xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
             xml += 'states="{'
-            xml += "'invisible': Not(And(%s, Not(%s)))" % (
-                step_pyson, auth_pyson)
+            xml += "&quot;invisible&quot;: %s" % invisible_def
             xml += '}">'
             xml += '<label id="noauth_text" string="The current record is '
             xml += 'in a state (%s) that you are not allowed to view."/>' % (
@@ -386,10 +391,12 @@ class Process(ModelSQL, ModelView, model.TaggedMixin):
         return xml
 
     def get_finished_process_xml(self):
+        pyson = Bool(Eval('current_state'))
+        invisible_def = utils.get_json_from_pyson(pyson)
         xml = '<group id="group_tech_complete" '
         xml += 'xfill="1" xexpand="1" yfill="1" yexpand="1" '
         xml += 'states="{'
-        xml += "'invisible': ~~Eval('current_state')"
+        xml += "&quot;invisible&quot;: %s" % invisible_def
         xml += '}">'
         xml += '<label id="complete_text" string="The current record '
         xml += 'completed the current process, please go ahead"/>'
@@ -881,13 +888,12 @@ class ProcessStep(ModelSQL, ModelView, model.TaggedMixin):
         return xml
 
     def get_pyson_for_display(self, step_relation):
-        step_pyson = "(Eval('current_state', 0) == %s)" % (
-            step_relation.id)
+        step_pyson = Bool(Eval('current_state', 0) == step_relation.id)
         if self.authorizations:
-            auth_pyson = '('
+            auths = []
             for elem in self.authorizations:
-                auth_pyson += "Eval('groups', []).contains(%s) or " % elem.id
-            auth_pyson = auth_pyson[:-4] + ')'
+                auths.append(Bool(Eval('groups', []).contains(elem.id)))
+            auth_pyson = Or(*auths)
         else:
             auth_pyson = None
         return step_pyson, auth_pyson

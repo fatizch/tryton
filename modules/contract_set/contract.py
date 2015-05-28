@@ -2,6 +2,7 @@ from sql.aggregate import Max
 
 from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
+from trytond.pyson import Eval, Bool, Equal
 
 from trytond.modules.cog_utils import model, fields
 from trytond.modules.contract import _STATES, _DEPENDS
@@ -55,7 +56,8 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
                 'The contract set number must be unique.')
         ]
         cls._buttons.update({
-                'button_decline_set': {},
+                'button_decline_set': {
+                    "invisible": Bool(Equal(Eval('status'), 'declined'))},
                 })
         cls._error_messages.update({
             'no_sequence_defined': 'No sequence defined in configuration '
