@@ -5,8 +5,8 @@
         <record model="ir.action.act_window" id="act_person_form">
             <field name="name">Persons</field>
             <field name="res_model">party.party</field>
-            <field name="domain">[('is_person', '=', True)]</field>
-            <field name="context">{'synthesis': 'health'}</field>
+            <field name="domain" eval="[('is_person', '=', True)]" pyson="1"/>
+            <field name="context" eval="{'synthesis': 'health'}" pyson="1"/>
         </record>
         <record model="ir.ui.view" id="health_person_view_tree">
             <field name="model">party.party</field>

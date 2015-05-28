@@ -22,14 +22,14 @@
             <field name="global_p" eval="True"/>
         </record>
         <record model="ir.rule" id="rule_benefit_1">
-            <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+            <field name="domain" eval="[('company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
             <field name="rule_group" ref="rule_group_benefit"/>
         </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_benefit_form">
             <field name="name">Benefits</field>
             <field name="res_model">benefit</field>
-            <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_benefit_view_tree">
             <field name="sequence" eval="10"/>
@@ -61,14 +61,14 @@
             <field name="global_p" eval="True"/>
         </record>
         <record model="ir.rule" id="rule_event_desc_1">
-            <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+            <field name="domain" eval="[('company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
             <field name="rule_group" ref="rule_group_event_desc"/>
         </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_event_desc_form">
             <field name="name">Events</field>
             <field name="res_model">benefit.event.description</field>
-            <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_event_desc_view_tree">
             <field name="sequence" eval="10"/>
@@ -100,14 +100,14 @@
             <field name="global_p" eval="True"/>
         </record>
         <record model="ir.rule" id="rule_loss_desc_1">
-            <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+            <field name="domain" eval="[('company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
             <field name="rule_group" ref="rule_group_loss_desc"/>
         </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_loss_desc_form">
             <field name="name">Losses</field>
             <field name="res_model">benefit.loss.description</field>
-            <field name="domain">[('company', '=', Eval('context', {}).get('company', False))]</field>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_loss_desc_view_tree">
             <field name="sequence" eval="10"/>

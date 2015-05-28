@@ -103,8 +103,8 @@
         <record model="ir.action.act_window" id="act_cell_relate_form">
             <field name="name">Cells</field>
             <field name="res_model">table.cell</field>
-            <field name="domain">[('definition', '=', Eval('active_id'))]</field>
-            <field name="context">{'table': Eval('active_id')}</field>
+            <field name="domain" eval="[('definition', '=', Eval('active_id'))]" pyson="1"/>
+            <field name="context" eval="{'table': Eval('active_id')}" pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_table_relate_keyword1">
             <field name="keyword">form_relate</field>
@@ -136,7 +136,7 @@
             <field name="name">Table 2D</field>
             <field name="res_model">table.2d</field>
             <field name="window_name" eval="False"/>
-            <field name="context">{'table': Eval('active_id'), 'dimension3': Eval('dimension3'), 'dimension4': Eval('dimension4')}</field>
+            <field name="context" eval="{'table': Eval('active_id'), 'dimension3': Eval('dimension3'), 'dimension4': Eval('dimension4')}" pyson="1"/>
         </record>
         <!-- Access Right -->
         <record model="ir.model.access" id="access_table_2d">

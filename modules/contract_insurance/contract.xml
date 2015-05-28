@@ -96,7 +96,7 @@
         <record model="ir.action.act_window" id="act_contract_activation_history_relate_form">
             <field name="name">Activation History</field>
             <field name="res_model">contract.activation_history</field>
-            <field name="domain">[('contract', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('contract', '=', Eval('active_id'))]" pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_contract_activation_history_relate_keyword">
             <field name="keyword">form_relate</field>

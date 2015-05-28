@@ -38,13 +38,13 @@
         <record model="ir.action.act_window.domain" id="act_commission_domain_broker">
             <field name="name">Broker</field>
             <field name="sequence" eval="10"/>
-            <field name="domain">[('type_', '=', 'out')]</field>
+            <field name="domain" eval="[('type_', '=', 'out')]" pyson="1"/>
             <field name="act_window" ref="commission.act_commission_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_commission_domain_insurer">
             <field name="name">Insurer</field>
             <field name="sequence" eval="20"/>
-            <field name="domain">[('type_', '=', 'in')]</field>
+            <field name="domain" eval="[('type_', '=', 'in')]" pyson="1"/>
             <field name="act_window" ref="commission.act_commission_form"/>
         </record>
         <record model="ir.ui.view" id="plan_view_form">

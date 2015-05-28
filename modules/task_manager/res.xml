@@ -82,13 +82,13 @@
         <record model="ir.ui.view" id="tasks_by_process_step_view_graph">
             <field name="model">res.team.priority</field>
             <field name="type">graph</field>
-            <field name="domain">[('team', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('team', '=', Eval('active_id'))]" pyson="1"/>
             <field name="name">tasks_by_process_step_graph</field>
         </record>
         <record model="ir.ui.view" id="tasks_by_user_view_graph">
             <field name="model">res.user-res.team</field>
             <field name="type">graph</field>
-            <field name="domain">[('team', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('team', '=', Eval('active_id'))]" pyson="1"/>
             <field name="name">tasks_by_user_graph</field>
         </record>
         <record model="ir.ui.view" id="tasks_by_date_view_graph">
@@ -119,12 +119,12 @@
             <!-- Temporary disable autoreload to investigate -->
             <!-- issue https://bugs.b2ck.com/issue1490 -->
             <!-- <field name="auto_refresh">100</field> -->
-            <field name="domain">[('latest', '=', True), ['OR', ('locked', '=', False), ('user', '=', Eval('context', {}).get('_user'))], ('to_state', '!=', None)]</field>
+            <field name="domain" eval="[('latest', '=', True), ['OR', ('locked', '=', False), ('user', '=', Eval('context', {}).get('_user'))], ('to_state', '!=', None)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_process_log_domain_mine">
             <field name="name">Mine</field>
             <field name="sequence" eval="10"/>
-            <field name="domain">[('user', '=', Eval('_user'))]</field>
+            <field name="domain" eval="[('user', '=', Eval('_user'))]" pyson="1"/>
             <field name="act_window" ref="act_process_log"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_process_log_domain_all">

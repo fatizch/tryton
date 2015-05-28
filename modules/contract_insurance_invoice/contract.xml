@@ -71,7 +71,7 @@
         <record model="ir.action.act_window" id="act_premium_notice_form">
             <field name="name">Premium Notices</field>
             <field name="res_model">account.invoice</field>
-            <field name="domain">[('contract', 'in', Eval('active_ids'))]</field>
+            <field name="domain" eval="[('contract', 'in', Eval('active_ids'))]" pyson="1"/>
             <field name="order">[('start', 'DESC')]</field>
         </record>
         <record model="ir.action.act_window.view" id="act_invoice_view1">
@@ -87,25 +87,24 @@
         <record model="ir.action.act_window.domain" id="act_invoice_domain_pending">
             <field name="name">Pending</field>
             <field name="sequence" eval="10"/>
-            <field name="domain">[('state', 'in', ('posted', 'validated'))]</field>
+            <field name="domain" eval="[('state', 'in', ('posted', 'validated'))]" pyson="1"/>
             <field name="act_window" ref="act_premium_notice_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_invoice_domain_paid">
             <field name="name">Paid</field>
             <field name="sequence" eval="20"/>
-            <field name="domain">[('state', '=', 'paid')]</field>
+            <field name="domain" eval="[('state', '=', 'paid')]" pyson="1"/>
             <field name="act_window" ref="act_premium_notice_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_invoice_domain_canceled">
             <field name="name">Canceled</field>
             <field name="sequence" eval="30"/>
-            <field name="domain">[('state', '=', 'cancel')]</field>
+            <field name="domain" eval="[('state', '=', 'cancel')]" pyson="1"/>
             <field name="act_window" ref="act_premium_notice_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_invoice_domain_all">
             <field name="name">All</field>
             <field name="sequence" eval="99"/>
-            <field name="domain"/>
             <field name="act_window" ref="act_premium_notice_form"/>
         </record>
         <record model="ir.action.keyword" id="act_premium_notice_form_keyword1">

@@ -10,7 +10,7 @@
         <record model="ir.action.act_window" id="act_claims_button">
             <field name="name">Claims</field>
             <field name="res_model">claim</field>
-            <field name="domain">[('claimant', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('claimant', '=', Eval('active_id'))]" pyson="1"/>
         </record>
     </data>
 </tryton>

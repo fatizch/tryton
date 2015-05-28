@@ -83,8 +83,8 @@
             <field name="name">Contract</field>
             <field name="res_model">contract</field>
             <field name="window_name" eval="False"/>
-            <field name="domain">[('id', 'in', Eval('contracts'))]</field>
-            <field name="context">{'_datetime': Eval('application_date'), 'contract': Eval('contract')}</field>
+            <field name="domain" eval="[('id', 'in', Eval('contracts'))]" pyson="1"/>
+            <field name="context" eval="{'_datetime': Eval('application_date'), 'contract': Eval('contract')}" pyson="1"/>
         </record>
         <!-- ############################## -->
         <!-- # Decline Endorsement Wizard # -->

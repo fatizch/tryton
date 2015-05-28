@@ -16,12 +16,13 @@
             <field name="global_p" eval="True"/>
         </record>
         <record model="ir.rule" id="rule_dist_network_1">
-            <field name="domain">[('company', 'in', [c.id for c in user.companies])]</field>
+            <field name="domain"
+                 eval="[('company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
             <field name="rule_group" ref="rule_group_dist_network"/>
         </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="distribution.act_dist_network_form">
-            <field name="domain">[('parent', '=', None), ('company', '=', Eval('context', {}).get('company', None))]</field>
+            <field name="domain" eval="[('parent', '=', None), ('company', '=', Eval('context', {}).get('company', None))]" pyson="1"/>
         </record>
         <!-- ############################################################ -->
         <!-- Product -->
@@ -51,14 +52,14 @@
             <field name="global_p" eval="True"/>
         </record>
         <record model="ir.rule" id="rule_commercial_product_1">
-            <field name="domain">[('product.company', 'in', [c.id for c in user.companies])]</field>
+            <field name="domain" eval="[('product.company', 'in', Eval('user', {}).get('companies', []))]" pyson="1"/>
             <field name="rule_group" ref="rule_group_commercial_product"/>
         </record>
         <!-- Entry Point -->
         <record model="ir.action.act_window" id="act_commercial_product_form">
             <field name="name">Commercial Products</field>
             <field name="res_model">distribution.commercial_product</field>
-            <field name="domain">[('product.company', '=', Eval('context', {}).get('company', False))]</field>
+            <field name="domain" eval="[('product.company', '=', Eval('context', {}).get('company', False))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_commercial_product_tree_view">
             <field name="sequence" eval="10"/>

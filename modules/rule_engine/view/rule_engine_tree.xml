@@ -2,7 +2,6 @@
 <tree string="Rules" colors="If(~Eval('passing_test_cases' , False) | Bool(Eval('debug_mode')), 'red', 'black')">
     <field name="type_"/>
     <field name="name"/>
-    <field name="context"/>
     <field name="status"/>
     <field name="debug_mode"/>
     <field name="tags_name"/>

@@ -35,7 +35,7 @@
         <record model="ir.action.act_window.domain" id="act_dist_network_domain_parent">
             <field name="name">Tree</field>
             <field name="sequence" eval="10"/>
-            <field name="domain">[('parent', '=', None)]</field>
+            <field name="domain" eval="[('parent', '=', None)]" pyson="1"/>
             <field name="act_window" ref="act_dist_network_form"/>
         </record>
         <record model="ir.action.act_window.domain" id="act_dist_network_domain_all">
@@ -80,7 +80,7 @@
         <record model="ir.action.act_window" id="act_distribution_network_relate_form">
             <field name="name">Childs</field>
             <field name="res_model">distribution.network</field>
-            <field name="domain">[('parent', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('parent', '=', Eval('active_id'))]" pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_distribution_network_relate_keyword">
             <field name="keyword">form_relate</field>

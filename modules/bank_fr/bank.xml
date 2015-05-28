@@ -14,7 +14,7 @@
         <record model="ir.action.act_window" id="act_agency_relate_form">
             <field name="name">Agencies</field>
             <field name="res_model">bank.agency</field>
-            <field name="domain">[('bank', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('bank', '=', Eval('active_id'))]" pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_agency_relate_keyword">
             <field name="keyword">form_relate</field>

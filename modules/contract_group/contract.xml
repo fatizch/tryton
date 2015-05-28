@@ -19,10 +19,10 @@
         <record model="ir.action.act_window" id="act_contract_form">
             <field name="name">Group Contract</field>
             <field name="res_model">contract</field>
-            <field name="domain">[('is_group', '=', True)]</field>
+            <field name="domain" eval="[('is_group', '=', True)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window" id="contract.act_contract_form">
-            <field name="domain">[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False)]</field>
+            <field name="domain" eval="[('company', '=', Eval('context', {}).get('company', False)), ('is_group', '=', False)]" pyson="1"/>
         </record>
         <!-- View that connect the form in the tree with the specification -->
         <record model="ir.action.act_window.view" id="act_contract_form_view1">

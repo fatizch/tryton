@@ -27,7 +27,7 @@
         <record model="ir.action.act_window" id="act_endorsement">
             <field name="name">Endorsement</field>
             <field name="res_model">endorsement</field>
-            <field name="domain">[('loans', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('loans', '=', Eval('active_id'))]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_endorsement_view1">
             <field name="sequence" eval="10"/>

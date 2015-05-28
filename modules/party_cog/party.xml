@@ -31,13 +31,13 @@
         <record model="ir.action.act_window.domain" id="act_party_domain_recent">
             <field name="name">Recent</field>
             <field name="sequence" eval="20"/>
-            <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
+            <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
             <field name="act_window" ref="party.act_party_form"/>
         </record>
         <record model="ir.action.act_window" id="act_contact_mechanisms_relate_form">
             <field name="name">Contact Mechanisms</field>
             <field name="res_model">party.contact_mechanism</field>
-            <field name="domain">[('party', '=', Eval('active_id'))]</field>
+            <field name="domain" eval="[('party', '=', Eval('active_id'))]" pyson="1"/>
         </record>
         <record model="ir.action.keyword" id="act_contact_mechanisms_relate_keyword">
             <field name="keyword">form_relate</field>
@@ -61,7 +61,7 @@
         <record model="ir.action.act_window" id="act_person_form">
             <field name="name">Persons</field>
             <field name="res_model">party.party</field>
-            <field name="domain">[('is_person', '=', True)]</field>
+            <field name="domain" eval="[('is_person', '=', True)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_person_tree_view">
             <field name="sequence" eval="10"/>
@@ -81,7 +81,7 @@
         <record model="ir.action.act_window.domain" id="act_person_domain_recent">
             <field name="name">Recent</field>
             <field name="sequence" eval="20"/>
-            <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
+            <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
             <field name="act_window" ref="act_person_form"/>
         </record>
         <menuitem parent="party.menu_party" sequence="0" id="menu_person_form" icon="coopengo-party" action="act_person_form"/>
@@ -102,7 +102,7 @@
         <record model="ir.action.act_window" id="act_company_form">
             <field name="name">Companies</field>
             <field name="res_model">party.party</field>
-            <field name="domain">[('is_company', '=', True)]</field>
+            <field name="domain" eval="[('is_company', '=', True)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_company_tree_view">
             <field name="sequence" eval="10"/>
@@ -122,7 +122,7 @@
         <record model="ir.action.act_window.domain" id="act_company_domain_recent">
             <field name="name">Recent</field>
             <field name="sequence" eval="20"/>
-            <field name="domain">['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]</field>
+            <field name="domain" eval="['OR', [('create_uid', '=', Eval('_user')), ('write_uid', '=', None)], [('write_uid', '=', Eval('_user'))]]" pyson="1"/>
             <field name="act_window" ref="act_company_form"/>
         </record>
         <menuitem parent="party.menu_party" sequence="0" id="menu_company_form" icon="coopengo-company" action="act_company_form"/>
@@ -172,7 +172,7 @@
             <field name="name">Synthesis</field>
             <field name="window_name" eval="False"/>
             <field name="res_model">party.synthesis.menu</field>
-            <field name="domain">[['OR', ('party', 'in', Eval('active_ids', [])), ('party', '=', None)], ('parent', '=', None)]</field>
+            <field name="domain" eval="[['OR', ('party', 'in', Eval('active_ids', [])), ('party', '=', None)], ('parent', '=', None)]" pyson="1"/>
         </record>
         <record model="ir.action.act_window.view" id="act_menu_form_view1">
             <field name="sequence" eval="10"/>
