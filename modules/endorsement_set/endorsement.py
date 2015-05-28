@@ -186,14 +186,17 @@ class EndorsementSet(model.CoopSQL, model.CoopView):
     def set_effective_date(cls, endorsement_sets, name, value):
         pool = Pool()
         Endorsement = pool.get('endorsement')
-        if any([endorsement.effective_date
+        if any([(endorsement.effective_date and
+                    endorsement.effective_date != value)
                     for endorsement_set in endorsement_sets for endorsement in
                     endorsement_set.endorsements]):
             cls.append_functional_error('effective_date_already_set')
         to_write = []
         for endorsement_set in endorsement_sets:
             to_write += [[endorsement for endorsement in
-                    endorsement_set.endorsements],
+                    endorsement_set.endorsements if (
+                        not endorsement.effective_date or
+                        endorsement.effective_date != value)],
                 {'effective_date': value}]
         Endorsement.write(*to_write)
 
