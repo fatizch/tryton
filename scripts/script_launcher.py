@@ -464,8 +464,11 @@ def doc(arguments=None, config=None, work_data=None, override_values=None):
         try:
             with codecs.open(os.path.join(modules_doc_dir, module, 'doc',
                         language, 'index.rst'), encoding='utf-8') as index:
+                header = index.readlines()[:4]
+                module_translated = [l for l in header
+                    if l.strip() and not l.startswith('..')][0]
                 module_translated = re.sub(r'[^\w\-]+', '_',
-                    strip_accents(index.readline().strip()))
+                    strip_accents(module_translated))
         except IOError:
             module_translated = module
         os.rename(os.path.join(modules_doc_dir, module),
