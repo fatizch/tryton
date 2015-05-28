@@ -1,6 +1,54 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:commission-plan-extra_data,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:commission-plan-extra_data,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:commission-plan-extra_data,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:commission-plan-extra_data,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:commission-plan-extra_data,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:commission-plan-extra_data,plan:"
+msgid "Commission Plan"
+msgstr "Plan de commissionement"
+
+msgctxt "field:commission-plan-extra_data,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:commission-plan-extra_data,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:commission-plan-extra_data,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:commission-plan-extra_data,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:commission.agent,extra_data:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
+
+msgctxt "field:commission.plan,extra_data_def:"
+msgid "Extra Data"
+msgstr "Données Complémentaires"
 
 msgctxt "field:commission.plan,rule_engine_key:"
 msgid "Rule Engine Key"
@@ -13,6 +61,10 @@ msgstr "Date de Création"
 msgctxt "field:commission.plan.line,formula_description:"
 msgid "Formula"
 msgstr "Formule"
+
+msgctxt "field:commission.plan.line,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:commission.plan.line,rule:"
 msgid "Rule Engine"
@@ -30,6 +82,15 @@ msgctxt "help:commission.plan,rule_engine_key:"
 msgid "key to retrieve the commission plan in rule engine algorithm"
 msgstr ""
 "Clé pour retrouver la plan de commissionnement au sein du moteur de règle"
+
+msgctxt "model:commission-plan-extra_data,name:"
+msgid "Relation between Commission Plan and Extra Data"
+msgstr ""
+"Relation entre le plan de commissionnement et les données complémentaires"
+
+msgctxt "model:rule_engine,name:commission_escompte"
+msgid "Commission en escompte"
+msgstr "Commission en escompte"
 
 msgctxt "model:rule_engine,name:commission_lineaire"
 msgid "Commission linéaire"
@@ -51,6 +112,10 @@ msgctxt ""
 "model:rule_engine.rule_parameter,string:lineaire_pourcentage_commission"
 msgid "Pourcentage de commission"
 msgstr "Pourcentage de commission"
+
+msgctxt "selection:extra_data,kind:"
+msgid "Agent"
+msgstr "Protocole de commissionnement"
 
 msgctxt "selection:rule_engine,type_:"
 msgid "Commission"

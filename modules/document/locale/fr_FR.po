@@ -6,10 +6,6 @@ msgctxt "error:document.description:"
 msgid "The document description code must be unique"
 msgstr "Le code du modèle de document doit être unique"
 
-msgctxt "error:ir.attachment:"
-msgid "Can't decode attachment in base 64"
-msgstr "Impossible de décoder la pièce jointe en base 64"
-
 msgctxt "field:document.description,code:"
 msgid "Code"
 msgstr "Code"

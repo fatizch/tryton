@@ -2,6 +2,18 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:product.product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:product.template,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:product.uom,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "model:ir.action,name:act_product_form"
 msgid "Accounting Variants"
 msgstr "Variantes comptables"

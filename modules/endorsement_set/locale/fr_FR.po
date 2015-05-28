@@ -86,6 +86,10 @@ msgctxt "field:endorsement.set,endorsements:"
 msgid "Endorsements"
 msgstr "Avenants"
 
+msgctxt "field:endorsement.set,endorsements_summary:"
+msgid "Endorsements Summary"
+msgstr "Résumé des avenants"
+
 msgctxt "field:endorsement.set,id:"
 msgid "ID"
 msgstr "ID"

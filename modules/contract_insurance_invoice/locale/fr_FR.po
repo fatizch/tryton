@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -190,7 +190,19 @@ msgctxt "field:account.invoice.payment_term,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:account.invoice.payment_term.line,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:account.invoice.payment_term.line,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:account.invoice.payment_term.line.relativedelta,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
+msgctxt "field:account.invoice.payment_term.line.relativedelta,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
@@ -417,6 +429,10 @@ msgstr "Facture"
 msgctxt "field:contract.invoice,invoice_state:"
 msgid "Invoice State"
 msgstr "Etat"
+
+msgctxt "field:contract.invoice,non_periodic:"
+msgid "Non Periodic"
+msgstr "Non périodique"
 
 msgctxt "field:contract.invoice,planned_payment_date:"
 msgid "Planned Payment Date"
@@ -749,6 +765,10 @@ msgstr "Modes de quittancement"
 msgctxt "field:offered.product,change_billing_modes_order:"
 msgid "Change Order"
 msgstr "Modifier l'Ordre"
+
+msgctxt "field:offered.product,days_offset_for_subscription_payments:"
+msgid "Days Offset For Subscription Payments"
+msgstr "Délai en jours pour le paiement des frais à la signature"
 
 msgctxt "field:offered.product,ordered_billing_modes:"
 msgid "Ordered Billing Mode"

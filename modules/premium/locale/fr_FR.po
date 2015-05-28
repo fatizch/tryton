@@ -1,10 +1,14 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:account.fee:"
 msgid "The code must be unique"
 msgstr "Le code doit être unique"
+
+msgctxt "error:contract.premium.display:"
+msgid "No contract found in context"
+msgstr "Pas de contrat trouvé dans le contexte"
 
 msgctxt "field:account.fee,allow_override:"
 msgid "Allow Override"
@@ -86,9 +90,17 @@ msgctxt "field:account.fee,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract,all_premiums:"
+msgid "All Premiums"
+msgstr "Toutes les primes"
+
 msgctxt "field:contract,fees:"
 msgid "Fees"
 msgstr "Frais"
+
+msgctxt "field:contract,premiums:"
+msgid "Premiums"
+msgstr "Primes"
 
 msgctxt "field:contract,show_premium:"
 msgid "Show Premium"
@@ -174,21 +186,165 @@ msgctxt "field:contract.fee,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.option,premiums:"
+msgid "Premiums"
+msgstr "Primes"
+
+msgctxt "field:contract.premium,amount:"
+msgid "Amount"
+msgstr "Montant"
+
+msgctxt "field:contract.premium,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.premium,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.premium,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:contract.premium,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.premium,end:"
+msgid "End"
+msgstr "Terminer"
+
 msgctxt "field:contract.premium,fee:"
 msgid "Fee"
 msgstr "Frais"
+
+msgctxt "field:contract.premium,frequency:"
+msgid "Frequency"
+msgstr "Fréquence"
+
+msgctxt "field:contract.premium,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium,main_contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.premium,option:"
+msgid "Option"
+msgstr "Option"
+
+msgctxt "field:contract.premium,parent:"
+msgid "Parent"
+msgstr "Parent"
+
+msgctxt "field:contract.premium,rated_entity:"
+msgid "Rated Entity"
+msgstr "Elément tarifé"
+
+msgctxt "field:contract.premium,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.premium,start:"
+msgid "Start"
+msgstr "Début"
+
+msgctxt "field:contract.premium,taxes:"
+msgid "Taxes"
+msgstr "Taxes"
+
+msgctxt "field:contract.premium,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.premium,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:contract.premium,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
+msgctxt "field:contract.premium-account.tax,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
 
 msgctxt "field:contract.premium-account.tax,create_date_:"
 msgid "Creation date"
 msgstr "Date de Création"
 
+msgctxt "field:contract.premium-account.tax,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:contract.premium-account.tax,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium-account.tax,premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "field:contract.premium-account.tax,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.premium-account.tax,tax:"
+msgid "Tax"
+msgstr "Taxe"
+
+msgctxt "field:contract.premium-account.tax,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:contract.premium-account.tax,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
 msgctxt "field:contract.premium-account.tax,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:contract.premium.display.premiums,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium.display.premiums,premiums:"
+msgid "Premiums"
+msgstr "Primes"
+
+msgctxt "field:contract.premium.display.premiums.line,amount:"
+msgid "Amount Today"
+msgstr "Montant à la date du jour"
+
+msgctxt "field:contract.premium.display.premiums.line,childs:"
+msgid "Childs"
+msgstr "Enfants"
+
+msgctxt "field:contract.premium.display.premiums.line,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.premium.display.premiums.line,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:contract.premium.display.premiums.line,premium:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "field:contract.premium.display.premiums.line,premiums:"
+msgid "Premium"
+msgstr "Prime"
+
 msgctxt "field:offered.option.description,fees:"
 msgid "Fees"
 msgstr "Frais"
+
+msgctxt "field:offered.option.description,premium_rules:"
+msgid "Premium Rules"
+msgstr "Règles de Cotisation"
 
 msgctxt "field:offered.option.description,taxes:"
 msgid "Taxes"
@@ -294,6 +450,10 @@ msgctxt "field:offered.option.description.premium_rule,frequency:"
 msgid "Rate Frequency"
 msgstr "Périodicité du tarif"
 
+msgctxt "field:offered.option.description.premium_rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:offered.option.description.premium_rule,id:"
 msgid "ID"
 msgstr "ID"
@@ -329,6 +489,10 @@ msgstr "Identifiant XML"
 msgctxt "field:offered.product,fees:"
 msgid "Fees"
 msgstr "Frais"
+
+msgctxt "field:offered.product,premium_dates:"
+msgid "Premium Dates"
+msgstr "Dates de calcul"
 
 msgctxt "field:offered.product-account.fee,create_date:"
 msgid "Create Date"
@@ -426,6 +590,22 @@ msgctxt "model:contract.fee,name:"
 msgid "Contract Fee"
 msgstr "Frais du contrat"
 
+msgctxt "model:contract.premium,name:"
+msgid "Premium"
+msgstr "Prime"
+
+msgctxt "model:contract.premium-account.tax,name:"
+msgid "Premium - Tax"
+msgstr "Relation Prime - Taxe"
+
+msgctxt "model:contract.premium.display.premiums,name:"
+msgid "Display Contract Premium Displayer"
+msgstr "Ecran d'affichage des primes du contrat"
+
+msgctxt "model:contract.premium.display.premiums.line,name:"
+msgid "Display Contract Premium Displayer Prmeium Line"
+msgstr "Ecran d'affichage des primes du contrat par ligne"
+
 msgctxt "model:ir.action,name:act_fee"
 msgid "Fees"
 msgstr "Frais"
@@ -457,6 +637,10 @@ msgstr "Relation Produit - Frais"
 msgctxt "model:offered.product.premium_date,name:"
 msgid "Product Premium Dates"
 msgstr "Dates de calcul des primes"
+
+msgctxt "model:rule_engine,name:simple_premium_rule"
+msgid "Simple Premium Rule"
+msgstr "Règle de tarification simple"
 
 msgctxt "model:rule_engine.rule_parameter,string:premium_amount"
 msgid "Premium Amount"
@@ -499,8 +683,32 @@ msgid "At contract signature"
 msgstr "A la signature du contrat"
 
 msgctxt "selection:contract.premium,frequency:"
+msgid "Half-yearly"
+msgstr "Semestriel"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Monthly"
+msgstr "Mensuel"
+
+msgctxt "selection:contract.premium,frequency:"
 msgid "Once per Contract"
 msgstr "Une fois par contrat"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Once per Invoice"
+msgstr "Une fois par quittance"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Quarterly"
+msgstr "Trimestriel"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Yearly (360 days)"
+msgstr "Annuel (360 jours)"
+
+msgctxt "selection:contract.premium,frequency:"
+msgid "Yearly (365 days)"
+msgstr "Annuel (365 jours)"
 
 msgctxt "selection:contract.premium,frequency:"
 msgid "Yearly (Exact)"
@@ -629,3 +837,7 @@ msgstr "Dates de calcul des primes"
 msgctxt "view:offered.product:"
 msgid "Premium Data"
 msgstr "Données de prime"
+
+msgctxt "wizard_button:contract.premium.display,display,end:"
+msgid "Exit"
+msgstr "Sortir"

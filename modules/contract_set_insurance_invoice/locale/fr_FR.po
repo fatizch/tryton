@@ -6,6 +6,12 @@ msgctxt "error:contract.set.premium.display:"
 msgid "No contract set found in context"
 msgstr "Pas d'ensemble de contrats trouvé dans le contexte"
 
+msgctxt "error:contract_term_renewal.renew:"
+msgid "All contracts on contract set %s must be renewed together"
+msgstr ""
+"Tous les contrats de l'ensemble de contrat %s doivent être renouvellés en "
+"même temps"
+
 msgctxt "field:account.fee,one_per_set:"
 msgid "One Per Set"
 msgstr "Un par ensemble de contrats"

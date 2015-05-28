@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -20,7 +20,7 @@ msgstr "Clause bénéficiaire"
 
 msgctxt "field:contract.option,customized_beneficiary_clause:"
 msgid "Customized Beneficiary Clause"
-msgstr "Clause bénéficiare personnalisée"
+msgstr "Clause bénéficiaire personnalisée"
 
 msgctxt "field:contract.option,has_beneficiary_clause:"
 msgid "Has Beneficiary Clause"

@@ -3,8 +3,8 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:cash_value.cash_value_rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
+msgid "You can not have 2 business rules that overlap!"
+msgstr "Vous ne pouvez pas avoir 2 règles métiers qui se chevauchent"
 
 msgctxt "field:cash_value.cash_value_rule,config_kind:"
 msgid "Conf. kind"

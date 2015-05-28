@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -240,8 +240,8 @@ msgstr "Identifiant XML"
 
 msgctxt "help:account.payment.journal.failure_action,reject_number:"
 msgid ""
-"Filter the action according to the number of rejects for a given payment. If "
-"empty, action will be used for all rejects"
+"Filter the action according to the number of rejects for a given payment. If"
+" empty, action will be used for all rejects"
 msgstr ""
 "Filtre l'action en fonction du nombre de rejets pour un paiement donné. Si "
 "vide, l'action sera utilisée pour tous les rejets"

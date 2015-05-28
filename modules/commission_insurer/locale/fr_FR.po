@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -37,6 +37,10 @@ msgstr "Journal"
 msgctxt "field:commission.create_invoice_principal.ask,post_invoices:"
 msgid "Post Invoices"
 msgstr "Emettre les bordereaux"
+
+msgctxt "field:commission.create_invoice_principal.ask,until_date:"
+msgid "Until Date"
+msgstr "Jusqu'au"
 
 msgctxt "field:insurer,waiting_account:"
 msgid "Waiting Account"

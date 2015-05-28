@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "error:contract:"
+msgid "SSN is required for covered element %s"
+msgstr "Le NIR est requis pour les personnes couvertes %s"
+
 msgctxt "error:health.party_complement:"
 msgid "HC system must be defined"
 msgstr ""

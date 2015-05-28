@@ -10,6 +10,11 @@ msgctxt "field:account.payment,sepa_merged_id:"
 msgid "SEPA Merged ID"
 msgstr "ID regroupement SEPA"
 
+msgctxt ""
+"field:account.payment.journal,last_sepa_receivable_payment_creation_date:"
+msgid "Last Receivable Payment SEPA Creation"
+msgstr "Date de la dernière génération des prélèvements SEPA"
+
 msgctxt "field:account.payment.sepa.mandate,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"

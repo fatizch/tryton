@@ -30,6 +30,10 @@ msgctxt "field:commission.plan.recovery_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
 
+msgctxt "field:commission.plan.recovery_rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:commission.plan.recovery_rule,id:"
 msgid "ID"
 msgstr "ID"
@@ -63,7 +67,7 @@ msgid "XML Id"
 msgstr "Identifiant XML"
 
 msgctxt "model:commission.plan.recovery_rule,name:"
-msgid "Recovery Rule"
+msgid "Commission Recovery Rule"
 msgstr "Règle de reprise de commissions"
 
 msgctxt "model:ir.action,name:act_recovery_rule_form"

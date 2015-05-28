@@ -414,9 +414,9 @@ class TerminateContract(EndorsementWizardStepMixin, model.CoopView):
     def __setup__(cls):
         super(TerminateContract, cls).__setup__()
         cls._error_messages.update({
-                'termination_date_must_be_anterior': 'The termination date'
+                'termination_date_must_be_anterior': 'The termination date '
                 'must be anterior to the end date of the modified period: %s',
-                'termination_date_must_be_posterior': 'The termination date'
+                'termination_date_must_be_posterior': 'The termination date '
                 'must be posterior to the contract start date: %s',
                 })
 

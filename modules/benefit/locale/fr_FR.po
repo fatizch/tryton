@@ -3,12 +3,12 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:benefit.reserve.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
+msgid "You can not have 2 business rules that overlap!"
+msgstr "Vous ne pouvez pas avoir 2 règles métiers qui se chevauchent"
 
 msgctxt "error:benefit.rule:"
-msgid "You can not have 2 business rules that overlaps!"
-msgstr "2 règles se chevauchent!"
+msgid "You can not have 2 business rules that overlap!"
+msgstr "Vous ne pouvez pas avoir 2 règles métiers qui se chevauchent"
 
 msgctxt "error:benefit:"
 msgid "The code must be unique!"

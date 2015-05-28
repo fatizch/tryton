@@ -1,0 +1,142 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:endorsement.contract.change_broker,agent:"
+msgid "New Agent"
+msgstr "Nouveau protocole de commissionnement"
+
+msgctxt "field:endorsement.contract.change_broker,broker:"
+msgid "New Broker"
+msgstr "Nouveau courtier"
+
+msgctxt "field:endorsement.contract.change_broker,broker_party:"
+msgid "New Broker Party"
+msgstr "Nouveau courtier"
+
+msgctxt "field:endorsement.contract.change_broker,current_agent:"
+msgid "Current Agent"
+msgstr "Protocole de commissionnement actuel"
+
+msgctxt "field:endorsement.contract.change_broker,current_broker:"
+msgid "Current Broker"
+msgstr "Courtier actuel"
+
+msgctxt "field:endorsement.contract.change_broker,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.change_broker,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.change_broker,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.change_broker,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.change_broker,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:endorsement.contract.change_commission,agent:"
+msgid "New Agent"
+msgstr "Nouveau protocole de commissionnement"
+
+msgctxt "field:endorsement.contract.change_commission,broker:"
+msgid "New Broker"
+msgstr "Nouveau courtier"
+
+msgctxt "field:endorsement.contract.change_commission,broker_party:"
+msgid "New Broker Party"
+msgstr "Nouveau courtier"
+
+msgctxt "field:endorsement.contract.change_commission,current_agent:"
+msgid "Current Agent"
+msgstr "Protocole de commissionnement actuel"
+
+msgctxt "field:endorsement.contract.change_commission,current_broker:"
+msgid "Current Broker"
+msgstr "Courtier actuel"
+
+msgctxt "field:endorsement.contract.change_commission,current_plan:"
+msgid "Current Plan"
+msgstr "Plan de commissionnement actuel"
+
+msgctxt "field:endorsement.contract.change_commission,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.change_commission,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.change_commission,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.change_commission,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.change_commission,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "model:endorsement.contract.change_broker,name:"
+msgid "Change Contract Broker"
+msgstr "Changement de courtier sur un contrat"
+
+msgctxt "model:endorsement.contract.change_commission,name:"
+msgid "Change Contract Commission"
+msgstr "Modifications des commissions sur un contrat"
+
+msgctxt "selection:endorsement.part,kind:"
+msgid "Commission"
+msgstr "Commission"
+
+msgctxt "view:endorsement.contract.change_broker:"
+msgid "Change Contract Commission"
+msgstr "Modifications des commissions sur un contrat"
+
+msgctxt "view:endorsement.contract.change_commission:"
+msgid "Change Contract Broker"
+msgstr "Changement de courtier sur un contrat"
+
+msgctxt "wizard_button:endorsement.start,change_broker,change_broker_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_broker,change_broker_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,change_broker,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,change_broker,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_commission,change_commission_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_commission,change_commission_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,change_commission,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,change_commission,suspend:"
+msgid "Suspend"
+msgstr "Suspendre"

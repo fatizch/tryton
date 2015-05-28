@@ -1,10 +1,14 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:claim.declare:"
-msgid "Please pick a process from the selection"
-msgstr "Choisir un processus de la sélection"
+msgctxt "error:claim:"
+msgid "Enter a value for field '%s' of '%s'"
+msgstr "Entrez  une valeur pour le champ '%s' de '%s'"
+
+msgctxt "error:claim:"
+msgid "Enter a value for field(s): %s"
+msgstr "Entrez une valeur pour le(s) champs(s) : %s"
 
 msgctxt "error:claim:"
 msgid "Everything is good !"
@@ -13,6 +17,10 @@ msgstr "Tout est bon!"
 msgctxt "error:claim:"
 msgid "Object %s is currently locked by user %s"
 msgstr "L'objet %s est verrouillé par l'utilisateur %s"
+
+msgctxt "error:claim:"
+msgid "Select a date that is not in the future for field(s): %s"
+msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
 msgctxt "field:claim,contact_history:"
 msgid "History"
@@ -25,6 +33,10 @@ msgstr "Trace Courante"
 msgctxt "field:claim,current_state:"
 msgid "Current State"
 msgstr "Etat Courant"
+
+msgctxt "field:claim,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
 
 msgctxt "field:claim,doc_received:"
 msgid "All Documents Received"
@@ -53,10 +65,6 @@ msgstr "Sinistre"
 msgctxt "field:claim.declare.find_process,claims:"
 msgid "Claims"
 msgstr "Sinistres"
-
-msgctxt "field:claim.declare.find_process,date:"
-msgid "Date"
-msgstr "Date"
 
 msgctxt "field:claim.declare.find_process,good_process:"
 msgid "Good Process"
@@ -120,7 +128,7 @@ msgstr "Démarrer le processus"
 
 msgctxt "wizard_button:claim.declare,process_parameters,action:"
 msgid "Start Process (_k)"
-msgstr "Démarrer le processus (k)"
+msgstr "Démarrer le processus (_k)"
 
 msgctxt "wizard_button:claim.declare,process_parameters,end:"
 msgid "Cancel"

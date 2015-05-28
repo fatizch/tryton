@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -32,6 +32,10 @@ msgstr "Pas de modèle de lettre trouvé pour le %s et la langue %s"
 msgctxt "error:report.template:"
 msgid "The document template code must be unique"
 msgstr "Le code du modèle de courrier doit être unique"
+
+msgctxt "field:ir.model,printable:"
+msgid "Printable"
+msgstr "Imprimable"
 
 msgctxt "field:report.create.attach,attachment:"
 msgid "Data File"

@@ -60,10 +60,6 @@ msgctxt "field:extra_data,digits:"
 msgid "Digits"
 msgstr "Précision"
 
-msgctxt "field:extra_data,end_date:"
-msgid "End Date"
-msgstr "Date de Fin"
-
 msgctxt "field:extra_data,id:"
 msgid "ID"
 msgstr "ID"
@@ -95,10 +91,6 @@ msgstr "Sélection JSON"
 msgctxt "field:extra_data,selection_sorted:"
 msgid "Selection Sorted"
 msgstr "Sélection Triée"
-
-msgctxt "field:extra_data,start_date:"
-msgid "Start Date"
-msgstr "Date de Début"
 
 msgctxt "field:extra_data,string:"
 msgid "Name"
@@ -339,6 +331,10 @@ msgstr "Options Requises"
 msgctxt "field:offered.option.description,products:"
 msgid "OptionDescriptions"
 msgstr "Garanties"
+
+msgctxt "field:offered.option.description,products_name:"
+msgid "Products"
+msgstr "Produits"
 
 msgctxt "field:offered.option.description,rec_name:"
 msgid "Name"
@@ -880,6 +876,50 @@ msgctxt "field:offered.product-package,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:report.template,products:"
+msgid "Products"
+msgstr "Produits"
+
+msgctxt "field:report.template-offered.product,create_date:"
+msgid "Create Date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-offered.product,create_date_:"
+msgid "Creation date"
+msgstr "Date de Création"
+
+msgctxt "field:report.template-offered.product,create_uid:"
+msgid "Create User"
+msgstr "Créé par"
+
+msgctxt "field:report.template-offered.product,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:report.template-offered.product,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:report.template-offered.product,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:report.template-offered.product,report_template:"
+msgid "Document"
+msgstr "Document"
+
+msgctxt "field:report.template-offered.product,write_date:"
+msgid "Write Date"
+msgstr "Date de mise à jour"
+
+msgctxt "field:report.template-offered.product,write_uid:"
+msgid "Write User"
+msgstr "Mis à jour par"
+
+msgctxt "field:report.template-offered.product,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
+
 msgctxt "help:extra_data,selection:"
 msgid "A couple of key and label separated by \":\" per line"
 msgstr "Un couple de clé, valeur séparaé par un \":\" par ligne"
@@ -1007,6 +1047,10 @@ msgstr "Relation Produit - Description d'Option"
 msgctxt "model:offered.product-package,name:"
 msgid "Product - Package Relation"
 msgstr "Relation Produit - Formule"
+
+msgctxt "model:report.template-offered.product,name:"
+msgid "Report template to Product relation"
+msgstr "Relation Modèle - Produit"
 
 msgctxt "model:res.group,name:group_offered"
 msgid "Offered"

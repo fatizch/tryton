@@ -45,13 +45,21 @@ msgctxt "field:document.rule,documents:"
 msgid "Documents"
 msgstr "Documents"
 
+msgctxt "field:document.rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
+
 msgctxt "field:document.rule,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:document.rule,offered:"
-msgid "Offered"
-msgstr "Offre"
+msgctxt "field:document.rule,option:"
+msgid "Option Description"
+msgstr "Garantie"
+
+msgctxt "field:document.rule,product:"
+msgid "Product"
+msgstr "Produit"
 
 msgctxt "field:document.rule,rec_name:"
 msgid "Name"
@@ -117,10 +125,6 @@ msgctxt "field:document.rule-document.description,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
-msgctxt "field:offered,document_rules:"
-msgid "Document Rules"
-msgstr "Règles de gestion des documents"
-
 msgctxt "field:offered.option.description,document_rules:"
 msgid "Document Rules"
 msgstr "Règles de gestion des documents"
@@ -160,14 +164,6 @@ msgstr "Risque Couvert"
 msgctxt "selection:document.request.line,for_object:"
 msgid "Option"
 msgstr "Option"
-
-msgctxt "selection:document.rule,offered:"
-msgid "Option Description"
-msgstr "Garantie"
-
-msgctxt "selection:document.rule,offered:"
-msgid "Product"
-msgstr "Produit"
 
 msgctxt "view:contract:"
 msgid "Documents"

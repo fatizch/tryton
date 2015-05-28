@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -8,8 +8,8 @@ msgstr "Le code doit être unique !"
 
 msgctxt "error:commission.plan:"
 msgid ""
-"Prepayment payment rule result %s is not matching the expected format [(date, "
-"percentage)]"
+"Prepayment payment rule result %s is not matching the expected format "
+"[(date, percentage)]"
 msgstr ""
 "Le résultat de la règle d'échéancier de versement du précompte ne correspond"
 " pas au format attendu [(date, pourcentage)]"
@@ -33,6 +33,10 @@ msgstr "Date de Création"
 msgctxt "field:commission.plan.prepayment.payment_rule,create_uid:"
 msgid "Create User"
 msgstr "Créé par"
+
+msgctxt "field:commission.plan.prepayment.payment_rule,func_key:"
+msgid "Functional Key"
+msgstr "Clé fonctionnelle"
 
 msgctxt "field:commission.plan.prepayment.payment_rule,id:"
 msgid "ID"

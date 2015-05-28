@@ -11,6 +11,14 @@ msgid "Enter a value for field(s): %s"
 msgstr "Entrez une valeur pour le(s) champs(s) : %s"
 
 msgctxt "error:endorsement:"
+msgid "Everything is good !"
+msgstr "Tout est bon!"
+
+msgctxt "error:endorsement:"
+msgid "Object %s is currently locked by user %s"
+msgstr "L'objet %s est verrouillé par l'utilisateur %s"
+
+msgctxt "error:endorsement:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
 
@@ -18,9 +26,25 @@ msgctxt "field:endorsement,created_attachments:"
 msgid "Created Attachments"
 msgstr "Pièces jointes créées"
 
+msgctxt "field:endorsement,current_log:"
+msgid "Current Log"
+msgstr "Trace Courante"
+
+msgctxt "field:endorsement,current_state:"
+msgid "Current State"
+msgstr "Etat Courant"
+
+msgctxt "field:endorsement,current_state_name:"
+msgid "Current State In Process"
+msgstr "Etat courant au sein du processus"
+
 msgctxt "field:endorsement,endorsement_parts_union:"
 msgid "Endorsement Parts"
 msgstr "Avenants unitaires"
+
+msgctxt "field:endorsement,logs:"
+msgid "Task"
+msgstr "Tâche"
 
 msgctxt "field:endorsement.part.union,code:"
 msgid "Code"
@@ -79,7 +103,7 @@ msgid "Contracts"
 msgstr "Contrats"
 
 msgctxt "field:endorsement.start.find_process,definition:"
-msgid "Definition"
+msgid "Endorsement Definition"
 msgstr "Définition"
 
 msgctxt "field:endorsement.start.find_process,effective_date:"
@@ -118,6 +142,10 @@ msgctxt "model:ir.ui.menu,name:menu_start_endorsement_process"
 msgid "Start Endorsement Process"
 msgstr "Démarrer le processus d'avenant"
 
+msgctxt "selection:process,kind:"
+msgid "Contract Endorsement"
+msgstr "Avenant au contrat"
+
 msgctxt "view:endorsement.contract:"
 msgid "Modify"
 msgstr "Modifier"
@@ -134,7 +162,15 @@ msgctxt "wizard_button:endorsement.start,basic_preview,end:"
 msgid "Ok"
 msgstr "Ok"
 
+msgctxt "wizard_button:endorsement.start,preview_contract_payments,end:"
+msgid "Ok"
+msgstr "Ok"
+
 msgctxt "wizard_button:endorsement.start,preview_contract_premiums,end:"
+msgid "Ok"
+msgstr "Ok"
+
+msgctxt "wizard_button:endorsement.start,preview_loan,end:"
 msgid "Ok"
 msgstr "Ok"
 

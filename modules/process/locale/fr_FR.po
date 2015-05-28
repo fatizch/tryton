@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -65,6 +65,10 @@ msgstr "Créé par"
 msgctxt "field:process,display_steps_without_status:"
 msgid "Display Steps Without Status"
 msgstr "Afficher les Etapes sans Statut"
+
+msgctxt "field:process,end_step_name:"
+msgid "End Step Name"
+msgstr "Nom de l'étape de fin"
 
 msgctxt "field:process,fancy_name:"
 msgid "Name"
@@ -213,6 +217,10 @@ msgstr "Date de mise à jour"
 msgctxt "field:process-process.step,write_uid:"
 msgid "Write User"
 msgstr "Mis à jour par"
+
+msgctxt "field:process-process.step,xml_id:"
+msgid "XML Id"
+msgstr "Identifiant XML"
 
 msgctxt "field:process.action,create_date:"
 msgid "Create Date"
@@ -625,6 +633,10 @@ msgstr "Relation Processus - Etape"
 msgctxt "model:process.action,name:"
 msgid "Code"
 msgstr "Code"
+
+msgctxt "model:process.process-act_window,name:"
+msgid "Process to Action Window Relation"
+msgstr "Relation entre le processus et les actions des fenêtres"
 
 msgctxt "model:process.process_framework,name:"
 msgid "Process Framework"

@@ -62,6 +62,10 @@ msgctxt "model:offered.option.description.eligibility_rule,name:"
 msgid "Option Description Eligibility Rule"
 msgstr "Règle d'éligbilité à l'option"
 
+msgctxt "model:rule_engine,name:option_eligibility_on_age"
+msgid "Option Eligibility Rule"
+msgstr "Règle d'éligibilité d'une garantie"
+
 msgctxt "model:rule_engine.rule_parameter,selection:given_day"
 msgid ""
 "1 : 1\n"

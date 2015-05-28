@@ -353,16 +353,8 @@ msgid "Create Agents"
 msgstr "Créer les protocoles de commissionnement"
 
 msgctxt "view:commission.plan:"
-msgid "Insurer Plan"
-msgstr "Plan Assureur"
-
-msgctxt "view:commission.plan:"
-msgid "Lines"
-msgstr "Lignes"
-
-msgctxt "view:commission.plan:"
-msgid "Plan Relation"
-msgstr "Relation Plans de Commissionnement"
+msgid "Administration"
+msgstr "Administration"
 
 msgctxt "view:commission:"
 msgid "Amount"

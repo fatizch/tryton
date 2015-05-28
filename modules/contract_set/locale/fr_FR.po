@@ -3,14 +3,18 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:contract.set:"
-msgid "No sequence defined in configuration for contract set number"
+msgid "No sequence defined in configuration for contracts set number"
 msgstr ""
-"Pas de séquence définie dans la configuration pour le numéro d'ensemble de "
-"contrats"
+"Pas de séquence de définie dans la configuration pour les numéros d'ensemble"
+" de contrats"
 
 msgctxt "error:contract.set:"
 msgid "The contract set number must be unique."
 msgstr "Le numéro de l'ensemble de contrat sdoit être unique."
+
+msgctxt "error:contract.set:"
+msgid "the contract %s is already defined in the contract set %s"
+msgstr "Le contrat %s est déjà défini dans l'ensemble de contrats %s"
 
 msgctxt "field:contract,contract_set:"
 msgid "Contract Set"

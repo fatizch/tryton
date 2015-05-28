@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -25,6 +25,11 @@ msgstr "L'objet %s est verrouillé par l'utilisateur %s"
 msgctxt "error:endorsement.set:"
 msgid "Select a date that is not in the future for field(s): %s"
 msgstr "Sélectionnez une date non à venir pour le(s) champ(s) : %s"
+
+msgctxt "error:endorsement.start_process:"
+msgid "The selected contracts must belong to the same contract set."
+msgstr ""
+"Les contrats sélectionnées doivent appartenir au même ensemble de contrat."
 
 msgctxt "field:endorsement,contracts_name:"
 msgid "Contracts Name"
@@ -62,49 +67,17 @@ msgctxt "field:endorsement.set,logs:"
 msgid "Task"
 msgstr "Tâche"
 
-msgctxt "field:endorsement.set.apply.find_process,contract_set:"
-msgid "Contract Set"
-msgstr "Ensemble de contrats"
-
-msgctxt "field:endorsement.set.apply.find_process,effective_date:"
-msgid "Effective Date"
-msgstr "Date effective"
-
-msgctxt "field:endorsement.set.apply.find_process,endorsement_definition:"
-msgid "Endorsement Definition"
-msgstr "Définition d'avenant"
-
-msgctxt "field:endorsement.set.apply.find_process,endorsement_set:"
-msgid "Endorsement Set"
-msgstr "Ensemble d'avenants"
-
-msgctxt "field:endorsement.set.apply.find_process,good_process:"
-msgid "Good Process"
-msgstr "Processus"
-
-msgctxt "field:endorsement.set.apply.find_process,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:endorsement.set.apply.find_process,model:"
-msgid "Model"
-msgstr "Modèle"
-
-msgctxt "model:endorsement.set.apply.find_process,name:"
-msgid "EndorsementSetApply Find Process"
-msgstr ""
-
-msgctxt "model:ir.action,name:endorsement_set_process_launcher"
+msgctxt "model:ir.action,name:"
 msgid "Endorsement Set Application"
 msgstr "Appliquer l'ensemble d'avenants"
 
-msgctxt "model:ir.ui.menu,name:menu_start_endorsement_set_process"
+msgctxt "model:ir.ui.menu,name:"
 msgid "Endorsement Set Application"
 msgstr "Application de l'ensemble d'avenants"
 
 msgctxt "selection:process,kind:"
-msgid "Endorsement Set Application"
-msgstr "Application de l'ensemble d'avenants"
+msgid "Endorsement Set"
+msgstr "Ensemble d'avenants"
 
 msgctxt "view:endorsement.set:"
 msgid "Resume Current Process"
@@ -117,11 +90,3 @@ msgstr "Avenants"
 msgctxt "view:endorsement:"
 msgid "Preview Changes"
 msgstr "Prévisualiser les changements"
-
-msgctxt "wizard_button:endorsement.set.apply,process_parameters,action:"
-msgid "Start Process (_k)"
-msgstr "Démarrer le processus (_k)"
-
-msgctxt "wizard_button:endorsement.set.apply,process_parameters,end:"
-msgid "Cancel"
-msgstr "Annuler"

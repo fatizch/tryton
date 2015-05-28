@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -69,6 +69,20 @@ msgstr "Suppression de la version"
 msgctxt "error:endorsement.contract.option:"
 msgid "Update %s"
 msgstr "Mise à jour de %s"
+
+msgctxt "error:endorsement.contract.terminate:"
+msgid ""
+"The termination date must be anterior to the end date of the modified "
+"period: %s"
+msgstr ""
+"La date de résiliation doit être antérieure à la date de fin de la période "
+"modifiée: %s"
+
+msgctxt "error:endorsement.contract.terminate:"
+msgid "The termination date must be posterior to the contract start date: %s"
+msgstr ""
+"La date de résiliation doit être postérieure à la date de début du contrat: "
+"%s"
 
 msgctxt "error:endorsement.contract:"
 msgid "Activation History Modifications"
@@ -811,6 +825,66 @@ msgctxt "field:endorsement.contract.option.field,xml_id:"
 msgid "XML Id"
 msgstr "Identifiant XML"
 
+msgctxt "field:endorsement.contract.terminate,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.contract.terminate,current_end_date:"
+msgid "Current End Date"
+msgstr "Date de fin actuelle"
+
+msgctxt "field:endorsement.contract.terminate,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.terminate,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.terminate,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.terminate,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.terminate,termination_date:"
+msgid "Termination Date"
+msgstr "Date de résiliation"
+
+msgctxt "field:endorsement.contract.terminate,termination_reason:"
+msgid "Termination Reason"
+msgstr "Motif de terminaison"
+
+msgctxt "field:endorsement.contract.void,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:endorsement.contract.void,current_end_date:"
+msgid "Current End Date"
+msgstr "Date de fin actuelle"
+
+msgctxt "field:endorsement.contract.void,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:endorsement.contract.void,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:endorsement.contract.void,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:endorsement.contract.void,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:endorsement.contract.void,void_reason:"
+msgid "Void Reason"
+msgstr "Raison de la résiliation sans effet"
+
 msgctxt "field:endorsement.decline.select_reason,endorsements:"
 msgid "Endorsements"
 msgstr "Avenants"
@@ -1243,6 +1317,14 @@ msgctxt "model:endorsement.contract.option.field,name:"
 msgid "Endorsement Option Field"
 msgstr "Champs de la garantie souscrite"
 
+msgctxt "model:endorsement.contract.terminate,name:"
+msgid "Terminate Contract"
+msgstr "Terminer le contrat"
+
+msgctxt "model:endorsement.contract.void,name:"
+msgid "Void Contract"
+msgstr "Résiliation sans effet"
+
 msgctxt "model:endorsement.decline.select_reason,name:"
 msgid "Reason selector to decline endorsement"
 msgstr "Motif d'abandon de l'avenant"
@@ -1545,6 +1627,14 @@ msgctxt "view:endorsement.contract.option:"
 msgid "Endorsement Options"
 msgstr "Modifications de la garantie souscrite"
 
+msgctxt "view:endorsement.contract.terminate:"
+msgid "Terminate Contract"
+msgstr "Terminer le contrat"
+
+msgctxt "view:endorsement.contract.void:"
+msgid "Void Contract"
+msgstr "Résiliation sans effet"
+
 msgctxt "view:endorsement.contract:"
 msgid "Apply"
 msgstr "Appliquer"
@@ -1654,18 +1744,6 @@ msgctxt "wizard_button:endorsement.decline,select_reason,end:"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgctxt "wizard_button:endorsement.start,basic_preview,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,cancel:"
-msgid "Cancel"
-msgstr "Annuler"
-
-msgctxt "wizard_button:endorsement.start,basic_preview,summary:"
-msgid "Summary"
-msgstr "Synthèse"
-
 msgctxt ""
 "wizard_button:endorsement.start,change_contract_extra_data,change_contract_extra_data_next:"
 msgid "Next"
@@ -1726,10 +1804,6 @@ msgctxt ""
 msgid "Start Endorsement"
 msgstr "Nouvel Avenant"
 
-msgctxt "wizard_button:endorsement.start,summary,apply_endorsement:"
-msgid "Apply"
-msgstr "Appliquer"
-
 msgctxt "wizard_button:endorsement.start,summary,cancel:"
 msgid "Cancel"
 msgstr "Annuler"
@@ -1745,3 +1819,39 @@ msgstr "Précédent"
 msgctxt "wizard_button:endorsement.start,summary,suspend:"
 msgid "Save"
 msgstr "Sauvegarder"
+
+msgctxt "wizard_button:endorsement.start,terminate_contract,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,terminate_contract,terminate_contract_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,terminate_contract,terminate_contract_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,terminate_contract,terminate_contract_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,void_contract,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt "wizard_button:endorsement.start,void_contract,void_contract_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,void_contract,void_contract_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt "wizard_button:endorsement.start,void_contract,void_contract_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
