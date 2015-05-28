@@ -33,7 +33,7 @@ class BatchLogger(logging.LoggerAdapter):
 
 def get_logger(batch_name):
     logger = get_task_logger(batch_name)
-    log_dir = config.get('batch', 'log_dir', '')
+    log_dir = config.get('batch', 'log_dir', default='')
     if log_dir and len(logger.handlers) < 2:
         handler = logging.FileHandler(os.path.join(
             log_dir, batch_name + '.log'), delay=True)

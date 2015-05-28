@@ -17,7 +17,7 @@ class Country(export.ExportImportMixin):
     @staticmethod
     def default_country():
         Country = Pool().get('country.country')
-        code = config.get('options', 'default_country', 'FR')
+        code = config.get('options', 'default_country', default='FR')
         country, = Country.search([('code', '=', code)])
         return country
 

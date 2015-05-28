@@ -60,7 +60,7 @@ ORDER = [
     ('sequence', 'Sequence'),
     ]
 
-DIMENSION_MAX = int(config.get('options', 'table_dimension', 4))
+DIMENSION_MAX = int(config.get('options', 'table_dimension', default=4))
 
 
 class TableDefinition(ModelSQL, ModelView, model.TaggedMixin):

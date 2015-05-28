@@ -17,7 +17,7 @@ config.update_etc(os.path.abspath(os.path.join(os.path.normpath(__file__),
 
 CONTEXT = {}
 
-DIMENSION_MAX = int(config.get('table', 'table_dimension', 4))
+DIMENSION_MAX = int(config.get('table', 'table_dimension', default=4))
 
 
 def migrate_age_from_value_to_range():

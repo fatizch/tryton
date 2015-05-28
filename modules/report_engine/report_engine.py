@@ -490,7 +490,7 @@ class ReportGenerate(Report):
         basename, ext = os.path.splitext(filename)
         filename = coop_string.slugify(basename, lower=False) + ext
         server_shared_folder = config.get('EDM', 'server_shared_folder',
-            '/tmp')
+            default='/tmp')
         client_shared_folder = config.get('EDM', 'client_shared_folder')
         try:
             tmp_dir = os.path.basename(
