@@ -1,3 +1,4 @@
+Version 1.4 - 2015-05-29
 * Invoice premiums with at_contract_signature frequency at contract activation
 * Manage invoicing of non periodic frequencies
 * Add a wizard to change contract bank account

@@ -1,3 +1,4 @@
+Version 1.4 - 2015-05-29
 * Allow to cancel commission invoice
 * Add broker fee management
 * Automatic payment generation for broker based on configuration

@@ -1,6 +1,7 @@
+Version 1.4 - 2015-05-29
 * Attachment defines binary data encoding and decoding for export
 * Move attachment from report_engine to cog_utils
-* Batches can now make use of command line extra arguments  
+* Batches can now make use of command line extra arguments
 * Allow to automatically delete removed records of a O2M field
 * Allow to configure required data for an export
 * Allow to call ir.model.methods with lists
