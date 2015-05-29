@@ -42,6 +42,7 @@ class Commission:
     @classmethod
     def __setup__(cls):
         super(Commission, cls).__setup__()
+        cls.invoice_line.select = True
         cls.type_.searcher = 'search_type_'
 
     def get_commissionned_option(self, name):
