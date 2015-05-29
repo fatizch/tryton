@@ -173,6 +173,12 @@ class CoopSQL(export.ExportImportMixin, ModelSQL, FunctionalErrorMixIn):
                         'should be required since it is used as a reverse ' +
                         'field for field %s of %s' % (
                             field_name, cls.__name__))
+                if not target_field.select and not field._target_not_indexed:
+                    logging.getLogger('fields').warning(
+                        'Field %s of %s ' % (field.field, field.model_name) +
+                        'should be selected since it is used as a reverse ' +
+                        'field for field %s of %s' % (
+                            field_name, cls.__name__))
 
     @property
     def _save_values(self):
