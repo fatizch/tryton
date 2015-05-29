@@ -31,14 +31,17 @@ else
     echo $SEP
     cd tryton-workspace
     hg clone ssh://hg@hg.coopengo.com/trytond
+    hg update coog
     echo $SEP
     echo Getting Tryton client
     echo $SEP
     hg clone ssh://hg@hg.coopengo.com/tryton
+    hg update coog
     echo $SEP
     echo Getting Proteus
     echo $SEP
     hg clone http://hg.tryton.org/proteus
+    hg update default
     echo $SEP
     echo Done
     echo $SEP

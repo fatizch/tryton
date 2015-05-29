@@ -366,7 +366,7 @@ def check_style(session, issue_url, repo_path, email, password):
             branch = ['coopengo']
     else:
         repository_url = repo_path + 'coopbusiness'
-        branch = ['default']
+        branch = ['coog']
 
     repo_dir = install_repository(repository_url, branch)
     try:

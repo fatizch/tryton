@@ -82,18 +82,18 @@ try:
     updater = subprocess.Popen(['hg', 'pull',
         repo_url + 'trytond', '--insecure'])
     updater.communicate()
-    updater = subprocess.Popen(['hg', 'update', 'dev'])
+    updater = subprocess.Popen(['hg', 'update', 'coog'])
     updater.communicate()
 
     os.chdir(os.path.join(path_to_workspace, 'tryton'))
     updater = subprocess.Popen(['hg', 'pull',
         repo_url + 'tryton', '--insecure'])
     updater.communicate()
-    updater = subprocess.Popen(['hg', 'update', 'coopengo'])
+    updater = subprocess.Popen(['hg', 'update', 'coog'])
     updater.communicate()
 
     os.chdir(os.path.join(path_to_workspace, 'coopbusiness', 'scripts'))
-    updater = subprocess.Popen(['hg', 'update', 'default'])
+    updater = subprocess.Popen(['hg', 'update', 'coog'])
     updater.communicate()
 
     updater = subprocess.Popen(['./script_launcher.py', 'configure'])

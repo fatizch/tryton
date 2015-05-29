@@ -26,7 +26,7 @@ else
     echo $SEP
     echo Getting Coop modules
     echo $SEP
-    hg clone ssh://hg@hg.coopengo.com/coopbusiness -r default
+    hg clone ssh://hg@hg.coopengo.com/coopbusiness -r coog
     echo $SEP
     echo Done
     echo $SEP
