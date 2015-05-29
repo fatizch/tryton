@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -9,7 +9,7 @@ msgstr "Pas d'ensemble de contrats trouvé dans le contexte"
 msgctxt "error:contract_term_renewal.renew:"
 msgid "All contracts on contract set %s must be renewed together"
 msgstr ""
-"Tous les contrats de l'ensemble de contrat %s doivent être renouvellés en "
+"Tous les contrats de l'ensemble de contrats %s doivent être renouvellés en "
 "même temps"
 
 msgctxt "field:account.fee,one_per_set:"

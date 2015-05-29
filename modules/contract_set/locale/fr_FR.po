@@ -5,7 +5,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 msgctxt "error:contract.set:"
 msgid "No sequence defined in configuration for contracts set number"
 msgstr ""
-"Pas de séquence de définie dans la configuration pour les numéros d'ensemble"
+"Pas de séquence définie dans la configuration pour les numéros d'ensemble"
 " de contrats"
 
 msgctxt "error:contract.set:"
