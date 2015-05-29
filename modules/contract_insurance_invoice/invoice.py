@@ -352,7 +352,7 @@ class InvoiceLineDetail(model.CoopSQL, model.CoopView):
     __name__ = 'account.invoice.line.detail'
 
     invoice_line = fields.Many2One('account.invoice.line', 'Invoice Line',
-        ondelete='CASCADE', readonly=True, required=True)
+        ondelete='CASCADE', readonly=True, required=True, select=True)
     contract = fields.Many2One('contract', 'Contract', select=True,
         ondelete='RESTRICT', readonly=True)
     covered_element = fields.Many2One('contract.covered_element',
