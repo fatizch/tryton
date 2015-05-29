@@ -16,6 +16,12 @@ class Invoice(export.ExportImportMixin):
         'on_change_with_icon')
 
     @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls.move.select = True
+        cls.cancel_move.select = True
+
+    @classmethod
     def is_master_object(cls):
         return True
 
