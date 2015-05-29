@@ -255,7 +255,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
         if isinstance(modules_to_load, basestring):
             modules_to_load = [modules_to_load]
         elif modules_to_load is None:
-            Module = Pool().get('ir.module.module')
+            Module = Pool().get('ir.module')
             modules_to_load = [x.name
                 for x in Module.search([('state', '=', 'installed')])]
         # trytond/trytond/modules path
@@ -290,7 +290,7 @@ class TestCaseModel(ModelSingleton, model.CoopSQL, model.CoopView):
 
     @classmethod
     def get_all_test_files(cls):
-        Module = Pool().get('ir.module.module')
+        Module = Pool().get('ir.module')
         result = {}
         # trytond/trytond/modules path
         top_path = os.path.abspath(os.path.join(os.path.normpath(__file__),

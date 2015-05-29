@@ -16,11 +16,11 @@ Init Database::
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> endorsement_loan_module = Module.find([
     ...         ('name', '=', 'endorsement_loan')])[0]
     >>> Module.install([endorsement_loan_module.id], config.context)
-    >>> wizard = Wizard('ir.module.module.install_upgrade')
+    >>> wizard = Wizard('ir.module.install_upgrade')
     >>> wizard.execute('upgrade')
 
 Get Models::

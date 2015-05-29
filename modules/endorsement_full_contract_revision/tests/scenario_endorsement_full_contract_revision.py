@@ -19,11 +19,11 @@ config.pool.test = True
 # config.pool.test = True
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module.module')
+Module = Model.get('ir.module')
 full_contract_revision_module = Module.find([
         ('name', '=', 'endorsement_full_contract_revision')])[0]
 Module.install([full_contract_revision_module.id], config.context)
-wizard = Wizard('ir.module.module.install_upgrade')
+wizard = Wizard('ir.module.install_upgrade')
 wizard.execute('upgrade')
 
 # #Comment# #Get Models

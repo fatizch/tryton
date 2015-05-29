@@ -15,10 +15,10 @@ Init Database::
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> invoice_module = Module.find([('name', '=', 'contract_insurance_invoice')])[0]
     >>> Module.install([invoice_module.id], config.context)
-    >>> wizard = Wizard('ir.module.module.install_upgrade')
+    >>> wizard = Wizard('ir.module.install_upgrade')
     >>> wizard.execute('upgrade')
 
 Get Models::

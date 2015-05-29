@@ -23,11 +23,11 @@ NEEDED_MODULES = [
 config = config.set_trytond(database='sqlite://')
 config.pool.test = True
 
-Module = Model.get('ir.module.module')
+Module = Model.get('ir.module')
 coop_utils_modules = Module.find([('name', 'in', NEEDED_MODULES)])
 for module in coop_utils_modules:
     Module.install([module.id], config.context)
-Wizard('ir.module.module.install_upgrade').execute('upgrade')
+Wizard('ir.module.install_upgrade').execute('upgrade')
 
 import_wizard = Wizard('ir.import')
 with open(IMPORT_FILE, 'r') as f:

@@ -199,7 +199,7 @@ class ViewValidationBatch(BatchRoot):
 
     @classmethod
     def get_batch_domain(cls, treatment_date):
-        Module = Pool().get('ir.module.module')
+        Module = Pool().get('ir.module')
         modules = Module.search([])
         utils_module = Module.search([('name', '=', 'cog_utils')])[0]
         coop_modules = set([module.name for module in modules

@@ -23,11 +23,11 @@ config = config.set_trytond()
 config.pool.test = True
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module.module')
+Module = Model.get('ir.module')
 contract_dunning_module = Module.find([
         ('name', '=', 'contract_insurance_invoice_dunning')])[0]
 contract_dunning_module.click('install')
-Wizard('ir.module.module.install_upgrade').execute('upgrade')
+Wizard('ir.module.install_upgrade').execute('upgrade')
 
 # #Comment# #Create country
 _ = create_country()

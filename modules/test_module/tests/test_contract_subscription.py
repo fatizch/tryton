@@ -14,10 +14,10 @@ config = config.set_trytond(
     password='admin',
     config_file=os.path.join(os.environ['VIRTUAL_ENV'], 'tryton-workspace',
         'conf', 'trytond.conf'))
-Module = Model.get('ir.module.module')
+Module = Model.get('ir.module')
 test_module = Module.find([('name', '=', 'test_module')])[0]
 Module.install([test_module.id], config.context)
-wizard = Wizard('ir.module.module.install_upgrade')
+wizard = Wizard('ir.module.install_upgrade')
 wizard.execute('upgrade')
 ##Comment##Import Exported DB
 TestCaseConfig = Model.get('ir.test_case')(1)

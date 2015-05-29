@@ -15,7 +15,7 @@ def generate_module_translation(cfg_dict, base_path, module_name):
     wiz_form = export_wizard.form
     wiz_form.language, = Model.get('ir.lang').find(
         [('code', '=', cfg_dict['language'])])
-    Module = Model.get('ir.module.module')
+    Module = Model.get('ir.module')
     try:
         wiz_form.module, = Module.find([('name', '=', module_name)])
     except ValueError:

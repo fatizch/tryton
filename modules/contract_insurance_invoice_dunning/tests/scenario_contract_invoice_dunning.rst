@@ -27,11 +27,11 @@ Imports::
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> contract_dunning_module = Module.find([
     ...         ('name', '=', 'contract_insurance_invoice_dunning')])[0]
     >>> contract_dunning_module.click('install')
-    >>> Wizard('ir.module.module.install_upgrade').execute('upgrade')
+    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
 
 Create country::
 

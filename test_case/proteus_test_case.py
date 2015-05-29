@@ -34,8 +34,8 @@ def install_modules(config, modules_to_install, cfg_dict, only_this_module):
             modules_to_install)
     else:
         will_be_installed = modules_to_install
-    ConfigWizardItem = Model.get('ir.module.module.config_wizard.item')
-    Module = Model.get('ir.module.module')
+    ConfigWizardItem = Model.get('ir.module.config_wizard.item')
+    Module = Model.get('ir.module')
     installed_modules = set([x.name for x in
             Module.find([('state', '=', 'installed')])])
     for x in will_be_installed:
@@ -53,7 +53,7 @@ def install_modules(config, modules_to_install, cfg_dict, only_this_module):
                 cur_module)
             module = module[0]
             Module.install([module.id], config.context)
-            Wizard('ir.module.module.install_upgrade').execute('upgrade')
+            Wizard('ir.module.install_upgrade').execute('upgrade')
             for item in ConfigWizardItem.find([('state', '!=', 'done')]):
                 item.state = 'done'
                 item.save()

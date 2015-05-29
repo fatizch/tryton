@@ -18,10 +18,10 @@ config.pool.test = True
 #         'conf', 'trytond.conf'))
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module.module')
+Module = Model.get('ir.module')
 endorsement_module = Module.find([('name', '=', 'endorsement')])[0]
 Module.install([endorsement_module.id], config.context)
-wizard = Wizard('ir.module.module.install_upgrade')
+wizard = Wizard('ir.module.install_upgrade')
 wizard.execute('upgrade')
 
 # #Comment# #Get Models

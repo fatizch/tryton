@@ -19,10 +19,10 @@ config.pool.test = True
 # config.pool.test = True
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module.module')
+Module = Model.get('ir.module')
 loan_invoice_module = Module.find([('name', '=', 'contract_loan_invoice')])[0]
 Module.install([loan_invoice_module.id], config.context)
-wizard = Wizard('ir.module.module.install_upgrade')
+wizard = Wizard('ir.module.install_upgrade')
 wizard.execute('upgrade')
 
 # #Comment# #Get Models

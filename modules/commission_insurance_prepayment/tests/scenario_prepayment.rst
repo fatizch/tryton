@@ -28,11 +28,11 @@ Imports::
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> commission_module = Module.find([
     ...         ('name', '=', 'commission_insurance_prepayment')])[0]
     >>> commission_module.click('install')
-    >>> Wizard('ir.module.module.install_upgrade').execute('upgrade')
+    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
 
 Create country::
 

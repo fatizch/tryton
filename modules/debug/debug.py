@@ -408,7 +408,7 @@ class ModelInfo(ModelView):
     @classmethod
     def raw_module_infos(cls):
         infos = {}
-        for module in Pool().get('ir.module.module').search([],
+        for module in Pool().get('ir.module').search([],
                 order=[('name', 'DESC')]):
             infos[module.name] = {
                 'state': module.state,

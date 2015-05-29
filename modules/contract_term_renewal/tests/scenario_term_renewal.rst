@@ -16,10 +16,10 @@ Init Database::
 
 Install Modules::
 
-    >>> Module = Model.get('ir.module.module')
+    >>> Module = Model.get('ir.module')
     >>> renewal_module = Module.find([('name', '=', 'contract_term_renewal')])[0]
     >>> Module.install([renewal_module.id], config.context)
-    >>> wizard = Wizard('ir.module.module.install_upgrade')
+    >>> wizard = Wizard('ir.module.install_upgrade')
     >>> wizard.execute('upgrade')
 
 Get Models::

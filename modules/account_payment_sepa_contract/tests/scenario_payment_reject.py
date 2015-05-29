@@ -23,11 +23,11 @@ config = config.set_trytond()
 config.pool.test = True
 
 # #Comment# #Install Modules
-Module = Model.get('ir.module.module')
+Module = Model.get('ir.module')
 payment_sepa_module = Module.find(
     [('name', '=', 'account_payment_sepa_contract')])[0]
 payment_sepa_module.click('install')
-Wizard('ir.module.module.install_upgrade').execute('upgrade')
+Wizard('ir.module.install_upgrade').execute('upgrade')
 
 # #Comment# #Create country
 _ = create_country()
