@@ -1137,9 +1137,9 @@ class ContractInvoice(model.CoopSQL, model.CoopView):
     _rec_name = 'invoice'
 
     contract = fields.Many2One('contract', 'Contract', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     invoice = fields.Many2One('account.invoice', 'Invoice', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     invoice_state = fields.Function(
         fields.Char('Invoice State'),
         'get_invoice_state', searcher='search_invoice_state')

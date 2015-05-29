@@ -29,7 +29,7 @@ class OptionDescription:
     family = fields.Selection([('generic', 'Generic')], 'Family')
     item_desc = fields.Many2One('offered.item.description', 'Item Description',
         ondelete='RESTRICT', states={'required': ~Eval('is_service')},
-        depends=['is_service'])
+        depends=['is_service'], select=True)
 
     @classmethod
     def __setup__(cls):

@@ -31,8 +31,8 @@ class ProductTermRenewalRule(RuleMixin, model.CoopSQL,
 
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
-    product = fields.Many2One('offered.product', 'Product',
-        required=True, ondelete='CASCADE')
+    product = fields.Many2One('offered.product', 'Product', required=True,
+        ondelete='CASCADE', select=True)
     allow_renewal = fields.Boolean('Allow Renewal')
 
     @classmethod

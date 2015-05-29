@@ -335,7 +335,7 @@ class BenefitRuleStage(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'benefit.rule.stage'
 
     benefit_rule = fields.Many2One('benefit.rule', 'Benefit Rule',
-        ondelete='CASCADE', required=True)
+        ondelete='CASCADE', required=True, select=True)
     config_kind = fields.Selection(CONFIG_KIND, 'Conf. kind', required=True)
     config_kind_string = config_kind.translated('config_kind')
     rule = fields.Many2One('rule_engine', 'Amount', ondelete='RESTRICT',

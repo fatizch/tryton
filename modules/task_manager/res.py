@@ -68,7 +68,7 @@ class Priority(model.CoopSQL, model.CoopView):
     process_step = fields.Many2One('process-process.step', 'Process Step',
         required=True, ondelete='CASCADE')
     team = fields.Many2One('res.team', 'Team', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     value = fields.Integer('Value')
     nb_tasks = fields.Function(
         fields.Integer('Number of Tasks'),
@@ -199,7 +199,7 @@ class UserTeamRelation(model.CoopSQL, model.CoopView):
     __name__ = 'res.user-res.team'
 
     team = fields.Many2One('res.team', 'Team', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     user = fields.Many2One('res.user', 'User', ondelete='RESTRICT',
         required=True)
     nb_tasks = fields.Function(

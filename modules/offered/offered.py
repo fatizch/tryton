@@ -686,7 +686,7 @@ class ProductOptionDescriptionRelation(model.CoopSQL, model.CoopView):
     __name__ = 'offered.product-option.description'
 
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     coverage = fields.Many2One('offered.option.description',
         'Option Description', ondelete='RESTRICT', required=True)
     order = fields.Integer('Order')

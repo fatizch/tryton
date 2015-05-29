@@ -81,7 +81,7 @@ class EndorsementParty:
             'readonly': Eval('state') == 'applied',
             },
         depends=['state', 'party', 'definition'],
-        context={'definition': Eval('definition')})
+        context={'definition': Eval('definition')}, delete_missing=True)
 
     def get_endorsement_summary(self, name):
         result = super(EndorsementParty, self).get_endorsement_summary(name)

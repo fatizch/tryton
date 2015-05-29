@@ -167,9 +167,9 @@ class ContractLoan(model.CoopSQL, model.CoopView):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     contract = fields.Many2One('contract', 'Contract', required=True,
-        ondelete='CASCADE')
-    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE',
-        required=True)
+        ondelete='CASCADE', select=True)
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', required=True,
+        select=True)
     number = fields.Integer('Number')
     loan_state = fields.Function(
         fields.Char('Loan State'),
@@ -359,7 +359,7 @@ class LoanShare(model.CoopSQL, model.CoopView, model.ExpandTreeMixin):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
-        required=True, select=1, states=_STATES, depends=_DEPENDS)
+        required=True, select=True, states=_STATES, depends=_DEPENDS)
     start_date = fields.Date('Start Date', states=_STATES, depends=_DEPENDS)
     end_date = fields.Function(
         fields.Date('End Date'),

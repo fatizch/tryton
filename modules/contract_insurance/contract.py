@@ -308,7 +308,7 @@ class ContractOption:
     __name__ = 'contract.option'
 
     covered_element = fields.Many2One('contract.covered_element',
-        'Covered Element', ondelete='CASCADE',
+        'Covered Element', ondelete='CASCADE', select=True,
         states={
             'readonly': Eval('contract_status') != 'quote',
             'invisible': ~Eval('covered_element'),
@@ -576,7 +576,8 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     _func_key = 'party_code'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
-        states={'invisible': ~Eval('contract')}, depends=['contract'])
+        states={'invisible': ~Eval('contract')}, depends=['contract'],
+        select=True)
     covered_relations = fields.Many2Many('contract.covered_element-party',
         'covered_element', 'party_relation', 'Covered Relations', domain=[
             'OR',
@@ -608,7 +609,7 @@ class CoveredElement(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
         'covered_element', 'Declined Options',
         domain=[('status', '=', 'declined')], target_not_required=True)
     parent = fields.Many2One('contract.covered_element', 'Parent',
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     party = fields.Many2One('party.party', 'Actor', domain=[
             If(
                 Eval('item_kind') == 'person',
@@ -1139,7 +1140,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             }, digits=(16, Eval('currency_digits', 2)),
         depends=['currency_digits', 'calculation_kind', 'is_discount',
                  'max_value'],
-        domain= [If(Eval('calculation_kind', '') != 'flat',
+        domain=[If(Eval('calculation_kind', '') != 'flat',
                 [],
                 If(Bool(Eval('is_discount')),
                     [('flat_amount', '<', 0),
@@ -1154,13 +1155,13 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     motive = fields.Many2One('extra_premium.kind', 'Motive',
         ondelete='RESTRICT', required=True)
     option = fields.Many2One('contract.option', 'Option', ondelete='CASCADE',
-        states={'invisible': ~Eval('option')}, required=True)
+        states={'invisible': ~Eval('option')}, required=True, select=True)
     rate = fields.Numeric('Rate on Premium', states={
             'invisible': Eval('calculation_kind', '') != 'rate',
             'required': Eval('calculation_kind', '') == 'rate'},
         digits=(16, 4), depends=['calculation_kind', 'is_discount',
                                  'max_rate'],
-        domain= [If(Eval('calculation_kind', '') != 'rate',
+        domain=[If(Eval('calculation_kind', '') != 'rate',
                 [],
                 If(Bool(Eval('is_discount')),
                     [('rate', '<', 0),

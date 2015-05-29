@@ -87,7 +87,7 @@ class Endorsement:
     __name__ = 'endorsement'
 
     party_endorsements = fields.One2Many('endorsement.party', 'endorsement',
-        'Party Endorsement', size=1)
+        'Party Endorsement', size=1, delete_missing=True)
     parties = fields.Function(
         fields.Many2Many('party.party', '', '', 'Parties'),
         'get_parties', searcher='search_parties')
@@ -150,10 +150,10 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
     _func_key = 'func_key'
 
     party = fields.Many2One('party.party', 'Party', required=True,
-        ondelete='CASCADE',
+        ondelete='CASCADE', select=True,
         states={'readonly': Eval('state') == 'applied'}, depends=['state'])
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     definition = fields.Function(
         fields.Many2One('endorsement.definition', 'Definition'),
         'get_definition')
@@ -174,7 +174,7 @@ class EndorsementParty(values_mixin('endorsement.party.field'),
             'readonly': Eval('state') == 'applied',
             },
         depends=['state', 'party', 'definition'],
-        context={'definition': Eval('definition')})
+        context={'definition': Eval('definition')}, delete_missing=True)
 
     @classmethod
     def __setup__(cls):

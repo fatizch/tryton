@@ -515,7 +515,7 @@ class RuleParameter(DictSchemaMixin, model.CoopSQL, model.CoopView):
     __name__ = 'rule_engine.rule_parameter'
 
     parent_rule = fields.Many2One('rule_engine', 'Parent Rule', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
 
     @classmethod
     def __register__(cls, module_name):
@@ -1154,7 +1154,7 @@ class RuleFunction(ModelView, ModelSQL):
         'Type', required=True)
     type_string = type.translated('type')
     parent = fields.Many2One('rule_engine.function', 'Parent',
-        ondelete='SET NULL')
+        ondelete='SET NULL', select=True)
     children = fields.One2Many('rule_engine.function', 'parent', 'Children',
         target_not_required=True)
     translated_technical_name = fields.Char('Translated technical name',
@@ -1281,7 +1281,7 @@ class TestCaseValue(ModelView, ModelSQL):
     value = fields.Char('Value', states={'invisible': ~Eval('override_value')})
     override_value = fields.Boolean('Override Value')
     test_case = fields.Many2One('rule_engine.test_case', 'Test Case',
-        ondelete='CASCADE', required=True)
+        ondelete='CASCADE', required=True, select=True)
     rule = fields.Function(
         fields.Many2One('rule_engine', 'Rule'),
         'get_rule')
@@ -1340,7 +1340,7 @@ class TestCase(ModelView, ModelSQL):
 
     description = fields.Char('Description', required=True)
     rule = fields.Many2One('rule_engine', 'Rule', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     expected_result = fields.Char('Expected Result')
     test_values = fields.One2Many('rule_engine.test_case.value', 'test_case',
         'Values', depends=['rule'], delete_missing=True,

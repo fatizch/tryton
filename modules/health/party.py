@@ -19,7 +19,8 @@ class Party:
         'get_is_health')
     health_complement = fields.One2Many('health.party_complement', 'party',
         'Health Complement', size=1, states={
-            'invisible': And(~Eval('health_complement'), ~Eval('is_health'))})
+            'invisible': And(~Eval('health_complement'), ~Eval('is_health'))},
+        delete_missing=True)
     health_contract = fields.Function(
         fields.Many2One('contract', 'Health Contract', states={
                 'invisible': Eval('context', {}).get('synthesis') != 'health',
@@ -61,7 +62,8 @@ class HealthPartyComplement(model.CoopSQL, model.CoopView):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
 
-    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE')
+    party = fields.Many2One('party.party', 'Party', ondelete='CASCADE',
+        required=True, select=True)
 
     def get_func_key(self, name):
         return ''

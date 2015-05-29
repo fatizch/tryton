@@ -176,7 +176,7 @@ class Beneficiary(model.CoopSQL, model.CoopView):
     __name__ = 'contract.option.beneficiary'
 
     option = fields.Many2One('contract.option', 'Option', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     accepting = fields.Boolean('Accepting')
     party = fields.Many2One('party.party', 'Party', states={
             'required': Bool(Eval('accepting')),

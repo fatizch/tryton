@@ -26,7 +26,7 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
     document_desc = fields.Many2One('document.description',
         'Document Definition', required=True, ondelete='RESTRICT')
     for_object = fields.Reference('Needed For', [('', '')],
-        states={'readonly': ~~Eval('for_object')}, required=True)
+        states={'readonly': ~~Eval('for_object')}, required=True, select=True)
     send_date = fields.Date('Send Date')
     reception_date = fields.Date('Reception Date')
     request_date = fields.Date('Request Date', states={'readonly': True})
@@ -34,7 +34,7 @@ class DocumentRequestLine(model.CoopSQL, model.CoopView):
         fields.Boolean('Received', depends=['attachment', 'reception_date']),
         'on_change_with_received', setter='set_received')
     request = fields.Many2One('document.request', 'Document Request',
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     attachment = fields.Many2One('ir.attachment', 'Attachment',
         domain=[('resource', '=', Eval('for_object'))],
         depends=['for_object'], ondelete='RESTRICT')
@@ -128,7 +128,8 @@ class DocumentRequest(Printable, model.CoopSQL, model.CoopView):
 
     __name__ = 'document.request'
 
-    needed_by = fields.Reference('Requested for', [('', '')], required=True)
+    needed_by = fields.Reference('Requested for', [('', '')], required=True,
+        select=True)
     documents = fields.One2Many('document.request.line', 'request',
         'Documents', depends=['needed_by_str'],
         context={'request_owner': Eval('needed_by_str')}, delete_missing=True,

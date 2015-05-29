@@ -90,7 +90,7 @@ class OptionDescriptionEndingRule(RuleMixin, model.CoopSQL, model.CoopView):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     coverage = fields.Many2One('offered.option.description', 'Coverage',
-        required=True, ondelete='CASCADE')
+        required=True, ondelete='CASCADE', select=True)
 
     @classmethod
     def __setup__(cls):

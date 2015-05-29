@@ -174,7 +174,7 @@ class ContractSet(model.CoopSQL, model.CoopView, Printable):
 class Contract:
     __name__ = 'contract'
     contract_set = fields.Many2One('contract.set', 'Contract Set',
-        ondelete='SET NULL', states=_STATES, depends=_DEPENDS)
+        ondelete='SET NULL', states=_STATES, depends=_DEPENDS, select=True)
 
     def get_dates(self):
         if self.contract_set and not Transaction().context.get(

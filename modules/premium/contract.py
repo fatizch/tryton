@@ -4,7 +4,7 @@ from sql import Column
 from sql.conditionals import Coalesce
 
 from trytond.pool import PoolMeta, Pool
-from trytond.pyson import Eval, Bool, If, Not
+from trytond.pyson import Eval, If
 from trytond.transaction import Transaction
 from trytond.rpc import RPC
 from trytond.model import dualmethod
@@ -238,7 +238,7 @@ class ContractFee(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'contract.fee'
 
     contract = fields.Many2One('contract', 'Contract', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     fee = fields.Many2One('account.fee', 'Fee', required=True,
         ondelete='RESTRICT')
     premiums = fields.One2Many('contract.premium', 'fee', 'Premiums',
@@ -363,9 +363,10 @@ class Premium(model.CoopSQL, model.CoopView):
         ondelete='CASCADE')
     option = fields.Many2One('contract.option', 'Option', select=True,
         ondelete='CASCADE')
-    fee = fields.Many2One('contract.fee', 'Fee', ondelete='CASCADE')
+    fee = fields.Many2One('contract.fee', 'Fee', ondelete='CASCADE',
+        select=True)
     rated_entity = fields.Reference('Rated Entity', 'get_rated_entities',
-        required=True)
+        required=True, select=True)
     start = fields.Date('Start')
     end = fields.Date('End')
     amount = fields.Numeric('Amount', required=True)

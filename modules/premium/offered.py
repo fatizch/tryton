@@ -41,7 +41,7 @@ class ProductPremiumDate(model.CoopSQL, model.CoopView):
     __name__ = 'offered.product.premium_date'
 
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     type_ = fields.Selection([
             ('yearly_on_start_date', 'Yearly, from the contract start date'),
             ('yearly_custom_date', 'Yearly, at this date'),
@@ -138,9 +138,9 @@ class ProductFeeRelation(model.CoopSQL):
     __name__ = 'offered.product-account.fee'
 
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     fee = fields.Many2One('account.fee', 'Fee', ondelete='RESTRICT',
-        required=True)
+        required=True, select=True)
 
 
 class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
@@ -150,7 +150,7 @@ class OptionDescriptionPremiumRule(RuleMixin, MatchMixin, model.CoopSQL,
     __name__ = 'offered.option.description.premium_rule'
 
     coverage = fields.Many2One('offered.option.description', 'Coverage',
-        ondelete='CASCADE', required=True)
+        ondelete='CASCADE', required=True, select=True)
     frequency = fields.Selection(PREMIUM_FREQUENCY, 'Rate Frequency',
         required=True)
     premium_base = fields.Function(

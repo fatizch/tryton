@@ -421,7 +421,7 @@ class VersionObject(CoopView):
     __name__ = 'utils.version_object'
 
     main_elem = fields.Many2One(None, 'Descriptor', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
 

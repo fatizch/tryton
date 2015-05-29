@@ -81,7 +81,7 @@ class Loan(Workflow, model.CoopSQL, model.CoopView):
         states=_STATES, depends=_DEPENDS)
     loan_shares = fields.One2Many('loan.share', 'loan', 'Loan Shares',
         readonly=True, states={'invisible': ~Eval('loan_shares')},
-        delete_missing=True)
+        delete_missing=True, target_not_indexed=True)
     insured_persons = fields.Function(
         fields.Many2Many('party.party', None, None, 'Insured Persons',
             states={'invisible': ~Eval('insured_persons')}),
@@ -525,7 +525,8 @@ class LoanIncrement(model.CoopSQL, model.CoopView, ModelCurrency):
     end_date = fields.Function(
         fields.Date('End Date'),
         'get_end_date')
-    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', required=True)
+    loan = fields.Many2One('loan', 'Loan', ondelete='CASCADE', required=True,
+        select=True)
     number_of_payments = fields.Integer('Number of Payments', required=True,
         domain=[('number_of_payments', '>', 0)])
     rate = fields.Numeric('Annual Rate', digits=(16, 4))

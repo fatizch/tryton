@@ -63,7 +63,7 @@ class EndorsementPart:
     party_fields = fields.One2Many(
         'endorsement.party.field', 'endorsement_part', 'Party Fields', states={
             'invisible': Eval('kind', '') != 'party'},
-        depends=['kind'])
+        depends=['kind'], delete_missing=True)
     generate_contract_endorsements = fields.Boolean(
         'Generate Contract Endorsements',
         states={'invisible': Eval('kind') != 'party'},

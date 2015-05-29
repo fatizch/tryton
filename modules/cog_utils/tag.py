@@ -14,7 +14,7 @@ class Tag(model.CoopSQL, model.CoopView):
 
     code = fields.Char('Code', required=True)
     name = fields.Char('Name', translate=True)
-    parent = fields.Many2One('tag', 'Parent', ondelete='CASCADE')
+    parent = fields.Many2One('tag', 'Parent', ondelete='CASCADE', select=True)
     childs = fields.One2Many('tag', 'parent', 'Childs',
         target_not_required=True)
     tagged_objects = fields.One2Many('tag-object', 'tag', 'Tagged Objects',
@@ -43,7 +43,8 @@ class TagObjectRelation(model.CoopSQL, model.CoopView):
     __name__ = 'tag-object'
     _rec_name = 'object_'
 
-    tag = fields.Many2One('tag', 'Tag', ondelete='CASCADE', required=True)
+    tag = fields.Many2One('tag', 'Tag', ondelete='CASCADE', required=True,
+        select=True)
     object_ = fields.Reference('Object', selection='models_get', required=True)
 
     @staticmethod

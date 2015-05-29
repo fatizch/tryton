@@ -38,7 +38,7 @@ class Expense(model.CoopSQL, model.CoopView, ModelCurrency):
     __name__ = 'expense'
 
     service = fields.Many2One('contract.service', 'Contract Service',
-        ondelete='CASCADE', required=True)
+        ondelete='CASCADE', required=True, select=True)
     kind = fields.Many2One('expense.kind', 'Kind', ondelete='RESTRICT')
     amount = fields.Numeric('Amount', required=True, digits=(
             16, Eval('currency_digits', DEF_CUR_DIG)),

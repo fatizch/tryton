@@ -205,7 +205,7 @@ class Endorsement:
     __name__ = 'endorsement'
 
     endorsement_set = fields.Many2One('endorsement.set', 'Endorsement Set',
-        ondelete='SET NULL')
+        ondelete='SET NULL', select=True)
     contract_set = fields.Function(
             fields.Many2One('contract.set', 'Contract Set'),
             'get_contract_set')

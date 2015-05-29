@@ -62,7 +62,8 @@ class CommercialProduct(model.CoopSQL, model.CoopView):
             If(Eval('context', {}).contains('company'),
                 ('company', '=', Eval('context', {}).get('company')),
                 ('id', '>', 0))],
-        depends=['start_date'], required=True, ondelete='RESTRICT')
+        depends=['start_date'], required=True, ondelete='RESTRICT',
+        select=True)
     dist_networks = fields.Many2Many('distribution.network-commercial_product',
         'com_product', 'dist_network', 'Distribution Networks')
     start_date = fields.Date('Start Date', required=True)

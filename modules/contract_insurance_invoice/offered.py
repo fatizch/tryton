@@ -278,9 +278,9 @@ class ProductBillingModeRelation(model.CoopSQL, model.CoopView):
     __name__ = 'offered.product-offered.billing_mode'
 
     billing_mode = fields.Many2One('offered.billing_mode',
-        'Billing Mode', ondelete='RESTRICT', required=True)
+        'Billing Mode', ondelete='RESTRICT', required=True, select=True)
     product = fields.Many2One('offered.product', 'Product', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     order = fields.Integer('Order')
 
     @classmethod
@@ -315,9 +315,9 @@ class BillingModePaymentTermRelation(model.CoopSQL, model.CoopView):
     __name__ = 'offered.billing.mode-account.invoice.payment_term'
 
     payment_term = fields.Many2One('account.invoice.payment_term',
-        'Payment Term', ondelete='RESTRICT', required=True)
+        'Payment Term', ondelete='RESTRICT', required=True, select=True)
     billing_mode = fields.Many2One('offered.billing_mode', 'Billing Mode',
-        ondelete='CASCADE', required=True)
+        ondelete='CASCADE', required=True, select=True)
     order = fields.Integer('Order')
 
     @classmethod

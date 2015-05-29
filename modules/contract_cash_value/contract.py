@@ -23,7 +23,7 @@ class CashValueCollection(model.CoopView, model.CoopSQL):
     updated_amount = fields.Numeric('Updated Amount')
     kind = fields.Selection([('payment', 'Payment')], 'Kind')
     contract = fields.Many2One('contract', 'Contract',
-        ondelete='CASCADE', required=True)
+        ondelete='CASCADE', required=True, select=True)
     # collection = fields.Many2One('collection', 'Collection',
     #     ondelete='CASCADE', states={'required': True})
 

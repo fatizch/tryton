@@ -37,7 +37,8 @@ class Status(ModelSQL, ModelView):
     name = fields.Char('Name', required=True, translate=True)
     code = fields.Char('Code', required=True)
     relations = fields.One2Many('process-process.step', 'status', 'Relations',
-        states={'readonly': True}, target_not_required=True)
+        states={'readonly': True}, target_not_required=True,
+        target_not_indexed=True)
 
     @fields.depends('code', 'name')
     def on_change_with_code(self):
@@ -53,9 +54,9 @@ class ProcessStepRelation(export.ExportImportMixin, ModelSQL, ModelView):
     _func_key = 'technical_step_name'
 
     process = fields.Many2One('process', 'Process', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     step = fields.Many2One('process.step', 'Step', ondelete='RESTRICT',
-        required=True)
+        required=True, select=True)
     status = fields.Many2One('process.status', 'Status', ondelete='RESTRICT')
     order = fields.Integer('Order')
     technical_step_name = fields.Function(fields.Char('Technical Step Name'),
@@ -632,9 +633,9 @@ class Code(ModelSQL, ModelView):
         'get_on_model')
     method_name = fields.Char('Method Name', required=True)
     parent_step = fields.Many2One('process.step', 'Parent Step',
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     parent_transition = fields.Many2One('process.transition',
-        'Parent Transition', ondelete='CASCADE')
+        'Parent Transition', ondelete='CASCADE', select=True)
     sequence = fields.Integer('Sequence', states={'invisible': True})
     parameters = fields.Char('Parameters')
 
@@ -706,7 +707,7 @@ class ProcessTransition(ModelSQL, ModelView):
     __name__ = 'process.transition'
 
     on_process = fields.Many2One('process', 'On Process', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     from_step = fields.Many2One('process.step', 'From Step',
         ondelete='CASCADE', required=True)
     to_step = fields.Many2One('process.step', 'To Step', ondelete='CASCADE',
@@ -1027,7 +1028,7 @@ class ProcessActWindow(model.CoopSQL):
     __name__ = 'process.process-act_window'
 
     process = fields.Many2One('process', 'Process', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     action_window = fields.Many2One('ir.action.act_window', 'Action Window',
         ondelete='CASCADE', required=True)
     language = fields.Many2One('ir.lang', 'Language', ondelete='RESTRICT')

@@ -166,7 +166,7 @@ class EndorsementLoan(values_mixin('endorsement.loan.field'),
     loan = fields.Many2One('loan', 'Loan', required=True, ondelete='CASCADE',
         states={'readonly': Eval('state') == 'applied'}, depends=['state'])
     endorsement = fields.Many2One('endorsement', 'Endorsement', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     increments = fields.One2Many('endorsement.loan.increment',
         'loan_endorsement', 'Loan Increments', delete_missing=True)
     definition = fields.Function(

@@ -699,7 +699,8 @@ class ViewDescription(model.CoopSQL, model.CoopView):
     view_content = fields.Text('View Content')
     view_model = fields.Many2One('ir.model', 'View Model', required=True,
         states={'readonly': Eval('id', 0) > 0}, ondelete='RESTRICT')
-    for_step = fields.Many2One('process.step', 'For Step', ondelete='CASCADE')
+    for_step = fields.Many2One('process.step', 'For Step', ondelete='CASCADE',
+        select=True)
     field_childs = fields.Selection('get_field_childs', 'Children field',
         depends=['view_model'], states={
             'invisible': Eval('view_kind') != 'tree'})

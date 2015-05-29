@@ -76,7 +76,7 @@ class ActivationHistory(model.CoopSQL, model.CoopView):
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     contract = fields.Many2One('contract', 'Contract', required=True,
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     start_date = fields.Date('Start Date')
     end_date = fields.Date('End Date', domain=['OR',
             ('end_date', '=', None),
@@ -1299,7 +1299,7 @@ class ContractOption(model.CoopSQL, model.CoopView, model.ExpandTreeMixin,
     func_key = fields.Function(fields.Char('Functional Key'),
         'get_func_key', searcher='search_func_key')
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
-        states={'invisible': ~Eval('contract')})
+        states={'invisible': ~Eval('contract')}, select=True)
     parent_contract = fields.Function(
         fields.Many2One('contract', 'Parent Contract'),
         'on_change_with_parent_contract', searcher='search_parent_contract')
@@ -1666,7 +1666,7 @@ class ContractAddress(model.CoopSQL, model.CoopView):
     __name__ = 'contract.address'
 
     contract = fields.Many2One('contract', 'Contract', ondelete='CASCADE',
-        required=True)
+        required=True, select=True)
     start_date = fields.Date('Start Date', required=True)
     end_date = fields.Date('End Date')
     address = fields.Many2One('party.address', 'Address', ondelete='RESTRICT',

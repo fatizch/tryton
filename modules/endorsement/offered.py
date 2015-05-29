@@ -231,9 +231,9 @@ class EndorsementDefinitionPartRelation(model.CoopSQL, model.CoopView):
     __name__ = 'endorsement.definition-endorsement.part'
 
     definition = fields.Many2One('endorsement.definition', 'Definition',
-        required=True, ondelete='CASCADE')
+        required=True, ondelete='CASCADE', select=True)
     endorsement_part = fields.Many2One('endorsement.part',
-        'Endorsement Part', required=True, ondelete='RESTRICT')
+        'Endorsement Part', required=True, ondelete='RESTRICT', select=True)
     order = fields.Integer('Order')
 
     @classmethod

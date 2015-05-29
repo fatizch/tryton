@@ -334,10 +334,9 @@ class ExtraDataSubExtraDataRelation(model.CoopSQL, model.CoopView):
 
     __name__ = 'extra_data-sub_extra_data'
 
-    master = fields.Many2One(
-        'extra_data', 'Master', ondelete='CASCADE')
-    child = fields.Many2One(
-        'extra_data', 'Child', ondelete='RESTRICT')
+    master = fields.Many2One('extra_data', 'Master', ondelete='CASCADE',
+        select=True)
+    child = fields.Many2One('extra_data', 'Child', ondelete='RESTRICT')
     select_value = fields.Char('Select value')
 
     def does_match(self, value):

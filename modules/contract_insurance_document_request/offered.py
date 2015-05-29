@@ -22,9 +22,9 @@ class DocumentRule(RuleMixin, model.CoopSQL, model.CoopView):
     __name__ = 'document.rule'
 
     product = fields.Many2One('offered.product', 'Product',
-        ondelete='CASCADE')
+        ondelete='CASCADE', select=True)
     option = fields.Many2One('offered.option.description',
-        'Option Description', ondelete='CASCADE')
+        'Option Description', ondelete='CASCADE', select=True)
     documents = fields.Many2Many('document.rule-document.description', 'rule',
         'document', 'Documents')
 
@@ -93,7 +93,8 @@ class Product:
     __name__ = 'offered.product'
 
     document_rules = fields.One2Many('document.rule', 'product',
-        'Document Rules', delete_missing=True, size=1)
+        'Document Rules', delete_missing=True, size=1,
+        target_not_required=True)
 
     @classmethod
     def __register__(cls, module_name):
@@ -115,7 +116,8 @@ class OptionDescription:
     __name__ = 'offered.option.description'
 
     document_rules = fields.One2Many('document.rule', 'option',
-        'Document Rules', delete_missing=True, size=1)
+        'Document Rules', delete_missing=True, size=1,
+        target_not_required=True)
 
     @classmethod
     def __register__(cls, module_name):
