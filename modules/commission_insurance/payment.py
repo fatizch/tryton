@@ -26,6 +26,6 @@ class Configuration:
         if not line.origin.is_commission_invoice:
             return super(Configuration, self).get_payment_journal(line)
         journal = self.broker_bank_transfer_journal \
-            if line.origin.party.bank_transfert_payment \
+            if line.origin.party.automatic_wire_transfer \
             else self.broker_check_journal
         return journal or super(Configuration, self).get_payment_journal(line)
