@@ -37,6 +37,11 @@ class Mandate(export.ExportImportMixin):
     __name__ = 'account.payment.sepa.mandate'
     _func_key = 'identification'
 
+    @classmethod
+    def __setup__(cls):
+        super(Mandate, cls).__setup__()
+        cls.indentification.select = True
+
     def get_rec_name(self, name):
         if self.identification is None or self.party is None:
             return super(Mandate, self).get_rec_name(name)
