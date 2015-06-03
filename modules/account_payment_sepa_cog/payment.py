@@ -40,7 +40,7 @@ class Mandate(export.ExportImportMixin):
     @classmethod
     def __setup__(cls):
         super(Mandate, cls).__setup__()
-        cls.indentification.select = True
+        cls.identification.select = True
 
     def get_rec_name(self, name):
         if self.identification is None or self.party is None:
