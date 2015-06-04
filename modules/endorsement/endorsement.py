@@ -1250,7 +1250,7 @@ class EndorsementContract(values_mixin('endorsement.contract.field'),
         cls.values.states = {
             'readonly': Eval('state') == 'applied',
             }
-        cls.values.domain = [('definition', '=', Eval('definition'))]
+        cls.values.domain = [('definitions', 'in', [Eval('definition')])]
         cls.values.depends = ['state', 'definition']
 
     def get_func_key(self, name):
