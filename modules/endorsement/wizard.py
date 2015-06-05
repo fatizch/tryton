@@ -583,23 +583,52 @@ class SelectEndorsement(model.CoopView):
         states={'invisible': True})
     contract_in_process = fields.Boolean('Contract in Progress',
         states={'invisible': True})
+    contract_has_future_endorsement = fields.Boolean(
+        'Contract has future endorsement', states={'invisible': True})
+    effective_date_before_today = fields.Boolean('Effective date is in past',
+        states={'invisible': True})
 
     @classmethod
     def view_attributes(cls):
         return super(SelectEndorsement, cls).view_attributes() + [(
-                '/form/group[@id="warnings"]',
+                '/form/group[@id="warnings"]/group[@id="contract_in_process"]',
                 'states',
-                {'invisible': Not(Eval('contract_in_process', False))}
+                {'invisible': Not(Eval('contract_in_process', False))}),
+            (
+                '/form/group[@id="warnings"]/group[@id="date_before_today"]',
+                'states',
+                {'invisible': Not(Eval('effective_date_before_today',
+                            False))}),
+            (
+                '/form/group[@id="warnings"]/'
+                'group[@id="contract_has_future_endorsement"]',
+                'states',
+                {'invisible': Not(Eval('contract_has_future_endorsement',
+                            False))}
                 )]
 
-    @fields.depends('contract')
+    @fields.depends('contract', 'contract_has_future_endorsement',
+        'contract_in_process', 'effective_date')
     def on_change_contract(self):
         if self.contract:
             self.product = self.contract.product
             self.contract_in_process = bool(self.contract.current_state)
+            self.contract_has_future_endorsement = len(
+                Pool().get('endorsement.contract').search([
+                        ('endorsement.effective_date', '>', self.effective_date
+                            or utils.today()),
+                        ('endorsement.state', '=', 'applied'),
+                        ('contract', '=', self.contract.id)])) > 0
         else:
             self.product = None
             self.contract_in_process = None
+            self.contract_has_future_endorsement = False
+
+    @fields.depends('contract', 'contract_has_future_endorsement',
+        'contract_in_process', 'effective_date', 'effective_date_before_today')
+    def on_change_effective_date(self):
+        self.effective_date_before_today = self.effective_date < utils.today()
+        self.on_change_contract()
 
 
 class BasicPreview(EndorsementWizardPreviewMixin, model.CoopView):

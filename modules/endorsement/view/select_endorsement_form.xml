@@ -17,10 +17,24 @@
     <newline/>
     <group id="filler" string="" colspan="4" yexpand="1" yfill="1">
     </group>
-    <group id="warnings" string="" colspan="4">
-        <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
-        <label string="Selected Contract is currently in a process. You will not be able to apply / preview the endorsement while it's not completed" id="contrct_in_process_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
-        <newline/>
-        <field name="contract_in_process"/>
+    <group id="warnings" string="" colspan="4" col="1">
+        <group id="contract_in_process" string="">
+            <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+            <label string="Selected Contract is currently in a process. You will not be able to apply / preview the endorsement while it's not completed" id="contract_in_process_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
+            <newline/>
+            <field name="contract_in_process"/>
+        </group>
+        <group id="date_before_today" string="">
+            <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+            <label string="The selected date is in the past !" id="effective_date_before_today_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
+            <newline/>
+            <field name="effective_date_before_today"/>
+        </group>
+        <group id="contract_has_future_endorsement" string="">
+            <image name="tryton-dialog-warning" xexpand="0" xfill="0"/>
+            <label string="The selected contract has endorsement(s) with a posterior effective date" id="contract_has_future_endorsement_warning" yalign="0.0" xalign="0.0" xexpand="1" colspan="3"/>
+            <newline/>
+            <field name="contract_has_future_endorsement"/>
+        </group>
     </group>
 </form>
