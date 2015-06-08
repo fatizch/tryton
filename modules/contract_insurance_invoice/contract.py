@@ -127,7 +127,7 @@ class Contract:
         ContractInvoice = pool.get('contract.invoice')
         return [x.id for x in ContractInvoice.search([
                     ('contract', '=', self),
-                    ('invoice.state', '!=', 'cancel'),
+                    ('invoice.state', 'not in', ('cancel', 'paid')),
                     ('start', '>=', self.start_date),
                     ('end', '<=', self.end_date or datetime.date.max),
                     ])]
@@ -137,6 +137,7 @@ class Contract:
         ContractInvoice = pool.get('contract.invoice')
         non_periodic_invoices = ContractInvoice.search([
                 ('contract', '=', self),
+                ('invoice.state', 'not in', ('cancel', 'paid')),
                 ('non_periodic', '=', True)])
         all_good_invoices = list(set(self.current_term_invoices) |
             set(non_periodic_invoices))
