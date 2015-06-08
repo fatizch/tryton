@@ -887,6 +887,6 @@ class ExportToFile(Wizard):
     def default_export_summary(self, name):
         return {
             'summary': self._summary,
-            'file': buffer(json.dumps(self._result, cls=JSONEncoder)),
+            'file': json.dumps(self._result, cls=JSONEncoder),
             'file_name': self._file_name,
             }
