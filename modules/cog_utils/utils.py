@@ -19,6 +19,7 @@ from trytond.model.modelstorage import EvalEnvironment
 
 __all__ = []
 
+
 def get_module_name(cls):
     return cls.__name__.split('.')[0]
 
@@ -345,6 +346,7 @@ def pyson_encode(pyson_expr, do_eval=False):
 def get_json_from_pyson(pyson):
     encoded = PYSONEncoder().encode(pyson)
     return ''.join([x if x != '"' else '&quot;' for x in encoded])
+
 
 def get_domain_instances(record, field_name):
     field = record._fields[field_name]

@@ -331,6 +331,56 @@ class ModuleTestCase(test_framework.CoopTestCase):
                     ('contracts', '=', contract.id),
                     ]))
 
+    def test0099_test_automatic_endorsement(self):
+        from trytond.modules.endorsement import EndorsementWizardStepMixin
+
+        _save_values = {
+            'company': 1,
+            'contract_number': '1234',
+            'options': [
+                ('add', (10, 11)),
+                ('delete', (15, 12)),
+                ('create', ({
+                            'coverage': 1,
+                            }, {
+                            'coverage': 2,
+                            })),
+                ('write', [1, 2], {
+                        'coverage': 100})]}
+
+        test_endorsement = self.EndorsementContract()
+        EndorsementWizardStepMixin._update_endorsement(test_endorsement,
+            _save_values)
+        self.assertEqual(test_endorsement.values, {'company': 1,
+                'contract_number': '1234'})
+        self.assertEqual(len(test_endorsement.options), 8)
+
+        def test_value(endorsement, action, relation, values):
+            self.assertEqual(endorsement.__name__,
+                'endorsement.contract.option')
+            self.assertEqual(endorsement.action, action)
+            if relation:
+                self.assertEqual(endorsement.relation, relation)
+            else:
+                self.assertIsNone(getattr(endorsement, 'relation', None))
+            if values:
+                self.assertEqual(endorsement.values, values)
+            else:
+                self.assertIsNone(getattr(endorsement, 'values', None))
+
+        for idx, (action, relation, values) in enumerate([
+                    ('add', 10, None),
+                    ('add', 11, None),
+                    ('remove', 15, None),
+                    ('remove', 12, None),
+                    ('add', None, {'coverage': 1}),
+                    ('add', None, {'coverage': 2}),
+                    ('update', 1, {'coverage': 100}),
+                    ('update', 2, {'coverage': 100}),
+                    ]):
+            test_value(test_endorsement.options[idx], action, relation,
+                values)
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()

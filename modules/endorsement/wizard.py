@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from trytond.pool import Pool, PoolMeta
-from trytond.model import Model
+from trytond.model import Model, fields as tryton_fields
 from trytond.transaction import Transaction
 from trytond.wizard import Wizard, StateView, StateTransition, Button
 from trytond.wizard import StateAction
@@ -132,6 +132,7 @@ class EndorsementWizardStepMixin(object):
         return self.wizard.get_state_before(self.step_name)
 
     def step_suspend(self):
+        self.step_update()
         return 'end'
 
     def step_next(self):
@@ -189,8 +190,72 @@ class EndorsementWizardStepMixin(object):
                 continue
             fval = values.get(fname, getattr(default, fname, None))
             fval = fval.id if isinstance(fval, Model) else fval
+            if isinstance(fval, (list, tuple)):
+                fval = [x.id for x in fval]
             result[fname] = fval
         return result
+
+    @classmethod
+    def _update_endorsement(cls, endorsement, data_dict):
+        pool = Pool()
+        Model = pool.get(
+            pool.get(endorsement.__class__._fields['values'].schema_model)
+            ._get_model())
+        endorsement.clean()
+        new_values = {}
+        for k, v in data_dict.iteritems():
+            field = Model._fields[k]
+            if isinstance(field, tryton_fields.Function):
+                if not field.setter:
+                    continue
+                field = field._field
+            if k in ('create_date', 'create_uid', 'write_date', 'write_uid'):
+                continue
+            if isinstance(field, (tryton_fields.One2Many,
+                        tryton_fields.Many2Many)):
+                if isinstance(field, tryton_fields.One2Many):
+                    target_model = field.model_name
+                else:
+                    target_model = pool.get(field.relation_name)._fields[
+                        fields.target].model_name
+                new_name, new_field = endorsement._get_field_for_model(
+                    target_model)
+                EndorsedModel = pool.get(new_field.model_name)
+                values = []
+                for action_data in v:
+                    if action_data[0] == 'delete':
+                        for id_to_del in action_data[1]:
+                            values.append(EndorsedModel(action='remove',
+                                    relation=id_to_del))
+                    elif action_data[0] == 'write':
+                        for id_to_update in action_data[1]:
+                            new_endorsed_data = EndorsedModel(action='update',
+                                relation=id_to_update)
+                            cls._update_endorsement(new_endorsed_data,
+                                action_data[2])
+                            values.append(new_endorsed_data)
+                    elif action_data[0] == 'add':
+                        for id_to_add in action_data[1]:
+                            values.append(EndorsedModel(action='add',
+                                    relation=id_to_add))
+                    elif action_data[0] == 'create':
+                        for data_dict in action_data[1]:
+                            new_endorsed_data = EndorsedModel(action='add')
+                            cls._update_endorsement(new_endorsed_data,
+                                data_dict)
+                            values.append(new_endorsed_data)
+                    elif action_data[0] == 'remove' and isinstance(field,
+                            tryton_fields.Many2Many):
+                        for id_to_remove in action_data[1]:
+                            values.append(EndorsedModel(action='remove',
+                                    relation=id_to_del))
+                    else:
+                        raise Exception('unsupported operation')
+
+                setattr(endorsement, new_name, values)
+            else:
+                new_values[k] = v
+        endorsement.values = new_values
 
 
 class DummyStep(EndorsementWizardStepMixin, model.CoopView):

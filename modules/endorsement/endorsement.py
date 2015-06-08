@@ -129,12 +129,37 @@ def field_mixin(model):
         def search_definitions(cls, name, clause):
             return [('endorsement_part.definitions',) + tuple(clause[1:])]
 
+        @classmethod
+        def _get_model(cls):
+            return model
+
     return Mixin
+
+
+class EndorsementRoot(object):
+    @classmethod
+    def __post_setup__(cls):
+        super(EndorsementRoot, cls).__post_setup__()
+
+        pool = Pool()
+        endorsement_tree = {}
+        for fname, field in cls._fields.iteritems():
+            if not isinstance(field, fields.One2Many):
+                continue
+            Target = pool.get(field.model_name)
+            if not issubclass(Target, EndorsementRoot):
+                continue
+            EndorsedField = pool.get(Target.values.schema_model)
+            endorsement_tree[EndorsedField._get_model()] = (fname, field)
+        cls._endorsement_tree = endorsement_tree
+
+    def _get_field_for_model(self, target_model):
+        return self.__class__._endorsement_tree[target_model]
 
 
 def values_mixin(value_model):
 
-    class Mixin(model.CoopSQL, model.CoopView):
+    class Mixin(EndorsementRoot, model.CoopSQL, model.CoopView):
         values = fields.Dict(value_model, 'Values')
         # applied_on need to be stored to be used as datetime_field
         applied_on = fields.Timestamp('Applied On', readonly=True)
@@ -297,6 +322,17 @@ def values_mixin(value_model):
             if new_values:
                 values.setdefault('values', {}).update(new_values)
             return values
+
+        def clean(self):
+            pool = Pool()
+            self.values = {}
+            for fname, field in self.__class__._fields.iteritems():
+                if not isinstance(field, fields.One2Many):
+                    continue
+                Target = pool.get(field.model_name)
+                if not isinstance(Target, EndorsementRoot):
+                    continue
+                setattr(self, fname, [])
 
         @classmethod
         def create(cls, vlist):
