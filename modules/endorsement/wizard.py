@@ -141,6 +141,17 @@ class EndorsementWizardStepMixin(object):
     def step_update(self):
         raise NotImplementedError
 
+    @classmethod
+    def check_before_start(cls, select_screen):
+        '''
+            This methods will be called before the first step of the start
+            endorsement wizard. Its purpose is to check the consistency of the
+            basic data (contract / date / subscriber) regarding this particular
+            endorsement state. The first parameter is the
+            endorsement.start.select record from the wizard.
+        '''
+        pass
+
     def _get_contracts(self):
         return {x.contract.id: x
             for x in self.wizard.endorsement.contract_endorsements}
@@ -766,6 +777,8 @@ class StartEndorsement(Wizard):
         return 'end'
 
     def transition_start_endorsement(self):
+        with model.error_manager():
+            self.check_before_start()
         if not self.endorsement:
             endorsement = Pool().get('endorsement')()
             endorsement.effective_date = \
@@ -781,6 +794,12 @@ class StartEndorsement(Wizard):
             endorsement.save()
             self.select_endorsement.endorsement = endorsement.id
         return self.definition.endorsement_parts[0].view
+
+    def check_before_start(self):
+        definition = self.select_endorsement.endorsement_definition
+        for part in definition.endorsement_parts:
+            getattr(self, part.view).check_before_start(
+                self.select_endorsement)
 
     def default_summary(self, name):
         result = self.select_endorsement._default_values
