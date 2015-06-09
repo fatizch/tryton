@@ -111,10 +111,10 @@ class ContractOption:
                     paid_prepayments:
                 amount = amount - paid_prepayments[(agent.id, '%s,%s' % (
                             self.__name__, self.id))]
-            if not amount:
-                continue
             digits = Commission.amount.digits
             amount = amount.quantize(Decimal(str(10.0 ** -digits[1])))
+            if not amount:
+                continue
 
             payment_schedule = plan.compute_prepayment_schedule(self)
             for (date, percentage) in payment_schedule:
