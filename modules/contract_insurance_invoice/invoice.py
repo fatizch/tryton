@@ -180,13 +180,14 @@ class Invoice:
                     coop_string.translate_value(self, 'state'))
         else:
             if self.start and self.end:
-                return '- %s - (%s - %s) [%s]' % (
+                return '%s - %s - (%s - %s) [%s]' % (
+                    self.description,
                     self.currency.amount_as_string(self.total_amount),
                     Date.date_as_string(self.start),
                     Date.date_as_string(self.end),
                     coop_string.translate_value(self, 'state'))
             else:
-                return '%s - %s [%s]' % (
+                return '%s - %s [%s]' % (self.description,
                     self.currency.amount_as_string(self.total_amount),
                     coop_string.translate_value(self, 'state'))
 
