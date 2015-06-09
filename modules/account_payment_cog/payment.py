@@ -195,6 +195,18 @@ class Payment(export.ExportImportMixin):
         ('pending', 'Pending'),
         ('done', 'Done')
         ], 'Manual Fail Status')
+    reject_description = fields.Function(
+        fields.Char('Reject Description', states={
+                'invisible': ~Eval('reject_description')}),
+        'get_reject_description')
+
+    def get_reject_description(self, name):
+        pool = Pool()
+        RejectReason = pool.get('account.payment.journal.reject_reason')
+        if not self.fail_code:
+            return ''
+        reject_reason, = RejectReason.search([('code', '=', self.fail_code)])
+        return reject_reason.description
 
     @classmethod
     def __setup__(cls):
