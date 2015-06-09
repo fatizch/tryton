@@ -1,5 +1,6 @@
 from trytond.pool import PoolMeta
 from trytond.modules.cog_utils import export, fields
+from trytond.modules.report_engine import Printable
 
 __metaclass__ = PoolMeta
 __all__ = [
@@ -7,7 +8,7 @@ __all__ = [
     ]
 
 
-class Invoice(export.ExportImportMixin):
+class Invoice(export.ExportImportMixin, Printable):
     __name__ = 'account.invoice'
     _func_key = 'number'
 
@@ -39,3 +40,12 @@ class Invoice(export.ExportImportMixin):
             return 'invoice_post'
         else:
             return 'invoice'
+
+    def get_lang(self):
+        return self.party.lang.code
+
+    def get_contact(self):
+        return self.party
+
+    def get_sender(self):
+        return self.company.party

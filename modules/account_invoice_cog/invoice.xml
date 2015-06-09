@@ -26,6 +26,11 @@
             <field name="inherit" ref="account_invoice.invoice_view_tree"/>
             <field name="name">invoice_list</field>
         </record>
+        <record model="ir.action.keyword" id="letter_generation_wizard">
+            <field name="keyword">form_action</field>
+            <field name="model">account.invoice,-1</field>
+            <field name="action" ref="report_engine.letter_generation_wizard"/>
+        </record>
         <menuitem id="account_invoice.menu_invoices" icon="invoice" name="Invoices"/>
         <menuitem id="account_invoice.menu_invoice_out_invoice_form" icon="invoice" action="account_invoice.act_invoice_out_invoice_form"/>
     </data>
