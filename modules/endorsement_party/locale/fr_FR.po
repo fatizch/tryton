@@ -270,7 +270,7 @@ msgstr "Adresses"
 
 msgctxt "field:endorsement.party.change_address,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.party.change_address,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -327,7 +327,7 @@ msgstr "Date de naissance actuelle"
 
 msgctxt "field:endorsement.party.change_birth_date,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.party.change_birth_date,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -352,7 +352,7 @@ msgstr "Complément santé actuel"
 
 msgctxt "field:endorsement.party.change_health_complement,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt ""
 "field:endorsement.party.change_health_complement,endorsement_definition:"
@@ -386,7 +386,7 @@ msgstr "Nom actuel"
 
 msgctxt "field:endorsement.party.change_name,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.party.change_name,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -418,7 +418,7 @@ msgstr "Numéro de sécurité sociale actuel"
 
 msgctxt "field:endorsement.party.change_ssn,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.party.change_ssn,endorsement_definition:"
 msgid "Endorsement Definition"

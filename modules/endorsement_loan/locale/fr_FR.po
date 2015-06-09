@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -123,7 +123,7 @@ msgstr "Arrêter la couverture du prêt"
 msgctxt ""
 "field:contract.covered_element.add_option.loan_shares,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt ""
 "field:contract.covered_element.add_option.loan_shares,endorsement_definition:"
@@ -255,7 +255,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:endorsement.loan.change,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.loan.change,endorsement_definition:"
 msgid "Endorsement Definition"

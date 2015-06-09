@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -284,7 +284,7 @@ msgstr "Date d'effet du contrat"
 
 msgctxt "field:contract.bank_account.change.select,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:contract.bank_account.change.select,id:"
 msgid "ID"

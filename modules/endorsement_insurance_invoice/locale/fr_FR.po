@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -32,7 +32,7 @@ msgstr "Annuler les modifications futures"
 
 msgctxt "field:contract.billing_information.change,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:contract.billing_information.change,endorsement_definition:"
 msgid "Endorsement Definition"

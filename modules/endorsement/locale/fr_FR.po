@@ -205,7 +205,7 @@ msgstr "Définition"
 
 msgctxt "field:endorsement,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement,endorsement_summary:"
 msgid "Endorsement Summary"
@@ -499,7 +499,7 @@ msgstr "Date d'effet des données complémentaires"
 
 msgctxt "field:endorsement.contract.change_extra_data,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.contract.change_extra_data,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -527,7 +527,7 @@ msgstr "Date de fin actuelle"
 
 msgctxt "field:endorsement.contract.change_start_date,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.contract.change_start_date,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -835,7 +835,7 @@ msgstr "Date de fin actuelle"
 
 msgctxt "field:endorsement.contract.terminate,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.contract.terminate,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -867,7 +867,7 @@ msgstr "Date de fin actuelle"
 
 msgctxt "field:endorsement.contract.void,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.contract.void,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -1159,7 +1159,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:endorsement.start.dummy_step,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.start.dummy_step,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -1191,7 +1191,7 @@ msgstr "Contrat en cours de modification"
 
 msgctxt "field:endorsement.start.select_endorsement,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.start.select_endorsement,endorsement:"
 msgid "Endorsement"

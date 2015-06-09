@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -8,7 +8,7 @@ msgstr "Définition d'avenant"
 
 msgctxt "field:endorsement_party.start.find_process,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement_party.start.find_process,good_process:"
 msgid "Good Process"

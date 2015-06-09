@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -102,7 +102,7 @@ msgstr "Risque Couvert"
 
 msgctxt "field:contract.covered_element.add_option,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:contract.covered_element.add_option,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -142,7 +142,7 @@ msgstr "Nouveaux éléments couverts"
 
 msgctxt "field:contract.covered_element.new,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:contract.covered_element.new,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -174,7 +174,7 @@ msgstr "Date d'Effet"
 
 msgctxt "field:contract.covered_element.option.remove,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:contract.covered_element.option.remove,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -615,7 +615,7 @@ msgstr "Identifiant XML"
 
 msgctxt "field:endorsement.contract.manage_extra_premium,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt ""
 "field:endorsement.contract.manage_extra_premium,endorsement_definition:"

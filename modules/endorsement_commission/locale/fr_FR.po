@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -24,7 +24,7 @@ msgstr "Courtier actuel"
 
 msgctxt "field:endorsement.contract.change_broker,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.contract.change_broker,endorsement_definition:"
 msgid "Endorsement Definition"
@@ -68,7 +68,7 @@ msgstr "Plan de commissionnement actuel"
 
 msgctxt "field:endorsement.contract.change_commission,effective_date:"
 msgid "Effective Date"
-msgstr "Date effective"
+msgstr "Date d'effet"
 
 msgctxt "field:endorsement.contract.change_commission,endorsement_definition:"
 msgid "Endorsement Definition"
