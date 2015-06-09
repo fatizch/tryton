@@ -1185,11 +1185,16 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
     start_date = fields.Function(
         fields.Date('Start Date'), 'get_start_date')
     manual_start_date = fields.Date('Manual Start date')
-    duration = fields.Integer('Duration')
+    duration = fields.Integer('Duration', states={
+            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
     duration_unit = fields.Selection(
         [('month', 'Month'), ('year', 'Year')],
-        'Duration Unit', sort=False, required=True)
+        'Duration Unit', sort=False, required=True, states={
+            'invisible': ~Eval('time_limited')}, depends=['time_limited'])
     duration_unit_string = duration_unit.translated('duration_unit')
+    time_limited = fields.Function(
+        fields.Boolean('Time Limited'), 'get_time_limited',
+        setter='setter_void')
 
     @classmethod
     def __setup__(cls):
@@ -1224,8 +1229,7 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                         Bool(Eval('is_discount')))}
                 ), (
                 '/form/group[@id="invisible"]',
-                'states',
-                {'invisible': True}
+                'states', {'invisible': True}
                 )]
 
     @classmethod
@@ -1233,13 +1237,27 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
         return 'rate'
 
     @classmethod
+    def default_time_limited(cls):
+        return False
+
+    @classmethod
     def default_end_date(cls):
         if 'end_date' in Transaction().context:
             return Transaction().context.get('end_date')
         return None
 
-    @staticmethod
-    def default_duration_unit():
+    @fields.depends('option')
+    def on_change_option(self):
+        self.start_date = self.option.initial_start_date
+
+    @fields.depends('time_limited', 'duration')
+    def on_change_time_limited(self):
+        if not self.time_limited:
+            self.duration = 0
+        self.end_date = self.calculate_end_date()
+
+    @classmethod
+    def default_duration_unit(cls):
         return 'month'
 
     @fields.depends('calculation_kind')
@@ -1248,6 +1266,16 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
             self.rate = None
         elif self.calculation_kind == 'rate':
             self.flat_amount = None
+
+    @fields.depends('duration', 'start_date', 'duration_unit', 'time_limited')
+    def on_change_duration(self):
+        if not self.time_limited:
+            self.duration = 0
+        self.end_date = self.calculate_end_date()
+
+    @fields.depends('start_date', 'duration', 'duration_unit')
+    def on_change_duration_unit(self):
+        self.end_date = self.calculate_end_date()
 
     @fields.depends('motive')
     def on_change_with_is_discount(self, name=None):
@@ -1283,6 +1311,9 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
                 abs(self.rate) * 100)
         else:
             return super(ExtraPremium, self).get_rec_name(name)
+
+    def get_time_limited(self, name):
+        return self.duration != 0
 
     @classmethod
     def search_max_value(cls, name, clause):
@@ -1330,14 +1361,16 @@ class ExtraPremium(model.CoopSQL, model.CoopView, ModelCurrency):
 
     def calculate_end_date(self):
         if not self.duration:
-            return self.option.end_date
-        months = years = 0
-        if self.duration_unit == 'month':
-            months = self.duration
-        elif self.duration_unit == 'year':
-            years = self.duration
-        return self.start_date + relativedelta(months=months,
-            years=years, days=-1)
+            if getattr(self, 'option', None):
+                return self.option.end_date
+        else:
+            months, years = 0, 0
+            if self.duration_unit == 'month':
+                months = self.duration
+            else:
+                years = self.duration
+            return self.start_date + relativedelta(months=months,
+                years=years, days=-1)
 
 
 class OptionExclusionKindRelation(model.CoopSQL):

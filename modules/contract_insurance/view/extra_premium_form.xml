@@ -31,6 +31,8 @@
         </group>
     </group>
     <newline/>
+    <label name="time_limited"/>
+    <field name="time_limited"/>
     <label name="duration"/>
     <group id="duration">
         <field name="duration" xexpand="0"/>

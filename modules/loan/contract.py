@@ -312,9 +312,8 @@ class ExtraPremium:
 
     @classmethod
     def view_attributes(cls):
-        return [
-            ('/form/group[@id="capital_per_mil"]'
-                '/string[@id="capital_per_mil_rate"]', 'states',
+        return super(ExtraPremium, cls).view_attributes() + [(
+                '/form/group[@id="capital_per_mil"]', 'states',
                 {'invisible': Eval('calculation_kind') != 'capital_per_mil'})]
 
     @fields.depends('option')
