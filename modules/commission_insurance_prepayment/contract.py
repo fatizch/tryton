@@ -77,6 +77,7 @@ class ContractOption:
         pattern = {
             'first_year_premium': self.first_year_premium,
             'coverage': self.coverage,
+            'agent': agent,
             }
         return plan.compute_prepayment(self.product, pattern=pattern)
 
