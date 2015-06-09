@@ -338,6 +338,7 @@ class MoveLine:
                 journal.last_sepa_receivable_payment_creation_date
                 or datetime.date.min,
                 max([payment['date'] for payment in payments_group
-                    if payment['kind'] == 'receivable']))
+                        if payment['kind'] == 'receivable'] +
+                    [datetime.date.min]))
             journal.save()
         return payments
