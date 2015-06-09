@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <!-- ############################################################ -->
+        <!-- ########### Precompte sur la premiere annee ########### -->
+        <!-- ############################################################ -->
+        <record model="rule_engine" id="commission_precompte">
+            <field name="name">Precompte sur la prime de la premiere annee</field>
+            <field name="short_name">precompte_prime_1_ere_annee</field>
+            <field name="algorithm">return prime_premiere_annee() * param_pourcentage_precompte() * 0.01</field>
+            <field name="status">validated</field>
+            <field name="type_">commission</field>
+            <field name="context" ref="commission_insurance_rule_engine.commission_context"/>
+        </record>
+        <record model="rule_engine.rule_parameter" id="escompte_premiere_annee">
+            <field name="name">pourcentage_precompte</field>
+            <field name="type_">numeric</field>
+            <field name="digits">2</field>
+            <field name="string">Pourcentage du précompte</field>
+            <field name="parent_rule" ref="commission_precompte"/>
+        </record>
+    </data>
+</tryton>

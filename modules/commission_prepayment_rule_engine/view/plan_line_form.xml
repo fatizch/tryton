@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/form/field[@name='prepayment_formula']" position="after">
+        <newline/>
+        <label name="prepayment_rule"/>
+        <field name="prepayment_rule" colspan="3"/>
+        <field name="prepayment_rule_extra_data" no_command="1" colspan="3"/>
+        <newline/>
+    </xpath>
+</data>

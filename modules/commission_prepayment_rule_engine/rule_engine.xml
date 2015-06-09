@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tryton>
+    <data>
+        <record model="rule_engine.function" id="prime_premiere_annee">
+            <field name="translated_technical_name">prime_premiere_annee</field>
+            <field name="description">Prime de la premiere annee</field>
+            <field name="type">function</field>
+            <field name="language" ref="ir.lang_fr"/>
+            <field name="namespace">rule_engine.runtime</field>
+            <field name="name">_re_option_first_year_premium</field>
+            <field name="parent" ref="commission_insurance_rule_engine.dossier_commission"/>
+        </record>
+    </data>
+</tryton>

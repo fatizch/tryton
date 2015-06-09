@@ -78,6 +78,7 @@ class ContractOption:
             'first_year_premium': self.first_year_premium,
             'coverage': self.coverage,
             'agent': agent,
+            'option': self,
             }
         return plan.compute_prepayment(self.product, pattern=pattern)
 

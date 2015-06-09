@@ -1,14 +1,17 @@
 import datetime
+from decimal import Decimal
 from types import FloatType, IntType
 
 from trytond.pool import PoolMeta
-from trytond.modules.cog_utils import fields, model, coop_string
+from trytond.pyson import Eval, Bool, Not
 
+from trytond.modules.cog_utils import fields, model, coop_string
 from trytond.modules.rule_engine import RuleMixin
 
 __all__ = [
     'Plan',
     'PrepaymentPaymentDateRule',
+    'PlanLines',
     ]
 __metaclass__ = PoolMeta
 
@@ -71,3 +74,50 @@ class PrepaymentPaymentDateRule(RuleMixin, model.CoopSQL, model.CoopView):
         if self.code:
             return self.code
         return coop_string.slugify(self.name)
+
+
+class PlanLines:
+    __name__ = 'commission.plan.line'
+
+    prepayment_rule = fields.Many2One('rule_engine', 'Prepayment Rule Engine',
+        ondelete='RESTRICT', domain=[('type_', '=', 'commission')],
+        depends=['use_rule_engine'],
+        states={
+            'invisible': Not(Eval('use_rule_engine', True))})
+    prepayment_rule_extra_data = fields.Dict('rule_engine.rule_parameter',
+        'Prepayment Rule Extra Data', states={
+            'invisible': Not(Bool(Eval('prepayment_rule_extra_data', False)))})
+    prepayment_formula_description = fields.Function(fields.Char('Prepayment'),
+        'get_prepayment_formula_description')
+
+    @classmethod
+    def __setup__(cls):
+        super(PlanLines, cls).__setup__()
+        cls.prepayment_formula.states['invisible'] = Eval('use_rule_engine',
+            True)
+        cls.prepayment_formula.depends.append('use_rule_engine')
+
+    def get_formula_description(self, name):
+        if self.use_rule_engine:
+            if self.prepayment_rule:
+                return self.prepayment_rule.name
+        else:
+            return self.prepayment_formula
+
+    def get_prepayment_amount(self, **context):
+        if not self.use_rule_engine:
+            return super(PlanLines, self).get_prepayment_amount(**context)
+        if not self.prepayment_rule:
+            return
+        args = context['names']
+        if 'option' in context['names']:
+            context['names']['option'].init_dict_for_rule_engine(args)
+        return Decimal(self.prepayment_rule.execute(
+                args, self.prepayment_rule_extra_data).result)
+
+    @fields.depends('prepayment_rule', 'prepayment_rule_extra_data')
+    def on_change_with_prepayment_rule_extra_data(self):
+        if not self.prepayment_rule:
+            return {}
+        return self.prepayment_rule.get_extra_data_for_on_change(
+            self.prepayment_rule_extra_data)

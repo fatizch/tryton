@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <xpath expr="/tree/field[@name='prepayment_formula']" position="replace">
+        <field name="prepayment_formula_description"/>
+    </xpath>
+</data>
