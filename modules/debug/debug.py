@@ -131,7 +131,6 @@ class ModelInfo(ModelView):
     @fields.depends('model_name', 'hide_functions', 'filter_value',
         'field_infos', 'id_to_calculate')
     def on_change_model_name(self):
-        self.id_to_calculate = None
         self.to_evaluate = ''
         self.evaluation_result = ''
         self.recalculate_field_infos()
@@ -428,18 +427,12 @@ class DebugModel(Wizard):
         [Button('Quit', 'end', 'tryton-cancel')])
 
     def default_model_info(self, name):
-        if self.model_info and getattr(self.model_info, 'model_name', None):
-            return self.model_info._default_values
-        if Transaction().context.get('active_model', '') != 'ir.model':
-            return {}
-        self.model_info.model_name = Pool().get('ir.model')(
-            Transaction().context.get('active_id')).model
-        self.model_info.hide_functions = False
-        self.model_info.filter_value = 'name'
-        result = self.model_info._default_values
-        result['field_infos'] = [x[1] for x in
-            self.model_info.on_change_with_field_infos()['add']]
-        return result
+        return {
+            'model_name': Transaction().context.get('active_model', None),
+            'id_to_calculate': Transaction().context.get('active_id', None),
+            'hide_functions': False,
+            'filter_value': 'name',
+            }
 
 
 class VisualizeDebug(ModelView):
