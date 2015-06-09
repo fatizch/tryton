@@ -14,4 +14,4 @@ class MoveLine:
     def dunning_procedure(self):
         if self.contract:
             return self.contract.product.dunning_procedure
-        return super(self, MoveLine).dunning_procedure()
+        return super(MoveLine, self).dunning_procedure()
