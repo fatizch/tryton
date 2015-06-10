@@ -461,7 +461,7 @@ class Contract:
         new_invoices = Invoice.create([i._save_values
                  for contract_invoices in invoices.itervalues()
                  for c, i in contract_invoices])
-        Invoice.update_taxes(new_invoices)
+
         # Set the new ids
         old_invoices = (i for ci in invoices.itervalues() for c, i in ci)
         for invoice, new_invoice in zip(old_invoices, new_invoices):
@@ -475,8 +475,12 @@ class Contract:
                         invoice=invoice,
                         start=start,
                         end=end))
-        return ContractInvoice.create([c._save_values
+        contracts_invoices = ContractInvoice.create([c._save_values
                 for c in contract_invoices_to_create])
+
+        # Update taxes once contract_invoice are created
+        Invoice.update_taxes(new_invoices)
+        return contracts_invoices
 
     def get_invoice(self, start, end, billing_information):
         pool = Pool()
@@ -1097,6 +1101,7 @@ class Premium:
         pool = Pool()
         InvoiceLine = pool.get('account.invoice.line')
         InvoiceLineDetail = pool.get('account.invoice.line.detail')
+        Tax = pool.get('account.tax')
         if start is not None and end is not None:
             if ((self.start or datetime.date.min) > end
                     or (self.end or datetime.date.max) < start):
@@ -1104,16 +1109,22 @@ class Premium:
             start = (start if start > (self.start or datetime.date.min)
                 else self.start)
             end = end if end < (self.end or datetime.date.max) else self.end
-        amount = self.get_amount(start, end)
-        if not amount:
+        line_amount = self.get_amount(start, end)
+        if not line_amount:
             return []
+        if self.main_contract.product.taxes_included_in_premium:
+            line_amount = Tax.reverse_compute(line_amount, self.taxes, start)
+            line_amount = line_amount.quantize(
+                Decimal(1) / 10 ** InvoiceLine.unit_price.digits[1])
+        else:
+            line_amount = self.main_contract.company.currency.round(line_amount)
         return [InvoiceLine(
                 type='line',
                 description=self.get_description(),
                 origin=self.main_contract,
                 quantity=1,
                 unit=None,
-                unit_price=self.main_contract.company.currency.round(amount),
+                unit_price=line_amount,
                 taxes=self.taxes,
                 invoice_type='out_invoice',
                 account=self.account,

@@ -19,6 +19,7 @@ def register():
         OptionDescriptionPremiumRule,
         Invoice,
         InvoiceLine,
+        Configuration,
         Fee,
         Contract,
         ContractFee,

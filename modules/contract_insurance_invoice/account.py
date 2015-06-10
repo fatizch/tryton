@@ -1,5 +1,5 @@
 from trytond import backend
-from trytond.pool import PoolMeta
+from trytond.pool import PoolMeta, Pool
 from trytond.transaction import Transaction
 from trytond.pyson import Id
 
@@ -9,7 +9,52 @@ __metaclass__ = PoolMeta
 __all__ = [
     'Fee',
     'MoveLine',
+    'Configuration',
     ]
+
+
+class Configuration:
+    __name__ = 'account.configuration'
+
+    @classmethod
+    def __setup__(cls):
+        super(Configuration, cls).__setup__()
+        cls._error_messages.update({
+                'rounding_document_method_error': 'Following products or '
+                'coverages : %s have tax included option which is not allowed '
+                'with document rounding method.'
+                })
+
+    def check_taxes_included_option(self, company):
+        pool = Pool()
+        Product = pool.get('offered.product')
+        Option = pool.get('offered.option.description')
+        products = Product.search([('company', '=', company.id),
+                ('taxes_included_in_premium', '=', True)])
+        if products:
+            self.raise_user_error('rounding_document_method_error',
+                ','.join([product.name for product in products]))
+        options = Option.search([('company', '=', company.id),
+                ('taxes_included_in_premium', '=', True)])
+        if options:
+            self.raise_user_error('rounding_document_method_error',
+                ','.join([option.name for option in options]))
+
+    @classmethod
+    def validate(cls, configurations):
+        pool = Pool()
+        Company = pool.get('company.company')
+        super(Configuration, cls).validate(configurations)
+        for company in Company.search([]):
+            found_match = False
+            for line in configurations[0].tax_roundings:
+                if line.match({'company': company.id}):
+                    found_match = True
+                    if line.method == 'document':
+                        configurations[0].check_taxes_included_option(company)
+            if not found_match:
+                # By default configuration is per document
+                configurations[0].check_taxes_included_option(company)
 
 
 class Fee:

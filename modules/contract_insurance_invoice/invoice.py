@@ -303,6 +303,41 @@ class Invoice:
             result.update(dict(cursor.fetchall()))
         return result
 
+    def _get_tax_context(self):
+        context = super(Invoice, self)._get_tax_context()
+        if (self.contract and self.contract.product and
+                self.contract.product.taxes_included_in_premium):
+            context['tax_included'] = True
+        return context
+
+    def _round_taxes(self, taxes):
+        '''
+            Tax included option is only available if taxes are rounded per line
+            This code implements the Sum Preserving Rounding algorithm
+        '''
+        context = Transaction().context
+        if not context.get('tax_included') or not context['tax_included']:
+            return super(Invoice, self)._round_taxes(taxes)
+        if not self.currency:
+            return
+        expected_amount_non_rounded = 0
+        sum_of_rounded = 0
+        for taxline in taxes.itervalues():
+            if expected_amount_non_rounded == 0:
+                # Add base amount only for the first tax
+                expected_amount_non_rounded = taxline['base']
+            expected_amount_non_rounded += taxline['amount']
+            for attribute in ('base', 'amount'):
+                taxline[attribute] = self.currency.round(taxline[attribute])
+            if sum_of_rounded == 0:
+                sum_of_rounded = taxline['base']
+            sum_of_rounded += taxline['amount']
+            rounded_of_sum = self.currency.round(expected_amount_non_rounded)
+            if sum_of_rounded != rounded_of_sum:
+                taxline['amount'] += rounded_of_sum - sum_of_rounded
+                sum_of_rounded += rounded_of_sum - sum_of_rounded
+            assert rounded_of_sum == sum_of_rounded
+
 
 class InvoiceLine:
     __name__ = 'account.invoice.line'

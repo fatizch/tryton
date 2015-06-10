@@ -42,8 +42,12 @@ class ModuleTestCase(test_framework.CoopTestCase):
 
     def test_premium_get_amount(self):
         'Test Premium.get_amount'
+        company, = self.Company.search([
+                ('rec_name', '=', 'Dunder Mifflin'),
+                ])
         contract = self.Contract()
         contract.start_date = date(2011, 10, 21)
+        contract.company = company
         premium_monthly = self.Premium(
             frequency='monthly',
             amount=Decimal(100),
@@ -327,6 +331,10 @@ def suite():
             suite.addTest(test)
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(ModuleTestCase))
     suite.addTests(doctest.DocFileSuite('scenario_invoice_contract.rst',
+            setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
+    suite.addTests(doctest.DocFileSuite(
+            'scenario_invoice_contract_tax_included.rst',
             setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite

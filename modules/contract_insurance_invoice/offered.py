@@ -257,6 +257,13 @@ class Product:
         delete_missing=True)
     days_offset_for_subscription_payments = fields.Integer(
         'Days Offset For Subscription Payments')
+    taxes_included_in_premium = fields.Boolean('Taxes Included',
+        help='Taxes Included In Premium',
+        states={'invisible': Eval('tax_rounding') == 'document'},
+        depends=['tax_rounding'])
+    tax_rounding = fields.Function(
+        fields.Char('Tax_Rounding'),
+        'get_tax_rounding')
 
     @classmethod
     def __register__(cls, module_name):
@@ -267,6 +274,19 @@ class Product:
         product = TableHandler(cursor, cls)
         if product.column_exist('account_for_billing'):
             product.drop_column('account_for_billing')
+
+    @classmethod
+    def __setup__(cls):
+        super(Product, cls).__setup__()
+        cls.coverages.domain.extend([('taxes_included_in_premium', '=',
+            Eval('taxes_included_in_premium'))])
+        cls.coverages.depends.extend(['taxes_included_in_premium'])
+
+    def get_tax_rounding(self, name):
+        pool = Pool()
+        Configuration = pool.get('account.configuration')
+        config = Configuration(1)
+        return config.tax_rounding
 
     def get_change_billing_modes_order(self, name):
         return False
@@ -353,6 +373,13 @@ class OptionDescription:
         domain=[['OR', [('kind', '=', 'revenue')], [('kind', '=', 'other')]],
             ('company', '=', Eval('company'))],
         required=True, ondelete='RESTRICT')
+    taxes_included_in_premium = fields.Boolean('Taxes Included',
+        help='Taxes Included In Premium',
+        states={'invisible': Eval('tax_rounding') == 'document'},
+        depends=['tax_rounding'])
+    tax_rounding = fields.Function(
+        fields.Char('Tax_Rounding'),
+        'get_tax_rounding')
 
     @classmethod
     def _export_light(cls):
@@ -361,6 +388,12 @@ class OptionDescription:
 
     def get_account_for_billing(self, line):
         return self.account_for_billing
+
+    def get_tax_rounding(self, name):
+        pool = Pool()
+        Configuration = pool.get('account.configuration')
+        config = Configuration(1)
+        return config.tax_rounding
 
 
 class OptionDescriptionPremiumRule:

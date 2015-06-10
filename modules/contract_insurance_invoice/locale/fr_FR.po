@@ -753,6 +753,14 @@ msgctxt "field:offered.option.description,account_for_billing:"
 msgid "Account for billing"
 msgstr "Compte pour le quittancement"
 
+msgctxt "field:offered.option.description,tax_rounding:"
+msgid "Tax_Rounding"
+msgstr "Arrondi des taxes"
+
+msgctxt "field:offered.option.description,taxes_included_in_premium:"
+msgid "Taxes Included"
+msgstr "Taxes incluses"
+
 msgctxt ""
 "field:offered.option.description.premium_rule,match_contract_frequency:"
 msgid "Match Contract Frequency"
@@ -773,6 +781,14 @@ msgstr "Délai en jours pour le paiement des frais à la signature"
 msgctxt "field:offered.product,ordered_billing_modes:"
 msgid "Ordered Billing Mode"
 msgstr "Modifier l'ordre des modes de quittancement"
+
+msgctxt "field:offered.product,tax_rounding:"
+msgid "Tax_Rounding"
+msgstr "Arrondi des taxes"
+
+msgctxt "field:offered.product,taxes_included_in_premium:"
+msgid "Taxes Included"
+msgstr "Taxes incluses"
 
 msgctxt "field:offered.product-offered.billing_mode,billing_mode:"
 msgid "Billing Mode"
@@ -867,10 +883,18 @@ msgstr ""
 "Une liste de nombres séparés par des virgules correspondant aux jours disponibles pour le prélèvement.\n"
 "Une liste vide signifie que tous les jours sont autorisés."
 
+msgctxt "help:offered.option.description,taxes_included_in_premium:"
+msgid "Taxes Included In Premium"
+msgstr "Taxes incluses dans le tarif"
+
 msgctxt ""
 "help:offered.option.description.premium_rule,match_contract_frequency:"
 msgid "Should the premium be stored at the contract's frequency ?"
 msgstr "La prime doit-elle être stockée à la fréquence du contrat?"
+
+msgctxt "help:offered.product,taxes_included_in_premium:"
+msgid "Taxes Included In Premium"
+msgstr "Taxes incluses dans le tarif"
 
 msgctxt "model:account.invoice.line.detail,name:"
 msgid "Invoice Line Detail"

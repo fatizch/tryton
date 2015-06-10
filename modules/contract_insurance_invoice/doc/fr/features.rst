@@ -33,3 +33,8 @@
 
 - **API de tarification :** Il est possible d'obtenir via un appel RPC
   les tarifs pour un contrat potentiel. Rien n'est sauvegardé en base.
+
+- **Taxes incluses :** Il est possible de définir dans le paramétrage que la
+  prime est définie taxes incluses ou taxes exclues. Cette option n'est
+  disponible au niveau d'un produit que si la stratégie d'arrondi définie dans
+  la configuration est l'arrondi par ligne.
