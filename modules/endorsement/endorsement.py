@@ -156,6 +156,33 @@ class EndorsementRoot(object):
     def _get_field_for_model(self, target_model):
         return self.__class__._endorsement_tree[target_model]
 
+    def is_null(self):
+        '''
+            Returns False if all endorsement related values (the 'values' dict
+            field and recursively all endorsement related one2manys) are
+            considered null, else True
+        '''
+        if self.values:
+            return False
+        for fname, _ in self._endorsement_tree.itervalues():
+            for elem in getattr(self, fname, []):
+                if not elem.is_null():
+                    return False
+        return True
+
+    def clean_up(self):
+        '''
+            Remove all 'dead' (as in 'is_null()') children endorsements, and
+            returns own is_null status after trimming.
+        '''
+        for fname, _ in self._endorsement_tree.itervalues():
+            values, new_values = getattr(self, fname, ()), []
+            for elem in values:
+                if not elem.clean_up():
+                    new_values.append(elem)
+            setattr(self, fname, new_values)
+        return self.is_null()
+
 
 def values_mixin(value_model):
 
