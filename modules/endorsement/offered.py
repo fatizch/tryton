@@ -48,6 +48,11 @@ class EndorsementDefinition(model.CoopSQL, model.CoopView):
         'get_is_technical', searcher='search_is_technical')
 
     @classmethod
+    def __setup__(cls):
+        super(EndorsementDefinition, cls).__setup__()
+        cls._order = [('name', 'ASC')]
+
+    @classmethod
     def _export_skips(cls):
         return (super(EndorsementDefinition, cls)._export_skips() |
             set(['products']))
