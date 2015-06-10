@@ -3,7 +3,7 @@
     <label name="applicant"/>
     <field name="applicant"/>
     <label name="endorsement_definition"/>
-    <field name="endorsement_definition" view_ids="endorsement.endorsement_definition_light_view_list"/>
+    <field name="endorsement_definition" widget="selection"/>
     <newline/>
     <label name="effective_date"/>
     <field name="effective_date"/>
