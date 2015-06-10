@@ -12,4 +12,5 @@ def register():
         PlanAgentRelation,
         InvoiceLine,
         Contract,
+        ContractOption,
         module='commission_multi_agents', type_='model')
