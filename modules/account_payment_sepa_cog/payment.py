@@ -242,10 +242,12 @@ class Payment:
             journal = config.reject_fee_journal
             account = reject_fee.product.template.account_revenue_used
             name_for_billing = reject_fee.name
+            contract_id = cls.get_contract_id(payments_list)
             invoices_to_create.append(payment.create_fee_invoice(
                     fee_amount, journal, account, name_for_billing,
                     sepa_mandate))
-            payment_date_to_update.append({'payment_date': payment_date})
+            payment_date_to_update.append({'payment_date': payment_date,
+                    'contract': contract_id})
 
         Invoice.save(invoices_to_create)
         Invoice.post(invoices_to_create)
@@ -254,6 +256,19 @@ class Payment:
             lines_to_write += [list(i.lines_to_pay), p]
         if lines_to_write:
             MoveLine.write(*lines_to_write)
+
+    # contract to attach invoice fee
+    @classmethod
+    def get_contract_id(cls, payments):
+        contract_id = None
+        for payment in payments:
+            contract = payment.line.contract
+            if not contract:
+                continue
+            if contract_id and contract_id != contract.id:
+                return None
+            contract_id = contract.id
+        return contract_id
 
     def create_fee_invoice(self, fee_amount, journal, account_for_billing,
             name_for_billing, sepa_mandate):
