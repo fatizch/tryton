@@ -413,7 +413,7 @@ class ReportGenerate(Report):
         report_context = cls.get_context(records, data)
         oext, content = cls.convert(action_report,
             cls.render(action_report, report_context))
-        return (oext, buffer(content), action_report.direct_print, filename)
+        return (oext, bytearray(content), action_report.direct_print, filename)
 
     @classmethod
     def get_context(cls, records, data):
@@ -513,7 +513,7 @@ class ReportGenerateFromFile(Report):
     @classmethod
     def execute(cls, ids, data):
         with open(data['output_report_filepath'], 'r') as f:
-            value = buffer(f.read())
+            value = bytearray(f.read())
         return ('.pdf', value, False,
             os.path.splitext(
                 os.path.basename(data['output_report_filepath']))[0])
@@ -703,7 +703,7 @@ class ReportCreate(Wizard):
 
     def default_attach(self, fields):
         with open(self.preview_document.output_report_filepath, 'r') as f:
-            attachment = buffer(f.read())
+            attachment = bytearray(f.read())
         result = {'attachment': attachment,
             'name': os.path.basename(
                 self.preview_document.output_report_filepath),
