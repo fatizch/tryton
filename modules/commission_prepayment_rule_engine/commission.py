@@ -112,6 +112,7 @@ class PlanLines:
         args = context['names']
         if 'option' in context['names']:
             context['names']['option'].init_dict_for_rule_engine(args)
+            args['date'] = context['names']['option'].start_date
         return Decimal(self.prepayment_rule.execute(
                 args, self.prepayment_rule_extra_data).result)
 
