@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+        <!-- ############################## -->
+        <!-- # Change Billing Information # -->
+        <!-- ############################## -->
+        <record model="ir.ui.view" id="change_billing_information_view_form">
+            <field name="model">contract.billing_information.change</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement_insurance_invoice.change_billing_information_view_form"/>
+            <field name="name">change_billing_information_form</field>
+        </record>
+        <!-- ####################### -->
+        <!-- # Billing Information # -->
+        <!-- ####################### -->
+        <record model="ir.ui.view" id="endorsement_billing_information_view_form">
+            <field name="model">contract.billing_information</field>
+            <field name="type">form</field>
+            <field name="inherit" ref="endorsement_insurance_invoice.endorsement_billing_information_view_form"/>
+            <field name="name">endorsement_billing_information_form</field>
+        </record>
+    </data>
+</tryton>

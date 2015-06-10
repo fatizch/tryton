@@ -1,0 +1,16 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:contract.billing_information.change:"
+msgid "A new mandate will be created, this action cannot be cancelled"
+msgstr ""
+"Un nouveau mandat va être créé, cette action ne pourra pas être annulée !"
+
+msgctxt "field:contract.billing_information.change,mandate_needed:"
+msgid "Mandate Needed"
+msgstr "Mandat Requis"
+
+msgctxt "field:contract.billing_information.change,sepa_signature_date:"
+msgid "Sepa Mandate Signature Date"
+msgstr "Date de signature du mandat SEPA"
