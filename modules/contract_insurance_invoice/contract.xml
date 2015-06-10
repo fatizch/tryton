@@ -10,12 +10,6 @@
             <field name="type">form</field>
             <field name="name">contract_form</field>
         </record>
-        <record model="ir.ui.view" id="contract_view_list">
-            <field name="model">contract</field>
-            <field name="type">tree</field>
-            <field name="inherit" ref="contract.contract_view_tree"/>
-            <field name="name">contract_list</field>
-        </record>
         <!-- #################### -->
         <!-- # Contract Balance # -->
         <!-- #################### -->
@@ -126,21 +120,6 @@
             <field name="keyword">form_action</field>
             <field name="model">contract,-1</field>
             <field name="action" ref="act_invoice"/>
-        </record>
-        <!-- ####################### -->
-        <!-- # Change Bank Account # -->
-        <!-- ####################### -->
-        <record model="ir.action.wizard" id="act_change_contract_bank_account">
-            <field name="name">Change Bank Account for Billing</field>
-            <field name="wiz_name">contract.bank_account.change</field>
-        </record>
-        <!-- ############################## -->
-        <!-- # Change Bank Account Select # -->
-        <!-- ############################## -->
-        <record model="ir.ui.view" id="bank_account_change_select_view_form">
-            <field name="model">contract.bank_account.change.select</field>
-            <field name="type">form</field>
-            <field name="name">bank_account_change_select_form</field>
         </record>
     </data>
 </tryton>

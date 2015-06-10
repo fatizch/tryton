@@ -10,9 +10,4 @@ def register():
         ContractBillingInformation,
         Invoice,
         MoveLine,
-        ChangeBankAccountSelect,
         module='account_payment_sepa_contract', type_='model')
-
-    Pool.register(
-        ChangeBankAccount,
-        module='account_payment_sepa_contract', type_='wizard')

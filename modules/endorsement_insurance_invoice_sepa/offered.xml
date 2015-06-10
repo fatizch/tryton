@@ -8,5 +8,12 @@
             <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'sepa_mandate')]"/>
             <field name="endorsement_part" ref="endorsement_insurance_invoice.change_billing_information_endorsement_part"/>
         </record>
+        <!-- ###################################################### -->
+        <!-- # Change Direct Debit Account Endorsement Definition # -->
+        <!-- ###################################################### -->
+        <record model="endorsement.contract.billing_information.field" id="sepa_mandate_field_1">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'sepa_mandate')]"/>
+            <field name="endorsement_part" ref="endorsement_insurance_invoice.change_direct_debit_account_endorsement_part"/>
+        </record>
     </data>
 </tryton>

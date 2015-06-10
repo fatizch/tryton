@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<form string="Change Direct Debit Account" col="4">
+    <group id="header" colspan="4">
+        <label name="effective_date"/>
+        <field name="effective_date"/>
+        <label name="endorsement_definition"/>
+        <field name="endorsement_definition"/>
+        <label name="contract"/>
+        <field name="contract"/>
+    </group>
+    <group name="previous_billing_information" colspan="4" yexpand="1" yfill="1">
+        <field name="previous_billing_information" mode="form" expand_toolbar="0" view_ids="endorsement_insurance_invoice.endorsement_direct_debit_account_view_form"/>
+    </group>
+    <group name="new_billing_information" colspan="4" yexpand="1" yfill="1">
+        <field name="new_billing_information" mode="form" expand_toolbar="0" view_ids="endorsement_insurance_invoice.endorsement_direct_debit_account_view_form"/>
+    </group>
+    <group name="other_contracts" colspan="4" yexpand="1" yfill="1">
+        <field name="other_contracts" expand_toolbar="0"/>
+    </group>
+    <field name="product"/>
+    <field name="endorsement_part"/>
+    <field name="subscriber"/>
+</form>

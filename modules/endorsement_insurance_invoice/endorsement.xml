@@ -31,5 +31,10 @@
             <field name="type">form</field>
             <field name="name">endorsement_billing_information_form</field>
         </record>
+        <record model="ir.ui.view" id="endorsement_direct_debit_account_view_form">
+            <field name="model">contract.billing_information</field>
+            <field name="type">form</field>
+            <field name="name">endorsement_direct_debit_account_form</field>
+        </record>
     </data>
 </tryton>

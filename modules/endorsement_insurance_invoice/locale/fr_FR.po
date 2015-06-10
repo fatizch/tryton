@@ -18,6 +18,26 @@ msgctxt "error:contract.billing_information.change:"
 msgid "The date %s is not compatible with the billing mode %s."
 msgstr "La date %s n'est pas compatible avec le mode de quittancement %s."
 
+msgctxt "error:contract.direct_debit_account.change:"
+msgid "Please set a  new direct debit account !"
+msgstr "Veuillez renseigner le nouveau compte bancaire !"
+
+msgctxt "error:contract.direct_debit_account.change:"
+msgid ""
+"The contract %s does not have an invoice starting on the %s. Select another "
+"date."
+msgstr ""
+"Le contrat %s n'a pas de quittance commençant au %s. Veuillez choisir une "
+"autre date."
+
+msgctxt "error:contract.direct_debit_account.change:"
+msgid "The date %s is not compatible with the billing mode %s."
+msgstr "La date %s n'est pas compatible avec le mode de quittancement %s."
+
+msgctxt "error:contract.direct_debit_account.change:"
+msgid "The selected contract is not paid through direct debit !"
+msgstr "Le contrat sélectionné n'est pas payé par prélèvement automatique !"
+
 msgctxt "error:endorsement.contract.billing_information:"
 msgid "New version"
 msgstr "Nouvelle version"
@@ -88,6 +108,47 @@ msgctxt ""
 "field:contract.billing_information.change.contract_displayer,to_propagate:"
 msgid "Propagate"
 msgstr "Propager"
+
+msgctxt "field:contract.direct_debit_account.change,contract:"
+msgid "Contract"
+msgstr "Contrat"
+
+msgctxt "field:contract.direct_debit_account.change,effective_date:"
+msgid "Effective Date"
+msgstr "Date effective"
+
+msgctxt "field:contract.direct_debit_account.change,endorsement_definition:"
+msgid "Endorsement Definition"
+msgstr "Définition d'avenant"
+
+msgctxt "field:contract.direct_debit_account.change,endorsement_part:"
+msgid "Endorsement Part"
+msgstr "Avenant unitaire"
+
+msgctxt "field:contract.direct_debit_account.change,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:contract.direct_debit_account.change,new_billing_information:"
+msgid "New Billing Information"
+msgstr "Nouveaux Paramètres"
+
+msgctxt "field:contract.direct_debit_account.change,other_contracts:"
+msgid "Other Contracts"
+msgstr "Autres contrats"
+
+msgctxt ""
+"field:contract.direct_debit_account.change,previous_billing_information:"
+msgid "Previous Billing Information"
+msgstr "Paramètres existants"
+
+msgctxt "field:contract.direct_debit_account.change,product:"
+msgid "Product"
+msgstr "Produit"
+
+msgctxt "field:contract.direct_debit_account.change,subscriber:"
+msgid "Subscriber"
+msgstr "Souscripteur"
 
 msgctxt "field:endorsement,contracts_name:"
 msgid "Contracts Name"
@@ -255,6 +316,10 @@ msgctxt "model:contract.billing_information.change.contract_displayer,name:"
 msgid "Contract Displayer"
 msgstr "Contrat"
 
+msgctxt "model:contract.direct_debit_account.change,name:"
+msgid "Change Direct Debit Account"
+msgstr "Modification du compte de prélèvement"
+
 msgctxt "model:endorsement.contract.billing_information,name:"
 msgid "Endorsement Billing Information"
 msgstr "Modification des paramètres de quittancement"
@@ -272,6 +337,11 @@ msgctxt ""
 msgid "Change Billing Information"
 msgstr "Modification des paramètres de quittancement"
 
+msgctxt ""
+"model:endorsement.definition,name:change_direct_debit_account_definition"
+msgid "Change Direct Debit Account"
+msgstr "Modification du compte de prélèvement"
+
 msgctxt "model:endorsement.part,name:"
 msgid "Change Bank Account"
 msgstr "Changement du compte bancaire"
@@ -280,6 +350,11 @@ msgctxt ""
 "model:endorsement.part,name:change_billing_information_endorsement_part"
 msgid "Change Billing Information"
 msgstr "Modification des paramètres de quittancement"
+
+msgctxt ""
+"model:endorsement.part,name:change_direct_debit_account_endorsement_part"
+msgid "Change Direct Debit Account"
+msgstr "Modification du compte de prélèvement"
 
 msgctxt ""
 "selection:contract.billing_information.change.contract_displayer,to_propagate:"
@@ -324,6 +399,10 @@ msgctxt "view:contract.billing_information:"
 msgid "Billing Information"
 msgstr "Quittancement"
 
+msgctxt "view:contract.direct_debit_account.change:"
+msgid "Change Direct Debit Account"
+msgstr "Modification du compte de prélèvement"
+
 msgctxt "view:endorsement.contract.billing_information.field:"
 msgid "Endorsement Field"
 msgstr "Champs des paramètres de quittancement"
@@ -352,5 +431,24 @@ msgid "Suspend"
 msgstr "Suspendre"
 
 msgctxt "wizard_button:endorsement.start,change_billing_information,end:"
+msgid "Cancel"
+msgstr "Annuler"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_direct_debit_account,change_direct_debit_account_next:"
+msgid "Next"
+msgstr "Suivant"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_direct_debit_account,change_direct_debit_account_previous:"
+msgid "Previous"
+msgstr "Précédent"
+
+msgctxt ""
+"wizard_button:endorsement.start,change_direct_debit_account,change_direct_debit_account_suspend:"
+msgid "Suspend"
+msgstr "Suspendre"
+
+msgctxt "wizard_button:endorsement.start,change_direct_debit_account,end:"
 msgid "Cancel"
 msgstr "Annuler"

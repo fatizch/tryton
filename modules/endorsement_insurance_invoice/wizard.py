@@ -10,6 +10,7 @@ __metaclass__ = PoolMeta
 __all__ = [
     'BasicPreview',
     'ChangeBillingInformation',
+    'ChangeDirectDebitAccount',
     'ContractDisplayer',
     'StartEndorsement',
     'RemoveOption',
@@ -337,6 +338,37 @@ class ChangeBillingInformation(EndorsementWizardStepMixin, model.CoopView):
                         select_screen.effective_date, billing_mode.rec_name))
 
 
+class ChangeDirectDebitAccount(ChangeBillingInformation):
+    'Change Direct Debit Account'
+
+    __name__ = 'contract.direct_debit_account.change'
+
+    @classmethod
+    def __setup__(cls):
+        super(ChangeDirectDebitAccount, cls).__setup__()
+        cls.other_contracts.domain = [
+            ('to_propagate', 'in', ('nothing', 'bank_account'))]
+        cls._error_messages.update({
+                'not_direct_debit': 'The selected contract is not paid '
+                'through direct debit !',
+                })
+
+    @classmethod
+    def state_view_name(cls):
+        return 'endorsement_insurance_invoice.' + \
+            'change_direct_debit_account_view_form'
+
+    @classmethod
+    def check_before_start(cls, select_screen):
+        if not utils.get_good_versions_at_date(
+                select_screen.contract, 'billing_informations',
+                select_screen.effective_date,
+                'date')[0].direct_debit:
+            cls.append_functional_error('not_direct_debit')
+            return
+        super(ChangeDirectDebitAccount, cls).check_before_start(select_screen)
+
+
 class ContractDisplayer(model.CoopView):
     'Contract Displayer'
 
@@ -361,3 +393,5 @@ class StartEndorsement:
 
 add_endorsement_step(StartEndorsement, ChangeBillingInformation,
     'change_billing_information')
+add_endorsement_step(StartEndorsement, ChangeDirectDebitAccount,
+    'change_direct_debit_account')

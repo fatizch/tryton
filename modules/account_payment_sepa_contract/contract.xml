@@ -22,14 +22,5 @@
             <field name="type">form</field>
             <field name="name">contract_billing_information_without_date_form</field>
         </record>
-        <!-- ############################## -->
-        <!-- # Change Bank Account Select # -->
-        <!-- ############################## -->
-        <record model="ir.ui.view" id="bank_account_change_select_view_form">
-            <field name="model">contract.bank_account.change.select</field>
-            <field name="type">form</field>
-            <field name="inherit" ref="contract_insurance_invoice.bank_account_change_select_view_form"/>
-            <field name="name">bank_account_change_select_form</field>
-        </record>
     </data>
 </tryton>

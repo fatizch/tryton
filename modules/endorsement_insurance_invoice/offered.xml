@@ -106,5 +106,27 @@
             <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'payment_term')]"/>
             <field name="endorsement_part" ref="change_billing_information_endorsement_part"/>
         </record>
+        <!-- ###################################################### -->
+        <!-- # Change Direct Debit Account Endorsement Definition # -->
+        <!-- ###################################################### -->
+        <record model="endorsement.definition" id="change_direct_debit_account_definition">
+            <field name="code">change_direct_debit_account</field>
+            <field name="name">Change Direct Debit Account</field>
+        </record>
+        <record model="endorsement.part" id="change_direct_debit_account_endorsement_part">
+            <field name="code">change_direct_debit_account</field>
+            <field name="name">Change Direct Debit Account</field>
+            <field name="kind">billing_information</field>
+            <field name="view">change_direct_debit_account</field>
+        </record>
+        <record model="endorsement.definition-endorsement.part" id="change_direct_debit_account_relation">
+            <field name="definition" ref="change_direct_debit_account_definition"/>
+            <field name="endorsement_part" ref="change_direct_debit_account_endorsement_part"/>
+            <field name="order">1</field>
+        </record>
+        <record model="endorsement.contract.billing_information.field" id="direct_debit_account_field_1">
+            <field name="field" search="[('model.model', '=', 'contract.billing_information'), ('name', '=', 'direct_debit_account')]"/>
+            <field name="endorsement_part" ref="change_direct_debit_account_endorsement_part"/>
+        </record>
     </data>
 </tryton>

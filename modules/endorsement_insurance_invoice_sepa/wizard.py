@@ -6,6 +6,7 @@ from trytond.modules.cog_utils import fields
 __metaclass__ = PoolMeta
 __all__ = [
     'ChangeBillingInformation',
+    'ChangeDirectDebitAccount',
     ]
 
 
@@ -85,3 +86,7 @@ class ChangeBillingInformation:
             new_mandate.save()
             new_info.sepa_mandate = new_mandate
         super(ChangeBillingInformation, self).step_update()
+
+
+class ChangeDirectDebitAccount(ChangeBillingInformation):
+    __name__ = 'contract.direct_debit_account.change'
