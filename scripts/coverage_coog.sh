@@ -21,7 +21,7 @@ echo '' >> myglobalreport.txt
 for module in $(ls modules)
     do echo $module
     env DO_NOT_TEST_CASES=True coverage run -a --source=modules/$module \
-        "$RUNTESTS" -m $module
+        --omit=*__init__*,*tests*,*test_case_data* "$RUNTESTS" -m $module
     for db in $(PGPASSWORD="$POSTGRESQL_PASSWORD" psql -U postgres -l | grep test | cut -f1 -d '|')
         do PGPASSWORD="$POSTGRESQL_PASSWORD" dropdb -U postgres $db
         done
